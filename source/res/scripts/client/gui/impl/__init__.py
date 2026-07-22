@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/impl/__init__.py
 import typing
 from gui.impl.pub.window_loader_controller import WindowLoaderController
+from gui.impl.tooltips_config import registerWulfTooltipContentFactories
 from skeletons.gui.game_control import IGameStateTracker
 from skeletons.gui.impl import IGuiLoader, IFullscreenManager, INotificationWindowController
 if typing.TYPE_CHECKING:
@@ -14,6 +15,7 @@ def getGuiImplConfig(manager):
     from gui.impl.pub.notification_window_controller import NotificationWindowController
     from gui.impl.gen.view_models.common.tutorial.tutorial_model import TutorialModel
     from gui.impl.gen.view_models.common.ui_logger_model import UiLoggerModel
+    registerWulfTooltipContentFactories()
     loader = GuiLoader()
     loader.init(TutorialModel(), UiLoggerModel())
     manager.addInstance(IGuiLoader, loader, finalizer='fini')

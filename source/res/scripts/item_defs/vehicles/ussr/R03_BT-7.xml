@@ -50,7 +50,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	8000	</weight>
-    <maxHealth>	432	</maxHealth>
+    <maxHealth>	400	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	110	</maxHealth>
       <maxRegenHealth>	75	</maxRegenHealth>
@@ -1789,7 +1789,7 @@
           <camouflage></camouflage>
         </customizableVehicleAreas>
       </customization>
-      <repairTime>	4.57142878	</repairTime>
+      <repairTime>	2.85003138	</repairTime>
     </BT-5>
     <BT-7>
       <userString>	#ussr_vehicles:BT-7	</userString>
@@ -2620,7 +2620,7 @@
           <camouflage></camouflage>
         </customizableVehicleAreas>
       </customization>
-      <repairTime>	4.57142878	</repairTime>
+      <repairTime>	2.85003138	</repairTime>
     </BT-7>
   </chassis>
   <turrets0>
@@ -2648,7 +2648,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	950	</weight>
-      <maxHealth>	78	</maxHealth>
+      <maxHealth>	110	</maxHealth>
       <rotationSpeed>	38	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	80	</maxHealth>
@@ -2672,7 +2672,7 @@
             </armor_4>
             <gun>	10	</gun>
           </armor>
-          <shotDispersionRadius>	0.44	</shotDispersionRadius>
+          <shotDispersionRadius>	0.38	</shotDispersionRadius>
           <reloadTime>	2.1	</reloadTime>
           <aimingTime>	1.9	</aimingTime>
           <shotDispersionFactors>
@@ -3238,7 +3238,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	1050	</weight>
-      <maxHealth>	108	</maxHealth>
+      <maxHealth>	140	</maxHealth>
       <rotationSpeed>	40	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	80	</maxHealth>
@@ -3267,7 +3267,7 @@
             </armor_4>
             <gun>	10	</gun>
           </armor>
-          <shotDispersionRadius>	0.42	</shotDispersionRadius>
+          <shotDispersionRadius>	0.36	</shotDispersionRadius>
           <reloadTime>	1.9	</reloadTime>
           <aimingTime>	1.7	</aimingTime>
           <pitchLimits>
@@ -3323,10 +3323,14 @@
             <aoTextureSize>	512 256	</aoTextureSize>
           </camouflage>
         </_45mm_20K>
-        <_37mm_ZiS-19>	shared	  <maxAmmo>	200	</maxAmmo>
+        <_37mm_ZiS-19>	shared	  <unlocks>
+            <vehicle>	R04_T-34	  <cost>	11500	</cost>
+            </vehicle>
+          </unlocks>
+          <maxAmmo>	200	</maxAmmo>
           <shotDispersionFactors>
             <turretRotation>	0.08	</turretRotation>
-            <afterShot>	3	</afterShot>
+            <afterShot>	1.5	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <armor>
@@ -3338,7 +3342,7 @@
             </armor_4>
             <gun>	10	</gun>
           </armor>
-          <shotDispersionRadius>	0.37	</shotDispersionRadius>
+          <shotDispersionRadius>	0.36	</shotDispersionRadius>
           <reloadTime>	1.8	</reloadTime>
           <aimingTime>	1.7	</aimingTime>
           <pitchLimits>
@@ -3923,20 +3927,13 @@
     </BT-7_conic>
   </turrets0>
   <engines>
-    <M-17T>	shared	  <unlocks>
-        <engine>	M-17F	  <cost>	850	</cost>
-        </engine>
-      </unlocks>
-    </M-17T>
     <M-17F>	shared	  <unlocks>
         <engine>	V-2	  <cost>	1250	</cost>
         </engine>
       </unlocks>
     </M-17F>
     <V-2>	shared	  <unlocks>
-        <vehicle>	R04_T-34	  <cost>	11500	</cost>
-        </vehicle>
-        <vehicle>	R12_A-20	  <cost>	10200	</cost>
+        <vehicle>	R12_A-20	  <cost>	11500	</cost>
         </vehicle>
       </unlocks>
     </V-2>
@@ -3945,20 +3942,11 @@
     <Small>	shared	</Small>
   </fuelTanks>
   <radios>
-    <_71-TK-3>	shared	  <unlocks>
-        <radio>	_12LL	  <cost>	5600	</cost>
-        </radio>
-      </unlocks>
-    </_71-TK-3>
     <_12LL>	shared	</_12LL>
   </radios>
   <physics>
     <detailed>
       <engines>
-        <M-17T>
-          <smplEnginePower>	475.7765	</smplEnginePower>
-          <smplFwMaxSpeed>	65.4	</smplFwMaxSpeed>
-        </M-17T>
         <M-17F>
           <smplEnginePower>	528.6406	</smplEnginePower>
           <smplFwMaxSpeed>	65.4	</smplFwMaxSpeed>

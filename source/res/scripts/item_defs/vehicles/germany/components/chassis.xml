@@ -1,283 +1,842 @@
 <chassis.xml>
-  <ids>
-    <PzIV_Ausf_1940>	0	</PzIV_Ausf_1940>
-    <Hummel_Ausf_1943>	2	</Hummel_Ausf_1943>
-    <Hummel_Ausf_1944>	3	</Hummel_Ausf_1944>
-    <PzVI_Standardketten>	4	</PzVI_Standardketten>
-    <PzVI_Vetstaerktketten>	5	</PzVI_Vetstaerktketten>
-    <Pz35t_Standardketten>	6	</Pz35t_Standardketten>
-    <Pz35t_Vetstaerktketten>	7	</Pz35t_Vetstaerktketten>
-    <StuGIII_Ausf_1940>	8	</StuGIII_Ausf_1940>
-    <StuGIII_Ausf_1943>	9	</StuGIII_Ausf_1943>
-    <Pz-V_Standardketten>	10	</Pz-V_Standardketten>
-    <Pz-V_Vetstaerktketten>	11	</Pz-V_Vetstaerktketten>
-    <Hetzer_Ausf_A>	12	</Hetzer_Ausf_A>
-    <Hetzer_Ausf_B>	13	</Hetzer_Ausf_B>
-    <JagdPzIV_Ausf_1940>	14	</JagdPzIV_Ausf_1940>
-    <JagdPzIV_Ausf_1943>	15	</JagdPzIV_Ausf_1943>
-    <PzII_ketten_Ausf_A>	16	</PzII_ketten_Ausf_A>
-    <PzII_ketten_Ausf_B>	17	</PzII_ketten_Ausf_B>
-    <VK3601H_henshelketten>	18	</VK3601H_henshelketten>
-    <VK3601H_henshelketten_ausf_B>	19	</VK3601H_henshelketten_ausf_B>
-    <VK3001H>	20	</VK3001H>
-    <VK3001H_ausf_B>	21	</VK3001H_ausf_B>
-    <Sturmpanzerketten_I>	22	</Sturmpanzerketten_I>
-    <Sturmpanzerketten_II>	23	</Sturmpanzerketten_II>
-    <LeichtertaktorkettenB>	25	</LeichtertaktorkettenB>
-    <Leichtertaktorketten>	24	</Leichtertaktorketten>
-    <Pz38t_Standardketten>	26	</Pz38t_Standardketten>
-    <Pz38t_Vetstaerktketten>	27	</Pz38t_Vetstaerktketten>
-    <PzJgd_ketten_I>	28	</PzJgd_ketten_I>
-    <PzJgd_ketten_II>	29	</PzJgd_ketten_II>
-    <JgPzV_Standardketten>	30	</JgPzV_Standardketten>
-    <JgPzV_Vetstaerktketten>	31	</JgPzV_Vetstaerktketten>
-    <VK3002DB_Standardtketten>	32	</VK3002DB_Standardtketten>
-    <VK3002DB_Vetstaerktketten>	33	</VK3002DB_Vetstaerktketten>
-    <PzIIIketten_Ausf_J>	34	</PzIIIketten_Ausf_J>
-    <PzIIIketten_Ausf_L>	35	</PzIIIketten_Ausf_L>
-    <Sturmpanzerketten_ausf_A>	36	</Sturmpanzerketten_ausf_A>
-    <Sturmpanzerketten_ausf_B>	37	</Sturmpanzerketten_ausf_B>
-    <PzIIIketten_Ausf_A>	38	</PzIIIketten_Ausf_A>
-    <PzIIIketten_Ausf_B>	39	</PzIIIketten_Ausf_B>
-    <PzVIB_Standardketten>	40	</PzVIB_Standardketten>
-    <PzVIB_Vetstaerktketten>	41	</PzVIB_Vetstaerktketten>
-    <Leopardketten_Ausf_A>	42	</Leopardketten_Ausf_A>
-    <Leopardketten_Ausf_B>	43	</Leopardketten_Ausf_B>
-    <Grilleketten_ausf_A>	44	</Grilleketten_ausf_A>
-    <Grilleketten_ausf_B>	45	</Grilleketten_ausf_B>
-    <Wespeketten_ausf_A>	47	</Wespeketten_ausf_A>
-    <Wespeketten_ausf_B>	48	</Wespeketten_ausf_B>
-    <Luchsketten_Ausf_A>	49	</Luchsketten_Ausf_A>
-    <Luchsketten_Ausf_B>	50	</Luchsketten_Ausf_B>
-    <PzV-IVketten>	51	</PzV-IVketten>
-    <PzII_ausf_J>	52	</PzII_ausf_J>
-    <PzIII-IV>	53	</PzIII-IV>
-    <PzIII-IV_ausf_B>	54	</PzIII-IV_ausf_B>
-    <MarderII>	55	</MarderII>
-    <MarderIIketten_ausf_B>	56	</MarderIIketten_ausf_B>
-    <Mausketten>	57	</Mausketten>
-    <S-35ketten>	58	</S-35ketten>
-    <B2ketten>	59	</B2ketten>
-    <VK3001P>	60	</VK3001P>
-    <VK3001P_ausf_B>	61	</VK3001P_ausf_B>
-    <VK4502P_Standardketten>	62	</VK4502P_Standardketten>
-    <VK4502P_Vetstaerktketten>	63	</VK4502P_Vetstaerktketten>
-    <H35ketten>	64	</H35ketten>
-    <Ferdinandstandardketten>	66	</Ferdinandstandardketten>
-    <Ferdinandvetstaerktketten>	67	</Ferdinandvetstaerktketten>
-    <JagdTiger_Standardketten>	74	</JagdTiger_Standardketten>
-    <JagdTiger_Vetstaerktketten>	75	</JagdTiger_Vetstaerktketten>
-    <PzV-IVketten_ausfA>	76	</PzV-IVketten_ausfA>
-    <Chassis_Pz38_NA_1>	77	</Chassis_Pz38_NA_1>
-    <Chassis_Pz38_NA_2>	78	</Chassis_Pz38_NA_2>
-    <Chassis_Panther_II>	79	</Chassis_Panther_II>
-    <Chassis_Panther_II_2>	80	</Chassis_Panther_II_2>
-    <Chassis_G_Tiger>	81	</Chassis_G_Tiger>
-    <Chassis_G_Tiger2>	82	</Chassis_G_Tiger2>
-    <Chassis_G_Panther_1>	83	</Chassis_G_Panther_1>
-    <Chassis_G_Panther_2>	84	</Chassis_G_Panther_2>
-    <Chassis_Lowe>	85	</Chassis_Lowe>
-    <Chassis_G_E>	86	</Chassis_G_E>
-    <Chassis_T-25>	88	</Chassis_T-25>
-    <Chassis_T-15>	89	</Chassis_T-15>
-    <Chassis_E-100>	90	</Chassis_E-100>
-    <Chassis_E-75>	91	</Chassis_E-75>
-    <Chassis_E-75_2>	92	</Chassis_E-75_2>
-    <Chassis_VK2801>	93	</Chassis_VK2801>
-    <Chassis_VK2801_2>	94	</Chassis_VK2801_2>
-    <Chassis_E-50>	95	</Chassis_E-50>
-    <Chassis_E-50_2>	96	</Chassis_E-50_2>
-    <Chassis_VK4502A>	97	</Chassis_VK4502A>
-    <Chassis_VK4502A_2>	98	</Chassis_VK4502A_2>
-    <Chassis_PzVI_Tiger_P>	99	</Chassis_PzVI_Tiger_P>
-    <Chassis_PzVI_Tiger_P_2>	100	</Chassis_PzVI_Tiger_P_2>
-    <Chassis_PzIV_Hydro>	101	</Chassis_PzIV_Hydro>
-    <Chassis_JagdTiger_SdKfz_185>	102	</Chassis_JagdTiger_SdKfz_185>
-    <Chassis_Sturer_Emil>	103	</Chassis_Sturer_Emil>
-    <Chassis_Sturer_Emil_2>	104	</Chassis_Sturer_Emil_2>
-    <Chassis_Marder_III>	105	</Chassis_Marder_III>
-    <Chassis_Marder_III_2>	106	</Chassis_Marder_III_2>
-    <Chassis_JagdPantherII>	107	</Chassis_JagdPantherII>
-    <Chassis_JagdPantherII_2>	108	</Chassis_JagdPantherII_2>
-    <Chassis_Nashorn>	109	</Chassis_Nashorn>
-    <Chassis_Nashorn_2>	110	</Chassis_Nashorn_2>
-    <Chassis_JagdPz_E100>	111	</Chassis_JagdPz_E100>
-    <Chassis_E-25>	112	</Chassis_E-25>
-    <Chassis_DickerMax>	118	</Chassis_DickerMax>
-    <PzIV_ausf43>	119	</PzIV_ausf43>
-    <Chassis_E50_Ausf_M>	120	</Chassis_E50_Ausf_M>
-    <Chassis_Panther_M10>	121	</Chassis_Panther_M10>
-    <PzIIIketten_Ausf_L_T>	122	</PzIIIketten_Ausf_L_T>
-    <PzVIB_Vetstaerktketten_T>	123	</PzVIB_Vetstaerktketten_T>
-    <Pz-V_Vetstaerktketten_T>	124	</Pz-V_Vetstaerktketten_T>
-    <Chassis_PzI_ausf_C>	125	</Chassis_PzI_ausf_C>
-    <Chassis_PzI_ausf_C_2>	126	</Chassis_PzI_ausf_C_2>
-    <Chassis_PzI>	127	</Chassis_PzI>
-    <Chassis_PzI_2>	129	</Chassis_PzI_2>
-    <Chassis_Pz_II_AusfG>	130	</Chassis_Pz_II_AusfG>
-    <Chassis_Pz_II_AusfG_2>	131	</Chassis_Pz_II_AusfG_2>
-    <Chassis_DW_II>	132	</Chassis_DW_II>
-    <Chassis_DW_II_2>	133	</Chassis_DW_II_2>
-    <Chassis_VK2001DB>	134	</Chassis_VK2001DB>
-    <Chassis_VK2001DB_2>	135	</Chassis_VK2001DB_2>
-    <Chassis_VK7201>	136	</Chassis_VK7201>
-    <Chassis_Indien_Panzer>	137	</Chassis_Indien_Panzer>
-    <Chassis_Indien_Panzer_2>	138	</Chassis_Indien_Panzer_2>
-    <Chassis_VK3002DB_V1>	139	</Chassis_VK3002DB_V1>
-    <Chassis_VK3002DB_V1_2>	140	</Chassis_VK3002DB_V1_2>
-    <Chassis_Auf_Panther_2>	142	</Chassis_Auf_Panther_2>
-    <Chassis_Auf_Panther>	141	</Chassis_Auf_Panther>
-    <Chassis_Leopard1>	143	</Chassis_Leopard1>
-    <Chassis_Pro_Ag_A>	144	</Chassis_Pro_Ag_A>
-    <Chassis_Pro_Ag_A_2>	145	</Chassis_Pro_Ag_A_2>
-    <Chassis_GW_Mk_IVe>	146	</Chassis_GW_Mk_IVe>
-    <Chassis_GW_Mk_IVe_2>	147	</Chassis_GW_Mk_IVe_2>
-    <Chassis_GW_Elefant>	148	</Chassis_GW_Elefant>
-    <Chassis_GW_Elefant_2>	149	</Chassis_GW_Elefant_2>
-    <Chassis_Pz_Sfl_IVb>	150	</Chassis_Pz_Sfl_IVb>
-    <Chassis_Pz_Sfl_IVb_2>	151	</Chassis_Pz_Sfl_IVb_2>
-    <Chassis_VK3002M>	153	</Chassis_VK3002M>
-    <Chassis_VK3002M_2>	154	</Chassis_VK3002M_2>
-    <Chassis_Pz_Sfl_IVc>	155	</Chassis_Pz_Sfl_IVc>
-    <Chassis_Pz_Sfl_IVc_2>	156	</Chassis_Pz_Sfl_IVc_2>
-    <Chassis_Waffentrager_IV>	157	</Chassis_Waffentrager_IV>
-    <Chassis_Waffentrager_IV_2>	158	</Chassis_Waffentrager_IV_2>
-    <Chassis_RhB_Waffentrager>	159	</Chassis_RhB_Waffentrager>
-    <Chassis_RhB_Waffentrager_2>	160	</Chassis_RhB_Waffentrager_2>
-    <Chassis_Waffentrager_E100>	161	</Chassis_Waffentrager_E100>
-    <Chassis_Pz_IV_AusfA>	162	</Chassis_Pz_IV_AusfA>
-    <Chassis_Pz_IV_AusfA_2>	163	</Chassis_Pz_IV_AusfA_2>
-    <Chassis_Pz_IV_AusfD>	164	</Chassis_Pz_IV_AusfD>
-    <Chassis_Pz_IV_AusfD_2>	165	</Chassis_Pz_IV_AusfD_2>
-    <Chassis_G100_Gtraktor_Krupp>	168	</Chassis_G100_Gtraktor_Krupp>
-    <Chassis_G101_StuG_III>	171	</Chassis_G101_StuG_III>
-    <Chassis_G101_StuG_III_2>	172	</Chassis_G101_StuG_III_2>
-    <Chassis_Pz_IV_AusfH>	174	</Chassis_Pz_IV_AusfH>
-    <Chassis_Pz_IV_AusfH_2>	175	</Chassis_Pz_IV_AusfH_2>
-    <Chassis_G103_RU_251>	177	</Chassis_G103_RU_251>
-    <Chassis_G103_RU_251_2>	178	</Chassis_G103_RU_251_2>
-    <Chassis_Env_Artillery>	179	</Chassis_Env_Artillery>
-    <Chassis_G104_Stug_IV>	180	</Chassis_G104_Stug_IV>
-    <Chassis_G106_PzKpfwPanther_AusfF>	181	</Chassis_G106_PzKpfwPanther_AusfF>
-    <Chassis_G108_PzKpfwII_AusfD>	182	</Chassis_G108_PzKpfwII_AusfD>
-    <Chassis_G105_T-55_NVA_DDR>	183	</Chassis_G105_T-55_NVA_DDR>
-    <Chassis_G04_PzVI_Tiger_IA>	184	</Chassis_G04_PzVI_Tiger_IA>
-    <Chassis_G107_PzKpfwIII_AusfK>	185	</Chassis_G107_PzKpfwIII_AusfK>
-    <Chassis_G110_Typ_205>	186	</Chassis_G110_Typ_205>
-    <Chassis_G110_Typ_205_2>	187	</Chassis_G110_Typ_205_2>
-    <Chassis_G109_Steyr_WT>	188	</Chassis_G109_Steyr_WT>
-    <Chassis_G112_KanonenJagdPanzer>	189	</Chassis_G112_KanonenJagdPanzer>
-    <Chassis_G58_VK4502P>	190	</Chassis_G58_VK4502P>
-    <Chassis_G113_SP_I_C>	191	</Chassis_G113_SP_I_C>
-    <Chassis_G113_SP_I_C_2>	192	</Chassis_G113_SP_I_C_2>
-    <Chassis_G114_Skorpian>	193	</Chassis_G114_Skorpian>
-    <Chassis_G115_Typ_205_4_Jun>	194	</Chassis_G115_Typ_205_4_Jun>
-    <Chassis_G118_VK4503>	199	</Chassis_G118_VK4503>
-    <Chassis_G116_Turan_III_prot>	200	</Chassis_G116_Turan_III_prot>
-    <Chassis_G117_Toldi_III>	201	</Chassis_G117_Toldi_III>
-    <Chassis_G119_Panzer58>	202	</Chassis_G119_Panzer58>
-    <Chassis_G121_Grille_15_L63>	203	</Chassis_G121_Grille_15_L63>
-    <Chassis_G120_M41_90>	204	</Chassis_G120_M41_90>
-    <Chassis_G119_Pz58_Mutz>	205	</Chassis_G119_Pz58_Mutz>
-    <Chassis_G120_M41_90_GrandFinal>	206	</Chassis_G120_M41_90_GrandFinal>
-    <Chassis_G122_VK6501H>	207	</Chassis_G122_VK6501H>
-    <PzV-IVketten_CN>	208	</PzV-IVketten_CN>
-    <PzV-IVketten_ausfA_CN>	209	</PzV-IVketten_ausfA_CN>
-    <Chassis_G114_Rheinmetall_Skorpian>	210	</Chassis_G114_Rheinmetall_Skorpian>
-    <Chassis_G134_PzKpfw_VII>	211	</Chassis_G134_PzKpfw_VII>
-    <Chassis_G115_Typ_205B>	212	</Chassis_G115_Typ_205B>
-    <Chassis_G115_Typ_205B_2>	213	</Chassis_G115_Typ_205B_2>
-    <Chassis_G119_Panzer58_BF>	214	</Chassis_G119_Panzer58_BF>
-    <Chassis_G125_Spz_57_Rh>	215	</Chassis_G125_Spz_57_Rh>
-    <Chassis_G16_PzVIB_Tiger_II_F>	216	</Chassis_G16_PzVIB_Tiger_II_F>
-    <Chassis_G126_HWK_12>	217	</Chassis_G126_HWK_12>
-    <Chassis_G126_HWK_12_2>	218	</Chassis_G126_HWK_12_2>
-    <Chassis_G44_JagdTigerH>	219	</Chassis_G44_JagdTigerH>
-    <Chassis_G136_Tiger_131>	220	</Chassis_G136_Tiger_131>
-    <Chassis_G137_PzVI_Tiger_217>	222	</Chassis_G137_PzVI_Tiger_217>
-    <Chassis_G138_VK168_02>	223	</Chassis_G138_VK168_02>
-    <Chassis_G98_Waffentrager_E100_P>	224	</Chassis_G98_Waffentrager_E100_P>
-    <Chassis_G112_KanonenJagdPanzer_105>	225	</Chassis_G112_KanonenJagdPanzer_105>
-    <Chassis_G138_VK168_02_Mauerbrecher>	226	</Chassis_G138_VK168_02_Mauerbrecher>
-    <Chassis_G85_Aufklarungspanzer_V>	227	</Chassis_G85_Aufklarungspanzer_V>
-    <Chassis_G139_MKA>	228	</Chassis_G139_MKA>
-    <Chassis_G140_HWK_30>	229	</Chassis_G140_HWK_30>
-    <Chassis_Lowe_FL>	230	</Chassis_Lowe_FL>
-    <Chassis_G119_Panzer58_FL>	231	</Chassis_G119_Panzer58_FL>
-    <Chassis_G141_VK7501K>	232	</Chassis_G141_VK7501K>
-    <Chassis_G144_Kpz_50t>	233	</Chassis_G144_Kpz_50t>
-    <Chassis_G143_E75_TS>	234	</Chassis_G143_E75_TS>
-    <Chassis_G142_M48RPz>	235	</Chassis_G142_M48RPz>
-    <Chassis_1_G147_Kunze_Panzer>	236	</Chassis_1_G147_Kunze_Panzer>
-    <Chassis_Leopard1_bob>	237	</Chassis_Leopard1_bob>
-    <Chassis_G151_Pz_Sfl_IC>	238	</Chassis_G151_Pz_Sfl_IC>
-    <Chassis_G154_Kpz_07_RH>	239	</Chassis_G154_Kpz_07_RH>
-    <Chassis_G81_Pz_IV_AusfH_GuP>	240	</Chassis_G81_Pz_IV_AusfH_GuP>
-    <Chassis_G160_Pz_Kpfw_35_R_mit_T_26_Turm>	241	</Chassis_G160_Pz_Kpfw_35_R_mit_T_26_Turm>
-    <Chassis_G161_Pz_Kpfw_M15_38_t>	242	</Chassis_G161_Pz_Kpfw_M15_38_t>
-    <Chassis_G159_KPZ_3_Project_07_HK>	243	</Chassis_G159_KPZ_3_Project_07_HK>
-    <Chassis_G98_Waffentrager_E100_WO>	244	</Chassis_G98_Waffentrager_E100_WO>
-    <Chassis_G163_Pz_Kpfw_KW_Ir_mit_75mm_kwk40>	245	</Chassis_G163_Pz_Kpfw_KW_Ir_mit_75mm_kwk40>
-    <Chassis_G162_Project_Kpz_07P_E>	246	</Chassis_G162_Project_Kpz_07P_E>
-    <Chassis_G167_Tiger_Maus_120t>	247	</Chassis_G167_Tiger_Maus_120t>
-    <Chassis_G166_LKpz_70_K>	248	</Chassis_G166_LKpz_70_K>
-    <Chassis_G164_Kpz_Pr_68_P>	249	</Chassis_G164_Kpz_Pr_68_P>
-    <Chassis_G168_KJpz_T_III>	250	</Chassis_G168_KJpz_T_III>
-    <Chassis_G165_Erich_Konzept_I>	251	</Chassis_G165_Erich_Konzept_I>
-    <VK3002DB_Standardtketten_SH>	306	</VK3002DB_Standardtketten_SH>
-    <Chassis_VK4502A_SH>	307	</Chassis_VK4502A_SH>
-    <Chassis_E-100_SH>	308	</Chassis_E-100_SH>
-    <Chassis_G00_Bomber_SH>	310	</Chassis_G00_Bomber_SH>
-    <Chassis_G25_PzII_Luchs_SHXXI_B>	311	</Chassis_G25_PzII_Luchs_SHXXI_B>
-    <PzIV_ausf43_SH_bot>	312	</PzIV_ausf43_SH_bot>
-    <Chassis_G04_PzVI_Tiger_I_SHXXI_B>	313	</Chassis_G04_PzVI_Tiger_I_SHXXI_B>
-    <Chassis_G158_VK2801_105_SPXXI>	314	</Chassis_G158_VK2801_105_SPXXI>
-    <Chassis_E50_Ausf_M_7x7>	401	</Chassis_E50_Ausf_M_7x7>
-    <JagdTiger_Vetstaerktketten_FL>	501	</JagdTiger_Vetstaerktketten_FL>
-    <Chassis_E-50_2_FL>	502	</Chassis_E-50_2_FL>
-    <Ferdinandvetstaerktketten_FL>	504	</Ferdinandvetstaerktketten_FL>
-    <PzVIB_Vetstaerktketten_FL>	505	</PzVIB_Vetstaerktketten_FL>
-    <Chassis_Panther_II_2_FL>	506	</Chassis_Panther_II_2_FL>
-    <Chassis_G126_HWK_12_2_FL>	507	</Chassis_G126_HWK_12_2_FL>
-    <PzVI_Vetstaerktketten_FL>	31003	</PzVI_Vetstaerktketten_FL>
-    <Chassis_E-75_2_FL>	31004	</Chassis_E-75_2_FL>
-    <Chassis_G134_PzKpfw_VII_7x7>	31002	</Chassis_G134_PzKpfw_VII_7x7>
-    <VK3601H_henshelketten_ausf_B_C>	31001	</VK3601H_henshelketten_ausf_B_C>
-    <Chassis_G171_E77>	31005	</Chassis_G171_E77>
-    <Chassis_G171_E77_02>	31006	</Chassis_G171_E77_02>
-    <Chassis_G182_Mausekonig>	31007	</Chassis_G182_Mausekonig>
-    <Chassis_G178_Sturmtiger_V1>	31008	</Chassis_G178_Sturmtiger_V1>
-    <Chassis_G184_EisBaer>	31009	</Chassis_G184_EisBaer>
-    <Chassis_G189_E100_02>	31010	</Chassis_G189_E100_02>
-    <Chassis_G181_StuG_Maus_17cm>	31011	</Chassis_G181_StuG_Maus_17cm>
-    <Chassis_G193_Aufgabe_57>	31012	</Chassis_G193_Aufgabe_57>
-    <Chassis_G196_E_75_Ausf_B_Doppel>	31013	</Chassis_G196_E_75_Ausf_B_Doppel>
-    <Chassis_G194_E_50_GT_Alkett_Prod>	31014	</Chassis_G194_E_50_GT_Alkett_Prod>
-    <Chassis_G1105_T-55_NVA_DDR_T>	35001	</Chassis_G1105_T-55_NVA_DDR_T>
-    <Chassis_JagdTiger_SdKfz_185_IGR>	60001	</Chassis_JagdTiger_SdKfz_185_IGR>
-    <Chassis_Panther_II_2_IGR>	60002	</Chassis_Panther_II_2_IGR>
-    <PzVIB_Vetstaerktketten_IGR>	60003	</PzVIB_Vetstaerktketten_IGR>
-    <PzVI_Vetstaerktketten_IGR>	60004	</PzVI_Vetstaerktketten_IGR>
-    <StuGIII_Ausf_1943_IGR>	60005	</StuGIII_Ausf_1943_IGR>
-    <Chassis_E-25_IGR>	60006	</Chassis_E-25_IGR>
-    <Pz-V_Vetstaerktketten_IGR>	60007	</Pz-V_Vetstaerktketten_IGR>
-    <Ferdinandvetstaerktketten_IGR>	60008	</Ferdinandvetstaerktketten_IGR>
-    <Mausketten_IGR>	60009	</Mausketten_IGR>
-    <Chassis_Pz_IV_AusfD_bootcamp>	64005	</Chassis_Pz_IV_AusfD_bootcamp>
-    <Chassis_DW_II_2_MapsTraining_Dummy_HT_1>	46	</Chassis_DW_II_2_MapsTraining_Dummy_HT_1>
-    <Hetzer_Ausf_B_MapsTraining_Dummy_ATSPG_1>	65	</Hetzer_Ausf_B_MapsTraining_Dummy_ATSPG_1>
-    <PzVI_Vetstaerktketten_MapsTraining_Player_HT_2>	68	</PzVI_Vetstaerktketten_MapsTraining_Player_HT_2>
-    <Chassis_Nashorn_2_MapsTraining_Dummy_ATSPG_2>	69	</Chassis_Nashorn_2_MapsTraining_Dummy_ATSPG_2>
-    <Hummel_Ausf_1944_NewOnBoarding>	65006	</Hummel_Ausf_1944_NewOnBoarding>
-    <PzIIIketten_Ausf_L_NewOnBoarding>	64014	</PzIIIketten_Ausf_L_NewOnBoarding>
-    <Chassis_Pz_IV_AusfH_2_NewOnBoarding>	64015	</Chassis_Pz_IV_AusfH_2_NewOnBoarding>
-    <VK3001P_NewOnBoarding>	64016	</VK3001P_NewOnBoarding>
-    <PzVIB_Vetstaerktketten_NewOnBoarding>	64012	</PzVIB_Vetstaerktketten_NewOnBoarding>
-    <Chassis_PzVI_Tiger_P_2_NewOnBoarding>	64013	</Chassis_PzVI_Tiger_P_2_NewOnBoarding>
-    <JgPzV_Vetstaerktketten_NewOnBoarding>	64017	</JgPzV_Vetstaerktketten_NewOnBoarding>
-    <Chassis_G00_Startgestell>	65007	</Chassis_G00_Startgestell>
-    <Chassis_G00_Artilleriebunker>	65008	</Chassis_G00_Artilleriebunker>
-    <Chassis_G00_Feuerbunker>	65009	</Chassis_G00_Feuerbunker>
-  </ids>
-  <shared></shared>
+  <xmlns:xmlref>	http://bwt/xmlref	</xmlns:xmlref>
+  <shared>
+    <B2ketten>
+      <id>	59	</id>
+    </B2ketten>
+    <Chassis_1_G147_Kunze_Panzer>
+      <id>	236	</id>
+    </Chassis_1_G147_Kunze_Panzer>
+    <Chassis_Auf_Panther>
+      <id>	141	</id>
+    </Chassis_Auf_Panther>
+    <Chassis_Auf_Panther_2>
+      <id>	142	</id>
+    </Chassis_Auf_Panther_2>
+    <Chassis_DW_II>
+      <id>	132	</id>
+    </Chassis_DW_II>
+    <Chassis_DW_II_2>
+      <id>	133	</id>
+    </Chassis_DW_II_2>
+    <Chassis_DW_II_2_MapsTraining_Dummy_HT_1>
+      <id>	46	</id>
+    </Chassis_DW_II_2_MapsTraining_Dummy_HT_1>
+    <Chassis_DickerMax>
+      <id>	118	</id>
+    </Chassis_DickerMax>
+    <Chassis_E-100>
+      <id>	90	</id>
+    </Chassis_E-100>
+    <Chassis_E-100_SH>
+      <id>	308	</id>
+    </Chassis_E-100_SH>
+    <Chassis_E-25>
+      <id>	112	</id>
+    </Chassis_E-25>
+    <Chassis_E-25_IGR>
+      <id>	60006	</id>
+    </Chassis_E-25_IGR>
+    <Chassis_E-50>
+      <id>	95	</id>
+    </Chassis_E-50>
+    <Chassis_E-50_2>
+      <id>	96	</id>
+    </Chassis_E-50_2>
+    <Chassis_E-50_2_FL>
+      <id>	502	</id>
+    </Chassis_E-50_2_FL>
+    <Chassis_E-75>
+      <id>	91	</id>
+    </Chassis_E-75>
+    <Chassis_E-75_2>
+      <id>	92	</id>
+    </Chassis_E-75_2>
+    <Chassis_E-75_2_FL>
+      <id>	31004	</id>
+    </Chassis_E-75_2_FL>
+    <Chassis_E50_Ausf_M>
+      <id>	120	</id>
+    </Chassis_E50_Ausf_M>
+    <Chassis_E50_Ausf_M_7x7>
+      <id>	401	</id>
+    </Chassis_E50_Ausf_M_7x7>
+    <Chassis_Env_Artillery>
+      <id>	179	</id>
+    </Chassis_Env_Artillery>
+    <Chassis_G00_Artilleriebunker>
+      <id>	65008	</id>
+    </Chassis_G00_Artilleriebunker>
+    <Chassis_G00_Bomber_SH>
+      <id>	310	</id>
+    </Chassis_G00_Bomber_SH>
+    <Chassis_G00_Feuerbunker>
+      <id>	65009	</id>
+    </Chassis_G00_Feuerbunker>
+    <Chassis_G00_Startgestell>
+      <id>	65007	</id>
+    </Chassis_G00_Startgestell>
+    <Chassis_G04_PzVI_Tiger_IA>
+      <id>	184	</id>
+    </Chassis_G04_PzVI_Tiger_IA>
+    <Chassis_G04_PzVI_Tiger_I_SHXXI_B>
+      <id>	313	</id>
+    </Chassis_G04_PzVI_Tiger_I_SHXXI_B>
+    <Chassis_G100_Gtraktor_Krupp>
+      <id>	168	</id>
+    </Chassis_G100_Gtraktor_Krupp>
+    <Chassis_G101_StuG_III>
+      <id>	171	</id>
+    </Chassis_G101_StuG_III>
+    <Chassis_G101_StuG_III_2>
+      <id>	172	</id>
+    </Chassis_G101_StuG_III_2>
+    <Chassis_G103_RU_251>
+      <id>	177	</id>
+    </Chassis_G103_RU_251>
+    <Chassis_G103_RU_251_2>
+      <id>	178	</id>
+    </Chassis_G103_RU_251_2>
+    <Chassis_G104_Stug_IV>
+      <id>	180	</id>
+    </Chassis_G104_Stug_IV>
+    <Chassis_G105_T-55_NVA_DDR>
+      <id>	183	</id>
+    </Chassis_G105_T-55_NVA_DDR>
+    <Chassis_G106_PzKpfwPanther_AusfF>
+      <id>	181	</id>
+    </Chassis_G106_PzKpfwPanther_AusfF>
+    <Chassis_G107_PzKpfwIII_AusfK>
+      <id>	185	</id>
+    </Chassis_G107_PzKpfwIII_AusfK>
+    <Chassis_G108_PzKpfwII_AusfD>
+      <id>	182	</id>
+    </Chassis_G108_PzKpfwII_AusfD>
+    <Chassis_G109_Steyr_WT>
+      <id>	188	</id>
+    </Chassis_G109_Steyr_WT>
+    <Chassis_G1105_T-55_NVA_DDR_T>
+      <id>	35001	</id>
+    </Chassis_G1105_T-55_NVA_DDR_T>
+    <Chassis_G110_Typ_205>
+      <id>	186	</id>
+    </Chassis_G110_Typ_205>
+    <Chassis_G110_Typ_205_2>
+      <id>	187	</id>
+    </Chassis_G110_Typ_205_2>
+    <Chassis_G112_KanonenJagdPanzer>
+      <id>	189	</id>
+    </Chassis_G112_KanonenJagdPanzer>
+    <Chassis_G112_KanonenJagdPanzer_105>
+      <id>	225	</id>
+    </Chassis_G112_KanonenJagdPanzer_105>
+    <Chassis_G113_SP_I_C>
+      <id>	191	</id>
+    </Chassis_G113_SP_I_C>
+    <Chassis_G113_SP_I_C_2>
+      <id>	192	</id>
+    </Chassis_G113_SP_I_C_2>
+    <Chassis_G114_Rheinmetall_Skorpian>
+      <id>	210	</id>
+    </Chassis_G114_Rheinmetall_Skorpian>
+    <Chassis_G114_Skorpian>
+      <id>	193	</id>
+    </Chassis_G114_Skorpian>
+    <Chassis_G115_Typ_205B>
+      <id>	212	</id>
+    </Chassis_G115_Typ_205B>
+    <Chassis_G115_Typ_205B_2>
+      <id>	213	</id>
+    </Chassis_G115_Typ_205B_2>
+    <Chassis_G115_Typ_205_4_Jun>
+      <id>	194	</id>
+    </Chassis_G115_Typ_205_4_Jun>
+    <Chassis_G116_Turan_III_prot>
+      <id>	200	</id>
+    </Chassis_G116_Turan_III_prot>
+    <Chassis_G117_Toldi_III>
+      <id>	201	</id>
+    </Chassis_G117_Toldi_III>
+    <Chassis_G118_VK4503>
+      <id>	199	</id>
+    </Chassis_G118_VK4503>
+    <Chassis_G119_Panzer58>
+      <id>	202	</id>
+    </Chassis_G119_Panzer58>
+    <Chassis_G119_Panzer58_BF>
+      <id>	214	</id>
+    </Chassis_G119_Panzer58_BF>
+    <Chassis_G119_Panzer58_FL>
+      <id>	231	</id>
+    </Chassis_G119_Panzer58_FL>
+    <Chassis_G119_Pz58_Mutz>
+      <id>	205	</id>
+    </Chassis_G119_Pz58_Mutz>
+    <Chassis_G120_M41_90>
+      <id>	204	</id>
+    </Chassis_G120_M41_90>
+    <Chassis_G120_M41_90_GrandFinal>
+      <id>	206	</id>
+    </Chassis_G120_M41_90_GrandFinal>
+    <Chassis_G121_Grille_15_L63>
+      <id>	203	</id>
+    </Chassis_G121_Grille_15_L63>
+    <Chassis_G122_VK6501H>
+      <id>	207	</id>
+    </Chassis_G122_VK6501H>
+    <Chassis_G125_Spz_57_Rh>
+      <id>	215	</id>
+    </Chassis_G125_Spz_57_Rh>
+    <Chassis_G126_HWK_12>
+      <id>	217	</id>
+    </Chassis_G126_HWK_12>
+    <Chassis_G126_HWK_12_2>
+      <id>	218	</id>
+    </Chassis_G126_HWK_12_2>
+    <Chassis_G126_HWK_12_2_FL>
+      <id>	507	</id>
+    </Chassis_G126_HWK_12_2_FL>
+    <Chassis_G134_PzKpfw_VII>
+      <id>	211	</id>
+    </Chassis_G134_PzKpfw_VII>
+    <Chassis_G134_PzKpfw_VII_7x7>
+      <id>	31002	</id>
+    </Chassis_G134_PzKpfw_VII_7x7>
+    <Chassis_G136_Tiger_131>
+      <id>	220	</id>
+    </Chassis_G136_Tiger_131>
+    <Chassis_G137_PzVI_Tiger_217>
+      <id>	222	</id>
+    </Chassis_G137_PzVI_Tiger_217>
+    <Chassis_G138_VK168_02>
+      <id>	223	</id>
+    </Chassis_G138_VK168_02>
+    <Chassis_G138_VK168_02_Mauerbrecher>
+      <id>	226	</id>
+    </Chassis_G138_VK168_02_Mauerbrecher>
+    <Chassis_G139_MKA>
+      <id>	228	</id>
+    </Chassis_G139_MKA>
+    <Chassis_G140_HWK_30>
+      <id>	229	</id>
+    </Chassis_G140_HWK_30>
+    <Chassis_G141_VK7501K>
+      <id>	232	</id>
+    </Chassis_G141_VK7501K>
+    <Chassis_G142_M48RPz>
+      <id>	235	</id>
+    </Chassis_G142_M48RPz>
+    <Chassis_G143_E75_TS>
+      <id>	234	</id>
+    </Chassis_G143_E75_TS>
+    <Chassis_G144_Kpz_50t>
+      <id>	233	</id>
+    </Chassis_G144_Kpz_50t>
+    <Chassis_G151_Pz_Sfl_IC>
+      <id>	238	</id>
+    </Chassis_G151_Pz_Sfl_IC>
+    <Chassis_G154_Kpz_07_RH>
+      <id>	239	</id>
+    </Chassis_G154_Kpz_07_RH>
+    <Chassis_G158_VK2801_105_SPXXI>
+      <id>	314	</id>
+    </Chassis_G158_VK2801_105_SPXXI>
+    <Chassis_G159_KPZ_3_Project_07_HK>
+      <id>	243	</id>
+    </Chassis_G159_KPZ_3_Project_07_HK>
+    <Chassis_G160_Pz_Kpfw_35_R_mit_T_26_Turm>
+      <id>	241	</id>
+    </Chassis_G160_Pz_Kpfw_35_R_mit_T_26_Turm>
+    <Chassis_G161_Pz_Kpfw_M15_38_t>
+      <id>	242	</id>
+    </Chassis_G161_Pz_Kpfw_M15_38_t>
+    <Chassis_G162_Project_Kpz_07P_E>
+      <id>	246	</id>
+    </Chassis_G162_Project_Kpz_07P_E>
+    <Chassis_G163_Pz_Kpfw_KW_Ir_mit_75mm_kwk40>
+      <id>	245	</id>
+    </Chassis_G163_Pz_Kpfw_KW_Ir_mit_75mm_kwk40>
+    <Chassis_G164_Kpz_Pr_68_P>
+      <id>	249	</id>
+    </Chassis_G164_Kpz_Pr_68_P>
+    <Chassis_G165_Erich_Konzept_I>
+      <id>	251	</id>
+    </Chassis_G165_Erich_Konzept_I>
+    <Chassis_G166_LKpz_70_K>
+      <id>	248	</id>
+    </Chassis_G166_LKpz_70_K>
+    <Chassis_G167_Tiger_Maus_120t>
+      <id>	247	</id>
+    </Chassis_G167_Tiger_Maus_120t>
+    <Chassis_G168_KJpz_T_III>
+      <id>	250	</id>
+    </Chassis_G168_KJpz_T_III>
+    <Chassis_G16_PzVIB_Tiger_II_F>
+      <id>	216	</id>
+    </Chassis_G16_PzVIB_Tiger_II_F>
+    <Chassis_G171_E77>
+      <id>	31005	</id>
+    </Chassis_G171_E77>
+    <Chassis_G171_E77_02>
+      <id>	31006	</id>
+    </Chassis_G171_E77_02>
+    <Chassis_G178_Sturmtiger_V1>
+      <id>	31008	</id>
+    </Chassis_G178_Sturmtiger_V1>
+    <Chassis_G181_StuG_Maus_17cm>
+      <id>	31011	</id>
+    </Chassis_G181_StuG_Maus_17cm>
+    <Chassis_G182_Mausekonig>
+      <id>	31007	</id>
+    </Chassis_G182_Mausekonig>
+    <Chassis_G184_EisBaer>
+      <id>	31009	</id>
+    </Chassis_G184_EisBaer>
+    <Chassis_G189_E100_02>
+      <id>	31010	</id>
+    </Chassis_G189_E100_02>
+    <Chassis_G193_Aufgabe_57>
+      <id>	31012	</id>
+    </Chassis_G193_Aufgabe_57>
+    <Chassis_G194_E_50_GT_Alkett_Prod>
+      <id>	31014	</id>
+    </Chassis_G194_E_50_GT_Alkett_Prod>
+    <Chassis_G196_E_75_Ausf_B_Doppel>
+      <id>	31013	</id>
+    </Chassis_G196_E_75_Ausf_B_Doppel>
+    <Chassis_G197_E_94_Fechter>
+      <id>	31016	</id>
+    </Chassis_G197_E_94_Fechter>
+    <Chassis_G25_PzII_Luchs_SHXXI_B>
+      <id>	311	</id>
+    </Chassis_G25_PzII_Luchs_SHXXI_B>
+    <Chassis_G44_JagdTigerH>
+      <id>	219	</id>
+    </Chassis_G44_JagdTigerH>
+    <Chassis_G58_VK4502P>
+      <id>	190	</id>
+    </Chassis_G58_VK4502P>
+    <Chassis_G81_Pz_IV_AusfH_GuP>
+      <id>	240	</id>
+    </Chassis_G81_Pz_IV_AusfH_GuP>
+    <Chassis_G85_Aufklarungspanzer_V>
+      <id>	227	</id>
+    </Chassis_G85_Aufklarungspanzer_V>
+    <Chassis_G98_Waffentrager_E100_P>
+      <id>	224	</id>
+    </Chassis_G98_Waffentrager_E100_P>
+    <Chassis_G98_Waffentrager_E100_WO>
+      <id>	244	</id>
+    </Chassis_G98_Waffentrager_E100_WO>
+    <Chassis_GW_Elefant>
+      <id>	148	</id>
+    </Chassis_GW_Elefant>
+    <Chassis_GW_Elefant_2>
+      <id>	149	</id>
+    </Chassis_GW_Elefant_2>
+    <Chassis_GW_Mk_IVe>
+      <id>	146	</id>
+    </Chassis_GW_Mk_IVe>
+    <Chassis_GW_Mk_IVe_2>
+      <id>	147	</id>
+    </Chassis_GW_Mk_IVe_2>
+    <Chassis_G_E>
+      <id>	86	</id>
+    </Chassis_G_E>
+    <Chassis_G_Panther_1>
+      <id>	83	</id>
+    </Chassis_G_Panther_1>
+    <Chassis_G_Panther_2>
+      <id>	84	</id>
+    </Chassis_G_Panther_2>
+    <Chassis_G_Tiger>
+      <id>	81	</id>
+    </Chassis_G_Tiger>
+    <Chassis_G_Tiger2>
+      <id>	82	</id>
+    </Chassis_G_Tiger2>
+    <Chassis_Indien_Panzer>
+      <id>	137	</id>
+    </Chassis_Indien_Panzer>
+    <Chassis_Indien_Panzer_2>
+      <id>	138	</id>
+    </Chassis_Indien_Panzer_2>
+    <Chassis_JagdPantherII>
+      <id>	107	</id>
+    </Chassis_JagdPantherII>
+    <Chassis_JagdPantherII_2>
+      <id>	108	</id>
+    </Chassis_JagdPantherII_2>
+    <Chassis_JagdPz_E100>
+      <id>	111	</id>
+    </Chassis_JagdPz_E100>
+    <Chassis_JagdTiger_SdKfz_185>
+      <id>	102	</id>
+    </Chassis_JagdTiger_SdKfz_185>
+    <Chassis_JagdTiger_SdKfz_185_IGR>
+      <id>	60001	</id>
+    </Chassis_JagdTiger_SdKfz_185_IGR>
+    <Chassis_Leopard1>
+      <id>	143	</id>
+    </Chassis_Leopard1>
+    <Chassis_Leopard1_bob>
+      <id>	237	</id>
+    </Chassis_Leopard1_bob>
+    <Chassis_Lowe>
+      <id>	85	</id>
+    </Chassis_Lowe>
+    <Chassis_Lowe_FL>
+      <id>	230	</id>
+    </Chassis_Lowe_FL>
+    <Chassis_Marder_III>
+      <id>	105	</id>
+    </Chassis_Marder_III>
+    <Chassis_Marder_III_2>
+      <id>	106	</id>
+    </Chassis_Marder_III_2>
+    <Chassis_Nashorn>
+      <id>	109	</id>
+    </Chassis_Nashorn>
+    <Chassis_Nashorn_2>
+      <id>	110	</id>
+    </Chassis_Nashorn_2>
+    <Chassis_Nashorn_2_MapsTraining_Dummy_ATSPG_2>
+      <id>	69	</id>
+    </Chassis_Nashorn_2_MapsTraining_Dummy_ATSPG_2>
+    <Chassis_Panther_II>
+      <id>	79	</id>
+    </Chassis_Panther_II>
+    <Chassis_Panther_II_2>
+      <id>	80	</id>
+    </Chassis_Panther_II_2>
+    <Chassis_Panther_II_2_FL>
+      <id>	506	</id>
+    </Chassis_Panther_II_2_FL>
+    <Chassis_Panther_II_2_IGR>
+      <id>	60002	</id>
+    </Chassis_Panther_II_2_IGR>
+    <Chassis_Panther_M10>
+      <id>	121	</id>
+    </Chassis_Panther_M10>
+    <Chassis_Pro_Ag_A>
+      <id>	144	</id>
+    </Chassis_Pro_Ag_A>
+    <Chassis_Pro_Ag_A_2>
+      <id>	145	</id>
+    </Chassis_Pro_Ag_A_2>
+    <Chassis_Pz38_NA_1>
+      <id>	77	</id>
+    </Chassis_Pz38_NA_1>
+    <Chassis_Pz38_NA_2>
+      <id>	78	</id>
+    </Chassis_Pz38_NA_2>
+    <Chassis_PzI>
+      <id>	127	</id>
+    </Chassis_PzI>
+    <Chassis_PzIV_Hydro>
+      <id>	101	</id>
+    </Chassis_PzIV_Hydro>
+    <Chassis_PzI_2>
+      <id>	129	</id>
+    </Chassis_PzI_2>
+    <Chassis_PzI_ausf_C>
+      <id>	125	</id>
+    </Chassis_PzI_ausf_C>
+    <Chassis_PzI_ausf_C_2>
+      <id>	126	</id>
+    </Chassis_PzI_ausf_C_2>
+    <Chassis_PzVI_Tiger_P>
+      <id>	99	</id>
+    </Chassis_PzVI_Tiger_P>
+    <Chassis_PzVI_Tiger_P_2>
+      <id>	100	</id>
+    </Chassis_PzVI_Tiger_P_2>
+    <Chassis_PzVI_Tiger_P_2_NewOnBoarding>
+      <id>	64013	</id>
+    </Chassis_PzVI_Tiger_P_2_NewOnBoarding>
+    <Chassis_Pz_II_AusfG>
+      <id>	130	</id>
+    </Chassis_Pz_II_AusfG>
+    <Chassis_Pz_II_AusfG_2>
+      <id>	131	</id>
+    </Chassis_Pz_II_AusfG_2>
+    <Chassis_Pz_IV_AusfA>
+      <id>	162	</id>
+    </Chassis_Pz_IV_AusfA>
+    <Chassis_Pz_IV_AusfA_2>
+      <id>	163	</id>
+    </Chassis_Pz_IV_AusfA_2>
+    <Chassis_Pz_IV_AusfD>
+      <id>	164	</id>
+    </Chassis_Pz_IV_AusfD>
+    <Chassis_Pz_IV_AusfD_2>
+      <id>	165	</id>
+    </Chassis_Pz_IV_AusfD_2>
+    <Chassis_Pz_IV_AusfD_bootcamp>
+      <id>	64005	</id>
+    </Chassis_Pz_IV_AusfD_bootcamp>
+    <Chassis_Pz_IV_AusfH>
+      <id>	174	</id>
+    </Chassis_Pz_IV_AusfH>
+    <Chassis_Pz_IV_AusfH_2>
+      <id>	175	</id>
+    </Chassis_Pz_IV_AusfH_2>
+    <Chassis_Pz_IV_AusfH_2_NewOnBoarding>
+      <id>	64015	</id>
+    </Chassis_Pz_IV_AusfH_2_NewOnBoarding>
+    <Chassis_Pz_Sfl_IVb>
+      <id>	150	</id>
+    </Chassis_Pz_Sfl_IVb>
+    <Chassis_Pz_Sfl_IVb_2>
+      <id>	151	</id>
+    </Chassis_Pz_Sfl_IVb_2>
+    <Chassis_Pz_Sfl_IVc>
+      <id>	155	</id>
+    </Chassis_Pz_Sfl_IVc>
+    <Chassis_Pz_Sfl_IVc_2>
+      <id>	156	</id>
+    </Chassis_Pz_Sfl_IVc_2>
+    <Chassis_RhB_Waffentrager>
+      <id>	159	</id>
+    </Chassis_RhB_Waffentrager>
+    <Chassis_RhB_Waffentrager_2>
+      <id>	160	</id>
+    </Chassis_RhB_Waffentrager_2>
+    <Chassis_Sturer_Emil>
+      <id>	103	</id>
+    </Chassis_Sturer_Emil>
+    <Chassis_Sturer_Emil_2>
+      <id>	104	</id>
+    </Chassis_Sturer_Emil_2>
+    <Chassis_T-15>
+      <id>	89	</id>
+    </Chassis_T-15>
+    <Chassis_T-25>
+      <id>	88	</id>
+    </Chassis_T-25>
+    <Chassis_VK2001DB>
+      <id>	134	</id>
+    </Chassis_VK2001DB>
+    <Chassis_VK2001DB_2>
+      <id>	135	</id>
+    </Chassis_VK2001DB_2>
+    <Chassis_VK2801>
+      <id>	93	</id>
+    </Chassis_VK2801>
+    <Chassis_VK2801_2>
+      <id>	94	</id>
+    </Chassis_VK2801_2>
+    <Chassis_VK3002DB_V1>
+      <id>	139	</id>
+    </Chassis_VK3002DB_V1>
+    <Chassis_VK3002DB_V1_2>
+      <id>	140	</id>
+    </Chassis_VK3002DB_V1_2>
+    <Chassis_VK3002M>
+      <id>	153	</id>
+    </Chassis_VK3002M>
+    <Chassis_VK3002M_2>
+      <id>	154	</id>
+    </Chassis_VK3002M_2>
+    <Chassis_VK4502A>
+      <id>	97	</id>
+    </Chassis_VK4502A>
+    <Chassis_VK4502A_2>
+      <id>	98	</id>
+    </Chassis_VK4502A_2>
+    <Chassis_VK4502A_SH>
+      <id>	307	</id>
+    </Chassis_VK4502A_SH>
+    <Chassis_VK7201>
+      <id>	136	</id>
+    </Chassis_VK7201>
+    <Chassis_Waffentrager_E100>
+      <id>	161	</id>
+    </Chassis_Waffentrager_E100>
+    <Chassis_Waffentrager_IV>
+      <id>	157	</id>
+    </Chassis_Waffentrager_IV>
+    <Chassis_Waffentrager_IV_2>
+      <id>	158	</id>
+    </Chassis_Waffentrager_IV_2>
+    <Ferdinandstandardketten>
+      <id>	66	</id>
+    </Ferdinandstandardketten>
+    <Ferdinandvetstaerktketten>
+      <id>	67	</id>
+    </Ferdinandvetstaerktketten>
+    <Ferdinandvetstaerktketten_FL>
+      <id>	504	</id>
+    </Ferdinandvetstaerktketten_FL>
+    <Ferdinandvetstaerktketten_IGR>
+      <id>	60008	</id>
+    </Ferdinandvetstaerktketten_IGR>
+    <Grilleketten_ausf_A>
+      <id>	44	</id>
+    </Grilleketten_ausf_A>
+    <Grilleketten_ausf_B>
+      <id>	45	</id>
+    </Grilleketten_ausf_B>
+    <H35ketten>
+      <id>	64	</id>
+    </H35ketten>
+    <Hetzer_Ausf_A>
+      <id>	12	</id>
+    </Hetzer_Ausf_A>
+    <Hetzer_Ausf_B>
+      <id>	13	</id>
+    </Hetzer_Ausf_B>
+    <Hetzer_Ausf_B_MapsTraining_Dummy_ATSPG_1>
+      <id>	65	</id>
+    </Hetzer_Ausf_B_MapsTraining_Dummy_ATSPG_1>
+    <Hummel_Ausf_1943>
+      <id>	2	</id>
+    </Hummel_Ausf_1943>
+    <Hummel_Ausf_1944>
+      <id>	3	</id>
+    </Hummel_Ausf_1944>
+    <Hummel_Ausf_1944_NewOnBoarding>
+      <id>	65006	</id>
+    </Hummel_Ausf_1944_NewOnBoarding>
+    <JagdPzIV_Ausf_1940>
+      <id>	14	</id>
+    </JagdPzIV_Ausf_1940>
+    <JagdPzIV_Ausf_1943>
+      <id>	15	</id>
+    </JagdPzIV_Ausf_1943>
+    <JagdTiger_Standardketten>
+      <id>	74	</id>
+    </JagdTiger_Standardketten>
+    <JagdTiger_Vetstaerktketten>
+      <id>	75	</id>
+    </JagdTiger_Vetstaerktketten>
+    <JagdTiger_Vetstaerktketten_FL>
+      <id>	501	</id>
+    </JagdTiger_Vetstaerktketten_FL>
+    <JgPzV_Standardketten>
+      <id>	30	</id>
+    </JgPzV_Standardketten>
+    <JgPzV_Vetstaerktketten>
+      <id>	31	</id>
+    </JgPzV_Vetstaerktketten>
+    <JgPzV_Vetstaerktketten_NewOnBoarding>
+      <id>	64017	</id>
+    </JgPzV_Vetstaerktketten_NewOnBoarding>
+    <Leichtertaktorketten>
+      <id>	24	</id>
+    </Leichtertaktorketten>
+    <LeichtertaktorkettenB>
+      <id>	25	</id>
+    </LeichtertaktorkettenB>
+    <Leopardketten_Ausf_A>
+      <id>	42	</id>
+    </Leopardketten_Ausf_A>
+    <Leopardketten_Ausf_B>
+      <id>	43	</id>
+    </Leopardketten_Ausf_B>
+    <Luchsketten_Ausf_A>
+      <id>	49	</id>
+    </Luchsketten_Ausf_A>
+    <Luchsketten_Ausf_B>
+      <id>	50	</id>
+    </Luchsketten_Ausf_B>
+    <MarderII>
+      <id>	55	</id>
+    </MarderII>
+    <MarderIIketten_ausf_B>
+      <id>	56	</id>
+    </MarderIIketten_ausf_B>
+    <Mausketten>
+      <id>	57	</id>
+    </Mausketten>
+    <Mausketten_IGR>
+      <id>	60009	</id>
+    </Mausketten_IGR>
+    <Pz-V_Standardketten>
+      <id>	10	</id>
+    </Pz-V_Standardketten>
+    <Pz-V_Vetstaerktketten>
+      <id>	11	</id>
+    </Pz-V_Vetstaerktketten>
+    <Pz-V_Vetstaerktketten_IGR>
+      <id>	60007	</id>
+    </Pz-V_Vetstaerktketten_IGR>
+    <Pz-V_Vetstaerktketten_T>
+      <id>	124	</id>
+    </Pz-V_Vetstaerktketten_T>
+    <Pz35t_Standardketten>
+      <id>	6	</id>
+    </Pz35t_Standardketten>
+    <Pz35t_Vetstaerktketten>
+      <id>	7	</id>
+    </Pz35t_Vetstaerktketten>
+    <Pz38t_Standardketten>
+      <id>	26	</id>
+    </Pz38t_Standardketten>
+    <Pz38t_Vetstaerktketten>
+      <id>	27	</id>
+    </Pz38t_Vetstaerktketten>
+    <PzIII-IV>
+      <id>	53	</id>
+    </PzIII-IV>
+    <PzIII-IV_ausf_B>
+      <id>	54	</id>
+    </PzIII-IV_ausf_B>
+    <PzIIIketten_Ausf_A>
+      <id>	38	</id>
+    </PzIIIketten_Ausf_A>
+    <PzIIIketten_Ausf_B>
+      <id>	39	</id>
+    </PzIIIketten_Ausf_B>
+    <PzIIIketten_Ausf_J>
+      <id>	34	</id>
+    </PzIIIketten_Ausf_J>
+    <PzIIIketten_Ausf_L>
+      <id>	35	</id>
+    </PzIIIketten_Ausf_L>
+    <PzIIIketten_Ausf_L_NewOnBoarding>
+      <id>	64014	</id>
+    </PzIIIketten_Ausf_L_NewOnBoarding>
+    <PzIIIketten_Ausf_L_T>
+      <id>	122	</id>
+    </PzIIIketten_Ausf_L_T>
+    <PzII_ausf_J>
+      <id>	52	</id>
+    </PzII_ausf_J>
+    <PzII_ketten_Ausf_A>
+      <id>	16	</id>
+    </PzII_ketten_Ausf_A>
+    <PzII_ketten_Ausf_B>
+      <id>	17	</id>
+    </PzII_ketten_Ausf_B>
+    <PzIV_Ausf_1940>
+      <id>	0	</id>
+    </PzIV_Ausf_1940>
+    <PzIV_ausf43>
+      <id>	119	</id>
+    </PzIV_ausf43>
+    <PzIV_ausf43_SH_bot>
+      <id>	312	</id>
+    </PzIV_ausf43_SH_bot>
+    <PzJgd_ketten_I>
+      <id>	28	</id>
+    </PzJgd_ketten_I>
+    <PzJgd_ketten_II>
+      <id>	29	</id>
+    </PzJgd_ketten_II>
+    <PzV-IVketten>
+      <id>	51	</id>
+    </PzV-IVketten>
+    <PzV-IVketten_CN>
+      <id>	208	</id>
+    </PzV-IVketten_CN>
+    <PzV-IVketten_ausfA>
+      <id>	76	</id>
+    </PzV-IVketten_ausfA>
+    <PzV-IVketten_ausfA_CN>
+      <id>	209	</id>
+    </PzV-IVketten_ausfA_CN>
+    <PzVIB_Standardketten>
+      <id>	40	</id>
+    </PzVIB_Standardketten>
+    <PzVIB_Vetstaerktketten>
+      <id>	41	</id>
+    </PzVIB_Vetstaerktketten>
+    <PzVIB_Vetstaerktketten_FL>
+      <id>	505	</id>
+    </PzVIB_Vetstaerktketten_FL>
+    <PzVIB_Vetstaerktketten_IGR>
+      <id>	60003	</id>
+    </PzVIB_Vetstaerktketten_IGR>
+    <PzVIB_Vetstaerktketten_NewOnBoarding>
+      <id>	64012	</id>
+    </PzVIB_Vetstaerktketten_NewOnBoarding>
+    <PzVIB_Vetstaerktketten_T>
+      <id>	123	</id>
+    </PzVIB_Vetstaerktketten_T>
+    <PzVI_Standardketten>
+      <id>	4	</id>
+    </PzVI_Standardketten>
+    <PzVI_Vetstaerktketten>
+      <id>	5	</id>
+    </PzVI_Vetstaerktketten>
+    <PzVI_Vetstaerktketten_FL>
+      <id>	31003	</id>
+    </PzVI_Vetstaerktketten_FL>
+    <PzVI_Vetstaerktketten_IGR>
+      <id>	60004	</id>
+    </PzVI_Vetstaerktketten_IGR>
+    <PzVI_Vetstaerktketten_MapsTraining_Player_HT_2>
+      <id>	68	</id>
+    </PzVI_Vetstaerktketten_MapsTraining_Player_HT_2>
+    <S-35ketten>
+      <id>	58	</id>
+    </S-35ketten>
+    <StuGIII_Ausf_1940>
+      <id>	8	</id>
+    </StuGIII_Ausf_1940>
+    <StuGIII_Ausf_1943>
+      <id>	9	</id>
+    </StuGIII_Ausf_1943>
+    <StuGIII_Ausf_1943_IGR>
+      <id>	60005	</id>
+    </StuGIII_Ausf_1943_IGR>
+    <Sturmpanzerketten_I>
+      <id>	22	</id>
+    </Sturmpanzerketten_I>
+    <Sturmpanzerketten_II>
+      <id>	23	</id>
+    </Sturmpanzerketten_II>
+    <Sturmpanzerketten_ausf_A>
+      <id>	36	</id>
+    </Sturmpanzerketten_ausf_A>
+    <Sturmpanzerketten_ausf_B>
+      <id>	37	</id>
+    </Sturmpanzerketten_ausf_B>
+    <VK3001H>
+      <id>	20	</id>
+    </VK3001H>
+    <VK3001H_ausf_B>
+      <id>	21	</id>
+    </VK3001H_ausf_B>
+    <VK3001P>
+      <id>	60	</id>
+    </VK3001P>
+    <VK3001P_NewOnBoarding>
+      <id>	64016	</id>
+    </VK3001P_NewOnBoarding>
+    <VK3001P_ausf_B>
+      <id>	61	</id>
+    </VK3001P_ausf_B>
+    <VK3002DB_Standardtketten>
+      <id>	32	</id>
+    </VK3002DB_Standardtketten>
+    <VK3002DB_Standardtketten_SH>
+      <id>	306	</id>
+    </VK3002DB_Standardtketten_SH>
+    <VK3002DB_Vetstaerktketten>
+      <id>	33	</id>
+    </VK3002DB_Vetstaerktketten>
+    <VK3601H_henshelketten>
+      <id>	18	</id>
+    </VK3601H_henshelketten>
+    <VK3601H_henshelketten_ausf_B>
+      <id>	19	</id>
+    </VK3601H_henshelketten_ausf_B>
+    <VK3601H_henshelketten_ausf_B_C>
+      <id>	31001	</id>
+    </VK3601H_henshelketten_ausf_B_C>
+    <VK4502P_Standardketten>
+      <id>	62	</id>
+    </VK4502P_Standardketten>
+    <VK4502P_Vetstaerktketten>
+      <id>	63	</id>
+    </VK4502P_Vetstaerktketten>
+    <Wespeketten_ausf_A>
+      <id>	47	</id>
+    </Wespeketten_ausf_A>
+    <Wespeketten_ausf_B>
+      <id>	48	</id>
+    </Wespeketten_ausf_B>
+  </shared>
 </chassis.xml>

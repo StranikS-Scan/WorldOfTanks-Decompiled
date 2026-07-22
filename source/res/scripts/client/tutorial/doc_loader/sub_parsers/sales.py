@@ -33,9 +33,33 @@ def readTimerTriggerSection(xmlCtx, section, _, triggerID):
     return sub_parsers.readValidateVarTriggerSection(xmlCtx, section, triggerID, triggers.TimerTrigger)
 
 
+def readCurrentVehicleChangedTriggerSection(xmlCtx, section, _, triggerID):
+    unlockTargetIDs = _readUnlockTargetIDs(xmlCtx, section)
+    return sub_parsers.readValidateVarTriggerSection(xmlCtx, section, triggerID, triggers.CurrentVehicleChangedTrigger, unlockTargetIDs=unlockTargetIDs)
+
+
+def readItemsCacheSyncTriggerSection(xmlCtx, section, _, triggerID):
+    unlockTargetIDs = _readUnlockTargetIDs(xmlCtx, section)
+    return sub_parsers.readValidateVarTriggerSection(xmlCtx, section, triggerID, triggers.ItemsCacheSyncTrigger, unlockTargetIDs=unlockTargetIDs)
+
+
+def readResearchGoToNextVehicleTriggerSection(xmlCtx, section, _, triggerID):
+    unlockTargetIDs = _readUnlockTargetIDs(xmlCtx, section)
+    return sub_parsers.readValidateVarTriggerSection(xmlCtx, section, triggerID, triggers.ResearchGoToNextVehicleTrigger, unlockTargetIDs=unlockTargetIDs)
+
+
+def _readUnlockTargetIDs(xmlCtx, section):
+    unlockTargetIDs = []
+    if 'unlock-targets' in section.keys():
+        for _, subSec in _xml.getChildren(xmlCtx, section, 'unlock-targets'):
+            unlockTargetIDs.append(parseID(xmlCtx, subSec, 'Specify a target ID'))
+
+    return unlockTargetIDs
+
+
 def readHintSection(xmlCtx, section, flags):
     sectionInfo = sub_parsers.parseHint(xmlCtx, section)
-    hint = chapter.ChainHint(sectionInfo['hintID'], sectionInfo['itemID'], sectionInfo['text'], sectionInfo['hasBox'], sectionInfo['arrow'], sectionInfo['padding'], sectionInfo['hideImmediately'])
+    hint = chapter.ChainHint(sectionInfo['hintID'], sectionInfo['itemID'], sectionInfo['text'], sectionInfo['hasBox'], sectionInfo['arrow'], sectionInfo['padding'], sectionInfo['hideImmediately'], sectionInfo['updateRuntime'])
     hint.setActions(sub_parsers.parseActions(xmlCtx, _xml.getSubsection(xmlCtx, section, 'actions'), flags))
     return hint
 
@@ -50,4 +74,7 @@ def init():
      'view-data': readLoadViewDataSection})
     sub_parsers.setEffectsParsers({'load-view': _reaLoadViewSection})
     sub_parsers.setTriggersParsers({'timer': readTimerTriggerSection,
-     'isCollectibleVehicle': readIsCollectibleVehicleTrigger})
+     'isCollectibleVehicle': readIsCollectibleVehicleTrigger,
+     'current-vehicle-changed': readCurrentVehicleChangedTriggerSection,
+     'items-cache-sync': readItemsCacheSyncTriggerSection,
+     'research-go-to-next-vehicle': readResearchGoToNextVehicleTriggerSection})

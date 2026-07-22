@@ -1,0 +1,63 @@
+<camouflage_lunar_ny_ox_label.xml>
+  <uk:GB91_Super_Conqueror0>	ussr	</uk:GB91_Super_Conqueror0>
+  <france:F87_Batignolles-Chatillon_12t_FL2>	germany	</france:F87_Batignolles-Chatillon_12t_FL2>
+  <france:F87_Batignolles-Chatillon_12t_FL9>	usa	</france:F87_Batignolles-Chatillon_12t_FL9>
+  <xmlns:china>	china	</xmlns:china>
+  <france:F87_Batignolles-Chatillon_12t_FL1>	france	</france:F87_Batignolles-Chatillon_12t_FL1>
+  <france:F87_Batignolles-Chatillon_12t_FL8>	uk	</france:F87_Batignolles-Chatillon_12t_FL8>
+  <france:F87_Batignolles-Chatillon_12t_FL5>	japan	</france:F87_Batignolles-Chatillon_12t_FL5>
+  <france:F87_Batignolles-Chatillon_12t_FL0>	czech	</france:F87_Batignolles-Chatillon_12t_FL0>
+  <france:F87_Batignolles-Chatillon_12t_FL7>	sweden	</france:F87_Batignolles-Chatillon_12t_FL7>
+  <france:F87_Batignolles-Chatillon_12t_FL6>	poland	</france:F87_Batignolles-Chatillon_12t_FL6>
+  <france:F87_Batignolles-Chatillon_12t_FL4>	italy	</france:F87_Batignolles-Chatillon_12t_FL4>
+  <france:F87_Batignolles-Chatillon_12t_FL3>	intunion	</france:F87_Batignolles-Chatillon_12t_FL3>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/opaque	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	MT camouflages 50g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R47_ISU-152_Zveroboj ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <camouflage>
+      <id>	222	</id>
+      <texture>	vehicles/russian/Camouflage/lunar_ny_ox.dds	</texture>
+      <description>	#vehicle_customization:camouflage/lunar_ny_ox/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/lunar_ny_ox/label	</userString>
+      <tags>	fullRGB	</tags>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	255 0 0 255	</c0>
+          <c1>	0 255 0 255	</c1>
+          <c2>	0 0 255 255	</c2>
+          <c3>	0 0 0 255	</c3>
+        </palette>
+      </palettes>
+      <rotation>
+        <HULL>	0.314159	</HULL>
+        <TURRET>	0.314159	</TURRET>
+        <GUN>	0.314159	</GUN>
+      </rotation>
+      <tiling>
+        <france:F87_Batignolles-Chatillon_12t>	2 2 0.74 -0.94	</france:F87_Batignolles-Chatillon_12t>
+        <france:F87_Batignolles-Chatillon_12t_FL>	2 2 0.74 -0.94	</france:F87_Batignolles-Chatillon_12t_FL>
+        <uk:GB91_Super_Conqueror>	1.3 1.3 -0.07 0.04	</uk:GB91_Super_Conqueror>
+        <ussr:R115_IS-3_auto>	3.5 3.5 0.36 -0.14	</ussr:R115_IS-3_auto>
+        <ussr:R11_MS-1>	4 4 -5.03 -0.14	</ussr:R11_MS-1>
+        <ussr:R148_Object_430_U>	0.77 0.77 0.47 -0.25	</ussr:R148_Object_430_U>
+        <ussr:R148_Object_430_U_bob>	0.77 0.77 0.47 -0.25	</ussr:R148_Object_430_U_bob>
+        <ussr:R77_KV2>	2.5 2.5 -0.05 -0.32	</ussr:R77_KV2>
+        <ussr:R95_Object_907>	0.9 0.9 3 -1.86	</ussr:R95_Object_907>
+      </tiling>
+      <tilingSettings>
+        <type>	relative	</type>
+        <factor>	2.3 2.3	</factor>
+        <offset>	-1.9 -0.25	</offset>
+      </tilingSettings>
+    </camouflage>
+  </itemGroup>
+</camouflage_lunar_ny_ox_label.xml>

@@ -10,6 +10,7 @@ from .images import Images
 from .sounds import Sounds
 from .strings import Strings
 from .styles import Styles
+from .subtitles import Subtitles
 from .videos import Videos
 from .views import Views
 
@@ -25,6 +26,7 @@ class Resources(object):
     sounds = Sounds()
     strings = Strings()
     styles = Styles()
+    subtitles = Subtitles()
     videos = Videos()
     views = Views()
 

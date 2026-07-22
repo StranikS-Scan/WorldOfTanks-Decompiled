@@ -15,6 +15,7 @@ from gui.shared import events
 from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.impl import backport
 from gui.impl.gen import R
+from uilogging.rename_testing.loggers import RenameTestingUILogger
 
 class Trainings(TrainingsListBase):
 
@@ -42,9 +43,11 @@ class Trainings(TrainingsListBase):
 
     @adisp_process
     def joinTrainingRequest(self, prbID):
+        RenameTestingUILogger().logTrainingJoinRoom()
         yield self.prbDispatcher.join(JoinTrainingCtx(prbID, waitingID='prebattle/join'))
 
     def createTrainingRequest(self):
+        RenameTestingUILogger().logTrainingOpenCreateRoomDialog()
         settings = TrainingSettingsCtx()
         self.fireEvent(events.LoadViewEvent(SFViewLoadParams(PREBATTLE_ALIASES.TRAINING_SETTINGS_WINDOW_PY), ctx={'isCreateRequest': True,
          'settings': settings}), scope=EVENT_BUS_SCOPE.LOBBY)

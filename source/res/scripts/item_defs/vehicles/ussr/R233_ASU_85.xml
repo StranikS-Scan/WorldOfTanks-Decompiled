@@ -7,7 +7,7 @@
     <loader></loader>
   </crew>
   <supplySlots>	4 1 1 6 6 6 7 8 8 8	</supplySlots>
-  <postProgressionTree>	role_ATSPG_universal	</postProgressionTree>
+  <postProgressionTree>	role_ATSPG_sniper	</postProgressionTree>
   <customRoleSlotOptions>	3 5	</customRoleSlotOptions>
   <speedLimits>
     <forward>	60	</forward>
@@ -46,27 +46,27 @@
       <battle>	0	</battle>
     </fakeTurrets>
     <armor>
-      <armor_1>	45	</armor_1>
+      <armor_1>	65	</armor_1>
       <armor_2>	45	</armor_2>
-      <armor_3>	15	</armor_3>
-      <armor_4>	8	</armor_4>
-      <armor_5>	6	</armor_5>
-      <armor_6>	6	</armor_6>
-      <armor_7>	25	</armor_7>
+      <armor_3>	45	</armor_3>
+      <armor_4>	35	</armor_4>
+      <armor_5>	45	</armor_5>
+      <armor_6>	45	</armor_6>
+      <armor_7>	45	</armor_7>
       <armor_8>	0	</armor_8>
-      <armor_9>	5	</armor_9>
-      <armor_10>	5	</armor_10>
-      <armor_11>	13	</armor_11>
-      <armor_12>	15	</armor_12>
-      <armor_13>	15	</armor_13>
-      <armor_15>	13	</armor_15>
-      <armor_16>	30	</armor_16>
-      <armor_17>	30	</armor_17>
-      <armor_18>	54	</armor_18>
-      <armor_19>	78	</armor_19>
-      <armor_20>	45	</armor_20>
-      <armor_21>	45	</armor_21>
-      <armor_22>	30	</armor_22>
+      <armor_9>	35	</armor_9>
+      <armor_10>	25	</armor_10>
+      <armor_11>	45	</armor_11>
+      <armor_12>	45	</armor_12>
+      <armor_13>	35	</armor_13>
+      <armor_15>	45	</armor_15>
+      <armor_16>	95	</armor_16>
+      <armor_17>	95	</armor_17>
+      <armor_18>	95	</armor_18>
+      <armor_19>	95	</armor_19>
+      <armor_20>	65	</armor_20>
+      <armor_21>	65	</armor_21>
+      <armor_22>	65	</armor_22>
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	11045	</weight>
@@ -2119,24 +2119,24 @@
       <guns>
         <_85mm_D70_R233>	shared	  <maxAmmo>	60	</maxAmmo>
           <armor>
-            <armor_1>	45	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            <armor_1>	65	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_1>
-            <armor_2>	35	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            <armor_2>	65	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_2>
-            <armor_3>	35	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            <armor_3>	65	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_3>
             <armor_4>	0	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_4>
-            <armor_6>	30	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            <armor_6>	65	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_6>
-            <armor_7>	45	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            <armor_7>	65	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_7>
             <gun>	30	</gun>
           </armor>
           <turretYawLimits>	-15 15	</turretYawLimits>
           <pitchLimits>
             <minPitch>	0 -15 1 -15	</minPitch>
-            <maxPitch>	0 5 1 5	</maxPitch>
+            <maxPitch>	0.00000 8.00 1.00000 8.00	</maxPitch>
           </pitchLimits>
           <shotDispersionRadius>	0.30	</shotDispersionRadius>
           <reloadTime>	4.5	</reloadTime>

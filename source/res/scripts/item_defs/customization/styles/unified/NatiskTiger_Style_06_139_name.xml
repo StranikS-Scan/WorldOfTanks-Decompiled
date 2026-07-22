@@ -1,0 +1,49 @@
+<NatiskTiger_Style_06_139_name.xml>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <style>
+      <id>	31456	</id>
+      <texture>	gui/maps/vehicles/styles/NatiskTiger_Style_139.png	</texture>
+      <outfits>
+        <outfit>
+          <season>	all	</season>
+          <paints>
+            <item>
+              <id>	31424	</id>
+              <appliedTo>	20753	</appliedTo>
+            </item>
+          </paints>
+          <camouflages>
+            <item>
+              <id>	31437	</id>
+              <patternSize>	1	</patternSize>
+              <appliedTo>	4368	</appliedTo>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <projection_decals>
+            <item>
+              <id>	31367	</id>
+              <tags>	front safe formfactor_square	</tags>
+            </item>
+          </projection_decals>
+          <modifications>
+            <item>	4	</item>
+          </modifications>
+        </outfit>
+      </outfits>
+      <userString>	#vehicle_customization:NatiskTiger_Style_06_139/name	</userString>
+      <description>	#vehicle_customization:NatiskTiger_Style_06_139/description	</description>
+      <longDescriptionSpecial>	#vehicle_customization:NatiskTiger_Style_06_139/longDescription	</longDescriptionSpecial>
+    </style>
+    <tags>	hiddenInUI	</tags>
+    <priceGroup>	MT 2D styles universal 1000g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+  </itemGroup>
+</NatiskTiger_Style_06_139_name.xml>

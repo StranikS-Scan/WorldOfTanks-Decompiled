@@ -1,0 +1,48 @@
+<styles_Rush_2023_00_MT.xml>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	MT 2D styles universal 1000g notInShop	</priceGroup>
+    <style>
+      <id>	31045	</id>
+      <tags>	questsProgression	</tags>
+      <texture>	gui/maps/vehicles/styles/Rush_2023_Preview_MT.png	</texture>
+      <description>	#vehicle_customization:styles/Rush_2023_00_MT/description	</description>
+      <userString>	#vehicle_customization:styles/Rush_2023_00_MT	</userString>
+      <longDescriptionSpecial>	#vehicle_customization:styles/Rush_2023_00_MT/description/long	</longDescriptionSpecial>
+      <outfits>
+        <outfit>
+          <season>	all	</season>
+          <camouflages>
+            <item>
+              <id>	31036	</id>
+              <patternSize>	1	</patternSize>
+              <appliedTo>	4368	</appliedTo>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <insignias>
+            <item>
+              <id>	31008	</id>
+              <appliedTo>	4096	</appliedTo>
+            </item>
+          </insignias>
+        </outfit>
+      </outfits>
+      <alternateItems>
+        <camouflage>
+          <id>	31036 31037 31038 31039 31040 31041	</id>
+        </camouflage>
+        <decal>
+          <id>	31048 31049 31050 31051 31052 31053 31054 31055 31056 31057 31058 31059 31060 31061 31062 31063 31064 31065 31066 31067 31068 31069 31070	</id>
+        </decal>
+      </alternateItems>
+    </style>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+  </itemGroup>
+</styles_Rush_2023_00_MT.xml>

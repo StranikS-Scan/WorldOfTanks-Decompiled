@@ -1,0 +1,50 @@
+<camouflage_uk_bicolor_australian_label_15535.xml>
+  <xmlns:czech1>	ussr	</xmlns:czech1>
+  <xmlns:germany>	germany	</xmlns:germany>
+  <xmlns:czech0>	usa	</xmlns:czech0>
+  <xmlns:china>	china	</xmlns:china>
+  <xmlns:france>	france	</xmlns:france>
+  <xmlns:uk>	uk	</xmlns:uk>
+  <xmlns:japan>	japan	</xmlns:japan>
+  <xmlns:czech>	czech	</xmlns:czech>
+  <xmlns:sweden>	sweden	</xmlns:sweden>
+  <xmlns:poland>	poland	</xmlns:poland>
+  <xmlns:italy>	italy	</xmlns:italy>
+  <xmlns:intunion>	intunion	</xmlns:intunion>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/opaque	</userString>
+    <season>	summer	</season>
+    <historical>	0	</historical>
+    <priceGroup>	MT camouflages 50g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <nations>	uk	</nations>
+        <vehicles>	uk:GB35_Sentinel_AC_IV	</vehicles>
+      </include>
+    </vehicleFilter>
+    <camouflage>
+      <id>	15535	</id>
+      <texture>	vehicles/british/Camouflage/GB_bicolor_australian.dds	</texture>
+      <description>	#vehicle_customization:camouflage/uk/bicolor/australian/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/uk/bicolor/australian/label	</userString>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	164 132 96 255	</c0>
+          <c1>	81 84 78 255	</c1>
+          <c2>	0 0 0 0	</c2>
+          <c3>	0 0 0 0	</c3>
+        </palette>
+      </palettes>
+      <tiling>
+        <GB35_Sentinel_AC_IV>	3.4 3.4 0.08 0.000000	</GB35_Sentinel_AC_IV>
+      </tiling>
+      <tilingSettings>
+        <type>	relative	</type>
+        <factor>	2.275437  2.278568	</factor>
+        <offset>	0.000000 0.000000	</offset>
+      </tilingSettings>
+    </camouflage>
+  </itemGroup>
+</camouflage_uk_bicolor_australian_label_15535.xml>

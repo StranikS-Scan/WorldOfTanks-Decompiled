@@ -1,0 +1,65 @@
+<MT_Bday_2024_Style_05_name.xml>
+  <itemGroup>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <priceGroup>	MT 2D styles universal 1000g notInShop	</priceGroup>
+    <style>
+      <id>	31155	</id>
+      <userString>	#vehicle_customization:MT_Bday_2024_Style_05/name	</userString>
+      <description>	#vehicle_customization:MT_Bday_2024_Style_05/description	</description>
+      <longDescriptionSpecial>	#vehicle_customization:MT_Bday_2024_Style_05/longDescription	</longDescriptionSpecial>
+      <texture>	gui/maps/vehicles/styles/MT_Bday_2024_Style_05.png	</texture>
+      <outfits>
+        <outfit>
+          <season>	all	</season>
+          <camouflages>
+            <item>
+              <id>	31132	</id>
+              <patternSize>	1	</patternSize>
+              <appliedTo>	4352	</appliedTo>
+              <palette>	0	</palette>
+            </item>
+            <item>
+              <id>	31133	</id>
+              <patternSize>	1	</patternSize>
+              <appliedTo>	16	</appliedTo>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <projection_decals>
+            <item>
+              <id>	31168	</id>
+              <scaleFactorId>	1	</scaleFactorId>
+              <tags>	mimic formfactor_rect1x2 direction_right_to_left left	</tags>
+            </item>
+            <item>
+              <id>	31169	</id>
+              <scaleFactorId>	2	</scaleFactorId>
+              <tags>	front safe direction_right_to_left formfactor_square	</tags>
+            </item>
+            <item>
+              <id>	31170	</id>
+              <scaleFactorId>	2	</scaleFactorId>
+              <tags>	right safe direction_right_to_left formfactor_square	</tags>
+            </item>
+          </projection_decals>
+          <paints>
+            <item>
+              <id>	31128	</id>
+              <appliedTo>	20753	</appliedTo>
+            </item>
+          </paints>
+          <modifications>
+            <item>	4	</item>
+          </modifications>
+        </outfit>
+      </outfits>
+    </style>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+  </itemGroup>
+</MT_Bday_2024_Style_05_name.xml>

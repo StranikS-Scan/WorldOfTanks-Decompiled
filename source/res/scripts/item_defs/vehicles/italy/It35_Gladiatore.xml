@@ -79,7 +79,7 @@
     </swinging>
     <exhaust>
       <pixie>	diesel_large	</pixie>
-      <nodes>	HP_Track_Exhaus_1 HP_Track_Exhaus_2 HP_Track_Exhaus_3 HP_Track_Exhaus_4 HP_Track_Exhaus_5 HP_Track_Exhaus_6 HP_Track_Exhaus_7 HP_Track_Exhaus_8	</nodes>
+      <nodes>	HP_Track_Exhaus_1 HP_Track_Exhaus_2	</nodes>
     </exhaust>
     <turretPositions>
       <turret>	0.0 0.35990 0.771751	</turret>
@@ -778,8 +778,8 @@
       <rotationIsAroundCenter>	True	</rotationIsAroundCenter>
       <rotationSpeed>	28	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.2	</vehicleMovement>
-        <vehicleRotation>	0.2	</vehicleRotation>
+        <vehicleMovement>	0.24	</vehicleMovement>
+        <vehicleRotation>	0.24	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	250	</maxHealth>
@@ -863,26 +863,26 @@
                 <boxCollider>
                   <row0>	0.741000 0.000001 -0.000006	</row0>
                   <row1>	0.000000 0.300000 -0.000003	</row1>
-                  <row2>	0.000057 0.000083 7.373156	</row2>
-                  <row3>	-1.467000 1.620384 -0.000008	</row3>
+                  <row2>	0.000057 0.000083 7.373155	</row2>
+                  <row3>	-1.465496 1.312759 0.008801	</row3>
                 </boxCollider>
                 <boxCollider>
                   <row0>	0.740579 0.000000 0.000000	</row0>
                   <row1>	0.000000 0.236323 0.184801	</row1>
                   <row2>	0.000000 -0.296108 0.378661	</row2>
-                  <row3>	-1.466600 1.220108 3.784500	</row3>
+                  <row3>	-1.454796 1.219583 3.726185	</row3>
                 </boxCollider>
                 <boxCollider>
                   <row0>	0.740579 0.000000 0.000001	</row0>
                   <row1>	0.000000 0.007631 0.299903	</row1>
                   <row2>	0.000000 -0.872680 0.022206	</row2>
-                  <row3>	-1.466596 1.316208 -3.705818	</row3>
+                  <row3>	-1.437706 1.319708 -3.662212	</row3>
                 </boxCollider>
                 <boxCollider>
                   <row0>	0.300000 0.000000 0.000000	</row0>
                   <row1>	0.000000 0.638147 0.000000	</row1>
                   <row2>	0.000000 0.000000 7.603820	</row2>
-                  <row3>	-1.951170 1.136214 0.003845	</row3>
+                  <row3>	-1.918977 1.136213 0.003850	</row3>
                 </boxCollider>
               </hullCollider>
             </physicalParams>
@@ -941,26 +941,26 @@
                 <boxCollider>
                   <row0>	0.741000 0.000001 -0.000006	</row0>
                   <row1>	0.000000 0.300000 -0.000003	</row1>
-                  <row2>	0.000057 0.000083 7.373160	</row2>
-                  <row3>	1.467000 1.620380 -0.000008	</row3>
+                  <row2>	0.000057 0.000083 7.373159	</row2>
+                  <row3>	1.469223 1.284270 0.013073	</row3>
                 </boxCollider>
                 <boxCollider>
                   <row0>	0.740579 0.000000 0.000000	</row0>
                   <row1>	0.000000 0.236323 0.184801	</row1>
                   <row2>	0.000000 -0.296108 0.378661	</row2>
-                  <row3>	1.467000 1.220110 3.784500	</row3>
+                  <row3>	1.428272 1.214638 3.695663	</row3>
                 </boxCollider>
                 <boxCollider>
                   <row0>	0.740579 0.000000 0.000001	</row0>
                   <row1>	0.000000 0.007631 0.299903	</row1>
                   <row2>	0.000000 -0.872680 0.022206	</row2>
-                  <row3>	1.467000 1.316210 -3.705820	</row3>
+                  <row3>	1.472927 1.317305 -3.682213	</row3>
                 </boxCollider>
                 <boxCollider>
                   <row0>	0.300000 0.000000 0.000000	</row0>
                   <row1>	0.000000 0.638147 0.000000	</row1>
                   <row2>	0.000000 0.000000 7.603820	</row2>
-                  <row3>	1.951000 1.136210 0.003845	</row3>
+                  <row3>	1.927213 1.136211 0.003842	</row3>
                 </boxCollider>
               </hullCollider>
             </physicalParams>
@@ -1072,13 +1072,13 @@
         <slot>
           <slotType>	paint	</slotType>
           <slotId>	21000	</slotId>
-          <anchorPosition>	-1.989834 0.533435 -0.000001	</anchorPosition>
+          <anchorPosition>	-1.851229 0.794242 -0.000001	</anchorPosition>
           <anchorDirection>	0 1 0	</anchorDirection>
         </slot>
         <slot>
           <slotType>	style	</slotType>
           <slotId>	29000	</slotId>
-          <anchorPosition>	0 0 0	</anchorPosition>
+          <anchorPosition>	0.000027 2.496931 0.743717	</anchorPosition>
           <anchorDirection>	0 1 0	</anchorDirection>
         </slot>
       </customizationSlots>
@@ -1810,12 +1810,12 @@
             <rate>	15	</rate>
           </clip>
           <autoreload>
-            <reloadTime>	12 12 15 20	</reloadTime>
+            <reloadTime>	12 12 14 18	</reloadTime>
             <boostFraction>	0.5	</boostFraction>
             <boostStartTime>	0	</boostStartTime>
             <boostResidueTime>	2	</boostResidueTime>
           </autoreload>
-          <aimingTime>	2.5	</aimingTime>
+          <aimingTime>	2.8	</aimingTime>
           <shotDispersionRadius>	0.32	</shotDispersionRadius>
           <shotDispersionFactors>
             <turretRotation>	0.14	</turretRotation>
@@ -1829,13 +1829,6 @@
               <anchorPosition>	-0.000001 0 3.825954	</anchorPosition>
               <anchorDirection>	0 1 0	</anchorDirection>
               <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41001	</slotId>
-              <anchorPosition>	0.000005 0.385806 0.361746	</anchorPosition>
-              <anchorDirection>	0 1 0	</anchorDirection>
-              <applyTo>	16384	</applyTo>
             </slot>
             <slot>
               <slotType>	camouflage	</slotType>
@@ -1857,7 +1850,7 @@
           </customizationSlots>
           <customization>
             <customizableVehicleAreas>
-              <paint>	GUN GUN_2	</paint>
+              <paint>	GUN	</paint>
               <camouflage>	GUN	</camouflage>
             </customizableVehicleAreas>
           </customization>

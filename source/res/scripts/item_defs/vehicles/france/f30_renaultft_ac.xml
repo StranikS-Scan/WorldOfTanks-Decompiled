@@ -7,8 +7,8 @@
   </crew>
   <supplySlots>	1 6 8 8 8	</supplySlots>
   <speedLimits>
-    <forward>	21	</forward>
-    <backward>	8	</backward>
+    <forward>	26	</forward>
+    <backward>	12	</backward>
   </speedLimits>
   <invisibility>
     <moving>	0.155	</moving>
@@ -66,7 +66,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	2750	</weight>
-    <maxHealth>	192	</maxHealth>
+    <maxHealth>	300	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	80	</maxHealth>
       <maxRegenHealth>	55	</maxRegenHealth>
@@ -1574,8 +1574,8 @@
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
       <rotationSpeed>	27	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.3	</vehicleMovement>
-        <vehicleRotation>	0.3	</vehicleRotation>
+        <vehicleMovement>	0.20	</vehicleMovement>
+        <vehicleRotation>	0.20	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	50	</maxHealth>
@@ -1877,7 +1877,7 @@
         </trackPair>
         <lodDist>	SPLINE_TRACK	</lodDist>
       </splineDesc>
-      <repairTime>	6.85714293	</repairTime>
+      <repairTime>	1.71001065	</repairTime>
     </Chassis_RenaultFT_AC>
     <Chassis_RenaultFT_AC_2>
       <userString>	#france_vehicles:Chassis_RenaultFT_AC_2	</userString>
@@ -1894,8 +1894,8 @@
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
       <rotationSpeed>	30	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.28	</vehicleMovement>
-        <vehicleRotation>	0.28	</vehicleRotation>
+        <vehicleMovement>	0.18	</vehicleMovement>
+        <vehicleRotation>	0.18	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	60	</maxHealth>
@@ -2197,7 +2197,7 @@
         </trackPair>
         <lodDist>	SPLINE_TRACK	</lodDist>
       </splineDesc>
-      <repairTime>	6.85714293	</repairTime>
+      <repairTime>	1.71001065	</repairTime>
     </Chassis_RenaultFT_AC_2>
   </chassis>
   <turrets0>
@@ -2212,7 +2212,7 @@
         <armor_2>	10	</armor_2>
       </armor>
       <weight>	70	</weight>
-      <maxHealth>	48	</maxHealth>
+      <maxHealth>	90	</maxHealth>
       <rotationSpeed>	24	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	100	</maxHealth>
@@ -2401,7 +2401,7 @@
           <armor>
             <gun>	10	</gun>
           </armor>
-          <shotDispersionRadius>	0.43	</shotDispersionRadius>
+          <shotDispersionRadius>	0.37	</shotDispersionRadius>
           <reloadTime>	6.5	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.12	</turretRotation>
@@ -2536,12 +2536,12 @@
     <detailed>
       <engines>
         <Renault>
-          <smplEnginePower>	41.23396	</smplEnginePower>
-          <smplFwMaxSpeed>	21	</smplFwMaxSpeed>
+          <smplEnginePower>	50	</smplEnginePower>
+          <smplFwMaxSpeed>	26	</smplFwMaxSpeed>
         </Renault>
         <Renault_M26_27>
-          <smplEnginePower>	47.57765	</smplEnginePower>
-          <smplFwMaxSpeed>	21	</smplFwMaxSpeed>
+          <smplEnginePower>	55	</smplEnginePower>
+          <smplFwMaxSpeed>	26	</smplFwMaxSpeed>
         </Renault_M26_27>
       </engines>
       <chassis>

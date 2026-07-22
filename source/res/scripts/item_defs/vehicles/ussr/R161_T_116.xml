@@ -52,7 +52,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	5200	</weight>
-    <maxHealth>	328	</maxHealth>
+    <maxHealth>	400	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	90	</maxHealth>
       <maxRegenHealth>	60	</maxRegenHealth>
@@ -993,8 +993,8 @@
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
       <rotationSpeed>	48	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.22	</vehicleMovement>
-        <vehicleRotation>	0.22	</vehicleRotation>
+        <vehicleMovement>	0.18	</vehicleMovement>
+        <vehicleRotation>	0.18	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	70	</maxHealth>
@@ -1871,7 +1871,7 @@
           <camouflage></camouflage>
         </customizableVehicleAreas>
       </customization>
-      <repairTime>	5.71428585	</repairTime>
+      <repairTime>	2.28001642	</repairTime>
     </Chassis_R161_T_116>
   </chassis>
   <turrets0>
@@ -1891,7 +1891,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	1500	</weight>
-      <maxHealth>	82	</maxHealth>
+      <maxHealth>	60	</maxHealth>
       <rotationSpeed>	40	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	70	</maxHealth>
@@ -1906,11 +1906,11 @@
       </surveyingDeviceHealth>
       <guns>
         <_45mm_20KL>	shared	  <maxAmmo>	200	</maxAmmo>
-          <shotDispersionRadius>	0.42	</shotDispersionRadius>
-          <aimingTime>	1.9	</aimingTime>
+          <shotDispersionRadius>	0.38	</shotDispersionRadius>
+          <aimingTime>	1.6	</aimingTime>
           <shotDispersionFactors>
-            <turretRotation>	0.14	</turretRotation>
-            <afterShot>	3.5	</afterShot>
+            <turretRotation>	0.10	</turretRotation>
+            <afterShot>	1.5	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <armor>

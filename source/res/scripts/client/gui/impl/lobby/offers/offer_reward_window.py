@@ -4,7 +4,7 @@ import logging
 import shared_utils
 from PlayerEvents import g_playerEvents
 from gui.impl.auxiliary.rewards_helper import getRewardsBonuses
-from gui.impl.backport import TooltipData, BackportTooltipWindow
+from gui.impl.backport import BackportTooltipWindow, createTooltipData
 from gui.impl.lobby.offers import getGfImagePath
 from gui.shared.event_dispatcher import showOfferGiftsWindow
 from gui.shared.utils.functions import stripAllTags
@@ -77,7 +77,7 @@ class OfferRewardWindow(ViewImpl):
                 formattedBonus = shared_utils.first(formattedBonuses)
                 if formattedBonus is not None:
                     icon = getGfImagePath(formattedBonus.get('imgSource')) or ''
-                    self._tooltipData = TooltipData(tooltip=formattedBonus.get('tooltip', None), isSpecial=formattedBonus.get('isSpecial', False), specialAlias=formattedBonus.get('specialAlias', ''), specialArgs=formattedBonus.get('specialArgs', None))
+                    self._tooltipData = createTooltipData(tooltip=formattedBonus.get('tooltip', None), isSpecial=formattedBonus.get('isSpecial', False), specialAlias=formattedBonus.get('specialAlias', ''), specialArgs=formattedBonus.get('specialArgs', None))
                 model.setCount(self._gift.giftCount)
                 model.setHightlightType(self._gift.highlight)
             model.setName(title)

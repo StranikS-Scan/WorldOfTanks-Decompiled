@@ -1,0 +1,64 @@
+<Portal_Deca_01_138_name.xml>
+  <xmlns:czech1>	ussr	</xmlns:czech1>
+  <xmlns:germany>	germany	</xmlns:germany>
+  <xmlns:czech0>	usa	</xmlns:czech0>
+  <xmlns:china>	china	</xmlns:china>
+  <xmlns:france>	france	</xmlns:france>
+  <xmlns:uk>	uk	</xmlns:uk>
+  <xmlns:japan>	japan	</xmlns:japan>
+  <xmlns:czech>	czech	</xmlns:czech>
+  <xmlns:sweden>	sweden	</xmlns:sweden>
+  <xmlns:poland>	poland	</xmlns:poland>
+  <xmlns:italy>	italy	</xmlns:italy>
+  <xmlns:intunion>	intunion	</xmlns:intunion>
+  <itemGroup>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <userString>	#vehicle_customization:projection_decals/cool	</userString>
+    <projection_decal>
+      <id>	31341	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/cool/Portal_Deca_01_138.dds	</texture>
+      <tags>	formfactor_square direction_right_to_left	</tags>
+      <userString>	#vehicle_customization:Portal_Deca_01_138/name	</userString>
+      <description>	#vehicle_customization:Portal_Deca_01_138/description	</description>
+      <mirror>	true	</mirror>
+    </projection_decal>
+    <projection_decal>
+      <id>	31342	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/cool/Portal_Deca_02_138.dds	</texture>
+      <userString>	#vehicle_customization:Portal_Deca_02_138/name	</userString>
+      <description>	#vehicle_customization:Portal_Deca_02_138/description	</description>
+      <mirror>	true	</mirror>
+      <tags>	formfactor_square direction_right_to_left	</tags>
+    </projection_decal>
+    <projection_decal>
+      <id>	31343	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/cool/Portal_Deca_03_138.dds	</texture>
+      <userString>	#vehicle_customization:Portal_Deca_03_138/name	</userString>
+      <description>	#vehicle_customization:Portal_Deca_03_138/description	</description>
+      <mirror>	true	</mirror>
+      <tags>	formfactor_square direction_right_to_left	</tags>
+    </projection_decal>
+    <projection_decal>
+      <id>	31344	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/cool/Portal_Deca_04_138.dds	</texture>
+      <userString>	#vehicle_customization:Portal_Deca_04_138/name	</userString>
+      <description>	#vehicle_customization:Portal_Deca_04_138/description	</description>
+      <tags>	formfactor_square direction_left_to_right	</tags>
+    </projection_decal>
+    <name>	Portal_Deca_138	</name>
+    <priceGroup>	MT projection_decals 100g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF usa:A104_M4A3E8A usa:A126_PzVI_Tiger_II_capt ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <projection_decal>
+      <id>	31345	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/cool/Portal_Deca_05_138.dds	</texture>
+      <userString>	#vehicle_customization:Portal_Deca_05_138/name	</userString>
+      <description>	#vehicle_customization:Portal_Deca_05_138/description	</description>
+      <tags>	formfactor_square direction_left_to_right	</tags>
+    </projection_decal>
+  </itemGroup>
+</Portal_Deca_01_138_name.xml>

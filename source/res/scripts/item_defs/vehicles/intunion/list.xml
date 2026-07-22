@@ -1,4 +1,5 @@
 <list.xml>
+  <xmlns:xmlref>	http://bwt/xmlref	</xmlns:xmlref>
   <Un01_Cromwell_VII>
     <id>	31001	</id>
     <userString>	#intunion_vehicles:Un01_Cromwell_VII	</userString>
@@ -26,19 +27,6 @@
     <tags>	mediumTank role_MT_universal HD improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class2_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
     <level>	7	</level>
   </Un03_Degem_Yud>
-  <Un06_M47_Romach>
-    <id>	31004	</id>
-    <userString>	#intunion_vehicles:Un06_M47_Romach	</userString>
-    <shortUserString>	#intunion_vehicles:Un06_M47_Romach_short	</shortUserString>
-    <description>	#intunion_vehicles:Un06_M47_Romach_descr	</description>
-    <shortDescriptionSpecial>	#intunion_vehicles:Un06_M47_Romach_short_special	</shortDescriptionSpecial>
-    <longDescriptionSpecial>	#intunion_vehicles:Un06_M47_Romach_long_special	</longDescriptionSpecial>
-    <price>	11000	  <gold></gold>
-    </price>
-    <notInShop>	true	</notInShop>
-    <tags>	mediumTank role_MT_universal HD improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
-    <level>	8	</level>
-  </Un06_M47_Romach>
   <Un04_Vickers_MBT_EXP>
     <id>	31005	</id>
     <userString>	#intunion_vehicles:Un04_Vickers_MBT_EXP	</userString>
@@ -48,140 +36,6 @@
     <tags>	mediumTank role_MT_universal HD improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
     <level>	8	</level>
   </Un04_Vickers_MBT_EXP>
-  <Un14_T54D>
-    <id>	31006	</id>
-    <userString>	#intunion_vehicles:Un14_T54D	</userString>
-    <shortUserString>	#intunion_vehicles:Un14_T54D_short	</shortUserString>
-    <description>	#intunion_vehicles:Un14_T54D_descr	</description>
-    <price>	6100000	</price>
-    <tags>	mediumTank role_MT_assault HD improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_medium_user earn_crystals	</tags>
-    <level>	10	</level>
-  </Un14_T54D>
-  <Un05_Shot_Kal_Alef>
-    <id>	31007	</id>
-    <userString>	#intunion_vehicles:Un05_Shot_Kal_Alef	</userString>
-    <shortUserString>	#intunion_vehicles:Un05_Shot_Kal_Alef_short	</shortUserString>
-    <description>	#intunion_vehicles:Un05_Shot_Kal_Alef_descr	</description>
-    <price>	3600000	</price>
-    <tags>	mediumTank role_MT_universal HD improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
-    <level>	9	</level>
-  </Un05_Shot_Kal_Alef>
-  <Un11_Sherman_M3_IDF>
-    <id>	31008	</id>
-    <userString>	#intunion_vehicles:Un11_Sherman_M3_IDF	</userString>
-    <shortUserString>	#intunion_vehicles:Un11_Sherman_M3_IDF_short	</shortUserString>
-    <description>	#intunion_vehicles:Un11_Sherman_M3_IDF_descr	</description>
-    <price>	355000	</price>
-    <tags>	mediumTank HD improvedVentilation_class2_user tankRammer_class2_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
-    <level>	5	</level>
-  </Un11_Sherman_M3_IDF>
-  <Un10_Sherman_Krupp_IDF>
-    <id>	31009	</id>
-    <userString>	#intunion_vehicles:Un10_Sherman_Krupp_IDF	</userString>
-    <shortUserString>	#intunion_vehicles:Un10_Sherman_Krupp_IDF_short	</shortUserString>
-    <description>	#intunion_vehicles:Un10_Sherman_Krupp_IDF_descr	</description>
-    <price>	137000	</price>
-    <tags>	mediumTank HD improvedVentilation_class3_user extraHealthReserve_class3_user	</tags>
-    <level>	4	</level>
-  </Un10_Sherman_Krupp_IDF>
-  <Un09_Locust>
-    <id>	31010	</id>
-    <userString>	#intunion_vehicles:Un09_Locust	</userString>
-    <shortUserString>	#intunion_vehicles:Un09_Locust_short	</shortUserString>
-    <description>	#intunion_vehicles:Un09_Locust_descr	</description>
-    <price>	42000	</price>
-    <tags>	lightTank HD improvedVentilation_class3_user extraHealthReserve_class3_user	</tags>
-    <level>	3	</level>
-  </Un09_Locust>
-  <Un08_Hotchkiss_H_39_IDF>
-    <id>	31011	</id>
-    <userString>	#intunion_vehicles:Un08_Hotchkiss_H_39_IDF	</userString>
-    <shortUserString>	#intunion_vehicles:Un08_Hotchkiss_H_39_IDF_short	</shortUserString>
-    <description>	#intunion_vehicles:Un08_Hotchkiss_H_39_IDF_descr	</description>
-    <price>	4000	</price>
-    <tags>	lightTank HD improvedVentilation_class3_user extraHealthReserve_class3_user	</tags>
-    <level>	2	</level>
-  </Un08_Hotchkiss_H_39_IDF>
-  <Un07_Renault_R35>
-    <id>	31012	</id>
-    <userString>	#intunion_vehicles:Un07_Renault_R35	</userString>
-    <shortUserString>	#intunion_vehicles:Un07_Renault_R35_short	</shortUserString>
-    <description>	#intunion_vehicles:Un07_Renault_R35_descr	</description>
-    <price>	0	</price>
-    <tags>	lightTank HD	</tags>
-    <level>	1	</level>
-  </Un07_Renault_R35>
-  <Un13_T-54>
-    <id>	31013	</id>
-    <userString>	#intunion_vehicles:Un13_T-54	</userString>
-    <shortUserString>	#intunion_vehicles:Un13_T-54_short	</shortUserString>
-    <description>	#intunion_vehicles:Un13_T-54_descr	</description>
-    <price>	3500000	</price>
-    <tags>	mediumTank role_MT_universal HD mediumTank3 improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
-    <level>	9	</level>
-  </Un13_T-54>
-  <Un12_Merkava_M48>
-    <id>	31014	</id>
-    <userString>	#intunion_vehicles:Un12_Merkava_M48	</userString>
-    <shortUserString>	#intunion_vehicles:Un12_Merkava_M48_short	</shortUserString>
-    <description>	#intunion_vehicles:Un12_Merkava_M48_descr	</description>
-    <shortDescriptionSpecial>	#intunion_vehicles:Un12_Merkava_M48_short_special	</shortDescriptionSpecial>
-    <longDescriptionSpecial>	#intunion_vehicles:Un12_Merkava_M48_long_special	</longDescriptionSpecial>
-    <price>	17500	  <gold></gold>
-    </price>
-    <notInShop>	true	</notInShop>
-    <tags>	mediumTank role_MT_universal HD improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user earn_crystals lockOutfit	</tags>
-    <level>	9	</level>
-  </Un12_Merkava_M48>
-  <Un24_Vz_68_2_Britva>
-    <id>	31018	</id>
-    <userString>	#intunion_vehicles:Un24_Vz_68_2_Britva	</userString>
-    <description>	#intunion_vehicles:Un24_Vz_68_2_Britva_descr	</description>
-    <shortUserString>	#intunion_vehicles:Un24_Vz_68_2_Britva_short	</shortUserString>
-    <shortDescriptionSpecial>	#intunion_vehicles:Un24_Vz_68_2_Britva_short_special	</shortDescriptionSpecial>
-    <longDescriptionSpecial>	#intunion_vehicles:Un24_Vz_68_2_Britva_long_special	</longDescriptionSpecial>
-    <price>	11000	  <gold></gold>
-    </price>
-    <notInShop>	true	</notInShop>
-    <tags>	mediumTank role_MT_support HD improvedVentilation_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
-    <level>	8	</level>
-  </Un24_Vz_68_2_Britva>
-  <Un17_RDT_62>
-    <id>	31015	</id>
-    <userString>	#intunion_vehicles:Un17_RDT_62	</userString>
-    <shortUserString>	#intunion_vehicles:Un17_RDT_62_short	</shortUserString>
-    <description>	#intunion_vehicles:Un17_RDT_62_descr	</description>
-    <price>	6100000	</price>
-    <notInShop>	true	</notInShop>
-    <tags>	mediumTank role_MT_support HD improvedVentilation_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user earn_crystals private secret	</tags>
-    <level>	10	</level>
-  </Un17_RDT_62>
-  <Un1017_RDT_62_T>
-    <id>	35001	</id>
-    <userString>	#intunion_vehicles:Un1017_RDT_62_T	</userString>
-    <shortUserString>	#intunion_vehicles:Un1017_RDT_62_T_short	</shortUserString>
-    <description>	#intunion_vehicles:Un1017_RDT_62_T_descr	</description>
-    <shortDescriptionSpecial>	#intunion_vehicles:Un1017_RDT_62_T_short_special	</shortDescriptionSpecial>
-    <longDescriptionSpecial>	#intunion_vehicles:Un1017_RDT_62_T_long_special	</longDescriptionSpecial>
-    <price>	100	  <gold></gold>
-    </price>
-    <notInShop>	true	</notInShop>
-    <tags>	mediumTank role_MT_support HD improvedVentilation_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user earn_crystals secret testTank lockOutfit	</tags>
-    <level>	10	</level>
-  </Un1017_RDT_62_T>
-  <Un1015_SBM_44_T>
-    <id>	35002	</id>
-    <userString>	#intunion_vehicles:Un1015_SBM_44_T	</userString>
-    <description>	#intunion_vehicles:Un1015_SBM_44_T_descr	</description>
-    <shortUserString>	#intunion_vehicles:Un1015_SBM_44_T_short	</shortUserString>
-    <shortDescriptionSpecial>	#intunion_vehicles:Un1015_SBM_44_T_short_special	</shortDescriptionSpecial>
-    <longDescriptionSpecial>	#intunion_vehicles:Un1015_SBM_44_T_long_special	</longDescriptionSpecial>
-    <price>	100	  <gold></gold>
-    </price>
-    <notInShop>	true	</notInShop>
-    <tags>	mediumTank role_MT_support HD improvedVentilation_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user special secret testTank lockOutfit	</tags>
-    <level>	8	</level>
-  </Un1015_SBM_44_T>
   <Un04_Vickers_MBT_EXP_FL>
     <id>	31019	</id>
     <userString>	#intunion_vehicles:Un04_Vickers_MBT_EXP_FL	</userString>
@@ -196,6 +50,130 @@
     <tags>	mediumTank role_MT_universal private epic_battles HD improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
     <level>	8	</level>
   </Un04_Vickers_MBT_EXP_FL>
+  <Un05_Shot_Kal_Alef>
+    <id>	31007	</id>
+    <userString>	#intunion_vehicles:Un05_Shot_Kal_Alef	</userString>
+    <shortUserString>	#intunion_vehicles:Un05_Shot_Kal_Alef_short	</shortUserString>
+    <description>	#intunion_vehicles:Un05_Shot_Kal_Alef_descr	</description>
+    <price>	3600000	</price>
+    <tags>	mediumTank role_MT_universal HD improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
+    <level>	9	</level>
+  </Un05_Shot_Kal_Alef>
+  <Un06_M47_Romach>
+    <id>	31004	</id>
+    <userString>	#intunion_vehicles:Un06_M47_Romach	</userString>
+    <shortUserString>	#intunion_vehicles:Un06_M47_Romach_short	</shortUserString>
+    <description>	#intunion_vehicles:Un06_M47_Romach_descr	</description>
+    <shortDescriptionSpecial>	#intunion_vehicles:Un06_M47_Romach_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#intunion_vehicles:Un06_M47_Romach_long_special	</longDescriptionSpecial>
+    <price>	11000	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	mediumTank role_MT_universal HD improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
+    <level>	8	</level>
+  </Un06_M47_Romach>
+  <Un07_Renault_R35>
+    <id>	31012	</id>
+    <userString>	#intunion_vehicles:Un07_Renault_R35	</userString>
+    <shortUserString>	#intunion_vehicles:Un07_Renault_R35_short	</shortUserString>
+    <description>	#intunion_vehicles:Un07_Renault_R35_descr	</description>
+    <price>	0	</price>
+    <tags>	lightTank HD	</tags>
+    <level>	1	</level>
+  </Un07_Renault_R35>
+  <Un08_Hotchkiss_H_39_IDF>
+    <id>	31011	</id>
+    <userString>	#intunion_vehicles:Un08_Hotchkiss_H_39_IDF	</userString>
+    <shortUserString>	#intunion_vehicles:Un08_Hotchkiss_H_39_IDF_short	</shortUserString>
+    <description>	#intunion_vehicles:Un08_Hotchkiss_H_39_IDF_descr	</description>
+    <price>	4000	</price>
+    <tags>	lightTank HD improvedVentilation_class3_user extraHealthReserve_class3_user	</tags>
+    <level>	2	</level>
+  </Un08_Hotchkiss_H_39_IDF>
+  <Un09_Locust>
+    <id>	31010	</id>
+    <userString>	#intunion_vehicles:Un09_Locust	</userString>
+    <shortUserString>	#intunion_vehicles:Un09_Locust_short	</shortUserString>
+    <description>	#intunion_vehicles:Un09_Locust_descr	</description>
+    <price>	42000	</price>
+    <tags>	lightTank HD improvedVentilation_class3_user extraHealthReserve_class3_user	</tags>
+    <level>	3	</level>
+  </Un09_Locust>
+  <Un1015_SBM_44_T>
+    <id>	35002	</id>
+    <userString>	#intunion_vehicles:Un1015_SBM_44_T	</userString>
+    <description>	#intunion_vehicles:Un1015_SBM_44_T_descr	</description>
+    <shortUserString>	#intunion_vehicles:Un1015_SBM_44_T_short	</shortUserString>
+    <shortDescriptionSpecial>	#intunion_vehicles:Un1015_SBM_44_T_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#intunion_vehicles:Un1015_SBM_44_T_long_special	</longDescriptionSpecial>
+    <price>	100	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	mediumTank role_MT_support HD improvedVentilation_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user special secret testTank lockOutfit	</tags>
+    <level>	8	</level>
+  </Un1015_SBM_44_T>
+  <Un1017_RDT_62_T>
+    <id>	35001	</id>
+    <userString>	#intunion_vehicles:Un1017_RDT_62_T	</userString>
+    <shortUserString>	#intunion_vehicles:Un1017_RDT_62_T_short	</shortUserString>
+    <description>	#intunion_vehicles:Un1017_RDT_62_T_descr	</description>
+    <shortDescriptionSpecial>	#intunion_vehicles:Un1017_RDT_62_T_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#intunion_vehicles:Un1017_RDT_62_T_long_special	</longDescriptionSpecial>
+    <price>	100	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	mediumTank role_MT_support HD improvedVentilation_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user earn_crystals secret testTank lockOutfit	</tags>
+    <level>	10	</level>
+  </Un1017_RDT_62_T>
+  <Un10_Sherman_Krupp_IDF>
+    <id>	31009	</id>
+    <userString>	#intunion_vehicles:Un10_Sherman_Krupp_IDF	</userString>
+    <shortUserString>	#intunion_vehicles:Un10_Sherman_Krupp_IDF_short	</shortUserString>
+    <description>	#intunion_vehicles:Un10_Sherman_Krupp_IDF_descr	</description>
+    <price>	137000	</price>
+    <tags>	mediumTank HD improvedVentilation_class3_user extraHealthReserve_class3_user	</tags>
+    <level>	4	</level>
+  </Un10_Sherman_Krupp_IDF>
+  <Un11_Sherman_M3_IDF>
+    <id>	31008	</id>
+    <userString>	#intunion_vehicles:Un11_Sherman_M3_IDF	</userString>
+    <shortUserString>	#intunion_vehicles:Un11_Sherman_M3_IDF_short	</shortUserString>
+    <description>	#intunion_vehicles:Un11_Sherman_M3_IDF_descr	</description>
+    <price>	355000	</price>
+    <tags>	mediumTank HD improvedVentilation_class2_user tankRammer_class2_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
+    <level>	5	</level>
+  </Un11_Sherman_M3_IDF>
+  <Un12_Merkava_M48>
+    <id>	31014	</id>
+    <userString>	#intunion_vehicles:Un12_Merkava_M48	</userString>
+    <shortUserString>	#intunion_vehicles:Un12_Merkava_M48_short	</shortUserString>
+    <description>	#intunion_vehicles:Un12_Merkava_M48_descr	</description>
+    <shortDescriptionSpecial>	#intunion_vehicles:Un12_Merkava_M48_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#intunion_vehicles:Un12_Merkava_M48_long_special	</longDescriptionSpecial>
+    <price>	17500	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	mediumTank role_MT_universal HD improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user earn_crystals lockOutfit	</tags>
+    <level>	9	</level>
+  </Un12_Merkava_M48>
+  <Un13_T-54>
+    <id>	31013	</id>
+    <userString>	#intunion_vehicles:Un13_T-54	</userString>
+    <shortUserString>	#intunion_vehicles:Un13_T-54_short	</shortUserString>
+    <description>	#intunion_vehicles:Un13_T-54_descr	</description>
+    <price>	3500000	</price>
+    <tags>	mediumTank role_MT_universal HD mediumTank3 improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
+    <level>	9	</level>
+  </Un13_T-54>
+  <Un14_T54D>
+    <id>	31006	</id>
+    <userString>	#intunion_vehicles:Un14_T54D	</userString>
+    <shortUserString>	#intunion_vehicles:Un14_T54D_short	</shortUserString>
+    <description>	#intunion_vehicles:Un14_T54D_descr	</description>
+    <price>	6100000	</price>
+    <tags>	mediumTank role_MT_assault HD improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_medium_user earn_crystals	</tags>
+    <level>	10	</level>
+  </Un14_T54D>
   <Un15_SBM_44>
     <id>	31016	</id>
     <userString>	#intunion_vehicles:Un15_SBM_44	</userString>
@@ -206,4 +184,27 @@
     <tags>	mediumTank role_MT_support HD improvedVentilation_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user private secret	</tags>
     <level>	8	</level>
   </Un15_SBM_44>
+  <Un17_RDT_62>
+    <id>	31015	</id>
+    <userString>	#intunion_vehicles:Un17_RDT_62	</userString>
+    <shortUserString>	#intunion_vehicles:Un17_RDT_62_short	</shortUserString>
+    <description>	#intunion_vehicles:Un17_RDT_62_descr	</description>
+    <price>	6100000	</price>
+    <notInShop>	true	</notInShop>
+    <tags>	mediumTank role_MT_support HD improvedVentilation_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user earn_crystals private secret	</tags>
+    <level>	10	</level>
+  </Un17_RDT_62>
+  <Un24_Vz_68_2_Britva>
+    <id>	31018	</id>
+    <userString>	#intunion_vehicles:Un24_Vz_68_2_Britva	</userString>
+    <description>	#intunion_vehicles:Un24_Vz_68_2_Britva_descr	</description>
+    <shortUserString>	#intunion_vehicles:Un24_Vz_68_2_Britva_short	</shortUserString>
+    <shortDescriptionSpecial>	#intunion_vehicles:Un24_Vz_68_2_Britva_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#intunion_vehicles:Un24_Vz_68_2_Britva_long_special	</longDescriptionSpecial>
+    <price>	11000	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	mediumTank role_MT_support HD improvedVentilation_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
+    <level>	8	</level>
+  </Un24_Vz_68_2_Britva>
 </list.xml>

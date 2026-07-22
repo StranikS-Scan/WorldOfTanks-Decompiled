@@ -13,6 +13,7 @@ from ..gui_constants import ViewFlags, ViewStatus, ViewEventType, ChildFlags, Sh
 TViewModel = typing.TypeVar('TViewModel', bound=ViewModel)
 _logger = logging.getLogger(__name__)
 if typing.TYPE_CHECKING:
+    from ..py_object_wrappers import ResourceDescriptor
     from .. import Window
     from sound_gui_manager import CommonSoundSpaceSettings
     from gui.sounds.ViewSoundManager import _ViewSoundsManager
@@ -36,11 +37,13 @@ class ViewSettings(typing.Generic[TViewModel]):
 
     @property
     def layoutID(self):
-        return self.__proxy.layoutID
+        return self.__proxy.layoutID if self.__proxy is not None else 0
 
     @layoutID.setter
     def layoutID(self, layoutID):
-        self.__proxy.layoutID = layoutID
+        if self.__proxy is not None:
+            self.__proxy.layoutID = layoutID
+        return
 
     @property
     def flags(self):
@@ -48,7 +51,8 @@ class ViewSettings(typing.Generic[TViewModel]):
 
     @flags.setter
     def flags(self, flags):
-        self.__proxy.flags = flags
+        self.__proxy.flags = flags if self.__proxy is not None else 0
+        return
 
     @property
     def model(self):
@@ -59,6 +63,16 @@ class ViewSettings(typing.Generic[TViewModel]):
         if model is not None and not isinstance(model, ViewModel):
             raise SoftException('model should be ViewModel class or extends it')
         self.__proxy.model = getProxy(model)
+        return
+
+    @property
+    def relatedResources(self):
+        return self.__proxy.relatedResources if self.__proxy is not None else []
+
+    @relatedResources.setter
+    def relatedResources(self, resources):
+        if self.__proxy is not None:
+            self.__proxy.relatedResources = resources
         return
 
     def clear(self):

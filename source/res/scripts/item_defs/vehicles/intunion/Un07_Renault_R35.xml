@@ -8,7 +8,7 @@
   </crew>
   <supplySlots>	8 8 8	</supplySlots>
   <speedLimits>
-    <forward>	20	</forward>
+    <forward>	30	</forward>
     <backward>	8	</backward>
   </speedLimits>
   <invisibility>
@@ -83,7 +83,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	6490	</weight>
-    <maxHealth>	196	</maxHealth>
+    <maxHealth>	200	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	65	</maxHealth>
       <maxRegenHealth>	45	</maxRegenHealth>
@@ -1150,8 +1150,8 @@
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
       <rotationSpeed>	40	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.4	</vehicleMovement>
-        <vehicleRotation>	0.4	</vehicleRotation>
+        <vehicleMovement>	0.10	</vehicleMovement>
+        <vehicleRotation>	0.10	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	50	</maxHealth>
@@ -2134,7 +2134,7 @@
         <density>	123.184486 122.514877	</density>
         <aoTextureSize>	256 256	</aoTextureSize>
       </camouflage>
-      <repairTime>	3.41880345	</repairTime>
+      <repairTime>	1.70988882	</repairTime>
     </Chassis_Un07_Renault_R35>
   </chassis>
   <turrets0>
@@ -2163,14 +2163,14 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	1250	</weight>
-      <maxHealth>	49	</maxHealth>
+      <maxHealth>	80	</maxHealth>
       <rotationSpeed>	30	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	50	</maxHealth>
         <maxRegenHealth>	25	</maxRegenHealth>
         <repairCost>	1.0	</repairCost>
       </turretRotatorHealth>
-      <circularVisionRadius>	280	</circularVisionRadius>
+      <circularVisionRadius>	300	</circularVisionRadius>
       <surveyingDeviceHealth>
         <maxHealth>	30	</maxHealth>
         <maxRegenHealth>	15	</maxRegenHealth>
@@ -2198,11 +2198,11 @@
             </gun>
           </armor>
           <shotDispersionFactors>
-            <turretRotation>	0.11	</turretRotation>
-            <afterShot>	1.2	</afterShot>
+            <turretRotation>	0.10	</turretRotation>
+            <afterShot>	1.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <aimingTime>	2.1	</aimingTime>
+          <aimingTime>	2.0	</aimingTime>
           <reloadTime>	6.0	</reloadTime>
           <shotDispersionRadius>	0.57	</shotDispersionRadius>
           <invisibilityFactorAtShot>	0.238	</invisibilityFactorAtShot>
@@ -2252,10 +2252,10 @@
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 16 0.36 16 0.42 9 0.58 9 0.64 16 1 16	</maxPitch>
           </pitchLimits>
-          <aimingTime>	2.3	</aimingTime>
+          <aimingTime>	1.8	</aimingTime>
           <shotDispersionFactors>
-            <turretRotation>	0.15	</turretRotation>
-            <afterShot>	4.0	</afterShot>
+            <turretRotation>	0.10	</turretRotation>
+            <afterShot>	3.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <maxAmmo>	100	</maxAmmo>
@@ -2270,8 +2270,8 @@
               <chanceToHitByExplosion>	0	</chanceToHitByExplosion>
             </gun>
           </armor>
-          <shotDispersionRadius>	0.52	</shotDispersionRadius>
-          <reloadTime>	2.6	</reloadTime>
+          <shotDispersionRadius>	0.40	</shotDispersionRadius>
+          <reloadTime>	2.0	</reloadTime>
           <invisibilityFactorAtShot>	0.255	</invisibilityFactorAtShot>
           <customizationSlots>
             <slot>
@@ -2713,8 +2713,8 @@
     <detailed>
       <engines>
         <Renault_22_CV>
-          <smplEnginePower>	75	</smplEnginePower>
-          <smplFwMaxSpeed>	20	</smplFwMaxSpeed>
+          <smplEnginePower>	90	</smplEnginePower>
+          <smplFwMaxSpeed>	30	</smplFwMaxSpeed>
         </Renault_22_CV>
       </engines>
       <chassis>

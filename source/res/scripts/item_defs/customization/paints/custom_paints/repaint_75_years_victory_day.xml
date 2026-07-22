@@ -1,0 +1,37 @@
+<repaint_75_years_victory_day.xml>
+  <itemGroup>
+    <name>	Victory Day	</name>
+    <userString>	#vehicle_customization:repaint/color_group_04	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	paints 20g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <paint>
+      <id>	31	</id>
+      <texture>	gui/maps/vehicles/repaints/custom_color_22.png	</texture>
+      <color>	201 199 195 255	</color>
+      <gloss>	0.509	</gloss>
+      <metallic>	0.23	</metallic>
+      <userString>	#vehicle_customization:repaint/75_years_victory_day	</userString>
+      <tags>	hiddenInUI	</tags>
+    </paint>
+    <paint>
+      <id>	105	</id>
+      <texture>	gui/maps/vehicles/repaints/custom_color_18.png	</texture>
+      <color>	140 19 19 255	</color>
+      <gloss>	0.6	</gloss>
+      <metallic>	0.4	</metallic>
+      <userString>	#vehicle_customization:repaint/victory_day_2021	</userString>
+    </paint>
+    <usages>
+      <item>
+        <componentType>	ALL	</componentType>
+        <cost>	1	</cost>
+      </item>
+    </usages>
+  </itemGroup>
+</repaint_75_years_victory_day.xml>

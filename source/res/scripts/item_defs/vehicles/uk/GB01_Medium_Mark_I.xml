@@ -9,8 +9,8 @@
   </crew>
   <supplySlots>	8 8 8	</supplySlots>
   <speedLimits>
-    <forward>	24	</forward>
-    <backward>	8	</backward>
+    <forward>	26	</forward>
+    <backward>	10	</backward>
   </speedLimits>
   <invisibility>
     <moving>	0.106	</moving>
@@ -86,7 +86,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	6750	</weight>
-    <maxHealth>	240	</maxHealth>
+    <maxHealth>	200	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	70	</maxHealth>
       <maxRegenHealth>	48	</maxRegenHealth>
@@ -1106,8 +1106,8 @@
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
       <rotationSpeed>	35	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.36	</vehicleMovement>
-        <vehicleRotation>	0.36	</vehicleRotation>
+        <vehicleMovement>	0.10	</vehicleMovement>
+        <vehicleRotation>	0.10	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	50	</maxHealth>
@@ -2017,12 +2017,49 @@
           <camouflage></camouflage>
         </customizableVehicleAreas>
       </customization>
-      <repairTime>	3.41880345	</repairTime>
+      <repairTime>	1.70988882	</repairTime>
     </Chassis_GB01_Medium_Mark_I_2>
   </chassis>
   <turrets0>
     <Turret_1_GB01_Medium_Mark_I>
       <userString>	#gb_vehicles:Turret_1_GB01_Medium_Mark_I	</userString>
+      <tags></tags>
+      <level>	1	</level>
+      <price>	0	</price>
+      <notInShop>	true	</notInShop>
+      <armor>
+        <armor_1>	6.35	</armor_1>
+        <armor_2>	6.35	</armor_2>
+        <armor_3>	6.35	</armor_3>
+        <armor_4>	6.35	</armor_4>
+        <armor_5>	6.35	</armor_5>
+        <armor_6>	6.35	</armor_6>
+        <armor_9>	0	</armor_9>
+        <surveyingDevice>	0	  <chanceToHitByProjectile>	0	</chanceToHitByProjectile>
+          <chanceToHitByExplosion>	0	</chanceToHitByExplosion>
+        </surveyingDevice>
+        <commander>	0	  <chanceToHitByProjectile>	0	</chanceToHitByProjectile>
+          <chanceToHitByExplosion>	0	</chanceToHitByExplosion>
+        </commander>
+        <gunner_1>	0	  <chanceToHitByProjectile>	0	</chanceToHitByProjectile>
+          <chanceToHitByExplosion>	0	</chanceToHitByExplosion>
+        </gunner_1>
+      </armor>
+      <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+      <weight>	1360	</weight>
+      <maxHealth>	100	</maxHealth>
+      <rotationSpeed>	32	</rotationSpeed>
+      <turretRotatorHealth>
+        <maxHealth>	50	</maxHealth>
+        <maxRegenHealth>	25	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </turretRotatorHealth>
+      <circularVisionRadius>	300	</circularVisionRadius>
+      <surveyingDeviceHealth>
+        <maxHealth>	30	</maxHealth>
+        <maxRegenHealth>	15	</maxRegenHealth>
+        <repairCost>	2.0	</repairCost>
+      </surveyingDeviceHealth>
       <guns>
         <_3pdr_gun_Hotchkiss>	shared	  <maxAmmo>	205	</maxAmmo>
           <unlocks>
@@ -2034,14 +2071,14 @@
               <chanceToHitByExplosion>	0	</chanceToHitByExplosion>
             </gun>
           </armor>
-          <shotDispersionRadius>	0.45	</shotDispersionRadius>
+          <shotDispersionRadius>	0.38	</shotDispersionRadius>
           <reloadTime>	4.5	</reloadTime>
           <shotDispersionFactors>
-            <turretRotation>	0.16	</turretRotation>
-            <afterShot>	4.0	</afterShot>
+            <turretRotation>	0.10	</turretRotation>
+            <afterShot>	3.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <aimingTime>	2.9	</aimingTime>
+          <aimingTime>	2.0	</aimingTime>
           <invisibilityFactorAtShot>	0.247	</invisibilityFactorAtShot>
           <pitchLimits>
             <minPitch>	0 -16 1 -16	</minPitch>
@@ -2099,14 +2136,14 @@
               <chanceToHitByExplosion>	0	</chanceToHitByExplosion>
             </gun>
           </armor>
-          <shotDispersionRadius>	0.52	</shotDispersionRadius>
+          <shotDispersionRadius>	0.38	</shotDispersionRadius>
           <reloadTime>	4.5	</reloadTime>
           <shotDispersionFactors>
-            <turretRotation>	0.16	</turretRotation>
-            <afterShot>	4.0	</afterShot>
+            <turretRotation>	0.10	</turretRotation>
+            <afterShot>	3.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <aimingTime>	2.3	</aimingTime>
+          <aimingTime>	1.9	</aimingTime>
           <invisibilityFactorAtShot>	0.238	</invisibilityFactorAtShot>
           <pitchLimits>
             <minPitch>	0 -16 1 -16	</minPitch>
@@ -2159,43 +2196,6 @@
           </camouflage>
         </QF_6_pounder_8cwt_Mk_II>
       </guns>
-      <tags></tags>
-      <level>	1	</level>
-      <price>	0	</price>
-      <notInShop>	true	</notInShop>
-      <armor>
-        <armor_1>	6.35	</armor_1>
-        <armor_2>	6.35	</armor_2>
-        <armor_3>	6.35	</armor_3>
-        <armor_4>	6.35	</armor_4>
-        <armor_5>	6.35	</armor_5>
-        <armor_6>	6.35	</armor_6>
-        <armor_9>	0	</armor_9>
-        <surveyingDevice>	0	  <chanceToHitByProjectile>	0	</chanceToHitByProjectile>
-          <chanceToHitByExplosion>	0	</chanceToHitByExplosion>
-        </surveyingDevice>
-        <commander>	0	  <chanceToHitByProjectile>	0	</chanceToHitByProjectile>
-          <chanceToHitByExplosion>	0	</chanceToHitByExplosion>
-        </commander>
-        <gunner_1>	0	  <chanceToHitByProjectile>	0	</chanceToHitByProjectile>
-          <chanceToHitByExplosion>	0	</chanceToHitByExplosion>
-        </gunner_1>
-      </armor>
-      <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
-      <weight>	1360	</weight>
-      <maxHealth>	60	</maxHealth>
-      <rotationSpeed>	32	</rotationSpeed>
-      <turretRotatorHealth>
-        <maxHealth>	50	</maxHealth>
-        <maxRegenHealth>	25	</maxRegenHealth>
-        <repairCost>	1.0	</repairCost>
-      </turretRotatorHealth>
-      <circularVisionRadius>	280	</circularVisionRadius>
-      <surveyingDeviceHealth>
-        <maxHealth>	30	</maxHealth>
-        <maxRegenHealth>	15	</maxRegenHealth>
-        <repairCost>	2.0	</repairCost>
-      </surveyingDeviceHealth>
       <models>
         <undamaged>	vehicles/british/GB01_Medium_Mark_I/normal/lod0/Turret_01.model	</undamaged>
         <destroyed>	vehicles/british/GB01_Medium_Mark_I/crash/lod0/Turret_01.model	</destroyed>
@@ -2827,8 +2827,8 @@
     <detailed>
       <engines>
         <Vickers-Armstrong>
-          <smplEnginePower>	95.1553	</smplEnginePower>
-          <smplFwMaxSpeed>	24	</smplFwMaxSpeed>
+          <smplEnginePower>	135	</smplEnginePower>
+          <smplFwMaxSpeed>	26	</smplFwMaxSpeed>
         </Vickers-Armstrong>
       </engines>
       <chassis>

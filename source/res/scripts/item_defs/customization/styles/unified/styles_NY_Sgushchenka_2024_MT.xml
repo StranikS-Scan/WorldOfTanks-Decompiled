@@ -1,0 +1,61 @@
+<styles_NY_Sgushchenka_2024_MT.xml>
+  <itemGroup>
+    <season>	ALL	</season>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <historical>	1	</historical>
+    <priceGroup>	MT 2D styles universal 1000g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <style>
+      <id>	31084	</id>
+      <texture>	gui/maps/vehicles/styles/NY_Sgushchenka_2024_MT.png	</texture>
+      <userString>	#vehicle_customization:styles/NY_Sgushchenka_2024_MT	</userString>
+      <description>	#vehicle_customization:styles/NY_Sgushchenka_2024_MT/description	</description>
+      <longDescriptionSpecial>	#vehicle_customization:styles/NY_Sgushchenka_2024_MT/description/long	</longDescriptionSpecial>
+      <outfits>
+        <outfit>
+          <season>	all	</season>
+          <modifications>
+            <item>	4	</item>
+          </modifications>
+          <paints>
+            <item>
+              <id>	31056	</id>
+              <appliedTo>	16656	</appliedTo>
+            </item>
+            <item>
+              <id>	31057	</id>
+              <appliedTo>	4097	</appliedTo>
+            </item>
+          </paints>
+          <camouflages>
+            <item>
+              <id>	31059	</id>
+              <patternSize>	1	</patternSize>
+              <appliedTo>	16	</appliedTo>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <projection_decals>
+            <item>
+              <id>	31074	</id>
+              <tags>	front formfactor_rect1x2 cover direction_right_to_left	</tags>
+            </item>
+            <item>
+              <id>	31075	</id>
+              <tags>	front formfactor_rect1x2 direction_left_to_right mimic	</tags>
+            </item>
+            <item>
+              <id>	31076	</id>
+              <scaleFactorId>	1	</scaleFactorId>
+              <tags>	right formfactor_rect1x2 mimic direction_left_to_right	</tags>
+            </item>
+          </projection_decals>
+        </outfit>
+      </outfits>
+    </style>
+  </itemGroup>
+</styles_NY_Sgushchenka_2024_MT.xml>

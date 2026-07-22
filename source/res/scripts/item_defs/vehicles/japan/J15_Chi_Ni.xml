@@ -64,7 +64,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	4930	</weight>
-    <maxHealth>	304	</maxHealth>
+    <maxHealth>	400	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	85	</maxHealth>
       <maxRegenHealth>	55	</maxRegenHealth>
@@ -1194,8 +1194,8 @@
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
       <rotationSpeed>	36	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.34	</vehicleMovement>
-        <vehicleRotation>	0.34	</vehicleRotation>
+        <vehicleMovement>	0.24	</vehicleMovement>
+        <vehicleRotation>	0.24	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	50	</maxHealth>
@@ -1906,7 +1906,7 @@
           <camouflage></camouflage>
         </customizableVehicleAreas>
       </customization>
-      <repairTime>	6.85714293	</repairTime>
+      <repairTime>	1.71001065	</repairTime>
     </Chassis_Chi_Ni>
     <Chassis_Chi_Ni_2>
       <userString>	#japan_vehicles:Chassis_Chi_Ni_2	</userString>
@@ -1923,8 +1923,8 @@
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
       <rotationSpeed>	38	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.32	</vehicleMovement>
-        <vehicleRotation>	0.32	</vehicleRotation>
+        <vehicleMovement>	0.22	</vehicleMovement>
+        <vehicleRotation>	0.22	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	60	</maxHealth>
@@ -2635,7 +2635,7 @@
           <camouflage></camouflage>
         </customizableVehicleAreas>
       </customization>
-      <repairTime>	6.85714293	</repairTime>
+      <repairTime>	1.71001065	</repairTime>
     </Chassis_Chi_Ni_2>
   </chassis>
   <turrets0>
@@ -2660,7 +2660,7 @@
       </armor>
       <primaryArmor>	armor_2 armor_3 armor_4	</primaryArmor>
       <weight>	500	</weight>
-      <maxHealth>	76	</maxHealth>
+      <maxHealth>	60	</maxHealth>
       <rotationSpeed>	30	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	60	</maxHealth>
@@ -2692,7 +2692,7 @@
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 14 0.172222 14 0.186111 15 0.375 15 0.388889 8 0.611111 8 0.625 15 0.813889 15 0.827778 14 1 14	</maxPitch>
           </pitchLimits>
-          <shotDispersionRadius>	0.56	</shotDispersionRadius>
+          <shotDispersionRadius>	0.5	</shotDispersionRadius>
           <reloadTime>	10	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.08	</turretRotation>
@@ -2763,14 +2763,14 @@
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 15 0.138889 15 0.152778 9 0.375 9 0.388889 8 0.611111 8 0.625 9 0.847222 9 0.861111 15 1 15	</maxPitch>
           </pitchLimits>
-          <shotDispersionRadius>	0.45	</shotDispersionRadius>
+          <shotDispersionRadius>	0.4	</shotDispersionRadius>
           <reloadTime>	2.3	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.1	</turretRotation>
             <afterShot>	3.5	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <aimingTime>	1.9	</aimingTime>
+          <aimingTime>	1.8	</aimingTime>
           <invisibilityFactorAtShot>	0.255	</invisibilityFactorAtShot>
           <turretYawLimits>	-180 180	</turretYawLimits>
           <models>
@@ -2833,14 +2833,14 @@
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 15 0.125 15 0.138889 10 0.375 10 0.388889 8 0.611111 8 0.625 10 0.861111 10 0.875 15 1 15	</maxPitch>
           </pitchLimits>
-          <shotDispersionRadius>	0.5	</shotDispersionRadius>
+          <shotDispersionRadius>	0.4	</shotDispersionRadius>
           <reloadTime>	3.4	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.1	</turretRotation>
             <afterShot>	3.5	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <aimingTime>	2.1	</aimingTime>
+          <aimingTime>	1.6	</aimingTime>
           <invisibilityFactorAtShot>	0.238	</invisibilityFactorAtShot>
           <turretYawLimits>	-180 180	</turretYawLimits>
           <models>

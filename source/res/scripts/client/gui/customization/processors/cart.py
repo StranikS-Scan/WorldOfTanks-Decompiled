@@ -51,7 +51,7 @@ class ProcessorSelector(object):
 
 
 class BasePurchaseDescription(object):
-    __slots__ = ('intCD', 'identificator', 'selected', 'item', 'component', 'quantity', 'purchaseIndices', 'progressionLevel', '_uiDataPacker', 'dependents', 'dependentOn')
+    __slots__ = ('intCD', 'identificator', 'selected', 'item', 'component', 'quantity', 'purchaseIndices', 'progressionLevel', '_uiDataPacker', 'dependents', 'dependentOn', 'isFromInventory')
 
     def __init__(self, item, purchaseIdx=0, quantity=1, component=None, progressionLevel=-1):
         self._uiDataPacker = None
@@ -65,6 +65,7 @@ class BasePurchaseDescription(object):
         self.progressionLevel = progressionLevel
         self.dependents = None
         self.dependentOn = None
+        self.isFromInventory = False
         return
 
     def getUIData(self):
@@ -214,14 +215,15 @@ class StyleItemsProcessor(ItemsProcessor):
         nationalEmblemItem = self.__service.getItemByID(GUI_ITEM_TYPE.EMBLEM, g_currentVehicle.item.descriptor.type.defaultPlayerEmblemID)
         for season in SeasonType.COMMON_SEASONS:
             seasonInfo = itemsInfo.setdefault(season, _SeasonPurchaseInfo())
-            styleDescription = self._getItemDescription(style.item, progressionLevel=style.progressionLevel)
+            styleDescription = self._getItemDescription(style, progressionLevel=style.progressionLevel)
             seasonInfo.add(styleDescription, GUI_ITEM_TYPE.STYLE)
             seasonInfo.delete(nationalEmblemItem.intCD, GUI_ITEM_TYPE.EMBLEM)
 
         return itemsInfo
 
-    def _getItemDescription(self, item, idx=0, progressionLevel=-1):
-        desc = self._itemDescriptionClass(item, idx, progressionLevel=progressionLevel)
+    def _getItemDescription(self, style, idx=0, progressionLevel=-1):
+        desc = self._itemDescriptionClass(style.item, idx, progressionLevel=progressionLevel)
+        desc.isFromInventory = style.isFromInventory
         desc.setPacker(self._itemUiDataPacker)
         return desc
 

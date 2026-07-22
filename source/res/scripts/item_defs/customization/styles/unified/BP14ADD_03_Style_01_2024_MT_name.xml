@@ -1,0 +1,124 @@
+<BP14ADD_03_Style_01_2024_MT_name.xml>
+  <itemGroup>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <style>
+      <id>	31150	</id>
+      <texture>	gui/maps/vehicles/styles/BP14ADD_03_Style_01_2024_MT.png	</texture>
+      <userString>	#vehicle_customization:BP14ADD_03_Style_01_2024_MT/name	</userString>
+      <description>	#vehicle_customization:BP14ADD_03_Style_01_2024_MT/description	</description>
+      <longDescriptionSpecial>	#vehicle_customization:BP14ADD_03_Style_01_2024_MT/longDescription	</longDescriptionSpecial>
+      <outfits>
+        <outfit>
+          <season>	event	</season>
+        </outfit>
+        <outfit>
+          <season>	winter	</season>
+          <paints>
+            <item>
+              <id>	31121	</id>
+              <appliedTo>	20753	</appliedTo>
+            </item>
+          </paints>
+          <camouflages>
+            <item>
+              <id>	31122	</id>
+              <patternSize>	1	</patternSize>
+              <appliedTo>	4352	</appliedTo>
+              <palette>	0	</palette>
+            </item>
+            <item>
+              <id>	31123	</id>
+              <patternSize>	1	</patternSize>
+              <appliedTo>	16	</appliedTo>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <modifications>
+            <item>	4	</item>
+          </modifications>
+          <projection_decals>
+            <item>
+              <id>	31167	</id>
+              <scaleFactorId>	2	</scaleFactorId>
+              <tags>	formfactor_rect1x2 safe right	</tags>
+            </item>
+          </projection_decals>
+        </outfit>
+        <outfit>
+          <season>	summer	</season>
+          <paints>
+            <item>
+              <id>	31122	</id>
+              <appliedTo>	20753	</appliedTo>
+            </item>
+          </paints>
+          <camouflages>
+            <item>
+              <id>	31124	</id>
+              <patternSize>	1	</patternSize>
+              <appliedTo>	4352	</appliedTo>
+              <palette>	0	</palette>
+            </item>
+            <item>
+              <id>	31125	</id>
+              <patternSize>	1	</patternSize>
+              <appliedTo>	16	</appliedTo>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <modifications>
+            <item>	4	</item>
+          </modifications>
+          <projection_decals>
+            <item>
+              <id>	31167	</id>
+              <scaleFactorId>	2	</scaleFactorId>
+              <tags>	formfactor_rect1x2 safe right	</tags>
+            </item>
+          </projection_decals>
+        </outfit>
+        <outfit>
+          <season>	desert	</season>
+          <paints>
+            <item>
+              <id>	31123	</id>
+              <appliedTo>	20753	</appliedTo>
+            </item>
+          </paints>
+          <modifications>
+            <item>	4	</item>
+          </modifications>
+          <camouflages>
+            <item>
+              <id>	31126	</id>
+              <patternSize>	1	</patternSize>
+              <appliedTo>	4352	</appliedTo>
+              <palette>	0	</palette>
+            </item>
+            <item>
+              <id>	31127	</id>
+              <patternSize>	1	</patternSize>
+              <appliedTo>	16	</appliedTo>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <projection_decals>
+            <item>
+              <id>	31167	</id>
+              <tags>	formfactor_rect1x2 safe right	</tags>
+              <scaleFactorId>	2	</scaleFactorId>
+            </item>
+          </projection_decals>
+        </outfit>
+      </outfits>
+    </style>
+    <priceGroup>	MT 2D styles universal 1000g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+  </itemGroup>
+</BP14ADD_03_Style_01_2024_MT_name.xml>

@@ -776,6 +776,7 @@ class _AdventCalendarConfig(namedtuple('_AdventCalendarConfig', ('calendarURL', 
 
 _crystalRewardInfo = namedtuple('_crystalRewardInfo', 'level, arenaType, winTop3, loseTop3, winTop10, loseTop10, topLength firstTopLength')
 _crystalRewardComp7Info = namedtuple('_crystalRewardInfo', 'level, arenaType, winTop2, loseTop2, winTop5, loseTop5, winTop7, loseTop7, topLength firstTopLength')
+_crystalRewardRankedInfo = namedtuple('_crystalRewardInfo', 'level, arenaType, winTop3, loseTop3, winTop7, loseTop7, winTop10, loseTop10, topLength firstTopLength')
 
 class _crystalRewardConfigSection(namedtuple('_crystalRewardConfigSection', ('level', 'vehicle'))):
     __slots__ = ()
@@ -804,6 +805,8 @@ class _crystalRewardsConfig(namedtuple('_crystalRewardsConfig', ('limits', 'rewa
                 winTop3 = max(topWinRewards)
                 if arenaBonusType == ARENA_BONUS_TYPE.COMP7:
                     results.append(_crystalRewardComp7Info(level, arenaBonusType, winTop2=scoreData[True].get(1, 0), loseTop2=scoreData[False].get(1, 0), winTop5=scoreData[True].get(5, 0), loseTop5=scoreData[False].get(5, 0), winTop7=scoreData[True].get(7, 0), loseTop7=scoreData[False].get(7, 0), topLength=len(scoreData[True]), firstTopLength=topWinRewards.count(winTop3)))
+                if arenaBonusType == ARENA_BONUS_TYPE.RANKED:
+                    results.append(_crystalRewardRankedInfo(level, arenaBonusType, winTop3=scoreData[True].get(1, 0), loseTop3=scoreData[False].get(1, 0), winTop7=scoreData[True].get(7, 0), loseTop7=scoreData[False].get(7, 0), winTop10=scoreData[True].get(10, 0), loseTop10=scoreData[False].get(10, 0), topLength=len(scoreData[True]), firstTopLength=topWinRewards.count(winTop3)))
                 results.append(_crystalRewardInfo(level, arenaBonusType, winTop3=winTop3, loseTop3=max(scoreData[False].itervalues()), winTop10=min(scoreData[True].itervalues()), loseTop10=min(scoreData[False].itervalues()), topLength=len(scoreData[True]), firstTopLength=topWinRewards.count(winTop3)))
 
         return results
@@ -1125,28 +1128,6 @@ class _CollectiveGoalEntryPointConfig(namedtuple('_CollectiveGoalConfig', ('isEn
         defaults = dict(isEnabled=False, startTime=None, finishTime=None, marathonPrefix=None, hermodChannelName=None, marathonName=None, goalType=None, goalDescription=None, rulesCaption=None)
         defaults.update(kwargs)
         return super(_CollectiveGoalEntryPointConfig, cls).__new__(cls, **defaults)
-
-    def replace(self, data):
-        allowedFields = self._fields
-        dataToUpdate = dict(((k, v) for k, v in data.iteritems() if k in allowedFields))
-        return self._replace(**dataToUpdate)
-
-    @classmethod
-    def defaults(cls):
-        return cls()
-
-
-class _PlayStreakConfig(namedtuple('_PlayStreakConfig', ('isEnabled',
- 'isPaused',
- 'bonusTypes',
- 'daySkipSettings',
- 'rewardsCalendar'))):
-    __slots__ = ()
-
-    def __new__(cls, **kwargs):
-        defaults = dict(isEnabled=False, isPaused=False, bonusTypes=None, daySkipSettings=None, rewardsCalendar=None)
-        defaults.update(kwargs)
-        return super(_PlayStreakConfig, cls).__new__(cls, **defaults)
 
     def replace(self, data):
         allowedFields = self._fields
@@ -2101,7 +2082,6 @@ class ServerSettings(object):
         self.__randomBattlesConfig = RandomBattlesConfig()
         self.__modeSelectorConfig = ModeSelectorConfig()
         self.__paragonsConfig = ParagonsConfig.defaults()
-        self.__playStreakConfig = _PlayStreakConfig()
         self.__blackMarketConfig = _BlackMarketConfig()
         self.__ingameBrowserEventConfig = _IngameBrowserEventConfig()
         self.__lootBoxStatisticsConfig = _LootBoxStatisticsConfig.defaults()
@@ -2220,8 +2200,6 @@ class ServerSettings(object):
             self.__battleMattersConfig = makeTupleByDict(_BattleMattersConfig, self.__serverSettings[Configs.BATTLE_MATTERS_CONFIG.value])
         if Configs.COLLECTIVE_GOAL_ENTRY_POINT_CONFIG.value in self.__serverSettings:
             self.__collectiveGoalEntryPointConfig = makeTupleByDict(_CollectiveGoalEntryPointConfig, self.__serverSettings[Configs.COLLECTIVE_GOAL_ENTRY_POINT_CONFIG.value])
-        if Configs.PLAY_STREAK_CONFIG.value in self.__serverSettings:
-            self.__playStreakConfig = makeTupleByDict(_PlayStreakConfig, self.__serverSettings[Configs.PLAY_STREAK_CONFIG.value])
         if Configs.BLACK_MARKET_CONFIG.value in self.__serverSettings:
             self.__blackMarketConfig = makeTupleByDict(_BlackMarketConfig, self.__serverSettings[Configs.BLACK_MARKET_CONFIG.value])
         if Configs.INGAME_BROWSER_EVENT_CONFIG.value in self.__serverSettings:
@@ -2462,8 +2440,6 @@ class ServerSettings(object):
             self.__serverSettings[lbKeyConfig] = serverSettingsDiff[lbKeyConfig]
         if Configs.RANDOM_BATTLES_CONFIG.value in serverSettingsDiff:
             self.__updateRandomBattlesConfig(serverSettingsDiff)
-        if Configs.PLAY_STREAK_CONFIG.value in serverSettingsDiff:
-            self.__updatePlayStreakConfig(serverSettingsDiff)
         if Configs.BLACK_MARKET_CONFIG.value in serverSettingsDiff:
             self.__updateBlackMarketConfig(serverSettingsDiff)
         if Configs.INGAME_BROWSER_EVENT_CONFIG.value in serverSettingsDiff:
@@ -2647,10 +2623,6 @@ class ServerSettings(object):
     @property
     def universalFlagEntryPointConfig(self):
         return self.__getGlobalSetting(Configs.UNIVERSAL_FLAG_ENTRY_POINT_CONFIG.value, {'isEnabled': False})
-
-    @property
-    def playStreakConfig(self):
-        return self.__playStreakConfig
 
     @property
     def blackMarketConfig(self):
@@ -2894,6 +2866,9 @@ class ServerSettings(object):
     def isWotPlusExcludedMapEnabled(self):
         return self.isRenewableSubEnabled() and self.__getGlobalSetting(RENEWABLE_SUBSCRIPTION_CONFIG, {}).get('enableExcludedMap', False)
 
+    def isPreferredMapsSlotsEnabled(self, slotsTypeName):
+        return bool(self.getPreferredMapsConfig().get(slotsTypeName, 0))
+
     def isWoTPlusExclusiveVehicleEnabled(self):
         return self.isRenewableSubEnabled() and self.__getGlobalSetting(RENEWABLE_SUBSCRIPTION_CONFIG, {}).get('enableWoTPlusExclusiveVehicle', False)
 
@@ -3108,9 +3083,6 @@ class ServerSettings(object):
     def getRPConfig(self):
         return self.__referralProgramConfig
 
-    def getPlayStreakConfig(self):
-        return self.__getGlobalSetting(Configs.PLAY_STREAK_CONFIG.value, {})
-
     def getBlackMarketConfig(self):
         return self.__getGlobalSetting(Configs.BLACK_MARKET_CONFIG.value, {})
 
@@ -3242,9 +3214,6 @@ class ServerSettings(object):
 
     def __updateCollectiveGoalEntryPointConfig(self, diff):
         self.__collectiveGoalEntryPointConfig = self.__collectiveGoalEntryPointConfig.replace(diff[Configs.COLLECTIVE_GOAL_ENTRY_POINT_CONFIG.value])
-
-    def __updatePlayStreakConfig(self, diff):
-        self.__playStreakConfig = self.__playStreakConfig.replace(diff[Configs.PLAY_STREAK_CONFIG.value])
 
     def __updateBlackMarketConfig(self, diff):
         self.__blackMarketConfig = self.__blackMarketConfig.replace(diff[Configs.BLACK_MARKET_CONFIG.value])

@@ -1,15 +1,20 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/game_control/gift_system_controller.py
+import logging
 import typing
+from functools import partial
+from collections import deque
 from bootcamp.BootCampEvents import g_bootcampEvents
 from constants import Configs
 from Event import Event, EventManager
 from gifts.gifts_common import ClientReqStrategy
 from gui.ClientUpdateManager import g_clientUpdateManager
+from gui.gift_system.constants import MAX_CACHED_PLAYERS
 from gui.gift_system.hubs import createGiftEventHub
 from gui.gift_system.hubs.base.hub_core import IGiftEventHub
 from gui.gift_system.requesters.history_requester import GiftSystemHistoryRequester
 from gui.gift_system.requesters.state_requester import GiftSystemWebStateRequester
+from gui.gift_system.requesters.wait_response_requester import GiftSystemWaitResponseRequester
 from gui.gift_system.wrappers import skipNoHubsAction
 from helpers import dependency
 from helpers.server_settings import GiftSystemConfig
@@ -20,6 +25,7 @@ if typing.TYPE_CHECKING:
     from gui.gift_system.wrappers import GiftsHistoryData, GiftsWebState
     from gui.shared import events
     from helpers.server_settings import ServerSettings, GiftEventConfig
+_logger = logging.getLogger(__name__)
 
 class GiftSystemController(IGiftSystemController):
     __itemsCache = dependency.descriptor(IItemsCache)
@@ -32,9 +38,11 @@ class GiftSystemController(IGiftSystemController):
         self.__isLobbyInited = False
         self.__serverSettings = None
         self.__giftSystemSettings = None
+        self.__requestWaitResponseQueue = deque()
         self.__eventHubs = {}
         self.__historyRequester = GiftSystemHistoryRequester(self.__onHistoryReceived)
         self.__webStateRequester = GiftSystemWebStateRequester(self.__onWebStateReceived)
+        self.__waitResponseRequester = GiftSystemWaitResponseRequester(self.__onWaitResponseReceived)
         return
 
     def init(self):
@@ -43,8 +51,10 @@ class GiftSystemController(IGiftSystemController):
 
     def fini(self):
         g_bootcampEvents.onBootcampFinished -= self.__onBootcampFinished
+        self.__requestWaitResponseQueue = deque()
         self.__historyRequester.destroy()
         self.__webStateRequester.destroy()
+        self.__waitResponseRequester.destroy()
         self.__em.clear()
 
     def onAccountBecomePlayer(self):
@@ -78,11 +88,38 @@ class GiftSystemController(IGiftSystemController):
             return
         self.__onWebStateReadyChanged(strategy=ClientReqStrategy.DEMAND, eventIDs=[eventID])
 
+    def requestWaitResponse(self, reqEventId, spaID, getUpdatedAtAfter=None, getUpdatedAtBefore=None):
+        if reqEventId not in self.__eventHubs:
+            return
+        if not self.__eventHubs[reqEventId].isWebStateReceived():
+            self.__requestWaitResponseQueue.append(partial(self.requestWaitResponse, reqEventId, spaID, getUpdatedAtAfter, getUpdatedAtBefore))
+            return
+        if not self.__waitResponseRequester.isWaitResponseLimitSet():
+            limit = self.__eventHubs[reqEventId].getKeeper().getWaitResponseLimit()
+            self.__waitResponseRequester.setWaiResponseLimit(limit)
+        self.__waitResponseRequester.request(reqEventId, spaID, getUpdatedAtAfter=getUpdatedAtAfter, getUpdatedAtBefore=getUpdatedAtBefore)
+
+    def __onWaitResponseReceived(self, eventID, result):
+        if eventID is None:
+            return
+        elif result is None:
+            _logger.warning('onWaitResponseReceived, result is None, request is not Succeed')
+            return
+        else:
+            limit = self.__eventHubs[eventID].getKeeper().getWaitResponseLimit()
+            playersWaitingResponseCount = len(self.__eventHubs[eventID].getKeeper().getPlayersWaitingResponse())
+            if playersWaitingResponseCount + limit > MAX_CACHED_PLAYERS:
+                self.__waitResponseRequester.stop()
+            self.__eventHubs[eventID].processWaitResponse(result)
+            return
+
     def __clear(self):
         self.__updateLobbyState(isLobbyInited=False)
         self.__webStateRequester.stop()
         self.__historyRequester.stop()
+        self.__waitResponseRequester.stop()
         g_clientUpdateManager.removeObjectCallbacks(self)
+        self.__requestWaitResponseQueue = deque()
 
     def __onBootcampFinished(self):
         for eventHub in self.__eventHubs.itervalues():
@@ -112,6 +149,13 @@ class GiftSystemController(IGiftSystemController):
     def __onWebStateReceived(self, webState):
         for eventID, eventHub in ((eID, eHub) for eID, eHub in self.__eventHubs.iteritems() if eID in webState):
             eventHub.processWebState(webState[eventID])
+
+        while self.__requestWaitResponseQueue:
+            function = self.__requestWaitResponseQueue.popleft()
+            if not callable(function):
+                logging.error('Object is not callable, got %s', function)
+                continue
+            function()
 
     def __onServerSettingsChanged(self, serverSettings):
         if self.__serverSettings is not None:

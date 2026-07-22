@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/techtree/research_items_data.py
 import logging
+from Event import Event
 from gui.techtree import nodes
 from gui.techtree.data import _ItemsData, _checkCollectibleEnabled
 from gui.techtree.settings import NODE_STATE, MAX_PATH_LIMIT, RESEARCH_ITEMS, UnlockProps, DEFAULT_UNLOCK_PROPS
@@ -21,6 +22,7 @@ class ResearchItemsData(_ItemsData):
     _itemsCache = dependency.descriptor(IItemsCache)
     _rootCD = None
     _moduleInstaller = None
+    onGoToNextVehicle = Event()
 
     def __init__(self, dumper):
         super(ResearchItemsData, self).__init__(dumper)
@@ -51,6 +53,12 @@ class ResearchItemsData(_ItemsData):
     @classmethod
     def getRootCD(cls):
         return cls._rootCD
+
+    @classmethod
+    def notifyGoToNextVehicle(cls, oldRootCD, newRootCD):
+        if oldRootCD is not None and oldRootCD != newRootCD:
+            cls.onGoToNextVehicle(oldRootCD, newRootCD)
+        return
 
     @classmethod
     def clearRootCD(cls):

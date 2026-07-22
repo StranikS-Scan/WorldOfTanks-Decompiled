@@ -57,6 +57,7 @@ from messenger.m_constants import USER_TAG
 from gui.impl.lobby.platoon.platoon_helpers import PreloadableWindow
 from gui.impl.pub.tooltip_window import SimpleTooltipContent
 from messenger.ext import channel_num_gen
+from uilogging.rename_testing.loggers import RenameTestingUILogger
 from adisp import adisp_process
 if typing.TYPE_CHECKING:
     from helpers.server_settings import Comp7RanksConfig
@@ -522,10 +523,14 @@ class SquadMembersView(ViewImpl, CallbackDelayer):
 
     @adisp_process
     def _onSwitchReady(self):
+        playerInfo = self._platoonCtrl.getPlayerInfo()
+        if playerInfo is not None and not playerInfo.isReady:
+            RenameTestingUILogger().logPlatoonReadyButton()
         result = yield self._platoonCtrl.togglePlayerReadyAction()
         if result:
             with self.viewModel.transaction() as model:
                 model.btnSwitchReady.setIsEnabled(False)
+        return
 
     def _hasFreeSlot(self):
         return self._platoonCtrl.hasFreeSlot()

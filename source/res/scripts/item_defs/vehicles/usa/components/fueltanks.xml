@@ -1,33 +1,8 @@
 <fuelTanks.xml>
-  <ids>
-    <Small>	201	</Small>
-    <Medium>	202	</Medium>
-    <Average>	203	</Average>
-    <Heavy>	204	</Heavy>
-    <Large>	205	</Large>
-    <Large_SH>	207	</Large_SH>
-    <Average_MapsTraining_Dummy_MT_1>	2	</Average_MapsTraining_Dummy_MT_1>
-    <Average_MapsTraining_Player_HT_1>	3	</Average_MapsTraining_Player_HT_1>
-    <Average_MapsTraining_Dummy_LT_2>	4	</Average_MapsTraining_Dummy_LT_2>
-  </ids>
+  <xmlns:xmlref>	http://bwt/xmlref	</xmlns:xmlref>
   <shared>
-    <Small>
-      <tags></tags>
-      <price>	100	</price>
-      <weight>	200	</weight>
-      <maxHealth>	100	</maxHealth>
-      <maxRegenHealth>	40	</maxRegenHealth>
-      <repairCost>	1.0	</repairCost>
-    </Small>
-    <Medium>
-      <tags></tags>
-      <price>	100	</price>
-      <weight>	250	</weight>
-      <maxHealth>	125	</maxHealth>
-      <maxRegenHealth>	50	</maxRegenHealth>
-      <repairCost>	1.0	</repairCost>
-    </Medium>
     <Average>
+      <id>	203	</id>
       <tags></tags>
       <price>	100	</price>
       <weight>	250	</weight>
@@ -35,32 +10,18 @@
       <maxRegenHealth>	50	</maxRegenHealth>
       <repairCost>	1.0	</repairCost>
     </Average>
-    <Heavy>
+    <Average_MapsTraining_Dummy_LT_2>
+      <id>	4	</id>
       <tags></tags>
       <price>	100	</price>
-      <weight>	275	</weight>
-      <maxHealth>	175	</maxHealth>
-      <maxRegenHealth>	70	</maxRegenHealth>
+      <weight>	250	</weight>
+      <maxHealth>	150	</maxHealth>
+      <maxRegenHealth>	50	</maxRegenHealth>
       <repairCost>	1.0	</repairCost>
-    </Heavy>
-    <Large>
-      <tags></tags>
-      <price>	100	</price>
-      <weight>	300	</weight>
-      <maxHealth>	200	</maxHealth>
-      <maxRegenHealth>	70	</maxRegenHealth>
-      <repairCost>	1.0	</repairCost>
-    </Large>
-    <Large_SH>
-      <tags></tags>
-      <price>	0	</price>
-      <notInShop>	true	</notInShop>
-      <weight>	300	</weight>
-      <maxHealth>	1000	</maxHealth>
-      <maxRegenHealth>	135	</maxRegenHealth>
-      <repairCost>	0	</repairCost>
-    </Large_SH>
+      <notInShop>	True	</notInShop>
+    </Average_MapsTraining_Dummy_LT_2>
     <Average_MapsTraining_Dummy_MT_1>
+      <id>	2	</id>
       <tags></tags>
       <price>	100	</price>
       <weight>	250	</weight>
@@ -70,6 +31,7 @@
       <notInShop>	True	</notInShop>
     </Average_MapsTraining_Dummy_MT_1>
     <Average_MapsTraining_Player_HT_1>
+      <id>	3	</id>
       <tags></tags>
       <price>	100	</price>
       <weight>	250	</weight>
@@ -79,14 +41,51 @@
       <invulnerable>	True	</invulnerable>
       <notInShop>	True	</notInShop>
     </Average_MapsTraining_Player_HT_1>
-    <Average_MapsTraining_Dummy_LT_2>
+    <Heavy>
+      <id>	204	</id>
+      <tags></tags>
+      <price>	100	</price>
+      <weight>	275	</weight>
+      <maxHealth>	175	</maxHealth>
+      <maxRegenHealth>	70	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+    </Heavy>
+    <Large>
+      <id>	205	</id>
+      <tags></tags>
+      <price>	100	</price>
+      <weight>	300	</weight>
+      <maxHealth>	200	</maxHealth>
+      <maxRegenHealth>	70	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+    </Large>
+    <Large_SH>
+      <id>	207	</id>
+      <tags></tags>
+      <price>	0	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	300	</weight>
+      <maxHealth>	1000	</maxHealth>
+      <maxRegenHealth>	135	</maxRegenHealth>
+      <repairCost>	0	</repairCost>
+    </Large_SH>
+    <Medium>
+      <id>	202	</id>
       <tags></tags>
       <price>	100	</price>
       <weight>	250	</weight>
-      <maxHealth>	150	</maxHealth>
+      <maxHealth>	125	</maxHealth>
       <maxRegenHealth>	50	</maxRegenHealth>
       <repairCost>	1.0	</repairCost>
-      <notInShop>	True	</notInShop>
-    </Average_MapsTraining_Dummy_LT_2>
+    </Medium>
+    <Small>
+      <id>	201	</id>
+      <tags></tags>
+      <price>	100	</price>
+      <weight>	200	</weight>
+      <maxHealth>	100	</maxHealth>
+      <maxRegenHealth>	40	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+    </Small>
   </shared>
 </fuelTanks.xml>

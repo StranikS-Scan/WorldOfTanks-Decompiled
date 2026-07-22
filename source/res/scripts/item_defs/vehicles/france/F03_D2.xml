@@ -8,8 +8,8 @@
   </crew>
   <supplySlots>	1 1 6 6 8 8 8	</supplySlots>
   <speedLimits>
-    <forward>	23	</forward>
-    <backward>	12	</backward>
+    <forward>	25	</forward>
+    <backward>	15	</backward>
   </speedLimits>
   <invisibility>
     <moving>	0.181	</moving>
@@ -51,7 +51,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	12200	</weight>
-    <maxHealth>	328	</maxHealth>
+    <maxHealth>	450	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	100	</maxHealth>
       <maxRegenHealth>	70	</maxRegenHealth>
@@ -1208,8 +1208,8 @@
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
       <rotationSpeed>	36	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.3	</vehicleMovement>
-        <vehicleRotation>	0.3	</vehicleRotation>
+        <vehicleMovement>	0.22	</vehicleMovement>
+        <vehicleRotation>	0.22	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	70	</maxHealth>
@@ -2263,7 +2263,7 @@
           <camouflage></camouflage>
         </customizableVehicleAreas>
       </customization>
-      <repairTime>	6.85714293	</repairTime>
+      <repairTime>	2.28001642	</repairTime>
     </Chassis_D2>
     <Chassis_D2_2>
       <userString>	#france_vehicles:Chassis_D2_2	</userString>
@@ -2280,8 +2280,8 @@
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
       <rotationSpeed>	38	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.28	</vehicleMovement>
-        <vehicleRotation>	0.28	</vehicleRotation>
+        <vehicleMovement>	0.20	</vehicleMovement>
+        <vehicleRotation>	0.20	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	80	</maxHealth>
@@ -3335,7 +3335,7 @@
           <camouflage></camouflage>
         </customizableVehicleAreas>
       </customization>
-      <repairTime>	6.85714293	</repairTime>
+      <repairTime>	2.28001642	</repairTime>
     </Chassis_D2_2>
   </chassis>
   <turrets0>
@@ -3355,7 +3355,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	1000	</weight>
-      <maxHealth>	62	</maxHealth>
+      <maxHealth>	70	</maxHealth>
       <rotationSpeed>	30	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	70	</maxHealth>
@@ -3392,13 +3392,13 @@
             <gun>	15	</gun>
           </armor>
           <shotDispersionFactors>
-            <turretRotation>	0.16	</turretRotation>
-            <afterShot>	4	</afterShot>
+            <turretRotation>	0.12	</turretRotation>
+            <afterShot>	2	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <shotDispersionRadius>	0.53	</shotDispersionRadius>
           <reloadTime>	2.5	</reloadTime>
-          <aimingTime>	2	</aimingTime>
+          <aimingTime>	1.8	</aimingTime>
           <invisibilityFactorAtShot>	0.29	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/french/F03_D2/normal/lod0/Gun_01.model	</undamaged>
@@ -3466,12 +3466,12 @@
           </armor>
           <reloadTime>	2.5	</reloadTime>
           <shotDispersionFactors>
-            <turretRotation>	0.16	</turretRotation>
-            <afterShot>	4	</afterShot>
+            <turretRotation>	0.12	</turretRotation>
+            <afterShot>	2	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <aimingTime>	2	</aimingTime>
-          <shotDispersionRadius>	0.47	</shotDispersionRadius>
+          <aimingTime>	1.8	</aimingTime>
+          <shotDispersionRadius>	0.42	</shotDispersionRadius>
           <invisibilityFactorAtShot>	0.29	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/french/F03_D2/normal/lod0/Gun_02.model	</undamaged>
@@ -3535,10 +3535,10 @@
           </armor>
           <reloadTime>	1.8	</reloadTime>
           <aimingTime>	1.5	</aimingTime>
-          <shotDispersionRadius>	0.45	</shotDispersionRadius>
+          <shotDispersionRadius>	0.42	</shotDispersionRadius>
           <shotDispersionFactors>
             <turretRotation>	0.12	</turretRotation>
-            <afterShot>	3	</afterShot>
+            <afterShot>	2	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <invisibilityFactorAtShot>	0.336	</invisibilityFactorAtShot>
@@ -4000,7 +4000,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	1350	</weight>
-      <maxHealth>	82	</maxHealth>
+      <maxHealth>	100	</maxHealth>
       <rotationSpeed>	28	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	70	</maxHealth>
@@ -4033,12 +4033,12 @@
           </armor>
           <reloadTime>	2.4	</reloadTime>
           <shotDispersionFactors>
-            <turretRotation>	0.14	</turretRotation>
-            <afterShot>	3.5	</afterShot>
+            <turretRotation>	0.10	</turretRotation>
+            <afterShot>	2.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <shotDispersionRadius>	0.53	</shotDispersionRadius>
-          <aimingTime>	2	</aimingTime>
+          <shotDispersionRadius>	0.40	</shotDispersionRadius>
+          <aimingTime>	1.6	</aimingTime>
           <invisibilityFactorAtShot>	0.29	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/french/F03_D2/normal/lod0/Gun_04.model	</undamaged>
@@ -4102,12 +4102,12 @@
           </armor>
           <aimingTime>	2	</aimingTime>
           <shotDispersionFactors>
-            <turretRotation>	0.14	</turretRotation>
-            <afterShot>	3.5	</afterShot>
+            <turretRotation>	0.10	</turretRotation>
+            <afterShot>	2.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <shotDispersionRadius>	0.47	</shotDispersionRadius>
-          <reloadTime>	2.4	</reloadTime>
+          <shotDispersionRadius>	0.40	</shotDispersionRadius>
+          <reloadTime>	1.6	</reloadTime>
           <invisibilityFactorAtShot>	0.29	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/french/F03_D2/normal/lod0/Gun_05.model	</undamaged>
@@ -4172,8 +4172,13 @@
             <gun>	10	</gun>
           </armor>
           <reloadTime>	1.7	</reloadTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.10	</turretRotation>
+            <afterShot>	2	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
           <aimingTime>	1.5	</aimingTime>
-          <shotDispersionRadius>	0.45	</shotDispersionRadius>
+          <shotDispersionRadius>	0.40	</shotDispersionRadius>
           <invisibilityFactorAtShot>	0.336	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/french/F03_D2/normal/lod0/Gun_06.model	</undamaged>
@@ -4233,11 +4238,11 @@
           <shotDispersionRadius>	0.39	</shotDispersionRadius>
           <reloadTime>	2.6	</reloadTime>
           <shotDispersionFactors>
-            <turretRotation>	0.16	</turretRotation>
-            <afterShot>	4	</afterShot>
+            <turretRotation>	0.10	</turretRotation>
+            <afterShot>	2	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <aimingTime>	2.3	</aimingTime>
+          <aimingTime>	1.6	</aimingTime>
           <invisibilityFactorAtShot>	0.29	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/french/F03_D2/normal/lod0/Gun_07.model	</undamaged>
@@ -4715,11 +4720,11 @@
       <engines>
         <Renault_S6>
           <smplEnginePower>	158.5922	</smplEnginePower>
-          <smplFwMaxSpeed>	23	</smplFwMaxSpeed>
+          <smplFwMaxSpeed>	25	</smplFwMaxSpeed>
         </Renault_S6>
         <Renault_S6Bis>
           <smplEnginePower>	190.3106	</smplEnginePower>
-          <smplFwMaxSpeed>	23	</smplFwMaxSpeed>
+          <smplFwMaxSpeed>	25	</smplFwMaxSpeed>
         </Renault_S6Bis>
       </engines>
       <chassis>

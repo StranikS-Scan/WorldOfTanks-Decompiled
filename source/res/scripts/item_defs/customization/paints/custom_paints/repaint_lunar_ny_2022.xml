@@ -1,0 +1,36 @@
+<repaint_lunar_ny_2022.xml>
+  <itemGroup>
+    <name>	Lunar NY 2022	</name>
+    <userString>	#vehicle_customization:repaint/color_group_04	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	paints 20g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <paint>
+      <id>	239	</id>
+      <texture>	gui/maps/vehicles/repaints/custom_color_20.png	</texture>
+      <color>	10 8 25 255	</color>
+      <gloss>	0.74	</gloss>
+      <metallic>	0.38	</metallic>
+      <userString>	#vehicle_customization:repaint/lunar_ny_2022	</userString>
+    </paint>
+    <paint>
+      <id>	240	</id>
+      <texture>	gui/maps/vehicles/repaints/custom_color_20.png	</texture>
+      <color>	0.000000 0.000000 23.000000 255.000000	</color>
+      <gloss>	0.700000	</gloss>
+      <metallic>	0.110000	</metallic>
+      <userString>	#vehicle_customization:repaint/cn_lunar_ny_2022	</userString>
+    </paint>
+    <usages>
+      <item>
+        <componentType>	ALL	</componentType>
+        <cost>	1	</cost>
+      </item>
+    </usages>
+  </itemGroup>
+</repaint_lunar_ny_2022.xml>

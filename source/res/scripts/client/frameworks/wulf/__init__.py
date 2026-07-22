@@ -29,6 +29,8 @@ from .py_object_wrappers import getRealFormat
 from .py_object_wrappers import getTimeFormat
 from .py_object_wrappers import getDateFormat
 from .py_object_wrappers import caseMap
+from .py_object_wrappers import ResourceType
+from .py_object_wrappers import ResourceDescriptor
 from .view.array import Array
 from .view.command import Command
 from .view.view import ViewSettings
@@ -38,4 +40,4 @@ from .windows_system.windows_area import WindowsArea
 from .windows_system.window import WindowSettings
 from .windows_system.window import Window
 from .view.view_model import ViewModel
-__all__ = ('GuiApplication', 'PropertyType', 'PositionAnchor', 'ViewFlags', 'ViewStatus', 'ViewEventType', 'WindowFlags', 'WindowLayer', 'WindowStatus', 'NumberFormatType', 'RealFormatType', 'TimeFormatType', 'DateFormatType', 'CaseType', 'Array', 'Command', 'ViewSettings', 'View', 'ViewEvent', 'WindowsArea', 'WindowSettings', 'Window', 'ViewModel', 'isTranslatedKeyValid', 'isTranslatedTextExisted', 'getTranslatedText', 'getTranslatedPluralText', 'getImagePath', 'getSoundEffectId', 'getLayoutPath', 'getTranslatedTextByResId', 'getTranslatedPluralTextByResId', 'getTranslatedKey', 'getNumberFormat', 'getRealFormat', 'getTimeFormat', 'getDateFormat', 'caseMap')
+__all__ = ('GuiApplication', 'PropertyType', 'PositionAnchor', 'ViewFlags', 'ViewStatus', 'ViewEventType', 'WindowFlags', 'WindowLayer', 'WindowStatus', 'NumberFormatType', 'RealFormatType', 'TimeFormatType', 'DateFormatType', 'CaseType', 'Array', 'Command', 'ViewSettings', 'View', 'ViewEvent', 'WindowsArea', 'WindowSettings', 'Window', 'ViewModel', 'isTranslatedKeyValid', 'isTranslatedTextExisted', 'getTranslatedText', 'getTranslatedPluralText', 'getImagePath', 'getSoundEffectId', 'getLayoutPath', 'getTranslatedTextByResId', 'getTranslatedPluralTextByResId', 'getTranslatedKey', 'getNumberFormat', 'getRealFormat', 'getTimeFormat', 'getDateFormat', 'caseMap', 'ResourceType', 'ResourceDescriptor')

@@ -84,7 +84,7 @@ class StatTrackComponentManager(CGF.ComponentManager):
             return vehicleID
 
     def __getFragsCount(self, vehicleID):
-        if self.__isInHangar:
+        if self.__isInHangar or not isPlayerAvatar():
             vehicle = BigWorld.entities[vehicleID]
             counterValue = vehicle.appearance.getThisVehicleDossierStatTrackFrags()
         else:

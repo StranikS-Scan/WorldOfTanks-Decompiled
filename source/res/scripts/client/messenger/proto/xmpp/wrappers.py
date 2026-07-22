@@ -4,6 +4,7 @@ from collections import namedtuple
 from constants import IGR_TYPE, ARENA_GUI_TYPE_LABEL
 from gui.shared.utils.decorators import ReprInjector
 from helpers import time_utils
+from messenger import g_settings
 from messenger.proto.entities import ClanInfo
 from messenger.proto.xmpp.gloox_constants import CHAT_STATE
 from messenger.proto.xmpp.xmpp_constants import XMPP_BAN_COMPONENT
@@ -55,6 +56,10 @@ class BanInfo(object):
 
     def isBanned(self, game=None, components=None):
         return self.getFirstActiveItem(game=game, components=components) is not None
+
+    @staticmethod
+    def getCurrentGame():
+        return g_settings.server.XMPP.resource
 
 
 ExtsInfo = namedtuple('ExtsInfo', ('dbID', 'nickname', 'client', 'clan', 'ban'))

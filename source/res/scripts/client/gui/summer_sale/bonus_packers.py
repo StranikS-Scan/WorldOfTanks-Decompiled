@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/gui/summer_sale/bonus_packers.py
 from copy import deepcopy
 import constants
-from gui.impl.backport import TooltipData
+from gui.impl.backport import createTooltipData
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.summer_sale.compensation_bonus_model import CompensationBonusModel
 from gui.impl.gen.view_models.views.lobby.summer_sale.summer_sale_tokens_bonus_model import SummerSaleTokensBonusModel
@@ -40,7 +40,7 @@ class SummerSaleCompensationBonusUIPacker(SimpleBonusUIPacker):
 
     @classmethod
     def _getToolTip(cls, bonus):
-        return [TooltipData(tooltip=None, isSpecial=True, specialAlias=None, specialArgs=[cls._getCompensatedBonus(bonus), bonus])]
+        return [createTooltipData(tooltip=None, isSpecial=True, specialAlias=None, specialArgs=[cls._getCompensatedBonus(bonus), bonus])]
 
     @classmethod
     def _getCompensatedBonus(cls, bonus):

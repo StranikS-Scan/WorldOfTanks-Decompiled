@@ -2,8 +2,12 @@
 # Embedded file name: scripts/client/tutorial/control/sales/triggers.py
 import BigWorld
 from CurrentVehicle import g_currentVehicle
-from tutorial.control.triggers import Trigger, TriggerWithValidateVar
-__all__ = ('TimerTrigger', 'IsCollectibleVehicleTrigger')
+from gui.techtree.research_items_data import ResearchItemsData
+from helpers import dependency
+from skeletons.gui.shared import IItemsCache
+from tutorial.control.triggers import Trigger, TriggerWithSubscription, TriggerWithValidateVar
+from tutorial.logger import LOG_DEBUG
+__all__ = ('TimerTrigger', 'IsCollectibleVehicleTrigger', 'CurrentVehicleChangedTrigger', 'ItemsCacheSyncTrigger', 'ResearchGoToNextVehicleTrigger')
 
 class TimerTrigger(TriggerWithValidateVar):
 
@@ -48,3 +52,83 @@ class IsCollectibleVehicleTrigger(Trigger):
 
     def __onCurrentVehicleChanged(self):
         self.toggle(isOn=self.isOn())
+
+
+class CurrentVehicleChangedTrigger(TriggerWithSubscription):
+
+    def __init__(self, triggerID, validateVarID, setVarID=None, validateUpdateOnly=False, unlockTargetIDs=None):
+        super(CurrentVehicleChangedTrigger, self).__init__(triggerID, validateVarID, setVarID, validateUpdateOnly)
+        self.__unlockTargetIDs = unlockTargetIDs or []
+
+    def _subscribe(self):
+        g_currentVehicle.onChanged += self.__onCurrentVehicleChanged
+
+    def _unsubscribe(self):
+        g_currentVehicle.onChanged -= self.__onCurrentVehicleChanged
+
+    def __onCurrentVehicleChanged(self):
+        LOG_DEBUG('CurrentVehicleChangedTrigger.onChanged', self.getID())
+        self._tutorial.invalidateFlags()
+        for targetID in self.__unlockTargetIDs:
+            LOG_DEBUG('CurrentVehicleChangedTrigger.unlockState', self.getID(), targetID)
+            self._tutorial.unlockState(targetID)
+
+        LOG_DEBUG('CurrentVehicleChangedTrigger.toggle', self.getID())
+        self.toggle()
+
+
+class ItemsCacheSyncTrigger(TriggerWithSubscription):
+    itemsCache = dependency.descriptor(IItemsCache)
+
+    def __init__(self, triggerID, validateVarID, setVarID=None, validateUpdateOnly=False, unlockTargetIDs=None):
+        super(ItemsCacheSyncTrigger, self).__init__(triggerID, validateVarID, setVarID, validateUpdateOnly)
+        self.__unlockTargetIDs = unlockTargetIDs or []
+
+    def _subscribe(self):
+        self.itemsCache.onSyncCompleted += self.__onItemsCacheSyncCompleted
+
+    def _unsubscribe(self):
+        self.itemsCache.onSyncCompleted -= self.__onItemsCacheSyncCompleted
+
+    def __onItemsCacheSyncCompleted(self, *_):
+        LOG_DEBUG('ItemsCacheSyncTrigger.onSyncCompleted', self.getID())
+        self._tutorial.invalidateFlags()
+        for targetID in self.__unlockTargetIDs:
+            LOG_DEBUG('ItemsCacheSyncTrigger.unlockState', self.getID(), targetID)
+            self._tutorial.unlockState(targetID)
+
+        LOG_DEBUG('ItemsCacheSyncTrigger.toggle', self.getID())
+        self.toggle()
+
+
+class ResearchGoToNextVehicleTrigger(TriggerWithSubscription):
+
+    def __init__(self, triggerID, validateVarID, setVarID=None, validateUpdateOnly=False, unlockTargetIDs=None):
+        super(ResearchGoToNextVehicleTrigger, self).__init__(triggerID, validateVarID, setVarID, validateUpdateOnly)
+        self.__unlockTargetIDs = unlockTargetIDs or []
+
+    def _subscribe(self):
+        LOG_DEBUG('ResearchGoToNextVehicleTrigger.subscribe', self.getID())
+        ResearchItemsData.onGoToNextVehicle += self.__onGoToNextVehicle
+
+    def _unsubscribe(self):
+        LOG_DEBUG('ResearchGoToNextVehicleTrigger.unsubscribe', self.getID())
+        ResearchItemsData.onGoToNextVehicle -= self.__onGoToNextVehicle
+
+    def run(self):
+        self.isRunning = True
+        LOG_DEBUG('ResearchGoToNextVehicleTrigger.run', self.getID(), self.isSubscribed)
+        if not self.isSubscribed:
+            self.isSubscribed = True
+            self._subscribe()
+        self.isRunning = False
+
+    def __onGoToNextVehicle(self, oldRootCD, newRootCD):
+        LOG_DEBUG('ResearchGoToNextVehicleTrigger.onGoToNextVehicle', self.getID(), oldRootCD, newRootCD)
+        self._tutorial.invalidateFlags()
+        for targetID in self.__unlockTargetIDs:
+            LOG_DEBUG('ResearchGoToNextVehicleTrigger.unlockState', self.getID(), targetID)
+            self._tutorial.unlockState(targetID)
+
+        LOG_DEBUG('ResearchGoToNextVehicleTrigger.toggle', self.getID())
+        self.toggle()

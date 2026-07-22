@@ -1,0 +1,78 @@
+<camouflage_apocalypse_2_label.xml>
+  <germany:G121_Grille_15_L632>	ussr	</germany:G121_Grille_15_L632>
+  <france:F18_Bat_Chatillon25t_7x74>	germany	</france:F18_Bat_Chatillon25t_7x74>
+  <germany:G121_Grille_15_L631>	usa	</germany:G121_Grille_15_L631>
+  <france:F18_Bat_Chatillon25t_7x71>	china	</france:F18_Bat_Chatillon25t_7x71>
+  <france:F18_Bat_Chatillon25t_7x73>	france	</france:F18_Bat_Chatillon25t_7x73>
+  <germany:G121_Grille_15_L630>	uk	</germany:G121_Grille_15_L630>
+  <france:F18_Bat_Chatillon25t_7x77>	japan	</france:F18_Bat_Chatillon25t_7x77>
+  <france:F18_Bat_Chatillon25t_7x72>	czech	</france:F18_Bat_Chatillon25t_7x72>
+  <france:F18_Bat_Chatillon25t_7x79>	sweden	</france:F18_Bat_Chatillon25t_7x79>
+  <france:F18_Bat_Chatillon25t_7x78>	poland	</france:F18_Bat_Chatillon25t_7x78>
+  <france:F18_Bat_Chatillon25t_7x76>	italy	</france:F18_Bat_Chatillon25t_7x76>
+  <france:F18_Bat_Chatillon25t_7x75>	intunion	</france:F18_Bat_Chatillon25t_7x75>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/opaque	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	MT camouflages 50g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <levels>	8 9 10	</levels>
+      </include>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R47_ISU-152_Zveroboj ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <camouflage>
+      <id>	150	</id>
+      <texture>	vehicles/russian/Camouflage/apocalypse_2.dds	</texture>
+      <description>	#vehicle_customization:camouflage/apocalypse_2/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/apocalypse_2/label	</userString>
+      <tags>	fullRGB	</tags>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	255 0 0 255	</c0>
+          <c1>	0 255 0 255	</c1>
+          <c2>	0 0 255 255	</c2>
+          <c3>	0 0 0 255	</c3>
+        </palette>
+      </palettes>
+      <rotation>
+        <HULL>	0.261799	</HULL>
+        <TURRET>	0.261799	</TURRET>
+        <GUN>	0.261799	</GUN>
+      </rotation>
+      <tiling>
+        <france:F108_Panhard_EBR_105>	4.2 4.2 15.54 1.34	</france:F108_Panhard_EBR_105>
+        <france:F18_Bat_Chatillon25t>	2.4 2.4 0.2 0.94	</france:F18_Bat_Chatillon25t>
+        <france:F18_Bat_Chatillon25t_7x7>	2.4 2.4 0.2 0.94	</france:F18_Bat_Chatillon25t_7x7>
+        <germany:G121_Grille_15_L63>	9 9 -0.08 1.53	</germany:G121_Grille_15_L63>
+        <germany:G42_Maus>	4 4 -4.25 0.37	</germany:G42_Maus>
+        <france:F18_Bat_Chatillon25t9>	4 4 -4.25 0.37	</france:F18_Bat_Chatillon25t9>
+        <japan:J20_Type_2605>	3.5 3.5 15.13 16.54	</japan:J20_Type_2605>
+        <japan:J20_Type_2605_7x7>	3.5 3.5 15.13 16.54	</japan:J20_Type_2605_7x7>
+        <japan:J28_O_I_100>	1.8 1.8 -2.07 1.09	</japan:J28_O_I_100>
+        <sweden:S11_Strv_103B>	2.7 2.7 -0.73 2.2	</sweden:S11_Strv_103B>
+        <uk:GB07_Matilda>	3.3 3.3 0.36 0.91	</uk:GB07_Matilda>
+        <france:F18_Bat_Chatillon25t0>	2 2 -0.34 0.79	</france:F18_Bat_Chatillon25t0>
+        <france:F18_Bat_Chatillon25t1>	4.5 4.5 -1.04 0.44	</france:F18_Bat_Chatillon25t1>
+        <france:F18_Bat_Chatillon25t2>	5.9 5.9 1.42 1.45	</france:F18_Bat_Chatillon25t2>
+        <france:F18_Bat_Chatillon25t3>	2.8 2.8 1.53 2.16	</france:F18_Bat_Chatillon25t3>
+        <france:F18_Bat_Chatillon25t4>	2.8 2.8 1.53 2.16	</france:F18_Bat_Chatillon25t4>
+        <france:F18_Bat_Chatillon25t5>	5.6 5.6 -0.2 1.51	</france:F18_Bat_Chatillon25t5>
+        <france:F18_Bat_Chatillon25t6>	1.1 1.1 0.09 0.02	</france:F18_Bat_Chatillon25t6>
+        <france:F18_Bat_Chatillon25t7>	1.1 1.1 0.09 0.02	</france:F18_Bat_Chatillon25t7>
+        <france:F18_Bat_Chatillon25t8>	7.5 7.5 0.53 -1.39	</france:F18_Bat_Chatillon25t8>
+        <france:F18_Bat_Chatillon25t_7x70>	3.7 3.7 -0.35 0.2	</france:F18_Bat_Chatillon25t_7x70>
+      </tiling>
+      <tilingSettings>
+        <type>	relative	</type>
+        <factor>	3.7 3.7	</factor>
+        <offset>	0.15 1.34	</offset>
+      </tilingSettings>
+    </camouflage>
+  </itemGroup>
+</camouflage_apocalypse_2_label.xml>

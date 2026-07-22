@@ -46,6 +46,7 @@ from skeletons.gui.impl import IGuiLoader
 from skeletons.gui.lobby_context import ILobbyContext
 from uilogging.deprecated.bootcamp.constants import BC_LOG_KEYS, BC_LOG_ACTIONS
 from uilogging.deprecated.bootcamp.loggers import BootcampLogger
+from uilogging.rename_testing.loggers import RenameTestingUILogger
 from th_async import th_await, await_callback, th_async, BrokenPromiseError, forwardAsFuture
 if typing.TYPE_CHECKING:
     from typing import Optional, Callable
@@ -219,6 +220,7 @@ class ModeSelectorView(ViewImpl):
             self.__subSelectorCallback()
             self.__subSelectorCallback = None
         self.uiBootcampLogger.logOnlyFromBootcamp(BC_LOG_ACTIONS.OPENED)
+        RenameTestingUILogger().logModeSelectorOpen()
         self.inputManager.removeEscapeListener(self.__handleEscape)
         return
 
@@ -316,6 +318,8 @@ class ModeSelectorView(ViewImpl):
                 specView = self.__gui.windowsManager.getViewByLayoutID(BattleSessionView.layoutID)
                 if modeSelectorItem.modeName != PREBATTLE_ACTION_NAME.SPEC_BATTLES_LIST and specView is not None:
                     specView.destroyWindow()
+                if modeSelectorItem.modeName == PREBATTLE_ACTION_NAME.TRAININGS_LIST:
+                    RenameTestingUILogger().logTrainingModSelectorItem()
                 self.__dataProvider.select(modeSelectorItem.modeName)
             self.__isClickProcessing = False
             if self.__isContentVisible:

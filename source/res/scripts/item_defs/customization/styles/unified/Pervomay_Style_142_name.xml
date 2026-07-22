@@ -1,0 +1,42 @@
+<Pervomay_Style_142_name.xml>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	MT 2D styles universal 1000g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <style>
+      <id>	31542	</id>
+      <texture>	gui/maps/vehicles/styles/Pervomay_Style_142.png	</texture>
+      <outfits>
+        <outfit>
+          <season>	all	</season>
+          <modifications>
+            <item>	5	</item>
+          </modifications>
+          <paints>
+            <item>
+              <id>	31487	</id>
+              <appliedTo>	20753	</appliedTo>
+            </item>
+          </paints>
+          <camouflages>
+            <item>
+              <id>	31507	</id>
+              <patternSize>	1	</patternSize>
+              <appliedTo>	4368	</appliedTo>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+        </outfit>
+      </outfits>
+      <userString>	#vehicle_customization:Pervomay_Style_142/name	</userString>
+      <description>	#vehicle_customization:Pervomay_Style_142/description	</description>
+      <longDescriptionSpecial>	#vehicle_customization:Pervomay_Style_142/longDescription	</longDescriptionSpecial>
+    </style>
+  </itemGroup>
+</Pervomay_Style_142_name.xml>

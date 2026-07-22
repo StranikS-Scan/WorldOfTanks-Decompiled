@@ -1,0 +1,44 @@
+<repaint_the_first_horseman.xml>
+  <itemGroup>
+    <name>	Horsemen of Apocalypse	</name>
+    <userString>	#vehicle_customization:repaint/color_group_04	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	paints 20g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <paint>
+      <id>	41	</id>
+      <texture>	gui/maps/vehicles/repaints/custom_color_39.png	</texture>
+      <color>	163 181 198 255	</color>
+      <gloss>	0.509	</gloss>
+      <metallic>	0.23	</metallic>
+      <userString>	#vehicle_customization:repaint/the_first_horseman	</userString>
+    </paint>
+    <paint>
+      <id>	79	</id>
+      <texture>	gui/maps/vehicles/repaints/custom_color_12.png	</texture>
+      <color>	39 48 44 255	</color>
+      <gloss>	0.7	</gloss>
+      <metallic>	0.17	</metallic>
+      <userString>	#vehicle_customization:repaint/the_3rd_horseman	</userString>
+    </paint>
+    <paint>
+      <id>	80	</id>
+      <texture>	gui/maps/vehicles/repaints/custom_color_20.png	</texture>
+      <color>	17 8 12 255	</color>
+      <gloss>	0.68	</gloss>
+      <metallic>	0.17	</metallic>
+      <userString>	#vehicle_customization:repaint/the_4th_horseman	</userString>
+    </paint>
+    <usages>
+      <item>
+        <componentType>	ALL	</componentType>
+        <cost>	1	</cost>
+      </item>
+    </usages>
+  </itemGroup>
+</repaint_the_first_horseman.xml>

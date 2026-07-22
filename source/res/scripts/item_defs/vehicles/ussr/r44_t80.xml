@@ -40,7 +40,7 @@
   <hull>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	5670	</weight>
-    <maxHealth>	432	</maxHealth>
+    <maxHealth>	400	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	110	</maxHealth>
       <maxRegenHealth>	75	</maxRegenHealth>
@@ -931,8 +931,8 @@
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
       <rotationSpeed>	48	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.26	</vehicleMovement>
-        <vehicleRotation>	0.26	</vehicleRotation>
+        <vehicleMovement>	0.22	</vehicleMovement>
+        <vehicleRotation>	0.22	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	70	</maxHealth>
@@ -1703,7 +1703,7 @@
           <camouflage></camouflage>
         </customizableVehicleAreas>
       </customization>
-      <repairTime>	4.57142878	</repairTime>
+      <repairTime>	2.85003138	</repairTime>
     </Chassis_T80>
     <Chassis_T80_2>
       <userString>	#ussr_vehicles:Chassis_T80_2	</userString>
@@ -1716,8 +1716,8 @@
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
       <rotationSpeed>	52	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.24	</vehicleMovement>
-        <vehicleRotation>	0.24	</vehicleRotation>
+        <vehicleMovement>	0.20	</vehicleMovement>
+        <vehicleRotation>	0.20	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	80	</maxHealth>
@@ -2488,7 +2488,7 @@
           <camouflage></camouflage>
         </customizableVehicleAreas>
       </customization>
-      <repairTime>	4.57142878	</repairTime>
+      <repairTime>	2.85003138	</repairTime>
     </Chassis_T80_2>
   </chassis>
   <turrets0>
@@ -2500,7 +2500,7 @@
       <notInShop>	true	</notInShop>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	2000	</weight>
-      <maxHealth>	108	</maxHealth>
+      <maxHealth>	110	</maxHealth>
       <rotationSpeed>	45	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	80	</maxHealth>
@@ -2538,14 +2538,14 @@
             <gun>	_45mm_VT-42	  <cost>	850	</cost>
             </gun>
           </unlocks>
-          <shotDispersionRadius>	0.46	</shotDispersionRadius>
+          <shotDispersionRadius>	0.38	</shotDispersionRadius>
           <reloadTime>	2.1	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.08	</turretRotation>
-            <afterShot>	4.0	</afterShot>
+            <afterShot>	2.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <aimingTime>	2.3	</aimingTime>
+          <aimingTime>	2.0	</aimingTime>
           <invisibilityFactorAtShot>	0.29	</invisibilityFactorAtShot>
           <armor>
             <gun>	10	</gun>
@@ -2645,7 +2645,7 @@
           <reloadTime>	2.1	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.1	</turretRotation>
-            <afterShot>	4.0	</afterShot>
+            <afterShot>	2.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <aimingTime>	1.9	</aimingTime>
@@ -2732,7 +2732,7 @@
           <reloadTime>	2.1	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.08	</turretRotation>
-            <afterShot>	4.0	</afterShot>
+            <afterShot>	2.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <aimingTime>	1.7	</aimingTime>
@@ -2810,12 +2810,12 @@
           </camouflage>
         </_45mm_VT-43>
         <_37mm_automatic_SH-37>	shared	  <maxAmmo>	210	</maxAmmo>
-          <shotDispersionRadius>	0.45	</shotDispersionRadius>
+          <shotDispersionRadius>	0.42	</shotDispersionRadius>
           <reloadTime>	4.2	</reloadTime>
           <aimingTime>	2.3	</aimingTime>
           <shotDispersionFactors>
             <turretRotation>	0.08	</turretRotation>
-            <afterShot>	2	</afterShot>
+            <afterShot>	1.5	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <pitchLimits>

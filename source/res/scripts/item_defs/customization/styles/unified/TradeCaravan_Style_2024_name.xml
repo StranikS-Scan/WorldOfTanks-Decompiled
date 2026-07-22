@@ -1,0 +1,50 @@
+<TradeCaravan_Style_2024_name.xml>
+  <itemGroup>
+    <season>	ALL	</season>
+    <historical>	2	</historical>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <priceGroup>	MT 2D styles universal 1000g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <style>
+      <id>	31235	</id>
+      <texture>	gui/maps/vehicles/styles/TradeCaravan_Style_2024.png	</texture>
+      <outfits>
+        <outfit>
+          <season>	all	</season>
+          <paints>
+            <item>
+              <id>	31186	</id>
+              <appliedTo>	20753	</appliedTo>
+            </item>
+          </paints>
+          <modifications>
+            <item>	4	</item>
+          </modifications>
+          <camouflages>
+            <item>
+              <id>	31201	</id>
+              <patternSize>	1	</patternSize>
+              <appliedTo>	4368	</appliedTo>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+        </outfit>
+      </outfits>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+      <userString>	#vehicle_customization:TradeCaravan_Style_2024/name	</userString>
+      <description>	#vehicle_customization:TradeCaravan_Style_2024/description	</description>
+      <longDescriptionSpecial>	#vehicle_customization:TradeCaravan_Style_2024/longDescription	</longDescriptionSpecial>
+    </style>
+    <tags>	progression_required	</tags>
+  </itemGroup>
+</TradeCaravan_Style_2024_name.xml>

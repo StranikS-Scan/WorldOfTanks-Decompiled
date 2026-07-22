@@ -74,6 +74,20 @@ class TokenRequester(object):
     def canAllowRequest(self):
         return self.__tokenType != TOKEN_TYPE.WGNI if not isPlayerAccount() else True
 
+    def cancelRequest(self):
+        self.__clearTimeoutCb()
+        repository = _getAccountRepository()
+        if repository:
+            repository.onTokenReceived -= self._onTokenReceived
+        requestId = self.__requestID
+        self.__requestID = 0
+        if self.__callback is not None:
+            _logger.info('Token request %s cancelled', requestId)
+            callback = self.__callback
+            self.__callback = None
+            callback(None)
+        return
+
     @adisp_async
     @adisp_process
     def request(self, timeout=None, callback=None, allowDelay=False):

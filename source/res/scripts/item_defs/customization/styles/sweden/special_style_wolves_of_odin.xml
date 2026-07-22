@@ -1,0 +1,43 @@
+<special_style_wolves_of_odin.xml>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/main_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	MT 3D styles 6-7-8 levels 4000g	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	sweden:S26_Lansen_C	</vehicles>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	12	</id>
+      <texture>	gui/maps/vehicles/styles/WolvesOfOdin.png	</texture>
+      <description>	#vehicle_customization:special_style/wolves_of_odin_desc	</description>
+      <longDescriptionSpecial>	#vehicle_customization:special_style/wolves_of_odin_desc/long	</longDescriptionSpecial>
+      <modelsSet>	WolvesOfOdin	</modelsSet>
+      <maxNumber>	1	</maxNumber>
+      <userString>	#vehicle_customization:special_style/wolves_of_odin	</userString>
+      <tags>	progression_required	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	1	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+        </outfit>
+      </outfits>
+    </style>
+  </itemGroup>
+</special_style_wolves_of_odin.xml>

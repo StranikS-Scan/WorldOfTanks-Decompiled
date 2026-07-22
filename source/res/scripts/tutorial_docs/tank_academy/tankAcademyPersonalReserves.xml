@@ -1,0 +1,106 @@
+<tankAcademyPersonalReserves.xml>
+  <default-scene>	DefaultScene	</default-scene>
+  <initial-scene>	MissionsPage	</initial-scene>
+  <scenes>
+    <scene>	MissionsPage	  <post-effects>
+        <inactivate>	ReservesButtonOnScene	</inactivate>
+        <inactivate>	PersonalReservesGroupOnScene	</inactivate>
+      </post-effects>
+      <runtime-effects>
+        <show-hint>	PersonalReservesHint	  <condition>
+            <active>	ReservesButtonOnScene	</active>
+          </condition>
+        </show-hint>
+      </runtime-effects>
+      <gui-items>
+        <gui-item>	ReservesButton	  <on-scene-effects>
+            <activate>	ReservesButtonOnScene	</activate>
+          </on-scene-effects>
+          <not-on-scene-effects>
+            <inactivate>	ReservesButtonOnScene	</inactivate>
+          </not-on-scene-effects>
+        </gui-item>
+      </gui-items>
+    </scene>
+    <scene>	DefaultScene	  <post-effects></post-effects>
+      <runtime-effects>
+        <show-hint>	PersonalReservesActivationHint	  <condition>
+            <active>	PersonalReservesGroupOnScene	</active>
+          </condition>
+        </show-hint>
+      </runtime-effects>
+      <gui-items>
+        <gui-item>	PersonalReservesGroup	  <on-scene-effects>
+            <activate>	PersonalReservesGroupOnScene	</activate>
+          </on-scene-effects>
+          <not-on-scene-effects>
+            <inactivate>	PersonalReservesGroupOnScene	</inactivate>
+          </not-on-scene-effects>
+        </gui-item>
+      </gui-items>
+    </scene>
+  </scenes>
+  <has-id>
+    <hint>	PersonalReservesHint	  <item-id>	ReservesButton	</item-id>
+      <text>	Активация личных резервов	</text>
+      <arrow>
+        <direction>	B	</direction>
+        <loop>	True	</loop>
+      </arrow>
+      <checked-ui-state>
+        <simple-state>
+          <state>	enabled	</state>
+          <value>	True	</value>
+        </simple-state>
+      </checked-ui-state>
+      <has-box>	False	</has-box>
+      <update-runtime>	True	</update-runtime>
+      <ignore-outside-click>	True	</ignore-outside-click>
+      <actions>
+        <click>	ReservesButton	  <effects>
+            <close-hint>	PersonalReservesHint	</close-hint>
+          </effects>
+        </click>
+        <click-outside>	ReservesButton	  <effects>
+            <refuse-training></refuse-training>
+          </effects>
+        </click-outside>
+        <esc>	ReservesButton	  <effects>
+            <refuse-training></refuse-training>
+          </effects>
+        </esc>
+      </actions>
+    </hint>
+    <hint>	PersonalReservesActivationHint	  <item-id>	PersonalReservesGroup	</item-id>
+      <text>	Активируйте любой резерв —&lt;br/&gt;и выходите &lt;b&gt;В БОЙ&lt;/b&gt;	</text>
+      <arrow>
+        <direction>	T	</direction>
+        <loop>	True	</loop>
+      </arrow>
+      <checked-ui-state>
+        <simple-state>
+          <state>	visible	</state>
+          <value>	True	</value>
+        </simple-state>
+      </checked-ui-state>
+      <update-runtime>	True	</update-runtime>
+      <ignore-outside-click>	True	</ignore-outside-click>
+      <actions>
+        <click>	PersonalReservesGroup	  <effects>
+            <refuse-training></refuse-training>
+          </effects>
+        </click>
+        <click-outside>	PersonalReservesGroup	  <effects>
+            <refuse-training></refuse-training>
+          </effects>
+        </click-outside>
+        <esc>	PersonalReservesGroup	  <effects>
+            <refuse-training></refuse-training>
+          </effects>
+        </esc>
+      </actions>
+    </hint>
+  </has-id>
+  <triggers></triggers>
+  <vars></vars>
+</tankAcademyPersonalReserves.xml>

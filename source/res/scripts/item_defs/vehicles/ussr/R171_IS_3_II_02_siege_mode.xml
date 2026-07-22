@@ -1709,13 +1709,13 @@
       <price>	66000	</price>
       <notInShop>	true	</notInShop>
       <armor>
-        <armor_1>	330	</armor_1>
-        <armor_2>	260	</armor_2>
+        <armor_1>	280	</armor_1>
+        <armor_2>	210	</armor_2>
         <armor_3>	150	</armor_3>
         <armor_4>	130	</armor_4>
         <armor_5>	20	</armor_5>
-        <armor_6>	220	</armor_6>
-        <armor_7>	210	</armor_7>
+        <armor_6>	170	</armor_6>
+        <armor_7>	160	</armor_7>
         <armor_8>	0	</armor_8>
         <armor_9>	52	</armor_9>
         <armor_10>	20	</armor_10>
@@ -1728,11 +1728,11 @@
         <armor_18>	100	</armor_18>
         <armor_19>	75	</armor_19>
         <armor_20>	45	</armor_20>
-        <armor_21>	310	</armor_21>
-        <armor_22>	290	</armor_22>
-        <armor_23>	270	</armor_23>
-        <armor_24>	230	</armor_24>
-        <armor_25>	245	</armor_25>
+        <armor_21>	260	</armor_21>
+        <armor_22>	240	</armor_22>
+        <armor_23>	220	</armor_23>
+        <armor_24>	180	</armor_24>
+        <armor_25>	195	</armor_25>
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	12700	</weight>
@@ -1753,7 +1753,7 @@
         <_122mm_BL-9_dualgun_02>
           <maxAmmo>	74	</maxAmmo>
           <armor>
-            <armor_1>	330	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            <armor_1>	280	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_1>
             <armor_2>	200	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_2>
@@ -1806,8 +1806,8 @@
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 8 0.333333 8 0.397222 4 0.444444 3 0.555556 3 0.602778 4 0.66667 8 1 8	</maxPitch>
           </pitchLimits>
-          <shotDispersionRadius>	0.37	</shotDispersionRadius>
-          <reloadTime>	9.0	</reloadTime>
+          <shotDispersionRadius>	0.36	</shotDispersionRadius>
+          <reloadTime>	8.5	</reloadTime>
           <aimingTime>	2.6	</aimingTime>
           <invisibilityFactorAtShot>	0.095	</invisibilityFactorAtShot>
           <multiGunEffects>	shot_dualgun_large_mb_L shot_dualgun_large_mb_R	</multiGunEffects>
@@ -1815,7 +1815,7 @@
             <chargeTime>	2.0	</chargeTime>
             <shootImpulse>	200	</shootImpulse>
             <reloadLockTime>	3	</reloadLockTime>
-            <reloadTimes>	9.0 9.0	</reloadTimes>
+            <reloadTimes>	8.5 8.5	</reloadTimes>
             <rateTime>	4	</rateTime>
             <chargeThreshold>	0.5	</chargeThreshold>
             <afterShotDelay>	1	</afterShotDelay>
@@ -2592,7 +2592,7 @@
       <engines>
         <V-12-6M_02>
           <smplEnginePower>	930	</smplEnginePower>
-          <smplFwMaxSpeed>	44	</smplFwMaxSpeed>
+          <smplFwMaxSpeed>	43	</smplFwMaxSpeed>
         </V-12-6M_02>
       </engines>
       <chassis>

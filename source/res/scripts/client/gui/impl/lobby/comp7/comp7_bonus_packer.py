@@ -7,7 +7,7 @@ from dog_tags_common.components_config import componentConfigAdapter
 from dog_tags_common.config.common import ComponentViewType
 from gui.impl import backport
 from gui.impl.gen import R
-from gui.impl.backport import TooltipData, createTooltipData
+from gui.impl.backport import createTooltipData
 from gui.impl.gen.view_models.views.lobby.comp7.comp7_bonus_model import Comp7BonusModel, DogTagType
 from gui.impl.gen.view_models.views.lobby.comp7.comp7_style_bonus_model import Comp7StyleBonusModel
 from gui.impl.lobby.comp7.comp7_bonus_helpers import BonusTypes, getBonusType
@@ -67,7 +67,7 @@ class Comp7DossierBonusUIPacker(DossierBonusUIPacker):
     def _getBadgeTooltip(cls, bonus):
         tooltipData = []
         for badge in bonus.getBadges():
-            tooltipData.append(TooltipData(tooltip=None, isSpecial=True, specialAlias=TOOLTIPS_CONSTANTS.BADGE, specialArgs=[badge.badgeID, badge.isSuffixLayout()]))
+            tooltipData.append(createTooltipData(tooltip=None, isSpecial=True, specialAlias=TOOLTIPS_CONSTANTS.BADGE, specialArgs=[badge.badgeID, badge.isSuffixLayout()]))
 
         return tooltipData
 

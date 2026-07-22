@@ -1,0 +1,66 @@
+<camouflage_bb2020_dragon_award_label.xml>
+  <japan:J28_O_I_1003>	ussr	</japan:J28_O_I_1003>
+  <germany:G42_Maus5>	germany	</germany:G42_Maus5>
+  <japan:J28_O_I_1002>	usa	</japan:J28_O_I_1002>
+  <germany:G42_Maus2>	china	</germany:G42_Maus2>
+  <germany:G42_Maus4>	france	</germany:G42_Maus4>
+  <japan:J28_O_I_1001>	uk	</japan:J28_O_I_1001>
+  <germany:G42_Maus8>	japan	</germany:G42_Maus8>
+  <germany:G42_Maus3>	czech	</germany:G42_Maus3>
+  <japan:J28_O_I_1000>	sweden	</japan:J28_O_I_1000>
+  <germany:G42_Maus9>	poland	</germany:G42_Maus9>
+  <germany:G42_Maus7>	italy	</germany:G42_Maus7>
+  <germany:G42_Maus6>	intunion	</germany:G42_Maus6>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/opaque	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	MT camouflages 50g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R47_ISU-152_Zveroboj ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <camouflage>
+      <id>	77	</id>
+      <texture>	vehicles/russian/Camouflage/bb2020_dragon_award.dds	</texture>
+      <description>	#vehicle_customization:camouflage/bb2020_dragon_award/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/bb2020_dragon_award/label	</userString>
+      <tags>	hiddenInUI	</tags>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	255 0 0 255	</c0>
+          <c1>	0 255 0 255	</c1>
+          <c2>	0 0 255 255	</c2>
+          <c3>	0 0 0 255	</c3>
+        </palette>
+      </palettes>
+      <rotation>
+        <HULL>	-0.785398	</HULL>
+        <TURRET>	-0.785398	</TURRET>
+        <GUN>	-0.785398	</GUN>
+      </rotation>
+      <tiling>
+        <germany:G121_Grille_15_L63>	4.98772 4.98772 0.02144 0.697429	</germany:G121_Grille_15_L63>
+        <germany:G42_Maus>	1.85 1.85 0.49463 0.721807	</germany:G42_Maus>
+        <ussr:R230_Maus>	1.85 1.85 0.49463 0.721807	</ussr:R230_Maus>
+        <japan:J28_O_I_100>	0.9 0.9 0.07 0.14	</japan:J28_O_I_100>
+        <sweden:S17_EMIL_1952_E2>	0.848955 0.848955 -0.218588 0.390214	</sweden:S17_EMIL_1952_E2>
+        <uk:GB91_Super_Conqueror>	0.8 0.8 0.74241 2.00419	</uk:GB91_Super_Conqueror>
+        <usa:A13_T34_hvy>	2.04707 2.04707 0.032792 0.776046	</usa:A13_T34_hvy>
+        <ussr:R115_IS-3_auto>	2.20619 2.2146 0.488129 0.13803	</ussr:R115_IS-3_auto>
+        <ussr:R115_IS-3_auto_S>	2.20619 2.2146 0.488129 0.13803	</ussr:R115_IS-3_auto_S>
+        <ussr:R121_KV4_KTT>	2 2 0.485752 0.761638	</ussr:R121_KV4_KTT>
+        <germany:G42_Maus0>	0.5 0.5 -0.114016 -0.170855	</germany:G42_Maus0>
+        <germany:G42_Maus1>	1.87242 1.87242 -0.97316 -0.286174	</germany:G42_Maus1>
+      </tiling>
+      <tilingSettings>
+        <type>	relative	</type>
+        <factor>	1.5 1.5	</factor>
+        <offset>	0.11 0.15	</offset>
+      </tilingSettings>
+    </camouflage>
+  </itemGroup>
+</camouflage_bb2020_dragon_award_label.xml>

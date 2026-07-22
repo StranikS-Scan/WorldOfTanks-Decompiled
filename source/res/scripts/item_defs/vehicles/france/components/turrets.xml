@@ -1,147 +1,434 @@
 <turrets.xml>
-  <ids>
-    <Turret_1_D2>	1	</Turret_1_D2>
-    <Turret_2_D2>	2	</Turret_2_D2>
-    <Turret_1_RenaultFT>	3	</Turret_1_RenaultFT>
-    <Turret_2_RenaultFT>	4	</Turret_2_RenaultFT>
-    <Turret_1_RenaultBS>	5	</Turret_1_RenaultBS>
-    <Turret_1_B1>	6	</Turret_1_B1>
-    <Turret_2_B1>	7	</Turret_2_B1>
-    <Turret_1_Hotchkiss_H35>	8	</Turret_1_Hotchkiss_H35>
-    <Turret_1_D1_2>	10	</Turret_1_D1_2>
-    <Turret_2_D1_2>	11	</Turret_2_D1_2>
-    <Turret_1_105_leFH18B2>	13	</Turret_1_105_leFH18B2>
-    <Turret_1_FCM_36Pak40>	14	</Turret_1_FCM_36Pak40>
-    <Turret_1_ARL_44>	15	</Turret_1_ARL_44>
-    <Turret_2_ARL_44>	16	</Turret_2_ARL_44>
-    <Turret_1_AMX40>	17	</Turret_1_AMX40>
-    <Turret_2_AMX40>	18	</Turret_2_AMX40>
-    <Turret_1_AMX_50_100>	19	</Turret_1_AMX_50_100>
-    <Turret_1_Lorraine39_L_AM>	20	</Turret_1_Lorraine39_L_AM>
-    <Turret_1_Bat_Chatillon25t>	21	</Turret_1_Bat_Chatillon25t>
-    <Turret_1_AMX_50_120>	22	</Turret_1_AMX_50_120>
-    <Turret_1_AMX_105AM>	23	</Turret_1_AMX_105AM>
-    <Turret_1_Renault_G1R>	25	</Turret_1_Renault_G1R>
-    <Turret_2_Renault_G1R>	26	</Turret_2_Renault_G1R>
-    <Turret_2_AMX_13F3AM>	28	</Turret_2_AMX_13F3AM>
-    <Turret_1_AMX_13_90>	29	</Turret_1_AMX_13_90>
-    <Turret_1_AMX_13_75>	30	</Turret_1_AMX_13_75>
-    <Turret_1_Lorraine40t>	33	</Turret_1_Lorraine40t>
-    <Turret_1_AMX38>	34	</Turret_1_AMX38>
-    <Turret_1_AMX_50_68t>	36	</Turret_1_AMX_50_68t>
-    <Turret_1_AMX_12t>	37	</Turret_1_AMX_12t>
-    <Turret_1_BDR_G1B>	38	</Turret_1_BDR_G1B>
-    <Turret_2_BDR_G1B>	39	</Turret_2_BDR_G1B>
-    <Turret_1_AMX_M4_1945>	40	</Turret_1_AMX_M4_1945>
-    <Turret_2_AMX_M4_1945>	41	</Turret_2_AMX_M4_1945>
-    <Turret_1_Lorraine155_50>	42	</Turret_1_Lorraine155_50>
-    <Turret_2_Lorraine155_51>	44	</Turret_2_Lorraine155_51>
-    <Turret_1_RenaultFT_AC>	45	</Turret_1_RenaultFT_AC>
-    <Turret_1_RenaultUE57>	47	</Turret_1_RenaultUE57>
-    <Turret_1_Somua_Sau_40>	53	</Turret_1_Somua_Sau_40>
-    <Turret_1_S_35CA>	54	</Turret_1_S_35CA>
-    <Turret_1_AMX_AC_Mle1946>	57	</Turret_1_AMX_AC_Mle1946>
-    <Turret_1_AMX50_Foch>	58	</Turret_1_AMX50_Foch>
-    <Turret_1_ARL_V39>	60	</Turret_1_ARL_V39>
-    <Turret_1_Bat_Chatillon155>	61	</Turret_1_Bat_Chatillon155>
-    <Turret_1_AMX_AC_Mle1948>	62	</Turret_1_AMX_AC_Mle1948>
-    <Turret_1_Somua_S35>	67	</Turret_1_Somua_S35>
-    <Turret_2_Somua_S35>	68	</Turret_2_Somua_S35>
-    <Turret_1_AMX_50Fosh_155>	72	</Turret_1_AMX_50Fosh_155>
-    <Turret_1_ELC_AMX>	73	</Turret_1_ELC_AMX>
-    <Turret_1_FCM_50t>	74	</Turret_1_FCM_50t>
-    <Turret_1_Bat_Chatillon155_55>	75	</Turret_1_Bat_Chatillon155_55>
-    <Turret_1_AMX_Ob_Am105>	76	</Turret_1_AMX_Ob_Am105>
-    <Turret_2_AMX_Ob_Am105>	77	</Turret_2_AMX_Ob_Am105>
-    <Turret_1_AMX13_57_100>	89	</Turret_1_AMX13_57_100>
-    <Turret_1_AMX_Chasseur_de_char_46>	90	</Turret_1_AMX_Chasseur_de_char_46>
-    <Turret_1_SARL42>	93	</Turret_1_SARL42>
-    <Turret_2_SARL42>	94	</Turret_2_SARL42>
-    <Turret_1_FCM36_20t>	95	</Turret_1_FCM36_20t>
-    <Turret_1_AMX_30>	97	</Turret_1_AMX_30>
-    <Turret_1_AMX_30_prototype>	98	</Turret_1_AMX_30_prototype>
-    <Turret_2_AMX_30_prototype>	99	</Turret_2_AMX_30_prototype>
-    <Turret_1_RenaultR35>	100	</Turret_1_RenaultR35>
-    <Turret_2_RenaultR35>	101	</Turret_2_RenaultR35>
-    <Turret_1_AMX13_57_100_GrandFinal>	102	</Turret_1_AMX13_57_100_GrandFinal>
-    <Turret_1_AMX_50_68t_fallout>	103	</Turret_1_AMX_50_68t_fallout>
-    <Turret_1_M4A1_Revalorise>	104	</Turret_1_M4A1_Revalorise>
-    <Turret_1_F74_AMX_M4_1949>	107	</Turret_1_F74_AMX_M4_1949>
-    <Turret_1_Char_de_25t>	108	</Turret_1_Char_de_25t>
-    <Turret_1_F84_Somua_SM>	111	</Turret_1_F84_Somua_SM>
-    <Turret_1_F81_Char_de_65t>	112	</Turret_1_F81_Char_de_65t>
-    <Turret_2_F81_Char_de_65t>	113	</Turret_2_F81_Char_de_65t>
-    <Turret_1_F83_AMX_M4_Mle1949_Bis>	114	</Turret_1_F83_AMX_M4_Mle1949_Bis>
-    <Turret_2_F83_AMX_M4_Mle1949_Bis>	115	</Turret_2_F83_AMX_M4_Mle1949_Bis>
-    <Turret_1_F82_AMX_M4_Mle1949_Ter>	116	</Turret_1_F82_AMX_M4_Mle1949_Ter>
-    <Turret_1_F74_AMX_M4_1949_Liberte>	117	</Turret_1_F74_AMX_M4_1949_Liberte>
-    <Turret_1_F19_Lorraine40t>	118	</Turret_1_F19_Lorraine40t>
-    <Turret_1_F88_AMX_13_105>	119	</Turret_1_F88_AMX_13_105>
-    <Turret_1_F87_Batignolles-Chatillon_12t>	120	</Turret_1_F87_Batignolles-Chatillon_12t>
-    <Turret_1_F89_Canon_dassaut_de_105>	121	</Turret_1_F89_Canon_dassaut_de_105>
-    <Turret_2_Bat_Chatillon155_55>	122	</Turret_2_Bat_Chatillon155_55>
-    <Turret_1_F64_AMX_50Fosh_B>	123	</Turret_1_F64_AMX_50Fosh_B>
-    <Turret_1_F97_ELC_EVEN_90>	124	</Turret_1_F97_ELC_EVEN_90>
-    <Turret_1_F106_Panhard_EBR_75_Mle1954>	125	</Turret_1_F106_Panhard_EBR_75_Mle1954>
-    <Turret_1_F109_AMD_Panhard_178B>	126	</Turret_1_F109_AMD_Panhard_178B>
-    <Turret_1_F107_Hotchkiss_EBR>	127	</Turret_1_F107_Hotchkiss_EBR>
-    <Turret_1_F110_Lynx_6x6>	128	</Turret_1_F110_Lynx_6x6>
-    <Turret_1_F100_Panhard_EBR_90>	129	</Turret_1_F100_Panhard_EBR_90>
-    <Turret_1_F108_Panhard_EBR_105>	130	</Turret_1_F108_Panhard_EBR_105>
-    <Turret_1_F111_AM39_Gendron_Somua>	131	</Turret_1_F111_AM39_Gendron_Somua>
-    <Turret_2_F109_AMD_Panhard_178B>	132	</Turret_2_F109_AMD_Panhard_178B>
-    <Turret_1_F74_AMX_M4_1949_FL>	133	</Turret_1_F74_AMX_M4_1949_FL>
-    <Turret_1_M4A1_Revalorise_FL>	134	</Turret_1_M4A1_Revalorise_FL>
-    <Turret_1_F112_M10_RBFM>	135	</Turret_1_F112_M10_RBFM>
-    <Turret_1_F85_M4A1_FL10>	136	</Turret_1_F85_M4A1_FL10>
-    <Turret_1_F113_Bretagne_Panther>	137	</Turret_1_F113_Bretagne_Panther>
-    <Turret_1_F42_AMR_35>	138	</Turret_1_F42_AMR_35>
-    <Turret_1_F114_Projet_4_1>	139	</Turret_1_F114_Projet_4_1>
-    <Turret_1_F116_Bat_Chatillon_Bourrasque>	140	</Turret_1_F116_Bat_Chatillon_Bourrasque>
-    <Turret_1_F97_ELC_EVEN_90_FL>	141	</Turret_1_F97_ELC_EVEN_90_FL>
-    <Turret_1_F115_Lorraine_50t>	142	</Turret_1_F115_Lorraine_50t>
-    <Turret_1_F117_Alt_Proto_AMX_30>	143	</Turret_1_F117_Alt_Proto_AMX_30>
-    <Turret_1_F118_Char_Mle_75>	144	</Turret_1_F118_Char_Mle_75>
-    <Turret_1_F124_AMX_13FL11>	146	</Turret_1_F124_AMX_13FL11>
-    <Turret_1_F119_Projet_Murat>	148	</Turret_1_F119_Projet_Murat>
-    <Turret_1_F126_Char_Lourd_AP58>	31002	</Turret_1_F126_Char_Lourd_AP58>
-    <Turret_2_F83_AMX_M4_Mle1949_Bis_FL>	501	</Turret_2_F83_AMX_M4_Mle1949_Bis_FL>
-    <Turret_1_AMX_AC_Mle1948_FL>	502	</Turret_1_AMX_AC_Mle1948_FL>
-    <Turret_1_F88_AMX_13_105_7x7>	503	</Turret_1_F88_AMX_13_105_7x7>
-    <Turret_1_F64_AMX_50Fosh_B_7x7>	504	</Turret_1_F64_AMX_50Fosh_B_7x7>
-    <Turret_1_AMX_13_75_FL>	31001	</Turret_1_AMX_13_75_FL>
-    <Turret_1_F87_Batignolles-Chatillon_12t_FL>	505	</Turret_1_F87_Batignolles-Chatillon_12t_FL>
-    <Turret_1_AMX_50_100_FL>	506	</Turret_1_AMX_50_100_FL>
-    <Turret_1_F110_Lynx_6x6_FL>	507	</Turret_1_F110_Lynx_6x6_FL>
-    <Turret_1_AMX_13_90_FL>	31003	</Turret_1_AMX_13_90_FL>
-    <Turret_1_F97_ELC_EVEN_90_SH>	10000	</Turret_1_F97_ELC_EVEN_90_SH>
-    <Turret_2_F62_ELC_AMX_SH>	10001	</Turret_2_F62_ELC_AMX_SH>
-    <Turret_3_F87_Bat-Chatillon12t_SH>	10002	</Turret_3_F87_Bat-Chatillon12t_SH>
-    <Turret_1_AMX_AC_Mle1948_IGR>	60001	</Turret_1_AMX_AC_Mle1948_IGR>
-    <Turret_1_AMX_13_90_IGR>	60002	</Turret_1_AMX_13_90_IGR>
-    <Turret_1_AMX_50_100_IGR>	60003	</Turret_1_AMX_50_100_IGR>
-    <Turret_1_105_leFH18B2_IGR>	60004	</Turret_1_105_leFH18B2_IGR>
-    <Turret_1_S_35CA_IGR>	60005	</Turret_1_S_35CA_IGR>
-    <Turret_1_ELC_AMX_IGR>	60006	</Turret_1_ELC_AMX_IGR>
-    <Turret_1_Bat_Chatillon25t_IGR>	60007	</Turret_1_Bat_Chatillon25t_IGR>
-    <Turret_1_F130_AMX_Tracteur_D>	31008	</Turret_1_F130_AMX_Tracteur_D>
-    <Turret_1_AMX_50_68t_bob>	31009	</Turret_1_AMX_50_68t_bob>
-    <Turret_1_F131_Coutelas>	31010	</Turret_1_F131_Coutelas>
-    <Turret_1_F133_Projet_57>	31011	</Turret_1_F133_Projet_57>
-    <Turret_1_F134_ARL_Projet_F>	31012	</Turret_1_F134_ARL_Projet_F>
-    <Turret_1_F133_Projet_57_Ampere>	31013	</Turret_1_F133_Projet_57_Ampere>
-    <Turret_1_AMX_Chasseur_de_char_46_02>	31014	</Turret_1_AMX_Chasseur_de_char_46_02>
-    <Turret_1_F116_Bat_Chatillon_Bourrasque_02>	31015	</Turret_1_F116_Bat_Chatillon_Bourrasque_02>
-    <Turret_1_F135_Schneider_120_AC_Gendarme_02>	31016	</Turret_1_F135_Schneider_120_AC_Gendarme_02>
-    <Turret_1_F123_ERAC_105_Proto>	31017	</Turret_1_F123_ERAC_105_Proto>
-    <Turret_1_F128_Schneider_90_105_DCA_Oie>	31004	</Turret_1_F128_Schneider_90_105_DCA_Oie>
-    <Turret_1_F19_Lorraine40t_02>	31005	</Turret_1_F19_Lorraine40t_02>
-    <Turret_1_F129_Schneider_120_AC_Gendarme>	31006	</Turret_1_F129_Schneider_120_AC_Gendarme>
-    <Turret_1_Bat_Chatillon25t_7x7>	31007	</Turret_1_Bat_Chatillon25t_7x7>
-    <Turret_1_F137_Tornade>	31018	</Turret_1_F137_Tornade>
-    <Turret_2_AMX_13F3AM_MapsTraining_Dummy_SPG_2>	9	</Turret_2_AMX_13F3AM_MapsTraining_Dummy_SPG_2>
-    <Turret_1_AMX_AC_Mle1946_bootcamp>	1002	</Turret_1_AMX_AC_Mle1946_bootcamp>
-    <Turret_1_F142_Projet_Louis_FL10_90>	31019	</Turret_1_F142_Projet_Louis_FL10_90>
-  </ids>
-  <shared></shared>
+  <xmlns:xmlref>	http://bwt/xmlref	</xmlns:xmlref>
+  <shared>
+    <Turret_1_105_leFH18B2>
+      <id>	13	</id>
+    </Turret_1_105_leFH18B2>
+    <Turret_1_105_leFH18B2_IGR>
+      <id>	60004	</id>
+    </Turret_1_105_leFH18B2_IGR>
+    <Turret_1_AMX13_57_100>
+      <id>	89	</id>
+    </Turret_1_AMX13_57_100>
+    <Turret_1_AMX13_57_100_GrandFinal>
+      <id>	102	</id>
+    </Turret_1_AMX13_57_100_GrandFinal>
+    <Turret_1_AMX38>
+      <id>	34	</id>
+    </Turret_1_AMX38>
+    <Turret_1_AMX40>
+      <id>	17	</id>
+    </Turret_1_AMX40>
+    <Turret_1_AMX50_Foch>
+      <id>	58	</id>
+    </Turret_1_AMX50_Foch>
+    <Turret_1_AMX_105AM>
+      <id>	23	</id>
+    </Turret_1_AMX_105AM>
+    <Turret_1_AMX_12t>
+      <id>	37	</id>
+    </Turret_1_AMX_12t>
+    <Turret_1_AMX_13_75>
+      <id>	30	</id>
+    </Turret_1_AMX_13_75>
+    <Turret_1_AMX_13_75_FL>
+      <id>	31001	</id>
+    </Turret_1_AMX_13_75_FL>
+    <Turret_1_AMX_13_90>
+      <id>	29	</id>
+    </Turret_1_AMX_13_90>
+    <Turret_1_AMX_13_90_FL>
+      <id>	31003	</id>
+    </Turret_1_AMX_13_90_FL>
+    <Turret_1_AMX_13_90_IGR>
+      <id>	60002	</id>
+    </Turret_1_AMX_13_90_IGR>
+    <Turret_1_AMX_30>
+      <id>	97	</id>
+    </Turret_1_AMX_30>
+    <Turret_1_AMX_30_prototype>
+      <id>	98	</id>
+    </Turret_1_AMX_30_prototype>
+    <Turret_1_AMX_50Fosh_155>
+      <id>	72	</id>
+    </Turret_1_AMX_50Fosh_155>
+    <Turret_1_AMX_50_100>
+      <id>	19	</id>
+    </Turret_1_AMX_50_100>
+    <Turret_1_AMX_50_100_FL>
+      <id>	506	</id>
+    </Turret_1_AMX_50_100_FL>
+    <Turret_1_AMX_50_100_IGR>
+      <id>	60003	</id>
+    </Turret_1_AMX_50_100_IGR>
+    <Turret_1_AMX_50_120>
+      <id>	22	</id>
+    </Turret_1_AMX_50_120>
+    <Turret_1_AMX_50_68t>
+      <id>	36	</id>
+    </Turret_1_AMX_50_68t>
+    <Turret_1_AMX_50_68t_bob>
+      <id>	31009	</id>
+    </Turret_1_AMX_50_68t_bob>
+    <Turret_1_AMX_50_68t_fallout>
+      <id>	103	</id>
+    </Turret_1_AMX_50_68t_fallout>
+    <Turret_1_AMX_AC_Mle1946>
+      <id>	57	</id>
+    </Turret_1_AMX_AC_Mle1946>
+    <Turret_1_AMX_AC_Mle1946_bootcamp>
+      <id>	1002	</id>
+    </Turret_1_AMX_AC_Mle1946_bootcamp>
+    <Turret_1_AMX_AC_Mle1948>
+      <id>	62	</id>
+    </Turret_1_AMX_AC_Mle1948>
+    <Turret_1_AMX_AC_Mle1948_FL>
+      <id>	502	</id>
+    </Turret_1_AMX_AC_Mle1948_FL>
+    <Turret_1_AMX_AC_Mle1948_IGR>
+      <id>	60001	</id>
+    </Turret_1_AMX_AC_Mle1948_IGR>
+    <Turret_1_AMX_Chasseur_de_char_46>
+      <id>	90	</id>
+    </Turret_1_AMX_Chasseur_de_char_46>
+    <Turret_1_AMX_Chasseur_de_char_46_02>
+      <id>	31014	</id>
+    </Turret_1_AMX_Chasseur_de_char_46_02>
+    <Turret_1_AMX_M4_1945>
+      <id>	40	</id>
+    </Turret_1_AMX_M4_1945>
+    <Turret_1_AMX_Ob_Am105>
+      <id>	76	</id>
+    </Turret_1_AMX_Ob_Am105>
+    <Turret_1_ARL_44>
+      <id>	15	</id>
+    </Turret_1_ARL_44>
+    <Turret_1_ARL_V39>
+      <id>	60	</id>
+    </Turret_1_ARL_V39>
+    <Turret_1_B1>
+      <id>	6	</id>
+    </Turret_1_B1>
+    <Turret_1_BDR_G1B>
+      <id>	38	</id>
+    </Turret_1_BDR_G1B>
+    <Turret_1_Bat_Chatillon155>
+      <id>	61	</id>
+    </Turret_1_Bat_Chatillon155>
+    <Turret_1_Bat_Chatillon155_55>
+      <id>	75	</id>
+    </Turret_1_Bat_Chatillon155_55>
+    <Turret_1_Bat_Chatillon25t>
+      <id>	21	</id>
+    </Turret_1_Bat_Chatillon25t>
+    <Turret_1_Bat_Chatillon25t_7x7>
+      <id>	31007	</id>
+    </Turret_1_Bat_Chatillon25t_7x7>
+    <Turret_1_Bat_Chatillon25t_IGR>
+      <id>	60007	</id>
+    </Turret_1_Bat_Chatillon25t_IGR>
+    <Turret_1_Char_de_25t>
+      <id>	108	</id>
+    </Turret_1_Char_de_25t>
+    <Turret_1_D1_2>
+      <id>	10	</id>
+    </Turret_1_D1_2>
+    <Turret_1_D2>
+      <id>	1	</id>
+    </Turret_1_D2>
+    <Turret_1_ELC_AMX>
+      <id>	73	</id>
+    </Turret_1_ELC_AMX>
+    <Turret_1_ELC_AMX_IGR>
+      <id>	60006	</id>
+    </Turret_1_ELC_AMX_IGR>
+    <Turret_1_F100_Panhard_EBR_90>
+      <id>	129	</id>
+    </Turret_1_F100_Panhard_EBR_90>
+    <Turret_1_F106_Panhard_EBR_75_Mle1954>
+      <id>	125	</id>
+    </Turret_1_F106_Panhard_EBR_75_Mle1954>
+    <Turret_1_F107_Hotchkiss_EBR>
+      <id>	127	</id>
+    </Turret_1_F107_Hotchkiss_EBR>
+    <Turret_1_F108_Panhard_EBR_105>
+      <id>	130	</id>
+    </Turret_1_F108_Panhard_EBR_105>
+    <Turret_1_F109_AMD_Panhard_178B>
+      <id>	126	</id>
+    </Turret_1_F109_AMD_Panhard_178B>
+    <Turret_1_F110_Lynx_6x6>
+      <id>	128	</id>
+    </Turret_1_F110_Lynx_6x6>
+    <Turret_1_F110_Lynx_6x6_FL>
+      <id>	507	</id>
+    </Turret_1_F110_Lynx_6x6_FL>
+    <Turret_1_F111_AM39_Gendron_Somua>
+      <id>	131	</id>
+    </Turret_1_F111_AM39_Gendron_Somua>
+    <Turret_1_F112_M10_RBFM>
+      <id>	135	</id>
+    </Turret_1_F112_M10_RBFM>
+    <Turret_1_F113_Bretagne_Panther>
+      <id>	137	</id>
+    </Turret_1_F113_Bretagne_Panther>
+    <Turret_1_F114_Projet_4_1>
+      <id>	139	</id>
+    </Turret_1_F114_Projet_4_1>
+    <Turret_1_F115_Lorraine_50t>
+      <id>	142	</id>
+    </Turret_1_F115_Lorraine_50t>
+    <Turret_1_F116_Bat_Chatillon_Bourrasque>
+      <id>	140	</id>
+    </Turret_1_F116_Bat_Chatillon_Bourrasque>
+    <Turret_1_F116_Bat_Chatillon_Bourrasque_02>
+      <id>	31015	</id>
+    </Turret_1_F116_Bat_Chatillon_Bourrasque_02>
+    <Turret_1_F117_Alt_Proto_AMX_30>
+      <id>	143	</id>
+    </Turret_1_F117_Alt_Proto_AMX_30>
+    <Turret_1_F118_Char_Mle_75>
+      <id>	144	</id>
+    </Turret_1_F118_Char_Mle_75>
+    <Turret_1_F119_Projet_Murat>
+      <id>	148	</id>
+    </Turret_1_F119_Projet_Murat>
+    <Turret_1_F121_G1L>
+      <id>	31021	</id>
+    </Turret_1_F121_G1L>
+    <Turret_1_F123_ERAC_105_Proto>
+      <id>	31017	</id>
+    </Turret_1_F123_ERAC_105_Proto>
+    <Turret_1_F124_AMX_13FL11>
+      <id>	146	</id>
+    </Turret_1_F124_AMX_13FL11>
+    <Turret_1_F126_Char_Lourd_AP58>
+      <id>	31002	</id>
+    </Turret_1_F126_Char_Lourd_AP58>
+    <Turret_1_F128_Schneider_90_105_DCA_Oie>
+      <id>	31004	</id>
+    </Turret_1_F128_Schneider_90_105_DCA_Oie>
+    <Turret_1_F129_Schneider_120_AC_Gendarme>
+      <id>	31006	</id>
+    </Turret_1_F129_Schneider_120_AC_Gendarme>
+    <Turret_1_F130_AMX_Tracteur_D>
+      <id>	31008	</id>
+    </Turret_1_F130_AMX_Tracteur_D>
+    <Turret_1_F131_Coutelas>
+      <id>	31010	</id>
+    </Turret_1_F131_Coutelas>
+    <Turret_1_F133_Projet_57>
+      <id>	31011	</id>
+    </Turret_1_F133_Projet_57>
+    <Turret_1_F133_Projet_57_Ampere>
+      <id>	31013	</id>
+    </Turret_1_F133_Projet_57_Ampere>
+    <Turret_1_F134_ARL_Projet_F>
+      <id>	31012	</id>
+    </Turret_1_F134_ARL_Projet_F>
+    <Turret_1_F135_Schneider_120_AC_Gendarme_02>
+      <id>	31016	</id>
+    </Turret_1_F135_Schneider_120_AC_Gendarme_02>
+    <Turret_1_F137_Tornade>
+      <id>	31018	</id>
+    </Turret_1_F137_Tornade>
+    <Turret_1_F142_Projet_Louis_FL10_90>
+      <id>	31019	</id>
+    </Turret_1_F142_Projet_Louis_FL10_90>
+    <Turret_1_F19_Lorraine40t>
+      <id>	118	</id>
+    </Turret_1_F19_Lorraine40t>
+    <Turret_1_F19_Lorraine40t_02>
+      <id>	31005	</id>
+    </Turret_1_F19_Lorraine40t_02>
+    <Turret_1_F42_AMR_35>
+      <id>	138	</id>
+    </Turret_1_F42_AMR_35>
+    <Turret_1_F64_AMX_50Fosh_B>
+      <id>	123	</id>
+    </Turret_1_F64_AMX_50Fosh_B>
+    <Turret_1_F64_AMX_50Fosh_B_7x7>
+      <id>	504	</id>
+    </Turret_1_F64_AMX_50Fosh_B_7x7>
+    <Turret_1_F74_AMX_M4_1949>
+      <id>	107	</id>
+    </Turret_1_F74_AMX_M4_1949>
+    <Turret_1_F74_AMX_M4_1949_FL>
+      <id>	133	</id>
+    </Turret_1_F74_AMX_M4_1949_FL>
+    <Turret_1_F74_AMX_M4_1949_Liberte>
+      <id>	117	</id>
+    </Turret_1_F74_AMX_M4_1949_Liberte>
+    <Turret_1_F81_Char_de_65t>
+      <id>	112	</id>
+    </Turret_1_F81_Char_de_65t>
+    <Turret_1_F82_AMX_M4_Mle1949_Ter>
+      <id>	116	</id>
+    </Turret_1_F82_AMX_M4_Mle1949_Ter>
+    <Turret_1_F83_AMX_M4_Mle1949_Bis>
+      <id>	114	</id>
+    </Turret_1_F83_AMX_M4_Mle1949_Bis>
+    <Turret_1_F84_Somua_SM>
+      <id>	111	</id>
+    </Turret_1_F84_Somua_SM>
+    <Turret_1_F85_M4A1_FL10>
+      <id>	136	</id>
+    </Turret_1_F85_M4A1_FL10>
+    <Turret_1_F87_Batignolles-Chatillon_12t>
+      <id>	120	</id>
+    </Turret_1_F87_Batignolles-Chatillon_12t>
+    <Turret_1_F87_Batignolles-Chatillon_12t_FL>
+      <id>	505	</id>
+    </Turret_1_F87_Batignolles-Chatillon_12t_FL>
+    <Turret_1_F88_AMX_13_105>
+      <id>	119	</id>
+    </Turret_1_F88_AMX_13_105>
+    <Turret_1_F88_AMX_13_105_7x7>
+      <id>	503	</id>
+    </Turret_1_F88_AMX_13_105_7x7>
+    <Turret_1_F89_Canon_dassaut_de_105>
+      <id>	121	</id>
+    </Turret_1_F89_Canon_dassaut_de_105>
+    <Turret_1_F97_ELC_EVEN_90>
+      <id>	124	</id>
+    </Turret_1_F97_ELC_EVEN_90>
+    <Turret_1_F97_ELC_EVEN_90_FL>
+      <id>	141	</id>
+    </Turret_1_F97_ELC_EVEN_90_FL>
+    <Turret_1_F97_ELC_EVEN_90_SH>
+      <id>	10000	</id>
+    </Turret_1_F97_ELC_EVEN_90_SH>
+    <Turret_1_FCM36_20t>
+      <id>	95	</id>
+    </Turret_1_FCM36_20t>
+    <Turret_1_FCM_36Pak40>
+      <id>	14	</id>
+    </Turret_1_FCM_36Pak40>
+    <Turret_1_FCM_50t>
+      <id>	74	</id>
+    </Turret_1_FCM_50t>
+    <Turret_1_Hotchkiss_H35>
+      <id>	8	</id>
+    </Turret_1_Hotchkiss_H35>
+    <Turret_1_Lorraine155_50>
+      <id>	42	</id>
+    </Turret_1_Lorraine155_50>
+    <Turret_1_Lorraine39_L_AM>
+      <id>	20	</id>
+    </Turret_1_Lorraine39_L_AM>
+    <Turret_1_Lorraine40t>
+      <id>	33	</id>
+    </Turret_1_Lorraine40t>
+    <Turret_1_M4A1_Revalorise>
+      <id>	104	</id>
+    </Turret_1_M4A1_Revalorise>
+    <Turret_1_M4A1_Revalorise_FL>
+      <id>	134	</id>
+    </Turret_1_M4A1_Revalorise_FL>
+    <Turret_1_RenaultBS>
+      <id>	5	</id>
+    </Turret_1_RenaultBS>
+    <Turret_1_RenaultFT>
+      <id>	3	</id>
+    </Turret_1_RenaultFT>
+    <Turret_1_RenaultFT_AC>
+      <id>	45	</id>
+    </Turret_1_RenaultFT_AC>
+    <Turret_1_RenaultR35>
+      <id>	100	</id>
+    </Turret_1_RenaultR35>
+    <Turret_1_RenaultUE57>
+      <id>	47	</id>
+    </Turret_1_RenaultUE57>
+    <Turret_1_Renault_G1R>
+      <id>	25	</id>
+    </Turret_1_Renault_G1R>
+    <Turret_1_SARL42>
+      <id>	93	</id>
+    </Turret_1_SARL42>
+    <Turret_1_S_35CA>
+      <id>	54	</id>
+    </Turret_1_S_35CA>
+    <Turret_1_S_35CA_IGR>
+      <id>	60005	</id>
+    </Turret_1_S_35CA_IGR>
+    <Turret_1_Somua_S35>
+      <id>	67	</id>
+    </Turret_1_Somua_S35>
+    <Turret_1_Somua_Sau_40>
+      <id>	53	</id>
+    </Turret_1_Somua_Sau_40>
+    <Turret_2_AMX40>
+      <id>	18	</id>
+    </Turret_2_AMX40>
+    <Turret_2_AMX_13F3AM>
+      <id>	28	</id>
+    </Turret_2_AMX_13F3AM>
+    <Turret_2_AMX_13F3AM_MapsTraining_Dummy_SPG_2>
+      <id>	9	</id>
+    </Turret_2_AMX_13F3AM_MapsTraining_Dummy_SPG_2>
+    <Turret_2_AMX_30_prototype>
+      <id>	99	</id>
+    </Turret_2_AMX_30_prototype>
+    <Turret_2_AMX_M4_1945>
+      <id>	41	</id>
+    </Turret_2_AMX_M4_1945>
+    <Turret_2_AMX_Ob_Am105>
+      <id>	77	</id>
+    </Turret_2_AMX_Ob_Am105>
+    <Turret_2_ARL_44>
+      <id>	16	</id>
+    </Turret_2_ARL_44>
+    <Turret_2_B1>
+      <id>	7	</id>
+    </Turret_2_B1>
+    <Turret_2_BDR_G1B>
+      <id>	39	</id>
+    </Turret_2_BDR_G1B>
+    <Turret_2_Bat_Chatillon155_55>
+      <id>	122	</id>
+    </Turret_2_Bat_Chatillon155_55>
+    <Turret_2_D1_2>
+      <id>	11	</id>
+    </Turret_2_D1_2>
+    <Turret_2_D2>
+      <id>	2	</id>
+    </Turret_2_D2>
+    <Turret_2_F109_AMD_Panhard_178B>
+      <id>	132	</id>
+    </Turret_2_F109_AMD_Panhard_178B>
+    <Turret_2_F62_ELC_AMX_SH>
+      <id>	10001	</id>
+    </Turret_2_F62_ELC_AMX_SH>
+    <Turret_2_F81_Char_de_65t>
+      <id>	113	</id>
+    </Turret_2_F81_Char_de_65t>
+    <Turret_2_F83_AMX_M4_Mle1949_Bis>
+      <id>	115	</id>
+    </Turret_2_F83_AMX_M4_Mle1949_Bis>
+    <Turret_2_F83_AMX_M4_Mle1949_Bis_FL>
+      <id>	501	</id>
+    </Turret_2_F83_AMX_M4_Mle1949_Bis_FL>
+    <Turret_2_Lorraine155_51>
+      <id>	44	</id>
+    </Turret_2_Lorraine155_51>
+    <Turret_2_RenaultFT>
+      <id>	4	</id>
+    </Turret_2_RenaultFT>
+    <Turret_2_RenaultR35>
+      <id>	101	</id>
+    </Turret_2_RenaultR35>
+    <Turret_2_Renault_G1R>
+      <id>	26	</id>
+    </Turret_2_Renault_G1R>
+    <Turret_2_SARL42>
+      <id>	94	</id>
+    </Turret_2_SARL42>
+    <Turret_2_Somua_S35>
+      <id>	68	</id>
+    </Turret_2_Somua_S35>
+    <Turret_3_F87_Bat-Chatillon12t_SH>
+      <id>	10002	</id>
+    </Turret_3_F87_Bat-Chatillon12t_SH>
+  </shared>
 </turrets.xml>

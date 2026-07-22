@@ -1,0 +1,52 @@
+<BlackMarket_02_Camo_Hull_138_name.xml>
+  <xmlns:china2>	ussr	</xmlns:china2>
+  <xmlns:germany>	germany	</xmlns:germany>
+  <xmlns:china1>	usa	</xmlns:china1>
+  <xmlns:china>	china	</xmlns:china>
+  <xmlns:france>	france	</xmlns:france>
+  <xmlns:china0>	uk	</xmlns:china0>
+  <xmlns:japan>	japan	</xmlns:japan>
+  <xmlns:czech>	czech	</xmlns:czech>
+  <xmlns:sweden>	sweden	</xmlns:sweden>
+  <xmlns:poland>	poland	</xmlns:poland>
+  <xmlns:italy>	italy	</xmlns:italy>
+  <xmlns:intunion>	intunion	</xmlns:intunion>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/opaque	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	MT camouflages 50g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <nations>	france	</nations>
+        <vehicles>	france:F116_Bat_Chatillon_Bourrasque_02	</vehicles>
+        <levels>	8	</levels>
+      </include>
+    </vehicleFilter>
+    <camouflage>
+      <id>	31413	</id>
+      <texture>	vehicles/russian/Camouflage/BlackMarket_02_Camo_Hull_138.dds	</texture>
+      <userString>	#vehicle_customization:BlackMarket_02_Camo_Hull_138/name	</userString>
+      <description>	#vehicle_customization:BlackMarket_02_Camo_Hull_138/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <palettes>
+        <palette>
+          <c0>	255 0 0 255	</c0>
+          <c1>	0 255 0 255	</c1>
+          <c2>	0 0 255 255	</c2>
+          <c3>	0 0 0 255	</c3>
+        </palette>
+      </palettes>
+      <exclusionImpact>	0.35	</exclusionImpact>
+      <tiling>
+        <france:F116_Bat_Chatillon_Bourrasque_02>	0.93457 0.93457 0 0	</france:F116_Bat_Chatillon_Bourrasque_02>
+      </tiling>
+      <tilingSettings>
+        <factor>	1 1	</factor>
+        <offset>	0.0 0.0	</offset>
+      </tilingSettings>
+      <glossMetallicMap>	vehicles/russian/Camouflage/BlackMarket_02_Camo_Hull_138_GMM.dds	</glossMetallicMap>
+    </camouflage>
+    <tags>	hiddenInUI fullRGB vehicleBound	</tags>
+  </itemGroup>
+</BlackMarket_02_Camo_Hull_138_name.xml>

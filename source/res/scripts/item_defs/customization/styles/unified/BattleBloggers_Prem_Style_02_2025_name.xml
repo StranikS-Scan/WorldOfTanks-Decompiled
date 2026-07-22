@@ -1,0 +1,74 @@
+<BattleBloggers_Prem_Style_02_2025_name.xml>
+  <itemGroup>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <style>
+      <id>	31289	</id>
+      <texture>	gui/maps/vehicles/styles/BattleBloggers_Prem_Style_02_2025.png	</texture>
+      <outfits>
+        <outfit>
+          <season>	all	</season>
+          <paints>
+            <item>
+              <id>	31257	</id>
+              <appliedTo>	16384	</appliedTo>
+            </item>
+            <item>
+              <id>	31258	</id>
+              <appliedTo>	4096	</appliedTo>
+            </item>
+            <item>
+              <id>	31259	</id>
+              <appliedTo>	1	</appliedTo>
+            </item>
+            <item>
+              <id>	31260	</id>
+              <appliedTo>	272	</appliedTo>
+            </item>
+          </paints>
+          <modifications>
+            <item>	4	</item>
+          </modifications>
+          <camouflages>
+            <item>
+              <id>	31247	</id>
+              <patternSize>	1	</patternSize>
+              <appliedTo>	272	</appliedTo>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <projection_decals>
+            <item>
+              <id>	31259	</id>
+              <tags>	formfactor_square safe front	</tags>
+            </item>
+            <item>
+              <id>	31261	</id>
+              <tags>	formfactor_square direction_left_to_right safe right	</tags>
+            </item>
+            <item>
+              <id>	31261	</id>
+              <tags>	left formfactor_square direction_right_to_left safe	</tags>
+            </item>
+          </projection_decals>
+          <insignias>
+            <item>
+              <id>	31016	</id>
+              <appliedTo>	4096	</appliedTo>
+            </item>
+          </insignias>
+        </outfit>
+      </outfits>
+      <userString>	#vehicle_customization:BattleBloggers_Prem_Style_02_2025/name	</userString>
+      <description>	#vehicle_customization:BattleBloggers_Prem_Style_02_2025/description	</description>
+      <longDescriptionSpecial>	#vehicle_customization:BattleBloggers_Prem_Style_02_2025/longDescription	</longDescriptionSpecial>
+    </style>
+    <priceGroup>	MT 2D styles universal 1000g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+  </itemGroup>
+</BattleBloggers_Prem_Style_02_2025_name.xml>

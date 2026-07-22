@@ -1,32 +1,8 @@
 <fuelTanks.xml>
-  <ids>
-    <Small>	201	</Small>
-    <Medium>	202	</Medium>
-    <Average>	203	</Average>
-    <Heavy>	204	</Heavy>
-    <Large>	205	</Large>
-    <Large_SH>	207	</Large_SH>
-    <Medium_MapsTraining_Dummy_SPG_2>	1	</Medium_MapsTraining_Dummy_SPG_2>
-    <Large_bootcamp>	0	</Large_bootcamp>
-  </ids>
+  <xmlns:xmlref>	http://bwt/xmlref	</xmlns:xmlref>
   <shared>
-    <Small>
-      <tags></tags>
-      <price>	100	</price>
-      <weight>	200	</weight>
-      <maxHealth>	100	</maxHealth>
-      <maxRegenHealth>	40	</maxRegenHealth>
-      <repairCost>	1.0	</repairCost>
-    </Small>
-    <Medium>
-      <tags></tags>
-      <price>	100	</price>
-      <weight>	250	</weight>
-      <maxHealth>	125	</maxHealth>
-      <maxRegenHealth>	50	</maxRegenHealth>
-      <repairCost>	1.0	</repairCost>
-    </Medium>
     <Average>
+      <id>	203	</id>
       <tags></tags>
       <price>	100	</price>
       <weight>	250	</weight>
@@ -35,6 +11,7 @@
       <repairCost>	1.0	</repairCost>
     </Average>
     <Heavy>
+      <id>	204	</id>
       <tags></tags>
       <price>	100	</price>
       <weight>	275	</weight>
@@ -43,6 +20,7 @@
       <repairCost>	1.0	</repairCost>
     </Heavy>
     <Large>
+      <id>	205	</id>
       <tags></tags>
       <price>	100	</price>
       <weight>	300	</weight>
@@ -51,6 +29,7 @@
       <repairCost>	1.0	</repairCost>
     </Large>
     <Large_SH>
+      <id>	207	</id>
       <tags></tags>
       <price>	0	</price>
       <notInShop>	true	</notInShop>
@@ -59,16 +38,8 @@
       <maxRegenHealth>	135	</maxRegenHealth>
       <repairCost>	0	</repairCost>
     </Large_SH>
-    <Medium_MapsTraining_Dummy_SPG_2>
-      <tags></tags>
-      <price>	100	</price>
-      <weight>	250	</weight>
-      <maxHealth>	125	</maxHealth>
-      <maxRegenHealth>	50	</maxRegenHealth>
-      <repairCost>	1.0	</repairCost>
-      <notInShop>	True	</notInShop>
-    </Medium_MapsTraining_Dummy_SPG_2>
     <Large_bootcamp>
+      <id>	0	</id>
       <tags></tags>
       <price>	100	</price>
       <weight>	300	</weight>
@@ -77,5 +48,33 @@
       <repairCost>	1.0	</repairCost>
       <notInShop>	True	</notInShop>
     </Large_bootcamp>
+    <Medium>
+      <id>	202	</id>
+      <tags></tags>
+      <price>	100	</price>
+      <weight>	250	</weight>
+      <maxHealth>	125	</maxHealth>
+      <maxRegenHealth>	50	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+    </Medium>
+    <Medium_MapsTraining_Dummy_SPG_2>
+      <id>	1	</id>
+      <tags></tags>
+      <price>	100	</price>
+      <weight>	250	</weight>
+      <maxHealth>	125	</maxHealth>
+      <maxRegenHealth>	50	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+      <notInShop>	True	</notInShop>
+    </Medium_MapsTraining_Dummy_SPG_2>
+    <Small>
+      <id>	201	</id>
+      <tags></tags>
+      <price>	100	</price>
+      <weight>	200	</weight>
+      <maxHealth>	100	</maxHealth>
+      <maxRegenHealth>	40	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+    </Small>
   </shared>
 </fuelTanks.xml>

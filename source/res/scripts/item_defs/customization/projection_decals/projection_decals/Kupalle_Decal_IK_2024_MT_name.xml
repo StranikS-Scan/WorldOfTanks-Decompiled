@@ -1,0 +1,33 @@
+<Kupalle_Decal_IK_2024_MT_name.xml>
+  <xmlns:czech1>	ussr	</xmlns:czech1>
+  <xmlns:germany>	germany	</xmlns:germany>
+  <xmlns:czech0>	usa	</xmlns:czech0>
+  <xmlns:china>	china	</xmlns:china>
+  <xmlns:france>	france	</xmlns:france>
+  <xmlns:uk>	uk	</xmlns:uk>
+  <xmlns:japan>	japan	</xmlns:japan>
+  <xmlns:czech>	czech	</xmlns:czech>
+  <xmlns:sweden>	sweden	</xmlns:sweden>
+  <xmlns:poland>	poland	</xmlns:poland>
+  <xmlns:italy>	italy	</xmlns:italy>
+  <xmlns:intunion>	intunion	</xmlns:intunion>
+  <itemGroup>
+    <name>	Kupalle_2024_MT	</name>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <userString>	#vehicle_customization:projection_decals/cool	</userString>
+    <projection_decal>
+      <id>	31123	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/cool/Kupalle_Decal_IK_2024_MT.dds	</texture>
+      <userString>	#vehicle_customization:Kupalle_Decal_IK_2024_MT/name	</userString>
+      <description>	#vehicle_customization:Kupalle_Decal_IK_2024_MT/description	</description>
+      <tags>	formfactor_rect1x2 direction_left_to_right styleOnly disableVerticalMirror hiddenInUI	</tags>
+      <priceGroup>	MT projection_decals 100g notInShop	</priceGroup>
+      <vehicleFilter>
+        <exclude>
+          <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF usa:A104_M4A3E8A usa:A126_PzVI_Tiger_II_capt ussr:R61_Object252_BF	</vehicles>
+        </exclude>
+      </vehicleFilter>
+    </projection_decal>
+  </itemGroup>
+</Kupalle_Decal_IK_2024_MT_name.xml>

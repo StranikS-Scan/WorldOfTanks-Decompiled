@@ -1,0 +1,58 @@
+<BlackMarket_02_Style_138_name.xml>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	MT 2D styles universal 1000g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <nations>	france	</nations>
+        <vehicles>	france:F116_Bat_Chatillon_Bourrasque_02	</vehicles>
+        <levels>	8	</levels>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	31437	</id>
+      <texture>	gui/maps/vehicles/styles/BlackMarket_02_Style_138.png	</texture>
+      <userString>	#vehicle_customization:BlackMarket_02_Style_138/name	</userString>
+      <description>	#vehicle_customization:BlackMarket_02_Style_138/description	</description>
+      <longDescriptionSpecial>	#vehicle_customization:BlackMarket_02_Style_138/longDescription	</longDescriptionSpecial>
+      <outfits>
+        <outfit>
+          <season>	all	</season>
+          <modifications>
+            <item>	4	</item>
+          </modifications>
+          <paints>
+            <item>
+              <id>	31399	</id>
+              <appliedTo>	20753	</appliedTo>
+            </item>
+          </paints>
+          <camouflages>
+            <item>
+              <id>	31412	</id>
+              <patternSize>	1	</patternSize>
+              <appliedTo>	256	</appliedTo>
+              <palette>	0	</palette>
+            </item>
+            <item>
+              <id>	31413	</id>
+              <patternSize>	1	</patternSize>
+              <appliedTo>	16	</appliedTo>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <insignias>
+            <item>
+              <id>	31040	</id>
+              <appliedTo>	4096	</appliedTo>
+            </item>
+          </insignias>
+        </outfit>
+      </outfits>
+    </style>
+    <tags>	lockedOnVehicle vehicleBound	</tags>
+    <maxNumber>	1	</maxNumber>
+  </itemGroup>
+</BlackMarket_02_Style_138_name.xml>

@@ -1,0 +1,46 @@
+<special_style_fw_2022_style.xml>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	MT 2D styles universal 1000g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <levels>	10	</levels>
+      </include>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <style>
+      <id>	648	</id>
+      <texture>	gui/maps/vehicles/styles/FW_2022_Style_Icon.png	</texture>
+      <userString>	#vehicle_customization:special_style/fw_2022_style	</userString>
+      <description>	#vehicle_customization:special_style/fw_2022_style_desc	</description>
+      <longDescriptionSpecial>	#vehicle_customization:special_style/fw_2022_style_desc/long	</longDescriptionSpecial>
+      <tags>	questsProgression	</tags>
+      <maxNumber>	5	</maxNumber>
+      <alternateItems>
+        <camouflage>
+          <id>	15928 15929 15930 15931 15932 15933 15934	</id>
+        </camouflage>
+        <decal>
+          <id>	881 882 883 884 885 886 887 888 889 890 891 892 893 894 895 896 897 898 899 900 901 902 903 904	</id>
+        </decal>
+      </alternateItems>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	15930	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+        </outfit>
+      </outfits>
+    </style>
+  </itemGroup>
+</special_style_fw_2022_style.xml>

@@ -99,6 +99,9 @@ class GiftEventBaseHub(IGiftEventHub):
         strategy = strategy or self._settings.clientReqStrategy
         return False if not self._isHistoryReceived or strategy != self._settings.clientReqStrategy else not self._isWebStateReceived and self._isWebStateEnabled()
 
+    def isWaitResponseRequired(self):
+        return False
+
     def getGifter(self):
         return self._gifter
 
@@ -135,6 +138,14 @@ class GiftEventBaseHub(IGiftEventHub):
             self._keeper.processWebState(webState)
             self._isWebStateReceived = True
             self.onHubUpdated(HubUpdateReason.WEB_STATE, webState)
+            return
+
+    def processWaitResponse(self, incomeData):
+        if not self.isWaitResponseRequired() or incomeData is None:
+            return
+        else:
+            self._keeper.processWaitResponse(incomeData)
+            self.onHubUpdated(HubUpdateReason.WAIT_RESPONSE_RECEIVED, incomeData)
             return
 
     def reset(self):

@@ -1,176 +1,521 @@
 <chassis.xml>
-  <ids>
-    <Chassis_AMX_13_75_2>	0	</Chassis_AMX_13_75_2>
-    <Chassis_AMX_13_75_3>	1	</Chassis_AMX_13_75_3>
-    <Chassis_D2>	2	</Chassis_D2>
-    <Chassis_D2_2>	3	</Chassis_D2_2>
-    <Chassis_RenaultFT>	4	</Chassis_RenaultFT>
-    <Chassis_RenaultFT2>	5	</Chassis_RenaultFT2>
-    <Chassis_RenaultBS>	6	</Chassis_RenaultBS>
-    <Chassis_RenaultBS2>	7	</Chassis_RenaultBS2>
-    <Chassis_B1>	8	</Chassis_B1>
-    <Chassis_B1_2>	9	</Chassis_B1_2>
-    <Chassis_Hotchkiss_H35>	10	</Chassis_Hotchkiss_H35>
-    <Chassis_Hotchkiss_H35_2>	11	</Chassis_Hotchkiss_H35_2>
-    <Chassis_D1_2>	12	</Chassis_D1_2>
-    <Chassis_D1_2_2>	13	</Chassis_D1_2_2>
-    <Chassis_105_leFH18B2>	15	</Chassis_105_leFH18B2>
-    <Chassis_FCM_36Pak40>	16	</Chassis_FCM_36Pak40>
-    <Chassis_ARL_44>	17	</Chassis_ARL_44>
-    <Chassis_ARL_44_2>	18	</Chassis_ARL_44_2>
-    <Chassis_AMX40>	19	</Chassis_AMX40>
-    <Chassis_AMX40_2>	20	</Chassis_AMX40_2>
-    <Chassis_AMX_50_100>	21	</Chassis_AMX_50_100>
-    <Chassis_AMX_50_100_2>	22	</Chassis_AMX_50_100_2>
-    <Chassis_Lorraine39_L_AM>	23	</Chassis_Lorraine39_L_AM>
-    <Chassis_Lorraine39_L_AM_2>	24	</Chassis_Lorraine39_L_AM_2>
-    <Chassis_Bat_Chatillon25t_2>	26	</Chassis_Bat_Chatillon25t_2>
-    <Chassis_AMX_50_120>	27	</Chassis_AMX_50_120>
-    <Chassis_AMX_50_120_2>	28	</Chassis_AMX_50_120_2>
-    <Chassis_AMX_105AM>	29	</Chassis_AMX_105AM>
-    <Chassis_AMX_105AM_2>	30	</Chassis_AMX_105AM_2>
-    <Chassis_BDR_G1B>	31	</Chassis_BDR_G1B>
-    <Chassis_Renault_G1R>	32	</Chassis_Renault_G1R>
-    <Chassis_Renault_G1R_2>	33	</Chassis_Renault_G1R_2>
-    <Chassis_AMX_13F3AM>	34	</Chassis_AMX_13F3AM>
-    <Chassis_AMX_13F3AM_2>	35	</Chassis_AMX_13F3AM_2>
-    <Chassis_AMX_13_90>	36	</Chassis_AMX_13_90>
-    <Chassis_AMX_13_90_2>	37	</Chassis_AMX_13_90_2>
-    <Chassis_RenaultUE57_2>	38	</Chassis_RenaultUE57_2>
-    <Chassis_Lorraine40t>	40	</Chassis_Lorraine40t>
-    <Chassis_Lorraine40t_2>	41	</Chassis_Lorraine40t_2>
-    <Chassis_AMX38>	42	</Chassis_AMX38>
-    <Chassis_AMX38_2>	43	</Chassis_AMX38_2>
-    <Chassis_AMX_50_68t>	44	</Chassis_AMX_50_68t>
-    <Chassis_AMX_12t>	45	</Chassis_AMX_12t>
-    <Chassis_AMX_12t_2>	46	</Chassis_AMX_12t_2>
-    <Chassis_BDR_G1B_2>	47	</Chassis_BDR_G1B_2>
-    <Chassis_AMX_M4_1945>	48	</Chassis_AMX_M4_1945>
-    <Chassis_AMX_M4_1945_2>	49	</Chassis_AMX_M4_1945_2>
-    <Chassis_Lorraine155_50>	50	</Chassis_Lorraine155_50>
-    <Chassis_Lorraine155_50_2>	51	</Chassis_Lorraine155_50_2>
-    <Chassis_Lorraine155_51>	52	</Chassis_Lorraine155_51>
-    <Chassis_Lorraine155_51_2>	53	</Chassis_Lorraine155_51_2>
-    <Chassis_RenaultFT_AC>	54	</Chassis_RenaultFT_AC>
-    <Chassis_RenaultFT_AC_2>	55	</Chassis_RenaultFT_AC_2>
-    <Chassis_RenaultUE57>	57	</Chassis_RenaultUE57>
-    <Chassis_Somua_Sau_40>	63	</Chassis_Somua_Sau_40>
-    <Chassis_Somua_Sau_40_2>	64	</Chassis_Somua_Sau_40_2>
-    <Chassis_S_35CA>	65	</Chassis_S_35CA>
-    <Chassis_S_35CA_2>	66	</Chassis_S_35CA_2>
-    <Chassis_AMX_AC_Mle1946>	70	</Chassis_AMX_AC_Mle1946>
-    <Chassis_AMX_AC_Mle1946_2>	71	</Chassis_AMX_AC_Mle1946_2>
-    <Chassis_AMX50_Foch>	72	</Chassis_AMX50_Foch>
-    <Chassis_AMX50_Foch_2>	73	</Chassis_AMX50_Foch_2>
-    <Chassis_ARL_V39>	76	</Chassis_ARL_V39>
-    <Chassis_ARL_V39_2>	77	</Chassis_ARL_V39_2>
-    <Chassis_Bat_Chatillon155>	78	</Chassis_Bat_Chatillon155>
-    <Chassis_AMX_AC_Mle1948>	80	</Chassis_AMX_AC_Mle1948>
-    <Chassis_AMX_AC_Mle1948_2>	81	</Chassis_AMX_AC_Mle1948_2>
-    <Chassis_Somua_S35>	86	</Chassis_Somua_S35>
-    <Chassis_Somua_S35_2>	87	</Chassis_Somua_S35_2>
-    <Chassis_AMX_50Fosh_155_2>	92	</Chassis_AMX_50Fosh_155_2>
-    <Chassis_ELC_AMX>	93	</Chassis_ELC_AMX>
-    <Chassis_ELC_AMX_2>	94	</Chassis_ELC_AMX_2>
-    <Chassis_FCM_50t>	95	</Chassis_FCM_50t>
-    <Chassis_Bat_Chatillon155_55>	96	</Chassis_Bat_Chatillon155_55>
-    <Chassis_Bat_Chatillon155_55_2>	97	</Chassis_Bat_Chatillon155_55_2>
-    <Chassis_AMX_Ob_Am105>	98	</Chassis_AMX_Ob_Am105>
-    <Chassis_AMX_Ob_Am105_2>	99	</Chassis_AMX_Ob_Am105_2>
-    <Chassis_AMX13_57_100>	111	</Chassis_AMX13_57_100>
-    <Chassis_AMX_Chasseur_de_char_46>	112	</Chassis_AMX_Chasseur_de_char_46>
-    <Chassis_SARL42>	115	</Chassis_SARL42>
-    <Chassis_SARL42_2>	116	</Chassis_SARL42_2>
-    <Chassis_FCM36_20t>	117	</Chassis_FCM36_20t>
-    <Chassis_FCM36_20t_2>	118	</Chassis_FCM36_20t_2>
-    <Chassis_AMX_30>	119	</Chassis_AMX_30>
-    <Chassis_AMX_30_prototype>	120	</Chassis_AMX_30_prototype>
-    <Chassis_AMX_30_prototype_2>	121	</Chassis_AMX_30_prototype_2>
-    <Chassis_RenaultR35>	122	</Chassis_RenaultR35>
-    <Chassis_RenaultR35_2>	123	</Chassis_RenaultR35_2>
-    <Chassis_AMX13_57_100_GrandFinal>	124	</Chassis_AMX13_57_100_GrandFinal>
-    <Chassis_AMX_50_68t_fallout>	125	</Chassis_AMX_50_68t_fallout>
-    <Chassis_M4A1_Revalorise>	126	</Chassis_M4A1_Revalorise>
-    <Chassis_F74_AMX_M4_1949>	129	</Chassis_F74_AMX_M4_1949>
-    <Chassis_Char_de_25t>	130	</Chassis_Char_de_25t>
-    <Chassis_Char_de_25t_2>	133	</Chassis_Char_de_25t_2>
-    <Chassis_F84_Somua_SM>	134	</Chassis_F84_Somua_SM>
-    <Chassis_F81_Char_de_65t>	135	</Chassis_F81_Char_de_65t>
-    <Chassis_F81_Char_de_65t_2>	136	</Chassis_F81_Char_de_65t_2>
-    <Chassis_F83_AMX_M4_Mle1949_Bis>	137	</Chassis_F83_AMX_M4_Mle1949_Bis>
-    <Chassis_F83_AMX_M4_Mle1949_Bis_2>	138	</Chassis_F83_AMX_M4_Mle1949_Bis_2>
-    <Chassis_F82_AMX_M4_Mle1949_Ter>	139	</Chassis_F82_AMX_M4_Mle1949_Ter>
-    <Chassis_F74_AMX_M4_1949_Liberte>	140	</Chassis_F74_AMX_M4_1949_Liberte>
-    <Chassis_F19_Lorraine40t>	141	</Chassis_F19_Lorraine40t>
-    <Chassis_F88_AMX_13_105>	142	</Chassis_F88_AMX_13_105>
-    <Chassis_F87_Batignolles-Chatillon_12t>	143	</Chassis_F87_Batignolles-Chatillon_12t>
-    <Chassis_F87_Batignolles-Chatillon_12t_2>	144	</Chassis_F87_Batignolles-Chatillon_12t_2>
-    <Chassis_F89_Canon_dassaut_de_105>	145	</Chassis_F89_Canon_dassaut_de_105>
-    <Chassis_F64_AMX_50Fosh_B>	146	</Chassis_F64_AMX_50Fosh_B>
-    <Chassis_F97_ELC_EVEN_90>	147	</Chassis_F97_ELC_EVEN_90>
-    <Chassis_F106_Panhard_EBR_75_Mle1954>	148	</Chassis_F106_Panhard_EBR_75_Mle1954>
-    <Chassis_F109_AMD_Panhard_178B>	149	</Chassis_F109_AMD_Panhard_178B>
-    <Chassis_F109_AMD_Panhard_178B_2>	150	</Chassis_F109_AMD_Panhard_178B_2>
-    <Chassis_F107_Hotchkiss_EBR>	151	</Chassis_F107_Hotchkiss_EBR>
-    <Chassis_F107_Hotchkiss_EBR_2>	152	</Chassis_F107_Hotchkiss_EBR_2>
-    <Chassis_F110_Lynx_6x6>	153	</Chassis_F110_Lynx_6x6>
-    <Chassis_F110_Lynx_6x6_2>	154	</Chassis_F110_Lynx_6x6_2>
-    <Chassis_F100_Panhard_EBR_90>	155	</Chassis_F100_Panhard_EBR_90>
-    <Chassis_F100_Panhard_EBR_90_2>	156	</Chassis_F100_Panhard_EBR_90_2>
-    <Chassis_F108_Panhard_EBR_105>	157	</Chassis_F108_Panhard_EBR_105>
-    <Chassis_F111_AM39_Gendron_Somua>	158	</Chassis_F111_AM39_Gendron_Somua>
-    <Chassis_F74_AMX_M4_1949_FL>	159	</Chassis_F74_AMX_M4_1949_FL>
-    <Chassis_M4A1_Revalorise_FL>	160	</Chassis_M4A1_Revalorise_FL>
-    <Chassis_F112_M10_RBFM>	161	</Chassis_F112_M10_RBFM>
-    <Chassis_F85_M4A1_FL10>	162	</Chassis_F85_M4A1_FL10>
-    <Chassis_F113_Bretagne_Panther>	163	</Chassis_F113_Bretagne_Panther>
-    <Chassis_F42_AMR_35>	164	</Chassis_F42_AMR_35>
-    <Chassis_F114_Projet_4_1>	165	</Chassis_F114_Projet_4_1>
-    <Chassis_F116_Bat_Chatillon_Bourrasque>	166	</Chassis_F116_Bat_Chatillon_Bourrasque>
-    <Chassis_F97_ELC_EVEN_90_FL>	167	</Chassis_F97_ELC_EVEN_90_FL>
-    <Chassis_F115_Lorraine_50t>	168	</Chassis_F115_Lorraine_50t>
-    <Chassis_F117_Alt_Proto_AMX_30>	169	</Chassis_F117_Alt_Proto_AMX_30>
-    <Chassis_F118_Char_Mle_75>	170	</Chassis_F118_Char_Mle_75>
-    <Chassis_F124_AMX_13FL11>	172	</Chassis_F124_AMX_13FL11>
-    <Chassis_F119_Projet_Murat>	174	</Chassis_F119_Projet_Murat>
-    <Chassis_F83_AMX_M4_Mle1949_Bis_2_FL>	501	</Chassis_F83_AMX_M4_Mle1949_Bis_2_FL>
-    <Chassis_AMX_AC_Mle1948_2_FL>	502	</Chassis_AMX_AC_Mle1948_2_FL>
-    <Chassis_F88_AMX_13_105_7x7>	503	</Chassis_F88_AMX_13_105_7x7>
-    <Chassis_F64_AMX_50Fosh_B_7x7>	504	</Chassis_F64_AMX_50Fosh_B_7x7>
-    <Chassis_F87_Batignolles-Chatillon_12t_2_FL>	505	</Chassis_F87_Batignolles-Chatillon_12t_2_FL>
-    <Chassis_AMX_50_100_2_FL>	506	</Chassis_AMX_50_100_2_FL>
-    <Chassis_F110_Lynx_6x6_2_FL>	507	</Chassis_F110_Lynx_6x6_2_FL>
-    <Chassis_AMX_13_75_3_FL>	31001	</Chassis_AMX_13_75_3_FL>
-    <Chassis_AMX_13_90_2_FL>	31003	</Chassis_AMX_13_90_2_FL>
-    <Chassis_AMC_35_SH>	10000	</Chassis_AMC_35_SH>
-    <Chassis_AMX13_57_100_SH>	10001	</Chassis_AMX13_57_100_SH>
-    <Chassis_Bat_Chatillon25t_2_SH>	10002	</Chassis_Bat_Chatillon25t_2_SH>
-    <Chassis_F126_Char_Lourd_AP58>	31002	</Chassis_F126_Char_Lourd_AP58>
-    <Chassis_F128_Schneider_90_105_DCA_Oie>	31004	</Chassis_F128_Schneider_90_105_DCA_Oie>
-    <Chassis_F19_Lorraine40t_02>	31005	</Chassis_F19_Lorraine40t_02>
-    <Chassis_F129_Schneider_120_AC_Gendarme>	31006	</Chassis_F129_Schneider_120_AC_Gendarme>
-    <Chassis_Bat_Chatillon25t_2_7x7>	31007	</Chassis_Bat_Chatillon25t_2_7x7>
-    <Chassis_F130_AMX_Tracteur_D>	31008	</Chassis_F130_AMX_Tracteur_D>
-    <Chassis_AMX_50_68t_bob>	31009	</Chassis_AMX_50_68t_bob>
-    <Chassis_F131_Coutelas>	31010	</Chassis_F131_Coutelas>
-    <Chassis_F133_Projet_57>	31011	</Chassis_F133_Projet_57>
-    <Chassis_F134_ARL_Projet_F>	31012	</Chassis_F134_ARL_Projet_F>
-    <Chassis_F133_Projet_57_Ampere>	31013	</Chassis_F133_Projet_57_Ampere>
-    <Chassis_AMX_Chasseur_de_char_46_02>	31014	</Chassis_AMX_Chasseur_de_char_46_02>
-    <Chassis_F116_Bat_Chatillon_Bourrasque_02>	31015	</Chassis_F116_Bat_Chatillon_Bourrasque_02>
-    <Chassis_F135_Schneider_120_AC_Gendarme_02>	31016	</Chassis_F135_Schneider_120_AC_Gendarme_02>
-    <Chassis_F123_ERAC_105_Proto>	31017	</Chassis_F123_ERAC_105_Proto>
-    <Chassis_F137_Tornade>	31018	</Chassis_F137_Tornade>
-    <Chassis_AMX_AC_Mle1948_2_IGR>	60001	</Chassis_AMX_AC_Mle1948_2_IGR>
-    <Chassis_AMX_13_90_2_IGR>	60002	</Chassis_AMX_13_90_2_IGR>
-    <Chassis_AMX_50_100_2_IGR>	60003	</Chassis_AMX_50_100_2_IGR>
-    <Chassis_105_leFH18B2_IGR>	60004	</Chassis_105_leFH18B2_IGR>
-    <Chassis_S_35CA_2_IGR>	60005	</Chassis_S_35CA_2_IGR>
-    <Chassis_ELC_AMX_2_IGR>	60006	</Chassis_ELC_AMX_2_IGR>
-    <Chassis_Bat_Chatillon25t_2_IGR>	60007	</Chassis_Bat_Chatillon25t_2_IGR>
-    <Chassis_AMX_13F3AM_2_MapsTraining_Dummy_SPG_2>	25	</Chassis_AMX_13F3AM_2_MapsTraining_Dummy_SPG_2>
-    <Chassis_AMX_AC_Mle1946_bootcamp>	1002	</Chassis_AMX_AC_Mle1946_bootcamp>
-    <Chassis_F142_Projet_Louis_FL10_90>	31019	</Chassis_F142_Projet_Louis_FL10_90>
-  </ids>
-  <shared></shared>
+  <xmlns:xmlref>	http://bwt/xmlref	</xmlns:xmlref>
+  <shared>
+    <Chassis_105_leFH18B2>
+      <id>	15	</id>
+    </Chassis_105_leFH18B2>
+    <Chassis_105_leFH18B2_IGR>
+      <id>	60004	</id>
+    </Chassis_105_leFH18B2_IGR>
+    <Chassis_AMC_35_SH>
+      <id>	10000	</id>
+    </Chassis_AMC_35_SH>
+    <Chassis_AMX13_57_100>
+      <id>	111	</id>
+    </Chassis_AMX13_57_100>
+    <Chassis_AMX13_57_100_GrandFinal>
+      <id>	124	</id>
+    </Chassis_AMX13_57_100_GrandFinal>
+    <Chassis_AMX13_57_100_SH>
+      <id>	10001	</id>
+    </Chassis_AMX13_57_100_SH>
+    <Chassis_AMX38>
+      <id>	42	</id>
+    </Chassis_AMX38>
+    <Chassis_AMX38_2>
+      <id>	43	</id>
+    </Chassis_AMX38_2>
+    <Chassis_AMX40>
+      <id>	19	</id>
+    </Chassis_AMX40>
+    <Chassis_AMX40_2>
+      <id>	20	</id>
+    </Chassis_AMX40_2>
+    <Chassis_AMX50_Foch>
+      <id>	72	</id>
+    </Chassis_AMX50_Foch>
+    <Chassis_AMX50_Foch_2>
+      <id>	73	</id>
+    </Chassis_AMX50_Foch_2>
+    <Chassis_AMX_105AM>
+      <id>	29	</id>
+    </Chassis_AMX_105AM>
+    <Chassis_AMX_105AM_2>
+      <id>	30	</id>
+    </Chassis_AMX_105AM_2>
+    <Chassis_AMX_12t>
+      <id>	45	</id>
+    </Chassis_AMX_12t>
+    <Chassis_AMX_12t_2>
+      <id>	46	</id>
+    </Chassis_AMX_12t_2>
+    <Chassis_AMX_13F3AM>
+      <id>	34	</id>
+    </Chassis_AMX_13F3AM>
+    <Chassis_AMX_13F3AM_2>
+      <id>	35	</id>
+    </Chassis_AMX_13F3AM_2>
+    <Chassis_AMX_13F3AM_2_MapsTraining_Dummy_SPG_2>
+      <id>	25	</id>
+    </Chassis_AMX_13F3AM_2_MapsTraining_Dummy_SPG_2>
+    <Chassis_AMX_13_75_2>
+      <id>	0	</id>
+    </Chassis_AMX_13_75_2>
+    <Chassis_AMX_13_75_3>
+      <id>	1	</id>
+    </Chassis_AMX_13_75_3>
+    <Chassis_AMX_13_75_3_FL>
+      <id>	31001	</id>
+    </Chassis_AMX_13_75_3_FL>
+    <Chassis_AMX_13_90>
+      <id>	36	</id>
+    </Chassis_AMX_13_90>
+    <Chassis_AMX_13_90_2>
+      <id>	37	</id>
+    </Chassis_AMX_13_90_2>
+    <Chassis_AMX_13_90_2_FL>
+      <id>	31003	</id>
+    </Chassis_AMX_13_90_2_FL>
+    <Chassis_AMX_13_90_2_IGR>
+      <id>	60002	</id>
+    </Chassis_AMX_13_90_2_IGR>
+    <Chassis_AMX_30>
+      <id>	119	</id>
+    </Chassis_AMX_30>
+    <Chassis_AMX_30_prototype>
+      <id>	120	</id>
+    </Chassis_AMX_30_prototype>
+    <Chassis_AMX_30_prototype_2>
+      <id>	121	</id>
+    </Chassis_AMX_30_prototype_2>
+    <Chassis_AMX_50Fosh_155_2>
+      <id>	92	</id>
+    </Chassis_AMX_50Fosh_155_2>
+    <Chassis_AMX_50_100>
+      <id>	21	</id>
+    </Chassis_AMX_50_100>
+    <Chassis_AMX_50_100_2>
+      <id>	22	</id>
+    </Chassis_AMX_50_100_2>
+    <Chassis_AMX_50_100_2_FL>
+      <id>	506	</id>
+    </Chassis_AMX_50_100_2_FL>
+    <Chassis_AMX_50_100_2_IGR>
+      <id>	60003	</id>
+    </Chassis_AMX_50_100_2_IGR>
+    <Chassis_AMX_50_120>
+      <id>	27	</id>
+    </Chassis_AMX_50_120>
+    <Chassis_AMX_50_120_2>
+      <id>	28	</id>
+    </Chassis_AMX_50_120_2>
+    <Chassis_AMX_50_68t>
+      <id>	44	</id>
+    </Chassis_AMX_50_68t>
+    <Chassis_AMX_50_68t_bob>
+      <id>	31009	</id>
+    </Chassis_AMX_50_68t_bob>
+    <Chassis_AMX_50_68t_fallout>
+      <id>	125	</id>
+    </Chassis_AMX_50_68t_fallout>
+    <Chassis_AMX_AC_Mle1946>
+      <id>	70	</id>
+    </Chassis_AMX_AC_Mle1946>
+    <Chassis_AMX_AC_Mle1946_2>
+      <id>	71	</id>
+    </Chassis_AMX_AC_Mle1946_2>
+    <Chassis_AMX_AC_Mle1946_bootcamp>
+      <id>	1002	</id>
+    </Chassis_AMX_AC_Mle1946_bootcamp>
+    <Chassis_AMX_AC_Mle1948>
+      <id>	80	</id>
+    </Chassis_AMX_AC_Mle1948>
+    <Chassis_AMX_AC_Mle1948_2>
+      <id>	81	</id>
+    </Chassis_AMX_AC_Mle1948_2>
+    <Chassis_AMX_AC_Mle1948_2_FL>
+      <id>	502	</id>
+    </Chassis_AMX_AC_Mle1948_2_FL>
+    <Chassis_AMX_AC_Mle1948_2_IGR>
+      <id>	60001	</id>
+    </Chassis_AMX_AC_Mle1948_2_IGR>
+    <Chassis_AMX_Chasseur_de_char_46>
+      <id>	112	</id>
+    </Chassis_AMX_Chasseur_de_char_46>
+    <Chassis_AMX_Chasseur_de_char_46_02>
+      <id>	31014	</id>
+    </Chassis_AMX_Chasseur_de_char_46_02>
+    <Chassis_AMX_M4_1945>
+      <id>	48	</id>
+    </Chassis_AMX_M4_1945>
+    <Chassis_AMX_M4_1945_2>
+      <id>	49	</id>
+    </Chassis_AMX_M4_1945_2>
+    <Chassis_AMX_Ob_Am105>
+      <id>	98	</id>
+    </Chassis_AMX_Ob_Am105>
+    <Chassis_AMX_Ob_Am105_2>
+      <id>	99	</id>
+    </Chassis_AMX_Ob_Am105_2>
+    <Chassis_ARL_44>
+      <id>	17	</id>
+    </Chassis_ARL_44>
+    <Chassis_ARL_44_2>
+      <id>	18	</id>
+    </Chassis_ARL_44_2>
+    <Chassis_ARL_V39>
+      <id>	76	</id>
+    </Chassis_ARL_V39>
+    <Chassis_ARL_V39_2>
+      <id>	77	</id>
+    </Chassis_ARL_V39_2>
+    <Chassis_B1>
+      <id>	8	</id>
+    </Chassis_B1>
+    <Chassis_B1_2>
+      <id>	9	</id>
+    </Chassis_B1_2>
+    <Chassis_BDR_G1B>
+      <id>	31	</id>
+    </Chassis_BDR_G1B>
+    <Chassis_BDR_G1B_2>
+      <id>	47	</id>
+    </Chassis_BDR_G1B_2>
+    <Chassis_Bat_Chatillon155>
+      <id>	78	</id>
+    </Chassis_Bat_Chatillon155>
+    <Chassis_Bat_Chatillon155_55>
+      <id>	96	</id>
+    </Chassis_Bat_Chatillon155_55>
+    <Chassis_Bat_Chatillon155_55_2>
+      <id>	97	</id>
+    </Chassis_Bat_Chatillon155_55_2>
+    <Chassis_Bat_Chatillon25t_2>
+      <id>	26	</id>
+    </Chassis_Bat_Chatillon25t_2>
+    <Chassis_Bat_Chatillon25t_2_7x7>
+      <id>	31007	</id>
+    </Chassis_Bat_Chatillon25t_2_7x7>
+    <Chassis_Bat_Chatillon25t_2_IGR>
+      <id>	60007	</id>
+    </Chassis_Bat_Chatillon25t_2_IGR>
+    <Chassis_Bat_Chatillon25t_2_SH>
+      <id>	10002	</id>
+    </Chassis_Bat_Chatillon25t_2_SH>
+    <Chassis_Char_de_25t>
+      <id>	130	</id>
+    </Chassis_Char_de_25t>
+    <Chassis_Char_de_25t_2>
+      <id>	133	</id>
+    </Chassis_Char_de_25t_2>
+    <Chassis_D1_2>
+      <id>	12	</id>
+    </Chassis_D1_2>
+    <Chassis_D1_2_2>
+      <id>	13	</id>
+    </Chassis_D1_2_2>
+    <Chassis_D2>
+      <id>	2	</id>
+    </Chassis_D2>
+    <Chassis_D2_2>
+      <id>	3	</id>
+    </Chassis_D2_2>
+    <Chassis_ELC_AMX>
+      <id>	93	</id>
+    </Chassis_ELC_AMX>
+    <Chassis_ELC_AMX_2>
+      <id>	94	</id>
+    </Chassis_ELC_AMX_2>
+    <Chassis_ELC_AMX_2_IGR>
+      <id>	60006	</id>
+    </Chassis_ELC_AMX_2_IGR>
+    <Chassis_F100_Panhard_EBR_90>
+      <id>	155	</id>
+    </Chassis_F100_Panhard_EBR_90>
+    <Chassis_F100_Panhard_EBR_90_2>
+      <id>	156	</id>
+    </Chassis_F100_Panhard_EBR_90_2>
+    <Chassis_F106_Panhard_EBR_75_Mle1954>
+      <id>	148	</id>
+    </Chassis_F106_Panhard_EBR_75_Mle1954>
+    <Chassis_F107_Hotchkiss_EBR>
+      <id>	151	</id>
+    </Chassis_F107_Hotchkiss_EBR>
+    <Chassis_F107_Hotchkiss_EBR_2>
+      <id>	152	</id>
+    </Chassis_F107_Hotchkiss_EBR_2>
+    <Chassis_F108_Panhard_EBR_105>
+      <id>	157	</id>
+    </Chassis_F108_Panhard_EBR_105>
+    <Chassis_F109_AMD_Panhard_178B>
+      <id>	149	</id>
+    </Chassis_F109_AMD_Panhard_178B>
+    <Chassis_F109_AMD_Panhard_178B_2>
+      <id>	150	</id>
+    </Chassis_F109_AMD_Panhard_178B_2>
+    <Chassis_F110_Lynx_6x6>
+      <id>	153	</id>
+    </Chassis_F110_Lynx_6x6>
+    <Chassis_F110_Lynx_6x6_2>
+      <id>	154	</id>
+    </Chassis_F110_Lynx_6x6_2>
+    <Chassis_F110_Lynx_6x6_2_FL>
+      <id>	507	</id>
+    </Chassis_F110_Lynx_6x6_2_FL>
+    <Chassis_F111_AM39_Gendron_Somua>
+      <id>	158	</id>
+    </Chassis_F111_AM39_Gendron_Somua>
+    <Chassis_F112_M10_RBFM>
+      <id>	161	</id>
+    </Chassis_F112_M10_RBFM>
+    <Chassis_F113_Bretagne_Panther>
+      <id>	163	</id>
+    </Chassis_F113_Bretagne_Panther>
+    <Chassis_F114_Projet_4_1>
+      <id>	165	</id>
+    </Chassis_F114_Projet_4_1>
+    <Chassis_F115_Lorraine_50t>
+      <id>	168	</id>
+    </Chassis_F115_Lorraine_50t>
+    <Chassis_F116_Bat_Chatillon_Bourrasque>
+      <id>	166	</id>
+    </Chassis_F116_Bat_Chatillon_Bourrasque>
+    <Chassis_F116_Bat_Chatillon_Bourrasque_02>
+      <id>	31015	</id>
+    </Chassis_F116_Bat_Chatillon_Bourrasque_02>
+    <Chassis_F117_Alt_Proto_AMX_30>
+      <id>	169	</id>
+    </Chassis_F117_Alt_Proto_AMX_30>
+    <Chassis_F118_Char_Mle_75>
+      <id>	170	</id>
+    </Chassis_F118_Char_Mle_75>
+    <Chassis_F119_Projet_Murat>
+      <id>	174	</id>
+    </Chassis_F119_Projet_Murat>
+    <Chassis_F121_G1L>
+      <id>	31021	</id>
+    </Chassis_F121_G1L>
+    <Chassis_F123_ERAC_105_Proto>
+      <id>	31017	</id>
+    </Chassis_F123_ERAC_105_Proto>
+    <Chassis_F124_AMX_13FL11>
+      <id>	172	</id>
+    </Chassis_F124_AMX_13FL11>
+    <Chassis_F126_Char_Lourd_AP58>
+      <id>	31002	</id>
+    </Chassis_F126_Char_Lourd_AP58>
+    <Chassis_F128_Schneider_90_105_DCA_Oie>
+      <id>	31004	</id>
+    </Chassis_F128_Schneider_90_105_DCA_Oie>
+    <Chassis_F129_Schneider_120_AC_Gendarme>
+      <id>	31006	</id>
+    </Chassis_F129_Schneider_120_AC_Gendarme>
+    <Chassis_F130_AMX_Tracteur_D>
+      <id>	31008	</id>
+    </Chassis_F130_AMX_Tracteur_D>
+    <Chassis_F131_Coutelas>
+      <id>	31010	</id>
+    </Chassis_F131_Coutelas>
+    <Chassis_F133_Projet_57>
+      <id>	31011	</id>
+    </Chassis_F133_Projet_57>
+    <Chassis_F133_Projet_57_Ampere>
+      <id>	31013	</id>
+    </Chassis_F133_Projet_57_Ampere>
+    <Chassis_F134_ARL_Projet_F>
+      <id>	31012	</id>
+    </Chassis_F134_ARL_Projet_F>
+    <Chassis_F135_Schneider_120_AC_Gendarme_02>
+      <id>	31016	</id>
+    </Chassis_F135_Schneider_120_AC_Gendarme_02>
+    <Chassis_F137_Tornade>
+      <id>	31018	</id>
+    </Chassis_F137_Tornade>
+    <Chassis_F142_Projet_Louis_FL10_90>
+      <id>	31019	</id>
+    </Chassis_F142_Projet_Louis_FL10_90>
+    <Chassis_F19_Lorraine40t>
+      <id>	141	</id>
+    </Chassis_F19_Lorraine40t>
+    <Chassis_F19_Lorraine40t_02>
+      <id>	31005	</id>
+    </Chassis_F19_Lorraine40t_02>
+    <Chassis_F42_AMR_35>
+      <id>	164	</id>
+    </Chassis_F42_AMR_35>
+    <Chassis_F64_AMX_50Fosh_B>
+      <id>	146	</id>
+    </Chassis_F64_AMX_50Fosh_B>
+    <Chassis_F64_AMX_50Fosh_B_7x7>
+      <id>	504	</id>
+    </Chassis_F64_AMX_50Fosh_B_7x7>
+    <Chassis_F74_AMX_M4_1949>
+      <id>	129	</id>
+    </Chassis_F74_AMX_M4_1949>
+    <Chassis_F74_AMX_M4_1949_FL>
+      <id>	159	</id>
+    </Chassis_F74_AMX_M4_1949_FL>
+    <Chassis_F74_AMX_M4_1949_Liberte>
+      <id>	140	</id>
+    </Chassis_F74_AMX_M4_1949_Liberte>
+    <Chassis_F81_Char_de_65t>
+      <id>	135	</id>
+    </Chassis_F81_Char_de_65t>
+    <Chassis_F81_Char_de_65t_2>
+      <id>	136	</id>
+    </Chassis_F81_Char_de_65t_2>
+    <Chassis_F82_AMX_M4_Mle1949_Ter>
+      <id>	139	</id>
+    </Chassis_F82_AMX_M4_Mle1949_Ter>
+    <Chassis_F83_AMX_M4_Mle1949_Bis>
+      <id>	137	</id>
+    </Chassis_F83_AMX_M4_Mle1949_Bis>
+    <Chassis_F83_AMX_M4_Mle1949_Bis_2>
+      <id>	138	</id>
+    </Chassis_F83_AMX_M4_Mle1949_Bis_2>
+    <Chassis_F83_AMX_M4_Mle1949_Bis_2_FL>
+      <id>	501	</id>
+    </Chassis_F83_AMX_M4_Mle1949_Bis_2_FL>
+    <Chassis_F84_Somua_SM>
+      <id>	134	</id>
+    </Chassis_F84_Somua_SM>
+    <Chassis_F85_M4A1_FL10>
+      <id>	162	</id>
+    </Chassis_F85_M4A1_FL10>
+    <Chassis_F87_Batignolles-Chatillon_12t>
+      <id>	143	</id>
+    </Chassis_F87_Batignolles-Chatillon_12t>
+    <Chassis_F87_Batignolles-Chatillon_12t_2>
+      <id>	144	</id>
+    </Chassis_F87_Batignolles-Chatillon_12t_2>
+    <Chassis_F87_Batignolles-Chatillon_12t_2_FL>
+      <id>	505	</id>
+    </Chassis_F87_Batignolles-Chatillon_12t_2_FL>
+    <Chassis_F88_AMX_13_105>
+      <id>	142	</id>
+    </Chassis_F88_AMX_13_105>
+    <Chassis_F88_AMX_13_105_7x7>
+      <id>	503	</id>
+    </Chassis_F88_AMX_13_105_7x7>
+    <Chassis_F89_Canon_dassaut_de_105>
+      <id>	145	</id>
+    </Chassis_F89_Canon_dassaut_de_105>
+    <Chassis_F97_ELC_EVEN_90>
+      <id>	147	</id>
+    </Chassis_F97_ELC_EVEN_90>
+    <Chassis_F97_ELC_EVEN_90_FL>
+      <id>	167	</id>
+    </Chassis_F97_ELC_EVEN_90_FL>
+    <Chassis_FCM36_20t>
+      <id>	117	</id>
+    </Chassis_FCM36_20t>
+    <Chassis_FCM36_20t_2>
+      <id>	118	</id>
+    </Chassis_FCM36_20t_2>
+    <Chassis_FCM_36Pak40>
+      <id>	16	</id>
+    </Chassis_FCM_36Pak40>
+    <Chassis_FCM_50t>
+      <id>	95	</id>
+    </Chassis_FCM_50t>
+    <Chassis_Hotchkiss_H35>
+      <id>	10	</id>
+    </Chassis_Hotchkiss_H35>
+    <Chassis_Hotchkiss_H35_2>
+      <id>	11	</id>
+    </Chassis_Hotchkiss_H35_2>
+    <Chassis_Lorraine155_50>
+      <id>	50	</id>
+    </Chassis_Lorraine155_50>
+    <Chassis_Lorraine155_50_2>
+      <id>	51	</id>
+    </Chassis_Lorraine155_50_2>
+    <Chassis_Lorraine155_51>
+      <id>	52	</id>
+    </Chassis_Lorraine155_51>
+    <Chassis_Lorraine155_51_2>
+      <id>	53	</id>
+    </Chassis_Lorraine155_51_2>
+    <Chassis_Lorraine39_L_AM>
+      <id>	23	</id>
+    </Chassis_Lorraine39_L_AM>
+    <Chassis_Lorraine39_L_AM_2>
+      <id>	24	</id>
+    </Chassis_Lorraine39_L_AM_2>
+    <Chassis_Lorraine40t>
+      <id>	40	</id>
+    </Chassis_Lorraine40t>
+    <Chassis_Lorraine40t_2>
+      <id>	41	</id>
+    </Chassis_Lorraine40t_2>
+    <Chassis_M4A1_Revalorise>
+      <id>	126	</id>
+    </Chassis_M4A1_Revalorise>
+    <Chassis_M4A1_Revalorise_FL>
+      <id>	160	</id>
+    </Chassis_M4A1_Revalorise_FL>
+    <Chassis_RenaultBS>
+      <id>	6	</id>
+    </Chassis_RenaultBS>
+    <Chassis_RenaultBS2>
+      <id>	7	</id>
+    </Chassis_RenaultBS2>
+    <Chassis_RenaultFT>
+      <id>	4	</id>
+    </Chassis_RenaultFT>
+    <Chassis_RenaultFT2>
+      <id>	5	</id>
+    </Chassis_RenaultFT2>
+    <Chassis_RenaultFT_AC>
+      <id>	54	</id>
+    </Chassis_RenaultFT_AC>
+    <Chassis_RenaultFT_AC_2>
+      <id>	55	</id>
+    </Chassis_RenaultFT_AC_2>
+    <Chassis_RenaultR35>
+      <id>	122	</id>
+    </Chassis_RenaultR35>
+    <Chassis_RenaultR35_2>
+      <id>	123	</id>
+    </Chassis_RenaultR35_2>
+    <Chassis_RenaultUE57>
+      <id>	57	</id>
+    </Chassis_RenaultUE57>
+    <Chassis_RenaultUE57_2>
+      <id>	38	</id>
+    </Chassis_RenaultUE57_2>
+    <Chassis_Renault_G1R>
+      <id>	32	</id>
+    </Chassis_Renault_G1R>
+    <Chassis_Renault_G1R_2>
+      <id>	33	</id>
+    </Chassis_Renault_G1R_2>
+    <Chassis_SARL42>
+      <id>	115	</id>
+    </Chassis_SARL42>
+    <Chassis_SARL42_2>
+      <id>	116	</id>
+    </Chassis_SARL42_2>
+    <Chassis_S_35CA>
+      <id>	65	</id>
+    </Chassis_S_35CA>
+    <Chassis_S_35CA_2>
+      <id>	66	</id>
+    </Chassis_S_35CA_2>
+    <Chassis_S_35CA_2_IGR>
+      <id>	60005	</id>
+    </Chassis_S_35CA_2_IGR>
+    <Chassis_Somua_S35>
+      <id>	86	</id>
+    </Chassis_Somua_S35>
+    <Chassis_Somua_S35_2>
+      <id>	87	</id>
+    </Chassis_Somua_S35_2>
+    <Chassis_Somua_Sau_40>
+      <id>	63	</id>
+    </Chassis_Somua_Sau_40>
+    <Chassis_Somua_Sau_40_2>
+      <id>	64	</id>
+    </Chassis_Somua_Sau_40_2>
+  </shared>
 </chassis.xml>

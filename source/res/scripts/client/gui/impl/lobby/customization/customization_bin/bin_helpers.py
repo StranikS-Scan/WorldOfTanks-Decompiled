@@ -127,7 +127,7 @@ class _StyleUIDataPacker(_ItemUIDataPacker):
     def __call__(self, desc):
         model = super(_StyleUIDataPacker, self).__call__(desc)
         model.setTooltip(TOOLTIPS_CONSTANTS.TECH_CUSTOMIZATION_ITEM_ICON)
-        model.setIsFromStorage(desc.item.isInInventory)
+        model.setIsFromStorage(desc.isFromInventory)
         return model
 
 

@@ -37,7 +37,7 @@ class MTLVideoReward(LootboxVideoRewardView):
 
     def _onClose(self):
         try:
-            self._vehicles, self._videoRes, self._isGuaranteedReward = next(self.__dataIter)
+            self._vehicles, self._videoRes, self._isGuaranteedReward, self._lootbox = next(self.__dataIter)
             self._soundControl.stop()
             self._update()
         except StopIteration:

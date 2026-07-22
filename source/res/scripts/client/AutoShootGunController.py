@@ -25,7 +25,7 @@ if typing.TYPE_CHECKING:
     from GenericComponents import ParticleComponent
     from Vehicular import GunRecoilAnimator
 _logger = logging.getLogger(__name__)
-_RTPC_SHELLS_REMAIN = 'RTPC_ext_autoguns_medium_counter'
+_RTPC_SHELLS_REMAIN = 'RTPC_ext_autoguns_counter'
 _RTPC_RATE = 'RTPC_ext_autoguns_medium_rate'
 
 def getPlayerVehicleAutoShootGunController():
@@ -110,22 +110,42 @@ class AutoShootGunShootingAnimator(CallbackDelayer, EventsHandler):
         if stateStatus is None or stateStatus.state != AutoShootGunState.SHOOT:
             self.stopCallback(self.__updateBurst)
             self.stopCallback(self.receiveShotsImpulse)
+            BigWorld.callback(SERVER_TICK_LENGTH / 4, lambda *args: self.stopCallback(self.__showShooting))
             self.__deactivateBurst(burstInProgress)
             return
         elif not burstInProgress:
             self.delayCallback(SERVER_TICK_LENGTH, self.__updateBurst)
             self.delayCallback(SERVER_TICK_LENGTH / 2, self.receiveShotsImpulse, SERVER_TICK_LENGTH / 2)
+            shotInterval = self.__vehicle.typeDescriptor.gun.autoShoot.shotInterval
+            self.delayCallback(shotInterval, self.__showShooting, shotInterval)
             self.__activateBurst(gunIndex)
             return
         else:
             self.__updateBurst()
             return
 
+    def __showShooting(self, interval):
+        vehicle = self.__vehicle
+        stages, effects, _ = vehicle.typeDescriptor.gun.effects
+        if not stages:
+            return
+        data = {'entity': vehicle}
+        effListPlayer = EffectsListPlayer(effects, stages, **data)
+        data['effPlayer'] = effListPlayer
+        effListPlayer.play(vehicle.appearance.compoundModel, callbackFunc=functools.partial(self.__stopSound, data))
+        return interval
+
+    def __stopSound(self, data):
+        if data.get('effPlayer') is not None:
+            data['effPlayer'].stop()
+        return
+
     def __activateBurst(self, gunIndex):
         self.__showBurstStart(gunIndex)
         self.__updateBurst()
         gunSoundObject = getGunSoundObject(self.__vehicle)
         gunSoundObject.play(self.__activationSound)
+        self.__showShooting(0)
 
     def __deactivateBurst(self, burstInProgress):
         getGunSoundObject(self.__vehicle).play(self.__deactivationSound if burstInProgress else '')
@@ -239,21 +259,6 @@ class AutoShootGunController(BigWorld.DynamicScriptComponent):
 
     def onLeaveWorld(self):
         self.onDestroy()
-
-    def showShooting(self):
-        vehicle = self.entity
-        stages, effects, _ = vehicle.typeDescriptor.gun.effects
-        if not stages:
-            return
-        data = {'entity': vehicle}
-        effListPlayer = EffectsListPlayer(effects, stages, **data)
-        data['effPlayer'] = effListPlayer
-        effListPlayer.play(vehicle.appearance.compoundModel, callbackFunc=functools.partial(self.__stopSound, data))
-
-    def __stopSound(self, data):
-        if data.get('effPlayer') is not None:
-            data['effPlayer'].stop()
-        return
 
     def __isAvatarReady(self):
         player = BigWorld.player()

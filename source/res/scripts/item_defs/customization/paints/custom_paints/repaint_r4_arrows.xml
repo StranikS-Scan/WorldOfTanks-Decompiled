@@ -1,0 +1,44 @@
+<repaint_r4_arrows.xml>
+  <itemGroup>
+    <name>	R4	</name>
+    <userString>	#vehicle_customization:repaint/color_group_04	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	paints 20g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <paint>
+      <id>	205	</id>
+      <texture>	gui/maps/vehicles/repaints/japan_color_03.png	</texture>
+      <color>	15.000000 38.000000 24.000000 255.000000	</color>
+      <gloss>	0.509000	</gloss>
+      <metallic>	0.230000	</metallic>
+      <userString>	#vehicle_customization:repaint/r4_arrows	</userString>
+    </paint>
+    <paint>
+      <id>	206	</id>
+      <texture>	gui/maps/vehicles/repaints/primer_marmot_01.png	</texture>
+      <color>	48.000000 23.000000 9.000000 255.000000	</color>
+      <gloss>	0.6	</gloss>
+      <metallic>	0.360000	</metallic>
+      <userString>	#vehicle_customization:repaint/r4_hammered	</userString>
+    </paint>
+    <paint>
+      <id>	207	</id>
+      <texture>	gui/maps/vehicles/repaints/poland_color_07.png	</texture>
+      <color>	118.000000 131.000000 135.000000 255.000000	</color>
+      <gloss>	0.509000	</gloss>
+      <metallic>	0.230000	</metallic>
+      <userString>	#vehicle_customization:repaint/r4_allies	</userString>
+    </paint>
+    <usages>
+      <item>
+        <componentType>	ALL	</componentType>
+        <cost>	1	</cost>
+      </item>
+    </usages>
+  </itemGroup>
+</repaint_r4_arrows.xml>

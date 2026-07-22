@@ -1,0 +1,84 @@
+<camouflage_the_first_horseman_label.xml>
+  <france:F18_Bat_Chatillon25t8>	ussr	</france:F18_Bat_Chatillon25t8>
+  <france:F18_Bat_Chatillon25t0>	germany	</france:F18_Bat_Chatillon25t0>
+  <france:F18_Bat_Chatillon25t7>	usa	</france:F18_Bat_Chatillon25t7>
+  <france:F10_AMX_50B_bob7>	china	</france:F10_AMX_50B_bob7>
+  <france:F10_AMX_50B_bob9>	france	</france:F10_AMX_50B_bob9>
+  <france:F18_Bat_Chatillon25t6>	uk	</france:F18_Bat_Chatillon25t6>
+  <france:F18_Bat_Chatillon25t3>	japan	</france:F18_Bat_Chatillon25t3>
+  <france:F10_AMX_50B_bob8>	czech	</france:F10_AMX_50B_bob8>
+  <france:F18_Bat_Chatillon25t5>	sweden	</france:F18_Bat_Chatillon25t5>
+  <france:F18_Bat_Chatillon25t4>	poland	</france:F18_Bat_Chatillon25t4>
+  <france:F18_Bat_Chatillon25t2>	italy	</france:F18_Bat_Chatillon25t2>
+  <france:F18_Bat_Chatillon25t1>	intunion	</france:F18_Bat_Chatillon25t1>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/opaque	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	MT camouflages 50g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <levels>	8 9 10	</levels>
+      </include>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R47_ISU-152_Zveroboj ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <camouflage>
+      <id>	185	</id>
+      <texture>	vehicles/russian/Camouflage/horseman_30.dds	</texture>
+      <description>	#vehicle_customization:camouflage/the_first_horseman/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/the_first_horseman/label	</userString>
+      <tags>	fullRGB	</tags>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	255 0 0 255	</c0>
+          <c1>	0 255 0 255	</c1>
+          <c2>	0 0 255 255	</c2>
+          <c3>	0 0 0 255	</c3>
+        </palette>
+      </palettes>
+      <rotation>
+        <HULL>	0.261799	</HULL>
+        <TURRET>	0.261799	</TURRET>
+        <GUN>	0.261799	</GUN>
+      </rotation>
+      <tiling>
+        <france:F108_Panhard_EBR_105>	4 4 13.2314 14.65	</france:F108_Panhard_EBR_105>
+        <france:F10_AMX_50B>	3 3 13.2114 14.51	</france:F10_AMX_50B>
+        <france:F10_AMX_50B_bob>	3 3 13.2114 14.51	</france:F10_AMX_50B_bob>
+        <france:F18_Bat_Chatillon25t>	2.7 2.7 12.9414 15.11	</france:F18_Bat_Chatillon25t>
+        <france:F18_Bat_Chatillon25t_7x7>	2.7 2.7 12.9414 15.11	</france:F18_Bat_Chatillon25t_7x7>
+        <france:F84_Somua_SM>	2.7 2.7 12.8814 15.27	</france:F84_Somua_SM>
+        <germany:G121_Grille_15_L63>	11 11 14.2014 15.06	</germany:G121_Grille_15_L63>
+        <germany:G99_RhB_Waffentrager>	5.5 5.5 13.4014 14.93	</germany:G99_RhB_Waffentrager>
+        <italy:It08_Progetto_M40_mod_65>	2.5 2.5 11.9614 13.99	</italy:It08_Progetto_M40_mod_65>
+        <japan:J20_Type_2605>	4.4 4.4 13.3214 14.6	</japan:J20_Type_2605>
+        <france:F10_AMX_50B0>	4.4 4.4 13.3214 14.6	</france:F10_AMX_50B0>
+        <france:F10_AMX_50B1>	3 3 13.2614 15.1	</france:F10_AMX_50B1>
+        <france:F10_AMX_50B2>	2 2 13.3714 15.1	</france:F10_AMX_50B2>
+        <france:F10_AMX_50B3>	3.8 3.8 13.5114 13.94	</france:F10_AMX_50B3>
+        <france:F10_AMX_50B4>	2.2 2.2 12.7014 14.83	</france:F10_AMX_50B4>
+        <france:F10_AMX_50B5>	5 5 12.8014 15.67	</france:F10_AMX_50B5>
+        <france:F10_AMX_50B6>	5 5 12.8014 15.67	</france:F10_AMX_50B6>
+        <france:F10_AMX_50B7>	7 7 12.9414 13.64	</france:F10_AMX_50B7>
+        <france:F10_AMX_50B9>	1.2 1.2 13.3114 14.01	</france:F10_AMX_50B9>
+        <france:F10_AMX_50B_bob0>	1.2 1.2 13.3114 14.01	</france:F10_AMX_50B_bob0>
+        <france:F10_AMX_50B_bob1>	5 5 8.0714 14.64	</france:F10_AMX_50B_bob1>
+        <france:F10_AMX_50B_bob2>	5 5 8.0714 14.64	</france:F10_AMX_50B_bob2>
+        <france:F10_AMX_50B_bob3>	7 7 13.1114 14.53	</france:F10_AMX_50B_bob3>
+        <france:F10_AMX_50B_bob4>	7 7 13.1114 14.53	</france:F10_AMX_50B_bob4>
+        <france:F10_AMX_50B8>	7 7 13.1114 14.53	</france:F10_AMX_50B8>
+        <france:F10_AMX_50B_bob5>	6 6 13.1814 14.44	</france:F10_AMX_50B_bob5>
+        <france:F10_AMX_50B_bob6>	4 4 13.2214 15.14	</france:F10_AMX_50B_bob6>
+      </tiling>
+      <tilingSettings>
+        <type>	relative	</type>
+        <factor>	3.3 3.3	</factor>
+        <offset>	13.4914 18.0384	</offset>
+      </tilingSettings>
+    </camouflage>
+  </itemGroup>
+</camouflage_the_first_horseman_label.xml>

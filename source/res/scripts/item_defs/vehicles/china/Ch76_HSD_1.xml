@@ -7,7 +7,7 @@
     <loader></loader>
   </crew>
   <supplySlots>	5 1 1 6 6 6 7 8 8 8	</supplySlots>
-  <postProgressionTree>	role_HT_assault	</postProgressionTree>
+  <postProgressionTree>	role_HT_break	</postProgressionTree>
   <customRoleSlotOptions>	2 4	</customRoleSlotOptions>
   <speedLimits>
     <forward>	45	</forward>
@@ -1987,20 +1987,20 @@
         <armor_2>	220	</armor_2>
         <armor_3>	170	</armor_3>
         <armor_4>	100	</armor_4>
-        <armor_5>	35	</armor_5>
-        <armor_6>	35	</armor_6>
+        <armor_5>	50	</armor_5>
+        <armor_6>	55	</armor_6>
         <armor_7>	120	</armor_7>
         <armor_8>	0	</armor_8>
         <armor_9>	110	</armor_9>
         <armor_10>	35	</armor_10>
         <armor_11>	130	</armor_11>
-        <armor_12>	70	</armor_12>
+        <armor_12>	95	</armor_12>
         <armor_13>	60	</armor_13>
-        <armor_14>	60	</armor_14>
-        <armor_15>	50	</armor_15>
+        <armor_14>	95	</armor_14>
+        <armor_15>	95	</armor_15>
         <armor_16>	260	</armor_16>
         <armor_17>	35	</armor_17>
-        <armor_18>	35	</armor_18>
+        <armor_18>	75	</armor_18>
         <armor_19>	150	</armor_19>
         <armor_20>	60	</armor_20>
         <armor_21>	245	</armor_21>
@@ -2014,7 +2014,7 @@
         <armor_30>	140	</armor_30>
         <armor_31>	95	</armor_31>
         <armor_32>	100	</armor_32>
-        <armor_33>	5	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+        <armor_33>	5	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
         </armor_33>
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
@@ -2035,13 +2035,13 @@
       <guns>
         <_122mm_Type_61_Ch76>	shared	  <maxAmmo>	44	</maxAmmo>
           <armor>
-            <armor_1>	260	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_1>	260	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_1>
-            <armor_2>	90	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_2>	90	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_2>
-            <armor_3>	170	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_3>	170	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_3>
-            <armor_4>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_4>	0	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_4>
             <gun>	45	</gun>
           </armor>
@@ -2616,7 +2616,7 @@
   <rocketAcceleration>
     <deployTime>	5	</deployTime>
     <reloadTime>	15	</reloadTime>
-    <reuseCount>	8	</reuseCount>
+    <reuseCount>	5	</reuseCount>
     <duration>	10	</duration>
     <impulse>
       <magnitude>	60	</magnitude>

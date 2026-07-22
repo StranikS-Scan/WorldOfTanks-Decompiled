@@ -1,0 +1,93 @@
+<RushShop_01_Paint_2025_name.xml>
+  <itemGroup>
+    <name>	RushShop_Paint_2025	</name>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <userString>	#vehicle_customization:repaint/color_group_04	</userString>
+    <paint>
+      <id>	31269	</id>
+      <color>	6 0 13 255	</color>
+      <gloss>	0.3	</gloss>
+      <metallic>	0.2	</metallic>
+      <userString>	#vehicle_customization:RushShop_01_Paint_2025/name	</userString>
+      <description>	#vehicle_customization:RushShop_01_Paint_2025/description	</description>
+      <texture>	gui/maps/vehicles/repaints/custom_color_23.png	</texture>
+    </paint>
+    <tags>	hiddenInUI	</tags>
+    <priceGroup>	paints 20g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <paint>
+      <id>	31270	</id>
+      <color>	13 11 11 255	</color>
+      <gloss>	0.5	</gloss>
+      <metallic>	0.2	</metallic>
+      <texture>	gui/maps/vehicles/repaints/custom_color_23.png	</texture>
+      <userString>	#vehicle_customization:RushShop_02_Paint_2025/name	</userString>
+      <description>	#vehicle_customization:RushShop_02_Paint_2025/description	</description>
+    </paint>
+    <paint>
+      <id>	31271	</id>
+      <color>	0 8 13 255	</color>
+      <gloss>	0.3	</gloss>
+      <metallic>	0.2	</metallic>
+      <texture>	gui/maps/vehicles/repaints/custom_color_23.png	</texture>
+      <userString>	#vehicle_customization:RushShop_03_Paint_2025/name	</userString>
+      <description>	#vehicle_customization:RushShop_03_Paint_2025/description	</description>
+    </paint>
+    <paint>
+      <id>	31272	</id>
+      <texture>	gui/maps/vehicles/repaints/custom_color_23.png	</texture>
+      <userString>	#vehicle_customization:RushShop_04_Paint_2025/name	</userString>
+      <description>	#vehicle_customization:RushShop_04_Paint_2025/description	</description>
+      <color>	13 11 11 255	</color>
+      <gloss>	0.5	</gloss>
+      <metallic>	0.2	</metallic>
+    </paint>
+    <paint>
+      <id>	31294	</id>
+      <userString>	#vehicle_customization:RushShopCollectionConfrontation_03_Paint_01_2025/name	</userString>
+      <description>	#vehicle_customization:RushShopCollectionConfrontation_03_Paint_01_2025/description	</description>
+      <color>	24 25 24 255	</color>
+      <gloss>	0.6	</gloss>
+      <metallic>	0.3	</metallic>
+      <vehicleFilter>
+        <include>
+          <vehicles>	china:Ch48_BZ_75	</vehicles>
+        </include>
+      </vehicleFilter>
+      <texture>	gui/maps/vehicles/repaints/custom_color_23.png	</texture>
+    </paint>
+    <paint>
+      <id>	31296	</id>
+      <color>	153 134 111 255	</color>
+      <gloss>	0.4	</gloss>
+      <metallic>	0.4	</metallic>
+      <vehicleFilter>
+        <include>
+          <vehicles>	japan:J20_Type_2605	</vehicles>
+        </include>
+      </vehicleFilter>
+      <texture>	gui/maps/vehicles/repaints/poland_color_06.png	</texture>
+      <userString>	#vehicle_customization:RushShopCollectionConfrontation_Paint_05_2025/name	</userString>
+      <description>	#vehicle_customization:RushShopCollectionConfrontation_Paint_05_2025/description	</description>
+    </paint>
+    <paint>
+      <id>	31297	</id>
+      <color>	22 22 22 255	</color>
+      <gloss>	0.6	</gloss>
+      <metallic>	0.25	</metallic>
+      <vehicleFilter>
+        <include>
+          <vehicles>	japan:J20_Type_2605	</vehicles>
+        </include>
+      </vehicleFilter>
+      <texture>	gui/maps/vehicles/repaints/custom_color_20.png	</texture>
+      <userString>	#vehicle_customization:RushShopCollectionConfrontation_Paint_06_2025/name	</userString>
+      <description>	#vehicle_customization:RushShopCollectionConfrontation_Paint_06_2025/description	</description>
+    </paint>
+  </itemGroup>
+</RushShop_01_Paint_2025_name.xml>

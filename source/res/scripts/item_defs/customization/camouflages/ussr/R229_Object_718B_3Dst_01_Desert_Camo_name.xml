@@ -1,0 +1,51 @@
+<R229_Object_718B_3Dst_01_Desert_Camo_name.xml>
+  <xmlns:czech1>	ussr	</xmlns:czech1>
+  <xmlns:germany>	germany	</xmlns:germany>
+  <xmlns:czech0>	usa	</xmlns:czech0>
+  <xmlns:china>	china	</xmlns:china>
+  <xmlns:france>	france	</xmlns:france>
+  <xmlns:uk>	uk	</xmlns:uk>
+  <xmlns:japan>	japan	</xmlns:japan>
+  <xmlns:czech>	czech	</xmlns:czech>
+  <xmlns:sweden>	sweden	</xmlns:sweden>
+  <xmlns:poland>	poland	</xmlns:poland>
+  <xmlns:italy>	italy	</xmlns:italy>
+  <xmlns:intunion>	intunion	</xmlns:intunion>
+  <itemGroup>
+    <season>	desert	</season>
+    <historical>	0	</historical>
+    <camouflage>
+      <id>	31403	</id>
+      <scales>	1.2 1 0.7	</scales>
+      <palettes>
+        <palette>
+          <c0>	153 120 92 255	</c0>
+          <c1>	97 97 97 255	</c1>
+          <c2>	0 0 255 0	</c2>
+          <c3>	0 0 0 0	</c3>
+        </palette>
+      </palettes>
+      <texture>	vehicles/russian/Camouflage/R229_Object_718B_3Dst_01_Camo_Desert_138.dds	</texture>
+      <rotation>
+        <HULL>	-2.617994	</HULL>
+        <TURRET>	-2.617994	</TURRET>
+        <GUN>	-2.617994	</GUN>
+      </rotation>
+      <tilingSettings>
+        <type>	relativewithfactor	</type>
+        <factor>	1.7 1.4	</factor>
+        <offset>	6.03 2.07	</offset>
+      </tilingSettings>
+      <userString>	#vehicle_customization:R229_Object_718B_3Dst_01_Desert_Camo/name	</userString>
+      <description>	#vehicle_customization:R229_Object_718B_3Dst_01_Desert_Camo/description	</description>
+    </camouflage>
+    <userString>	#vehicle_customization:camouflage/transparent	</userString>
+    <tags>	hiddenInUI fullRGB	</tags>
+    <priceGroup>	MT camouflages 50g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	ussr:R229_Object_718B	</vehicles>
+      </include>
+    </vehicleFilter>
+  </itemGroup>
+</R229_Object_718B_3Dst_01_Desert_Camo_name.xml>

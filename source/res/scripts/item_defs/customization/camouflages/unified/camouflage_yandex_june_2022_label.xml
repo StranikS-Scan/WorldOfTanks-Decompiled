@@ -1,0 +1,52 @@
+<camouflage_yandex_june_2022_label.xml>
+  <xmlns:czech1>	ussr	</xmlns:czech1>
+  <xmlns:germany>	germany	</xmlns:germany>
+  <xmlns:czech0>	usa	</xmlns:czech0>
+  <xmlns:china>	china	</xmlns:china>
+  <xmlns:france>	france	</xmlns:france>
+  <xmlns:uk>	uk	</xmlns:uk>
+  <xmlns:japan>	japan	</xmlns:japan>
+  <xmlns:czech>	czech	</xmlns:czech>
+  <xmlns:sweden>	sweden	</xmlns:sweden>
+  <xmlns:poland>	poland	</xmlns:poland>
+  <xmlns:italy>	italy	</xmlns:italy>
+  <xmlns:intunion>	intunion	</xmlns:intunion>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/transparent	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	MT camouflages 50g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R47_ISU-152_Zveroboj ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <camouflage>
+      <id>	409	</id>
+      <texture>	vehicles/russian/Camouflage/yandex_june_2022.dds	</texture>
+      <description>	#vehicle_customization:camouflage/yandex_june_2022/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/yandex_june_2022/label	</userString>
+      <tags>	hiddenInUI	</tags>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	181 166 143 255	</c0>
+          <c1>	110 103 103 255	</c1>
+          <c2>	119 120 77 255	</c2>
+          <c3>	40 28 28 255	</c3>
+        </palette>
+      </palettes>
+      <rotation>
+        <HULL>	-1.162913	</HULL>
+        <TURRET>	-1.162913	</TURRET>
+        <GUN>	-1.162913	</GUN>
+      </rotation>
+      <tilingSettings>
+        <type>	relativeWithFactor	</type>
+        <factor>	1.86 1.86	</factor>
+        <offset>	1.35 0.1	</offset>
+      </tilingSettings>
+    </camouflage>
+  </itemGroup>
+</camouflage_yandex_june_2022_label.xml>

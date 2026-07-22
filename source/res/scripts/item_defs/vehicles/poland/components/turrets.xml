@@ -1,61 +1,173 @@
 <turrets.xml>
-  <ids>
-    <Turret_1_Pl03_PzV_Poland>	0	</Turret_1_Pl03_PzV_Poland>
-    <Turret_1_Pl01_TKS_20mm>	1	</Turret_1_Pl01_TKS_20mm>
-    <Turret_1_Pl08_50TP_prototyp>	3	</Turret_1_Pl08_50TP_prototyp>
-    <Turret_1_Pl14_4TP>	4	</Turret_1_Pl14_4TP>
-    <Turret_1_Pl09_7TP>	5	</Turret_1_Pl09_7TP>
-    <Turret_2_Pl09_7TP>	6	</Turret_2_Pl09_7TP>
-    <Turret_1_Pl06_10TP>	7	</Turret_1_Pl06_10TP>
-    <Turret_1_Pl07_14TP>	8	</Turret_1_Pl07_14TP>
-    <Turret_2_Pl07_14TP>	9	</Turret_2_Pl07_14TP>
-    <Turret_1_Pl12_25TP_KSUST_II>	10	</Turret_1_Pl12_25TP_KSUST_II>
-    <Turret_2_Pl12_25TP_KSUST_II>	11	</Turret_2_Pl12_25TP_KSUST_II>
-    <Turret_1_Pl10_40TP_Habicha>	12	</Turret_1_Pl10_40TP_Habicha>
-    <Turret_2_Pl10_40TP_Habicha>	13	</Turret_2_Pl10_40TP_Habicha>
-    <Turret_1_Pl11_45TP_Habicha>	14	</Turret_1_Pl11_45TP_Habicha>
-    <Turret_2_Pl11_45TP_Habicha>	15	</Turret_2_Pl11_45TP_Habicha>
-    <Turret_1_Pl13_53TP_Markowskiego>	16	</Turret_1_Pl13_53TP_Markowskiego>
-    <Turret_2_Pl13_53TP_Markowskiego>	17	</Turret_2_Pl13_53TP_Markowskiego>
-    <Turret_1_Pl05_50TP_Tyszkiewicza>	18	</Turret_1_Pl05_50TP_Tyszkiewicza>
-    <Turret_2_Pl05_50TP_Tyszkiewicza>	19	</Turret_2_Pl05_50TP_Tyszkiewicza>
-    <Turret_1_Pl15_60TP_Lewandowskiego>	20	</Turret_1_Pl15_60TP_Lewandowskiego>
-    <Turret_1_Pl16_T34_85_Rudy>	21	</Turret_1_Pl16_T34_85_Rudy>
-    <Turret_1_Pl19_CS_52_LIS>	22	</Turret_1_Pl19_CS_52_LIS>
-    <Turret_1_Pl17_DS_PZlnz>	23	</Turret_1_Pl17_DS_PZlnz>
-    <Turret_2_Pl17_DS_PZlnz>	24	</Turret_2_Pl17_DS_PZlnz>
-    <Turret_1_Pl21_CS_63>	25	</Turret_1_Pl21_CS_63>
-    <Turret_1_Pl18_BUGI>	26	</Turret_1_Pl18_BUGI>
-    <Turret_2_Pl18_BUGI>	27	</Turret_2_Pl18_BUGI>
-    <Turret_1_Pl20_CS_44>	28	</Turret_1_Pl20_CS_44>
-    <Turret_2_Pl20_CS_44>	29	</Turret_2_Pl20_CS_44>
-    <Turret_1_Pl23_CS_53>	30	</Turret_1_Pl23_CS_53>
-    <Turret_2_Pl23_CS_53>	31	</Turret_2_Pl23_CS_53>
-    <Turret_1_Pl22_CS_59>	32	</Turret_1_Pl22_CS_59>
-    <Turret_2_Pl22_CS_59>	33	</Turret_2_Pl22_CS_59>
-    <Turret_1_Pl24_56TP>	37	</Turret_1_Pl24_56TP>
-    <Turret_1_Pl25_CS_52_C>	38	</Turret_1_Pl25_CS_52_C>
-    <Turret_1_Pl28_SDP_Wz_60>	39	</Turret_1_Pl28_SDP_Wz_60>
-    <Turret_1_Pl26_Czolg_P_Wz_46>	40	</Turret_1_Pl26_Czolg_P_Wz_46>
-    <Turret_1_Pl27_SDP_Wz_66T>	41	</Turret_1_Pl27_SDP_Wz_66T>
-    <Turret_1_Pl32_SDP_Wz_44>	42	</Turret_1_Pl32_SDP_Wz_44>
-    <Turret_1_Pl33_SDP_Wz_40>	43	</Turret_1_Pl33_SDP_Wz_40>
-    <Turret_1_Pl29_NC_Wz_70T>	44	</Turret_1_Pl29_NC_Wz_70T>
-    <Turret_1_Pl30_SDP_Wz58T>	45	</Turret_1_Pl30_SDP_Wz58T>
-    <Turret_1_Pl31_SDP_Wz_57D>	46	</Turret_1_Pl31_SDP_Wz_57D>
-    <Turret_1_Pl30_SDP_Wz58T_FL>	501	</Turret_1_Pl30_SDP_Wz58T_FL>
-    <Turret_1_Pl34_CS_63_02>	31001	</Turret_1_Pl34_CS_63_02>
-    <Turret_1_Pl29_NC_Wz_70T_T>	31002	</Turret_1_Pl29_NC_Wz_70T_T>
-    <Turret_1_Pl32_SDP_Wz_44_T>	31003	</Turret_1_Pl32_SDP_Wz_44_T>
-    <Turret_1_Pl30_SDP_Wz58T_T>	31004	</Turret_1_Pl30_SDP_Wz58T_T>
-    <Turret_1_Pl26_Czolg_P_Wz_46_Verbesserter>	31005	</Turret_1_Pl26_Czolg_P_Wz_46_Verbesserter>
-    <Turret_1_Pl21_CS_63_7x7>	31006	</Turret_1_Pl21_CS_63_7x7>
-    <Turret_1_Pl209_ULAN>	31007	</Turret_1_Pl209_ULAN>
-    <Turret_1_Pl35_CS_57_Sokol>	31008	</Turret_1_Pl35_CS_57_Sokol>
-    <Turret_1_Pl36_Bobr>	31009	</Turret_1_Pl36_Bobr>
-    <Turret_1_Pl18_BUGI_SH>	34	</Turret_1_Pl18_BUGI_SH>
-    <Turret_2_Pl23_CS_53M1_SH>	35	</Turret_2_Pl23_CS_53M1_SH>
-    <Turret_3_Pl23_CS_53_SH>	36	</Turret_3_Pl23_CS_53_SH>
-  </ids>
-  <shared></shared>
+  <xmlns:xmlref>	http://bwt/xmlref	</xmlns:xmlref>
+  <shared>
+    <Turret_1_Pl01_TKS_20mm>
+      <id>	1	</id>
+    </Turret_1_Pl01_TKS_20mm>
+    <Turret_1_Pl03_PzV_Poland>
+      <id>	0	</id>
+    </Turret_1_Pl03_PzV_Poland>
+    <Turret_1_Pl05_50TP_Tyszkiewicza>
+      <id>	18	</id>
+    </Turret_1_Pl05_50TP_Tyszkiewicza>
+    <Turret_1_Pl06_10TP>
+      <id>	7	</id>
+    </Turret_1_Pl06_10TP>
+    <Turret_1_Pl07_14TP>
+      <id>	8	</id>
+    </Turret_1_Pl07_14TP>
+    <Turret_1_Pl08_50TP_prototyp>
+      <id>	3	</id>
+    </Turret_1_Pl08_50TP_prototyp>
+    <Turret_1_Pl09_7TP>
+      <id>	5	</id>
+    </Turret_1_Pl09_7TP>
+    <Turret_1_Pl10_40TP_Habicha>
+      <id>	12	</id>
+    </Turret_1_Pl10_40TP_Habicha>
+    <Turret_1_Pl11_45TP_Habicha>
+      <id>	14	</id>
+    </Turret_1_Pl11_45TP_Habicha>
+    <Turret_1_Pl12_25TP_KSUST_II>
+      <id>	10	</id>
+    </Turret_1_Pl12_25TP_KSUST_II>
+    <Turret_1_Pl13_53TP_Markowskiego>
+      <id>	16	</id>
+    </Turret_1_Pl13_53TP_Markowskiego>
+    <Turret_1_Pl14_4TP>
+      <id>	4	</id>
+    </Turret_1_Pl14_4TP>
+    <Turret_1_Pl15_60TP_Lewandowskiego>
+      <id>	20	</id>
+    </Turret_1_Pl15_60TP_Lewandowskiego>
+    <Turret_1_Pl16_T34_85_Rudy>
+      <id>	21	</id>
+    </Turret_1_Pl16_T34_85_Rudy>
+    <Turret_1_Pl17_DS_PZlnz>
+      <id>	23	</id>
+    </Turret_1_Pl17_DS_PZlnz>
+    <Turret_1_Pl18_BUGI>
+      <id>	26	</id>
+    </Turret_1_Pl18_BUGI>
+    <Turret_1_Pl18_BUGI_SH>
+      <id>	34	</id>
+    </Turret_1_Pl18_BUGI_SH>
+    <Turret_1_Pl19_CS_52_LIS>
+      <id>	22	</id>
+    </Turret_1_Pl19_CS_52_LIS>
+    <Turret_1_Pl209_ULAN>
+      <id>	31007	</id>
+    </Turret_1_Pl209_ULAN>
+    <Turret_1_Pl20_CS_44>
+      <id>	28	</id>
+    </Turret_1_Pl20_CS_44>
+    <Turret_1_Pl21_CS_63>
+      <id>	25	</id>
+    </Turret_1_Pl21_CS_63>
+    <Turret_1_Pl21_CS_63_7x7>
+      <id>	31006	</id>
+    </Turret_1_Pl21_CS_63_7x7>
+    <Turret_1_Pl22_CS_59>
+      <id>	32	</id>
+    </Turret_1_Pl22_CS_59>
+    <Turret_1_Pl23_CS_53>
+      <id>	30	</id>
+    </Turret_1_Pl23_CS_53>
+    <Turret_1_Pl24_56TP>
+      <id>	37	</id>
+    </Turret_1_Pl24_56TP>
+    <Turret_1_Pl25_CS_52_C>
+      <id>	38	</id>
+    </Turret_1_Pl25_CS_52_C>
+    <Turret_1_Pl26_Czolg_P_Wz_46>
+      <id>	40	</id>
+    </Turret_1_Pl26_Czolg_P_Wz_46>
+    <Turret_1_Pl26_Czolg_P_Wz_46_Verbesserter>
+      <id>	31005	</id>
+    </Turret_1_Pl26_Czolg_P_Wz_46_Verbesserter>
+    <Turret_1_Pl27_SDP_Wz_66T>
+      <id>	41	</id>
+    </Turret_1_Pl27_SDP_Wz_66T>
+    <Turret_1_Pl28_SDP_Wz_60>
+      <id>	39	</id>
+    </Turret_1_Pl28_SDP_Wz_60>
+    <Turret_1_Pl29_NC_Wz_70T>
+      <id>	44	</id>
+    </Turret_1_Pl29_NC_Wz_70T>
+    <Turret_1_Pl29_NC_Wz_70T_T>
+      <id>	31002	</id>
+    </Turret_1_Pl29_NC_Wz_70T_T>
+    <Turret_1_Pl30_SDP_Wz58T>
+      <id>	45	</id>
+    </Turret_1_Pl30_SDP_Wz58T>
+    <Turret_1_Pl30_SDP_Wz58T_FL>
+      <id>	501	</id>
+    </Turret_1_Pl30_SDP_Wz58T_FL>
+    <Turret_1_Pl30_SDP_Wz58T_T>
+      <id>	31004	</id>
+    </Turret_1_Pl30_SDP_Wz58T_T>
+    <Turret_1_Pl31_SDP_Wz_57D>
+      <id>	46	</id>
+    </Turret_1_Pl31_SDP_Wz_57D>
+    <Turret_1_Pl32_SDP_Wz_44>
+      <id>	42	</id>
+    </Turret_1_Pl32_SDP_Wz_44>
+    <Turret_1_Pl32_SDP_Wz_44_T>
+      <id>	31003	</id>
+    </Turret_1_Pl32_SDP_Wz_44_T>
+    <Turret_1_Pl33_SDP_Wz_40>
+      <id>	43	</id>
+    </Turret_1_Pl33_SDP_Wz_40>
+    <Turret_1_Pl34_CS_63_02>
+      <id>	31001	</id>
+    </Turret_1_Pl34_CS_63_02>
+    <Turret_1_Pl35_CS_57_Sokol>
+      <id>	31008	</id>
+    </Turret_1_Pl35_CS_57_Sokol>
+    <Turret_1_Pl36_Bobr>
+      <id>	31009	</id>
+    </Turret_1_Pl36_Bobr>
+    <Turret_2_Pl05_50TP_Tyszkiewicza>
+      <id>	19	</id>
+    </Turret_2_Pl05_50TP_Tyszkiewicza>
+    <Turret_2_Pl07_14TP>
+      <id>	9	</id>
+    </Turret_2_Pl07_14TP>
+    <Turret_2_Pl09_7TP>
+      <id>	6	</id>
+    </Turret_2_Pl09_7TP>
+    <Turret_2_Pl10_40TP_Habicha>
+      <id>	13	</id>
+    </Turret_2_Pl10_40TP_Habicha>
+    <Turret_2_Pl11_45TP_Habicha>
+      <id>	15	</id>
+    </Turret_2_Pl11_45TP_Habicha>
+    <Turret_2_Pl12_25TP_KSUST_II>
+      <id>	11	</id>
+    </Turret_2_Pl12_25TP_KSUST_II>
+    <Turret_2_Pl13_53TP_Markowskiego>
+      <id>	17	</id>
+    </Turret_2_Pl13_53TP_Markowskiego>
+    <Turret_2_Pl17_DS_PZlnz>
+      <id>	24	</id>
+    </Turret_2_Pl17_DS_PZlnz>
+    <Turret_2_Pl18_BUGI>
+      <id>	27	</id>
+    </Turret_2_Pl18_BUGI>
+    <Turret_2_Pl20_CS_44>
+      <id>	29	</id>
+    </Turret_2_Pl20_CS_44>
+    <Turret_2_Pl22_CS_59>
+      <id>	33	</id>
+    </Turret_2_Pl22_CS_59>
+    <Turret_2_Pl23_CS_53>
+      <id>	31	</id>
+    </Turret_2_Pl23_CS_53>
+    <Turret_2_Pl23_CS_53M1_SH>
+      <id>	35	</id>
+    </Turret_2_Pl23_CS_53M1_SH>
+    <Turret_3_Pl23_CS_53_SH>
+      <id>	36	</id>
+    </Turret_3_Pl23_CS_53_SH>
+  </shared>
 </turrets.xml>

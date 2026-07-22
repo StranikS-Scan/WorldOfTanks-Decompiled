@@ -87,7 +87,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	5328	</weight>
-    <maxHealth>	224	</maxHealth>
+    <maxHealth>	200	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	65	</maxHealth>
       <maxRegenHealth>	45	</maxRegenHealth>
@@ -1234,8 +1234,8 @@
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
       <rotationSpeed>	35	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.32	</vehicleMovement>
-        <vehicleRotation>	0.32	</vehicleRotation>
+        <vehicleMovement>	0.10	</vehicleMovement>
+        <vehicleRotation>	0.10	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	50	</maxHealth>
@@ -2027,7 +2027,7 @@
           <camouflage></camouflage>
         </customizableVehicleAreas>
       </customization>
-      <repairTime>	3.41880345	</repairTime>
+      <repairTime>	1.70988882	</repairTime>
     </Chassis_S05_Strv_M21_29>
   </chassis>
   <turrets0>
@@ -2055,14 +2055,14 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	500	</weight>
-      <maxHealth>	56	</maxHealth>
+      <maxHealth>	80	</maxHealth>
       <rotationSpeed>	28	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	50	</maxHealth>
         <maxRegenHealth>	25	</maxRegenHealth>
         <repairCost>	1.0	</repairCost>
       </turretRotatorHealth>
-      <circularVisionRadius>	290	</circularVisionRadius>
+      <circularVisionRadius>	300	</circularVisionRadius>
       <surveyingDeviceHealth>
         <maxHealth>	30	</maxHealth>
         <maxRegenHealth>	15	</maxRegenHealth>
@@ -2089,11 +2089,12 @@
             <maxPitch>	0 10 1 10	</maxPitch>
           </pitchLimits>
           <invisibilityFactorAtShot>	0.255	</invisibilityFactorAtShot>
-          <shotDispersionRadius>	0.44	</shotDispersionRadius>
-          <reloadTime>	2.6	</reloadTime>
+          <shotDispersionRadius>	0.40	</shotDispersionRadius>
+          <reloadTime>	2.5	</reloadTime>
+          <aimingTime>	2.0	</aimingTime>
           <shotDispersionFactors>
-            <turretRotation>	0.12	</turretRotation>
-            <afterShot>	4.0	</afterShot>
+            <turretRotation>	0.10	</turretRotation>
+            <afterShot>	3.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <models>
@@ -2141,7 +2142,7 @@
             <aoTextureSize>	256 128	</aoTextureSize>
           </camouflage>
         </_37mm_kanon_m_Skoda>
-        <_20mm_akan_m_Madsen>	shared	  <maxAmmo>	1110	</maxAmmo>
+        <_20mm_akan_m_Madsen>	shared	  <maxAmmo>	1116	</maxAmmo>
           <unlocks>
             <vehicle>	S03_Strv_M38	  <cost>	275	</cost>
             </vehicle>
@@ -2160,17 +2161,22 @@
             <minPitch>	0 -15 1 -15	</minPitch>
             <maxPitch>	0 10 1 10	</maxPitch>
           </pitchLimits>
+          <shotDispersionRadius>	0.40	</shotDispersionRadius>
           <invisibilityFactorAtShot>	0.238	</invisibilityFactorAtShot>
-          <aimingTime>	2.5	</aimingTime>
+          <aimingTime>	2.0	</aimingTime>
           <shotDispersionFactors>
-            <turretRotation>	0.12	</turretRotation>
-            <afterShot>	1.5	</afterShot>
+            <turretRotation>	0.10	</turretRotation>
+            <afterShot>	1.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <clip>
-            <count>	10	</count>
+            <count>	12	</count>
             <rate>	200	</rate>
           </clip>
+          <burst>
+            <count>	3	</count>
+            <rate>	350	</rate>
+          </burst>
           <models>
             <undamaged>	vehicles/sweden/S05_Strv_M21_29/normal/lod0/Gun_02.model	</undamaged>
             <destroyed>	vehicles/sweden/S05_Strv_M21_29/crash/lod0/Gun_02.model	</destroyed>
@@ -2544,7 +2550,7 @@
     <detailed>
       <engines>
         <Daimler_Benz_m_1910>
-          <smplEnginePower>	80	</smplEnginePower>
+          <smplEnginePower>	120	</smplEnginePower>
           <smplFwMaxSpeed>	25	</smplFwMaxSpeed>
         </Daimler_Benz_m_1910>
       </engines>

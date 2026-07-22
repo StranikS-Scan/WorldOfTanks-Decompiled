@@ -41,6 +41,7 @@ from gui.sounds.ambients import BattleQueueEnv
 from helpers import dependency, i18n, time_utils, int2roman
 from helpers.i18n import makeString
 from skeletons.gui.shared import IItemsCache
+from skeletons.gui.game_control import IBRProgressionOnTokensController
 TYPES_ORDERED = (('heavyTank', ITEM_TYPES.VEHICLE_TAGS_HEAVY_TANK_NAME),
  ('mediumTank', ITEM_TYPES.VEHICLE_TAGS_MEDIUM_TANK_NAME),
  ('lightTank', ITEM_TYPES.VEHICLE_TAGS_LIGHT_TANK_NAME),
@@ -206,6 +207,10 @@ class _BattleRoyaleQueueProvider(RandomQueueProvider):
 
     def getLayoutStr(self):
         pass
+
+    def getIconPath(self, iconlabel):
+        postfix = dependency.instance(IBRProgressionOnTokensController).getBirthdayIconPostfix()
+        return backport.image(R.images.gui.maps.icons.battleTypes.c_136x136.dyn(iconlabel + postfix)())
 
 
 class _Comp7QueueProvider(RandomQueueProvider):

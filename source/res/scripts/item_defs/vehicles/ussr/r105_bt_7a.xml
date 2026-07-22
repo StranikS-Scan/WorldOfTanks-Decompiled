@@ -51,7 +51,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	6850	</weight>
-    <maxHealth>	312	</maxHealth>
+    <maxHealth>	400	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	90	</maxHealth>
       <maxRegenHealth>	60	</maxRegenHealth>
@@ -1821,14 +1821,14 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	1200	</weight>
-      <maxHealth>	78	</maxHealth>
+      <maxHealth>	60	</maxHealth>
       <rotationSpeed>	40	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	70	</maxHealth>
         <maxRegenHealth>	35	</maxRegenHealth>
         <repairCost>	1.0	</repairCost>
       </turretRotatorHealth>
-      <circularVisionRadius>	290	</circularVisionRadius>
+      <circularVisionRadius>	300	</circularVisionRadius>
       <surveyingDeviceHealth>
         <maxHealth>	50	</maxHealth>
         <maxRegenHealth>	25	</maxRegenHealth>
@@ -1850,14 +1850,14 @@
             <maxPitch>	0 5 0.430556 5 0.444444 4 0.555556 4 0.569445 5 1 5	</maxPitch>
           </pitchLimits>
           <invisibilityFactorAtShot>	0.26	</invisibilityFactorAtShot>
-          <shotDispersionRadius>	0.6	</shotDispersionRadius>
+          <shotDispersionRadius>	0.5	</shotDispersionRadius>
           <reloadTime>	4.8	</reloadTime>
           <shotDispersionFactors>
-            <turretRotation>	0.18	</turretRotation>
+            <turretRotation>	0.12	</turretRotation>
             <afterShot>	4.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <aimingTime>	2.4	</aimingTime>
+          <aimingTime>	2.1	</aimingTime>
           <models>
             <undamaged>	vehicles/russian/R105_BT_7A/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/russian/R105_BT_7A/crash/lod0/Gun_01.model	</destroyed>

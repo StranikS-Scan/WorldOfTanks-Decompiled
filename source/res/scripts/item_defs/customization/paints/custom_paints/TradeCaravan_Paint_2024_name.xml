@@ -1,0 +1,24 @@
+<TradeCaravan_Paint_2024_name.xml>
+  <itemGroup>
+    <name>	TradeCaravan_Style_2024	</name>
+    <season>	ALL	</season>
+    <historical>	2	</historical>
+    <userString>	#vehicle_customization:repaint/color_group_04	</userString>
+    <paint>
+      <id>	31186	</id>
+      <color>	0 55 32 255	</color>
+      <gloss>	0.6	</gloss>
+      <metallic>	0.3	</metallic>
+      <texture>	gui/maps/vehicles/repaints/china_color_07.png	</texture>
+      <userString>	#vehicle_customization:TradeCaravan_Paint_2024/name	</userString>
+      <description>	#vehicle_customization:TradeCaravan_Paint_2024/description	</description>
+    </paint>
+    <tags>	hiddenInUI	</tags>
+    <priceGroup>	paints 20g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+  </itemGroup>
+</TradeCaravan_Paint_2024_name.xml>

@@ -61,6 +61,7 @@ class QUESTS(object):
     BONUSNAME_BLUEPRINTS_ANY = '#quests:bonusName/blueprints/any'
     BONUSES_CREWBOOK_TEXT = '#quests:bonuses/crewBook/text'
     BONUSES_CREWSKIN_TEXT = '#quests:bonuses/crewSkin/text'
+    BONUSES_PREFERREDMAPSLOTS_POSTBATTLE = '#quests:bonuses/preferredMapSlots/postBattle'
     BONUSES_DOSSIER_ACHIVE = '#quests:bonuses/dossier/achive'
     BONUSES_DOSSIER_BADGE = '#quests:bonuses/dossier/badge'
     BONUSNAME_BLUEPRINTS_VEHICLE = '#quests:bonusName/blueprints/vehicle'
@@ -1298,6 +1299,7 @@ class QUESTS(object):
     BONUSNAME_CLAN_SEASON_PROGRESS = '#quests:bonusName/clan_season_progress'
     BONUSNAME_BUMBLEBEE_COIN = '#quests:bonusName/bumblebee_coin'
     BONUSNAME_HONEY_COIN = '#quests:bonusName/honey_coin'
+    BONUSNAME_REWARDSSLOTS = '#quests:bonusName/rewardsSlots'
     ACTION_AUTO_CALENDAR = '#quests:action/auto/calendar'
     ACTION_FULL_CALENDAR = '#quests:action/full/calendar'
     ACTION_HERO_FULL_CALENDAR = '#quests:action/hero/full/calendar'
@@ -1649,7 +1651,6 @@ class QUESTS(object):
     DAILYQUESTS_TAB_HIDDENBATTLETYPES = '#quests:dailyQuests/tab/hiddenBattleTypes'
     DAILYQUESTS_TAB_CATHEGORY_TOOLTIP_DAILY_HEADER = '#quests:dailyQuests/tab/cathegory/tooltip/daily/header'
     DAILYQUESTS_TAB_CATHEGORY_TOOLTIP_DAILY_BODY = '#quests:dailyQuests/tab/cathegory/tooltip/daily/body'
-    PLAYSTREAK_TAB_LABEL = '#quests:playStreak/tab/label'
     DAILYQUESTS_BODY_REROLL = '#quests:dailyQuests/body/reroll'
     DAILYQUESTS_MISSIONSWITCH_TOOLTIP_HEADER = '#quests:dailyQuests/missionSwitch/tooltip/header'
     DAILYQUESTS_MISSIONSWITCH_TOOLTIP_BODY_AVAILABLE = '#quests:dailyQuests/missionSwitch/tooltip/body/available'
@@ -1805,8 +1806,6 @@ class QUESTS(object):
     INTROSCREEN_TITLE = '#quests:introScreen/title'
     INTROSCREEN_SUBTITLE = '#quests:introScreen/subtitle'
     INTROSCREEN_SUBTITLEDAILYQUESTSONLY = '#quests:introScreen/subtitleDailyQuestsOnly'
-    INTROSCREEN_INPUTSERIES_HEADER = '#quests:introScreen/inputSeries/header'
-    INTROSCREEN_INPUTSERIES_DESCRIPTION = '#quests:introScreen/inputSeries/description'
     INTROSCREEN_DAILYQUESTS_HEADER = '#quests:introScreen/dailyQuests/header'
     INTROSCREEN_DAILYQUESTS_DESCRIPTION = '#quests:introScreen/dailyQuests/description'
     INTROSCREEN_CONFIRM = '#quests:introScreen/confirm'
@@ -1841,6 +1840,7 @@ class QUESTS(object):
     SWITCH_ISDAILYREGULARENABLED = '#quests:switch/isDailyRegularEnabled'
     SWITCH_ISWEEKLYENABLED = '#quests:switch/isWeeklyEnabled'
     SWITCH_ISWEEKLYENABLEDTITLE = '#quests:switch/isWeeklyEnabledTitle'
+    BONUSNAME_GOLDENTICKET = '#quests:bonusName/goldenticket'
     TOKEN_DEFAULT_ENUM = (TOKEN_DEFAULT_USSR,
      TOKEN_DEFAULT_GERMANY,
      TOKEN_DEFAULT_USA,
@@ -1970,7 +1970,9 @@ class QUESTS(object):
      BONUSNAME_DAILY_QUESTS_REWARDS,
      BONUSNAME_CLAN_SEASON_PROGRESS,
      BONUSNAME_BUMBLEBEE_COIN,
-     BONUSNAME_HONEY_COIN)
+     BONUSNAME_HONEY_COIN,
+     BONUSNAME_REWARDSSLOTS,
+     BONUSNAME_GOLDENTICKET)
     ACTION_ENUM = (ACTION_AUTO_CALENDAR,
      ACTION_FULL_CALENDAR,
      ACTION_HERO_FULL_CALENDAR,

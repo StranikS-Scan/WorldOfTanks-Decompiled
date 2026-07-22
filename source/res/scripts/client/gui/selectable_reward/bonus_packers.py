@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/gui/selectable_reward/bonus_packers.py
 import typing
 from gui.battle_pass.battle_pass_helpers import getOfferTokenByGift
-from gui.impl.backport import TooltipData
+from gui.impl.backport import createTooltipData
 from gui.shared.missions.packers.bonus import BACKPORT_TOOLTIP_CONTENT_ID, BaseBonusUIPacker
 from helpers import dependency
 from shared_utils import first
@@ -13,6 +13,7 @@ if typing.TYPE_CHECKING:
     from gui.impl.gen.view_models.common.missions.bonuses.bonus_model import BonusModel
     from gui.impl.gen.view_models.views.lobby.battle_pass.reward_item_model import RewardItemModel
     from gui.server_events.bonuses import SelectableBonus
+    from gui.impl.backport import TooltipData
 
 class SelectableBonusPacker(BaseBonusUIPacker):
     __offersProvider = dependency.descriptor(IOffersDataProvider)
@@ -47,7 +48,7 @@ class SelectableBonusPacker(BaseBonusUIPacker):
     def _getToolTip(cls, bonus):
         tooltipData = []
         for tokenID in bonus.getValue().iterkeys():
-            tooltipData.append(TooltipData(tooltip=None, isSpecial=True, specialAlias=cls._getTooltipSpecialAlias(), specialArgs=[tokenID]))
+            tooltipData.append(createTooltipData(tooltip=None, isSpecial=True, specialAlias=cls._getTooltipSpecialAlias(), specialArgs=[tokenID]))
 
         return tooltipData
 

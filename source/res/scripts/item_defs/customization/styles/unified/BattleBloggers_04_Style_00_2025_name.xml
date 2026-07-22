@@ -1,0 +1,45 @@
+<BattleBloggers_04_Style_00_2025_name.xml>
+  <itemGroup>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <style>
+      <id>	31272	</id>
+      <texture>	gui/maps/vehicles/styles/BattleBloggers_04_Style_2025.png	</texture>
+      <outfits>
+        <outfit>
+          <season>	all	</season>
+          <camouflages>
+            <item>
+              <id>	31230	</id>
+              <patternSize>	1	</patternSize>
+              <appliedTo>	4368	</appliedTo>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <insignias>
+            <item>
+              <id>	31016	</id>
+              <appliedTo>	4096	</appliedTo>
+            </item>
+          </insignias>
+        </outfit>
+      </outfits>
+      <alternateItems>
+        <camouflage>
+          <id>	31230 31231 31232	</id>
+        </camouflage>
+      </alternateItems>
+      <userString>	#vehicle_customization:BattleBloggers_04_Style_00_2025/name	</userString>
+      <description>	#vehicle_customization:BattleBloggers_04_Style_00_2025/description	</description>
+      <longDescriptionSpecial>	#vehicle_customization:BattleBloggers_04_Style_00_2025/longDescription	</longDescriptionSpecial>
+    </style>
+    <priceGroup>	MT 2D styles universal 1000g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <tags>	questsProgression	</tags>
+  </itemGroup>
+</BattleBloggers_04_Style_00_2025_name.xml>

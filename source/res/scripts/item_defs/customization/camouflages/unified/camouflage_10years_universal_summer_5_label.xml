@@ -1,0 +1,56 @@
+<camouflage_10years_universal_summer_5_label.xml>
+  <ussr:R11_MS-13>	ussr	</ussr:R11_MS-13>
+  <xmlns:germany>	germany	</xmlns:germany>
+  <ussr:R11_MS-12>	usa	</ussr:R11_MS-12>
+  <xmlns:china>	china	</xmlns:china>
+  <xmlns:france>	france	</xmlns:france>
+  <ussr:R11_MS-11>	uk	</ussr:R11_MS-11>
+  <xmlns:japan>	japan	</xmlns:japan>
+  <xmlns:czech>	czech	</xmlns:czech>
+  <ussr:R11_MS-10>	sweden	</ussr:R11_MS-10>
+  <xmlns:poland>	poland	</xmlns:poland>
+  <xmlns:italy>	italy	</xmlns:italy>
+  <xmlns:intunion>	intunion	</xmlns:intunion>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/opaque	</userString>
+    <season>	summer	</season>
+    <historical>	1	</historical>
+    <priceGroup>	MT camouflages 50g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R47_ISU-152_Zveroboj ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <camouflage>
+      <id>	179	</id>
+      <texture>	vehicles/russian/Camouflage/10years_universal_summer_5.dds	</texture>
+      <description>	#vehicle_customization:camouflage/10years_universal_summer_5/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/10years_universal_summer_5/label	</userString>
+      <tags>	fullRGB	</tags>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	255 0 0 255	</c0>
+          <c1>	0 255 0 255	</c1>
+          <c2>	0 0 255 255	</c2>
+          <c3>	0 0 0 255	</c3>
+        </palette>
+      </palettes>
+      <rotation>
+        <HULL>	0.516443	</HULL>
+        <TURRET>	0.516443	</TURRET>
+        <GUN>	0.516443	</GUN>
+      </rotation>
+      <tiling>
+        <germany:G121_Grille_15_L63>	5 5 0.000000 0.21	</germany:G121_Grille_15_L63>
+        <ussr:R11_MS-1>	4 4 -0.14 -0.2	</ussr:R11_MS-1>
+      </tiling>
+      <tilingSettings>
+        <type>	relative	</type>
+        <factor>	2 2	</factor>
+        <offset>	-1.57 -0.35	</offset>
+      </tilingSettings>
+    </camouflage>
+  </itemGroup>
+</camouflage_10years_universal_summer_5_label.xml>

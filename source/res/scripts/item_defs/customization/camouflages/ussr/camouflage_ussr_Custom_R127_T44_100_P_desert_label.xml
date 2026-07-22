@@ -1,0 +1,55 @@
+<camouflage_ussr_Custom_R127_T44_100_P_desert_label.xml>
+  <xmlns:czech1>	ussr	</xmlns:czech1>
+  <xmlns:germany>	germany	</xmlns:germany>
+  <xmlns:czech0>	usa	</xmlns:czech0>
+  <xmlns:china>	china	</xmlns:china>
+  <xmlns:france>	france	</xmlns:france>
+  <xmlns:uk>	uk	</xmlns:uk>
+  <xmlns:japan>	japan	</xmlns:japan>
+  <xmlns:czech>	czech	</xmlns:czech>
+  <xmlns:sweden>	sweden	</xmlns:sweden>
+  <xmlns:poland>	poland	</xmlns:poland>
+  <xmlns:italy>	italy	</xmlns:italy>
+  <xmlns:intunion>	intunion	</xmlns:intunion>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/opaque	</userString>
+    <season>	desert	</season>
+    <historical>	0	</historical>
+    <priceGroup>	MT camouflages 50g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <nations>	ussr	</nations>
+        <vehicles>	ussr:R127_T44_100_I	</vehicles>
+      </include>
+    </vehicleFilter>
+    <camouflage>
+      <id>	15041	</id>
+      <texture>	vehicles/russian/Camouflage/Rus_100.dds	</texture>
+      <description>	#vehicle_customization:camouflage/ussr/Custom_R127_T44_100_P_desert/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/ussr/Custom_R127_T44_100_P_desert/label	</userString>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	38 37 30 255	</c0>
+          <c1>	114 94 63 255	</c1>
+          <c2>	157 143 114 255	</c2>
+          <c3>	157 143 114 255	</c3>
+        </palette>
+      </palettes>
+      <tiling>
+        <R122_T44_100B>	4.8 4.8 0.41 0.8	</R122_T44_100B>
+        <R127_T44_100_K>	4.8 4.8 0.41 0.8	</R127_T44_100_K>
+        <R127_T44_100_M>	4.8 4.8 0.41 0.8	</R127_T44_100_M>
+        <R127_T44_100_P>	4.8 4.8 0.41 0.8	</R127_T44_100_P>
+        <R127_T44_100_U>	4.8 4.8 0.41 0.8	</R127_T44_100_U>
+        <R127_T44_100_I>	4.8 4.8 0.41 0.8	</R127_T44_100_I>
+      </tiling>
+      <tilingSettings>
+        <type>	relative	</type>
+        <factor>	2.727049  2.713537	</factor>
+        <offset>	0.000000 0.000000	</offset>
+      </tilingSettings>
+    </camouflage>
+  </itemGroup>
+</camouflage_ussr_Custom_R127_T44_100_P_desert_label.xml>

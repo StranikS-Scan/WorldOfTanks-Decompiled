@@ -1,0 +1,52 @@
+<BD_MT_2025_Premium2_Camo_01_name.xml>
+  <xmlns:czech1>	ussr	</xmlns:czech1>
+  <xmlns:germany>	germany	</xmlns:germany>
+  <xmlns:czech0>	usa	</xmlns:czech0>
+  <xmlns:china>	china	</xmlns:china>
+  <xmlns:france>	france	</xmlns:france>
+  <xmlns:uk>	uk	</xmlns:uk>
+  <xmlns:japan>	japan	</xmlns:japan>
+  <xmlns:czech>	czech	</xmlns:czech>
+  <xmlns:sweden>	sweden	</xmlns:sweden>
+  <xmlns:poland>	poland	</xmlns:poland>
+  <xmlns:italy>	italy	</xmlns:italy>
+  <xmlns:intunion>	intunion	</xmlns:intunion>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/opaque	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <tags>	fullRGB hiddenInUI	</tags>
+    <priceGroup>	MT camouflages 50g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R47_ISU-152_Zveroboj ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <camouflage>
+      <id>	31347	</id>
+      <texture>	vehicles/russian/Camouflage/BD_MT_2025_Premium2_Camo_01.dds	</texture>
+      <userString>	#vehicle_customization:BD_MT_2025_Premium2_Camo_01/name	</userString>
+      <description>	#vehicle_customization:BD_MT_2025_Premium2_Camo_01/description	</description>
+      <scales>	0.9 1 0.7	</scales>
+      <palettes>
+        <palette>
+          <c0>	255 0 0 255	</c0>
+          <c1>	0 255 0 255	</c1>
+          <c2>	0 0 255 255	</c2>
+          <c3>	0 0 0 255	</c3>
+        </palette>
+      </palettes>
+      <rotation>
+        <HULL>	-2.653773	</HULL>
+        <TURRET>	-2.653773	</TURRET>
+        <GUN>	-2.653773	</GUN>
+      </rotation>
+      <tilingSettings>
+        <type>	relative	</type>
+        <factor>	3.66 3.66	</factor>
+        <offset>	-7.08 -6.71	</offset>
+      </tilingSettings>
+      <glossMetallicMap>	vehicles/russian/Camouflage/BD_MT_2025_Premium2_Camo_01_GMM.dds	</glossMetallicMap>
+    </camouflage>
+  </itemGroup>
+</BD_MT_2025_Premium2_Camo_01_name.xml>

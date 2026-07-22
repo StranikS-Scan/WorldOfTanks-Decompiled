@@ -8,7 +8,7 @@ from adisp import adisp_process
 from constants import AchievementsLayoutStates, Configs
 from frameworks.wulf import ViewFlags, ViewSettings, WindowFlags, WindowLayer
 from gui.achievements.achievements_helper import fillAchievementSectionModel, fillAchievementModel, convertAchievementsToDbIds, convertDbIdsToAchievements
-from gui.impl.backport import TooltipData
+from gui.impl.backport import createTooltipData
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.achievements.dialogs.edit_confirm_model import DialogType
@@ -140,7 +140,7 @@ class EditView(ViewImpl):
 
     def __getBackportTooltipData(self, name, block):
         achievement = self.__dossier.getTotalStats().getAchievement((block, name))
-        return TooltipData(tooltip=None, isSpecial=True, specialAlias=TOOLTIPS_CONSTANTS.ACHIEVEMENT, specialArgs=(self.__dossier.getDossierType(),
+        return createTooltipData(tooltip=None, isSpecial=True, specialAlias=TOOLTIPS_CONSTANTS.ACHIEVEMENT, specialArgs=(self.__dossier.getDossierType(),
          dumpDossier(self.__dossier),
          block,
          name,

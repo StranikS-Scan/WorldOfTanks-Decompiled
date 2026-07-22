@@ -1,0 +1,66 @@
+<camouflage_historical_custom_look_korea_label.xml>
+  <usa:A136_T420>	ussr	</usa:A136_T420>
+  <usa:A128_concept_1b2>	germany	</usa:A128_concept_1b2>
+  <usa:A128_concept_1b9>	usa	</usa:A128_concept_1b9>
+  <xmlns:china>	china	</xmlns:china>
+  <usa:A128_concept_1b1>	france	</usa:A128_concept_1b1>
+  <usa:A128_concept_1b8>	uk	</usa:A128_concept_1b8>
+  <usa:A128_concept_1b5>	japan	</usa:A128_concept_1b5>
+  <usa:A128_concept_1b0>	czech	</usa:A128_concept_1b0>
+  <usa:A128_concept_1b7>	sweden	</usa:A128_concept_1b7>
+  <usa:A128_concept_1b6>	poland	</usa:A128_concept_1b6>
+  <usa:A128_concept_1b4>	italy	</usa:A128_concept_1b4>
+  <usa:A128_concept_1b3>	intunion	</usa:A128_concept_1b3>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/transparent	</userString>
+    <season>	ALL	</season>
+    <historical>	0	</historical>
+    <priceGroup>	MT camouflages 50g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <nations>	usa	</nations>
+      </include>
+      <exclude>
+        <vehicles>	usa:A13_T34_hvy_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <camouflage>
+      <id>	56	</id>
+      <texture>	vehicles/russian/Camouflage/historical_custom_look_korea_19.dds	</texture>
+      <description>	#vehicle_customization:camouflage/historical_custom_look_korea/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/historical_custom_look_korea/label	</userString>
+      <tags>	hiddenInUI	</tags>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	122 111 80 255	</c0>
+          <c1>	74 78 63 255	</c1>
+          <c2>	0 0 255 0	</c2>
+          <c3>	73 86 57 0	</c3>
+        </palette>
+      </palettes>
+      <rotation>
+        <HULL>	0.113446	</HULL>
+        <TURRET>	0.113446	</TURRET>
+        <GUN>	0.113446	</GUN>
+      </rotation>
+      <tiling>
+        <usa:A05_M4_Sherman>	4.5 4.5 -5.05 -4.87	</usa:A05_M4_Sherman>
+        <usa:A128_concept_1b>	0.52 0.52 0.000000 0.000000	</usa:A128_concept_1b>
+        <usa:A136_T42>	3.11 3.11 3.85 -6.84	</usa:A136_T42>
+        <usa:A13_T34_hvy>	2.6 2.6 -7.02 3.91	</usa:A13_T34_hvy>
+        <usa:A13_T34_hvy_FL>	2.6 2.6 -7.02 3.91	</usa:A13_T34_hvy_FL>
+        <usa:A34_M24_Chaffee>	3.05 3.05 7.35 -6.07	</usa:A34_M24_Chaffee>
+        <usa:A83_T110E4>	1.46 1.46 0.45 -1.16	</usa:A83_T110E4>
+        <usa:A83_T110E4_7x7>	1.46 1.46 0.45 -1.16	</usa:A83_T110E4_7x7>
+        <usa:A90_T69>	3.11 3.11 3.85 -6.84	</usa:A90_T69>
+      </tiling>
+      <tilingSettings>
+        <type>	absolute	</type>
+        <factor>	170 170	</factor>
+        <offset>	0.000000 -2	</offset>
+      </tilingSettings>
+    </camouflage>
+  </itemGroup>
+</camouflage_historical_custom_look_korea_label.xml>

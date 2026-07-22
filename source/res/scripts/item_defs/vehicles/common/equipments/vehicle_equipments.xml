@@ -8,6 +8,13 @@
     <icon>	handExtinguishers	</icon>
     <price>	3000	</price>
     <tags>	extinguisher	</tags>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <minLevel>	4	</minLevel>
+        </vehicle>
+      </include>
+    </vehicleFilter>
     <script>	Extinguisher	  <autoactivate>	true	</autoactivate>
       <cooldownSeconds>	105	</cooldownSeconds>
       <reuseCount>	-1	</reuseCount>
@@ -25,6 +32,13 @@
     <price>	20000	</price>
     <improved>	true	</improved>
     <tags>	extinguisher premium_equipment	</tags>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <minLevel>	4	</minLevel>
+        </vehicle>
+      </include>
+    </vehicleFilter>
     <script>	Extinguisher	  <fireStartingChanceFactor>	0.9	</fireStartingChanceFactor>
       <autoactivate>	true	</autoactivate>
       <cooldownSeconds>	90	</cooldownSeconds>
@@ -48,6 +62,13 @@
     <icon>	smallMedkit	</icon>
     <price>	3000	</price>
     <tags>	medkit	</tags>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <minLevel>	3	</minLevel>
+        </vehicle>
+      </include>
+    </vehicleFilter>
     <script>	Repairkit	  <repairAll>	true	</repairAll>
       <bonusValue>	0	</bonusValue>
       <stunResistanceEffect>	0.0	</stunResistanceEffect>
@@ -68,6 +89,13 @@
     <price>	20000	</price>
     <improved>	true	</improved>
     <tags>	medkit premium_equipment	</tags>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <minLevel>	3	</minLevel>
+        </vehicle>
+      </include>
+    </vehicleFilter>
     <script>	Repairkit	  <repairAll>	true	</repairAll>
       <bonusValue>	0.30	</bonusValue>
       <stunResistanceEffect>	0.0	</stunResistanceEffect>

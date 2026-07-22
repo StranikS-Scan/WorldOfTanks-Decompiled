@@ -1,0 +1,391 @@
+<tankAcademyResearchModule.xml>
+  <default-scene>	DefaultScene	</default-scene>
+  <initial-scene>	MissionsPage	</initial-scene>
+  <scenes>
+    <scene>	MissionsPage	  <post-effects>
+        <inactivate>	BuyModuleDialogOpening	</inactivate>
+        <inactivate>	ResearchModuleDialogOpening	</inactivate>
+        <inactivate>	VehicleResearchButtonClicked	</inactivate>
+        <inactivate>	ModuleResearched	</inactivate>
+        <inactivate>	ModuleBought	</inactivate>
+        <inactivate>	MenuHangarOnScene	</inactivate>
+        <inactivate>	HangarButtonWasClicked	</inactivate>
+        <inactivate>	TankCarouselOnScene	</inactivate>
+        <inactivate>	VehicleResearchButtonOnScene	</inactivate>
+        <inactivate>	ResearchItemNodeButtonOnScene	</inactivate>
+        <inactivate>	BuyModuleDialogAcceptButtonOnScene	</inactivate>
+        <inactivate>	BuyModuleDialogCancelButtonOnScene	</inactivate>
+        <inactivate>	SimpleDialogSecondButtonOnScene	</inactivate>
+        <inactivate>	HangarPanelShellsOnScene	</inactivate>
+      </post-effects>
+      <runtime-effects>
+        <show-hint>	MenuHangarHint	</show-hint>
+      </runtime-effects>
+      <gui-items>
+        <gui-item>	MenuHangar	  <on-scene-effects>
+            <activate>	MenuHangarOnScene	</activate>
+          </on-scene-effects>
+          <not-on-scene-effects>
+            <inactivate>	MenuHangarOnScene	</inactivate>
+          </not-on-scene-effects>
+        </gui-item>
+      </gui-items>
+    </scene>
+    <scene>	Hangar	  <post-effects>
+        <refuse-training>
+          <condition>
+            <inactive>	HangarButtonWasClicked	</inactive>
+          </condition>
+        </refuse-training>
+        <inactivate>	HangarButtonWasClicked	</inactivate>
+        <close-hint>	MenuHangarHint	</close-hint>
+        <close-hint>	ReturnToHangarHint	</close-hint>
+        <set-var>	CurrentVehicleCDSetter	</set-var>
+        <run-trigger>	CurrentVehicleChangeTrigger	</run-trigger>
+      </post-effects>
+      <runtime-effects>
+        <show-hint>	VehicleResearchButtonHint	  <condition>
+            <active>	VehicleResearchButtonOnScene	</active>
+            <inactive>	VehicleResearchButtonClicked	</inactive>
+            <inactive>	ModuleBought	</inactive>
+            <game-item>	CurrentVehicleCD	  <level-range>	RequiredVehicleMinLevel RequiredVehicleMaxLevel	</level-range>
+            </game-item>
+            <game-item>	CurrentVehicleCD	  <not-premium></not-premium>
+            </game-item>
+          </condition>
+        </show-hint>
+        <show-hint>	AmmunitionPanelHint	  <condition>
+            <active>	ModuleBought	</active>
+            <active>	HangarPanelShellsOnScene	</active>
+          </condition>
+        </show-hint>
+        <show-hint>	TankCarouselHint	  <condition>
+            <active>	TankCarouselOnScene	</active>
+            <either>
+              <game-item>	CurrentVehicleCD	  <not-level-range>	RequiredVehicleMinLevel RequiredVehicleMaxLevel	</not-level-range>
+              </game-item>
+              <game-item>	CurrentVehicleCD	  <premium></premium>
+              </game-item>
+            </either>
+          </condition>
+        </show-hint>
+      </runtime-effects>
+      <gui-items>
+        <gui-item>	VehicleResearchButton	  <on-scene-effects>
+            <activate>	VehicleResearchButtonOnScene	</activate>
+          </on-scene-effects>
+          <not-on-scene-effects>
+            <inactivate>	VehicleResearchButtonOnScene	</inactivate>
+          </not-on-scene-effects>
+        </gui-item>
+        <gui-item>	HangarPanelShells	  <on-scene-effects>
+            <activate>	HangarPanelShellsOnScene	</activate>
+          </on-scene-effects>
+          <not-on-scene-effects>
+            <inactivate>	HangarPanelShellsOnScene	</inactivate>
+          </not-on-scene-effects>
+        </gui-item>
+        <gui-item>	TankCarousel	  <on-scene-effects>
+            <activate>	TankCarouselOnScene	</activate>
+          </on-scene-effects>
+          <not-on-scene-effects>
+            <inactivate>	TankCarouselOnScene	</inactivate>
+          </not-on-scene-effects>
+        </gui-item>
+      </gui-items>
+    </scene>
+    <scene>	Research	  <post-effects>
+        <run-trigger>	ItemsCacheSyncTrigger	</run-trigger>
+        <set-var>	CurrentResearchModuleSetter	</set-var>
+        <run-trigger>	ResearchGoToNextVehicleTrigger	</run-trigger>
+      </post-effects>
+      <runtime-effects>
+        <show-hint>	ResearchModuleHint	  <condition>
+            <active>	ResearchItemNodeButtonOnScene	</active>
+            <inactive>	SimpleDialogSecondButtonOnScene	</inactive>
+            <inactive>	BuyModuleDialogAcceptButtonOnScene	</inactive>
+            <inactive>	BuyModuleDialogOpening	</inactive>
+            <inactive>	ResearchModuleDialogOpening	</inactive>
+            <inactive>	ModuleResearched	</inactive>
+            <inactive>	ModuleBought	</inactive>
+            <game-item>	CurrentVehicleCD	  <level-range>	RequiredVehicleMinLevel RequiredVehicleMaxLevel	</level-range>
+            </game-item>
+            <game-item>	CurrentVehicleCD	  <not-premium></not-premium>
+            </game-item>
+          </condition>
+        </show-hint>
+        <show-hint>	BuyModuleHint	  <condition>
+            <active>	ResearchItemNodeButtonOnScene	</active>
+            <inactive>	SimpleDialogSecondButtonOnScene	</inactive>
+            <inactive>	BuyModuleDialogAcceptButtonOnScene	</inactive>
+            <inactive>	BuyModuleDialogOpening	</inactive>
+            <active>	ModuleResearched	</active>
+            <inactive>	ModuleBought	</inactive>
+          </condition>
+        </show-hint>
+        <show-hint>	ReturnToHangarHint	  <condition>
+            <active>	ModuleBought	</active>
+            <active>	MenuHangarOnScene	</active>
+          </condition>
+        </show-hint>
+      </runtime-effects>
+      <gui-items>
+        <gui-item>	MenuHangar	  <on-scene-effects>
+            <activate>	MenuHangarOnScene	</activate>
+          </on-scene-effects>
+          <not-on-scene-effects>
+            <inactivate>	MenuHangarOnScene	</inactivate>
+          </not-on-scene-effects>
+        </gui-item>
+        <gui-item>	TankAcademyResearchItemNodeButton	  <on-scene-effects>
+            <activate>	ResearchItemNodeButtonOnScene	</activate>
+          </on-scene-effects>
+          <not-on-scene-effects>
+            <inactivate>	ResearchItemNodeButtonOnScene	</inactivate>
+          </not-on-scene-effects>
+        </gui-item>
+        <gui-item>	TankAcademyBuyModuleDialogAcceptButton	  <on-scene-effects>
+            <activate>	BuyModuleDialogAcceptButtonOnScene	</activate>
+          </on-scene-effects>
+          <not-on-scene-effects>
+            <inactivate>	BuyModuleDialogAcceptButtonOnScene	</inactivate>
+            <inactivate>	BuyModuleDialogOpening	</inactivate>
+          </not-on-scene-effects>
+        </gui-item>
+        <gui-item>	TankAcademyBuyModuleDialogCancelButton	  <on-scene-effects>
+            <activate>	BuyModuleDialogCancelButtonOnScene	</activate>
+          </on-scene-effects>
+          <not-on-scene-effects>
+            <inactivate>	BuyModuleDialogCancelButtonOnScene	</inactivate>
+            <inactivate>	BuyModuleDialogOpening	</inactivate>
+          </not-on-scene-effects>
+        </gui-item>
+        <gui-item>	SimpleDialogSecondButton	  <on-scene-effects>
+            <activate>	SimpleDialogSecondButtonOnScene	</activate>
+          </on-scene-effects>
+          <not-on-scene-effects>
+            <inactivate>	SimpleDialogSecondButtonOnScene	</inactivate>
+            <inactivate>	ResearchModuleDialogOpening	</inactivate>
+          </not-on-scene-effects>
+        </gui-item>
+      </gui-items>
+    </scene>
+    <scene>	DefaultScene	  <post-effects>
+        <refuse-training></refuse-training>
+      </post-effects>
+      <runtime-effects></runtime-effects>
+      <gui-items></gui-items>
+    </scene>
+  </scenes>
+  <has-id>
+    <hint>	MenuHangarHint	  <item-id>	MenuHangar	</item-id>
+      <text>	Перейдите в Ангар	</text>
+      <hide-immediately>	True	</hide-immediately>
+      <update-runtime>	True	</update-runtime>
+      <arrow>
+        <direction>	B	</direction>
+        <loop>	True	</loop>
+      </arrow>
+      <actions>
+        <click>	MenuHangar	  <effects>
+            <activate>	HangarButtonWasClicked	</activate>
+            <close-hint>	MenuHangarHint	</close-hint>
+          </effects>
+        </click>
+        <esc>	MenuHangar	  <effects>
+            <refuse-training></refuse-training>
+          </effects>
+        </esc>
+        <click>	BattleSelectorBar	  <effects>
+            <refuse-training></refuse-training>
+          </effects>
+        </click>
+      </actions>
+    </hint>
+    <hint>	VehicleResearchButtonHint	  <item-id>	VehicleResearchButton	</item-id>
+      <text>	Перейдите на экран исследований	</text>
+      <update-runtime>	True	</update-runtime>
+      <padding>
+        <left>	-225	</left>
+        <top>	-5	</top>
+        <right>	-35	</right>
+        <bottom>	-5	</bottom>
+      </padding>
+      <arrow>
+        <direction>	L	</direction>
+        <loop>	True	</loop>
+      </arrow>
+      <actions>
+        <click>	VehicleResearchButton	  <effects>
+            <close-hint>	VehicleResearchButtonHint	</close-hint>
+            <activate>	VehicleResearchButtonClicked	</activate>
+            <set-var>	CurrentVehicleCDSetter	</set-var>
+            <set-var>	CurrentResearchModuleSetter	</set-var>
+            <set-gui-item-criteria>	ResearchItemNodeCriteria	</set-gui-item-criteria>
+          </effects>
+        </click>
+        <esc>	VehicleResearchButton	  <effects>
+            <refuse-training></refuse-training>
+          </effects>
+        </esc>
+      </actions>
+    </hint>
+    <hint>	ResearchModuleHint	  <item-id>	TankAcademyResearchItemNodeButton	</item-id>
+      <text>	Исследуйте модуль	</text>
+      <hide-immediately>	True	</hide-immediately>
+      <update-runtime>	True	</update-runtime>
+      <arrow>
+        <direction>	T	</direction>
+        <loop>	True	</loop>
+      </arrow>
+      <actions>
+        <click>	TankAcademyResearchItemNodeButton	  <effects>
+            <close-hint>	ResearchModuleHint	</close-hint>
+            <activate>	ResearchModuleDialogOpening	</activate>
+          </effects>
+        </click>
+      </actions>
+    </hint>
+    <hint>	BuyModuleHint	  <item-id>	TankAcademyResearchItemNodeButton	</item-id>
+      <text>	Купите и установите&lt;br/&gt;этот модуль	</text>
+      <hide-immediately>	True	</hide-immediately>
+      <update-runtime>	True	</update-runtime>
+      <arrow>
+        <direction>	T	</direction>
+        <loop>	True	</loop>
+      </arrow>
+      <actions>
+        <click>	TankAcademyResearchItemNodeButton	  <effects>
+            <close-hint>	BuyModuleHint	</close-hint>
+            <activate>	BuyModuleDialogOpening	</activate>
+          </effects>
+        </click>
+      </actions>
+    </hint>
+    <hint>	ReturnToHangarHint	  <item-id>	MenuHangar	</item-id>
+      <text>	Вернитесь в Ангар	</text>
+      <update-runtime>	True	</update-runtime>
+      <arrow>
+        <direction>	B	</direction>
+        <loop>	True	</loop>
+      </arrow>
+      <actions>
+        <click>	MenuHangar	  <effects>
+            <activate>	HangarButtonWasClicked	</activate>
+            <close-hint>	ReturnToHangarHint	</close-hint>
+          </effects>
+        </click>
+        <click-outside>	MenuHangar	  <effects>
+            <refuse-training></refuse-training>
+          </effects>
+        </click-outside>
+      </actions>
+    </hint>
+    <hint>	AmmunitionPanelHint	  <item-id>	HangarPanelShells	</item-id>
+      <text>	Проверьте наличие боекомплекта —&lt;br/&gt;и выходите &lt;b&gt;В БОЙ&lt;/b&gt;	</text>
+      <update-runtime>	True	</update-runtime>
+      <arrow>
+        <direction>	T	</direction>
+        <loop>	True	</loop>
+      </arrow>
+      <actions>
+        <click>	HangarPanelShells	  <effects>
+            <refuse-training></refuse-training>
+          </effects>
+        </click>
+        <click-outside>	HangarPanelShells	  <effects>
+            <refuse-training></refuse-training>
+          </effects>
+        </click-outside>
+        <esc>	HangarPanelShells	  <effects>
+            <refuse-training></refuse-training>
+          </effects>
+        </esc>
+      </actions>
+    </hint>
+    <hint>	TankCarouselHint	  <item-id>	TankCarousel	</item-id>
+      <text>	Выберите исследуемую машину $RequiredVehicleMinLevelRoman$ уровня и выше	</text>
+      <hide-immediately>	True	</hide-immediately>
+      <update-runtime>	True	</update-runtime>
+      <arrow>
+        <direction>	T	</direction>
+        <loop>	True	</loop>
+      </arrow>
+      <actions>
+        <esc>	TankCarousel	  <effects>
+            <refuse-training></refuse-training>
+          </effects>
+        </esc>
+      </actions>
+    </hint>
+    <game-attribute>	CurrentVehicleCDSetter	  <var-ref>	CurrentVehicleCD	</var-ref>
+      <name>	CurrentVehicleCD	</name>
+    </game-attribute>
+    <game-attribute>	CurrentResearchModuleSetter	  <var-ref>	ModuleCD	</var-ref>
+      <name>	CurrentResearchModule	</name>
+    </game-attribute>
+    <gui-item-criteria>	ResearchItemNodeCriteria	  <item-id>	ResearchItemNodeID	</item-id>
+      <value>	id=$ModuleCD$	</value>
+    </gui-item-criteria>
+  </has-id>
+  <triggers>
+    <trigger>	CurrentVehicleChangeTrigger	  <type>	current-vehicle-changed	</type>
+      <validate-var></validate-var>
+      <unlock-targets>
+        <unlock-target>	TankCarousel	</unlock-target>
+        <unlock-target>	VehicleResearchButton	</unlock-target>
+      </unlock-targets>
+      <on-effects>
+        <set-var>	CurrentVehicleCDSetter	</set-var>
+        <close-hint>	TankCarouselHint	  <condition>
+            <game-item>	CurrentVehicleCD	  <level-range>	RequiredVehicleMinLevel RequiredVehicleMaxLevel	</level-range>
+            </game-item>
+            <game-item>	CurrentVehicleCD	  <not-premium></not-premium>
+            </game-item>
+          </condition>
+        </close-hint>
+        <close-hint>	VehicleResearchButtonHint	</close-hint>
+      </on-effects>
+    </trigger>
+    <trigger>	ItemsCacheSyncTrigger	  <type>	items-cache-sync	</type>
+      <validate-var></validate-var>
+      <unlock-targets>
+        <unlock-target>	TankAcademyResearchItemNodeButton	</unlock-target>
+      </unlock-targets>
+      <on-effects>
+        <close-hint>	ResearchModuleHint	  <condition>
+            <game-item>	ModuleCD	  <unlocked></unlocked>
+            </game-item>
+          </condition>
+        </close-hint>
+        <activate>	ModuleResearched	  <condition>
+            <game-item>	ModuleCD	  <unlocked></unlocked>
+            </game-item>
+          </condition>
+        </activate>
+        <close-hint>	BuyModuleHint	  <condition>
+            <game-item>	ModuleCD	  <installed>	CurrentVehicleCD	</installed>
+            </game-item>
+          </condition>
+        </close-hint>
+        <activate>	ModuleBought	  <condition>
+            <game-item>	ModuleCD	  <installed>	CurrentVehicleCD	</installed>
+            </game-item>
+          </condition>
+        </activate>
+      </on-effects>
+    </trigger>
+    <trigger>	ResearchGoToNextVehicleTrigger	  <type>	research-go-to-next-vehicle	</type>
+      <validate-var></validate-var>
+      <unlock-targets>
+        <unlock-target>	TankAcademyResearchItemNodeButton	</unlock-target>
+      </unlock-targets>
+      <on-effects>
+        <close-hint>	ResearchModuleHint	</close-hint>
+        <close-hint>	BuyModuleHint	</close-hint>
+        <refuse-training></refuse-training>
+      </on-effects>
+    </trigger>
+  </triggers>
+  <vars></vars>
+</tankAcademyResearchModule.xml>

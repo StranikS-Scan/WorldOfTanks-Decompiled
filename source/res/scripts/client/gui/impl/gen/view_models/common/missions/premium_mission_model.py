@@ -7,42 +7,42 @@ from gui.impl.gen.view_models.common.missions.quest_model import QuestModel
 class PremiumMissionModel(QuestModel):
     __slots__ = ()
 
-    def __init__(self, properties=16, commands=0):
+    def __init__(self, properties=18, commands=0):
         super(PremiumMissionModel, self).__init__(properties=properties, commands=commands)
 
     def getIcon(self):
-        return self._getString(11)
+        return self._getString(13)
 
     def setIcon(self, value):
-        self._setString(11, value)
+        self._setString(13, value)
 
     def getSubscriptionBonuses(self):
-        return self._getArray(12)
+        return self._getArray(14)
 
     def setSubscriptionBonuses(self, value):
-        self._setArray(12, value)
+        self._setArray(14, value)
 
     @staticmethod
     def getSubscriptionBonusesType():
         return BonusModel
 
     def getIsEnabledSubscription(self):
-        return self._getBool(13)
-
-    def setIsEnabledSubscription(self, value):
-        self._setBool(13, value)
-
-    def getIsActiveSubscription(self):
-        return self._getBool(14)
-
-    def setIsActiveSubscription(self, value):
-        self._setBool(14, value)
-
-    def getIsFirstView(self):
         return self._getBool(15)
 
-    def setIsFirstView(self, value):
+    def setIsEnabledSubscription(self, value):
         self._setBool(15, value)
+
+    def getIsActiveSubscription(self):
+        return self._getBool(16)
+
+    def setIsActiveSubscription(self, value):
+        self._setBool(16, value)
+
+    def getIsFirstView(self):
+        return self._getBool(17)
+
+    def setIsFirstView(self, value):
+        self._setBool(17, value)
 
     def _initialize(self):
         super(PremiumMissionModel, self)._initialize()

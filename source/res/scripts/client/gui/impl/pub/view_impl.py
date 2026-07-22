@@ -11,6 +11,7 @@ from helpers.events_handler import EventsHandler
 from skeletons.account_helpers.settings_repository import SettingsSerializable
 from skeletons.gui.impl import IGuiLoader
 from soft_exception import SoftException
+from gui.shared.system_factory import collectWulfTooltipContentFactory
 if TYPE_CHECKING:
     from typing import Optional
 TViewModel = TypeVar('TViewModel', bound=ViewModel)
@@ -28,7 +29,8 @@ class ViewImpl(View, EventsHandler, Generic[TViewModel]):
         super(ViewImpl, self)._finalize()
 
     def createToolTipContent(self, event, contentID):
-        return None
+        factory = collectWulfTooltipContentFactory(contentID)
+        return factory(self, event) if factory is not None else None
 
     def createPopOverContent(self, event):
         return None

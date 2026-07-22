@@ -17,6 +17,7 @@ class BonusesSortTags(object):
     UNIQUE_TANKMEN = 'uniqueTankmen'
     TANKMEN = 'tankmen'
     STYLE = 'style'
+    LB_STYLE_PROGRESS = 'lbStyleProgress'
     PERSONAL_BOOSTER = 'personalBooster'
     CREW_BOOK = 'crewBook'
     CURRENCY = 'ordinaryCurrency'
@@ -31,6 +32,7 @@ class BonusesSortTags(object):
     CLLC_ITEM_COMP = 'collectionItemCompensation'
     CUSTOM_LOOTBOX = 'customLootBox'
     CUSTOM_LOOTBOXKEY = 'customLootBoxKey'
+    CUSTOM_CURRENCY = 'customCurrency'
     RANGE = (UNSORTABLE,
      VEHICLE,
      UNIQUE_CUSTOMIZATION,
@@ -40,9 +42,11 @@ class BonusesSortTags(object):
      UNIQUE_TANKMEN,
      TANKMEN,
      STYLE,
+     LB_STYLE_PROGRESS,
      PERSONAL_BOOSTER,
      CREW_BOOK,
      CURRENCY,
+     CUSTOM_CURRENCY,
      OPT_DEV,
      EQUIPMENT,
      BATTLE_BOOSTER,
@@ -99,7 +103,7 @@ def _readOrder(ctx, order, tags):
         if tag.name == 'categories':
             continue
         if tag.name not in tags:
-            _logger.error('tag %s in order %s not in tags set', tag, order.name)
+            _logger.error('tag %s in order %s not in tags set', tag.name, order.name)
             return None
         res.append(tag.name)
 

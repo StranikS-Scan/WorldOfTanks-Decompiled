@@ -1,0 +1,40 @@
+<Rush_Pinup_Decal_name.xml>
+  <xmlns:czech1>	ussr	</xmlns:czech1>
+  <xmlns:germany>	germany	</xmlns:germany>
+  <xmlns:czech0>	usa	</xmlns:czech0>
+  <xmlns:china>	china	</xmlns:china>
+  <xmlns:france>	france	</xmlns:france>
+  <xmlns:uk>	uk	</xmlns:uk>
+  <xmlns:japan>	japan	</xmlns:japan>
+  <xmlns:czech>	czech	</xmlns:czech>
+  <xmlns:sweden>	sweden	</xmlns:sweden>
+  <xmlns:poland>	poland	</xmlns:poland>
+  <xmlns:italy>	italy	</xmlns:italy>
+  <xmlns:intunion>	intunion	</xmlns:intunion>
+  <itemGroup>
+    <name>	F108_Panhard_EBR_105_3Dst_Reef_Rush	</name>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <vehicleFilter>
+      <include>
+        <vehicles>	france:F108_Panhard_EBR_105	</vehicles>
+      </include>
+    </vehicleFilter>
+    <userString>	#vehicle_customization:projection_decals/special	</userString>
+    <priceGroup>	MT projection_decals 100g notInShop	</priceGroup>
+    <projection_decal>
+      <id>	31465	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/Rush_Pinup_Decal.dds	</texture>
+      <userString>	#vehicle_customization:Rush_Pinup_Decal/name	</userString>
+      <description>	#vehicle_customization:Rush_Pinup_Decal/description	</description>
+      <tags>	direction_left_to_right styleOnly hiddenInUI formfactor_square	</tags>
+    </projection_decal>
+    <projection_decal>
+      <id>	31474	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/BACK_Driver_Decal.dds	</texture>
+      <userString>	#vehicle_customization:BACK_Driver_Decal/name	</userString>
+      <description>	#vehicle_customization:BACK_Driver_Decal/description	</description>
+      <tags>	direction_left_to_right styleOnly hiddenInUI formfactor_square	</tags>
+    </projection_decal>
+  </itemGroup>
+</Rush_Pinup_Decal_name.xml>

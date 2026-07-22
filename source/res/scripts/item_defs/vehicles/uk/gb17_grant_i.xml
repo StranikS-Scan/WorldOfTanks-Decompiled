@@ -62,7 +62,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_3	</primaryArmor>
     <weight>	19962	</weight>
-    <maxHealth>	392	</maxHealth>
+    <maxHealth>	500	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	140	</maxHealth>
       <maxRegenHealth>	90	</maxRegenHealth>
@@ -1664,8 +1664,8 @@
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
       <rotationSpeed>	40	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.25	</vehicleMovement>
-        <vehicleRotation>	0.25	</vehicleRotation>
+        <vehicleMovement>	0.23	</vehicleMovement>
+        <vehicleRotation>	0.19	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	70	</maxHealth>
@@ -2590,7 +2590,7 @@
           <camouflage></camouflage>
         </customizableVehicleAreas>
       </customization>
-      <repairTime>	5.71428585	</repairTime>
+      <repairTime>	2.85003138	</repairTime>
     </Chassis_GB17_Grant_I>
     <Chassis_GB17_Grant_I_2>
       <userString>	#gb_vehicles:Chassis_GB17_Grant_I_2	</userString>
@@ -2607,8 +2607,8 @@
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
       <rotationSpeed>	42	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.22	</vehicleMovement>
-        <vehicleRotation>	0.22	</vehicleRotation>
+        <vehicleMovement>	0.20	</vehicleMovement>
+        <vehicleRotation>	0.16	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	80	</maxHealth>
@@ -3533,7 +3533,7 @@
           <camouflage></camouflage>
         </customizableVehicleAreas>
       </customization>
-      <repairTime>	5.71428585	</repairTime>
+      <repairTime>	2.85003138	</repairTime>
     </Chassis_GB17_Grant_I_2>
   </chassis>
   <turrets0>
@@ -3549,7 +3549,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_2 armor_2	</primaryArmor>
       <weight>	2000	</weight>
-      <maxHealth>	98	</maxHealth>
+      <maxHealth>	130	</maxHealth>
       <rotationSpeed>	42	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	100	</maxHealth>
@@ -3580,7 +3580,12 @@
             <gun>	20	</gun>
           </armor>
           <turretYawLimits>	-15 15	</turretYawLimits>
-          <shotDispersionRadius>	0.47	</shotDispersionRadius>
+          <shotDispersionRadius>	0.37	</shotDispersionRadius>
+          <shotDispersionFactors>
+            <turretRotation>	0.06	</turretRotation>
+            <afterShot>	3.5	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
           <reloadTime>	3.5	</reloadTime>
           <aimingTime>	1.8	</aimingTime>
           <invisibilityFactorAtShot>	0.26	</invisibilityFactorAtShot>
@@ -3640,14 +3645,14 @@
             </armor_1>
             <gun>	15	</gun>
           </armor>
-          <shotDispersionRadius>	0.42	</shotDispersionRadius>
+          <shotDispersionRadius>	0.36	</shotDispersionRadius>
           <reloadTime>	2.3	</reloadTime>
           <shotDispersionFactors>
-            <turretRotation>	0.18	</turretRotation>
+            <turretRotation>	0.06	</turretRotation>
             <afterShot>	3.5	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <aimingTime>	2.2	</aimingTime>
+          <aimingTime>	1.7	</aimingTime>
           <invisibilityFactorAtShot>	0.28	</invisibilityFactorAtShot>
           <turretYawLimits>	-15 15	</turretYawLimits>
           <models>
@@ -3707,9 +3712,14 @@
             <gun>	20	</gun>
           </armor>
           <turretYawLimits>	-15 15	</turretYawLimits>
-          <shotDispersionRadius>	0.41	</shotDispersionRadius>
+          <shotDispersionRadius>	0.36	</shotDispersionRadius>
+          <shotDispersionFactors>
+            <turretRotation>	0.06	</turretRotation>
+            <afterShot>	3.5	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
           <reloadTime>	3	</reloadTime>
-          <aimingTime>	2.1	</aimingTime>
+          <aimingTime>	1.7	</aimingTime>
           <invisibilityFactorAtShot>	0.26	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/british/GB17_Grant_I/normal/lod0/Gun_06.model	</undamaged>

@@ -1,0 +1,60 @@
+<BD_MT_2025_PostBox_ProjectionDecal_01_name.xml>
+  <xmlns:czech1>	ussr	</xmlns:czech1>
+  <xmlns:germany>	germany	</xmlns:germany>
+  <xmlns:czech0>	usa	</xmlns:czech0>
+  <xmlns:china>	china	</xmlns:china>
+  <xmlns:france>	france	</xmlns:france>
+  <xmlns:uk>	uk	</xmlns:uk>
+  <xmlns:japan>	japan	</xmlns:japan>
+  <xmlns:czech>	czech	</xmlns:czech>
+  <xmlns:sweden>	sweden	</xmlns:sweden>
+  <xmlns:poland>	poland	</xmlns:poland>
+  <xmlns:italy>	italy	</xmlns:italy>
+  <xmlns:intunion>	intunion	</xmlns:intunion>
+  <itemGroup>
+    <name>	BD_MT_2025	</name>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <userString>	#vehicle_customization:projection_decals/holiday	</userString>
+    <projection_decal>
+      <id>	31304	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/holiday/BD_MT_2025_PostBox_ProjectionDecal_01.dds	</texture>
+      <userString>	#vehicle_customization:BD_MT_2025_PostBox_ProjectionDecal_01/name	</userString>
+      <description>	#vehicle_customization:BD_MT_2025_PostBox_ProjectionDecal_01/description	</description>
+      <scaleFactorId>	1	</scaleFactorId>
+      <tags>	hiddenInUI formfactor_square direction_left_to_right styleOnly	</tags>
+      <priceGroup>	MT projection_decals 100g notInShop	</priceGroup>
+      <vehicleFilter>
+        <exclude>
+          <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF usa:A104_M4A3E8A usa:A126_PzVI_Tiger_II_capt ussr:R61_Object252_BF	</vehicles>
+        </exclude>
+      </vehicleFilter>
+    </projection_decal>
+    <projection_decal>
+      <id>	31305	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/holiday/BD_MT_2025_PostBox_ProjectionDecal_02.dds	</texture>
+      <userString>	#vehicle_customization:BD_MT_2025_PostBox_ProjectionDecal_02/name	</userString>
+      <description>	#vehicle_customization:BD_MT_2025_PostBox_ProjectionDecal_02/description	</description>
+      <scaleFactorId>	1	</scaleFactorId>
+      <tags>	formfactor_square disableVerticalMirror direction_left_to_right hiddenInUI styleOnly	</tags>
+      <priceGroup>	MT projection_decals 100g notInShop	</priceGroup>
+      <vehicleFilter>
+        <exclude></exclude>
+      </vehicleFilter>
+    </projection_decal>
+    <projection_decal>
+      <id>	31306	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/holiday/BD_MT_2025_PostBox_ProjectionDecal_03.dds	</texture>
+      <userString>	#vehicle_customization:BD_MT_2025_PostBox_ProjectionDecal_03/name	</userString>
+      <description>	#vehicle_customization:BD_MT_2025_PostBox_ProjectionDecal_03/description	</description>
+      <scaleFactorId>	1	</scaleFactorId>
+      <tags>	formfactor_square direction_left_to_right hiddenInUI styleOnly	</tags>
+      <priceGroup>	MT projection_decals 100g notInShop	</priceGroup>
+      <vehicleFilter>
+        <exclude>
+          <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF usa:A104_M4A3E8A usa:A126_PzVI_Tiger_II_capt ussr:R61_Object252_BF	</vehicles>
+        </exclude>
+      </vehicleFilter>
+    </projection_decal>
+  </itemGroup>
+</BD_MT_2025_PostBox_ProjectionDecal_01_name.xml>

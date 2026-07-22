@@ -15,6 +15,7 @@ from gui.impl import backport
 from gui.impl.gen import R
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
+from uilogging.rename_testing.loggers import RenameTestingUILogger
 
 class ArenasCache(object):
 
@@ -112,6 +113,8 @@ class TrainingSettingsWindow(TrainingWindowMeta):
         return info
 
     def updateTrainingRoom(self, arena, roundLength, isPrivate, comment):
+        if self.__isCreateRequest and not self.__isEpic:
+            RenameTestingUILogger().logTrainingCreateRoom()
         self.__settings.setArenaTypeID(arena)
         self.__settings.setRoundLen(roundLength * 60)
         self.__settings.setOpened(not isPrivate)

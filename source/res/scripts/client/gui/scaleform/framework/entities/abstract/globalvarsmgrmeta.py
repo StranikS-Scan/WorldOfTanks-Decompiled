@@ -51,3 +51,6 @@ class GlobalVarsMgrMeta(BaseDAAPIComponent):
 
     def isTradeInEnabled(self):
         self._printOverrideError('isTradeInEnabled')
+
+    def isBirthday(self):
+        self._printOverrideError('isBirthday')

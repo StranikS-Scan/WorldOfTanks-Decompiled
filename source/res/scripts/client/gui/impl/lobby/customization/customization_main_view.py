@@ -94,7 +94,7 @@ class _CustomizationCloseConfirmationsHelper(CloseConfirmatorsHelper):
 
 @sharedCustomizationTooltipData
 class CustomizationMainView(ViewImpl, EventSystemEntity, CustomizationSettingsSerializable):
-    __slots__ = ('__ctx', '__carouselDP', '__renderEnv', '__slotSelector', '__selectedItem', '__isHistoric', '__isNonHistoric', '__isFantastical', '__initAnchorsPositionsCallback', '__toolbarProvider', '__stageSwitcherProvider', '__carouselArrowsHintShown', '__closeConfirmationsHelper', '__isOnLoading', '__forceClose', '__progressiveItemCD')
+    __slots__ = ('__ctx', '__carouselDP', '__slotSelector', '__selectedItem', '__isHistoric', '__isNonHistoric', '__isFantastical', '__initAnchorsPositionsCallback', '__toolbarProvider', '__stageSwitcherProvider', '__carouselArrowsHintShown', '__closeConfirmationsHelper', '__isOnLoading', '__forceClose', '__progressiveItemCD')
     __service = dependency.descriptor(ICustomizationService)
     __settingsCore = dependency.descriptor(ISettingsCore)
     __guiLoader = dependency.descriptor(IGuiLoader)
@@ -112,8 +112,6 @@ class CustomizationMainView(ViewImpl, EventSystemEntity, CustomizationSettingsSe
         self.__progressiveItemCD = ctx.get('progressiveItemCD')
         self.__ctx = None
         self.__carouselDP = None
-        self.__renderEnv = BigWorld.CustomizationEnvironment()
-        self.__renderEnv.enable(True)
         self.__slotSelector = VehicleSlotSelector()
         self.__selectedItem = None
         self.__isHistoric = False
@@ -126,6 +124,9 @@ class CustomizationMainView(ViewImpl, EventSystemEntity, CustomizationSettingsSe
         self.__closeConfirmationsHelper = _CustomizationCloseConfirmationsHelper()
         self.__isOnLoading = False
         self.__forceClose = False
+        environmentSwitcher = BigWorld.EnvironmentSwitcher.instance()
+        if environmentSwitcher is not None:
+            environmentSwitcher.activateTempEnvironment('Customization')
         super(CustomizationMainView, self).__init__(settings)
         return
 
@@ -214,8 +215,9 @@ class CustomizationMainView(ViewImpl, EventSystemEntity, CustomizationSettingsSe
         self.fireEvent(CameraRelatedEvents(CameraRelatedEvents.FORCE_DISABLE_IDLE_PARALAX_MOVEMENT, ctx={'isDisable': False,
          'setIdle': True,
          'setParallax': True}), scope=EVENT_BUS_SCOPE.LOBBY)
-        self.__renderEnv.enable(False)
-        self.__renderEnv = None
+        environmentSwitcher = BigWorld.EnvironmentSwitcher.instance()
+        if environmentSwitcher is not None:
+            environmentSwitcher.activateMainEnvironment()
         self.__service.stopHighlighter()
         self.__toolbarProvider.fini()
         if self.__initAnchorsPositionsCallback is not None:
@@ -799,8 +801,11 @@ class CustomizationMainView(ViewImpl, EventSystemEntity, CustomizationSettingsSe
         with self.viewModel.transaction() as model:
             needInvalidate = False
             itemsList = model.carouselModel.getCarouselItemsList()
+            itemsLength = len(itemsList)
             for index, intCD in enumerate(newItemsRange):
                 newIndex = startIndex + index
+                if newIndex >= itemsLength:
+                    break
                 itemModel = itemsList.getValue(newIndex)
                 if not itemModel.getIsFilled():
                     needInvalidate = True

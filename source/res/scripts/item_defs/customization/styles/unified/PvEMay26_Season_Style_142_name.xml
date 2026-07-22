@@ -1,0 +1,95 @@
+<PvEMay26_Season_Style_142_name.xml>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/historical_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	0	</historical>
+    <priceGroup>	MT 2D styles universal 1000g notInShop	</priceGroup>
+    <style>
+      <id>	31534	</id>
+      <userString>	#vehicle_customization:PvEMay26_Season_Style_142/name	</userString>
+      <description>	#vehicle_customization:PvEMay26_Season_Style_142/description	</description>
+      <longDescriptionSpecial>	#vehicle_customization:PvEMay26_Season_Style_142/longDescription	</longDescriptionSpecial>
+      <texture>	gui/maps/vehicles/styles/PvEMay26_Season_Style_142.png	</texture>
+      <outfits>
+        <outfit>
+          <season>	event	</season>
+        </outfit>
+        <outfit>
+          <season>	winter	</season>
+          <camouflages>
+            <item>
+              <id>	31503	</id>
+              <patternSize>	1	</patternSize>
+              <appliedTo>	4368	</appliedTo>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <modifications>
+            <item>	3	</item>
+          </modifications>
+        </outfit>
+        <outfit>
+          <season>	summer	</season>
+          <camouflages>
+            <item>
+              <id>	31503	</id>
+              <patternSize>	1	</patternSize>
+              <appliedTo>	4368	</appliedTo>
+              <palette>	1	</palette>
+            </item>
+          </camouflages>
+          <modifications>
+            <item>	3	</item>
+          </modifications>
+          <paints>
+            <item>
+              <id>	31484	</id>
+              <appliedTo>	20753	</appliedTo>
+            </item>
+          </paints>
+        </outfit>
+        <outfit>
+          <season>	desert	</season>
+          <paints>
+            <item>
+              <id>	31485	</id>
+              <appliedTo>	20753	</appliedTo>
+            </item>
+          </paints>
+          <camouflages>
+            <item>
+              <id>	31503	</id>
+              <patternSize>	1	</patternSize>
+              <appliedTo>	4368	</appliedTo>
+              <palette>	2	</palette>
+            </item>
+          </camouflages>
+          <modifications>
+            <item>	3	</item>
+          </modifications>
+        </outfit>
+      </outfits>
+      <alternateItems>
+        <personal_number>
+          <id>	31001	</id>
+        </personal_number>
+      </alternateItems>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+    </style>
+    <tags>	addNationalEmblem	</tags>
+    <vehicleFilter>
+      <include>
+        <nations>	ussr	</nations>
+      </include>
+      <exclude>
+        <vehicles>	ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+  </itemGroup>
+</PvEMay26_Season_Style_142_name.xml>

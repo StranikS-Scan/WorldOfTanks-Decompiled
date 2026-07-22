@@ -1,0 +1,155 @@
+<camouflage_apac_nations_all_label.xml>
+  <xmlns:czech1>	ussr	</xmlns:czech1>
+  <xmlns:germany>	germany	</xmlns:germany>
+  <xmlns:czech0>	usa	</xmlns:czech0>
+  <xmlns:china>	china	</xmlns:china>
+  <xmlns:france>	france	</xmlns:france>
+  <xmlns:uk>	uk	</xmlns:uk>
+  <xmlns:japan>	japan	</xmlns:japan>
+  <xmlns:czech>	czech	</xmlns:czech>
+  <xmlns:sweden>	sweden	</xmlns:sweden>
+  <xmlns:poland>	poland	</xmlns:poland>
+  <xmlns:italy>	italy	</xmlns:italy>
+  <xmlns:intunion>	intunion	</xmlns:intunion>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/opaque	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	MT camouflages 50g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R47_ISU-152_Zveroboj ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <camouflage>
+      <id>	161	</id>
+      <texture>	vehicles/russian/Camouflage/apac_nations.dds	</texture>
+      <description>	#vehicle_customization:camouflage/apac_nations_all/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/apac_nations_all/label	</userString>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	27 53 28 255	</c0>
+          <c1>	107 136 142 255	</c1>
+          <c2>	216 191 67 255	</c2>
+          <c3>	25 25 25 255	</c3>
+        </palette>
+      </palettes>
+      <rotation>
+        <HULL>	-0.688532	</HULL>
+        <TURRET>	-0.688532	</TURRET>
+        <GUN>	-0.688532	</GUN>
+      </rotation>
+      <tilingSettings>
+        <type>	relative	</type>
+        <factor>	2.7 2.7	</factor>
+        <offset>	0.000000 0.000000	</offset>
+      </tilingSettings>
+    </camouflage>
+    <camouflage>
+      <id>	162	</id>
+      <texture>	vehicles/russian/Camouflage/apac_nations.dds	</texture>
+      <description>	#vehicle_customization:camouflage/apac_nations_green/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/apac_nations_green/label	</userString>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	17 63 37 255	</c0>
+          <c1>	78 112 30 255	</c1>
+          <c2>	203 162 81 255	</c2>
+          <c3>	26 33 19 255	</c3>
+        </palette>
+      </palettes>
+      <rotation>
+        <HULL>	-0.688532	</HULL>
+        <TURRET>	-0.688532	</TURRET>
+        <GUN>	-0.688532	</GUN>
+      </rotation>
+      <tilingSettings>
+        <type>	relative	</type>
+        <factor>	2.7 2.7	</factor>
+        <offset>	0.000000 0.000000	</offset>
+      </tilingSettings>
+    </camouflage>
+    <camouflage>
+      <id>	163	</id>
+      <texture>	vehicles/russian/Camouflage/apac_nations.dds	</texture>
+      <description>	#vehicle_customization:camouflage/apac_nations_red/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/apac_nations_red/label	</userString>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	91 31 13 255	</c0>
+          <c1>	188 141 94 255	</c1>
+          <c2>	152 44 22 255	</c2>
+          <c3>	40 6 6 255	</c3>
+        </palette>
+      </palettes>
+      <rotation>
+        <HULL>	-0.688532	</HULL>
+        <TURRET>	-0.688532	</TURRET>
+        <GUN>	-0.688532	</GUN>
+      </rotation>
+      <tilingSettings>
+        <type>	relative	</type>
+        <factor>	2.7 2.7	</factor>
+        <offset>	0.000000 0.000000	</offset>
+      </tilingSettings>
+    </camouflage>
+    <camouflage>
+      <id>	164	</id>
+      <texture>	vehicles/russian/Camouflage/apac_nations.dds	</texture>
+      <description>	#vehicle_customization:camouflage/apac_nations_lilac/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/apac_nations_lilac/label	</userString>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	79 18 59 255	</c0>
+          <c1>	203 123 123 255	</c1>
+          <c2>	68 15 52 255	</c2>
+          <c3>	38 20 29 255	</c3>
+        </palette>
+      </palettes>
+      <rotation>
+        <HULL>	-0.688532	</HULL>
+        <TURRET>	-0.688532	</TURRET>
+        <GUN>	-0.688532	</GUN>
+      </rotation>
+      <tilingSettings>
+        <type>	relative	</type>
+        <factor>	2.7 2.7	</factor>
+        <offset>	0.000000 0.000000	</offset>
+      </tilingSettings>
+    </camouflage>
+    <camouflage>
+      <id>	165	</id>
+      <texture>	vehicles/russian/Camouflage/apac_nations.dds	</texture>
+      <description>	#vehicle_customization:camouflage/apac_nations_purple/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/apac_nations_purple/label	</userString>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	14 29 50 255	</c0>
+          <c1>	64 77 196 255	</c1>
+          <c2>	191 123 89 255	</c2>
+          <c3>	28 9 38 255	</c3>
+        </palette>
+      </palettes>
+      <rotation>
+        <HULL>	-0.688532	</HULL>
+        <TURRET>	-0.688532	</TURRET>
+        <GUN>	-0.688532	</GUN>
+      </rotation>
+      <tilingSettings>
+        <type>	relative	</type>
+        <factor>	2.7 2.7	</factor>
+        <offset>	0.000000 0.000000	</offset>
+      </tilingSettings>
+    </camouflage>
+  </itemGroup>
+</camouflage_apac_nations_all_label.xml>

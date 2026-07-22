@@ -83,6 +83,7 @@ if typing.TYPE_CHECKING:
     from gui.Scaleform.framework.managers import ContainerManager
     from uilogging.wot_plus.logging_constants import WotPlusInfoPageSource
     from gui.impl.lobby.crew.widget.crew_widget import BuildedMessage
+    from sound_gui_manager import CommonSoundSpaceSettings
 _logger = logging.getLogger(__name__)
 
 class SettingsTabIndex(object):
@@ -845,6 +846,10 @@ def runSalesChain(chapterID, restoreIfRun=True, reloadIfRun=False, isStopForced=
     g_eventBus.handleEvent(events.TutorialEvent(events.TutorialEvent.START_TRAINING, settingsID='SALES_TRIGGERS', initialChapter=chapterID, restoreIfRun=restoreIfRun, reloadIfRun=reloadIfRun, isStopForced=isStopForced))
 
 
+def runTankAcademyChain(chapterID, restoreIfRun=True, reloadIfRun=False, isStopForced=False, showWaiting=True):
+    g_eventBus.handleEvent(events.TutorialEvent(events.TutorialEvent.START_TRAINING, settingsID='TANK_ACADEMY', initialChapter=chapterID, restoreIfRun=restoreIfRun, reloadIfRun=reloadIfRun, isStopForced=isStopForced, showWaiting=showWaiting))
+
+
 def changeAppResolution(width, height, scale):
     g_eventBus.handleEvent(events.GameEvent(events.GameEvent.CHANGE_APP_RESOLUTION, ctx={'width': width,
      'height': height,
@@ -1347,12 +1352,14 @@ def showPMDiscardConfirmationDialog(questID, callback=None):
     callback((result, {}))
 
 
-def showOfferGiftVehiclePreview(offerID, giftID, confirmCallback=None, backBtnLabel=None, customCallbacks=None):
-    g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.OFFER_GIFT_VEHICLE_PREVIEW), ctx={'offerID': offerID,
+def showOfferGiftVehiclePreview(offerID, giftID, confirmCallback=None, backBtnLabel=None, customCallbacks=None, soundSpace=None, **kwargs):
+    kwargs.update({'offerID': offerID,
      'giftID': giftID,
      'confirmCallback': confirmCallback,
      'backBtnLabel': backBtnLabel,
-     'customCallbacks': customCallbacks}), scope=EVENT_BUS_SCOPE.LOBBY)
+     'customCallbacks': customCallbacks,
+     'soundSpace': soundSpace})
+    g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.OFFER_GIFT_VEHICLE_PREVIEW), ctx=kwargs), scope=EVENT_BUS_SCOPE.LOBBY)
 
 
 def showOfferRewardWindow(offerID, giftID, cdnTitle='', cdnDescription='', cdnIcon=''):

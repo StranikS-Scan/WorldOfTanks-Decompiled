@@ -1,0 +1,81 @@
+<special_style_mid_autumn_fest_2023_1.xml>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	MT 2D styles universal 1000g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <style>
+      <id>	827	</id>
+      <texture>	gui/maps/vehicles/styles/mid_autumn_fest_2023_1.png	</texture>
+      <description>	#vehicle_customization:special_style/mid_autumn_fest_2023_1_desc	</description>
+      <longDescriptionSpecial>	#vehicle_customization:special_style/mid_autumn_fest_2023_1_desc/long	</longDescriptionSpecial>
+      <userString>	#vehicle_customization:special_style/mid_autumn_fest_2023_1	</userString>
+      <tags>	progression_required	</tags>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	15965	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <paints>
+            <item>
+              <id>	424	</id>
+              <appliedTo>	30583	</appliedTo>
+            </item>
+          </paints>
+        </outfit>
+      </outfits>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+    </style>
+    <style>
+      <id>	828	</id>
+      <texture>	gui/maps/vehicles/styles/mid_autumn_fest_2023_2.png	</texture>
+      <description>	#vehicle_customization:special_style/mid_autumn_fest_2023_2_desc	</description>
+      <longDescriptionSpecial>	#vehicle_customization:special_style/mid_autumn_fest_2023_2_desc/long	</longDescriptionSpecial>
+      <userString>	#vehicle_customization:special_style/mid_autumn_fest_2023_2	</userString>
+      <tags>	progression_required	</tags>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	15966	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <projection_decals>
+            <item>
+              <id>	941	</id>
+              <tags>	formfactor_rect1x2 mimic front	</tags>
+            </item>
+          </projection_decals>
+        </outfit>
+      </outfits>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+    </style>
+  </itemGroup>
+</special_style_mid_autumn_fest_2023_1.xml>

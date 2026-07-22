@@ -1976,7 +1976,7 @@
           <camouflage></camouflage>
         </customizableVehicleAreas>
       </customization>
-      <repairTime>	4.57142878	</repairTime>
+      <repairTime>	2.85003138	</repairTime>
     </Chassis_Pl07_14TP>
     <Chassis_Pl07_14TP_2>
       <userString>	#poland_vehicles:Chassis_Pl07_14TP_2	</userString>
@@ -2781,7 +2781,7 @@
           <camouflage></camouflage>
         </customizableVehicleAreas>
       </customization>
-      <repairTime>	4.57142878	</repairTime>
+      <repairTime>	2.85003138	</repairTime>
     </Chassis_Pl07_14TP_2>
   </chassis>
   <turrets0>
@@ -3307,6 +3307,10 @@
       <level>	4	</level>
       <price>	4850	</price>
       <unlocks>
+        <gun>	_47mm_armata_wz_39	  <cost>	1400	</cost>
+        </gun>
+        <vehicle>	Pl12_25TP_KSUST_II	  <cost>	11930	</cost>
+        </vehicle>
         <gun>	_40mm_auto_Boforsa	  <cost>	1150	</cost>
         </gun>
       </unlocks>
@@ -3353,8 +3357,8 @@
           <shotDispersionRadius>	0.36	</shotDispersionRadius>
           <reloadTime>	2.8	</reloadTime>
           <shotDispersionFactors>
-            <turretRotation>	0.12	</turretRotation>
-            <afterShot>	3.5	</afterShot>
+            <turretRotation>	0.10	</turretRotation>
+            <afterShot>	2.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <aimingTime>	1.9	</aimingTime>
@@ -3427,10 +3431,93 @@
             <aoTextureSize>	512 256	</aoTextureSize>
           </camouflage>
         </_37mm_Bofors_wz_37>
+        <_47mm_armata_wz_39>	shared	  <maxAmmo>	75	</maxAmmo>
+          <unlocks>
+            <vehicle>	Pl33_SDP_Wz_40	  <cost>	14200	</cost>
+            </vehicle>
+          </unlocks>
+          <armor>
+            <armor_1>	30	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	15	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	20	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_3>
+            <gun>	10	</gun>
+          </armor>
+          <shotDispersionRadius>	0.38	</shotDispersionRadius>
+          <reloadTime>	3.6	</reloadTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.1	</turretRotation>
+            <afterShot>	2	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <aimingTime>	1.7	</aimingTime>
+          <invisibilityFactorAtShot>	0.261	</invisibilityFactorAtShot>
+          <turretYawLimits>	-180 180	</turretYawLimits>
+          <pitchLimits>
+            <minPitch>	0 -20 1 -20	</minPitch>
+            <maxPitch>	0 8 1 8	</maxPitch>
+          </pitchLimits>
+          <models>
+            <undamaged>	vehicles/poland/Pl07_14TP/normal/lod0/Gun_04.model	</undamaged>
+            <destroyed>	vehicles/poland/Pl07_14TP/crash/lod0/Gun_04.model	</destroyed>
+            <exploded>	vehicles/poland/Pl07_14TP/crash/lod0/Gun_04.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModelServer>	vehicles/poland/Pl07_14TP/collision/Gun_04.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/poland/Pl07_14TP/collision_client/Gun_04.model	</collisionModelClient>
+          </hitTester>
+          <effects>	shot_small	</effects>
+          <reloadEffect>	reload20_45	</reloadEffect>
+          <customizationSlots>
+            <slot>
+              <slotType>	paint	</slotType>
+              <slotId>	41000	</slotId>
+              <anchorPosition>	-0.020816 -0.023121 1.00436	</anchorPosition>
+              <anchorDirection>	0 0 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+            <slot>
+              <slotType>	paint	</slotType>
+              <slotId>	41001	</slotId>
+              <anchorPosition>	0 0.108655 0.108656	</anchorPosition>
+              <anchorDirection>	0 0.707107 0.707107	</anchorDirection>
+              <applyTo>	16384	</applyTo>
+            </slot>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	42000	</slotId>
+              <anchorPosition>	-0.020816 -0.023121 1.00436	</anchorPosition>
+              <anchorDirection>	0 0 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	49000	</slotId>
+              <rayStart>	-0.041632 -0.046242 1.32399	</rayStart>
+              <rayEnd>	-0.041632 -0.046242 1.62399	</rayEnd>
+              <rayUp>	0.047 0 0	</rayUp>
+              <size>	0.3	</size>
+            </slot>
+          </customizationSlots>
+          <customization>
+            <customizableVehicleAreas>
+              <paint>	GUN GUN_2	</paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <shotOffset>	-0.041597 -0.045267 -0.000001	</shotOffset>
+          <camouflage>
+            <tiling>	0.48 0.24 0.000000 0.000000	</tiling>
+            <density>	131.027 130.915	</density>
+            <aoTextureSize>	512 256	</aoTextureSize>
+          </camouflage>
+        </_47mm_armata_wz_39>
         <_40mm_auto_Boforsa>	shared	  <maxAmmo>	92	</maxAmmo>
           <unlocks>
-            <gun>	_47mm_armata_wz_39	  <cost>	1400	</cost>
-            </gun>
+            <vehicle>	Pl17_DS_PZlnz	  <cost>	13230	</cost>
+            </vehicle>
           </unlocks>
           <armor>
             <armor_1>	30	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
@@ -3444,11 +3531,11 @@
           <shotDispersionRadius>	0.4	</shotDispersionRadius>
           <reloadTime>	6.5	</reloadTime>
           <shotDispersionFactors>
-            <turretRotation>	0.16	</turretRotation>
-            <afterShot>	3.5	</afterShot>
+            <turretRotation>	0.10	</turretRotation>
+            <afterShot>	2.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <aimingTime>	2.5	</aimingTime>
+          <aimingTime>	1.8	</aimingTime>
           <clip>
             <count>	4	</count>
             <rate>	150	</rate>
@@ -3518,91 +3605,6 @@
             <aoTextureSize>	512 256	</aoTextureSize>
           </camouflage>
         </_40mm_auto_Boforsa>
-        <_47mm_armata_wz_39>	shared	  <maxAmmo>	75	</maxAmmo>
-          <unlocks>
-            <vehicle>	Pl12_25TP_KSUST_II	  <cost>	11930	</cost>
-            </vehicle>
-            <vehicle>	Pl33_SDP_Wz_40	  <cost>	14200	</cost>
-            </vehicle>
-          </unlocks>
-          <armor>
-            <armor_1>	30	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_1>
-            <armor_2>	15	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_2>
-            <armor_3>	20	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_3>
-            <gun>	10	</gun>
-          </armor>
-          <shotDispersionRadius>	0.38	</shotDispersionRadius>
-          <reloadTime>	3.9	</reloadTime>
-          <shotDispersionFactors>
-            <turretRotation>	0.1	</turretRotation>
-            <afterShot>	3	</afterShot>
-            <whileGunDamaged>	2.0	</whileGunDamaged>
-          </shotDispersionFactors>
-          <aimingTime>	2	</aimingTime>
-          <invisibilityFactorAtShot>	0.261	</invisibilityFactorAtShot>
-          <turretYawLimits>	-180 180	</turretYawLimits>
-          <pitchLimits>
-            <minPitch>	0 -20 1 -20	</minPitch>
-            <maxPitch>	0 8 1 8	</maxPitch>
-          </pitchLimits>
-          <models>
-            <undamaged>	vehicles/poland/Pl07_14TP/normal/lod0/Gun_04.model	</undamaged>
-            <destroyed>	vehicles/poland/Pl07_14TP/crash/lod0/Gun_04.model	</destroyed>
-            <exploded>	vehicles/poland/Pl07_14TP/crash/lod0/Gun_04.model	</exploded>
-          </models>
-          <hitTester>
-            <collisionModelServer>	vehicles/poland/Pl07_14TP/collision/Gun_04.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/poland/Pl07_14TP/collision_client/Gun_04.model	</collisionModelClient>
-          </hitTester>
-          <effects>	shot_small	</effects>
-          <reloadEffect>	reload20_45	</reloadEffect>
-          <customizationSlots>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41000	</slotId>
-              <anchorPosition>	-0.020816 -0.023121 1.00436	</anchorPosition>
-              <anchorDirection>	0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41001	</slotId>
-              <anchorPosition>	0 0.108655 0.108656	</anchorPosition>
-              <anchorDirection>	0 0.707107 0.707107	</anchorDirection>
-              <applyTo>	16384	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	camouflage	</slotType>
-              <slotId>	42000	</slotId>
-              <anchorPosition>	-0.020816 -0.023121 1.00436	</anchorPosition>
-              <anchorDirection>	0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	insigniaOnGun	</slotType>
-              <slotId>	49000	</slotId>
-              <rayStart>	-0.041632 -0.046242 1.32399	</rayStart>
-              <rayEnd>	-0.041632 -0.046242 1.62399	</rayEnd>
-              <rayUp>	0.047 0 0	</rayUp>
-              <size>	0.3	</size>
-            </slot>
-          </customizationSlots>
-          <customization>
-            <customizableVehicleAreas>
-              <paint>	GUN GUN_2	</paint>
-              <camouflage>	GUN	</camouflage>
-            </customizableVehicleAreas>
-          </customization>
-          <shotOffset>	-0.041597 -0.045267 -0.000001	</shotOffset>
-          <camouflage>
-            <tiling>	0.48 0.24 0.000000 0.000000	</tiling>
-            <density>	131.027 130.915	</density>
-            <aoTextureSize>	512 256	</aoTextureSize>
-          </camouflage>
-        </_47mm_armata_wz_39>
       </guns>
       <models>
         <undamaged>	vehicles/poland/Pl07_14TP/normal/lod0/Turret_02.model	</undamaged>
@@ -4097,21 +4099,12 @@
         </engine>
       </unlocks>
     </J_V12_M>
-    <PLInz_RWA>	shared	  <unlocks>
-        <vehicle>	Pl17_DS_PZlnz	  <cost>	13230	</cost>
-        </vehicle>
-      </unlocks>
-    </PLInz_RWA>
+    <PLInz_RWA>	shared	</PLInz_RWA>
   </engines>
   <fuelTanks>
     <Medium>	shared	</Medium>
   </fuelTanks>
   <radios>
-    <N2_M>	shared	  <unlocks>
-        <radio>	N2_S	  <cost>	100	</cost>
-        </radio>
-      </unlocks>
-    </N2_M>
     <N2_S>	shared	</N2_S>
   </radios>
   <clientAdjustmentFactors></clientAdjustmentFactors>

@@ -1,249 +1,740 @@
 <chassis.xml>
-  <ids>
-    <T-14>	0	</T-14>
-    <chassisE1>	1	</chassisE1>
-    <chassisE2>	2	</chassisE2>
-    <Cunningham_E2>	4	</Cunningham_E2>
-    <T16E2>	5	</T16E2>
-    <Cunningham_E1>	3	</Cunningham_E1>
-    <HVS1>	6	</HVS1>
-    <HVS2>	7	</HVS2>
-    <T41>	8	</T41>
-    <T42>	9	</T42>
-    <NVSS_T66>	10	</NVSS_T66>
-    <NVSS_T80>	11	</NVSS_T80>
-    <HVSS_T48>	12	</HVSS_T48>
-    <HVSS_T51>	13	</HVSS_T51>
-    <VVSS_T16E1>	14	</VVSS_T16E1>
-    <VVSS_T16E2>	15	</VVSS_T16E2>
-    <VVSS_T36E6>	16	</VVSS_T36E6>
-    <VVSS_T51>	18	</VVSS_T51>
-    <VVSS_WE210>	20	</VVSS_WE210>
-    <T84E38>	21	</T84E38>
-    <T80E3>	23	</T80E3>
-    <VVSST41>	24	</VVSST41>
-    <VVSST48>	25	</VVSST48>
-    <HVSST31>	26	</HVSST31>
-    <HVSST35>	27	</HVSST35>
-    <VVSST49>	28	</VVSST49>
-    <VVSST51>	29	</VVSST51>
-    <T84E1>	30	</T84E1>
-    <T84E3>	31	</T84E3>
-    <T72>	32	</T72>
-    <T72E1>	33	</T72E1>
-    <T84E1A>	34	</T84E1A>
-    <T84E3A>	35	</T84E3A>
-    <T85E1>	36	</T85E1>
-    <T85E2>	37	</T85E2>
-    <T48>	38	</T48>
-    <T49>	39	</T49>
-    <MTLS_T1>	40	</MTLS_T1>
-    <VVSS_T16E3>	41	</VVSS_T16E3>
-    <VVSS_T36E8>	42	</VVSS_T36E8>
-    <VVSS_T48>	43	</VVSS_T48>
-    <VVSS_T48A>	44	</VVSS_T48A>
-    <T2E1>	45	</T2E1>
-    <T2E4>	46	</T2E4>
-    <Pershingchassis1>	47	</Pershingchassis1>
-    <Pershingchassis2>	48	</Pershingchassis2>
-    <Chassis_T18>	49	</Chassis_T18>
-    <Chassis_M10_Wolverine>	55	</Chassis_M10_Wolverine>
-    <Chassis_M10_Wolverine_2>	56	</Chassis_M10_Wolverine_2>
-    <Chassis_M4A2E4>	57	</Chassis_M4A2E4>
-    <Chassis_M36_Slagger_4>	58	</Chassis_M36_Slagger_4>
-    <Chassis_M36_Slagger_5>	59	</Chassis_M36_Slagger_5>
-    <Chassis_M40M43>	60	</Chassis_M40M43>
-    <Chassis_M40M43_2>	61	</Chassis_M40M43_2>
-    <Chassis_T40>	62	</Chassis_T40>
-    <Chassis_T40_2>	63	</Chassis_T40_2>
-    <Chassis_M12>	64	</Chassis_M12>
-    <Chassis_M12_2>	65	</Chassis_M12_2>
-    <Chassis_T28>	66	</Chassis_T28>
-    <Chassis_T28_2>	67	</Chassis_T28_2>
-    <Chassis_T92>	68	</Chassis_T92>
-    <Chassis_T95>	70	</Chassis_T95>
-    <Chassis_T95_2>	71	</Chassis_T95_2>
-    <Chassis_M6A2E1>	72	</Chassis_M6A2E1>
-    <Chassis_M22_Locust>	73	</Chassis_M22_Locust>
-    <Chassis_M46_Patton>	74	</Chassis_M46_Patton>
-    <Chassis_M46_Patton_2>	75	</Chassis_M46_Patton_2>
-    <Chassis_T25_AT>	76	</Chassis_T25_AT>
-    <Chassis_T25_AT_2>	77	</Chassis_T25_AT_2>
-    <Chassis_M103>	78	</Chassis_M103>
-    <Chassis_M103_2>	79	</Chassis_M103_2>
-    <Chassis_M24_Chaffee>	80	</Chassis_M24_Chaffee>
-    <Chassis_M24_Chaffee_2>	81	</Chassis_M24_Chaffee_2>
-    <Chassis_Sherman_Jumbo>	82	</Chassis_Sherman_Jumbo>
-    <Chassis_Sherman_Jumbo_2>	83	</Chassis_Sherman_Jumbo_2>
-    <Chassis_M8A1>	84	</Chassis_M8A1>
-    <Chassis_M8A1_2>	85	</Chassis_M8A1_2>
-    <Chassis_T49>	86	</Chassis_T49>
-    <Chassis_T49_2>	87	</Chassis_T49_2>
-    <Chassis_T110>	88	</Chassis_T110>
-    <Chassis_T25_2>	89	</Chassis_T25_2>
-    <Chassis_T25_2_2>	90	</Chassis_T25_2_2>
-    <Chassis_T28_Prototype>	91	</Chassis_T28_Prototype>
-    <Chassis_T28_Prototype_2>	92	</Chassis_T28_Prototype_2>
-    <Chassis_M18_Hellcat>	93	</Chassis_M18_Hellcat>
-    <Chassis_M18_Hellcat_2>	94	</Chassis_M18_Hellcat_2>
-    <Torsion_bar_T80>	95	</Torsion_bar_T80>
-    <T80E3A>	96	</T80E3A>
-    <Chassis_A136_T42>	97	</Chassis_A136_T42>
-    <Chassis_M4_Improved>	101	</Chassis_M4_Improved>
-    <Chassis_T110E4>	103	</Chassis_T110E4>
-    <Chassis_T26_E4_SuperPershing>	104	</Chassis_T26_E4_SuperPershing>
-    <Chassis_T110E3>	106	</Chassis_T110E3>
-    <Chassis_T1_E6>	107	</Chassis_T1_E6>
-    <Chassis_A120_M48A5>	108	</Chassis_A120_M48A5>
-    <Chassis_T95_E2>	109	</Chassis_T95_E2>
-    <Chassis_T69>	111	</Chassis_T69>
-    <Chassis_T69_2>	112	</Chassis_T69_2>
-    <Chassis_T57_58>	113	</Chassis_T57_58>
-    <Chassis_T21>	114	</Chassis_T21>
-    <Chassis_T21_2>	115	</Chassis_T21_2>
-    <Chassis_T54E1>	116	</Chassis_T54E1>
-    <Chassis_T54E1_2>	117	</Chassis_T54E1_2>
-    <Chassis_T71>	118	</Chassis_T71>
-    <Chassis_T71_2>	119	</Chassis_T71_2>
-    <NVSS_T801>	121	</NVSS_T801>
-    <Chassis_M60>	123	</Chassis_M60>
-    <Chassis_M53_55>	125	</Chassis_M53_55>
-    <Chassis_M53_55_2>	126	</Chassis_M53_55_2>
-    <Chassis_M44>	127	</Chassis_M44>
-    <Chassis_M44_2>	128	</Chassis_M44_2>
-    <Chassis_T7_Combat_Car>	129	</Chassis_T7_Combat_Car>
-    <Chassis_T37>	131	</Chassis_T37>
-    <Chassis_T37_2>	132	</Chassis_T37_2>
-    <Chassis_T95_E6>	136	</Chassis_T95_E6>
-    <Chassis_M41_Bulldog>	142	</Chassis_M41_Bulldog>
-    <Chassis_M41_Bulldog_2>	143	</Chassis_M41_Bulldog_2>
-    <Chassis_A104_M4A3E8A>	144	</Chassis_A104_M4A3E8A>
-    <Chassis_A100_T49>	145	</Chassis_A100_T49>
-    <Chassis_A100_T49_2>	146	</Chassis_A100_T49_2>
-    <Chassis_A101_M56>	148	</Chassis_A101_M56>
-    <Chassis_A102_T28_concept>	149	</Chassis_A102_T28_concept>
-    <Chassis_A108_T18_HMC>	153	</Chassis_A108_T18_HMC>
-    <Chassis_A108_T18_HMC_2>	154	</Chassis_A108_T18_HMC_2>
-    <Chassis_A106_M48A2_120>	157	</Chassis_A106_M48A2_120>
-    <Chassis_A109_T56_GMC>	155	</Chassis_A109_T56_GMC>
-    <Chassis_A109_T56_GMC_2>	156	</Chassis_A109_T56_GMC_2>
-    <Chassis_A46_T3>	161	</Chassis_A46_T3>
-    <Chassis_A46_T3_2>	162	</Chassis_A46_T3_2>
-    <Chassis_A27_T82>	163	</Chassis_A27_T82>
-    <Chassis_A27_T82_2>	164	</Chassis_A27_T82_2>
-    <Chassis_A107_T1_HMC>	165	</Chassis_A107_T1_HMC>
-    <Chassis_A107_T1_HMC_2>	166	</Chassis_A107_T1_HMC_2>
-    <Chassis_M46_Patton_KR>	167	</Chassis_M46_Patton_KR>
-    <Chassis_A111_T25_Pilot>	168	</Chassis_A111_T25_Pilot>
-    <Chassis_A112_T71E2>	169	</Chassis_A112_T71E2>
-    <Chassis_A99_T92_LT>	170	</Chassis_A99_T92_LT>
-    <Chassis_A115_Chrysler_K_GF>	173	</Chassis_A115_Chrysler_K_GF>
-    <Chassis_A117_T26E5>	174	</Chassis_A117_T26E5>
-    <Chassis_A117_T26E5_Patriot>	175	</Chassis_A117_T26E5_Patriot>
-    <T80E3_BF>	176	</T80E3_BF>
-    <Chassis_A116_XM551>	177	</Chassis_A116_XM551>
-    <Chassis_A118_M4_Thunderbolt>	178	</Chassis_A118_M4_Thunderbolt>
-    <Chassis_A112_T71E2R>	179	</Chassis_A112_T71E2R>
-    <Chassis_A112_T71E2R_2>	180	</Chassis_A112_T71E2R_2>
-    <Chassis_A121_M26_Cologne>	185	</Chassis_A121_M26_Cologne>
-    <Chassis_A115_Chrysler_K>	186	</Chassis_A115_Chrysler_K>
-    <Chassis_A122_TS-5>	187	</Chassis_A122_TS-5>
-    <T80E3_FL>	188	</T80E3_FL>
-    <Chassis_T26_E4_SuperPershing_FL>	189	</Chassis_T26_E4_SuperPershing_FL>
-    <Chassis_A123_T78>	190	</Chassis_A123_T78>
-    <Chassis_A126_PzVI_Tiger_II_capt>	191	</Chassis_A126_PzVI_Tiger_II_capt>
-    <Chassis_A125_AEP_1>	192	</Chassis_A125_AEP_1>
-    <Chassis_A124_T54E2>	194	</Chassis_A124_T54E2>
-    <Chassis_A127_TL_1_LPC>	195	</Chassis_A127_TL_1_LPC>
-    <Chassis_A130_Super_Hellcat>	196	</Chassis_A130_Super_Hellcat>
-    <Chassis_A129_T6_medium>	197	</Chassis_A129_T6_medium>
-    <Chassis_A129_T6_medium_2>	198	</Chassis_A129_T6_medium_2>
-    <Chassis_A128_concept_1b>	199	</Chassis_A128_concept_1b>
-    <Chassis_A117_T26E5_FL>	200	</Chassis_A117_T26E5_FL>
-    <T84E3A_FL>	201	</T84E3A_FL>
-    <Chassis_A132_T77>	202	</Chassis_A132_T77>
-    <Chassis_A134_M24E2_SuperChaffee>	203	</Chassis_A134_M24E2_SuperChaffee>
-    <Chassis_A140_ASTRON_REX_105mm>	204	</Chassis_A140_ASTRON_REX_105mm>
-    <Chassis_A145_TS_54>	205	</Chassis_A145_TS_54>
-    <Chassis_A148_Convertible_Medium_Tank_T3>	206	</Chassis_A148_Convertible_Medium_Tank_T3>
-    <Chassis_A146_TL_7_120>	207	</Chassis_A146_TL_7_120>
-    <Chassis_A149_AMBT>	208	</Chassis_A149_AMBT>
-    <Chassis_A141_M_IV_Y>	210	</Chassis_A141_M_IV_Y>
-    <Chassis_A142_Pawlack_Tank>	212	</Chassis_A142_Pawlack_Tank>
-    <Chassis_A142_Pawlack_Tank_2>	213	</Chassis_A142_Pawlack_Tank_2>
-    <Chassis_A147_M_II_Y>	214	</Chassis_A147_M_II_Y>
-    <Chassis_A147_M_II_Y_2>	215	</Chassis_A147_M_II_Y_2>
-    <Chassis_A139_M_III_Y>	216	</Chassis_A139_M_III_Y>
-    <Chassis_A139_M_III_Y_2>	217	</Chassis_A139_M_III_Y_2>
-    <Chassis_A144_M_VI_Y>	218	</Chassis_A144_M_VI_Y>
-    <Chassis_A144_M_VI_Y_2>	219	</Chassis_A144_M_VI_Y_2>
-    <Chassis_A143_M_V_Y>	220	</Chassis_A143_M_V_Y>
-    <Chassis_A150_MBT_B>	221	</Chassis_A150_MBT_B>
-    <Chassis_A151_TS_60>	222	</Chassis_A151_TS_60>
-    <Chassis_A156_T54_2022>	223	</Chassis_A156_T54_2022>
-    <Chassis_A152_M_Project>	224	</Chassis_A152_M_Project>
-    <Chassis_A152_M_Project_2>	225	</Chassis_A152_M_Project_2>
-    <T84E3A_M>	226	</T84E3A_M>
-    <Chassis_A158_T832>	227	</Chassis_A158_T832>
-    <Chassis_A153_XM66F>	228	</Chassis_A153_XM66F>
-    <Chassis_A154_Convertible_Medium_Tank_T3E2>	229	</Chassis_A154_Convertible_Medium_Tank_T3E2>
-    <Chassis_A161_ARMT>	231	</Chassis_A161_ARMT>
-    <Chassis_T71_2_IGR>	60001	</Chassis_T71_2_IGR>
-    <Chassis_T69_2_IGR>	60002	</Chassis_T69_2_IGR>
-    <T80E3_IGR>	60003	</T80E3_IGR>
-    <Chassis_Sherman_Jumbo_2_IGR>	60004	</Chassis_Sherman_Jumbo_2_IGR>
-    <Chassis_T49_2_IGR>	60005	</Chassis_T49_2_IGR>
-    <Pershingchassis2_IGR>	60006	</Pershingchassis2_IGR>
-    <T84E3_IGR>	60007	</T84E3_IGR>
-    <T42_IGR>	60008	</T42_IGR>
-    <Chassis_A120_M48A5_IGR>	60009	</Chassis_A120_M48A5_IGR>
-    <Chassis_T25_2_SH>	306	</Chassis_T25_2_SH>
-    <Chassis_T69_2_SH>	309	</Chassis_T69_2_SH>
-    <Chassis_T26_E4_SuperPershing_SH>	310	</Chassis_T26_E4_SuperPershing_SH>
-    <Chassis_A120_M48A5_7x7>	401	</Chassis_A120_M48A5_7x7>
-    <Chassis_T110_cl>	402	</Chassis_T110_cl>
-    <Chassis_T110E4_7x7>	403	</Chassis_T110E4_7x7>
-    <T84E38_FL>	501	</T84E38_FL>
-    <Chassis_M46_Patton_2_FL>	502	</Chassis_M46_Patton_2_FL>
-    <Chassis_M41_Bulldog_2_FL>	503	</Chassis_M41_Bulldog_2_FL>
-    <Chassis_T28_Prototype_2_FL>	504	</Chassis_T28_Prototype_2_FL>
-    <Pershingchassis2_FL>	505	</Pershingchassis2_FL>
-    <Chassis_T25_AT_2_FL>	31002	</Chassis_T25_AT_2_FL>
-    <Chassis_Sherman_Jumbo_bootcamp>	64004	</Chassis_Sherman_Jumbo_bootcamp>
-    <Chassis_A129_T6_medium_2_MapsTraining_Dummy_MT_1>	22	</Chassis_A129_T6_medium_2_MapsTraining_Dummy_MT_1>
-    <T-14_MapsTraining_Player_HT_1>	50	</T-14_MapsTraining_Player_HT_1>
-    <Chassis_T21_2_MapsTraining_Dummy_LT_2>	51	</Chassis_T21_2_MapsTraining_Dummy_LT_2>
-    <Chassis_T110_7x7>	31001	</Chassis_T110_7x7>
-    <Chassis_A141_M_IV_Y_MT_BF>	31003	</Chassis_A141_M_IV_Y_MT_BF>
-    <Chassis_A160_M24_594>	31004	</Chassis_A160_M24_594>
-    <Chassis_A143_M_V_Y_7x7>	31005	</Chassis_A143_M_V_Y_7x7>
-    <Chassis_A157_M_VII_Y>	31006	</Chassis_A157_M_VII_Y>
-    <Chassis_A162_ATAC_II>	31007	</Chassis_A162_ATAC_II>
-    <Chassis_A165_XM57>	31009	</Chassis_A165_XM57>
-    <Chassis_A163_H_3>	31010	</Chassis_A163_H_3>
-    <Chassis_A169_TF_3>	31011	</Chassis_A169_TF_3>
-    <Chassis_A169_TF_3_2>	31012	</Chassis_A169_TF_3_2>
-    <Chassis_A172_ASTRON_FL>	31013	</Chassis_A172_ASTRON_FL>
-    <Chassis_A170_M4A3FL>	31014	</Chassis_A170_M4A3FL>
-    <Chassis_A170_M4A3FL_2>	31015	</Chassis_A170_M4A3FL_2>
-    <Chassis_A173_TF_2_CLARK>	31016	</Chassis_A173_TF_2_CLARK>
-    <Chassis_T57_58_T>	31017	</Chassis_T57_58_T>
-    <Chassis_A172_ASTRON_FL_T>	31018	</Chassis_A172_ASTRON_FL_T>
-    <Chassis_A163_H_3_2>	31019	</Chassis_A163_H_3_2>
-    <Chassis_A171_TF_4>	31020	</Chassis_A171_TF_4>
-    <Chassis_A171_TF_4_2>	31021	</Chassis_A171_TF_4_2>
-    <Chassis_A169_TF_3_2_T>	31022	</Chassis_A169_TF_3_2_T>
-    <Chassis_A164_TS_6>	31023	</Chassis_A164_TS_6>
-    <Chassis_A174_M36B1_GMC>	31024	</Chassis_A174_M36B1_GMC>
-    <Chassis_A175_OTAC_MT_58>	31025	</Chassis_A175_OTAC_MT_58>
-    <VVSS_T48A_02>	31026	</VVSS_T48A_02>
-    <Chassis_A176_OTAC_LK_7605>	31027	</Chassis_A176_OTAC_LK_7605>
-    <Chassis_A175_OTAC_MT_58_02>	31028	</Chassis_A175_OTAC_MT_58_02>
-    <Chassis_A179_MBT_59>	31030	</Chassis_A179_MBT_59>
-    <Chassis_A125_AEP_1_T>	31008	</Chassis_A125_AEP_1_T>
-    <Chassis_A150_MBT_B_T>	35001	</Chassis_A150_MBT_B_T>
-    <Chassis_A1001_OTAC_MT_58_T>	35002	</Chassis_A1001_OTAC_MT_58_T>
-    <Chassis_A182_ALRS_M6>	31033	</Chassis_A182_ALRS_M6>
-  </ids>
-  <shared></shared>
+  <xmlns:xmlref>	http://bwt/xmlref	</xmlns:xmlref>
+  <shared>
+    <Chassis_A1001_OTAC_MT_58_T>
+      <id>	35002	</id>
+    </Chassis_A1001_OTAC_MT_58_T>
+    <Chassis_A100_T49>
+      <id>	145	</id>
+    </Chassis_A100_T49>
+    <Chassis_A100_T49_2>
+      <id>	146	</id>
+    </Chassis_A100_T49_2>
+    <Chassis_A101_M56>
+      <id>	148	</id>
+    </Chassis_A101_M56>
+    <Chassis_A102_T28_concept>
+      <id>	149	</id>
+    </Chassis_A102_T28_concept>
+    <Chassis_A104_M4A3E8A>
+      <id>	144	</id>
+    </Chassis_A104_M4A3E8A>
+    <Chassis_A106_M48A2_120>
+      <id>	157	</id>
+    </Chassis_A106_M48A2_120>
+    <Chassis_A107_T1_HMC>
+      <id>	165	</id>
+    </Chassis_A107_T1_HMC>
+    <Chassis_A107_T1_HMC_2>
+      <id>	166	</id>
+    </Chassis_A107_T1_HMC_2>
+    <Chassis_A108_T18_HMC>
+      <id>	153	</id>
+    </Chassis_A108_T18_HMC>
+    <Chassis_A108_T18_HMC_2>
+      <id>	154	</id>
+    </Chassis_A108_T18_HMC_2>
+    <Chassis_A109_T56_GMC>
+      <id>	155	</id>
+    </Chassis_A109_T56_GMC>
+    <Chassis_A109_T56_GMC_2>
+      <id>	156	</id>
+    </Chassis_A109_T56_GMC_2>
+    <Chassis_A111_T25_Pilot>
+      <id>	168	</id>
+    </Chassis_A111_T25_Pilot>
+    <Chassis_A112_T71E2>
+      <id>	169	</id>
+    </Chassis_A112_T71E2>
+    <Chassis_A112_T71E2R>
+      <id>	179	</id>
+    </Chassis_A112_T71E2R>
+    <Chassis_A112_T71E2R_2>
+      <id>	180	</id>
+    </Chassis_A112_T71E2R_2>
+    <Chassis_A115_Chrysler_K>
+      <id>	186	</id>
+    </Chassis_A115_Chrysler_K>
+    <Chassis_A115_Chrysler_K_GF>
+      <id>	173	</id>
+    </Chassis_A115_Chrysler_K_GF>
+    <Chassis_A116_XM551>
+      <id>	177	</id>
+    </Chassis_A116_XM551>
+    <Chassis_A117_T26E5>
+      <id>	174	</id>
+    </Chassis_A117_T26E5>
+    <Chassis_A117_T26E5_FL>
+      <id>	200	</id>
+    </Chassis_A117_T26E5_FL>
+    <Chassis_A117_T26E5_Patriot>
+      <id>	175	</id>
+    </Chassis_A117_T26E5_Patriot>
+    <Chassis_A118_M4_Thunderbolt>
+      <id>	178	</id>
+    </Chassis_A118_M4_Thunderbolt>
+    <Chassis_A120_M48A5>
+      <id>	108	</id>
+    </Chassis_A120_M48A5>
+    <Chassis_A120_M48A5_7x7>
+      <id>	401	</id>
+    </Chassis_A120_M48A5_7x7>
+    <Chassis_A120_M48A5_IGR>
+      <id>	60009	</id>
+    </Chassis_A120_M48A5_IGR>
+    <Chassis_A121_M26_Cologne>
+      <id>	185	</id>
+    </Chassis_A121_M26_Cologne>
+    <Chassis_A122_TS-5>
+      <id>	187	</id>
+    </Chassis_A122_TS-5>
+    <Chassis_A123_T78>
+      <id>	190	</id>
+    </Chassis_A123_T78>
+    <Chassis_A124_T54E2>
+      <id>	194	</id>
+    </Chassis_A124_T54E2>
+    <Chassis_A125_AEP_1>
+      <id>	192	</id>
+    </Chassis_A125_AEP_1>
+    <Chassis_A125_AEP_1_T>
+      <id>	31008	</id>
+    </Chassis_A125_AEP_1_T>
+    <Chassis_A126_PzVI_Tiger_II_capt>
+      <id>	191	</id>
+    </Chassis_A126_PzVI_Tiger_II_capt>
+    <Chassis_A127_TL_1_LPC>
+      <id>	195	</id>
+    </Chassis_A127_TL_1_LPC>
+    <Chassis_A128_concept_1b>
+      <id>	199	</id>
+    </Chassis_A128_concept_1b>
+    <Chassis_A129_T6_medium>
+      <id>	197	</id>
+    </Chassis_A129_T6_medium>
+    <Chassis_A129_T6_medium_2>
+      <id>	198	</id>
+    </Chassis_A129_T6_medium_2>
+    <Chassis_A129_T6_medium_2_MapsTraining_Dummy_MT_1>
+      <id>	22	</id>
+    </Chassis_A129_T6_medium_2_MapsTraining_Dummy_MT_1>
+    <Chassis_A130_Super_Hellcat>
+      <id>	196	</id>
+    </Chassis_A130_Super_Hellcat>
+    <Chassis_A132_T77>
+      <id>	202	</id>
+    </Chassis_A132_T77>
+    <Chassis_A134_M24E2_SuperChaffee>
+      <id>	203	</id>
+    </Chassis_A134_M24E2_SuperChaffee>
+    <Chassis_A136_T42>
+      <id>	97	</id>
+    </Chassis_A136_T42>
+    <Chassis_A139_M_III_Y>
+      <id>	216	</id>
+    </Chassis_A139_M_III_Y>
+    <Chassis_A139_M_III_Y_2>
+      <id>	217	</id>
+    </Chassis_A139_M_III_Y_2>
+    <Chassis_A140_ASTRON_REX_105mm>
+      <id>	204	</id>
+    </Chassis_A140_ASTRON_REX_105mm>
+    <Chassis_A141_M_IV_Y>
+      <id>	210	</id>
+    </Chassis_A141_M_IV_Y>
+    <Chassis_A141_M_IV_Y_MT_BF>
+      <id>	31003	</id>
+    </Chassis_A141_M_IV_Y_MT_BF>
+    <Chassis_A142_Pawlack_Tank>
+      <id>	212	</id>
+    </Chassis_A142_Pawlack_Tank>
+    <Chassis_A142_Pawlack_Tank_2>
+      <id>	213	</id>
+    </Chassis_A142_Pawlack_Tank_2>
+    <Chassis_A143_M_V_Y>
+      <id>	220	</id>
+    </Chassis_A143_M_V_Y>
+    <Chassis_A143_M_V_Y_7x7>
+      <id>	31005	</id>
+    </Chassis_A143_M_V_Y_7x7>
+    <Chassis_A144_M_VI_Y>
+      <id>	218	</id>
+    </Chassis_A144_M_VI_Y>
+    <Chassis_A144_M_VI_Y_2>
+      <id>	219	</id>
+    </Chassis_A144_M_VI_Y_2>
+    <Chassis_A145_TS_54>
+      <id>	205	</id>
+    </Chassis_A145_TS_54>
+    <Chassis_A146_TL_7_120>
+      <id>	207	</id>
+    </Chassis_A146_TL_7_120>
+    <Chassis_A147_M_II_Y>
+      <id>	214	</id>
+    </Chassis_A147_M_II_Y>
+    <Chassis_A147_M_II_Y_2>
+      <id>	215	</id>
+    </Chassis_A147_M_II_Y_2>
+    <Chassis_A148_Convertible_Medium_Tank_T3>
+      <id>	206	</id>
+    </Chassis_A148_Convertible_Medium_Tank_T3>
+    <Chassis_A149_AMBT>
+      <id>	208	</id>
+    </Chassis_A149_AMBT>
+    <Chassis_A150_MBT_B>
+      <id>	221	</id>
+    </Chassis_A150_MBT_B>
+    <Chassis_A150_MBT_B_T>
+      <id>	35001	</id>
+    </Chassis_A150_MBT_B_T>
+    <Chassis_A151_TS_60>
+      <id>	222	</id>
+    </Chassis_A151_TS_60>
+    <Chassis_A152_M_Project>
+      <id>	224	</id>
+    </Chassis_A152_M_Project>
+    <Chassis_A152_M_Project_2>
+      <id>	225	</id>
+    </Chassis_A152_M_Project_2>
+    <Chassis_A153_XM66F>
+      <id>	228	</id>
+    </Chassis_A153_XM66F>
+    <Chassis_A154_Convertible_Medium_Tank_T3E2>
+      <id>	229	</id>
+    </Chassis_A154_Convertible_Medium_Tank_T3E2>
+    <Chassis_A156_T54_2022>
+      <id>	223	</id>
+    </Chassis_A156_T54_2022>
+    <Chassis_A157_M_VII_Y>
+      <id>	31006	</id>
+    </Chassis_A157_M_VII_Y>
+    <Chassis_A158_T832>
+      <id>	227	</id>
+    </Chassis_A158_T832>
+    <Chassis_A160_M24_594>
+      <id>	31004	</id>
+    </Chassis_A160_M24_594>
+    <Chassis_A161_ARMT>
+      <id>	231	</id>
+    </Chassis_A161_ARMT>
+    <Chassis_A162_ATAC_II>
+      <id>	31007	</id>
+    </Chassis_A162_ATAC_II>
+    <Chassis_A163_H_3>
+      <id>	31010	</id>
+    </Chassis_A163_H_3>
+    <Chassis_A163_H_3_2>
+      <id>	31019	</id>
+    </Chassis_A163_H_3_2>
+    <Chassis_A164_TS_6>
+      <id>	31023	</id>
+    </Chassis_A164_TS_6>
+    <Chassis_A165_XM57>
+      <id>	31009	</id>
+    </Chassis_A165_XM57>
+    <Chassis_A169_TF_3>
+      <id>	31011	</id>
+    </Chassis_A169_TF_3>
+    <Chassis_A169_TF_3_2>
+      <id>	31012	</id>
+    </Chassis_A169_TF_3_2>
+    <Chassis_A169_TF_3_2_T>
+      <id>	31022	</id>
+    </Chassis_A169_TF_3_2_T>
+    <Chassis_A170_M4A3FL>
+      <id>	31014	</id>
+    </Chassis_A170_M4A3FL>
+    <Chassis_A170_M4A3FL_2>
+      <id>	31015	</id>
+    </Chassis_A170_M4A3FL_2>
+    <Chassis_A171_TF_4>
+      <id>	31020	</id>
+    </Chassis_A171_TF_4>
+    <Chassis_A171_TF_4_2>
+      <id>	31021	</id>
+    </Chassis_A171_TF_4_2>
+    <Chassis_A172_ASTRON_FL>
+      <id>	31013	</id>
+    </Chassis_A172_ASTRON_FL>
+    <Chassis_A172_ASTRON_FL_T>
+      <id>	31018	</id>
+    </Chassis_A172_ASTRON_FL_T>
+    <Chassis_A173_TF_2_CLARK>
+      <id>	31016	</id>
+    </Chassis_A173_TF_2_CLARK>
+    <Chassis_A174_M36B1_GMC>
+      <id>	31024	</id>
+    </Chassis_A174_M36B1_GMC>
+    <Chassis_A175_OTAC_MT_58>
+      <id>	31025	</id>
+    </Chassis_A175_OTAC_MT_58>
+    <Chassis_A175_OTAC_MT_58_02>
+      <id>	31028	</id>
+    </Chassis_A175_OTAC_MT_58_02>
+    <Chassis_A176_OTAC_LK_7605>
+      <id>	31027	</id>
+    </Chassis_A176_OTAC_LK_7605>
+    <Chassis_A179_MBT_59>
+      <id>	31030	</id>
+    </Chassis_A179_MBT_59>
+    <Chassis_A182_ALRS_M6>
+      <id>	31033	</id>
+    </Chassis_A182_ALRS_M6>
+    <Chassis_A184_HTPC>
+      <id>	31037	</id>
+    </Chassis_A184_HTPC>
+    <Chassis_A27_T82>
+      <id>	163	</id>
+    </Chassis_A27_T82>
+    <Chassis_A27_T82_2>
+      <id>	164	</id>
+    </Chassis_A27_T82_2>
+    <Chassis_A46_T3>
+      <id>	161	</id>
+    </Chassis_A46_T3>
+    <Chassis_A46_T3_2>
+      <id>	162	</id>
+    </Chassis_A46_T3_2>
+    <Chassis_A99_T92_LT>
+      <id>	170	</id>
+    </Chassis_A99_T92_LT>
+    <Chassis_M103>
+      <id>	78	</id>
+    </Chassis_M103>
+    <Chassis_M103_2>
+      <id>	79	</id>
+    </Chassis_M103_2>
+    <Chassis_M10_Wolverine>
+      <id>	55	</id>
+    </Chassis_M10_Wolverine>
+    <Chassis_M10_Wolverine_2>
+      <id>	56	</id>
+    </Chassis_M10_Wolverine_2>
+    <Chassis_M12>
+      <id>	64	</id>
+    </Chassis_M12>
+    <Chassis_M12_2>
+      <id>	65	</id>
+    </Chassis_M12_2>
+    <Chassis_M18_Hellcat>
+      <id>	93	</id>
+    </Chassis_M18_Hellcat>
+    <Chassis_M18_Hellcat_2>
+      <id>	94	</id>
+    </Chassis_M18_Hellcat_2>
+    <Chassis_M22_Locust>
+      <id>	73	</id>
+    </Chassis_M22_Locust>
+    <Chassis_M24_Chaffee>
+      <id>	80	</id>
+    </Chassis_M24_Chaffee>
+    <Chassis_M24_Chaffee_2>
+      <id>	81	</id>
+    </Chassis_M24_Chaffee_2>
+    <Chassis_M36_Slagger_4>
+      <id>	58	</id>
+    </Chassis_M36_Slagger_4>
+    <Chassis_M36_Slagger_5>
+      <id>	59	</id>
+    </Chassis_M36_Slagger_5>
+    <Chassis_M40M43>
+      <id>	60	</id>
+    </Chassis_M40M43>
+    <Chassis_M40M43_2>
+      <id>	61	</id>
+    </Chassis_M40M43_2>
+    <Chassis_M41_Bulldog>
+      <id>	142	</id>
+    </Chassis_M41_Bulldog>
+    <Chassis_M41_Bulldog_2>
+      <id>	143	</id>
+    </Chassis_M41_Bulldog_2>
+    <Chassis_M41_Bulldog_2_FL>
+      <id>	503	</id>
+    </Chassis_M41_Bulldog_2_FL>
+    <Chassis_M44>
+      <id>	127	</id>
+    </Chassis_M44>
+    <Chassis_M44_2>
+      <id>	128	</id>
+    </Chassis_M44_2>
+    <Chassis_M46_Patton>
+      <id>	74	</id>
+    </Chassis_M46_Patton>
+    <Chassis_M46_Patton_2>
+      <id>	75	</id>
+    </Chassis_M46_Patton_2>
+    <Chassis_M46_Patton_2_FL>
+      <id>	502	</id>
+    </Chassis_M46_Patton_2_FL>
+    <Chassis_M46_Patton_KR>
+      <id>	167	</id>
+    </Chassis_M46_Patton_KR>
+    <Chassis_M4A2E4>
+      <id>	57	</id>
+    </Chassis_M4A2E4>
+    <Chassis_M4_Improved>
+      <id>	101	</id>
+    </Chassis_M4_Improved>
+    <Chassis_M53_55>
+      <id>	125	</id>
+    </Chassis_M53_55>
+    <Chassis_M53_55_2>
+      <id>	126	</id>
+    </Chassis_M53_55_2>
+    <Chassis_M60>
+      <id>	123	</id>
+    </Chassis_M60>
+    <Chassis_M6A2E1>
+      <id>	72	</id>
+    </Chassis_M6A2E1>
+    <Chassis_M8A1>
+      <id>	84	</id>
+    </Chassis_M8A1>
+    <Chassis_M8A1_2>
+      <id>	85	</id>
+    </Chassis_M8A1_2>
+    <Chassis_Sherman_Jumbo>
+      <id>	82	</id>
+    </Chassis_Sherman_Jumbo>
+    <Chassis_Sherman_Jumbo_2>
+      <id>	83	</id>
+    </Chassis_Sherman_Jumbo_2>
+    <Chassis_Sherman_Jumbo_2_IGR>
+      <id>	60004	</id>
+    </Chassis_Sherman_Jumbo_2_IGR>
+    <Chassis_Sherman_Jumbo_bootcamp>
+      <id>	64004	</id>
+    </Chassis_Sherman_Jumbo_bootcamp>
+    <Chassis_T110>
+      <id>	88	</id>
+    </Chassis_T110>
+    <Chassis_T110E3>
+      <id>	106	</id>
+    </Chassis_T110E3>
+    <Chassis_T110E4>
+      <id>	103	</id>
+    </Chassis_T110E4>
+    <Chassis_T110E4_7x7>
+      <id>	403	</id>
+    </Chassis_T110E4_7x7>
+    <Chassis_T110_7x7>
+      <id>	31001	</id>
+    </Chassis_T110_7x7>
+    <Chassis_T110_cl>
+      <id>	402	</id>
+    </Chassis_T110_cl>
+    <Chassis_T18>
+      <id>	49	</id>
+    </Chassis_T18>
+    <Chassis_T1_E6>
+      <id>	107	</id>
+    </Chassis_T1_E6>
+    <Chassis_T21>
+      <id>	114	</id>
+    </Chassis_T21>
+    <Chassis_T21_2>
+      <id>	115	</id>
+    </Chassis_T21_2>
+    <Chassis_T21_2_MapsTraining_Dummy_LT_2>
+      <id>	51	</id>
+    </Chassis_T21_2_MapsTraining_Dummy_LT_2>
+    <Chassis_T25_2>
+      <id>	89	</id>
+    </Chassis_T25_2>
+    <Chassis_T25_2_2>
+      <id>	90	</id>
+    </Chassis_T25_2_2>
+    <Chassis_T25_2_SH>
+      <id>	306	</id>
+    </Chassis_T25_2_SH>
+    <Chassis_T25_AT>
+      <id>	76	</id>
+    </Chassis_T25_AT>
+    <Chassis_T25_AT_2>
+      <id>	77	</id>
+    </Chassis_T25_AT_2>
+    <Chassis_T25_AT_2_FL>
+      <id>	31002	</id>
+    </Chassis_T25_AT_2_FL>
+    <Chassis_T26_E4_SuperPershing>
+      <id>	104	</id>
+    </Chassis_T26_E4_SuperPershing>
+    <Chassis_T26_E4_SuperPershing_FL>
+      <id>	189	</id>
+    </Chassis_T26_E4_SuperPershing_FL>
+    <Chassis_T26_E4_SuperPershing_SH>
+      <id>	310	</id>
+    </Chassis_T26_E4_SuperPershing_SH>
+    <Chassis_T28>
+      <id>	66	</id>
+    </Chassis_T28>
+    <Chassis_T28_2>
+      <id>	67	</id>
+    </Chassis_T28_2>
+    <Chassis_T28_Prototype>
+      <id>	91	</id>
+    </Chassis_T28_Prototype>
+    <Chassis_T28_Prototype_2>
+      <id>	92	</id>
+    </Chassis_T28_Prototype_2>
+    <Chassis_T28_Prototype_2_FL>
+      <id>	504	</id>
+    </Chassis_T28_Prototype_2_FL>
+    <Chassis_T37>
+      <id>	131	</id>
+    </Chassis_T37>
+    <Chassis_T37_2>
+      <id>	132	</id>
+    </Chassis_T37_2>
+    <Chassis_T40>
+      <id>	62	</id>
+    </Chassis_T40>
+    <Chassis_T40_2>
+      <id>	63	</id>
+    </Chassis_T40_2>
+    <Chassis_T49>
+      <id>	86	</id>
+    </Chassis_T49>
+    <Chassis_T49_2>
+      <id>	87	</id>
+    </Chassis_T49_2>
+    <Chassis_T49_2_IGR>
+      <id>	60005	</id>
+    </Chassis_T49_2_IGR>
+    <Chassis_T54E1>
+      <id>	116	</id>
+    </Chassis_T54E1>
+    <Chassis_T54E1_2>
+      <id>	117	</id>
+    </Chassis_T54E1_2>
+    <Chassis_T57_58>
+      <id>	113	</id>
+    </Chassis_T57_58>
+    <Chassis_T57_58_T>
+      <id>	31017	</id>
+    </Chassis_T57_58_T>
+    <Chassis_T69>
+      <id>	111	</id>
+    </Chassis_T69>
+    <Chassis_T69_2>
+      <id>	112	</id>
+    </Chassis_T69_2>
+    <Chassis_T69_2_IGR>
+      <id>	60002	</id>
+    </Chassis_T69_2_IGR>
+    <Chassis_T69_2_SH>
+      <id>	309	</id>
+    </Chassis_T69_2_SH>
+    <Chassis_T71>
+      <id>	118	</id>
+    </Chassis_T71>
+    <Chassis_T71_2>
+      <id>	119	</id>
+    </Chassis_T71_2>
+    <Chassis_T71_2_IGR>
+      <id>	60001	</id>
+    </Chassis_T71_2_IGR>
+    <Chassis_T7_Combat_Car>
+      <id>	129	</id>
+    </Chassis_T7_Combat_Car>
+    <Chassis_T92>
+      <id>	68	</id>
+    </Chassis_T92>
+    <Chassis_T95>
+      <id>	70	</id>
+    </Chassis_T95>
+    <Chassis_T95_2>
+      <id>	71	</id>
+    </Chassis_T95_2>
+    <Chassis_T95_E2>
+      <id>	109	</id>
+    </Chassis_T95_E2>
+    <Chassis_T95_E6>
+      <id>	136	</id>
+    </Chassis_T95_E6>
+    <Cunningham_E1>
+      <id>	3	</id>
+    </Cunningham_E1>
+    <Cunningham_E2>
+      <id>	4	</id>
+    </Cunningham_E2>
+    <HVS1>
+      <id>	6	</id>
+    </HVS1>
+    <HVS2>
+      <id>	7	</id>
+    </HVS2>
+    <HVSST31>
+      <id>	26	</id>
+    </HVSST31>
+    <HVSST35>
+      <id>	27	</id>
+    </HVSST35>
+    <HVSS_T48>
+      <id>	12	</id>
+    </HVSS_T48>
+    <HVSS_T51>
+      <id>	13	</id>
+    </HVSS_T51>
+    <MTLS_T1>
+      <id>	40	</id>
+    </MTLS_T1>
+    <NVSS_T66>
+      <id>	10	</id>
+    </NVSS_T66>
+    <NVSS_T80>
+      <id>	11	</id>
+    </NVSS_T80>
+    <NVSS_T801>
+      <id>	121	</id>
+    </NVSS_T801>
+    <Pershingchassis1>
+      <id>	47	</id>
+    </Pershingchassis1>
+    <Pershingchassis2>
+      <id>	48	</id>
+    </Pershingchassis2>
+    <Pershingchassis2_FL>
+      <id>	505	</id>
+    </Pershingchassis2_FL>
+    <Pershingchassis2_IGR>
+      <id>	60006	</id>
+    </Pershingchassis2_IGR>
+    <T-14>
+      <id>	0	</id>
+    </T-14>
+    <T-14_MapsTraining_Player_HT_1>
+      <id>	50	</id>
+    </T-14_MapsTraining_Player_HT_1>
+    <T16E2>
+      <id>	5	</id>
+    </T16E2>
+    <T2E1>
+      <id>	45	</id>
+    </T2E1>
+    <T2E4>
+      <id>	46	</id>
+    </T2E4>
+    <T41>
+      <id>	8	</id>
+    </T41>
+    <T42>
+      <id>	9	</id>
+    </T42>
+    <T42_IGR>
+      <id>	60008	</id>
+    </T42_IGR>
+    <T48>
+      <id>	38	</id>
+    </T48>
+    <T49>
+      <id>	39	</id>
+    </T49>
+    <T72>
+      <id>	32	</id>
+    </T72>
+    <T72E1>
+      <id>	33	</id>
+    </T72E1>
+    <T80E3>
+      <id>	23	</id>
+    </T80E3>
+    <T80E3A>
+      <id>	96	</id>
+    </T80E3A>
+    <T80E3_BF>
+      <id>	176	</id>
+    </T80E3_BF>
+    <T80E3_FL>
+      <id>	188	</id>
+    </T80E3_FL>
+    <T80E3_IGR>
+      <id>	60003	</id>
+    </T80E3_IGR>
+    <T84E1>
+      <id>	30	</id>
+    </T84E1>
+    <T84E1A>
+      <id>	34	</id>
+    </T84E1A>
+    <T84E3>
+      <id>	31	</id>
+    </T84E3>
+    <T84E38>
+      <id>	21	</id>
+    </T84E38>
+    <T84E38_FL>
+      <id>	501	</id>
+    </T84E38_FL>
+    <T84E3A>
+      <id>	35	</id>
+    </T84E3A>
+    <T84E3A_FL>
+      <id>	201	</id>
+    </T84E3A_FL>
+    <T84E3A_M>
+      <id>	226	</id>
+    </T84E3A_M>
+    <T84E3_IGR>
+      <id>	60007	</id>
+    </T84E3_IGR>
+    <T85E1>
+      <id>	36	</id>
+    </T85E1>
+    <T85E2>
+      <id>	37	</id>
+    </T85E2>
+    <Torsion_bar_T80>
+      <id>	95	</id>
+    </Torsion_bar_T80>
+    <VVSST41>
+      <id>	24	</id>
+    </VVSST41>
+    <VVSST48>
+      <id>	25	</id>
+    </VVSST48>
+    <VVSST49>
+      <id>	28	</id>
+    </VVSST49>
+    <VVSST51>
+      <id>	29	</id>
+    </VVSST51>
+    <VVSS_T16E1>
+      <id>	14	</id>
+    </VVSS_T16E1>
+    <VVSS_T16E2>
+      <id>	15	</id>
+    </VVSS_T16E2>
+    <VVSS_T16E3>
+      <id>	41	</id>
+    </VVSS_T16E3>
+    <VVSS_T36E6>
+      <id>	16	</id>
+    </VVSS_T36E6>
+    <VVSS_T36E8>
+      <id>	42	</id>
+    </VVSS_T36E8>
+    <VVSS_T48>
+      <id>	43	</id>
+    </VVSS_T48>
+    <VVSS_T48A>
+      <id>	44	</id>
+    </VVSS_T48A>
+    <VVSS_T48A_02>
+      <id>	31026	</id>
+    </VVSS_T48A_02>
+    <VVSS_T51>
+      <id>	18	</id>
+    </VVSS_T51>
+    <VVSS_WE210>
+      <id>	20	</id>
+    </VVSS_WE210>
+    <chassisE1>
+      <id>	1	</id>
+    </chassisE1>
+    <chassisE2>
+      <id>	2	</id>
+    </chassisE2>
+  </shared>
 </chassis.xml>

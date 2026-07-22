@@ -1,0 +1,49 @@
+<Rush_BearThunderstorm_03_2025_name.xml>
+  <itemGroup>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <style>
+      <id>	31303	</id>
+      <outfits>
+        <outfit>
+          <season>	all	</season>
+          <paints>
+            <item>
+              <id>	31278	</id>
+              <appliedTo>	20753	</appliedTo>
+            </item>
+          </paints>
+          <modifications>
+            <item>	4	</item>
+          </modifications>
+          <camouflages>
+            <item>
+              <id>	31260	</id>
+              <patternSize>	1	</patternSize>
+              <appliedTo>	4368	</appliedTo>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <projection_decals>
+            <item>
+              <id>	31173	</id>
+              <tags>	front formfactor_square safe	</tags>
+            </item>
+          </projection_decals>
+        </outfit>
+      </outfits>
+      <texture>	gui/maps/vehicles/styles/Rush_BearThunderstorm_2025.png	</texture>
+      <userString>	#vehicle_customization:Rush_BearThunderstorm_03_2025/name	</userString>
+      <description>	#vehicle_customization:Rush_BearThunderstorm_03_2025/description	</description>
+      <longDescriptionSpecial>	#vehicle_customization:Rush_BearThunderstorm_03_2025/longDescription	</longDescriptionSpecial>
+    </style>
+    <priceGroup>	MT 2D styles universal 1000g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <tags>	hiddenInUI	</tags>
+  </itemGroup>
+</Rush_BearThunderstorm_03_2025_name.xml>

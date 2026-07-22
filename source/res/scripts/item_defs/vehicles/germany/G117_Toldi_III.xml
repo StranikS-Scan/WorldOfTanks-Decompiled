@@ -20,7 +20,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	3938	</weight>
-    <maxHealth>	328	</maxHealth>
+    <maxHealth>	400	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	100	</maxHealth>
       <maxRegenHealth>	80	</maxRegenHealth>
@@ -1129,8 +1129,8 @@
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
       <rotationSpeed>	45	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.3	</vehicleMovement>
-        <vehicleRotation>	0.3	</vehicleRotation>
+        <vehicleMovement>	0.24	</vehicleMovement>
+        <vehicleRotation>	0.24	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	70	</maxHealth>
@@ -1974,7 +1974,7 @@
           <camouflage></camouflage>
         </customizableVehicleAreas>
       </customization>
-      <repairTime>	5.71428585	</repairTime>
+      <repairTime>	2.28001642	</repairTime>
     </Chassis_G117_Toldi_III>
   </chassis>
   <turrets0>
@@ -1998,14 +1998,14 @@
           </armor>
           <turretYawLimits>	-180 180	</turretYawLimits>
           <invisibilityFactorAtShot>	0.285	</invisibilityFactorAtShot>
-          <shotDispersionRadius>	0.43	</shotDispersionRadius>
-          <reloadTime>	4	</reloadTime>
+          <shotDispersionRadius>	0.4	</shotDispersionRadius>
+          <reloadTime>	2.8	</reloadTime>
           <shotDispersionFactors>
-            <turretRotation>	0.14	</turretRotation>
-            <afterShot>	4.0	</afterShot>
+            <turretRotation>	0.10	</turretRotation>
+            <afterShot>	2.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <aimingTime>	2.1	</aimingTime>
+          <aimingTime>	1.7	</aimingTime>
           <models>
             <undamaged>	vehicles/german/G117_Toldi_III/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/german/G117_Toldi_III/crash/lod0/Gun_01.model	</destroyed>
@@ -2075,14 +2075,14 @@
       </armor>
       <primaryArmor>	armor_12 armor_3 armor_4	</primaryArmor>
       <weight>	2000	</weight>
-      <maxHealth>	82	</maxHealth>
+      <maxHealth>	60	</maxHealth>
       <rotationSpeed>	30	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	80	</maxHealth>
         <maxRegenHealth>	40	</maxRegenHealth>
         <repairCost>	1.0	</repairCost>
       </turretRotatorHealth>
-      <circularVisionRadius>	270	</circularVisionRadius>
+      <circularVisionRadius>	300	</circularVisionRadius>
       <surveyingDeviceHealth>
         <maxHealth>	60	</maxHealth>
         <maxRegenHealth>	30	</maxRegenHealth>

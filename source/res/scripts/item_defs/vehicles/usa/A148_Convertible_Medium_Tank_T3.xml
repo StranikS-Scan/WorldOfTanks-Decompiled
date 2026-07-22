@@ -52,7 +52,7 @@
     </armor>
     <primaryArmor>	armor_2 armor_3 armor_4	</primaryArmor>
     <weight>	5500	</weight>
-    <maxHealth>	360	</maxHealth>
+    <maxHealth>	450	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	130	</maxHealth>
       <maxRegenHealth>	90	</maxRegenHealth>
@@ -1351,7 +1351,7 @@
           <trackPairIdx>	0	</trackPairIdx>
         </right>
       </physicalTracks>
-      <repairTime>	5.71428585	</repairTime>
+      <repairTime>	2.28001642	</repairTime>
     </Chassis_A148_Convertible_Medium_Tank_T3>
   </chassis>
   <turrets0>
@@ -1393,8 +1393,8 @@
             <maxPitch>	0 15 0.280783 15 0.344444 2 0.655556 2 0.729218 15 1 15	</maxPitch>
           </pitchLimits>
           <shotDispersionFactors>
-            <turretRotation>	0.14	</turretRotation>
-            <afterShot>	4.0	</afterShot>
+            <turretRotation>	0.10	</turretRotation>
+            <afterShot>	1.5	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <armor>
@@ -1416,9 +1416,9 @@
             <count>	4	</count>
             <rate>	120	</rate>
           </burst>
-          <reloadTime>	15	</reloadTime>
-          <aimingTime>	2.5	</aimingTime>
-          <shotDispersionRadius>	0.51	</shotDispersionRadius>
+          <reloadTime>	13	</reloadTime>
+          <aimingTime>	1.5	</aimingTime>
+          <shotDispersionRadius>	0.50	</shotDispersionRadius>
           <invisibilityFactorAtShot>	0.195	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/american/A148_Convertible_Medium_Tank_T3/normal/lod0/Gun_01.model	</undamaged>

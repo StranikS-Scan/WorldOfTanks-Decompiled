@@ -1,0 +1,74 @@
+<camouflage_liveops_1_label.xml>
+  <xmlns:czech1>	ussr	</xmlns:czech1>
+  <xmlns:germany>	germany	</xmlns:germany>
+  <xmlns:czech0>	usa	</xmlns:czech0>
+  <xmlns:china>	china	</xmlns:china>
+  <xmlns:france>	france	</xmlns:france>
+  <xmlns:uk>	uk	</xmlns:uk>
+  <xmlns:japan>	japan	</xmlns:japan>
+  <xmlns:czech>	czech	</xmlns:czech>
+  <xmlns:sweden>	sweden	</xmlns:sweden>
+  <xmlns:poland>	poland	</xmlns:poland>
+  <xmlns:italy>	italy	</xmlns:italy>
+  <xmlns:intunion>	intunion	</xmlns:intunion>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/opaque	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	MT camouflages 50g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R47_ISU-152_Zveroboj ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <camouflage>
+      <id>	565	</id>
+      <texture>	vehicles/russian/Camouflage/liveops_1.dds	</texture>
+      <description>	#vehicle_customization:camouflage/liveops_1/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/liveops_1/label	</userString>
+      <tags>	hiddenInUI	</tags>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	60 71 47 255	</c0>
+          <c1>	153 159 161 255	</c1>
+          <c2>	86 89 86 255	</c2>
+          <c3>	30 26 18 255	</c3>
+        </palette>
+      </palettes>
+      <rotation>
+        <HULL>	-0.523599	</HULL>
+        <TURRET>	-0.523599	</TURRET>
+        <GUN>	-0.523599	</GUN>
+      </rotation>
+      <tilingSettings>
+        <type>	relativewithfactor	</type>
+        <factor>	2.15 2.15	</factor>
+        <offset>	0.89 0.48	</offset>
+      </tilingSettings>
+    </camouflage>
+    <camouflage>
+      <id>	566	</id>
+      <texture>	vehicles/russian/Camouflage/liveops_2.dds	</texture>
+      <description>	#vehicle_customization:camouflage/liveops_2/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/liveops_2/label	</userString>
+      <tags>	hiddenInUI	</tags>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	17 23 8 255	</c0>
+          <c1>	156 171 138 255	</c1>
+          <c2>	129 135 82 255	</c2>
+          <c3>	42 64 47 255	</c3>
+        </palette>
+      </palettes>
+      <tilingSettings>
+        <type>	relativewithfactor	</type>
+        <factor>	1.45 1.45	</factor>
+        <offset>	1.84 4.55	</offset>
+      </tilingSettings>
+    </camouflage>
+  </itemGroup>
+</camouflage_liveops_1_label.xml>

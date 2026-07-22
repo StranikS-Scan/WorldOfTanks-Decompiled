@@ -1,0 +1,60 @@
+<camouflage_10years_universal_winter_3_label.xml>
+  <france:F18_Bat_Chatillon25t_7x77>	ussr	</france:F18_Bat_Chatillon25t_7x77>
+  <xmlns:germany>	germany	</xmlns:germany>
+  <france:F18_Bat_Chatillon25t_7x76>	usa	</france:F18_Bat_Chatillon25t_7x76>
+  <xmlns:china>	china	</xmlns:china>
+  <xmlns:france>	france	</xmlns:france>
+  <france:F18_Bat_Chatillon25t_7x75>	uk	</france:F18_Bat_Chatillon25t_7x75>
+  <france:F18_Bat_Chatillon25t_7x72>	japan	</france:F18_Bat_Chatillon25t_7x72>
+  <xmlns:czech>	czech	</xmlns:czech>
+  <france:F18_Bat_Chatillon25t_7x74>	sweden	</france:F18_Bat_Chatillon25t_7x74>
+  <france:F18_Bat_Chatillon25t_7x73>	poland	</france:F18_Bat_Chatillon25t_7x73>
+  <france:F18_Bat_Chatillon25t_7x71>	italy	</france:F18_Bat_Chatillon25t_7x71>
+  <france:F18_Bat_Chatillon25t_7x70>	intunion	</france:F18_Bat_Chatillon25t_7x70>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/opaque	</userString>
+    <season>	winter	</season>
+    <historical>	1	</historical>
+    <priceGroup>	MT camouflages 50g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R47_ISU-152_Zveroboj ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <camouflage>
+      <id>	143	</id>
+      <texture>	vehicles/russian/Camouflage/10years_universal_winter_3.dds	</texture>
+      <description>	#vehicle_customization:camouflage/10years_universal_winter_3/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/10years_universal_winter_3/label	</userString>
+      <tags>	fullRGB	</tags>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	255 0 0 255	</c0>
+          <c1>	0 255 0 255	</c1>
+          <c2>	0 0 255 255	</c2>
+          <c3>	0 0 0 255	</c3>
+        </palette>
+      </palettes>
+      <rotation>
+        <HULL>	-0.153589	</HULL>
+        <TURRET>	-0.153589	</TURRET>
+        <GUN>	-0.153589	</GUN>
+      </rotation>
+      <tiling>
+        <france:F18_Bat_Chatillon25t>	1 1 -1 -0.1	</france:F18_Bat_Chatillon25t>
+        <france:F18_Bat_Chatillon25t_7x7>	1 1 -1 -0.1	</france:F18_Bat_Chatillon25t_7x7>
+        <japan:J28_O_I_100>	0.7 0.7 -0.55 -0.85	</japan:J28_O_I_100>
+        <uk:GB91_Super_Conqueror>	0.8 0.8 0.11 0.18	</uk:GB91_Super_Conqueror>
+        <ussr:R04_T-34>	2 2 0.18 0.27	</ussr:R04_T-34>
+        <ussr:R11_MS-1>	2.8 2.8 -0.2 -0.1	</ussr:R11_MS-1>
+      </tiling>
+      <tilingSettings>
+        <type>	relative	</type>
+        <factor>	1.5 1.5	</factor>
+        <offset>	0.1 -0.1	</offset>
+      </tilingSettings>
+    </camouflage>
+  </itemGroup>
+</camouflage_10years_universal_winter_3_label.xml>

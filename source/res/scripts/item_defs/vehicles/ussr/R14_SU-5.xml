@@ -55,7 +55,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	7086	</weight>
-    <maxHealth>	196	</maxHealth>
+    <maxHealth>	250	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	60	</maxHealth>
       <maxRegenHealth>	30	</maxRegenHealth>
@@ -2394,7 +2394,7 @@
           <camouflage></camouflage>
         </customizableVehicleAreas>
       </customization>
-      <repairTime>	9	</repairTime>
+      <repairTime>	2.85003138	</repairTime>
     </SU-5>
     <SU-5bis>
       <userString>	#ussr_vehicles:SU-5bis	</userString>
@@ -3524,7 +3524,7 @@
           <camouflage></camouflage>
         </customizableVehicleAreas>
       </customization>
-      <repairTime>	7	</repairTime>
+      <repairTime>	2.85003138	</repairTime>
     </SU-5bis>
   </chassis>
   <turrets0>
@@ -3541,14 +3541,14 @@
         <armor_8>	0	</armor_8>
       </armor>
       <weight>	100	</weight>
-      <maxHealth>	49	</maxHealth>
+      <maxHealth>	50	</maxHealth>
       <rotationSpeed>	16	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	100	</maxHealth>
         <maxRegenHealth>	50	</maxRegenHealth>
         <repairCost>	1.0	</repairCost>
       </turretRotatorHealth>
-      <circularVisionRadius>	250	</circularVisionRadius>
+      <circularVisionRadius>	300	</circularVisionRadius>
       <surveyingDeviceHealth>
         <maxHealth>	50	</maxHealth>
         <maxRegenHealth>	25	</maxRegenHealth>

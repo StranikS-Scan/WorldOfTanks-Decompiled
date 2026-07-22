@@ -141,7 +141,8 @@ REWARD_ITEM_IDS = {'freeXP': 1,
  'blueprints': 19,
  'entitlements': 20,
  'currencies': 21,
- 'dogTagComponents': 22}
+ 'dogTagComponents': 22,
+ 'preferredMapSlots': 23}
 ID_TO_NAME = dict(((v, k) for k, v in REWARD_ITEM_IDS.iteritems()))
 EXTENSIONS_CONVERTER_PROCESSOR = {}
 EXTENSIONS_UNPACK_PROCESSOR = {}
@@ -269,6 +270,23 @@ def __convertCurrencies(_, rewards):
     return result
 
 
+def __convertPreferredMapSlots(_, rewards):
+    result = []
+    for slotID, slotDurationDays in rewards.iteritems():
+        result.append({'value_type_id': REWARD_ITEM_IDS['preferredMapSlots'],
+         'amount': slotDurationDays,
+         'ext_info': slotID})
+
+    return result
+
+
+def __unpackPreferredMapSlots(item):
+    slotID = item['ext_info']
+    if not isinstance(slotID, int):
+        slotID = int(slotID)
+    return {'preferredMapSlots': {slotID: item['amount']}}
+
+
 def __defaultConverter(bonusName, rewards):
     result = []
     if isinstance(rewards, int):
@@ -301,7 +319,8 @@ def getDefaultConverterProcessor():
      'entitlements': __convertEntitlements,
      'entitlementList': __convertEntitlementList,
      'currencies': __convertCurrencies,
-     'dogTagComponents': lambda n, v: []}
+     'dogTagComponents': lambda n, v: [],
+     'preferredMapSlots': __convertPreferredMapSlots}
     default.update(EXTENSIONS_CONVERTER_PROCESSOR)
     return default
 
@@ -375,7 +394,8 @@ def getDefaultUnpackProcessor():
      'entitlements': __unpackEntitlements,
      'entitlementList': lambda i: {},
      'currencies': __unpackCurrencies,
-     'dogTagComponents': lambda i: {}}
+     'dogTagComponents': lambda i: {},
+     'preferredMapSlots': __unpackPreferredMapSlots}
     default.update(EXTENSIONS_UNPACK_PROCESSOR)
     return default
 

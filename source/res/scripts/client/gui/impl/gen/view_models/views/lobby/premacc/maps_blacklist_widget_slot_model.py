@@ -5,14 +5,14 @@ from gui.impl.gen.view_models.views.lobby.premacc.maps_blacklist_slot_model impo
 class MapsBlacklistWidgetSlotModel(MapsBlacklistSlotModel):
     __slots__ = ()
 
-    def __init__(self, properties=6, commands=0):
+    def __init__(self, properties=8, commands=0):
         super(MapsBlacklistWidgetSlotModel, self).__init__(properties=properties, commands=commands)
 
     def getIsShowMode(self):
-        return self._getBool(5)
+        return self._getBool(7)
 
     def setIsShowMode(self, value):
-        self._setBool(5, value)
+        self._setBool(7, value)
 
     def _initialize(self):
         super(MapsBlacklistWidgetSlotModel, self)._initialize()

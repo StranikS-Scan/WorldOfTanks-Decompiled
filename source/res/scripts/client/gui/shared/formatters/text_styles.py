@@ -464,6 +464,10 @@ def greenText(text):
     return _formatText('greenText', text)
 
 
+def brownText(text):
+    return _formatText('brownText', text)
+
+
 def discountText(text):
     return _formatText('discountText', text)
 

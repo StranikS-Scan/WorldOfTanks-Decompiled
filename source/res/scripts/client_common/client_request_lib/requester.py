@@ -385,6 +385,9 @@ class GiftSystemAccessor(BaseAccessor):
     def get_gift_system_state(self, callback, reqEventIds):
         return self._data_source.get_gift_system_state(callback, reqEventIds)
 
+    def get_gift_system_wait_response(self, callback, reqEventId, metaInfo):
+        return self._data_source.get_gift_system_wait_response(callback, reqEventId, metaInfo)
+
     def post_gift_system_gift(self, callback, entitlementCode, receiverID, metaInfo):
         return self._data_source.post_gift_system_gift(callback, entitlementCode, receiverID, metaInfo)
 

@@ -1,200 +1,596 @@
 <chassis.xml>
-  <ids>
-    <Chassis_GB32_Tortoise>	1	</Chassis_GB32_Tortoise>
-    <Chassis_GB33_Sentinel_AC_I>	2	</Chassis_GB33_Sentinel_AC_I>
-    <Chassis_GB01_Medium_Mark_I_2>	5	</Chassis_GB01_Medium_Mark_I_2>
-    <Chassis_GB05_Vickers_Medium_Mk_II>	6	</Chassis_GB05_Vickers_Medium_Mk_II>
-    <Chassis_GB05_Vickers_Medium_Mk_II_2>	7	</Chassis_GB05_Vickers_Medium_Mk_II_2>
-    <Chassis_GB01_Medium_Mark_I>	4	</Chassis_GB01_Medium_Mark_I>
-    <Chassis_GB14_M2>	8	</Chassis_GB14_M2>
-    <Chassis_GB14_M2_2>	9	</Chassis_GB14_M2_2>
-    <Chassis_GB07_Matilda>	10	</Chassis_GB07_Matilda>
-    <Chassis_GB07_Matilda_2>	11	</Chassis_GB07_Matilda_2>
-    <Chassis_GB21_Cromwell>	12	</Chassis_GB21_Cromwell>
-    <Chassis_GB21_Cromwell_2>	13	</Chassis_GB21_Cromwell_2>
-    <Chassis_GB15_Stuart_I>	14	</Chassis_GB15_Stuart_I>
-    <Chassis_GB15_Stuart_I_2>	15	</Chassis_GB15_Stuart_I_2>
-    <Chassis_GB17_Grant_I>	16	</Chassis_GB17_Grant_I>
-    <Chassis_GB17_Grant_I_2>	17	</Chassis_GB17_Grant_I_2>
-    <Chassis_GB20_Crusader>	20	</Chassis_GB20_Crusader>
-    <Chassis_GB20_Crusader_2>	21	</Chassis_GB20_Crusader_2>
-    <Chassis_GB06_Vickers_Medium_Mk_III>	22	</Chassis_GB06_Vickers_Medium_Mk_III>
-    <Chassis_GB06_Vickers_Medium_Mk_III_2>	23	</Chassis_GB06_Vickers_Medium_Mk_III_2>
-    <Chassis_GB08_Churchill_I>	26	</Chassis_GB08_Churchill_I>
-    <Chassis_GB08_Churchill_I_2>	27	</Chassis_GB08_Churchill_I_2>
-    <Chassis_GB10_Black_Prince>	28	</Chassis_GB10_Black_Prince>
-    <Chassis_GB10_Black_Prince_2>	29	</Chassis_GB10_Black_Prince_2>
-    <Chassis_GB27_Sexton>	31	</Chassis_GB27_Sexton>
-    <Chassis_GB27_Sexton_2>	32	</Chassis_GB27_Sexton_2>
-    <Chassis_GB19_Sherman_Firefly>	33	</Chassis_GB19_Sherman_Firefly>
-    <Chassis_GB19_Sherman_Firefly_2>	34	</Chassis_GB19_Sherman_Firefly_2>
-    <Chassis_GB11_Caernarvon>	35	</Chassis_GB11_Caernarvon>
-    <Chassis_GB11_Caernarvon_2>	36	</Chassis_GB11_Caernarvon_2>
-    <Chassis_GB12_Conqueror>	39	</Chassis_GB12_Conqueror>
-    <Chassis_GB12_Conqueror_2>	40	</Chassis_GB12_Conqueror_2>
-    <Chassis_GB09_Churchill_VII>	41	</Chassis_GB09_Churchill_VII>
-    <Chassis_GB09_Churchill_VII_2>	42	</Chassis_GB09_Churchill_VII_2>
-    <Chassis_GB04_Valentine>	43	</Chassis_GB04_Valentine>
-    <Chassis_GB04_Valentine_2>	44	</Chassis_GB04_Valentine_2>
-    <Chassis_GB68_Matilda_Black_Prince>	45	</Chassis_GB68_Matilda_Black_Prince>
-    <Chassis_GB03_Cruiser_Mk_I>	46	</Chassis_GB03_Cruiser_Mk_I>
-    <Chassis_GB03_Cruiser_Mk_I_2>	47	</Chassis_GB03_Cruiser_Mk_I_2>
-    <Chassis_GB22_Comet>	48	</Chassis_GB22_Comet>
-    <Chassis_GB22_Comet_2>	49	</Chassis_GB22_Comet_2>
-    <Chassis_GB24_Centurion_Mk3>	50	</Chassis_GB24_Centurion_Mk3>
-    <Chassis_GB24_Centurion_Mk3_2>	51	</Chassis_GB24_Centurion_Mk3_2>
-    <Chassis_GB23_Centurion>	52	</Chassis_GB23_Centurion>
-    <Chassis_GB23_Centurion_2>	53	</Chassis_GB23_Centurion_2>
-    <Chassis_GB13_FV215b>	54	</Chassis_GB13_FV215b>
-    <Chassis_GB60_Covenanter>	55	</Chassis_GB60_Covenanter>
-    <Chassis_GB60_Covenanter_2>	56	</Chassis_GB60_Covenanter_2>
-    <Chassis_GB69_Cruiser_Mk_II>	58	</Chassis_GB69_Cruiser_Mk_II>
-    <Chassis_GB69_Cruiser_Mk_II_2>	59	</Chassis_GB69_Cruiser_Mk_II_2>
-    <Chassis_GB70_FV4202_105>	60	</Chassis_GB70_FV4202_105>
-    <Chassis_GB59_Cruiser_Mk_IV>	61	</Chassis_GB59_Cruiser_Mk_IV>
-    <Chassis_GB59_Cruiser_Mk_IV_2>	62	</Chassis_GB59_Cruiser_Mk_IV_2>
-    <Chassis_GB63_TOG_II>	63	</Chassis_GB63_TOG_II>
-    <Chassis_GB58_Cruiser_Mk_III>	64	</Chassis_GB58_Cruiser_Mk_III>
-    <Chassis_GB58_Cruiser_Mk_III_2>	65	</Chassis_GB58_Cruiser_Mk_III_2>
-    <Chassis_GB71_AT_15A>	66	</Chassis_GB71_AT_15A>
-    <Chassis_GB42_Valentine_AT>	67	</Chassis_GB42_Valentine_AT>
-    <Chassis_GB42_Valentine_AT_2>	68	</Chassis_GB42_Valentine_AT_2>
-    <Chassis_GB39_Universal_CarrierQF2>	69	</Chassis_GB39_Universal_CarrierQF2>
-    <Chassis_GB39_Universal_CarrierQF2_2>	70	</Chassis_GB39_Universal_CarrierQF2_2>
-    <Chassis_GB72_AT15>	71	</Chassis_GB72_AT15>
-    <Chassis_GB72_AT15_2>	72	</Chassis_GB72_AT15_2>
-    <Chassis_GB74_AT8>	73	</Chassis_GB74_AT8>
-    <Chassis_GB74_AT8_2>	74	</Chassis_GB74_AT8_2>
-    <Chassis_GB73_AT2>	75	</Chassis_GB73_AT2>
-    <Chassis_GB73_AT2_2>	76	</Chassis_GB73_AT2_2>
-    <Chassis_GB57_Alecto>	77	</Chassis_GB57_Alecto>
-    <Chassis_GB57_Alecto_2>	78	</Chassis_GB57_Alecto_2>
-    <Chassis_GB48_FV215b_183>	79	</Chassis_GB48_FV215b_183>
-    <Chassis_GB40_Gun_Carrier_Churchill>	80	</Chassis_GB40_Gun_Carrier_Churchill>
-    <Chassis_GB40_Gun_Carrier_Churchill_2>	81	</Chassis_GB40_Gun_Carrier_Churchill_2>
-    <Chassis_GB75_AT7>	82	</Chassis_GB75_AT7>
-    <Chassis_GB75_AT7_2>	83	</Chassis_GB75_AT7_2>
-    <Chassis_GB32_Tortoise_2>	84	</Chassis_GB32_Tortoise_2>
-    <Chassis_GB51_Excelsior>	85	</Chassis_GB51_Excelsior>
-    <Chassis_GB25_Loyd_Carrier>	86	</Chassis_GB25_Loyd_Carrier>
-    <Chassis_GB25_Loyd_Carrier_2>	87	</Chassis_GB25_Loyd_Carrier_2>
-    <Chassis_Sexton_I>	88	</Chassis_Sexton_I>
-    <Chassis_GB26_Birch_Gun>	89	</Chassis_GB26_Birch_Gun>
-    <Chassis_GB26_Birch_Gun_2>	90	</Chassis_GB26_Birch_Gun_2>
-    <Chassis_GB28_Bishop>	91	</Chassis_GB28_Bishop>
-    <Chassis_GB28_Bishop_2>	92	</Chassis_GB28_Bishop_2>
-    <Chassis_GB29_Crusader_5inch>	93	</Chassis_GB29_Crusader_5inch>
-    <Chassis_GB29_Crusader_5inch_2>	94	</Chassis_GB29_Crusader_5inch_2>
-    <Chassis_GB30_FV3805>	95	</Chassis_GB30_FV3805>
-    <Chassis_GB30_FV3805_2>	96	</Chassis_GB30_FV3805_2>
-    <Chassis_GB77_FV304>	97	</Chassis_GB77_FV304>
-    <Chassis_GB77_FV304_2>	98	</Chassis_GB77_FV304_2>
-    <Chassis_GB79_FV206>	99	</Chassis_GB79_FV206>
-    <Chassis_GB79_FV206_2>	100	</Chassis_GB79_FV206_2>
-    <Chassis_GB31_Conqueror_Gun>	101	</Chassis_GB31_Conqueror_Gun>
-    <Chassis_GB76_Mk_VIC>	102	</Chassis_GB76_Mk_VIC>
-    <Chassis_GB52_A45>	105	</Chassis_GB52_A45>
-    <Chassis_GB50_Sherman_III>	107	</Chassis_GB50_Sherman_III>
-    <Chassis_GB50_Sherman_III_2>	108	</Chassis_GB50_Sherman_III_2>
-    <Chassis_GB70_N_FV4202_105>	109	</Chassis_GB70_N_FV4202_105>
-    <Chassis_GB81_FV4004>	110	</Chassis_GB81_FV4004>
-    <Chassis_GB81_FV4004_2>	111	</Chassis_GB81_FV4004_2>
-    <Chassis_GB44_Archer>	112	</Chassis_GB44_Archer>
-    <Chassis_GB44_Archer_2>	113	</Chassis_GB44_Archer_2>
-    <Chassis_GB83_FV4005>	114	</Chassis_GB83_FV4005>
-    <Chassis_GB41_Challenger>	115	</Chassis_GB41_Challenger>
-    <Chassis_GB41_Challenger_2>	116	</Chassis_GB41_Challenger_2>
-    <Chassis_GB45_Achilles_IIC>	117	</Chassis_GB45_Achilles_IIC>
-    <Chassis_GB45_Achilles_IIC_2>	118	</Chassis_GB45_Achilles_IIC_2>
-    <Chassis_GB80_Charioteer>	119	</Chassis_GB80_Charioteer>
-    <Chassis_GB80_Charioteer_2>	120	</Chassis_GB80_Charioteer_2>
-    <Chassis_GB86_Centurion_Action_X>	122	</Chassis_GB86_Centurion_Action_X>
-    <Chassis_GB85_Cromwell_Berlin>	121	</Chassis_GB85_Cromwell_Berlin>
-    <Chassis_GB84_Chieftain_Mk6>	125	</Chassis_GB84_Chieftain_Mk6>
-    <Chassis_GB87_Chieftain_T95_turret>	126	</Chassis_GB87_Chieftain_T95_turret>
-    <Chassis_GB35_Sentinel_AC_IV>	127	</Chassis_GB35_Sentinel_AC_IV>
-    <Chassis_GB88_T95_Chieftain_turret>	128	</Chassis_GB88_T95_Chieftain_turret>
-    <Chassis_GB91_Super_Conqueror>	129	</Chassis_GB91_Super_Conqueror>
-    <Chassis_GB92_FV217>	130	</Chassis_GB92_FV217>
-    <Chassis_GB93_Caernarvon_AX>	131	</Chassis_GB93_Caernarvon_AX>
-    <Chassis_GB94_Centurion_Mk5-1_RAAC>	132	</Chassis_GB94_Centurion_Mk5-1_RAAC>
-    <Chassis_GB95_Ekins_Firefly_M4A4>	133	</Chassis_GB95_Ekins_Firefly_M4A4>
-    <Chassis_GB97_Chimera>	134	</Chassis_GB97_Chimera>
-    <Chassis_GB96_Excalibur>	135	</Chassis_GB96_Excalibur>
-    <Chassis_GB98_T95_FV4201_Chieftain>	136	</Chassis_GB98_T95_FV4201_Chieftain>
-    <Chassis_GB70_N_FV4202_105_FL>	137	</Chassis_GB70_N_FV4202_105_FL>
-    <Chassis_GB101_FV1066_Senlac>	138	</Chassis_GB101_FV1066_Senlac>
-    <Chassis_GB103_GSOR3301_AVR_MK1>	139	</Chassis_GB103_GSOR3301_AVR_MK1>
-    <Chassis_GB103_GSOR3301_AVR_MK2>	140	</Chassis_GB103_GSOR3301_AVR_MK2>
-    <Chassis_GB100_Manticore>	141	</Chassis_GB100_Manticore>
-    <Chassis_GB105_Black_Prince_2019>	142	</Chassis_GB105_Black_Prince_2019>
-    <Chassis_GB102_LHMTV_Mk1>	143	</Chassis_GB102_LHMTV_Mk1>
-    <Chassis_GB102_LHMTV_Mk2>	144	</Chassis_GB102_LHMTV_Mk2>
-    <Chassis_1_GB104_GSR_3301_Setter>	145	</Chassis_1_GB104_GSR_3301_Setter>
-    <Chassis_2_GB104_GSR_3301_Setter>	146	</Chassis_2_GB104_GSR_3301_Setter>
-    <Chassis_GB99_Turtle_Mk1>	147	</Chassis_GB99_Turtle_Mk1>
-    <Chassis_GB107_Cavalier>	148	</Chassis_GB107_Cavalier>
-    <Chassis_GB107_Cavalier_2>	149	</Chassis_GB107_Cavalier_2>
-    <Chassis_GB108_A46>	150	</Chassis_GB108_A46>
-    <Chassis_GB37_Valliant>	151	</Chassis_GB37_Valliant>
-    <Chassis_GB106_Cobra>	152	</Chassis_GB106_Cobra>
-    <Chassis_GB109_GSOR_1008>	153	</Chassis_GB109_GSOR_1008>
-    <Chassis_GB111_Charlemagne>	154	</Chassis_GB111_Charlemagne>
-    <Chassis_GB110_FV4201_Chieftain_Prototype>	155	</Chassis_GB110_FV4201_Chieftain_Prototype>
-    <Chassis_GB112_Caliban>	156	</Chassis_GB112_Caliban>
-    <Chassis_GB113_Matilda_LVT>	157	</Chassis_GB113_Matilda_LVT>
-    <Chassis_GB114_Vickers_MBT_Mk3>	158	</Chassis_GB114_Vickers_MBT_Mk3>
-    <Chassis_GB115_Gonsalo>	159	</Chassis_GB115_Gonsalo>
-    <Chassis_GB116_Harry_Hopkins_I>	160	</Chassis_GB116_Harry_Hopkins_I>
-    <Chassis_GB121_GSOR_1010_FB>	161	</Chassis_GB121_GSOR_1010_FB>
-    <Chassis_GB120_Concept_No_5>	162	</Chassis_GB120_Concept_No_5>
-    <Chassis_GB123_GSOR_1006_v7>	163	</Chassis_GB123_GSOR_1006_v7>
-    <Chassis_GB123_GSOR_1006_v7_2>	164	</Chassis_GB123_GSOR_1006_v7_2>
-    <Chassis_GB125_Saladin>	165	</Chassis_GB125_Saladin>
-    <Chassis_GB125_Saladin_2>	166	</Chassis_GB125_Saladin_2>
-    <Chassis_GB124_AEC_Armoured_Car>	167	</Chassis_GB124_AEC_Armoured_Car>
-    <Chassis_GB124_AEC_Armoured_Car_2>	168	</Chassis_GB124_AEC_Armoured_Car_2>
-    <Chassis_GB122_Staghound_Mk_III>	169	</Chassis_GB122_Staghound_Mk_III>
-    <Chassis_GB122_Staghound_Mk_III_2>	170	</Chassis_GB122_Staghound_Mk_III_2>
-    <Chassis_GB126_FSV_Scheme_A>	171	</Chassis_GB126_FSV_Scheme_A>
-    <Chassis_GB126_FSV_Scheme_A_2>	172	</Chassis_GB126_FSV_Scheme_A_2>
-    <Chassis_GB86_Centurion_Action_X_7x7>	31001	</Chassis_GB86_Centurion_Action_X_7x7>
-    <Chassis_GB118_Taurus_CA>	31002	</Chassis_GB118_Taurus_CA>
-    <Chassis_GB110_FV4201_Chieftain_Prototype_B>	31003	</Chassis_GB110_FV4201_Chieftain_Prototype_B>
-    <Chassis_GB129_FV205b_Alligator>	31004	</Chassis_GB129_FV205b_Alligator>
-    <Chassis_GB112_Caliban_02_B>	31005	</Chassis_GB112_Caliban_02_B>
-    <Chassis_GB128_Nemesis>	31006	</Chassis_GB128_Nemesis>
-    <Chassis_GB120_Concept_No_5_bob>	31007	</Chassis_GB120_Concept_No_5_bob>
-    <Chassis_GB135_FV240>	31008	</Chassis_GB135_FV240>
-    <Chassis_GB135_FV240_2>	31009	</Chassis_GB135_FV240_2>
-    <Chassis_GB134_FV242B_Condor>	31010	</Chassis_GB134_FV242B_Condor>
-    <Chassis_GB136_FV245>	31011	</Chassis_GB136_FV245>
-    <Chassis_GB136_FV245_2>	31012	</Chassis_GB136_FV245_2>
-    <Chassis_GB133_Cyclone_Mk_2>	31013	</Chassis_GB133_Cyclone_Mk_2>
-    <Chassis_GB133_Cyclone_Mk_2_2>	31014	</Chassis_GB133_Cyclone_Mk_2_2>
-    <Chassis_GB130_FV225>	31015	</Chassis_GB130_FV225>
-    <Chassis_GB140_Champion>	31016	</Chassis_GB140_Champion>
-    <Chassis_GB137_CVT_Spider>	31017	</Chassis_GB137_CVT_Spider>
-    <Chassis_GB139_Vulcan>	31018	</Chassis_GB139_Vulcan>
-    <Chassis_GB143_Captain>	31019	</Chassis_GB143_Captain>
-    <Chassis_GB141_Celestial_2_51>	31020	</Chassis_GB141_Celestial_2_51>
-    <Chassis_GB142_FV249_Castle>	31021	</Chassis_GB142_FV249_Castle>
-    <Chassis_GB12_Conqueror_2_FL>	501	</Chassis_GB12_Conqueror_2_FL>
-    <Chassis_GB92_FV217_7x7>	502	</Chassis_GB92_FV217_7x7>
-    <Chassis_GB102_LHMTV_Mk2_FL>	503	</Chassis_GB102_LHMTV_Mk2_FL>
-    <Chassis_GB135_FV240_2_T>	35001	</Chassis_GB135_FV240_2_T>
-    <Chassis_GB134_FV242B_Condor_T>	35002	</Chassis_GB134_FV242B_Condor_T>
-    <Chassis_GB23_Centurion_2_IGR>	60001	</Chassis_GB23_Centurion_2_IGR>
-    <Chassis_GB11_Caernarvon_2_IGR>	60002	</Chassis_GB11_Caernarvon_2_IGR>
-    <Chassis_GB21_Cromwell_2_IGR>	60003	</Chassis_GB21_Cromwell_2_IGR>
-    <Chassis_GB77_FV304_2_IGR>	60004	</Chassis_GB77_FV304_2_IGR>
-    <Chassis_GB72_AT15_2_IGR>	60005	</Chassis_GB72_AT15_2_IGR>
-    <Chassis_GB08_Churchill_I_2_IGR>	60006	</Chassis_GB08_Churchill_I_2_IGR>
-    <Chassis_GB13_FV215b_IGR>	60007	</Chassis_GB13_FV215b_IGR>
-    <Chassis_GB107_Cavalier_SH>	10000	</Chassis_GB107_Cavalier_SH>
-    <Chassis_GB97_Chimera_SH>	10001	</Chassis_GB97_Chimera_SH>
-    <Chassis_GB84_Chieftain_Mk6_SH>	10002	</Chassis_GB84_Chieftain_Mk6_SH>
-    <Chassis_GB19_Sherman_Firefly_2_MapsTraining_Dummy_MT_2>	3	</Chassis_GB19_Sherman_Firefly_2_MapsTraining_Dummy_MT_2>
-  </ids>
-  <shared></shared>
+  <xmlns:xmlref>	http://bwt/xmlref	</xmlns:xmlref>
+  <shared>
+    <Chassis_1_GB104_GSR_3301_Setter>
+      <id>	145	</id>
+    </Chassis_1_GB104_GSR_3301_Setter>
+    <Chassis_2_GB104_GSR_3301_Setter>
+      <id>	146	</id>
+    </Chassis_2_GB104_GSR_3301_Setter>
+    <Chassis_GB01_Medium_Mark_I>
+      <id>	4	</id>
+    </Chassis_GB01_Medium_Mark_I>
+    <Chassis_GB01_Medium_Mark_I_2>
+      <id>	5	</id>
+    </Chassis_GB01_Medium_Mark_I_2>
+    <Chassis_GB03_Cruiser_Mk_I>
+      <id>	46	</id>
+    </Chassis_GB03_Cruiser_Mk_I>
+    <Chassis_GB03_Cruiser_Mk_I_2>
+      <id>	47	</id>
+    </Chassis_GB03_Cruiser_Mk_I_2>
+    <Chassis_GB04_Valentine>
+      <id>	43	</id>
+    </Chassis_GB04_Valentine>
+    <Chassis_GB04_Valentine_2>
+      <id>	44	</id>
+    </Chassis_GB04_Valentine_2>
+    <Chassis_GB05_Vickers_Medium_Mk_II>
+      <id>	6	</id>
+    </Chassis_GB05_Vickers_Medium_Mk_II>
+    <Chassis_GB05_Vickers_Medium_Mk_II_2>
+      <id>	7	</id>
+    </Chassis_GB05_Vickers_Medium_Mk_II_2>
+    <Chassis_GB06_Vickers_Medium_Mk_III>
+      <id>	22	</id>
+    </Chassis_GB06_Vickers_Medium_Mk_III>
+    <Chassis_GB06_Vickers_Medium_Mk_III_2>
+      <id>	23	</id>
+    </Chassis_GB06_Vickers_Medium_Mk_III_2>
+    <Chassis_GB07_Matilda>
+      <id>	10	</id>
+    </Chassis_GB07_Matilda>
+    <Chassis_GB07_Matilda_2>
+      <id>	11	</id>
+    </Chassis_GB07_Matilda_2>
+    <Chassis_GB08_Churchill_I>
+      <id>	26	</id>
+    </Chassis_GB08_Churchill_I>
+    <Chassis_GB08_Churchill_I_2>
+      <id>	27	</id>
+    </Chassis_GB08_Churchill_I_2>
+    <Chassis_GB08_Churchill_I_2_IGR>
+      <id>	60006	</id>
+    </Chassis_GB08_Churchill_I_2_IGR>
+    <Chassis_GB09_Churchill_VII>
+      <id>	41	</id>
+    </Chassis_GB09_Churchill_VII>
+    <Chassis_GB09_Churchill_VII_2>
+      <id>	42	</id>
+    </Chassis_GB09_Churchill_VII_2>
+    <Chassis_GB100_Manticore>
+      <id>	141	</id>
+    </Chassis_GB100_Manticore>
+    <Chassis_GB101_FV1066_Senlac>
+      <id>	138	</id>
+    </Chassis_GB101_FV1066_Senlac>
+    <Chassis_GB102_LHMTV_Mk1>
+      <id>	143	</id>
+    </Chassis_GB102_LHMTV_Mk1>
+    <Chassis_GB102_LHMTV_Mk2>
+      <id>	144	</id>
+    </Chassis_GB102_LHMTV_Mk2>
+    <Chassis_GB102_LHMTV_Mk2_FL>
+      <id>	503	</id>
+    </Chassis_GB102_LHMTV_Mk2_FL>
+    <Chassis_GB103_GSOR3301_AVR_MK1>
+      <id>	139	</id>
+    </Chassis_GB103_GSOR3301_AVR_MK1>
+    <Chassis_GB103_GSOR3301_AVR_MK2>
+      <id>	140	</id>
+    </Chassis_GB103_GSOR3301_AVR_MK2>
+    <Chassis_GB105_Black_Prince_2019>
+      <id>	142	</id>
+    </Chassis_GB105_Black_Prince_2019>
+    <Chassis_GB106_Cobra>
+      <id>	152	</id>
+    </Chassis_GB106_Cobra>
+    <Chassis_GB107_Cavalier>
+      <id>	148	</id>
+    </Chassis_GB107_Cavalier>
+    <Chassis_GB107_Cavalier_2>
+      <id>	149	</id>
+    </Chassis_GB107_Cavalier_2>
+    <Chassis_GB107_Cavalier_SH>
+      <id>	10000	</id>
+    </Chassis_GB107_Cavalier_SH>
+    <Chassis_GB108_A46>
+      <id>	150	</id>
+    </Chassis_GB108_A46>
+    <Chassis_GB109_GSOR_1008>
+      <id>	153	</id>
+    </Chassis_GB109_GSOR_1008>
+    <Chassis_GB10_Black_Prince>
+      <id>	28	</id>
+    </Chassis_GB10_Black_Prince>
+    <Chassis_GB10_Black_Prince_2>
+      <id>	29	</id>
+    </Chassis_GB10_Black_Prince_2>
+    <Chassis_GB110_FV4201_Chieftain_Prototype>
+      <id>	155	</id>
+    </Chassis_GB110_FV4201_Chieftain_Prototype>
+    <Chassis_GB110_FV4201_Chieftain_Prototype_B>
+      <id>	31003	</id>
+    </Chassis_GB110_FV4201_Chieftain_Prototype_B>
+    <Chassis_GB111_Charlemagne>
+      <id>	154	</id>
+    </Chassis_GB111_Charlemagne>
+    <Chassis_GB112_Caliban>
+      <id>	156	</id>
+    </Chassis_GB112_Caliban>
+    <Chassis_GB112_Caliban_02_B>
+      <id>	31005	</id>
+    </Chassis_GB112_Caliban_02_B>
+    <Chassis_GB113_Matilda_LVT>
+      <id>	157	</id>
+    </Chassis_GB113_Matilda_LVT>
+    <Chassis_GB114_Vickers_MBT_Mk3>
+      <id>	158	</id>
+    </Chassis_GB114_Vickers_MBT_Mk3>
+    <Chassis_GB115_Gonsalo>
+      <id>	159	</id>
+    </Chassis_GB115_Gonsalo>
+    <Chassis_GB116_Harry_Hopkins_I>
+      <id>	160	</id>
+    </Chassis_GB116_Harry_Hopkins_I>
+    <Chassis_GB118_Taurus_CA>
+      <id>	31002	</id>
+    </Chassis_GB118_Taurus_CA>
+    <Chassis_GB11_Caernarvon>
+      <id>	35	</id>
+    </Chassis_GB11_Caernarvon>
+    <Chassis_GB11_Caernarvon_2>
+      <id>	36	</id>
+    </Chassis_GB11_Caernarvon_2>
+    <Chassis_GB11_Caernarvon_2_IGR>
+      <id>	60002	</id>
+    </Chassis_GB11_Caernarvon_2_IGR>
+    <Chassis_GB120_Concept_No_5>
+      <id>	162	</id>
+    </Chassis_GB120_Concept_No_5>
+    <Chassis_GB120_Concept_No_5_bob>
+      <id>	31007	</id>
+    </Chassis_GB120_Concept_No_5_bob>
+    <Chassis_GB121_GSOR_1010_FB>
+      <id>	161	</id>
+    </Chassis_GB121_GSOR_1010_FB>
+    <Chassis_GB122_Staghound_Mk_III>
+      <id>	169	</id>
+    </Chassis_GB122_Staghound_Mk_III>
+    <Chassis_GB122_Staghound_Mk_III_2>
+      <id>	170	</id>
+    </Chassis_GB122_Staghound_Mk_III_2>
+    <Chassis_GB123_GSOR_1006_v7>
+      <id>	163	</id>
+    </Chassis_GB123_GSOR_1006_v7>
+    <Chassis_GB123_GSOR_1006_v7_2>
+      <id>	164	</id>
+    </Chassis_GB123_GSOR_1006_v7_2>
+    <Chassis_GB124_AEC_Armoured_Car>
+      <id>	167	</id>
+    </Chassis_GB124_AEC_Armoured_Car>
+    <Chassis_GB124_AEC_Armoured_Car_2>
+      <id>	168	</id>
+    </Chassis_GB124_AEC_Armoured_Car_2>
+    <Chassis_GB125_Saladin>
+      <id>	165	</id>
+    </Chassis_GB125_Saladin>
+    <Chassis_GB125_Saladin_2>
+      <id>	166	</id>
+    </Chassis_GB125_Saladin_2>
+    <Chassis_GB126_FSV_Scheme_A>
+      <id>	171	</id>
+    </Chassis_GB126_FSV_Scheme_A>
+    <Chassis_GB126_FSV_Scheme_A_2>
+      <id>	172	</id>
+    </Chassis_GB126_FSV_Scheme_A_2>
+    <Chassis_GB128_Nemesis>
+      <id>	31006	</id>
+    </Chassis_GB128_Nemesis>
+    <Chassis_GB129_FV205b_Alligator>
+      <id>	31004	</id>
+    </Chassis_GB129_FV205b_Alligator>
+    <Chassis_GB12_Conqueror>
+      <id>	39	</id>
+    </Chassis_GB12_Conqueror>
+    <Chassis_GB12_Conqueror_2>
+      <id>	40	</id>
+    </Chassis_GB12_Conqueror_2>
+    <Chassis_GB12_Conqueror_2_FL>
+      <id>	501	</id>
+    </Chassis_GB12_Conqueror_2_FL>
+    <Chassis_GB130_FV225>
+      <id>	31015	</id>
+    </Chassis_GB130_FV225>
+    <Chassis_GB131_Crusher>
+      <id>	31024	</id>
+    </Chassis_GB131_Crusher>
+    <Chassis_GB133_Cyclone_Mk_2>
+      <id>	31013	</id>
+    </Chassis_GB133_Cyclone_Mk_2>
+    <Chassis_GB133_Cyclone_Mk_2_2>
+      <id>	31014	</id>
+    </Chassis_GB133_Cyclone_Mk_2_2>
+    <Chassis_GB134_FV242B_Condor>
+      <id>	31010	</id>
+    </Chassis_GB134_FV242B_Condor>
+    <Chassis_GB134_FV242B_Condor_T>
+      <id>	35002	</id>
+    </Chassis_GB134_FV242B_Condor_T>
+    <Chassis_GB135_FV240>
+      <id>	31008	</id>
+    </Chassis_GB135_FV240>
+    <Chassis_GB135_FV240_2>
+      <id>	31009	</id>
+    </Chassis_GB135_FV240_2>
+    <Chassis_GB135_FV240_2_T>
+      <id>	35001	</id>
+    </Chassis_GB135_FV240_2_T>
+    <Chassis_GB136_FV245>
+      <id>	31011	</id>
+    </Chassis_GB136_FV245>
+    <Chassis_GB136_FV245_2>
+      <id>	31012	</id>
+    </Chassis_GB136_FV245_2>
+    <Chassis_GB137_CVT_Spider>
+      <id>	31017	</id>
+    </Chassis_GB137_CVT_Spider>
+    <Chassis_GB138_FV246_Colossus>
+      <id>	31022	</id>
+    </Chassis_GB138_FV246_Colossus>
+    <Chassis_GB139_Vulcan>
+      <id>	31018	</id>
+    </Chassis_GB139_Vulcan>
+    <Chassis_GB13_FV215b>
+      <id>	54	</id>
+    </Chassis_GB13_FV215b>
+    <Chassis_GB13_FV215b_IGR>
+      <id>	60007	</id>
+    </Chassis_GB13_FV215b_IGR>
+    <Chassis_GB140_Champion>
+      <id>	31016	</id>
+    </Chassis_GB140_Champion>
+    <Chassis_GB141_Celestial_2_51>
+      <id>	31020	</id>
+    </Chassis_GB141_Celestial_2_51>
+    <Chassis_GB142_FV249_Castle>
+      <id>	31021	</id>
+    </Chassis_GB142_FV249_Castle>
+    <Chassis_GB143_Captain>
+      <id>	31019	</id>
+    </Chassis_GB143_Captain>
+    <Chassis_GB14_M2>
+      <id>	8	</id>
+    </Chassis_GB14_M2>
+    <Chassis_GB14_M2_2>
+      <id>	9	</id>
+    </Chassis_GB14_M2_2>
+    <Chassis_GB15_Stuart_I>
+      <id>	14	</id>
+    </Chassis_GB15_Stuart_I>
+    <Chassis_GB15_Stuart_I_2>
+      <id>	15	</id>
+    </Chassis_GB15_Stuart_I_2>
+    <Chassis_GB17_Grant_I>
+      <id>	16	</id>
+    </Chassis_GB17_Grant_I>
+    <Chassis_GB17_Grant_I_2>
+      <id>	17	</id>
+    </Chassis_GB17_Grant_I_2>
+    <Chassis_GB19_Sherman_Firefly>
+      <id>	33	</id>
+    </Chassis_GB19_Sherman_Firefly>
+    <Chassis_GB19_Sherman_Firefly_2>
+      <id>	34	</id>
+    </Chassis_GB19_Sherman_Firefly_2>
+    <Chassis_GB19_Sherman_Firefly_2_MapsTraining_Dummy_MT_2>
+      <id>	3	</id>
+    </Chassis_GB19_Sherman_Firefly_2_MapsTraining_Dummy_MT_2>
+    <Chassis_GB20_Crusader>
+      <id>	20	</id>
+    </Chassis_GB20_Crusader>
+    <Chassis_GB20_Crusader_2>
+      <id>	21	</id>
+    </Chassis_GB20_Crusader_2>
+    <Chassis_GB21_Cromwell>
+      <id>	12	</id>
+    </Chassis_GB21_Cromwell>
+    <Chassis_GB21_Cromwell_2>
+      <id>	13	</id>
+    </Chassis_GB21_Cromwell_2>
+    <Chassis_GB21_Cromwell_2_IGR>
+      <id>	60003	</id>
+    </Chassis_GB21_Cromwell_2_IGR>
+    <Chassis_GB22_Comet>
+      <id>	48	</id>
+    </Chassis_GB22_Comet>
+    <Chassis_GB22_Comet_2>
+      <id>	49	</id>
+    </Chassis_GB22_Comet_2>
+    <Chassis_GB23_Centurion>
+      <id>	52	</id>
+    </Chassis_GB23_Centurion>
+    <Chassis_GB23_Centurion_2>
+      <id>	53	</id>
+    </Chassis_GB23_Centurion_2>
+    <Chassis_GB23_Centurion_2_IGR>
+      <id>	60001	</id>
+    </Chassis_GB23_Centurion_2_IGR>
+    <Chassis_GB24_Centurion_Mk3>
+      <id>	50	</id>
+    </Chassis_GB24_Centurion_Mk3>
+    <Chassis_GB24_Centurion_Mk3_2>
+      <id>	51	</id>
+    </Chassis_GB24_Centurion_Mk3_2>
+    <Chassis_GB25_Loyd_Carrier>
+      <id>	86	</id>
+    </Chassis_GB25_Loyd_Carrier>
+    <Chassis_GB25_Loyd_Carrier_2>
+      <id>	87	</id>
+    </Chassis_GB25_Loyd_Carrier_2>
+    <Chassis_GB26_Birch_Gun>
+      <id>	89	</id>
+    </Chassis_GB26_Birch_Gun>
+    <Chassis_GB26_Birch_Gun_2>
+      <id>	90	</id>
+    </Chassis_GB26_Birch_Gun_2>
+    <Chassis_GB27_Sexton>
+      <id>	31	</id>
+    </Chassis_GB27_Sexton>
+    <Chassis_GB27_Sexton_2>
+      <id>	32	</id>
+    </Chassis_GB27_Sexton_2>
+    <Chassis_GB28_Bishop>
+      <id>	91	</id>
+    </Chassis_GB28_Bishop>
+    <Chassis_GB28_Bishop_2>
+      <id>	92	</id>
+    </Chassis_GB28_Bishop_2>
+    <Chassis_GB29_Crusader_5inch>
+      <id>	93	</id>
+    </Chassis_GB29_Crusader_5inch>
+    <Chassis_GB29_Crusader_5inch_2>
+      <id>	94	</id>
+    </Chassis_GB29_Crusader_5inch_2>
+    <Chassis_GB30_FV3805>
+      <id>	95	</id>
+    </Chassis_GB30_FV3805>
+    <Chassis_GB30_FV3805_2>
+      <id>	96	</id>
+    </Chassis_GB30_FV3805_2>
+    <Chassis_GB31_Conqueror_Gun>
+      <id>	101	</id>
+    </Chassis_GB31_Conqueror_Gun>
+    <Chassis_GB32_Tortoise>
+      <id>	1	</id>
+    </Chassis_GB32_Tortoise>
+    <Chassis_GB32_Tortoise_2>
+      <id>	84	</id>
+    </Chassis_GB32_Tortoise_2>
+    <Chassis_GB33_Sentinel_AC_I>
+      <id>	2	</id>
+    </Chassis_GB33_Sentinel_AC_I>
+    <Chassis_GB35_Sentinel_AC_IV>
+      <id>	127	</id>
+    </Chassis_GB35_Sentinel_AC_IV>
+    <Chassis_GB37_Valliant>
+      <id>	151	</id>
+    </Chassis_GB37_Valliant>
+    <Chassis_GB39_Universal_CarrierQF2>
+      <id>	69	</id>
+    </Chassis_GB39_Universal_CarrierQF2>
+    <Chassis_GB39_Universal_CarrierQF2_2>
+      <id>	70	</id>
+    </Chassis_GB39_Universal_CarrierQF2_2>
+    <Chassis_GB40_Gun_Carrier_Churchill>
+      <id>	80	</id>
+    </Chassis_GB40_Gun_Carrier_Churchill>
+    <Chassis_GB40_Gun_Carrier_Churchill_2>
+      <id>	81	</id>
+    </Chassis_GB40_Gun_Carrier_Churchill_2>
+    <Chassis_GB41_Challenger>
+      <id>	115	</id>
+    </Chassis_GB41_Challenger>
+    <Chassis_GB41_Challenger_2>
+      <id>	116	</id>
+    </Chassis_GB41_Challenger_2>
+    <Chassis_GB42_Valentine_AT>
+      <id>	67	</id>
+    </Chassis_GB42_Valentine_AT>
+    <Chassis_GB42_Valentine_AT_2>
+      <id>	68	</id>
+    </Chassis_GB42_Valentine_AT_2>
+    <Chassis_GB44_Archer>
+      <id>	112	</id>
+    </Chassis_GB44_Archer>
+    <Chassis_GB44_Archer_2>
+      <id>	113	</id>
+    </Chassis_GB44_Archer_2>
+    <Chassis_GB45_Achilles_IIC>
+      <id>	117	</id>
+    </Chassis_GB45_Achilles_IIC>
+    <Chassis_GB45_Achilles_IIC_2>
+      <id>	118	</id>
+    </Chassis_GB45_Achilles_IIC_2>
+    <Chassis_GB48_FV215b_183>
+      <id>	79	</id>
+    </Chassis_GB48_FV215b_183>
+    <Chassis_GB50_Sherman_III>
+      <id>	107	</id>
+    </Chassis_GB50_Sherman_III>
+    <Chassis_GB50_Sherman_III_2>
+      <id>	108	</id>
+    </Chassis_GB50_Sherman_III_2>
+    <Chassis_GB51_Excelsior>
+      <id>	85	</id>
+    </Chassis_GB51_Excelsior>
+    <Chassis_GB52_A45>
+      <id>	105	</id>
+    </Chassis_GB52_A45>
+    <Chassis_GB57_Alecto>
+      <id>	77	</id>
+    </Chassis_GB57_Alecto>
+    <Chassis_GB57_Alecto_2>
+      <id>	78	</id>
+    </Chassis_GB57_Alecto_2>
+    <Chassis_GB58_Cruiser_Mk_III>
+      <id>	64	</id>
+    </Chassis_GB58_Cruiser_Mk_III>
+    <Chassis_GB58_Cruiser_Mk_III_2>
+      <id>	65	</id>
+    </Chassis_GB58_Cruiser_Mk_III_2>
+    <Chassis_GB59_Cruiser_Mk_IV>
+      <id>	61	</id>
+    </Chassis_GB59_Cruiser_Mk_IV>
+    <Chassis_GB59_Cruiser_Mk_IV_2>
+      <id>	62	</id>
+    </Chassis_GB59_Cruiser_Mk_IV_2>
+    <Chassis_GB60_Covenanter>
+      <id>	55	</id>
+    </Chassis_GB60_Covenanter>
+    <Chassis_GB60_Covenanter_2>
+      <id>	56	</id>
+    </Chassis_GB60_Covenanter_2>
+    <Chassis_GB63_TOG_II>
+      <id>	63	</id>
+    </Chassis_GB63_TOG_II>
+    <Chassis_GB68_Matilda_Black_Prince>
+      <id>	45	</id>
+    </Chassis_GB68_Matilda_Black_Prince>
+    <Chassis_GB69_Cruiser_Mk_II>
+      <id>	58	</id>
+    </Chassis_GB69_Cruiser_Mk_II>
+    <Chassis_GB69_Cruiser_Mk_II_2>
+      <id>	59	</id>
+    </Chassis_GB69_Cruiser_Mk_II_2>
+    <Chassis_GB70_FV4202_105>
+      <id>	60	</id>
+    </Chassis_GB70_FV4202_105>
+    <Chassis_GB70_N_FV4202_105>
+      <id>	109	</id>
+    </Chassis_GB70_N_FV4202_105>
+    <Chassis_GB70_N_FV4202_105_FL>
+      <id>	137	</id>
+    </Chassis_GB70_N_FV4202_105_FL>
+    <Chassis_GB71_AT_15A>
+      <id>	66	</id>
+    </Chassis_GB71_AT_15A>
+    <Chassis_GB72_AT15>
+      <id>	71	</id>
+    </Chassis_GB72_AT15>
+    <Chassis_GB72_AT15_2>
+      <id>	72	</id>
+    </Chassis_GB72_AT15_2>
+    <Chassis_GB72_AT15_2_IGR>
+      <id>	60005	</id>
+    </Chassis_GB72_AT15_2_IGR>
+    <Chassis_GB73_AT2>
+      <id>	75	</id>
+    </Chassis_GB73_AT2>
+    <Chassis_GB73_AT2_2>
+      <id>	76	</id>
+    </Chassis_GB73_AT2_2>
+    <Chassis_GB74_AT8>
+      <id>	73	</id>
+    </Chassis_GB74_AT8>
+    <Chassis_GB74_AT8_2>
+      <id>	74	</id>
+    </Chassis_GB74_AT8_2>
+    <Chassis_GB75_AT7>
+      <id>	82	</id>
+    </Chassis_GB75_AT7>
+    <Chassis_GB75_AT7_2>
+      <id>	83	</id>
+    </Chassis_GB75_AT7_2>
+    <Chassis_GB76_Mk_VIC>
+      <id>	102	</id>
+    </Chassis_GB76_Mk_VIC>
+    <Chassis_GB77_FV304>
+      <id>	97	</id>
+    </Chassis_GB77_FV304>
+    <Chassis_GB77_FV304_2>
+      <id>	98	</id>
+    </Chassis_GB77_FV304_2>
+    <Chassis_GB77_FV304_2_IGR>
+      <id>	60004	</id>
+    </Chassis_GB77_FV304_2_IGR>
+    <Chassis_GB79_FV206>
+      <id>	99	</id>
+    </Chassis_GB79_FV206>
+    <Chassis_GB79_FV206_2>
+      <id>	100	</id>
+    </Chassis_GB79_FV206_2>
+    <Chassis_GB80_Charioteer>
+      <id>	119	</id>
+    </Chassis_GB80_Charioteer>
+    <Chassis_GB80_Charioteer_2>
+      <id>	120	</id>
+    </Chassis_GB80_Charioteer_2>
+    <Chassis_GB81_FV4004>
+      <id>	110	</id>
+    </Chassis_GB81_FV4004>
+    <Chassis_GB81_FV4004_2>
+      <id>	111	</id>
+    </Chassis_GB81_FV4004_2>
+    <Chassis_GB83_FV4005>
+      <id>	114	</id>
+    </Chassis_GB83_FV4005>
+    <Chassis_GB84_Chieftain_Mk6>
+      <id>	125	</id>
+    </Chassis_GB84_Chieftain_Mk6>
+    <Chassis_GB84_Chieftain_Mk6_SH>
+      <id>	10002	</id>
+    </Chassis_GB84_Chieftain_Mk6_SH>
+    <Chassis_GB85_Cromwell_Berlin>
+      <id>	121	</id>
+    </Chassis_GB85_Cromwell_Berlin>
+    <Chassis_GB86_Centurion_Action_X>
+      <id>	122	</id>
+    </Chassis_GB86_Centurion_Action_X>
+    <Chassis_GB86_Centurion_Action_X_7x7>
+      <id>	31001	</id>
+    </Chassis_GB86_Centurion_Action_X_7x7>
+    <Chassis_GB87_Chieftain_T95_turret>
+      <id>	126	</id>
+    </Chassis_GB87_Chieftain_T95_turret>
+    <Chassis_GB88_T95_Chieftain_turret>
+      <id>	128	</id>
+    </Chassis_GB88_T95_Chieftain_turret>
+    <Chassis_GB91_Super_Conqueror>
+      <id>	129	</id>
+    </Chassis_GB91_Super_Conqueror>
+    <Chassis_GB92_FV217>
+      <id>	130	</id>
+    </Chassis_GB92_FV217>
+    <Chassis_GB92_FV217_7x7>
+      <id>	502	</id>
+    </Chassis_GB92_FV217_7x7>
+    <Chassis_GB93_Caernarvon_AX>
+      <id>	131	</id>
+    </Chassis_GB93_Caernarvon_AX>
+    <Chassis_GB94_Centurion_Mk5-1_RAAC>
+      <id>	132	</id>
+    </Chassis_GB94_Centurion_Mk5-1_RAAC>
+    <Chassis_GB95_Ekins_Firefly_M4A4>
+      <id>	133	</id>
+    </Chassis_GB95_Ekins_Firefly_M4A4>
+    <Chassis_GB96_Excalibur>
+      <id>	135	</id>
+    </Chassis_GB96_Excalibur>
+    <Chassis_GB97_Chimera>
+      <id>	134	</id>
+    </Chassis_GB97_Chimera>
+    <Chassis_GB97_Chimera_SH>
+      <id>	10001	</id>
+    </Chassis_GB97_Chimera_SH>
+    <Chassis_GB98_T95_FV4201_Chieftain>
+      <id>	136	</id>
+    </Chassis_GB98_T95_FV4201_Chieftain>
+    <Chassis_GB99_Turtle_Mk1>
+      <id>	147	</id>
+    </Chassis_GB99_Turtle_Mk1>
+    <Chassis_Sexton_I>
+      <id>	88	</id>
+    </Chassis_Sexton_I>
+  </shared>
 </chassis.xml>

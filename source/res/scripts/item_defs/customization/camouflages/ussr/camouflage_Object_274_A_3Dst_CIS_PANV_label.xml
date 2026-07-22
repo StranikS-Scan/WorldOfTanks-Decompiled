@@ -1,0 +1,57 @@
+<camouflage_Object_274_A_3Dst_CIS_PANV_label.xml>
+  <xmlns:china2>	ussr	</xmlns:china2>
+  <xmlns:germany>	germany	</xmlns:germany>
+  <xmlns:china1>	usa	</xmlns:china1>
+  <xmlns:china>	china	</xmlns:china>
+  <xmlns:france>	france	</xmlns:france>
+  <xmlns:china0>	uk	</xmlns:china0>
+  <xmlns:japan>	japan	</xmlns:japan>
+  <xmlns:czech>	czech	</xmlns:czech>
+  <xmlns:sweden>	sweden	</xmlns:sweden>
+  <xmlns:poland>	poland	</xmlns:poland>
+  <xmlns:italy>	italy	</xmlns:italy>
+  <xmlns:intunion>	intunion	</xmlns:intunion>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/opaque	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	MT camouflages 50g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	ussr:R180_Object_274_A	</vehicles>
+      </include>
+      <exclude>
+        <vehicles>	ussr:R47_ISU-152_Zveroboj	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <camouflage>
+      <id>	193	</id>
+      <texture>	vehicles/russian/Camouflage/strong.dds	</texture>
+      <description>	#vehicle_customization:camouflage/Object_274_A_3Dst_CIS_PANV/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/Object_274_A_3Dst_CIS_PANV/label	</userString>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	71 84 67 255	</c0>
+          <c1>	140 132 109 255	</c1>
+          <c2>	130 126 100 255	</c2>
+          <c3>	20 34 20 255	</c3>
+        </palette>
+      </palettes>
+      <rotation>
+        <HULL>	0.44471	</HULL>
+        <TURRET>	0.44471	</TURRET>
+        <GUN>	0.44471	</GUN>
+      </rotation>
+      <tiling>
+        <ussr:R180_Object_274_A>	2.38 2.38 0.000000 1.5	</ussr:R180_Object_274_A>
+      </tiling>
+      <tilingSettings>
+        <type>	relative	</type>
+        <factor>	1.59511 1.59756	</factor>
+        <offset>	0.000000 0.000000	</offset>
+      </tilingSettings>
+    </camouflage>
+  </itemGroup>
+</camouflage_Object_274_A_3Dst_CIS_PANV_label.xml>

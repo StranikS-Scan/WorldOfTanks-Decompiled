@@ -56,7 +56,7 @@ from gui.prb_control import prb_getters
 from gui.prb_control.ctrl_events import g_prbCtrlEvents
 from gui.prb_control.entities.base.ctx import PrbAction
 from gui.prb_control.entities.listener import IGlobalListener
-from gui.prb_control.settings import PRE_QUEUE_RESTRICTION, REQUEST_TYPE
+from gui.prb_control.settings import PRE_QUEUE_RESTRICTION, PREBATTLE_ACTION_NAME, REQUEST_TYPE
 from gui.server_events import recruit_helper, settings as quest_settings
 from gui.shared import event_dispatcher as shared_events, events, g_eventBus
 from gui.clans.clan_cache import g_clanCache
@@ -94,6 +94,7 @@ from skeletons.gui.storage_novelty import IStorageNovelty
 from skeletons.gui.techtree_events import ITechTreeEventsListener
 from skeletons.tutorial import ITutorialLoader
 from uilogging.personal_reserves.loggers import PersonalReservesActivationScreenFlowLogger
+from uilogging.rename_testing.loggers import RenameTestingUILogger
 from uilogging.wot_plus.loggers import WotPlusHeaderLogger
 if typing.TYPE_CHECKING:
     from typing import Optional, Dict, Tuple
@@ -456,6 +457,8 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         navigationPossible = yield self.lobbyContext.isHeaderNavigationPossible()
         fightButtonPressPossible = yield self.lobbyContext.isFightButtonPressPossible()
         if navigationPossible and fightButtonPressPossible:
+            if self.__isPlatoonGameMode():
+                RenameTestingUILogger().logPlatoonFightButton()
             if self.prbDispatcher:
                 prbEntity = self.prbDispatcher.getEntity()
                 result = yield self.platoonCtrl.processPlatoonActions(mmData, prbEntity, g_currentVehicle)
@@ -472,6 +475,7 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         self.platoonCtrl.setPlatoonPopoverPosition(platoonButtonXOffset)
 
     def showSquad(self, platoonButtonXOffset):
+        RenameTestingUILogger().logPlatoonMenuSection()
         if self.prbDispatcher:
             self.platoonCtrl.evaluateVisibility(platoonButtonXOffset, toggleUI=True)
         else:
@@ -1330,6 +1334,12 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         self.__menuVisibilityHelper.updateStates(state)
         activeState = self.__menuVisibilityHelper.getActiveState()
         self.as_toggleVisibilityMenuS(activeState)
+
+    def __isPlatoonGameMode(self):
+        if not self.prbDispatcher:
+            return False
+        state = self.prbDispatcher.getFunctionalState()
+        return True if state.isInUnit(PREBATTLE_TYPE.SQUAD) else battle_selector_items.getSquadItems().isSelected(PREBATTLE_ACTION_NAME.SQUAD)
 
     def _checkFightButtonDisabled(self, canDo, isLocked):
         return not canDo or isLocked

@@ -1,0 +1,21 @@
+<TeamInfoScoreComponent.def>
+  <Properties>
+    <scores>
+      <Type>	ARRAY	  <of>	FIXED_DICT	  <Properties>
+            <vehID>
+              <Type>	OBJECT_ID	</Type>
+            </vehID>
+            <score>
+              <Type>	INT32	</Type>
+            </score>
+          </Properties>
+        </of>
+      </Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </scores>
+  </Properties>
+  <ofEntity>
+    <TeamInfo></TeamInfo>
+  </ofEntity>
+  <DefaultKeyName>	teamInfoScoreComponent	</DefaultKeyName>
+</TeamInfoScoreComponent.def>

@@ -587,7 +587,6 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         self.__updateBattleRoyaleComponents()
         self.__hangarComponentsCtrl.updateComponentsVisibility()
         self.__updateBattleModifiersWidget()
-        self.__updateFunRandomModifiersWidget()
         Waiting.hide('updateVehicle')
 
     def __onCurrentVehicleChanged(self):
@@ -667,7 +666,6 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         self.__updateBattleRoyaleComponents()
         self.__hangarComponentsCtrl.updateComponentsVisibility()
         self.__updateBattleModifiersWidget()
-        self.__updateFunRandomModifiersWidget()
 
     def __onFunRandomUpdate(self, *_):
         self.__onEntityChanged()
@@ -701,7 +699,7 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         if RENEWABLE_SUBSCRIPTION_CONFIG in diff:
             self.__updateState()
         if Configs.FUN_RANDOM_CONFIG in diff:
-            self.__updateFunRandomModifiersWidget()
+            self.__updateBattleModifiersWidget()
         if Configs.BATTLE_MODIFIER_CONFIG in diff:
             self.__updateBattleModifiersWidget()
 
@@ -763,13 +761,9 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
 
     def __updateBattleModifiersWidget(self, *_, **__):
         self.as_setBattleModifiersVisibleS(False)
-        self.as_setComp7ModifiersVisibleS(False)
         modifiersDomain = self.__battleModifiersController.getCurrentDomain()
-        if modifiersDomain == IBattleModifiersController.ModifiersDomains.COMP7:
-            self.as_setComp7ModifiersVisibleS(True)
-        elif modifiersDomain in IBattleModifiersController.ModifiersDomains.STRONGHOLD_DOMAINS:
+        if modifiersDomain == IBattleModifiersController.ModifiersDomains.COMP7 or modifiersDomain in IBattleModifiersController.ModifiersDomains.STRONGHOLD_DOMAINS:
             self.as_setBattleModifiersVisibleS(True)
-
-    def __updateFunRandomModifiersWidget(self):
         subModeId = self.__funRandomCtrl.subModesHolder.getDesiredSubModeID()
-        self.as_setFunRandomModifiersVisibleS(self.__funRandomCtrl.isFunRandomModifiersVisibleSBySubModeID(subModeId))
+        if self.__funRandomCtrl.isFunRandomModifiersVisibleBySubModeID(subModeId):
+            self.as_setBattleModifiersVisibleS(True)

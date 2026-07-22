@@ -234,6 +234,13 @@ def __mergeParagonsUnlocks(total, key, value, isLeaf, count, *args):
     total[key].setdefault('ids', set()).update(value.get('ids', set()))
 
 
+def __mergePreferredMapSlots(total, key, value, isLeaf, count, *args):
+    preferredMapSlots = total.setdefault(key, {})
+    for slotID, slotDurationDays in value.iteritems():
+        preferredMapSlots.setdefault(slotID, 0)
+        preferredMapSlots[slotID] += count * slotDurationDays
+
+
 BONUS_MERGERS = {'credits': __mergeValue,
  'gold': __mergeValue,
  'xp': __mergeValue,
@@ -276,7 +283,8 @@ BONUS_MERGERS = {'credits': __mergeValue,
  'meta': __mergeMeta,
  'dailyQuestReroll': __mergeDailyQuestReroll,
  'noviceReset': __mergeNoviceReset,
- 'paragonsUnlocks': __mergeParagonsUnlocks}
+ 'paragonsUnlocks': __mergeParagonsUnlocks,
+ 'preferredMapSlots': __mergePreferredMapSlots}
 
 def _vehiclesInventoryChecker(account, key):
     invId = account._inventory.getVehicleInvID(key)

@@ -1,0 +1,57 @@
+<camouflage_germany_tricolor_Branch_generic_custom_look_3_label_496.xml>
+  <germany:G15_VK3601H4>	ussr	</germany:G15_VK3601H4>
+  <xmlns:germany>	germany	</xmlns:germany>
+  <germany:G15_VK3601H3>	usa	</germany:G15_VK3601H3>
+  <xmlns:china>	china	</xmlns:china>
+  <xmlns:france>	france	</xmlns:france>
+  <germany:G15_VK3601H2>	uk	</germany:G15_VK3601H2>
+  <xmlns:japan>	japan	</xmlns:japan>
+  <xmlns:czech>	czech	</xmlns:czech>
+  <germany:G15_VK3601H1>	sweden	</germany:G15_VK3601H1>
+  <germany:G15_VK3601H0>	poland	</germany:G15_VK3601H0>
+  <xmlns:italy>	italy	</xmlns:italy>
+  <xmlns:intunion>	intunion	</xmlns:intunion>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/opaque	</userString>
+    <season>	ALL	</season>
+    <historical>	0	</historical>
+    <priceGroup>	MT camouflages 50g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	germany:G04_PzVI_Tiger_I germany:G15_VK3601H germany:G15_VK3601H_C	</vehicles>
+      </include>
+    </vehicleFilter>
+    <camouflage>
+      <id>	496	</id>
+      <texture>	vehicles/german/Camouflage/Cger_1_9Branch.dds	</texture>
+      <description>	#vehicle_customization:camouflage/germany/tricolor/Branch_generic_custom_look_3/description	</description>
+      <scales>	1.2 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/germany/tricolor/Branch_generic_custom_look_3/label	</userString>
+      <tags>	hiddenInUI	</tags>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	68 55 52 255	</c0>
+          <c1>	119 113 94 255	</c1>
+          <c2>	78 86 74 255	</c2>
+          <c3>	117 113 80 0	</c3>
+        </palette>
+      </palettes>
+      <rotation>
+        <HULL>	0.523599	</HULL>
+        <TURRET>	0.523599	</TURRET>
+        <GUN>	0.523599	</GUN>
+      </rotation>
+      <tiling>
+        <germany:G04_PzVI_Tiger_I>	3.8 3.8 0.000000 0.000000	</germany:G04_PzVI_Tiger_I>
+        <germany:G15_VK3601H>	1.4 1.4 0.46 0.32	</germany:G15_VK3601H>
+        <germany:G15_VK3601H_C>	1.4 1.4 0.46 0.32	</germany:G15_VK3601H_C>
+      </tiling>
+      <tilingSettings>
+        <type>	relative	</type>
+        <factor>	2.32525 2.32947	</factor>
+        <offset>	0.000000 0.000000	</offset>
+      </tilingSettings>
+    </camouflage>
+  </itemGroup>
+</camouflage_germany_tricolor_Branch_generic_custom_look_3_label_496.xml>

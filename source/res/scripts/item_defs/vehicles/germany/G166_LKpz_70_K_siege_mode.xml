@@ -1591,8 +1591,8 @@
             <slot>
               <slotType>	insigniaOnGun	</slotType>
               <slotId>	49000	</slotId>
-              <rayStart>	-0.000001 0 3.34677	</rayStart>
-              <rayEnd>	-0.000001 0 3.62077	</rayEnd>
+              <rayStart>	-0.000001 0 4.15	</rayStart>
+              <rayEnd>	-0.000001 0 4.424	</rayEnd>
               <rayUp>	0.110156 0 0	</rayUp>
               <size>	0.274	</size>
             </slot>
@@ -1613,6 +1613,7 @@
             <collisionModelClient>	vehicles/german/G166_LKpz_70_K/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
           <reloadEffect>	autoloader_reload85_107	</reloadEffect>
+          <edgeByVisualModel>	false	</edgeByVisualModel>
           <camouflage>
             <density>	116.473709 116.448357	</density>
             <aoTextureSize>	512 512	</aoTextureSize>
@@ -1746,7 +1747,7 @@
         </customizableVehicleAreas>
       </customization>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
-      <physicsShape>	1.003 0 1.012 -0.001 0.483 0.367 0.735 0.347 0.541 0.5 0.398 0.5 0 0.621 0	</physicsShape>
+      <physicsShape>	1.003 0 1.012 -0.001 0.921 -0.014 0.735 0.347 0.541 0.5 0.398 0.5 0 0.621 0	</physicsShape>
       <camouflage>
         <density>	134.953232 134.834717	</density>
         <aoTextureSize>	512 512	</aoTextureSize>

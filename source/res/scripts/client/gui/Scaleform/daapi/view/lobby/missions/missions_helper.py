@@ -3,12 +3,11 @@
 import operator
 import time
 from collections import namedtuple
-import typing
+from typing import TYPE_CHECKING
 import constants
 from debug_utils import LOG_WARNING
-from gui.ranked_battles.ranked_helpers import isRankedQuestID
 from gui.Scaleform.daapi.view.lobby.missions import cards_formatters
-from gui.Scaleform.daapi.view.lobby.missions.awards_formatters import CurtailingAwardsComposer, AwardsWindowComposer, DetailedCardAwardComposer, PersonalMissionsAwardComposer
+from gui.Scaleform.daapi.view.lobby.missions.awards_formatters import AwardsWindowComposer, CurtailingAwardsComposer, DetailedCardAwardComposer, PersonalMissionsAwardComposer
 from gui.Scaleform.daapi.view.lobby.server_events.events_helpers import getVehicleRequirements
 from gui.Scaleform.genConsts.PERSONAL_MISSIONS_ALIASES import PERSONAL_MISSIONS_ALIASES
 from gui.Scaleform.genConsts.PERSONAL_MISSIONS_BUTTONS import PERSONAL_MISSIONS_BUTTONS
@@ -19,29 +18,32 @@ from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.impl import backport
 from gui.impl.gen import R
-from gui.server_events.awards_formatters import AWARDS_SIZES, getEpicAwardFormatter, EPIC_AWARD_SIZE, getMissionsDefaultAwardFormatter
+from gui.ranked_battles.ranked_helpers import isRankedQuestID
+from gui.server_events.awards_formatters import AWARDS_SIZES, EPIC_AWARD_SIZE, getEpicAwardFormatter, getMissionsDefaultAwardFormatter
 from gui.server_events.bonuses import SimpleBonus
 from gui.server_events.cond_formatters.prebattle import MissionsPreBattleConditionsFormatter
 from gui.server_events.cond_formatters.requirements import AccountRequirementsFormatter, TQAccountRequirementsFormatter
 from gui.server_events.conditions import GROUP_TYPE
 from gui.server_events.events_constants import BATTLE_ROYALE_GROUPS_ID, EPIC_BATTLE_GROUPS_ID, FUN_RANDOM_GROUP_ID
-from gui.server_events.events_helpers import MISSIONS_STATES, QuestInfoModel, AWARDS_PER_SINGLE_PAGE, isMarathon, AwardSheetPresenter, isPremium, isDebutBoxesQuest, isVersusAIQuest
+from gui.server_events.events_helpers import AWARDS_PER_SINGLE_PAGE, AwardSheetPresenter, MISSIONS_STATES, QuestInfoModel, isDebutBoxesQuest, isMarathon, isPremium, isVersusAIQuest
 from gui.server_events.formatters import DECORATION_SIZES
 from gui.server_events.personal_progress import formatters
 from gui.server_events.pm_constants import PM_TUTOR_FIELDS
-from gui.shared.formatters import text_styles, icons, time_formatters
+from gui.shared.formatters import icons, text_styles, time_formatters
 from gui.shared.utils.functions import makeTooltip
 from gui.shared.utils.requesters.ItemsRequester import REQ_CRITERIA
-from helpers import dependency, int2roman, time_utils, i18n
+from helpers import dependency, i18n, int2roman, time_utils
 from helpers.i18n import makeString as _ms
 from personal_missions import PM_BRANCH
 from pm_quests import PM_BRANCH_TO_FREE_TOKEN_NAME
 from quest_xml_source import MAX_BONUS_LIMIT
-from shared_utils import first, findFirst
+from shared_utils import findFirst, first
 from skeletons.account_helpers.settings_core import ISettingsCore
+from skeletons.gui.game_control import IBattleRoyaleController, IDebutBoxesController, IEpicBattleMetaGameController, IRankedBattlesController
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
-from skeletons.gui.game_control import IRankedBattlesController, IBattleRoyaleController, IEpicBattleMetaGameController, IDebutBoxesController
+if TYPE_CHECKING:
+    from typing import Dict, List, Union
 CARD_AWARDS_COUNT = 6
 CARD_AWARDS_BIG_COUNT = 5
 CARD_AWARDS_EPIC_COUNT = 4
@@ -1365,8 +1367,28 @@ def getDetailedMissionData(event):
         return _DetailedMissionInfo(event) if event.getType() in constants.EVENT_TYPE.LIKE_BATTLE_QUESTS else None
 
 
+def _normalizePreferredMapSlotAwardVO(award):
+    if not award:
+        return award
+    else:
+        isPreferredMapSlot = award.get('tooltip') == TOOLTIPS_CONSTANTS.PREFERRED_MAP_SLOT_TOOLTIP or award.get('specialAlias') == TOOLTIPS_CONSTANTS.PREFERRED_MAP_SLOT_TOOLTIP
+        if not isPreferredMapSlot:
+            return award
+        args = award.get('specialArgs') or []
+        if len(args) < 2:
+            return award
+        specialArgs = [str(args[0]), str(args[1])]
+        normalized = dict(award)
+        normalized['tooltip'] = TOOLTIPS_CONSTANTS.PREFERRED_MAP_SLOT_TOOLTIP
+        normalized['isWulfTooltip'] = True
+        normalized['specialArgs'] = specialArgs
+        normalized.pop('isSpecial', None)
+        normalized.pop('specialAlias', None)
+        return normalized
+
+
 def getAwardsWindowBonuses(bonuses):
-    result = _awardsWindowBonusFormatter.getFormattedBonuses(bonuses, AWARDS_SIZES.BIG)
+    result = [ _normalizePreferredMapSlotAwardVO(award) for award in _awardsWindowBonusFormatter.getFormattedBonuses(bonuses, AWARDS_SIZES.BIG) ]
     while len(result) % AWARDS_PER_SINGLE_PAGE != 0 and len(result) > AWARDS_PER_SINGLE_PAGE:
         result.append({})
 

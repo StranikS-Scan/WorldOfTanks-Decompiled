@@ -1,0 +1,60 @@
+<OnslaughtShop_01_Style_141_name.xml>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <style>
+      <id>	31511	</id>
+      <texture>	gui/maps/vehicles/styles/OnslaughtShop_01_Style_141.png	</texture>
+      <userString>	#vehicle_customization:OnslaughtShop_01_Style_141/name	</userString>
+      <description>	#vehicle_customization:OnslaughtShop_01_Style_141/description	</description>
+      <longDescriptionSpecial>	#vehicle_customization:OnslaughtShop_01_Style_141/longDescription	</longDescriptionSpecial>
+      <outfits>
+        <outfit>
+          <season>	all	</season>
+          <modifications>
+            <item>	3	</item>
+          </modifications>
+          <paints>
+            <item>
+              <id>	31458	</id>
+              <appliedTo>	20752	</appliedTo>
+            </item>
+            <item>
+              <id>	31459	</id>
+              <appliedTo>	1	</appliedTo>
+            </item>
+          </paints>
+          <camouflages>
+            <item>
+              <id>	31474	</id>
+              <patternSize>	1	</patternSize>
+              <appliedTo>	256	</appliedTo>
+              <palette>	0	</palette>
+            </item>
+            <item>
+              <id>	31475	</id>
+              <patternSize>	1	</patternSize>
+              <appliedTo>	16	</appliedTo>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <insignias>
+            <item>
+              <id>	31050	</id>
+              <appliedTo>	4096	</appliedTo>
+            </item>
+          </insignias>
+        </outfit>
+      </outfits>
+    </style>
+    <priceGroup>	MT 2D styles universal 1000g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	uk:GB88_T95_Chieftain_turret	</vehicles>
+      </include>
+    </vehicleFilter>
+    <tags>	lockedOnVehicle	</tags>
+    <maxNumber>	1	</maxNumber>
+  </itemGroup>
+</OnslaughtShop_01_Style_141_name.xml>

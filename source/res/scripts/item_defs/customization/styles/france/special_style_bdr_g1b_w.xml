@@ -1,0 +1,43 @@
+<special_style_bdr_g1b_w.xml>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/unique_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	MT 3D styles 6-7-8 levels 4000g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	france:F05_BDR_G1B	</vehicles>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	141	</id>
+      <texture>	gui/maps/vehicles/styles/bdr_g1b_w.png	</texture>
+      <description>	#vehicle_customization:special_style/bdr_g1b_w_description	</description>
+      <longDescriptionSpecial>	#vehicle_customization:special_style/bdr_g1b_w_description/long	</longDescriptionSpecial>
+      <modelsSet>	WH	</modelsSet>
+      <maxNumber>	1	</maxNumber>
+      <userString>	#vehicle_customization:special_style/bdr_g1b_w	</userString>
+      <tags>	progression_required	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	1	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+        </outfit>
+      </outfits>
+    </style>
+  </itemGroup>
+</special_style_bdr_g1b_w.xml>

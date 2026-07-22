@@ -1389,7 +1389,7 @@
             <gun>	10	</gun>
           </armor>
           <shotDispersionRadius>	0.2	</shotDispersionRadius>
-          <reloadTime>	15	</reloadTime>
+          <reloadTime>	12	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.12	</turretRotation>
             <afterShot>	3.5	</afterShot>
@@ -1398,14 +1398,14 @@
           <invisibilityFactorAtShot>	0.285	</invisibilityFactorAtShot>
           <aimingTime>	1.5	</aimingTime>
           <clip>
-            <count>	28	</count>
-            <rate>	290	</rate>
+            <count>	20	</count>
+            <rate>	240	</rate>
           </clip>
           <autoShoot>
             <shotDispersionPerSec>	1.5	</shotDispersionPerSec>
             <maxShotDispersion>	8	</maxShotDispersion>
-            <rate>	4.83	</rate>
-            <rebuildShotDispersionDelay>	1.0	</rebuildShotDispersionDelay>
+            <rate>	4	</rate>
+            <rebuildShotDispersionDelay>	0.3	</rebuildShotDispersionDelay>
           </autoShoot>
           <customizationSlots>
             <slot>
@@ -1943,7 +1943,7 @@
     <detailed>
       <engines>
         <V_44_T>
-          <smplEnginePower>	570	</smplEnginePower>
+          <smplEnginePower>	710	</smplEnginePower>
           <smplFwMaxSpeed>	55	</smplFwMaxSpeed>
         </V_44_T>
       </engines>

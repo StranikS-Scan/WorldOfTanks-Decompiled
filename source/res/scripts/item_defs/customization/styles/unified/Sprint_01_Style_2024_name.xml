@@ -1,0 +1,47 @@
+<Sprint_01_Style_2024_name.xml>
+  <itemGroup>
+    <season>	ALL	</season>
+    <historical>	2	</historical>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <tags>	progression_required	</tags>
+    <priceGroup>	MT 2D styles universal 1000g notInShop	</priceGroup>
+    <style>
+      <id>	31240	</id>
+      <texture>	gui/maps/vehicles/styles/Sprint_01_Style_2024.png	</texture>
+      <userString>	#vehicle_customization:Sprint_01_Style_2024/name	</userString>
+      <description>	#vehicle_customization:Sprint_01_Style_2024/description	</description>
+      <longDescriptionSpecial>	#vehicle_customization:Sprint_01_Style_2024/longDescription	</longDescriptionSpecial>
+      <outfits>
+        <outfit>
+          <season>	all	</season>
+          <paints>
+            <item>
+              <id>	31191	</id>
+              <appliedTo>	20753	</appliedTo>
+            </item>
+          </paints>
+          <camouflages>
+            <item>
+              <id>	31206	</id>
+              <patternSize>	1	</patternSize>
+              <appliedTo>	4368	</appliedTo>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+        </outfit>
+      </outfits>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+    </style>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+  </itemGroup>
+</Sprint_01_Style_2024_name.xml>

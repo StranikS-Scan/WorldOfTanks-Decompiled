@@ -85,7 +85,7 @@ class FunRandomMapsView(ViewImpl, LobbyHeaderVisibility, FunSubModeHolder, FunSu
     def __fullUpdateData(self):
         funRandomCtrl = self.funRandomCtrl
         subModeId = funRandomCtrl.subModesHolder.getDesiredSubModeID()
-        if not funRandomCtrl.isFunRandomModifiersVisibleSBySubModeID(subModeId):
+        if not funRandomCtrl.isFunRandomModifiersVisibleBySubModeID(subModeId):
             self.__close()
             return
         self.catchSubMode(funRandomCtrl.subModesHolder.getDesiredSubModeID())

@@ -2,8 +2,10 @@
 # Embedded file name: scripts/client/gui/clientgw/states.py
 from collections import namedtuple
 import BigWorld
+from PlayerEvents import g_playerEvents
 from adisp import adisp_process, adisp_async
 from client_request_lib.exceptions import ResponseCodes
+from constants import AUTH_TOKEN_REQUEST_TIMEOUT
 from debug_utils import LOG_WARNING, LOG_DEBUG
 from gui.battle_control import avatar_getter
 from gui.clans.restrictions import AccountClanLimits, DefaultAccountClanLimits
@@ -25,6 +27,7 @@ _PING_BACK_OFF_MIN_DELAY = 60
 _PING_BACK_OFF_MAX_DELAY = 1200
 _PING_BACK_OFF_MODIFIER = 30
 _PING_BACK_OFF_EXP_RANDOM_FACTOR = 5
+CLIENT_TOKEN_REQUEST_TIMEOUT = AUTH_TOKEN_REQUEST_TIMEOUT + 0.5
 
 class WebControllerStates(CONST_CONTAINER):
     STATE_NOT_DEFINED = 0
@@ -285,6 +288,11 @@ class AvailableState(_WebState):
     def init(self):
         super(AvailableState, self).init()
         self._tokenRequester = g_webFactory.createTokenRequester()
+        g_playerEvents.onAccountBecomeNonPlayer += self.__onAccountBecomeNonPlayer
+
+    def fini(self):
+        g_playerEvents.onAccountBecomeNonPlayer -= self.__onAccountBecomeNonPlayer
+        super(AvailableState, self).fini()
 
     def isAvailable(self):
         return True
@@ -386,7 +394,7 @@ class AvailableState(_WebState):
         self.__loginState = LOGIN_STATE.LOGGING_IN
         nextLoginState = LOGIN_STATE.LOGGED_OFF
         LOG_DEBUG('Requesting spa token...')
-        response = yield self._tokenRequester.request(allowDelay=True)
+        response = yield self._tokenRequester.request(timeout=CLIENT_TOKEN_REQUEST_TIMEOUT, allowDelay=True)
         if response and response.isValid():
             pDbID = getPlayerDatabaseID()
             if response.getDatabaseID() == pDbID:
@@ -440,3 +448,7 @@ class AvailableState(_WebState):
             while self.__waitingRequests:
                 ctx, clallback, prevResult, allowDelay = self.__waitingRequests.pop(0)
                 clallback(prevResult)
+
+    def __onAccountBecomeNonPlayer(self):
+        if self._tokenRequester.isInProcess():
+            self._tokenRequester.cancelRequest()

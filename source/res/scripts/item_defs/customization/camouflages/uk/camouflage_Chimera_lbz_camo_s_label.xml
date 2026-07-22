@@ -1,0 +1,50 @@
+<camouflage_Chimera_lbz_camo_s_label.xml>
+  <xmlns:china2>	ussr	</xmlns:china2>
+  <xmlns:germany>	germany	</xmlns:germany>
+  <xmlns:china1>	usa	</xmlns:china1>
+  <xmlns:china>	china	</xmlns:china>
+  <xmlns:france>	france	</xmlns:france>
+  <xmlns:china0>	uk	</xmlns:china0>
+  <xmlns:japan>	japan	</xmlns:japan>
+  <xmlns:czech>	czech	</xmlns:czech>
+  <xmlns:sweden>	sweden	</xmlns:sweden>
+  <xmlns:poland>	poland	</xmlns:poland>
+  <xmlns:italy>	italy	</xmlns:italy>
+  <xmlns:intunion>	intunion	</xmlns:intunion>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/opaque	</userString>
+    <season>	summer	</season>
+    <historical>	0	</historical>
+    <priceGroup>	MT camouflages 50g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	uk:GB97_Chimera	</vehicles>
+      </include>
+    </vehicleFilter>
+    <camouflage>
+      <id>	590	</id>
+      <texture>	vehicles/british/Camouflage/Chimera_lbz_camo.dds	</texture>
+      <description>	#vehicle_customization:camouflage/Chimera_lbz_camo_s/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/Chimera_lbz_camo_s/label	</userString>
+      <tags>	rare	</tags>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	68 61 42 255	</c0>
+          <c1>	128 140 117 255	</c1>
+          <c2>	203 196 150 255	</c2>
+          <c3>	0 0 0 0	</c3>
+        </palette>
+      </palettes>
+      <tiling>
+        <uk:GB97_Chimera>	3.4 3.4 0.000000 0.000000	</uk:GB97_Chimera>
+      </tiling>
+      <tilingSettings>
+        <type>	relative	</type>
+        <factor>	2.722297  2.704839	</factor>
+        <offset>	0.000000 0.000000	</offset>
+      </tilingSettings>
+    </camouflage>
+  </itemGroup>
+</camouflage_Chimera_lbz_camo_s_label.xml>

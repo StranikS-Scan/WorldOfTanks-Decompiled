@@ -1,0 +1,56 @@
+<camouflage_japan_desert_green-brown_spots_generic_custom_look_3_label_502.xml>
+  <japan:J11_Chi_Ri3>	ussr	</japan:J11_Chi_Ri3>
+  <xmlns:germany>	germany	</xmlns:germany>
+  <japan:J11_Chi_Ri2>	usa	</japan:J11_Chi_Ri2>
+  <xmlns:china>	china	</xmlns:china>
+  <xmlns:france>	france	</xmlns:france>
+  <japan:J11_Chi_Ri1>	uk	</japan:J11_Chi_Ri1>
+  <xmlns:japan>	japan	</xmlns:japan>
+  <xmlns:czech>	czech	</xmlns:czech>
+  <japan:J11_Chi_Ri0>	sweden	</japan:J11_Chi_Ri0>
+  <xmlns:poland>	poland	</xmlns:poland>
+  <xmlns:italy>	italy	</xmlns:italy>
+  <xmlns:intunion>	intunion	</xmlns:intunion>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/opaque	</userString>
+    <season>	ALL	</season>
+    <historical>	0	</historical>
+    <priceGroup>	MT camouflages 50g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	japan:J10_Chi_To japan:J11_Chi_Ri	</vehicles>
+      </include>
+    </vehicleFilter>
+    <camouflage>
+      <id>	502	</id>
+      <texture>	vehicles/japan/Camouflage/desert_green-brown_spots.dds	</texture>
+      <description>	#vehicle_customization:camouflage/japan/desert_green-brown_spots_generic_custom_look_3/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/japan/desert_green-brown_spots_generic_custom_look_3/label	</userString>
+      <tags>	hiddenInUI	</tags>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	63 61 43 255	</c0>
+          <c1>	124 130 81 255	</c1>
+          <c2>	53 89 51 255	</c2>
+          <c3>	0 0 0 0	</c3>
+        </palette>
+      </palettes>
+      <rotation>
+        <HULL>	-0.959931	</HULL>
+        <TURRET>	-0.959931	</TURRET>
+        <GUN>	-0.959931	</GUN>
+      </rotation>
+      <tiling>
+        <japan:J10_Chi_To>	2.2 2.2 0.12 0.63	</japan:J10_Chi_To>
+        <japan:J11_Chi_Ri>	4.7 4.7 0.3 0.26	</japan:J11_Chi_Ri>
+      </tiling>
+      <tilingSettings>
+        <type>	relative	</type>
+        <factor>	2.833872  2.842454	</factor>
+        <offset>	0.000000 0.000000	</offset>
+      </tilingSettings>
+    </camouflage>
+  </itemGroup>
+</camouflage_japan_desert_green-brown_spots_generic_custom_look_3_label_502.xml>

@@ -136,6 +136,7 @@ class VehiclePreviewBottomPanel(VehiclePreviewBottomPanelMeta):
         self.__timeCallbackID = None
         self.__timeLeftIcon = icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_TIME_ICON, 16, 16)
         self.__buttonLabel = None
+        self.__hideBuyBlock = False
         self.__cachedVehiclesVOs = None
         self.__cachedItemsVOs = None
         self.__cachedCollapsedItemsVOs = None
@@ -216,9 +217,10 @@ class VehiclePreviewBottomPanel(VehiclePreviewBottomPanelMeta):
     def setIsHeroTank(self, isHero):
         self.__isHeroTank = isHero
 
-    def setPanelTextData(self, title='', buttonLabel=None, uniqueVehicleTitle=None):
+    def setPanelTextData(self, title='', buttonLabel=None, uniqueVehicleTitle=None, hideBuyBlock=False):
         self.__uniqueVehicleTitle = uniqueVehicleTitle
         self.__buttonLabel = buttonLabel
+        self.__hideBuyBlock = hideBuyBlock
         self.__title = title
 
     def setPackItems(self, packItems, price, oldPrice):
@@ -395,6 +397,16 @@ class VehiclePreviewBottomPanel(VehiclePreviewBottomPanelMeta):
                 if heroTankUrl or self._heroTanks.isAdventHero():
                     buyingPanelData.update({'isBuyingAvailable': True,
                      'itemPrice': None})
+            if self.__hideBuyBlock:
+                buyingPanelData.update({'isBuyingAvailable': False,
+                 'isMoneyEnough': True,
+                 'buyButtonEnabled': False,
+                 'buyButtonLabel': '',
+                 'buyButtonTooltip': '',
+                 'itemPrice': None,
+                 'isUnlock': False,
+                 'showAction': False,
+                 'warning': ''})
             self.as_setBuyDataS(buyingPanelData)
             return
 

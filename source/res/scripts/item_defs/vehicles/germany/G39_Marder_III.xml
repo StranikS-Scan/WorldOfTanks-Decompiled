@@ -58,7 +58,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	5840	</weight>
-    <maxHealth>	332	</maxHealth>
+    <maxHealth>	450	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	125	</maxHealth>
       <maxRegenHealth>	85	</maxRegenHealth>
@@ -1355,8 +1355,8 @@
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
       <rotationSpeed>	38	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.3	</vehicleMovement>
-        <vehicleRotation>	0.3	</vehicleRotation>
+        <vehicleMovement>	0.27	</vehicleMovement>
+        <vehicleRotation>	0.27	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	70	</maxHealth>
@@ -2376,7 +2376,7 @@
           <camouflage></camouflage>
         </customizableVehicleAreas>
       </customization>
-      <repairTime>	5.71428585	</repairTime>
+      <repairTime>	2.85003138	</repairTime>
     </Chassis_Marder_III>
     <Chassis_Marder_III_2>
       <userString>	#germany_vehicles:Chassis_Marder_III_2	</userString>
@@ -2393,8 +2393,8 @@
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
       <rotationSpeed>	42	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.28	</vehicleMovement>
-        <vehicleRotation>	0.28	</vehicleRotation>
+        <vehicleMovement>	0.25	</vehicleMovement>
+        <vehicleRotation>	0.25	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	80	</maxHealth>
@@ -3414,7 +3414,7 @@
           <camouflage></camouflage>
         </customizableVehicleAreas>
       </customization>
-      <repairTime>	5.71428585	</repairTime>
+      <repairTime>	2.85003138	</repairTime>
     </Chassis_Marder_III_2>
   </chassis>
   <turrets0>
@@ -3431,7 +3431,7 @@
         <armor_3>	0	</armor_3>
       </armor>
       <weight>	100	</weight>
-      <maxHealth>	83	</maxHealth>
+      <maxHealth>	100	</maxHealth>
       <rotationSpeed>	26	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	100	</maxHealth>
@@ -3457,7 +3457,7 @@
           <armor>
             <gun>	20	</gun>
           </armor>
-          <shotDispersionRadius>	0.42	</shotDispersionRadius>
+          <shotDispersionRadius>	0.38	</shotDispersionRadius>
           <reloadTime>	4.3	</reloadTime>
           <aimingTime>	1.9	</aimingTime>
           <turretYawLimits>	-28 28	</turretYawLimits>

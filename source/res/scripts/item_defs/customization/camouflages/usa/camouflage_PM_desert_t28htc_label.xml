@@ -1,0 +1,51 @@
+<camouflage_PM_desert_t28htc_label.xml>
+  <xmlns:czech1>	ussr	</xmlns:czech1>
+  <xmlns:germany>	germany	</xmlns:germany>
+  <xmlns:czech0>	usa	</xmlns:czech0>
+  <xmlns:china>	china	</xmlns:china>
+  <xmlns:france>	france	</xmlns:france>
+  <xmlns:uk>	uk	</xmlns:uk>
+  <xmlns:japan>	japan	</xmlns:japan>
+  <xmlns:czech>	czech	</xmlns:czech>
+  <xmlns:sweden>	sweden	</xmlns:sweden>
+  <xmlns:poland>	poland	</xmlns:poland>
+  <xmlns:italy>	italy	</xmlns:italy>
+  <xmlns:intunion>	intunion	</xmlns:intunion>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/opaque	</userString>
+    <season>	desert	</season>
+    <historical>	0	</historical>
+    <priceGroup>	MT camouflages 50g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <nations>	usa	</nations>
+        <vehicles>	usa:A102_T28_concept	</vehicles>
+      </include>
+    </vehicleFilter>
+    <camouflage>
+      <id>	15242	</id>
+      <texture>	vehicles/american/Camouflage/camo_v3.dds	</texture>
+      <description>	#vehicle_customization:camouflage/PM_desert_t28htc/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/PM_desert_t28htc/label	</userString>
+      <tags>	rare	</tags>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	162 151 125 255	</c0>
+          <c1>	67 62 50 255	</c1>
+          <c2>	188 157 120 255	</c2>
+          <c3>	132 120 90 255	</c3>
+        </palette>
+      </palettes>
+      <tiling>
+        <A102_T28_concept>	0.7 0.7 2 5	</A102_T28_concept>
+      </tiling>
+      <tilingSettings>
+        <type>	relative	</type>
+        <factor>	0.847382  0.852807	</factor>
+        <offset>	0.000000 0.000000	</offset>
+      </tilingSettings>
+    </camouflage>
+  </itemGroup>
+</camouflage_PM_desert_t28htc_label.xml>

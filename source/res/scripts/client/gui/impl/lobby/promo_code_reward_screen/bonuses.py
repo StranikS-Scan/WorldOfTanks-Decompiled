@@ -13,7 +13,7 @@ else:
     from shared_utils import first
     from gui.shared.money import Money
     from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
-    from gui.impl.backport import TooltipData
+    from gui.impl.backport import createTooltipData
     from gui.server_events.bonuses import getServiceBonuses
     from gui.shared.gui_items.customization import CustomizationTooltipContext
 
@@ -32,9 +32,9 @@ else:
                     if compBonus:
                         item['customCompensation'] = None
                         item['compensatedNumber'] = 0
-                        tooltipData.append(TooltipData(tooltip=None, isSpecial=True, specialAlias=None, specialArgs=[originalBonus, compBonus]))
+                        tooltipData.append(createTooltipData(tooltip=None, isSpecial=True, specialAlias=None, specialArgs=[originalBonus, compBonus]))
                 itemCustomization = bonus.getC11nItem(item)
-                tooltipData.append(TooltipData(tooltip=None, isSpecial=True, specialAlias=TOOLTIPS_CONSTANTS.TECH_CUSTOMIZATION_ITEM_AWARD, specialArgs=CustomizationTooltipContext(itemCD=itemCustomization.intCD)))
+                tooltipData.append(createTooltipData(tooltip=None, isSpecial=True, specialAlias=TOOLTIPS_CONSTANTS.TECH_CUSTOMIZATION_ITEM_AWARD, specialArgs=CustomizationTooltipContext(itemCD=itemCustomization.intCD)))
 
             return tooltipData
 

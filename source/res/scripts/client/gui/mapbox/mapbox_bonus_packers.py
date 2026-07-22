@@ -1,13 +1,16 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/mapbox/mapbox_bonus_packers.py
+import typing
 from constants import PREMIUM_ENTITLEMENTS
-from gui.impl.backport import TooltipData, text
+from gui.impl.backport import text, createTooltipData
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.mapbox.reward_item_model import RewardItemModel
 from gui.impl.gen.view_models.views.lobby.mapbox.crew_book_reward_option_model import CrewBookRewardOptionModel
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.server_events.bonuses import PlusPremiumDaysBonus
 from gui.shared.missions.packers.bonus import getDefaultBonusPackersMap, SimpleBonusUIPacker, BonusUIPacker, GoodiesBonusUIPacker, CustomizationBonusUIPacker, getLocalizedBonusName, BaseBonusUIPacker, CrewBookBonusUIPacker, ItemBonusUIPacker
+if typing.TYPE_CHECKING:
+    from gui.impl.backport import TooltipData
 
 def getMapboxBonusPacker():
     mapping = getDefaultBonusPackersMap()
@@ -96,7 +99,7 @@ class MapboxSelectablePacker(BaseBonusUIPacker):
 
     @classmethod
     def _getToolTip(cls, bonus):
-        return [ TooltipData(tooltip=None, isSpecial=True, specialAlias=TOOLTIPS_CONSTANTS.SELECTABLE_CREWBOOK, specialArgs=[item]) for item in bonus.getItems() ]
+        return [ createTooltipData(tooltip=None, isSpecial=True, specialAlias=TOOLTIPS_CONSTANTS.SELECTABLE_CREWBOOK, specialArgs=[item]) for item in bonus.getItems() ]
 
 
 class MapboxCrewBookPacker(CrewBookBonusUIPacker):
@@ -130,4 +133,4 @@ class MapboxRandomCrewbookPacker(BaseBonusUIPacker):
 
     @classmethod
     def _getToolTip(cls, bonus):
-        return [ TooltipData(tooltip=None, isSpecial=True, specialAlias=TOOLTIPS_CONSTANTS.RANDOM_CREWBOOK_MAPBOX, specialArgs=[item]) for item in sorted(bonus.getItems()) ]
+        return [ createTooltipData(tooltip=None, isSpecial=True, specialAlias=TOOLTIPS_CONSTANTS.RANDOM_CREWBOOK_MAPBOX, specialArgs=[item]) for item in sorted(bonus.getItems()) ]

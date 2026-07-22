@@ -1,0 +1,130 @@
+<camouflage_bp2023_1_label.xml>
+  <germany:G114_Skorpian4>	ussr	</germany:G114_Skorpian4>
+  <france:F116_Bat_Chatillon_Bourrasque6>	germany	</france:F116_Bat_Chatillon_Bourrasque6>
+  <germany:G114_Skorpian3>	usa	</germany:G114_Skorpian3>
+  <france:F116_Bat_Chatillon_Bourrasque3>	china	</france:F116_Bat_Chatillon_Bourrasque3>
+  <france:F116_Bat_Chatillon_Bourrasque5>	france	</france:F116_Bat_Chatillon_Bourrasque5>
+  <germany:G114_Skorpian2>	uk	</germany:G114_Skorpian2>
+  <france:F116_Bat_Chatillon_Bourrasque9>	japan	</france:F116_Bat_Chatillon_Bourrasque9>
+  <france:F116_Bat_Chatillon_Bourrasque4>	czech	</france:F116_Bat_Chatillon_Bourrasque4>
+  <germany:G114_Skorpian1>	sweden	</germany:G114_Skorpian1>
+  <germany:G114_Skorpian0>	poland	</germany:G114_Skorpian0>
+  <france:F116_Bat_Chatillon_Bourrasque8>	italy	</france:F116_Bat_Chatillon_Bourrasque8>
+  <france:F116_Bat_Chatillon_Bourrasque7>	intunion	</france:F116_Bat_Chatillon_Bourrasque7>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/opaque	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	MT camouflages 50g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R47_ISU-152_Zveroboj ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <camouflage>
+      <id>	708	</id>
+      <texture>	vehicles/russian/Camouflage/bp2023_1.dds	</texture>
+      <description>	#vehicle_customization:camouflage/bp2023_1/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/bp2023_1/label	</userString>
+      <tags>	fullRGB hiddenInUI	</tags>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	255 0 0 255	</c0>
+          <c1>	0 255 0 255	</c1>
+          <c2>	0 0 255 255	</c2>
+          <c3>	0 0 0 255	</c3>
+        </palette>
+      </palettes>
+      <rotation>
+        <HULL>	-0.25988	</HULL>
+        <TURRET>	-0.25988	</TURRET>
+        <GUN>	-0.25988	</GUN>
+      </rotation>
+      <tilingSettings>
+        <type>	relative	</type>
+        <factor>	3.5 3.5	</factor>
+        <offset>	-5.95 -6.58	</offset>
+      </tilingSettings>
+      <tiling>
+        <germany:G114_Skorpian>	3.1 3.1 -1.9 -2.08	</germany:G114_Skorpian>
+        <uk:GB83_FV4005>	4.105 4.105 -6.45 -6.58	</uk:GB83_FV4005>
+        <sweden:S11_Strv_103B>	1.3 1.3 -8.83 -8.66	</sweden:S11_Strv_103B>
+        <germany:G51_Lowe>	3.42 3.42 -6.17 -5.54	</germany:G51_Lowe>
+      </tiling>
+      <gloss>	0.29 0.36 0.509 0.29	</gloss>
+      <metallic>	0.19 0.23 0.23 0.2	</metallic>
+    </camouflage>
+    <camouflage>
+      <id>	712	</id>
+      <texture>	vehicles/russian/Camouflage/bp2023_3.dds	</texture>
+      <description>	#vehicle_customization:camouflage/bp2023_3/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/bp2023_3/label	</userString>
+      <tags>	fullRGB hiddenInUI	</tags>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	255 0 0 255	</c0>
+          <c1>	0 255 0 255	</c1>
+          <c2>	0 0 255 255	</c2>
+          <c3>	0 0 0 255	</c3>
+        </palette>
+      </palettes>
+      <rotation>
+        <HULL>	0.656418	</HULL>
+        <TURRET>	0.656418	</TURRET>
+        <GUN>	0.656418	</GUN>
+      </rotation>
+      <tilingSettings>
+        <type>	relativewithfactor	</type>
+        <factor>	2.67 2.67	</factor>
+        <offset>	-0.48 -1.56	</offset>
+      </tilingSettings>
+      <gloss>	0.35 0.509 0.6 0.39	</gloss>
+      <metallic>	0.2 0.23 0.45 0.2	</metallic>
+    </camouflage>
+    <camouflage>
+      <id>	713	</id>
+      <texture>	vehicles/russian/Camouflage/bp2023_4.dds	</texture>
+      <description>	#vehicle_customization:camouflage/bp2023_4/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/bp2023_4/label	</userString>
+      <tags>	fullRGB hiddenInUI	</tags>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	255 0 0 255	</c0>
+          <c1>	0 255 0 255	</c1>
+          <c2>	0 0 255 255	</c2>
+          <c3>	0 0 0 255	</c3>
+        </palette>
+      </palettes>
+      <rotation>
+        <HULL>	-0.108734	</HULL>
+        <TURRET>	-0.108734	</TURRET>
+        <GUN>	-0.108734	</GUN>
+      </rotation>
+      <tilingSettings>
+        <type>	relativewithfactor	</type>
+        <factor>	2.38 2.38	</factor>
+        <offset>	1.9 -4.55	</offset>
+      </tilingSettings>
+      <gloss>	0.37 0.42 0.509 0.38	</gloss>
+      <metallic>	0.22 0.23 0.23 0.2	</metallic>
+      <tiling>
+        <germany:G42_Maus>	3.07 3.07 0.98 -5.29	</germany:G42_Maus>
+        <france:F116_Bat_Chatillon_Bourrasque2>	3.07 3.07 0.98 -5.29	</france:F116_Bat_Chatillon_Bourrasque2>
+        <france:F116_Bat_Chatillon_Bourrasque1>	0.8 0.8 1.08 -4.69	</france:F116_Bat_Chatillon_Bourrasque1>
+        <france:F114_Projet_4_1>	2.266 2.266 1.68 -4.67	</france:F114_Projet_4_1>
+        <france:F116_Bat_Chatillon_Bourrasque>	2.45 2.45 -1.63 0.18	</france:F116_Bat_Chatillon_Bourrasque>
+        <italy:It08_Progetto_M40_mod_65>	1.67 1.67 1.76 -4.61	</italy:It08_Progetto_M40_mod_65>
+        <italy:It13_Progetto_M35_mod_46>	1.84 1.84 -2.34 0.45	</italy:It13_Progetto_M35_mod_46>
+        <uk:GB83_FV4005>	3.15 3.15 1.86 -2.01	</uk:GB83_FV4005>
+        <japan:J16_ST_B1>	3.15 3.15 1 0.69	</japan:J16_ST_B1>
+        <france:F116_Bat_Chatillon_Bourrasque0>	3.032 3.032 1.62 -2.69	</france:F116_Bat_Chatillon_Bourrasque0>
+      </tiling>
+    </camouflage>
+  </itemGroup>
+</camouflage_bp2023_1_label.xml>

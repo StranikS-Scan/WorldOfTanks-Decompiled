@@ -18,29 +18,32 @@ from gui.battle_results.settings import BATTLE_RESULTS_RECORD as _RECORD
 from gui.impl import backport
 from gui.impl.gen.resources import R
 from helpers import i18n
-_REGULAR_TABS_VO_META = base.ListMeta([{'label': i18n.makeString(MENU.FINALSTATISTIC_TABS_COMMONSTATS),
-  'linkage': 'CommonStats',
-  'viewId': 'CommonStats',
-  'showWndBg': False}, {'label': i18n.makeString(MENU.FINALSTATISTIC_TABS_TEAMSTATS),
-  'linkage': 'TeamStatsUI',
-  'viewId': 'TeamStatsUI',
-  'showWndBg': False}, {'label': i18n.makeString(MENU.FINALSTATISTIC_TABS_DETAILSSTATS),
-  'linkage': 'DetailsStatsViewUI',
-  'viewId': 'DetailsStatsViewUI',
-  'showWndBg': True}])
-_MULTI_TEAM_TABS_VO_META = base.ListMeta([{'label': MENU.FINALSTATISTIC_TABS_COMMONSTATS,
-  'linkage': 'CommonStats',
-  'viewId': 'CommonStats',
-  'showWndBg': False}, {'label': MENU.FINALSTATISTIC_TABS_TEAMSTATS,
-  'linkage': 'MultiteamStatsUI',
-  'viewId': 'MultiteamStatsUI',
-  'showWndBg': False}, {'label': MENU.FINALSTATISTIC_TABS_DETAILSSTATS,
-  'linkage': 'DetailsStatsViewUI',
-  'viewId': 'DetailsStatsViewUI',
-  'showWndBg': True}])
-REGULAR_TABS_BLOCK = base.StatsBlock(_REGULAR_TABS_VO_META, 'tabInfo')
-MULTI_TEAM_TABS_BLOCK = base.StatsBlock(_MULTI_TEAM_TABS_VO_META, 'tabInfo')
-RANDOM_TABS_BLOCK = base.StatsBlock(_REGULAR_TABS_VO_META.copy(), 'tabInfo')
+TEAM_STATS_UI_LINK = 'TeamStatsUI'
+_COMMON_STATS_VO = base.DictMeta({'label': backport.text(R.strings.menu.finalStatistic.tabs.commonStats()),
+ 'linkage': 'CommonStats',
+ 'viewId': 'CommonStats',
+ 'showWndBg': False})
+_TEAM_STATS_VO_META = base.DictMeta({'label': backport.text(R.strings.menu.finalStatistic.tabs.teamStats()),
+ 'linkage': TEAM_STATS_UI_LINK,
+ 'viewId': TEAM_STATS_UI_LINK,
+ 'showWndBg': False})
+_DETAIL_STATS_VO_META = base.DictMeta({'label': backport.text(R.strings.menu.finalStatistic.tabs.detailsStats()),
+ 'linkage': 'DetailsStatsViewUI',
+ 'viewId': 'DetailsStatsViewUI',
+ 'showWndBg': True})
+_MULTI_TEAM_STATS_VO_META = base.DictMeta({'label': backport.text(R.strings.menu.finalStatistic.tabs.teamStats()),
+ 'linkage': 'MultiteamStatsUI',
+ 'viewId': 'MultiteamStatsUI',
+ 'showWndBg': False})
+REGULAR_TABS_BLOCK = base.StatsBlock(base.ListMeta(), 'tabInfo')
+REGULAR_TABS_BLOCK.addNextComponent(base.StatsBlock(_COMMON_STATS_VO))
+REGULAR_TABS_BLOCK.addNextComponent(base.StatsBlock(_TEAM_STATS_VO_META))
+REGULAR_TABS_BLOCK.addNextComponent(base.StatsBlock(_DETAIL_STATS_VO_META))
+MULTI_TEAM_TABS_BLOCK = base.StatsBlock(base.ListMeta(), 'tabInfo')
+MULTI_TEAM_TABS_BLOCK.addNextComponent(base.StatsBlock(_COMMON_STATS_VO))
+MULTI_TEAM_TABS_BLOCK.addNextComponent(base.StatsBlock(_MULTI_TEAM_STATS_VO_META))
+MULTI_TEAM_TABS_BLOCK.addNextComponent(base.StatsBlock(_DETAIL_STATS_VO_META))
+RANDOM_TABS_BLOCK = REGULAR_TABS_BLOCK.clone()
 _TEXT_VO_META = base.DictMeta({'windowTitle': i18n.makeString(MENU.FINALSTATISTIC_WINDOW_TITLE),
  'shareButtonLabel': i18n.makeString(BATTLE_RESULTS.COMMON_RESULTSSHAREBTN),
  'shareButtonTooltip': i18n.makeString(TOOLTIPS.BATTLERESULTS_FORTRESOURCE_RESULTSSHAREBTN),

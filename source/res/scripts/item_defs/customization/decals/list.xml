@@ -7817,10 +7817,10 @@
       <texture>	gui/maps/vehicles/decals/player_stickers/special/WT_Emblem_01_2025.dds	</texture>
       <userString>	#vehicle_customization:WT_Emblem_01_2025/name	</userString>
       <description>	#vehicle_customization:WT_Emblem_01_2025/description	</description>
-      <type>	emblem	</type>
     </decal>
     <name>	WT_Emblem_2025	</name>
     <priceGroup>	MT emblems 25g notInShop	</priceGroup>
+    <type>	emblem	</type>
   </itemGroup>
   <itemGroup>
     <name>	NatiskTiger_Emblem_139	</name>
@@ -8095,6 +8095,20 @@
     <type>	emblem	</type>
     <userString>	#vehicle_customization:emblem/special	</userString>
     <season>	ALL	</season>
+  </itemGroup>
+  <itemGroup>
+    <name>	DRMT2026_Emblem_Fixed_144	</name>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	MT emblems 25g notInShop	</priceGroup>
+    <type>	emblem	</type>
+    <userString>	#vehicle_customization:emblem/special	</userString>
+    <decal>
+      <id>	31479	</id>
+      <texture>	gui/maps/vehicles/decals/player_stickers/special/DRMT2026_Emblem_Fixed_144.dds	</texture>
+      <userString>	#vehicle_customization:DRMT2026_Emblem_Fixed_144/name	</userString>
+      <description>	#vehicle_customization:DRMT2026_Emblem_Fixed_144/description	</description>
+    </decal>
   </itemGroup>
   <itemGroup>
     <userString>	#vehicle_customization:emblem/IGR	</userString>
@@ -15787,11 +15801,11 @@
     <decal>
       <id>	31393	</id>
       <texture>	gui/maps/vehicles/decals/inscriptions/special/DeservedAward_Inscription_138.dds	</texture>
-      <type>	inscription	</type>
       <userString>	#vehicle_customization:DeservedAward_Inscription_138/name	</userString>
       <description>	#vehicle_customization:DeservedAward_Inscription_138/description	</description>
     </decal>
     <tags>	hiddenInUI	</tags>
+    <type>	inscription	</type>
   </itemGroup>
   <itemGroup>
     <name>	Parivision_Inscription_138	</name>

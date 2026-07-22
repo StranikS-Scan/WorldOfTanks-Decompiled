@@ -1,0 +1,230 @@
+<camouflage_strong_label.xml>
+  <ussr:R02_SU-8585>	ussr	</ussr:R02_SU-8585>
+  <ussr:R02_SU-8577>	germany	</ussr:R02_SU-8577>
+  <ussr:R02_SU-8584>	usa	</ussr:R02_SU-8584>
+  <ussr:R02_SU-8574>	china	</ussr:R02_SU-8574>
+  <ussr:R02_SU-8576>	france	</ussr:R02_SU-8576>
+  <ussr:R02_SU-8583>	uk	</ussr:R02_SU-8583>
+  <ussr:R02_SU-8580>	japan	</ussr:R02_SU-8580>
+  <ussr:R02_SU-8575>	czech	</ussr:R02_SU-8575>
+  <ussr:R02_SU-8582>	sweden	</ussr:R02_SU-8582>
+  <ussr:R02_SU-8581>	poland	</ussr:R02_SU-8581>
+  <ussr:R02_SU-8579>	italy	</ussr:R02_SU-8579>
+  <ussr:R02_SU-8578>	intunion	</ussr:R02_SU-8578>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/opaque	</userString>
+    <season>	ALL	</season>
+    <historical>	0	</historical>
+    <priceGroup>	MT camouflages 50g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <nations>	ussr	</nations>
+      </include>
+      <exclude>
+        <vehicles>	ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <camouflage>
+      <id>	660	</id>
+      <texture>	vehicles/russian/Camouflage/strong.dds	</texture>
+      <description>	#vehicle_customization:camouflage/strong/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/strong/label	</userString>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	80 84 67 255	</c0>
+          <c1>	130 120 93 255	</c1>
+          <c2>	140 121 85 255	</c2>
+          <c3>	68 52 48 255	</c3>
+        </palette>
+      </palettes>
+      <rotation>
+        <HULL>	0.44471	</HULL>
+        <TURRET>	0.44471	</TURRET>
+        <GUN>	0.44471	</GUN>
+      </rotation>
+      <tiling>
+        <ussr:R01_IS>	2.65 2.65 1.6 0.87	</ussr:R01_IS>
+        <ussr:R02_SU-85>	2.23 2.23 3.34 2.78	</ussr:R02_SU-85>
+        <ussr:R03_BT-7>	2.13 2.13 3.37 1.93	</ussr:R03_BT-7>
+        <ussr:R04_T-34>	2.11 2.11 0.4 0.85	</ussr:R04_T-34>
+        <ussr:R06_T-28>	1.01 1.01 2.76 1.81	</ussr:R06_T-28>
+        <ussr:R07_T-34-85>	2.47 2.47 4.83 4.11	</ussr:R07_T-34-85>
+        <ussr:R08_BT-2>	0.63 0.63 1.09 0.78	</ussr:R08_BT-2>
+        <ussr:R09_T-26>	2.2 2.2 0.88 0.81	</ussr:R09_T-26>
+        <ussr:R100_SU122A>	2.68 2.68 2 2.13	</ussr:R100_SU122A>
+        <ussr:R02_SU-850>	2.24 2.24 1.6 0.8	</ussr:R02_SU-850>
+        <ussr:R02_SU-851>	1.3 1.3 3.95 1.74	</ussr:R02_SU-851>
+        <ussr:R02_SU-852>	1.72 1.72 2.7 2.08	</ussr:R02_SU-852>
+        <ussr:R02_SU-853>	1.25 1.25 1.13 4.5	</ussr:R02_SU-853>
+        <ussr:R02_SU-854>	2.09 2.09 1.36 2.96	</ussr:R02_SU-854>
+        <ussr:R02_SU-855>	2.18 2.18 5.73 4.38	</ussr:R02_SU-855>
+        <ussr:R02_SU-856>	2.44 2.44 4.97 2.78	</ussr:R02_SU-856>
+        <ussr:R02_SU-857>	2.44 2.44 4.97 2.78	</ussr:R02_SU-857>
+        <ussr:R02_SU-858>	1.46 1.46 2.74 2.82	</ussr:R02_SU-858>
+        <ussr:R02_SU-859>	2.6 2.6 1.38 2.1	</ussr:R02_SU-859>
+        <ussr:R03_BT-70>	3.2 3.2 4.36 3.78	</ussr:R03_BT-70>
+        <ussr:R03_BT-71>	2.69 2.69 1.6 5.43	</ussr:R03_BT-71>
+        <ussr:R03_BT-72>	2.69 2.69 1.6 5.43	</ussr:R03_BT-72>
+        <ussr:R03_BT-73>	2.69 2.69 1.6 5.43	</ussr:R03_BT-73>
+        <ussr:R03_BT-74>	1.32 1.32 1.25 0.89	</ussr:R03_BT-74>
+        <ussr:R03_BT-75>	2.51 2.51 4.92 3.97	</ussr:R03_BT-75>
+        <ussr:R03_BT-76>	2.42 2.42 1.51 1.74	</ussr:R03_BT-76>
+        <ussr:R03_BT-77>	2.42 2.42 1.51 1.74	</ussr:R03_BT-77>
+        <ussr:R03_BT-78>	2.51 2.51 -0.85 0.35	</ussr:R03_BT-78>
+        <ussr:R03_BT-79>	3.17 3.17 3.61 1.6	</ussr:R03_BT-79>
+        <ussr:R04_T-340>	1.05 1.05 2.96 1.45	</ussr:R04_T-340>
+        <ussr:R04_T-341>	2.26 2.26 2.31 2.68	</ussr:R04_T-341>
+        <ussr:R04_T-342>	1.52 1.52 2.51 3.09	</ussr:R04_T-342>
+        <ussr:R04_T-343>	1.52 1.52 2.51 3.09	</ussr:R04_T-343>
+        <ussr:R04_T-344>	2 2 0.56 0.53	</ussr:R04_T-344>
+        <ussr:R04_T-345>	1.36 1.36 4.62 0.000000	</ussr:R04_T-345>
+        <ussr:R04_T-346>	2.28 2.28 0.45 -1.63	</ussr:R04_T-346>
+        <ussr:R04_T-347>	2.85 2.85 3.83 4.38	</ussr:R04_T-347>
+        <ussr:R04_T-348>	2.64 2.64 2.73 3.44	</ussr:R04_T-348>
+        <ussr:R04_T-349>	1.43 1.43 4.49 4.9	</ussr:R04_T-349>
+        <ussr:R06_T-280>	1.97 1.97 2.65 4.14	</ussr:R06_T-280>
+        <ussr:R06_T-281>	0.36 0.36 2.63 4	</ussr:R06_T-281>
+        <ussr:R06_T-282>	1.21 1.21 6.11 6.61	</ussr:R06_T-282>
+        <ussr:R06_T-284>	2.64 2.64 2.73 3.44	</ussr:R06_T-284>
+        <ussr:R06_T-285>	2.64 2.64 2.73 3.44	</ussr:R06_T-285>
+        <ussr:R06_T-286>	2.64 2.64 2.73 3.44	</ussr:R06_T-286>
+        <ussr:R06_T-287>	2.64 2.64 2.73 3.44	</ussr:R06_T-287>
+        <ussr:R06_T-283>	2.64 2.64 2.73 3.44	</ussr:R06_T-283>
+        <ussr:R06_T-288>	1.92 1.92 5.06 4.25	</ussr:R06_T-288>
+        <ussr:R06_T-289>	0.8 0.8 4.5 2.86	</ussr:R06_T-289>
+        <ussr:R07_T-34-850>	0.92 0.92 1.11 0.72	</ussr:R07_T-34-850>
+        <ussr:R07_T-34-851>	1.67 1.67 3.51 3.19	</ussr:R07_T-34-851>
+        <ussr:R07_T-34-852>	1 1 1.89 0.05	</ussr:R07_T-34-852>
+        <ussr:R07_T-34-853>	1 1 1.89 0.05	</ussr:R07_T-34-853>
+        <ussr:R07_T-34-854>	1.25 1.25 4.66 3.97	</ussr:R07_T-34-854>
+        <ussr:R07_T-34-855>	1.18 1.18 2.39 1.66	</ussr:R07_T-34-855>
+        <ussr:R07_T-34-856>	1.29 1.29 3.13 3.26	</ussr:R07_T-34-856>
+        <ussr:R07_T-34-857>	0.38 0.38 4.66 2.21	</ussr:R07_T-34-857>
+        <ussr:R07_T-34-858>	0.87 0.87 3.74 3.68	</ussr:R07_T-34-858>
+        <ussr:R07_T-34-859>	1.14 1.14 6.02 8.27	</ussr:R07_T-34-859>
+        <ussr:R08_BT-20>	0.78 0.78 4.46 2.72	</ussr:R08_BT-20>
+        <ussr:R08_BT-21>	1.07 1.07 3.4 4.79	</ussr:R08_BT-21>
+        <ussr:R08_BT-22>	2.13 2.13 1.76 1.73	</ussr:R08_BT-22>
+        <ussr:R08_BT-23>	1.26 1.26 2.28 2.77	</ussr:R08_BT-23>
+        <ussr:R08_BT-24>	1.26 1.26 2.28 2.77	</ussr:R08_BT-24>
+        <ussr:R08_BT-25>	0.46 0.46 6.68 6.36	</ussr:R08_BT-25>
+        <ussr:R08_BT-26>	0.46 0.46 6.68 6.36	</ussr:R08_BT-26>
+        <ussr:R08_BT-27>	2.28 2.28 5.68 1.81	</ussr:R08_BT-27>
+        <ussr:R08_BT-28>	2.28 2.28 5.68 1.81	</ussr:R08_BT-28>
+        <ussr:R08_BT-29>	2.35 2.35 2.91 4.45	</ussr:R08_BT-29>
+        <ussr:R09_T-260>	1.18 1.18 4.04 5.39	</ussr:R09_T-260>
+        <ussr:R09_T-261>	2.4 2.4 6.42 7.06	</ussr:R09_T-261>
+        <ussr:R09_T-262>	2.58 2.58 2.5 3.34	</ussr:R09_T-262>
+        <ussr:R09_T-263>	1.22 1.22 5.04 2.12	</ussr:R09_T-263>
+        <ussr:R09_T-264>	2.38 2.38 3.03 4.9	</ussr:R09_T-264>
+        <ussr:R09_T-265>	1.22 1.22 3.02 4.78	</ussr:R09_T-265>
+        <ussr:R09_T-266>	1.2 1.2 5.94 5.17	</ussr:R09_T-266>
+        <ussr:R09_T-267>	1.04 1.04 7.11 7.45	</ussr:R09_T-267>
+        <ussr:R09_T-268>	0.4 0.4 0.65 0.02	</ussr:R09_T-268>
+        <ussr:R09_T-269>	1.18 1.18 3.15 4.38	</ussr:R09_T-269>
+        <ussr:R100_SU122A0>	0.97 0.97 0.08 0.89	</ussr:R100_SU122A0>
+        <ussr:R100_SU122A1>	0.97 0.97 0.08 0.89	</ussr:R100_SU122A1>
+        <ussr:R100_SU122A2>	1.18 1.18 2.39 1.66	</ussr:R100_SU122A2>
+        <ussr:R100_SU122A4>	1.18 1.18 2.39 1.66	</ussr:R100_SU122A4>
+        <ussr:R100_SU122A3>	1.18 1.18 2.39 1.66	</ussr:R100_SU122A3>
+        <ussr:R100_SU122A5>	1.83 1.83 5.06 5.23	</ussr:R100_SU122A5>
+        <ussr:R100_SU122A6>	4.11 4.11 -8.16 6.55	</ussr:R100_SU122A6>
+        <ussr:R100_SU122A7>	1.2 1.2 4.93 3.93	</ussr:R100_SU122A7>
+        <ussr:R100_SU122A8>	1.2 1.2 4.93 3.93	</ussr:R100_SU122A8>
+        <ussr:R100_SU122A9>	1.2 1.2 4.93 3.93	</ussr:R100_SU122A9>
+        <ussr:R1013_IS_3_T0>	2 2 3.32 1.17	</ussr:R1013_IS_3_T0>
+        <ussr:R1013_IS_3_T1>	1.07 1.07 3.4 4.79	</ussr:R1013_IS_3_T1>
+        <ussr:R1013_IS_3_T2>	1.07 1.07 3.4 4.79	</ussr:R1013_IS_3_T2>
+        <ussr:R1013_IS_3_T3>	1.22 1.22 3.02 4.78	</ussr:R1013_IS_3_T3>
+        <ussr:R1013_IS_3_T4>	2.44 2.44 5.54 6.19	</ussr:R1013_IS_3_T4>
+        <ussr:R1013_IS_3_T5>	1.22 1.22 3.02 4.78	</ussr:R1013_IS_3_T5>
+        <ussr:R1013_IS_3_T6>	1.58 1.58 5.88 3.06	</ussr:R1013_IS_3_T6>
+        <ussr:R1013_IS_3_T7>	2.38 2.38 3.03 4.9	</ussr:R1013_IS_3_T7>
+        <ussr:R1013_IS_3_T8>	2.69 2.69 3.64 4.63	</ussr:R1013_IS_3_T8>
+        <ussr:R1013_IS_3_T9>	2.5 2.5 0.34 0.34	</ussr:R1013_IS_3_T9>
+        <ussr:R02_SU-8500>	2.5 2.5 0.34 0.34	</ussr:R02_SU-8500>
+        <ussr:R1013_IS_3_T>	2.5 2.5 0.34 0.34	</ussr:R1013_IS_3_T>
+        <ussr:R02_SU-8501>	2.52 2.52 4.49 4.86	</ussr:R02_SU-8501>
+        <ussr:R02_SU-8502>	2.52 2.52 4.49 4.86	</ussr:R02_SU-8502>
+        <ussr:R02_SU-8503>	2.56 2.56 4.89 14.09	</ussr:R02_SU-8503>
+        <ussr:R02_SU-8504>	2.72 2.72 7.99 5.33	</ussr:R02_SU-8504>
+        <ussr:R02_SU-8505>	1.69 1.69 4.72 5.9	</ussr:R02_SU-8505>
+        <ussr:R02_SU-8506>	1.67 1.67 13.12 5.47	</ussr:R02_SU-8506>
+        <ussr:R02_SU-8507>	1.09 1.09 2.75 3.68	</ussr:R02_SU-8507>
+        <ussr:R02_SU-8508>	2.13 2.13 5.93 4.93	</ussr:R02_SU-8508>
+        <ussr:R02_SU-8509>	2.68 2.68 5.07 6.32	</ussr:R02_SU-8509>
+        <ussr:R02_SU-8510>	0.55 0.55 1 5.64	</ussr:R02_SU-8510>
+        <ussr:R02_SU-8511>	0.96 0.96 3.13 3.35	</ussr:R02_SU-8511>
+        <ussr:R02_SU-8512>	0.69 0.69 3.65 3.51	</ussr:R02_SU-8512>
+        <ussr:R02_SU-8513>	1.65 1.65 5.03 6.32	</ussr:R02_SU-8513>
+        <ussr:R02_SU-8514>	1.65 1.65 4.94 5.58	</ussr:R02_SU-8514>
+        <ussr:R02_SU-8515>	2.59 2.59 3.34 5.31	</ussr:R02_SU-8515>
+        <ussr:R02_SU-8516>	2.53 2.53 7.94 4.56	</ussr:R02_SU-8516>
+        <ussr:R02_SU-8517>	2.53 2.53 7.94 4.56	</ussr:R02_SU-8517>
+        <ussr:R02_SU-8518>	1.87 1.87 0.95 0.09	</ussr:R02_SU-8518>
+        <ussr:R02_SU-8519>	0.68 0.68 0.41 0.91	</ussr:R02_SU-8519>
+        <ussr:R02_SU-8520>	0.84 0.84 0.47 1.45	</ussr:R02_SU-8520>
+        <ussr:R02_SU-8521>	2.09 2.09 5.56 5.96	</ussr:R02_SU-8521>
+        <ussr:R02_SU-8522>	1.95 1.95 11.11 7.02	</ussr:R02_SU-8522>
+        <ussr:R02_SU-8523>	2.68 2.68 1.73 5.06	</ussr:R02_SU-8523>
+        <ussr:R02_SU-8524>	2.44 2.44 5.54 6.19	</ussr:R02_SU-8524>
+        <ussr:R02_SU-8525>	2.44 2.44 5.54 6.19	</ussr:R02_SU-8525>
+        <ussr:R02_SU-8526>	2.44 2.44 2.11 2.53	</ussr:R02_SU-8526>
+        <ussr:R02_SU-8527>	2.09 2.09 2.17 2.85	</ussr:R02_SU-8527>
+        <ussr:R02_SU-8528>	2.19 2.19 4.21 4.38	</ussr:R02_SU-8528>
+        <ussr:R02_SU-8529>	1.88 1.88 0.48 3.84	</ussr:R02_SU-8529>
+        <ussr:R02_SU-8530>	1.9 1.9 4.79 1.38	</ussr:R02_SU-8530>
+        <ussr:R02_SU-8531>	1.84 1.84 4 4.19	</ussr:R02_SU-8531>
+        <ussr:R02_SU-8532>	1.67 1.67 6.82 3.78	</ussr:R02_SU-8532>
+        <ussr:R02_SU-8533>	2.21 2.21 3.26 3.35	</ussr:R02_SU-8533>
+        <ussr:R02_SU-8534>	1.23 1.23 4.19 6.2	</ussr:R02_SU-8534>
+        <ussr:R02_SU-8535>	1.01 1.01 2.98 3.57	</ussr:R02_SU-8535>
+        <ussr:R02_SU-8536>	1.11 1.11 4.19 3.32	</ussr:R02_SU-8536>
+        <ussr:R02_SU-8537>	2.71 2.71 3.65 4.45	</ussr:R02_SU-8537>
+        <ussr:R02_SU-8538>	2.71 2.71 3.65 4.45	</ussr:R02_SU-8538>
+        <ussr:R02_SU-8539>	2.71 2.71 3.65 4.45	</ussr:R02_SU-8539>
+        <ussr:R02_SU-8540>	1.37 1.37 2.33 3.43	</ussr:R02_SU-8540>
+        <ussr:R02_SU-8541>	0.62 0.62 4 4.84	</ussr:R02_SU-8541>
+        <ussr:R02_SU-8542>	1.11 1.11 3.32 1.76	</ussr:R02_SU-8542>
+        <ussr:R02_SU-8543>	0.55 0.55 0.52 -4.77	</ussr:R02_SU-8543>
+        <ussr:R02_SU-8544>	2.95 2.95 7.5 1.06	</ussr:R02_SU-8544>
+        <ussr:R02_SU-8545>	1.36 1.36 0.12 9.44	</ussr:R02_SU-8545>
+        <ussr:R02_SU-8546>	2.8 2.8 0.13 0.15	</ussr:R02_SU-8546>
+        <ussr:R02_SU-8547>	2.11 2.11 4.43 2.76	</ussr:R02_SU-8547>
+        <ussr:R02_SU-8548>	3.22 3.22 2.32 3.38	</ussr:R02_SU-8548>
+        <ussr:R02_SU-8549>	2.4 2.4 6.42 7.06	</ussr:R02_SU-8549>
+        <ussr:R02_SU-8550>	1.25 1.25 4.21 4.53	</ussr:R02_SU-8550>
+        <ussr:R02_SU-8551>	1.69 1.69 1.52 5.79	</ussr:R02_SU-8551>
+        <ussr:R02_SU-8552>	1.08 1.08 4 3.66	</ussr:R02_SU-8552>
+        <ussr:R02_SU-8553>	0.62 0.62 2.52 4.5	</ussr:R02_SU-8553>
+        <ussr:R02_SU-8554>	1.14 1.14 3.85 5.91	</ussr:R02_SU-8554>
+        <ussr:R02_SU-8555>	1.33 1.33 4.85 4.28	</ussr:R02_SU-8555>
+        <ussr:R02_SU-8556>	2.05 2.05 2.11 3.88	</ussr:R02_SU-8556>
+        <ussr:R02_SU-8557>	0.76 0.76 2.75 4.22	</ussr:R02_SU-8557>
+        <ussr:R02_SU-8558>	1.83 1.83 5.06 5.23	</ussr:R02_SU-8558>
+        <ussr:R02_SU-8559>	1.83 1.83 5.06 5.23	</ussr:R02_SU-8559>
+        <ussr:R02_SU-8560>	2.44 2.44 7.08 5.68	</ussr:R02_SU-8560>
+        <ussr:R02_SU-8561>	1.14 1.14 4.32 4.27	</ussr:R02_SU-8561>
+        <ussr:R02_SU-8563>	1.14 1.14 4.32 4.27	</ussr:R02_SU-8563>
+        <ussr:R02_SU-8562>	1.14 1.14 4.32 4.27	</ussr:R02_SU-8562>
+        <ussr:R02_SU-8564>	0.54 0.54 0.46 0.92	</ussr:R02_SU-8564>
+        <ussr:R02_SU-8565>	0.54 0.54 0.49 0.92	</ussr:R02_SU-8565>
+        <ussr:R02_SU-8566>	1.62 1.62 5.63 6.06	</ussr:R02_SU-8566>
+        <ussr:R02_SU-8567>	1.62 1.62 5.63 6.06	</ussr:R02_SU-8567>
+        <ussr:R02_SU-8568>	1.25 1.25 5.94 8.71	</ussr:R02_SU-8568>
+        <ussr:R02_SU-8569>	1.25 1.25 5.94 8.71	</ussr:R02_SU-8569>
+        <ussr:R02_SU-8570>	2.72 2.72 2.01 1.57	</ussr:R02_SU-8570>
+        <ussr:R02_SU-8571>	2.72 2.72 2.01 1.57	</ussr:R02_SU-8571>
+        <ussr:R02_SU-8572>	2.34 2.34 4.23 4.64	</ussr:R02_SU-8572>
+        <ussr:R02_SU-8573>	2.34 2.34 4.23 4.64	</ussr:R02_SU-8573>
+      </tiling>
+      <tilingSettings>
+        <type>	relative	</type>
+        <factor>	1.595114  1.597560	</factor>
+        <offset>	0.000000 0.000000	</offset>
+      </tilingSettings>
+    </camouflage>
+  </itemGroup>
+</camouflage_strong_label.xml>

@@ -30,3 +30,13 @@ def buildTexMapping(texCoords, texSize, fullTexSize):
 
 def hexARGBToRGBAFloatColor(hexColor):
     return Math.Vector4((hexColor >> 16 & 255) * (1.0 / 255.0), (hexColor >> 8 & 255) * (1.0 / 255.0), (hexColor & 255) * (1.0 / 255.0), (hexColor >> 24 & 255) * (1.0 / 255.0))
+
+
+def getMouseScreenPosition():
+    from helpers import dependency
+    from skeletons.account_helpers.settings_core import ISettingsCore
+    settingsCore = dependency.instance(ISettingsCore)
+    clipPos = GUI.mcursor().position
+    res = GUI.screenResolution()
+    scale = settingsCore.interfaceScale.get()
+    return ((clipPos[0] + 1.0) / 2.0 * res[0] / scale, (-clipPos[1] + 1.0) / 2.0 * res[1] / scale)

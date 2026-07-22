@@ -1,0 +1,64 @@
+<camouflage_cn_labor_day_2022_label.xml>
+  <sweden:S11_Strv_103B1>	ussr	</sweden:S11_Strv_103B1>
+  <italy:It20_Carro_Combattimento_45t3>	germany	</italy:It20_Carro_Combattimento_45t3>
+  <sweden:S11_Strv_103B0>	usa	</sweden:S11_Strv_103B0>
+  <italy:It20_Carro_Combattimento_45t0>	china	</italy:It20_Carro_Combattimento_45t0>
+  <italy:It20_Carro_Combattimento_45t2>	france	</italy:It20_Carro_Combattimento_45t2>
+  <italy:It20_Carro_Combattimento_45t9>	uk	</italy:It20_Carro_Combattimento_45t9>
+  <italy:It20_Carro_Combattimento_45t6>	japan	</italy:It20_Carro_Combattimento_45t6>
+  <italy:It20_Carro_Combattimento_45t1>	czech	</italy:It20_Carro_Combattimento_45t1>
+  <italy:It20_Carro_Combattimento_45t8>	sweden	</italy:It20_Carro_Combattimento_45t8>
+  <italy:It20_Carro_Combattimento_45t7>	poland	</italy:It20_Carro_Combattimento_45t7>
+  <italy:It20_Carro_Combattimento_45t5>	italy	</italy:It20_Carro_Combattimento_45t5>
+  <italy:It20_Carro_Combattimento_45t4>	intunion	</italy:It20_Carro_Combattimento_45t4>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/opaque	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	MT camouflages 50g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R47_ISU-152_Zveroboj ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <camouflage>
+      <id>	395	</id>
+      <texture>	vehicles/russian/Camouflage/cn_labor_day_2022.dds	</texture>
+      <description>	#vehicle_customization:camouflage/cn_labor_day_2022/description	</description>
+      <scales>	1.2 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/cn_labor_day_2022/label	</userString>
+      <tags>	fullRGB	</tags>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	255 0 0 255	</c0>
+          <c1>	0 255 0 255	</c1>
+          <c2>	0 0 255 255	</c2>
+          <c3>	0 0 0 255	</c3>
+        </palette>
+      </palettes>
+      <rotation>
+        <HULL>	0.20944	</HULL>
+        <TURRET>	0.20944	</TURRET>
+        <GUN>	0.20944	</GUN>
+      </rotation>
+      <tiling>
+        <germany:G42_Maus>	3 3 -12.02 -13.24	</germany:G42_Maus>
+        <ussr:R230_Maus>	3 3 -12.02 -13.24	</ussr:R230_Maus>
+        <italy:It20_Carro_Combattimento_45t>	2 2 0.08 -0.17	</italy:It20_Carro_Combattimento_45t>
+        <sweden:S11_Strv_103B>	1.2 1.2 -0.29 -0.51	</sweden:S11_Strv_103B>
+        <ussr:R07_T-34-85>	3.1 3.1 -0.33 -0.32	</ussr:R07_T-34-85>
+        <ussr:R11_MS-1>	3.3 3.3 -0.55 0.000000	</ussr:R11_MS-1>
+        <ussr:R19_IS-3>	3.4 3.4 -0.04 0.28	</ussr:R19_IS-3>
+        <ussr:R19_IS-3_FL>	3.4 3.4 -0.04 0.28	</ussr:R19_IS-3_FL>
+        <ussr:R1013_IS_3_T>	3.4 3.4 -0.04 0.28	</ussr:R1013_IS_3_T>
+        <ussr:R32_Matilda_II_LL>	0.8 0.8 -0.22 -0.07	</ussr:R32_Matilda_II_LL>
+      </tiling>
+      <tilingSettings>
+        <type>	relativeWithFactor	</type>
+        <factor>	2.5 2.5	</factor>
+        <offset>	-3.05 -0.18	</offset>
+      </tilingSettings>
+    </camouflage>
+  </itemGroup>
+</camouflage_cn_labor_day_2022_label.xml>

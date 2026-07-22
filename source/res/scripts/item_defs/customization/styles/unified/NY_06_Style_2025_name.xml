@@ -1,0 +1,59 @@
+<NY_06_Style_2025_name.xml>
+  <itemGroup>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <style>
+      <id>	31254	</id>
+      <outfits>
+        <outfit>
+          <season>	all	</season>
+          <paints>
+            <item>
+              <id>	31202	</id>
+              <appliedTo>	20753	</appliedTo>
+            </item>
+          </paints>
+          <camouflages>
+            <item>
+              <id>	31217	</id>
+              <patternSize>	1	</patternSize>
+              <appliedTo>	16	</appliedTo>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <projection_decals>
+            <item>
+              <id>	31222	</id>
+              <scaleFactorId>	2	</scaleFactorId>
+              <tags>	front mimic formfactor_rect1x2	</tags>
+            </item>
+            <item>
+              <id>	31223	</id>
+              <scaleFactorId>	2	</scaleFactorId>
+              <tags>	left safe formfactor_rect1x2	</tags>
+            </item>
+            <item>
+              <id>	31224	</id>
+              <scaleFactorId>	2	</scaleFactorId>
+              <tags>	right safe formfactor_rect1x2	</tags>
+            </item>
+          </projection_decals>
+          <modifications>
+            <item>	4	</item>
+          </modifications>
+        </outfit>
+      </outfits>
+      <texture>	gui/maps/vehicles/styles/NY_06_Style_2025.png	</texture>
+      <userString>	#vehicle_customization:NY_06_Style_2025/name	</userString>
+      <description>	#vehicle_customization:NY_06_Style_2025/description	</description>
+      <longDescriptionSpecial>	#vehicle_customization:NY_06_Style_2025/longDescription	</longDescriptionSpecial>
+    </style>
+    <priceGroup>	MT 2D styles universal 1000g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+  </itemGroup>
+</NY_06_Style_2025_name.xml>

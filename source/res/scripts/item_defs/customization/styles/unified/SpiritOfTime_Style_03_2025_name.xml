@@ -1,0 +1,43 @@
+<SpiritOfTime_Style_03_2025_name.xml>
+  <itemGroup>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <tags>	hiddenInUI	</tags>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <priceGroup>	MT 2D styles universal 1000g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <style>
+      <id>	31318	</id>
+      <texture>	gui/maps/vehicles/styles/SpiritOfTime_Style_2025.png	</texture>
+      <userString>	#vehicle_customization:SpiritOfTime_Style_03_2025/name	</userString>
+      <description>	#vehicle_customization:SpiritOfTime_Style_03_2025/description	</description>
+      <longDescriptionSpecial>	#vehicle_customization:SpiritOfTime_Style_03_2025/longDescription	</longDescriptionSpecial>
+      <outfits>
+        <outfit>
+          <season>	all	</season>
+          <modifications>
+            <item>	4	</item>
+          </modifications>
+          <paints>
+            <item>
+              <id>	31292	</id>
+              <appliedTo>	20753	</appliedTo>
+            </item>
+          </paints>
+          <camouflages>
+            <item>
+              <id>	31274	</id>
+              <patternSize>	1	</patternSize>
+              <appliedTo>	4368	</appliedTo>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+        </outfit>
+      </outfits>
+    </style>
+  </itemGroup>
+</SpiritOfTime_Style_03_2025_name.xml>

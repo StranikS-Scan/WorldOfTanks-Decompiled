@@ -1,0 +1,53 @@
+<ClanSeason_Camo_Gun_140_name.xml>
+  <xmlns:czech1>	ussr	</xmlns:czech1>
+  <xmlns:germany>	germany	</xmlns:germany>
+  <xmlns:czech0>	usa	</xmlns:czech0>
+  <xmlns:china>	china	</xmlns:china>
+  <xmlns:france>	france	</xmlns:france>
+  <xmlns:uk>	uk	</xmlns:uk>
+  <xmlns:japan>	japan	</xmlns:japan>
+  <xmlns:czech>	czech	</xmlns:czech>
+  <xmlns:sweden>	sweden	</xmlns:sweden>
+  <xmlns:poland>	poland	</xmlns:poland>
+  <xmlns:italy>	italy	</xmlns:italy>
+  <xmlns:intunion>	intunion	</xmlns:intunion>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/opaque	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <tags>	hiddenInUI fullRGB	</tags>
+    <priceGroup>	MT camouflages 50g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	france:F68_AMX_Chasseur_de_char_46_02	</vehicles>
+      </include>
+    </vehicleFilter>
+    <camouflage>
+      <id>	31444	</id>
+      <userString>	#vehicle_customization:ClanSeason_Camo_Gun_140/name	</userString>
+      <description>	#vehicle_customization:ClanSeason_Camo_Gun_140/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <exclusionImpact>	0.3	</exclusionImpact>
+      <palettes>
+        <palette>
+          <c0>	255 0 0 255	</c0>
+          <c1>	0 255 0 255	</c1>
+          <c2>	0 0 255 255	</c2>
+          <c3>	0 0 0 255	</c3>
+        </palette>
+      </palettes>
+      <texture>	vehicles/russian/Camouflage/ClanSeason_Camo_Gun_140.dds	</texture>
+      <rotation>
+        <HULL>	1.570796	</HULL>
+        <TURRET>	1.570796	</TURRET>
+        <GUN>	1.570796	</GUN>
+      </rotation>
+      <tilingSettings>
+        <type>	relative	</type>
+        <factor>	1.5 1.5	</factor>
+        <offset>	-7.05 -0.91	</offset>
+      </tilingSettings>
+      <glossMetallicMap>	vehicles/russian/Camouflage/ClanSeason_Camo_Gun_140_GMM.dds	</glossMetallicMap>
+    </camouflage>
+  </itemGroup>
+</ClanSeason_Camo_Gun_140_name.xml>

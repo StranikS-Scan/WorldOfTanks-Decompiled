@@ -58,7 +58,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	5103	</weight>
-    <maxHealth>	232	</maxHealth>
+    <maxHealth>	250	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	80	</maxHealth>
       <maxRegenHealth>	40	</maxRegenHealth>
@@ -2187,7 +2187,7 @@
           <camouflage></camouflage>
         </customizableVehicleAreas>
       </customization>
-      <repairTime>	9	</repairTime>
+      <repairTime>	2.85003138	</repairTime>
     </Chassis_GB26_Birch_Gun>
     <Chassis_GB26_Birch_Gun_2>
       <userString>	#gb_vehicles:Chassis_GB26_Birch_Gun_2	</userString>
@@ -3151,7 +3151,7 @@
           <camouflage></camouflage>
         </customizableVehicleAreas>
       </customization>
-      <repairTime>	7.63636351	</repairTime>
+      <repairTime>	2.85003138	</repairTime>
     </Chassis_GB26_Birch_Gun_2>
   </chassis>
   <turrets0>
@@ -3167,14 +3167,14 @@
         <armor_2>	6	</armor_2>
       </armor>
       <weight>	100	</weight>
-      <maxHealth>	58	</maxHealth>
+      <maxHealth>	60	</maxHealth>
       <rotationSpeed>	16	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	100	</maxHealth>
         <maxRegenHealth>	50	</maxRegenHealth>
         <repairCost>	1.0	</repairCost>
       </turretRotatorHealth>
-      <circularVisionRadius>	265	</circularVisionRadius>
+      <circularVisionRadius>	300	</circularVisionRadius>
       <surveyingDeviceHealth>
         <maxHealth>	50	</maxHealth>
         <maxRegenHealth>	25	</maxRegenHealth>
@@ -3197,7 +3197,7 @@
           </pitchLimits>
           <shotDispersionRadius>	0.74	</shotDispersionRadius>
           <reloadTime>	8.8	</reloadTime>
-          <aimingTime>	5	</aimingTime>
+          <aimingTime>	4	</aimingTime>
           <invisibilityFactorAtShot>	0.25	</invisibilityFactorAtShot>
           <shotDispersionFactors>
             <turretRotation>	0.44	</turretRotation>
@@ -3423,14 +3423,14 @@
         <armor_3>	0	</armor_3>
       </armor>
       <weight>	100	</weight>
-      <maxHealth>	58	</maxHealth>
+      <maxHealth>	60	</maxHealth>
       <rotationSpeed>	16	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	100	</maxHealth>
         <maxRegenHealth>	50	</maxRegenHealth>
         <repairCost>	1.0	</repairCost>
       </turretRotatorHealth>
-      <circularVisionRadius>	265	</circularVisionRadius>
+      <circularVisionRadius>	300	</circularVisionRadius>
       <surveyingDeviceHealth>
         <maxHealth>	50	</maxHealth>
         <maxRegenHealth>	25	</maxRegenHealth>
@@ -3454,7 +3454,7 @@
             <afterShot>	6	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <aimingTime>	5	</aimingTime>
+          <aimingTime>	4	</aimingTime>
           <invisibilityFactorAtShot>	0.25	</invisibilityFactorAtShot>
           <effects>	shot_main	</effects>
           <reloadEffect>	reload85_107	</reloadEffect>

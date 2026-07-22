@@ -145,7 +145,7 @@ class LootBoxOpenedFormatter(ServiceChannelFormatter):
         if not receivedRewards:
             return ''
         title = text_styles.titleFont(backport.text(R.strings.lb_messenger.serviceChannelMessages.lootbox.openedLootBox.receivedRewards.header()))
-        receivedRewardsFmt = QuestAchievesFormatter.formatQuestAchieves(receivedRewards, False)
+        receivedRewardsFmt = QuestAchievesFormatter.formatQuestAchieves(receivedRewards, False) or ''
         return self.__SEPARATOR + title + self.__SEPARATOR + receivedRewardsFmt + self.__SEPARATOR
 
     def __getVehicleCompensationString(self, compensatedVehicles):

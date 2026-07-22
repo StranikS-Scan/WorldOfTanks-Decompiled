@@ -12,9 +12,10 @@ from gui.impl.wrappers.function_helpers import replaceNoneKwargsModel
 from gui.prb_control.entities.listener import IGlobalListener
 from helpers import dependency, int2roman
 from skeletons.gui.game_control import IBattleModifiersController
+from skeletons.gui.hangar import IBattleModifiersEntry
 _TEXTS = R.strings.fortifications.battleModifiers
 
-class BattleModifiersPanelView(ViewImpl, IGlobalListener):
+class BattleModifiersPanelView(ViewImpl, IGlobalListener, IBattleModifiersEntry):
     __battleModifiersController = dependency.descriptor(IBattleModifiersController)
 
     def __init__(self, flags=ViewFlags.VIEW):
@@ -22,6 +23,11 @@ class BattleModifiersPanelView(ViewImpl, IGlobalListener):
         settings.flags = flags
         settings.model = BattleModifiersPanelViewModel()
         super(BattleModifiersPanelView, self).__init__(settings)
+
+    @classmethod
+    def getIsActive(cls):
+        modifiersDomain = cls.__battleModifiersController.getCurrentDomain()
+        return modifiersDomain in IBattleModifiersController.ModifiersDomains.STRONGHOLD_DOMAINS
 
     @property
     def viewModel(self):

@@ -1,0 +1,52 @@
+<camouflage_collapsible_style_camo_desert_06_label.xml>
+  <xmlns:czech1>	ussr	</xmlns:czech1>
+  <xmlns:germany>	germany	</xmlns:germany>
+  <xmlns:czech0>	usa	</xmlns:czech0>
+  <xmlns:china>	china	</xmlns:china>
+  <xmlns:france>	france	</xmlns:france>
+  <xmlns:uk>	uk	</xmlns:uk>
+  <xmlns:japan>	japan	</xmlns:japan>
+  <xmlns:czech>	czech	</xmlns:czech>
+  <xmlns:sweden>	sweden	</xmlns:sweden>
+  <xmlns:poland>	poland	</xmlns:poland>
+  <xmlns:italy>	italy	</xmlns:italy>
+  <xmlns:intunion>	intunion	</xmlns:intunion>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/opaque	</userString>
+    <season>	desert	</season>
+    <historical>	0	</historical>
+    <priceGroup>	MT camouflages 50g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <camouflage>
+      <id>	138	</id>
+      <texture>	vehicles/russian/Camouflage/Collapsible_style_CRACK.dds	</texture>
+      <description>	#vehicle_customization:camouflage/collapsible_style/camo_desert_06/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/collapsible_style/camo_desert_06/label	</userString>
+      <tags>	styleOnly	</tags>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	58 58 51 255	</c0>
+          <c1>	206 181 140 255	</c1>
+          <c2>	206 181 140 255	</c2>
+          <c3>	175 148 96 255	</c3>
+        </palette>
+      </palettes>
+      <rotation>
+        <HULL>	2.87979	</HULL>
+        <TURRET>	2.87979	</TURRET>
+        <GUN>	2.87979	</GUN>
+      </rotation>
+      <tilingSettings>
+        <type>	relative	</type>
+        <factor>	2.6 2.6	</factor>
+        <offset>	2.39262 3.01634	</offset>
+      </tilingSettings>
+    </camouflage>
+  </itemGroup>
+</camouflage_collapsible_style_camo_desert_06_label.xml>

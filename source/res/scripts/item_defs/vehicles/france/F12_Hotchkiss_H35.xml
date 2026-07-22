@@ -58,7 +58,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	4900	</weight>
-    <maxHealth>	256	</maxHealth>
+    <maxHealth>	300	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	80	</maxHealth>
       <maxRegenHealth>	55	</maxRegenHealth>
@@ -1210,8 +1210,8 @@
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
       <rotationSpeed>	32	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.32	</vehicleMovement>
-        <vehicleRotation>	0.32	</vehicleRotation>
+        <vehicleMovement>	0.26	</vehicleMovement>
+        <vehicleRotation>	0.26	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	50	</maxHealth>
@@ -2215,7 +2215,7 @@
           <camouflage></camouflage>
         </customizableVehicleAreas>
       </customization>
-      <repairTime>	6.85714293	</repairTime>
+      <repairTime>	1.71001065	</repairTime>
     </Chassis_Hotchkiss_H35>
     <Chassis_Hotchkiss_H35_2>
       <userString>	#france_vehicles:Chassis_Hotchkiss_H35_2	</userString>
@@ -2232,8 +2232,8 @@
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
       <rotationSpeed>	34	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.3	</vehicleMovement>
-        <vehicleRotation>	0.3	</vehicleRotation>
+        <vehicleMovement>	0.24	</vehicleMovement>
+        <vehicleRotation>	0.24	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	60	</maxHealth>
@@ -3237,7 +3237,7 @@
           <camouflage></camouflage>
         </customizableVehicleAreas>
       </customization>
-      <repairTime>	6.85714293	</repairTime>
+      <repairTime>	1.71001065	</repairTime>
     </Chassis_Hotchkiss_H35_2>
   </chassis>
   <turrets0>
@@ -3267,8 +3267,8 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	900	</weight>
-      <maxHealth>	64	</maxHealth>
-      <rotationSpeed>	24	</rotationSpeed>
+      <maxHealth>	40	</maxHealth>
+      <rotationSpeed>	34	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	60	</maxHealth>
         <maxRegenHealth>	30	</maxRegenHealth>
@@ -3290,11 +3290,11 @@
             <gun>	_25mm_Canon_Raccourci_Mle.1934	  <cost>	150	</cost>
             </gun>
           </unlocks>
-          <aimingTime>	2	</aimingTime>
+          <aimingTime>	1.8	</aimingTime>
           <armor>
             <gun>	10	</gun>
           </armor>
-          <shotDispersionRadius>	0.54	</shotDispersionRadius>
+          <shotDispersionRadius>	0.44	</shotDispersionRadius>
           <reloadTime>	2.5	</reloadTime>
           <invisibilityFactorAtShot>	0.255	</invisibilityFactorAtShot>
           <models>
@@ -3353,8 +3353,8 @@
           </armor>
           <reloadTime>	1.7	</reloadTime>
           <shotDispersionFactors>
-            <turretRotation>	0.12	</turretRotation>
-            <afterShot>	3	</afterShot>
+            <turretRotation>	0.08	</turretRotation>
+            <afterShot>	1	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <aimingTime>	1.5	</aimingTime>
@@ -3410,7 +3410,7 @@
             <gun>	10	</gun>
           </armor>
           <reloadTime>	2.6	</reloadTime>
-          <aimingTime>	2	</aimingTime>
+          <aimingTime>	1.5	</aimingTime>
           <invisibilityFactorAtShot>	0.255	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/french/F12_Hotchkiss_H35/normal/lod0/Gun_03.model	</undamaged>

@@ -1,0 +1,47 @@
+<Calendar_Decal_01_137_name.xml>
+  <xmlns:czech1>	ussr	</xmlns:czech1>
+  <xmlns:germany>	germany	</xmlns:germany>
+  <xmlns:czech0>	usa	</xmlns:czech0>
+  <xmlns:china>	china	</xmlns:china>
+  <xmlns:france>	france	</xmlns:france>
+  <xmlns:uk>	uk	</xmlns:uk>
+  <xmlns:japan>	japan	</xmlns:japan>
+  <xmlns:czech>	czech	</xmlns:czech>
+  <xmlns:sweden>	sweden	</xmlns:sweden>
+  <xmlns:poland>	poland	</xmlns:poland>
+  <xmlns:italy>	italy	</xmlns:italy>
+  <xmlns:intunion>	intunion	</xmlns:intunion>
+  <itemGroup>
+    <name>	Calendar_Decal_137	</name>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	MT projection_decals 100g notInShop	</priceGroup>
+    <userString>	#vehicle_customization:projection_decals/special	</userString>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF usa:A104_M4A3E8A usa:A126_PzVI_Tiger_II_capt ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <projection_decal>
+      <id>	31346	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/Calendar_Decal_01_137.dds	</texture>
+      <userString>	#vehicle_customization:Calendar_Decal_01_137/name	</userString>
+      <description>	#vehicle_customization:Calendar_Decal_01_137/description	</description>
+      <tags>	hiddenInUI formfactor_square styleOnly	</tags>
+    </projection_decal>
+    <projection_decal>
+      <id>	31347	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/Calendar_Decal_02_137.dds	</texture>
+      <userString>	#vehicle_customization:Calendar_Decal_02_137/name	</userString>
+      <description>	#vehicle_customization:Calendar_Decal_02_137/description	</description>
+    </projection_decal>
+    <projection_decal>
+      <id>	31348	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/Calendar_Decal_03_137.dds	</texture>
+      <userString>	#vehicle_customization:Calendar_Decal_03_137/name	</userString>
+      <description>	#vehicle_customization:Calendar_Decal_03_137/description	</description>
+      <tags>	hiddenInUI styleOnly formfactor_rect1x2	</tags>
+    </projection_decal>
+    <tags>	hiddenInUI formfactor_square styleOnly	</tags>
+  </itemGroup>
+</Calendar_Decal_01_137_name.xml>

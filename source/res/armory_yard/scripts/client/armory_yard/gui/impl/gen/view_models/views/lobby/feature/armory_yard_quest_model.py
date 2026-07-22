@@ -6,84 +6,84 @@ from gui.impl.gen.view_models.common.missions.quest_model import QuestModel
 class ArmoryYardQuestModel(QuestModel):
     __slots__ = ()
 
-    def __init__(self, properties=21, commands=0):
+    def __init__(self, properties=23, commands=0):
         super(ArmoryYardQuestModel, self).__init__(properties=properties, commands=commands)
 
     def getChapterId(self):
-        return self._getNumber(11)
+        return self._getNumber(13)
 
     def setChapterId(self, value):
-        self._setNumber(11, value)
+        self._setNumber(13, value)
 
     def getLevels(self):
-        return self._getArray(12)
+        return self._getArray(14)
 
     def setLevels(self, value):
-        self._setArray(12, value)
+        self._setArray(14, value)
 
     @staticmethod
     def getLevelsType():
         return int
 
     def getShowLevelsAsRange(self):
-        return self._getBool(13)
+        return self._getBool(15)
 
     def setShowLevelsAsRange(self, value):
-        self._setBool(13, value)
+        self._setBool(15, value)
 
     def getVehicleTypes(self):
-        return self._getArray(14)
+        return self._getArray(16)
 
     def setVehicleTypes(self, value):
-        self._setArray(14, value)
+        self._setArray(16, value)
 
     @staticmethod
     def getVehicleTypesType():
         return unicode
 
     def getVehicleNations(self):
-        return self._getArray(15)
+        return self._getArray(17)
 
     def setVehicleNations(self, value):
-        self._setArray(15, value)
+        self._setArray(17, value)
 
     @staticmethod
     def getVehicleNationsType():
         return unicode
 
     def getBattleTypes(self):
-        return self._getArray(16)
+        return self._getArray(18)
 
     def setBattleTypes(self, value):
-        self._setArray(16, value)
+        self._setArray(18, value)
 
     @staticmethod
     def getBattleTypesType():
         return int
 
     def getCurrent(self):
-        return self._getNumber(17)
+        return self._getNumber(19)
 
     def setCurrent(self, value):
-        self._setNumber(17, value)
+        self._setNumber(19, value)
 
     def getTotal(self):
-        return self._getNumber(18)
-
-    def setTotal(self, value):
-        self._setNumber(18, value)
-
-    def getIconKey(self):
-        return self._getString(19)
-
-    def setIconKey(self, value):
-        self._setString(19, value)
-
-    def getEarned(self):
         return self._getNumber(20)
 
-    def setEarned(self, value):
+    def setTotal(self, value):
         self._setNumber(20, value)
+
+    def getIconKey(self):
+        return self._getString(21)
+
+    def setIconKey(self, value):
+        self._setString(21, value)
+
+    def getEarned(self):
+        return self._getNumber(22)
+
+    def setEarned(self, value):
+        self._setNumber(22, value)
 
     def _initialize(self):
         super(ArmoryYardQuestModel, self)._initialize()

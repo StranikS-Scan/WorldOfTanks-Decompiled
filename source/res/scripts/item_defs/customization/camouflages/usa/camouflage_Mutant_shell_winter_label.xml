@@ -1,0 +1,51 @@
+<camouflage_Mutant_shell_winter_label.xml>
+  <xmlns:china2>	ussr	</xmlns:china2>
+  <xmlns:germany>	germany	</xmlns:germany>
+  <xmlns:china1>	usa	</xmlns:china1>
+  <xmlns:china>	china	</xmlns:china>
+  <xmlns:france>	france	</xmlns:france>
+  <xmlns:china0>	uk	</xmlns:china0>
+  <xmlns:japan>	japan	</xmlns:japan>
+  <xmlns:czech>	czech	</xmlns:czech>
+  <xmlns:sweden>	sweden	</xmlns:sweden>
+  <xmlns:poland>	poland	</xmlns:poland>
+  <xmlns:italy>	italy	</xmlns:italy>
+  <xmlns:intunion>	intunion	</xmlns:intunion>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/transparent	</userString>
+    <season>	winter	</season>
+    <historical>	0	</historical>
+    <priceGroup>	MT camouflages 50g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <nations>	usa	</nations>
+        <vehicles>	usa:A45_M6A2E1	</vehicles>
+      </include>
+    </vehicleFilter>
+    <camouflage>
+      <id>	15245	</id>
+      <texture>	vehicles/american/Camouflage/Mutant_shell.dds	</texture>
+      <description>	#vehicle_customization:camouflage/Mutant_shell_winter/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/Mutant_shell_winter/label	</userString>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	190 190 188 255	</c0>
+          <c1>	0 0 0 0	</c1>
+          <c2>	0 0 0 0	</c2>
+          <c3>	0 0 0 0	</c3>
+        </palette>
+      </palettes>
+      <tiling>
+        <A45_M6A2E1>	2.1 2.1 0.000000 8.2	</A45_M6A2E1>
+        <usa:A129_T6_medium>	3 3 0.000000 0.000000	</usa:A129_T6_medium>
+      </tiling>
+      <tilingSettings>
+        <type>	relative	</type>
+        <factor>	1.437483  1.440088	</factor>
+        <offset>	0.000000 0.000000	</offset>
+      </tilingSettings>
+    </camouflage>
+  </itemGroup>
+</camouflage_Mutant_shell_winter_label.xml>

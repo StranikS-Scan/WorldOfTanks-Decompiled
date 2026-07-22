@@ -687,10 +687,10 @@ class AmmoController(MethodsRules, ViewComponentsController):
         self.__processAutoReloadEffect(timeLeft)
         self.updateShellChangeTime()
 
-    def triggerReloadEffect(self, timeLeft, baseTime, reloadType=ReloadType.ANY):
+    def triggerReloadEffect(self, timeLeft, baseTime, reloadType=ReloadType.ANY, gunIndex=DUAL_GUN.ACTIVE_GUN.LEFT):
         if timeLeft > 0.0 and self.__gunSettings.reloadEffect is not None and self.__currShellCD in self.__ammo:
             clipCapacity = self.__gunSettings.clip.size
-            self.__gunSettings.reloadEffect.start(timeLeft, baseTime, clipCapacity, reloadType)
+            self.__gunSettings.reloadEffect.start(timeLeft, baseTime, clipCapacity, reloadType, gunIndex)
         elif timeLeft <= 0.0 and self.__gunSettings.reloadEffect is not None:
             self.__gunSettings.reloadEffect.reloadEnd()
         return
@@ -984,9 +984,13 @@ class AmmoController(MethodsRules, ViewComponentsController):
             return
 
     def __onCurrentShellChanged(self, intCD):
+        if self.__gunSettings.isDualGun and self.__gunSettings.reloadEffect is not None:
+            self.__gunSettings.reloadEffect.stopActiveDualGunSounds()
         self.onCurrentShellChanged(intCD)
         for component in self._viewComponents:
             component.setCurrentShellCD(intCD)
+
+        return
 
     def __onNextShellChanged(self, intCD):
         self.onNextShellChanged(intCD)

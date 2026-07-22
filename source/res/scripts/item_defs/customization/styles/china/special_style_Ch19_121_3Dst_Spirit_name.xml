@@ -1,0 +1,49 @@
+<special_style_Ch19_121_3Dst_Spirit_name.xml>
+  <itemGroup>
+    <season>	ALL	</season>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <historical>	1	</historical>
+    <priceGroup>	MT 3D styles 9-10 levels 8000g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	china:Ch19_121	</vehicles>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	31382	</id>
+      <texture>	gui/maps/vehicles/styles/Ch19_121_3Dst_Spirit.png	</texture>
+      <modelsSet>	Ch19_121_3Dst_Spirit	</modelsSet>
+      <userString>	#vehicle_customization:special_style/Ch19_121_3Dst_Spirit/name	</userString>
+      <description>	#vehicle_customization:special_style/Ch19_121_3Dst_Spirit/description	</description>
+      <longDescriptionSpecial>	#vehicle_customization:special_style/Ch19_121_3Dst_Spirit/longDescription	</longDescriptionSpecial>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+      <outfits>
+        <outfit>
+          <season>	all	</season>
+          <attachments>
+            <item>
+              <id>	31077	</id>
+              <slotId>	18001	</slotId>
+            </item>
+          </attachments>
+          <camouflages>
+            <item>
+              <id>	1	</id>
+              <patternSize>	1	</patternSize>
+              <appliedTo>	4368	</appliedTo>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+        </outfit>
+      </outfits>
+    </style>
+    <maxNumber>	1	</maxNumber>
+    <tags>	progression_required	</tags>
+  </itemGroup>
+</special_style_Ch19_121_3Dst_Spirit_name.xml>

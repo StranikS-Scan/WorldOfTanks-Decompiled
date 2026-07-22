@@ -184,6 +184,29 @@ class RankedBonusBattlesFormatter(OldStyleBonusFormatter):
             self._result.append(formatters.packTypedBonusesBlock(formattedList, typedTooltip=TOOLTIPS_CONSTANTS.RANKED_BATTLES_BONUS))
 
 
+class PreferredMapSlotsFormatter(OldStyleBonusFormatter):
+
+    @classmethod
+    def getOrder(cls):
+        pass
+
+    def accumulateBonuses(self, bonus, event=None):
+        days = text_styles.hightlight(backport.text(R.strings.tooltips.template.days.short(), value=bonus.getValue()))
+        text = backport.text(R.strings.quests.bonuses.preferredMapSlots.postBattle(), days=days)
+        self._result.append({'text': text,
+         'slotName': bonus.getSlotName(),
+         'amount': bonus.getValue()})
+
+    def extractFormattedBonuses(self, addLineSeparator=False):
+        result = []
+        endlineSymbol = _END_LINE_SEPARATOR if addLineSeparator else _EMPTY_STRING
+        for entry in self._result:
+            result.append(formatters.packWulfTooltipSimpleBonusesBlock([entry['text']], endlineSymbol=endlineSymbol, wulfTooltip=TOOLTIPS_CONSTANTS.PREFERRED_MAP_SLOT_TOOLTIP, wulfTooltipArg='{}:{}'.format(entry['slotName'], entry['amount'])))
+
+        self._result = []
+        return result
+
+
 class SimpleBonusFormatter(OldStyleBonusFormatter):
 
     def accumulateBonuses(self, bonus, event=None):
@@ -286,6 +309,7 @@ def _getFormattersMap(event):
      'crewBooks': CrewBookFormatter(),
      'blueprints': BlueprintsFormatter(),
      'crewSkins': CrewSkinFormatter(),
+     'preferredMapSlots': PreferredMapSlotsFormatter(),
      'battlePassPoints': BattlePassPointsFormatter(),
      'battleToken': BattleTokenFormatter(),
      'rankedBonusBattles': RankedBonusBattlesFormatter()}

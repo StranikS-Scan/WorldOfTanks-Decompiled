@@ -9,7 +9,7 @@
   <supplySlots>	2 1 1 6 6 6 7 8 8 8	</supplySlots>
   <postProgressionTree>	role_MT_sniper	</postProgressionTree>
   <speedLimits>
-    <forward>	60	</forward>
+    <forward>	55	</forward>
     <backward>	30	</backward>
   </speedLimits>
   <invisibility>
@@ -1163,11 +1163,11 @@
           <shotDispersionRadius>	0.38	</shotDispersionRadius>
           <reloadTime>	3.8	</reloadTime>
           <shotDispersionFactors>
-            <turretRotation>	0.1	</turretRotation>
+            <turretRotation>	0.12	</turretRotation>
             <afterShot>	4.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <aimingTime>	2.2	</aimingTime>
+          <aimingTime>	2.3	</aimingTime>
           <invisibilityFactorAtShot>	0.247	</invisibilityFactorAtShot>
           <customizationSlots>
             <slot>
@@ -1241,14 +1241,14 @@
             </armor_6>
             <gun>	10	</gun>
           </armor>
-          <shotDispersionRadius>	0.37	</shotDispersionRadius>
+          <shotDispersionRadius>	0.38	</shotDispersionRadius>
           <reloadTime>	4.9	</reloadTime>
           <shotDispersionFactors>
-            <turretRotation>	0.1	</turretRotation>
+            <turretRotation>	0.12	</turretRotation>
             <afterShot>	4.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <aimingTime>	2.2	</aimingTime>
+          <aimingTime>	2.3	</aimingTime>
           <pitchLimits>
             <minPitch>	0 -15  1 -15	</minPitch>
             <maxPitch>	0 5 1 5	</maxPitch>
@@ -1751,7 +1751,7 @@
             <afterShot>	4.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <aimingTime>	2.2	</aimingTime>
+          <aimingTime>	2.3	</aimingTime>
           <invisibilityFactorAtShot>	0.247	</invisibilityFactorAtShot>
           <customizationSlots>
             <slot>
@@ -1831,14 +1831,14 @@
             </armor_11>
             <gun>	10	</gun>
           </armor>
-          <shotDispersionRadius>	0.36	</shotDispersionRadius>
+          <shotDispersionRadius>	0.37	</shotDispersionRadius>
           <reloadTime>	4.7	</reloadTime>
           <shotDispersionFactors>
-            <turretRotation>	0.08	</turretRotation>
+            <turretRotation>	0.10	</turretRotation>
             <afterShot>	4.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <aimingTime>	2	</aimingTime>
+          <aimingTime>	2.3	</aimingTime>
           <pitchLimits>
             <minPitch>	0 -15  1 -15	</minPitch>
             <maxPitch>	0 5 1 5	</maxPitch>
@@ -1925,7 +1925,7 @@
           <shotDispersionRadius>	0.37	</shotDispersionRadius>
           <reloadTime>	4.7	</reloadTime>
           <shotDispersionFactors>
-            <turretRotation>	0.06	</turretRotation>
+            <turretRotation>	0.10	</turretRotation>
             <afterShot>	3	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
@@ -2467,11 +2467,11 @@
       <engines>
         <Rolls_Royce_B80P>
           <smplEnginePower>	210	</smplEnginePower>
-          <smplFwMaxSpeed>	60	</smplFwMaxSpeed>
+          <smplFwMaxSpeed>	55	</smplFwMaxSpeed>
         </Rolls_Royce_B80P>
         <Daimler_DQ450>
           <smplEnginePower>	220	</smplEnginePower>
-          <smplFwMaxSpeed>	60	</smplFwMaxSpeed>
+          <smplFwMaxSpeed>	55	</smplFwMaxSpeed>
         </Daimler_DQ450>
       </engines>
       <chassis>

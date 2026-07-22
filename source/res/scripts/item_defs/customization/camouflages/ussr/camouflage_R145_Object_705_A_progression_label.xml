@@ -1,0 +1,54 @@
+<camouflage_R145_Object_705_A_progression_label.xml>
+  <xmlns:china2>	ussr	</xmlns:china2>
+  <xmlns:germany>	germany	</xmlns:germany>
+  <xmlns:china1>	usa	</xmlns:china1>
+  <xmlns:china>	china	</xmlns:china>
+  <xmlns:france>	france	</xmlns:france>
+  <xmlns:china0>	uk	</xmlns:china0>
+  <xmlns:japan>	japan	</xmlns:japan>
+  <xmlns:czech>	czech	</xmlns:czech>
+  <xmlns:sweden>	sweden	</xmlns:sweden>
+  <xmlns:poland>	poland	</xmlns:poland>
+  <xmlns:italy>	italy	</xmlns:italy>
+  <xmlns:intunion>	intunion	</xmlns:intunion>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/opaque	</userString>
+    <season>	ALL	</season>
+    <historical>	0	</historical>
+    <priceGroup>	MT camouflages 50g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	ussr:R145_Object_705_A	</vehicles>
+      </include>
+    </vehicleFilter>
+    <camouflage>
+      <id>	302	</id>
+      <texture>	vehicles/russian/Camouflage/Object_705_A_camo.dds	</texture>
+      <description>	#vehicle_customization:camouflage/R145_Object_705_A_progression/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/R145_Object_705_A_progression/label	</userString>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	161 161 161 255	</c0>
+          <c1>	63 71 84 255	</c1>
+          <c2>	107 120 128 255	</c2>
+          <c3>	0 0 0 0	</c3>
+        </palette>
+      </palettes>
+      <rotation>
+        <HULL>	0.0872665	</HULL>
+        <TURRET>	0.0872665	</TURRET>
+        <GUN>	0.0872665	</GUN>
+      </rotation>
+      <tiling>
+        <ussr:R145_Object_705_A>	1.7 1.7 1.5 1.99	</ussr:R145_Object_705_A>
+      </tiling>
+      <tilingSettings>
+        <type>	relative	</type>
+        <factor>	1 1	</factor>
+        <offset>	0.000000 0.000000	</offset>
+      </tilingSettings>
+    </camouflage>
+  </itemGroup>
+</camouflage_R145_Object_705_A_progression_label.xml>

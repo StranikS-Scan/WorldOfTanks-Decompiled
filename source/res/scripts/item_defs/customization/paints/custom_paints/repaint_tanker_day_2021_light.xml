@@ -1,0 +1,38 @@
+<repaint_tanker_day_2021_light.xml>
+  <itemGroup>
+    <name>	Tanker Day 2021	</name>
+    <userString>	#vehicle_customization:repaint/color_group_04	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	paints 20g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <paint>
+      <id>	192	</id>
+      <texture>	gui/maps/vehicles/repaints/custom_color_17.png	</texture>
+      <color>	198 198 198 255	</color>
+      <gloss>	0.509	</gloss>
+      <metallic>	0.23	</metallic>
+      <userString>	#vehicle_customization:repaint/tanker_day_2021_light	</userString>
+      <tags>	hiddenInUI styleOnly	</tags>
+    </paint>
+    <paint>
+      <id>	193	</id>
+      <texture>	gui/maps/vehicles/repaints/japan_color_02.png	</texture>
+      <color>	45 27 13 255	</color>
+      <gloss>	0.5	</gloss>
+      <metallic>	0.3	</metallic>
+      <userString>	#vehicle_customization:repaint/tanker_day_2021_dark	</userString>
+      <tags>	hiddenInUI styleOnly	</tags>
+    </paint>
+    <usages>
+      <item>
+        <componentType>	ALL	</componentType>
+        <cost>	1	</cost>
+      </item>
+    </usages>
+  </itemGroup>
+</repaint_tanker_day_2021_light.xml>

@@ -56,6 +56,9 @@ BONUS_MERGERS = 49
 SERVICE_CHANNEL_SUBFORMATTERS = 50
 QUESTS_FROM_EXTENSIONS_SOURCE = 51
 SETTINGS_PROVIDERS_SERIALIZABLES = 52
+BATTLE_MODIFIERS_PANELS = 53
+BONUS_PACKERS = 54
+WULF_TOOLTIP_CONTENT_FACTORY = 55
 
 class _CollectEventsManager(object):
 
@@ -546,6 +549,18 @@ def collectCarouselEventEntryPoints():
     return __collectEM.handleEvent(CAROUSEL_EVENTS_ENTRIES, {'carouselEventEntries': {}})['carouselEventEntries']
 
 
+def registerBattleModifiersPanel(viewID, viewClass):
+
+    def onCollect(ctx):
+        ctx['battleModifiersPanels'][viewID] = viewClass
+
+    __collectEM.addListener(BATTLE_MODIFIERS_PANELS, onCollect)
+
+
+def collectBattleModifiersPanel():
+    return __collectEM.handleEvent(BATTLE_MODIFIERS_PANELS, {'battleModifiersPanels': {}})['battleModifiersPanels']
+
+
 def registerBattleQueueProvider(queueType, providerCls):
 
     def onCollect(ctx):
@@ -802,3 +817,27 @@ def registerExtensionSettingsProvidersSerializable(settingsProvidersSerializable
 
 def collectExtensionSettingsProvidersSerializable():
     return __collectEM.handleEvent(SETTINGS_PROVIDERS_SERIALIZABLES, ctx={'settingsProvidersSerializable': {}}).get('settingsProvidersSerializable')
+
+
+def registerCurrencyBonusPacker(bonusType, packer):
+
+    def onCollect(ctx):
+        ctx['currencyBonusPackers'][bonusType] = packer
+
+    __collectEM.addListener(BONUS_PACKERS, onCollect)
+
+
+def collectCurrencyBonusPacker(bonusType):
+    return __collectEM.handleEvent(BONUS_PACKERS, ctx={'currencyBonusPackers': {}})['currencyBonusPackers'].get(bonusType, None)
+
+
+def registerWulfTooltipContentFactory(contentID, factory):
+
+    def onCollect(ctx):
+        ctx['factory'] = factory
+
+    __collectEM.addListener((WULF_TOOLTIP_CONTENT_FACTORY, contentID), onCollect)
+
+
+def collectWulfTooltipContentFactory(contentID):
+    return __collectEM.handleEvent((WULF_TOOLTIP_CONTENT_FACTORY, contentID), ctx={}).get('factory')

@@ -246,7 +246,7 @@ class ProjectionDecalItem(BaseCustomizationItem):
 class CamouflageItem(BaseCustomizationItem):
     __metaclass__ = ReflectionMetaclass
     itemType = CustomizationType.CAMOUFLAGE
-    __slots__ = ('camoTypeIndex', 'palettes', 'compatibleParts', 'componentsCovering', 'invisibilityFactor', 'tiling', 'tilingSettings', 'scales', 'rotation', 'exclusionImpact', 'glossMetallicSettings', 'emissionSettings', 'normalSettings', 'styleId')
+    __slots__ = ('camoTypeIndex', 'palettes', 'compatibleParts', 'componentsCovering', 'invisibilityFactor', 'tiling', 'tilingSettings', 'scales', 'rotation', 'exclusionImpact', 'forceUv0', 'glossMetallicSettings', 'emissionSettings', 'normalSettings', 'styleId')
     allSlots = BaseCustomizationItem.__slots__ + __slots__
     CAMO_TYPES = {'Transparent': '#vehicle_customization:camouflage/transparent', 'Opaque': '#vehicle_customization:camouflage/opaque'}
     def __init__(self, parentGroup = None):
@@ -260,6 +260,7 @@ class CamouflageItem(BaseCustomizationItem):
         self.tilingSettings = (CamouflageTilingType.LEGACY, None, None)
         self.scales = (1.2, 1.0, 0.7)
         self.exclusionImpact = 1.0
+        self.forceUv0 = False
         self.glossMetallicSettings = {'glossMetallicMap': '', 'gloss': Math.Vector4(0.0), 'metallic': Math.Vector4(0.0)}
         self.emissionSettings = {'emissionAnimationSpeed': DEFAULT_EMISSION_ANIMATION_SPEED, 'deferredEmissionBrightness': DEFAULT_DEFERRED_EMISSION, 'forwardEmissionBrightness': DEFAULT_FORWARD_EMISSION, 'emissionMap': '', 'emissionPatternMap': ''}
         self.normalSettings = {'normalMap': '', 'normalMapFactor': DEFAULT_NORMAL_MAP_FACTOR, 'normalMaxLod': DEFAULT_NORMAL_MAX_LOD}
@@ -278,6 +279,7 @@ class CamouflageItem(BaseCustomizationItem):
         newItem.tilingSettings = deepcopy(self.tilingSettings)
         newItem.scales = self.scales
         newItem.exclusionImpact = self.exclusionImpact
+        newItem.forceUv0 = self.forceUv0
         newItem.emissionSettings = deepcopy(self.emissionSettings)
         newItem.normalSettings = deepcopy(self.normalSettings)
         super(CamouflageItem, self)._copy(newItem)
@@ -559,7 +561,7 @@ class Font(object):
         return items.makeIntCompactDescrByID('customizationItem', self.itemType, self.id)
 
 if IS_EDITOR:
-    CUSTOMIZATION_TYPES = {CustomizationType.MODIFICATION: ModificationItem, CustomizationType.DECAL: DecalItem, CustomizationType.ATTACHMENT: AttachmentItem, CustomizationType.INSIGNIA: InsigniaItem, CustomizationType.STYLE: StyleItem, CustomizationType.FONT: Font, CustomizationType.PERSONAL_NUMBER: PersonalNumberItem, CustomizationType.PAINT: PaintItem, CustomizationType.PROJECTION_DECAL: ProjectionDecalItem, CustomizationType.CAMOUFLAGE: CamouflageItem, CustomizationType.SEQUENCE: SequenceItem}
+    CUSTOMIZATION_TYPES = {CustomizationType.CAMOUFLAGE: CamouflageItem, CustomizationType.PAINT: PaintItem, CustomizationType.INSIGNIA: InsigniaItem, CustomizationType.SEQUENCE: SequenceItem, CustomizationType.MODIFICATION: ModificationItem, CustomizationType.PROJECTION_DECAL: ProjectionDecalItem, CustomizationType.ATTACHMENT: AttachmentItem, CustomizationType.STYLE: StyleItem, CustomizationType.DECAL: DecalItem, CustomizationType.PERSONAL_NUMBER: PersonalNumberItem, CustomizationType.FONT: Font}
     CUSTOMIZATION_CLASSES = {v : k for k, v in CUSTOMIZATION_TYPES.items()}
 class _Filter(object):
     __slots__ = ('include', 'exclude')
@@ -791,7 +793,7 @@ class CustomizationCache(object):
         self.itemGroupByProgressionBonusType = {arenaTypeID : list() for arenaTypeID in ARENA_BONUS_TYPE_NAMES.values() if ARENA_BONUS_TYPE_CAPS.checkAny(arenaTypeID, ARENA_BONUS_TYPE_CAPS.CUSTOMIZATION_PROGRESSION)}
         self._CustomizationCache__vehicleCanMayIncludeCustomization = {}
         self.topVehiclesByNation = {}
-        self.itemTypes = {CustomizationType.ATTACHMENT: self.attachments, CustomizationType.INSIGNIA: self.insignias, CustomizationType.DECAL: self.decals, CustomizationType.SEQUENCE: self.sequences, CustomizationType.PROJECTION_DECAL: self.projection_decals, CustomizationType.STYLE: self.styles, CustomizationType.PERSONAL_NUMBER: self.personal_numbers, CustomizationType.MODIFICATION: self.modifications, CustomizationType.CAMOUFLAGE: self.camouflages, CustomizationType.PAINT: self.paints}
+        self.itemTypes = {CustomizationType.MODIFICATION: self.modifications, CustomizationType.STYLE: self.styles, CustomizationType.DECAL: self.decals, CustomizationType.ATTACHMENT: self.attachments, CustomizationType.CAMOUFLAGE: self.camouflages, CustomizationType.PERSONAL_NUMBER: self.personal_numbers, CustomizationType.PAINT: self.paints, CustomizationType.PROJECTION_DECAL: self.projection_decals, CustomizationType.SEQUENCE: self.sequences, CustomizationType.INSIGNIA: self.insignias}
         super(CustomizationCache, self).__init__()
 
     def getQuestProgressionStyles(self):
@@ -1204,7 +1206,7 @@ def _validateDependencies(outfit, usedStyle, vehDescr, season):
         emblemRegions, inscriptionRegions = getAvailableDecalRegions(vehDescr)
         decalRegions = emblemRegions | inscriptionRegions
         modifiedOutfit = baseSeasonOutfit.applyDiff(outfit)
-        outfitToCheckDependencies = {CustomizationType.MODIFICATION: set(modifiedOutfit.modifications), CustomizationType.PAINT: {paint.id for paint in modifiedOutfit.paints if paint.appliedTo & paintRegions}, CustomizationType.DECAL: {decal.id for decal in modifiedOutfit.decals if decal.appliedTo & decalRegions}, CustomizationType.PERSONAL_NUMBER: {number.id for number in modifiedOutfit.personal_numbers if number.appliedTo & inscriptionRegions}, CustomizationType.PROJECTION_DECAL: {projectionDecal.id for projectionDecal in modifiedOutfit.projection_decals}}
+        outfitToCheckDependencies = {CustomizationType.MODIFICATION: set(modifiedOutfit.modifications), CustomizationType.PAINT: {paint.id for paint in modifiedOutfit.paints if paint.appliedTo & paintRegions}, CustomizationType.PROJECTION_DECAL: {projectionDecal.id for projectionDecal in modifiedOutfit.projection_decals}, CustomizationType.PERSONAL_NUMBER: {number.id for number in modifiedOutfit.personal_numbers if number.appliedTo & inscriptionRegions}, CustomizationType.DECAL: {decal.id for decal in modifiedOutfit.decals if decal.appliedTo & decalRegions}}
         for itemType, itemIDs in outfitToCheckDependencies.iteritems():
             camouflageItemTypeDependencies = usedStyle.dependencies.get(camouflageID, {}).get(itemType, {})
             alternateItems = usedStyle.alternateItems.get(itemType, ())

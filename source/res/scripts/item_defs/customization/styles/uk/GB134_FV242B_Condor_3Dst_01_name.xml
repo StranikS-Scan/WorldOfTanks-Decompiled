@@ -1,0 +1,48 @@
+<GB134_FV242B_Condor_3Dst_01_name.xml>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <style>
+      <id>	31461	</id>
+      <texture>	gui/maps/vehicles/styles/GB134_FV242B_Condor_3Dst_01.png	</texture>
+      <modelsSet>	GB134_FV242B_Condor_3Dst_01	</modelsSet>
+      <outfits>
+        <outfit>
+          <season>	all	</season>
+          <camouflages>
+            <item>
+              <id>	1	</id>
+              <patternSize>	1	</patternSize>
+              <appliedTo>	4368	</appliedTo>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <insignias>
+            <item>
+              <id>	31045	</id>
+              <appliedTo>	4096	</appliedTo>
+            </item>
+          </insignias>
+          <attachments>
+            <item>
+              <id>	31098	</id>
+              <slotId>	38000	</slotId>
+            </item>
+          </attachments>
+          <overrideDefaultAttachments>	1	</overrideDefaultAttachments>
+        </outfit>
+      </outfits>
+      <userString>	#vehicle_customization:GB134_FV242B_Condor_3Dst_01/name	</userString>
+      <description>	#vehicle_customization:GB134_FV242B_Condor_3Dst_01/description	</description>
+      <longDescriptionSpecial>	#vehicle_customization:GB134_FV242B_Condor_3Dst_01/longDescription	</longDescriptionSpecial>
+    </style>
+    <priceGroup>	MT 3D styles 9-10 levels 8000g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	uk:GB134_FV242B_Condor	</vehicles>
+      </include>
+    </vehicleFilter>
+    <maxNumber>	1	</maxNumber>
+  </itemGroup>
+</GB134_FV242B_Condor_3Dst_01_name.xml>

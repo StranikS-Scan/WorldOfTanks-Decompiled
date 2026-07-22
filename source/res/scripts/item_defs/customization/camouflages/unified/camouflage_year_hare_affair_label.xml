@@ -1,0 +1,99 @@
+<camouflage_year_hare_affair_label.xml>
+  <china:Ch16_WZ_1314>	ussr	</china:Ch16_WZ_1314>
+  <china:Ch12_111_1_2_36>	germany	</china:Ch12_111_1_2_36>
+  <china:Ch16_WZ_1313>	usa	</china:Ch16_WZ_1313>
+  <china:Ch12_111_1_2_33>	china	</china:Ch12_111_1_2_33>
+  <china:Ch12_111_1_2_35>	france	</china:Ch12_111_1_2_35>
+  <china:Ch16_WZ_1312>	uk	</china:Ch16_WZ_1312>
+  <china:Ch12_111_1_2_39>	japan	</china:Ch12_111_1_2_39>
+  <china:Ch12_111_1_2_34>	czech	</china:Ch12_111_1_2_34>
+  <china:Ch16_WZ_1311>	sweden	</china:Ch16_WZ_1311>
+  <china:Ch16_WZ_1310>	poland	</china:Ch16_WZ_1310>
+  <china:Ch12_111_1_2_38>	italy	</china:Ch12_111_1_2_38>
+  <china:Ch12_111_1_2_37>	intunion	</china:Ch12_111_1_2_37>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/transparent	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	MT camouflages 50g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R47_ISU-152_Zveroboj ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <camouflage>
+      <id>	361	</id>
+      <texture>	vehicles/russian/Camouflage/year_hare_affair.dds	</texture>
+      <description>	#vehicle_customization:camouflage/year_hare_affair/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/year_hare_affair/label	</userString>
+      <tags>	fullRGB hiddenInUI	</tags>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	165 203 209 203	</c0>
+          <c1>	14 14 56 203	</c1>
+          <c2>	29 37 63 178	</c2>
+          <c3>	0 0 0 0	</c3>
+        </palette>
+        <palette>
+          <c0>	194 209 123 203	</c0>
+          <c1>	23 35 8 203	</c1>
+          <c2>	57 63 29 178	</c2>
+          <c3>	0 0 0 0	</c3>
+        </palette>
+        <palette>
+          <c0>	209 203 152 203	</c0>
+          <c1>	50 36 12 203	</c1>
+          <c2>	63 48 29 203	</c2>
+          <c3>	0 0 0 0	</c3>
+        </palette>
+      </palettes>
+      <rotation>
+        <HULL>	0.261799	</HULL>
+        <TURRET>	0.261799	</TURRET>
+        <GUN>	0.261799	</GUN>
+      </rotation>
+      <tiling>
+        <china:Ch01_Type59>	1.6 1.6 0.08 2.15	</china:Ch01_Type59>
+        <china:Ch04_T34_1>	3.5 3.5 0.07 2.25	</china:Ch04_T34_1>
+        <china:Ch10_IS2>	2.5 2.5 0.05 2.66	</china:Ch10_IS2>
+        <china:Ch12_111_1_2_3>	1.9 1.9 -0.25 1.82	</china:Ch12_111_1_2_3>
+        <china:Ch16_WZ_131>	2.3 2.3 -0.12 2.69	</china:Ch16_WZ_131>
+        <china:Ch19_121>	4 4 -0.23 1.68	</china:Ch19_121>
+        <china:Ch19_121_7x7>	4 4 -0.23 1.68	</china:Ch19_121_7x7>
+        <china:Ch23_112>	1.9 1.9 0.27 2.11	</china:Ch23_112>
+        <china:Ch24_Type64>	3.1 3.1 0.11 2.34	</china:Ch24_Type64>
+        <china:Ch25_121_mod_1971B>	5 5 -0.2 2.3	</china:Ch25_121_mod_1971B>
+        <china:Ch04_T34_10>	1.1 1.1 -0.42 2.15	</china:Ch04_T34_10>
+        <china:Ch04_T34_11>	2.1 2.1 -0.293 2.1	</china:Ch04_T34_11>
+        <china:Ch04_T34_12>	4 4 0.38 2.62	</china:Ch04_T34_12>
+        <china:Ch04_T34_13>	1.1 1.1 -0.86 2.85	</china:Ch04_T34_13>
+        <china:Ch04_T34_14>	1.1 1.1 -0.86 2.85	</china:Ch04_T34_14>
+        <china:Ch04_T34_15>	1.1 1.1 0.7 3.18	</china:Ch04_T34_15>
+        <china:Ch04_T34_16>	2.1 2.1 0.49 1.43	</china:Ch04_T34_16>
+        <china:Ch04_T34_17>	2.1 2.1 0.49 1.43	</china:Ch04_T34_17>
+        <china:Ch04_T34_18>	2.2 2.2 0.1 2.51	</china:Ch04_T34_18>
+        <china:Ch04_T34_19>	2.2 2.2 0.1 2.51	</china:Ch04_T34_19>
+        <china:Ch10_IS20>	8.7 8.7 -0.03 2.61	</china:Ch10_IS20>
+        <china:Ch10_IS21>	3.2 3.2 -0.949 1.779	</china:Ch10_IS21>
+        <china:Ch12_111_1_2_31>	3.2 3.2 -0.949 1.779	</china:Ch12_111_1_2_31>
+        <china:Ch10_IS22>	3.3 3.3 -1.06 2.97	</china:Ch10_IS22>
+        <china:Ch10_IS23>	3.3 3.3 -1.06 2.97	</china:Ch10_IS23>
+        <china:Ch10_IS24>	3.2 3.2 -0.22 2.02	</china:Ch10_IS24>
+        <china:Ch10_IS25>	3.2 3.2 -0.22 2.02	</china:Ch10_IS25>
+        <china:Ch10_IS26>	1.9 1.9 -0.31 1.88	</china:Ch10_IS26>
+        <china:Ch10_IS27>	1.3 1.3 0.1 2.82	</china:Ch10_IS27>
+        <china:Ch10_IS28>	3.7 3.7 -0.01 1.73	</china:Ch10_IS28>
+        <china:Ch10_IS29>	3.6 3.6 -0.23 1.99	</china:Ch10_IS29>
+        <china:Ch12_111_1_2_30>	4.6 4.6 0.1 2.82	</china:Ch12_111_1_2_30>
+        <china:Ch12_111_1_2_32>	3.5 3.5 0.14 2.43	</china:Ch12_111_1_2_32>
+      </tiling>
+      <tilingSettings>
+        <type>	relative	</type>
+        <factor>	2.6 2.6	</factor>
+        <offset>	0.08 -2.19	</offset>
+      </tilingSettings>
+    </camouflage>
+  </itemGroup>
+</camouflage_year_hare_affair_label.xml>

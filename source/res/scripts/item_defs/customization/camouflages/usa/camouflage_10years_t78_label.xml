@@ -1,0 +1,56 @@
+<camouflage_10years_t78_label.xml>
+  <usa:A134_M24E2_SuperChaffee3>	ussr	</usa:A134_M24E2_SuperChaffee3>
+  <xmlns:germany>	germany	</xmlns:germany>
+  <usa:A134_M24E2_SuperChaffee2>	usa	</usa:A134_M24E2_SuperChaffee2>
+  <xmlns:china>	china	</xmlns:china>
+  <xmlns:france>	france	</xmlns:france>
+  <usa:A134_M24E2_SuperChaffee1>	uk	</usa:A134_M24E2_SuperChaffee1>
+  <xmlns:japan>	japan	</xmlns:japan>
+  <xmlns:czech>	czech	</xmlns:czech>
+  <usa:A134_M24E2_SuperChaffee0>	sweden	</usa:A134_M24E2_SuperChaffee0>
+  <xmlns:poland>	poland	</xmlns:poland>
+  <xmlns:italy>	italy	</xmlns:italy>
+  <xmlns:intunion>	intunion	</xmlns:intunion>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/opaque	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	MT camouflages 50g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	usa:A123_T78	</vehicles>
+      </include>
+    </vehicleFilter>
+    <camouflage>
+      <id>	182	</id>
+      <texture>	vehicles/russian/Camouflage/10years_t78.dds	</texture>
+      <description>	#vehicle_customization:camouflage/10years_t78/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/10years_t78/label	</userString>
+      <tags>	fullRGB	</tags>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	255 0 0 255	</c0>
+          <c1>	0 255 0 255	</c1>
+          <c2>	0 0 255 255	</c2>
+          <c3>	0 0 0 255	</c3>
+        </palette>
+      </palettes>
+      <rotation>
+        <HULL>	-0.261799	</HULL>
+        <TURRET>	-0.261799	</TURRET>
+        <GUN>	-0.261799	</GUN>
+      </rotation>
+      <tiling>
+        <usa:A123_T78>	2 2 3.15 -0.5	</usa:A123_T78>
+        <usa:A134_M24E2_SuperChaffee>	2 2 3.15 -0.5	</usa:A134_M24E2_SuperChaffee>
+      </tiling>
+      <tilingSettings>
+        <type>	relative	</type>
+        <factor>	1.233919  1.240364	</factor>
+        <offset>	0.000000 0.000000	</offset>
+      </tilingSettings>
+    </camouflage>
+  </itemGroup>
+</camouflage_10years_t78_label.xml>

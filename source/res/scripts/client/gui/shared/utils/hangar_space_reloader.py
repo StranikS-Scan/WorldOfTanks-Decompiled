@@ -39,7 +39,7 @@ class HangarSpaceReloader(IHangarSpaceReloader):
         self.__loadingSpacePath = None
         return
 
-    def changeHangarSpace(self, spaceName, visibilityMask, waitingMessage=None, backgroundImage=None, actionChange=False):
+    def changeHangarSpace(self, spaceName, visibilityMask, environment, waitingMessage=None, backgroundImage=None, actionChange=False):
         errCode = ErrorFlags.NONE
         if not spaceName:
             _logger.error('Invalid space name: the name cannot be empty.')
@@ -75,7 +75,7 @@ class HangarSpaceReloader(IHangarSpaceReloader):
             if waitingMessage:
                 Waiting.show(waitingMessage, isAlwaysOnTop=True, backgroundImage=getGfImagePath(backgroundImage))
             from gui.ClientHangarSpace import g_clientHangarSpaceOverride
-            g_clientHangarSpaceOverride.setPath(spacePath, visibilityMask=visibilityMask, isReload=True, event=self.hangarSpace.onSpaceChangedByAction if actionChange else None)
+            g_clientHangarSpaceOverride.setPath(spacePath, visibilityMask=visibilityMask, environment=environment, isReload=True, event=self.hangarSpace.onSpaceChangedByAction if actionChange else None)
             return (reloadValid, errCode)
 
     @staticmethod

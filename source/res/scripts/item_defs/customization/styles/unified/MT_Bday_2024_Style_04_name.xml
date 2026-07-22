@@ -1,0 +1,66 @@
+<MT_Bday_2024_Style_04_name.xml>
+  <itemGroup>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	MT 2D styles universal 1000g notInShop	</priceGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <style>
+      <id>	31147	</id>
+      <texture>	gui/maps/vehicles/styles/MT_Bday_2024_Style_04.png	</texture>
+      <userString>	#vehicle_customization:MT_Bday_2024_Style_04/name	</userString>
+      <description>	#vehicle_customization:MT_Bday_2024_Style_04/description	</description>
+      <longDescriptionSpecial>	#vehicle_customization:MT_Bday_2024_Style_04/longDescription	</longDescriptionSpecial>
+      <outfits>
+        <outfit>
+          <season>	all	</season>
+          <paints>
+            <item>
+              <id>	31116	</id>
+              <appliedTo>	16640	</appliedTo>
+            </item>
+            <item>
+              <id>	31117	</id>
+              <appliedTo>	16	</appliedTo>
+            </item>
+            <item>
+              <id>	31118	</id>
+              <appliedTo>	4097	</appliedTo>
+            </item>
+          </paints>
+          <projection_decals>
+            <item>
+              <id>	31151	</id>
+              <tags>	formfactor_rect1x2 direction_right_to_left disableVerticalMirror cover front	</tags>
+            </item>
+            <item>
+              <id>	31152	</id>
+              <scaleFactorId>	2	</scaleFactorId>
+              <tags>	right formfactor_square disableVerticalMirror safe direction_left_to_right	</tags>
+            </item>
+            <item>
+              <id>	31153	</id>
+              <scaleFactorId>	2	</scaleFactorId>
+              <tags>	formfactor_square direction_right_to_left left disableVerticalMirror safe	</tags>
+            </item>
+          </projection_decals>
+          <modifications>
+            <item>	5	</item>
+          </modifications>
+          <camouflages>
+            <item>
+              <id>	1	</id>
+              <patternSize>	1	</patternSize>
+              <appliedTo>	4368	</appliedTo>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+        </outfit>
+      </outfits>
+    </style>
+  </itemGroup>
+</MT_Bday_2024_Style_04_name.xml>

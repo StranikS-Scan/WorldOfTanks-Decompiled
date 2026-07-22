@@ -1,0 +1,44 @@
+<ArmoryYard_4_Decal_01_2024_name.xml>
+  <xmlns:czech1>	ussr	</xmlns:czech1>
+  <xmlns:germany>	germany	</xmlns:germany>
+  <xmlns:czech0>	usa	</xmlns:czech0>
+  <xmlns:china>	china	</xmlns:china>
+  <xmlns:france>	france	</xmlns:france>
+  <xmlns:uk>	uk	</xmlns:uk>
+  <xmlns:japan>	japan	</xmlns:japan>
+  <xmlns:czech>	czech	</xmlns:czech>
+  <xmlns:sweden>	sweden	</xmlns:sweden>
+  <xmlns:poland>	poland	</xmlns:poland>
+  <xmlns:italy>	italy	</xmlns:italy>
+  <xmlns:intunion>	intunion	</xmlns:intunion>
+  <itemGroup>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <userString>	#vehicle_customization:projection_decals/special	</userString>
+    <projection_decal>
+      <id>	31192	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/ArmoryYard_4_Decal_01_2024.dds	</texture>
+      <glossTexture>	gui/maps/vehicles/decals/projection_decals/special/ArmoryYard_4_Decal_01_2024_GMM.dds	</glossTexture>
+      <userString>	#vehicle_customization:ArmoryYard_4_Decal_01_2024/name	</userString>
+      <description>	#vehicle_customization:ArmoryYard_4_Decal_01_2024/description	</description>
+      <tags>	formfactor_rect1x2 direction_right_to_left hiddenInUI styleOnly disableVerticalMirror	</tags>
+    </projection_decal>
+    <projection_decal>
+      <id>	31193	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/ArmoryYard_4_Decal_02_2024.dds	</texture>
+      <glossTexture>	gui/maps/vehicles/decals/projection_decals/special/ArmoryYard_4_Decal_02_2024_GMM.dds	</glossTexture>
+      <scaleFactorId>	2	</scaleFactorId>
+      <userString>	#vehicle_customization:ArmoryYard_4_Decal_02_2024/name	</userString>
+      <description>	#vehicle_customization:ArmoryYard_4_Decal_02_2024/description	</description>
+      <mirror>	true	</mirror>
+      <tags>	styleOnly disableVerticalMirror formfactor_rect1x2 direction_right_to_left hiddenInUI	</tags>
+    </projection_decal>
+    <priceGroup>	MT projection_decals 100g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF usa:A104_M4A3E8A usa:A126_PzVI_Tiger_II_capt ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <name>	ArmoryYard_4_Decal_2024	</name>
+  </itemGroup>
+</ArmoryYard_4_Decal_01_2024_name.xml>

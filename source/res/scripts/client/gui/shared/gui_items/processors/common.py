@@ -1,32 +1,37 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/processors/common.py
 import logging
+from itertools import chain
 from string import lower
-import BigWorld
 from BWUtil import AsyncReturn
-from constants import EMPTY_GEOMETRY_ID, PREMIUM_TYPE
+from typing import TYPE_CHECKING
+import BigWorld
+from constants import PREMIUM_TYPE
 from gui import SystemMessages
-from gui.impl.lobby.customization.shared import removePartsFromOutfit
-from gui.shared.gui_items import GUI_ITEM_TYPE
-from gui.shared.notifications import NotificationPriorityLevel
-from gui.shared.formatters import getStyle
-from items import makeIntCompactDescrByID
-from items.components.c11n_constants import CustomizationType, CustomizationTypeNames, HIDDEN_CAMOUFLAGE_ID
-from skeletons.gui.shared import IItemsCache
-from skeletons.gui.customization import ICustomizationService
-from gui.impl.gen import R
-from gui.impl import backport
 from gui.Scaleform.locale.MESSENGER import MESSENGER
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
-from gui.SystemMessages import SM_TYPE, CURRENCY_TO_SM_TYPE
-from gui.shared.formatters import formatPrice, formatGoldPrice, text_styles, icons
-from gui.shared.gui_items.processors import Processor, makeError, makeSuccess, makeI18nError, makeI18nSuccess, plugins, GroupedRequestProcessor
-from gui.shared.gui_items import GUI_ITEM_ECONOMY_CODE
-from gui.shared.money import Money, Currency
+from gui.SystemMessages import CURRENCY_TO_SM_TYPE, SM_TYPE
+from gui.impl import backport
+from gui.impl.gen import R
+from gui.impl.lobby.customization.shared import removePartsFromOutfit
+from gui.impl.lobby.premacc.views_helpers import isSlotAvailableForUI
+from gui.shared.formatters import formatGoldPrice, formatPrice, getStyle, icons, text_styles
+from gui.shared.gui_items import GUI_ITEM_ECONOMY_CODE, GUI_ITEM_TYPE
+from gui.shared.gui_items.processors import GroupedRequestProcessor, Processor, makeError, makeI18nError, makeI18nSuccess, makeSuccess, plugins
+from gui.shared.money import Currency, Money
+from gui.shared.notifications import NotificationPriorityLevel
 from helpers import dependency
+from items import makeIntCompactDescrByID
+from items.components.c11n_constants import CustomizationType, CustomizationTypeNames, HIDDEN_CAMOUFLAGE_ID
 from items.customizations import isEditedStyle
-from skeletons.gui.game_control import IVehicleComparisonBasket, IWotPlusController, IEpicBattleMetaGameController
-from th_async import th_async, th_await, await_callback
+from preferred_maps import BlacklistWrapper, Slot, getConfiguredSlotLayout
+from skeletons.gui.customization import ICustomizationService
+from skeletons.gui.game_control import IEpicBattleMetaGameController, IVehicleComparisonBasket, IWotPlusController
+from skeletons.gui.lobby_context import ILobbyContext
+from skeletons.gui.shared import IItemsCache
+from th_async import await_callback, th_async, th_await
+if TYPE_CHECKING:
+    from typing import Dict
 _logger = logging.getLogger(__name__)
 
 class TankmanBerthsBuyer(Processor):
@@ -354,12 +359,15 @@ class ConvertBlueprintFragmentProcessor(Processor):
 
 
 class _MapsBlackListSelector(Processor):
+    __itemsCache = dependency.descriptor(IItemsCache)
+    __lobbyContext = dependency.descriptor(ILobbyContext)
 
-    def __init__(self, selectedMaps=None):
+    def __init__(self, selectedMaps=None, mapChangeApplied=True):
         super(_MapsBlackListSelector, self).__init__()
         if selectedMaps is None:
-            selectedMaps = ()
+            selectedMaps = {}
         self.__selectedMaps = selectedMaps
+        self.__mapChangeApplied = mapChangeApplied
         return
 
     def _getMessagePrefix(self):
@@ -384,11 +392,24 @@ class _MapsBlackListSelector(Processor):
         return makeI18nSuccess(sysMsgKey='{}/success'.format(self._getMessagePrefix()))
 
     def _request(self, callback):
+        if not self.__mapChangeApplied:
+            _logger.debug('Skip maps blacklist request: slot is no longer available for change (layout=%r)', self.__selectedMaps)
+            callback(makeSuccess())
+            return
         _logger.debug('Make server request to select black maps %r', self.__selectedMaps)
-        BigWorld.player().stats.setMapsBlackList(self.__selectedMaps, lambda code, errStr, ext: self._response(code, callback, ctx=ext, errStr=errStr))
+        slots = sorted(self.__selectedMaps.itervalues(), key=lambda slot: slot.id)
+        BigWorld.player().stats.setMapsBlackList(list(chain.from_iterable(((slot.id, slot.type, slot.mapID) for slot in slots))), lambda code, errStr, ext: self._response(code, callback, ctx=ext, errStr=errStr))
 
     def _getLayout(self):
-        return [ mapID for mapID, _ in self.itemsCache.items.stats.getMapsBlackList() ]
+        config = self.__lobbyContext.getServerSettings().getPreferredMapsConfig()
+        layout = getConfiguredSlotLayout(config)
+        blackList = BlacklistWrapper(self.__itemsCache.items.stats.getMapsBlackList())
+        for slotId, _ in layout.iteritems():
+            serverSlot = blackList.get(slotId)
+            if serverSlot is not None:
+                layout[slotId] = serverSlot
+
+        return layout
 
 
 class MapsBlackListSetter(_MapsBlackListSelector):
@@ -396,37 +417,50 @@ class MapsBlackListSetter(_MapsBlackListSelector):
     def __init__(self, selectedMapID):
         layout = self._getLayout()
         wasInserted = False
-        for idx, mapID in enumerate(layout):
-            if mapID == EMPTY_GEOMETRY_ID:
-                layout[idx] = selectedMapID
+        for slotId in sorted(layout):
+            slot = layout[slotId]
+            if isSlotAvailableForUI(slot) and slot.isEmpty():
+                layout[slot.id] = slot._replace(mapID=selectedMapID, type=slot.type)
                 wasInserted = True
                 break
 
         if not wasInserted:
-            layout.append(selectedMapID)
-        super(MapsBlackListSetter, self).__init__(layout)
+            _logger.debug('No available slots to set map %d (layout=%r)', selectedMapID, layout)
+        super(MapsBlackListSetter, self).__init__(layout, mapChangeApplied=wasInserted)
 
 
 class MapsBlackListRemover(_MapsBlackListSelector):
 
     def __init__(self, removeMapID):
         layout = self._getLayout()
-        if removeMapID in layout:
-            layout[layout.index(removeMapID)] = EMPTY_GEOMETRY_ID
-        else:
-            _logger.error('Cannot remove mapID %d from layout %r', removeMapID, layout)
-        super(MapsBlackListRemover, self).__init__(layout)
+        wasRemoved = False
+        for slotId in sorted(layout):
+            slot = layout[slotId]
+            if isSlotAvailableForUI(slot) and slot.mapID == removeMapID:
+                layout[slot.id] = slot.dropMap()
+                wasRemoved = True
+                break
+
+        if not wasRemoved:
+            _logger.debug('Cannot remove mapID %d from layout %r', removeMapID, layout)
+        super(MapsBlackListRemover, self).__init__(layout, mapChangeApplied=wasRemoved)
 
 
 class MapsBlackListChanger(_MapsBlackListSelector):
 
     def __init__(self, srcMapID, destMapID):
         layout = self._getLayout()
-        if srcMapID in layout:
-            layout[layout.index(srcMapID)] = destMapID
-        else:
-            _logger.error('Cannot change srcMapID %d from layout %r', srcMapID, layout)
-        super(MapsBlackListChanger, self).__init__(layout)
+        wasChanged = False
+        for slotId in sorted(layout):
+            slot = layout[slotId]
+            if isSlotAvailableForUI(slot) and slot.mapID == srcMapID:
+                layout[slot.id] = slot._replace(mapID=destMapID)
+                wasChanged = True
+                break
+
+        if not wasChanged:
+            _logger.debug('Cannot change srcMapID %d to %d: slot disabled or map missing (layout=%r)', srcMapID, destMapID, layout)
+        super(MapsBlackListChanger, self).__init__(layout, mapChangeApplied=wasChanged)
 
 
 class PremiumBonusApplier(Processor):

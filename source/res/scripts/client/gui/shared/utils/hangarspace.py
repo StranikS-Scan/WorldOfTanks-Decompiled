@@ -232,6 +232,10 @@ class HangarSpace(IHangarSpace):
     def visibilityMask(self):
         return None if self.__space is None else self.__space.visibilityMask
 
+    @property
+    def environment(self):
+        return None if self.__space is None else self.__space.environment
+
     def spaceLoading(self):
         return self.__space.spaceLoading() if self.__space is not None else False
 

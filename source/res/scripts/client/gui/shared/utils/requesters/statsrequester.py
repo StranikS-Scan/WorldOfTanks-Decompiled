@@ -1,23 +1,23 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/utils/requesters/StatsRequester.py
-from collections import namedtuple
 import json
-import typing
+from collections import namedtuple
+from copy import deepcopy
+from typing import TYPE_CHECKING
 import BigWorld
-from constants import CURRENT_GAME_ID
 from account_helpers.premium_info import PremiumInfo
 from adisp import adisp_async
+from constants import CURRENT_GAME_ID, MIN_VEHICLE_LEVEL, SPA_ATTRS
 from gui.shared.ext_money import ExtendedMoney
-from gui.shared.money import Money, Currency, DynamicMoney
+from gui.shared.money import Currency, DynamicMoney, Money
 from gui.shared.utils.requesters.abstract import AbstractSyncDataRequester
-from helpers import time_utils, dependency
-from constants import SPA_ATTRS, MIN_VEHICLE_LEVEL
+from helpers import dependency, time_utils
+from nation_change.nation_change_helpers import NationalGroupDataAccumulator
 from skeletons.gui.game_control import IWalletController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared.utils.requesters import IStatsRequester
-from nation_change.nation_change_helpers import NationalGroupDataAccumulator
-if typing.TYPE_CHECKING:
-    from typing import List, Tuple
+if TYPE_CHECKING:
+    from typing import Dict, Set, Tuple
 _ADDITIONAL_XP_DATA_KEY = '_additionalXPCache'
 _ControllableXPData = namedtuple('_ControllableXPData', ('vehicleID', 'bonusType', 'extraXP', 'extraFreeXP', 'extraTmenXP', 'isXPToTMan'))
 
@@ -192,7 +192,7 @@ class StatsRequester(AbstractSyncDataRequester, IStatsRequester):
 
     @property
     def todayPlayHours(self):
-        return self.dailyPlayHours[0]
+        return 0 if not self.dailyPlayHours else self.dailyPlayHours[-1]
 
     @property
     def playLimits(self):
@@ -330,8 +330,7 @@ class StatsRequester(AbstractSyncDataRequester, IStatsRequester):
         return self.getCacheValue('isEmergencyModeEnabled', False)
 
     def getMapsBlackList(self):
-        blackList = self.getCacheValue('preferredMaps', {}).get('blackList', ())
-        return blackList
+        return deepcopy(self.getCacheValue('preferredMaps', {}).get('blackList', {}))
 
     def getMaxResearchedLevelByNations(self):
         return self.getCacheValue('maxResearchedLevelByNation', {})

@@ -1,254 +1,755 @@
 <turrets.xml>
-  <ids>
-    <PzIV_Standart>	0	</PzIV_Standart>
-    <Hummel_0>	2	</Hummel_0>
-    <PzVI_Anfangsturm>	3	</PzVI_Anfangsturm>
-    <PzVI_Porsche_Turm>	4	</PzVI_Porsche_Turm>
-    <Pz35t_Standardturm>	5	</Pz35t_Standardturm>
-    <Pz35t_Verstaerktturm>	6	</Pz35t_Verstaerktturm>
-    <StuGIII_0>	7	</StuGIII_0>
-    <Pz-V_Standardturm>	8	</Pz-V_Standardturm>
-    <Pz-V_Shmallturm>	9	</Pz-V_Shmallturm>
-    <Hetzer_0>	10	</Hetzer_0>
-    <JagdPzIV_0>	11	</JagdPzIV_0>
-    <PzII_Standartturm>	12	</PzII_Standartturm>
-    <PzII_Luchsturm>	13	</PzII_Luchsturm>
-    <VK3601H_Standardturm>	14	</VK3601H_Standardturm>
-    <VK3601H_Grosseturm>	15	</VK3601H_Grosseturm>
-    <VK3001H_Standardturm>	16	</VK3001H_Standardturm>
-    <VK3001H_Eliteturm>	17	</VK3001H_Eliteturm>
-    <T_Bison>	18	</T_Bison>
-    <Swedish_Bofors>	19	</Swedish_Bofors>
-    <LT-40_turm>	21	</LT-40_turm>
-    <Pz38t_Ausf_G_turm>	22	</Pz38t_Ausf_G_turm>
-    <Verbesserteturm>	20	</Verbesserteturm>
-    <PanzerJager>	23	</PanzerJager>
-    <JgPzPanther>	24	</JgPzPanther>
-    <VK3002DB_turm>	25	</VK3002DB_turm>
-    <VK3002DB_Shmallturm>	26	</VK3002DB_Shmallturm>
-    <PzIII_Ausf_E>	27	</PzIII_Ausf_E>
-    <PzIII_Ausf_M>	28	</PzIII_Ausf_M>
-    <SturmpanzerII>	29	</SturmpanzerII>
-    <PzIII_Ausf_A>	30	</PzIII_Ausf_A>
-    <PzIII_Ausf_C>	31	</PzIII_Ausf_C>
-    <PzVIB_Porsche_Turm>	32	</PzVIB_Porsche_Turm>
-    <PzVIB_Heinschel_Turm>	33	</PzVIB_Heinschel_Turm>
-    <Leopardturm>	34	</Leopardturm>
-    <Grille_mod_1>	35	</Grille_mod_1>
-    <Wespeturm>	37	</Wespeturm>
-    <PzIIL_Luchsturm>	38	</PzIIL_Luchsturm>
-    <PzIIL_Grosseturm>	39	</PzIIL_Grosseturm>
-    <PzIVturm>	40	</PzIVturm>
-    <PzIIturm_ausf_J>	41	</PzIIturm_ausf_J>
-    <PzIV_ausf_F>	42	</PzIV_ausf_F>
-    <PzIV_ausf_H>	43	</PzIV_ausf_H>
-    <Marderturm>	44	</Marderturm>
-    <Mausturm>	45	</Mausturm>
-    <Somuaturm>	46	</Somuaturm>
-    <B2_740Fturm>	47	</B2_740Fturm>
-    <VK3001P_Krupp_turm>	48	</VK3001P_Krupp_turm>
-    <VK3001P_Porsche_turm>	49	</VK3001P_Porsche_turm>
-    <VK4502P_Standardturm>	50	</VK4502P_Standardturm>
-    <VK4502P_Eliteturm>	51	</VK4502P_Eliteturm>
-    <H39turm>	52	</H39turm>
-    <Ferdinandturm>	54	</Ferdinandturm>
-    <JagdTiger_turm>	59	</JagdTiger_turm>
-    <PzIVturm_Ausf_Alfa>	60	</PzIVturm_Ausf_Alfa>
-    <Turret_1_Pz38_NA>	61	</Turret_1_Pz38_NA>
-    <Turret_2_Pz38_NA>	62	</Turret_2_Pz38_NA>
-    <Turret_1_Panther_II>	63	</Turret_1_Panther_II>
-    <Turret_2_Panther_II>	64	</Turret_2_Panther_II>
-    <Turret_1_G_Tiger>	65	</Turret_1_G_Tiger>
-    <Turret_1_G_Panther>	66	</Turret_1_G_Panther>
-    <Turret_1_Lowe>	67	</Turret_1_Lowe>
-    <Turret_1_G_E>	68	</Turret_1_G_E>
-    <Turret_1_T-25>	69	</Turret_1_T-25>
-    <Turret_1_T-15>	70	</Turret_1_T-15>
-    <Turret_2_E-100>	72	</Turret_2_E-100>
-    <Turret_1_E-75>	73	</Turret_1_E-75>
-    <Turret_2_E-75>	74	</Turret_2_E-75>
-    <Turret_1_VK2801>	75	</Turret_1_VK2801>
-    <Turret_2_VK2801>	76	</Turret_2_VK2801>
-    <Turret_1_E-50>	77	</Turret_1_E-50>
-    <Turret_2_E-50>	78	</Turret_2_E-50>
-    <Turret_1_VK4502A>	79	</Turret_1_VK4502A>
-    <Turret_2_VK4502A>	80	</Turret_2_VK4502A>
-    <Turret_1_PzVI_Tiger_P>	81	</Turret_1_PzVI_Tiger_P>
-    <Turret_2_PzVI_Tiger_P>	82	</Turret_2_PzVI_Tiger_P>
-    <Turret_1_PzIV_Hydro>	83	</Turret_1_PzIV_Hydro>
-    <Turret_1_JagdTiger_SdKfz_185>	84	</Turret_1_JagdTiger_SdKfz_185>
-    <Turret_1_Sturer_Emil>	85	</Turret_1_Sturer_Emil>
-    <Turret_1_Marder_III>	86	</Turret_1_Marder_III>
-    <Turret_1_JagdPantherII>	87	</Turret_1_JagdPantherII>
-    <Turret_1_Nashorn>	88	</Turret_1_Nashorn>
-    <Turret_1_JagdPz_E100>	89	</Turret_1_JagdPz_E100>
-    <Turret_1_E-25>	90	</Turret_1_E-25>
-    <Turret_1_DickerMax>	96	</Turret_1_DickerMax>
-    <PzIV_Schmalturm_A>	97	</PzIV_Schmalturm_A>
-    <Turret_1_E50_Ausf_M>	98	</Turret_1_E50_Ausf_M>
-    <Turret_1_Panther_M10>	99	</Turret_1_Panther_M10>
-    <PzIII_Ausf_E_T>	100	</PzIII_Ausf_E_T>
-    <PzVIB_Porsche_Turm_T>	101	</PzVIB_Porsche_Turm_T>
-    <Pz-V_Standardturm_T>	102	</Pz-V_Standardturm_T>
-    <Turret_1_PzI_ausf_C>	103	</Turret_1_PzI_ausf_C>
-    <Turret_2_PzI_ausf_C>	104	</Turret_2_PzI_ausf_C>
-    <Turret_1_PzI>	105	</Turret_1_PzI>
-    <Turret_2_PzI>	106	</Turret_2_PzI>
-    <Turret_1_Pz_II_AusfG>	107	</Turret_1_Pz_II_AusfG>
-    <Turret_2_Pz_II_AusfG>	108	</Turret_2_Pz_II_AusfG>
-    <Turret_1_DW_II>	109	</Turret_1_DW_II>
-    <Turret_2_DW_II>	110	</Turret_2_DW_II>
-    <Turret_1_VK2001DB>	111	</Turret_1_VK2001DB>
-    <Turret_2_VK2001DB>	112	</Turret_2_VK2001DB>
-    <Turret_VK7201>	113	</Turret_VK7201>
-    <Turret_2_Indien_Panzer>	115	</Turret_2_Indien_Panzer>
-    <Turret_1_VK3002DB_V1>	116	</Turret_1_VK3002DB_V1>
-    <Turret_2_VK3002DB_V1>	117	</Turret_2_VK3002DB_V1>
-    <Turret_1_Auf_Panther>	118	</Turret_1_Auf_Panther>
-    <Turret_1_Leopard1>	120	</Turret_1_Leopard1>
-    <Turret_1_Pro_Ag_A>	121	</Turret_1_Pro_Ag_A>
-    <Turret_2_Pro_Ag_A>	122	</Turret_2_Pro_Ag_A>
-    <Turret_1_GW_Mk_IVe>	123	</Turret_1_GW_Mk_IVe>
-    <Turret_1_GW_Elefant>	124	</Turret_1_GW_Elefant>
-    <Turret_1_Pz_Sfl_IVb>	125	</Turret_1_Pz_Sfl_IVb>
-    <Turret_1_VK3002M>	127	</Turret_1_VK3002M>
-    <Turret_2_VK3002M>	128	</Turret_2_VK3002M>
-    <Turret_1_Pz_Sfl_IVc>	129	</Turret_1_Pz_Sfl_IVc>
-    <Turret_2_Pz_Sfl_IVc>	130	</Turret_2_Pz_Sfl_IVc>
-    <Turret_1_Waffentrager_IV>	131	</Turret_1_Waffentrager_IV>
-    <Turret_2_Waffentrager_IV>	132	</Turret_2_Waffentrager_IV>
-    <Turret_1_RhB_Waffentrager>	133	</Turret_1_RhB_Waffentrager>
-    <Turret_1_Waffentrager_E100>	134	</Turret_1_Waffentrager_E100>
-    <Turret_1_Pz_IV_AusfA>	135	</Turret_1_Pz_IV_AusfA>
-    <Turret_2_Pz_IV_AusfA>	136	</Turret_2_Pz_IV_AusfA>
-    <Turret_1_Pz_IV_AusfD>	137	</Turret_1_Pz_IV_AusfD>
-    <Turret_2_Pz_IV_AusfD>	138	</Turret_2_Pz_IV_AusfD>
-    <Turret_1_G100_Gtraktor_Krupp>	141	</Turret_1_G100_Gtraktor_Krupp>
-    <Turret_1_G101_StuG_III>	144	</Turret_1_G101_StuG_III>
-    <Turret_1_Pz_IV_AusfH>	146	</Turret_1_Pz_IV_AusfH>
-    <Turret_2_Pz_IV_AusfH>	147	</Turret_2_Pz_IV_AusfH>
-    <Turret_1_G103_RU_251>	149	</Turret_1_G103_RU_251>
-    <Turret_1_Env_Artillery>	150	</Turret_1_Env_Artillery>
-    <Turret_1_G104_Stug_IV>	151	</Turret_1_G104_Stug_IV>
-    <Turret_1_G106_PzKpfwPanther_AusfF>	152	</Turret_1_G106_PzKpfwPanther_AusfF>
-    <Turret_1_G108_PzKpfwII_AusfD>	153	</Turret_1_G108_PzKpfwII_AusfD>
-    <Turret_1_G105_T-55_NVA_DDR>	154	</Turret_1_G105_T-55_NVA_DDR>
-    <Turret_1_G04_PzVI_Tiger_IA>	155	</Turret_1_G04_PzVI_Tiger_IA>
-    <Turret_1_G107_PzKpfwIII_AusfK>	156	</Turret_1_G107_PzKpfwIII_AusfK>
-    <Turret_1_G110_Typ_205>	157	</Turret_1_G110_Typ_205>
-    <Turret_1_G109_Steyr_WT>	158	</Turret_1_G109_Steyr_WT>
-    <Turret_1_G112_KanonenJagdPanzer>	159	</Turret_1_G112_KanonenJagdPanzer>
-    <Turret_1_G58_VK4502P>	160	</Turret_1_G58_VK4502P>
-    <Hummel_1>	161	</Hummel_1>
-    <Turret_1_G113_SP_I_C>	162	</Turret_1_G113_SP_I_C>
-    <Turret_2_G113_SP_I_C>	163	</Turret_2_G113_SP_I_C>
-    <Turret_1_G114_Skorpian>	164	</Turret_1_G114_Skorpian>
-    <Turret_1_G115_Typ_205_4_Jun>	165	</Turret_1_G115_Typ_205_4_Jun>
-    <Turret_1_G118_VK4503>	170	</Turret_1_G118_VK4503>
-    <Turret_1_G116_Turan_III_prot>	171	</Turret_1_G116_Turan_III_prot>
-    <Turret_1_G117_Toldi_III>	172	</Turret_1_G117_Toldi_III>
-    <Turret_1_G119_Panzer58>	173	</Turret_1_G119_Panzer58>
-    <Turret_1_G121_Grille_15_L63>	174	</Turret_1_G121_Grille_15_L63>
-    <Turret_1_G120_M41_90>	175	</Turret_1_G120_M41_90>
-    <Turret_1_G119_Pz58_Mutz>	176	</Turret_1_G119_Pz58_Mutz>
-    <Turret_1_G120_M41_90_GrandFinal>	177	</Turret_1_G120_M41_90_GrandFinal>
-    <Turret_1_G122_VK6501H>	178	</Turret_1_G122_VK6501H>
-    <PzIVturm_CN>	179	</PzIVturm_CN>
-    <PzIVturm_Ausf_Alfa_CN>	180	</PzIVturm_Ausf_Alfa_CN>
-    <Turret_1_G114_Rheinmetall_Skorpian>	181	</Turret_1_G114_Rheinmetall_Skorpian>
-    <Turret_1_G134_PzKpfw_VII>	182	</Turret_1_G134_PzKpfw_VII>
-    <Turret_1_G115_Typ_205B>	183	</Turret_1_G115_Typ_205B>
-    <Turret_1_G119_Panzer58_BF>	184	</Turret_1_G119_Panzer58_BF>
-    <Turret_1_G125_Spz_57_Rh>	185	</Turret_1_G125_Spz_57_Rh>
-    <Turret_1_G16_PzVIB_Tiger_II_F>	186	</Turret_1_G16_PzVIB_Tiger_II_F>
-    <Turret_1_G126_HWK_12>	187	</Turret_1_G126_HWK_12>
-    <Turret_2_G126_HWK_12>	188	</Turret_2_G126_HWK_12>
-    <Turret_1_G44_JagdTigerH>	189	</Turret_1_G44_JagdTigerH>
-    <Turret_1_G136_Tiger_131>	190	</Turret_1_G136_Tiger_131>
-    <Turret_1_G137_PzVI_Tiger_217>	192	</Turret_1_G137_PzVI_Tiger_217>
-    <Turret_1_G138_VK168_02>	193	</Turret_1_G138_VK168_02>
-    <Turret_1_G98_Waffentrager_E100_P>	194	</Turret_1_G98_Waffentrager_E100_P>
-    <Turret_1_G112_KanonenJagdPanzer_105>	195	</Turret_1_G112_KanonenJagdPanzer_105>
-    <Turret_1_G138_VK168_02_Mauerbrecher>	196	</Turret_1_G138_VK168_02_Mauerbrecher>
-    <Turret_1_G85_Aufklarungspanzer_V>	197	</Turret_1_G85_Aufklarungspanzer_V>
-    <Turret_1_G139_MKA>	198	</Turret_1_G139_MKA>
-    <Turret_1_G140_HWK_30>	199	</Turret_1_G140_HWK_30>
-    <Turret_1_Lowe_FL>	200	</Turret_1_Lowe_FL>
-    <Turret_1_G119_Panzer58_FL>	201	</Turret_1_G119_Panzer58_FL>
-    <Turret_1_G141_VK7501K>	202	</Turret_1_G141_VK7501K>
-    <Turret_1_G144_Kpz_50t>	203	</Turret_1_G144_Kpz_50t>
-    <Turret_1_G143_E75_TS>	204	</Turret_1_G143_E75_TS>
-    <Turret_1_G142_M48RPz>	205	</Turret_1_G142_M48RPz>
-    <Turret_1_G147_Kunze_Panzer>	206	</Turret_1_G147_Kunze_Panzer>
-    <Turret_1_Leopard1_bob>	207	</Turret_1_Leopard1_bob>
-    <Turret_1_G151_Pz_Sfl_IC>	208	</Turret_1_G151_Pz_Sfl_IC>
-    <Turret_1_G154_Kpz_07_RH>	209	</Turret_1_G154_Kpz_07_RH>
-    <Turret_1_G81_Pz_IV_AusfH_GuP>	210	</Turret_1_G81_Pz_IV_AusfH_GuP>
-    <Turret_1_G158_VK2801_105_SPXXI>	211	</Turret_1_G158_VK2801_105_SPXXI>
-    <Turret_1_G160_Pz_Kpfw_35_R_mit_T_26_Turm>	212	</Turret_1_G160_Pz_Kpfw_35_R_mit_T_26_Turm>
-    <Turret_1_G161_Pz_Kpfw_M15_38_t>	213	</Turret_1_G161_Pz_Kpfw_M15_38_t>
-    <Turret_1_G159_KPZ_3_Project_07_HK>	214	</Turret_1_G159_KPZ_3_Project_07_HK>
-    <Turret_1_G98_Waffentrager_E100_WO>	215	</Turret_1_G98_Waffentrager_E100_WO>
-    <Turret_1_G163_Pz_Kpfw_KW_Ir_mit_75mm_kwk40>	216	</Turret_1_G163_Pz_Kpfw_KW_Ir_mit_75mm_kwk40>
-    <Turret_1_G162_Project_Kpz_07P_E>	217	</Turret_1_G162_Project_Kpz_07P_E>
-    <Turret_1_G167_Tiger_Maus_120t>	218	</Turret_1_G167_Tiger_Maus_120t>
-    <Turret_1_G166_LKpz_70_K>	219	</Turret_1_G166_LKpz_70_K>
-    <Turret_1_G164_Kpz_Pr_68_P>	220	</Turret_1_G164_Kpz_Pr_68_P>
-    <Turret_1_G168_KJpz_T_III>	221	</Turret_1_G168_KJpz_T_III>
-    <Turret_1_G165_Erich_Konzept_I>	222	</Turret_1_G165_Erich_Konzept_I>
-    <VK3001P_Porsche_turm_SH>	345	</VK3001P_Porsche_turm_SH>
-    <Turret_3_E-75_TS_SH>	346	</Turret_3_E-75_TS_SH>
-    <Turret_2_E-50_SH>	347	</Turret_2_E-50_SH>
-    <Turret_1_G00_Bomber_SH>	349	</Turret_1_G00_Bomber_SH>
-    <Turret_1_E50_Ausf_M_7x7>	401	</Turret_1_E50_Ausf_M_7x7>
-    <Turret_1_G25_PzII_Luchs_SHXXI_B>	350	</Turret_1_G25_PzII_Luchs_SHXXI_B>
-    <PzIV_Schmalturm_A_SH_bot>	351	</PzIV_Schmalturm_A_SH_bot>
-    <Turret_1_G04_PzVI_Tiger_I_SHXXI_B>	352	</Turret_1_G04_PzVI_Tiger_I_SHXXI_B>
-    <JagdTiger_turm_FL>	501	</JagdTiger_turm_FL>
-    <Turret_2_E-50_FL>	502	</Turret_2_E-50_FL>
-    <Ferdinandturm_FL>	504	</Ferdinandturm_FL>
-    <PzVIB_Heinschel_Turm_FL>	505	</PzVIB_Heinschel_Turm_FL>
-    <Turret_2_Panther_II_FL>	506	</Turret_2_Panther_II_FL>
-    <Turret_2_G126_HWK_12_FL>	507	</Turret_2_G126_HWK_12_FL>
-    <PzVI_Porsche_Turm_FL>	31003	</PzVI_Porsche_Turm_FL>
-    <Turret_2_E-75_FL>	31004	</Turret_2_E-75_FL>
-    <Turret_1_G134_PzKpfw_VII_7x7>	31002	</Turret_1_G134_PzKpfw_VII_7x7>
-    <VK3601H_Grosseturm_C>	31001	</VK3601H_Grosseturm_C>
-    <Turret_1_G171_E77>	31005	</Turret_1_G171_E77>
-    <Turret_1_G171_E77_02>	31006	</Turret_1_G171_E77_02>
-    <Turret_1_G182_Mausekonig>	31007	</Turret_1_G182_Mausekonig>
-    <Turret_1_G178_Sturmtiger_V1>	31008	</Turret_1_G178_Sturmtiger_V1>
-    <Turret_1_G184_EisBaer>	31009	</Turret_1_G184_EisBaer>
-    <Turret_2_G189_E100_02>	31010	</Turret_2_G189_E100_02>
-    <Turret_1_G181_StuG_Maus_17cm>	31011	</Turret_1_G181_StuG_Maus_17cm>
-    <Turret_1_G193_Aufgabe_57>	31012	</Turret_1_G193_Aufgabe_57>
-    <Turret_1_G196_E_75_Ausf_B_Doppel>	31013	</Turret_1_G196_E_75_Ausf_B_Doppel>
-    <Turret_1_G194_E_50_GT_Alkett_Prod>	31014	</Turret_1_G194_E_50_GT_Alkett_Prod>
-    <Turret_1_G1105_T-55_NVA_DDR_T>	35001	</Turret_1_G1105_T-55_NVA_DDR_T>
-    <Turret_1_JagdTiger_SdKfz_185_IGR>	60001	</Turret_1_JagdTiger_SdKfz_185_IGR>
-    <Turret_2_Panther_II_IGR>	60002	</Turret_2_Panther_II_IGR>
-    <PzVIB_Heinschel_Turm_IGR>	60003	</PzVIB_Heinschel_Turm_IGR>
-    <PzVI_Porsche_Turm_IGR>	60004	</PzVI_Porsche_Turm_IGR>
-    <StuGIII_0_IGR>	60005	</StuGIII_0_IGR>
-    <Turret_1_E-25_IGR>	60006	</Turret_1_E-25_IGR>
-    <Pz-V_Shmallturm_IGR>	60007	</Pz-V_Shmallturm_IGR>
-    <Ferdinandturm_IGR>	60008	</Ferdinandturm_IGR>
-    <Mausturm_IGR>	60009	</Mausturm_IGR>
-    <Turret_1_Pz_IV_AusfD_bootcamp>	64004	</Turret_1_Pz_IV_AusfD_bootcamp>
-    <Turret_2_DW_II_MapsTraining_Dummy_HT_1>	36	</Turret_2_DW_II_MapsTraining_Dummy_HT_1>
-    <Hetzer_0_MapsTraining_Dummy_ATSPG_1>	53	</Hetzer_0_MapsTraining_Dummy_ATSPG_1>
-    <PzVI_Porsche_Turm_MapsTraining_Player_HT_2>	55	</PzVI_Porsche_Turm_MapsTraining_Player_HT_2>
-    <Turret_1_Nashorn_MapsTraining_Dummy_ATSPG_2>	56	</Turret_1_Nashorn_MapsTraining_Dummy_ATSPG_2>
-    <Hummel_1_NewOnBoarding>	64025	</Hummel_1_NewOnBoarding>
-    <PzIII_Ausf_M_NewOnBoarding>	64026	</PzIII_Ausf_M_NewOnBoarding>
-    <Turret_2_Pz_IV_AusfH_NewOnBoarding>	64027	</Turret_2_Pz_IV_AusfH_NewOnBoarding>
-    <VK3001P_Krupp_turm_NewOnBoarding>	64028	</VK3001P_Krupp_turm_NewOnBoarding>
-    <PzVIB_Porsche_Turm_NewOnBoarding>	64031	</PzVIB_Porsche_Turm_NewOnBoarding>
-    <Turret_2_PzVI_Tiger_P_NewOnBoarding>	64032	</Turret_2_PzVI_Tiger_P_NewOnBoarding>
-    <JgPzPanther_NewOnBoarding>	64034	</JgPzPanther_NewOnBoarding>
-    <Turret_1_G00_Startgestell>	64035	</Turret_1_G00_Startgestell>
-    <Turret_1_G00_Artilleriebunker>	64036	</Turret_1_G00_Artilleriebunker>
-    <Turret_1_G00_Feuerbunker>	64037	</Turret_1_G00_Feuerbunker>
-  </ids>
-  <shared></shared>
+  <xmlns:xmlref>	http://bwt/xmlref	</xmlns:xmlref>
+  <shared>
+    <B2_740Fturm>
+      <id>	47	</id>
+    </B2_740Fturm>
+    <Ferdinandturm>
+      <id>	54	</id>
+    </Ferdinandturm>
+    <Ferdinandturm_FL>
+      <id>	504	</id>
+    </Ferdinandturm_FL>
+    <Ferdinandturm_IGR>
+      <id>	60008	</id>
+    </Ferdinandturm_IGR>
+    <Grille_mod_1>
+      <id>	35	</id>
+    </Grille_mod_1>
+    <H39turm>
+      <id>	52	</id>
+    </H39turm>
+    <Hetzer_0>
+      <id>	10	</id>
+    </Hetzer_0>
+    <Hetzer_0_MapsTraining_Dummy_ATSPG_1>
+      <id>	53	</id>
+    </Hetzer_0_MapsTraining_Dummy_ATSPG_1>
+    <Hummel_0>
+      <id>	2	</id>
+    </Hummel_0>
+    <Hummel_1>
+      <id>	161	</id>
+    </Hummel_1>
+    <Hummel_1_NewOnBoarding>
+      <id>	64025	</id>
+    </Hummel_1_NewOnBoarding>
+    <JagdPzIV_0>
+      <id>	11	</id>
+    </JagdPzIV_0>
+    <JagdTiger_turm>
+      <id>	59	</id>
+    </JagdTiger_turm>
+    <JagdTiger_turm_FL>
+      <id>	501	</id>
+    </JagdTiger_turm_FL>
+    <JgPzPanther>
+      <id>	24	</id>
+    </JgPzPanther>
+    <JgPzPanther_NewOnBoarding>
+      <id>	64034	</id>
+    </JgPzPanther_NewOnBoarding>
+    <LT-40_turm>
+      <id>	21	</id>
+    </LT-40_turm>
+    <Leopardturm>
+      <id>	34	</id>
+    </Leopardturm>
+    <Marderturm>
+      <id>	44	</id>
+    </Marderturm>
+    <Mausturm>
+      <id>	45	</id>
+    </Mausturm>
+    <Mausturm_IGR>
+      <id>	60009	</id>
+    </Mausturm_IGR>
+    <PanzerJager>
+      <id>	23	</id>
+    </PanzerJager>
+    <Pz-V_Shmallturm>
+      <id>	9	</id>
+    </Pz-V_Shmallturm>
+    <Pz-V_Shmallturm_IGR>
+      <id>	60007	</id>
+    </Pz-V_Shmallturm_IGR>
+    <Pz-V_Standardturm>
+      <id>	8	</id>
+    </Pz-V_Standardturm>
+    <Pz-V_Standardturm_T>
+      <id>	102	</id>
+    </Pz-V_Standardturm_T>
+    <Pz35t_Standardturm>
+      <id>	5	</id>
+    </Pz35t_Standardturm>
+    <Pz35t_Verstaerktturm>
+      <id>	6	</id>
+    </Pz35t_Verstaerktturm>
+    <Pz38t_Ausf_G_turm>
+      <id>	22	</id>
+    </Pz38t_Ausf_G_turm>
+    <PzIII_Ausf_A>
+      <id>	30	</id>
+    </PzIII_Ausf_A>
+    <PzIII_Ausf_C>
+      <id>	31	</id>
+    </PzIII_Ausf_C>
+    <PzIII_Ausf_E>
+      <id>	27	</id>
+    </PzIII_Ausf_E>
+    <PzIII_Ausf_E_T>
+      <id>	100	</id>
+    </PzIII_Ausf_E_T>
+    <PzIII_Ausf_M>
+      <id>	28	</id>
+    </PzIII_Ausf_M>
+    <PzIII_Ausf_M_NewOnBoarding>
+      <id>	64026	</id>
+    </PzIII_Ausf_M_NewOnBoarding>
+    <PzIIL_Grosseturm>
+      <id>	39	</id>
+    </PzIIL_Grosseturm>
+    <PzIIL_Luchsturm>
+      <id>	38	</id>
+    </PzIIL_Luchsturm>
+    <PzII_Luchsturm>
+      <id>	13	</id>
+    </PzII_Luchsturm>
+    <PzII_Standartturm>
+      <id>	12	</id>
+    </PzII_Standartturm>
+    <PzIIturm_ausf_J>
+      <id>	41	</id>
+    </PzIIturm_ausf_J>
+    <PzIV_Schmalturm_A>
+      <id>	97	</id>
+    </PzIV_Schmalturm_A>
+    <PzIV_Schmalturm_A_SH_bot>
+      <id>	351	</id>
+    </PzIV_Schmalturm_A_SH_bot>
+    <PzIV_Standart>
+      <id>	0	</id>
+    </PzIV_Standart>
+    <PzIV_ausf_F>
+      <id>	42	</id>
+    </PzIV_ausf_F>
+    <PzIV_ausf_H>
+      <id>	43	</id>
+    </PzIV_ausf_H>
+    <PzIVturm>
+      <id>	40	</id>
+    </PzIVturm>
+    <PzIVturm_Ausf_Alfa>
+      <id>	60	</id>
+    </PzIVturm_Ausf_Alfa>
+    <PzIVturm_Ausf_Alfa_CN>
+      <id>	180	</id>
+    </PzIVturm_Ausf_Alfa_CN>
+    <PzIVturm_CN>
+      <id>	179	</id>
+    </PzIVturm_CN>
+    <PzVIB_Heinschel_Turm>
+      <id>	33	</id>
+    </PzVIB_Heinschel_Turm>
+    <PzVIB_Heinschel_Turm_FL>
+      <id>	505	</id>
+    </PzVIB_Heinschel_Turm_FL>
+    <PzVIB_Heinschel_Turm_IGR>
+      <id>	60003	</id>
+    </PzVIB_Heinschel_Turm_IGR>
+    <PzVIB_Porsche_Turm>
+      <id>	32	</id>
+    </PzVIB_Porsche_Turm>
+    <PzVIB_Porsche_Turm_NewOnBoarding>
+      <id>	64031	</id>
+    </PzVIB_Porsche_Turm_NewOnBoarding>
+    <PzVIB_Porsche_Turm_T>
+      <id>	101	</id>
+    </PzVIB_Porsche_Turm_T>
+    <PzVI_Anfangsturm>
+      <id>	3	</id>
+    </PzVI_Anfangsturm>
+    <PzVI_Porsche_Turm>
+      <id>	4	</id>
+    </PzVI_Porsche_Turm>
+    <PzVI_Porsche_Turm_FL>
+      <id>	31003	</id>
+    </PzVI_Porsche_Turm_FL>
+    <PzVI_Porsche_Turm_IGR>
+      <id>	60004	</id>
+    </PzVI_Porsche_Turm_IGR>
+    <PzVI_Porsche_Turm_MapsTraining_Player_HT_2>
+      <id>	55	</id>
+    </PzVI_Porsche_Turm_MapsTraining_Player_HT_2>
+    <Somuaturm>
+      <id>	46	</id>
+    </Somuaturm>
+    <StuGIII_0>
+      <id>	7	</id>
+    </StuGIII_0>
+    <StuGIII_0_IGR>
+      <id>	60005	</id>
+    </StuGIII_0_IGR>
+    <SturmpanzerII>
+      <id>	29	</id>
+    </SturmpanzerII>
+    <Swedish_Bofors>
+      <id>	19	</id>
+    </Swedish_Bofors>
+    <T_Bison>
+      <id>	18	</id>
+    </T_Bison>
+    <Turret_1_Auf_Panther>
+      <id>	118	</id>
+    </Turret_1_Auf_Panther>
+    <Turret_1_DW_II>
+      <id>	109	</id>
+    </Turret_1_DW_II>
+    <Turret_1_DickerMax>
+      <id>	96	</id>
+    </Turret_1_DickerMax>
+    <Turret_1_E-25>
+      <id>	90	</id>
+    </Turret_1_E-25>
+    <Turret_1_E-25_IGR>
+      <id>	60006	</id>
+    </Turret_1_E-25_IGR>
+    <Turret_1_E-50>
+      <id>	77	</id>
+    </Turret_1_E-50>
+    <Turret_1_E-75>
+      <id>	73	</id>
+    </Turret_1_E-75>
+    <Turret_1_E50_Ausf_M>
+      <id>	98	</id>
+    </Turret_1_E50_Ausf_M>
+    <Turret_1_E50_Ausf_M_7x7>
+      <id>	401	</id>
+    </Turret_1_E50_Ausf_M_7x7>
+    <Turret_1_Env_Artillery>
+      <id>	150	</id>
+    </Turret_1_Env_Artillery>
+    <Turret_1_G00_Artilleriebunker>
+      <id>	64036	</id>
+    </Turret_1_G00_Artilleriebunker>
+    <Turret_1_G00_Bomber_SH>
+      <id>	349	</id>
+    </Turret_1_G00_Bomber_SH>
+    <Turret_1_G00_Feuerbunker>
+      <id>	64037	</id>
+    </Turret_1_G00_Feuerbunker>
+    <Turret_1_G00_Startgestell>
+      <id>	64035	</id>
+    </Turret_1_G00_Startgestell>
+    <Turret_1_G04_PzVI_Tiger_IA>
+      <id>	155	</id>
+    </Turret_1_G04_PzVI_Tiger_IA>
+    <Turret_1_G04_PzVI_Tiger_I_SHXXI_B>
+      <id>	352	</id>
+    </Turret_1_G04_PzVI_Tiger_I_SHXXI_B>
+    <Turret_1_G100_Gtraktor_Krupp>
+      <id>	141	</id>
+    </Turret_1_G100_Gtraktor_Krupp>
+    <Turret_1_G101_StuG_III>
+      <id>	144	</id>
+    </Turret_1_G101_StuG_III>
+    <Turret_1_G103_RU_251>
+      <id>	149	</id>
+    </Turret_1_G103_RU_251>
+    <Turret_1_G104_Stug_IV>
+      <id>	151	</id>
+    </Turret_1_G104_Stug_IV>
+    <Turret_1_G105_T-55_NVA_DDR>
+      <id>	154	</id>
+    </Turret_1_G105_T-55_NVA_DDR>
+    <Turret_1_G106_PzKpfwPanther_AusfF>
+      <id>	152	</id>
+    </Turret_1_G106_PzKpfwPanther_AusfF>
+    <Turret_1_G107_PzKpfwIII_AusfK>
+      <id>	156	</id>
+    </Turret_1_G107_PzKpfwIII_AusfK>
+    <Turret_1_G108_PzKpfwII_AusfD>
+      <id>	153	</id>
+    </Turret_1_G108_PzKpfwII_AusfD>
+    <Turret_1_G109_Steyr_WT>
+      <id>	158	</id>
+    </Turret_1_G109_Steyr_WT>
+    <Turret_1_G1105_T-55_NVA_DDR_T>
+      <id>	35001	</id>
+    </Turret_1_G1105_T-55_NVA_DDR_T>
+    <Turret_1_G110_Typ_205>
+      <id>	157	</id>
+    </Turret_1_G110_Typ_205>
+    <Turret_1_G112_KanonenJagdPanzer>
+      <id>	159	</id>
+    </Turret_1_G112_KanonenJagdPanzer>
+    <Turret_1_G112_KanonenJagdPanzer_105>
+      <id>	195	</id>
+    </Turret_1_G112_KanonenJagdPanzer_105>
+    <Turret_1_G113_SP_I_C>
+      <id>	162	</id>
+    </Turret_1_G113_SP_I_C>
+    <Turret_1_G114_Rheinmetall_Skorpian>
+      <id>	181	</id>
+    </Turret_1_G114_Rheinmetall_Skorpian>
+    <Turret_1_G114_Skorpian>
+      <id>	164	</id>
+    </Turret_1_G114_Skorpian>
+    <Turret_1_G115_Typ_205B>
+      <id>	183	</id>
+    </Turret_1_G115_Typ_205B>
+    <Turret_1_G115_Typ_205_4_Jun>
+      <id>	165	</id>
+    </Turret_1_G115_Typ_205_4_Jun>
+    <Turret_1_G116_Turan_III_prot>
+      <id>	171	</id>
+    </Turret_1_G116_Turan_III_prot>
+    <Turret_1_G117_Toldi_III>
+      <id>	172	</id>
+    </Turret_1_G117_Toldi_III>
+    <Turret_1_G118_VK4503>
+      <id>	170	</id>
+    </Turret_1_G118_VK4503>
+    <Turret_1_G119_Panzer58>
+      <id>	173	</id>
+    </Turret_1_G119_Panzer58>
+    <Turret_1_G119_Panzer58_BF>
+      <id>	184	</id>
+    </Turret_1_G119_Panzer58_BF>
+    <Turret_1_G119_Panzer58_FL>
+      <id>	201	</id>
+    </Turret_1_G119_Panzer58_FL>
+    <Turret_1_G119_Pz58_Mutz>
+      <id>	176	</id>
+    </Turret_1_G119_Pz58_Mutz>
+    <Turret_1_G120_M41_90>
+      <id>	175	</id>
+    </Turret_1_G120_M41_90>
+    <Turret_1_G120_M41_90_GrandFinal>
+      <id>	177	</id>
+    </Turret_1_G120_M41_90_GrandFinal>
+    <Turret_1_G121_Grille_15_L63>
+      <id>	174	</id>
+    </Turret_1_G121_Grille_15_L63>
+    <Turret_1_G122_VK6501H>
+      <id>	178	</id>
+    </Turret_1_G122_VK6501H>
+    <Turret_1_G125_Spz_57_Rh>
+      <id>	185	</id>
+    </Turret_1_G125_Spz_57_Rh>
+    <Turret_1_G126_HWK_12>
+      <id>	187	</id>
+    </Turret_1_G126_HWK_12>
+    <Turret_1_G134_PzKpfw_VII>
+      <id>	182	</id>
+    </Turret_1_G134_PzKpfw_VII>
+    <Turret_1_G134_PzKpfw_VII_7x7>
+      <id>	31002	</id>
+    </Turret_1_G134_PzKpfw_VII_7x7>
+    <Turret_1_G136_Tiger_131>
+      <id>	190	</id>
+    </Turret_1_G136_Tiger_131>
+    <Turret_1_G137_PzVI_Tiger_217>
+      <id>	192	</id>
+    </Turret_1_G137_PzVI_Tiger_217>
+    <Turret_1_G138_VK168_02>
+      <id>	193	</id>
+    </Turret_1_G138_VK168_02>
+    <Turret_1_G138_VK168_02_Mauerbrecher>
+      <id>	196	</id>
+    </Turret_1_G138_VK168_02_Mauerbrecher>
+    <Turret_1_G139_MKA>
+      <id>	198	</id>
+    </Turret_1_G139_MKA>
+    <Turret_1_G140_HWK_30>
+      <id>	199	</id>
+    </Turret_1_G140_HWK_30>
+    <Turret_1_G141_VK7501K>
+      <id>	202	</id>
+    </Turret_1_G141_VK7501K>
+    <Turret_1_G142_M48RPz>
+      <id>	205	</id>
+    </Turret_1_G142_M48RPz>
+    <Turret_1_G143_E75_TS>
+      <id>	204	</id>
+    </Turret_1_G143_E75_TS>
+    <Turret_1_G144_Kpz_50t>
+      <id>	203	</id>
+    </Turret_1_G144_Kpz_50t>
+    <Turret_1_G147_Kunze_Panzer>
+      <id>	206	</id>
+    </Turret_1_G147_Kunze_Panzer>
+    <Turret_1_G151_Pz_Sfl_IC>
+      <id>	208	</id>
+    </Turret_1_G151_Pz_Sfl_IC>
+    <Turret_1_G154_Kpz_07_RH>
+      <id>	209	</id>
+    </Turret_1_G154_Kpz_07_RH>
+    <Turret_1_G158_VK2801_105_SPXXI>
+      <id>	211	</id>
+    </Turret_1_G158_VK2801_105_SPXXI>
+    <Turret_1_G159_KPZ_3_Project_07_HK>
+      <id>	214	</id>
+    </Turret_1_G159_KPZ_3_Project_07_HK>
+    <Turret_1_G160_Pz_Kpfw_35_R_mit_T_26_Turm>
+      <id>	212	</id>
+    </Turret_1_G160_Pz_Kpfw_35_R_mit_T_26_Turm>
+    <Turret_1_G161_Pz_Kpfw_M15_38_t>
+      <id>	213	</id>
+    </Turret_1_G161_Pz_Kpfw_M15_38_t>
+    <Turret_1_G162_Project_Kpz_07P_E>
+      <id>	217	</id>
+    </Turret_1_G162_Project_Kpz_07P_E>
+    <Turret_1_G163_Pz_Kpfw_KW_Ir_mit_75mm_kwk40>
+      <id>	216	</id>
+    </Turret_1_G163_Pz_Kpfw_KW_Ir_mit_75mm_kwk40>
+    <Turret_1_G164_Kpz_Pr_68_P>
+      <id>	220	</id>
+    </Turret_1_G164_Kpz_Pr_68_P>
+    <Turret_1_G165_Erich_Konzept_I>
+      <id>	222	</id>
+    </Turret_1_G165_Erich_Konzept_I>
+    <Turret_1_G166_LKpz_70_K>
+      <id>	219	</id>
+    </Turret_1_G166_LKpz_70_K>
+    <Turret_1_G167_Tiger_Maus_120t>
+      <id>	218	</id>
+    </Turret_1_G167_Tiger_Maus_120t>
+    <Turret_1_G168_KJpz_T_III>
+      <id>	221	</id>
+    </Turret_1_G168_KJpz_T_III>
+    <Turret_1_G16_PzVIB_Tiger_II_F>
+      <id>	186	</id>
+    </Turret_1_G16_PzVIB_Tiger_II_F>
+    <Turret_1_G171_E77>
+      <id>	31005	</id>
+    </Turret_1_G171_E77>
+    <Turret_1_G171_E77_02>
+      <id>	31006	</id>
+    </Turret_1_G171_E77_02>
+    <Turret_1_G178_Sturmtiger_V1>
+      <id>	31008	</id>
+    </Turret_1_G178_Sturmtiger_V1>
+    <Turret_1_G181_StuG_Maus_17cm>
+      <id>	31011	</id>
+    </Turret_1_G181_StuG_Maus_17cm>
+    <Turret_1_G182_Mausekonig>
+      <id>	31007	</id>
+    </Turret_1_G182_Mausekonig>
+    <Turret_1_G184_EisBaer>
+      <id>	31009	</id>
+    </Turret_1_G184_EisBaer>
+    <Turret_1_G193_Aufgabe_57>
+      <id>	31012	</id>
+    </Turret_1_G193_Aufgabe_57>
+    <Turret_1_G194_E_50_GT_Alkett_Prod>
+      <id>	31014	</id>
+    </Turret_1_G194_E_50_GT_Alkett_Prod>
+    <Turret_1_G196_E_75_Ausf_B_Doppel>
+      <id>	31013	</id>
+    </Turret_1_G196_E_75_Ausf_B_Doppel>
+    <Turret_1_G197_E_94_Fechter>
+      <id>	31016	</id>
+    </Turret_1_G197_E_94_Fechter>
+    <Turret_1_G25_PzII_Luchs_SHXXI_B>
+      <id>	350	</id>
+    </Turret_1_G25_PzII_Luchs_SHXXI_B>
+    <Turret_1_G44_JagdTigerH>
+      <id>	189	</id>
+    </Turret_1_G44_JagdTigerH>
+    <Turret_1_G58_VK4502P>
+      <id>	160	</id>
+    </Turret_1_G58_VK4502P>
+    <Turret_1_G81_Pz_IV_AusfH_GuP>
+      <id>	210	</id>
+    </Turret_1_G81_Pz_IV_AusfH_GuP>
+    <Turret_1_G85_Aufklarungspanzer_V>
+      <id>	197	</id>
+    </Turret_1_G85_Aufklarungspanzer_V>
+    <Turret_1_G98_Waffentrager_E100_P>
+      <id>	194	</id>
+    </Turret_1_G98_Waffentrager_E100_P>
+    <Turret_1_G98_Waffentrager_E100_WO>
+      <id>	215	</id>
+    </Turret_1_G98_Waffentrager_E100_WO>
+    <Turret_1_GW_Elefant>
+      <id>	124	</id>
+    </Turret_1_GW_Elefant>
+    <Turret_1_GW_Mk_IVe>
+      <id>	123	</id>
+    </Turret_1_GW_Mk_IVe>
+    <Turret_1_G_E>
+      <id>	68	</id>
+    </Turret_1_G_E>
+    <Turret_1_G_Panther>
+      <id>	66	</id>
+    </Turret_1_G_Panther>
+    <Turret_1_G_Tiger>
+      <id>	65	</id>
+    </Turret_1_G_Tiger>
+    <Turret_1_JagdPantherII>
+      <id>	87	</id>
+    </Turret_1_JagdPantherII>
+    <Turret_1_JagdPz_E100>
+      <id>	89	</id>
+    </Turret_1_JagdPz_E100>
+    <Turret_1_JagdTiger_SdKfz_185>
+      <id>	84	</id>
+    </Turret_1_JagdTiger_SdKfz_185>
+    <Turret_1_JagdTiger_SdKfz_185_IGR>
+      <id>	60001	</id>
+    </Turret_1_JagdTiger_SdKfz_185_IGR>
+    <Turret_1_Leopard1>
+      <id>	120	</id>
+    </Turret_1_Leopard1>
+    <Turret_1_Leopard1_bob>
+      <id>	207	</id>
+    </Turret_1_Leopard1_bob>
+    <Turret_1_Lowe>
+      <id>	67	</id>
+    </Turret_1_Lowe>
+    <Turret_1_Lowe_FL>
+      <id>	200	</id>
+    </Turret_1_Lowe_FL>
+    <Turret_1_Marder_III>
+      <id>	86	</id>
+    </Turret_1_Marder_III>
+    <Turret_1_Nashorn>
+      <id>	88	</id>
+    </Turret_1_Nashorn>
+    <Turret_1_Nashorn_MapsTraining_Dummy_ATSPG_2>
+      <id>	56	</id>
+    </Turret_1_Nashorn_MapsTraining_Dummy_ATSPG_2>
+    <Turret_1_Panther_II>
+      <id>	63	</id>
+    </Turret_1_Panther_II>
+    <Turret_1_Panther_M10>
+      <id>	99	</id>
+    </Turret_1_Panther_M10>
+    <Turret_1_Pro_Ag_A>
+      <id>	121	</id>
+    </Turret_1_Pro_Ag_A>
+    <Turret_1_Pz38_NA>
+      <id>	61	</id>
+    </Turret_1_Pz38_NA>
+    <Turret_1_PzI>
+      <id>	105	</id>
+    </Turret_1_PzI>
+    <Turret_1_PzIV_Hydro>
+      <id>	83	</id>
+    </Turret_1_PzIV_Hydro>
+    <Turret_1_PzI_ausf_C>
+      <id>	103	</id>
+    </Turret_1_PzI_ausf_C>
+    <Turret_1_PzVI_Tiger_P>
+      <id>	81	</id>
+    </Turret_1_PzVI_Tiger_P>
+    <Turret_1_Pz_II_AusfG>
+      <id>	107	</id>
+    </Turret_1_Pz_II_AusfG>
+    <Turret_1_Pz_IV_AusfA>
+      <id>	135	</id>
+    </Turret_1_Pz_IV_AusfA>
+    <Turret_1_Pz_IV_AusfD>
+      <id>	137	</id>
+    </Turret_1_Pz_IV_AusfD>
+    <Turret_1_Pz_IV_AusfD_bootcamp>
+      <id>	64004	</id>
+    </Turret_1_Pz_IV_AusfD_bootcamp>
+    <Turret_1_Pz_IV_AusfH>
+      <id>	146	</id>
+    </Turret_1_Pz_IV_AusfH>
+    <Turret_1_Pz_Sfl_IVb>
+      <id>	125	</id>
+    </Turret_1_Pz_Sfl_IVb>
+    <Turret_1_Pz_Sfl_IVc>
+      <id>	129	</id>
+    </Turret_1_Pz_Sfl_IVc>
+    <Turret_1_RhB_Waffentrager>
+      <id>	133	</id>
+    </Turret_1_RhB_Waffentrager>
+    <Turret_1_Sturer_Emil>
+      <id>	85	</id>
+    </Turret_1_Sturer_Emil>
+    <Turret_1_T-15>
+      <id>	70	</id>
+    </Turret_1_T-15>
+    <Turret_1_T-25>
+      <id>	69	</id>
+    </Turret_1_T-25>
+    <Turret_1_VK2001DB>
+      <id>	111	</id>
+    </Turret_1_VK2001DB>
+    <Turret_1_VK2801>
+      <id>	75	</id>
+    </Turret_1_VK2801>
+    <Turret_1_VK3002DB_V1>
+      <id>	116	</id>
+    </Turret_1_VK3002DB_V1>
+    <Turret_1_VK3002M>
+      <id>	127	</id>
+    </Turret_1_VK3002M>
+    <Turret_1_VK4502A>
+      <id>	79	</id>
+    </Turret_1_VK4502A>
+    <Turret_1_Waffentrager_E100>
+      <id>	134	</id>
+    </Turret_1_Waffentrager_E100>
+    <Turret_1_Waffentrager_IV>
+      <id>	131	</id>
+    </Turret_1_Waffentrager_IV>
+    <Turret_2_DW_II>
+      <id>	110	</id>
+    </Turret_2_DW_II>
+    <Turret_2_DW_II_MapsTraining_Dummy_HT_1>
+      <id>	36	</id>
+    </Turret_2_DW_II_MapsTraining_Dummy_HT_1>
+    <Turret_2_E-100>
+      <id>	72	</id>
+    </Turret_2_E-100>
+    <Turret_2_E-50>
+      <id>	78	</id>
+    </Turret_2_E-50>
+    <Turret_2_E-50_FL>
+      <id>	502	</id>
+    </Turret_2_E-50_FL>
+    <Turret_2_E-50_SH>
+      <id>	347	</id>
+    </Turret_2_E-50_SH>
+    <Turret_2_E-75>
+      <id>	74	</id>
+    </Turret_2_E-75>
+    <Turret_2_E-75_FL>
+      <id>	31004	</id>
+    </Turret_2_E-75_FL>
+    <Turret_2_G113_SP_I_C>
+      <id>	163	</id>
+    </Turret_2_G113_SP_I_C>
+    <Turret_2_G126_HWK_12>
+      <id>	188	</id>
+    </Turret_2_G126_HWK_12>
+    <Turret_2_G126_HWK_12_FL>
+      <id>	507	</id>
+    </Turret_2_G126_HWK_12_FL>
+    <Turret_2_G189_E100_02>
+      <id>	31010	</id>
+    </Turret_2_G189_E100_02>
+    <Turret_2_Indien_Panzer>
+      <id>	115	</id>
+    </Turret_2_Indien_Panzer>
+    <Turret_2_Panther_II>
+      <id>	64	</id>
+    </Turret_2_Panther_II>
+    <Turret_2_Panther_II_FL>
+      <id>	506	</id>
+    </Turret_2_Panther_II_FL>
+    <Turret_2_Panther_II_IGR>
+      <id>	60002	</id>
+    </Turret_2_Panther_II_IGR>
+    <Turret_2_Pro_Ag_A>
+      <id>	122	</id>
+    </Turret_2_Pro_Ag_A>
+    <Turret_2_Pz38_NA>
+      <id>	62	</id>
+    </Turret_2_Pz38_NA>
+    <Turret_2_PzI>
+      <id>	106	</id>
+    </Turret_2_PzI>
+    <Turret_2_PzI_ausf_C>
+      <id>	104	</id>
+    </Turret_2_PzI_ausf_C>
+    <Turret_2_PzVI_Tiger_P>
+      <id>	82	</id>
+    </Turret_2_PzVI_Tiger_P>
+    <Turret_2_PzVI_Tiger_P_NewOnBoarding>
+      <id>	64032	</id>
+    </Turret_2_PzVI_Tiger_P_NewOnBoarding>
+    <Turret_2_Pz_II_AusfG>
+      <id>	108	</id>
+    </Turret_2_Pz_II_AusfG>
+    <Turret_2_Pz_IV_AusfA>
+      <id>	136	</id>
+    </Turret_2_Pz_IV_AusfA>
+    <Turret_2_Pz_IV_AusfD>
+      <id>	138	</id>
+    </Turret_2_Pz_IV_AusfD>
+    <Turret_2_Pz_IV_AusfH>
+      <id>	147	</id>
+    </Turret_2_Pz_IV_AusfH>
+    <Turret_2_Pz_IV_AusfH_NewOnBoarding>
+      <id>	64027	</id>
+    </Turret_2_Pz_IV_AusfH_NewOnBoarding>
+    <Turret_2_Pz_Sfl_IVc>
+      <id>	130	</id>
+    </Turret_2_Pz_Sfl_IVc>
+    <Turret_2_VK2001DB>
+      <id>	112	</id>
+    </Turret_2_VK2001DB>
+    <Turret_2_VK2801>
+      <id>	76	</id>
+    </Turret_2_VK2801>
+    <Turret_2_VK3002DB_V1>
+      <id>	117	</id>
+    </Turret_2_VK3002DB_V1>
+    <Turret_2_VK3002M>
+      <id>	128	</id>
+    </Turret_2_VK3002M>
+    <Turret_2_VK4502A>
+      <id>	80	</id>
+    </Turret_2_VK4502A>
+    <Turret_2_Waffentrager_IV>
+      <id>	132	</id>
+    </Turret_2_Waffentrager_IV>
+    <Turret_3_E-75_TS_SH>
+      <id>	346	</id>
+    </Turret_3_E-75_TS_SH>
+    <Turret_VK7201>
+      <id>	113	</id>
+    </Turret_VK7201>
+    <VK3001H_Eliteturm>
+      <id>	17	</id>
+    </VK3001H_Eliteturm>
+    <VK3001H_Standardturm>
+      <id>	16	</id>
+    </VK3001H_Standardturm>
+    <VK3001P_Krupp_turm>
+      <id>	48	</id>
+    </VK3001P_Krupp_turm>
+    <VK3001P_Krupp_turm_NewOnBoarding>
+      <id>	64028	</id>
+    </VK3001P_Krupp_turm_NewOnBoarding>
+    <VK3001P_Porsche_turm>
+      <id>	49	</id>
+    </VK3001P_Porsche_turm>
+    <VK3001P_Porsche_turm_SH>
+      <id>	345	</id>
+    </VK3001P_Porsche_turm_SH>
+    <VK3002DB_Shmallturm>
+      <id>	26	</id>
+    </VK3002DB_Shmallturm>
+    <VK3002DB_turm>
+      <id>	25	</id>
+    </VK3002DB_turm>
+    <VK3601H_Grosseturm>
+      <id>	15	</id>
+    </VK3601H_Grosseturm>
+    <VK3601H_Grosseturm_C>
+      <id>	31001	</id>
+    </VK3601H_Grosseturm_C>
+    <VK3601H_Standardturm>
+      <id>	14	</id>
+    </VK3601H_Standardturm>
+    <VK4502P_Eliteturm>
+      <id>	51	</id>
+    </VK4502P_Eliteturm>
+    <VK4502P_Standardturm>
+      <id>	50	</id>
+    </VK4502P_Standardturm>
+    <Verbesserteturm>
+      <id>	20	</id>
+    </Verbesserteturm>
+    <Wespeturm>
+      <id>	37	</id>
+    </Wespeturm>
+  </shared>
 </turrets.xml>

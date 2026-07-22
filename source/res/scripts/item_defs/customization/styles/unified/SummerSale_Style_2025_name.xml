@@ -1,0 +1,59 @@
+<SummerSale_Style_2025_name.xml>
+  <itemGroup>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	MT 2D styles universal 1000g notInShop	</priceGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <style>
+      <id>	31366	</id>
+      <texture>	gui/maps/vehicles/styles/SummerSale_Style_2025.png	</texture>
+      <userString>	#vehicle_customization:SummerSale_Style_2025/name	</userString>
+      <description>	#vehicle_customization:SummerSale_Style_2025/description	</description>
+      <longDescriptionSpecial>	#vehicle_customization:SummerSale_Style_2025/longDescription	</longDescriptionSpecial>
+      <isRent>	true	</isRent>
+      <outfits>
+        <outfit>
+          <season>	all	</season>
+          <paints>
+            <item>
+              <id>	31341	</id>
+              <appliedTo>	20753	</appliedTo>
+            </item>
+          </paints>
+          <camouflages>
+            <item>
+              <id>	31337	</id>
+              <patternSize>	1	</patternSize>
+              <appliedTo>	4368	</appliedTo>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <projection_decals>
+            <item>
+              <id>	31299	</id>
+              <tags>	formfactor_square safe left	</tags>
+              <scaleFactorId>	1	</scaleFactorId>
+            </item>
+          </projection_decals>
+          <modifications>
+            <item>	4	</item>
+          </modifications>
+        </outfit>
+      </outfits>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+      <rentCount>	8	</rentCount>
+      <tags>	vehicleBound progression_required	</tags>
+    </style>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+  </itemGroup>
+</SummerSale_Style_2025_name.xml>

@@ -1,0 +1,53 @@
+<BP18Stalcraft_01_Style_140_name.xml>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	MT 2D styles universal 1000g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <style>
+      <id>	31498	</id>
+      <userString>	#vehicle_customization:BP18Stalcraft_01_Style_140/name	</userString>
+      <description>	#vehicle_customization:BP18Stalcraft_01_Style_140/description	</description>
+      <longDescriptionSpecial>	#vehicle_customization:BP18Stalcraft_01_Style_140/longDescription	</longDescriptionSpecial>
+      <outfits>
+        <outfit>
+          <season>	all	</season>
+          <modifications>
+            <item>	1	</item>
+          </modifications>
+          <paints>
+            <item>
+              <id>	31450	</id>
+              <appliedTo>	20753	</appliedTo>
+            </item>
+          </paints>
+          <camouflages>
+            <item>
+              <id>	31467	</id>
+              <patternSize>	1	</patternSize>
+              <appliedTo>	4368	</appliedTo>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <projection_decals>
+            <item>
+              <id>	31407	</id>
+              <tags>	safe formfactor_square left	</tags>
+            </item>
+            <item>
+              <id>	31408	</id>
+              <scaleFactorId>	1	</scaleFactorId>
+              <tags>	safe formfactor_square right	</tags>
+            </item>
+          </projection_decals>
+        </outfit>
+      </outfits>
+      <texture>	gui/maps/vehicles/styles/BP18Stalcraft_01_Style_140.png	</texture>
+    </style>
+  </itemGroup>
+</BP18Stalcraft_01_Style_140_name.xml>

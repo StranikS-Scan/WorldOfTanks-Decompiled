@@ -100,7 +100,7 @@
         <common>
           <bonusLimit>	1	</bonusLimit>
           <cumulative>
-            <kills>	40	</kills>
+            <kills>	25	</kills>
           </cumulative>
         </common>
       </conditions>
@@ -161,7 +161,7 @@
         <common>
           <bonusLimit>	1	</bonusLimit>
           <cumulative>
-            <capturePoints>	40	</capturePoints>
+            <capturePoints>	50	</capturePoints>
           </cumulative>
         </common>
       </conditions>
@@ -349,7 +349,7 @@
         </postBattle>
         <common>
           <battles>
-            <count>	6	</count>
+            <count>	7	</count>
           </battles>
           <bonusLimit>	1	</bonusLimit>
         </common>
@@ -411,7 +411,7 @@
               <key>	#armory_quest_conditions:conditions/postbattle/damageBlockedByArmor/compareWithMaxHealth	</key>
             </description>
             <key>	damageBlockedByArmor	</key>
-            <greaterOrEqual>	2	</greaterOrEqual>
+            <greaterOrEqual>	2.5	</greaterOrEqual>
             <compareWithMaxHealth></compareWithMaxHealth>
           </results>
         </postBattle>
@@ -442,11 +442,11 @@
           <and>
             <results>
               <key>	damageDealt	</key>
-              <greaterOrEqual>	3000	</greaterOrEqual>
+              <greaterOrEqual>	3500	</greaterOrEqual>
             </results>
             <results>
               <key>	damageBlockedByArmor	</key>
-              <greaterOrEqual>	3000	</greaterOrEqual>
+              <greaterOrEqual>	3500	</greaterOrEqual>
             </results>
           </and>
         </postBattle>
@@ -715,7 +715,7 @@
         <common>
           <bonusLimit>	1	</bonusLimit>
           <cumulative>
-            <damageBlockedByArmor>	35000	</damageBlockedByArmor>
+            <damageBlockedByArmor>	40000	</damageBlockedByArmor>
           </cumulative>
         </common>
       </conditions>
@@ -908,7 +908,7 @@
         <common>
           <bonusLimit>	1	</bonusLimit>
           <cumulative>
-            <damageDealt>	80000	</damageDealt>
+            <damageDealt>	90000	</damageDealt>
           </cumulative>
         </common>
       </conditions>
@@ -960,7 +960,7 @@
         <common>
           <bonusLimit>	1	</bonusLimit>
           <cumulative>
-            <damagedHp>	100	</damagedHp>
+            <damagedHp>	150	</damagedHp>
           </cumulative>
         </common>
       </conditions>
@@ -988,13 +988,13 @@
             <win></win>
             <results>
               <key>	damageDealt	</key>
-              <greaterOrEqual>	1000	</greaterOrEqual>
+              <greaterOrEqual>	1250	</greaterOrEqual>
             </results>
           </and>
         </postBattle>
         <common>
           <battles>
-            <count>	17	</count>
+            <count>	15	</count>
           </battles>
           <bonusLimit>	1	</bonusLimit>
         </common>
@@ -1057,7 +1057,7 @@
           <bonusLimit>	1	</bonusLimit>
           <vehicleKills>
             <limittedTime>	180	</limittedTime>
-            <greaterOrEqual>	12	</greaterOrEqual>
+            <greaterOrEqual>	14	</greaterOrEqual>
           </vehicleKills>
         </common>
       </conditions>
@@ -1117,13 +1117,13 @@
             <win></win>
             <results>
               <key>	originalXP	</key>
-              <greaterOrEqual>	600	</greaterOrEqual>
+              <greaterOrEqual>	650	</greaterOrEqual>
             </results>
           </and>
         </postBattle>
         <common>
           <battles>
-            <count>	18	</count>
+            <count>	17	</count>
           </battles>
           <bonusLimit>	1	</bonusLimit>
         </common>
@@ -1260,7 +1260,7 @@
         </postBattle>
         <common>
           <battles>
-            <count>	7	</count>
+            <count>	8	</count>
           </battles>
           <bonusLimit>	1	</bonusLimit>
         </common>
@@ -1295,7 +1295,7 @@
         </postBattle>
         <common>
           <battles>
-            <count>	5	</count>
+            <count>	8	</count>
           </battles>
           <bonusLimit>	1	</bonusLimit>
         </common>
@@ -1361,7 +1361,7 @@
               <key>	#armory_quest_conditions:conditions/cumulative/vehicleKills/lightTank	</key>
             </description>
             <classes>	lightTank	</classes>
-            <greaterOrEqual>	4	</greaterOrEqual>
+            <greaterOrEqual>	6	</greaterOrEqual>
           </vehicleKills>
         </common>
       </conditions>
@@ -1391,7 +1391,7 @@
               <key>	#armory_quest_conditions:conditions/cumulative/vehicleKills/AT_SPG	</key>
             </description>
             <classes>	AT-SPG	</classes>
-            <greaterOrEqual>	10	</greaterOrEqual>
+            <greaterOrEqual>	11	</greaterOrEqual>
           </vehicleKills>
         </common>
       </conditions>
@@ -1421,7 +1421,7 @@
               <key>	#armory_quest_conditions:conditions/cumulative/vehicleKills/mediumTank	</key>
             </description>
             <classes>	mediumTank	</classes>
-            <greaterOrEqual>	10	</greaterOrEqual>
+            <greaterOrEqual>	11	</greaterOrEqual>
           </vehicleKills>
         </common>
       </conditions>
@@ -1480,7 +1480,7 @@
             <description>
               <key>	#armory_quest_conditions:conditions/postbattle/droppedCapturePoints	</key>
             </description>
-            <droppedCapturePoints>	40	</droppedCapturePoints>
+            <droppedCapturePoints>	50	</droppedCapturePoints>
           </cumulative>
         </common>
       </conditions>
@@ -1512,7 +1512,7 @@
         </postBattle>
         <common>
           <battles>
-            <count>	3	</count>
+            <count>	5	</count>
           </battles>
           <bonusLimit>	1	</bonusLimit>
         </common>
@@ -1543,7 +1543,7 @@
               <key>	#armory_quest_conditions:conditions/cumulative/vehicleDamage/whileInvisible	</key>
             </description>
             <whileInvisible></whileInvisible>
-            <greaterOrEqual>	25000	</greaterOrEqual>
+            <greaterOrEqual>	30000	</greaterOrEqual>
           </vehicleDamage>
         </common>
       </conditions>
@@ -1600,7 +1600,7 @@
           <and>
             <results>
               <key>	damageDealt	</key>
-              <greaterOrEqual>	1000	</greaterOrEqual>
+              <greaterOrEqual>	1250	</greaterOrEqual>
             </results>
             <results>
               <key>	kills	</key>
@@ -1610,7 +1610,7 @@
         </postBattle>
         <common>
           <battles>
-            <count>	20	</count>
+            <count>	18	</count>
           </battles>
           <bonusLimit>	1	</bonusLimit>
         </common>
@@ -1686,7 +1686,7 @@
         </postBattle>
         <common>
           <battles>
-            <count>	17	</count>
+            <count>	18	</count>
           </battles>
           <bonusLimit>	1	</bonusLimit>
         </common>
@@ -1714,7 +1714,7 @@
           <bonusLimit>	1	</bonusLimit>
           <vehicleDamage>
             <distance>	300	</distance>
-            <greaterOrEqual>	20000	</greaterOrEqual>
+            <greaterOrEqual>	25000	</greaterOrEqual>
           </vehicleDamage>
         </common>
       </conditions>
@@ -1775,7 +1775,7 @@
         </postBattle>
         <common>
           <battles>
-            <count>	10	</count>
+            <count>	12	</count>
           </battles>
           <bonusLimit>	1	</bonusLimit>
         </common>
@@ -1831,14 +1831,14 @@
           <vehicle>
             <vehicleDescr>
               <levels>	6 7 8 9 10 11	</levels>
-              <nations>	usa sweden	</nations>
+              <nations>	uk czech	</nations>
             </vehicleDescr>
           </vehicle>
         </preBattle>
         <common>
           <bonusLimit>	1	</bonusLimit>
           <cumulative>
-            <kills>	32	</kills>
+            <damagedHp>	120	</damagedHp>
           </cumulative>
         </common>
       </conditions>
@@ -1858,7 +1858,7 @@
           <vehicle>
             <vehicleDescr>
               <levels>	6 7 8 9 10 11	</levels>
-              <nations>	ussr intunion	</nations>
+              <nations>	germany italy	</nations>
             </vehicleDescr>
           </vehicle>
         </preBattle>
@@ -1869,7 +1869,7 @@
               <key>	#armory_quest_conditions:conditions/cumulative/vehicleKills/mediumTank	</key>
             </description>
             <classes>	mediumTank	</classes>
-            <greaterOrEqual>	8	</greaterOrEqual>
+            <greaterOrEqual>	9	</greaterOrEqual>
           </vehicleKills>
         </common>
       </conditions>
@@ -1889,7 +1889,7 @@
           <vehicle>
             <vehicleDescr>
               <levels>	6 7 8 9 10 11	</levels>
-              <nations>	uk czech	</nations>
+              <nations>	ussr intunion	</nations>
             </vehicleDescr>
           </vehicle>
         </preBattle>
@@ -1991,7 +1991,7 @@
           <vehicle>
             <vehicleDescr>
               <levels>	6 7 8 9 10 11	</levels>
-              <nations>	germany italy	</nations>
+              <nations>	usa sweden	</nations>
             </vehicleDescr>
           </vehicle>
         </preBattle>
@@ -2058,8 +2058,8 @@
           </battle>
           <vehicle>
             <vehicleDescr>
-              <levels>	6 7 8 9 10 11	</levels>
-              <nations>	usa sweden	</nations>
+              <levels>	6 7 8 9 10	</levels>
+              <nations>	japan poland	</nations>
             </vehicleDescr>
           </vehicle>
         </preBattle>
@@ -2461,7 +2461,7 @@
           <and>
             <results>
               <key>	damageDealt	</key>
-              <greaterOrEqual>	4500	</greaterOrEqual>
+              <greaterOrEqual>	5000	</greaterOrEqual>
             </results>
             <results>
               <key>	kills	</key>
@@ -2722,7 +2722,7 @@
         <common>
           <bonusLimit>	1	</bonusLimit>
           <cumulative>
-            <noDamageDirectHitsReceived>	150	</noDamageDirectHitsReceived>
+            <noDamageDirectHitsReceived>	165	</noDamageDirectHitsReceived>
           </cumulative>
         </common>
       </conditions>
@@ -2856,9 +2856,16 @@
         </preBattle>
         <common>
           <bonusLimit>	1	</bonusLimit>
-          <cumulative>
-            <kills>	35	</kills>
-          </cumulative>
+          <cumulativeExt>
+            <results>
+              <key>	kills	</key>
+              <greaterOrEqual>	35	</greaterOrEqual>
+            </results>
+            <results>
+              <key>	damageDealt	</key>
+              <greaterOrEqual>	70000	</greaterOrEqual>
+            </results>
+          </cumulativeExt>
         </common>
       </conditions>
       <bonus></bonus>
@@ -2944,7 +2951,7 @@
         <common>
           <bonusLimit>	1	</bonusLimit>
           <cumulative>
-            <critsCount>	135	</critsCount>
+            <critsCount>	160	</critsCount>
           </cumulative>
         </common>
       </conditions>
@@ -3130,7 +3137,7 @@
         </postBattle>
         <common>
           <battles>
-            <count>	17	</count>
+            <count>	23	</count>
           </battles>
           <bonusLimit>	1	</bonusLimit>
         </common>
@@ -3195,7 +3202,7 @@
         </postBattle>
         <common>
           <battles>
-            <count>	25	</count>
+            <count>	32	</count>
           </battles>
           <bonusLimit>	1	</bonusLimit>
         </common>
@@ -3230,7 +3237,7 @@
         </postBattle>
         <common>
           <battles>
-            <count>	4	</count>
+            <count>	5	</count>
           </battles>
           <bonusLimit>	1	</bonusLimit>
         </common>
@@ -3265,7 +3272,7 @@
         </postBattle>
         <common>
           <battles>
-            <count>	7	</count>
+            <count>	8	</count>
           </battles>
           <bonusLimit>	1	</bonusLimit>
         </common>
@@ -3327,7 +3334,7 @@
         <postBattle>
           <results>
             <key>	damageDealt	</key>
-            <greaterOrEqual>	3500	</greaterOrEqual>
+            <greaterOrEqual>	3750	</greaterOrEqual>
           </results>
         </postBattle>
         <common>
@@ -3396,7 +3403,7 @@
             </description>
             <classes>	lightTank	</classes>
             <eventCount></eventCount>
-            <greaterOrEqual>	20	</greaterOrEqual>
+            <greaterOrEqual>	23	</greaterOrEqual>
           </vehicleDamage>
         </common>
       </conditions>
@@ -3458,7 +3465,7 @@
             </description>
             <classes>	AT-SPG	</classes>
             <eventCount></eventCount>
-            <greaterOrEqual>	60	</greaterOrEqual>
+            <greaterOrEqual>	70	</greaterOrEqual>
           </vehicleDamage>
         </common>
       </conditions>
@@ -3520,7 +3527,7 @@
             </description>
             <classes>	mediumTank	</classes>
             <eventCount></eventCount>
-            <greaterOrEqual>	65	</greaterOrEqual>
+            <greaterOrEqual>	80	</greaterOrEqual>
           </vehicleDamage>
         </common>
       </conditions>
@@ -3582,7 +3589,7 @@
             </description>
             <classes>	heavyTank	</classes>
             <eventCount></eventCount>
-            <greaterOrEqual>	100	</greaterOrEqual>
+            <greaterOrEqual>	110	</greaterOrEqual>
           </vehicleDamage>
         </common>
       </conditions>
@@ -3843,7 +3850,7 @@
           <vehicle>
             <vehicleDescr>
               <levels>	6 7 8 9 10 11	</levels>
-              <nations>	france china	</nations>
+              <nations>	germany italy	</nations>
             </vehicleDescr>
           </vehicle>
         </preBattle>
@@ -3892,7 +3899,7 @@
         </postBattle>
         <common>
           <battles>
-            <count>	22	</count>
+            <count>	25	</count>
           </battles>
           <bonusLimit>	1	</bonusLimit>
         </common>
@@ -3912,8 +3919,8 @@
           </battle>
           <vehicle>
             <vehicleDescr>
-              <levels>	6 7 8 9 10	</levels>
-              <nations>	japan poland	</nations>
+              <levels>	6 7 8 9 10 11	</levels>
+              <nations>	usa sweden	</nations>
             </vehicleDescr>
           </vehicle>
         </preBattle>
@@ -3940,7 +3947,7 @@
           <vehicle>
             <vehicleDescr>
               <levels>	6 7 8 9 10 11	</levels>
-              <nations>	germany italy	</nations>
+              <nations>	france china	</nations>
             </vehicleDescr>
           </vehicle>
         </preBattle>
@@ -4010,8 +4017,8 @@
           </battle>
           <vehicle>
             <vehicleDescr>
-              <levels>	6 7 8 9 10 11	</levels>
-              <nations>	ussr intunion	</nations>
+              <levels>	6 7 8 9 10	</levels>
+              <nations>	japan poland	</nations>
             </vehicleDescr>
           </vehicle>
         </preBattle>
@@ -4022,7 +4029,7 @@
               <key>	#armory_quest_conditions:conditions/cumulative/vehicleKills/mediumTank	</key>
             </description>
             <classes>	mediumTank	</classes>
-            <greaterOrEqual>	14	</greaterOrEqual>
+            <greaterOrEqual>	16	</greaterOrEqual>
           </vehicleKills>
         </common>
       </conditions>
@@ -4118,7 +4125,7 @@
               <damageReceived></damageReceived>
               <damageBlockedByArmor></damageBlockedByArmor>
             </sum>
-            <greaterOrEqual>	350000	</greaterOrEqual>
+            <greaterOrEqual>	400000	</greaterOrEqual>
           </cumulativeSum>
         </common>
       </conditions>
@@ -4342,7 +4349,7 @@
         <postBattle>
           <results>
             <key>	damageDealt	</key>
-            <greaterOrEqual>	6000	</greaterOrEqual>
+            <greaterOrEqual>	6500	</greaterOrEqual>
           </results>
         </postBattle>
         <common>
@@ -4412,7 +4419,7 @@
         </postBattle>
         <common>
           <battles>
-            <count>	9	</count>
+            <count>	8	</count>
           </battles>
           <bonusLimit>	1	</bonusLimit>
         </common>
@@ -4473,7 +4480,7 @@
           <and>
             <results>
               <key>	damageBlockedByArmor	</key>
-              <greaterOrEqual>	4000	</greaterOrEqual>
+              <greaterOrEqual>	4500	</greaterOrEqual>
             </results>
             <isAlive></isAlive>
           </and>
@@ -5245,7 +5252,7 @@
         </postBattle>
         <common>
           <battles>
-            <count>	6	</count>
+            <count>	8	</count>
           </battles>
           <bonusLimit>	1	</bonusLimit>
         </common>
@@ -5280,7 +5287,7 @@
         </postBattle>
         <common>
           <battles>
-            <count>	14	</count>
+            <count>	17	</count>
           </battles>
           <bonusLimit>	1	</bonusLimit>
         </common>
@@ -5518,7 +5525,7 @@
               <key>	#armory_quest_conditions:conditions/cumulative/vehicleDamageSumm/lightTank	</key>
             </description>
             <classes>	lightTank	</classes>
-            <greaterOrEqual>	7500	</greaterOrEqual>
+            <greaterOrEqual>	9000	</greaterOrEqual>
           </vehicleDamage>
         </common>
       </conditions>
@@ -5578,7 +5585,7 @@
               <key>	#armory_quest_conditions:conditions/cumulative/vehicleDamageSumm/AT_SPG/SPG	</key>
             </description>
             <classes>	AT-SPG SPG	</classes>
-            <greaterOrEqual>	33000	</greaterOrEqual>
+            <greaterOrEqual>	37000	</greaterOrEqual>
           </vehicleDamage>
         </common>
       </conditions>
@@ -5608,7 +5615,7 @@
               <key>	#armory_quest_conditions:conditions/cumulative/vehicleDamageSumm/mediumTank	</key>
             </description>
             <classes>	mediumTank	</classes>
-            <greaterOrEqual>	38000	</greaterOrEqual>
+            <greaterOrEqual>	45000	</greaterOrEqual>
           </vehicleDamage>
         </common>
       </conditions>
@@ -5638,7 +5645,7 @@
               <key>	#armory_quest_conditions:conditions/cumulative/vehicleDamageSumm/heavyTank	</key>
             </description>
             <classes>	heavyTank	</classes>
-            <greaterOrEqual>	55000	</greaterOrEqual>
+            <greaterOrEqual>	60000	</greaterOrEqual>
           </vehicleDamage>
         </common>
       </conditions>
@@ -5863,7 +5870,7 @@
         </postBattle>
         <common>
           <battles>
-            <count>	7	</count>
+            <count>	8	</count>
           </battles>
           <bonusLimit>	1	</bonusLimit>
         </common>
@@ -5954,7 +5961,7 @@
         <common>
           <bonusLimit>	1	</bonusLimit>
           <cumulative>
-            <noDamageDirectHitsReceived>	150	</noDamageDirectHitsReceived>
+            <noDamageDirectHitsReceived>	200	</noDamageDirectHitsReceived>
           </cumulative>
         </common>
       </conditions>
@@ -6015,7 +6022,7 @@
         </postBattle>
         <common>
           <battles>
-            <count>	10	</count>
+            <count>	12	</count>
           </battles>
           <bonusLimit>	1	</bonusLimit>
         </common>
@@ -6084,7 +6091,7 @@
         </postBattle>
         <common>
           <battles>
-            <count>	30	</count>
+            <count>	35	</count>
           </battles>
           <bonusLimit>	1	</bonusLimit>
         </common>
@@ -6105,7 +6112,7 @@
           <vehicle>
             <vehicleDescr>
               <levels>	6 7 8 9 10 11	</levels>
-              <nations>	france china	</nations>
+              <nations>	ussr intunion	</nations>
             </vehicleDescr>
           </vehicle>
         </preBattle>
@@ -6113,7 +6120,7 @@
           <bonusLimit>	1	</bonusLimit>
           <vehicleKills>
             <limittedTime>	180	</limittedTime>
-            <greaterOrEqual>	16	</greaterOrEqual>
+            <greaterOrEqual>	20	</greaterOrEqual>
           </vehicleKills>
         </common>
       </conditions>
@@ -6132,15 +6139,15 @@
           </battle>
           <vehicle>
             <vehicleDescr>
-              <levels>	6 7 8 9 10	</levels>
-              <nations>	japan poland	</nations>
+              <levels>	6 7 8 9 10 11	</levels>
+              <nations>	france china	</nations>
             </vehicleDescr>
           </vehicle>
         </preBattle>
         <common>
           <bonusLimit>	1	</bonusLimit>
           <cumulative>
-            <damageDealt>	120000	</damageDealt>
+            <damageDealt>	125000	</damageDealt>
           </cumulative>
         </common>
       </conditions>
@@ -6228,7 +6235,7 @@
         </postBattle>
         <common>
           <battles>
-            <count>	6	</count>
+            <count>	8	</count>
           </battles>
           <bonusLimit>	1	</bonusLimit>
         </common>
@@ -6248,8 +6255,8 @@
           </battle>
           <vehicle>
             <vehicleDescr>
-              <levels>	6 7 8 9 10	</levels>
-              <nations>	japan poland	</nations>
+              <levels>	6 7 8 9 10 11	</levels>
+              <nations>	france china	</nations>
             </vehicleDescr>
           </vehicle>
         </preBattle>
@@ -6264,7 +6271,7 @@
         </postBattle>
         <common>
           <battles>
-            <count>	17	</count>
+            <count>	20	</count>
           </battles>
           <bonusLimit>	1	</bonusLimit>
         </common>
@@ -6403,7 +6410,7 @@
         </postBattle>
         <common>
           <battles>
-            <count>	6	</count>
+            <count>	7	</count>
           </battles>
           <bonusLimit>	1	</bonusLimit>
         </common>
@@ -6463,7 +6470,7 @@
         <common>
           <bonusLimit>	1	</bonusLimit>
           <cumulative>
-            <kills>	80	</kills>
+            <kills>	95	</kills>
           </cumulative>
         </common>
       </conditions>
@@ -6611,7 +6618,7 @@
         <postBattle>
           <results>
             <key>	damageDealt	</key>
-            <greaterOrEqual>	7000	</greaterOrEqual>
+            <greaterOrEqual>	8000	</greaterOrEqual>
           </results>
         </postBattle>
         <common>
@@ -6735,7 +6742,7 @@
         <postBattle>
           <results>
             <key>	damageBlockedByArmor	</key>
-            <greaterOrEqual>	6000	</greaterOrEqual>
+            <greaterOrEqual>	6500	</greaterOrEqual>
           </results>
         </postBattle>
         <common>
@@ -6794,7 +6801,7 @@
           <and>
             <results>
               <key>	damageDealt	</key>
-              <greaterOrEqual>	5500	</greaterOrEqual>
+              <greaterOrEqual>	6500	</greaterOrEqual>
             </results>
             <results>
               <key>	kills	</key>
@@ -7035,7 +7042,7 @@
         <common>
           <bonusLimit>	1	</bonusLimit>
           <cumulative>
-            <noDamageDirectHitsReceived>	200	</noDamageDirectHitsReceived>
+            <noDamageDirectHitsReceived>	230	</noDamageDirectHitsReceived>
           </cumulative>
         </common>
       </conditions>
@@ -7129,7 +7136,7 @@
             <description>
               <key>	#armory_quest_conditions:conditions/cumulative/spotted/win	</key>
             </description>
-            <spotted>	30	</spotted>
+            <spotted>	50	</spotted>
           </cumulative>
         </common>
       </conditions>
@@ -7156,7 +7163,7 @@
         <common>
           <bonusLimit>	1	</bonusLimit>
           <cumulative>
-            <kills>	50	</kills>
+            <kills>	55	</kills>
           </cumulative>
         </common>
       </conditions>
@@ -7184,7 +7191,7 @@
         </postBattle>
         <common>
           <battles>
-            <count>	50	</count>
+            <count>	60	</count>
           </battles>
           <bonusLimit>	1	</bonusLimit>
         </common>
@@ -7217,7 +7224,7 @@
             <description>
               <key>	#armory_quest_conditions:conditions/cumulative/originalXP/win	</key>
             </description>
-            <originalXP>	39000	</originalXP>
+            <originalXP>	45000	</originalXP>
           </cumulative>
         </common>
       </conditions>
@@ -7243,7 +7250,7 @@
         <common>
           <bonusLimit>	1	</bonusLimit>
           <cumulative>
-            <damaged>	325	</damaged>
+            <damaged>	375	</damaged>
           </cumulative>
         </common>
       </conditions>
@@ -7269,7 +7276,7 @@
         <common>
           <bonusLimit>	1	</bonusLimit>
           <cumulative>
-            <damageDealt>	170000	</damageDealt>
+            <damageDealt>	200000	</damageDealt>
           </cumulative>
         </common>
       </conditions>
@@ -7321,7 +7328,7 @@
         <common>
           <bonusLimit>	1	</bonusLimit>
           <cumulative>
-            <critsCount>	230	</critsCount>
+            <critsCount>	250	</critsCount>
           </cumulative>
         </common>
       </conditions>
@@ -7348,7 +7355,7 @@
           <bonusLimit>	1	</bonusLimit>
           <vehicleKills>
             <limittedTime>	240	</limittedTime>
-            <greaterOrEqual>	48	</greaterOrEqual>
+            <greaterOrEqual>	53	</greaterOrEqual>
           </vehicleKills>
         </common>
       </conditions>
@@ -7379,7 +7386,7 @@
         </postBattle>
         <common>
           <battles>
-            <count>	25	</count>
+            <count>	30	</count>
           </battles>
           <bonusLimit>	1	</bonusLimit>
         </common>
@@ -7414,7 +7421,7 @@
         </postBattle>
         <common>
           <battles>
-            <count>	27	</count>
+            <count>	30	</count>
           </battles>
           <bonusLimit>	1	</bonusLimit>
         </common>
@@ -7449,7 +7456,7 @@
         </postBattle>
         <common>
           <battles>
-            <count>	12	</count>
+            <count>	16	</count>
           </battles>
           <bonusLimit>	1	</bonusLimit>
         </common>
@@ -7516,7 +7523,7 @@
         </postBattle>
         <common>
           <battles>
-            <count>	30	</count>
+            <count>	33	</count>
           </battles>
           <bonusLimit>	1	</bonusLimit>
         </common>
@@ -7544,7 +7551,7 @@
           <and>
             <results>
               <key>	damageDealt	</key>
-              <greaterOrEqual>	3000	</greaterOrEqual>
+              <greaterOrEqual>	3500	</greaterOrEqual>
             </results>
             <win></win>
           </and>
@@ -7613,7 +7620,7 @@
         <postBattle>
           <results>
             <key>	damageDealt	</key>
-            <greaterOrEqual>	4000	</greaterOrEqual>
+            <greaterOrEqual>	4500	</greaterOrEqual>
           </results>
         </postBattle>
         <common>
@@ -7682,7 +7689,7 @@
             </description>
             <classes>	lightTank	</classes>
             <eventCount></eventCount>
-            <greaterOrEqual>	30	</greaterOrEqual>
+            <greaterOrEqual>	45	</greaterOrEqual>
           </vehicleDamage>
         </common>
       </conditions>
@@ -7744,7 +7751,7 @@
             </description>
             <classes>	AT-SPG	</classes>
             <eventCount></eventCount>
-            <greaterOrEqual>	110	</greaterOrEqual>
+            <greaterOrEqual>	125	</greaterOrEqual>
           </vehicleDamage>
         </common>
       </conditions>
@@ -7806,7 +7813,7 @@
             </description>
             <classes>	mediumTank	</classes>
             <eventCount></eventCount>
-            <greaterOrEqual>	115	</greaterOrEqual>
+            <greaterOrEqual>	130	</greaterOrEqual>
           </vehicleDamage>
         </common>
       </conditions>
@@ -7868,7 +7875,7 @@
             </description>
             <classes>	heavyTank	</classes>
             <eventCount></eventCount>
-            <greaterOrEqual>	180	</greaterOrEqual>
+            <greaterOrEqual>	195	</greaterOrEqual>
           </vehicleDamage>
         </common>
       </conditions>
@@ -7931,7 +7938,7 @@
         </postBattle>
         <common>
           <battles>
-            <count>	4	</count>
+            <count>	5	</count>
           </battles>
           <bonusLimit>	1	</bonusLimit>
         </common>
@@ -7962,7 +7969,7 @@
               <key>	#armory_quest_conditions:conditions/cumulative/vehicleDamage/whileInvisible	</key>
             </description>
             <whileInvisible></whileInvisible>
-            <greaterOrEqual>	50000	</greaterOrEqual>
+            <greaterOrEqual>	60000	</greaterOrEqual>
           </vehicleDamage>
         </common>
       </conditions>
@@ -8019,7 +8026,7 @@
           <bonusLimit>	1	</bonusLimit>
           <vehicleKills>
             <distance>	-100	</distance>
-            <greaterOrEqual>	30	</greaterOrEqual>
+            <greaterOrEqual>	35	</greaterOrEqual>
           </vehicleKills>
         </common>
       </conditions>
@@ -8045,7 +8052,7 @@
         <common>
           <bonusLimit>	1	</bonusLimit>
           <cumulative>
-            <damageAssistedRadio>	65000	</damageAssistedRadio>
+            <damageAssistedRadio>	75000	</damageAssistedRadio>
           </cumulative>
         </common>
       </conditions>
@@ -8108,7 +8115,7 @@
         </postBattle>
         <common>
           <battles>
-            <count>	8	</count>
+            <count>	9	</count>
           </battles>
           <bonusLimit>	1	</bonusLimit>
         </common>
@@ -8136,7 +8143,7 @@
         <common>
           <bonusLimit>	1	</bonusLimit>
           <cumulative>
-            <kills>	65	</kills>
+            <kills>	70	</kills>
           </cumulative>
         </common>
       </conditions>
@@ -8155,8 +8162,8 @@
           </battle>
           <vehicle>
             <vehicleDescr>
-              <levels>	6 7 8 9 10 11	</levels>
-              <nations>	usa sweden	</nations>
+              <levels>	6 7 8 9 10	</levels>
+              <nations>	japan poland	</nations>
             </vehicleDescr>
           </vehicle>
         </preBattle>
@@ -8216,7 +8223,7 @@
           <vehicle>
             <vehicleDescr>
               <levels>	6 7 8 9 10 11	</levels>
-              <nations>	france china	</nations>
+              <nations>	usa sweden	</nations>
             </vehicleDescr>
           </vehicle>
         </preBattle>
@@ -8225,7 +8232,7 @@
         </postBattle>
         <common>
           <battles>
-            <count>	40	</count>
+            <count>	45	</count>
           </battles>
           <bonusLimit>	1	</bonusLimit>
         </common>
@@ -8326,7 +8333,7 @@
           </battle>
           <vehicle>
             <vehicleDescr>
-              <types>	usa:A176_OTAC_LK_7605	</types>
+              <types>	uk:GB142_FV249_Castle	</types>
             </vehicleDescr>
           </vehicle>
         </preBattle>
@@ -8369,7 +8376,7 @@
               <key>	#armory_quest_conditions:conditions/cumulative/vehicleKills/AT_SPG	</key>
             </description>
             <classes>	AT-SPG	</classes>
-            <greaterOrEqual>	14	</greaterOrEqual>
+            <greaterOrEqual>	16	</greaterOrEqual>
           </vehicleKills>
         </common>
       </conditions>
@@ -8400,7 +8407,7 @@
         </postBattle>
         <common>
           <battles>
-            <count>	4	</count>
+            <count>	3	</count>
           </battles>
           <bonusLimit>	1	</bonusLimit>
         </common>
@@ -8435,7 +8442,7 @@
         </postBattle>
         <common>
           <battles>
-            <count>	18	</count>
+            <count>	20	</count>
           </battles>
           <bonusLimit>	1	</bonusLimit>
         </common>
@@ -8563,7 +8570,7 @@
         </postBattle>
         <common>
           <battles>
-            <count>	38	</count>
+            <count>	48	</count>
           </battles>
           <bonusLimit>	1	</bonusLimit>
         </common>
@@ -8583,14 +8590,14 @@
           </battle>
           <vehicle>
             <vehicleDescr>
-              <types>	usa:A176_OTAC_LK_7605	</types>
+              <types>	uk:GB142_FV249_Castle	</types>
             </vehicleDescr>
           </vehicle>
         </preBattle>
         <common>
           <bonusLimit>	1	</bonusLimit>
           <cumulative>
-            <damageDealt>	45000	</damageDealt>
+            <damageDealt>	50000	</damageDealt>
           </cumulative>
         </common>
       </conditions>
@@ -8686,7 +8693,7 @@
         </postBattle>
         <common>
           <battles>
-            <count>	25	</count>
+            <count>	27	</count>
           </battles>
           <bonusLimit>	1	</bonusLimit>
         </common>
@@ -8815,14 +8822,14 @@
           <and>
             <results>
               <key>	kills	</key>
-              <greaterOrEqual>	4	</greaterOrEqual>
+              <greaterOrEqual>	5	</greaterOrEqual>
             </results>
             <isAlive></isAlive>
           </and>
         </postBattle>
         <common>
           <battles>
-            <count>	3	</count>
+            <count>	2	</count>
           </battles>
           <bonusLimit>	1	</bonusLimit>
         </common>
@@ -9084,7 +9091,7 @@
         <postBattle>
           <results>
             <key>	originalXP	</key>
-            <greaterOrEqual>	1350	</greaterOrEqual>
+            <greaterOrEqual>	1375	</greaterOrEqual>
           </results>
         </postBattle>
         <common>
@@ -9145,7 +9152,7 @@
               <key>	damageDealt	</key>
               <key>	damageBlockedByArmor	</key>
             </plus>
-            <greaterOrEqual>	7500	</greaterOrEqual>
+            <greaterOrEqual>	8000	</greaterOrEqual>
           </results>
         </postBattle>
         <common>
@@ -9399,7 +9406,7 @@
           <and>
             <results>
               <key>	damageDealt	</key>
-              <greaterOrEqual>	5000	</greaterOrEqual>
+              <greaterOrEqual>	5500	</greaterOrEqual>
             </results>
             <results>
               <key>	damageBlockedByArmor	</key>
@@ -9526,7 +9533,7 @@
         <common>
           <bonusLimit>	1	</bonusLimit>
           <cumulative>
-            <damageAssistedRadio>	40000	</damageAssistedRadio>
+            <damageAssistedRadio>	50000	</damageAssistedRadio>
           </cumulative>
         </common>
       </conditions>
@@ -9585,7 +9592,7 @@
         </postBattle>
         <common>
           <battles>
-            <count>	12	</count>
+            <count>	14	</count>
           </battles>
           <bonusLimit>	1	</bonusLimit>
         </common>
@@ -9639,14 +9646,14 @@
           </battle>
           <vehicle>
             <vehicleDescr>
-              <types>	usa:A176_OTAC_LK_7605	</types>
+              <types>	uk:GB142_FV249_Castle	</types>
             </vehicleDescr>
           </vehicle>
         </preBattle>
         <common>
           <bonusLimit>	1	</bonusLimit>
           <cumulative>
-            <kills>	30	</kills>
+            <kills>	35	</kills>
           </cumulative>
         </common>
       </conditions>
@@ -9665,7 +9672,7 @@
           </battle>
           <vehicle>
             <vehicleDescr>
-              <types>	usa:A176_OTAC_LK_7605	</types>
+              <types>	uk:GB142_FV249_Castle	</types>
             </vehicleDescr>
           </vehicle>
         </preBattle>
@@ -9691,7 +9698,7 @@
           </battle>
           <vehicle>
             <vehicleDescr>
-              <types>	usa:A176_OTAC_LK_7605	</types>
+              <types>	uk:GB142_FV249_Castle	</types>
             </vehicleDescr>
           </vehicle>
         </preBattle>
@@ -9897,7 +9904,7 @@
           <bonusLimit>	1	</bonusLimit>
           <vehicleKills>
             <limittedTime>	240	</limittedTime>
-            <greaterOrEqual>	35	</greaterOrEqual>
+            <greaterOrEqual>	38	</greaterOrEqual>
           </vehicleKills>
         </common>
       </conditions>
@@ -9998,7 +10005,7 @@
         </postBattle>
         <common>
           <battles>
-            <count>	3	</count>
+            <count>	4	</count>
           </battles>
           <bonusLimit>	1	</bonusLimit>
         </common>
@@ -10033,7 +10040,7 @@
         </postBattle>
         <common>
           <battles>
-            <count>	12	</count>
+            <count>	15	</count>
           </battles>
           <bonusLimit>	1	</bonusLimit>
         </common>
@@ -10068,7 +10075,7 @@
         </postBattle>
         <common>
           <battles>
-            <count>	17	</count>
+            <count>	23	</count>
           </battles>
           <bonusLimit>	1	</bonusLimit>
         </common>
@@ -10138,7 +10145,7 @@
         </postBattle>
         <common>
           <battles>
-            <count>	14	</count>
+            <count>	17	</count>
           </battles>
           <bonusLimit>	1	</bonusLimit>
         </common>
@@ -10240,7 +10247,7 @@
         </postBattle>
         <common>
           <battles>
-            <count>	6	</count>
+            <count>	7	</count>
           </battles>
           <bonusLimit>	1	</bonusLimit>
         </common>
@@ -10307,7 +10314,7 @@
         </postBattle>
         <common>
           <battles>
-            <count>	5	</count>
+            <count>	6	</count>
           </battles>
           <bonusLimit>	1	</bonusLimit>
         </common>
@@ -10400,7 +10407,7 @@
               <key>	#armory_quest_conditions:conditions/cumulative/vehicleKills/mediumTank	</key>
             </description>
             <classes>	mediumTank	</classes>
-            <greaterOrEqual>	16	</greaterOrEqual>
+            <greaterOrEqual>	18	</greaterOrEqual>
           </vehicleKills>
         </common>
       </conditions>
@@ -10430,7 +10437,7 @@
               <key>	#armory_quest_conditions:conditions/cumulative/vehicleKills/heavyTank	</key>
             </description>
             <classes>	heavyTank	</classes>
-            <greaterOrEqual>	20	</greaterOrEqual>
+            <greaterOrEqual>	22	</greaterOrEqual>
           </vehicleKills>
         </common>
       </conditions>
@@ -10464,7 +10471,7 @@
         </postBattle>
         <common>
           <battles>
-            <count>	12	</count>
+            <count>	14	</count>
           </battles>
           <bonusLimit>	1	</bonusLimit>
         </common>
@@ -10527,7 +10534,7 @@
         </postBattle>
         <common>
           <battles>
-            <count>	5	</count>
+            <count>	8	</count>
           </battles>
           <bonusLimit>	1	</bonusLimit>
         </common>
@@ -10562,7 +10569,7 @@
         </postBattle>
         <common>
           <battles>
-            <count>	4	</count>
+            <count>	5	</count>
           </battles>
           <bonusLimit>	1	</bonusLimit>
         </common>
@@ -10589,7 +10596,7 @@
         <common>
           <bonusLimit>	1	</bonusLimit>
           <cumulative>
-            <damageAssistedRadio>	48000	</damageAssistedRadio>
+            <damageAssistedRadio>	60000	</damageAssistedRadio>
           </cumulative>
         </common>
       </conditions>
@@ -10641,7 +10648,7 @@
         <common>
           <bonusLimit>	1	</bonusLimit>
           <cumulative>
-            <noDamageDirectHitsReceived>	130	</noDamageDirectHitsReceived>
+            <noDamageDirectHitsReceived>	185	</noDamageDirectHitsReceived>
           </cumulative>
         </common>
       </conditions>
@@ -10686,8 +10693,8 @@
           </battle>
           <vehicle>
             <vehicleDescr>
-              <levels>	6 7 8 9 10	</levels>
-              <nations>	japan poland	</nations>
+              <levels>	6 7 8 9 10 11	</levels>
+              <nations>	france china	</nations>
             </vehicleDescr>
           </vehicle>
         </preBattle>
@@ -10702,7 +10709,7 @@
         </postBattle>
         <common>
           <battles>
-            <count>	7	</count>
+            <count>	10	</count>
           </battles>
           <bonusLimit>	1	</bonusLimit>
         </common>
@@ -10770,7 +10777,7 @@
               <key>	#armory_quest_conditions:conditions/cumulative/vehicleKills/AT_SPG	</key>
             </description>
             <classes>	AT-SPG	</classes>
-            <greaterOrEqual>	11	</greaterOrEqual>
+            <greaterOrEqual>	14	</greaterOrEqual>
           </vehicleKills>
         </common>
       </conditions>
@@ -10797,7 +10804,7 @@
         <common>
           <bonusLimit>	1	</bonusLimit>
           <cumulative>
-            <originalXP>	37000	</originalXP>
+            <originalXP>	40000	</originalXP>
           </cumulative>
         </common>
       </conditions>
@@ -10816,8 +10823,8 @@
           </battle>
           <vehicle>
             <vehicleDescr>
-              <levels>	6 7 8 9 10 11	</levels>
-              <nations>	france china	</nations>
+              <levels>	6 7 8 9 10	</levels>
+              <nations>	japan poland	</nations>
             </vehicleDescr>
           </vehicle>
         </preBattle>
@@ -10829,7 +10836,7 @@
         </postBattle>
         <common>
           <battles>
-            <count>	32	</count>
+            <count>	35	</count>
           </battles>
           <bonusLimit>	1	</bonusLimit>
         </common>
@@ -10890,7 +10897,7 @@
         <common>
           <bonusLimit>	1	</bonusLimit>
           <cumulative>
-            <kills>	50	</kills>
+            <kills>	55	</kills>
           </cumulative>
         </common>
       </conditions>
@@ -14180,7 +14187,7 @@
           </battle>
           <vehicle>
             <vehicleDescr>
-              <types>	usa:A176_OTAC_LK_7605	</types>
+              <types>	uk:GB142_FV249_Castle	</types>
             </vehicleDescr>
           </vehicle>
         </preBattle>
@@ -14206,7 +14213,7 @@
           </battle>
           <vehicle>
             <vehicleDescr>
-              <types>	usa:A176_OTAC_LK_7605	</types>
+              <types>	uk:GB142_FV249_Castle	</types>
             </vehicleDescr>
           </vehicle>
         </preBattle>
@@ -14687,7 +14694,7 @@
           <cumulativeExt>
             <results>
               <key>	damageDealt	</key>
-              <greaterOrEqual>	120000	</greaterOrEqual>
+              <greaterOrEqual>	130000	</greaterOrEqual>
             </results>
             <results>
               <key>	originalXP	</key>

@@ -1,0 +1,36 @@
+<repaint_battlepass_2020_ussr.xml>
+  <itemGroup>
+    <name>	Battle Pass 2020 Non-Historical	</name>
+    <userString>	#vehicle_customization:repaint/color_group_04	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	paints 20g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <paint>
+      <id>	59	</id>
+      <texture>	gui/maps/vehicles/repaints/ussr_color_05.png	</texture>
+      <color>	76 75 61 255	</color>
+      <gloss>	0.509	</gloss>
+      <metallic>	0.23	</metallic>
+      <userString>	#vehicle_customization:repaint/battlepass_2020_ussr	</userString>
+    </paint>
+    <paint>
+      <id>	60	</id>
+      <texture>	gui/maps/vehicles/repaints/custom_color_29.png	</texture>
+      <color>	157 160 165 255	</color>
+      <gloss>	0.509	</gloss>
+      <metallic>	0.23	</metallic>
+      <userString>	#vehicle_customization:repaint/battlepass_2020_usa	</userString>
+    </paint>
+    <usages>
+      <item>
+        <componentType>	ALL	</componentType>
+        <cost>	1	</cost>
+      </item>
+    </usages>
+  </itemGroup>
+</repaint_battlepass_2020_ussr.xml>

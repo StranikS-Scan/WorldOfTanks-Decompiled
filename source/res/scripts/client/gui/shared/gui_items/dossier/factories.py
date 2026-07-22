@@ -461,6 +461,7 @@ _ACHIEVEMENTS_BY_NAME = {(_AB.TOTAL, 'warrior'): _CustomAchieveFactory.get(_as.r
  (_AB.SINGLE, 'races24FirstPlace'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
  (_AB.SINGLE, 'races24Progression'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
  (_AB.SINGLE, 'BirthdayPr_2025'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
+ (_AB.SINGLE, 'BirthdayPr_2026'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
  (_AB.TOTAL, 'wt2024HunterWins'): _AchieveFactory.get(_abstract_achievements.QuestAchievement),
  (_AB.TOTAL, 'wt2024BossWins'): _AchieveFactory.get(_abstract_achievements.QuestAchievement),
  (_AB.TOTAL, 'wt2024MaxPlasma'): _AchieveFactory.get(_abstract_achievements.QuestAchievement),

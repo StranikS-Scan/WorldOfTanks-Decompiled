@@ -102,14 +102,20 @@ _GAME_ITEM_CONDITION_TAGS = {'selected': _COND_STATE.SELECTED,
  'money-not-enough': ~_COND_STATE.MONEY_ENOUGH,
  'level': _COND_STATE.LEVEL,
  'not-level': ~_COND_STATE.LEVEL,
+ 'level-range': _COND_STATE.LEVEL_RANGE,
+ 'not-level-range': ~_COND_STATE.LEVEL_RANGE,
  'may-install': _COND_STATE.MAY_INSTALL,
  'may-not-install': ~_COND_STATE.MAY_INSTALL,
  'installed': _COND_STATE.INSTALLED,
  'not-installed': ~_COND_STATE.INSTALLED,
  'has-regular-consumables': _COND_STATE.HAS_REGULAR_CONSUMABLES,
  'has-no-regular-consumables': ~_COND_STATE.HAS_REGULAR_CONSUMABLES,
+ 'all-equipment-installed': _COND_STATE.ALL_EQUIPMENT_INSTALLED,
+ 'not-all-equipment-installed': ~_COND_STATE.ALL_EQUIPMENT_INSTALLED,
  'has-optional-devices': _COND_STATE.HAS_OPTIONAL_DEVICES,
- 'has-no-optional-devices': ~_COND_STATE.HAS_OPTIONAL_DEVICES}
+ 'has-no-optional-devices': ~_COND_STATE.HAS_OPTIONAL_DEVICES,
+ 'has-multiplied-xp': _COND_STATE.HAS_MULTIPLIED_XP,
+ 'has-no-multiplied-xp': ~_COND_STATE.HAS_MULTIPLIED_XP}
 _GAME_ITEM_CONDITION_SET = set(_GAME_ITEM_CONDITION_TAGS.keys())
 
 def _readGameItemCondition(xmlCtx, section, _):

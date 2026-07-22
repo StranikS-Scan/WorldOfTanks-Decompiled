@@ -1,0 +1,33 @@
+<TradingCaravan_01_Paint_2025_name.xml>
+  <itemGroup>
+    <name>	TradingCaravan_1_37_Paint_2025	</name>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <tags>	hiddenInUI	</tags>
+    <priceGroup>	paints 20g notInShop	</priceGroup>
+    <userString>	#vehicle_customization:repaint/color_group_04	</userString>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <paint>
+      <id>	31376	</id>
+      <userString>	#vehicle_customization:TradingCaravan_01_Paint_2025/name	</userString>
+      <description>	#vehicle_customization:TradingCaravan_01_Paint_2025/description	</description>
+      <color>	86 101 116 255	</color>
+      <gloss>	0.509	</gloss>
+      <metallic>	0.23	</metallic>
+      <texture>	gui/maps/vehicles/repaints/custom_color_39.png	</texture>
+    </paint>
+    <paint>
+      <id>	31377	</id>
+      <color>	43 43 43 255	</color>
+      <gloss>	0.63	</gloss>
+      <metallic>	0.235	</metallic>
+      <texture>	gui/maps/vehicles/repaints/czech_color_04.png	</texture>
+      <userString>	#vehicle_customization:TradingCaravan_02_Paint_2025/name	</userString>
+      <description>	#vehicle_customization:TradingCaravan_02_Paint_2025/description	</description>
+    </paint>
+  </itemGroup>
+</TradingCaravan_01_Paint_2025_name.xml>

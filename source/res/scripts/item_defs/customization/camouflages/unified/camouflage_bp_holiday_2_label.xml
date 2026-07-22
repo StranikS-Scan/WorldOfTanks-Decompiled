@@ -1,0 +1,74 @@
+<camouflage_bp_holiday_2_label.xml>
+  <xmlns:czech1>	ussr	</xmlns:czech1>
+  <xmlns:germany>	germany	</xmlns:germany>
+  <xmlns:czech0>	usa	</xmlns:czech0>
+  <xmlns:china>	china	</xmlns:china>
+  <xmlns:france>	france	</xmlns:france>
+  <xmlns:uk>	uk	</xmlns:uk>
+  <xmlns:japan>	japan	</xmlns:japan>
+  <xmlns:czech>	czech	</xmlns:czech>
+  <xmlns:sweden>	sweden	</xmlns:sweden>
+  <xmlns:poland>	poland	</xmlns:poland>
+  <xmlns:italy>	italy	</xmlns:italy>
+  <xmlns:intunion>	intunion	</xmlns:intunion>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/transparent	</userString>
+    <season>	ALL	</season>
+    <historical>	2	</historical>
+    <priceGroup>	MT camouflages 50g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R47_ISU-152_Zveroboj ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <camouflage>
+      <id>	488	</id>
+      <texture>	vehicles/russian/Camouflage/bp_holiday_2_hull.dds	</texture>
+      <description>	#vehicle_customization:camouflage/bp_holiday_2/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/bp_holiday_2/label	</userString>
+      <tags>	hiddenInUI	</tags>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	255 0 0 0	</c0>
+          <c1>	197 220 240 255	</c1>
+          <c2>	0 0 255 0	</c2>
+          <c3>	17 15 8 255	</c3>
+        </palette>
+      </palettes>
+      <tilingSettings>
+        <type>	relativewithfactor	</type>
+        <factor>	2.54 2.54	</factor>
+        <offset>	-8.26 -13.36	</offset>
+      </tilingSettings>
+    </camouflage>
+    <camouflage>
+      <id>	489	</id>
+      <texture>	vehicles/russian/Camouflage/bp_holiday_2_turret.dds	</texture>
+      <description>	#vehicle_customization:camouflage/bp_holiday_2/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/bp_holiday_2/label	</userString>
+      <tags>	hiddenInUI	</tags>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	255 0 0 0	</c0>
+          <c1>	238 245 248 255	</c1>
+          <c2>	0 0 255 255	</c2>
+          <c3>	0 0 0 255	</c3>
+        </palette>
+      </palettes>
+      <rotation>
+        <HULL>	-0.352906	</HULL>
+        <TURRET>	-0.352906	</TURRET>
+        <GUN>	-0.352906	</GUN>
+      </rotation>
+      <tilingSettings>
+        <type>	relativewithfactor	</type>
+        <factor>	6.18 6.18	</factor>
+        <offset>	-12.33 -2.26	</offset>
+      </tilingSettings>
+    </camouflage>
+  </itemGroup>
+</camouflage_bp_holiday_2_label.xml>

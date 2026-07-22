@@ -1,0 +1,69 @@
+<camouflage_ny_2021_chuck_label.xml>
+  <germany:G42_Maus6>	ussr	</germany:G42_Maus6>
+  <germany:G189_E100_028>	germany	</germany:G189_E100_028>
+  <germany:G42_Maus5>	usa	</germany:G42_Maus5>
+  <germany:G189_E100_025>	china	</germany:G189_E100_025>
+  <germany:G189_E100_027>	france	</germany:G189_E100_027>
+  <germany:G42_Maus4>	uk	</germany:G42_Maus4>
+  <germany:G42_Maus1>	japan	</germany:G42_Maus1>
+  <germany:G189_E100_026>	czech	</germany:G189_E100_026>
+  <germany:G42_Maus3>	sweden	</germany:G42_Maus3>
+  <germany:G42_Maus2>	poland	</germany:G42_Maus2>
+  <germany:G42_Maus0>	italy	</germany:G42_Maus0>
+  <germany:G189_E100_029>	intunion	</germany:G189_E100_029>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/opaque	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	MT camouflages 50g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R47_ISU-152_Zveroboj ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <camouflage>
+      <id>	209	</id>
+      <texture>	vehicles/russian/Camouflage/ny_2021_chuck.dds	</texture>
+      <description>	#vehicle_customization:camouflage/ny_2021_chuck/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/ny_2021_chuck/label	</userString>
+      <tags>	hiddenInUI	</tags>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	255 0 0 255	</c0>
+          <c1>	0 255 0 255	</c1>
+          <c2>	0 0 255 255	</c2>
+          <c3>	0 0 0 255	</c3>
+        </palette>
+      </palettes>
+      <rotation>
+        <HULL>	0.20944	</HULL>
+        <TURRET>	0.20944	</TURRET>
+        <GUN>	0.20944	</GUN>
+      </rotation>
+      <tiling>
+        <germany:G121_Grille_15_L63>	7.64784 7.64784 1.3749 0.087	</germany:G121_Grille_15_L63>
+        <germany:G42_Maus>	2.6 2.6 -0.39 -1.24	</germany:G42_Maus>
+        <germany:G189_E100_023>	2.6 2.6 -0.39 -1.24	</germany:G189_E100_023>
+        <germany:G56_E-100>	2.6 2.6 0.33 0.53	</germany:G56_E-100>
+        <germany:G189_E100_02>	2.6 2.6 0.33 0.53	</germany:G189_E100_02>
+        <italy:It08_Progetto_M40_mod_65>	1.3 1.3 0.04 -0.36	</italy:It08_Progetto_M40_mod_65>
+        <sweden:S11_Strv_103B>	1 1 1.25 0.08	</sweden:S11_Strv_103B>
+        <uk:GB91_Super_Conqueror>	1.4 1.4 0.14 0.000000	</uk:GB91_Super_Conqueror>
+        <usa:A13_T34_hvy>	3.1 3.1 0.07 -0.28	</usa:A13_T34_hvy>
+        <ussr:R115_IS-3_auto>	3.38 3.38 -0.12 -0.07	</ussr:R115_IS-3_auto>
+        <ussr:R11_MS-1>	4.31 4.31 -0.65 -0.27	</ussr:R11_MS-1>
+        <germany:G189_E100_020>	2.9 2.9 -1.2 -0.38	</germany:G189_E100_020>
+        <germany:G189_E100_021>	0.64 0.64 -0.02 -0.1399	</germany:G189_E100_021>
+        <germany:G189_E100_022>	0.64 0.64 -0.02 -0.1399	</germany:G189_E100_022>
+        <germany:G189_E100_024>	2.3 2.3 0.856 -0.4033	</germany:G189_E100_024>
+      </tiling>
+      <tilingSettings>
+        <type>	relative	</type>
+        <factor>	2.3 2.3	</factor>
+        <offset>	0.14 -0.37	</offset>
+      </tilingSettings>
+    </camouflage>
+  </itemGroup>
+</camouflage_ny_2021_chuck_label.xml>

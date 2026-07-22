@@ -1,0 +1,50 @@
+<camouflage_Excalibur_lbz_camo_w_label.xml>
+  <xmlns:china2>	ussr	</xmlns:china2>
+  <xmlns:germany>	germany	</xmlns:germany>
+  <xmlns:china1>	usa	</xmlns:china1>
+  <xmlns:china>	china	</xmlns:china>
+  <xmlns:france>	france	</xmlns:france>
+  <xmlns:china0>	uk	</xmlns:china0>
+  <xmlns:japan>	japan	</xmlns:japan>
+  <xmlns:czech>	czech	</xmlns:czech>
+  <xmlns:sweden>	sweden	</xmlns:sweden>
+  <xmlns:poland>	poland	</xmlns:poland>
+  <xmlns:italy>	italy	</xmlns:italy>
+  <xmlns:intunion>	intunion	</xmlns:intunion>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/opaque	</userString>
+    <season>	winter	</season>
+    <historical>	0	</historical>
+    <priceGroup>	MT camouflages 50g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	uk:GB96_Excalibur	</vehicles>
+      </include>
+    </vehicleFilter>
+    <camouflage>
+      <id>	583	</id>
+      <texture>	vehicles/british/Camouflage/Excalibur_lbz_camo.dds	</texture>
+      <description>	#vehicle_customization:camouflage/Excalibur_lbz_camo_w/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/Excalibur_lbz_camo_w/label	</userString>
+      <tags>	rare	</tags>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	63 59 50 255	</c0>
+          <c1>	158 173 186 255	</c1>
+          <c2>	90 96 99 255	</c2>
+          <c3>	0 0 0 0	</c3>
+        </palette>
+      </palettes>
+      <tiling>
+        <uk:GB96_Excalibur>	2.54 2.54 0.000000 0.000000	</uk:GB96_Excalibur>
+      </tiling>
+      <tilingSettings>
+        <type>	relative	</type>
+        <factor>	1.784869  1.781583	</factor>
+        <offset>	0.000000 0.000000	</offset>
+      </tilingSettings>
+    </camouflage>
+  </itemGroup>
+</camouflage_Excalibur_lbz_camo_w_label.xml>

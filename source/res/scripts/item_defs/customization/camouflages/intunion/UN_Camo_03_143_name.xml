@@ -1,0 +1,51 @@
+<UN_Camo_03_143_name.xml>
+  <xmlns:czech1>	ussr	</xmlns:czech1>
+  <xmlns:germany>	germany	</xmlns:germany>
+  <xmlns:czech0>	usa	</xmlns:czech0>
+  <xmlns:china>	china	</xmlns:china>
+  <xmlns:france>	france	</xmlns:france>
+  <xmlns:uk>	uk	</xmlns:uk>
+  <xmlns:japan>	japan	</xmlns:japan>
+  <xmlns:czech>	czech	</xmlns:czech>
+  <xmlns:sweden>	sweden	</xmlns:sweden>
+  <xmlns:poland>	poland	</xmlns:poland>
+  <xmlns:italy>	italy	</xmlns:italy>
+  <xmlns:intunion>	intunion	</xmlns:intunion>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/transparent	</userString>
+    <season>	ALL	</season>
+    <historical>	0	</historical>
+    <tags>	hiddenInUI fullRGB	</tags>
+    <priceGroup>	MT camouflages 50g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <nations>	intunion	</nations>
+      </include>
+    </vehicleFilter>
+    <camouflage>
+      <id>	31496	</id>
+      <texture>	vehicles/intunion/Camouflage/UN_Camo_03_143.dds	</texture>
+      <scales>	1.2 1 0.7	</scales>
+      <palettes>
+        <palette>
+          <c0>	51 51 51 255	</c0>
+          <c1>	0 255 0 0	</c1>
+          <c2>	0 0 255 0	</c2>
+          <c3>	0 0 0 0	</c3>
+        </palette>
+      </palettes>
+      <description>	#vehicle_customization:UN_Camo_03_143/description	</description>
+      <rotation>
+        <HULL>	0.122173	</HULL>
+        <TURRET>	0.122173	</TURRET>
+        <GUN>	0.122173	</GUN>
+      </rotation>
+      <tilingSettings>
+        <type>	relative	</type>
+        <factor>	2 2	</factor>
+        <offset>	-6.76 -1.23	</offset>
+      </tilingSettings>
+      <userString>	#vehicle_customization:UN_Camo_03_143/name	</userString>
+    </camouflage>
+  </itemGroup>
+</UN_Camo_03_143_name.xml>

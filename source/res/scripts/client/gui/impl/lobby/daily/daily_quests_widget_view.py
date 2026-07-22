@@ -3,13 +3,11 @@
 import logging
 import BigWorld
 import typing
-from account_helpers.AccountSettings import AccountSettings, PlayStreak
 from constants import PremiumConfigs
 from frameworks.wulf import Array, ViewFlags, WindowFlags
 from frameworks.wulf.view.view import ViewSettings
 from gui.Scaleform.genConsts.MISSIONS_STATES import MISSIONS_STATES
 from gui.impl.gen import R
-from gui.impl.gen.view_models.views.lobby.daily.daily_quests_view_model import DailyTabs
 from gui.impl.gen.view_models.views.lobby.daily.daily_quests_widget_view_model import DailyQuestsWidgetViewModel
 from gui.impl.gen.view_models.views.lobby.daily.widget_quest_model import WidgetQuestModel
 from gui.impl.gui_decorators import args2params
@@ -23,7 +21,7 @@ from gui.shared.events import LobbySimpleEvent
 from gui.shared.main_wnd_state_watcher import ClientMainWindowStateWatcher
 from gui.shared.missions.packers.events import getEventUIDataPacker, findFirstConditionModel
 from helpers import dependency
-from skeletons.gui.game_control import IWotPlusController, IGameSessionController, IPlayStreakController
+from skeletons.gui.game_control import IWotPlusController, IGameSessionController
 from skeletons.gui.impl import IGuiLoader
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
@@ -33,7 +31,6 @@ if typing.TYPE_CHECKING:
     from gui.server_events.event_items import ServerEventAbstract, DailyQuest
     from typing import Optional, Any
     from gui.impl.gen.view_models.common.missions.daily_quest_model import DailyQuestModel
-    from gui.impl.gen.view_models.views.lobby.daily.play_streak.play_streak_widget_model import PlayStreakWidgetModel
     from gui.impl.gen.view_models.common.missions.conditions.preformatted_condition_model import PreformattedConditionModel
 MOUSE_BUTTON_RIGHT = 2
 MOUSE_BUTTON_LEFT = 0
@@ -53,7 +50,6 @@ class DailyQuestsWidgetView(ViewImpl, ClientMainWindowStateWatcher):
     gameSession = dependency.descriptor(IGameSessionController)
     itemsCache = dependency.descriptor(IItemsCache)
     __gui = dependency.descriptor(IGuiLoader)
-    __playStreakController = dependency.descriptor(IPlayStreakController)
 
     def __init__(self):
         settings = ViewSettings(R.views.lobby.daily.DailyQuestWidget(), ViewFlags.VIEW, DailyQuestsWidgetViewModel())
@@ -100,7 +96,6 @@ class DailyQuestsWidgetView(ViewImpl, ClientMainWindowStateWatcher):
     def _onLoading(self, *args, **kwargs):
         super(DailyQuestsWidgetView, self)._onLoading(*args, **kwargs)
         self._updateViewModel()
-        self.__onPlayStreakUpdated()
 
     def _initialize(self, *args, **kwargs):
         self.mainWindowWatcherInit()
@@ -108,31 +103,11 @@ class DailyQuestsWidgetView(ViewImpl, ClientMainWindowStateWatcher):
     def _getEvents(self):
         return ((self.__eventsCache.onSyncCompleted, self.__onSyncCompleted),
          (self.viewModel.onQuestClick, self.__onQuestClick),
-         (self.viewModel.onPlayStreakClick, self.__onPlayStreakClick),
          (self.gameSession.onPremiumTypeChanged, self._onPremiumTypeChanged),
-         (self.__playStreakController.onDataUpdated, self.__onPlayStreakUpdated),
          (self.lobbyContext.getServerSettings().onServerSettingsChange, self.__onServerSettingsChanged))
 
     def _getListeners(self):
         return ((LobbySimpleEvent.CLOSE_HELPLAYOUT, self.__onHelpLayoutHide, EVENT_BUS_SCOPE.LOBBY), (LobbySimpleEvent.SHOW_HELPLAYOUT, self.__onHelpLayoutShow, EVENT_BUS_SCOPE.LOBBY))
-
-    def __setIsFirstAppearance(self, streakProgress, model):
-        freezeProgress = self.itemsCache.items.playStreak.getRedemptionDay()
-        lastSeenCount = AccountSettings.getPlayStreak(PlayStreak.PLAY_STREAK_LAST_LEVEL_SEEN_WIDGET)
-        lastFreezeSeenCount = AccountSettings.getPlayStreak(PlayStreak.PLAY_STREAK_LAST_LEVEL_FREEZE_SEEN_WIDGET)
-        if streakProgress != lastSeenCount and streakProgress:
-            AccountSettings.setPlayStreak(PlayStreak.PLAY_STREAK_LAST_LEVEL_SEEN_WIDGET, streakProgress)
-            model.setIsFirstAppearance(True)
-        elif lastFreezeSeenCount != freezeProgress and self.itemsCache.items.playStreak.getDailyConditionCompleted():
-            AccountSettings.setPlayStreak(PlayStreak.PLAY_STREAK_LAST_LEVEL_FREEZE_SEEN_WIDGET, freezeProgress)
-            if freezeProgress > 0:
-                model.setIsFirstAppearanceRedemptionDay(True)
-            else:
-                model.setIsLastDayRedemption(True)
-        else:
-            model.setIsFirstAppearance(False)
-            model.setIsLastDayRedemption(False)
-            model.setIsFirstAppearanceRedemptionDay(False)
 
     def _finalize(self):
         self.mainWindowWatcherDestroy()
@@ -153,11 +128,6 @@ class DailyQuestsWidgetView(ViewImpl, ClientMainWindowStateWatcher):
         with self.getViewModel().transaction() as tx:
             modelPremiumQuests = tx.getPremiumQuests()
             self.__packQuestsModel(modelPremiumQuests, premiumQuests)
-
-    def __onPlayStreakUpdated(self):
-        if self.lobbyContext.getServerSettings().playStreakConfig.isEnabled:
-            with self.viewModel.transaction() as tx:
-                self._updataPlayStreakModel(tx)
 
     def _updateViewModel(self):
         _logger.debug('DailyQuests::UpdatingViewModel')
@@ -201,11 +171,6 @@ class DailyQuestsWidgetView(ViewImpl, ClientMainWindowStateWatcher):
     @args2params(int)
     def __onQuestClick(self, tabIdx):
         showDailyQuests(subTab=tabIdx)
-
-    def __onPlayStreakClick(self):
-        showDailyQuests(subTab=DailyTabs.SERIAL)
-        if not AccountSettings.getPlayStreak(PlayStreak.PLAY_STREAK_CLICK):
-            AccountSettings.setPlayStreak(PlayStreak.PLAY_STREAK_CLICK, True)
 
     def __onHelpLayoutShow(self, _):
         windows = self.__gui.windowsManager.findWindows(predicateTooltipWindow)
@@ -263,16 +228,3 @@ class DailyQuestsWidgetView(ViewImpl, ClientMainWindowStateWatcher):
 
         model.invalidate()
         return
-
-    def _updataPlayStreakModel(self, model):
-        with model.playStreak.transaction() as tx:
-            streakProgress = self.__playStreakController.getStreakProgress()
-            tx.setStreakLength(streakProgress)
-            self.__setIsFirstAppearance(streakProgress, tx)
-            tx.setSkipDayCount(self.__playStreakController.getSkipDayCount())
-            tx.setDailyWin(self.itemsCache.items.playStreak.getDailyConditionCompleted())
-            tx.setIsPaused(self.lobbyContext.getServerSettings().playStreakConfig.isPaused)
-            tx.setRedemptionDayCount(self.itemsCache.items.playStreak.getRedemptionDay())
-            tx.setIsBlocked(self.__playStreakController.getIsBlocked())
-            tx.setRedemptionMaxDayCount(self.lobbyContext.getServerSettings().playStreakConfig.daySkipSettings.get('freezeModeLength'))
-            tx.setIsEnabled(self.lobbyContext.getServerSettings().playStreakConfig.isEnabled)

@@ -1,0 +1,90 @@
+<special_style_G178_Sturmtiger_V1_3Dst_01_name.xml>
+  <itemGroup>
+    <season>	ALL	</season>
+    <historical>	0	</historical>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <priceGroup>	MT 3D styles 9-10 levels 8000g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	germany:G178_Sturmtiger_V1	</vehicles>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	31375	</id>
+      <modelsSet>	G178_Sturmtiger_V1_3Dst_01	</modelsSet>
+      <texture>	gui/maps/vehicles/styles/G178_Sturmtiger_V1_3Dst_01.png	</texture>
+      <userString>	#vehicle_customization:special_style/G178_Sturmtiger_V1_3Dst_01/name	</userString>
+      <description>	#vehicle_customization:special_style/G178_Sturmtiger_V1_3Dst_01/description	</description>
+      <longDescriptionSpecial>	#vehicle_customization:special_style/G178_Sturmtiger_V1_3Dst_01/longDescription	</longDescriptionSpecial>
+      <outfits>
+        <outfit>
+          <season>	event	</season>
+        </outfit>
+        <outfit>
+          <season>	winter	</season>
+          <camouflages>
+            <item>
+              <id>	31365	</id>
+              <patternSize>	1	</patternSize>
+              <appliedTo>	4368	</appliedTo>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <attachments>
+            <item>
+              <id>	31071	</id>
+              <slotId>	18000	</slotId>
+            </item>
+          </attachments>
+        </outfit>
+        <outfit>
+          <season>	summer	</season>
+          <camouflages>
+            <item>
+              <id>	31352	</id>
+              <patternSize>	1	</patternSize>
+              <appliedTo>	4368	</appliedTo>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <attachments>
+            <item>
+              <id>	31071	</id>
+              <slotId>	18000	</slotId>
+            </item>
+          </attachments>
+        </outfit>
+        <outfit>
+          <season>	desert	</season>
+          <camouflages>
+            <item>
+              <id>	31353	</id>
+              <patternSize>	1	</patternSize>
+              <appliedTo>	4368	</appliedTo>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <attachments>
+            <item>
+              <id>	31071	</id>
+              <slotId>	18000	</slotId>
+            </item>
+          </attachments>
+        </outfit>
+      </outfits>
+      <outfits></outfits>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+    </style>
+    <vehicleFilter>
+      <include></include>
+    </vehicleFilter>
+    <maxNumber>	1	</maxNumber>
+    <tags>	styleSerialNumber progression_required	</tags>
+  </itemGroup>
+</special_style_G178_Sturmtiger_V1_3Dst_01_name.xml>

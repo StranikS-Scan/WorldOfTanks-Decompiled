@@ -1,0 +1,52 @@
+<camouflage_PM_winter_t28htc_label.xml>
+  <xmlns:china2>	ussr	</xmlns:china2>
+  <xmlns:germany>	germany	</xmlns:germany>
+  <xmlns:china1>	usa	</xmlns:china1>
+  <xmlns:china>	china	</xmlns:china>
+  <xmlns:france>	france	</xmlns:france>
+  <xmlns:china0>	uk	</xmlns:china0>
+  <xmlns:japan>	japan	</xmlns:japan>
+  <xmlns:czech>	czech	</xmlns:czech>
+  <xmlns:sweden>	sweden	</xmlns:sweden>
+  <xmlns:poland>	poland	</xmlns:poland>
+  <xmlns:italy>	italy	</xmlns:italy>
+  <xmlns:intunion>	intunion	</xmlns:intunion>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/opaque	</userString>
+    <season>	winter	</season>
+    <historical>	0	</historical>
+    <priceGroup>	MT camouflages 50g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <nations>	usa	</nations>
+        <vehicles>	usa:A102_T28_concept	</vehicles>
+      </include>
+    </vehicleFilter>
+    <camouflage>
+      <id>	15240	</id>
+      <texture>	vehicles/american/Camouflage/camo_v3.dds	</texture>
+      <description>	#vehicle_customization:camouflage/PM_winter_t28htc/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/PM_winter_t28htc/label	</userString>
+      <tags>	rare	</tags>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	182 183 179 255	</c0>
+          <c1>	44 39 37 255	</c1>
+          <c2>	99 85 63 255	</c2>
+          <c3>	124 124 120 255	</c3>
+        </palette>
+      </palettes>
+      <tiling>
+        <A102_T28_concept>	0.7 0.7 2 5	</A102_T28_concept>
+        <usa:A129_T6_medium>	3 3 0.000000 0.000000	</usa:A129_T6_medium>
+      </tiling>
+      <tilingSettings>
+        <type>	relative	</type>
+        <factor>	0.847382  0.852807	</factor>
+        <offset>	0.000000 0.000000	</offset>
+      </tilingSettings>
+    </camouflage>
+  </itemGroup>
+</camouflage_PM_winter_t28htc_label.xml>

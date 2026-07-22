@@ -2,10 +2,9 @@
 # Embedded file name: scripts/client/gui/impl/lobby/gf_notifications/__init__.py
 from gui.Scaleform.framework.entities.inject_component_adaptor import InjectComponentAdaptor
 from simple_notification import SimpleNotification
-from play_streak_rewards import PlayStreakRewards
 from debug_utils import LOG_ERROR
 from gui.impl.gen import R
-NOTIFICATION_PRESENTERS = {'PlayStreakRewards': (R.views.lobby.notifications.PlayStreakRewards(), PlayStreakRewards)}
+NOTIFICATION_PRESENTERS = {}
 
 class GFNotificationInject(InjectComponentAdaptor):
 

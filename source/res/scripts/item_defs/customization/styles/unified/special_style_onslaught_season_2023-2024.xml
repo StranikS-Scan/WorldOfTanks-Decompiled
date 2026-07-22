@@ -1,0 +1,42 @@
+<special_style_onslaught_season_2023-2024.xml>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	MT 2D styles universal 1000g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <style>
+      <id>	836	</id>
+      <texture>	gui/maps/vehicles/styles/onslaught_season_2023-2024.png	</texture>
+      <userString>	#vehicle_customization:special_style/onslaught_season_2023-2024	</userString>
+      <description>	#vehicle_customization:special_style/onslaught_season_2023-2024_desc	</description>
+      <longDescriptionSpecial>	#vehicle_customization:special_style/onslaught_season_2023-2024_desc/long	</longDescriptionSpecial>
+      <tags>	questsProgression	</tags>
+      <alternateItems>
+        <camouflage>
+          <id>	15982 15983 15984 15985 15986 15987	</id>
+        </camouflage>
+        <decal>
+          <id>	15954 15955 15956 15957 15958 15959 15960 15961 15962 15963 15964 15965 15966 15967 15968 15969 15970 15971 15972 15973 15974 15975 15976	</id>
+        </decal>
+      </alternateItems>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	15982	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+        </outfit>
+      </outfits>
+    </style>
+  </itemGroup>
+</special_style_onslaught_season_2023-2024.xml>

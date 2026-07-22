@@ -12,18 +12,15 @@ from gui.impl.gui_decorators import args2params
 from gui.impl.lobby.daily import DailyTabs
 from gui.impl.lobby.daily.daily_quests_facade import DailyQuestsFacade
 from gui.impl.lobby.daily.daily_quests_info_page import showDailyQuestsInfoPage
-from gui.impl.lobby.play_streak.play_streak_facade import PlayStreakFacade
-from gui.impl.lobby.play_streak.play_streak_info_page import showPlayStreakInfoPage
 from gui.impl.pub import ViewImpl
 from gui.server_events import settings
-from gui.server_events.events_helpers import isPremiumQuestsEnable, isDailyQuestsEnable, isPlayStreakEnable, isDailyRegularQuestsEnabled
+from gui.server_events.events_helpers import isPremiumQuestsEnable, isDailyQuestsEnable, isDailyRegularQuestsEnabled
 from gui.shared import events
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
 from gui.shared.event_dispatcher import showDailyQuestsIntroWindow
 from helpers import dependency
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
-from skeletons.gui.lobby_context import ILobbyContext
 _logger = logging.getLogger(__name__)
 DEFAULT_DAILY_TAB = DailyTabs.QUESTS
 DAILY_VIEW = (DailyTabs.QUESTS, DailyTabs.PREMIUM)
@@ -32,8 +29,7 @@ DAILY_LAOUT_ID = R.views.lobby.daily.DailyQuestsRegularView()
 class DailyQuestsView(ViewImpl):
     eventsCache = dependency.descriptor(IEventsCache)
     itemsCache = dependency.descriptor(IItemsCache)
-    lobbyContext = dependency.descriptor(ILobbyContext)
-    __slots__ = ('__proxyMissionsPage', '__viewActive', '__tabs', '__tabsToSubview', '__subviews', '__currentTabID', '__dailyQuests', '__em', 'onIsCurrentMissionTab', 'onPlayStreakTab', '__playStreak', '__battleTypes', '__tooltipData')
+    __slots__ = ('__proxyMissionsPage', '__viewActive', '__tabs', '__tabsToSubview', '__subviews', '__currentTabID', '__dailyQuests', '__em', 'onIsCurrentMissionTab', '__battleTypes', '__tooltipData')
 
     def __init__(self, layoutID=R.views.lobby.daily.DailyQuestsView()):
         viewSettings = ViewSettings(layoutID, ViewFlags.VIEW, DailyQuestsViewModel())
@@ -44,14 +40,10 @@ class DailyQuestsView(ViewImpl):
         self.__dailyQuests = DailyQuestsFacade(self)
         self.__tabs.update(self.__dailyQuests.getTabs())
         self.__tabsToSubview.update(self.__dailyQuests.getSubviews())
-        self.__playStreak = PlayStreakFacade(self)
-        self.__tabs.update(self.__playStreak.getTabs())
-        self.__tabsToSubview.update(self.__playStreak.getSubviews())
         self.__currentTabID = None
         self.__viewActive = False
         self.__em = EventManager()
         self.onIsCurrentMissionTab = Event(self.__em)
-        self.onPlayStreakTab = Event(self.__em)
         self.__tooltipData = {}
         return
 
@@ -109,7 +101,7 @@ class DailyQuestsView(ViewImpl):
 
     def initView(self):
         dq = settings.getDQSettings()
-        if not dq.dailyQuestsIntroSeen and (isDailyQuestsEnable() or isPlayStreakEnable()):
+        if not dq.dailyQuestsIntroSeen and isDailyQuestsEnable():
             showDailyQuestsIntroWindow()
         else:
             with self.viewModel.transaction() as tx:
@@ -117,7 +109,6 @@ class DailyQuestsView(ViewImpl):
 
     def _finalize(self):
         self.__dailyQuests.finalize()
-        self.__playStreak.finalize()
         self.__tabs.clear()
         self.__tabsToSubview.clear()
         self.__proxyMissionsPage = None
@@ -129,23 +120,17 @@ class DailyQuestsView(ViewImpl):
     def _updateModel(self, model):
         model.setIsDailyRegularEnabled(isDailyRegularQuestsEnabled())
         model.setIsDailyPremEnabled(isPremiumQuestsEnable())
-        model.setIsSerialEnterEnabled(isPlayStreakEnable())
         battleTypes = model.getDailyBattleTypes()
         self.__dailyQuests.updateBattleModes(battleTypes)
 
     def _getEvents(self):
-        return ((self.viewModel.onTabClick, self.__onTabClick),
-         (self.viewModel.onClose, self.__onCloseView),
-         (self.viewModel.onInfoClick, self.__showInfoPage),
-         (self.viewModel.onShowInfo, self.__showPlayStreakInfoPage))
+        return ((self.viewModel.onTabClick, self.__onTabClick), (self.viewModel.onClose, self.__onCloseView), (self.viewModel.onInfoClick, self.__showInfoPage))
 
     def _getListeners(self):
         return ((events.MissionsEvent.ON_TAB_CHANGED, self.__onMissionsTabChanged, EVENT_BUS_SCOPE.LOBBY),)
 
     @args2params(int)
     def __onTabClick(self, tabIdx):
-        if tabIdx == DailyTabs.SERIAL:
-            self.onPlayStreakTab()
         self.changeTab(tabIdx)
 
     def __onCloseView(self):
@@ -186,6 +171,3 @@ class DailyQuestsView(ViewImpl):
 
     def __showInfoPage(self):
         showDailyQuestsInfoPage()
-
-    def __showPlayStreakInfoPage(self):
-        showPlayStreakInfoPage()

@@ -11,7 +11,7 @@ from gui.impl.gen.view_models.views.lobby.blueprints.blueprint_screen_tooltips i
 from gui.impl.lobby.progressive_reward.progressive_award_sounds import setSoundState, ProgressiveRewardSoundEvents
 from gui.impl.pub import ViewImpl
 from gui.impl.pub.lobby_window import LobbyNotificationWindow
-from gui.impl.backport import createTooltipData, BackportTooltipWindow, TooltipData
+from gui.impl.backport import createTooltipData, BackportTooltipWindow
 from gui.techtree.techtree_dp import g_techTreeDP
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.shared.event_dispatcher import showBlueprintView
@@ -123,7 +123,7 @@ class ProgressiveRewardAwardView(ViewImpl):
                 rewardsList.addViewModel(rewardRender)
                 compensationReason = reward.get('compensationReason', None)
                 ttTarget = compensationReason if compensationReason is not None else reward
-                self.__items[index] = TooltipData(tooltip=ttTarget.get('tooltip', None), isSpecial=ttTarget.get('isSpecial', False), specialAlias=ttTarget.get('specialAlias', ''), specialArgs=ttTarget.get('specialArgs', None))
+                self.__items[index] = createTooltipData(tooltip=ttTarget.get('tooltip', None), isSpecial=ttTarget.get('isSpecial', False), specialAlias=ttTarget.get('specialAlias', ''), specialArgs=ttTarget.get('specialArgs', None))
 
             rewardsList.invalidate()
             tx.setSpecialRewardType(self.__specialRewardType)

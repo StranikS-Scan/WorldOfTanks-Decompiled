@@ -559,6 +559,7 @@ class CamouflageXmlWriter(BaseCustomizationItemXmlWriter):
         if group:
             changed |= rewriteFloat(section, 'invisibilityFactor', item, 'invisibilityFactor', 1.0)
             changed |= rewriteFloat(section, 'exclusionImpact', item, 'exclusionImpact', 1.0)
+            changed |= rewriteBool(section, 'forceUv0', item, 'forceUv0', False)
             changed |= rewritePalettes(section, item)
             changed |= rewriteCamouflageRotation(section, item)
             changed |= rewriteCamouflageTiling(section, item)

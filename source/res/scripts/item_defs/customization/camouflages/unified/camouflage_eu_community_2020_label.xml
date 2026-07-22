@@ -1,0 +1,55 @@
+<camouflage_eu_community_2020_label.xml>
+  <ussr:R40_T-54_FL3>	ussr	</ussr:R40_T-54_FL3>
+  <xmlns:germany>	germany	</xmlns:germany>
+  <ussr:R40_T-54_FL2>	usa	</ussr:R40_T-54_FL2>
+  <xmlns:china>	china	</xmlns:china>
+  <xmlns:france>	france	</xmlns:france>
+  <ussr:R40_T-54_FL1>	uk	</ussr:R40_T-54_FL1>
+  <xmlns:japan>	japan	</xmlns:japan>
+  <xmlns:czech>	czech	</xmlns:czech>
+  <ussr:R40_T-54_FL0>	sweden	</ussr:R40_T-54_FL0>
+  <xmlns:poland>	poland	</xmlns:poland>
+  <xmlns:italy>	italy	</xmlns:italy>
+  <xmlns:intunion>	intunion	</xmlns:intunion>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/transparent	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	MT camouflages 50g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R47_ISU-152_Zveroboj ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <camouflage>
+      <id>	210	</id>
+      <texture>	vehicles/russian/Camouflage/eu_community_2020.dds	</texture>
+      <description>	#vehicle_customization:camouflage/eu_community_2020/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/eu_community_2020/label	</userString>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	196 31 31 255	</c0>
+          <c1>	152 152 152 255	</c1>
+          <c2>	127 94 28 255	</c2>
+          <c3>	20 4 4 255	</c3>
+        </palette>
+      </palettes>
+      <rotation>
+        <HULL>	-0.397935	</HULL>
+        <TURRET>	-0.397935	</TURRET>
+        <GUN>	-0.397935	</GUN>
+      </rotation>
+      <tiling>
+        <ussr:R40_T-54>	4.73 4.73 -0.476398 0.01	</ussr:R40_T-54>
+        <ussr:R40_T-54_FL>	4.73 4.73 -0.476398 0.01	</ussr:R40_T-54_FL>
+      </tiling>
+      <tilingSettings>
+        <type>	relative	</type>
+        <factor>	3 3	</factor>
+        <offset>	-0.98 -0.56	</offset>
+      </tilingSettings>
+    </camouflage>
+  </itemGroup>
+</camouflage_eu_community_2020_label.xml>

@@ -1,0 +1,204 @@
+<camouflage_ny_2023_bro_label.xml>
+  <france:F18_Bat_Chatillon25t_7x76>	ussr	</france:F18_Bat_Chatillon25t_7x76>
+  <france:F18_Bat_Chatillon25t8>	germany	</france:F18_Bat_Chatillon25t8>
+  <france:F18_Bat_Chatillon25t_7x75>	usa	</france:F18_Bat_Chatillon25t_7x75>
+  <france:F18_Bat_Chatillon25t5>	china	</france:F18_Bat_Chatillon25t5>
+  <france:F18_Bat_Chatillon25t7>	france	</france:F18_Bat_Chatillon25t7>
+  <france:F18_Bat_Chatillon25t_7x74>	uk	</france:F18_Bat_Chatillon25t_7x74>
+  <france:F18_Bat_Chatillon25t_7x71>	japan	</france:F18_Bat_Chatillon25t_7x71>
+  <france:F18_Bat_Chatillon25t6>	czech	</france:F18_Bat_Chatillon25t6>
+  <france:F18_Bat_Chatillon25t_7x73>	sweden	</france:F18_Bat_Chatillon25t_7x73>
+  <france:F18_Bat_Chatillon25t_7x72>	poland	</france:F18_Bat_Chatillon25t_7x72>
+  <france:F18_Bat_Chatillon25t_7x70>	italy	</france:F18_Bat_Chatillon25t_7x70>
+  <france:F18_Bat_Chatillon25t9>	intunion	</france:F18_Bat_Chatillon25t9>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/opaque	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	MT camouflages 50g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R47_ISU-152_Zveroboj ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <camouflage>
+      <id>	481	</id>
+      <texture>	vehicles/russian/Camouflage/ny_2023_bro.dds	</texture>
+      <description>	#vehicle_customization:camouflage/ny_2023_bro/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/ny_2023_bro/label	</userString>
+      <tags>	fullRGB hiddenInUI	</tags>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	255 0 0 255	</c0>
+          <c1>	0 255 0 255	</c1>
+          <c2>	0 0 255 255	</c2>
+          <c3>	0 0 0 255	</c3>
+        </palette>
+      </palettes>
+      <rotation>
+        <HULL>	-0.610865	</HULL>
+        <TURRET>	-0.610865	</TURRET>
+        <GUN>	-0.610865	</GUN>
+      </rotation>
+      <tilingSettings>
+        <type>	relativewithfactor	</type>
+        <factor>	3 3	</factor>
+        <offset>	2.57 -0.07	</offset>
+      </tilingSettings>
+    </camouflage>
+    <camouflage>
+      <id>	482	</id>
+      <texture>	vehicles/russian/Camouflage/ny_2023_cat.dds	</texture>
+      <description>	#vehicle_customization:camouflage/ny_2023_cat/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/ny_2023_cat/label	</userString>
+      <tags>	fullRGB hiddenInUI	</tags>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	255 0 0 255	</c0>
+          <c1>	0 255 0 255	</c1>
+          <c2>	0 0 255 255	</c2>
+          <c3>	0 0 0 255	</c3>
+        </palette>
+      </palettes>
+      <tilingSettings>
+        <type>	relativewithfactor	</type>
+        <factor>	1.8 1.8	</factor>
+        <offset>	-0.08 -0.04	</offset>
+      </tilingSettings>
+    </camouflage>
+    <camouflage>
+      <id>	483	</id>
+      <texture>	vehicles/russian/Camouflage/ny_2023_10th.dds	</texture>
+      <description>	#vehicle_customization:camouflage/ny_2023_10th/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/ny_2023_10th/label	</userString>
+      <tags>	fullRGB hiddenInUI	</tags>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	255 0 0 255	</c0>
+          <c1>	0 255 0 255	</c1>
+          <c2>	0 0 255 255	</c2>
+          <c3>	0 0 0 255	</c3>
+        </palette>
+      </palettes>
+      <rotation>
+        <HULL>	-0.456055	</HULL>
+        <TURRET>	-0.456055	</TURRET>
+        <GUN>	-0.456055	</GUN>
+      </rotation>
+      <tilingSettings>
+        <type>	relativewithfactor	</type>
+        <factor>	2.4 2.4	</factor>
+        <offset>	3.23 0.17	</offset>
+      </tilingSettings>
+      <glossMetallicMap>	vehicles/russian/Camouflage/ny_2023_10th_GM.dds	</glossMetallicMap>
+    </camouflage>
+    <camouflage>
+      <id>	484	</id>
+      <texture>	vehicles/russian/Camouflage/ny_2023_a.dds	</texture>
+      <description>	#vehicle_customization:camouflage/ny_2023_a/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/ny_2023_a/label	</userString>
+      <tags>	fullRGB hiddenInUI	</tags>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	255 0 0 255	</c0>
+          <c1>	0 255 0 255	</c1>
+          <c2>	0 0 255 255	</c2>
+          <c3>	0 0 0 255	</c3>
+        </palette>
+      </palettes>
+      <rotation>
+        <HULL>	0.261799	</HULL>
+        <TURRET>	0.261799	</TURRET>
+        <GUN>	0.261799	</GUN>
+      </rotation>
+      <tilingSettings>
+        <type>	relativewithfactor	</type>
+        <factor>	2.5 2.5	</factor>
+        <offset>	-1.46 -0.02	</offset>
+      </tilingSettings>
+      <tiling>
+        <germany:G56_E-100>	3 3 -0.62 0.5	</germany:G56_E-100>
+        <germany:G189_E100_02>	3 3 -0.62 0.5	</germany:G189_E100_02>
+        <usa:A63_M46_Patton>	2 2 0.17 0.21	</usa:A63_M46_Patton>
+      </tiling>
+    </camouflage>
+    <camouflage>
+      <id>	485	</id>
+      <texture>	vehicles/russian/Camouflage/ny_2023_m.dds	</texture>
+      <description>	#vehicle_customization:camouflage/ny_2023_m/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/ny_2023_m/label	</userString>
+      <tags>	fullRGB hiddenInUI	</tags>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	255 0 0 255	</c0>
+          <c1>	0 255 0 255	</c1>
+          <c2>	0 0 255 255	</c2>
+          <c3>	0 0 0 255	</c3>
+        </palette>
+      </palettes>
+      <rotation>
+        <HULL>	-0.349066	</HULL>
+        <TURRET>	-0.349066	</TURRET>
+        <GUN>	-0.349066	</GUN>
+      </rotation>
+      <tilingSettings>
+        <type>	relative	</type>
+        <factor>	2.5 2.5	</factor>
+        <offset>	1.1 -0.96	</offset>
+      </tilingSettings>
+    </camouflage>
+    <camouflage>
+      <id>	486	</id>
+      <texture>	vehicles/russian/Camouflage/ny_2023_m_challenge.dds	</texture>
+      <description>	#vehicle_customization:camouflage/ny_2023_m_challenge/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/ny_2023_m_challenge/label	</userString>
+      <tags>	fullRGB hiddenInUI	</tags>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	255 0 0 255	</c0>
+          <c1>	0 255 0 255	</c1>
+          <c2>	0 0 255 255	</c2>
+          <c3>	0 0 0 255	</c3>
+        </palette>
+      </palettes>
+      <rotation>
+        <HULL>	0.15516	</HULL>
+        <TURRET>	0.15516	</TURRET>
+        <GUN>	0.15516	</GUN>
+      </rotation>
+      <tilingSettings>
+        <type>	relativewithfactor	</type>
+        <factor>	2.3 2.3	</factor>
+        <offset>	0.5 -1.1	</offset>
+      </tilingSettings>
+      <tiling>
+        <france:F108_Panhard_EBR_105>	2.69 2.69 5.04 16.16	</france:F108_Panhard_EBR_105>
+        <france:F18_Bat_Chatillon25t>	1.97 1.97 -9.33 -3.12	</france:F18_Bat_Chatillon25t>
+        <france:F18_Bat_Chatillon25t_7x7>	1.97 1.97 -9.33 -3.12	</france:F18_Bat_Chatillon25t_7x7>
+        <germany:G121_Grille_15_L63>	8.78 8.78 1.85 -0.96	</germany:G121_Grille_15_L63>
+        <germany:G56_E-100>	2.97 2.97 -5.45 0.53	</germany:G56_E-100>
+        <germany:G189_E100_02>	2.97 2.97 -5.45 0.53	</germany:G189_E100_02>
+        <uk:GB91_Super_Conqueror>	1.45 1.45 7.79 7.17	</uk:GB91_Super_Conqueror>
+        <ussr:R148_Object_430_U>	0.91 0.91 2.16 1.1	</ussr:R148_Object_430_U>
+        <france:F18_Bat_Chatillon25t0>	0.91 0.91 2.16 1.1	</france:F18_Bat_Chatillon25t0>
+        <france:F18_Bat_Chatillon25t1>	3.02 3.02 -5.31 -1.33	</france:F18_Bat_Chatillon25t1>
+        <france:F18_Bat_Chatillon25t2>	3.81 3.81 0.11 0.19	</france:F18_Bat_Chatillon25t2>
+        <france:F18_Bat_Chatillon25t3>	3.81 3.81 0.11 0.19	</france:F18_Bat_Chatillon25t3>
+        <ussr:R1013_IS_3_T>	3.81 3.81 0.11 0.19	</ussr:R1013_IS_3_T>
+        <france:F18_Bat_Chatillon25t4>	3.07 3.07 2.34 0.8	</france:F18_Bat_Chatillon25t4>
+      </tiling>
+    </camouflage>
+  </itemGroup>
+</camouflage_ny_2023_bro_label.xml>

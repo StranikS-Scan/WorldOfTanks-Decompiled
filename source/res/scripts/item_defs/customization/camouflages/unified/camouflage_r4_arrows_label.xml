@@ -1,0 +1,136 @@
+<camouflage_r4_arrows_label.xml>
+  <xmlns:czech1>	ussr	</xmlns:czech1>
+  <xmlns:germany>	germany	</xmlns:germany>
+  <xmlns:czech0>	usa	</xmlns:czech0>
+  <xmlns:china>	china	</xmlns:china>
+  <xmlns:france>	france	</xmlns:france>
+  <xmlns:uk>	uk	</xmlns:uk>
+  <xmlns:japan>	japan	</xmlns:japan>
+  <xmlns:czech>	czech	</xmlns:czech>
+  <xmlns:sweden>	sweden	</xmlns:sweden>
+  <xmlns:poland>	poland	</xmlns:poland>
+  <xmlns:italy>	italy	</xmlns:italy>
+  <xmlns:intunion>	intunion	</xmlns:intunion>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/transparent	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	MT camouflages 50g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R47_ISU-152_Zveroboj ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <camouflage>
+      <id>	369	</id>
+      <texture>	vehicles/russian/Camouflage/r4_arrows.dds	</texture>
+      <description>	#vehicle_customization:camouflage/r4_arrows/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/r4_arrows/label	</userString>
+      <tags>	fullRGB	</tags>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	255 0 0 255	</c0>
+          <c1>	0 255 0 255	</c1>
+          <c2>	0 0 255 255	</c2>
+          <c3>	0 0 0 255	</c3>
+        </palette>
+      </palettes>
+      <rotation>
+        <HULL>	2.844887	</HULL>
+        <TURRET>	2.844887	</TURRET>
+        <GUN>	2.844887	</GUN>
+      </rotation>
+      <tilingSettings>
+        <type>	relativeWithFactor	</type>
+        <factor>	2.750000 2.750000	</factor>
+        <offset>	0.530000 2.200000	</offset>
+      </tilingSettings>
+    </camouflage>
+    <camouflage>
+      <id>	370	</id>
+      <texture>	vehicles/russian/Camouflage/r4_hammered.dds	</texture>
+      <description>	#vehicle_customization:camouflage/r4_hammered/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/r4_hammered/label	</userString>
+      <tags>	fullRGB	</tags>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	255 0 0 255	</c0>
+          <c1>	0 255 0 255	</c1>
+          <c2>	0 0 255 255	</c2>
+          <c3>	0 0 0 255	</c3>
+        </palette>
+      </palettes>
+      <rotation>
+        <HULL>	-0.261799	</HULL>
+        <TURRET>	-0.261799	</TURRET>
+        <GUN>	-0.261799	</GUN>
+      </rotation>
+      <tilingSettings>
+        <type>	relativeWithFactor	</type>
+        <factor>	2.5 2.5	</factor>
+        <offset>	0.380000 -0.150000	</offset>
+      </tilingSettings>
+      <gloss>	0.830000 0.510000 0.000000 0.590000	</gloss>
+      <metallic>	0.270000 0.230000 0.190000 0.120000	</metallic>
+    </camouflage>
+    <camouflage>
+      <id>	371	</id>
+      <texture>	vehicles/russian/Camouflage/r4_allies.dds	</texture>
+      <description>	#vehicle_customization:camouflage/r4_allies/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/r4_allies/label	</userString>
+      <tags>	fullRGB	</tags>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	255 0 0 255	</c0>
+          <c1>	0 255 0 255	</c1>
+          <c2>	0 0 255 255	</c2>
+          <c3>	0 0 0 255	</c3>
+        </palette>
+      </palettes>
+      <rotation>
+        <HULL>	0.384147	</HULL>
+        <TURRET>	0.384147	</TURRET>
+        <GUN>	0.384147	</GUN>
+      </rotation>
+      <tilingSettings>
+        <type>	relativeWithFactor	</type>
+        <factor>	3.000000 3.000000	</factor>
+        <offset>	-0.200000 -0.380000	</offset>
+      </tilingSettings>
+    </camouflage>
+    <camouflage>
+      <id>	387	</id>
+      <texture>	vehicles/russian/Camouflage/lavaF.dds	</texture>
+      <description>	#vehicle_customization:camouflage/11_11/description	</description>
+      <scales>	1.2 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/11_11/label	</userString>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	32 33 40 255	</c0>
+          <c1>	61 61 61 255	</c1>
+          <c2>	64 61 76 255	</c2>
+          <c3>	0 0 0 0	</c3>
+        </palette>
+      </palettes>
+      <rotation>
+        <HULL>	-1.65806	</HULL>
+        <TURRET>	-1.65806	</TURRET>
+        <GUN>	-1.65806	</GUN>
+      </rotation>
+      <tilingSettings>
+        <type>	relativeWithFactor	</type>
+        <factor>	2 2	</factor>
+        <offset>	5.94 -2.29	</offset>
+      </tilingSettings>
+      <gloss>	0.500000 0.660000 0.509000 0.509000	</gloss>
+      <metallic>	0.330000 0.870000 0.230000 0.230000	</metallic>
+    </camouflage>
+  </itemGroup>
+</camouflage_r4_arrows_label.xml>

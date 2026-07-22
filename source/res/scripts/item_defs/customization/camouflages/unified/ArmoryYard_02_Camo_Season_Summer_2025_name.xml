@@ -1,0 +1,51 @@
+<ArmoryYard_02_Camo_Season_Summer_2025_name.xml>
+  <xmlns:czech1>	ussr	</xmlns:czech1>
+  <xmlns:germany>	germany	</xmlns:germany>
+  <xmlns:czech0>	usa	</xmlns:czech0>
+  <xmlns:china>	china	</xmlns:china>
+  <xmlns:france>	france	</xmlns:france>
+  <xmlns:uk>	uk	</xmlns:uk>
+  <xmlns:japan>	japan	</xmlns:japan>
+  <xmlns:czech>	czech	</xmlns:czech>
+  <xmlns:sweden>	sweden	</xmlns:sweden>
+  <xmlns:poland>	poland	</xmlns:poland>
+  <xmlns:italy>	italy	</xmlns:italy>
+  <xmlns:intunion>	intunion	</xmlns:intunion>
+  <itemGroup>
+    <season>	summer	</season>
+    <historical>	1	</historical>
+    <tags>	hiddenInUI fullRGB	</tags>
+    <priceGroup>	MT camouflages 50g notInShop	</priceGroup>
+    <camouflage>
+      <id>	31332	</id>
+      <scales>	1.2 1 0.7	</scales>
+      <palettes>
+        <palette>
+          <c0>	65 75 49 255	</c0>
+          <c1>	115 110 66 255	</c1>
+          <c2>	51 42 32 255	</c2>
+          <c3>	0 0 0 255	</c3>
+        </palette>
+      </palettes>
+      <texture>	vehicles/russian/Camouflage/ArmoryYard_02_Camo_Season_2025.dds	</texture>
+      <userString>	#vehicle_customization:ArmoryYard_02_Camo_Season_Summer_2025/name	</userString>
+      <description>	#vehicle_customization:ArmoryYard_02_Camo_Season_Summer_2025/description	</description>
+      <rotation>
+        <HULL>	-0.418879	</HULL>
+        <TURRET>	-0.418879	</TURRET>
+        <GUN>	-0.418879	</GUN>
+      </rotation>
+      <tilingSettings>
+        <type>	relative	</type>
+        <factor>	2.3 2.3	</factor>
+        <offset>	-5.24 -4.87	</offset>
+      </tilingSettings>
+    </camouflage>
+    <userString>	#vehicle_customization:camouflage/opaque	</userString>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R47_ISU-152_Zveroboj ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+  </itemGroup>
+</ArmoryYard_02_Camo_Season_Summer_2025_name.xml>

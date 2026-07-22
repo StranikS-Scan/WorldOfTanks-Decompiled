@@ -1,0 +1,153 @@
+<tankAcademyCustomization.xml>
+  <default-scene>	DefaultScene	</default-scene>
+  <initial-scene>	MissionsPage	</initial-scene>
+  <scenes>
+    <scene>	MissionsPage	  <post-effects>
+        <inactivate>	MenuHangarOnScene	</inactivate>
+        <inactivate>	HangarButtonWasClicked	</inactivate>
+        <inactivate>	TankCarouselOnScene	</inactivate>
+        <inactivate>	TuningBtnOnScene	</inactivate>
+      </post-effects>
+      <runtime-effects>
+        <show-hint>	MenuHangarHint	  <condition>
+            <active>	MenuHangarOnScene	</active>
+          </condition>
+        </show-hint>
+      </runtime-effects>
+      <gui-items>
+        <gui-item>	MenuHangar	  <on-scene-effects>
+            <activate>	MenuHangarOnScene	</activate>
+          </on-scene-effects>
+          <not-on-scene-effects>
+            <inactivate>	MenuHangarOnScene	</inactivate>
+          </not-on-scene-effects>
+        </gui-item>
+      </gui-items>
+    </scene>
+    <scene>	Hangar	  <post-effects>
+        <refuse-training>
+          <condition>
+            <inactive>	HangarButtonWasClicked	</inactive>
+          </condition>
+        </refuse-training>
+        <inactivate>	HangarButtonWasClicked	</inactivate>
+        <set-var>	CurrentVehicleCDSetter	</set-var>
+        <run-trigger>	CurrentVehicleChangeTrigger	</run-trigger>
+      </post-effects>
+      <runtime-effects>
+        <show-hint>	TankCarouselHint	  <condition>
+            <active>	TankCarouselOnScene	</active>
+            <game-item>	CurrentVehicleCD	  <not-level-range>	RequiredVehicleMinLevel RequiredVehicleMaxLevel	</not-level-range>
+            </game-item>
+          </condition>
+        </show-hint>
+        <show-hint>	TuningBtnHint	  <condition>
+            <active>	TuningBtnOnScene	</active>
+            <game-item>	CurrentVehicleCD	  <level-range>	RequiredVehicleMinLevel RequiredVehicleMaxLevel	</level-range>
+            </game-item>
+          </condition>
+        </show-hint>
+      </runtime-effects>
+      <gui-items>
+        <gui-item>	TankCarousel	  <on-scene-effects>
+            <activate>	TankCarouselOnScene	</activate>
+          </on-scene-effects>
+          <not-on-scene-effects>
+            <inactivate>	TankCarouselOnScene	</inactivate>
+          </not-on-scene-effects>
+        </gui-item>
+        <gui-item>	TuningBtn	  <on-scene-effects>
+            <activate>	TuningBtnOnScene	</activate>
+          </on-scene-effects>
+          <not-on-scene-effects>
+            <inactivate>	TuningBtnOnScene	</inactivate>
+          </not-on-scene-effects>
+        </gui-item>
+      </gui-items>
+    </scene>
+    <scene>	DefaultScene	  <post-effects>
+        <refuse-training></refuse-training>
+      </post-effects>
+      <runtime-effects></runtime-effects>
+      <gui-items></gui-items>
+    </scene>
+  </scenes>
+  <has-id>
+    <hint>	MenuHangarHint	  <item-id>	MenuHangar	</item-id>
+      <text>	Перейдите в Ангар	</text>
+      <hide-immediately>	True	</hide-immediately>
+      <update-runtime>	True	</update-runtime>
+      <arrow>
+        <direction>	B	</direction>
+        <loop>	True	</loop>
+      </arrow>
+      <actions>
+        <click>	MenuHangar	  <effects>
+            <activate>	HangarButtonWasClicked	</activate>
+            <close-hint>	MenuHangarHint	</close-hint>
+          </effects>
+        </click>
+        <esc>	MenuHangar	  <effects>
+            <refuse-training></refuse-training>
+          </effects>
+        </esc>
+        <click>	BattleSelectorBar	  <effects>
+            <refuse-training></refuse-training>
+          </effects>
+        </click>
+      </actions>
+    </hint>
+    <hint>	TankCarouselHint	  <item-id>	TankCarousel	</item-id>
+      <text>	Выберите машину $RequiredVehicleMinLevelRoman$ уровня и выше	</text>
+      <hide-immediately>	True	</hide-immediately>
+      <update-runtime>	True	</update-runtime>
+      <arrow>
+        <direction>	T	</direction>
+        <loop>	True	</loop>
+      </arrow>
+      <actions>
+        <esc>	TankCarousel	  <effects>
+            <refuse-training></refuse-training>
+          </effects>
+        </esc>
+      </actions>
+    </hint>
+    <hint>	TuningBtnHint	  <item-id>	TuningBtn	</item-id>
+      <text>	Нанесите любой 2D-стиль на машину —&lt;br/&gt;и выходите &lt;b&gt;В БОЙ&lt;/b&gt;	</text>
+      <hide-immediately>	True	</hide-immediately>
+      <update-runtime>	True	</update-runtime>
+      <arrow>
+        <direction>	T	</direction>
+        <loop>	True	</loop>
+      </arrow>
+      <actions>
+        <esc>	TuningBtn	  <effects>
+            <refuse-training></refuse-training>
+          </effects>
+        </esc>
+      </actions>
+    </hint>
+    <game-attribute>	CurrentVehicleCDSetter	  <var-ref>	CurrentVehicleCD	</var-ref>
+      <name>	CurrentVehicleCD	</name>
+    </game-attribute>
+  </has-id>
+  <triggers>
+    <trigger>	CurrentVehicleChangeTrigger	  <type>	current-vehicle-changed	</type>
+      <validate-var></validate-var>
+      <unlock-targets>
+        <unlock-target>	TankCarousel	</unlock-target>
+        <unlock-target>	TuningBtn	</unlock-target>
+      </unlock-targets>
+      <on-effects>
+        <set-var>	CurrentVehicleCDSetter	</set-var>
+        <close-hint>	TankCarouselHint	  <condition>
+            <game-item>	CurrentVehicleCD	  <level-range>	RequiredVehicleMinLevel RequiredVehicleMaxLevel	</level-range>
+            </game-item>
+          </condition>
+        </close-hint>
+        <close-hint>	TuningBtnHint	</close-hint>
+      </on-effects>
+    </trigger>
+  </triggers>
+  <vars></vars>
+</tankAcademyCustomization.xml>

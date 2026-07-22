@@ -1,0 +1,72 @@
+<camouflage_NY2020_east_label.xml>
+  <germany:G42_Maus9>	ussr	</germany:G42_Maus9>
+  <germany:G42_Maus1>	germany	</germany:G42_Maus1>
+  <germany:G42_Maus8>	usa	</germany:G42_Maus8>
+  <france:F114_Projet_4_18>	china	</france:F114_Projet_4_18>
+  <germany:G42_Maus0>	france	</germany:G42_Maus0>
+  <germany:G42_Maus7>	uk	</germany:G42_Maus7>
+  <germany:G42_Maus4>	japan	</germany:G42_Maus4>
+  <france:F114_Projet_4_19>	czech	</france:F114_Projet_4_19>
+  <germany:G42_Maus6>	sweden	</germany:G42_Maus6>
+  <germany:G42_Maus5>	poland	</germany:G42_Maus5>
+  <germany:G42_Maus3>	italy	</germany:G42_Maus3>
+  <germany:G42_Maus2>	intunion	</germany:G42_Maus2>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/opaque	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	MT camouflages 50g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R47_ISU-152_Zveroboj ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <camouflage>
+      <id>	61	</id>
+      <texture>	vehicles/russian/Camouflage/NY2020_east.dds	</texture>
+      <description>	#vehicle_customization:camouflage/NY2020_east/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/NY2020_east/label	</userString>
+      <tags>	hiddenInUI	</tags>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	255 0 0 0	</c0>
+          <c1>	203 0 40 255	</c1>
+          <c2>	156 200 216 255	</c2>
+          <c3>	0 0 0 211	</c3>
+        </palette>
+      </palettes>
+      <rotation>
+        <HULL>	0.523599	</HULL>
+        <TURRET>	0.523599	</TURRET>
+        <GUN>	0.523599	</GUN>
+      </rotation>
+      <tiling>
+        <france:F108_Panhard_EBR_105>	2.6 2.6 0.26 -0.03	</france:F108_Panhard_EBR_105>
+        <france:F114_Projet_4_1>	1.68 1.68 0.000000 0.000000	</france:F114_Projet_4_1>
+        <germany:G42_Maus>	2.45 2.45 -0.61 -0.84	</germany:G42_Maus>
+        <france:F114_Projet_4_15>	2.45 2.45 -0.61 -0.84	</france:F114_Projet_4_15>
+        <usa:A128_concept_1b>	0.8 0.8 0.0152582 -0.0708075	</usa:A128_concept_1b>
+        <usa:A129_T6_medium>	3 3 0.000000 0.000000	</usa:A129_T6_medium>
+        <usa:A13_T34_hvy>	2.6 2.6 -0.89 0.47	</usa:A13_T34_hvy>
+        <ussr:R108_T34_85M>	2.7 2.7 0.74 -0.3	</ussr:R108_T34_85M>
+        <ussr:R11_MS-1>	3.5 3.5 0.01 0.01	</ussr:R11_MS-1>
+        <ussr:R121_KV4_KTT>	2.5 2.5 -0.37 -0.23	</ussr:R121_KV4_KTT>
+        <france:F114_Projet_4_10>	0.53 0.53 -0.16 0.82	</france:F114_Projet_4_10>
+        <france:F114_Projet_4_11>	0.53 0.53 -0.16 0.82	</france:F114_Projet_4_11>
+        <france:F114_Projet_4_12>	2.8 2.8 -1.63 0.78	</france:F114_Projet_4_12>
+        <france:F114_Projet_4_13>	2.9 2.9 -0.59 0.09	</france:F114_Projet_4_13>
+        <france:F114_Projet_4_14>	2.9 2.9 -0.59 0.09	</france:F114_Projet_4_14>
+        <ussr:R1013_IS_3_T>	2.9 2.9 -0.59 0.09	</ussr:R1013_IS_3_T>
+        <france:F114_Projet_4_16>	0.6 0.6 -0.69 0.95	</france:F114_Projet_4_16>
+        <france:F114_Projet_4_17>	2.37173 2.37173 -0.26 0.52	</france:F114_Projet_4_17>
+      </tiling>
+      <tilingSettings>
+        <type>	relative	</type>
+        <factor>	1.9 1.9	</factor>
+        <offset>	0.000000 0.000000	</offset>
+      </tilingSettings>
+    </camouflage>
+  </itemGroup>
+</camouflage_NY2020_east_label.xml>

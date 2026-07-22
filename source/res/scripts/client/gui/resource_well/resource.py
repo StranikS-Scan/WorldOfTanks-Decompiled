@@ -9,7 +9,7 @@ from constants import PREMIUM_TYPE, SECONDS_IN_DAY, PREMIUM_ENTITLEMENTS
 from gui import NONE_NATION_NAME
 from gui.Scaleform.genConsts.CURRENCIES_CONSTANTS import CURRENCIES_CONSTANTS
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
-from gui.impl.backport import createTooltipData, TooltipData
+from gui.impl.backport import createTooltipData
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.resource_well.resource_well_constants import ResourceType, ServerResourceType
 from gui.resource_well.resources_sort import getComparatorByType, getTypeComparator
@@ -24,6 +24,7 @@ import account_helpers
 import logging
 if typing.TYPE_CHECKING:
     from typing import Dict, List, Tuple
+    from gui.impl.backport import TooltipData
 _logger = logging.getLogger(__name__)
 _INTELLIGENCE_BLUEPRINT = 'intelligence'
 _CURRENCY_TOOLTIPS = {Currency.GOLD: TOOLTIPS_CONSTANTS.RESOURCE_WELL_GOLD,
@@ -113,7 +114,7 @@ class BlueprintResource(Resource):
 
     @property
     def tooltip(self):
-        return TooltipData(tooltip=None, isSpecial=True, specialAlias=TOOLTIPS_CONSTANTS.BLUEPRINT_FRAGMENT_INFO, specialArgs=self._getTooltipSpecialArgs())
+        return createTooltipData(tooltip=None, isSpecial=True, specialAlias=TOOLTIPS_CONSTANTS.BLUEPRINT_FRAGMENT_INFO, specialArgs=self._getTooltipSpecialArgs())
 
     @property
     def nation(self):

@@ -130,5 +130,8 @@ class ITutorialLoader(object):
     def stop(self, restore=True):
         raise NotImplementedError
 
+    def stopTutorial(self):
+        raise NotImplementedError
+
     def refuse(self):
         raise NotImplementedError

@@ -1,0 +1,68 @@
+<Cyberport_2024_MT_name.xml>
+  <itemGroup>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	MT 2D styles universal 1000g notInShop	</priceGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <style>
+      <id>	31111	</id>
+      <texture>	gui/maps/vehicles/styles/Cyberport_2024_MT.png	</texture>
+      <userString>	#vehicle_customization:Cyberport_2024_MT/name	</userString>
+      <description>	#vehicle_customization:Cyberport_2024_MT/description	</description>
+      <longDescriptionSpecial>	#vehicle_customization:Cyberport_2024_MT/longDescription	</longDescriptionSpecial>
+      <outfits>
+        <outfit>
+          <season>	all	</season>
+          <paints>
+            <item>
+              <id>	31085	</id>
+              <appliedTo>	272	</appliedTo>
+            </item>
+            <item>
+              <id>	31086	</id>
+              <appliedTo>	7	</appliedTo>
+            </item>
+            <item>
+              <id>	31087	</id>
+              <appliedTo>	24576	</appliedTo>
+            </item>
+            <item>
+              <id>	31088	</id>
+              <appliedTo>	4096	</appliedTo>
+            </item>
+          </paints>
+          <camouflages>
+            <item>
+              <id>	31087	</id>
+              <patternSize>	1	</patternSize>
+              <appliedTo>	272	</appliedTo>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <projection_decals>
+            <item>
+              <id>	31107	</id>
+              <tags>	formfactor_square front safe	</tags>
+            </item>
+            <item>
+              <id>	31108	</id>
+              <tags>	formfactor_square direction_right_to_left left safe	</tags>
+            </item>
+            <item>
+              <id>	31109	</id>
+              <tags>	direction_left_to_right formfactor_square right safe	</tags>
+            </item>
+          </projection_decals>
+          <modifications>
+            <item>	5	</item>
+          </modifications>
+        </outfit>
+      </outfits>
+    </style>
+  </itemGroup>
+</Cyberport_2024_MT_name.xml>

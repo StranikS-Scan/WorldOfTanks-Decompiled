@@ -1,0 +1,78 @@
+<special_style_tanker_day_2021.xml>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	MT 2D styles universal 1000g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <style>
+      <id>	539	</id>
+      <texture>	gui/maps/vehicles/styles/tanker_day_2021.png	</texture>
+      <description>	#vehicle_customization:special_style/tanker_day_2021_desc	</description>
+      <userString>	#vehicle_customization:special_style/tanker_day_2021	</userString>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	351	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <paints>
+            <item>
+              <id>	192	</id>
+              <appliedTo>	22391	</appliedTo>
+            </item>
+          </paints>
+          <decals>
+            <item>
+              <id>	819	</id>
+              <appliedTo>	13104	</appliedTo>
+            </item>
+            <item>
+              <id>	820	</id>
+              <appliedTo>	52416	</appliedTo>
+            </item>
+          </decals>
+        </outfit>
+      </outfits>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+      <alternateItems>
+        <camouflage>
+          <id>	351 352	</id>
+        </camouflage>
+        <paint>
+          <id>	192 193	</id>
+        </paint>
+        <decal>
+          <id>	818 819 820 821	</id>
+        </decal>
+      </alternateItems>
+      <dependencies>
+        <camouflage>
+          <id>	351	</id>
+          <paint>	192	</paint>
+          <decal>	819 820	</decal>
+        </camouflage>
+        <camouflage>
+          <id>	352	</id>
+          <paint>	193	</paint>
+          <decal>	818 821	</decal>
+        </camouflage>
+      </dependencies>
+    </style>
+  </itemGroup>
+</special_style_tanker_day_2021.xml>

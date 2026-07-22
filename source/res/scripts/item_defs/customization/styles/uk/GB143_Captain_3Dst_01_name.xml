@@ -1,0 +1,52 @@
+<GB143_Captain_3Dst_01_name.xml>
+  <itemGroup>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <priceGroup>	MT 3D styles 6-7-8 levels 4000g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	uk:GB143_Captain	</vehicles>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	31481	</id>
+      <texture>	gui/maps/vehicles/styles/GB143_Captain_3Dst_01.png	</texture>
+      <modelsSet>	GB143_Captain_3Dst_01	</modelsSet>
+      <outfits>
+        <outfit>
+          <season>	all	</season>
+          <camouflages>
+            <item>
+              <id>	1	</id>
+              <patternSize>	1	</patternSize>
+              <appliedTo>	4368	</appliedTo>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <attachments>
+            <item>
+              <id>	31107	</id>
+              <slotId>	38000	</slotId>
+            </item>
+            <item>
+              <id>	31108	</id>
+              <slotId>	18000	</slotId>
+            </item>
+          </attachments>
+          <overrideDefaultAttachments>	1	</overrideDefaultAttachments>
+          <insignias>
+            <item>
+              <id>	31048	</id>
+              <appliedTo>	4096	</appliedTo>
+            </item>
+          </insignias>
+        </outfit>
+      </outfits>
+      <userString>	#vehicle_customization:GB143_Captain_3Dst_01/name	</userString>
+      <description>	#vehicle_customization:GB143_Captain_3Dst_01/description	</description>
+      <longDescriptionSpecial>	#vehicle_customization:GB143_Captain_3Dst_01/longDescription	</longDescriptionSpecial>
+    </style>
+    <maxNumber>	1	</maxNumber>
+  </itemGroup>
+</GB143_Captain_3Dst_01_name.xml>

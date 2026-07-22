@@ -442,6 +442,7 @@ class VehicleDescriptor(object):
                 except Exception as e:
                     nationID = nations.INDICES[nation]
                     vehicleTypeID = 65535
+                    LOG_ERROR("Vehicle descriptor wasn't created", e.message)
 
             if xmlPath is None:
                 type = g_cache.vehicle(nationID, vehicleTypeID)
@@ -2172,27 +2173,13 @@ class VehicleType(object):
         _xml.rewriteFloat(mainSection, 'speedLimits/backward', self.speedLimits[1] * component_constants.MS_TO_KMH)
         _xml.rewriteFloat(mainSection, 'emblems/alpha', self.emblemsAlpha)
         _xml.rewriteString(mainSection, 'effects/damagedStateGroup', self.editorData.damagedStateGroup, 'medium')
-        sharedSections = {}
         nationID = self.id[0]
-        nationName = nations.NAMES[nationID]
-        if useSharedSections:
-            for componentId in ITEM_TYPES.values():
-                if componentId in Cache.NATION_ITEM_SOURCE:
-                    compsXmlPath = '{vehcilePath}{nationName}{componentsPath}{componentSource}'.format(vehcilePath=_VEHICLE_TYPE_XML_PATH, nationName=nationName, componentsPath=Cache.NATION_COMPONENTS_SECTION, componentSource=Cache.NATION_ITEM_SOURCE[componentId])
-                    section = ResMgr.openSection(compsXmlPath)
-                    if section is None:
-                        _xml.raiseWrongXml(None, compsXmlPath, "Can't open shared section")
-                    sharedSections[componentId] = section
-
         materialData = tankArmor.TankArmorHelper().collectData()
         _writeHulls(self.hulls, mainSection, materialData.get('hull', None))
-        _writeInstallableComponents(self.chassis, mainSection, 'chassis', _writeChassis, g_cache.chassisIDs(nationID), sharedSections, materialData=materialData)
+        _writeInstallableComponents(self.chassis, mainSection, 'chassis', _writeChassis, g_cache.chassisIDs(nationID), useSharedSections, materialData=materialData)
         defHull = self.hulls[0]
         for n in xrange(len(defHull.turretPositions)):
-            _writeInstallableComponents(self.turrets[n], mainSection, 'turrets' + repr(n), _writeTurret, g_cache.turretIDs(nationID), sharedSections, materialData=materialData)
-
-        for id, section in sharedSections.items():
-            section.save()
+            _writeInstallableComponents(self.turrets[n], mainSection, 'turrets' + repr(n), _writeTurret, g_cache.turretIDs(nationID), useSharedSections, materialData=materialData)
 
         return mainSection
 
@@ -2472,12 +2459,12 @@ class SupplySlotsStorage(object):
 class Cache(object):
     __slots__ = ('__vehicles', '__commonConfig', '__chassis', '__engines', '__fuelTanks', '__radios', '__turrets', '__guns', '__shells', '__optionalDevices', '__optionalDeviceIDs', '__equipments', '__equipmentIDs', '__chassisIDs', '__engineIDs', '__fuelTankIDs', '__radioIDs', '__turretIDs', '__gunIDs', '__shellIDs', '__customization', '__playerEmblems', '__shotEffects', '__shotEffectsIndexes', '__shotEffectsNames', '__damageStickers', '__vehicleEffects', '__gunEffects', '__gunReloadEffects', '__gunRecoilEffects', '__turretDetachmentEffects', '__customEffects', '__requestOncePrereqs', '__customization20', '__roles', '__supplySlots', '__supplySlotsStorages', '__moduleKind', '__postProgression', '__gunSpinEffects', '__paragonsBranchesToReset')
     NATION_COMPONENTS_SECTION = '/components/'
-    NATION_ITEM_SOURCE = {ITEM_TYPES.vehicleChassis: 'chassis.xml',
-     ITEM_TYPES.vehicleEngine: 'engines.xml',
-     ITEM_TYPES.vehicleFuelTank: 'fuelTanks.xml',
-     ITEM_TYPES.vehicleRadio: 'radios.xml',
-     ITEM_TYPES.vehicleGun: 'guns.xml',
-     ITEM_TYPES.vehicleTurret: 'turrets.xml'}
+    NATION_ITEM_SOURCE = {ITEM_TYPES.vehicleChassis: 'chassis',
+     ITEM_TYPES.vehicleEngine: 'engines',
+     ITEM_TYPES.vehicleFuelTank: 'fuelTanks',
+     ITEM_TYPES.vehicleRadio: 'radios',
+     ITEM_TYPES.vehicleGun: 'guns',
+     ITEM_TYPES.vehicleTurret: 'turrets'}
 
     def __init__(self):
         self.__vehicles = {}
@@ -2844,13 +2831,13 @@ class Cache(object):
             self.__shells[nationID], self.__shellIDs[nationID] = emptyDict, emptyDict
             return
         compsXmlPath = _VEHICLE_TYPE_XML_PATH + nationName + self.NATION_COMPONENTS_SECTION
-        self.__chassis[nationID], self.__chassisIDs[nationID] = _readComponents(compsXmlPath + self.NATION_ITEM_SOURCE[ITEM_TYPES.vehicleChassis], _readChassis, nationID, ITEM_TYPES.vehicleChassis)
-        self.__engines[nationID], self.__engineIDs[nationID] = _readComponents(compsXmlPath + self.NATION_ITEM_SOURCE[ITEM_TYPES.vehicleEngine], _readEngine, nationID, ITEM_TYPES.vehicleEngine)
-        self.__fuelTanks[nationID], self.__fuelTankIDs[nationID] = _readComponents(compsXmlPath + self.NATION_ITEM_SOURCE[ITEM_TYPES.vehicleFuelTank], _readFuelTank, nationID, ITEM_TYPES.vehicleFuelTank)
-        self.__radios[nationID], self.__radioIDs[nationID] = _readComponents(compsXmlPath + self.NATION_ITEM_SOURCE[ITEM_TYPES.vehicleRadio], _readRadio, nationID, ITEM_TYPES.vehicleRadio)
+        self.__chassis[nationID], self.__chassisIDs[nationID] = _readComponents(compsXmlPath + self.NATION_ITEM_SOURCE[ITEM_TYPES.vehicleChassis] + '.xml', _readChassis, nationID, ITEM_TYPES.vehicleChassis)
+        self.__engines[nationID], self.__engineIDs[nationID] = _readComponents(compsXmlPath + self.NATION_ITEM_SOURCE[ITEM_TYPES.vehicleEngine] + '.xml', _readEngine, nationID, ITEM_TYPES.vehicleEngine)
+        self.__fuelTanks[nationID], self.__fuelTankIDs[nationID] = _readComponents(compsXmlPath + self.NATION_ITEM_SOURCE[ITEM_TYPES.vehicleFuelTank] + '.xml', _readFuelTank, nationID, ITEM_TYPES.vehicleFuelTank)
+        self.__radios[nationID], self.__radioIDs[nationID] = _readComponents(compsXmlPath + self.NATION_ITEM_SOURCE[ITEM_TYPES.vehicleRadio] + '.xml', _readRadio, nationID, ITEM_TYPES.vehicleRadio)
         self.__shells[nationID], self.__shellIDs[nationID] = _readShells(compsXmlPath + 'shells.xml', nationID)
-        self.__guns[nationID], self.__gunIDs[nationID] = _readComponents(compsXmlPath + self.NATION_ITEM_SOURCE[ITEM_TYPES.vehicleGun], _readGun, nationID, ITEM_TYPES.vehicleGun)
-        self.__turrets[nationID], self.__turretIDs[nationID] = _readComponents(compsXmlPath + self.NATION_ITEM_SOURCE[ITEM_TYPES.vehicleTurret], _readTurret, nationID, ITEM_TYPES.vehicleTurret)
+        self.__guns[nationID], self.__gunIDs[nationID] = _readComponents(compsXmlPath + self.NATION_ITEM_SOURCE[ITEM_TYPES.vehicleGun] + '.xml', _readGun, nationID, ITEM_TYPES.vehicleGun)
+        self.__turrets[nationID], self.__turretIDs[nationID] = _readComponents(compsXmlPath + self.NATION_ITEM_SOURCE[ITEM_TYPES.vehicleTurret] + '.xml', _readTurret, nationID, ITEM_TYPES.vehicleTurret)
 
 
 class VehicleList(object):
@@ -3272,9 +3259,9 @@ def getUnlocksSources():
     for nationID in xrange(len(nations.NAMES)):
         for vehicleTypeID in g_list.getList(nationID).iterkeys():
             vehicleType = g_cache.vehicle(nationID, vehicleTypeID)
-            for descr in vehicleType.unlocksDescrs:
-                cd = descr[1]
-                res.setdefault(cd, set()).add(vehicleType)
+            unlocks = vehicleType.autounlockedItems + [ descr[1] for descr in vehicleType.unlocksDescrs ]
+            for itemDescr in unlocks:
+                res.setdefault(itemDescr, set()).add(vehicleType)
 
     return res
 
@@ -3331,22 +3318,20 @@ def _readComponents(xmlPath, reader, nationID, itemTypeID):
     xmlCtx = (None, xmlPath)
     descrs = {}
     ids = {}
-    for name in _xml.getSubsection(xmlCtx, section, 'ids').keys():
+    for name, subsection in _xml.getChildren(xmlCtx, section, 'shared'):
         name = intern(name)
-        componentID = _xml.readInt(xmlCtx, section, 'ids/' + name, 0, 65535)
+        subctx = (xmlCtx, name)
+        componentID = _xml.readInt(subctx, subsection, 'id', 0, 65535)
         if componentID in descrs:
-            _xml.raiseWrongXml(xmlCtx, 'ids/' + name, 'name or ID is not unique')
+            _xml.raiseWrongXml(subctx, 'id', 'name or ID is not unique')
         ids[name] = componentID
         descrs[componentID] = vehicle_items.createInstallableItem(itemTypeID, nationID, componentID, name)
-
-    for name, subsection in _xml.getChildren(xmlCtx, section, 'shared'):
-        ctx = (xmlCtx, 'shared')
-        if name not in ids:
-            _xml.raiseWrongXml(ctx, name, 'unknown name')
+        if len(subsection.items()) == 1:
+            continue
         descr = descrs[ids[name]]
         if descr.status != _ITEM_STATUS.EMPTY:
-            _xml.raiseWrongXml(ctx, name, 'already defined')
-        reader((ctx, name), subsection, descr)
+            _xml.raiseWrongXml(xmlCtx, name, 'already defined')
+        reader(subctx, subsection, descr)
         descr.status = _ITEM_STATUS.SHARED
 
     ResMgr.purge(xmlPath, True)
@@ -3387,24 +3372,29 @@ def _readInstallableComponents(xmlCtx, section, subsectionName, nationID, reader
     return tuple(res)
 
 
-def _writeInstallableComponents(components, section, subsectionName, writer, cachedIDs, sharedSections, **kwargs):
+def _writeInstallableComponents(components, section, subsectionName, writer, cachedIDs, useSharedSections, **kwargs):
     cachedNames = {id:name for name, id in cachedIDs.iteritems()}
     for component in components:
         item_type_id, nation_id, item_id_within_nation = parseIntCompactDescr(component.compactDescr)
         componentName = cachedNames[item_id_within_nation]
         sharedComponentSection = None
-        if sharedSections:
-            sharedSection = sharedSections[item_type_id]
-            sharedComponentSection = sharedSection['shared/{}'.format(componentName)]
+        if useSharedSections:
+            componentsXmlPath = '{vehiclePath}{nationName}{componentsPath}{componentSource}/{componentName}.xml'.format(vehiclePath=_VEHICLE_TYPE_XML_PATH, nationName=nations.NAMES[nation_id], componentsPath=Cache.NATION_COMPONENTS_SECTION, componentSource=Cache.NATION_ITEM_SOURCE[item_type_id], componentName=componentName)
+            sharedComponentRoot = ResMgr.openSection(componentsXmlPath)
+            sharedComponentSection = sharedComponentRoot[componentName]
+            if sharedComponentSection is None:
+                _xml.raiseWrongXml(None, componentsXmlPath, "Can't open shared section")
         mainComponentSection = section['{}/{}'.format(subsectionName, componentName)]
         if mainComponentSection is None:
             _xml.raiseWrongXml(None, subsectionName, 'can not open main components section')
             return
         sectionsToWrite = [mainComponentSection]
-        if sharedComponentSection:
+        if sharedComponentSection is not None:
             sectionsToWrite.append(sharedComponentSection)
         combinedSection = CombinedDataSection(sectionsToWrite)
-        writer(component, combinedSection, sharedSections, kwargs['materialData'], parentName=kwargs['parentName'] if 'parentName' in kwargs else '')
+        writer(component, combinedSection, useSharedSections, kwargs['materialData'], parentName=kwargs['parentName'] if 'parentName' in kwargs else '')
+        if sharedComponentSection is not None:
+            sharedComponentSection.save()
 
     return
 
@@ -3934,7 +3924,7 @@ def _readChassis(xmlCtx, section, item, unlocksDescrs=None, _=None, isWheeledVeh
     return
 
 
-def _writeChassis(item, section, sharedSections, materialData, *args, **kwargs):
+def _writeChassis(item, section, useSharedSections, materialData, *args, **kwargs):
     _writeHitTester(item.hitTesterManager, None, section, 'hitTester')
     _xml.rewriteFloat(section, 'weight', item.weight)
     _xml.rewriteFloat(section, 'rotationSpeed', degrees(item.rotationSpeed))
@@ -4440,7 +4430,7 @@ def _readTurret(xmlCtx, section, item, unlocksDescrs=None, _=None):
     item.unlocks = _readUnlocks(xmlCtx, section, 'unlocks', unlocksDescrs, item.compactDescr)
 
 
-def _writeTurret(item, section, sharedSections, materialData, *args, **kwargs):
+def _writeTurret(item, section, useSharedSections, materialData, *args, **kwargs):
     _xml.rewriteFloat(section, 'weight', item.weight)
     _xml.rewriteFloat(section, 'gunJointPitch', degrees(item.gunJointPitch), 0.0)
     _xml.rewriteBool(section, 'showEmblemsOnGun', item.showEmblemsOnGun, defaultValue=False)
@@ -4456,7 +4446,7 @@ def _writeTurret(item, section, sharedSections, materialData, *args, **kwargs):
     shared_writers.writeModelsSets(item.modelsSets, section['models'])
     _xml.rewriteTupleOfFloats(section, 'physicsShape', item.physicsShape, [])
     nationID = parseIntCompactDescr(item.compactDescr)[1]
-    _writeInstallableComponents(item.guns, section, 'guns', _writeGun, g_cache.gunIDs(nationID), sharedSections, materialData=materialData.get('gun', None), parentName=item.name)
+    _writeInstallableComponents(item.guns, section, 'guns', _writeGun, g_cache.gunIDs(nationID), useSharedSections, materialData=materialData.get('gun', None), parentName=item.name)
     _writeMultiGun(item, section)
     return
 
@@ -5119,7 +5109,7 @@ def _readGunLocals(xmlCtx, section, sharedItem, unlocksDescrs, turretCompactDesc
         return item
 
 
-def _writeGun(item, section, sharedSections, materialData, *args, **kwargs):
+def _writeGun(item, section, useSharedSections, materialData, *args, **kwargs):
     _xml.rewriteFloat(section, 'rotationSpeed', degrees(item.rotationSpeed))
     _xml.rewriteFloat(section, 'weight', item.weight)
     _xml.rewriteFloat(section, 'reloadTime', item.reloadTime)
@@ -5312,9 +5302,10 @@ def _readShells(xmlPath, nationID):
     section = ResMgr.openSection(xmlPath)
     if section is None:
         _xml.raiseWrongXml(None, xmlPath, 'Cannot open xml file that probably doesnt exists')
+    shellsSection = _xml.getSubsection((None, xmlPath), section, '')
     icons = {}
     if IS_CLIENT or IS_UE_EDITOR or IS_WEB:
-        for name, subsection in _xml.getChildren((None, xmlPath), section, 'icons'):
+        for name, subsection in _xml.getChildren((None, xmlPath), shellsSection, 'icons'):
             name = intern(name)
             if icons.has_key(name):
                 _xml.raiseWrongXml((None, xmlPath + '/icons'), name, 'name is not unique')
@@ -5322,7 +5313,7 @@ def _readShells(xmlPath, nationID):
 
     descrs = {}
     ids = {}
-    for name, subsection in section.items():
+    for name, subsection in shellsSection.items():
         if name in ('icons', 'xmlns:xmlref'):
             continue
         xmlCtx = (None, xmlPath + '/' + name)
@@ -5335,8 +5326,6 @@ def _readShells(xmlPath, nationID):
         descrs[id] = _readShell(xmlCtx, subsection, name, nationID, id, icons)
         ids[name] = id
 
-    section = None
-    subsection = None
     ResMgr.purge(xmlPath, True)
     return (descrs, ids)
 

@@ -1,0 +1,305 @@
+<camouflage_master_of_orion_label.xml>
+  <china:Ch08_Type97_Chi_Ha62>	ussr	</china:Ch08_Type97_Chi_Ha62>
+  <china:Ch08_Type97_Chi_Ha54>	germany	</china:Ch08_Type97_Chi_Ha54>
+  <china:Ch08_Type97_Chi_Ha61>	usa	</china:Ch08_Type97_Chi_Ha61>
+  <china:Ch08_Type97_Chi_Ha51>	china	</china:Ch08_Type97_Chi_Ha51>
+  <china:Ch08_Type97_Chi_Ha53>	france	</china:Ch08_Type97_Chi_Ha53>
+  <china:Ch08_Type97_Chi_Ha60>	uk	</china:Ch08_Type97_Chi_Ha60>
+  <china:Ch08_Type97_Chi_Ha57>	japan	</china:Ch08_Type97_Chi_Ha57>
+  <china:Ch08_Type97_Chi_Ha52>	czech	</china:Ch08_Type97_Chi_Ha52>
+  <china:Ch08_Type97_Chi_Ha59>	sweden	</china:Ch08_Type97_Chi_Ha59>
+  <china:Ch08_Type97_Chi_Ha58>	poland	</china:Ch08_Type97_Chi_Ha58>
+  <china:Ch08_Type97_Chi_Ha56>	italy	</china:Ch08_Type97_Chi_Ha56>
+  <china:Ch08_Type97_Chi_Ha55>	intunion	</china:Ch08_Type97_Chi_Ha55>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/opaque	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	MT camouflages 50g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R47_ISU-152_Zveroboj ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <camouflage>
+      <id>	89	</id>
+      <texture>	vehicles/russian/Camouflage/master_of_orion.dds	</texture>
+      <description>	#vehicle_customization:camouflage/master_of_orion/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/master_of_orion/label	</userString>
+      <tags>	hiddenInUI	</tags>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	255 0 0 255	</c0>
+          <c1>	0 255 0 255	</c1>
+          <c2>	0 0 255 255	</c2>
+          <c3>	0 0 0 255	</c3>
+        </palette>
+      </palettes>
+      <rotation>
+        <HULL>	0.5044	</HULL>
+        <TURRET>	0.5044	</TURRET>
+        <GUN>	0.5044	</GUN>
+      </rotation>
+      <tiling>
+        <china:Ch06_Renault_NC31>	0.65 0.65 -0.64 0.05	</china:Ch06_Renault_NC31>
+        <china:Ch07_Vickers_MkE_Type_BT26>	0.67 0.67 0.192814 -0.0538116	</china:Ch07_Vickers_MkE_Type_BT26>
+        <china:Ch08_Type97_Chi_Ha>	1.64 1.64 0.0100004 0.237348	</china:Ch08_Type97_Chi_Ha>
+        <china:Ch09_M5>	1.07 1.07 0.01 0.01	</china:Ch09_M5>
+        <china:Ch21_T34>	1.97 1.97 -0.53583 0.00999989	</china:Ch21_T34>
+        <china:Ch30_T-26G_FT>	2.8 2.8 -0.154694 0.00999906	</china:Ch30_T-26G_FT>
+        <china:Ch31_M3G_FT>	0.54 0.54 0.01 0.01	</china:Ch31_M3G_FT>
+        <china:Ch32_SU-76G_FT>	1.12 1.12 0.01 0.01	</china:Ch32_SU-76G_FT>
+        <china:Ch33_60G_FT>	0.69 0.69 -0.459836 0.0100003	</china:Ch33_60G_FT>
+        <czech:Cz03_LT_vz35>	2.04 2.04 0.01 0.01	</czech:Cz03_LT_vz35>
+        <china:Ch07_Vickers_MkE_Type_BT260>	2.03 2.03 -0.389285 -0.248098	</china:Ch07_Vickers_MkE_Type_BT260>
+        <china:Ch07_Vickers_MkE_Type_BT261>	2.7 2.7 -0.230023 0.00999985	</china:Ch07_Vickers_MkE_Type_BT261>
+        <china:Ch07_Vickers_MkE_Type_BT262>	2.14 2.14 0.01 0.01	</china:Ch07_Vickers_MkE_Type_BT262>
+        <china:Ch07_Vickers_MkE_Type_BT263>	1.26 1.26 0.164009 0.170054	</china:Ch07_Vickers_MkE_Type_BT263>
+        <china:Ch07_Vickers_MkE_Type_BT264>	0.65 0.65 -0.64 0.01	</china:Ch07_Vickers_MkE_Type_BT264>
+        <china:Ch07_Vickers_MkE_Type_BT265>	1.7 1.7 0.0734035 -0.143253	</china:Ch07_Vickers_MkE_Type_BT265>
+        <china:Ch07_Vickers_MkE_Type_BT266>	1.07 1.07 0.00999979 0.372812	</china:Ch07_Vickers_MkE_Type_BT266>
+        <china:Ch07_Vickers_MkE_Type_BT267>	0.73 0.73 0.278104 0.01	</china:Ch07_Vickers_MkE_Type_BT267>
+        <china:Ch07_Vickers_MkE_Type_BT268>	1.37 1.37 0.01 0.01	</china:Ch07_Vickers_MkE_Type_BT268>
+        <china:Ch07_Vickers_MkE_Type_BT269>	1.65 1.65 -1.1314 0.0100022	</china:Ch07_Vickers_MkE_Type_BT269>
+        <china:Ch08_Type97_Chi_Ha0>	0.94 0.94 0.424584 0.00999916	</china:Ch08_Type97_Chi_Ha0>
+        <china:Ch08_Type97_Chi_Ha1>	1.04 1.04 -0.646674 0.0100016	</china:Ch08_Type97_Chi_Ha1>
+        <china:Ch08_Type97_Chi_Ha2>	1.57 1.57 0.448341 0.00999915	</china:Ch08_Type97_Chi_Ha2>
+        <china:Ch08_Type97_Chi_Ha3>	0.5 0.5 0.01 0.01	</china:Ch08_Type97_Chi_Ha3>
+        <china:Ch08_Type97_Chi_Ha4>	0.5 0.5 0.01 0.01	</china:Ch08_Type97_Chi_Ha4>
+        <china:Ch08_Type97_Chi_Ha5>	1.14 1.14 -0.245272 0.0477254	</china:Ch08_Type97_Chi_Ha5>
+        <china:Ch08_Type97_Chi_Ha6>	1.07 1.07 0.00999998 0.134907	</china:Ch08_Type97_Chi_Ha6>
+        <china:Ch08_Type97_Chi_Ha7>	1.76 1.76 -0.617712 0.00999978	</china:Ch08_Type97_Chi_Ha7>
+        <china:Ch08_Type97_Chi_Ha8>	0.52 0.52 0.0226237 0.0988787	</china:Ch08_Type97_Chi_Ha8>
+        <china:Ch08_Type97_Chi_Ha9>	0.88 0.88 0.01 0.01	</china:Ch08_Type97_Chi_Ha9>
+        <china:Ch09_M50>	1.16 1.16 0.01 0.01	</china:Ch09_M50>
+        <china:Ch09_M51>	1.26 1.26 0.01 0.01	</china:Ch09_M51>
+        <china:Ch09_M52>	1.13 1.13 0.01 0.01	</china:Ch09_M52>
+        <china:Ch09_M53>	1.13 1.13 0.01 0.01	</china:Ch09_M53>
+        <china:Ch09_M54>	0.86 0.86 0.0415989 0.00989679	</china:Ch09_M54>
+        <china:Ch09_M55>	1.53 1.53 0.01 0.01	</china:Ch09_M55>
+        <china:Ch09_M56>	1.4 1.4 0.01 0.01	</china:Ch09_M56>
+        <china:Ch09_M57>	2.17 2.17 0.01 0.01	</china:Ch09_M57>
+        <china:Ch09_M58>	2.39 2.39 0.01 0.01	</china:Ch09_M58>
+        <china:Ch09_M59>	1.81 1.81 0.224334 0.0717354	</china:Ch09_M59>
+        <china:Ch21_T340>	0.88 0.88 -0.726449 0.0100006	</china:Ch21_T340>
+        <china:Ch21_T341>	2.06 2.06 0.01 0.01	</china:Ch21_T341>
+        <china:Ch21_T342>	2.49 2.49 0.567846 0.00999968	</china:Ch21_T342>
+        <china:Ch21_T343>	2.66 2.66 0.01 0.01	</china:Ch21_T343>
+        <china:Ch21_T344>	2.96 2.96 0.01 0.01	</china:Ch21_T344>
+        <china:Ch21_T345>	1.76 1.76 0.01 0.01	</china:Ch21_T345>
+        <china:Ch21_T346>	1.22 1.22 0.01 0.01	</china:Ch21_T346>
+        <china:Ch21_T347>	1.5 1.5 0.00999688 -0.2231	</china:Ch21_T347>
+        <china:Ch21_T348>	0.99 0.99 0.01 0.01	</china:Ch21_T348>
+        <china:Ch21_T349>	1.32 1.32 0.01 -0.0510483	</china:Ch21_T349>
+        <china:Ch30_T-26G_FT0>	1.14 1.14 0.4441 0.290491	</china:Ch30_T-26G_FT0>
+        <china:Ch30_T-26G_FT1>	2.2 2.2 0.613035 0.0100002	</china:Ch30_T-26G_FT1>
+        <china:Ch30_T-26G_FT2>	1.65 1.65 0.01 0.01	</china:Ch30_T-26G_FT2>
+        <china:Ch30_T-26G_FT3>	2.47 2.47 0.400514 0.00999884	</china:Ch30_T-26G_FT3>
+        <china:Ch30_T-26G_FT4>	2.4 2.4 0.01 0.01	</china:Ch30_T-26G_FT4>
+        <china:Ch30_T-26G_FT5>	2.44 2.44 -0.280781 0.0100003	</china:Ch30_T-26G_FT5>
+        <china:Ch30_T-26G_FT6>	1.11 1.11 0.01 0.01	</china:Ch30_T-26G_FT6>
+        <china:Ch30_T-26G_FT7>	2.35 2.35 0.01 0.01	</china:Ch30_T-26G_FT7>
+        <china:Ch30_T-26G_FT8>	2.27 2.27 0.01 0.01	</china:Ch30_T-26G_FT8>
+        <china:Ch30_T-26G_FT9>	2.12 2.12 -0.195565 0.546326	</china:Ch30_T-26G_FT9>
+        <china:Ch31_M3G_FT0>	3.72 3.72 -0.459225 -0.116492	</china:Ch31_M3G_FT0>
+        <china:Ch31_M3G_FT1>	0.93 0.93 0.01 0.01	</china:Ch31_M3G_FT1>
+        <china:Ch31_M3G_FT2>	0.6 0.6 0.0100008 -0.176154	</china:Ch31_M3G_FT2>
+        <china:Ch31_M3G_FT3>	1.89 1.89 -0.215575 0.010002	</china:Ch31_M3G_FT3>
+        <china:Ch31_M3G_FT4>	5.6 5.6 0.03 0.01	</china:Ch31_M3G_FT4>
+        <china:Ch31_M3G_FT5>	1.35 1.35 0.01 0.01	</china:Ch31_M3G_FT5>
+        <china:Ch31_M3G_FT6>	1.59 1.59 0.51744 0.00999533	</china:Ch31_M3G_FT6>
+        <china:Ch31_M3G_FT7>	2.92 2.92 0.693131 0.0100005	</china:Ch31_M3G_FT7>
+        <china:Ch31_M3G_FT8>	2.28 2.28 0.01 -0.0739974	</china:Ch31_M3G_FT8>
+        <china:Ch31_M3G_FT9>	2.28 2.28 0.01 0.01	</china:Ch31_M3G_FT9>
+        <china:Ch32_SU-76G_FT0>	1.94 1.94 0.01 0.01	</china:Ch32_SU-76G_FT0>
+        <china:Ch32_SU-76G_FT1>	1.2 1.2 0.127178 -0.0923843	</china:Ch32_SU-76G_FT1>
+        <china:Ch32_SU-76G_FT2>	2.46 2.46 0.01 0.01	</china:Ch32_SU-76G_FT2>
+        <china:Ch32_SU-76G_FT3>	2.13 2.13 0.01 0.01	</china:Ch32_SU-76G_FT3>
+        <china:Ch32_SU-76G_FT4>	1.8 1.8 0.01 0.01	</china:Ch32_SU-76G_FT4>
+        <china:Ch32_SU-76G_FT5>	1.57 1.57 0.01 0.01	</china:Ch32_SU-76G_FT5>
+        <china:Ch32_SU-76G_FT6>	1 1 0.01 0.01	</china:Ch32_SU-76G_FT6>
+        <china:Ch32_SU-76G_FT7>	2.38 2.38 0.01 0.01	</china:Ch32_SU-76G_FT7>
+        <china:Ch32_SU-76G_FT8>	2.38 2.38 0.01 0.01	</china:Ch32_SU-76G_FT8>
+        <china:Ch32_SU-76G_FT9>	2.25 2.25 0.01 0.01	</china:Ch32_SU-76G_FT9>
+        <china:Ch33_60G_FT0>	1.64 1.64 -0.524588 0.00999767	</china:Ch33_60G_FT0>
+        <china:Ch33_60G_FT1>	1.36 1.36 0.01 0.01	</china:Ch33_60G_FT1>
+        <china:Ch33_60G_FT2>	0.75 0.75 -0.309157 0.235195	</china:Ch33_60G_FT2>
+        <china:Ch33_60G_FT3>	1.13 1.13 0.01 0.01	</china:Ch33_60G_FT3>
+        <china:Ch33_60G_FT4>	2.72 2.72 0.294891 0.0100012	</china:Ch33_60G_FT4>
+        <china:Ch33_60G_FT5>	1.09 1.09 0.01 0.01	</china:Ch33_60G_FT5>
+        <china:Ch33_60G_FT6>	1.53 1.53 -0.775216 0.797355	</china:Ch33_60G_FT6>
+        <china:Ch33_60G_FT7>	1.16 1.16 0.01 0.01	</china:Ch33_60G_FT7>
+        <china:Ch33_60G_FT8>	1.95 1.95 0.01 0.01	</china:Ch33_60G_FT8>
+        <china:Ch33_60G_FT9>	1.64 1.64 0.01 0.01	</china:Ch33_60G_FT9>
+        <czech:Cz03_LT_vz350>	1.07 1.07 0.01 0.01	</czech:Cz03_LT_vz350>
+        <czech:Cz03_LT_vz351>	1.08 1.08 0.01 0.01	</czech:Cz03_LT_vz351>
+        <czech:Cz03_LT_vz352>	1.32 1.32 -0.394306 0.0100002	</czech:Cz03_LT_vz352>
+        <czech:Cz03_LT_vz353>	1.19 1.19 -0.3836 0.00999969	</czech:Cz03_LT_vz353>
+        <czech:Cz03_LT_vz354>	1.71 1.71 0.01 0.01	</czech:Cz03_LT_vz354>
+        <czech:Cz03_LT_vz355>	1.29 1.29 0.00999772 0.241327	</czech:Cz03_LT_vz355>
+        <czech:Cz03_LT_vz356>	1.4 1.4 0.342505 -0.159841	</czech:Cz03_LT_vz356>
+        <czech:Cz03_LT_vz357>	2.09 2.09 0.00999913 -0.633169	</czech:Cz03_LT_vz357>
+        <czech:Cz03_LT_vz358>	1.6 1.6 0.01 0.01	</czech:Cz03_LT_vz358>
+        <czech:Cz03_LT_vz359>	1.87 1.87 0.01 0.01	</czech:Cz03_LT_vz359>
+        <china:Ch07_Vickers_MkE_Type_BT2600>	1.18 1.18 -0.177212 0.00999974	</china:Ch07_Vickers_MkE_Type_BT2600>
+        <china:Ch07_Vickers_MkE_Type_BT2601>	1.06 1.06 0.674682 0.152923	</china:Ch07_Vickers_MkE_Type_BT2601>
+        <china:Ch07_Vickers_MkE_Type_BT2602>	1.54 1.54 -0.155361 0.641456	</china:Ch07_Vickers_MkE_Type_BT2602>
+        <china:Ch07_Vickers_MkE_Type_BT2603>	0.82 0.82 0.0100071 0.601375	</china:Ch07_Vickers_MkE_Type_BT2603>
+        <china:Ch07_Vickers_MkE_Type_BT2604>	0.99 0.99 -0.214403 0.49437	</china:Ch07_Vickers_MkE_Type_BT2604>
+        <china:Ch07_Vickers_MkE_Type_BT2605>	0.83 0.83 0.01 0.01	</china:Ch07_Vickers_MkE_Type_BT2605>
+        <china:Ch07_Vickers_MkE_Type_BT2606>	0.61 0.61 -0.405544 0.4537	</china:Ch07_Vickers_MkE_Type_BT2606>
+        <china:Ch07_Vickers_MkE_Type_BT2607>	0.9 0.9 0.410182 0.0572039	</china:Ch07_Vickers_MkE_Type_BT2607>
+        <china:Ch07_Vickers_MkE_Type_BT2608>	2.97 2.97 -0.14447 -0.512608	</china:Ch07_Vickers_MkE_Type_BT2608>
+        <china:Ch07_Vickers_MkE_Type_BT2609>	2.17 2.17 -0.550045 0.0100054	</china:Ch07_Vickers_MkE_Type_BT2609>
+        <china:Ch07_Vickers_MkE_Type_BT2610>	1.68 1.68 -0.0892656 0.0100011	</china:Ch07_Vickers_MkE_Type_BT2610>
+        <china:Ch07_Vickers_MkE_Type_BT2611>	1.41 1.41 -0.0835719 0.010001	</china:Ch07_Vickers_MkE_Type_BT2611>
+        <china:Ch07_Vickers_MkE_Type_BT2612>	2.55 2.55 -0.252423 0.00999846	</china:Ch07_Vickers_MkE_Type_BT2612>
+        <china:Ch07_Vickers_MkE_Type_BT2613>	2.15 2.15 0.00999944 -0.297864	</china:Ch07_Vickers_MkE_Type_BT2613>
+        <china:Ch07_Vickers_MkE_Type_BT2614>	2.26 2.26 -0.817637 0.00999935	</china:Ch07_Vickers_MkE_Type_BT2614>
+        <china:Ch07_Vickers_MkE_Type_BT2615>	3.39 3.39 0.01 0.01	</china:Ch07_Vickers_MkE_Type_BT2615>
+        <china:Ch07_Vickers_MkE_Type_BT2616>	2.74 2.74 0.0100001 -0.189904	</china:Ch07_Vickers_MkE_Type_BT2616>
+        <china:Ch07_Vickers_MkE_Type_BT2617>	2.35 2.35 -0.145415 0.390957	</china:Ch07_Vickers_MkE_Type_BT2617>
+        <china:Ch07_Vickers_MkE_Type_BT2618>	1.63 1.63 0.01 0.01	</china:Ch07_Vickers_MkE_Type_BT2618>
+        <china:Ch07_Vickers_MkE_Type_BT2619>	1.16 1.16 0.01 0.01	</china:Ch07_Vickers_MkE_Type_BT2619>
+        <china:Ch07_Vickers_MkE_Type_BT2620>	2.07 2.07 0.01 0.01	</china:Ch07_Vickers_MkE_Type_BT2620>
+        <china:Ch07_Vickers_MkE_Type_BT2621>	1.26 1.26 0.00999965 0.15325	</china:Ch07_Vickers_MkE_Type_BT2621>
+        <china:Ch07_Vickers_MkE_Type_BT2622>	1.44 1.44 0.0099919 -0.0996242	</china:Ch07_Vickers_MkE_Type_BT2622>
+        <china:Ch07_Vickers_MkE_Type_BT2623>	0.65 0.65 0.0100006 -0.207671	</china:Ch07_Vickers_MkE_Type_BT2623>
+        <china:Ch07_Vickers_MkE_Type_BT2624>	2.38 2.38 -0.361094 0.0100009	</china:Ch07_Vickers_MkE_Type_BT2624>
+        <china:Ch07_Vickers_MkE_Type_BT2625>	0.86 0.86 -0.327165 -0.568662	</china:Ch07_Vickers_MkE_Type_BT2625>
+        <china:Ch07_Vickers_MkE_Type_BT2626>	1.36 1.36 0.01 0.01	</china:Ch07_Vickers_MkE_Type_BT2626>
+        <china:Ch07_Vickers_MkE_Type_BT2627>	1.27 1.27 0.01 0.01	</china:Ch07_Vickers_MkE_Type_BT2627>
+        <china:Ch07_Vickers_MkE_Type_BT2628>	0.74 0.74 0.01 0.01	</china:Ch07_Vickers_MkE_Type_BT2628>
+        <china:Ch07_Vickers_MkE_Type_BT2629>	2.32 2.32 -0.300703 -0.133095	</china:Ch07_Vickers_MkE_Type_BT2629>
+        <china:Ch07_Vickers_MkE_Type_BT2630>	0.66 0.66 0.01 0.01	</china:Ch07_Vickers_MkE_Type_BT2630>
+        <china:Ch07_Vickers_MkE_Type_BT2631>	1.26 1.26 0.74781 0.427682	</china:Ch07_Vickers_MkE_Type_BT2631>
+        <china:Ch07_Vickers_MkE_Type_BT2632>	2.22 2.22 -0.00687654 -0.222601	</china:Ch07_Vickers_MkE_Type_BT2632>
+        <china:Ch07_Vickers_MkE_Type_BT2633>	0.64 0.64 1.05 0.01	</china:Ch07_Vickers_MkE_Type_BT2633>
+        <china:Ch07_Vickers_MkE_Type_BT2634>	4.55 4.55 -0.281506 0.00999852	</china:Ch07_Vickers_MkE_Type_BT2634>
+        <china:Ch07_Vickers_MkE_Type_BT2635>	1.27 1.27 -0.0917443 -0.0698962	</china:Ch07_Vickers_MkE_Type_BT2635>
+        <china:Ch07_Vickers_MkE_Type_BT2636>	0.6 0.6 0.474959 0.00999687	</china:Ch07_Vickers_MkE_Type_BT2636>
+        <china:Ch07_Vickers_MkE_Type_BT2637>	0.98 0.98 0.01 0.01	</china:Ch07_Vickers_MkE_Type_BT2637>
+        <china:Ch07_Vickers_MkE_Type_BT2638>	2.53 2.53 0.01 0.01	</china:Ch07_Vickers_MkE_Type_BT2638>
+        <china:Ch07_Vickers_MkE_Type_BT2639>	1.83 1.83 0.681669 0.0100023	</china:Ch07_Vickers_MkE_Type_BT2639>
+        <china:Ch07_Vickers_MkE_Type_BT2640>	1.99 1.99 -0.397202 0.0099991	</china:Ch07_Vickers_MkE_Type_BT2640>
+        <china:Ch07_Vickers_MkE_Type_BT2641>	1.88 1.88 -0.299463 0.0100006	</china:Ch07_Vickers_MkE_Type_BT2641>
+        <china:Ch07_Vickers_MkE_Type_BT2642>	1.08 1.08 0.00999962 -0.124756	</china:Ch07_Vickers_MkE_Type_BT2642>
+        <china:Ch07_Vickers_MkE_Type_BT2643>	1.26 1.26 0.333979 0.0100002	</china:Ch07_Vickers_MkE_Type_BT2643>
+        <china:Ch07_Vickers_MkE_Type_BT2644>	1.27 1.27 0.01 0.01	</china:Ch07_Vickers_MkE_Type_BT2644>
+        <china:Ch07_Vickers_MkE_Type_BT2645>	1.16 1.16 0.01 0.01	</china:Ch07_Vickers_MkE_Type_BT2645>
+        <china:Ch07_Vickers_MkE_Type_BT2646>	1.25 1.25 -0.561619 0.00999762	</china:Ch07_Vickers_MkE_Type_BT2646>
+        <china:Ch07_Vickers_MkE_Type_BT2647>	0.89 0.89 0.01 0.01	</china:Ch07_Vickers_MkE_Type_BT2647>
+        <china:Ch07_Vickers_MkE_Type_BT2648>	1.66 1.66 0.01 0.01	</china:Ch07_Vickers_MkE_Type_BT2648>
+        <china:Ch07_Vickers_MkE_Type_BT2649>	1.66 1.66 0.01 0.01	</china:Ch07_Vickers_MkE_Type_BT2649>
+        <china:Ch07_Vickers_MkE_Type_BT2650>	2.48 2.48 0.01 0.01	</china:Ch07_Vickers_MkE_Type_BT2650>
+        <china:Ch07_Vickers_MkE_Type_BT2651>	1.34 1.34 0.01 0.01	</china:Ch07_Vickers_MkE_Type_BT2651>
+        <china:Ch07_Vickers_MkE_Type_BT2652>	1.79 1.79 0.00999891 -0.0831781	</china:Ch07_Vickers_MkE_Type_BT2652>
+        <china:Ch07_Vickers_MkE_Type_BT2653>	2.36 2.36 -0.204196 0.25609	</china:Ch07_Vickers_MkE_Type_BT2653>
+        <china:Ch07_Vickers_MkE_Type_BT2654>	2.09 2.09 -0.0982223 0.120652	</china:Ch07_Vickers_MkE_Type_BT2654>
+        <china:Ch07_Vickers_MkE_Type_BT2655>	2.03 2.03 -0.30586 0.00999967	</china:Ch07_Vickers_MkE_Type_BT2655>
+        <china:Ch07_Vickers_MkE_Type_BT2656>	1.44 1.44 0.01 -0.0518321	</china:Ch07_Vickers_MkE_Type_BT2656>
+        <china:Ch07_Vickers_MkE_Type_BT2657>	1.22 1.22 0.00999548 -0.236633	</china:Ch07_Vickers_MkE_Type_BT2657>
+        <china:Ch07_Vickers_MkE_Type_BT2658>	1.24 1.24 0.01 0.01	</china:Ch07_Vickers_MkE_Type_BT2658>
+        <china:Ch07_Vickers_MkE_Type_BT2659>	0.54 0.54 0.01 0.01	</china:Ch07_Vickers_MkE_Type_BT2659>
+        <china:Ch07_Vickers_MkE_Type_BT2660>	1.83 1.83 -0.16538 0.0100003	</china:Ch07_Vickers_MkE_Type_BT2660>
+        <china:Ch07_Vickers_MkE_Type_BT2661>	1.5 1.5 0.01 -0.114931	</china:Ch07_Vickers_MkE_Type_BT2661>
+        <china:Ch07_Vickers_MkE_Type_BT2662>	0.91 0.91 0.01 0.01	</china:Ch07_Vickers_MkE_Type_BT2662>
+        <china:Ch07_Vickers_MkE_Type_BT2663>	1.27 1.27 0.01 0.01	</china:Ch07_Vickers_MkE_Type_BT2663>
+        <china:Ch07_Vickers_MkE_Type_BT2664>	2.58 2.58 0.494515 0.218326	</china:Ch07_Vickers_MkE_Type_BT2664>
+        <china:Ch07_Vickers_MkE_Type_BT2665>	1.89 1.89 0.0099997 -0.220359	</china:Ch07_Vickers_MkE_Type_BT2665>
+        <china:Ch07_Vickers_MkE_Type_BT2666>	1.73 1.73 0.01 0.01	</china:Ch07_Vickers_MkE_Type_BT2666>
+        <china:Ch07_Vickers_MkE_Type_BT2667>	1.25 1.25 0.00999994 0.257906	</china:Ch07_Vickers_MkE_Type_BT2667>
+        <china:Ch07_Vickers_MkE_Type_BT2668>	2.48 2.48 0.00999928 -0.346859	</china:Ch07_Vickers_MkE_Type_BT2668>
+        <china:Ch07_Vickers_MkE_Type_BT2669>	1.1 1.1 0.247231 0.0100001	</china:Ch07_Vickers_MkE_Type_BT2669>
+        <china:Ch07_Vickers_MkE_Type_BT2670>	1.56 1.56 0.01 0.01	</china:Ch07_Vickers_MkE_Type_BT2670>
+        <china:Ch07_Vickers_MkE_Type_BT2671>	1.36 1.36 0.01 0.01	</china:Ch07_Vickers_MkE_Type_BT2671>
+        <china:Ch07_Vickers_MkE_Type_BT2672>	2 2 -0.89 -0.13	</china:Ch07_Vickers_MkE_Type_BT2672>
+        <china:Ch07_Vickers_MkE_Type_BT2673>	3.03 3.03 0.186209 -0.342283	</china:Ch07_Vickers_MkE_Type_BT2673>
+        <china:Ch07_Vickers_MkE_Type_BT2674>	1.94 1.94 0.01 0.01	</china:Ch07_Vickers_MkE_Type_BT2674>
+        <china:Ch07_Vickers_MkE_Type_BT2675>	2.68 2.68 -0.49747 0.00999989	</china:Ch07_Vickers_MkE_Type_BT2675>
+        <china:Ch07_Vickers_MkE_Type_BT2676>	2.33 2.33 -0.920029 -0.125686	</china:Ch07_Vickers_MkE_Type_BT2676>
+        <china:Ch07_Vickers_MkE_Type_BT2677>	2.22 2.22 -0.496095 0.01	</china:Ch07_Vickers_MkE_Type_BT2677>
+        <china:Ch07_Vickers_MkE_Type_BT2678>	0.88 0.88 0.00999982 -0.240721	</china:Ch07_Vickers_MkE_Type_BT2678>
+        <china:Ch07_Vickers_MkE_Type_BT2679>	2.03 2.03 0.0100046 0.202528	</china:Ch07_Vickers_MkE_Type_BT2679>
+        <china:Ch07_Vickers_MkE_Type_BT2680>	1.16 1.16 0.01 0.01	</china:Ch07_Vickers_MkE_Type_BT2680>
+        <china:Ch07_Vickers_MkE_Type_BT2681>	1.69 1.69 0.01 0.01	</china:Ch07_Vickers_MkE_Type_BT2681>
+        <china:Ch07_Vickers_MkE_Type_BT2682>	2.3 2.3 0.15 0.01	</china:Ch07_Vickers_MkE_Type_BT2682>
+        <china:Ch07_Vickers_MkE_Type_BT2683>	2.01 2.01 0.01 0.01	</china:Ch07_Vickers_MkE_Type_BT2683>
+        <china:Ch07_Vickers_MkE_Type_BT2684>	1.23 1.23 0.138469 0.0100001	</china:Ch07_Vickers_MkE_Type_BT2684>
+        <china:Ch07_Vickers_MkE_Type_BT2685>	2.67 2.67 0.363596 0.0100005	</china:Ch07_Vickers_MkE_Type_BT2685>
+        <china:Ch07_Vickers_MkE_Type_BT2686>	1.54 1.54 0.431256 0.0099946	</china:Ch07_Vickers_MkE_Type_BT2686>
+        <china:Ch07_Vickers_MkE_Type_BT2687>	1.63 1.63 0.141987 -0.387364	</china:Ch07_Vickers_MkE_Type_BT2687>
+        <china:Ch07_Vickers_MkE_Type_BT2688>	2.25 2.25 -0.207092 -0.0763455	</china:Ch07_Vickers_MkE_Type_BT2688>
+        <china:Ch07_Vickers_MkE_Type_BT2689>	1.66 1.66 0.312226 -0.371571	</china:Ch07_Vickers_MkE_Type_BT2689>
+        <china:Ch07_Vickers_MkE_Type_BT2690>	1.66 1.66 0.312226 -0.371571	</china:Ch07_Vickers_MkE_Type_BT2690>
+        <china:Ch07_Vickers_MkE_Type_BT2691>	1.63 1.63 -0.553697 0.00999792	</china:Ch07_Vickers_MkE_Type_BT2691>
+        <china:Ch07_Vickers_MkE_Type_BT2692>	2.18 2.18 0.243647 0.130561	</china:Ch07_Vickers_MkE_Type_BT2692>
+        <china:Ch07_Vickers_MkE_Type_BT2693>	1.75 1.75 0.01 0.01	</china:Ch07_Vickers_MkE_Type_BT2693>
+        <china:Ch07_Vickers_MkE_Type_BT2694>	2.48 2.48 0.01 0.01	</china:Ch07_Vickers_MkE_Type_BT2694>
+        <china:Ch07_Vickers_MkE_Type_BT2695>	2.04 2.04 -0.306615 0.00999998	</china:Ch07_Vickers_MkE_Type_BT2695>
+        <china:Ch07_Vickers_MkE_Type_BT2696>	1.19 1.19 -0.319096 -0.365296	</china:Ch07_Vickers_MkE_Type_BT2696>
+        <china:Ch07_Vickers_MkE_Type_BT2697>	1.83 1.83 -0.421456 0.00999922	</china:Ch07_Vickers_MkE_Type_BT2697>
+        <china:Ch07_Vickers_MkE_Type_BT2698>	1.42 1.42 0.00768497 0.571093	</china:Ch07_Vickers_MkE_Type_BT2698>
+        <china:Ch07_Vickers_MkE_Type_BT2699>	1.69 1.69 0.01 0.01	</china:Ch07_Vickers_MkE_Type_BT2699>
+        <china:Ch08_Type97_Chi_Ha00>	1.92 1.92 -0.0324925 0.0133009	</china:Ch08_Type97_Chi_Ha00>
+        <china:Ch08_Type97_Chi_Ha01>	2.52 2.52 0.01 0.01	</china:Ch08_Type97_Chi_Ha01>
+        <china:Ch08_Type97_Chi_Ha02>	1.5 1.5 0.00999898 0.299223	</china:Ch08_Type97_Chi_Ha02>
+        <china:Ch08_Type97_Chi_Ha03>	2.24 2.24 -0.368238 0.447362	</china:Ch08_Type97_Chi_Ha03>
+        <china:Ch08_Type97_Chi_Ha04>	0.94 0.94 0.183906 -0.203074	</china:Ch08_Type97_Chi_Ha04>
+        <china:Ch08_Type97_Chi_Ha05>	1.46 1.46 -0.0521575 0.234414	</china:Ch08_Type97_Chi_Ha05>
+        <china:Ch08_Type97_Chi_Ha06>	1.88 1.88 -0.670179 -0.335981	</china:Ch08_Type97_Chi_Ha06>
+        <china:Ch08_Type97_Chi_Ha07>	1.97 1.97 0.01 0.01	</china:Ch08_Type97_Chi_Ha07>
+        <china:Ch08_Type97_Chi_Ha08>	1.92 1.92 0.01 0.01	</china:Ch08_Type97_Chi_Ha08>
+        <china:Ch08_Type97_Chi_Ha09>	1.87 1.87 0.715173 0.0100002	</china:Ch08_Type97_Chi_Ha09>
+        <china:Ch08_Type97_Chi_Ha10>	1.08 1.08 -0.00014321 -0.232418	</china:Ch08_Type97_Chi_Ha10>
+        <china:Ch08_Type97_Chi_Ha11>	1.23 1.23 -0.382794 0.00999919	</china:Ch08_Type97_Chi_Ha11>
+        <china:Ch08_Type97_Chi_Ha12>	2.06 2.06 0.01 0.01	</china:Ch08_Type97_Chi_Ha12>
+        <china:Ch08_Type97_Chi_Ha13>	2.66 2.66 0.01 0.01	</china:Ch08_Type97_Chi_Ha13>
+        <china:Ch08_Type97_Chi_Ha14>	1.69 1.69 0.0105822 -0.240659	</china:Ch08_Type97_Chi_Ha14>
+        <china:Ch08_Type97_Chi_Ha15>	1.62 1.62 0.01 0.01	</china:Ch08_Type97_Chi_Ha15>
+        <china:Ch08_Type97_Chi_Ha16>	1.99 1.99 0.01 0.01	</china:Ch08_Type97_Chi_Ha16>
+        <china:Ch08_Type97_Chi_Ha17>	2.3 2.3 -0.57 0.75	</china:Ch08_Type97_Chi_Ha17>
+        <china:Ch08_Type97_Chi_Ha18>	2.3 2.3 0.01 0.01	</china:Ch08_Type97_Chi_Ha18>
+        <china:Ch08_Type97_Chi_Ha19>	0.33 0.33 0.00999327 -0.462022	</china:Ch08_Type97_Chi_Ha19>
+        <china:Ch08_Type97_Chi_Ha20>	0.86 0.86 -0.483345 0.00999954	</china:Ch08_Type97_Chi_Ha20>
+        <china:Ch08_Type97_Chi_Ha21>	0.94 0.94 0.01 0.01	</china:Ch08_Type97_Chi_Ha21>
+        <china:Ch08_Type97_Chi_Ha22>	0.77 0.77 0.01 0.01	</china:Ch08_Type97_Chi_Ha22>
+        <china:Ch08_Type97_Chi_Ha23>	2.23 2.23 -0.31146 0.0099985	</china:Ch08_Type97_Chi_Ha23>
+        <china:Ch08_Type97_Chi_Ha24>	1.18 1.18 0.01 0.01	</china:Ch08_Type97_Chi_Ha24>
+        <china:Ch08_Type97_Chi_Ha25>	0.89 0.89 0.0100013 -0.365604	</china:Ch08_Type97_Chi_Ha25>
+        <china:Ch08_Type97_Chi_Ha26>	2.86 2.86 0.0100739 -0.450719	</china:Ch08_Type97_Chi_Ha26>
+        <china:Ch08_Type97_Chi_Ha27>	2.5 2.5 -0.12 -0.12	</china:Ch08_Type97_Chi_Ha27>
+        <china:Ch08_Type97_Chi_Ha28>	1.84 1.84 0.00999936 -0.280148	</china:Ch08_Type97_Chi_Ha28>
+        <china:Ch08_Type97_Chi_Ha29>	1.36 1.36 0.313487 0.0100014	</china:Ch08_Type97_Chi_Ha29>
+        <china:Ch08_Type97_Chi_Ha30>	1.4 1.4 -0.543584 0.00999792	</china:Ch08_Type97_Chi_Ha30>
+        <china:Ch08_Type97_Chi_Ha31>	2.4 2.4 -0.513984 0.0100011	</china:Ch08_Type97_Chi_Ha31>
+        <china:Ch08_Type97_Chi_Ha32>	0.58 0.58 0.01 0.01	</china:Ch08_Type97_Chi_Ha32>
+        <china:Ch08_Type97_Chi_Ha33>	1.03 1.03 0.01 0.01	</china:Ch08_Type97_Chi_Ha33>
+        <china:Ch08_Type97_Chi_Ha34>	0.61 0.61 -0.248357 0.00999955	</china:Ch08_Type97_Chi_Ha34>
+        <china:Ch08_Type97_Chi_Ha35>	1.36 1.36 -0.288092 0.00999999	</china:Ch08_Type97_Chi_Ha35>
+        <china:Ch08_Type97_Chi_Ha36>	1.42 1.42 0.01 0.01	</china:Ch08_Type97_Chi_Ha36>
+        <china:Ch08_Type97_Chi_Ha37>	1.77 1.77 0.01 0.01	</china:Ch08_Type97_Chi_Ha37>
+        <china:Ch08_Type97_Chi_Ha38>	0.6 0.6 -0.858963 0.383636	</china:Ch08_Type97_Chi_Ha38>
+        <china:Ch08_Type97_Chi_Ha39>	1.03 1.03 0.0100006 -0.0753615	</china:Ch08_Type97_Chi_Ha39>
+        <china:Ch08_Type97_Chi_Ha40>	2.24 2.24 -0.855974 0.00999412	</china:Ch08_Type97_Chi_Ha40>
+        <china:Ch08_Type97_Chi_Ha41>	2.1 2.1 0.01 0.01	</china:Ch08_Type97_Chi_Ha41>
+        <china:Ch08_Type97_Chi_Ha42>	2.02 2.02 -0.440762 0.0100005	</china:Ch08_Type97_Chi_Ha42>
+        <china:Ch08_Type97_Chi_Ha43>	1.55 1.55 0.010002 -0.372448	</china:Ch08_Type97_Chi_Ha43>
+        <china:Ch08_Type97_Chi_Ha44>	0.6 0.6 0.01 0.01	</china:Ch08_Type97_Chi_Ha44>
+        <china:Ch08_Type97_Chi_Ha45>	1.33 1.33 0.11525 0.0102362	</china:Ch08_Type97_Chi_Ha45>
+        <china:Ch08_Type97_Chi_Ha46>	0.62 0.62 0.00999987 0.185464	</china:Ch08_Type97_Chi_Ha46>
+        <china:Ch08_Type97_Chi_Ha47>	1.08 1.08 0.0100004 0.370542	</china:Ch08_Type97_Chi_Ha47>
+        <china:Ch08_Type97_Chi_Ha48>	2.12 2.12 0.01 0.379289	</china:Ch08_Type97_Chi_Ha48>
+        <china:Ch08_Type97_Chi_Ha49>	0.82 0.82 0.100523 -0.296131	</china:Ch08_Type97_Chi_Ha49>
+        <china:Ch08_Type97_Chi_Ha50>	1.65 1.65 0.01 0.01	</china:Ch08_Type97_Chi_Ha50>
+      </tiling>
+      <tilingSettings>
+        <type>	relative	</type>
+        <factor>	1.5 1.5	</factor>
+        <offset>	0.000000 -0.05	</offset>
+      </tilingSettings>
+    </camouflage>
+  </itemGroup>
+</camouflage_master_of_orion_label.xml>

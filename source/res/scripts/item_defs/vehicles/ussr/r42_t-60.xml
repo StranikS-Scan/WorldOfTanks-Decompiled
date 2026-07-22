@@ -60,7 +60,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	3107	</weight>
-    <maxHealth>	272	</maxHealth>
+    <maxHealth>	300	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	75	</maxHealth>
       <maxRegenHealth>	50	</maxRegenHealth>
@@ -1190,812 +1190,6 @@
     </camouflage>
   </hull>
   <chassis>
-    <Chassis_T-60>
-      <userString>	#ussr_vehicles:Chassis_T-60	</userString>
-      <tags></tags>
-      <level>	1	</level>
-      <price>	290	</price>
-      <unlocks>
-        <chassis>	Chassis_T-60_2	  <cost>	100	</cost>
-        </chassis>
-      </unlocks>
-      <armor>
-        <leftTrack>	5	</leftTrack>
-        <rightTrack>	5	</rightTrack>
-      </armor>
-      <weight>	2000	</weight>
-      <terrainResistance>	1.2 1.3 2.3	</terrainResistance>
-      <brakeForce>	6300	</brakeForce>
-      <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
-      <rotationSpeed>	48	</rotationSpeed>
-      <shotDispersionFactors>
-        <vehicleMovement>	0.3	</vehicleMovement>
-        <vehicleRotation>	0.3	</vehicleRotation>
-      </shotDispersionFactors>
-      <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	50	</maxHealth>
-      <maxRegenHealth>	40	</maxRegenHealth>
-      <repairCost>	5.0	</repairCost>
-      <models>
-        <undamaged>	vehicles/russian/R42_T-60/normal/lod0/Chassis.model	</undamaged>
-        <destroyed>	vehicles/russian/R42_T-60/crash/lod0/Chassis.model	</destroyed>
-        <exploded>	vehicles/russian/R42_T-60/crash/lod0/Chassis.model	</exploded>
-      </models>
-      <traces>
-        <lodDist>	MEDIUM	</lodDist>
-        <bufferPrefs>	smallTank	</bufferPrefs>
-        <textureSet>	ussr_01	</textureSet>
-        <size>	0.42 0.28	</size>
-      </traces>
-      <tracks>
-        <lodDist>	MEDIUM_TRACK	</lodDist>
-        <trackPair>
-          <trackPairIdx>	0	</trackPairIdx>
-          <leftMaterial>	track_mat_L_skinned	</leftMaterial>
-          <rightMaterial>	track_mat_R_skinned	</rightMaterial>
-          <textureScale>	-3.5	</textureScale>
-          <trackDebris>
-            <isLeft>	true	</isLeft>
-            <destructionEffect></destructionEffect>
-            <physicalParams>
-              <renderModelOffset>	-0.004588	</renderModelOffset>
-              <interpolationsCount>	1	</interpolationsCount>
-              <lengthwiseSpringLength>	0.090559	</lengthwiseSpringLength>
-              <widthwiseSpringLength>	0.21293	</widthwiseSpringLength>
-              <hingeJointStiffness>	1050.094116	</hingeJointStiffness>
-              <torsionStiffnessStep>	6	</torsionStiffnessStep>
-              <wheelGroups>
-                <wheelGroup>
-                  <wheelName>	WD_L4	</wheelName>
-                  <wheelName>	W_L3	</wheelName>
-                  <wheelName>	W_L2	</wheelName>
-                  <wheelName>	W_L1	</wheelName>
-                  <wheelName>	W_L0	</wheelName>
-                  <groupRadius>	0.25354	</groupRadius>
-                  <groupInnerOffset>	0.229768	</groupInnerOffset>
-                  <groupOuterOffset>	-0.16777	</groupOuterOffset>
-                </wheelGroup>
-                <wheelGroup>
-                  <wheelName>	WD_L3	</wheelName>
-                  <wheelName>	WD_L2	</wheelName>
-                  <wheelName>	WD_L1	</wheelName>
-                  <groupRadius>	0.092941	</groupRadius>
-                  <groupInnerOffset>	0.229768	</groupInnerOffset>
-                  <groupOuterOffset>	-0.15877	</groupOuterOffset>
-                </wheelGroup>
-                <wheelGroup>
-                  <wheelName>	WD_L0	</wheelName>
-                  <groupRadius>	0.224052	</groupRadius>
-                  <groupInnerOffset>	0.229768	</groupInnerOffset>
-                  <groupOuterOffset>	-0.15677	</groupOuterOffset>
-                </wheelGroup>
-              </wheelGroups>
-              <hullCollider>
-                <boxCollider>
-                  <row0>	1.679826 0.000000 0.000000	</row0>
-                  <row1>	0.000000 1.040761 0.000000	</row1>
-                  <row2>	0.000000 0.000000 3.735520	</row2>
-                  <row3>	0.010735 0.831995 -0.010480	</row3>
-                </boxCollider>
-                <boxCollider>
-                  <row0>	0.788872 0.000000 0.000000	</row0>
-                  <row1>	0.000000 0.300000 0.000000	</row1>
-                  <row2>	0.000000 0.000000 3.956319	</row2>
-                  <row3>	-0.773000 1.210000 -0.004622	</row3>
-                </boxCollider>
-                <boxCollider>
-                  <row0>	0.864393 0.000000 0.000000	</row0>
-                  <row1>	0.000000 0.299140 -0.022699	</row1>
-                  <row2>	0.000001 0.191551 2.524350	</row2>
-                  <row3>	-0.773000 1.121690 -0.817083	</row3>
-                </boxCollider>
-                <boxCollider>
-                  <row0>	0.890337 0.000000 0.000000	</row0>
-                  <row1>	0.000000 0.231062 0.191338	</row1>
-                  <row2>	0.000000 -0.516917 0.624235	</row2>
-                  <row3>	-0.773000 1.178583 1.787180	</row3>
-                </boxCollider>
-                <boxCollider>
-                  <row0>	0.907551 0.000000 0.000000	</row0>
-                  <row1>	0.000000 0.180170 -0.239873	</row1>
-                  <row2>	0.000000 0.466946 0.350726	</row2>
-                  <row3>	-0.773000 0.921942 -1.919880	</row3>
-                </boxCollider>
-              </hullCollider>
-            </physicalParams>
-          </trackDebris>
-          <trackDebris>
-            <isLeft>	false	</isLeft>
-            <destructionEffect></destructionEffect>
-            <physicalParams>
-              <renderModelOffset>	-0.004956	</renderModelOffset>
-              <interpolationsCount>	1	</interpolationsCount>
-              <lengthwiseSpringLength>	0.090616	</lengthwiseSpringLength>
-              <widthwiseSpringLength>	0.212921	</widthwiseSpringLength>
-              <hingeJointStiffness>	1047.232422	</hingeJointStiffness>
-              <torsionStiffnessStep>	6	</torsionStiffnessStep>
-              <wheelGroups>
-                <wheelGroup>
-                  <wheelName>	WD_R4	</wheelName>
-                  <wheelName>	W_R3	</wheelName>
-                  <wheelName>	W_R2	</wheelName>
-                  <wheelName>	W_R1	</wheelName>
-                  <wheelName>	W_R0	</wheelName>
-                  <groupRadius>	0.253875	</groupRadius>
-                  <groupInnerOffset>	-0.229768	</groupInnerOffset>
-                  <groupOuterOffset>	0.14677	</groupOuterOffset>
-                </wheelGroup>
-                <wheelGroup>
-                  <wheelName>	WD_R3	</wheelName>
-                  <wheelName>	WD_R2	</wheelName>
-                  <wheelName>	WD_R1	</wheelName>
-                  <groupRadius>	0.093237	</groupRadius>
-                  <groupInnerOffset>	-0.229768	</groupInnerOffset>
-                  <groupOuterOffset>	0.15177	</groupOuterOffset>
-                </wheelGroup>
-                <wheelGroup>
-                  <wheelName>	WD_R0	</wheelName>
-                  <groupRadius>	0.224384	</groupRadius>
-                  <groupInnerOffset>	-0.229768	</groupInnerOffset>
-                  <groupOuterOffset>	0.15877	</groupOuterOffset>
-                </wheelGroup>
-              </wheelGroups>
-              <hullCollider>
-                <boxCollider>
-                  <row0>	1.679826 0.000000 0.000000	</row0>
-                  <row1>	0.000000 1.040761 0.000000	</row1>
-                  <row2>	0.000000 0.000000 3.735520	</row2>
-                  <row3>	0.000000 0.831995 -0.010480	</row3>
-                </boxCollider>
-                <boxCollider>
-                  <row0>	0.788872 0.000000 0.000000	</row0>
-                  <row1>	0.000000 0.300000 0.000000	</row1>
-                  <row2>	0.000000 0.000000 3.956320	</row2>
-                  <row3>	0.773000 1.210000 -0.004622	</row3>
-                </boxCollider>
-                <boxCollider>
-                  <row0>	0.864393 0.000000 0.000000	</row0>
-                  <row1>	0.000000 0.299140 -0.022699	</row1>
-                  <row2>	0.000001 0.191551 2.524349	</row2>
-                  <row3>	0.773000 1.121691 -0.817083	</row3>
-                </boxCollider>
-                <boxCollider>
-                  <row0>	0.890337 0.000000 0.000000	</row0>
-                  <row1>	0.000000 0.231062 0.191338	</row1>
-                  <row2>	0.000000 -0.516917 0.624235	</row2>
-                  <row3>	0.773000 1.178580 1.787180	</row3>
-                </boxCollider>
-                <boxCollider>
-                  <row0>	0.907551 0.000000 0.000000	</row0>
-                  <row1>	0.000000 0.180170 -0.239873	</row1>
-                  <row2>	0.000000 0.466946 0.350726	</row2>
-                  <row3>	0.773000 0.921942 -1.919883	</row3>
-                </boxCollider>
-              </hullCollider>
-            </physicalParams>
-          </trackDebris>
-        </trackPair>
-      </tracks>
-      <wheels>
-        <lodDist>	MEDIUM	</lodDist>
-        <wheel>
-          <isLeft>	false	</isLeft>
-          <isLeading>	true	</isLeading>
-          <name>	WD_R0	</name>
-          <radius>	0.273214	</radius>
-          <syncAngle>	22.5	</syncAngle>
-        </wheel>
-        <group>
-          <isLeft>	false	</isLeft>
-          <template>	WD_R	</template>
-          <radius>	0.119107	</radius>
-          <startIndex>	1	</startIndex>
-          <count>	3	</count>
-        </group>
-        <wheel>
-          <isLeft>	false	</isLeft>
-          <isLeading>	true	</isLeading>
-          <name>	WD_R4	</name>
-          <radius>	0.25436	</radius>
-          <syncAngle>	22.5	</syncAngle>
-        </wheel>
-        <group>
-          <isLeft>	false	</isLeft>
-          <template>	W_R	</template>
-          <radius>	0.25436	</radius>
-          <startIndex>	0	</startIndex>
-          <count>	4	</count>
-        </group>
-        <wheel>
-          <isLeft>	true	</isLeft>
-          <isLeading>	true	</isLeading>
-          <name>	WD_L0	</name>
-          <radius>	0.273214	</radius>
-          <syncAngle>	22.5	</syncAngle>
-        </wheel>
-        <group>
-          <isLeft>	true	</isLeft>
-          <template>	WD_L	</template>
-          <radius>	0.119107	</radius>
-          <startIndex>	1	</startIndex>
-          <count>	3	</count>
-        </group>
-        <wheel>
-          <isLeft>	true	</isLeft>
-          <isLeading>	true	</isLeading>
-          <name>	WD_L4	</name>
-          <radius>	0.25436	</radius>
-          <syncAngle>	22.5	</syncAngle>
-        </wheel>
-        <group>
-          <isLeft>	true	</isLeft>
-          <template>	W_L	</template>
-          <radius>	0.25436	</radius>
-          <startIndex>	0	</startIndex>
-          <count>	4	</count>
-        </group>
-      </wheels>
-      <drivingWheels>	WD_L0 WD_L4	</drivingWheels>
-      <effects>
-        <lodDist>	MEDIUM	</lodDist>
-        <mud>	smallTankMud	</mud>
-      </effects>
-      <wwsoundPC>	treads_type_pc	</wwsoundPC>
-      <wwsoundNPC>	trds_med_npc	</wwsoundNPC>
-      <hullPosition>	0.000000 0.815027 0.000000	</hullPosition>
-      <hitTester>
-        <collisionModelServer>	vehicles/russian/R42_T-60/collision/Chassis.model	</collisionModelServer>
-        <collisionModelClient>	vehicles/russian/R42_T-60/collision_client/Chassis.model	</collisionModelClient>
-      </hitTester>
-      <topRightCarryingPoint>	1.01968 1.13152	</topRightCarryingPoint>
-      <maxClimbAngle>	25	</maxClimbAngle>
-      <navmeshGirth>	6.0	</navmeshGirth>
-      <AODecals>
-        <decal>
-          <transform>
-            <row0>	3.250230 0.000000 0.000000	</row0>
-            <row1>	0.000000 1.154120 0.000000	</row1>
-            <row2>	0.000000 0.000000 4.510290	</row2>
-            <row3>	0.000000 0.000000 -0.000001	</row3>
-          </transform>
-        </decal>
-      </AODecals>
-      <trackThickness>	-0.0051	</trackThickness>
-      <trackNodes>
-        <enable>	true	</enable>
-        <linkBones>	false	</linkBones>
-        <maxAmplitude>	0.03	</maxAmplitude>
-        <maxOffset>	0.03	</maxOffset>
-        <gravity>	-9.8	</gravity>
-        <elasticity>	1100	</elasticity>
-        <damping>	2	</damping>
-        <node>
-          <isLeft>	false	</isLeft>
-          <name>	Track_VT_R0	</name>
-          <forwardElastK>	3	</forwardElastK>
-          <backwardElastK>	0.7	</backwardElastK>
-          <offset>	-0.06	</offset>
-        </node>
-        <node>
-          <isLeft>	true	</isLeft>
-          <name>	Track_VT_L0	</name>
-          <forwardElastK>	3	</forwardElastK>
-          <backwardElastK>	0.7	</backwardElastK>
-          <offset>	-0.06	</offset>
-        </node>
-        <node>
-          <isLeft>	false	</isLeft>
-          <name>	Track_VT_R1	</name>
-          <forwardElastK>	2.8	</forwardElastK>
-          <backwardElastK>	0.7	</backwardElastK>
-          <offset>	-0.06	</offset>
-        </node>
-        <node>
-          <isLeft>	false	</isLeft>
-          <name>	Track_VT_R2	</name>
-          <forwardElastK>	2.6	</forwardElastK>
-          <backwardElastK>	0.7	</backwardElastK>
-          <offset>	-0.06	</offset>
-        </node>
-        <node>
-          <isLeft>	false	</isLeft>
-          <name>	Track_VT_R3	</name>
-          <forwardElastK>	2.4	</forwardElastK>
-          <backwardElastK>	0.7	</backwardElastK>
-          <offset>	-0.06	</offset>
-        </node>
-        <node>
-          <isLeft>	true	</isLeft>
-          <name>	Track_VT_L1	</name>
-          <forwardElastK>	2.8	</forwardElastK>
-          <backwardElastK>	0.7	</backwardElastK>
-          <offset>	-0.058	</offset>
-        </node>
-        <node>
-          <isLeft>	true	</isLeft>
-          <name>	Track_VT_L2	</name>
-          <forwardElastK>	2.6	</forwardElastK>
-          <backwardElastK>	0.7	</backwardElastK>
-          <offset>	-0.06	</offset>
-        </node>
-        <node>
-          <isLeft>	true	</isLeft>
-          <name>	Track_VT_L3	</name>
-          <forwardElastK>	2.4	</forwardElastK>
-          <backwardElastK>	0.7	</backwardElastK>
-          <offset>	-0.06	</offset>
-        </node>
-        <node>
-          <isLeft>	true	</isLeft>
-          <name>	Track_VD_L0	</name>
-          <forwardElastK>	0.65	</forwardElastK>
-          <backwardElastK>	2	</backwardElastK>
-        </node>
-        <node>
-          <isLeft>	true	</isLeft>
-          <name>	Track_VD_L1	</name>
-          <forwardElastK>	2	</forwardElastK>
-        </node>
-        <node>
-          <isLeft>	false	</isLeft>
-          <name>	Track_VD_R0	</name>
-          <forwardElastK>	0.65	</forwardElastK>
-          <backwardElastK>	2	</backwardElastK>
-        </node>
-        <node>
-          <isLeft>	false	</isLeft>
-          <name>	Track_VD_R1	</name>
-          <forwardElastK>	2	</forwardElastK>
-        </node>
-      </trackNodes>
-      <groundNodes>
-        <group>
-          <template>	Track_L	</template>
-          <startIndex>	0	</startIndex>
-          <count>	4	</count>
-          <isLeft>	true	</isLeft>
-          <minOffset>	-0.099265	</minOffset>
-          <maxOffset>	0.113971	</maxOffset>
-        </group>
-        <group>
-          <template>	Track_R	</template>
-          <startIndex>	0	</startIndex>
-          <count>	4	</count>
-          <isLeft>	false	</isLeft>
-          <minOffset>	-0.099265	</minOffset>
-          <maxOffset>	0.113971	</maxOffset>
-        </group>
-      </groundNodes>
-      <splineDesc>
-        <trackPair>
-          <trackPairIdx>	0	</trackPairIdx>
-          <segmentModelLeft>	vehicles/russian/R42_T-60/track/segment.model	</segmentModelLeft>
-          <segmentModelRight>	vehicles/russian/R42_T-60/track/segment.model	</segmentModelRight>
-          <left>	vehicles/russian/R42_T-60/track/left.track	</left>
-          <right>	vehicles/russian/R42_T-60/track/right.track	</right>
-          <segmentLength>	0.095	</segmentLength>
-          <segmentOffset>	0.168	</segmentOffset>
-          <atlas>
-            <UTiles>	1	</UTiles>
-            <VTiles>	1	</VTiles>
-          </atlas>
-        </trackPair>
-        <lodDist>	SPLINE_TRACK	</lodDist>
-      </splineDesc>
-      <physicalTracks>
-        <left>
-          <segmentsCount>	94	</segmentsCount>
-          <segmentsOuterThickness>	0.027891	</segmentsOuterThickness>
-          <segmentsInnerThickness>	0.018715	</segmentsInnerThickness>
-          <segmentsPlaneOffset>	-1.02	</segmentsPlaneOffset>
-          <springsLength>
-            <backwardMovement>
-              <back>	0.094294	</back>
-              <top>	0.090298	</top>
-              <front>	0.086416	</front>
-              <bottom>	0.041873	</bottom>
-            </backwardMovement>
-            <forwardMovement>
-              <back>	0.086563	</back>
-              <top>	0.083913	</top>
-              <front>	0.093881	</front>
-              <bottom>	0.033862	</bottom>
-            </forwardMovement>
-          </springsLength>
-          <mainSegment>
-            <model>	vehicles/russian/R42_T-60/track/segment.model	</model>
-            <length>	0.095787	</length>
-          </mainSegment>
-          <collisionHull>
-            <bottom></bottom>
-            <top>
-              <part>
-                <xStart>	-1.96525	</xStart>
-                <xStep>	0.047893	</xStep>
-                <ySamples>	0.628159 0.713266 0.784819 0.826989 0.849195 0.870789 0.886826 0.890268 0.893712 0.897155 0.900598 0.904042 0.907476 0.910864 0.914253 0.91764 0.921028 0.924417 0.927805 0.931194 0.934582 0.93797 0.941359 0.944747 0.948135 0.951534 0.954977 0.958417 0.962047 0.965926 0.969466 0.972906 0.976346 0.979786 0.983236 0.986406 0.989446 0.992476 0.995516 0.998556 1.00181 1.00525 1.00869 1.01214 1.01569 1.01962 1.02355 1.02747 1.0314 1.03168 1.03168 1.03168 1.03168 1.03168 1.03153 1.03109 1.03064 1.03019 1.02975 1.0293 1.02886 1.02841 1.02796 1.02752 1.02635 1.02471 1.02261 1.02052 1.02128 1.02547 1.02725 1.02728 1.02731 1.02734 1.02737 1.02752 1.02567 1.0217 1.01357 0.999743 0.982141 0.953443 0.89358	</ySamples>
-              </part>
-            </top>
-          </collisionHull>
-          <bottomWheels>
-            <wheel>	WD_L4	</wheel>
-            <wheel>	W_L3	</wheel>
-            <wheel>	W_L2	</wheel>
-            <wheel>	W_L1	</wheel>
-            <wheel>	W_L0	</wheel>
-            <wheel>	WD_L0	</wheel>
-          </bottomWheels>
-          <snapWheels>
-            <topFront>
-              <wheelName>	WD_L0	</wheelName>
-              <basePos>	1.69498 0.671768	</basePos>
-              <shiftVec>	0.227778 0.083984	</shiftVec>
-              <jointIdx>	13	</jointIdx>
-            </topFront>
-            <topBack>
-              <wheelName>	WD_L4	</wheelName>
-              <basePos>	-1.68693 0.484835	</basePos>
-              <shiftVec>	-0.24999 0.107832	</shiftVec>
-              <jointIdx>	57	</jointIdx>
-            </topBack>
-            <bottomBack>
-              <wheelName>	W_L3	</wheelName>
-              <basePos>	-1.13155 0.306071	</basePos>
-              <shiftVec>	-0.023797 -0.272036	</shiftVec>
-              <jointIdx>	69	</jointIdx>
-            </bottomBack>
-            <bottomFront>
-              <wheelName>	W_L0	</wheelName>
-              <basePos>	1.08791 0.306071	</basePos>
-              <shiftVec>	0.01159 -0.272829	</shiftVec>
-              <jointIdx>	0	</jointIdx>
-            </bottomFront>
-          </snapWheels>
-          <radiusOverrides>
-            <wheel>
-              <name>	WD_L4	</name>
-              <radius>	0.27158	</radius>
-            </wheel>
-            <wheel>
-              <name>	WD_L3	</name>
-              <radius>	0.11	</radius>
-            </wheel>
-            <wheel>
-              <name>	WD_L2	</name>
-              <radius>	0.11	</radius>
-            </wheel>
-            <wheel>
-              <name>	WD_L1	</name>
-              <radius>	0.11	</radius>
-            </wheel>
-            <wheel>
-              <name>	WD_L0	</name>
-              <radius>	0.24201	</radius>
-            </wheel>
-          </radiusOverrides>
-          <teethSyncs>
-            <syncWithMainModel>	true	</syncWithMainModel>
-            <segmentSyncPivotOffset>	0	</segmentSyncPivotOffset>
-            <sync>
-              <name>	WD_L4	</name>
-              <startAngle>	-422.886993	</startAngle>
-              <teethCount>	16	</teethCount>
-            </sync>
-            <sync>
-              <name>	WD_L0	</name>
-              <startAngle>	-419.643005	</startAngle>
-              <teethCount>	16	</teethCount>
-            </sync>
-          </teethSyncs>
-          <sourceCollisionHullPoints>
-            <top>
-              <range>
-                <point>	-1.03449 0.67381 -1.96529	</point>
-                <point>	-0.864491 0.758919 -1.9174	</point>
-                <point>	-0.974491 0.830471 -1.8695	</point>
-                <point>	-0.994489 0.872641 -1.82161	</point>
-                <point>	-0.844488 0.894849 -1.77372	</point>
-                <point>	-0.944487 0.916442 -1.72582	</point>
-                <point>	-1.02449 0.932478 -1.67793	</point>
-                <point>	-0.984484 0.935921 -1.63004	</point>
-                <point>	-0.984483 0.939365 -1.58214	</point>
-                <point>	-0.984481 0.942808 -1.53425	</point>
-                <point>	-0.97448 0.946251 -1.48636	</point>
-                <point>	-0.954478 0.949695 -1.43846	</point>
-                <point>	-1.04448 0.953128 -1.39057	</point>
-                <point>	-1.04448 0.956516 -1.34267	</point>
-                <point>	-1.04447 0.959905 -1.29478	</point>
-                <point>	-1.04447 0.963293 -1.24689	</point>
-                <point>	-1.04447 0.966681 -1.19899	</point>
-                <point>	-1.04447 0.97007 -1.1511	</point>
-                <point>	-1.04447 0.973458 -1.10321	</point>
-                <point>	-1.04447 0.976847 -1.05531	</point>
-                <point>	-1.04447 0.980235 -1.00742	</point>
-                <point>	-1.04446 0.983623 -0.959526	</point>
-                <point>	-1.04446 0.987012 -0.911633	</point>
-                <point>	-1.04446 0.9904 -0.863739	</point>
-                <point>	-1.04446 0.993788 -0.815846	</point>
-                <point>	-1.04446 0.997187 -0.767953	</point>
-                <point>	-1.04446 1.00063 -0.720059	</point>
-                <point>	-1.04446 1.00407 -0.672166	</point>
-                <point>	-1.04445 1.0077 -0.624273	</point>
-                <point>	-1.04445 1.01158 -0.576379	</point>
-                <point>	-1.03445 1.01512 -0.528486	</point>
-                <point>	-1.01445 1.01856 -0.480594	</point>
-                <point>	-1.04445 1.022 -0.432699	</point>
-                <point>	-1.03445 1.02544 -0.384806	</point>
-                <point>	-1.02445 1.02889 -0.336913	</point>
-                <point>	-1.04444 1.03206 -0.289019	</point>
-                <point>	-1.04444 1.0351 -0.241125	</point>
-                <point>	-1.04444 1.03813 -0.193232	</point>
-                <point>	-1.04444 1.04117 -0.145339	</point>
-                <point>	-1.04444 1.04421 -0.097445	</point>
-                <point>	-1.04444 1.04746 -0.049552	</point>
-                <point>	-1.04444 1.0509 -0.001659	</point>
-                <point>	-1.04443 1.05434 0.046235	</point>
-                <point>	-1.04443 1.05779 0.094128	</point>
-                <point>	-1.04443 1.06134 0.142021	</point>
-                <point>	-1.02443 1.06527 0.189914	</point>
-                <point>	-1.02443 1.0692 0.237808	</point>
-                <point>	-1.02443 1.07313 0.285701	</point>
-                <point>	-1.02443 1.07706 0.333594	</point>
-                <point>	-1.03442 1.07734 0.381488	</point>
-                <point>	-1.03442 1.07734 0.429382	</point>
-                <point>	-1.04442 1.07734 0.477275	</point>
-                <point>	-1.01442 1.07734 0.525168	</point>
-                <point>	-1.03442 1.07734 0.573062	</point>
-                <point>	-1.04442 1.07719 0.620955	</point>
-                <point>	-1.04442 1.07675 0.668849	</point>
-                <point>	-1.04441 1.0763 0.716742	</point>
-                <point>	-1.04441 1.07585 0.764635	</point>
-                <point>	-1.04441 1.07541 0.812529	</point>
-                <point>	-1.04441 1.07496 0.860422	</point>
-                <point>	-1.04441 1.07452 0.908316	</point>
-                <point>	-1.04441 1.07407 0.956209	</point>
-                <point>	-1.0444 1.07362 1.0041	</point>
-                <point>	-1.0444 1.07318 1.052	</point>
-                <point>	-0.844402 1.07201 1.09988	</point>
-                <point>	-0.844401 1.07037 1.14778	</point>
-                <point>	-0.844399 1.06827 1.19567	</point>
-                <point>	-0.844397 1.06618 1.24356	</point>
-                <point>	-0.844396 1.06693 1.29146	</point>
-                <point>	-0.844394 1.07113 1.33935	</point>
-                <point>	-1.04439 1.07291 1.38725	</point>
-                <point>	-1.04439 1.07294 1.43514	</point>
-                <point>	-1.04439 1.07297 1.48304	</point>
-                <point>	-1.04439 1.073 1.53093	</point>
-                <point>	-1.04439 1.07303 1.57882	</point>
-                <point>	-1.04439 1.07318 1.62672	</point>
-                <point>	-1.04438 1.07133 1.67461	</point>
-                <point>	-1.04438 1.06736 1.7225	</point>
-                <point>	-1.04438 1.05923 1.7704	</point>
-                <point>	-1.04438 1.0454 1.81829	</point>
-                <point>	-0.844378 1.0278 1.86618	</point>
-                <point>	-1.04438 0.9991 1.91408	</point>
-                <point>	-0.854374 0.939239 1.96196	</point>
-              </range>
-            </top>
-          </sourceCollisionHullPoints>
-          <trackPairIdx>	0	</trackPairIdx>
-        </left>
-        <right>
-          <segmentsCount>	94	</segmentsCount>
-          <segmentsOuterThickness>	0.028263	</segmentsOuterThickness>
-          <segmentsInnerThickness>	0.018352	</segmentsInnerThickness>
-          <segmentsPlaneOffset>	1.02	</segmentsPlaneOffset>
-          <springsLength>
-            <backwardMovement>
-              <back>	0.094294	</back>
-              <top>	0.090298	</top>
-              <front>	0.086416	</front>
-              <bottom>	0.041873	</bottom>
-            </backwardMovement>
-            <forwardMovement>
-              <back>	0.086563	</back>
-              <top>	0.083913	</top>
-              <front>	0.093881	</front>
-              <bottom>	0.033862	</bottom>
-            </forwardMovement>
-          </springsLength>
-          <mainSegment>
-            <model>	vehicles/russian/R42_T-60/track/segment.model	</model>
-            <length>	0.093814	</length>
-          </mainSegment>
-          <collisionHull>
-            <bottom></bottom>
-            <top>
-              <part>
-                <xStart>	-1.98118	</xStart>
-                <xStep>	0.046907	</xStep>
-                <ySamples>	0.624345 0.708005 0.763079 0.818026 0.850552 0.871532 0.882386 0.888729 0.892101 0.895471 0.898842 0.902213 0.905583 0.908954 0.912325 0.915695 0.919066 0.922436 0.925807 0.929178 0.932548 0.935919 0.93929 0.94266 0.94603 0.949402 0.952772 0.956142 0.959511 0.962889 0.966277 0.969645 0.973023 0.976392 0.97976 0.983128 0.986506 0.989874 0.993243 0.996611 0.999989 1.00255 1.00492 1.00769 1.01106 1.01444 1.01781 1.02184 1.02592 1.03 1.03166 1.03166 1.03166 1.03166 1.03141 1.031 1.0306 1.03019 1.02977 1.02937 1.02896 1.02874 1.02874 1.02902 1.02945 1.02675 1.02294 1.01663 1.01779 1.01975 1.02065 1.02261 1.02622 1.02506 1.02482 1.02407 1.02447 1.02314 1.02289 1.02301 1.0161 1.00774 0.988953 0.96652 0.933927	</ySamples>
-              </part>
-            </top>
-          </collisionHull>
-          <bottomWheels>
-            <wheel>	WD_R4	</wheel>
-            <wheel>	W_R3	</wheel>
-            <wheel>	W_R2	</wheel>
-            <wheel>	W_R1	</wheel>
-            <wheel>	W_R0	</wheel>
-            <wheel>	WD_R0	</wheel>
-          </bottomWheels>
-          <snapWheels>
-            <topFront>
-              <wheelName>	WD_R0	</wheelName>
-              <basePos>	1.69498 0.671768	</basePos>
-              <shiftVec>	0.228832 0.082073	</shiftVec>
-              <jointIdx>	12	</jointIdx>
-            </topFront>
-            <topBack>
-              <wheelName>	WD_R4	</wheelName>
-              <basePos>	-1.68693 0.484835	</basePos>
-              <shiftVec>	-0.250802 0.108152	</shiftVec>
-              <jointIdx>	56	</jointIdx>
-            </topBack>
-            <bottomBack>
-              <wheelName>	W_R3	</wheelName>
-              <basePos>	-1.08805 0.306071	</basePos>
-              <shiftVec>	0.025668 -0.272712	</shiftVec>
-              <jointIdx>	69	</jointIdx>
-            </bottomBack>
-            <bottomFront>
-              <wheelName>	W_R0	</wheelName>
-              <basePos>	1.13141 0.306071	</basePos>
-              <shiftVec>	0.062669 -0.265414	</shiftVec>
-              <jointIdx>	0	</jointIdx>
-            </bottomFront>
-          </snapWheels>
-          <radiusOverrides>
-            <wheel>
-              <name>	WD_R4	</name>
-              <radius>	0.27158	</radius>
-            </wheel>
-            <wheel>
-              <name>	WD_R3	</name>
-              <radius>	0.11	</radius>
-            </wheel>
-            <wheel>
-              <name>	WD_R2	</name>
-              <radius>	0.11	</radius>
-            </wheel>
-            <wheel>
-              <name>	WD_R1	</name>
-              <radius>	0.11	</radius>
-            </wheel>
-            <wheel>
-              <name>	WD_R0	</name>
-              <radius>	0.24201	</radius>
-            </wheel>
-          </radiusOverrides>
-          <teethSyncs>
-            <syncWithMainModel>	true	</syncWithMainModel>
-            <segmentSyncPivotOffset>	0	</segmentSyncPivotOffset>
-            <sync>
-              <name>	WD_R4	</name>
-              <startAngle>	-416.563995	</startAngle>
-              <teethCount>	16	</teethCount>
-            </sync>
-            <sync>
-              <name>	WD_R0	</name>
-              <startAngle>	-419.636993	</startAngle>
-              <teethCount>	16	</teethCount>
-            </sync>
-          </teethSyncs>
-          <sourceCollisionHullPoints>
-            <top>
-              <range>
-                <point>	0.864406 0.669944 -1.98058	</point>
-                <point>	0.944406 0.753607 -1.93367	</point>
-                <point>	0.974407 0.808683 -1.88677	</point>
-                <point>	0.924408 0.863631 -1.83986	</point>
-                <point>	0.84441 0.896158 -1.79295	</point>
-                <point>	1.04441 0.917142 -1.74605	</point>
-                <point>	1.04441 0.927998 -1.69914	</point>
-                <point>	1.04441 0.934343 -1.65223	</point>
-                <point>	1.01441 0.937716 -1.60532	</point>
-                <point>	1.00442 0.941088 -1.55842	</point>
-                <point>	0.994417 0.944461 -1.51151	</point>
-                <point>	0.994419 0.947833 -1.4646	</point>
-                <point>	0.98442 0.951205 -1.41769	</point>
-                <point>	0.974422 0.954578 -1.37079	</point>
-                <point>	0.964423 0.95795 -1.32388	</point>
-                <point>	0.964425 0.961322 -1.27697	</point>
-                <point>	0.954426 0.964695 -1.23007	</point>
-                <point>	0.944427 0.968067 -1.18316	</point>
-                <point>	0.944429 0.971439 -1.13625	</point>
-                <point>	0.93443 0.974812 -1.08934	</point>
-                <point>	0.924432 0.978184 -1.04244	</point>
-                <point>	0.914433 0.981556 -0.995529	</point>
-                <point>	0.914434 0.984929 -0.948622	</point>
-                <point>	0.904436 0.988301 -0.901714	</point>
-                <point>	0.894437 0.991673 -0.854807	</point>
-                <point>	0.894439 0.995046 -0.8079	</point>
-                <point>	0.88444 0.998418 -0.760993	</point>
-                <point>	0.874442 1.00179 -0.714085	</point>
-                <point>	0.864443 1.00516 -0.667178	</point>
-                <point>	0.864444 1.00854 -0.620271	</point>
-                <point>	0.864446 1.01193 -0.573364	</point>
-                <point>	0.864447 1.0153 -0.526457	</point>
-                <point>	0.864448 1.01868 -0.47955	</point>
-                <point>	0.86445 1.02205 -0.432643	</point>
-                <point>	0.864451 1.02542 -0.385736	</point>
-                <point>	0.864453 1.02879 -0.338828	</point>
-                <point>	0.864454 1.03217 -0.291921	</point>
-                <point>	0.864455 1.03554 -0.245015	</point>
-                <point>	0.864457 1.03891 -0.198107	</point>
-                <point>	0.864458 1.04228 -0.1512	</point>
-                <point>	0.86446 1.04566 -0.104293	</point>
-                <point>	0.924461 1.04822 -0.057388	</point>
-                <point>	1.00446 1.0506 -0.010483	</point>
-                <point>	1.04446 1.05337 0.036423	</point>
-                <point>	1.04447 1.05674 0.08333	</point>
-                <point>	1.04447 1.06012 0.130237	</point>
-                <point>	1.04447 1.06349 0.177144	</point>
-                <point>	0.994469 1.06753 0.224052	</point>
-                <point>	0.944471 1.07161 0.270961	</point>
-                <point>	0.934472 1.07569 0.317868	</point>
-                <point>	0.864474 1.07735 0.364777	</point>
-                <point>	0.864475 1.07735 0.411685	</point>
-                <point>	0.864477 1.07735 0.458592	</point>
-                <point>	0.864478 1.07735 0.505499	</point>
-                <point>	1.04448 1.07711 0.552401	</point>
-                <point>	1.04448 1.0767 0.599308	</point>
-                <point>	1.04448 1.0763 0.646214	</point>
-                <point>	1.04448 1.07589 0.693121	</point>
-                <point>	1.04448 1.07548 0.740028	</point>
-                <point>	1.04449 1.07508 0.786936	</point>
-                <point>	1.04449 1.07467 0.833843	</point>
-                <point>	1.04449 1.07445 0.88075	</point>
-                <point>	1.04449 1.07445 0.927657	</point>
-                <point>	1.04449 1.07473 0.974564	</point>
-                <point>	1.04449 1.07517 1.02147	</point>
-                <point>	0.854495 1.07247 1.06838	</point>
-                <point>	0.854497 1.06866 1.11529	</point>
-                <point>	0.854498 1.06235 1.1622	</point>
-                <point>	0.8445 1.06351 1.20911	</point>
-                <point>	0.854501 1.06548 1.25601	</point>
-                <point>	0.854503 1.06638 1.30292	</point>
-                <point>	0.854505 1.06834 1.34983	</point>
-                <point>	1.04451 1.07195 1.39673	</point>
-                <point>	1.04451 1.07079 1.44363	</point>
-                <point>	1.04451 1.07055 1.49054	</point>
-                <point>	1.04451 1.06981 1.53745	</point>
-                <point>	1.04451 1.07021 1.58436	</point>
-                <point>	1.04451 1.06888 1.63126	</point>
-                <point>	1.04451 1.06863 1.67817	</point>
-                <point>	1.04452 1.06875 1.72508	</point>
-                <point>	1.04452 1.06184 1.77198	</point>
-                <point>	1.04452 1.05349 1.81889	</point>
-                <point>	0.844521 1.0347 1.8658	</point>
-                <point>	1.04452 1.01227 1.91271	</point>
-                <point>	0.864524 0.979677 1.95962	</point>
-              </range>
-            </top>
-          </sourceCollisionHullPoints>
-          <trackPairIdx>	0	</trackPairIdx>
-        </right>
-      </physicalTracks>
-      <customizationSlots>
-        <slot>
-          <slotType>	paint	</slotType>
-          <slotId>	21000	</slotId>
-          <anchorPosition>	-1.14945 0.477776 -0.00738	</anchorPosition>
-          <anchorDirection>	-0.923391 0.383814 -0.005929	</anchorDirection>
-        </slot>
-        <slot>
-          <slotType>	style	</slotType>
-          <slotId>	29000	</slotId>
-          <anchorPosition>	-0.302513 1.80127 -0.187737	</anchorPosition>
-          <anchorDirection>	0 1 0	</anchorDirection>
-        </slot>
-      </customizationSlots>
-      <customization>
-        <customizableVehicleAreas>
-          <paint>	CHASSIS	</paint>
-          <camouflage></camouflage>
-        </customizableVehicleAreas>
-      </customization>
-      <repairTime>	6.85714293	</repairTime>
-    </Chassis_T-60>
     <Chassis_T-60_2>
       <userString>	#ussr_vehicles:Chassis_T-60_2	</userString>
       <tags></tags>
@@ -2011,8 +1205,8 @@
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
       <rotationSpeed>	52	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.28	</vehicleMovement>
-        <vehicleRotation>	0.28	</vehicleRotation>
+        <vehicleMovement>	0.24	</vehicleMovement>
+        <vehicleRotation>	0.24	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	60	</maxHealth>
@@ -2796,7 +1990,7 @@
           <camouflage></camouflage>
         </customizableVehicleAreas>
       </customization>
-      <repairTime>	6.85714293	</repairTime>
+      <repairTime>	1.71001065	</repairTime>
     </Chassis_T-60_2>
   </chassis>
   <turrets0>
@@ -2823,120 +2017,20 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	450	</weight>
-      <maxHealth>	53	</maxHealth>
+      <maxHealth>	40	</maxHealth>
       <rotationSpeed>	32	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	60	</maxHealth>
         <maxRegenHealth>	30	</maxRegenHealth>
         <repairCost>	1.0	</repairCost>
       </turretRotatorHealth>
-      <circularVisionRadius>	280	</circularVisionRadius>
+      <circularVisionRadius>	300	</circularVisionRadius>
       <surveyingDeviceHealth>
         <maxHealth>	40	</maxHealth>
         <maxRegenHealth>	20	</maxRegenHealth>
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_12.7mm_DSHK>	shared	  <maxAmmo>	2000	</maxAmmo>
-          <unlocks>
-            <gun>	_20mm_TNSH	  <cost>	35	</cost>
-            </gun>
-          </unlocks>
-          <armor>
-            <armor_3>	15	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_3>
-            <armor_4>	15	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_4>
-            <armor_6>	6	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_6>
-            <armor_8>	0	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_8>
-            <gun>	10	</gun>
-          </armor>
-          <reloadTime>	33	</reloadTime>
-          <shotDispersionFactors>
-            <turretRotation>	0.12	</turretRotation>
-            <afterShot>	1.1	</afterShot>
-            <whileGunDamaged>	2.0	</whileGunDamaged>
-          </shotDispersionFactors>
-          <pitchLimits>
-            <minPitch>	0 -25 1 -25	</minPitch>
-            <maxPitch>	0 7 1 7	</maxPitch>
-          </pitchLimits>
-          <invisibilityFactorAtShot>	0.238	</invisibilityFactorAtShot>
-          <models>
-            <undamaged>	vehicles/russian/R42_T-60/normal/lod0/Gun_02.model	</undamaged>
-            <destroyed>	vehicles/russian/R42_T-60/crash/lod0/Gun_02.model	</destroyed>
-            <exploded>	vehicles/russian/R42_T-60/crash/lod0/Gun_02.model	</exploded>
-          </models>
-          <hitTester>
-            <collisionModelServer>	vehicles/russian/R42_T-60/collision/Gun_02.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/russian/R42_T-60/collision_client/Gun_02.model	</collisionModelClient>
-          </hitTester>
-          <effects>	shot_auto	</effects>
-          <reloadEffect>	reload12_25	</reloadEffect>
-          <customizationSlots>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41000	</slotId>
-              <anchorPosition>	0 0.108245 0.108245	</anchorPosition>
-              <anchorDirection>	0 0.707107 0.707107	</anchorDirection>
-              <applyTo>	16384	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	camouflage	</slotType>
-              <slotId>	42000	</slotId>
-              <anchorPosition>	0.063128 0.006688 0.504433	</anchorPosition>
-              <anchorDirection>	0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	projectionDecal	</slotType>
-              <slotId>	45000	</slotId>
-              <tags>	formfactor_rect1x3	</tags>
-              <position>	-0.302214 1.59967 0.42577	</position>
-              <rotation>	0.986957 -0.001325 3.14157	</rotation>
-              <scale>	0.673943 0.673946 0.673946	</scale>
-              <showOn>	4096	</showOn>
-              <clipAngle>	1.32216	</clipAngle>
-              <anchorShift>	0.042763	</anchorShift>
-            </slot>
-            <slot>
-              <slotType>	projectionDecal	</slotType>
-              <slotId>	45001	</slotId>
-              <tags>	formfactor_square direction_left_to_right	</tags>
-              <position>	-0.435045 1.55601 0.363931	</position>
-              <rotation>	1.46932 -0.000102 3.14146	</rotation>
-              <scale>	0.268126 0.268127 0.268127	</scale>
-              <showOn>	4096	</showOn>
-              <clipAngle>	1.08658	</clipAngle>
-              <anchorShift>	0.100979	</anchorShift>
-            </slot>
-            <slot>
-              <slotType>	projectionDecal	</slotType>
-              <slotId>	45002	</slotId>
-              <tags>	formfactor_rect1x2	</tags>
-              <position>	-0.29917 1.56173 0.357451	</position>
-              <rotation>	1.56287 3.14135 0.001544	</rotation>
-              <scale>	0.505316 0.505319 0.505317	</scale>
-              <showOn>	4096	</showOn>
-              <clipAngle>	0.772086	</clipAngle>
-              <anchorShift>	0.094702	</anchorShift>
-            </slot>
-          </customizationSlots>
-          <customization>
-            <customizableVehicleAreas>
-              <paint>	GUN_2	</paint>
-              <camouflage>	GUN	</camouflage>
-            </customizableVehicleAreas>
-          </customization>
-          <shotOffset>	0.126257 0.013375 0.000000	</shotOffset>
-          <camouflage>
-            <tiling>	1.3 0.6 1.2 0.7	</tiling>
-            <density>	112.811 111.02	</density>
-            <aoTextureSize>	512 256	</aoTextureSize>
-          </camouflage>
-        </_12.7mm_DSHK>
         <_20mm_TNSH>	shared	  <maxAmmo>	1480	</maxAmmo>
           <armor>
             <armor_3>	15	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
@@ -2947,14 +2041,14 @@
             </armor_8>
             <gun>	10	</gun>
           </armor>
-          <shotDispersionRadius>	0.53	</shotDispersionRadius>
-          <reloadTime>	9.4	</reloadTime>
+          <shotDispersionRadius>	0.5	</shotDispersionRadius>
+          <reloadTime>	9.0	</reloadTime>
           <shotDispersionFactors>
-            <turretRotation>	0.12	</turretRotation>
+            <turretRotation>	0.08	</turretRotation>
             <afterShot>	1.3	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <aimingTime>	1.9	</aimingTime>
+          <aimingTime>	1.0	</aimingTime>
           <pitchLimits>
             <minPitch>	0 -25 1 -25	</minPitch>
             <maxPitch>	0 7 1 7	</maxPitch>
@@ -3354,8 +2448,6 @@
       <level>	2	</level>
       <price>	570	</price>
       <unlocks>
-        <vehicle>	R43_T-70	  <cost>	1150	</cost>
-        </vehicle>
         <gun>	_37mm_ZiS-19	  <cost>	160	</cost>
         </gun>
       </unlocks>
@@ -3373,7 +2465,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	550	</weight>
-      <maxHealth>	68	</maxHealth>
+      <maxHealth>	60	</maxHealth>
       <rotationSpeed>	34	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	60	</maxHealth>
@@ -3387,102 +2479,6 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_12.7mm_DSHK>	shared	  <maxAmmo>	2000	</maxAmmo>
-          <armor>
-            <armor_1>	35	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_1>
-            <armor_2>	35	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_2>
-            <armor_4>	0	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_4>
-            <armor_7>	6	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_7>
-            <gun>	10	</gun>
-          </armor>
-          <shotDispersionFactors>
-            <turretRotation>	0.08	</turretRotation>
-            <afterShot>	1.1	</afterShot>
-            <whileGunDamaged>	2.0	</whileGunDamaged>
-          </shotDispersionFactors>
-          <aimingTime>	1.5	</aimingTime>
-          <pitchLimits>
-            <minPitch>	0 -25 1 -25	</minPitch>
-            <maxPitch>	0 7 1 7	</maxPitch>
-          </pitchLimits>
-          <invisibilityFactorAtShot>	0.238	</invisibilityFactorAtShot>
-          <models>
-            <undamaged>	vehicles/russian/R42_T-60/normal/lod0/Gun_05.model	</undamaged>
-            <destroyed>	vehicles/russian/R42_T-60/crash/lod0/Gun_05.model	</destroyed>
-            <exploded>	vehicles/russian/R42_T-60/crash/lod0/Gun_05.model	</exploded>
-          </models>
-          <hitTester>
-            <collisionModelServer>	vehicles/russian/R42_T-60/collision/Gun_05.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/russian/R42_T-60/collision_client/Gun_05.model	</collisionModelClient>
-          </hitTester>
-          <effects>	shot_auto	</effects>
-          <reloadEffect>	reload12_25	</reloadEffect>
-          <customizationSlots>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41000	</slotId>
-              <anchorPosition>	0 0.112205 0.112205	</anchorPosition>
-              <anchorDirection>	0 0.707107 0.707107	</anchorDirection>
-              <applyTo>	16384	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	camouflage	</slotType>
-              <slotId>	42000	</slotId>
-              <anchorPosition>	0.063123 0.006687 0.504433	</anchorPosition>
-              <anchorDirection>	0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	projectionDecal	</slotType>
-              <slotId>	45000	</slotId>
-              <tags>	formfactor_rect1x3	</tags>
-              <position>	-0.302216 1.5971 0.427469	</position>
-              <rotation>	0.986957 -0.001325 3.14157	</rotation>
-              <scale>	0.673943 0.673946 0.673946	</scale>
-              <showOn>	4096	</showOn>
-              <clipAngle>	1.32216	</clipAngle>
-              <anchorShift>	0.042761	</anchorShift>
-            </slot>
-            <slot>
-              <slotType>	projectionDecal	</slotType>
-              <slotId>	45001	</slotId>
-              <tags>	formfactor_square direction_left_to_right	</tags>
-              <position>	-0.435045 1.54824 0.366576	</position>
-              <rotation>	1.24283 -0.00001 3.14155	</rotation>
-              <scale>	0.268126 0.268127 0.268127	</scale>
-              <showOn>	4096	</showOn>
-              <clipAngle>	1.08658	</clipAngle>
-              <anchorShift>	0.100978	</anchorShift>
-            </slot>
-            <slot>
-              <slotType>	projectionDecal	</slotType>
-              <slotId>	45002	</slotId>
-              <tags>	formfactor_rect1x2	</tags>
-              <position>	-0.29917 1.56173 0.357451	</position>
-              <rotation>	1.56287 3.14135 0.001544	</rotation>
-              <scale>	0.505316 0.505319 0.505317	</scale>
-              <showOn>	4096	</showOn>
-              <clipAngle>	0.772086	</clipAngle>
-              <anchorShift>	0.094702	</anchorShift>
-            </slot>
-          </customizationSlots>
-          <customization>
-            <customizableVehicleAreas>
-              <paint>	GUN_2	</paint>
-              <camouflage>	GUN	</camouflage>
-            </customizableVehicleAreas>
-          </customization>
-          <shotOffset>	0.126246 0.013375 0.000000	</shotOffset>
-          <camouflage>
-            <tiling>	1.3 0.6 1.2 0.7	</tiling>
-            <density>	112.811 111.02	</density>
-            <aoTextureSize>	512 256	</aoTextureSize>
-          </camouflage>
-        </_12.7mm_DSHK>
         <_20mm_TNSH>	shared	  <maxAmmo>	1480	</maxAmmo>
           <armor>
             <armor_1>	35	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
@@ -3493,14 +2489,14 @@
             </armor_5>
             <gun>	10	</gun>
           </armor>
-          <shotDispersionRadius>	0.53	</shotDispersionRadius>
-          <reloadTime>	8.6	</reloadTime>
+          <shotDispersionRadius>	0.50	</shotDispersionRadius>
+          <reloadTime>	8.0	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.08	</turretRotation>
             <afterShot>	1.3	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <aimingTime>	1.7	</aimingTime>
+          <aimingTime>	1.0	</aimingTime>
           <pitchLimits>
             <minPitch>	0 -25 1 -25	</minPitch>
             <maxPitch>	0 7 1 7	</maxPitch>
@@ -3586,7 +2582,11 @@
             <aoTextureSize>	512 256	</aoTextureSize>
           </camouflage>
         </_20mm_TNSH>
-        <_37mm_ZiS-19>	shared	  <maxAmmo>	250	</maxAmmo>
+        <_37mm_ZiS-19>	shared	  <unlocks>
+            <vehicle>	R43_T-70	  <cost>	1400	</cost>
+            </vehicle>
+          </unlocks>
+          <maxAmmo>	250	</maxAmmo>
           <armor>
             <armor_1>	35	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_1>
@@ -3597,13 +2597,13 @@
             <gun>	10	</gun>
           </armor>
           <shotDispersionRadius>	0.39	</shotDispersionRadius>
-          <reloadTime>	2.7	</reloadTime>
+          <reloadTime>	2.4	</reloadTime>
           <shotDispersionFactors>
-            <turretRotation>	0.16	</turretRotation>
-            <afterShot>	4.0	</afterShot>
+            <turretRotation>	0.10	</turretRotation>
+            <afterShot>	1.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <aimingTime>	2.5	</aimingTime>
+          <aimingTime>	1.5	</aimingTime>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 5 1 5	</maxPitch>
@@ -4000,11 +3000,6 @@
     </Turret_2_T-60>
   </turrets0>
   <engines>
-    <GAZ-202>	shared	  <unlocks>
-        <engine>	ZiS-16	  <cost>	90	</cost>
-        </engine>
-      </unlocks>
-    </GAZ-202>
     <ZiS-16>	shared	</ZiS-16>
   </engines>
   <fuelTanks>
@@ -4016,39 +3011,22 @@
   <physics>
     <detailed>
       <engines>
-        <GAZ-202>
-          <smplEnginePower>	74.00968	</smplEnginePower>
-          <smplFwMaxSpeed>	45	</smplFwMaxSpeed>
-        </GAZ-202>
         <ZiS-16>
           <smplEnginePower>	89.8689	</smplEnginePower>
           <smplFwMaxSpeed>	45	</smplFwMaxSpeed>
         </ZiS-16>
       </engines>
       <chassis>
-        <Chassis_T-60>
-          <grounds>
-            <soft>
-              <rollingFriction>	0.18515	</rollingFriction>
-            </soft>
-            <medium>
-              <rollingFriction>	0.10465	</rollingFriction>
-            </medium>
-            <firm>
-              <rollingFriction>	0.0966	</rollingFriction>
-            </firm>
-          </grounds>
-        </Chassis_T-60>
         <Chassis_T-60_2>
           <grounds>
             <soft>
               <rollingFriction>	0.16905	</rollingFriction>
             </soft>
             <medium>
-              <rollingFriction>	0.0966	</rollingFriction>
+              <rollingFriction>	0.0666	</rollingFriction>
             </medium>
             <firm>
-              <rollingFriction>	0.08855	</rollingFriction>
+              <rollingFriction>	0.02855	</rollingFriction>
             </firm>
           </grounds>
         </Chassis_T-60_2>

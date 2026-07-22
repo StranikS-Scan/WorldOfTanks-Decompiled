@@ -1,0 +1,46 @@
+<VolunteersModGame_Style_00_2024_MT_name.xml>
+  <itemGroup>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <tags>	questsProgression	</tags>
+    <priceGroup>	MT 2D styles universal 1000g notInShop	</priceGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <style>
+      <id>	31185	</id>
+      <texture>	gui/maps/vehicles/styles/VolunteersModGame_Style_2024_MT.png	</texture>
+      <userString>	#vehicle_customization:VolunteersModGame_Style_00_2024_MT/name	</userString>
+      <description>	#vehicle_customization:VolunteersModGame_Style_00_2024_MT/description	</description>
+      <longDescriptionSpecial>	#vehicle_customization:VolunteersModGame_Style_00_2024_MT/longDescription	</longDescriptionSpecial>
+      <outfits>
+        <outfit>
+          <season>	all	</season>
+          <camouflages>
+            <item>
+              <id>	31142	</id>
+              <patternSize>	1	</patternSize>
+              <appliedTo>	4368	</appliedTo>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+        </outfit>
+      </outfits>
+      <alternateItems>
+        <camouflage>
+          <id>	31142 31143 31144 31145	</id>
+        </camouflage>
+      </alternateItems>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+    </style>
+  </itemGroup>
+</VolunteersModGame_Style_00_2024_MT_name.xml>

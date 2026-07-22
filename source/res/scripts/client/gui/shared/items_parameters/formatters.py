@@ -312,10 +312,12 @@ def isDiffEnoughToDisplay(value):
 
 
 def getParameterSmallIconPath(parameter):
+    parameter = _getResAvailable(R.images.gui.maps.icons.vehParams.small, parameter)
     return RES_ICONS.MAPS_ICONS_VEHPARAMS_SMALL + '/%s.png' % parameter
 
 
 def getParameterBigIconPath(parameter):
+    parameter = _getResAvailable(R.images.gui.maps.icons.vehParams.big, parameter)
     return RES_ICONS.MAPS_ICONS_VEHPARAMS_BIG + '/%s.png' % parameter
 
 
@@ -417,6 +419,11 @@ def chassisRepairTimePreprocessor(values, states):
 
 def _getRoundReload(value):
     return backport.getNiceNumberFormat(round(value, 1))
+
+
+def _getResAvailable(resPath, parameter):
+    resId = resPath.dyn(parameter)
+    return parameter if resId.exists() else 'param_not_found'
 
 
 FORMAT_SETTINGS = {'relativePower': _integralFormat,

@@ -31,6 +31,7 @@ from skeletons.gui.game_control import IIGRController, IMapsTrainingController, 
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.impl import IGuiLoader
+from uilogging.rename_testing.loggers import RenameTestingUILogger
 
 class _LobbySubViewsLifecycleHandler(IViewLifecycleHandler):
     __WAITING_LBL = 'loadPage'
@@ -163,6 +164,7 @@ class LobbyView(LobbyPageMeta, IWaitingWidget):
         epicBattlesCount = self.itemsCache.items.getAccountDossier().getEpicBattleStats().getBattlesCount()
         self.lobbyContext.updateBattlesCount(battlesCount, epicBattlesCount)
         self.fireEvent(events.GUICommonEvent(events.GUICommonEvent.LOBBY_VIEW_LOADED))
+        RenameTestingUILogger().logHangarEnter()
         self.bwProto.voipController.invalidateMicrophoneMute()
         self._UiEffectsManager.populate(app=self.app)
 

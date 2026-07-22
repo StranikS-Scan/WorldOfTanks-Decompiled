@@ -22,7 +22,8 @@ class SalesControlsFactory(ControlsFactory):
          EFFECT_TYPE.CLOSE_HINT: functional.FunctionalCloseHint,
          EFFECT_TYPE.RUN_TRIGGER: core_func.FunctionalRunTriggerEffect,
          EFFECT_TYPE.INVOKE_GUI_CMD: core_func.FunctionalGuiCommandEffect,
-         EFFECT_TYPE.SET_GUI_ITEM_CRITERIA: core_func.FunctionalSetGuiItemCriteria}
+         EFFECT_TYPE.SET_GUI_ITEM_CRITERIA: core_func.FunctionalSetGuiItemCriteria,
+         EFFECT_TYPE.SET_VAR: core_func.FunctionalSetVarAction}
         queries_ = {}
         ControlsFactory.__init__(self, effects, queries_)
 

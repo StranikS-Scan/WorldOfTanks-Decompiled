@@ -18,6 +18,7 @@ from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
 from helpers import dependency
 from shared_utils import findFirst
 from skeletons.account_helpers.settings_core import ISettingsCache
+from skeletons.gui.battle_session import IBattleSessionProvider
 from skeletons.gui.lobby_context import ILobbyContext
 from uilogging.battle_context_hints.loggers import BattleContextHintsLogger
 if typing.TYPE_CHECKING:
@@ -115,6 +116,7 @@ class BattleContextHintsController(ViewComponentsController):
     MAX_HINT_DURATION = 60
     __settingsCache = dependency.descriptor(ISettingsCache)
     __lobbyContext = dependency.descriptor(ILobbyContext)
+    __sessionProvider = dependency.descriptor(IBattleSessionProvider)
 
     def __init__(self, hintsConfig):
         super(BattleContextHintsController, self).__init__()
@@ -392,7 +394,7 @@ class BattleContextHintsController(ViewComponentsController):
             hintData.setBattlesCooldown(0)
             hintData.setLastBattleTriggered(False)
 
-    @staticmethod
-    def __isPlayerObserver():
-        avatar = BigWorld.player()
-        return avatar.playerVehicleID != avatar.vehicle.id
+    def __isPlayerObserver(self):
+        playerVehicleID = BigWorld.player().playerVehicleID
+        controllingVehicleID = self.__sessionProvider.shared.vehicleState.getControllingVehicleID()
+        return playerVehicleID != controllingVehicleID

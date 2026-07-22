@@ -37,6 +37,7 @@ class OfferGiftVehiclePreview(VehiclePreview):
         self._vehicle = self._gift.bonus.displayedItem
         customCallbacks = ctx.get('customCallbacks', {})
         self._customCallbacks = customCallbacks if customCallbacks is not None else {}
+        self._COMMON_SOUND_SPACE = ctx.get('soundSpace', self._COMMON_SOUND_SPACE)
         ctx['itemCD'] = self._vehicle.intCD
         ctx['previewBackCb'] = self._customCallbacks.get('previewBackCb', partial(event_dispatcher.showOfferGiftsWindow, self._offer.id))
         super(OfferGiftVehiclePreview, self).__init__(ctx)

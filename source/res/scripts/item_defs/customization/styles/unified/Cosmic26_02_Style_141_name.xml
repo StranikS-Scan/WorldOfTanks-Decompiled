@@ -1,0 +1,54 @@
+<Cosmic26_02_Style_141_name.xml>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	MT 2D styles universal 1000g notInShop	</priceGroup>
+    <tags>	progression_required	</tags>
+    <style>
+      <id>	31502	</id>
+      <texture>	gui/maps/vehicles/styles/Cosmic26_02_Style_141.png	</texture>
+      <outfits>
+        <outfit>
+          <season>	all	</season>
+          <modifications>
+            <item>	1	</item>
+          </modifications>
+          <paints>
+            <item>
+              <id>	31453	</id>
+              <appliedTo>	273	</appliedTo>
+            </item>
+            <item>
+              <id>	31454	</id>
+              <appliedTo>	20480	</appliedTo>
+            </item>
+          </paints>
+          <camouflages>
+            <item>
+              <id>	31470	</id>
+              <patternSize>	1	</patternSize>
+              <appliedTo>	4368	</appliedTo>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+        </outfit>
+      </outfits>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+      <userString>	#vehicle_customization:Cosmic26_02_Style_141/name	</userString>
+      <description>	#vehicle_customization:Cosmic26_02_Style_141/description	</description>
+      <longDescriptionSpecial>	#vehicle_customization:Cosmic26_02_Style_141/longDescription	</longDescriptionSpecial>
+    </style>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+  </itemGroup>
+</Cosmic26_02_Style_141_name.xml>

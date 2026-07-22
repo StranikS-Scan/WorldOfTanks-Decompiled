@@ -371,6 +371,11 @@ class BATTLE_RESULTS(object):
     CUSTOMIZATIONPROGRESS_DESCR = '#battle_results:customizationProgress/descr'
     CUSTOMIZATIONPROGRESS_AWARD_RECEIVED = '#battle_results:customizationProgress/award/received'
     CUSTOMIZATIONPROGRESS_AWARD_NEWLEVEL = '#battle_results:customizationProgress/award/newLevel'
+    GIFTSYSTEM_BANNER_TITLE = '#battle_results:giftSystem/banner/title'
+    GIFTSYSTEM_BANNER_TITLE_EMPHASIZED = '#battle_results:giftSystem/banner/title/emphasized'
+    GIFTSYSTEM_BANNER_STAMPS_LABEL_AVAILABLE = '#battle_results:giftSystem/banner/stamps/label/available'
+    GIFTSYSTEM_BANNER_STAMPS_LABEL_NOTAVAILABLE = '#battle_results:giftSystem/banner/stamps/label/notAvailable'
+    GIFTSYSTEM_BANNER_STAMPS_BUTTON_NOTAVAILABLE = '#battle_results:giftSystem/banner/stamps/button/notAvailable'
     DETAILS_TIME_LBL_ENUM = (DETAILS_TIME_LBL_OBJECTIVESREACHED,
      DETAILS_TIME_LBL_OBJECTIVESDESTROYED,
      DETAILS_TIME_LBL_BASESCAPTURED,

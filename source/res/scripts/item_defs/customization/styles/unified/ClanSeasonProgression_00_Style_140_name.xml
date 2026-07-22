@@ -1,0 +1,45 @@
+<ClanSeasonProgression_00_Style_140_name.xml>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <style>
+      <id>	31494	</id>
+      <userString>	#vehicle_customization:ClanSeasonProgression_00_Style_140/name	</userString>
+      <description>	#vehicle_customization:ClanSeasonProgression_00_Style_140/description	</description>
+      <longDescriptionSpecial>	#vehicle_customization:ClanSeasonProgression_00_Style_140/longDescription	</longDescriptionSpecial>
+      <texture>	gui/maps/vehicles/styles/ClanSeasonProgression_Style_140.png	</texture>
+      <outfits>
+        <outfit>
+          <season>	all	</season>
+          <camouflages>
+            <item>
+              <id>	31449	</id>
+              <patternSize>	1	</patternSize>
+              <appliedTo>	4368	</appliedTo>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+        </outfit>
+      </outfits>
+      <alternateItems>
+        <decal>
+          <id>	31427 31428 31429 31430	</id>
+        </decal>
+        <camouflage>
+          <id>	31449 31450 31451 31452 31453 31454	</id>
+        </camouflage>
+      </alternateItems>
+    </style>
+    <tags>	questsProgression	</tags>
+    <priceGroup>	MT 2D styles universal 1000g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <levels>	8 9 10	</levels>
+      </include>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+  </itemGroup>
+</ClanSeasonProgression_00_Style_140_name.xml>

@@ -1,391 +1,8 @@
 <radios.xml>
-  <ids>
-    <FuG7A>	0	</FuG7A>
-    <RKB_c_1>	1	</RKB_c_1>
-    <RTU_Jesion>	4	</RTU_Jesion>
-    <N2>	5	</N2>
-    <N2_C>	6	</N2_C>
-    <N2_S>	7	</N2_S>
-    <RKB_C>	8	</RKB_C>
-    <RTU_Jesion_M>	9	</RTU_Jesion_M>
-    <R_113>	10	</R_113>
-    <N2_M>	11	</N2_M>
-    <N2_L>	12	</N2_L>
-    <RKD>	13	</RKD>
-    <R_113_P>	14	</R_113_P>
-    <_9RM_O>	15	</_9RM_O>
-    <R_123>	16	</R_123>
-    <RT10_26P>	17	</RT10_26P>
-    <R_123P>	18	</R_123P>
-    <R_123_1>	19	</R_123_1>
-    <RT10_26P_A>	23	</RT10_26P_A>
-    <R_123M>	25	</R_123M>
-    <R_123P_FL>	501	</R_123P_FL>
-    <R_123_02>	31001	</R_123_02>
-    <R_123_T>	31002	</R_123_T>
-    <R_113_P_T>	31003	</R_113_P_T>
-    <R_123P_T>	31004	</R_123P_T>
-    <RT_10_wz46>	31005	</RT_10_wz46>
-    <R_123_7x7>	31006	</R_123_7x7>
-    <R_113_U>	31007	</R_113_U>
-    <R_113_P_S>	31008	</R_113_P_S>
-    <RT10_26P_Pl36>	31009	</RT10_26P_Pl36>
-    <Development_Radio>	65000	</Development_Radio>
-    <N2_C_SH>	20	</N2_C_SH>
-    <R_113_P_SH>	21	</R_113_P_SH>
-    <R_123P_SH>	22	</R_123P_SH>
-  </ids>
+  <xmlns:xmlref>	http://bwt/xmlref	</xmlns:xmlref>
   <shared>
-    <N2>
-      <userString>	#poland_vehicles:N2	</userString>
-      <tags></tags>
-      <level>	2	</level>
-      <price>	0	</price>
-      <notInShop>	true	</notInShop>
-      <weight>	50	</weight>
-      <distance>	300	</distance>
-      <maxHealth>	100	</maxHealth>
-      <maxRegenHealth>	49	</maxRegenHealth>
-      <repairCost>	0.5	</repairCost>
-    </N2>
-    <N2_M>
-      <userString>	#poland_vehicles:N2_M	</userString>
-      <tags></tags>
-      <level>	2	</level>
-      <price>	200	</price>
-      <weight>	50	</weight>
-      <distance>	300	</distance>
-      <maxHealth>	100	</maxHealth>
-      <maxRegenHealth>	49	</maxRegenHealth>
-      <repairCost>	0.5	</repairCost>
-    </N2_M>
-    <RKB_c_1>
-      <userString>	#poland_vehicles:RKB_c_1	</userString>
-      <tags></tags>
-      <level>	3	</level>
-      <price>	630	</price>
-      <notInShop>	true	</notInShop>
-      <weight>	30	</weight>
-      <distance>	310	</distance>
-      <maxHealth>	100	</maxHealth>
-      <maxRegenHealth>	49	</maxRegenHealth>
-      <repairCost>	0.5	</repairCost>
-    </RKB_c_1>
-    <RT10_26P>
-      <userString>	#poland_vehicles:RT10_26P	</userString>
-      <tags></tags>
-      <level>	7	</level>
-      <price>	19800	</price>
-      <weight>	50	</weight>
-      <distance>	440	</distance>
-      <maxHealth>	150	</maxHealth>
-      <maxRegenHealth>	125	</maxRegenHealth>
-      <repairCost>	1.5	</repairCost>
-    </RT10_26P>
-    <RT10_26P_A>
-      <userString>	#poland_vehicles:RT10_26P_A	</userString>
-      <tags></tags>
-      <level>	7	</level>
-      <price>	19800	</price>
-      <notInShop>	true	</notInShop>
-      <weight>	50	</weight>
-      <distance>	440	</distance>
-      <maxHealth>	150	</maxHealth>
-      <maxRegenHealth>	125	</maxRegenHealth>
-      <repairCost>	1.5	</repairCost>
-    </RT10_26P_A>
-    <RT10_26P_Pl36>
-      <userString>	#poland_vehicles:RT10_26P_Pl36	</userString>
-      <tags></tags>
-      <level>	8	</level>
-      <price>	25000	</price>
-      <notInShop>	true	</notInShop>
-      <weight>	31	</weight>
-      <distance>	525	</distance>
-      <maxHealth>	120	</maxHealth>
-      <maxRegenHealth>	60	</maxRegenHealth>
-      <repairCost>	1.5	</repairCost>
-    </RT10_26P_Pl36>
-    <FuG7A>
-      <userString>	#poland_vehicles:Fug7A	</userString>
-      <tags></tags>
-      <level>	6	</level>
-      <price>	8160	</price>
-      <notInShop>	true	</notInShop>
-      <weight>	70	</weight>
-      <distance>	710	</distance>
-      <maxHealth>	160	</maxHealth>
-      <maxRegenHealth>	96	</maxRegenHealth>
-      <repairCost>	3	</repairCost>
-    </FuG7A>
-    <RKD>
-      <userString>	#poland_vehicles:RKD	</userString>
-      <tags></tags>
-      <level>	7	</level>
-      <price>	22500	</price>
-      <weight>	70	</weight>
-      <distance>	530	</distance>
-      <maxHealth>	120	</maxHealth>
-      <maxRegenHealth>	60	</maxRegenHealth>
-      <repairCost>	1.5	</repairCost>
-    </RKD>
-    <RTU_Jesion>
-      <userString>	#poland_vehicles:RTU_Jesion	</userString>
-      <tags></tags>
-      <level>	8	</level>
-      <price>	25000	</price>
-      <notInShop>	true	</notInShop>
-      <weight>	100	</weight>
-      <distance>	525	</distance>
-      <maxHealth>	120	</maxHealth>
-      <maxRegenHealth>	60	</maxRegenHealth>
-      <repairCost>	1.5	</repairCost>
-    </RTU_Jesion>
-    <RTU_Jesion_M>
-      <userString>	#poland_vehicles:RTU_Jesion_M	</userString>
-      <tags></tags>
-      <level>	8	</level>
-      <price>	25000	</price>
-      <weight>	160	</weight>
-      <distance>	650	</distance>
-      <maxHealth>	150	</maxHealth>
-      <maxRegenHealth>	75	</maxRegenHealth>
-      <repairCost>	3	</repairCost>
-    </RTU_Jesion_M>
-    <R_123P>
-      <userString>	#poland_vehicles:R_123P	</userString>
-      <tags></tags>
-      <level>	9	</level>
-      <price>	44000	</price>
-      <weight>	100	</weight>
-      <distance>	710	</distance>
-      <maxHealth>	200	</maxHealth>
-      <maxRegenHealth>	150	</maxRegenHealth>
-      <repairCost>	3	</repairCost>
-    </R_123P>
-    <R_123P_FL>
-      <userString>	#poland_vehicles:R_123P	</userString>
-      <tags></tags>
-      <level>	9	</level>
-      <price>	44000	</price>
-      <notInShop>	true	</notInShop>
-      <weight>	100	</weight>
-      <distance>	710	</distance>
-      <maxHealth>	200	</maxHealth>
-      <maxRegenHealth>	150	</maxRegenHealth>
-      <repairCost>	3	</repairCost>
-    </R_123P_FL>
-    <N2_C>
-      <userString>	#poland_vehicles:N2_C	</userString>
-      <tags></tags>
-      <level>	4	</level>
-      <price>	2200	</price>
-      <weight>	80	</weight>
-      <distance>	375	</distance>
-      <maxHealth>	110	</maxHealth>
-      <maxRegenHealth>	60	</maxRegenHealth>
-      <repairCost>	1	</repairCost>
-    </N2_C>
-    <RKB_C>
-      <userString>	#poland_vehicles:RKB_C	</userString>
-      <tags></tags>
-      <level>	5	</level>
-      <price>	3800	</price>
-      <weight>	80	</weight>
-      <distance>	430	</distance>
-      <maxHealth>	115	</maxHealth>
-      <maxRegenHealth>	60	</maxRegenHealth>
-      <repairCost>	1	</repairCost>
-    </RKB_C>
-    <N2_S>
-      <userString>	#poland_vehicles:N2_S	</userString>
-      <tags></tags>
-      <level>	3	</level>
-      <price>	610	</price>
-      <weight>	100	</weight>
-      <distance>	350	</distance>
-      <maxHealth>	100	</maxHealth>
-      <maxRegenHealth>	49	</maxRegenHealth>
-      <repairCost>	0.5	</repairCost>
-    </N2_S>
-    <N2_L>
-      <userString>	#poland_vehicles:N2_L	</userString>
-      <tags></tags>
-      <level>	6	</level>
-      <price>	10000	</price>
-      <weight>	41	</weight>
-      <distance>	480	</distance>
-      <maxHealth>	120	</maxHealth>
-      <maxRegenHealth>	60	</maxRegenHealth>
-      <repairCost>	1.5	</repairCost>
-    </N2_L>
-    <R_113>
-      <userString>	#poland_vehicles:R_113	</userString>
-      <tags></tags>
-      <level>	10	</level>
-      <price>	52000	</price>
-      <notInShop>	true	</notInShop>
-      <weight>	110	</weight>
-      <distance>	730	</distance>
-      <maxHealth>	250	</maxHealth>
-      <maxRegenHealth>	75	</maxRegenHealth>
-      <repairCost>	3.5	</repairCost>
-    </R_113>
-    <R_113_U>
-      <userString>	#poland_vehicles:R_113_U	</userString>
-      <tags></tags>
-      <level>	10	</level>
-      <price>	52000	</price>
-      <notInShop>	true	</notInShop>
-      <weight>	110	</weight>
-      <distance>	730	</distance>
-      <maxHealth>	250	</maxHealth>
-      <maxRegenHealth>	75	</maxRegenHealth>
-      <repairCost>	3.5	</repairCost>
-    </R_113_U>
-    <R_123>
-      <userString>	#poland_vehicles:R_123	</userString>
-      <tags></tags>
-      <level>	10	</level>
-      <price>	52000	</price>
-      <notInShop>	true	</notInShop>
-      <weight>	100	</weight>
-      <distance>	730	</distance>
-      <maxHealth>	250	</maxHealth>
-      <maxRegenHealth>	75	</maxRegenHealth>
-      <repairCost>	3.5	</repairCost>
-    </R_123>
-    <R_123_7x7>
-      <userString>	#poland_vehicles:R_123	</userString>
-      <tags></tags>
-      <level>	10	</level>
-      <price>	52000	</price>
-      <notInShop>	true	</notInShop>
-      <weight>	100	</weight>
-      <distance>	730	</distance>
-      <maxHealth>	250	</maxHealth>
-      <maxRegenHealth>	75	</maxRegenHealth>
-      <repairCost>	3.5	</repairCost>
-    </R_123_7x7>
-    <R_123P_T>
-      <userString>	#poland_vehicles:R_123P	</userString>
-      <tags></tags>
-      <level>	9	</level>
-      <price>	44000	</price>
-      <notInShop>	true	</notInShop>
-      <weight>	100	</weight>
-      <distance>	710	</distance>
-      <maxHealth>	200	</maxHealth>
-      <maxRegenHealth>	150	</maxRegenHealth>
-      <repairCost>	3	</repairCost>
-    </R_123P_T>
-    <R_123_T>
-      <userString>	#poland_vehicles:R_123	</userString>
-      <tags></tags>
-      <level>	10	</level>
-      <price>	52000	</price>
-      <notInShop>	true	</notInShop>
-      <weight>	100	</weight>
-      <distance>	730	</distance>
-      <maxHealth>	250	</maxHealth>
-      <maxRegenHealth>	75	</maxRegenHealth>
-      <repairCost>	3.5	</repairCost>
-    </R_123_T>
-    <R_123_02>
-      <userString>	#poland_vehicles:R_123	</userString>
-      <tags></tags>
-      <level>	10	</level>
-      <price>	52000	</price>
-      <notInShop>	true	</notInShop>
-      <weight>	100	</weight>
-      <distance>	730	</distance>
-      <maxHealth>	250	</maxHealth>
-      <maxRegenHealth>	75	</maxRegenHealth>
-      <repairCost>	3.5	</repairCost>
-    </R_123_02>
-    <R_123M>
-      <userString>	#poland_vehicles:R_123M	</userString>
-      <tags></tags>
-      <level>	10	</level>
-      <price>	52000	</price>
-      <notInShop>	true	</notInShop>
-      <weight>	100	</weight>
-      <distance>	730	</distance>
-      <maxHealth>	250	</maxHealth>
-      <maxRegenHealth>	75	</maxRegenHealth>
-      <repairCost>	3.5	</repairCost>
-    </R_123M>
-    <R_123_1>
-      <userString>	#poland_vehicles:R_123	</userString>
-      <tags></tags>
-      <level>	10	</level>
-      <price>	52000	</price>
-      <weight>	100	</weight>
-      <distance>	730	</distance>
-      <maxHealth>	250	</maxHealth>
-      <maxRegenHealth>	75	</maxRegenHealth>
-      <repairCost>	3.5	</repairCost>
-    </R_123_1>
-    <R_113_P>
-      <userString>	#poland_vehicles:R_113_P	</userString>
-      <tags></tags>
-      <level>	9	</level>
-      <price>	43500	</price>
-      <weight>	100	</weight>
-      <distance>	700	</distance>
-      <maxHealth>	200	</maxHealth>
-      <maxRegenHealth>	150	</maxRegenHealth>
-      <repairCost>	3	</repairCost>
-    </R_113_P>
-    <RT_10_wz46>
-      <userString>	#poland_vehicles:RT_10	</userString>
-      <tags></tags>
-      <level>	10	</level>
-      <price>	53500	</price>
-      <notInShop>	true	</notInShop>
-      <weight>	100	</weight>
-      <distance>	700	</distance>
-      <maxHealth>	200	</maxHealth>
-      <maxRegenHealth>	150	</maxRegenHealth>
-      <repairCost>	3	</repairCost>
-    </RT_10_wz46>
-    <R_113_P_T>
-      <userString>	#poland_vehicles:R_113_P	</userString>
-      <tags></tags>
-      <level>	9	</level>
-      <price>	43500	</price>
-      <notInShop>	true	</notInShop>
-      <weight>	100	</weight>
-      <distance>	700	</distance>
-      <maxHealth>	200	</maxHealth>
-      <maxRegenHealth>	150	</maxRegenHealth>
-      <repairCost>	3	</repairCost>
-    </R_113_P_T>
-    <R_113_P_S>
-      <userString>	#poland_vehicles:R_113_P_S	</userString>
-      <tags></tags>
-      <level>	9	</level>
-      <price>	43500	</price>
-      <notInShop>	true	</notInShop>
-      <weight>	42	</weight>
-      <distance>	700	</distance>
-      <maxHealth>	200	</maxHealth>
-      <maxRegenHealth>	150	</maxRegenHealth>
-      <repairCost>	3	</repairCost>
-    </R_113_P_S>
-    <_9RM_O>
-      <userString>	#poland_vehicles:_9RM	</userString>
-      <tags></tags>
-      <level>	8	</level>
-      <price>	24240	</price>
-      <notInShop>	true	</notInShop>
-      <weight>	30	</weight>
-      <distance>	525	</distance>
-      <maxHealth>	120	</maxHealth>
-      <maxRegenHealth>	60	</maxRegenHealth>
-      <repairCost>	1.5	</repairCost>
-    </_9RM_O>
     <Development_Radio>
+      <id>	65000	</id>
       <userString>	Development Radio	</userString>
       <tags></tags>
       <notInShop>	true	</notInShop>
@@ -397,7 +14,46 @@
       <maxRegenHealth>	75	</maxRegenHealth>
       <repairCost>	0	</repairCost>
     </Development_Radio>
+    <FuG7A>
+      <id>	0	</id>
+      <userString>	#poland_vehicles:Fug7A	</userString>
+      <tags></tags>
+      <level>	6	</level>
+      <price>	8160	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	70	</weight>
+      <distance>	710	</distance>
+      <maxHealth>	160	</maxHealth>
+      <maxRegenHealth>	96	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+    </FuG7A>
+    <N2>
+      <id>	5	</id>
+      <userString>	#poland_vehicles:N2	</userString>
+      <tags></tags>
+      <level>	2	</level>
+      <price>	0	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	50	</weight>
+      <distance>	300	</distance>
+      <maxHealth>	100	</maxHealth>
+      <maxRegenHealth>	49	</maxRegenHealth>
+      <repairCost>	0.5	</repairCost>
+    </N2>
+    <N2_C>
+      <id>	6	</id>
+      <userString>	#poland_vehicles:N2_C	</userString>
+      <tags></tags>
+      <level>	4	</level>
+      <price>	2200	</price>
+      <weight>	80	</weight>
+      <distance>	375	</distance>
+      <maxHealth>	110	</maxHealth>
+      <maxRegenHealth>	60	</maxRegenHealth>
+      <repairCost>	1	</repairCost>
+    </N2_C>
     <N2_C_SH>
+      <id>	20	</id>
       <userString>	#poland_vehicles:N2_C_SH	</userString>
       <tags></tags>
       <level>	1	</level>
@@ -411,7 +67,195 @@
       <radarRadius>	410	</radarRadius>
       <radarCooldown>	30	</radarCooldown>
     </N2_C_SH>
+    <N2_L>
+      <id>	12	</id>
+      <userString>	#poland_vehicles:N2_L	</userString>
+      <tags></tags>
+      <level>	6	</level>
+      <price>	10000	</price>
+      <weight>	41	</weight>
+      <distance>	480	</distance>
+      <maxHealth>	120	</maxHealth>
+      <maxRegenHealth>	60	</maxRegenHealth>
+      <repairCost>	1.5	</repairCost>
+    </N2_L>
+    <N2_M>
+      <id>	11	</id>
+      <userString>	#poland_vehicles:N2_M	</userString>
+      <tags></tags>
+      <level>	2	</level>
+      <price>	200	</price>
+      <weight>	50	</weight>
+      <distance>	300	</distance>
+      <maxHealth>	100	</maxHealth>
+      <maxRegenHealth>	49	</maxRegenHealth>
+      <repairCost>	0.5	</repairCost>
+    </N2_M>
+    <N2_S>
+      <id>	7	</id>
+      <userString>	#poland_vehicles:N2_S	</userString>
+      <tags></tags>
+      <level>	3	</level>
+      <price>	610	</price>
+      <weight>	100	</weight>
+      <distance>	350	</distance>
+      <maxHealth>	100	</maxHealth>
+      <maxRegenHealth>	49	</maxRegenHealth>
+      <repairCost>	0.5	</repairCost>
+    </N2_S>
+    <RKB_C>
+      <id>	8	</id>
+      <userString>	#poland_vehicles:RKB_C	</userString>
+      <tags></tags>
+      <level>	5	</level>
+      <price>	3800	</price>
+      <weight>	80	</weight>
+      <distance>	430	</distance>
+      <maxHealth>	115	</maxHealth>
+      <maxRegenHealth>	60	</maxRegenHealth>
+      <repairCost>	1	</repairCost>
+    </RKB_C>
+    <RKB_c_1>
+      <id>	1	</id>
+      <userString>	#poland_vehicles:RKB_c_1	</userString>
+      <tags></tags>
+      <level>	3	</level>
+      <price>	630	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	30	</weight>
+      <distance>	310	</distance>
+      <maxHealth>	100	</maxHealth>
+      <maxRegenHealth>	49	</maxRegenHealth>
+      <repairCost>	0.5	</repairCost>
+    </RKB_c_1>
+    <RKD>
+      <id>	13	</id>
+      <userString>	#poland_vehicles:RKD	</userString>
+      <tags></tags>
+      <level>	7	</level>
+      <price>	22500	</price>
+      <weight>	70	</weight>
+      <distance>	530	</distance>
+      <maxHealth>	120	</maxHealth>
+      <maxRegenHealth>	60	</maxRegenHealth>
+      <repairCost>	1.5	</repairCost>
+    </RKD>
+    <RT10_26P>
+      <id>	17	</id>
+      <userString>	#poland_vehicles:RT10_26P	</userString>
+      <tags></tags>
+      <level>	7	</level>
+      <price>	19800	</price>
+      <weight>	50	</weight>
+      <distance>	440	</distance>
+      <maxHealth>	150	</maxHealth>
+      <maxRegenHealth>	125	</maxRegenHealth>
+      <repairCost>	1.5	</repairCost>
+    </RT10_26P>
+    <RT10_26P_A>
+      <id>	23	</id>
+      <userString>	#poland_vehicles:RT10_26P_A	</userString>
+      <tags></tags>
+      <level>	7	</level>
+      <price>	19800	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	50	</weight>
+      <distance>	440	</distance>
+      <maxHealth>	150	</maxHealth>
+      <maxRegenHealth>	125	</maxRegenHealth>
+      <repairCost>	1.5	</repairCost>
+    </RT10_26P_A>
+    <RT10_26P_Pl36>
+      <id>	31009	</id>
+      <userString>	#poland_vehicles:RT10_26P_Pl36	</userString>
+      <tags></tags>
+      <level>	8	</level>
+      <price>	25000	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	31	</weight>
+      <distance>	525	</distance>
+      <maxHealth>	120	</maxHealth>
+      <maxRegenHealth>	60	</maxRegenHealth>
+      <repairCost>	1.5	</repairCost>
+    </RT10_26P_Pl36>
+    <RTU_Jesion>
+      <id>	4	</id>
+      <userString>	#poland_vehicles:RTU_Jesion	</userString>
+      <tags></tags>
+      <level>	8	</level>
+      <price>	25000	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	100	</weight>
+      <distance>	525	</distance>
+      <maxHealth>	120	</maxHealth>
+      <maxRegenHealth>	60	</maxRegenHealth>
+      <repairCost>	1.5	</repairCost>
+    </RTU_Jesion>
+    <RTU_Jesion_M>
+      <id>	9	</id>
+      <userString>	#poland_vehicles:RTU_Jesion_M	</userString>
+      <tags></tags>
+      <level>	8	</level>
+      <price>	25000	</price>
+      <weight>	160	</weight>
+      <distance>	650	</distance>
+      <maxHealth>	150	</maxHealth>
+      <maxRegenHealth>	75	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+    </RTU_Jesion_M>
+    <RT_10_wz46>
+      <id>	31005	</id>
+      <userString>	#poland_vehicles:RT_10	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	53500	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	100	</weight>
+      <distance>	700	</distance>
+      <maxHealth>	200	</maxHealth>
+      <maxRegenHealth>	150	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+    </RT_10_wz46>
+    <R_113>
+      <id>	10	</id>
+      <userString>	#poland_vehicles:R_113	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	52000	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	110	</weight>
+      <distance>	730	</distance>
+      <maxHealth>	250	</maxHealth>
+      <maxRegenHealth>	75	</maxRegenHealth>
+      <repairCost>	3.5	</repairCost>
+    </R_113>
+    <R_113_P>
+      <id>	14	</id>
+      <userString>	#poland_vehicles:R_113_P	</userString>
+      <tags></tags>
+      <level>	9	</level>
+      <price>	43500	</price>
+      <weight>	100	</weight>
+      <distance>	700	</distance>
+      <maxHealth>	200	</maxHealth>
+      <maxRegenHealth>	150	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+    </R_113_P>
+    <R_113_P_S>
+      <id>	31008	</id>
+      <userString>	#poland_vehicles:R_113_P_S	</userString>
+      <tags></tags>
+      <level>	9	</level>
+      <price>	43500	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	42	</weight>
+      <distance>	700	</distance>
+      <maxHealth>	200	</maxHealth>
+      <maxRegenHealth>	150	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+    </R_113_P_S>
     <R_113_P_SH>
+      <id>	21	</id>
       <userString>	#poland_vehicles:R_113_P_SH	</userString>
       <tags></tags>
       <level>	2	</level>
@@ -425,7 +269,85 @@
       <radarRadius>	310	</radarRadius>
       <radarCooldown>	20	</radarCooldown>
     </R_113_P_SH>
+    <R_113_P_T>
+      <id>	31003	</id>
+      <userString>	#poland_vehicles:R_113_P	</userString>
+      <tags></tags>
+      <level>	9	</level>
+      <price>	43500	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	100	</weight>
+      <distance>	700	</distance>
+      <maxHealth>	200	</maxHealth>
+      <maxRegenHealth>	150	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+    </R_113_P_T>
+    <R_113_U>
+      <id>	31007	</id>
+      <userString>	#poland_vehicles:R_113_U	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	52000	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	110	</weight>
+      <distance>	730	</distance>
+      <maxHealth>	250	</maxHealth>
+      <maxRegenHealth>	75	</maxRegenHealth>
+      <repairCost>	3.5	</repairCost>
+    </R_113_U>
+    <R_123>
+      <id>	16	</id>
+      <userString>	#poland_vehicles:R_123	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	52000	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	100	</weight>
+      <distance>	730	</distance>
+      <maxHealth>	250	</maxHealth>
+      <maxRegenHealth>	75	</maxRegenHealth>
+      <repairCost>	3.5	</repairCost>
+    </R_123>
+    <R_123M>
+      <id>	25	</id>
+      <userString>	#poland_vehicles:R_123M	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	52000	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	100	</weight>
+      <distance>	730	</distance>
+      <maxHealth>	250	</maxHealth>
+      <maxRegenHealth>	75	</maxRegenHealth>
+      <repairCost>	3.5	</repairCost>
+    </R_123M>
+    <R_123P>
+      <id>	18	</id>
+      <userString>	#poland_vehicles:R_123P	</userString>
+      <tags></tags>
+      <level>	9	</level>
+      <price>	44000	</price>
+      <weight>	100	</weight>
+      <distance>	710	</distance>
+      <maxHealth>	200	</maxHealth>
+      <maxRegenHealth>	150	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+    </R_123P>
+    <R_123P_FL>
+      <id>	501	</id>
+      <userString>	#poland_vehicles:R_123P	</userString>
+      <tags></tags>
+      <level>	9	</level>
+      <price>	44000	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	100	</weight>
+      <distance>	710	</distance>
+      <maxHealth>	200	</maxHealth>
+      <maxRegenHealth>	150	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+    </R_123P_FL>
     <R_123P_SH>
+      <id>	22	</id>
       <userString>	#poland_vehicles:R_123P_SH	</userString>
       <tags></tags>
       <level>	2	</level>
@@ -439,5 +361,82 @@
       <radarRadius>	510	</radarRadius>
       <radarCooldown>	30	</radarCooldown>
     </R_123P_SH>
+    <R_123P_T>
+      <id>	31004	</id>
+      <userString>	#poland_vehicles:R_123P	</userString>
+      <tags></tags>
+      <level>	9	</level>
+      <price>	44000	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	100	</weight>
+      <distance>	710	</distance>
+      <maxHealth>	200	</maxHealth>
+      <maxRegenHealth>	150	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+    </R_123P_T>
+    <R_123_02>
+      <id>	31001	</id>
+      <userString>	#poland_vehicles:R_123	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	52000	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	100	</weight>
+      <distance>	730	</distance>
+      <maxHealth>	250	</maxHealth>
+      <maxRegenHealth>	75	</maxRegenHealth>
+      <repairCost>	3.5	</repairCost>
+    </R_123_02>
+    <R_123_1>
+      <id>	19	</id>
+      <userString>	#poland_vehicles:R_123	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	52000	</price>
+      <weight>	100	</weight>
+      <distance>	730	</distance>
+      <maxHealth>	250	</maxHealth>
+      <maxRegenHealth>	75	</maxRegenHealth>
+      <repairCost>	3.5	</repairCost>
+    </R_123_1>
+    <R_123_7x7>
+      <id>	31006	</id>
+      <userString>	#poland_vehicles:R_123	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	52000	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	100	</weight>
+      <distance>	730	</distance>
+      <maxHealth>	250	</maxHealth>
+      <maxRegenHealth>	75	</maxRegenHealth>
+      <repairCost>	3.5	</repairCost>
+    </R_123_7x7>
+    <R_123_T>
+      <id>	31002	</id>
+      <userString>	#poland_vehicles:R_123	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	52000	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	100	</weight>
+      <distance>	730	</distance>
+      <maxHealth>	250	</maxHealth>
+      <maxRegenHealth>	75	</maxRegenHealth>
+      <repairCost>	3.5	</repairCost>
+    </R_123_T>
+    <_9RM_O>
+      <id>	15	</id>
+      <userString>	#poland_vehicles:_9RM	</userString>
+      <tags></tags>
+      <level>	8	</level>
+      <price>	24240	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	30	</weight>
+      <distance>	525	</distance>
+      <maxHealth>	120	</maxHealth>
+      <maxRegenHealth>	60	</maxRegenHealth>
+      <repairCost>	1.5	</repairCost>
+    </_9RM_O>
   </shared>
 </radios.xml>

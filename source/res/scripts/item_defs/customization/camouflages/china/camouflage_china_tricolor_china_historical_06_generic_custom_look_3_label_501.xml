@@ -1,0 +1,56 @@
+<camouflage_china_tricolor_china_historical_06_generic_custom_look_3_label_501.xml>
+  <china:Ch20_Type583>	ussr	</china:Ch20_Type583>
+  <xmlns:germany>	germany	</xmlns:germany>
+  <china:Ch20_Type582>	usa	</china:Ch20_Type582>
+  <xmlns:china>	china	</xmlns:china>
+  <xmlns:france>	france	</xmlns:france>
+  <china:Ch20_Type581>	uk	</china:Ch20_Type581>
+  <xmlns:japan>	japan	</xmlns:japan>
+  <xmlns:czech>	czech	</xmlns:czech>
+  <china:Ch20_Type580>	sweden	</china:Ch20_Type580>
+  <xmlns:poland>	poland	</xmlns:poland>
+  <xmlns:italy>	italy	</xmlns:italy>
+  <xmlns:intunion>	intunion	</xmlns:intunion>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/transparent	</userString>
+    <season>	ALL	</season>
+    <historical>	0	</historical>
+    <priceGroup>	MT camouflages 50g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	china:Ch04_T34_1 china:Ch20_Type58	</vehicles>
+      </include>
+    </vehicleFilter>
+    <camouflage>
+      <id>	501	</id>
+      <texture>	vehicles/chinese/Camouflage/china_historical_06.dds	</texture>
+      <description>	#vehicle_customization:camouflage/china/tricolor/china_historical_06_generic_custom_look_3/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/china/tricolor/china_historical_06_generic_custom_look_3/label	</userString>
+      <tags>	hiddenInUI	</tags>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	31 38 19 255	</c0>
+          <c1>	170 136 136 25	</c1>
+          <c2>	121 127 100 255	</c2>
+          <c3>	0 0 0 0	</c3>
+        </palette>
+      </palettes>
+      <rotation>
+        <HULL>	-0.436332	</HULL>
+        <TURRET>	-0.436332	</TURRET>
+        <GUN>	-0.436332	</GUN>
+      </rotation>
+      <tiling>
+        <china:Ch04_T34_1>	4.8 4.8 1.16 0.71	</china:Ch04_T34_1>
+        <china:Ch20_Type58>	6 6 0.25 0.58	</china:Ch20_Type58>
+      </tiling>
+      <tilingSettings>
+        <type>	relative	</type>
+        <factor>	3.55564 3.5552	</factor>
+        <offset>	0.000000 0.000000	</offset>
+      </tilingSettings>
+    </camouflage>
+  </itemGroup>
+</camouflage_china_tricolor_china_historical_06_generic_custom_look_3_label_501.xml>

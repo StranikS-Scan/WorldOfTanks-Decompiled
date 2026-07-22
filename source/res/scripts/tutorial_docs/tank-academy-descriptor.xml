@@ -1,0 +1,103 @@
+<tank-academy-descriptor.xml>
+  <gui>	gui/tutorial-lobby-gui.xml	</gui>
+  <initial-chapter></initial-chapter>
+  <chapters>
+    <chapter>
+      <bonus></bonus>
+      <chapter-id>	tankAcademyMultipliedXP	</chapter-id>
+      <file-path>	scripts/tutorial_docs/tank_academy/tankAcademyMultipliedXP.xml	</file-path>
+    </chapter>
+    <chapter>
+      <bonus></bonus>
+      <chapter-id>	tankAcademyResearchModule	</chapter-id>
+      <vars>
+        <var-set>	RequiredVehicleMinLevel	  <asInt>	3	</asInt>
+        </var-set>
+        <var-set>	RequiredVehicleMinLevelRoman	  <asString>	III	</asString>
+        </var-set>
+        <var-set>	RequiredVehicleMaxLevel	  <asInt>	11	</asInt>
+        </var-set>
+      </vars>
+      <file-path>	scripts/tutorial_docs/tank_academy/tankAcademyResearchModule.xml	</file-path>
+    </chapter>
+    <chapter>
+      <bonus></bonus>
+      <chapter-id>	tankAcademyResearchVehicle_4	</chapter-id>
+      <vars>
+        <var-set>	RequiredVehicleLevel	  <asInt>	3	</asInt>
+        </var-set>
+        <var-set>	RequiredVehicleLevelRoman	  <asString>	III	</asString>
+        </var-set>
+      </vars>
+      <file-path>	scripts/tutorial_docs/tank_academy/tankAcademyResearchVehicle.xml	</file-path>
+    </chapter>
+    <chapter>
+      <bonus></bonus>
+      <chapter-id>	tankAcademyAllEquipment	</chapter-id>
+      <vars>
+        <var-set>	RequiredVehicleMinLevel	  <asInt>	4	</asInt>
+        </var-set>
+        <var-set>	RequiredVehicleMinLevelRoman	  <asString>	IV	</asString>
+        </var-set>
+        <var-set>	RequiredVehicleMaxLevel	  <asInt>	11	</asInt>
+        </var-set>
+      </vars>
+      <file-path>	scripts/tutorial_docs/tank_academy/tankAcademyAllEquipment.xml	</file-path>
+    </chapter>
+    <chapter>
+      <bonus></bonus>
+      <chapter-id>	tankAcademyOptionalDevices	</chapter-id>
+      <vars>
+        <var-set>	RequiredVehicleMinLevel	  <asInt>	4	</asInt>
+        </var-set>
+        <var-set>	RequiredVehicleMinLevelRoman	  <asString>	IV	</asString>
+        </var-set>
+        <var-set>	RequiredVehicleMaxLevel	  <asInt>	11	</asInt>
+        </var-set>
+      </vars>
+      <file-path>	scripts/tutorial_docs/tank_academy/tankAcademyOptionalDevices.xml	</file-path>
+    </chapter>
+    <chapter>
+      <bonus></bonus>
+      <chapter-id>	tankAcademyAllAmmunition	</chapter-id>
+      <vars>
+        <var-set>	RequiredVehicleMinLevel	  <asInt>	4	</asInt>
+        </var-set>
+        <var-set>	RequiredVehicleMinLevelRoman	  <asString>	IV	</asString>
+        </var-set>
+        <var-set>	RequiredVehicleMaxLevel	  <asInt>	11	</asInt>
+        </var-set>
+      </vars>
+      <file-path>	scripts/tutorial_docs/tank_academy/tankAcademyAllAmmunition.xml	</file-path>
+    </chapter>
+    <chapter>
+      <bonus></bonus>
+      <chapter-id>	tankAcademyResearchVehicle_5	</chapter-id>
+      <vars>
+        <var-set>	RequiredVehicleLevel	  <asInt>	4	</asInt>
+        </var-set>
+        <var-set>	RequiredVehicleLevelRoman	  <asString>	IV	</asString>
+        </var-set>
+      </vars>
+      <file-path>	scripts/tutorial_docs/tank_academy/tankAcademyResearchVehicle.xml	</file-path>
+    </chapter>
+    <chapter>
+      <bonus></bonus>
+      <chapter-id>	tankAcademyCustomization	</chapter-id>
+      <vars>
+        <var-set>	RequiredVehicleMinLevel	  <asInt>	5	</asInt>
+        </var-set>
+        <var-set>	RequiredVehicleMinLevelRoman	  <asString>	V	</asString>
+        </var-set>
+        <var-set>	RequiredVehicleMaxLevel	  <asInt>	11	</asInt>
+        </var-set>
+      </vars>
+      <file-path>	scripts/tutorial_docs/tank_academy/tankAcademyCustomization.xml	</file-path>
+    </chapter>
+    <chapter>
+      <bonus></bonus>
+      <chapter-id>	tankAcademyPersonalReserves	</chapter-id>
+      <file-path>	scripts/tutorial_docs/tank_academy/tankAcademyPersonalReserves.xml	</file-path>
+    </chapter>
+  </chapters>
+</tank-academy-descriptor.xml>

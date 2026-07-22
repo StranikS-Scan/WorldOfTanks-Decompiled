@@ -1610,7 +1610,7 @@
       </armor>
       <primaryArmor>	armor_10 armor_11 armor_12	</primaryArmor>
       <weight>	5700	</weight>
-      <maxHealth>	360	</maxHealth>
+      <maxHealth>	460	</maxHealth>
       <rotationSpeed>	38	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	150	</maxHealth>
@@ -1643,7 +1643,7 @@
             <armor_11>	30	</armor_11>
             <gun>	35	</gun>
           </armor>
-          <shotDispersionRadius>	0.38	</shotDispersionRadius>
+          <shotDispersionRadius>	0.36	</shotDispersionRadius>
           <reloadTime>	36	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.16	</turretRotation>
@@ -1653,9 +1653,9 @@
           <invisibilityFactorAtShot>	0.198	</invisibilityFactorAtShot>
           <clip>
             <count>	5	</count>
-            <rate>	22	</rate>
+            <rate>	25	</rate>
           </clip>
-          <aimingTime>	2.7	</aimingTime>
+          <aimingTime>	2.3	</aimingTime>
           <models>
             <undamaged>	vehicles/french/F18_Bat_Chatillon25t/normal/lod0/Gun_03.model	</undamaged>
             <destroyed>	vehicles/french/F18_Bat_Chatillon25t/crash/lod0/Gun_03.model	</destroyed>

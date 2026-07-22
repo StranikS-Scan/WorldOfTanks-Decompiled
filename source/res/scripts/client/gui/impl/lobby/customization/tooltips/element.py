@@ -348,6 +348,7 @@ class ElementTooltip(BlocksTooltipData):
 
     def _packQuestsBlock(self):
         blocks = []
+        conditionBlocks = []
         quests = self._item.getUnlockingQuests()
         tokenCount = self.__itemsCache.items.tokens.getTokenCount(self._item.requiredToken)
         if not self._item.requiredToken or self._item.requiredToken and (self._item.isUnlockingExpired() or tokenCount >= self._item.descriptor.requiredTokenCount):
@@ -402,7 +403,8 @@ class ElementTooltip(BlocksTooltipData):
                         current = int(andItem.current or 0 if battlesCount is None else battlesCount.current)
                         total = int(andItem.total or 1 if battlesCount is None else battlesCount.total)
                         progress += int(round(current * 100.0 / total))
-                        blocks.append(formatCondition(quest, isCompleted, isAvailable, current, total, description))
+                        if description:
+                            conditionBlocks.append(formatCondition(quest, isCompleted, isAvailable, current, total, description))
                         hasBattleConditions = True
 
                     if andItems:
@@ -410,7 +412,12 @@ class ElementTooltip(BlocksTooltipData):
                     progressPercents.append(progress)
 
                 if quest.accountReqs.getTokens() and not hasBattleConditions:
-                    blocks.append(formatCondition(quest, isCompleted, isAvailable, 0, 1, quest.getDescription()))
+                    description = quest.getDescription()
+                    if description:
+                        conditionBlocks.append(formatCondition(quest, isCompleted, isAvailable, 0, 1, description))
+                if not conditionBlocks:
+                    return
+                blocks.extend(conditionBlocks)
                 if delimitersToPost:
                     blocks.append(formatters.packQuestOrConditionBlockData(padding=formatters.packPadding(bottom=-22, right=17)))
                     delimitersToPost -= 1

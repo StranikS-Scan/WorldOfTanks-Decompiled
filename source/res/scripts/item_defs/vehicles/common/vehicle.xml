@@ -1114,4 +1114,13 @@
     <external>	wheel rightTrack leftTrack gun surveyingDevice	</external>
     <tankmen>	commander driver radioman_1 radioman_2 gunner_1 gunner_2 loader_1 loader_2	</tankmen>
   </moduleKind>
+  <deviceInvulnerability>
+    <config>
+      <arenaTypes>	REGULAR VERSUS_AI	</arenaTypes>
+      <level_1>	engine ammoBay fuelTank radio gun crew turretRotator surveyingDevice	</level_1>
+      <level_2>	engine ammoBay fuelTank radio gun crew turretRotator surveyingDevice	</level_2>
+      <level_3>	engine ammoBay fuelTank radio gun turretRotator surveyingDevice	</level_3>
+      <level_4>	ammoBay radio turretRotator surveyingDevice	</level_4>
+    </config>
+  </deviceInvulnerability>
 </vehicle.xml>

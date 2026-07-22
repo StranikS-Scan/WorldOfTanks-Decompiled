@@ -56,7 +56,7 @@ class LobbyVehicleMarkerView(LobbyVehicleMarkerViewMeta):
         self.removeListener(events.LobbyMarkersManagerEvent.ON_MARKER_ADDED, self.__onCgfMarkerAdded, EVENT_BUS_SCOPE.LOBBY)
         self.removeListener(CameraRelatedEvents.CAMERA_ENTITY_UPDATED, self.__onCameraEntityUpdated, EVENT_BUS_SCOPE.DEFAULT)
         self.removeListener(events.HangarVehicleEvent.ON_HERO_TANK_LOADED, self.__onHeroTankLoaded, EVENT_BUS_SCOPE.LOBBY)
-        self.removeListener(events.HangarVehicleEvent.ON_HERO_TANK_DESTROY, self._onHeroPlatoonTankDestroy, EVENT_BUS_SCOPE.LOBBY)
+        self.removeListener(events.HangarVehicleEvent.ON_HERO_TANK_DESTROY, self._onHeroTankDestroy, EVENT_BUS_SCOPE.LOBBY)
         self.hangarSpace.onSpaceDestroy -= self.__onSpaceDestroy
         self.removeListener(events.HangarVehicleEvent.ON_PLATOON_TANK_LOADED, self._onPlatoonTankLoaded, EVENT_BUS_SCOPE.LOBBY)
         self.removeListener(events.HangarVehicleEvent.ON_PLATOON_TANK_DESTROY, self._onHeroPlatoonTankDestroy, EVENT_BUS_SCOPE.LOBBY)
@@ -70,6 +70,11 @@ class LobbyVehicleMarkerView(LobbyVehicleMarkerViewMeta):
         vehicle = event.ctx['entity']
         self.__beginCreateVehicleMarker(vehicle)
 
+    def _onHeroTankDestroy(self, event):
+        vehicle = event.ctx['entity']
+        _logger.info('destroy vehicle marker %s', vehicle.id)
+        self.__destroyMarker(vehicle.id)
+
     def _onPlatoonTankLoaded(self, event):
         vehicle = event.ctx['entity']
         playerName = event.ctx['playerName']
@@ -78,6 +83,7 @@ class LobbyVehicleMarkerView(LobbyVehicleMarkerViewMeta):
 
     def _onHeroPlatoonTankDestroy(self, event):
         vehicle = event.ctx['entity']
+        _logger.info('destroy platoon vehicle marker %s', vehicle.id)
         self.__destroyMarker(vehicle.id)
 
     def __onCgfMarkerAdded(self, event):
@@ -157,13 +163,15 @@ class LobbyVehicleMarkerView(LobbyVehicleMarkerViewMeta):
 
     def __createVehicleMarker(self, vehicle):
         vClass, vName, vMatrix = self.__getVehicleInfo(vehicle)
+        _logger.info('create vehicle marker %s %s', vehicle.id, vName)
         flashMarker = self.as_createMarkerS(vehicle.id, vClass, vName)
         self.__markersCache[vehicle.id] = GUI.HangarVehicleMarker()
         self.__markersCache[vehicle.id].setMarker(flashMarker, vMatrix)
         self.__updateMarkerVisibility(vehicle.id)
 
     def __createPlatoonMarker(self, vehicle, playerName):
-        vClass, _, vMatrix = self.__getVehicleInfo(vehicle)
+        vClass, vName, vMatrix = self.__getVehicleInfo(vehicle)
+        _logger.info('create platoon vehicle marker %s %s', vehicle.id, vName)
         flashMarker = self.as_createPlatoonMarkerS(vehicle.id, vClass, playerName)
         self.__markersCache[vehicle.id] = GUI.HangarVehicleMarker()
         self.__markersCache[vehicle.id].setMarker(flashMarker, vMatrix)
@@ -171,10 +179,14 @@ class LobbyVehicleMarkerView(LobbyVehicleMarkerViewMeta):
 
     def __destroyMarker(self, entityId):
         self.as_removeMarkerS(entityId)
-        self.__markersCache.pop(entityId, None)
+        marker = self.__markersCache.pop(entityId, None)
+        if marker is not None:
+            marker.markerSetActive(False)
         return
 
     def __destroyAllMarkers(self):
+        if self.__markersCache:
+            _logger.info('destroy all hangar vehicle markers')
         for k, marker in self.__markersCache.iteritems():
             self.as_removeMarkerS(k)
             if marker is not None:

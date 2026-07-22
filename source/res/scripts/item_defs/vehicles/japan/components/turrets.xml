@@ -1,74 +1,212 @@
 <turrets.xml>
-  <ids>
-    <Turret_1_Chi_Nu_Kai>	0	</Turret_1_Chi_Nu_Kai>
-    <Turret_1_Ke_Ni_B>	1	</Turret_1_Ke_Ni_B>
-    <Turret_1_Chi_Ni>	2	</Turret_1_Chi_Ni>
-    <Turret_1_NC27>	3	</Turret_1_NC27>
-    <Turret_2_NC27>	4	</Turret_2_NC27>
-    <Turret_1_Ha_Go>	5	</Turret_1_Ha_Go>
-    <Turret_2_Ha_Go>	6	</Turret_2_Ha_Go>
-    <Turret_1_Chi_Ri>	7	</Turret_1_Chi_Ri>
-    <Turret_2_Chi_Ri>	8	</Turret_2_Chi_Ri>
-    <Turret_1_Chi_Nu>	9	</Turret_1_Chi_Nu>
-    <Turret_2_Chi_Nu>	10	</Turret_2_Chi_Nu>
-    <Turret_1_Chi_He>	11	</Turret_1_Chi_He>
-    <Turret_2_Chi_He>	12	</Turret_2_Chi_He>
-    <Turret_1_Chi_To>	13	</Turret_1_Chi_To>
-    <Turret_2_Chi_To>	14	</Turret_2_Chi_To>
-    <Turret_1_Chi_Ha>	15	</Turret_1_Chi_Ha>
-    <Turret_2_Chi_Ha>	16	</Turret_2_Chi_Ha>
-    <Turret_1_Ke_Ni>	17	</Turret_1_Ke_Ni>
-    <Turret_2_Ke_Ni>	18	</Turret_2_Ke_Ni>
-    <Turret_1_STA_1>	19	</Turret_1_STA_1>
-    <Turret_2_STA_1>	20	</Turret_2_STA_1>
-    <Turret_1_Ke_Ho>	21	</Turret_1_Ke_Ho>
-    <Turret_1_Te_Ke>	23	</Turret_1_Te_Ke>
-    <Turret_1_Type_61>	24	</Turret_1_Type_61>
-    <Turret_2_Type_61>	25	</Turret_2_Type_61>
-    <Turret_1_ST_B1>	26	</Turret_1_ST_B1>
-    <Turret_1_STA_2_3>	27	</Turret_1_STA_2_3>
-    <Turret_1_Tiger_I_Jpn>	28	</Turret_1_Tiger_I_Jpn>
-    <Turret_1_J20_Type_2605>	29	</Turret_1_J20_Type_2605>
-    <Turret_1_J25_Type_4>	30	</Turret_1_J25_Type_4>
-    <Turret_1_J22_Type_95>	31	</Turret_1_J22_Type_95>
-    <Turret_1_J21_Type_91>	32	</Turret_1_J21_Type_91>
-    <Turret_1_J27_O_I_120>	33	</Turret_1_J27_O_I_120>
-    <Turret_1_J28_O_I_100>	34	</Turret_1_J28_O_I_100>
-    <Turret_1_J24_Mi_To_130_tons>	35	</Turret_1_J24_Mi_To_130_tons>
-    <Turret_1_J23_Mi_To>	36	</Turret_1_J23_Mi_To>
-    <Turret_1_J26_Type_89>	37	</Turret_1_J26_Type_89>
-    <Turret_2_J26_Type_89>	38	</Turret_2_J26_Type_89>
-    <Turret_1_J31_Type_5_KaRi>	42	</Turret_1_J31_Type_5_KaRi>
-    <Turret_1_J35_Ho_Ri_3>	43	</Turret_1_J35_Ho_Ri_3>
-    <Turret_1_J32_Chi_To_SPG>	44	</Turret_1_J32_Chi_To_SPG>
-    <Turret_1_J33_Ho_Ri_2>	45	</Turret_1_J33_Ho_Ri_2>
-    <Turret_1_J34_Ho_Ri_1>	46	</Turret_1_J34_Ho_Ri_1>
-    <Turret_1_J37_Type_3_Ho_Ni_III>	47	</Turret_1_J37_Type_3_Ho_Ni_III>
-    <Turret_J38_Type_95_Ji_Ro>	48	</Turret_J38_Type_95_Ji_Ro>
-    <Turret_1_J36_Type_63_HT>	49	</Turret_1_J36_Type_63_HT>
-    <Turret_1_J27_O_I_120_BP>	31001	</Turret_1_J27_O_I_120_BP>
-    <Turret_2_J44_Type_3_Ju_Nu_test>	31003	</Turret_2_J44_Type_3_Ju_Nu_test>
-    <Turret_1_J39_Type_57>	50	</Turret_1_J39_Type_57>
-    <Turret_1_J44_Type_3_Ju_Nu>	51	</Turret_1_J44_Type_3_Ju_Nu>
-    <Turret_2_J44_Type_3_Ju_Nu>	52	</Turret_2_J44_Type_3_Ju_Nu>
-    <Turret_1_J45_Mitsu_108>	54	</Turret_1_J45_Mitsu_108>
-    <Turret_2_J45_Mitsu_108>	55	</Turret_2_J45_Mitsu_108>
-    <Turret_1_J43_Type_4_Ju-To>	56	</Turret_1_J43_Type_4_Ju-To>
-    <Turret_1_J41_Type_68>	57	</Turret_1_J41_Type_68>
-    <Turret_2_J41_Type_68>	58	</Turret_2_J41_Type_68>
-    <Turret_1_J40_Type_71>	59	</Turret_1_J40_Type_71>
-    <Turret_2_J43_Type_4_Ju-To>	60	</Turret_2_J43_Type_4_Ju-To>
-    <Turret_2_J39_Type_57>	61	</Turret_2_J39_Type_57>
-    <Turret_2_J39_Type_57_FL>	501	</Turret_2_J39_Type_57_FL>
-    <Turret_1_J20_Type_2605_7x7>	31002	</Turret_1_J20_Type_2605_7x7>
-    <Turret_1_J40_Type_71_test>	31004	</Turret_1_J40_Type_71_test>
-    <Turret_2_J39_Type_57_test>	31005	</Turret_2_J39_Type_57_test>
-    <Turret_1_J35_Ho_Ri_3_7x7>	31006	</Turret_1_J35_Ho_Ri_3_7x7>
-    <Turret_1_J49_Type_60_Proto_4>	31007	</Turret_1_J49_Type_60_Proto_4>
-    <Turret_1_J36_Type_63_HT_02>	31009	</Turret_1_J36_Type_63_HT_02>
-    <Turret_2_STA_1_IGR>	60001	</Turret_2_STA_1_IGR>
-    <Turret_2_Chi_Ri_IGR>	60002	</Turret_2_Chi_Ri_IGR>
-    <Turret_1_ST_B1_IGR>	60003	</Turret_1_ST_B1_IGR>
-  </ids>
-  <shared></shared>
+  <xmlns:xmlref>	http://bwt/xmlref	</xmlns:xmlref>
+  <shared>
+    <Turret_1_Chi_Ha>
+      <id>	15	</id>
+    </Turret_1_Chi_Ha>
+    <Turret_1_Chi_He>
+      <id>	11	</id>
+    </Turret_1_Chi_He>
+    <Turret_1_Chi_Ni>
+      <id>	2	</id>
+    </Turret_1_Chi_Ni>
+    <Turret_1_Chi_Nu>
+      <id>	9	</id>
+    </Turret_1_Chi_Nu>
+    <Turret_1_Chi_Nu_Kai>
+      <id>	0	</id>
+    </Turret_1_Chi_Nu_Kai>
+    <Turret_1_Chi_Ri>
+      <id>	7	</id>
+    </Turret_1_Chi_Ri>
+    <Turret_1_Chi_To>
+      <id>	13	</id>
+    </Turret_1_Chi_To>
+    <Turret_1_Ha_Go>
+      <id>	5	</id>
+    </Turret_1_Ha_Go>
+    <Turret_1_J20_Type_2605>
+      <id>	29	</id>
+    </Turret_1_J20_Type_2605>
+    <Turret_1_J20_Type_2605_7x7>
+      <id>	31002	</id>
+    </Turret_1_J20_Type_2605_7x7>
+    <Turret_1_J21_Type_91>
+      <id>	32	</id>
+    </Turret_1_J21_Type_91>
+    <Turret_1_J22_Type_95>
+      <id>	31	</id>
+    </Turret_1_J22_Type_95>
+    <Turret_1_J23_Mi_To>
+      <id>	36	</id>
+    </Turret_1_J23_Mi_To>
+    <Turret_1_J24_Mi_To_130_tons>
+      <id>	35	</id>
+    </Turret_1_J24_Mi_To_130_tons>
+    <Turret_1_J25_Type_4>
+      <id>	30	</id>
+    </Turret_1_J25_Type_4>
+    <Turret_1_J26_Type_89>
+      <id>	37	</id>
+    </Turret_1_J26_Type_89>
+    <Turret_1_J27_O_I_120>
+      <id>	33	</id>
+    </Turret_1_J27_O_I_120>
+    <Turret_1_J27_O_I_120_BP>
+      <id>	31001	</id>
+    </Turret_1_J27_O_I_120_BP>
+    <Turret_1_J28_O_I_100>
+      <id>	34	</id>
+    </Turret_1_J28_O_I_100>
+    <Turret_1_J31_Type_5_KaRi>
+      <id>	42	</id>
+    </Turret_1_J31_Type_5_KaRi>
+    <Turret_1_J32_Chi_To_SPG>
+      <id>	44	</id>
+    </Turret_1_J32_Chi_To_SPG>
+    <Turret_1_J33_Ho_Ri_2>
+      <id>	45	</id>
+    </Turret_1_J33_Ho_Ri_2>
+    <Turret_1_J34_Ho_Ri_1>
+      <id>	46	</id>
+    </Turret_1_J34_Ho_Ri_1>
+    <Turret_1_J35_Ho_Ri_3>
+      <id>	43	</id>
+    </Turret_1_J35_Ho_Ri_3>
+    <Turret_1_J35_Ho_Ri_3_7x7>
+      <id>	31006	</id>
+    </Turret_1_J35_Ho_Ri_3_7x7>
+    <Turret_1_J36_Type_63_HT>
+      <id>	49	</id>
+    </Turret_1_J36_Type_63_HT>
+    <Turret_1_J36_Type_63_HT_02>
+      <id>	31009	</id>
+    </Turret_1_J36_Type_63_HT_02>
+    <Turret_1_J37_Type_3_Ho_Ni_III>
+      <id>	47	</id>
+    </Turret_1_J37_Type_3_Ho_Ni_III>
+    <Turret_1_J39_Type_57>
+      <id>	50	</id>
+    </Turret_1_J39_Type_57>
+    <Turret_1_J40_Type_71>
+      <id>	59	</id>
+    </Turret_1_J40_Type_71>
+    <Turret_1_J40_Type_71_test>
+      <id>	31004	</id>
+    </Turret_1_J40_Type_71_test>
+    <Turret_1_J41_Type_68>
+      <id>	57	</id>
+    </Turret_1_J41_Type_68>
+    <Turret_1_J43_Type_4_Ju-To>
+      <id>	56	</id>
+    </Turret_1_J43_Type_4_Ju-To>
+    <Turret_1_J44_Type_3_Ju_Nu>
+      <id>	51	</id>
+    </Turret_1_J44_Type_3_Ju_Nu>
+    <Turret_1_J45_Mitsu_108>
+      <id>	54	</id>
+    </Turret_1_J45_Mitsu_108>
+    <Turret_1_J49_Type_60_Proto_4>
+      <id>	31007	</id>
+    </Turret_1_J49_Type_60_Proto_4>
+    <Turret_1_Ke_Ho>
+      <id>	21	</id>
+    </Turret_1_Ke_Ho>
+    <Turret_1_Ke_Ni>
+      <id>	17	</id>
+    </Turret_1_Ke_Ni>
+    <Turret_1_Ke_Ni_B>
+      <id>	1	</id>
+    </Turret_1_Ke_Ni_B>
+    <Turret_1_NC27>
+      <id>	3	</id>
+    </Turret_1_NC27>
+    <Turret_1_STA_1>
+      <id>	19	</id>
+    </Turret_1_STA_1>
+    <Turret_1_STA_2_3>
+      <id>	27	</id>
+    </Turret_1_STA_2_3>
+    <Turret_1_ST_B1>
+      <id>	26	</id>
+    </Turret_1_ST_B1>
+    <Turret_1_ST_B1_IGR>
+      <id>	60003	</id>
+    </Turret_1_ST_B1_IGR>
+    <Turret_1_Te_Ke>
+      <id>	23	</id>
+    </Turret_1_Te_Ke>
+    <Turret_1_Tiger_I_Jpn>
+      <id>	28	</id>
+    </Turret_1_Tiger_I_Jpn>
+    <Turret_1_Type_61>
+      <id>	24	</id>
+    </Turret_1_Type_61>
+    <Turret_2_Chi_Ha>
+      <id>	16	</id>
+    </Turret_2_Chi_Ha>
+    <Turret_2_Chi_He>
+      <id>	12	</id>
+    </Turret_2_Chi_He>
+    <Turret_2_Chi_Nu>
+      <id>	10	</id>
+    </Turret_2_Chi_Nu>
+    <Turret_2_Chi_Ri>
+      <id>	8	</id>
+    </Turret_2_Chi_Ri>
+    <Turret_2_Chi_Ri_IGR>
+      <id>	60002	</id>
+    </Turret_2_Chi_Ri_IGR>
+    <Turret_2_Chi_To>
+      <id>	14	</id>
+    </Turret_2_Chi_To>
+    <Turret_2_Ha_Go>
+      <id>	6	</id>
+    </Turret_2_Ha_Go>
+    <Turret_2_J26_Type_89>
+      <id>	38	</id>
+    </Turret_2_J26_Type_89>
+    <Turret_2_J39_Type_57>
+      <id>	61	</id>
+    </Turret_2_J39_Type_57>
+    <Turret_2_J39_Type_57_FL>
+      <id>	501	</id>
+    </Turret_2_J39_Type_57_FL>
+    <Turret_2_J39_Type_57_test>
+      <id>	31005	</id>
+    </Turret_2_J39_Type_57_test>
+    <Turret_2_J41_Type_68>
+      <id>	58	</id>
+    </Turret_2_J41_Type_68>
+    <Turret_2_J43_Type_4_Ju-To>
+      <id>	60	</id>
+    </Turret_2_J43_Type_4_Ju-To>
+    <Turret_2_J44_Type_3_Ju_Nu>
+      <id>	52	</id>
+    </Turret_2_J44_Type_3_Ju_Nu>
+    <Turret_2_J44_Type_3_Ju_Nu_test>
+      <id>	31003	</id>
+    </Turret_2_J44_Type_3_Ju_Nu_test>
+    <Turret_2_J45_Mitsu_108>
+      <id>	55	</id>
+    </Turret_2_J45_Mitsu_108>
+    <Turret_2_Ke_Ni>
+      <id>	18	</id>
+    </Turret_2_Ke_Ni>
+    <Turret_2_NC27>
+      <id>	4	</id>
+    </Turret_2_NC27>
+    <Turret_2_STA_1>
+      <id>	20	</id>
+    </Turret_2_STA_1>
+    <Turret_2_STA_1_IGR>
+      <id>	60001	</id>
+    </Turret_2_STA_1_IGR>
+    <Turret_2_Type_61>
+      <id>	25	</id>
+    </Turret_2_Type_61>
+    <Turret_J38_Type_95_Ji_Ro>
+      <id>	48	</id>
+    </Turret_J38_Type_95_Ji_Ro>
+  </shared>
 </turrets.xml>

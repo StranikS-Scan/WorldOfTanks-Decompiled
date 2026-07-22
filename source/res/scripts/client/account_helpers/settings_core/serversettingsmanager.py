@@ -114,6 +114,7 @@ class UI_STORAGE_KEYS(CONST_CONTAINER):
     CLIP_DUAL_GUN_HIGHLIGHTS_COUNTER = 'clip_dual_gun_highlights_counter'
     CLIP_DUAL_GUN_MARK_IS_SHOWN = 'clip_dual_gun_mark_is_shown'
     DUAL_GUN_DUAL_ACCURACY_HIGHLIGHTS_COUNTER = 'dual_gun_dual_accuracy_highlights_count'
+    TANK_ACADEMY_WELCOME_SCREEN_SHOWN = 'tank_academy_welcome_screen_shown'
 
 
 class BATTLE_MATTERS_KEYS(CONST_CONTAINER):
@@ -574,10 +575,12 @@ class ServerSettingsManager(object):
                                            OnceOnlyHints.PARAGONS_FIRST_RESET_HINT: 6,
                                            OnceOnlyHints.PARAGONS_ENTRY_POINT_HINT: 7,
                                            OnceOnlyHints.PARAGONS_RESEARCH_BUTTON_HINT: 8,
-                                           OnceOnlyHints.BIRTHDAY_POSTBATTLE_EXTRA_TAB_HINT: 9,
+                                           OnceOnlyHints.BIRTHDAY_POSTBATTLE_TEAM_STATS_TAB_HINT: 9,
                                            OnceOnlyHints.ADD_ECONOMIC_DIRECTIVES_HINT: 10,
                                            OnceOnlyHints.EPIC_SUPPLY_INFO_HINT: 11,
-                                           OnceOnlyHints.COMP7_SKILL_HINT: 12}, offsets={}),
+                                           OnceOnlyHints.COMP7_SKILL_HINT: 12,
+                                           OnceOnlyHints.TANK_ACADEMY_FIGHT_BUTTON_HINT: 13,
+                                           OnceOnlyHints.TANK_ACADEMY_ENTRY_POINT_HINT: 14}, offsets={}),
      SETTINGS_SECTIONS.DAMAGE_INDICATOR: Section(masks={DAMAGE_INDICATOR.TYPE: 0,
                                           DAMAGE_INDICATOR.PRESET_CRITS: 1,
                                           DAMAGE_INDICATOR.DAMAGE_VALUE: 2,
@@ -641,7 +644,8 @@ class ServerSettingsManager(object):
                                       UI_STORAGE_KEYS.FLAMETHROWER_MARK_IS_SHOWN: 13,
                                       UI_STORAGE_KEYS.THERMAL_VISION_MARK_IS_SHOWN: 17,
                                       UI_STORAGE_KEYS.AUTO_RELOAD_DUAL_GUN_MARK_IS_SHOWN: 21,
-                                      UI_STORAGE_KEYS.CLIP_DUAL_GUN_MARK_IS_SHOWN: 25}, offsets={UI_STORAGE_KEYS.ROCKET_ACCELERATION_HIGHLIGHTS_COUNTER: Offset(1, 14),
+                                      UI_STORAGE_KEYS.CLIP_DUAL_GUN_MARK_IS_SHOWN: 25,
+                                      UI_STORAGE_KEYS.TANK_ACADEMY_WELCOME_SCREEN_SHOWN: 29}, offsets={UI_STORAGE_KEYS.ROCKET_ACCELERATION_HIGHLIGHTS_COUNTER: Offset(1, 14),
                                       UI_STORAGE_KEYS.DUAL_ACCURACY_HIGHLIGHTS_COUNTER: Offset(6, 448),
                                       UI_STORAGE_KEYS.FLAMETHROWER_HIGHLIGHTS_COUNTER: Offset(10, 7168),
                                       UI_STORAGE_KEYS.THERMAL_VISION_HIGHLIGHTS_COUNTER: Offset(14, 114688),
@@ -1168,6 +1172,12 @@ class ServerSettingsManager(object):
 
     def getDisableAnimTooltipFlag(self):
         return self.getUIStorage().get(UI_STORAGE_KEYS.DISABLE_ANIMATED_TOOLTIP) == 1
+
+    def isTankAcademyWelcomeScreenShown(self):
+        return self.getUIStorage2().get(UI_STORAGE_KEYS.TANK_ACADEMY_WELCOME_SCREEN_SHOWN) == 1
+
+    def setTankAcademyWelcomeScreenShown(self):
+        self.saveInUIStorage2({UI_STORAGE_KEYS.TANK_ACADEMY_WELCOME_SCREEN_SHOWN: 1})
 
     def getBattleMattersQuestWasShowed(self):
         return self.getSectionSettings(SETTINGS_SECTIONS.BATTLE_MATTERS_QUESTS, BATTLE_MATTERS_KEYS.QUESTS_SHOWN, 0)

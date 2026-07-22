@@ -1,0 +1,56 @@
+<camouflage_usa_tricolor_Tri-color_Spotted_generic_custom_look_3_label_497.xml>
+  <usa:A07_T203>	ussr	</usa:A07_T203>
+  <xmlns:germany>	germany	</xmlns:germany>
+  <usa:A07_T202>	usa	</usa:A07_T202>
+  <xmlns:china>	china	</xmlns:china>
+  <xmlns:france>	france	</xmlns:france>
+  <usa:A07_T201>	uk	</usa:A07_T201>
+  <xmlns:japan>	japan	</xmlns:japan>
+  <xmlns:czech>	czech	</xmlns:czech>
+  <usa:A07_T200>	sweden	</usa:A07_T200>
+  <xmlns:poland>	poland	</xmlns:poland>
+  <xmlns:italy>	italy	</xmlns:italy>
+  <xmlns:intunion>	intunion	</xmlns:intunion>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/opaque	</userString>
+    <season>	ALL	</season>
+    <historical>	0	</historical>
+    <priceGroup>	MT camouflages 50g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	usa:A06_M4A3E8_Sherman usa:A07_T20	</vehicles>
+      </include>
+    </vehicleFilter>
+    <camouflage>
+      <id>	497	</id>
+      <texture>	vehicles/american/Camouflage/Cusa_1_9Tri-color_Spotted.dds	</texture>
+      <description>	#vehicle_customization:camouflage/usa/tricolor/Tri-color_Spotted_generic_custom_look_3/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/usa/tricolor/Tri-color_Spotted_generic_custom_look_3/label	</userString>
+      <tags>	hiddenInUI	</tags>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	37 51 56 255	</c0>
+          <c1>	101 82 66 255	</c1>
+          <c2>	124 130 106 255	</c2>
+          <c3>	0 0 0 0	</c3>
+        </palette>
+      </palettes>
+      <rotation>
+        <HULL>	0.785398	</HULL>
+        <TURRET>	0.785398	</TURRET>
+        <GUN>	0.785398	</GUN>
+      </rotation>
+      <tiling>
+        <usa:A06_M4A3E8_Sherman>	2.35 2.35 0.000000 0.000000	</usa:A06_M4A3E8_Sherman>
+        <usa:A07_T20>	3.53 3.53 0.000000 0.000000	</usa:A07_T20>
+      </tiling>
+      <tilingSettings>
+        <type>	relative	</type>
+        <factor>	1.455990  1.458334	</factor>
+        <offset>	0.000000 0.000000	</offset>
+      </tilingSettings>
+    </camouflage>
+  </itemGroup>
+</camouflage_usa_tricolor_Tri-color_Spotted_generic_custom_look_3_label_497.xml>

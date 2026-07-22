@@ -1011,7 +1011,6 @@ class Configs(enum.Enum):
     RANDOM_BATTLES_CONFIG = 'random_battles_config'
     MODE_SELECTOR_CONFIG = 'mode_selector_config'
     PARAGONS_CONFIG = 'paragons_config'
-    PLAY_STREAK_CONFIG = 'play_streak_config'
     BLACK_MARKET_CONFIG = 'black_market_config'
     INGAME_BROWSER_EVENT_CONFIG = 'ingame_browser_event_config'
     LOOTBOX_STATISTICS_CONFIG = 'lootbox_statistics_config'
@@ -1551,6 +1550,8 @@ LOOTBOX_MTL_CATEGORY = 'mtl_universal'
 VERY_BIG_TIME = int(time.mktime(datetime.datetime(2050, 1, 1).timetuple()))
 TWITCH_TOKEN_PREFIX = 'token:twitch'
 CUSTOMIZATION_PROGRESS_PREFIX = 'cust_progress_'
+LOOTBOX_CUSTOMIZATION_PROGRESS_PREFIX = 'lb_cust_progress'
+LOOTBOX_CUSTOMIZATION_PROGRESS_FORMAT = LOOTBOX_CUSTOMIZATION_PROGRESS_PREFIX + ':{}_{}:{}'
 EMAIL_CONFIRMATION_QUEST_ID = 'email_confirmation'
 EMAIL_CONFIRMATION_TOKEN_NAME = 'acc_completion:email_confirm'
 DEMO_ACCOUNT_ATTR = 'isDemoAccount'
@@ -2316,6 +2317,7 @@ INT_USER_SETTINGS_KEYS = {USER_SERVER_SETTINGS.VERSION: 'Settings version',
  31004: 'Battle context hints counters',
  31005: 'Battle context hints counters, section2',
  31006: 'Battle context hints counters, section3'}
+AUTH_TOKEN_REQUEST_TIMEOUT = 35.0
 
 class TOKEN_TYPE:
     XMPPCS = 1

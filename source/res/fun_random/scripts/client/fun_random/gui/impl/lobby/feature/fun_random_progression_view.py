@@ -96,7 +96,7 @@ class FunRandomProgressionView(ViewImpl, LobbyHeaderVisibility, FunAssetPacksMix
         with self.viewModel.transaction() as model:
             model.setAssetsPointer(self.getModeAssetsPointer())
             subModeId = self.__funRandomCtrl.subModesHolder.getDesiredSubModeID()
-            model.setIsNavigationButtonVisible(self.__funRandomCtrl.isFunRandomModifiersVisibleSBySubModeID(subModeId))
+            model.setIsNavigationButtonVisible(self.__funRandomCtrl.isFunRandomModifiersVisibleBySubModeID(subModeId))
             packProgressionStages(progression, model.getStages(), self.__tooltips)
             packProgressionCondition(progression, model.condition)
             packProgressionState(progression, model.state)

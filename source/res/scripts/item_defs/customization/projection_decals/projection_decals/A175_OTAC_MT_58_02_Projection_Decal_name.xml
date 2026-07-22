@@ -1,0 +1,39 @@
+<A175_OTAC_MT_58_02_Projection_Decal_name.xml>
+  <xmlns:czech1>	ussr	</xmlns:czech1>
+  <xmlns:germany>	germany	</xmlns:germany>
+  <xmlns:czech0>	usa	</xmlns:czech0>
+  <xmlns:china>	china	</xmlns:china>
+  <xmlns:france>	france	</xmlns:france>
+  <xmlns:uk>	uk	</xmlns:uk>
+  <xmlns:japan>	japan	</xmlns:japan>
+  <xmlns:czech>	czech	</xmlns:czech>
+  <xmlns:sweden>	sweden	</xmlns:sweden>
+  <xmlns:poland>	poland	</xmlns:poland>
+  <xmlns:italy>	italy	</xmlns:italy>
+  <xmlns:intunion>	intunion	</xmlns:intunion>
+  <itemGroup>
+    <name>	A175_OTAC_MT_58_02	</name>
+    <season>	ALL	</season>
+    <historical>	2	</historical>
+    <userString>	#vehicle_customization:projection_decals/special	</userString>
+    <projection_decal>
+      <id>	31383	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/A175_OTAC_MT_58_02_stattracker_AM.dds	</texture>
+      <tags>	styleOnly formfactor_square hiddenInUI	</tags>
+      <priceGroup>	MT projection_decals 100g notInShop	</priceGroup>
+      <emissionMap>	gui/maps/vehicles/decals/projection_decals/special/A175_OTAC_MT_58_02_stattracker_Emission.dds	</emissionMap>
+      <emissionPatternMap>	gui/maps/vehicles/decals/projection_decals/special/A175_OTAC_MT_58_02_stattracker_Pattern.dds	</emissionPatternMap>
+      <emissionAnimationSpeed>	0.25	</emissionAnimationSpeed>
+      <vehicleFilter>
+        <include>
+          <vehicles>	usa:A175_OTAC_MT_58_02	</vehicles>
+        </include>
+      </vehicleFilter>
+      <mirror>	false	</mirror>
+      <userString>	#vehicle_customization:A175_OTAC_MT_58_02_Projection_Decal/name	</userString>
+      <description>	#vehicle_customization:A175_OTAC_MT_58_02_Projection_Decal/description	</description>
+      <forwardEmissionBrightness>	2	</forwardEmissionBrightness>
+      <deferredEmissionBrightness>	2	</deferredEmissionBrightness>
+    </projection_decal>
+  </itemGroup>
+</A175_OTAC_MT_58_02_Projection_Decal_name.xml>

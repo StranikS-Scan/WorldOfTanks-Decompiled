@@ -1,0 +1,136 @@
+<style_31387_mt_bd_2026_camouflage.xml>
+  <quests>
+    <tokenQuest>
+      <enabled>	true	</enabled>
+      <delayed>	true	</delayed>
+      <hidden>	true	</hidden>
+      <id>	mt_bd_2026_progression:2	</id>
+      <conditions>
+        <preBattle>
+          <account>
+            <and>
+              <token>
+                <id>	lb_cust_progress:31387_1:2	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+              </token>
+              <token>
+                <id>	cust_progress_31387_1	</id>
+                <less>	2	</less>
+              </token>
+              <token>
+                <id>	mt_bd26_style_goldmission:1	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+                <consume>	1	</consume>
+              </token>
+            </and>
+          </account>
+        </preBattle>
+        <common>
+          <bonusLimit>	1	</bonusLimit>
+        </common>
+      </conditions>
+      <bonus>
+        <token>
+          <id>	cust_progress_31387_1	</id>
+          <expires>	01.01.2050 00:00	</expires>
+          <count>	2	</count>
+          <limit>	2	</limit>
+        </token>
+        <token>
+          <id>	mt_bd26_style_goldmission:2	</id>
+          <expires>	01.01.2050 00:00	</expires>
+          <limit>	1	</limit>
+          <count>	1	</count>
+        </token>
+      </bonus>
+    </tokenQuest>
+    <tokenQuest>
+      <enabled>	true	</enabled>
+      <delayed>	true	</delayed>
+      <hidden>	true	</hidden>
+      <id>	mt_bd_2026_progression:3	</id>
+      <conditions>
+        <preBattle>
+          <account>
+            <and>
+              <token>
+                <id>	lb_cust_progress:31387_1:3	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+              </token>
+              <token>
+                <id>	cust_progress_31387_1	</id>
+                <less>	3	</less>
+              </token>
+              <token>
+                <id>	mt_bd26_style_goldmission:2	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+                <consume>	1	</consume>
+              </token>
+            </and>
+          </account>
+        </preBattle>
+        <common>
+          <bonusLimit>	1	</bonusLimit>
+        </common>
+      </conditions>
+      <bonus>
+        <token>
+          <id>	cust_progress_31387_1	</id>
+          <expires>	01.01.2050 00:00	</expires>
+          <count>	3	</count>
+          <limit>	3	</limit>
+        </token>
+        <token>
+          <id>	mt_bd26_style_goldmission:3	</id>
+          <expires>	01.01.2050 00:00	</expires>
+          <limit>	1	</limit>
+          <count>	1	</count>
+        </token>
+      </bonus>
+    </tokenQuest>
+    <tokenQuest>
+      <enabled>	true	</enabled>
+      <delayed>	true	</delayed>
+      <hidden>	true	</hidden>
+      <id>	mt_bd_2026_progression:4	</id>
+      <conditions>
+        <preBattle>
+          <account>
+            <and>
+              <token>
+                <id>	lb_cust_progress:31387_1:4	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+              </token>
+              <token>
+                <id>	cust_progress_31387_1	</id>
+                <less>	4	</less>
+              </token>
+              <token>
+                <id>	mt_bd26_style_goldmission:3	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+                <consume>	1	</consume>
+              </token>
+            </and>
+          </account>
+        </preBattle>
+        <common>
+          <bonusLimit>	1	</bonusLimit>
+        </common>
+      </conditions>
+      <bonus>
+        <token>
+          <id>	cust_progress_31387_1	</id>
+          <expires>	01.01.2050 00:00	</expires>
+          <count>	4	</count>
+          <limit>	4	</limit>
+        </token>
+        <token>
+          <id>	mt_bd26_style_goldmission:4	</id>
+          <expires>	01.01.2050 00:00	</expires>
+          <limit>	1	</limit>
+          <count>	1	</count>
+        </token>
+      </bonus>
+    </tokenQuest>
+  </quests>
+</style_31387_mt_bd_2026_camouflage.xml>

@@ -59,7 +59,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	2890	</weight>
-    <maxHealth>	224	</maxHealth>
+    <maxHealth>	300	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	75	</maxHealth>
       <maxRegenHealth>	50	</maxRegenHealth>
@@ -2096,7 +2096,7 @@
           <camouflage></camouflage>
         </customizableVehicleAreas>
       </customization>
-      <repairTime>	6.85714293	</repairTime>
+      <repairTime>	1.71001065	</repairTime>
     </Chassis_R125_T_45>
   </chassis>
   <turrets0>
@@ -2118,7 +2118,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	1000	</weight>
-      <maxHealth>	56	</maxHealth>
+      <maxHealth>	50	</maxHealth>
       <rotationSpeed>	34	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	60	</maxHealth>
@@ -2152,13 +2152,13 @@
             <maxPitch>	0 6 1 6	</maxPitch>
           </pitchLimits>
           <shotDispersionRadius>	0.4	</shotDispersionRadius>
-          <reloadTime>	3.6	</reloadTime>
+          <reloadTime>	3.0	</reloadTime>
           <shotDispersionFactors>
-            <turretRotation>	0.16	</turretRotation>
+            <turretRotation>	0.12	</turretRotation>
             <afterShot>	3.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <aimingTime>	2.4	</aimingTime>
+          <aimingTime>	1.8	</aimingTime>
           <models>
             <undamaged>	vehicles/russian/R125_T_45/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/russian/R125_T_45/crash/lod0/Gun_01.model	</destroyed>
@@ -2740,7 +2740,7 @@
     <detailed>
       <engines>
         <ZiS-16_A>
-          <smplEnginePower>	89.8689	</smplEnginePower>
+          <smplEnginePower>	110	</smplEnginePower>
           <smplFwMaxSpeed>	40.515	</smplFwMaxSpeed>
         </ZiS-16_A>
       </engines>

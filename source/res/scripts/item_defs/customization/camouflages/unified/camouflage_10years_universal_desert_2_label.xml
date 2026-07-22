@@ -1,0 +1,57 @@
+<camouflage_10years_universal_desert_2_label.xml>
+  <uk:GB91_Super_Conqueror4>	ussr	</uk:GB91_Super_Conqueror4>
+  <xmlns:germany>	germany	</xmlns:germany>
+  <uk:GB91_Super_Conqueror3>	usa	</uk:GB91_Super_Conqueror3>
+  <xmlns:china>	china	</xmlns:china>
+  <xmlns:france>	france	</xmlns:france>
+  <uk:GB91_Super_Conqueror2>	uk	</uk:GB91_Super_Conqueror2>
+  <xmlns:japan>	japan	</xmlns:japan>
+  <xmlns:czech>	czech	</xmlns:czech>
+  <uk:GB91_Super_Conqueror1>	sweden	</uk:GB91_Super_Conqueror1>
+  <uk:GB91_Super_Conqueror0>	poland	</uk:GB91_Super_Conqueror0>
+  <xmlns:italy>	italy	</xmlns:italy>
+  <xmlns:intunion>	intunion	</xmlns:intunion>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/opaque	</userString>
+    <season>	desert	</season>
+    <historical>	1	</historical>
+    <priceGroup>	MT camouflages 50g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R47_ISU-152_Zveroboj ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <camouflage>
+      <id>	120	</id>
+      <texture>	vehicles/russian/Camouflage/10years_universal_desert_2.dds	</texture>
+      <description>	#vehicle_customization:camouflage/10years_universal_desert_2/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/10years_universal_desert_2/label	</userString>
+      <tags>	hiddenInUI	</tags>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	255 0 0 255	</c0>
+          <c1>	0 255 0 255	</c1>
+          <c2>	0 0 255 255	</c2>
+          <c3>	0 0 0 255	</c3>
+        </palette>
+      </palettes>
+      <rotation>
+        <HULL>	-1.01229	</HULL>
+        <TURRET>	-1.01229	</TURRET>
+        <GUN>	-1.01229	</GUN>
+      </rotation>
+      <tiling>
+        <sweden:S11_Strv_103B>	1 1 -1.9 0.000000	</sweden:S11_Strv_103B>
+        <uk:GB91_Super_Conqueror>	1.9 1.9 -3 0.2	</uk:GB91_Super_Conqueror>
+        <ussr:R45_IS-7>	3 3 0.75 -0.25	</ussr:R45_IS-7>
+      </tiling>
+      <tilingSettings>
+        <type>	relative	</type>
+        <factor>	3 3	</factor>
+        <offset>	5.2 -1.95	</offset>
+      </tilingSettings>
+    </camouflage>
+  </itemGroup>
+</camouflage_10years_universal_desert_2_label.xml>

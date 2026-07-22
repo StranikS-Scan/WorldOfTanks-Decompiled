@@ -14,12 +14,13 @@ from gui.battle_pass.battle_pass_helpers import isSeasonEndingSoon, getFormatted
 from gui.prb_control.dispatcher import g_prbLoader
 from gui.prb_control.formatters.invites import getPreQueueName
 from helpers import dependency
-from skeletons.gui.game_control import IBattlePassController, IBattleRoyaleController
+from skeletons.gui.game_control import IBattlePassController, IBattleRoyaleController, IBRProgressionOnTokensController
 from skeletons.gui.lobby_context import ILobbyContext
 
 class BattlePassInProgressTooltipView(ViewImpl):
     __battlePass = dependency.descriptor(IBattlePassController)
     __battleRoyaleController = dependency.descriptor(IBattleRoyaleController)
+    __brProgression = dependency.descriptor(IBRProgressionOnTokensController)
     __lobbyContext = dependency.descriptor(ILobbyContext)
     __slots__ = ('__battleType',)
 
@@ -68,6 +69,7 @@ class BattlePassInProgressTooltipView(ViewImpl):
                 model.setNotChosenRewardCount(self.__battlePass.getNotChosenRewardCount())
                 model.setExpireTime(self.__battlePass.getChapterRemainingTime(chapterID))
                 model.setChapterType(ChapterType(self.__battlePass.getChapterType(chapterID)))
+                model.setIconPostfix(self.__brProgression.getBirthdayIconPostfix())
                 timeTillEnd = ''
                 if isSeasonEndingSoon() and not isBattlePassPurchased:
                     timeTillEnd = getFormattedTimeLeft(self.__battlePass.getSeasonTimeLeft())

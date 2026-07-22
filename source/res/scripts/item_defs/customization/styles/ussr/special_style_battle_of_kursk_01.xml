@@ -1,0 +1,43 @@
+<special_style_battle_of_kursk_01.xml>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	0	</historical>
+    <priceGroup>	MT 2D styles direct 1500g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	ussr:R154_T_34E_1943	</vehicles>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	184	</id>
+      <texture>	gui/maps/vehicles/styles/battle_of_kursk_01.png	</texture>
+      <description>	#vehicle_customization:special_style/battle_of_kursk_01_desc	</description>
+      <longDescriptionSpecial>	#vehicle_customization:special_style/battle_of_kursk_01_desc/long	</longDescriptionSpecial>
+      <modelsSet>	KurskBattle	</modelsSet>
+      <maxNumber>	1	</maxNumber>
+      <userString>	#vehicle_customization:special_style/battle_of_kursk_01	</userString>
+      <tags>	Kursk_battle progression_required addNationalEmblem	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	1	</id>
+              <appliedTo>	16	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+        </outfit>
+      </outfits>
+    </style>
+  </itemGroup>
+</special_style_battle_of_kursk_01.xml>

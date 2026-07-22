@@ -172,7 +172,7 @@ class OnVehicleEngineStateChange(Block, VehicleMeta):
             self._vehicle.onEngineStateChange += self.__onEngineStateChange
 
     def onFinishScript(self):
-        if self._vehicle:
+        if self._vehicle and not self._vehicle.isDestroyed:
             self._vehicle.onEngineStateChange -= self.__onEngineStateChange
 
     def __onEngineStateChange(self, engineState):

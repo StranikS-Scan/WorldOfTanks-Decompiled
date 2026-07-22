@@ -183,7 +183,9 @@ class Research(ResearchMeta):
         self._vehPostProgressionEntryPoint.tryUnlock()
 
     def goToNextVehicle(self, vehCD):
+        oldRootCD = self._data.getRootCD()
         self._data.setRootCD(vehCD)
+        self._data.notifyGoToNextVehicle(oldRootCD, self._data.getRootCD())
         self.redraw()
         self._vehPostProgressionEntryPoint.tryUnlock()
 

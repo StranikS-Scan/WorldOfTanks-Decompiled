@@ -1,0 +1,51 @@
+<UN_Camo_Winter_138_name.xml>
+  <xmlns:czech1>	ussr	</xmlns:czech1>
+  <xmlns:germany>	germany	</xmlns:germany>
+  <xmlns:czech0>	usa	</xmlns:czech0>
+  <xmlns:china>	china	</xmlns:china>
+  <xmlns:france>	france	</xmlns:france>
+  <xmlns:uk>	uk	</xmlns:uk>
+  <xmlns:japan>	japan	</xmlns:japan>
+  <xmlns:czech>	czech	</xmlns:czech>
+  <xmlns:sweden>	sweden	</xmlns:sweden>
+  <xmlns:poland>	poland	</xmlns:poland>
+  <xmlns:italy>	italy	</xmlns:italy>
+  <xmlns:intunion>	intunion	</xmlns:intunion>
+  <itemGroup>
+    <season>	winter	</season>
+    <historical>	0	</historical>
+    <camouflage>
+      <id>	31399	</id>
+      <scales>	1.3 1 0.7	</scales>
+      <palettes>
+        <palette>
+          <c0>	153 153 153 255	</c0>
+          <c1>	199 199 199 255	</c1>
+          <c2>	0 0 255 0	</c2>
+          <c3>	0 0 0 0	</c3>
+        </palette>
+      </palettes>
+      <tilingSettings>
+        <type>	relative	</type>
+        <factor>	4 2	</factor>
+        <offset>	-0.72 1.82	</offset>
+      </tilingSettings>
+      <texture>	vehicles/russian/Camouflage/UN_Camo_Winter_138.dds	</texture>
+      <userString>	#vehicle_customization:UN_Camo_Winter_138/name	</userString>
+      <description>	#vehicle_customization:UN_Camo_Winter_138/description	</description>
+      <rotation>
+        <HULL>	-1.745329	</HULL>
+        <TURRET>	-1.745329	</TURRET>
+        <GUN>	-1.745329	</GUN>
+      </rotation>
+    </camouflage>
+    <userString>	#vehicle_customization:camouflage/opaque	</userString>
+    <tags>	hiddenInUI fullRGB	</tags>
+    <priceGroup>	MT camouflages 50g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <nations>	intunion	</nations>
+      </include>
+    </vehicleFilter>
+  </itemGroup>
+</UN_Camo_Winter_138_name.xml>

@@ -1,0 +1,52 @@
+<VolunteersModGame_Camo_03_2024_MT_name.xml>
+  <xmlns:czech1>	ussr	</xmlns:czech1>
+  <xmlns:germany>	germany	</xmlns:germany>
+  <xmlns:czech0>	usa	</xmlns:czech0>
+  <xmlns:china>	china	</xmlns:china>
+  <xmlns:france>	france	</xmlns:france>
+  <xmlns:uk>	uk	</xmlns:uk>
+  <xmlns:japan>	japan	</xmlns:japan>
+  <xmlns:czech>	czech	</xmlns:czech>
+  <xmlns:sweden>	sweden	</xmlns:sweden>
+  <xmlns:poland>	poland	</xmlns:poland>
+  <xmlns:italy>	italy	</xmlns:italy>
+  <xmlns:intunion>	intunion	</xmlns:intunion>
+  <itemGroup>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <camouflage>
+      <id>	31144	</id>
+      <scales>	0.9 1 0.7	</scales>
+      <palettes>
+        <palette>
+          <c0>	255 0 0 255	</c0>
+          <c1>	0 255 0 255	</c1>
+          <c2>	0 0 255 255	</c2>
+          <c3>	0 0 0 255	</c3>
+        </palette>
+      </palettes>
+      <texture>	vehicles/russian/Camouflage/VolunteersModGame_Camo_03_2024_MT.dds	</texture>
+      <userString>	#vehicle_customization:VolunteersModGame_Camo_03_2024_MT/name	</userString>
+      <description>	#vehicle_customization:VolunteersModGame_Camo_03_2024_MT/description	</description>
+      <rotation>
+        <HULL>	0.349066	</HULL>
+        <TURRET>	0.349066	</TURRET>
+        <GUN>	0.349066	</GUN>
+      </rotation>
+      <tilingSettings>
+        <type>	relativewithfactor	</type>
+        <factor>	2 2	</factor>
+        <offset>	-8.96 -11.15	</offset>
+      </tilingSettings>
+    </camouflage>
+    <userString>	#vehicle_customization:camouflage/opaque	</userString>
+    <tags>	hiddenInUI fullRGB styleOnly questsProgression	</tags>
+    <priceGroup>	MT camouflages 50g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R47_ISU-152_Zveroboj ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <style>	31166	</style>
+  </itemGroup>
+</VolunteersModGame_Camo_03_2024_MT_name.xml>

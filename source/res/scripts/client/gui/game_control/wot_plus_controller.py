@@ -8,7 +8,7 @@ import BigWorld
 from Event import Event
 from PlayerEvents import g_playerEvents
 from bootcamp.Bootcamp import g_bootcamp
-from constants import RENEWABLE_SUBSCRIPTION_CONFIG
+from constants import PremiumConfigs, RENEWABLE_SUBSCRIPTION_CONFIG
 from gui import SystemMessages
 from gui.impl import backport
 from gui.impl.gen import R
@@ -22,6 +22,7 @@ from helpers import dependency
 from items.vehicles import getItemByCompactDescr
 from messenger.m_constants import SCH_CLIENT_MSG_TYPE
 from messenger.proto.bw.wrappers import ServiceChannelMessage
+from preferred_maps import SlotTypeName
 from piggy_bank_common.settings_constants import PIGGY_BANK_PDATA_KEY
 from renewable_subscription_common.settings_constants import RS_PDATA_KEY, IDLE_CREW_XP_PDATA_KEY, SUBSCRIPTION_DURATION_LENGTH, IDLE_CREW_VEH_INV_ID, RS_EXPIRATION_TIME, WotPlusState, SUBSCRIPTION_STATE
 from shared_utils.account_helpers.diff_utils import synchronizeDicts
@@ -186,20 +187,20 @@ class WotPlusController(IWotPlusController):
     def getEnabledBonuses(self):
         serverSettings = self._lobbyContext.getServerSettings()
         enabledBonuses = []
-        if serverSettings.isWoTPlusExclusiveVehicleEnabled():
-            enabledBonuses.append(WoTPlusExclusiveVehicle())
-        if serverSettings.isRenewableSubGoldReserveEnabled():
-            enabledBonuses.append(GoldBank())
-        if serverSettings.isRenewableSubPassiveCrewXPEnabled():
-            enabledBonuses.append(IdleCrewXP())
-        if serverSettings.isFreeEquipmentDemountingEnabled():
-            enabledBonuses.append(FreeEquipmentDemounting())
-        if serverSettings.isDailyQuestsExtraRewardsEnabled():
-            enabledBonuses.append(DailyQuestsRewards())
-        if serverSettings.isTeamCreditsBonusEnabled():
-            enabledBonuses.append(TeamCreditsBonus())
         if serverSettings.isWotPlusExcludedMapEnabled():
             enabledBonuses.append(ExcludedMap())
+        if serverSettings.isRenewableSubGoldReserveEnabled():
+            enabledBonuses.append(GoldBank())
+        if serverSettings.isDailyQuestsExtraRewardsEnabled():
+            enabledBonuses.append(DailyQuestsRewards())
+        if serverSettings.isWoTPlusExclusiveVehicleEnabled():
+            enabledBonuses.append(WoTPlusExclusiveVehicle())
+        if serverSettings.isFreeEquipmentDemountingEnabled():
+            enabledBonuses.append(FreeEquipmentDemounting())
+        if serverSettings.isRenewableSubPassiveCrewXPEnabled():
+            enabledBonuses.append(IdleCrewXP())
+        if serverSettings.isTeamCreditsBonusEnabled():
+            enabledBonuses.append(TeamCreditsBonus())
         if serverSettings.isDailyAttendancesEnabled():
             enabledBonuses.append(AttendanceReward())
         return enabledBonuses
@@ -252,6 +253,7 @@ class WotPlusController(IWotPlusController):
         if g_bootcamp.isRunning():
             return
         serverSettings = self._lobbyContext.getServerSettings()
+        isSubscrbSlotsEnabled = serverSettings.isPreferredMapsSlotsEnabled(SlotTypeName.SUBSCRB)
         isWotPlusEnabled = self.isWotPlusEnabled()
         isGoldReserveEnabled = serverSettings.isRenewableSubGoldReserveEnabled()
         isPassiveXpEnabled = serverSettings.isRenewableSubPassiveCrewXPEnabled()
@@ -261,6 +263,14 @@ class WotPlusController(IWotPlusController):
         isDailyQuestsExtraRewardsEnabled = serverSettings.isDailyQuestsExtraRewardsEnabled()
         isTeamCreditsBonusEnabled = serverSettings.isTeamCreditsBonusEnabled()
         with settings.wotPlusSettings() as dt:
+            strategy = self._getStrategy()
+            if dt.isExcludedMapsKillSwitchInitialized:
+                strategy.notifyClient(dt.isSubscrbExcludedMapSlotsEnabled, isSubscrbSlotsEnabled, SCH_CLIENT_MSG_TYPE.BONUS_EXCLUDED_MAP_ENABLED, SCH_CLIENT_MSG_TYPE.BONUS_EXCLUDED_MAP_DISABLED)
+                strategy.notifyClient(dt.isExcludedMapEnabled, isExcludedMapEnabled, SCH_CLIENT_MSG_TYPE.BONUS_EXCLUDED_MAP_ENABLED, SCH_CLIENT_MSG_TYPE.BONUS_EXCLUDED_MAP_DISABLED)
+            dt.setSubscrbExcludedMapSlotsState(isSubscrbSlotsEnabled)
+            dt.setExcludedMapState(isExcludedMapEnabled)
+            if not dt.isExcludedMapsKillSwitchInitialized:
+                dt.setExcludedMapsKillSwitchInitialized(True)
             hasSubscription = self.isEnabled()
             if not isWotPlusEnabled and not hasSubscription:
                 return
@@ -276,7 +286,6 @@ class WotPlusController(IWotPlusController):
                     strategy.notifyClient(dt.isGoldReserveEnabled, isGoldReserveEnabled, SCH_CLIENT_MSG_TYPE.WOTPLUS_GOLDRESERVE_ENABLED, SCH_CLIENT_MSG_TYPE.WOTPLUS_GOLDRESERVE_DISABLED)
                     strategy.notifyClient(dt.isPassiveXpEnabled, isPassiveXpEnabled, SCH_CLIENT_MSG_TYPE.WOTPLUS_PASSIVEXP_ENABLED, SCH_CLIENT_MSG_TYPE.WOTPLUS_PASSIVEXP_DISABLED)
                     strategy.notifyClient(dt.isFreeDemountingEnabled, isFreeDemountingEnabled, SCH_CLIENT_MSG_TYPE.WOTPLUS_FREE_DEMOUNT_ENABLED, SCH_CLIENT_MSG_TYPE.WOTPLUS_FREE_DEMOUNT_DISABLED)
-                    strategy.notifyClient(dt.isExcludedMapEnabled, isExcludedMapEnabled, SCH_CLIENT_MSG_TYPE.BONUS_EXCLUDED_MAP_ENABLED, SCH_CLIENT_MSG_TYPE.BONUS_EXCLUDED_MAP_DISABLED)
                     strategy.notifyClient(dt.isDailyAttendancesEnabled, isDailyAttendancesEnabled, SCH_CLIENT_MSG_TYPE.WOTPLUS_DAILY_ATTENDANCES_ENABLED, SCH_CLIENT_MSG_TYPE.WOTPLUS_DAILY_ATTENDANCES_DISABLED)
                     strategy.notifyClient(dt.isDailyQuestsExtraRewardsEnabled, isDailyQuestsExtraRewardsEnabled, SCH_CLIENT_MSG_TYPE.WOTPLUS_DAILY_QUESTS_EXTRA_REWARDS_ENABLED, SCH_CLIENT_MSG_TYPE.WOTPLUS_DAILY_QUESTS_EXTRA_REWARDS_DISABLED)
                     strategy.notifyClient(dt.isTeamCreditsBonusEnabled, isTeamCreditsBonusEnabled, SCH_CLIENT_MSG_TYPE.WOTPLUS_TEAM_CREDITS_BONUS_ENABLED, SCH_CLIENT_MSG_TYPE.WOTPLUS_TEAM_CREDITS_BONUS_DISABLED)
@@ -284,7 +293,6 @@ class WotPlusController(IWotPlusController):
             dt.setGoldReserveEnabledState(isGoldReserveEnabled)
             dt.setPassiveXpState(isPassiveXpEnabled)
             dt.setFreeDemountingState(isFreeDemountingEnabled)
-            dt.setExcludedMapState(isExcludedMapEnabled)
             dt.setDailyAttendancesState(isDailyAttendancesEnabled)
             dt.setDailyQuestsExtraRewardsState(isDailyQuestsExtraRewardsEnabled)
             dt.setTeamCreditsBonusState(isTeamCreditsBonusEnabled)
@@ -304,6 +312,7 @@ class WotPlusController(IWotPlusController):
             self._state = WotPlusState.INACTIVE
             return
         self._isStateUpdate = False
+        self._userSubscriptionFetchCtrl.resetFetch()
         subscriptions = yield th_await(self._userSubscriptionFetchCtrl.getProducts(False))
         serverUTCTime = getServerUTCTime()
         filterSubscriptions = [ p for p in subscriptions.products if p.nextBilling > serverUTCTime ]
@@ -350,7 +359,7 @@ class WotPlusController(IWotPlusController):
         return _SessionNotificationStrategy() if self._validSessionStarted else _LoginNotificationStrategy()
 
     def _onServerSettingsChange(self, diff):
-        if RENEWABLE_SUBSCRIPTION_CONFIG in diff:
+        if RENEWABLE_SUBSCRIPTION_CONFIG in diff or PremiumConfigs.PREFERRED_MAPS in diff:
             self.processSwitchNotifications()
 
     def _onCmdResponseReceived(self, resultID, requestID, errorStr, errorMsg=None):

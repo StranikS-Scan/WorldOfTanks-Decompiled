@@ -1,67 +1,191 @@
 <chassis.xml>
-  <ids>
-    <Chassis_1_Pl03_PzV_Poland>	0	</Chassis_1_Pl03_PzV_Poland>
-    <Chassis_Pl01_TKS_20mm>	1	</Chassis_Pl01_TKS_20mm>
-    <Chassis_Pl08_50TP_prototyp>	3	</Chassis_Pl08_50TP_prototyp>
-    <Chassis_Pl14_4TP>	4	</Chassis_Pl14_4TP>
-    <Chassis_Pl09_7TP>	5	</Chassis_Pl09_7TP>
-    <Chassis_Pl09_7TP_2>	6	</Chassis_Pl09_7TP_2>
-    <Chassis_Pl06_10TP>	7	</Chassis_Pl06_10TP>
-    <Chassis_Pl06_10TP_2>	8	</Chassis_Pl06_10TP_2>
-    <Chassis_Pl07_14TP>	9	</Chassis_Pl07_14TP>
-    <Chassis_Pl07_14TP_2>	10	</Chassis_Pl07_14TP_2>
-    <Chassis_Pl12_25TP_KSUST_II>	11	</Chassis_Pl12_25TP_KSUST_II>
-    <Chassis_Pl12_25TP_KSUST_II_2>	12	</Chassis_Pl12_25TP_KSUST_II_2>
-    <Chassis_Pl10_40TP_Habicha>	13	</Chassis_Pl10_40TP_Habicha>
-    <Chassis_Pl10_40TP_Habicha_2>	14	</Chassis_Pl10_40TP_Habicha_2>
-    <Chassis_Pl11_45TP_Habicha>	15	</Chassis_Pl11_45TP_Habicha>
-    <Chassis_Pl11_45TP_Habicha_2>	16	</Chassis_Pl11_45TP_Habicha_2>
-    <Chassis_Pl13_53TP_Markowskiego>	17	</Chassis_Pl13_53TP_Markowskiego>
-    <Chassis_Pl13_53TP_Markowskiego_2>	18	</Chassis_Pl13_53TP_Markowskiego_2>
-    <Chassis_Pl05_50TP_Tyszkiewicza>	19	</Chassis_Pl05_50TP_Tyszkiewicza>
-    <Chassis_Pl05_50TP_Tyszkiewicza_2>	20	</Chassis_Pl05_50TP_Tyszkiewicza_2>
-    <Chassis_Pl15_60TP_Lewandowskiego>	21	</Chassis_Pl15_60TP_Lewandowskiego>
-    <Chassis_Pl16_T34_85_Rudy>	22	</Chassis_Pl16_T34_85_Rudy>
-    <Chassis_Pl19_CS_52_LIS>	23	</Chassis_Pl19_CS_52_LIS>
-    <Chassis_Pl17_DS_PZlnz>	24	</Chassis_Pl17_DS_PZlnz>
-    <Chassis_Pl17_DS_PZlnz_2>	25	</Chassis_Pl17_DS_PZlnz_2>
-    <Chassis_Pl21_CS_63>	26	</Chassis_Pl21_CS_63>
-    <Chassis_Pl18_BUGI>	27	</Chassis_Pl18_BUGI>
-    <Chassis_Pl18_BUGI_2>	28	</Chassis_Pl18_BUGI_2>
-    <Chassis_Pl20_CS_44>	29	</Chassis_Pl20_CS_44>
-    <Chassis_Pl20_CS_44_2>	30	</Chassis_Pl20_CS_44_2>
-    <Chassis_Pl23_CS_53>	31	</Chassis_Pl23_CS_53>
-    <Chassis_Pl23_CS_53_2>	32	</Chassis_Pl23_CS_53_2>
-    <Chassis_Pl22_CS_59>	33	</Chassis_Pl22_CS_59>
-    <Chassis_Pl22_CS_59_2>	34	</Chassis_Pl22_CS_59_2>
-    <Chassis_Pl24_56TP>	38	</Chassis_Pl24_56TP>
-    <Chassis_Pl25_CS_52_C>	39	</Chassis_Pl25_CS_52_C>
-    <Chassis_Pl28_SDP_Wz_60>	40	</Chassis_Pl28_SDP_Wz_60>
-    <Chassis_Pl28_SDP_Wz_60_2>	41	</Chassis_Pl28_SDP_Wz_60_2>
-    <Chassis_Pl26_Czolg_P_Wz_46>	42	</Chassis_Pl26_Czolg_P_Wz_46>
-    <Chassis_Pl27_SDP_Wz_66T>	43	</Chassis_Pl27_SDP_Wz_66T>
-    <Chassis_Pl32_SDP_Wz_44>	44	</Chassis_Pl32_SDP_Wz_44>
-    <Chassis_Pl32_SDP_Wz_44_2>	45	</Chassis_Pl32_SDP_Wz_44_2>
-    <Chassis_Pl33_SDP_Wz_40>	46	</Chassis_Pl33_SDP_Wz_40>
-    <Chassis_Pl33_SDP_Wz_40_2>	47	</Chassis_Pl33_SDP_Wz_40_2>
-    <Chassis_Pl29_NC_Wz_70T>	48	</Chassis_Pl29_NC_Wz_70T>
-    <Chassis_Pl30_SDP_Wz58T>	49	</Chassis_Pl30_SDP_Wz58T>
-    <Chassis_Pl30_SDP_Wz58T_2>	50	</Chassis_Pl30_SDP_Wz58T_2>
-    <Chassis_Pl31_SDP_Wz_57D>	51	</Chassis_Pl31_SDP_Wz_57D>
-    <Chassis_Pl31_SDP_Wz_57D_2>	52	</Chassis_Pl31_SDP_Wz_57D_2>
-    <Chassis_Pl30_SDP_Wz58T_2_FL>	501	</Chassis_Pl30_SDP_Wz58T_2_FL>
-    <Chassis_Pl34_CS_63_02>	31001	</Chassis_Pl34_CS_63_02>
-    <Chassis_Pl29_NC_Wz_70T_T>	31002	</Chassis_Pl29_NC_Wz_70T_T>
-    <Chassis_Pl32_SDP_Wz_44_2_T>	31003	</Chassis_Pl32_SDP_Wz_44_2_T>
-    <Chassis_Pl30_SDP_Wz58T_2_T>	31004	</Chassis_Pl30_SDP_Wz58T_2_T>
-    <Chassis_Pl26_Czolg_P_Wz_46_Verbesserter>	31005	</Chassis_Pl26_Czolg_P_Wz_46_Verbesserter>
-    <Chassis_Pl21_CS_63_7x7>	31006	</Chassis_Pl21_CS_63_7x7>
-    <Chassis_Pl209_ULAN>	31007	</Chassis_Pl209_ULAN>
-    <Chassis_Pl35_CS_57_Sokol>	31008	</Chassis_Pl35_CS_57_Sokol>
-    <Chassis_Pl36_Bobr>	31009	</Chassis_Pl36_Bobr>
-    <Chassis_01_Pl17_DS_PZlnz_SH>	35	</Chassis_01_Pl17_DS_PZlnz_SH>
-    <Chassis_02_Pl22_CS_59_SH>	36	</Chassis_02_Pl22_CS_59_SH>
-    <Chassis_03_Pl13_53TP_Markowskiego_SH>	37	</Chassis_03_Pl13_53TP_Markowskiego_SH>
-  </ids>
-  <shared></shared>
+  <xmlns:xmlref>	http://bwt/xmlref	</xmlns:xmlref>
+  <shared>
+    <Chassis_01_Pl17_DS_PZlnz_SH>
+      <id>	35	</id>
+    </Chassis_01_Pl17_DS_PZlnz_SH>
+    <Chassis_02_Pl22_CS_59_SH>
+      <id>	36	</id>
+    </Chassis_02_Pl22_CS_59_SH>
+    <Chassis_03_Pl13_53TP_Markowskiego_SH>
+      <id>	37	</id>
+    </Chassis_03_Pl13_53TP_Markowskiego_SH>
+    <Chassis_1_Pl03_PzV_Poland>
+      <id>	0	</id>
+    </Chassis_1_Pl03_PzV_Poland>
+    <Chassis_Pl01_TKS_20mm>
+      <id>	1	</id>
+    </Chassis_Pl01_TKS_20mm>
+    <Chassis_Pl05_50TP_Tyszkiewicza>
+      <id>	19	</id>
+    </Chassis_Pl05_50TP_Tyszkiewicza>
+    <Chassis_Pl05_50TP_Tyszkiewicza_2>
+      <id>	20	</id>
+    </Chassis_Pl05_50TP_Tyszkiewicza_2>
+    <Chassis_Pl06_10TP>
+      <id>	7	</id>
+    </Chassis_Pl06_10TP>
+    <Chassis_Pl06_10TP_2>
+      <id>	8	</id>
+    </Chassis_Pl06_10TP_2>
+    <Chassis_Pl07_14TP>
+      <id>	9	</id>
+    </Chassis_Pl07_14TP>
+    <Chassis_Pl07_14TP_2>
+      <id>	10	</id>
+    </Chassis_Pl07_14TP_2>
+    <Chassis_Pl08_50TP_prototyp>
+      <id>	3	</id>
+    </Chassis_Pl08_50TP_prototyp>
+    <Chassis_Pl09_7TP>
+      <id>	5	</id>
+    </Chassis_Pl09_7TP>
+    <Chassis_Pl09_7TP_2>
+      <id>	6	</id>
+    </Chassis_Pl09_7TP_2>
+    <Chassis_Pl10_40TP_Habicha>
+      <id>	13	</id>
+    </Chassis_Pl10_40TP_Habicha>
+    <Chassis_Pl10_40TP_Habicha_2>
+      <id>	14	</id>
+    </Chassis_Pl10_40TP_Habicha_2>
+    <Chassis_Pl11_45TP_Habicha>
+      <id>	15	</id>
+    </Chassis_Pl11_45TP_Habicha>
+    <Chassis_Pl11_45TP_Habicha_2>
+      <id>	16	</id>
+    </Chassis_Pl11_45TP_Habicha_2>
+    <Chassis_Pl12_25TP_KSUST_II>
+      <id>	11	</id>
+    </Chassis_Pl12_25TP_KSUST_II>
+    <Chassis_Pl12_25TP_KSUST_II_2>
+      <id>	12	</id>
+    </Chassis_Pl12_25TP_KSUST_II_2>
+    <Chassis_Pl13_53TP_Markowskiego>
+      <id>	17	</id>
+    </Chassis_Pl13_53TP_Markowskiego>
+    <Chassis_Pl13_53TP_Markowskiego_2>
+      <id>	18	</id>
+    </Chassis_Pl13_53TP_Markowskiego_2>
+    <Chassis_Pl14_4TP>
+      <id>	4	</id>
+    </Chassis_Pl14_4TP>
+    <Chassis_Pl15_60TP_Lewandowskiego>
+      <id>	21	</id>
+    </Chassis_Pl15_60TP_Lewandowskiego>
+    <Chassis_Pl16_T34_85_Rudy>
+      <id>	22	</id>
+    </Chassis_Pl16_T34_85_Rudy>
+    <Chassis_Pl17_DS_PZlnz>
+      <id>	24	</id>
+    </Chassis_Pl17_DS_PZlnz>
+    <Chassis_Pl17_DS_PZlnz_2>
+      <id>	25	</id>
+    </Chassis_Pl17_DS_PZlnz_2>
+    <Chassis_Pl18_BUGI>
+      <id>	27	</id>
+    </Chassis_Pl18_BUGI>
+    <Chassis_Pl18_BUGI_2>
+      <id>	28	</id>
+    </Chassis_Pl18_BUGI_2>
+    <Chassis_Pl19_CS_52_LIS>
+      <id>	23	</id>
+    </Chassis_Pl19_CS_52_LIS>
+    <Chassis_Pl209_ULAN>
+      <id>	31007	</id>
+    </Chassis_Pl209_ULAN>
+    <Chassis_Pl20_CS_44>
+      <id>	29	</id>
+    </Chassis_Pl20_CS_44>
+    <Chassis_Pl20_CS_44_2>
+      <id>	30	</id>
+    </Chassis_Pl20_CS_44_2>
+    <Chassis_Pl21_CS_63>
+      <id>	26	</id>
+    </Chassis_Pl21_CS_63>
+    <Chassis_Pl21_CS_63_7x7>
+      <id>	31006	</id>
+    </Chassis_Pl21_CS_63_7x7>
+    <Chassis_Pl22_CS_59>
+      <id>	33	</id>
+    </Chassis_Pl22_CS_59>
+    <Chassis_Pl22_CS_59_2>
+      <id>	34	</id>
+    </Chassis_Pl22_CS_59_2>
+    <Chassis_Pl23_CS_53>
+      <id>	31	</id>
+    </Chassis_Pl23_CS_53>
+    <Chassis_Pl23_CS_53_2>
+      <id>	32	</id>
+    </Chassis_Pl23_CS_53_2>
+    <Chassis_Pl24_56TP>
+      <id>	38	</id>
+    </Chassis_Pl24_56TP>
+    <Chassis_Pl25_CS_52_C>
+      <id>	39	</id>
+    </Chassis_Pl25_CS_52_C>
+    <Chassis_Pl26_Czolg_P_Wz_46>
+      <id>	42	</id>
+    </Chassis_Pl26_Czolg_P_Wz_46>
+    <Chassis_Pl26_Czolg_P_Wz_46_Verbesserter>
+      <id>	31005	</id>
+    </Chassis_Pl26_Czolg_P_Wz_46_Verbesserter>
+    <Chassis_Pl27_SDP_Wz_66T>
+      <id>	43	</id>
+    </Chassis_Pl27_SDP_Wz_66T>
+    <Chassis_Pl28_SDP_Wz_60>
+      <id>	40	</id>
+    </Chassis_Pl28_SDP_Wz_60>
+    <Chassis_Pl28_SDP_Wz_60_2>
+      <id>	41	</id>
+    </Chassis_Pl28_SDP_Wz_60_2>
+    <Chassis_Pl29_NC_Wz_70T>
+      <id>	48	</id>
+    </Chassis_Pl29_NC_Wz_70T>
+    <Chassis_Pl29_NC_Wz_70T_T>
+      <id>	31002	</id>
+    </Chassis_Pl29_NC_Wz_70T_T>
+    <Chassis_Pl30_SDP_Wz58T>
+      <id>	49	</id>
+    </Chassis_Pl30_SDP_Wz58T>
+    <Chassis_Pl30_SDP_Wz58T_2>
+      <id>	50	</id>
+    </Chassis_Pl30_SDP_Wz58T_2>
+    <Chassis_Pl30_SDP_Wz58T_2_FL>
+      <id>	501	</id>
+    </Chassis_Pl30_SDP_Wz58T_2_FL>
+    <Chassis_Pl30_SDP_Wz58T_2_T>
+      <id>	31004	</id>
+    </Chassis_Pl30_SDP_Wz58T_2_T>
+    <Chassis_Pl31_SDP_Wz_57D>
+      <id>	51	</id>
+    </Chassis_Pl31_SDP_Wz_57D>
+    <Chassis_Pl31_SDP_Wz_57D_2>
+      <id>	52	</id>
+    </Chassis_Pl31_SDP_Wz_57D_2>
+    <Chassis_Pl32_SDP_Wz_44>
+      <id>	44	</id>
+    </Chassis_Pl32_SDP_Wz_44>
+    <Chassis_Pl32_SDP_Wz_44_2>
+      <id>	45	</id>
+    </Chassis_Pl32_SDP_Wz_44_2>
+    <Chassis_Pl32_SDP_Wz_44_2_T>
+      <id>	31003	</id>
+    </Chassis_Pl32_SDP_Wz_44_2_T>
+    <Chassis_Pl33_SDP_Wz_40>
+      <id>	46	</id>
+    </Chassis_Pl33_SDP_Wz_40>
+    <Chassis_Pl33_SDP_Wz_40_2>
+      <id>	47	</id>
+    </Chassis_Pl33_SDP_Wz_40_2>
+    <Chassis_Pl34_CS_63_02>
+      <id>	31001	</id>
+    </Chassis_Pl34_CS_63_02>
+    <Chassis_Pl35_CS_57_Sokol>
+      <id>	31008	</id>
+    </Chassis_Pl35_CS_57_Sokol>
+    <Chassis_Pl36_Bobr>
+      <id>	31009	</id>
+    </Chassis_Pl36_Bobr>
+  </shared>
 </chassis.xml>

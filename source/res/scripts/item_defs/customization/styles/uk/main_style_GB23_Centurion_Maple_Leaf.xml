@@ -1,0 +1,42 @@
+<main_style_GB23_Centurion_Maple_Leaf.xml>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/main_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	MT 2D styles direct 1500g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	uk:GB23_Centurion	</vehicles>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	108	</id>
+      <texture>	gui/maps/vehicles/styles/GB23_Centurion_Maple_Leaf.png	</texture>
+      <longDescriptionSpecial>	#vehicle_customization:main_style/GB23_Centurion_Maple_Leaf_desc/long	</longDescriptionSpecial>
+      <modelsSet>	Maple_Leaf	</modelsSet>
+      <maxNumber>	1	</maxNumber>
+      <userString>	#vehicle_customization:main_style/GB23_Centurion_Maple_Leaf	</userString>
+      <tags>	progression_required	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	1	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+        </outfit>
+      </outfits>
+    </style>
+  </itemGroup>
+</main_style_GB23_Centurion_Maple_Leaf.xml>

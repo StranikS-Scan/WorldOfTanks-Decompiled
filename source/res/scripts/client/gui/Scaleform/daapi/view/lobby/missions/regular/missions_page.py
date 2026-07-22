@@ -41,10 +41,11 @@ from gui.sounds.ambients import BattleMattersSoundEnv, BattlePassSoundEnv, Lobby
 from helpers import dependency
 from helpers.i18n import makeString as _ms
 from items import getTypeOfCompactDescr
-from skeletons.gui.app_loader import GuiGlobalSpaceID, IAppLoader
-from skeletons.gui.battle_matters import IBattleMattersController
+from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.event_boards_controllers import IEventBoardController
-from skeletons.gui.game_control import IBattlePassController, ICollectiveGoalMarathonsController, IDebutBoxesController, IFunRandomController, IGameSessionController, IHangarSpaceSwitchController, ILimitedUIController, IMapboxController, IMarathonEventsController, IRankedBattlesController, ISummerSaleController, IUnseenEventsCounter
+from skeletons.gui.game_control import IBattlePassController, ICollectiveGoalMarathonsController, IDebutBoxesController, IFunRandomController, IGameSessionController, IHangarSpaceSwitchController, ILimitedUIController, IMapboxController, IMarathonEventsController, IRankedBattlesController, ISummerSaleController, IUnseenEventsCounter, ITankAcademyController
+from skeletons.gui.app_loader import IAppLoader, GuiGlobalSpaceID
+from skeletons.gui.battle_matters import IBattleMattersController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from th_async import th_async, th_await
@@ -89,10 +90,12 @@ class MissionsPage(LobbySubView, MissionsPageMeta):
     __mapboxCtrl = dependency.descriptor(IMapboxController)
     __battleMattersController = dependency.descriptor(IBattleMattersController)
     __limitedUIController = dependency.descriptor(ILimitedUIController)
+    __tankAcademyController = dependency.descriptor(ITankAcademyController)
     __collectiveGoalMarathonsController = dependency.descriptor(ICollectiveGoalMarathonsController)
     __unseenEventsManager = dependency.descriptor(IUnseenEventsCounter)
     __debutBoxes = dependency.descriptor(IDebutBoxesController)
     __summerSale = dependency.descriptor(ISummerSaleController)
+    __settingsCore = dependency.descriptor(ISettingsCore)
 
     def __init__(self, ctx):
         super(MissionsPage, self).__init__(ctx)
@@ -480,8 +483,14 @@ class MissionsPage(LobbySubView, MissionsPageMeta):
             return (headerTab, tab)
 
     def __battleMattersTabIsEnabled(self):
+        return self.__isBattleMattersAvailable() or self.__isTankAcademyAvailable()
+
+    def __isBattleMattersAvailable(self):
         bm = self.__battleMattersController
         return bm.isEnabled() and (not bm.isFinished() or bm.hasUnobtainedDelayedRewards()) and bm.isValidConfiguration()
+
+    def __isTankAcademyAvailable(self):
+        return self.__tankAcademyController.isEnabled() and (not self.__tankAcademyController.isFinished() or self.__tankAcademyController.hasUnobtainedDelayedRewards()) and self.__tankAcademyController.isValidConfiguration() and self.__tankAcademyController.isFirstQuestCompleted() and self.__settingsCore.serverSettings.isTankAcademyWelcomeScreenShown()
 
     @staticmethod
     def __getSuitableEvents(tab):
@@ -599,6 +608,7 @@ class MissionView(MissionViewBase):
     __sound_env__ = LobbySubViewEnv
     eventsCache = dependency.descriptor(IEventsCache)
     __battleMattersController = dependency.descriptor(IBattleMattersController)
+    __tankAcademyController = dependency.descriptor(ITankAcademyController)
     gameSession = dependency.descriptor(IGameSessionController)
     __rankedController = dependency.descriptor(IRankedBattlesController)
     __spaceSwitchController = dependency.descriptor(IHangarSpaceSwitchController)
@@ -627,6 +637,7 @@ class MissionView(MissionViewBase):
         super(MissionView, self)._populate()
         self.eventsCache.onSyncCompleted += self._onEventsUpdate
         self.__battleMattersController.onStateChanged += self._onBattleMattersStateChanged
+        self.__tankAcademyController.onStateChanged += self._onBattleMattersStateChanged
         self.gameSession.onPremiumTypeChanged += self.__onPremiumTypeChanged
         self.__rankedController.onUpdated += self._onEventsUpdate
         self.__rankedController.onGameModeStatusUpdated += self._onEventsUpdate
@@ -638,6 +649,7 @@ class MissionView(MissionViewBase):
     def _dispose(self):
         self.eventsCache.onSyncCompleted -= self._onEventsUpdate
         self.__battleMattersController.onStateChanged -= self._onBattleMattersStateChanged
+        self.__tankAcademyController.onStateChanged -= self._onBattleMattersStateChanged
         self.gameSession.onPremiumTypeChanged -= self.__onPremiumTypeChanged
         self.__rankedController.onUpdated -= self._onEventsUpdate
         self.__rankedController.onGameModeStatusUpdated -= self._onEventsUpdate

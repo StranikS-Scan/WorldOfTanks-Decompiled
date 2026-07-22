@@ -1,0 +1,378 @@
+<camouflage_bp2021_1_label.xml>
+  <xmlns:czech1>	ussr	</xmlns:czech1>
+  <xmlns:germany>	germany	</xmlns:germany>
+  <xmlns:czech0>	usa	</xmlns:czech0>
+  <xmlns:china>	china	</xmlns:china>
+  <xmlns:france>	france	</xmlns:france>
+  <xmlns:uk>	uk	</xmlns:uk>
+  <xmlns:japan>	japan	</xmlns:japan>
+  <xmlns:czech>	czech	</xmlns:czech>
+  <xmlns:sweden>	sweden	</xmlns:sweden>
+  <xmlns:poland>	poland	</xmlns:poland>
+  <xmlns:italy>	italy	</xmlns:italy>
+  <xmlns:intunion>	intunion	</xmlns:intunion>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/opaque	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	MT camouflages 50g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R47_ISU-152_Zveroboj ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <camouflage>
+      <id>	284	</id>
+      <texture>	vehicles/russian/Camouflage/bp2021_1.dds	</texture>
+      <description>	#vehicle_customization:camouflage/bp2021_1/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/bp2021_1/label	</userString>
+      <tags>	fullRGB	</tags>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	255 0 0 255	</c0>
+          <c1>	0 255 0 255	</c1>
+          <c2>	0 0 255 255	</c2>
+          <c3>	0 0 0 255	</c3>
+        </palette>
+      </palettes>
+      <rotation>
+        <HULL>	0.229336	</HULL>
+        <TURRET>	0.229336	</TURRET>
+        <GUN>	0.229336	</GUN>
+      </rotation>
+      <tilingSettings>
+        <type>	relative	</type>
+        <factor>	2.3 2.3	</factor>
+        <offset>	0.08 0.48	</offset>
+      </tilingSettings>
+    </camouflage>
+    <camouflage>
+      <id>	285	</id>
+      <texture>	vehicles/russian/Camouflage/bp2021_2.dds	</texture>
+      <description>	#vehicle_customization:camouflage/bp2021_2/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/bp2021_2/label	</userString>
+      <tags>	fullRGB	</tags>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	255 0 0 255	</c0>
+          <c1>	0 255 0 255	</c1>
+          <c2>	0 0 255 255	</c2>
+          <c3>	0 0 0 255	</c3>
+        </palette>
+      </palettes>
+      <rotation>
+        <HULL>	-0.174533	</HULL>
+        <TURRET>	-0.174533	</TURRET>
+        <GUN>	-0.174533	</GUN>
+      </rotation>
+      <tilingSettings>
+        <type>	relative	</type>
+        <factor>	3.5 3.5	</factor>
+        <offset>	-0.2 0.12	</offset>
+      </tilingSettings>
+    </camouflage>
+    <camouflage>
+      <id>	286	</id>
+      <texture>	vehicles/russian/Camouflage/bp2021_3.dds	</texture>
+      <description>	#vehicle_customization:camouflage/bp2021_3/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/bp2021_3/label	</userString>
+      <tags>	fullRGB	</tags>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	255 0 0 255	</c0>
+          <c1>	0 255 0 255	</c1>
+          <c2>	0 0 255 255	</c2>
+          <c3>	0 0 0 255	</c3>
+        </palette>
+      </palettes>
+      <rotation>
+        <HULL>	2.0944	</HULL>
+        <TURRET>	2.0944	</TURRET>
+        <GUN>	2.0944	</GUN>
+      </rotation>
+      <tilingSettings>
+        <type>	relative	</type>
+        <factor>	2.5 2.5	</factor>
+        <offset>	-0.632 -1.7	</offset>
+      </tilingSettings>
+    </camouflage>
+    <camouflage>
+      <id>	312	</id>
+      <texture>	vehicles/russian/Camouflage/bp2021_5_3.dds	</texture>
+      <description>	#vehicle_customization:camouflage/bp2021_5_3/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/bp2021_5_3/label	</userString>
+      <tags>	fullRGB	</tags>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	255 0 0 255	</c0>
+          <c1>	0 255 0 255	</c1>
+          <c2>	0 0 255 255	</c2>
+          <c3>	0 0 0 255	</c3>
+        </palette>
+      </palettes>
+      <rotation>
+        <HULL>	0.296706	</HULL>
+        <TURRET>	0.296706	</TURRET>
+        <GUN>	0.296706	</GUN>
+      </rotation>
+      <tilingSettings>
+        <type>	relativeWithFactor	</type>
+        <factor>	3 3	</factor>
+        <offset>	-0.792 -0.576	</offset>
+      </tilingSettings>
+    </camouflage>
+    <camouflage>
+      <id>	315	</id>
+      <texture>	vehicles/russian/Camouflage/bp2021_5_2.dds	</texture>
+      <description>	#vehicle_customization:camouflage/bp2021_5_2/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/bp2021_5_2/label	</userString>
+      <tags>	fullRGB	</tags>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	255 0 0 255	</c0>
+          <c1>	0 255 0 255	</c1>
+          <c2>	0 0 255 255	</c2>
+          <c3>	0 0 0 255	</c3>
+        </palette>
+      </palettes>
+      <rotation>
+        <HULL>	0.383972	</HULL>
+        <TURRET>	0.383972	</TURRET>
+        <GUN>	0.383972	</GUN>
+      </rotation>
+      <tilingSettings>
+        <type>	relativeWithFactor	</type>
+        <factor>	1.8 1.8	</factor>
+        <offset>	0.000000 0.000000	</offset>
+      </tilingSettings>
+    </camouflage>
+    <camouflage>
+      <id>	322	</id>
+      <texture>	vehicles/russian/Camouflage/bp2021s2_style1.dds	</texture>
+      <description>	#vehicle_customization:camouflage/bp2021s2_style1/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/bp2021s2_style1/label	</userString>
+      <tags>	fullRGB	</tags>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	255 0 0 255	</c0>
+          <c1>	0 255 0 255	</c1>
+          <c2>	0 0 255 255	</c2>
+          <c3>	0 0 0 255	</c3>
+        </palette>
+      </palettes>
+      <rotation>
+        <HULL>	0.349066	</HULL>
+        <TURRET>	0.349066	</TURRET>
+        <GUN>	0.349066	</GUN>
+      </rotation>
+      <tilingSettings>
+        <type>	relativeWithFactor	</type>
+        <factor>	2.200000 2.200000	</factor>
+        <offset>	-0.050000 0.430000	</offset>
+      </tilingSettings>
+    </camouflage>
+    <camouflage>
+      <id>	342	</id>
+      <texture>	vehicles/russian/Camouflage/bp2021_6_1.dds	</texture>
+      <description>	#vehicle_customization:camouflage/bp2021_6_1/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/bp2021_6_1/label	</userString>
+      <tags>	fullRGB	</tags>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	255 0 0 255	</c0>
+          <c1>	0 255 0 255	</c1>
+          <c2>	0 0 255 255	</c2>
+          <c3>	0 0 0 255	</c3>
+        </palette>
+      </palettes>
+      <rotation>
+        <HULL>	0.174533	</HULL>
+        <TURRET>	0.174533	</TURRET>
+        <GUN>	0.174533	</GUN>
+      </rotation>
+      <tilingSettings>
+        <type>	relativeWithFactor	</type>
+        <factor>	2.6 2.6	</factor>
+        <offset>	0.000000 0.94	</offset>
+      </tilingSettings>
+    </camouflage>
+    <camouflage>
+      <id>	343	</id>
+      <texture>	vehicles/russian/Camouflage/bp2021_6_2.dds	</texture>
+      <description>	#vehicle_customization:camouflage/bp2021_6_2/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/bp2021_6_2/label	</userString>
+      <tags>	fullRGB	</tags>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	255 0 0 255	</c0>
+          <c1>	0 255 0 255	</c1>
+          <c2>	0 0 255 255	</c2>
+          <c3>	0 0 0 255	</c3>
+        </palette>
+      </palettes>
+      <rotation>
+        <HULL>	0.131423	</HULL>
+        <TURRET>	0.131423	</TURRET>
+        <GUN>	0.131423	</GUN>
+      </rotation>
+      <tilingSettings>
+        <type>	relativeWithFactor	</type>
+        <factor>	2.3 2.3	</factor>
+        <offset>	0.56 -0.77	</offset>
+      </tilingSettings>
+    </camouflage>
+    <camouflage>
+      <id>	344	</id>
+      <texture>	vehicles/russian/Camouflage/bp2021_6_3_hull.dds	</texture>
+      <description>	#vehicle_customization:camouflage/bp2021_6_3_hull/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/bp2021_6_3_hull/label	</userString>
+      <tags>	fullRGB	</tags>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	255 0 0 255	</c0>
+          <c1>	0 255 0 255	</c1>
+          <c2>	0 0 255 255	</c2>
+          <c3>	0 0 0 255	</c3>
+        </palette>
+      </palettes>
+      <rotation>
+        <HULL>	-0.261799	</HULL>
+        <TURRET>	-0.261799	</TURRET>
+        <GUN>	-0.261799	</GUN>
+      </rotation>
+      <tilingSettings>
+        <type>	relative	</type>
+        <factor>	1.8 1.8	</factor>
+        <offset>	-1.54 0.39	</offset>
+      </tilingSettings>
+    </camouflage>
+    <camouflage>
+      <id>	345	</id>
+      <texture>	vehicles/russian/Camouflage/bp2021_6_3_turret.dds	</texture>
+      <description>	#vehicle_customization:camouflage/bp2021_6_3_turret/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/bp2021_6_3_turret/label	</userString>
+      <tags>	fullRGB	</tags>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	255 0 0 255	</c0>
+          <c1>	0 255 0 255	</c1>
+          <c2>	0 0 255 255	</c2>
+          <c3>	0 0 0 255	</c3>
+        </palette>
+      </palettes>
+      <rotation>
+        <HULL>	1.5708	</HULL>
+        <TURRET>	1.5708	</TURRET>
+        <GUN>	1.5708	</GUN>
+      </rotation>
+      <tilingSettings>
+        <type>	relative	</type>
+        <factor>	2.2 2.2	</factor>
+        <offset>	1 0.16	</offset>
+      </tilingSettings>
+    </camouflage>
+    <camouflage>
+      <id>	381	</id>
+      <texture>	vehicles/russian/Camouflage/bp2022_1.dds	</texture>
+      <description>	#vehicle_customization:camouflage/bp2022_1/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/bp2022_1/label	</userString>
+      <tags>	fullRGB	</tags>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	255 0 0 255	</c0>
+          <c1>	0 255 0 255	</c1>
+          <c2>	0 0 255 255	</c2>
+          <c3>	0 0 0 255	</c3>
+        </palette>
+      </palettes>
+      <rotation>
+        <HULL>	-0.785398	</HULL>
+        <TURRET>	-0.785398	</TURRET>
+        <GUN>	-0.785398	</GUN>
+      </rotation>
+      <tilingSettings>
+        <type>	relativewithfactor	</type>
+        <factor>	1.600000 1.600000	</factor>
+        <offset>	-1.550000 -5.170000	</offset>
+      </tilingSettings>
+    </camouflage>
+    <camouflage>
+      <id>	382	</id>
+      <texture>	vehicles/russian/Camouflage/bp2022_2.dds	</texture>
+      <description>	#vehicle_customization:camouflage/bp2022_2/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/bp2022_2/label	</userString>
+      <tags>	fullRGB	</tags>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	255 0 0 255	</c0>
+          <c1>	0 255 0 255	</c1>
+          <c2>	0 0 255 255	</c2>
+          <c3>	0 0 0 255	</c3>
+        </palette>
+      </palettes>
+      <rotation>
+        <HULL>	0.785398	</HULL>
+        <TURRET>	0.785398	</TURRET>
+        <GUN>	0.785398	</GUN>
+      </rotation>
+      <tilingSettings>
+        <type>	relativewithfactor	</type>
+        <factor>	1.700000 1.700000	</factor>
+        <offset>	-2.500000 -0.080000	</offset>
+      </tilingSettings>
+      <gloss>	0.509000 0.509000 0.509000 0.150000	</gloss>
+      <metallic>	0.230000 0.230000 0.230000 0.150000	</metallic>
+    </camouflage>
+    <camouflage>
+      <id>	383	</id>
+      <texture>	vehicles/russian/Camouflage/bp2022_3.dds	</texture>
+      <description>	#vehicle_customization:camouflage/bp2022_3/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/bp2022_3/label	</userString>
+      <tags>	fullRGB	</tags>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	255 0 0 255	</c0>
+          <c1>	0 255 0 255	</c1>
+          <c2>	0 0 255 255	</c2>
+          <c3>	0 0 0 255	</c3>
+        </palette>
+      </palettes>
+      <rotation>
+        <HULL>	-0.220086	</HULL>
+        <TURRET>	-0.220086	</TURRET>
+        <GUN>	-0.220086	</GUN>
+      </rotation>
+      <tilingSettings>
+        <type>	relativewithfactor	</type>
+        <factor>	2.000000 2.000000	</factor>
+        <offset>	-1.430000 -5.150000	</offset>
+      </tilingSettings>
+    </camouflage>
+  </itemGroup>
+</camouflage_bp2021_1_label.xml>

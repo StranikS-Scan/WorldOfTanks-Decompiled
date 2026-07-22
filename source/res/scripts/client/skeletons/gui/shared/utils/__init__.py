@@ -97,10 +97,6 @@ class IItemsRequester(requesters.IRequester):
         raise NotImplementedError
 
     @property
-    def playStreak(self):
-        raise NotImplementedError
-
-    @property
     def armoryYard(self):
         raise NotImplementedError
 
@@ -279,6 +275,10 @@ class IHangarSpace(object):
     def visibilityMask(self):
         raise NotImplementedError
 
+    @property
+    def environment(self):
+        raise NotImplementedError
+
     def spaceLoading(self):
         raise NotImplementedError
 
@@ -339,7 +339,7 @@ class IHangarSpaceReloader(object):
     def destroy(self):
         raise NotImplementedError
 
-    def changeHangarSpace(self, spaceName, visibilityMask, waitingMessage=None, backgroundImage=None):
+    def changeHangarSpace(self, spaceName, visibilityMask, environment, waitingMessage=None, backgroundImage=None):
         raise NotImplementedError
 
     @property

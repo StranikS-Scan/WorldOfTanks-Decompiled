@@ -1,0 +1,48 @@
+<projection_decals_Mosfilm_Decal_02_2023_MT.xml>
+  <xmlns:czech1>	ussr	</xmlns:czech1>
+  <xmlns:germany>	germany	</xmlns:germany>
+  <xmlns:czech0>	usa	</xmlns:czech0>
+  <xmlns:china>	china	</xmlns:china>
+  <xmlns:france>	france	</xmlns:france>
+  <xmlns:uk>	uk	</xmlns:uk>
+  <xmlns:japan>	japan	</xmlns:japan>
+  <xmlns:czech>	czech	</xmlns:czech>
+  <xmlns:sweden>	sweden	</xmlns:sweden>
+  <xmlns:poland>	poland	</xmlns:poland>
+  <xmlns:italy>	italy	</xmlns:italy>
+  <xmlns:intunion>	intunion	</xmlns:intunion>
+  <itemGroup>
+    <name>	Mosfilm 2023	</name>
+    <userString>	#vehicle_customization:projection_decals/special	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	MT projection_decals 100g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF usa:A104_M4A3E8A usa:A126_PzVI_Tiger_II_capt ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <projection_decal>
+      <id>	31048	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/Mosfilm_Decal_01_2023_MT.dds	</texture>
+      <tags>	hiddenInUI direction_left_to_right formfactor_square styleOnly	</tags>
+      <userString>	#vehicle_customization:projection_decals/Mosfilm_Decal_02_2023_MT	</userString>
+      <mirror>	false	</mirror>
+    </projection_decal>
+    <projection_decal>
+      <id>	31049	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/Mosfilm_Decal_02_2023_MT.dds	</texture>
+      <userString>	#vehicle_customization:projection_decals/Mosfilm_Decal_01_2023_MT	</userString>
+      <tags>	hiddenInUI formfactor_square direction_right_to_left styleOnly	</tags>
+      <mirror>	false	</mirror>
+    </projection_decal>
+    <projection_decal>
+      <id>	31050	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/Mosfilm_Decal_03_2023_MT.dds	</texture>
+      <glossTexture>	gui/maps/vehicles/decals/projection_decals/special/Mosfilm_Decal_03_2023_MT_GMM.dds	</glossTexture>
+      <tags>	hiddenInUI direction_right_to_left disableVerticalMirror formfactor_rect1x2 styleOnly	</tags>
+      <userString>	#vehicle_customization:projection_decals/Mosfilm_Decal_03_2023_MT	</userString>
+      <mirror>	false	</mirror>
+    </projection_decal>
+  </itemGroup>
+</projection_decals_Mosfilm_Decal_02_2023_MT.xml>

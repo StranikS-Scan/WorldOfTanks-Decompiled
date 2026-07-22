@@ -1,49 +1,137 @@
 <turrets.xml>
-  <ids>
-    <Turret_1_Cz01_Skoda_T40>	0	</Turret_1_Cz01_Skoda_T40>
-    <Turret_1_Cz06_Kolohousenka>	1	</Turret_1_Cz06_Kolohousenka>
-    <Turret_1_Cz03_LT_vz35>	2	</Turret_1_Cz03_LT_vz35>
-    <Turret_2_Cz03_LT_vz35>	3	</Turret_2_Cz03_LT_vz35>
-    <Turret_1_Cz10_LT_vz38>	4	</Turret_1_Cz10_LT_vz38>
-    <Turret_2_Cz10_LT_vz38>	5	</Turret_2_Cz10_LT_vz38>
-    <Turret_1_Cz11_V_8_H>	6	</Turret_1_Cz11_V_8_H>
-    <Turret_2_Cz11_V_8_H>	7	</Turret_2_Cz11_V_8_H>
-    <Turret_1_Cz09_T_24>	8	</Turret_1_Cz09_T_24>
-    <Turret_2_Cz09_T_24>	9	</Turret_2_Cz09_T_24>
-    <Turret_1_Cz08_T_25>	10	</Turret_1_Cz08_T_25>
-    <Turret_2_Cz08_T_25>	11	</Turret_2_Cz08_T_25>
-    <Turret_1_Cz05_T34_100>	12	</Turret_1_Cz05_T34_100>
-    <Turret_2_Cz05_T34_100>	13	</Turret_2_Cz05_T34_100>
-    <Turret_1_Cz07_TVP_46>	14	</Turret_1_Cz07_TVP_46>
-    <Turret_2_Cz07_TVP_46>	15	</Turret_2_Cz07_TVP_46>
-    <Turret_1_Cz02_TVP_T50>	16	</Turret_1_Cz02_TVP_T50>
-    <Turret_2_Cz02_TVP_T50>	17	</Turret_2_Cz02_TVP_T50>
-    <Turret_1_Cz04_T50_51>	18	</Turret_1_Cz04_T50_51>
-    <Turret_1_Cz13_T_27>	19	</Turret_1_Cz13_T_27>
-    <Turret_1_Cz15_Skoda_T-45_Prem>	21	</Turret_1_Cz15_Skoda_T-45_Prem>
-    <Turret_1_Cz14_Skoda_T-56>	22	</Turret_1_Cz14_Skoda_T-56>
-    <Turret_1_Cz17_Vz_55>	23	</Turret_1_Cz17_Vz_55>
-    <Turret_1_Cz16_TNH_T_vz51>	24	</Turret_1_Cz16_TNH_T_vz51>
-    <Turret_2_Cz16_TNH_T_vz51>	25	</Turret_2_Cz16_TNH_T_vz51>
-    <Turret_1_Cz18_TNH_105_1000>	26	</Turret_1_Cz18_TNH_105_1000>
-    <Turret_2_Cz18_TNH_105_1000>	27	</Turret_2_Cz18_TNH_105_1000>
-    <Turret_1_Cz19_Vz_44_1>	28	</Turret_1_Cz19_Vz_44_1>
-    <Turret_2_Cz19_Vz_44_1>	29	</Turret_2_Cz19_Vz_44_1>
-    <Turret_1_Cz20_ShPTK_TVP_100_mm>	30	</Turret_1_Cz20_ShPTK_TVP_100_mm>
-    <Turret_1_Cz17_Vz_55_CN>	31	</Turret_1_Cz17_Vz_55_CN>
-    <Turret_1_Cz29_Pzw_39>	41	</Turret_1_Cz29_Pzw_39>
-    <Turret_1_Cz21_TST>	31001	</Turret_1_Cz21_TST>
-    <Turret_1_Cz31_Tatra_T_III>	31002	</Turret_1_Cz31_Tatra_T_III>
-    <Turret_2_Cz02_TVP_T50_FL>	31003	</Turret_2_Cz02_TVP_T50_FL>
-    <Turret_1_Cz32_Vz_58_Koncept>	31004	</Turret_1_Cz32_Vz_58_Koncept>
-    <Turret_1_Cz36_Lisak_v2>	31005	</Turret_1_Cz36_Lisak_v2>
-    <Turret_1_Cz35_Klevets>	31006	</Turret_1_Cz35_Klevets>
-    <Turret_1_Cz37_Vz_59_Dravec>	31007	</Turret_1_Cz37_Vz_59_Dravec>
-    <Turret_1_Cz30_TBT>	31008	</Turret_1_Cz30_TBT>
-    <Turret_1_Cz38_Projekt_SAT>	31009	</Turret_1_Cz38_Projekt_SAT>
-    <Turret_1_Cz39_SD_122_49_Sekera>	31013	</Turret_1_Cz39_SD_122_49_Sekera>
-    <Turret_1_Cz00_COSM_Gravizapa_02>	40003	</Turret_1_Cz00_COSM_Gravizapa_02>
-    <Turret_1_Cz00_COSM_Pepelac_02>	40002	</Turret_1_Cz00_COSM_Pepelac_02>
-  </ids>
-  <shared></shared>
+  <xmlns:xmlref>	http://bwt/xmlref	</xmlns:xmlref>
+  <shared>
+    <Turret_1_Cz00_COSM_Gravizapa_02>
+      <id>	40003	</id>
+    </Turret_1_Cz00_COSM_Gravizapa_02>
+    <Turret_1_Cz00_COSM_Pepelac_02>
+      <id>	40002	</id>
+    </Turret_1_Cz00_COSM_Pepelac_02>
+    <Turret_1_Cz01_Skoda_T40>
+      <id>	0	</id>
+    </Turret_1_Cz01_Skoda_T40>
+    <Turret_1_Cz02_TVP_T50>
+      <id>	16	</id>
+    </Turret_1_Cz02_TVP_T50>
+    <Turret_1_Cz03_LT_vz35>
+      <id>	2	</id>
+    </Turret_1_Cz03_LT_vz35>
+    <Turret_1_Cz04_T50_51>
+      <id>	18	</id>
+    </Turret_1_Cz04_T50_51>
+    <Turret_1_Cz05_T34_100>
+      <id>	12	</id>
+    </Turret_1_Cz05_T34_100>
+    <Turret_1_Cz06_Kolohousenka>
+      <id>	1	</id>
+    </Turret_1_Cz06_Kolohousenka>
+    <Turret_1_Cz07_TVP_46>
+      <id>	14	</id>
+    </Turret_1_Cz07_TVP_46>
+    <Turret_1_Cz08_T_25>
+      <id>	10	</id>
+    </Turret_1_Cz08_T_25>
+    <Turret_1_Cz09_T_24>
+      <id>	8	</id>
+    </Turret_1_Cz09_T_24>
+    <Turret_1_Cz10_LT_vz38>
+      <id>	4	</id>
+    </Turret_1_Cz10_LT_vz38>
+    <Turret_1_Cz11_V_8_H>
+      <id>	6	</id>
+    </Turret_1_Cz11_V_8_H>
+    <Turret_1_Cz13_T_27>
+      <id>	19	</id>
+    </Turret_1_Cz13_T_27>
+    <Turret_1_Cz14_Skoda_T-56>
+      <id>	22	</id>
+    </Turret_1_Cz14_Skoda_T-56>
+    <Turret_1_Cz15_Skoda_T-45_Prem>
+      <id>	21	</id>
+    </Turret_1_Cz15_Skoda_T-45_Prem>
+    <Turret_1_Cz16_TNH_T_vz51>
+      <id>	24	</id>
+    </Turret_1_Cz16_TNH_T_vz51>
+    <Turret_1_Cz17_Vz_55>
+      <id>	23	</id>
+    </Turret_1_Cz17_Vz_55>
+    <Turret_1_Cz17_Vz_55_CN>
+      <id>	31	</id>
+    </Turret_1_Cz17_Vz_55_CN>
+    <Turret_1_Cz18_TNH_105_1000>
+      <id>	26	</id>
+    </Turret_1_Cz18_TNH_105_1000>
+    <Turret_1_Cz19_Vz_44_1>
+      <id>	28	</id>
+    </Turret_1_Cz19_Vz_44_1>
+    <Turret_1_Cz20_ShPTK_TVP_100_mm>
+      <id>	30	</id>
+    </Turret_1_Cz20_ShPTK_TVP_100_mm>
+    <Turret_1_Cz21_TST>
+      <id>	31001	</id>
+    </Turret_1_Cz21_TST>
+    <Turret_1_Cz29_Pzw_39>
+      <id>	41	</id>
+    </Turret_1_Cz29_Pzw_39>
+    <Turret_1_Cz30_TBT>
+      <id>	31008	</id>
+    </Turret_1_Cz30_TBT>
+    <Turret_1_Cz31_Tatra_T_III>
+      <id>	31002	</id>
+    </Turret_1_Cz31_Tatra_T_III>
+    <Turret_1_Cz32_Vz_58_Koncept>
+      <id>	31004	</id>
+    </Turret_1_Cz32_Vz_58_Koncept>
+    <Turret_1_Cz35_Klevets>
+      <id>	31006	</id>
+    </Turret_1_Cz35_Klevets>
+    <Turret_1_Cz36_Lisak_v2>
+      <id>	31005	</id>
+    </Turret_1_Cz36_Lisak_v2>
+    <Turret_1_Cz37_Vz_59_Dravec>
+      <id>	31007	</id>
+    </Turret_1_Cz37_Vz_59_Dravec>
+    <Turret_1_Cz38_Projekt_SAT>
+      <id>	31009	</id>
+    </Turret_1_Cz38_Projekt_SAT>
+    <Turret_1_Cz39_SD_122_49_Sekera>
+      <id>	31013	</id>
+    </Turret_1_Cz39_SD_122_49_Sekera>
+    <Turret_2_Cz02_TVP_T50>
+      <id>	17	</id>
+    </Turret_2_Cz02_TVP_T50>
+    <Turret_2_Cz02_TVP_T50_FL>
+      <id>	31003	</id>
+    </Turret_2_Cz02_TVP_T50_FL>
+    <Turret_2_Cz03_LT_vz35>
+      <id>	3	</id>
+    </Turret_2_Cz03_LT_vz35>
+    <Turret_2_Cz05_T34_100>
+      <id>	13	</id>
+    </Turret_2_Cz05_T34_100>
+    <Turret_2_Cz07_TVP_46>
+      <id>	15	</id>
+    </Turret_2_Cz07_TVP_46>
+    <Turret_2_Cz08_T_25>
+      <id>	11	</id>
+    </Turret_2_Cz08_T_25>
+    <Turret_2_Cz09_T_24>
+      <id>	9	</id>
+    </Turret_2_Cz09_T_24>
+    <Turret_2_Cz10_LT_vz38>
+      <id>	5	</id>
+    </Turret_2_Cz10_LT_vz38>
+    <Turret_2_Cz11_V_8_H>
+      <id>	7	</id>
+    </Turret_2_Cz11_V_8_H>
+    <Turret_2_Cz16_TNH_T_vz51>
+      <id>	25	</id>
+    </Turret_2_Cz16_TNH_T_vz51>
+    <Turret_2_Cz18_TNH_105_1000>
+      <id>	27	</id>
+    </Turret_2_Cz18_TNH_105_1000>
+    <Turret_2_Cz19_Vz_44_1>
+      <id>	29	</id>
+    </Turret_2_Cz19_Vz_44_1>
+  </shared>
 </turrets.xml>

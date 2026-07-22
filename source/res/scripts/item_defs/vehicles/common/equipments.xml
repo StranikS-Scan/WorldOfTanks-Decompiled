@@ -9,6 +9,13 @@
     <icon>	handExtinguishers	</icon>
     <price>	3000	</price>
     <tags>	extinguisher	</tags>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <minLevel>	4	</minLevel>
+        </vehicle>
+      </include>
+    </vehicleFilter>
     <script>	Extinguisher	  <autoactivate>	true	</autoactivate>
       <cooldownSeconds>	105	</cooldownSeconds>
       <reuseCount>	-1	</reuseCount>
@@ -26,6 +33,13 @@
     <price>	20000	</price>
     <improved>	true	</improved>
     <tags>	extinguisher premium_equipment	</tags>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <minLevel>	4	</minLevel>
+        </vehicle>
+      </include>
+    </vehicleFilter>
     <script>	Extinguisher	  <fireStartingChanceFactor>	0.9	</fireStartingChanceFactor>
       <autoactivate>	true	</autoactivate>
       <cooldownSeconds>	90	</cooldownSeconds>
@@ -49,6 +63,13 @@
     <icon>	smallMedkit	</icon>
     <price>	3000	</price>
     <tags>	medkit	</tags>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <minLevel>	3	</minLevel>
+        </vehicle>
+      </include>
+    </vehicleFilter>
     <script>	Repairkit	  <repairAll>	true	</repairAll>
       <bonusValue>	0	</bonusValue>
       <stunResistanceEffect>	0.0	</stunResistanceEffect>
@@ -69,6 +90,13 @@
     <price>	20000	</price>
     <improved>	true	</improved>
     <tags>	medkit premium_equipment	</tags>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <minLevel>	3	</minLevel>
+        </vehicle>
+      </include>
+    </vehicleFilter>
     <script>	Repairkit	  <repairAll>	true	</repairAll>
       <bonusValue>	0.30	</bonusValue>
       <stunResistanceEffect>	0.0	</stunResistanceEffect>
@@ -8840,11 +8868,11 @@
       </visualScript>
       <cooldownSeconds>	15	  <exports>	vse tooltip	</exports>
       </cooldownSeconds>
-      <duration>	20	  <exports>	vse tooltip	</exports>
+      <duration>	15	  <exports>	vse tooltip	</exports>
       </duration>
       <shotDispersionFactors>	0.8 0.6 0.4	  <exports>	vse	</exports>
       </shotDispersionFactors>
-      <slvl>	1 1.2 1.5	  <exports>	vse	</exports>
+      <slvl>	0.4 0.6 0.8	  <exports>	vse	</exports>
       </slvl>
       <sdlvl>	0.7 0.85 0.97	  <exports>	vse	</exports>
       </sdlvl>
@@ -8973,7 +9001,7 @@
       </cooldownSeconds>
       <duration>	10 15 20	  <exports>	vse tooltip	</exports>
       </duration>
-      <enginePowerBuff>	1.2	  <exports>	vse tooltip	</exports>
+      <enginePowerBuff>	1.05	  <exports>	vse tooltip	</exports>
       </enginePowerBuff>
       <fwdSpeedBoost>	5	  <exports>	vse tooltip	</exports>
       </fwdSpeedBoost>

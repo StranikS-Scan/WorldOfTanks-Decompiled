@@ -71,6 +71,13 @@ def get_gift_system_state(req_event_ids):
     return {event_id:event_stub for event_id in req_event_ids}
 
 
+def get_gift_system_wait_response(*_):
+    wait_response = {'players': [],
+     'last_player_updated_at': None,
+     'first_player_updated_at': None}
+    return wait_response
+
+
 def post_gift_system_gift(*_):
     current_time = int(time.time())
     response_stub = {'execution_time': current_time - time_utils.ONE_SECOND}
@@ -690,6 +697,11 @@ class FakeDataAccessor(base.BaseDataAccessor):
     def get_gift_system_state(self, req_event_ids):
         self._storage.get('gift_system_state', {}).clear()
         return self._request_data('gift_system_state', frozenset(req_event_ids))
+
+    @fake_method(example=get_gift_system_wait_response)
+    def get_gift_system_wait_response(self, *_):
+        self._storage.get('get_gift_system_wait_response', {}).clear()
+        return self._request_data('get_gift_system_wait_response', None)
 
     @fake_method(example=post_gift_system_gift)
     def post_gift_system_gift(self, *_):

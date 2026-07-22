@@ -1,0 +1,49 @@
+<styles_Rush_2023_Ice_05_MT.xml>
+  <itemGroup>
+    <season>	ALL	</season>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <historical>	1	</historical>
+    <priceGroup>	MT 2D styles universal 1000g notInShop	</priceGroup>
+    <style>
+      <id>	31075	</id>
+      <tags>	hiddenInUI	</tags>
+      <texture>	gui/maps/vehicles/styles/Rush_ice_2023_Preview_MT.png	</texture>
+      <description>	#vehicle_customization:styles/Rush_2023_Ice_05_MT/description	</description>
+      <userString>	#vehicle_customization:styles/Rush_2023_Ice_05_MT	</userString>
+      <longDescriptionSpecial>	#vehicle_customization:styles/Rush_2023_Ice_05_MT/description/long	</longDescriptionSpecial>
+      <outfits>
+        <outfit>
+          <season>	all	</season>
+          <paints>
+            <item>
+              <id>	31052	</id>
+              <appliedTo>	20753	</appliedTo>
+            </item>
+          </paints>
+          <camouflages>
+            <item>
+              <id>	31054	</id>
+              <patternSize>	1	</patternSize>
+              <appliedTo>	4368	</appliedTo>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <projection_decals>
+            <item>
+              <id>	31070	</id>
+              <tags>	formfactor_square safe front	</tags>
+            </item>
+          </projection_decals>
+          <modifications>
+            <item>	4	</item>
+          </modifications>
+        </outfit>
+      </outfits>
+    </style>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+  </itemGroup>
+</styles_Rush_2023_Ice_05_MT.xml>

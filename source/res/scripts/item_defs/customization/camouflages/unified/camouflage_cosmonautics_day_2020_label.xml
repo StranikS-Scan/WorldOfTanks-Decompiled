@@ -1,0 +1,71 @@
+<camouflage_cosmonautics_day_2020_label.xml>
+  <germany:G51_Lowe8>	ussr	</germany:G51_Lowe8>
+  <germany:G51_Lowe0>	germany	</germany:G51_Lowe0>
+  <germany:G51_Lowe7>	usa	</germany:G51_Lowe7>
+  <germany:G42_Maus7>	china	</germany:G42_Maus7>
+  <germany:G42_Maus9>	france	</germany:G42_Maus9>
+  <germany:G51_Lowe6>	uk	</germany:G51_Lowe6>
+  <germany:G51_Lowe3>	japan	</germany:G51_Lowe3>
+  <germany:G42_Maus8>	czech	</germany:G42_Maus8>
+  <germany:G51_Lowe5>	sweden	</germany:G51_Lowe5>
+  <germany:G51_Lowe4>	poland	</germany:G51_Lowe4>
+  <germany:G51_Lowe2>	italy	</germany:G51_Lowe2>
+  <germany:G51_Lowe1>	intunion	</germany:G51_Lowe1>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/transparent	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	MT camouflages 50g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R47_ISU-152_Zveroboj ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <camouflage>
+      <id>	95	</id>
+      <texture>	vehicles/russian/Camouflage/cosmonautics_day_2020.dds	</texture>
+      <description>	#vehicle_customization:camouflage/cosmonautics_day_2020/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/cosmonautics_day_2020/label	</userString>
+      <tags>	hiddenInUI	</tags>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	255 0 0 255	</c0>
+          <c1>	0 255 0 255	</c1>
+          <c2>	0 0 255 255	</c2>
+          <c3>	0 0 0 255	</c3>
+        </palette>
+      </palettes>
+      <rotation>
+        <HULL>	-0.733038	</HULL>
+        <TURRET>	-0.733038	</TURRET>
+        <GUN>	-0.733038	</GUN>
+      </rotation>
+      <tiling>
+        <germany:G121_Grille_15_L63>	6.5 6.5 0.63 -0.15	</germany:G121_Grille_15_L63>
+        <germany:G42_Maus>	2.5 2.5 -2.49 -4.23	</germany:G42_Maus>
+        <germany:G42_Maus4>	2.5 2.5 -2.49 -4.23	</germany:G42_Maus4>
+        <germany:G51_Lowe>	2.5 2.5 0.52 -0.08	</germany:G51_Lowe>
+        <italy:It08_Progetto_M40_mod_65>	0.8 0.8 0.85 -0.01	</italy:It08_Progetto_M40_mod_65>
+        <japan:J16_ST_B1>	2 2 -0.26 0.17	</japan:J16_ST_B1>
+        <japan:J20_Type_2605>	2.5 2.5 0.63 -0.11	</japan:J20_Type_2605>
+        <japan:J20_Type_2605_7x7>	2.5 2.5 0.63 -0.11	</japan:J20_Type_2605_7x7>
+        <poland:Pl15_60TP_Lewandowskiego>	1.42 1.42 1.07 -2.32	</poland:Pl15_60TP_Lewandowskiego>
+        <sweden:S11_Strv_103B>	0.77 0.77 0.6 -0.89	</sweden:S11_Strv_103B>
+        <sweden:S16_Kranvagn>	0.66 0.66 -0.38 -0.99	</sweden:S16_Kranvagn>
+        <germany:G42_Maus0>	0.66 0.66 -0.38 -0.99	</germany:G42_Maus0>
+        <germany:G42_Maus1>	2.72 2.5 -0.34 0.81	</germany:G42_Maus1>
+        <germany:G42_Maus2>	2.7 2.7 0.4 -0.27	</germany:G42_Maus2>
+        <germany:G42_Maus3>	3.7 3.7 0.29 -0.26	</germany:G42_Maus3>
+        <germany:G42_Maus5>	2.5 2.5 -0.09 -0.07	</germany:G42_Maus5>
+        <germany:G42_Maus6>	2.4 2.4 0.35 -0.22	</germany:G42_Maus6>
+      </tiling>
+      <tilingSettings>
+        <type>	relative	</type>
+        <factor>	1.7 1.7	</factor>
+        <offset>	0.144375 1.2661	</offset>
+      </tilingSettings>
+    </camouflage>
+  </itemGroup>
+</camouflage_cosmonautics_day_2020_label.xml>

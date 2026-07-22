@@ -1,0 +1,51 @@
+<camouflage_PM_winter_ob260_label.xml>
+  <xmlns:czech1>	ussr	</xmlns:czech1>
+  <xmlns:germany>	germany	</xmlns:germany>
+  <xmlns:czech0>	usa	</xmlns:czech0>
+  <xmlns:china>	china	</xmlns:china>
+  <xmlns:france>	france	</xmlns:france>
+  <xmlns:uk>	uk	</xmlns:uk>
+  <xmlns:japan>	japan	</xmlns:japan>
+  <xmlns:czech>	czech	</xmlns:czech>
+  <xmlns:sweden>	sweden	</xmlns:sweden>
+  <xmlns:poland>	poland	</xmlns:poland>
+  <xmlns:italy>	italy	</xmlns:italy>
+  <xmlns:intunion>	intunion	</xmlns:intunion>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/opaque	</userString>
+    <season>	winter	</season>
+    <historical>	0	</historical>
+    <priceGroup>	MT camouflages 50g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <nations>	ussr	</nations>
+        <vehicles>	ussr:R110_Object_260	</vehicles>
+      </include>
+    </vehicleFilter>
+    <camouflage>
+      <id>	15045	</id>
+      <texture>	vehicles/russian/Camouflage/Obj_260_lbz_camo.dds	</texture>
+      <description>	#vehicle_customization:camouflage/PM_winter_ob260/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/PM_winter_ob260/label	</userString>
+      <tags>	rare	</tags>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	89 95 98 255	</c0>
+          <c1>	89 95 98 255	</c1>
+          <c2>	163 166 167 255	</c2>
+          <c3>	47 47 37 255	</c3>
+        </palette>
+      </palettes>
+      <tiling>
+        <R110_Object_260>	1.7 1.7 2 5.8	</R110_Object_260>
+      </tiling>
+      <tilingSettings>
+        <type>	relative	</type>
+        <factor>	1.159582  1.151595	</factor>
+        <offset>	0.000000 0.000000	</offset>
+      </tilingSettings>
+    </camouflage>
+  </itemGroup>
+</camouflage_PM_winter_ob260_label.xml>

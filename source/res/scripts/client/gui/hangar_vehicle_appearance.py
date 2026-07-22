@@ -528,6 +528,8 @@ class HangarVehicleAppearance(ScriptGameObject):
             chassisFashion = self.__fashions.chassis
             splineTracksImpl = model_assembler.setupSplineTracks(chassisFashion, self.__vDesc, self.__vEntity.model, self.__resources, self.__outfit.modelsSet)
             self.wheelsAnimator = model_assembler.createWheelsAnimator(self, ColliderTypes.VEHICLE_COLLIDER, self.__vDesc, lambda : 0, wheelsScroll, wheelsSteering, splineTracksImpl)
+            model_assembler.createSuspension(self, self.__vDesc, None)
+            model_assembler.createLeveredSuspension(self, self.__vDesc, None)
             self.trackNodesAnimator = model_assembler.createTrackNodesAnimator(self, self.__vDesc)
             model_assembler.assembleTracks(self.__resources, self.__vDesc, self, splineTracksImpl, True)
             dirtEnabled = BigWorld.dirtEnabled() and 'HD' in self.__vDesc.type.tags

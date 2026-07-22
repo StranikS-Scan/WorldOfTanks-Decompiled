@@ -1,0 +1,121 @@
+<styles_ArmoryYard_2023_MT.xml>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	MT 2D styles universal 1000g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <style>
+      <id>	31068	</id>
+      <texture>	gui/maps/vehicles/styles/ArmoryYard_2023_MT.png	</texture>
+      <description>	#vehicle_customization:styles/ArmoryYard_2023_MT/description	</description>
+      <userString>	#vehicle_customization:styles/ArmoryYard_2023_MT	</userString>
+      <longDescriptionSpecial>	#vehicle_customization:styles/ArmoryYard_2023_MT/description/long	</longDescriptionSpecial>
+      <outfits>
+        <outfit>
+          <season>	event	</season>
+        </outfit>
+        <outfit>
+          <season>	winter	</season>
+          <camouflages>
+            <item>
+              <id>	31047	</id>
+              <patternSize>	1	</patternSize>
+              <appliedTo>	4368	</appliedTo>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <paints>
+            <item>
+              <id>	31045	</id>
+              <appliedTo>	20753	</appliedTo>
+            </item>
+          </paints>
+          <projection_decals>
+            <item>
+              <id>	31062	</id>
+              <tags>	formfactor_rect1x2 front mimic	</tags>
+              <scaleFactorId>	2	</scaleFactorId>
+            </item>
+            <item>
+              <id>	31063	</id>
+              <tags>	direction_right_to_left formfactor_rect1x2 left mimic	</tags>
+            </item>
+            <item>
+              <id>	31064	</id>
+              <tags>	formfactor_rect1x2 direction_left_to_right right safe	</tags>
+            </item>
+          </projection_decals>
+        </outfit>
+        <outfit>
+          <season>	summer	</season>
+          <camouflages>
+            <item>
+              <id>	31046	</id>
+              <patternSize>	1	</patternSize>
+              <appliedTo>	4368	</appliedTo>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <paints>
+            <item>
+              <id>	31044	</id>
+              <appliedTo>	20753	</appliedTo>
+            </item>
+          </paints>
+          <projection_decals>
+            <item>
+              <id>	31062	</id>
+              <scaleFactorId>	2	</scaleFactorId>
+              <tags>	formfactor_rect1x2 front mimic	</tags>
+            </item>
+            <item>
+              <id>	31063	</id>
+              <tags>	direction_right_to_left formfactor_rect1x2 left mimic	</tags>
+            </item>
+            <item>
+              <id>	31064	</id>
+              <tags>	formfactor_rect1x2 direction_left_to_right right safe	</tags>
+            </item>
+          </projection_decals>
+        </outfit>
+        <outfit>
+          <season>	desert	</season>
+          <camouflages>
+            <item>
+              <id>	31048	</id>
+              <patternSize>	1	</patternSize>
+              <appliedTo>	4368	</appliedTo>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <paints>
+            <item>
+              <id>	31046	</id>
+              <appliedTo>	20753	</appliedTo>
+            </item>
+          </paints>
+          <projection_decals>
+            <item>
+              <id>	31062	</id>
+              <scaleFactorId>	2	</scaleFactorId>
+              <tags>	formfactor_rect1x2 front mimic	</tags>
+            </item>
+            <item>
+              <id>	31063	</id>
+              <tags>	direction_right_to_left formfactor_rect1x2 left mimic	</tags>
+            </item>
+            <item>
+              <id>	31064	</id>
+              <tags>	formfactor_rect1x2 direction_left_to_right right safe	</tags>
+            </item>
+          </projection_decals>
+        </outfit>
+      </outfits>
+    </style>
+  </itemGroup>
+</styles_ArmoryYard_2023_MT.xml>

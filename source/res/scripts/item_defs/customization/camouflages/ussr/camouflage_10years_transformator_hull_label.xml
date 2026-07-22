@@ -1,0 +1,54 @@
+<camouflage_10years_transformator_hull_label.xml>
+  <ussr:R38_KV-220_beta3>	ussr	</ussr:R38_KV-220_beta3>
+  <xmlns:germany>	germany	</xmlns:germany>
+  <ussr:R38_KV-220_beta2>	usa	</ussr:R38_KV-220_beta2>
+  <xmlns:china>	china	</xmlns:china>
+  <xmlns:france>	france	</xmlns:france>
+  <ussr:R38_KV-220_beta1>	uk	</ussr:R38_KV-220_beta1>
+  <xmlns:japan>	japan	</xmlns:japan>
+  <xmlns:czech>	czech	</xmlns:czech>
+  <ussr:R38_KV-220_beta0>	sweden	</ussr:R38_KV-220_beta0>
+  <xmlns:poland>	poland	</xmlns:poland>
+  <xmlns:italy>	italy	</xmlns:italy>
+  <xmlns:intunion>	intunion	</xmlns:intunion>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/opaque	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	MT camouflages 50g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	ussr:R38_KV-220 ussr:R38_KV-220_beta	</vehicles>
+      </include>
+      <exclude>
+        <vehicles>	ussr:R47_ISU-152_Zveroboj	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <camouflage>
+      <id>	103	</id>
+      <texture>	vehicles/russian/Camouflage/10years_transformator_hull.dds	</texture>
+      <description>	#vehicle_customization:camouflage/10years_transformator_hull/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/10years_transformator_hull/label	</userString>
+      <tags>	hiddenInUI	</tags>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	255 0 0 255	</c0>
+          <c1>	0 255 0 255	</c1>
+          <c2>	0 0 255 255	</c2>
+          <c3>	0 0 0 255	</c3>
+        </palette>
+      </palettes>
+      <tiling>
+        <ussr:R38_KV-220>	2 2 1.11 1.8	</ussr:R38_KV-220>
+        <ussr:R38_KV-220_beta>	2.2 2.2 0.09 -1.22	</ussr:R38_KV-220_beta>
+      </tiling>
+      <tilingSettings>
+        <type>	relative	</type>
+        <factor>	2.192148  2.195995	</factor>
+        <offset>	0.000000 0.000000	</offset>
+      </tilingSettings>
+    </camouflage>
+  </itemGroup>
+</camouflage_10years_transformator_hull_label.xml>

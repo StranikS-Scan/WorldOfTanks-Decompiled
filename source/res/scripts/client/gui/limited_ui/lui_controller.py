@@ -149,7 +149,7 @@ class _LimitedUIConditionsRepresentationService(object):
         return conditionGroups
 
 
-class LimitedUIController(ILimitedUIController):
+class LimitedUIController(ILimitedUIController, CallbackDelayer):
     __lobbyContext = dependency.descriptor(ILobbyContext)
     __battleRoyaleController = dependency.descriptor(IBattleRoyaleController)
     __bootcampController = dependency.descriptor(IBootcampController)
@@ -243,12 +243,12 @@ class LimitedUIController(ILimitedUIController):
 
     def completeRule(self, ruleID):
         if not self.__isRuleCompleted(ruleID):
-            self.__completeRule(ruleID)
+            self.__completeRules([ruleID])
             for handler in self.__observers[ruleID]:
                 handler(ruleID, CallHandlerReason.COMPLETE_RULE)
 
     def completeAllRules(self):
-        self.__settingsCore.serverSettings.setLimitedUIFullComplete()
+        self.__completeRules(self.__rules.getRulesIDs())
         for ruleID, handlers in self.__observers.items():
             for handler in handlers:
                 handler(ruleID, CallHandlerReason.COMPLETE_RULE)
@@ -435,8 +435,8 @@ class LimitedUIController(ILimitedUIController):
             return True
         isComplete = self.__checkCondition(ruleID)
         if isComplete:
-            self.__completeRule(ruleID)
-            if self.__readSettings(ruleID):
+            self.__completeRules([ruleID])
+            if self.__isRuleCompleted(ruleID):
                 self.__updateTutorialHints(state=self.__isEnabled, arguments=ruleID.value)
         return isComplete
 
@@ -446,22 +446,17 @@ class LimitedUIController(ILimitedUIController):
         return rule.expression(ctx) if ctx else False
 
     def __isRuleCompleted(self, ruleID):
-        return self.__readSettings(ruleID)
+        return ruleID in self.__postponedCompleteRules or self.__readSettings(ruleID)
 
     def __isRuleFirstlyCompleted(self, ruleID):
         return not self.__isRuleCompleted(ruleID) and self.__checkRule(ruleID)
 
-    def __completeRule(self, ruleID):
-        if not self.__storeSettings(ruleID):
-            self.__postponedCompleteRules.add(ruleID)
-            return
-        self.__sendSysMessage(ruleID)
+    def __completeRules(self, ruleIDs):
+        self.__postponedCompleteRules.update(ruleIDs)
+        self.delayCallback(0, self.__storePostponed)
 
     def __readSettings(self, ruleID):
         return self.__settingsCore.serverSettings.getLimitedUIProgress(ruleID, default=False)
-
-    def __storeSettings(self, ruleID):
-        return self.__settingsCore.serverSettings.setLimitedUIProgress([ruleID])
 
     def __storePostponed(self):
         if self.__postponedCompleteRules and self.__settingsCore.serverSettings.setLimitedUIProgress(self.__postponedCompleteRules):

@@ -1,0 +1,244 @@
+<camouflage_frontline_captured_camo_label.xml>
+  <germany:G03_PzV_Panther04>	ussr	</germany:G03_PzV_Panther04>
+  <germany:G02_Hummel96>	germany	</germany:G02_Hummel96>
+  <germany:G03_PzV_Panther03>	usa	</germany:G03_PzV_Panther03>
+  <germany:G02_Hummel93>	china	</germany:G02_Hummel93>
+  <germany:G02_Hummel95>	france	</germany:G02_Hummel95>
+  <germany:G03_PzV_Panther02>	uk	</germany:G03_PzV_Panther02>
+  <germany:G02_Hummel99>	japan	</germany:G02_Hummel99>
+  <germany:G02_Hummel94>	czech	</germany:G02_Hummel94>
+  <germany:G03_PzV_Panther01>	sweden	</germany:G03_PzV_Panther01>
+  <germany:G03_PzV_Panther00>	poland	</germany:G03_PzV_Panther00>
+  <germany:G02_Hummel98>	italy	</germany:G02_Hummel98>
+  <germany:G02_Hummel97>	intunion	</germany:G02_Hummel97>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/opaque	</userString>
+    <season>	ALL	</season>
+    <historical>	0	</historical>
+    <priceGroup>	MT camouflages 50g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <nations>	germany italy japan	</nations>
+      </include>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <camouflage>
+      <id>	561	</id>
+      <texture>	vehicles/german/Camouflage/frontline_captured.dds	</texture>
+      <description>	#vehicle_customization:camouflage/frontline_captured_camo/description	</description>
+      <scales>	1.6 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/frontline_captured_camo/label	</userString>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	16 17 24 255	</c0>
+          <c1>	151 156 159 255	</c1>
+          <c2>	113 118 128 255	</c2>
+          <c3>	74 81 89 255	</c3>
+        </palette>
+      </palettes>
+      <tiling>
+        <france:F114_Projet_4_1>	1.17 1.17 0.000000 0.000000	</france:F114_Projet_4_1>
+        <germany:G02_Hummel>	3.6 3.6 0.2 0.9	</germany:G02_Hummel>
+        <germany:G03_PzV_Panther>	2.08649 2.08649 0.549351 0.9	</germany:G03_PzV_Panther>
+        <germany:G03_PzV_Panther_IGR>	2.10541 2.10541 0.5 0.9	</germany:G03_PzV_Panther_IGR>
+        <germany:G04_PzVI_Tiger_I>	2.4 2.4 1.3 0.5	</germany:G04_PzVI_Tiger_I>
+        <germany:G04_PzVI_Tiger_I_FL>	2.4 2.4 1.3 0.5	</germany:G04_PzVI_Tiger_I_FL>
+        <germany:G04_PzVI_Tiger_IA>	2.4 2.4 1.3 0.5	</germany:G04_PzVI_Tiger_IA>
+        <germany:G04_PzVI_Tiger_I_IGR>	2.4 2.4 1.3 0.538961	</germany:G04_PzVI_Tiger_I_IGR>
+        <germany:G05_StuG_40_AusfG>	3.02162 3.02162 0.000000 0.000000	</germany:G05_StuG_40_AusfG>
+        <germany:G05_StuG_40_AusfG_IGR>	3 3 0.000000 0.000000	</germany:G05_StuG_40_AusfG_IGR>
+        <germany:G02_Hummel0>	1.28649 1.28649 1.01948 0.6	</germany:G02_Hummel0>
+        <germany:G02_Hummel1>	2.91351 2.91351 0.519481 0.000000	</germany:G02_Hummel1>
+        <germany:G02_Hummel2>	3.47297 3.47297 0.000000 0.000000	</germany:G02_Hummel2>
+        <germany:G02_Hummel3>	3.62973 3.62973 1.1 0.000000	</germany:G02_Hummel3>
+        <germany:G02_Hummel4>	3.00811 3.00811 0.5 1.21948	</germany:G02_Hummel4>
+        <germany:G02_Hummel5>	1.5 1.5 0.000000 0.000000	</germany:G02_Hummel5>
+        <germany:G02_Hummel6>	2.16216 2.16216 0.000000 0.000000	</germany:G02_Hummel6>
+        <germany:G02_Hummel7>	4.5 4.5 0.000000 0.000000	</germany:G02_Hummel7>
+        <germany:G02_Hummel8>	2.2 2.2 0.000000 0.000000	</germany:G02_Hummel8>
+        <germany:G02_Hummel9>	2.72162 2.72162 0.000000 0.000000	</germany:G02_Hummel9>
+        <germany:G03_PzV_Panther0>	3.10811 3.10811 0.000000 0.000000	</germany:G03_PzV_Panther0>
+        <germany:G03_PzV_Panther1>	2.34865 2.34865 0.000000 0.000000	</germany:G03_PzV_Panther1>
+        <germany:G03_PzV_Panther2>	4.48378 3.91892 1.04935 0.4	</germany:G03_PzV_Panther2>
+        <germany:G03_PzV_Panther3>	2.2 2.2 0.000000 0.000000	</germany:G03_PzV_Panther3>
+        <germany:G03_PzV_Panther4>	2.3 2.3 0.000000 0.000000	</germany:G03_PzV_Panther4>
+        <germany:G03_PzV_Panther5>	2.3 2.3 0.000000 0.000000	</germany:G03_PzV_Panther5>
+        <germany:G03_PzV_Panther6>	2.4 2.4 0.000000 0.000000	</germany:G03_PzV_Panther6>
+        <germany:G03_PzV_Panther7>	1.7 1.7 1.2 0.000000	</germany:G03_PzV_Panther7>
+        <germany:G03_PzV_Panther8>	1.7 1.7 0.000000 0.000000	</germany:G03_PzV_Panther8>
+        <germany:G03_PzV_Panther9>	1.3 1.3 0.000000 0.000000	</germany:G03_PzV_Panther9>
+        <germany:G03_PzV_Panther_IGR0>	1.08649 1.08649 0.000000 0.000000	</germany:G03_PzV_Panther_IGR0>
+        <germany:G03_PzV_Panther_IGR1>	0.9 0.9 0.000000 0.000000	</germany:G03_PzV_Panther_IGR1>
+        <germany:G03_PzV_Panther_IGR2>	0.9 0.9 1.64935 0.000000	</germany:G03_PzV_Panther_IGR2>
+        <germany:G03_PzV_Panther_IGR3>	0.8 0.8 0.000000 0.2	</germany:G03_PzV_Panther_IGR3>
+        <germany:G03_PzV_Panther_IGR4>	2.05676 2.05676 0.000000 0.5	</germany:G03_PzV_Panther_IGR4>
+        <germany:G03_PzV_Panther_IGR5>	1.9 1.9 1 0.519481	</germany:G03_PzV_Panther_IGR5>
+        <germany:G03_PzV_Panther_IGR6>	2.05676 2.05676 0.000000 0.5	</germany:G03_PzV_Panther_IGR6>
+        <germany:G03_PzV_Panther_IGR7>	2.2 2.2 0.000000 0.5	</germany:G03_PzV_Panther_IGR7>
+        <germany:G03_PzV_Panther_IGR8>	3.2 3.2 0.4 0.000000	</germany:G03_PzV_Panther_IGR8>
+        <germany:G03_PzV_Panther_IGR9>	1.48649 1.48649 0.000000 0.2	</germany:G03_PzV_Panther_IGR9>
+        <germany:G04_PzVI_Tiger_I0>	3.13784 3.13784 0.000000 0.000000	</germany:G04_PzVI_Tiger_I0>
+        <germany:G04_PzVI_Tiger_I1>	1.5 1.5 0.3 0.719481	</germany:G04_PzVI_Tiger_I1>
+        <germany:G04_PzVI_Tiger_I2>	0.6 0.6 1 1.2	</germany:G04_PzVI_Tiger_I2>
+        <germany:G04_PzVI_Tiger_I3>	0.6 0.6 1 1.2	</germany:G04_PzVI_Tiger_I3>
+        <germany:G04_PzVI_Tiger_I4>	1.6 1.6 0.000000 0.000000	</germany:G04_PzVI_Tiger_I4>
+        <germany:G04_PzVI_Tiger_I5>	2.2 2.2 0.1 0.000000	</germany:G04_PzVI_Tiger_I5>
+        <germany:G04_PzVI_Tiger_I6>	2.2 2.2 0.1 0.000000	</germany:G04_PzVI_Tiger_I6>
+        <germany:G04_PzVI_Tiger_I7>	1.2 1.2 0.000000 0.000000	</germany:G04_PzVI_Tiger_I7>
+        <germany:G04_PzVI_Tiger_I8>	2.1 2.1 0.000000 0.000000	</germany:G04_PzVI_Tiger_I8>
+        <germany:G04_PzVI_Tiger_I9>	1.57 1.57 2.79 2.58	</germany:G04_PzVI_Tiger_I9>
+        <germany:G04_PzVI_Tiger_IA0>	1.16 1.16 1.6 1.67	</germany:G04_PzVI_Tiger_IA0>
+        <germany:G04_PzVI_Tiger_IA1>	1.8 1.8 0.2 0.5	</germany:G04_PzVI_Tiger_IA1>
+        <germany:G04_PzVI_Tiger_IA2>	1.57 1.57 2.79 2.58	</germany:G04_PzVI_Tiger_IA2>
+        <germany:G04_PzVI_Tiger_IA3>	1.57 1.57 2.79 2.58	</germany:G04_PzVI_Tiger_IA3>
+        <germany:G04_PzVI_Tiger_IA4>	1.21622 1.21622 0.000000 0.000000	</germany:G04_PzVI_Tiger_IA4>
+        <germany:G04_PzVI_Tiger_IA5>	1.21622 1.21622 0.000000 0.000000	</germany:G04_PzVI_Tiger_IA5>
+        <germany:G04_PzVI_Tiger_IA6>	1.8 1.8 0.6 0.4	</germany:G04_PzVI_Tiger_IA6>
+        <germany:G04_PzVI_Tiger_IA7>	1.8 1.8 0.6 0.4	</germany:G04_PzVI_Tiger_IA7>
+        <germany:G04_PzVI_Tiger_IA8>	3 3 0.000000 0.44	</germany:G04_PzVI_Tiger_IA8>
+        <germany:G04_PzVI_Tiger_I_FL0>	1.91081 1.91081 0.6 0.4	</germany:G04_PzVI_Tiger_I_FL0>
+        <germany:G04_PzVI_Tiger_I_FL1>	3.5 3.5 2.50779 1.6	</germany:G04_PzVI_Tiger_I_FL1>
+        <germany:G04_PzVI_Tiger_I_FL2>	2.36216 2.36216 0.749351 0.9	</germany:G04_PzVI_Tiger_I_FL2>
+        <germany:G04_PzVI_Tiger_I_FL3>	1.7 1.7 0.000000 0.9	</germany:G04_PzVI_Tiger_I_FL3>
+        <germany:G04_PzVI_Tiger_I_FL4>	3.3 3.3 0.000000 0.000000	</germany:G04_PzVI_Tiger_I_FL4>
+        <germany:G04_PzVI_Tiger_I_FL5>	2.35676 2.35676 0.4 0.000000	</germany:G04_PzVI_Tiger_I_FL5>
+        <germany:G04_PzVI_Tiger_I_FL6>	2.5 2.5 0.000000 0.000000	</germany:G04_PzVI_Tiger_I_FL6>
+        <germany:G04_PzVI_Tiger_I_FL7>	2 2 0.000000 0.3	</germany:G04_PzVI_Tiger_I_FL7>
+        <germany:G04_PzVI_Tiger_I_FL8>	2.7 2.7 0.000000 0.000000	</germany:G04_PzVI_Tiger_I_FL8>
+        <germany:G04_PzVI_Tiger_I_FL9>	3.1 3.1 0.85974 0.1	</germany:G04_PzVI_Tiger_I_FL9>
+        <germany:G04_PzVI_Tiger_I_IGR0>	1.2 1.2 0.000000 0.000000	</germany:G04_PzVI_Tiger_I_IGR0>
+        <germany:G04_PzVI_Tiger_I_IGR1>	3.2 3.2 0.1 1.64935	</germany:G04_PzVI_Tiger_I_IGR1>
+        <germany:G04_PzVI_Tiger_I_IGR2>	3.49459 3.49459 0.000000 0.1	</germany:G04_PzVI_Tiger_I_IGR2>
+        <germany:G04_PzVI_Tiger_I_IGR3>	3.0027 3.0027 0.000000 0.000000	</germany:G04_PzVI_Tiger_I_IGR3>
+        <germany:G04_PzVI_Tiger_I_IGR4>	2.8 2.8 0.000000 0.000000	</germany:G04_PzVI_Tiger_I_IGR4>
+        <germany:G04_PzVI_Tiger_I_IGR5>	2.97297 2.97297 0.000000 0.000000	</germany:G04_PzVI_Tiger_I_IGR5>
+        <germany:G04_PzVI_Tiger_I_IGR6>	1.7 1.7 0.1 1.15974	</germany:G04_PzVI_Tiger_I_IGR6>
+        <germany:G04_PzVI_Tiger_I_IGR7>	1.3 1.3 0.000000 1.21948	</germany:G04_PzVI_Tiger_I_IGR7>
+        <germany:G04_PzVI_Tiger_I_IGR8>	1.68649 1.68649 0.000000 0.8	</germany:G04_PzVI_Tiger_I_IGR8>
+        <germany:G04_PzVI_Tiger_I_IGR9>	3.4 3.4 0.000000 0.000000	</germany:G04_PzVI_Tiger_I_IGR9>
+        <germany:G05_StuG_40_AusfG0>	3.4 3.4 0.000000 0.000000	</germany:G05_StuG_40_AusfG0>
+        <germany:G05_StuG_40_AusfG1>	3.3 3.3 0.2 0.000000	</germany:G05_StuG_40_AusfG1>
+        <germany:G05_StuG_40_AusfG2>	6.6 6.6 1.2 0.7	</germany:G05_StuG_40_AusfG2>
+        <germany:G05_StuG_40_AusfG3>	3.3 3.3 0.2 0.7	</germany:G05_StuG_40_AusfG3>
+        <germany:G05_StuG_40_AusfG4>	2.4 2.4 0.5 0.3	</germany:G05_StuG_40_AusfG4>
+        <germany:G02_Hummel92>	2.4 2.4 0.5 0.3	</germany:G02_Hummel92>
+        <germany:G05_StuG_40_AusfG5>	1.7 1.7 0.7 0.6	</germany:G05_StuG_40_AusfG5>
+        <germany:G05_StuG_40_AusfG6>	1.85676 1.85676 0.6 0.000000	</germany:G05_StuG_40_AusfG6>
+        <germany:G05_StuG_40_AusfG7>	1.85676 1.85676 0.6 0.000000	</germany:G05_StuG_40_AusfG7>
+        <germany:G05_StuG_40_AusfG8>	2.6 2.6 2.50779 1	</germany:G05_StuG_40_AusfG8>
+        <germany:G05_StuG_40_AusfG9>	1.9 1.9 0.000000 0.000000	</germany:G05_StuG_40_AusfG9>
+        <germany:G05_StuG_40_AusfG_IGR0>	1.8 1.8 1.91948 0.6	</germany:G05_StuG_40_AusfG_IGR0>
+        <germany:G05_StuG_40_AusfG_IGR1>	1.7 1.7 0.000000 0.000000	</germany:G05_StuG_40_AusfG_IGR1>
+        <germany:G05_StuG_40_AusfG_IGR2>	1.7 1.7 0.000000 0.000000	</germany:G05_StuG_40_AusfG_IGR2>
+        <germany:G05_StuG_40_AusfG_IGR3>	1.8 1.8 0.2 0.5	</germany:G05_StuG_40_AusfG_IGR3>
+        <germany:G05_StuG_40_AusfG_IGR4>	1.8 1.8 0.2 0.5	</germany:G05_StuG_40_AusfG_IGR4>
+        <germany:G05_StuG_40_AusfG_IGR5>	2.36216 2.36216 0.000000 0.000000	</germany:G05_StuG_40_AusfG_IGR5>
+        <germany:G05_StuG_40_AusfG_IGR6>	2.05676 2.05676 0.000000 0.000000	</germany:G05_StuG_40_AusfG_IGR6>
+        <germany:G05_StuG_40_AusfG_IGR7>	2.14324 2.14324 0.000000 0.8	</germany:G05_StuG_40_AusfG_IGR7>
+        <germany:G05_StuG_40_AusfG_IGR8>	2.14324 2.14324 0.000000 0.8	</germany:G05_StuG_40_AusfG_IGR8>
+        <germany:G05_StuG_40_AusfG_IGR9>	2.4 2.4 1.3 1.3	</germany:G05_StuG_40_AusfG_IGR9>
+        <germany:G02_Hummel00>	2.4 2.4 1.3 1.3	</germany:G02_Hummel00>
+        <germany:G02_Hummel01>	2.1 2.1 0.9 1.8	</germany:G02_Hummel01>
+        <germany:G04_PzVI_Tiger_IA9>	2.1 2.1 0.9 1.8	</germany:G04_PzVI_Tiger_IA9>
+        <germany:G02_Hummel02>	2.3 2.3 0.000000 0.000000	</germany:G02_Hummel02>
+        <germany:G02_Hummel03>	1.4 1.4 0.000000 0.000000	</germany:G02_Hummel03>
+        <germany:G02_Hummel04>	3.10811 3.10811 2.46753 1.48831	</germany:G02_Hummel04>
+        <germany:G02_Hummel05>	1.9 1.9 0.6 1	</germany:G02_Hummel05>
+        <germany:G02_Hummel06>	2.44324 2.44324 0.000000 0.000000	</germany:G02_Hummel06>
+        <germany:G02_Hummel07>	2.44324 2.44324 0.000000 0.000000	</germany:G02_Hummel07>
+        <germany:G02_Hummel08>	2.5 2.5 0.9 0.9	</germany:G02_Hummel08>
+        <germany:G02_Hummel09>	1.2 1.2 0.000000 0.000000	</germany:G02_Hummel09>
+        <germany:G02_Hummel10>	1.1 1.1 0.4 0.3	</germany:G02_Hummel10>
+        <germany:G02_Hummel11>	1.1 1.1 0.000000 0.000000	</germany:G02_Hummel11>
+        <germany:G02_Hummel12>	2 2 0.7 0.2	</germany:G02_Hummel12>
+        <germany:G02_Hummel13>	1.3 1.3 0.000000 0.000000	</germany:G02_Hummel13>
+        <germany:G02_Hummel14>	1.2 1.2 0.000000 0.000000	</germany:G02_Hummel14>
+        <germany:G02_Hummel15>	1.2 1.2 0.000000 0.000000	</germany:G02_Hummel15>
+        <germany:G02_Hummel16>	1.5 1.5 0.000000 0.000000	</germany:G02_Hummel16>
+        <germany:G02_Hummel17>	2.96216 2.96216 0.868831 0.5	</germany:G02_Hummel17>
+        <germany:G02_Hummel18>	1.2 1.2 0.000000 0.000000	</germany:G02_Hummel18>
+        <germany:G02_Hummel19>	1.4 1.4 0.5 0.000000	</germany:G02_Hummel19>
+        <germany:G02_Hummel20>	2.3 2.3 0.000000 0.000000	</germany:G02_Hummel20>
+        <germany:G02_Hummel21>	1.6 1.6 2.40649 0.000000	</germany:G02_Hummel21>
+        <germany:G02_Hummel22>	1.52162 1.52162 1.03896 3.67662	</germany:G02_Hummel22>
+        <germany:G02_Hummel23>	1.38108 1.38108 0.1 0.42987	</germany:G02_Hummel23>
+        <germany:G02_Hummel24>	2.6 2.6 0.000000 0.000000	</germany:G02_Hummel24>
+        <germany:G02_Hummel25>	2.7 2.7 0.000000 0.000000	</germany:G02_Hummel25>
+        <germany:G02_Hummel26>	2.13784 2.13784 0.000000 0.000000	</germany:G02_Hummel26>
+        <germany:G02_Hummel27>	2.4 2.4 0.8 0.9	</germany:G02_Hummel27>
+        <germany:G02_Hummel28>	2.4 2.4 0.8 0.9	</germany:G02_Hummel28>
+        <germany:G02_Hummel29>	2 2 0.2 0.2	</germany:G02_Hummel29>
+        <germany:G02_Hummel30>	2.5 2.5 0.000000 0.000000	</germany:G02_Hummel30>
+        <germany:G02_Hummel31>	3.78378 3.78378 0.000000 0.000000	</germany:G02_Hummel31>
+        <germany:G02_Hummel32>	4.05405 4.05405 1.42857 1.7974	</germany:G02_Hummel32>
+        <germany:G02_Hummel33>	2.59459 2.59459 2 0.4	</germany:G02_Hummel33>
+        <germany:G02_Hummel34>	1.5 1.5 0.000000 0.4	</germany:G02_Hummel34>
+        <germany:G02_Hummel35>	3.54324 3.54324 0.2 0.6	</germany:G02_Hummel35>
+        <germany:G02_Hummel36>	2.14324 2.14324 0.5 0.000000	</germany:G02_Hummel36>
+        <germany:G02_Hummel37>	1.88108 1.88108 0.48 0.48	</germany:G02_Hummel37>
+        <germany:G02_Hummel38>	1.49189 1.49189 0.000000 0.000000	</germany:G02_Hummel38>
+        <germany:G02_Hummel39>	1.1 1.1 0.000000 0.000000	</germany:G02_Hummel39>
+        <germany:G02_Hummel40>	1.16216 1.16216 0.6 0.000000	</germany:G02_Hummel40>
+        <germany:G02_Hummel41>	0.9 0.9 1 1	</germany:G02_Hummel41>
+        <germany:G02_Hummel42>	0.9 0.9 0.000000 0.000000	</germany:G02_Hummel42>
+        <germany:G02_Hummel43>	1.18649 1.18649 2.1 1.4	</germany:G02_Hummel43>
+        <germany:G02_Hummel44>	1.18649 1.18649 2.1 1.4	</germany:G02_Hummel44>
+        <germany:G02_Hummel45>	2.5973 2.5973 0.000000 0.000000	</germany:G02_Hummel45>
+        <germany:G02_Hummel46>	1.5 1.5 0.7 0.22987	</germany:G02_Hummel46>
+        <germany:G02_Hummel47>	1.1 1.1 0.4 0.000000	</germany:G02_Hummel47>
+        <germany:G02_Hummel48>	1.5 1.5 0.000000 0.000000	</germany:G02_Hummel48>
+        <germany:G02_Hummel49>	1.48108 1.48108 0.000000 0.9	</germany:G02_Hummel49>
+        <germany:G02_Hummel50>	1.48108 1.48108 0.000000 0.9	</germany:G02_Hummel50>
+        <germany:G02_Hummel51>	1.3 1.3 1.3 1.5	</germany:G02_Hummel51>
+        <germany:G02_Hummel52>	1.57 1.57 2.79 2.58	</germany:G02_Hummel52>
+        <germany:G02_Hummel53>	1.1 1.1 0.4 0.000000	</germany:G02_Hummel53>
+        <germany:G02_Hummel54>	1.18649 1.18649 2.1 1.4	</germany:G02_Hummel54>
+        <germany:G02_Hummel55>	1.18649 1.18649 2.1 1.4	</germany:G02_Hummel55>
+        <germany:G02_Hummel56>	1.3 1.3 1.3 1.5	</germany:G02_Hummel56>
+        <germany:G02_Hummel57>	1.3 1.3 1.3 1.5	</germany:G02_Hummel57>
+        <germany:G02_Hummel58>	1.11081 1.11081 0.5 0.1	</germany:G02_Hummel58>
+        <germany:G02_Hummel59>	3.24324 3.24324 0.000000 0.000000	</germany:G02_Hummel59>
+        <germany:G02_Hummel60>	2.02162 2.02162 0.000000 0.000000	</germany:G02_Hummel60>
+        <germany:G02_Hummel61>	2.2973 2.2973 0.000000 0.000000	</germany:G02_Hummel61>
+        <germany:G02_Hummel62>	2 2 0.000000 0.000000	</germany:G02_Hummel62>
+        <germany:G02_Hummel63>	3.78378 3.78378 0.000000 0.000000	</germany:G02_Hummel63>
+        <germany:G02_Hummel64>	2.3 2.3 0.000000 0.000000	</germany:G02_Hummel64>
+        <germany:G02_Hummel65>	3.97027 3.97027 0.000000 0.000000	</germany:G02_Hummel65>
+        <germany:G02_Hummel66>	3.61351 3.61351 0.000000 0.000000	</germany:G02_Hummel66>
+        <germany:G02_Hummel67>	1.2 1.2 0.3 0.000000	</germany:G02_Hummel67>
+        <germany:G02_Hummel68>	2.7 2.7 0.5 0.2	</germany:G02_Hummel68>
+        <germany:G02_Hummel69>	2.4 2.4 0.000000 0.000000	</germany:G02_Hummel69>
+        <germany:G02_Hummel70>	3.8 3.8 0.000000 0.000000	</germany:G02_Hummel70>
+        <germany:G02_Hummel71>	1.6 1.6 0.000000 0.000000	</germany:G02_Hummel71>
+        <germany:G02_Hummel72>	1.6 1.6 0.000000 0.000000	</germany:G02_Hummel72>
+        <germany:G02_Hummel73>	1.7 1.7 0.000000 0.000000	</germany:G02_Hummel73>
+        <germany:G02_Hummel74>	2.7 2.7 0.000000 0.000000	</germany:G02_Hummel74>
+        <germany:G02_Hummel75>	2.24324 2.24324 0.000000 0.000000	</germany:G02_Hummel75>
+        <germany:G02_Hummel76>	2.2 2.2 0.000000 0.000000	</germany:G02_Hummel76>
+        <germany:G02_Hummel77>	2.5 2.5 1.24935 0.000000	</germany:G02_Hummel77>
+        <germany:G02_Hummel78>	2.4 2.4 0.000000 0.000000	</germany:G02_Hummel78>
+        <germany:G02_Hummel79>	2.09189 2.09189 0.619481 0.2	</germany:G02_Hummel79>
+        <germany:G02_Hummel80>	2.09189 2.09189 0.619481 0.2	</germany:G02_Hummel80>
+        <germany:G02_Hummel81>	1.4 1.4 0.000000 0.000000	</germany:G02_Hummel81>
+        <germany:G02_Hummel82>	1.1 1.1 0.000000 0.000000	</germany:G02_Hummel82>
+        <germany:G02_Hummel83>	2.2 2.2 0.000000 0.000000	</germany:G02_Hummel83>
+        <germany:G02_Hummel84>	1.82703 1.82703 0.000000 0.000000	</germany:G02_Hummel84>
+        <germany:G02_Hummel85>	2.1 2.1 0.000000 0.000000	</germany:G02_Hummel85>
+        <germany:G02_Hummel86>	1.75676 1.75676 0.000000 0.000000	</germany:G02_Hummel86>
+        <germany:G02_Hummel87>	1.99189 1.99189 0.000000 0.000000	</germany:G02_Hummel87>
+        <germany:G02_Hummel88>	1.99189 1.99189 0.000000 0.000000	</germany:G02_Hummel88>
+        <germany:G02_Hummel89>	0.8 0.8 0.4 0.000000	</germany:G02_Hummel89>
+        <germany:G02_Hummel90>	1.57 1.57 2.79 2.58	</germany:G02_Hummel90>
+        <germany:G02_Hummel91>	3.99 3.99 0.000000 0.000000	</germany:G02_Hummel91>
+      </tiling>
+      <tilingSettings>
+        <type>	relative	</type>
+        <factor>	1.867655  1.868180	</factor>
+        <offset>	0.000000 0.000000	</offset>
+      </tilingSettings>
+    </camouflage>
+  </itemGroup>
+</camouflage_frontline_captured_camo_label.xml>

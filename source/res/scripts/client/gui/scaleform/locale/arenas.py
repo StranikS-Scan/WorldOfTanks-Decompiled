@@ -201,9 +201,13 @@ class ARENAS(object):
     QA_CONTENT_01_DESCRIPTION = '#arenas:qa_content_01/description'
     H08_MT_HANGAR_NAME = '#arenas:h08_mt_hangar/name'
     H08_MT_HANGAR_DESCRIPTION = '#arenas:h08_mt_hangar/description'
+    HANGAR_MT_LITE_EDITOR_NAME = '#arenas:Hangar_mt_lite_editor/name'
+    HANGAR_MT_LITE_EDITOR_DESCRIPTION = '#arenas:Hangar_mt_lite_editor/description'
     MODIFIED = '#arenas:modified'
     C_280_COSMIC_2026_NAME = '#arenas:280_cosmic_2026/name'
     C_280_COSMIC_2026_DESCRIPTION = '#arenas:280_cosmic_2026/description'
+    H17_MT_BDAY_2026_NAME = '#arenas:h17_mt_bday_2026/name'
+    H17_MT_BDAY_2026_DESCRIPTION = '#arenas:h17_mt_bday_2026/description'
     ALL_ENUM = (TYPE_CTF_NAME,
      TYPE_CTF_DESCRIPTION,
      TYPE_DOMINATION_NAME,
@@ -402,9 +406,13 @@ class ARENAS(object):
      QA_CONTENT_01_DESCRIPTION,
      H08_MT_HANGAR_NAME,
      H08_MT_HANGAR_DESCRIPTION,
+     HANGAR_MT_LITE_EDITOR_NAME,
+     HANGAR_MT_LITE_EDITOR_DESCRIPTION,
      MODIFIED,
      C_280_COSMIC_2026_NAME,
-     C_280_COSMIC_2026_DESCRIPTION)
+     C_280_COSMIC_2026_DESCRIPTION,
+     H17_MT_BDAY_2026_NAME,
+     H17_MT_BDAY_2026_DESCRIPTION)
 
     @classmethod
     def all(cls, key0):

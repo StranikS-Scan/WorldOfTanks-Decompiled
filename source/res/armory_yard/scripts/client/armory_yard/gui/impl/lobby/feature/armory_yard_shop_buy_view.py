@@ -101,7 +101,8 @@ class ArmoryYardShopBuyView(ArmoryYardShopBaseView):
             currency.update({Currency.GOLD: gold / self.viewModel.getGoldConversion()})
         if crystal > 0:
             currency.update({Currency.CRYSTAL: crystal / self.viewModel.getCrystalConversion()})
-        BigWorld.player().AccountArmoryYardComponent.buyShopProduct(self.__productId, count, json.dumps(currency), callback=partial(self.__onPurchaseResponse, isBundle=self.__armoryYardShopCtrl.isBundle(self.__productId), stages=self.__getProductData().get('UI', {}).get('stages', 1)))
+        uiSection = self.__getProductData().get('UI', {})
+        BigWorld.player().AccountArmoryYardComponent.buyShopProduct(self.__productId, count, json.dumps(currency), callback=partial(self.__onPurchaseResponse, isBundle=self.__armoryYardShopCtrl.isBundle(self.__productId), stages=uiSection.get('stages', 1), packAsBundle=uiSection.get('packAsBundle', {}), count=count))
         if not Waiting.isOpened('buyItem'):
             Waiting.show('buyItem', isAlwaysOnTop=True, isSingle=True)
 
@@ -188,17 +189,19 @@ class ArmoryYardShopBuyView(ArmoryYardShopBaseView):
         if customization:
             styleID = customization.get('id', '')
             self.onClose()
-            self.__armoryYardCtrl.isVehiclePreview = True
             if not self.__armoryYardCtrl.isArmoryVisiting:
                 self.__armoryYardCtrl.showShopStylePreview(styleID=styleID, backCallback=self.__backCallback)
             else:
+                self.__armoryYardCtrl.isVehiclePreview = True
                 self.__armoryYardCtrl.showShopStylePreview(styleID=styleID, backCallback=partial(self.__armoryYardCtrl.goToArmoryYard, ctx={'loadShopBuyView': True,
                  'productID': self.__productId}))
                 self.__armoryYardCtrl.cameraManager.goToHangar()
 
-    def __onPurchaseResponse(self, requestID, resultID, errorStr, data=None, isBundle=False, stages=0):
+    def __onPurchaseResponse(self, requestID, resultID, errorStr, data=None, isBundle=False, stages=0, packAsBundle=None, count=0):
         Waiting.hide('buyItem')
         self.__isPurchasing = False
+        additionalBundleParams = {'packAsBundle': packAsBundle if packAsBundle else {},
+         'count': count}
         if resultID < 0:
             self.__armoryYardShopCtrl.onPurchaseError()
             self.__update()
@@ -209,7 +212,7 @@ class ArmoryYardShopBuyView(ArmoryYardShopBaseView):
             if rewardsCount > 1:
                 showArmoryYardRewardWindow(rewards, state=State.SHOP, closeCallback=showArmoryYardShopWindow, stage=stages)
             else:
-                packer = getBonusPacker(data['productID'], rewards)
+                packer = getBonusPacker(data['productID'], rewards, **additionalBundleParams)
                 showArmoryYardShopRewardWindow(packer.title, packer.largeIcon, packer.count, packer.itemType, closeCallback=showArmoryYardShopWindow)
             self.onClose()
 
@@ -269,7 +272,7 @@ class ArmoryYardShopBuyView(ArmoryYardShopBaseView):
 
     def __updatePlayerMoney(self, _=None):
         gold, tokens, crystal = self.__getPlayerMoney()
-        if self.viewModel.getGoldAmount() == int(gold) and self.viewModel.getCurrencyAmount() == tokens:
+        if self.viewModel.getGoldAmount() == int(gold) and self.viewModel.getCurrencyAmount() == tokens and self.viewModel.getCrystalAmount() == int(crystal):
             return
         with self.viewModel.transaction() as model:
             model.setGoldAmount(int(gold))

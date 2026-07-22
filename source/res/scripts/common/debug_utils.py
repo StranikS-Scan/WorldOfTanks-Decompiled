@@ -258,6 +258,17 @@ def LOG_WRONG_CLIENT(entity, *kargs, **kwargs):
     return
 
 
+@_LogWrapper(LOG_LEVEL.RELEASE)
+def LOG_WRONG_CLIENT_SHORT(entity, attributeName, attribute, entityId, funcName, *_, **__):
+    entity = getattr(entity, 'id', entity)
+    BigWorld.logError('WRONG_CLIENT', ' '.join(map(str, [entity,
+     attributeName,
+     attribute,
+     entityId,
+     funcName])), None)
+    return
+
+
 def _doLog(category, msg, args=None, kwargs={}, frameDepth=2):
     header = _makeMsgHeader(sys._getframe(frameDepth))
     logFunc = _g_logMapping.get(category, None)

@@ -1949,7 +1949,7 @@
           </pitchLimits>
           <invisibilityFactorAtShot>	0.153	</invisibilityFactorAtShot>
           <shotDispersionRadius>	0.38	</shotDispersionRadius>
-          <reloadTime>	11.8	</reloadTime>
+          <reloadTime>	12.0	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.08	</turretRotation>
             <afterShot>	4.0	</afterShot>
@@ -2603,10 +2603,10 @@
     </detailed>
   </physics>
   <rocketAcceleration>
-    <deployTime>	3	</deployTime>
-    <reloadTime>	5	</reloadTime>
-    <reuseCount>	15	</reuseCount>
-    <duration>	3	</duration>
+    <deployTime>	10	</deployTime>
+    <reloadTime>	15	</reloadTime>
+    <reuseCount>	8	</reuseCount>
+    <duration>	4	</duration>
     <impulse>
       <magnitude>	100	</magnitude>
       <applyPoint>	0.0 0.0 -1.5	</applyPoint>
@@ -2615,7 +2615,7 @@
     <modifiers>
       <mul>
         <name>	dynAttrs/ramming	</name>
-        <value>	1.25	</value>
+        <value>	1.05	</value>
       </mul>
       <mul>
         <name>	dynAttrs/additiveShotDispersionFactor	</name>
@@ -2623,11 +2623,11 @@
       </mul>
       <mul>
         <name>	dynAttrs/engine/power	</name>
-        <value>	2.5	</value>
+        <value>	1.524188204108681	</value>
       </mul>
       <mul>
         <name>	dynAttrs/vehicle/maxSpeed/forward	</name>
-        <value>	1.272727272727273	</value>
+        <value>	1.090909090909091	</value>
       </mul>
       <mul>
         <name>	dynAttrs/vehicle/maxSpeed/backward	</name>
@@ -2641,15 +2641,15 @@
     <kpi>
       <mul>
         <name>	vehicleEnginePower	</name>
-        <value>	2.5	</value>
+        <value>	1.524188204108681	</value>
       </mul>
       <mul>
         <name>	vehicleForwardMaxSpeed	</name>
-        <value>	1.272727272727273	</value>
+        <value>	1.090909090909091	</value>
       </mul>
       <mul>
         <name>	vehicleBackwardMaxSpeed	</name>
-        <value>	0.1	</value>
+        <value>	0.2	</value>
       </mul>
       <mul>
         <name>	vehicleAllGroundRotationSpeed	</name>

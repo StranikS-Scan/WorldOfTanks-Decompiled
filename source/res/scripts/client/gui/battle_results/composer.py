@@ -119,11 +119,17 @@ class StrongholdBattleStatsComposer(StatsComposer):
     def __init__(self, reusable):
         super(StrongholdBattleStatsComposer, self).__init__(reusable, templates.STRONGHOLD_BATTLE_COMMON_STATS_BLOCK.clone(), templates.STRONGHOLD_PERSONAL_STATS_BLOCK.clone(), templates.STRONGHOLD_TEAMS_STATS_BLOCK.clone(), templates.REGULAR_TEXT_STATS_BLOCK.clone())
 
+    def _registerTabs(self, reusable):
+        self._block.addNextComponent(templates.STRONGHOLD_TABS_BLOCK.clone())
+
 
 class StrongholdSortieBattleStatsComposer(StatsComposer):
 
     def __init__(self, reusable):
         super(StrongholdSortieBattleStatsComposer, self).__init__(reusable, templates.REGULAR_COMMON_STATS_BLOCK.clone(), templates.STRONGHOLD_PERSONAL_STATS_BLOCK.clone(), templates.STRONGHOLD_TEAMS_STATS_BLOCK.clone(), templates.REGULAR_TEXT_STATS_BLOCK.clone())
+
+    def _registerTabs(self, reusable):
+        self._block.addNextComponent(templates.STRONGHOLD_TABS_BLOCK.clone())
 
 
 class RankedBattlesStatsComposer(StatsComposer):

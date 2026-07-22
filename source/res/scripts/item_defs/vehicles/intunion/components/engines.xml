@@ -1,107 +1,43 @@
 <engines.xml>
-  <ids>
-    <Continental_AVDS_1790_FL>	501	</Continental_AVDS_1790_FL>
-    <Rolls_Royse_Meteor>	31001	</Rolls_Royse_Meteor>
-    <Rolls_Royse_Meteor_MkIV>	31002	</Rolls_Royse_Meteor_MkIV>
-    <Continental_AV_1790_6A>	31003	</Continental_AV_1790_6A>
-    <Cummins_VT8_460>	31004	</Cummins_VT8_460>
-    <Cummins_V903_500>	31005	</Cummins_V903_500>
-    <Continental_AV_1790_7B>	31006	</Continental_AV_1790_7B>
-    <Leyland_L60_Mk4A>	31007	</Leyland_L60_Mk4A>
-    <Continental_AVDS_1790>	31008	</Continental_AVDS_1790>
-    <V_54B>	31009	</V_54B>
-    <Continental_AVDS_1790_2AC>	31010	</Continental_AVDS_1790_2AC>
-    <Continental_AVDS_1790_6A>	31011	</Continental_AVDS_1790_6A>
-    <GM_6046>	31012	</GM_6046>
-    <Chrysler_A57>	31013	</Chrysler_A57>
-    <Ford_GAA_1>	31014	</Ford_GAA_1>
-    <Ford_GAA_2>	31015	</Ford_GAA_2>
-    <Lycoming_O_435T>	31016	</Lycoming_O_435T>
-    <Lycoming_O_435TA>	31017	</Lycoming_O_435TA>
-    <Hotchkiss_35>	31018	</Hotchkiss_35>
-    <Hotchkiss_39>	31019	</Hotchkiss_39>
-    <Renault_22_CV>	31020	</Renault_22_CV>
-    <V-2-54>	31021	</V-2-54>
-    <V-55U>	31022	</V-55U>
-    <Continental_AVDS_1790_6AM>	31023	</Continental_AVDS_1790_6AM>
-    <_5TD>	31030	</_5TD>
-    <V_55>	31025	</V_55>
-    <V_2_34>	31026	</V_2_34>
-    <V_44>	31027	</V_44>
-    <V_55_T>	35001	</V_55_T>
-    <V_44_T>	35002	</V_44_T>
-    <Development_Engine>	65000	</Development_Engine>
-  </ids>
+  <xmlns:xmlref>	http://bwt/xmlref	</xmlns:xmlref>
   <shared>
-    <Rolls_Royse_Meteor>
-      <userString>	#intunion_vehicles:Rolls_Royse_Meteor	</userString>
+    <Chrysler_A57>
+      <id>	31013	</id>
+      <userString>	#intunion_vehicles:Chrysler_A57	</userString>
       <tags>	gasoline	</tags>
-      <level>	6	</level>
-      <price>	29000	</price>
+      <level>	5	</level>
+      <price>	13900	</price>
       <wwsoundPC>	eng_Continental_R975_C1_pc	</wwsoundPC>
       <wwsoundNPC>	eng_Continental_R975_C1_npc	</wwsoundNPC>
-      <power>	600	</power>
-      <weight>	630	</weight>
-      <maxHealth>	247	</maxHealth>
-      <maxRegenHealth>	123	</maxRegenHealth>
-      <repairCost>	5	</repairCost>
+      <power>	550	</power>
+      <weight>	2379	</weight>
+      <maxHealth>	104	</maxHealth>
+      <maxRegenHealth>	52	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
       <fireStartingChance>	0.2	</fireStartingChance>
-      <rpm_min>	399	</rpm_min>
-      <rpm_max>	2551	</rpm_max>
-    </Rolls_Royse_Meteor>
-    <Rolls_Royse_Meteor_MkIV>
-      <userString>	#intunion_vehicles:Rolls_Royse_Meteor_MkIV	</userString>
-      <tags>	gasoline	</tags>
-      <level>	6	</level>
-      <price>	33000	</price>
-      <wwsoundPC>	eng_Continental_R975_C1_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_Continental_R975_C1_npc	</wwsoundNPC>
-      <power>	650	</power>
-      <weight>	630	</weight>
-      <maxHealth>	247	</maxHealth>
-      <maxRegenHealth>	123	</maxRegenHealth>
-      <repairCost>	5	</repairCost>
-      <fireStartingChance>	0.2	</fireStartingChance>
-      <rpm_min>	349	</rpm_min>
-      <rpm_max>	2727	</rpm_max>
-    </Rolls_Royse_Meteor_MkIV>
-    <Continental_AV_1790_7B>
-      <userString>	#intunion_vehicles:Continental_AV_1790_7B	</userString>
-      <shortUserString>	#intunion_vehicles:Continental_AV_1790_7B_short	</shortUserString>
-      <tags>	gasoline	</tags>
+      <rpm_min>	449	</rpm_min>
+      <rpm_max>	2375	</rpm_max>
+    </Chrysler_A57>
+    <Continental_AVDS_1790>
+      <id>	31008	</id>
+      <userString>	#intunion_vehicles:Continental_AVDS_1790	</userString>
+      <shortUserString>	#intunion_vehicles:Continental_AVDS_1790_short	</shortUserString>
+      <tags>	diesel	</tags>
       <level>	8	</level>
-      <price>	45000	</price>
-      <notInShop>	true	</notInShop>
-      <wwsoundPC>	eng_Ford_GAA_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_Ford_GAA_npc	</wwsoundNPC>
-      <power>	820	</power>
-      <weight>	1200	</weight>
+      <price>	57000	</price>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <power>	750	</power>
+      <weight>	1905	</weight>
       <maxHealth>	260	</maxHealth>
       <maxRegenHealth>	130	</maxRegenHealth>
-      <repairCost>	5	</repairCost>
-      <fireStartingChance>	0.2	</fireStartingChance>
-      <rpm_min>	488	</rpm_min>
-      <rpm_max>	2682	</rpm_max>
-    </Continental_AV_1790_7B>
-    <Continental_AV_1790_6A>
-      <userString>	#intunion_vehicles:Continental_AV_1790_6A	</userString>
-      <shortUserString>	#intunion_vehicles:Continental_AV_1790_6A_short	</shortUserString>
-      <tags>	diesel	</tags>
-      <level>	10	</level>
-      <price>	120000	</price>
-      <notInShop>	true	</notInShop>
-      <wwsoundPC>	eng_V2_34_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_V2_34_npc	</wwsoundNPC>
-      <power>	1250	</power>
-      <weight>	2200	</weight>
-      <maxHealth>	285	</maxHealth>
-      <maxRegenHealth>	142	</maxRegenHealth>
-      <repairCost>	8	</repairCost>
-      <fireStartingChance>	0.12	</fireStartingChance>
-      <rpm_min>	300	</rpm_min>
-      <rpm_max>	2300	</rpm_max>
-    </Continental_AV_1790_6A>
+      <repairCost>	6	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+      <rpm_min>	249	</rpm_min>
+      <rpm_max>	2452	</rpm_max>
+    </Continental_AVDS_1790>
     <Continental_AVDS_1790_2AC>
+      <id>	31010	</id>
       <userString>	#intunion_vehicles:Continental_AVDS_1790_2AC	</userString>
       <shortUserString>	#intunion_vehicles:Continental_AVDS_1790_2AC_short	</shortUserString>
       <tags>	diesel	</tags>
@@ -118,7 +54,26 @@
       <rpm_min>	430	</rpm_min>
       <rpm_max>	2040	</rpm_max>
     </Continental_AVDS_1790_2AC>
+    <Continental_AVDS_1790_6A>
+      <id>	31011	</id>
+      <userString>	#intunion_vehicles:Continental_AVDS_1790_6A	</userString>
+      <shortUserString>	#intunion_vehicles:Continental_AVDS_1790_6A_short	</shortUserString>
+      <tags>	diesel	</tags>
+      <level>	10	</level>
+      <price>	105000	</price>
+      <wwsoundPC>	eng_V2_34_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_V2_34_npc	</wwsoundNPC>
+      <power>	1080	</power>
+      <weight>	2200	</weight>
+      <maxHealth>	285	</maxHealth>
+      <maxRegenHealth>	142	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <fireStartingChance>	0.12	</fireStartingChance>
+      <rpm_min>	360	</rpm_min>
+      <rpm_max>	2180	</rpm_max>
+    </Continental_AVDS_1790_6A>
     <Continental_AVDS_1790_6AM>
+      <id>	31023	</id>
       <userString>	#intunion_vehicles:Continental_AVDS_1790_6AM	</userString>
       <shortUserString>	#intunion_vehicles:Continental_AVDS_1790_6AM_short	</shortUserString>
       <tags>	diesel	</tags>
@@ -136,89 +91,8 @@
       <rpm_min>	376	</rpm_min>
       <rpm_max>	2148	</rpm_max>
     </Continental_AVDS_1790_6AM>
-    <Continental_AVDS_1790_6A>
-      <userString>	#intunion_vehicles:Continental_AVDS_1790_6A	</userString>
-      <shortUserString>	#intunion_vehicles:Continental_AVDS_1790_6A_short	</shortUserString>
-      <tags>	diesel	</tags>
-      <level>	10	</level>
-      <price>	105000	</price>
-      <wwsoundPC>	eng_V2_34_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_V2_34_npc	</wwsoundNPC>
-      <power>	1080	</power>
-      <weight>	2200	</weight>
-      <maxHealth>	285	</maxHealth>
-      <maxRegenHealth>	142	</maxRegenHealth>
-      <repairCost>	8	</repairCost>
-      <fireStartingChance>	0.12	</fireStartingChance>
-      <rpm_min>	360	</rpm_min>
-      <rpm_max>	2180	</rpm_max>
-    </Continental_AVDS_1790_6A>
-    <Cummins_VT8_460>
-      <userString>	#intunion_vehicles:Cummins_VT8_460	</userString>
-      <tags>	diesel	</tags>
-      <level>	6	</level>
-      <price>	25500	</price>
-      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
-      <power>	650	</power>
-      <weight>	1660	</weight>
-      <maxHealth>	200	</maxHealth>
-      <maxRegenHealth>	100	</maxRegenHealth>
-      <repairCost>	5	</repairCost>
-      <fireStartingChance>	0.15	</fireStartingChance>
-      <rpm_min>	349	</rpm_min>
-      <rpm_max>	2150	</rpm_max>
-    </Cummins_VT8_460>
-    <Cummins_V903_500>
-      <userString>	#intunion_vehicles:Cummins_V903_500	</userString>
-      <tags>	diesel	</tags>
-      <level>	7	</level>
-      <price>	37500	</price>
-      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
-      <power>	680	</power>
-      <weight>	1660	</weight>
-      <maxHealth>	234	</maxHealth>
-      <maxRegenHealth>	123	</maxRegenHealth>
-      <repairCost>	5	</repairCost>
-      <fireStartingChance>	0.15	</fireStartingChance>
-      <rpm_min>	319	</rpm_min>
-      <rpm_max>	2241	</rpm_max>
-    </Cummins_V903_500>
-    <Leyland_L60_Mk4A>
-      <userString>	#intunion_vehicles:Leyland_L60_Mk4A	</userString>
-      <tags>	diesel	</tags>
-      <level>	7	</level>
-      <price>	41000	</price>
-      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
-      <power>	680	</power>
-      <weight>	2464	</weight>
-      <maxHealth>	234	</maxHealth>
-      <maxRegenHealth>	123	</maxRegenHealth>
-      <repairCost>	5	</repairCost>
-      <fireStartingChance>	0.15	</fireStartingChance>
-      <rpm_min>	319	</rpm_min>
-      <rpm_max>	2241	</rpm_max>
-    </Leyland_L60_Mk4A>
-    <Continental_AVDS_1790>
-      <userString>	#intunion_vehicles:Continental_AVDS_1790	</userString>
-      <shortUserString>	#intunion_vehicles:Continental_AVDS_1790_short	</shortUserString>
-      <tags>	diesel	</tags>
-      <level>	8	</level>
-      <price>	57000	</price>
-      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
-      <power>	750	</power>
-      <weight>	1905	</weight>
-      <maxHealth>	260	</maxHealth>
-      <maxRegenHealth>	130	</maxRegenHealth>
-      <repairCost>	6	</repairCost>
-      <fireStartingChance>	0.15	</fireStartingChance>
-      <rpm_min>	249	</rpm_min>
-      <rpm_max>	2452	</rpm_max>
-    </Continental_AVDS_1790>
     <Continental_AVDS_1790_FL>
+      <id>	501	</id>
       <userString>	#intunion_vehicles:Continental_AVDS_1790	</userString>
       <shortUserString>	#intunion_vehicles:Continental_AVDS_1790_short	</shortUserString>
       <tags>	diesel	</tags>
@@ -236,301 +110,80 @@
       <rpm_min>	249	</rpm_min>
       <rpm_max>	2452	</rpm_max>
     </Continental_AVDS_1790_FL>
-    <V_54B>
-      <userString>	#intunion_vehicles:V_54B	</userString>
+    <Continental_AV_1790_6A>
+      <id>	31003	</id>
+      <userString>	#intunion_vehicles:Continental_AV_1790_6A	</userString>
+      <shortUserString>	#intunion_vehicles:Continental_AV_1790_6A_short	</shortUserString>
       <tags>	diesel	</tags>
       <level>	10	</level>
-      <price>	110000	</price>
+      <price>	120000	</price>
       <notInShop>	true	</notInShop>
-      <wwsoundPC>	eng_V2K_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_V2K_npc	</wwsoundNPC>
-      <power>	580	</power>
-      <weight>	895	</weight>
-      <maxHealth>	360	</maxHealth>
-      <maxRegenHealth>	180	</maxRegenHealth>
-      <repairCost>	10	</repairCost>
-      <fireStartingChance>	0.1	</fireStartingChance>
-      <rpm_min>	319	</rpm_min>
-      <rpm_max>	2261	</rpm_max>
-    </V_54B>
-    <GM_6046>
-      <userString>	#intunion_vehicles:GM_6046	</userString>
-      <tags>	diesel	</tags>
-      <level>	5	</level>
-      <price>	13500	</price>
-      <wwsoundPC>	eng_V2K_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_V2K_npc	</wwsoundNPC>
-      <power>	500	</power>
-      <weight>	2318	</weight>
-      <maxHealth>	176	</maxHealth>
-      <maxRegenHealth>	100	</maxRegenHealth>
-      <repairCost>	3	</repairCost>
-      <fireStartingChance>	0.15	</fireStartingChance>
-      <rpm_min>	399	</rpm_min>
-      <rpm_max>	2101	</rpm_max>
-    </GM_6046>
-    <Chrysler_A57>
-      <userString>	#intunion_vehicles:Chrysler_A57	</userString>
-      <tags>	gasoline	</tags>
-      <level>	5	</level>
-      <price>	13900	</price>
-      <wwsoundPC>	eng_Continental_R975_C1_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_Continental_R975_C1_npc	</wwsoundNPC>
-      <power>	550	</power>
-      <weight>	2379	</weight>
-      <maxHealth>	104	</maxHealth>
-      <maxRegenHealth>	52	</maxRegenHealth>
-      <repairCost>	3	</repairCost>
-      <fireStartingChance>	0.2	</fireStartingChance>
-      <rpm_min>	449	</rpm_min>
-      <rpm_max>	2375	</rpm_max>
-    </Chrysler_A57>
-    <Ford_GAA_1>
-      <userString>	#intunion_vehicles:Ford_GAA_1	</userString>
-      <tags>	gasoline	</tags>
-      <level>	4	</level>
-      <price>	10500	</price>
-      <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
-      <power>	450	</power>
-      <weight>	708	</weight>
-      <maxHealth>	104	</maxHealth>
-      <maxRegenHealth>	52	</maxRegenHealth>
-      <repairCost>	2	</repairCost>
-      <fireStartingChance>	0.2	</fireStartingChance>
-      <rpm_min>	290	</rpm_min>
-      <rpm_max>	2868	</rpm_max>
-    </Ford_GAA_1>
-    <Ford_GAA_2>
-      <userString>	#intunion_vehicles:Ford_GAA_2	</userString>
-      <tags>	gasoline	</tags>
-      <level>	5	</level>
-      <price>	12500	</price>
-      <wwsoundPC>	eng_Continental_R975_C1_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_Continental_R975_C1_npc	</wwsoundNPC>
-      <power>	500	</power>
-      <weight>	708	</weight>
-      <maxHealth>	136	</maxHealth>
-      <maxRegenHealth>	67	</maxRegenHealth>
-      <repairCost>	3	</repairCost>
-      <fireStartingChance>	0.2	</fireStartingChance>
-      <rpm_min>	500	</rpm_min>
-      <rpm_max>	2200	</rpm_max>
-    </Ford_GAA_2>
-    <Lycoming_O_435T>
-      <userString>	#intunion_vehicles:Lycoming_O_435T	</userString>
-      <tags>	gasoline	</tags>
-      <level>	4	</level>
-      <price>	9500	</price>
-      <wwsoundPC>	eng_gaz_aa_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_gaz_aa_npc	</wwsoundNPC>
-      <power>	162	</power>
-      <weight>	155	</weight>
-      <maxHealth>	104	</maxHealth>
-      <maxRegenHealth>	52	</maxRegenHealth>
-      <repairCost>	3	</repairCost>
-      <fireStartingChance>	0.2	</fireStartingChance>
-      <rpm_min>	296	</rpm_min>
-      <rpm_max>	2651	</rpm_max>
-    </Lycoming_O_435T>
-    <Lycoming_O_435TA>
-      <userString>	#intunion_vehicles:Lycoming_O_435TA	</userString>
-      <tags>	gasoline	</tags>
-      <level>	4	</level>
-      <price>	11000	</price>
-      <wwsoundPC>	eng_gaz_aa_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_gaz_aa_npc	</wwsoundNPC>
-      <power>	192	</power>
-      <weight>	158	</weight>
-      <maxHealth>	104	</maxHealth>
-      <maxRegenHealth>	52	</maxRegenHealth>
-      <repairCost>	3	</repairCost>
-      <fireStartingChance>	0.2	</fireStartingChance>
-      <rpm_min>	258	</rpm_min>
-      <rpm_max>	2771	</rpm_max>
-    </Lycoming_O_435TA>
-    <Hotchkiss_35>
-      <userString>	#intunion_vehicles:Hotchkiss_35	</userString>
-      <tags>	gasoline	</tags>
-      <level>	1	</level>
-      <price>	400	</price>
-      <wwsoundPC>	eng_gaz_aa_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_gaz_aa_npc	</wwsoundNPC>
-      <power>	75	</power>
-      <weight>	266	</weight>
-      <maxHealth>	25	</maxHealth>
-      <maxRegenHealth>	17	</maxRegenHealth>
-      <repairCost>	1	</repairCost>
-      <fireStartingChance>	0.2	</fireStartingChance>
-      <rpm_min>	405	</rpm_min>
-      <rpm_max>	2301	</rpm_max>
-    </Hotchkiss_35>
-    <Hotchkiss_39>
-      <userString>	#intunion_vehicles:Hotchkiss_39	</userString>
-      <tags>	gasoline	</tags>
-      <level>	2	</level>
-      <price>	1100	</price>
-      <wwsoundPC>	eng_gaz_aa_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_gaz_aa_npc	</wwsoundNPC>
-      <power>	120	</power>
-      <weight>	280	</weight>
-      <maxHealth>	25	</maxHealth>
-      <maxRegenHealth>	17	</maxRegenHealth>
-      <repairCost>	1	</repairCost>
-      <fireStartingChance>	0.2	</fireStartingChance>
-      <rpm_min>	349	</rpm_min>
-      <rpm_max>	2482	</rpm_max>
-    </Hotchkiss_39>
-    <Renault_22_CV>
-      <userString>	#intunion_vehicles:Renault_22_CV	</userString>
-      <tags>	gasoline	</tags>
-      <level>	1	</level>
-      <price>	0	</price>
-      <notInShop>	true	</notInShop>
-      <wwsoundPC>	eng_gaz_aa_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_gaz_aa_npc	</wwsoundNPC>
-      <power>	75	</power>
-      <weight>	266	</weight>
-      <maxHealth>	25	</maxHealth>
-      <maxRegenHealth>	17	</maxRegenHealth>
-      <repairCost>	1	</repairCost>
-      <fireStartingChance>	0.2	</fireStartingChance>
-      <rpm_min>	405	</rpm_min>
-      <rpm_max>	2301	</rpm_max>
-    </Renault_22_CV>
-    <V-2-54>
-      <userString>	#intunion_vehicles:V-2-54	</userString>
-      <tags>	diesel	</tags>
-      <level>	9	</level>
-      <price>	78000	</price>
-      <wwsoundPC>	eng_V2K_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_V2K_npc	</wwsoundNPC>
-      <power>	560	</power>
-      <weight>	700	</weight>
-      <maxHealth>	370	</maxHealth>
-      <maxRegenHealth>	185	</maxRegenHealth>
-      <repairCost>	9	</repairCost>
+      <wwsoundPC>	eng_V2_34_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_V2_34_npc	</wwsoundNPC>
+      <power>	1250	</power>
+      <weight>	2200	</weight>
+      <maxHealth>	285	</maxHealth>
+      <maxRegenHealth>	142	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
       <fireStartingChance>	0.12	</fireStartingChance>
-      <rpm_min>	339	</rpm_min>
-      <rpm_max>	2221	</rpm_max>
-    </V-2-54>
-    <V-55U>
-      <userString>	#intunion_vehicles:V-55U	</userString>
-      <tags>	diesel	</tags>
-      <level>	10	</level>
-      <price>	95000	</price>
-      <wwsoundPC>	eng_V2K_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_V2K_npc	</wwsoundNPC>
-      <power>	580	</power>
-      <weight>	700	</weight>
-      <maxHealth>	370	</maxHealth>
-      <maxRegenHealth>	185	</maxRegenHealth>
-      <repairCost>	9	</repairCost>
-      <fireStartingChance>	0.12	</fireStartingChance>
-      <rpm_min>	319	</rpm_min>
-      <rpm_max>	2261	</rpm_max>
-    </V-55U>
-    <_5TD>
-      <userString>	#intunion_vehicles:_5TD	</userString>
-      <tags>	diesel	</tags>
+      <rpm_min>	300	</rpm_min>
+      <rpm_max>	2300	</rpm_max>
+    </Continental_AV_1790_6A>
+    <Continental_AV_1790_7B>
+      <id>	31006	</id>
+      <userString>	#intunion_vehicles:Continental_AV_1790_7B	</userString>
+      <shortUserString>	#intunion_vehicles:Continental_AV_1790_7B_short	</shortUserString>
+      <tags>	gasoline	</tags>
       <level>	8	</level>
-      <price>	57000	</price>
+      <price>	45000	</price>
       <notInShop>	true	</notInShop>
-      <wwsoundPC>	eng_V2K_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_V2K_npc	</wwsoundNPC>
-      <power>	550	</power>
-      <weight>	1000	</weight>
+      <wwsoundPC>	eng_Ford_GAA_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Ford_GAA_npc	</wwsoundNPC>
+      <power>	820	</power>
+      <weight>	1200	</weight>
       <maxHealth>	260	</maxHealth>
       <maxRegenHealth>	130	</maxRegenHealth>
-      <repairCost>	6	</repairCost>
-      <fireStartingChance>	0.15	</fireStartingChance>
-      <rpm_min>	349	</rpm_min>
-      <rpm_max>	2201	</rpm_max>
-    </_5TD>
-    <V_55>
-      <userString>	#intunion_vehicles:V_55	</userString>
-      <tags>	diesel	</tags>
-      <level>	10	</level>
-      <price>	100000	</price>
-      <notInShop>	true	</notInShop>
-      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
-      <power>	750	</power>
-      <weight>	940	</weight>
-      <maxHealth>	360	</maxHealth>
-      <maxRegenHealth>	180	</maxRegenHealth>
-      <repairCost>	10	</repairCost>
-      <fireStartingChance>	0.12	</fireStartingChance>
-      <rpm_min>	249	</rpm_min>
-      <rpm_max>	2452	</rpm_max>
-    </V_55>
-    <V_2_34>
-      <userString>	#intunion_vehicles:V_2_34	</userString>
+      <repairCost>	5	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	488	</rpm_min>
+      <rpm_max>	2682	</rpm_max>
+    </Continental_AV_1790_7B>
+    <Cummins_V903_500>
+      <id>	31005	</id>
+      <userString>	#intunion_vehicles:Cummins_V903_500	</userString>
       <tags>	diesel	</tags>
       <level>	7	</level>
-      <price>	35000	</price>
-      <wwsoundPC>	eng_V2K_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_V2K_npc	</wwsoundNPC>
-      <power>	520	</power>
-      <weight>	750	</weight>
-      <maxHealth>	190	</maxHealth>
-      <maxRegenHealth>	95	</maxRegenHealth>
-      <repairCost>	7	</repairCost>
-      <fireStartingChance>	0.15	</fireStartingChance>
-      <rpm_min>	379	</rpm_min>
-      <rpm_max>	2141	</rpm_max>
-    </V_2_34>
-    <V_44>
-      <userString>	#intunion_vehicles:V_44	</userString>
-      <tags>	diesel	</tags>
-      <level>	8	</level>
-      <price>	50000	</price>
-      <wwsoundPC>	eng_V2K_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_V2K_npc	</wwsoundNPC>
-      <power>	570	</power>
-      <weight>	895	</weight>
-      <maxHealth>	260	</maxHealth>
-      <maxRegenHealth>	130	</maxRegenHealth>
-      <repairCost>	8	</repairCost>
-      <fireStartingChance>	0.12	</fireStartingChance>
-      <rpm_min>	329	</rpm_min>
-      <rpm_max>	2241	</rpm_max>
-    </V_44>
-    <V_55_T>
-      <userString>	#intunion_vehicles:V_55_T	</userString>
-      <tags>	diesel	</tags>
-      <level>	10	</level>
-      <price>	100000	</price>
-      <notInShop>	true	</notInShop>
+      <price>	37500	</price>
       <wwsoundPC>	eng_v55_pc	</wwsoundPC>
       <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
-      <power>	750	</power>
-      <weight>	940	</weight>
-      <maxHealth>	360	</maxHealth>
-      <maxRegenHealth>	180	</maxRegenHealth>
-      <repairCost>	10	</repairCost>
-      <fireStartingChance>	0.12	</fireStartingChance>
-      <rpm_min>	249	</rpm_min>
-      <rpm_max>	2452	</rpm_max>
-    </V_55_T>
-    <V_44_T>
-      <userString>	#intunion_vehicles:V_44_T	</userString>
-      <tags>	diesel	</tags>
-      <level>	8	</level>
-      <price>	50000	</price>
-      <notInShop>	true	</notInShop>
-      <wwsoundPC>	eng_V2K_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_V2K_npc	</wwsoundNPC>
-      <power>	570	</power>
-      <weight>	895	</weight>
-      <maxHealth>	260	</maxHealth>
-      <maxRegenHealth>	130	</maxRegenHealth>
-      <repairCost>	8	</repairCost>
-      <fireStartingChance>	0.12	</fireStartingChance>
-      <rpm_min>	329	</rpm_min>
+      <power>	680	</power>
+      <weight>	1660	</weight>
+      <maxHealth>	234	</maxHealth>
+      <maxRegenHealth>	123	</maxRegenHealth>
+      <repairCost>	5	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+      <rpm_min>	319	</rpm_min>
       <rpm_max>	2241	</rpm_max>
-    </V_44_T>
+    </Cummins_V903_500>
+    <Cummins_VT8_460>
+      <id>	31004	</id>
+      <userString>	#intunion_vehicles:Cummins_VT8_460	</userString>
+      <tags>	diesel	</tags>
+      <level>	6	</level>
+      <price>	25500	</price>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <power>	650	</power>
+      <weight>	1660	</weight>
+      <maxHealth>	200	</maxHealth>
+      <maxRegenHealth>	100	</maxRegenHealth>
+      <repairCost>	5	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+      <rpm_min>	349	</rpm_min>
+      <rpm_max>	2150	</rpm_max>
+    </Cummins_VT8_460>
     <Development_Engine>
+      <id>	65000	</id>
       <userString>	Development Engine	</userString>
       <tags>	diesel	</tags>
       <level>	5	</level>
@@ -547,5 +200,351 @@
       <rpm_min>	359	</rpm_min>
       <rpm_max>	2181	</rpm_max>
     </Development_Engine>
+    <Ford_GAA_1>
+      <id>	31014	</id>
+      <userString>	#intunion_vehicles:Ford_GAA_1	</userString>
+      <tags>	gasoline	</tags>
+      <level>	4	</level>
+      <price>	10500	</price>
+      <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
+      <power>	450	</power>
+      <weight>	708	</weight>
+      <maxHealth>	104	</maxHealth>
+      <maxRegenHealth>	52	</maxRegenHealth>
+      <repairCost>	2	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	290	</rpm_min>
+      <rpm_max>	2868	</rpm_max>
+    </Ford_GAA_1>
+    <Ford_GAA_2>
+      <id>	31015	</id>
+      <userString>	#intunion_vehicles:Ford_GAA_2	</userString>
+      <tags>	gasoline	</tags>
+      <level>	5	</level>
+      <price>	12500	</price>
+      <wwsoundPC>	eng_Continental_R975_C1_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Continental_R975_C1_npc	</wwsoundNPC>
+      <power>	500	</power>
+      <weight>	708	</weight>
+      <maxHealth>	136	</maxHealth>
+      <maxRegenHealth>	67	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	500	</rpm_min>
+      <rpm_max>	2200	</rpm_max>
+    </Ford_GAA_2>
+    <GM_6046>
+      <id>	31012	</id>
+      <userString>	#intunion_vehicles:GM_6046	</userString>
+      <tags>	diesel	</tags>
+      <level>	5	</level>
+      <price>	13500	</price>
+      <wwsoundPC>	eng_V2K_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_V2K_npc	</wwsoundNPC>
+      <power>	500	</power>
+      <weight>	2318	</weight>
+      <maxHealth>	176	</maxHealth>
+      <maxRegenHealth>	100	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+      <rpm_min>	399	</rpm_min>
+      <rpm_max>	2101	</rpm_max>
+    </GM_6046>
+    <Hotchkiss_35>
+      <id>	31018	</id>
+      <userString>	#intunion_vehicles:Hotchkiss_35	</userString>
+      <tags>	gasoline	</tags>
+      <level>	1	</level>
+      <price>	400	</price>
+      <wwsoundPC>	eng_gaz_aa_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_gaz_aa_npc	</wwsoundNPC>
+      <power>	75	</power>
+      <weight>	266	</weight>
+      <maxHealth>	25	</maxHealth>
+      <maxRegenHealth>	17	</maxRegenHealth>
+      <repairCost>	1	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	405	</rpm_min>
+      <rpm_max>	2301	</rpm_max>
+    </Hotchkiss_35>
+    <Hotchkiss_39>
+      <id>	31019	</id>
+      <userString>	#intunion_vehicles:Hotchkiss_39	</userString>
+      <tags>	gasoline	</tags>
+      <level>	2	</level>
+      <price>	1100	</price>
+      <wwsoundPC>	eng_gaz_aa_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_gaz_aa_npc	</wwsoundNPC>
+      <power>	120	</power>
+      <weight>	280	</weight>
+      <maxHealth>	25	</maxHealth>
+      <maxRegenHealth>	17	</maxRegenHealth>
+      <repairCost>	1	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	349	</rpm_min>
+      <rpm_max>	2482	</rpm_max>
+    </Hotchkiss_39>
+    <Leyland_L60_Mk4A>
+      <id>	31007	</id>
+      <userString>	#intunion_vehicles:Leyland_L60_Mk4A	</userString>
+      <tags>	diesel	</tags>
+      <level>	7	</level>
+      <price>	41000	</price>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <power>	680	</power>
+      <weight>	2464	</weight>
+      <maxHealth>	234	</maxHealth>
+      <maxRegenHealth>	123	</maxRegenHealth>
+      <repairCost>	5	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+      <rpm_min>	319	</rpm_min>
+      <rpm_max>	2241	</rpm_max>
+    </Leyland_L60_Mk4A>
+    <Lycoming_O_435T>
+      <id>	31016	</id>
+      <userString>	#intunion_vehicles:Lycoming_O_435T	</userString>
+      <tags>	gasoline	</tags>
+      <level>	4	</level>
+      <price>	9500	</price>
+      <wwsoundPC>	eng_gaz_aa_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_gaz_aa_npc	</wwsoundNPC>
+      <power>	162	</power>
+      <weight>	155	</weight>
+      <maxHealth>	104	</maxHealth>
+      <maxRegenHealth>	52	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	296	</rpm_min>
+      <rpm_max>	2651	</rpm_max>
+    </Lycoming_O_435T>
+    <Lycoming_O_435TA>
+      <id>	31017	</id>
+      <userString>	#intunion_vehicles:Lycoming_O_435TA	</userString>
+      <tags>	gasoline	</tags>
+      <level>	4	</level>
+      <price>	11000	</price>
+      <wwsoundPC>	eng_gaz_aa_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_gaz_aa_npc	</wwsoundNPC>
+      <power>	192	</power>
+      <weight>	158	</weight>
+      <maxHealth>	104	</maxHealth>
+      <maxRegenHealth>	52	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	258	</rpm_min>
+      <rpm_max>	2771	</rpm_max>
+    </Lycoming_O_435TA>
+    <Renault_22_CV>
+      <id>	31020	</id>
+      <userString>	#intunion_vehicles:Renault_22_CV	</userString>
+      <tags>	gasoline	</tags>
+      <level>	1	</level>
+      <price>	0	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_gaz_aa_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_gaz_aa_npc	</wwsoundNPC>
+      <power>	90	</power>
+      <weight>	266	</weight>
+      <maxHealth>	25	</maxHealth>
+      <maxRegenHealth>	17	</maxRegenHealth>
+      <repairCost>	1	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	386	</rpm_min>
+      <rpm_max>	2361	</rpm_max>
+    </Renault_22_CV>
+    <Rolls_Royse_Meteor>
+      <id>	31001	</id>
+      <userString>	#intunion_vehicles:Rolls_Royse_Meteor	</userString>
+      <tags>	gasoline	</tags>
+      <level>	6	</level>
+      <price>	29000	</price>
+      <wwsoundPC>	eng_Continental_R975_C1_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Continental_R975_C1_npc	</wwsoundNPC>
+      <power>	600	</power>
+      <weight>	630	</weight>
+      <maxHealth>	247	</maxHealth>
+      <maxRegenHealth>	123	</maxRegenHealth>
+      <repairCost>	5	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	399	</rpm_min>
+      <rpm_max>	2551	</rpm_max>
+    </Rolls_Royse_Meteor>
+    <Rolls_Royse_Meteor_MkIV>
+      <id>	31002	</id>
+      <userString>	#intunion_vehicles:Rolls_Royse_Meteor_MkIV	</userString>
+      <tags>	gasoline	</tags>
+      <level>	6	</level>
+      <price>	33000	</price>
+      <wwsoundPC>	eng_Continental_R975_C1_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Continental_R975_C1_npc	</wwsoundNPC>
+      <power>	650	</power>
+      <weight>	630	</weight>
+      <maxHealth>	247	</maxHealth>
+      <maxRegenHealth>	123	</maxRegenHealth>
+      <repairCost>	5	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	349	</rpm_min>
+      <rpm_max>	2727	</rpm_max>
+    </Rolls_Royse_Meteor_MkIV>
+    <V-2-54>
+      <id>	31021	</id>
+      <userString>	#intunion_vehicles:V-2-54	</userString>
+      <tags>	diesel	</tags>
+      <level>	9	</level>
+      <price>	78000	</price>
+      <wwsoundPC>	eng_V2K_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_V2K_npc	</wwsoundNPC>
+      <power>	560	</power>
+      <weight>	700	</weight>
+      <maxHealth>	370	</maxHealth>
+      <maxRegenHealth>	185	</maxRegenHealth>
+      <repairCost>	9	</repairCost>
+      <fireStartingChance>	0.12	</fireStartingChance>
+      <rpm_min>	339	</rpm_min>
+      <rpm_max>	2221	</rpm_max>
+    </V-2-54>
+    <V-55U>
+      <id>	31022	</id>
+      <userString>	#intunion_vehicles:V-55U	</userString>
+      <tags>	diesel	</tags>
+      <level>	10	</level>
+      <price>	95000	</price>
+      <wwsoundPC>	eng_V2K_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_V2K_npc	</wwsoundNPC>
+      <power>	580	</power>
+      <weight>	700	</weight>
+      <maxHealth>	370	</maxHealth>
+      <maxRegenHealth>	185	</maxRegenHealth>
+      <repairCost>	9	</repairCost>
+      <fireStartingChance>	0.12	</fireStartingChance>
+      <rpm_min>	319	</rpm_min>
+      <rpm_max>	2261	</rpm_max>
+    </V-55U>
+    <V_2_34>
+      <id>	31026	</id>
+      <userString>	#intunion_vehicles:V_2_34	</userString>
+      <tags>	diesel	</tags>
+      <level>	7	</level>
+      <price>	35000	</price>
+      <wwsoundPC>	eng_V2K_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_V2K_npc	</wwsoundNPC>
+      <power>	520	</power>
+      <weight>	750	</weight>
+      <maxHealth>	190	</maxHealth>
+      <maxRegenHealth>	95	</maxRegenHealth>
+      <repairCost>	7	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+      <rpm_min>	379	</rpm_min>
+      <rpm_max>	2141	</rpm_max>
+    </V_2_34>
+    <V_44>
+      <id>	31027	</id>
+      <userString>	#intunion_vehicles:V_44	</userString>
+      <tags>	diesel	</tags>
+      <level>	8	</level>
+      <price>	50000	</price>
+      <wwsoundPC>	eng_V2K_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_V2K_npc	</wwsoundNPC>
+      <power>	570	</power>
+      <weight>	895	</weight>
+      <maxHealth>	260	</maxHealth>
+      <maxRegenHealth>	130	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <fireStartingChance>	0.12	</fireStartingChance>
+      <rpm_min>	329	</rpm_min>
+      <rpm_max>	2241	</rpm_max>
+    </V_44>
+    <V_44_T>
+      <id>	35002	</id>
+      <userString>	#intunion_vehicles:V_44_T	</userString>
+      <tags>	diesel	</tags>
+      <level>	8	</level>
+      <price>	50000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <power>	710	</power>
+      <weight>	895	</weight>
+      <maxHealth>	260	</maxHealth>
+      <maxRegenHealth>	130	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <fireStartingChance>	0.12	</fireStartingChance>
+      <rpm_min>	289	</rpm_min>
+      <rpm_max>	2331	</rpm_max>
+    </V_44_T>
+    <V_54B>
+      <id>	31009	</id>
+      <userString>	#intunion_vehicles:V_54B	</userString>
+      <tags>	diesel	</tags>
+      <level>	10	</level>
+      <price>	110000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_V2K_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_V2K_npc	</wwsoundNPC>
+      <power>	580	</power>
+      <weight>	895	</weight>
+      <maxHealth>	360	</maxHealth>
+      <maxRegenHealth>	180	</maxRegenHealth>
+      <repairCost>	10	</repairCost>
+      <fireStartingChance>	0.1	</fireStartingChance>
+      <rpm_min>	319	</rpm_min>
+      <rpm_max>	2261	</rpm_max>
+    </V_54B>
+    <V_55>
+      <id>	31025	</id>
+      <userString>	#intunion_vehicles:V_55	</userString>
+      <tags>	diesel	</tags>
+      <level>	10	</level>
+      <price>	100000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <power>	750	</power>
+      <weight>	940	</weight>
+      <maxHealth>	360	</maxHealth>
+      <maxRegenHealth>	180	</maxRegenHealth>
+      <repairCost>	10	</repairCost>
+      <fireStartingChance>	0.12	</fireStartingChance>
+      <rpm_min>	249	</rpm_min>
+      <rpm_max>	2452	</rpm_max>
+    </V_55>
+    <V_55_T>
+      <id>	35001	</id>
+      <userString>	#intunion_vehicles:V_55_T	</userString>
+      <tags>	diesel	</tags>
+      <level>	10	</level>
+      <price>	100000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <power>	750	</power>
+      <weight>	940	</weight>
+      <maxHealth>	360	</maxHealth>
+      <maxRegenHealth>	180	</maxRegenHealth>
+      <repairCost>	10	</repairCost>
+      <fireStartingChance>	0.12	</fireStartingChance>
+      <rpm_min>	249	</rpm_min>
+      <rpm_max>	2452	</rpm_max>
+    </V_55_T>
+    <_5TD>
+      <id>	31030	</id>
+      <userString>	#intunion_vehicles:_5TD	</userString>
+      <tags>	diesel	</tags>
+      <level>	8	</level>
+      <price>	57000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_V2K_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_V2K_npc	</wwsoundNPC>
+      <power>	550	</power>
+      <weight>	1000	</weight>
+      <maxHealth>	260	</maxHealth>
+      <maxRegenHealth>	130	</maxRegenHealth>
+      <repairCost>	6	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+      <rpm_min>	349	</rpm_min>
+      <rpm_max>	2201	</rpm_max>
+    </_5TD>
   </shared>
 </engines.xml>

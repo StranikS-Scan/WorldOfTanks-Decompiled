@@ -1,89 +1,21 @@
 <radios.xml>
-  <ids>
-    <Ra_400_1>	0	</Ra_400_1>
-    <_25_W_Sv_1_m_39_A>	1	</_25_W_Sv_1_m_39_A>
-    <_25_W_Sv_1_m_39>	2	</_25_W_Sv_1_m_39>
-    <Ra_421_1>	3	</Ra_421_1>
-    <_25_W_Sv_1_m_39_42>	4	</_25_W_Sv_1_m_39_42>
-    <_70_W_Sv_m_43>	5	</_70_W_Sv_m_43>
-    <Ra_100>	6	</Ra_100>
-    <Ra_421>	8	</Ra_421>
-    <_1_W_Sv>	9	</_1_W_Sv>
-    <Ra_105>	10	</Ra_105>
-    <Ra_400>	7	</Ra_400>
-    <Ra_146>	11	</Ra_146>
-    <Ra_400_P>	12	</Ra_400_P>
-    <Ra_421_FL>	501	</Ra_421_FL>
-    <Ra_421_1_7x7>	502	</Ra_421_1_7x7>
-    <Development_Radio>	65000	</Development_Radio>
-    <_70_W_Sv_m_43_SH>	1000	</_70_W_Sv_m_43_SH>
-    <Ra_421_1_SH>	1001	</Ra_421_1_SH>
-    <Ra_400_P_SH>	1002	</Ra_400_P_SH>
-    <Ra_421_P>	31001	</Ra_421_P>
-    <Ra_421_V>	31003	</Ra_421_V>
-    <Ra_421_V_T>	35001	</Ra_421_V_T>
-    <Ra_146_T>	35002	</Ra_146_T>
-    <Ra_100_T>	35003	</Ra_100_T>
-  </ids>
+  <xmlns:xmlref>	http://bwt/xmlref	</xmlns:xmlref>
   <shared>
-    <_1_W_Sv>
-      <userString>	#sweden_vehicles:_1_W_Sv	</userString>
+    <Development_Radio>
+      <id>	65000	</id>
+      <userString>	Development Radio	</userString>
       <tags></tags>
-      <level>	2	</level>
+      <notInShop>	true	</notInShop>
+      <level>	1	</level>
       <price>	0	</price>
-      <notInShop>	true	</notInShop>
-      <weight>	34	</weight>
-      <distance>	265	</distance>
-      <maxHealth>	100	</maxHealth>
-      <maxRegenHealth>	49	</maxRegenHealth>
-      <repairCost>	0.5	</repairCost>
-    </_1_W_Sv>
-    <_25_W_Sv_1_m_39>
-      <userString>	#sweden_vehicles:_25_W_Sv_1_m_39	</userString>
-      <tags></tags>
-      <level>	2	</level>
-      <price>	180	</price>
-      <weight>	34	</weight>
-      <distance>	290	</distance>
-      <maxHealth>	100	</maxHealth>
-      <maxRegenHealth>	49	</maxRegenHealth>
-      <repairCost>	0.5	</repairCost>
-    </_25_W_Sv_1_m_39>
-    <_25_W_Sv_1_m_39_A>
-      <userString>	#sweden_vehicles:_25_W_Sv_1_m_39_A	</userString>
-      <tags></tags>
-      <level>	2	</level>
-      <price>	180	</price>
-      <notInShop>	true	</notInShop>
-      <weight>	34	</weight>
-      <distance>	290	</distance>
-      <maxHealth>	100	</maxHealth>
-      <maxRegenHealth>	49	</maxRegenHealth>
-      <repairCost>	0.5	</repairCost>
-    </_25_W_Sv_1_m_39_A>
-    <_25_W_Sv_1_m_39_42>
-      <userString>	#sweden_vehicles:_25_W_Sv_1_m_39_42	</userString>
-      <tags></tags>
-      <level>	4	</level>
-      <price>	2200	</price>
-      <weight>	34	</weight>
-      <distance>	345	</distance>
-      <maxHealth>	100	</maxHealth>
-      <maxRegenHealth>	60	</maxRegenHealth>
-      <repairCost>	1	</repairCost>
-    </_25_W_Sv_1_m_39_42>
-    <_70_W_Sv_m_43>
-      <userString>	#sweden_vehicles:_70_W_Sv_m_43	</userString>
-      <tags></tags>
-      <level>	6	</level>
-      <price>	21600	</price>
-      <weight>	70	</weight>
-      <distance>	400	</distance>
-      <maxHealth>	120	</maxHealth>
-      <maxRegenHealth>	60	</maxRegenHealth>
-      <repairCost>	1.2	</repairCost>
-    </_70_W_Sv_m_43>
+      <weight>	1	</weight>
+      <distance>	90	</distance>
+      <maxHealth>	90	</maxHealth>
+      <maxRegenHealth>	75	</maxRegenHealth>
+      <repairCost>	0	</repairCost>
+    </Development_Radio>
     <Ra_100>
+      <id>	6	</id>
       <userString>	#sweden_vehicles:Ra_100	</userString>
       <tags></tags>
       <level>	7	</level>
@@ -95,6 +27,7 @@
       <repairCost>	1.5	</repairCost>
     </Ra_100>
     <Ra_100_T>
+      <id>	35003	</id>
       <userString>	#sweden_vehicles:Ra_100_T	</userString>
       <tags></tags>
       <level>	7	</level>
@@ -107,6 +40,7 @@
       <repairCost>	1.5	</repairCost>
     </Ra_100_T>
     <Ra_105>
+      <id>	10	</id>
       <userString>	#sweden_vehicles:Ra_105	</userString>
       <tags></tags>
       <level>	8	</level>
@@ -118,6 +52,7 @@
       <repairCost>	1.5	</repairCost>
     </Ra_105>
     <Ra_146>
+      <id>	11	</id>
       <userString>	#sweden_vehicles:Ra_146	</userString>
       <tags></tags>
       <level>	9	</level>
@@ -129,6 +64,7 @@
       <repairCost>	3	</repairCost>
     </Ra_146>
     <Ra_146_T>
+      <id>	35002	</id>
       <userString>	#sweden_vehicles:Ra_146_T	</userString>
       <tags></tags>
       <level>	9	</level>
@@ -141,6 +77,7 @@
       <repairCost>	3	</repairCost>
     </Ra_146_T>
     <Ra_400>
+      <id>	7	</id>
       <userString>	#sweden_vehicles:Ra_400	</userString>
       <tags></tags>
       <level>	9	</level>
@@ -152,6 +89,7 @@
       <repairCost>	3	</repairCost>
     </Ra_400>
     <Ra_400_1>
+      <id>	0	</id>
       <userString>	#sweden_vehicles:Ra_400_1	</userString>
       <tags></tags>
       <level>	9	</level>
@@ -163,90 +101,8 @@
       <maxRegenHealth>	75	</maxRegenHealth>
       <repairCost>	3	</repairCost>
     </Ra_400_1>
-    <Ra_421>
-      <userString>	#sweden_vehicles:Ra_421	</userString>
-      <tags></tags>
-      <level>	10	</level>
-      <price>	57200	</price>
-      <weight>	27	</weight>
-      <distance>	850	</distance>
-      <maxHealth>	250	</maxHealth>
-      <maxRegenHealth>	75	</maxRegenHealth>
-      <repairCost>	3.5	</repairCost>
-    </Ra_421>
-    <Ra_421_FL>
-      <userString>	#sweden_vehicles:Ra_421	</userString>
-      <tags></tags>
-      <level>	10	</level>
-      <price>	57200	</price>
-      <notInShop>	true	</notInShop>
-      <weight>	27	</weight>
-      <distance>	850	</distance>
-      <maxHealth>	250	</maxHealth>
-      <maxRegenHealth>	75	</maxRegenHealth>
-      <repairCost>	3.5	</repairCost>
-    </Ra_421_FL>
-    <Ra_421_1>
-      <userString>	#sweden_vehicles:Ra_421_1	</userString>
-      <tags></tags>
-      <level>	10	</level>
-      <price>	57200	</price>
-      <notInShop>	true	</notInShop>
-      <weight>	27	</weight>
-      <distance>	850	</distance>
-      <maxHealth>	250	</maxHealth>
-      <maxRegenHealth>	75	</maxRegenHealth>
-      <repairCost>	3.5	</repairCost>
-    </Ra_421_1>
-    <Ra_421_P>
-      <userString>	#sweden_vehicles:Ra_421_P	</userString>
-      <tags></tags>
-      <level>	10	</level>
-      <price>	57200	</price>
-      <notInShop>	true	</notInShop>
-      <weight>	27	</weight>
-      <distance>	850	</distance>
-      <maxHealth>	250	</maxHealth>
-      <maxRegenHealth>	75	</maxRegenHealth>
-      <repairCost>	3.5	</repairCost>
-    </Ra_421_P>
-    <Ra_421_V>
-      <userString>	#sweden_vehicles:Ra_421_V	</userString>
-      <tags></tags>
-      <level>	10	</level>
-      <price>	57200	</price>
-      <notInShop>	true	</notInShop>
-      <weight>	27	</weight>
-      <distance>	850	</distance>
-      <maxHealth>	250	</maxHealth>
-      <maxRegenHealth>	75	</maxRegenHealth>
-      <repairCost>	3.5	</repairCost>
-    </Ra_421_V>
-    <Ra_421_V_T>
-      <userString>	#sweden_vehicles:Ra_421_V_T	</userString>
-      <tags></tags>
-      <level>	10	</level>
-      <price>	57200	</price>
-      <notInShop>	true	</notInShop>
-      <weight>	27	</weight>
-      <distance>	850	</distance>
-      <maxHealth>	250	</maxHealth>
-      <maxRegenHealth>	75	</maxRegenHealth>
-      <repairCost>	3.5	</repairCost>
-    </Ra_421_V_T>
-    <Ra_421_1_7x7>
-      <userString>	#sweden_vehicles:Ra_421_1	</userString>
-      <tags></tags>
-      <level>	10	</level>
-      <price>	57200	</price>
-      <notInShop>	true	</notInShop>
-      <weight>	27	</weight>
-      <distance>	850	</distance>
-      <maxHealth>	250	</maxHealth>
-      <maxRegenHealth>	75	</maxRegenHealth>
-      <repairCost>	3.5	</repairCost>
-    </Ra_421_1_7x7>
     <Ra_400_P>
+      <id>	12	</id>
       <userString>	#sweden_vehicles:Ra_400_P	</userString>
       <tags></tags>
       <level>	9	</level>
@@ -258,47 +114,8 @@
       <maxRegenHealth>	75	</maxRegenHealth>
       <repairCost>	3	</repairCost>
     </Ra_400_P>
-    <Development_Radio>
-      <userString>	Development Radio	</userString>
-      <tags></tags>
-      <notInShop>	true	</notInShop>
-      <level>	1	</level>
-      <price>	0	</price>
-      <weight>	1	</weight>
-      <distance>	90	</distance>
-      <maxHealth>	90	</maxHealth>
-      <maxRegenHealth>	75	</maxRegenHealth>
-      <repairCost>	0	</repairCost>
-    </Development_Radio>
-    <_70_W_Sv_m_43_SH>
-      <userString>	#sweden_vehicles:_70_W_Sv_m_43_SH	</userString>
-      <tags></tags>
-      <level>	1	</level>
-      <price>	0	</price>
-      <notInShop>	true	</notInShop>
-      <weight>	100	</weight>
-      <distance>	2000	</distance>
-      <maxHealth>	100	</maxHealth>
-      <maxRegenHealth>	60	</maxRegenHealth>
-      <repairCost>	0	</repairCost>
-      <radarRadius>	350	</radarRadius>
-      <radarCooldown>	30	</radarCooldown>
-    </_70_W_Sv_m_43_SH>
-    <Ra_421_1_SH>
-      <userString>	#sweden_vehicles:Ra_421_1_SH	</userString>
-      <tags></tags>
-      <level>	3	</level>
-      <price>	0	</price>
-      <notInShop>	true	</notInShop>
-      <weight>	100	</weight>
-      <distance>	2000	</distance>
-      <maxHealth>	200	</maxHealth>
-      <maxRegenHealth>	150	</maxRegenHealth>
-      <repairCost>	0	</repairCost>
-      <radarRadius>	250	</radarRadius>
-      <radarCooldown>	20	</radarCooldown>
-    </Ra_421_1_SH>
     <Ra_400_P_SH>
+      <id>	1002	</id>
       <userString>	#sweden_vehicles:Ra_400_P_SH	</userString>
       <tags></tags>
       <level>	3	</level>
@@ -312,5 +129,200 @@
       <radarRadius>	450	</radarRadius>
       <radarCooldown>	30	</radarCooldown>
     </Ra_400_P_SH>
+    <Ra_400_V>
+      <id>	31002	</id>
+      <userString>	#sweden_vehicles:Ra_400_V	</userString>
+      <tags></tags>
+      <level>	9	</level>
+      <price>	44200	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	45	</weight>
+      <distance>	710	</distance>
+      <maxHealth>	150	</maxHealth>
+      <maxRegenHealth>	75	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+    </Ra_400_V>
+    <Ra_421>
+      <id>	8	</id>
+      <userString>	#sweden_vehicles:Ra_421	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	57200	</price>
+      <weight>	27	</weight>
+      <distance>	850	</distance>
+      <maxHealth>	250	</maxHealth>
+      <maxRegenHealth>	75	</maxRegenHealth>
+      <repairCost>	3.5	</repairCost>
+    </Ra_421>
+    <Ra_421_1>
+      <id>	3	</id>
+      <userString>	#sweden_vehicles:Ra_421_1	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	57200	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	27	</weight>
+      <distance>	850	</distance>
+      <maxHealth>	250	</maxHealth>
+      <maxRegenHealth>	75	</maxRegenHealth>
+      <repairCost>	3.5	</repairCost>
+    </Ra_421_1>
+    <Ra_421_1_7x7>
+      <id>	502	</id>
+      <userString>	#sweden_vehicles:Ra_421_1	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	57200	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	27	</weight>
+      <distance>	850	</distance>
+      <maxHealth>	250	</maxHealth>
+      <maxRegenHealth>	75	</maxRegenHealth>
+      <repairCost>	3.5	</repairCost>
+    </Ra_421_1_7x7>
+    <Ra_421_1_SH>
+      <id>	1001	</id>
+      <userString>	#sweden_vehicles:Ra_421_1_SH	</userString>
+      <tags></tags>
+      <level>	3	</level>
+      <price>	0	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	100	</weight>
+      <distance>	2000	</distance>
+      <maxHealth>	200	</maxHealth>
+      <maxRegenHealth>	150	</maxRegenHealth>
+      <repairCost>	0	</repairCost>
+      <radarRadius>	250	</radarRadius>
+      <radarCooldown>	20	</radarCooldown>
+    </Ra_421_1_SH>
+    <Ra_421_FL>
+      <id>	501	</id>
+      <userString>	#sweden_vehicles:Ra_421	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	57200	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	27	</weight>
+      <distance>	850	</distance>
+      <maxHealth>	250	</maxHealth>
+      <maxRegenHealth>	75	</maxRegenHealth>
+      <repairCost>	3.5	</repairCost>
+    </Ra_421_FL>
+    <Ra_421_P>
+      <id>	31001	</id>
+      <userString>	#sweden_vehicles:Ra_421_P	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	57200	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	27	</weight>
+      <distance>	850	</distance>
+      <maxHealth>	250	</maxHealth>
+      <maxRegenHealth>	75	</maxRegenHealth>
+      <repairCost>	3.5	</repairCost>
+    </Ra_421_P>
+    <Ra_421_V>
+      <id>	31003	</id>
+      <userString>	#sweden_vehicles:Ra_421_V	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	57200	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	27	</weight>
+      <distance>	850	</distance>
+      <maxHealth>	250	</maxHealth>
+      <maxRegenHealth>	75	</maxRegenHealth>
+      <repairCost>	3.5	</repairCost>
+    </Ra_421_V>
+    <Ra_421_V_T>
+      <id>	35001	</id>
+      <userString>	#sweden_vehicles:Ra_421_V_T	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	57200	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	27	</weight>
+      <distance>	850	</distance>
+      <maxHealth>	250	</maxHealth>
+      <maxRegenHealth>	75	</maxRegenHealth>
+      <repairCost>	3.5	</repairCost>
+    </Ra_421_V_T>
+    <_1_W_Sv>
+      <id>	9	</id>
+      <userString>	#sweden_vehicles:_1_W_Sv	</userString>
+      <tags></tags>
+      <level>	2	</level>
+      <price>	0	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	34	</weight>
+      <distance>	265	</distance>
+      <maxHealth>	100	</maxHealth>
+      <maxRegenHealth>	49	</maxRegenHealth>
+      <repairCost>	0.5	</repairCost>
+    </_1_W_Sv>
+    <_25_W_Sv_1_m_39>
+      <id>	2	</id>
+      <userString>	#sweden_vehicles:_25_W_Sv_1_m_39	</userString>
+      <tags></tags>
+      <level>	2	</level>
+      <price>	180	</price>
+      <weight>	34	</weight>
+      <distance>	290	</distance>
+      <maxHealth>	100	</maxHealth>
+      <maxRegenHealth>	49	</maxRegenHealth>
+      <repairCost>	0.5	</repairCost>
+    </_25_W_Sv_1_m_39>
+    <_25_W_Sv_1_m_39_42>
+      <id>	4	</id>
+      <userString>	#sweden_vehicles:_25_W_Sv_1_m_39_42	</userString>
+      <tags></tags>
+      <level>	4	</level>
+      <price>	2200	</price>
+      <weight>	34	</weight>
+      <distance>	345	</distance>
+      <maxHealth>	100	</maxHealth>
+      <maxRegenHealth>	60	</maxRegenHealth>
+      <repairCost>	1	</repairCost>
+    </_25_W_Sv_1_m_39_42>
+    <_25_W_Sv_1_m_39_A>
+      <id>	1	</id>
+      <userString>	#sweden_vehicles:_25_W_Sv_1_m_39_A	</userString>
+      <tags></tags>
+      <level>	2	</level>
+      <price>	180	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	34	</weight>
+      <distance>	290	</distance>
+      <maxHealth>	100	</maxHealth>
+      <maxRegenHealth>	49	</maxRegenHealth>
+      <repairCost>	0.5	</repairCost>
+    </_25_W_Sv_1_m_39_A>
+    <_70_W_Sv_m_43>
+      <id>	5	</id>
+      <userString>	#sweden_vehicles:_70_W_Sv_m_43	</userString>
+      <tags></tags>
+      <level>	6	</level>
+      <price>	21600	</price>
+      <weight>	70	</weight>
+      <distance>	400	</distance>
+      <maxHealth>	120	</maxHealth>
+      <maxRegenHealth>	60	</maxRegenHealth>
+      <repairCost>	1.2	</repairCost>
+    </_70_W_Sv_m_43>
+    <_70_W_Sv_m_43_SH>
+      <id>	1000	</id>
+      <userString>	#sweden_vehicles:_70_W_Sv_m_43_SH	</userString>
+      <tags></tags>
+      <level>	1	</level>
+      <price>	0	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	100	</weight>
+      <distance>	2000	</distance>
+      <maxHealth>	100	</maxHealth>
+      <maxRegenHealth>	60	</maxRegenHealth>
+      <repairCost>	0	</repairCost>
+      <radarRadius>	350	</radarRadius>
+      <radarCooldown>	30	</radarCooldown>
+    </_70_W_Sv_m_43_SH>
   </shared>
 </radios.xml>

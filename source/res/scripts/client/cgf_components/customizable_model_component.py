@@ -65,19 +65,27 @@ class CustomizableModelManager(CGF.ComponentManager):
 
     @onAddedQuery(CGF.GameObject, GenericComponents.DynamicModelComponent, ModelFashionAttachedComponent)
     def onAddedModelFashion(self, go, modelComponent, attachedComponent):
+        appearanceId = attachedComponent.appearanceId
         fashion = self.__fashions.get(go.id)
         if fashion:
-            modelComponent.setPartFashion(0, self.__fashions[go.id])
-        if attachedComponent.appearanceId not in self.__appearanceToGOs:
-            self.__appearanceToGOs[attachedComponent.appearanceId] = []
-        self.__appearanceToGOs[attachedComponent.appearanceId].append(go)
+            modelComponent.setPartFashion(0, fashion)
+        self.__appearanceToGOs.setdefault(appearanceId, [])
+        dirtComponent = go.findComponentByType(Vehicular.DirtComponent)
+        if dirtComponent:
+            self.__dirtComponents.setdefault(appearanceId, {})[go.id] = dirtComponent
+        self.__appearanceToGOs[appearanceId].append(go)
 
     @onRemovedQuery(CGF.GameObject, ModelFashionAttachedComponent)
     def onRemovedModelFashion(self, modelGO, attachedComponent):
-        gameObjects = self.__appearanceToGOs.get(attachedComponent.appearanceId)
+        appearanceId = attachedComponent.appearanceId
+        gameObjects = self.__appearanceToGOs.get(appearanceId)
         if gameObjects and modelGO in gameObjects:
-            self.__appearanceToGOs[attachedComponent.appearanceId].remove(modelGO)
-        self.invalidateOutfitDataCache(attachedComponent.appearanceId)
+            gameObjects.remove(modelGO)
+        dirtCompsByGo = self.__dirtComponents.get(appearanceId)
+        if dirtCompsByGo:
+            dirtCompsByGo.pop(modelGO.id, None)
+        self.invalidateOutfitDataCache(appearanceId)
+        return
 
     def __applyCamo(self, c11nComponent, camo):
         c11nComponent.setPartCamo(camo)
@@ -121,7 +129,8 @@ class CustomizableModelManager(CGF.ComponentManager):
         if appearanceId not in self.__dirtComponents:
             return
         for dirtComponent in self.__dirtComponents[appearanceId].values():
-            dirtComponent.update(*args)
+            if dirtComponent.valid():
+                dirtComponent.update(*args)
 
     def updateAttachmentFashions(self, gameObject):
         hManager = CGF.HierarchyManager(gameObject.spaceID)

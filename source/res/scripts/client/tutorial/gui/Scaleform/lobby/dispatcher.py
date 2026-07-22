@@ -5,6 +5,7 @@ from gui.shared import g_eventBus, EVENT_BUS_SCOPE
 from gui.shared.events import TutorialEvent
 from tutorial.logger import LOG_MEMORY, LOG_ERROR
 from tutorial.gui import GUIDispatcher
+from tutorial.gui.Scaleform.lobby.proxy import SfLobbyProxy
 
 class SfLobbyDispatcher(GUIDispatcher):
 
@@ -37,9 +38,13 @@ class SfLobbyDispatcher(GUIDispatcher):
         if not event.settingsID:
             LOG_ERROR('Name of tutorial is not defined', event.settingsID)
             return
-        Waiting.show('tutorial-chapter-loading', isSingle=True)
+        showWaiting = event.showWaiting
+        SfLobbyProxy.setWaitingEnabled(showWaiting)
+        if showWaiting:
+            Waiting.show('tutorial-chapter-loading', isSingle=True)
         self.startTraining(event.settingsID, event.getState())
-        Waiting.hide('tutorial-chapter-loading')
+        if showWaiting:
+            Waiting.hide('tutorial-chapter-loading')
 
     def __handleStopTraining(self, _):
         self.stopTraining()

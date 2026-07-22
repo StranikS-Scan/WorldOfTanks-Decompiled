@@ -1,35 +1,95 @@
 <turrets.xml>
-  <ids>
-    <Turret_2_Un04_Vickers_MBT_EXP_FL>	501	</Turret_2_Un04_Vickers_MBT_EXP_FL>
-    <Turret_1_Un01_Cromwell_VII>	31001	</Turret_1_Un01_Cromwell_VII>
-    <Turret_2_Un01_Cromwell_VII>	31002	</Turret_2_Un01_Cromwell_VII>
-    <Turret_1_Un02_Merkava_LP>	31003	</Turret_1_Un02_Merkava_LP>
-    <Turret_1_Un03_Degem_Yud>	31004	</Turret_1_Un03_Degem_Yud>
-    <Turret_2_Un03_Degem_Yud>	31005	</Turret_2_Un03_Degem_Yud>
-    <Turret_1_Un06_M47_Romach>	31006	</Turret_1_Un06_M47_Romach>
-    <Turret_1_Un04_Vickers_MBT_EXP>	31007	</Turret_1_Un04_Vickers_MBT_EXP>
-    <Turret_2_Un04_Vickers_MBT_EXP>	31008	</Turret_2_Un04_Vickers_MBT_EXP>
-    <Turret_1_Un05_Shot_Kal_Alef>	31009	</Turret_1_Un05_Shot_Kal_Alef>
-    <Turret_2_Un05_Shot_Kal_Alef>	31010	</Turret_2_Un05_Shot_Kal_Alef>
-    <Turret_1_Un14_T54D>	31011	</Turret_1_Un14_T54D>
-    <Turret_1_Un11_Sherman_M3_IDF>	31012	</Turret_1_Un11_Sherman_M3_IDF>
-    <Turret_2_Un11_Sherman_M3_IDF>	31013	</Turret_2_Un11_Sherman_M3_IDF>
-    <Turret_1_Un10_Sherman_Krupp_IDF>	31014	</Turret_1_Un10_Sherman_Krupp_IDF>
-    <Turret_2_Un10_Sherman_Krupp_IDF>	31015	</Turret_2_Un10_Sherman_Krupp_IDF>
-    <Turret_1_Un09_Locust>	31016	</Turret_1_Un09_Locust>
-    <Turret_2_Un09_Locust>	31017	</Turret_2_Un09_Locust>
-    <Turret_1_Un08_Hotchkiss_H_39_IDF>	31018	</Turret_1_Un08_Hotchkiss_H_39_IDF>
-    <Turret_2_Un08_Hotchkiss_H_39_IDF>	31019	</Turret_2_Un08_Hotchkiss_H_39_IDF>
-    <Turret_1_Un07_Renault_R35>	31020	</Turret_1_Un07_Renault_R35>
-    <Turret_1_Un13_T-54>	31021	</Turret_1_Un13_T-54>
-    <Turret_2_Un13_T-54>	31022	</Turret_2_Un13_T-54>
-    <Turret_1_Un12_Merkava_M48>	31023	</Turret_1_Un12_Merkava_M48>
-    <Turret_1_Un24_Vz_68_2_Britva>	31030	</Turret_1_Un24_Vz_68_2_Britva>
-    <Turret_1_Un17_RDT_62>	31025	</Turret_1_Un17_RDT_62>
-    <Turret_1_Un15_SBM_44>	31026	</Turret_1_Un15_SBM_44>
-    <Turret_2_Un15_SBM_44>	31027	</Turret_2_Un15_SBM_44>
-    <Turret_1_Un1017_RDT_62_T>	35001	</Turret_1_Un1017_RDT_62_T>
-    <Turret_2_Un1015_SBM_44_T>	35002	</Turret_2_Un1015_SBM_44_T>
-  </ids>
-  <shared></shared>
+  <xmlns:xmlref>	http://bwt/xmlref	</xmlns:xmlref>
+  <shared>
+    <Turret_1_Un01_Cromwell_VII>
+      <id>	31001	</id>
+    </Turret_1_Un01_Cromwell_VII>
+    <Turret_1_Un02_Merkava_LP>
+      <id>	31003	</id>
+    </Turret_1_Un02_Merkava_LP>
+    <Turret_1_Un03_Degem_Yud>
+      <id>	31004	</id>
+    </Turret_1_Un03_Degem_Yud>
+    <Turret_1_Un04_Vickers_MBT_EXP>
+      <id>	31007	</id>
+    </Turret_1_Un04_Vickers_MBT_EXP>
+    <Turret_1_Un05_Shot_Kal_Alef>
+      <id>	31009	</id>
+    </Turret_1_Un05_Shot_Kal_Alef>
+    <Turret_1_Un06_M47_Romach>
+      <id>	31006	</id>
+    </Turret_1_Un06_M47_Romach>
+    <Turret_1_Un07_Renault_R35>
+      <id>	31020	</id>
+    </Turret_1_Un07_Renault_R35>
+    <Turret_1_Un08_Hotchkiss_H_39_IDF>
+      <id>	31018	</id>
+    </Turret_1_Un08_Hotchkiss_H_39_IDF>
+    <Turret_1_Un09_Locust>
+      <id>	31016	</id>
+    </Turret_1_Un09_Locust>
+    <Turret_1_Un1017_RDT_62_T>
+      <id>	35001	</id>
+    </Turret_1_Un1017_RDT_62_T>
+    <Turret_1_Un10_Sherman_Krupp_IDF>
+      <id>	31014	</id>
+    </Turret_1_Un10_Sherman_Krupp_IDF>
+    <Turret_1_Un11_Sherman_M3_IDF>
+      <id>	31012	</id>
+    </Turret_1_Un11_Sherman_M3_IDF>
+    <Turret_1_Un12_Merkava_M48>
+      <id>	31023	</id>
+    </Turret_1_Un12_Merkava_M48>
+    <Turret_1_Un13_T-54>
+      <id>	31021	</id>
+    </Turret_1_Un13_T-54>
+    <Turret_1_Un14_T54D>
+      <id>	31011	</id>
+    </Turret_1_Un14_T54D>
+    <Turret_1_Un15_SBM_44>
+      <id>	31026	</id>
+    </Turret_1_Un15_SBM_44>
+    <Turret_1_Un17_RDT_62>
+      <id>	31025	</id>
+    </Turret_1_Un17_RDT_62>
+    <Turret_1_Un24_Vz_68_2_Britva>
+      <id>	31030	</id>
+    </Turret_1_Un24_Vz_68_2_Britva>
+    <Turret_2_Un01_Cromwell_VII>
+      <id>	31002	</id>
+    </Turret_2_Un01_Cromwell_VII>
+    <Turret_2_Un03_Degem_Yud>
+      <id>	31005	</id>
+    </Turret_2_Un03_Degem_Yud>
+    <Turret_2_Un04_Vickers_MBT_EXP>
+      <id>	31008	</id>
+    </Turret_2_Un04_Vickers_MBT_EXP>
+    <Turret_2_Un04_Vickers_MBT_EXP_FL>
+      <id>	501	</id>
+    </Turret_2_Un04_Vickers_MBT_EXP_FL>
+    <Turret_2_Un05_Shot_Kal_Alef>
+      <id>	31010	</id>
+    </Turret_2_Un05_Shot_Kal_Alef>
+    <Turret_2_Un08_Hotchkiss_H_39_IDF>
+      <id>	31019	</id>
+    </Turret_2_Un08_Hotchkiss_H_39_IDF>
+    <Turret_2_Un09_Locust>
+      <id>	31017	</id>
+    </Turret_2_Un09_Locust>
+    <Turret_2_Un1015_SBM_44_T>
+      <id>	35002	</id>
+    </Turret_2_Un1015_SBM_44_T>
+    <Turret_2_Un10_Sherman_Krupp_IDF>
+      <id>	31015	</id>
+    </Turret_2_Un10_Sherman_Krupp_IDF>
+    <Turret_2_Un11_Sherman_M3_IDF>
+      <id>	31013	</id>
+    </Turret_2_Un11_Sherman_M3_IDF>
+    <Turret_2_Un13_T-54>
+      <id>	31022	</id>
+    </Turret_2_Un13_T-54>
+    <Turret_2_Un15_SBM_44>
+      <id>	31027	</id>
+    </Turret_2_Un15_SBM_44>
+  </shared>
 </turrets.xml>

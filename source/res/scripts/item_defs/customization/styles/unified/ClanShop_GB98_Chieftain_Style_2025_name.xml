@@ -1,0 +1,63 @@
+<ClanShop_GB98_Chieftain_Style_2025_name.xml>
+  <itemGroup>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	MT 2D styles universal 1000g notInShop	</priceGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <vehicleFilter>
+      <include>
+        <vehicles>	uk:GB98_T95_FV4201_Chieftain	</vehicles>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	31365	</id>
+      <userString>	#vehicle_customization:ClanShop_GB98_Chieftain_Style_2025/name	</userString>
+      <description>	#vehicle_customization:ClanShop_GB98_Chieftain_Style_2025/description	</description>
+      <longDescriptionSpecial>	#vehicle_customization:ClanShop_GB98_Chieftain_Style_2025/longDescription	</longDescriptionSpecial>
+      <outfits>
+        <outfit>
+          <season>	all	</season>
+          <paints>
+            <item>
+              <id>	31340	</id>
+              <appliedTo>	20753	</appliedTo>
+            </item>
+          </paints>
+          <camouflages>
+            <item>
+              <id>	31335	</id>
+              <patternSize>	1	</patternSize>
+              <appliedTo>	16	</appliedTo>
+              <palette>	0	</palette>
+            </item>
+            <item>
+              <id>	31336	</id>
+              <patternSize>	1	</patternSize>
+              <appliedTo>	256	</appliedTo>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <modifications>
+            <item>	4	</item>
+          </modifications>
+          <insignias>
+            <item>
+              <id>	31030	</id>
+              <appliedTo>	4096	</appliedTo>
+            </item>
+          </insignias>
+        </outfit>
+      </outfits>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+      <texture>	gui/maps/vehicles/styles/ClanShop_GB98_Chieftain_Style_2025.png	</texture>
+    </style>
+    <tags>	progression_required	</tags>
+    <maxNumber>	1	</maxNumber>
+  </itemGroup>
+</ClanShop_GB98_Chieftain_Style_2025_name.xml>

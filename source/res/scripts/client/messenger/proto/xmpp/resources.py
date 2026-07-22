@@ -1,10 +1,12 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/proto/xmpp/resources.py
-from constants import IGR_TYPE, CURRENT_GAME_ID
+from constants import IGR_TYPE, NOVICE_RESTRICTIONS_BAN_TYPE
 from gui.shared.utils.decorators import ReprInjector
-from messenger.m_constants import USER_TAG
-from messenger.proto.xmpp.gloox_constants import PRESENCES_ORDER, PRESENCE
+from messenger.m_constants import PROTO_TYPE, USER_TAG
+from messenger.proto.xmpp.gloox_constants import PRESENCES_ORDER, PRESENCE, SUBSCRIPTION
 from messenger.proto.xmpp.wrappers import ExtsInfo
+from messenger.proto.xmpp.xmpp_constants import XMPP_ITEM_TYPE, XMPP_BAN_COMPONENT
+from messenger.storage import storage_getter
 from messenger import g_settings
 
 @ReprInjector.simple('priority', 'message', 'presence', ('__exts', 'exts'), ('__mucInfo', 'muc'))
@@ -31,10 +33,35 @@ class Resource(object):
                 tags.add(USER_TAG.IGR_BASE)
             elif info.igrID == IGR_TYPE.PREMIUM:
                 tags.add(USER_TAG.IGR_PREMIUM)
-        info = self.__exts.ban
-        if info and info.isBanned(game=CURRENT_GAME_ID):
+        if self.__isChatBanned():
             tags.add(USER_TAG.BAN_CHAT)
         return tags
+
+    def __isChatBanned(self):
+        banInfo = self.__exts.ban
+        if not banInfo:
+            return False
+        else:
+            banItem = banInfo.getFirstActiveItem(game=banInfo.getCurrentGame(), components=XMPP_BAN_COMPONENT.PRIVATE)
+            if banItem is None:
+                return False
+            if banItem.banType != NOVICE_RESTRICTIONS_BAN_TYPE:
+                return True
+            dbID = self.__exts.dbID
+            if not dbID:
+                return True
+            user = storage_getter('users')().getUser(dbID, PROTO_TYPE.XMPP)
+            if user is None:
+                return True
+            if Resource.__isConfirmedFriend(user):
+                return False
+            from gui.Scaleform.daapi.view.lobby.referral_program.referral_program_helpers import getRecruiterDbId
+            return False if getRecruiterDbId() == dbID else True
+
+    @staticmethod
+    def __isConfirmedFriend(user):
+        item = user.getItem()
+        return False if item.getItemType() != XMPP_ITEM_TYPE.ROSTER_ITEM else item.getSubscription()[0] == SUBSCRIPTION.ON
 
     def getPlatformAccountDatabaseID(self):
         return self.__exts.dbID

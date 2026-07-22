@@ -9,7 +9,7 @@
   <supplySlots>	1 1 1 6 6 6 8 8 8	</supplySlots>
   <speedLimits>
     <forward>	24	</forward>
-    <backward>	12	</backward>
+    <backward>	15	</backward>
   </speedLimits>
   <invisibility>
     <moving>	0.211	</moving>
@@ -57,7 +57,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_7 armor_4	</primaryArmor>
     <weight>	9960	</weight>
-    <maxHealth>	324	</maxHealth>
+    <maxHealth>	450	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	100	</maxHealth>
       <maxRegenHealth>	70	</maxRegenHealth>
@@ -2529,7 +2529,7 @@
           <camouflage></camouflage>
         </customizableVehicleAreas>
       </customization>
-      <repairTime>	5.71428585	</repairTime>
+      <repairTime>	2.85003138	</repairTime>
     </Chassis_GB42_Valentine_AT>
     <Chassis_GB42_Valentine_AT_2>
       <userString>	#gb_vehicles:Chassis_GB42_Valentine_AT_2	</userString>
@@ -3739,7 +3739,7 @@
           <camouflage></camouflage>
         </customizableVehicleAreas>
       </customization>
-      <repairTime>	5.71428585	</repairTime>
+      <repairTime>	2.85003138	</repairTime>
     </Chassis_GB42_Valentine_AT_2>
   </chassis>
   <turrets0>
@@ -3755,7 +3755,7 @@
         <armor_3>	0	</armor_3>
       </armor>
       <weight>	100	</weight>
-      <maxHealth>	81	</maxHealth>
+      <maxHealth>	110	</maxHealth>
       <rotationSpeed>	44	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	100	</maxHealth>
@@ -3779,13 +3779,13 @@
           <armor>
             <gun>	15	</gun>
           </armor>
-          <shotDispersionRadius>	0.41	</shotDispersionRadius>
+          <shotDispersionRadius>	0.36	</shotDispersionRadius>
           <reloadTime>	2.8	</reloadTime>
-          <aimingTime>	2	</aimingTime>
+          <aimingTime>	1.7	</aimingTime>
           <invisibilityFactorAtShot>	0.28	</invisibilityFactorAtShot>
           <shotDispersionFactors>
-            <turretRotation>	0.12	</turretRotation>
-            <afterShot>	4	</afterShot>
+            <turretRotation>	0.10	</turretRotation>
+            <afterShot>	2	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <pitchLimits>
@@ -3848,14 +3848,14 @@
           <armor>
             <gun>	30	</gun>
           </armor>
-          <shotDispersionRadius>	0.49	</shotDispersionRadius>
+          <shotDispersionRadius>	0.45	</shotDispersionRadius>
           <reloadTime>	8	</reloadTime>
           <shotDispersionFactors>
-            <turretRotation>	0.16	</turretRotation>
+            <turretRotation>	0.10	</turretRotation>
             <afterShot>	4	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <aimingTime>	2.5	</aimingTime>
+          <aimingTime>	2.1	</aimingTime>
           <invisibilityFactorAtShot>	0.25	</invisibilityFactorAtShot>
           <pitchLimits>
             <minPitch>	0 -15 1 -15	</minPitch>
@@ -3923,7 +3923,7 @@
           <invisibilityFactorAtShot>	0.252	</invisibilityFactorAtShot>
           <shotDispersionFactors>
             <turretRotation>	0.08	</turretRotation>
-            <afterShot>	3	</afterShot>
+            <afterShot>	2	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <pitchLimits>
@@ -4145,16 +4145,6 @@
     </Turret_1_GB42_Valentine_AT>
   </turrets0>
   <engines>
-    <AEC_A189>	shared	  <unlocks>
-        <engine>	AEC_A1909	  <cost>	180	</cost>
-        </engine>
-      </unlocks>
-    </AEC_A189>
-    <AEC_A1909>	shared	  <unlocks>
-        <engine>	GMC_6-71_Mk10	  <cost>	700	</cost>
-        </engine>
-      </unlocks>
-    </AEC_A1909>
     <GMC_6-71_Mk10>	shared	  <unlocks>
         <engine>	GMC_6-71_Mk11	  <cost>	800	</cost>
         </engine>
@@ -4166,34 +4156,11 @@
     <Medium>	shared	</Medium>
   </fuelTanks>
   <radios>
-    <N11>	shared	  <unlocks>
-        <radio>	N9	  <cost>	610	</cost>
-        </radio>
-      </unlocks>
-    </N11>
-    <N9>	shared	  <unlocks>
-        <radio>	N19Mk1	  <cost>	1480	</cost>
-        </radio>
-      </unlocks>
-    </N9>
-    <N19Mk1>	shared	  <unlocks>
-        <radio>	N19Mk2	  <cost>	3600	</cost>
-        </radio>
-      </unlocks>
-    </N19Mk1>
     <N19Mk2>	shared	</N19Mk2>
   </radios>
   <physics>
     <detailed>
       <engines>
-        <AEC_A189>
-          <smplEnginePower>	142.733	</smplEnginePower>
-          <smplFwMaxSpeed>	24	</smplFwMaxSpeed>
-        </AEC_A189>
-        <AEC_A1909>
-          <smplEnginePower>	138.5038	</smplEnginePower>
-          <smplFwMaxSpeed>	24	</smplFwMaxSpeed>
-        </AEC_A1909>
         <GMC_6-71_Mk10>
           <smplEnginePower>	145.9048	</smplEnginePower>
           <smplFwMaxSpeed>	24	</smplFwMaxSpeed>

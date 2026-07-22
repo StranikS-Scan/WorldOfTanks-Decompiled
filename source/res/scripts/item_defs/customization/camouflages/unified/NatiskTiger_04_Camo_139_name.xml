@@ -1,0 +1,54 @@
+<NatiskTiger_04_Camo_139_name.xml>
+  <xmlns:czech1>	ussr	</xmlns:czech1>
+  <xmlns:germany>	germany	</xmlns:germany>
+  <xmlns:czech0>	usa	</xmlns:czech0>
+  <xmlns:china>	china	</xmlns:china>
+  <xmlns:france>	france	</xmlns:france>
+  <xmlns:uk>	uk	</xmlns:uk>
+  <xmlns:japan>	japan	</xmlns:japan>
+  <xmlns:czech>	czech	</xmlns:czech>
+  <xmlns:sweden>	sweden	</xmlns:sweden>
+  <xmlns:poland>	poland	</xmlns:poland>
+  <xmlns:italy>	italy	</xmlns:italy>
+  <xmlns:intunion>	intunion	</xmlns:intunion>
+  <itemGroup>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <style>	31454	</style>
+    <camouflage>
+      <id>	31435	</id>
+      <scales>	1.2 1 0.7	</scales>
+      <palettes>
+        <palette>
+          <c0>	255 0 0 255	</c0>
+          <c1>	0 255 0 255	</c1>
+          <c2>	0 0 255 255	</c2>
+          <c3>	0 0 0 140	</c3>
+        </palette>
+      </palettes>
+      <texture>	vehicles/russian/Camouflage/NatiskTiger_04_Camo_139.dds	</texture>
+      <tilingSettings>
+        <type>	relative	</type>
+        <factor>	2.64 2.64	</factor>
+        <offset>	-11.36 -12.45	</offset>
+      </tilingSettings>
+      <glossMetallicMap>	vehicles/russian/Camouflage/NatiskTiger_04_Camo_139_GMM.dds	</glossMetallicMap>
+      <userString>	#vehicle_customization:NatiskTiger_04_Camo_139/name	</userString>
+      <description>	#vehicle_customization:NatiskTiger_04_Camo_139/description	</description>
+      <exclusionImpact>	0.5	</exclusionImpact>
+      <rotation>
+        <HULL>	-1.021716	</HULL>
+        <TURRET>	-1.021716	</TURRET>
+        <GUN>	-1.021716	</GUN>
+      </rotation>
+    </camouflage>
+    <tags>	styleOnly fullRGB questsProgression hiddenInUI	</tags>
+    <priceGroup>	MT camouflages 50g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R47_ISU-152_Zveroboj ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <userString>	#vehicle_customization:camouflage/opaque	</userString>
+  </itemGroup>
+</NatiskTiger_04_Camo_139_name.xml>

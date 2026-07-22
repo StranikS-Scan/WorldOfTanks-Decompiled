@@ -1,0 +1,62 @@
+<Dom_Style_2024_MT_name.xml>
+  <itemGroup>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <tags>	progression_required	</tags>
+    <priceGroup>	MT 2D styles universal 1000g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <style>
+      <id>	31205	</id>
+      <texture>	gui/maps/vehicles/styles/Dom_Style_2024_MT.png	</texture>
+      <outfits>
+        <outfit>
+          <season>	all	</season>
+          <paints>
+            <item>
+              <id>	31167	</id>
+              <appliedTo>	20753	</appliedTo>
+            </item>
+          </paints>
+          <camouflages>
+            <item>
+              <id>	31172	</id>
+              <patternSize>	1	</patternSize>
+              <appliedTo>	4368	</appliedTo>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <projection_decals>
+            <item>
+              <id>	31182	</id>
+              <scaleFactorId>	1	</scaleFactorId>
+              <tags>	formfactor_rect1x2 direction_right_to_left left safe	</tags>
+            </item>
+            <item>
+              <id>	31182	</id>
+              <scaleFactorId>	1	</scaleFactorId>
+              <tags>	right direction_right_to_left safe formfactor_rect1x2	</tags>
+            </item>
+          </projection_decals>
+          <modifications>
+            <item>	4	</item>
+          </modifications>
+        </outfit>
+      </outfits>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+      <userString>	#vehicle_customization:Dom_Style_2024_MT/name	</userString>
+      <description>	#vehicle_customization:Dom_Style_2024_MT/description	</description>
+      <longDescriptionSpecial>	#vehicle_customization:Dom_Style_2024_MT/longDescription	</longDescriptionSpecial>
+    </style>
+  </itemGroup>
+</Dom_Style_2024_MT_name.xml>

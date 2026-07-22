@@ -1,0 +1,48 @@
+<Rush_2024_ThunderWolf_MT_name.xml>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	MT 2D styles universal 1000g notInShop	</priceGroup>
+    <style>
+      <id>	31104	</id>
+      <tags>	questsProgression	</tags>
+      <texture>	gui/maps/vehicles/styles/Rush_2024_ThunderWolf_MT.png	</texture>
+      <userString>	#vehicle_customization:Rush_2024_ThunderWolf_MT/name	</userString>
+      <description>	#vehicle_customization:Rush_2024_ThunderWolf_MT/description	</description>
+      <longDescriptionSpecial>	#vehicle_customization:Rush_2024_ThunderWolf_MT/longDescription	</longDescriptionSpecial>
+      <outfits>
+        <outfit>
+          <season>	all	</season>
+          <camouflages>
+            <item>
+              <id>	31081	</id>
+              <patternSize>	1	</patternSize>
+              <appliedTo>	4368	</appliedTo>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <insignias>
+            <item>
+              <id>	31008	</id>
+              <appliedTo>	4096	</appliedTo>
+            </item>
+          </insignias>
+        </outfit>
+      </outfits>
+      <alternateItems>
+        <camouflage>
+          <id>	31081 31082 31083 31084 31085 31086	</id>
+        </camouflage>
+        <decal>
+          <id>	31119 31120 31121 31122 31123 31124 31125 31126 31127 31128 31129 31130 31131 31132 31133 31134 31135 31136 31137 31138 31139 31140 31141	</id>
+        </decal>
+      </alternateItems>
+    </style>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+  </itemGroup>
+</Rush_2024_ThunderWolf_MT_name.xml>

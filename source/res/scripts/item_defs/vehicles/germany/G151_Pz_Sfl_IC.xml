@@ -63,7 +63,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	5440	</weight>
-    <maxHealth>	332	</maxHealth>
+    <maxHealth>	450	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	125	</maxHealth>
       <maxRegenHealth>	85	</maxRegenHealth>
@@ -1269,8 +1269,8 @@
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
       <rotationSpeed>	44	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.28	</vehicleMovement>
-        <vehicleRotation>	0.28	</vehicleRotation>
+        <vehicleMovement>	0.22	</vehicleMovement>
+        <vehicleRotation>	0.22	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	80	</maxHealth>
@@ -2175,7 +2175,7 @@
           <trackPairIdx>	0	</trackPairIdx>
         </right>
       </physicalTracks>
-      <repairTime>	5.71428585	</repairTime>
+      <repairTime>	2.85003138	</repairTime>
     </Chassis_G151_Pz_Sfl_IC>
   </chassis>
   <turrets0>
@@ -2195,8 +2195,8 @@
         <armor_8>	0	</armor_8>
       </armor>
       <weight>	100	</weight>
-      <maxHealth>	83	</maxHealth>
-      <rotationSpeed>	28	</rotationSpeed>
+      <maxHealth>	100	</maxHealth>
+      <rotationSpeed>	34	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	100	</maxHealth>
         <maxRegenHealth>	50	</maxRegenHealth>
@@ -2224,15 +2224,15 @@
             </armor_4>
             <gun>	10	</gun>
           </armor>
-          <reloadTime>	10	</reloadTime>
+          <reloadTime>	8	</reloadTime>
           <clip>
             <count>	3	</count>
             <rate>	30	</rate>
           </clip>
-          <aimingTime>	2	</aimingTime>
+          <aimingTime>	1.8	</aimingTime>
           <shotDispersionFactors>
             <turretRotation>	0.08	</turretRotation>
-            <afterShot>	3	</afterShot>
+            <afterShot>	2	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <shotDispersionRadius>	0.39	</shotDispersionRadius>

@@ -56,7 +56,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	9320	</weight>
-    <maxHealth>	432	</maxHealth>
+    <maxHealth>	500	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	125	</maxHealth>
       <maxRegenHealth>	85	</maxRegenHealth>
@@ -868,8 +868,8 @@
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
       <rotationSpeed>	35	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.32	</vehicleMovement>
-        <vehicleRotation>	0.32	</vehicleRotation>
+        <vehicleMovement>	0.22	</vehicleMovement>
+        <vehicleRotation>	0.22	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	70	</maxHealth>
@@ -2005,7 +2005,7 @@
           <camouflage></camouflage>
         </customizableVehicleAreas>
       </customization>
-      <repairTime>	5.71428585	</repairTime>
+      <repairTime>	2.85003138	</repairTime>
     </Chassis_Pz_IV_AusfD>
     <Chassis_Pz_IV_AusfD_2>
       <userString>	#germany_vehicles:Chassis_Pz_IV_AusfD_2	</userString>
@@ -2022,8 +2022,8 @@
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
       <rotationSpeed>	40	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.29	</vehicleMovement>
-        <vehicleRotation>	0.29	</vehicleRotation>
+        <vehicleMovement>	0.20	</vehicleMovement>
+        <vehicleRotation>	0.20	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	80	</maxHealth>
@@ -3159,13 +3159,17 @@
           <camouflage></camouflage>
         </customizableVehicleAreas>
       </customization>
-      <repairTime>	5.71428585	</repairTime>
+      <repairTime>	2.85003138	</repairTime>
     </Chassis_Pz_IV_AusfD_2>
   </chassis>
   <turrets0>
     <Turret_1_Pz_IV_AusfD>
       <userString>	#germany_vehicles:Turret_1_Pz_IV_AusfD	</userString>
       <tags></tags>
+      <unlocks>
+        <turret>	Turret_2_Pz_IV_AusfD	  <cost>	1200	</cost>
+        </turret>
+      </unlocks>
       <level>	3	</level>
       <price>	2200	</price>
       <armor>
@@ -3183,7 +3187,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	1800	</weight>
-      <maxHealth>	78	</maxHealth>
+      <maxHealth>	110	</maxHealth>
       <rotationSpeed>	44	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	80	</maxHealth>
@@ -3199,8 +3203,6 @@
       <guns>
         <_50mm_KwK_38_L42>	shared	  <maxAmmo>	195	</maxAmmo>
           <unlocks>
-            <gun>	_75mm_KwK_37_L24	  <cost>	800	</cost>
-            </gun>
             <gun>	_50mm_KwK_39_L60	  <cost>	1350	</cost>
             </gun>
           </unlocks>
@@ -3215,7 +3217,7 @@
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 10 1 10	</maxPitch>
           </pitchLimits>
-          <shotDispersionRadius>	0.46	</shotDispersionRadius>
+          <shotDispersionRadius>	0.40	</shotDispersionRadius>
           <reloadTime>	2.1	</reloadTime>
           <aimingTime>	2	</aimingTime>
           <invisibilityFactorAtShot>	0.29	</invisibilityFactorAtShot>
@@ -3266,6 +3268,10 @@
           </camouflage>
         </_50mm_KwK_38_L42>
         <_50mm_KwK_39_L60>	shared	  <maxAmmo>	145	</maxAmmo>
+          <unlocks>
+            <gun>	_75mm_KwK_37_L24	  <cost>	800	</cost>
+            </gun>
+          </unlocks>
           <armor>
             <armor_1>	10	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_1>
@@ -3327,10 +3333,6 @@
           </camouflage>
         </_50mm_KwK_39_L60>
         <_75mm_KwK_37_L24>	shared	  <maxAmmo>	140	</maxAmmo>
-          <unlocks>
-            <turret>	Turret_2_Pz_IV_AusfD	  <cost>	1200	</cost>
-            </turret>
-          </unlocks>
           <armor>
             <armor_1>	10	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_1>
@@ -3342,7 +3344,7 @@
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 10 0.388889 10 0.402778 9 0.597222 9 0.611111 10 1 10	</maxPitch>
           </pitchLimits>
-          <shotDispersionRadius>	0.5	</shotDispersionRadius>
+          <shotDispersionRadius>	0.40	</shotDispersionRadius>
           <reloadTime>	3.9	</reloadTime>
           <aimingTime>	1.9	</aimingTime>
           <invisibilityFactorAtShot>	0.26	</invisibilityFactorAtShot>
@@ -3870,7 +3872,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	2100	</weight>
-      <maxHealth>	108	</maxHealth>
+      <maxHealth>	130	</maxHealth>
       <rotationSpeed>	44	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	80	</maxHealth>
@@ -3898,7 +3900,7 @@
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 10 1 10	</maxPitch>
           </pitchLimits>
-          <shotDispersionRadius>	0.46	</shotDispersionRadius>
+          <shotDispersionRadius>	0.38	</shotDispersionRadius>
           <reloadTime>	2.1	</reloadTime>
           <aimingTime>	2	</aimingTime>
           <invisibilityFactorAtShot>	0.29	</invisibilityFactorAtShot>
@@ -4026,7 +4028,7 @@
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 10 1 10	</maxPitch>
           </pitchLimits>
-          <shotDispersionRadius>	0.5	</shotDispersionRadius>
+          <shotDispersionRadius>	0.40	</shotDispersionRadius>
           <reloadTime>	3.9	</reloadTime>
           <aimingTime>	1.9	</aimingTime>
           <invisibilityFactorAtShot>	0.26	</invisibilityFactorAtShot>
@@ -4090,9 +4092,9 @@
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 10 1 10	</maxPitch>
           </pitchLimits>
-          <shotDispersionRadius>	0.4	</shotDispersionRadius>
+          <shotDispersionRadius>	0.38	</shotDispersionRadius>
           <reloadTime>	4	</reloadTime>
-          <aimingTime>	2.5	</aimingTime>
+          <aimingTime>	1.9	</aimingTime>
           <invisibilityFactorAtShot>	0.247	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/german/G80_Pz_IV_AusfD/normal/lod0/Gun_07.model	</undamaged>

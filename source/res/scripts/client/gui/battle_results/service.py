@@ -24,6 +24,7 @@ from shared_utils.account_helpers.battle_results_helpers import getEmptyClientPB
 from skeletons.gui.battle_matters import IBattleMattersController
 from skeletons.gui.battle_results import IBattleResultsService
 from skeletons.gui.battle_session import IBattleSessionProvider
+from skeletons.gui.game_control import ITankAcademyController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
@@ -36,6 +37,7 @@ class BattleResultsService(IBattleResultsService):
     itemsCache = dependency.descriptor(IItemsCache)
     lobbyContext = dependency.descriptor(ILobbyContext)
     sessionProvider = dependency.descriptor(IBattleSessionProvider)
+    tankAcademyController = dependency.descriptor(ITankAcademyController)
 
     def __init__(self):
         super(BattleResultsService, self).__init__()
@@ -282,13 +284,17 @@ class BattleResultsService(IBattleResultsService):
         arenaBonusType = battleCtx.lastArenaBonusType or ARENA_BONUS_TYPE.UNKNOWN
         if arenaUniqueID:
             try:
-                self.__showResults(context.RequestResultsContext(arenaUniqueID, arenaBonusType))
+                if not self.__shouldSuppressAutoShow(arenaUniqueID):
+                    self.__showResults(context.RequestResultsContext(arenaUniqueID, arenaBonusType))
             except Exception:
                 LOG_CURRENT_EXCEPTION()
 
             battleCtx.lastArenaUniqueID = None
             battleCtx.lastArenaBonusType = None
         return
+
+    def __shouldSuppressAutoShow(self, arenaUniqueID):
+        return self.tankAcademyController.isActive() and self.tankAcademyController.consumePostBattleAutoShowSuppressed(arenaUniqueID)
 
     @adisp_async
     @adisp_process

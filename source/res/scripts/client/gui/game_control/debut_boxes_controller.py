@@ -7,7 +7,8 @@ from Event import EventManager
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import CAROUSEL_FILTER_2, RANKED_CAROUSEL_FILTER_2, COMP7_CAROUSEL_FILTER_2
 from constants import Configs
-from shared_utils import findFirst
+from gui.impl.lobby.common.view_helpers import convertQueueTypeToArenaType
+from shared_utils import findFirst, first
 from gui import SystemMessages
 from gui.SystemMessages import SM_TYPE
 from gui.impl import backport
@@ -84,6 +85,9 @@ class DebutBoxesController(IDebutBoxesController):
     def isQuestsAvailableOnVehicle(self, vehicle):
         quest = self.getQuestForVehicle(vehicle)
         return quest is not None and not quest.bonusCond.isGroupProgressCompleted(groupByKey=vehicle.intCD)
+
+    def isQuestsAvailableOnBattle(self):
+        return first(self.__quests.itervalues()).hasBonusType(convertQueueTypeToArenaType())
 
     def getQuestsIDs(self):
         return self.__getConfig().questIDs

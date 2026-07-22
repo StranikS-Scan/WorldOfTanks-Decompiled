@@ -59,7 +59,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	11310	</weight>
-    <maxHealth>	400	</maxHealth>
+    <maxHealth>	450	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	110	</maxHealth>
       <maxRegenHealth>	70	</maxRegenHealth>
@@ -2221,7 +2221,7 @@
           <camouflage></camouflage>
         </customizableVehicleAreas>
       </customization>
-      <repairTime>	6.85714293	</repairTime>
+      <repairTime>	2.28001642	</repairTime>
     </Chassis_GB06_Vickers_Medium_Mk_III>
     <Chassis_GB06_Vickers_Medium_Mk_III_2>
       <userString>	#gb_vehicles:Chassis_GB06_Vickers_Medium_Mk_III_2	</userString>
@@ -3299,7 +3299,7 @@
           <camouflage></camouflage>
         </customizableVehicleAreas>
       </customization>
-      <repairTime>	6.85714293	</repairTime>
+      <repairTime>	2.28001642	</repairTime>
     </Chassis_GB06_Vickers_Medium_Mk_III_2>
   </chassis>
   <turrets0>
@@ -3323,7 +3323,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	1250	</weight>
-      <maxHealth>	75	</maxHealth>
+      <maxHealth>	80	</maxHealth>
       <rotationSpeed>	40	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	70	</maxHealth>
@@ -3359,10 +3359,10 @@
           <reloadTime>	3	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.1	</turretRotation>
-            <afterShot>	3.5	</afterShot>
+            <afterShot>	2.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <aimingTime>	2.1	</aimingTime>
+          <aimingTime>	1.9	</aimingTime>
           <invisibilityFactorAtShot>	0.29	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/british/GB06_Vickers_Medium_Mk_III/normal/lod0/Gun_01.model	</undamaged>
@@ -3417,14 +3417,14 @@
             </armor_3>
             <gun>	10	</gun>
           </armor>
-          <shotDispersionRadius>	0.44	</shotDispersionRadius>
+          <shotDispersionRadius>	0.42	</shotDispersionRadius>
           <reloadTime>	3.3	</reloadTime>
           <shotDispersionFactors>
-            <turretRotation>	0.12	</turretRotation>
-            <afterShot>	4.0	</afterShot>
+            <turretRotation>	0.10	</turretRotation>
+            <afterShot>	2.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <aimingTime>	2.1	</aimingTime>
+          <aimingTime>	1.9	</aimingTime>
           <invisibilityFactorAtShot>	0.28	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/british/GB06_Vickers_Medium_Mk_III/normal/lod0/Gun_02.model	</undamaged>
@@ -3955,8 +3955,8 @@
             </armor_3>
             <gun>	10	</gun>
           </armor>
-          <shotDispersionRadius>	0.41	</shotDispersionRadius>
-          <reloadTime>	2.7	</reloadTime>
+          <shotDispersionRadius>	0.40	</shotDispersionRadius>
+          <reloadTime>	2.5	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.08	</turretRotation>
             <afterShot>	3.5	</afterShot>
@@ -4017,11 +4017,11 @@
             </armor_3>
             <gun>	10	</gun>
           </armor>
-          <shotDispersionRadius>	0.44	</shotDispersionRadius>
+          <shotDispersionRadius>	0.40	</shotDispersionRadius>
           <reloadTime>	3	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.1	</turretRotation>
-            <afterShot>	4.0	</afterShot>
+            <afterShot>	2.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <aimingTime>	1.7	</aimingTime>
@@ -4085,7 +4085,7 @@
           <invisibilityFactorAtShot>	0.3	</invisibilityFactorAtShot>
           <shotDispersionFactors>
             <turretRotation>	0.08	</turretRotation>
-            <afterShot>	3	</afterShot>
+            <afterShot>	2	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <models>

@@ -1,0 +1,60 @@
+<TamedFlame_style_name.xml>
+  <itemGroup>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <tags>	progression_required	</tags>
+    <priceGroup>	MT 2D styles universal 1000g notInShop	</priceGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <style>
+      <id>	31100	</id>
+      <texture>	gui/maps/vehicles/styles/TamedFlame.png	</texture>
+      <userString>	#vehicle_customization:TamedFlame_style/name	</userString>
+      <description>	#vehicle_customization:TamedFlame_style/description	</description>
+      <longDescriptionSpecial>	#vehicle_customization:TamedFlame_style/longDescription	</longDescriptionSpecial>
+      <outfits>
+        <outfit>
+          <season>	all	</season>
+          <paints>
+            <item>
+              <id>	31069	</id>
+              <appliedTo>	273	</appliedTo>
+            </item>
+            <item>
+              <id>	31070	</id>
+              <appliedTo>	20480	</appliedTo>
+            </item>
+          </paints>
+          <camouflages>
+            <item>
+              <id>	31071	</id>
+              <patternSize>	1	</patternSize>
+              <appliedTo>	272	</appliedTo>
+              <palette>	0	</palette>
+            </item>
+            <item>
+              <id>	31072	</id>
+              <patternSize>	1	</patternSize>
+              <appliedTo>	4096	</appliedTo>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <modifications>
+            <item>	4	</item>
+          </modifications>
+        </outfit>
+      </outfits>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+    </style>
+  </itemGroup>
+</TamedFlame_style_name.xml>

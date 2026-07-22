@@ -1,49 +1,137 @@
 <chassis.xml>
-  <ids>
-    <Chassis_Cz01_Skoda_T40>	0	</Chassis_Cz01_Skoda_T40>
-    <Chassis_Cz06_Kolohousenka>	1	</Chassis_Cz06_Kolohousenka>
-    <Chassis_Cz03_LT_vz35>	2	</Chassis_Cz03_LT_vz35>
-    <Chassis_Cz03_LT_vz35_2>	3	</Chassis_Cz03_LT_vz35_2>
-    <Chassis_Cz10_LT_vz38>	4	</Chassis_Cz10_LT_vz38>
-    <Chassis_Cz10_LT_vz38_2>	5	</Chassis_Cz10_LT_vz38_2>
-    <Chassis_Cz11_V_8_H>	6	</Chassis_Cz11_V_8_H>
-    <Chassis_Cz11_V_8_H_2>	7	</Chassis_Cz11_V_8_H_2>
-    <Chassis_Cz09_T_24>	8	</Chassis_Cz09_T_24>
-    <Chassis_Cz09_T_24_2>	9	</Chassis_Cz09_T_24_2>
-    <Chassis_Cz08_T_25>	10	</Chassis_Cz08_T_25>
-    <Chassis_Cz08_T_25_2>	11	</Chassis_Cz08_T_25_2>
-    <Chassis_Cz05_T34_100>	12	</Chassis_Cz05_T34_100>
-    <Chassis_Cz05_T34_100_2>	13	</Chassis_Cz05_T34_100_2>
-    <Chassis_Cz07_TVP_46>	14	</Chassis_Cz07_TVP_46>
-    <Chassis_Cz07_TVP_46_2>	15	</Chassis_Cz07_TVP_46_2>
-    <Chassis_Cz02_TVP_T50>	16	</Chassis_Cz02_TVP_T50>
-    <Chassis_Cz02_TVP_T50_2>	17	</Chassis_Cz02_TVP_T50_2>
-    <Chassis_Cz04_T50_51>	18	</Chassis_Cz04_T50_51>
-    <Chassis_Cz13_T_27>	19	</Chassis_Cz13_T_27>
-    <Chassis_Cz15_Skoda_T-45_Prem>	21	</Chassis_Cz15_Skoda_T-45_Prem>
-    <Chassis_Cz14_Skoda_T-56>	22	</Chassis_Cz14_Skoda_T-56>
-    <Chassis_Cz17_Vz_55>	23	</Chassis_Cz17_Vz_55>
-    <Chassis_Cz16_TNH_T_vz51>	24	</Chassis_Cz16_TNH_T_vz51>
-    <Chassis_Cz16_TNH_T_vz51_2>	25	</Chassis_Cz16_TNH_T_vz51_2>
-    <Chassis_Cz18_TNH_105_1000>	26	</Chassis_Cz18_TNH_105_1000>
-    <Chassis_Cz18_TNH_105_1000_2>	27	</Chassis_Cz18_TNH_105_1000_2>
-    <Chassis_Cz19_Vz_44_1>	28	</Chassis_Cz19_Vz_44_1>
-    <Chassis_Cz19_Vz_44_1_2>	29	</Chassis_Cz19_Vz_44_1_2>
-    <Chassis_Cz20_ShPTK_TVP_100_mm>	30	</Chassis_Cz20_ShPTK_TVP_100_mm>
-    <Chassis_Cz17_Vz_55_CN>	31	</Chassis_Cz17_Vz_55_CN>
-    <Chassis_Cz29_Pzw_39>	38	</Chassis_Cz29_Pzw_39>
-    <Chassis_Cz21_TST>	31001	</Chassis_Cz21_TST>
-    <Chassis_Cz31_Tatra_T_III>	31002	</Chassis_Cz31_Tatra_T_III>
-    <Chassis_Cz02_TVP_T50_2_FL>	31003	</Chassis_Cz02_TVP_T50_2_FL>
-    <Chassis_Cz32_Vz_58_Koncept>	31004	</Chassis_Cz32_Vz_58_Koncept>
-    <Chassis_Cz36_Lisak_v2>	31005	</Chassis_Cz36_Lisak_v2>
-    <Chassis_Cz35_Klevets>	31006	</Chassis_Cz35_Klevets>
-    <Chassis_Cz37_Vz_59_Dravec>	31007	</Chassis_Cz37_Vz_59_Dravec>
-    <Chassis_Cz30_TBT>	31008	</Chassis_Cz30_TBT>
-    <Chassis_Cz38_Projekt_SAT>	31009	</Chassis_Cz38_Projekt_SAT>
-    <Chassis_Cz39_SD_122_49_Sekera>	31013	</Chassis_Cz39_SD_122_49_Sekera>
-    <Chassis_Cz00_COSM_Gravizapa_02>	40003	</Chassis_Cz00_COSM_Gravizapa_02>
-    <Chassis_Cz00_COSM_Pepelac_02>	40002	</Chassis_Cz00_COSM_Pepelac_02>
-  </ids>
-  <shared></shared>
+  <xmlns:xmlref>	http://bwt/xmlref	</xmlns:xmlref>
+  <shared>
+    <Chassis_Cz00_COSM_Gravizapa_02>
+      <id>	40003	</id>
+    </Chassis_Cz00_COSM_Gravizapa_02>
+    <Chassis_Cz00_COSM_Pepelac_02>
+      <id>	40002	</id>
+    </Chassis_Cz00_COSM_Pepelac_02>
+    <Chassis_Cz01_Skoda_T40>
+      <id>	0	</id>
+    </Chassis_Cz01_Skoda_T40>
+    <Chassis_Cz02_TVP_T50>
+      <id>	16	</id>
+    </Chassis_Cz02_TVP_T50>
+    <Chassis_Cz02_TVP_T50_2>
+      <id>	17	</id>
+    </Chassis_Cz02_TVP_T50_2>
+    <Chassis_Cz02_TVP_T50_2_FL>
+      <id>	31003	</id>
+    </Chassis_Cz02_TVP_T50_2_FL>
+    <Chassis_Cz03_LT_vz35>
+      <id>	2	</id>
+    </Chassis_Cz03_LT_vz35>
+    <Chassis_Cz03_LT_vz35_2>
+      <id>	3	</id>
+    </Chassis_Cz03_LT_vz35_2>
+    <Chassis_Cz04_T50_51>
+      <id>	18	</id>
+    </Chassis_Cz04_T50_51>
+    <Chassis_Cz05_T34_100>
+      <id>	12	</id>
+    </Chassis_Cz05_T34_100>
+    <Chassis_Cz05_T34_100_2>
+      <id>	13	</id>
+    </Chassis_Cz05_T34_100_2>
+    <Chassis_Cz06_Kolohousenka>
+      <id>	1	</id>
+    </Chassis_Cz06_Kolohousenka>
+    <Chassis_Cz07_TVP_46>
+      <id>	14	</id>
+    </Chassis_Cz07_TVP_46>
+    <Chassis_Cz07_TVP_46_2>
+      <id>	15	</id>
+    </Chassis_Cz07_TVP_46_2>
+    <Chassis_Cz08_T_25>
+      <id>	10	</id>
+    </Chassis_Cz08_T_25>
+    <Chassis_Cz08_T_25_2>
+      <id>	11	</id>
+    </Chassis_Cz08_T_25_2>
+    <Chassis_Cz09_T_24>
+      <id>	8	</id>
+    </Chassis_Cz09_T_24>
+    <Chassis_Cz09_T_24_2>
+      <id>	9	</id>
+    </Chassis_Cz09_T_24_2>
+    <Chassis_Cz10_LT_vz38>
+      <id>	4	</id>
+    </Chassis_Cz10_LT_vz38>
+    <Chassis_Cz10_LT_vz38_2>
+      <id>	5	</id>
+    </Chassis_Cz10_LT_vz38_2>
+    <Chassis_Cz11_V_8_H>
+      <id>	6	</id>
+    </Chassis_Cz11_V_8_H>
+    <Chassis_Cz11_V_8_H_2>
+      <id>	7	</id>
+    </Chassis_Cz11_V_8_H_2>
+    <Chassis_Cz13_T_27>
+      <id>	19	</id>
+    </Chassis_Cz13_T_27>
+    <Chassis_Cz14_Skoda_T-56>
+      <id>	22	</id>
+    </Chassis_Cz14_Skoda_T-56>
+    <Chassis_Cz15_Skoda_T-45_Prem>
+      <id>	21	</id>
+    </Chassis_Cz15_Skoda_T-45_Prem>
+    <Chassis_Cz16_TNH_T_vz51>
+      <id>	24	</id>
+    </Chassis_Cz16_TNH_T_vz51>
+    <Chassis_Cz16_TNH_T_vz51_2>
+      <id>	25	</id>
+    </Chassis_Cz16_TNH_T_vz51_2>
+    <Chassis_Cz17_Vz_55>
+      <id>	23	</id>
+    </Chassis_Cz17_Vz_55>
+    <Chassis_Cz17_Vz_55_CN>
+      <id>	31	</id>
+    </Chassis_Cz17_Vz_55_CN>
+    <Chassis_Cz18_TNH_105_1000>
+      <id>	26	</id>
+    </Chassis_Cz18_TNH_105_1000>
+    <Chassis_Cz18_TNH_105_1000_2>
+      <id>	27	</id>
+    </Chassis_Cz18_TNH_105_1000_2>
+    <Chassis_Cz19_Vz_44_1>
+      <id>	28	</id>
+    </Chassis_Cz19_Vz_44_1>
+    <Chassis_Cz19_Vz_44_1_2>
+      <id>	29	</id>
+    </Chassis_Cz19_Vz_44_1_2>
+    <Chassis_Cz20_ShPTK_TVP_100_mm>
+      <id>	30	</id>
+    </Chassis_Cz20_ShPTK_TVP_100_mm>
+    <Chassis_Cz21_TST>
+      <id>	31001	</id>
+    </Chassis_Cz21_TST>
+    <Chassis_Cz29_Pzw_39>
+      <id>	38	</id>
+    </Chassis_Cz29_Pzw_39>
+    <Chassis_Cz30_TBT>
+      <id>	31008	</id>
+    </Chassis_Cz30_TBT>
+    <Chassis_Cz31_Tatra_T_III>
+      <id>	31002	</id>
+    </Chassis_Cz31_Tatra_T_III>
+    <Chassis_Cz32_Vz_58_Koncept>
+      <id>	31004	</id>
+    </Chassis_Cz32_Vz_58_Koncept>
+    <Chassis_Cz35_Klevets>
+      <id>	31006	</id>
+    </Chassis_Cz35_Klevets>
+    <Chassis_Cz36_Lisak_v2>
+      <id>	31005	</id>
+    </Chassis_Cz36_Lisak_v2>
+    <Chassis_Cz37_Vz_59_Dravec>
+      <id>	31007	</id>
+    </Chassis_Cz37_Vz_59_Dravec>
+    <Chassis_Cz38_Projekt_SAT>
+      <id>	31009	</id>
+    </Chassis_Cz38_Projekt_SAT>
+    <Chassis_Cz39_SD_122_49_Sekera>
+      <id>	31013	</id>
+    </Chassis_Cz39_SD_122_49_Sekera>
+  </shared>
 </chassis.xml>

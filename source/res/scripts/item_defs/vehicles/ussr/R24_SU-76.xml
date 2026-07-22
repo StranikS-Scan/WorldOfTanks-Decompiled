@@ -61,7 +61,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	5565	</weight>
-    <maxHealth>	324	</maxHealth>
+    <maxHealth>	450	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	90	</maxHealth>
       <maxRegenHealth>	60	</maxRegenHealth>
@@ -2271,7 +2271,7 @@
           <camouflage></camouflage>
         </customizableVehicleAreas>
       </customization>
-      <repairTime>	5.71428585	</repairTime>
+      <repairTime>	2.85003138	</repairTime>
     </SU-76>
     <SU-76bis>
       <userString>	#ussr_vehicles:SU-76bis	</userString>
@@ -3305,7 +3305,7 @@
           <camouflage></camouflage>
         </customizableVehicleAreas>
       </customization>
-      <repairTime>	5.71428585	</repairTime>
+      <repairTime>	2.85003138	</repairTime>
     </SU-76bis>
   </chassis>
   <turrets0>
@@ -3321,7 +3321,7 @@
         <armor_8>	0	</armor_8>
       </armor>
       <weight>	83	</weight>
-      <maxHealth>	81	</maxHealth>
+      <maxHealth>	100	</maxHealth>
       <rotationSpeed>	44	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	100	</maxHealth>
@@ -3341,9 +3341,9 @@
           </pitchLimits>
           <maxAmmo>	120	</maxAmmo>
           <unlocks>
-            <gun>	_57mm_ZiS-2	  <cost>	4000	</cost>
-            </gun>
             <gun>	_76mm_ZiS-3_mod_42	  <cost>	2600	</cost>
+            </gun>
+            <gun>	_57mm_ZiS-2	  <cost>	4000	</cost>
             </gun>
           </unlocks>
           <armor>
@@ -3357,12 +3357,12 @@
             </armor_4>
             <gun>	10	</gun>
           </armor>
-          <shotDispersionRadius>	0.41	</shotDispersionRadius>
+          <shotDispersionRadius>	0.38	</shotDispersionRadius>
           <reloadTime>	2.6	</reloadTime>
           <aimingTime>	1.7	</aimingTime>
           <shotDispersionFactors>
             <turretRotation>	0.1	</turretRotation>
-            <afterShot>	3.0	</afterShot>
+            <afterShot>	2.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <invisibilityFactorAtShot>	0.28	</invisibilityFactorAtShot>
@@ -3443,7 +3443,7 @@
           </pitchLimits>
           <maxAmmo>	95	</maxAmmo>
           <unlocks>
-            <vehicle>	R02_SU-85	  <cost>	12500	</cost>
+            <vehicle>	R100_SU122A	  <cost>	12570	</cost>
             </vehicle>
           </unlocks>
           <armor>
@@ -3457,12 +3457,12 @@
             </armor_4>
             <gun>	20	</gun>
           </armor>
-          <shotDispersionRadius>	0.43	</shotDispersionRadius>
-          <reloadTime>	4.1	</reloadTime>
-          <aimingTime>	2.3	</aimingTime>
+          <shotDispersionRadius>	0.36	</shotDispersionRadius>
+          <reloadTime>	4.0	</reloadTime>
+          <aimingTime>	1.8	</aimingTime>
           <shotDispersionFactors>
-            <turretRotation>	0.12	</turretRotation>
-            <afterShot>	3.5	</afterShot>
+            <turretRotation>	0.10	</turretRotation>
+            <afterShot>	2.5	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <invisibilityFactorAtShot>	0.247	</invisibilityFactorAtShot>
@@ -3580,12 +3580,16 @@
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_76mm_ZiS-3_mod_42>
-        <_57mm_ZiS-2>	shared	  <pitchLimits>
+        <_57mm_ZiS-2>	shared	  <unlocks>
+            <vehicle>	R02_SU-85	  <cost>	12500	</cost>
+            </vehicle>
+          </unlocks>
+          <pitchLimits>
             <minPitch>	0 -15 1 -15	</minPitch>
             <maxPitch>	0 5 1 5	</maxPitch>
           </pitchLimits>
           <maxAmmo>	110	</maxAmmo>
-          <reloadTime>	3.2	</reloadTime>
+          <reloadTime>	3.0	</reloadTime>
           <armor>
             <armor_1>	15	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_1>
@@ -3601,7 +3605,7 @@
           <aimingTime>	1.7	</aimingTime>
           <shotDispersionFactors>
             <turretRotation>	0.1	</turretRotation>
-            <afterShot>	3.0	</afterShot>
+            <afterShot>	2.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <invisibilityFactorAtShot>	0.28	</invisibilityFactorAtShot>
@@ -3772,16 +3776,7 @@
     <Medium>	shared	</Medium>
   </fuelTanks>
   <radios>
-    <_9R>	shared	  <unlocks>
-        <radio>	_9RM	  <cost>	4040	</cost>
-        </radio>
-      </unlocks>
-    </_9R>
-    <_9RM>	shared	  <unlocks>
-        <vehicle>	R100_SU122A	  <cost>	12570	</cost>
-        </vehicle>
-      </unlocks>
-    </_9RM>
+    <_9RM>	shared	</_9RM>
   </radios>
   <physics>
     <detailed>

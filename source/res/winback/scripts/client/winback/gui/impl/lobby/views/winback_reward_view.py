@@ -4,7 +4,6 @@ import logging
 import typing
 from PlayerEvents import g_playerEvents
 from frameworks.wulf import ViewFlags, ViewSettings, WindowFlags, WindowLayer
-from gui.impl.backport.backport_tooltip import TooltipData
 from gui.impl.gen import R
 from gui.impl.lobby.common.view_wrappers import createBackportTooltipDecorator
 from gui.impl.pub import ViewImpl
@@ -26,6 +25,7 @@ from winback.gui.sounds_constants import REWARD_SOUND_SPACE
 if typing.TYPE_CHECKING:
     from typing import List
     from gui.server_events.bonuses import SimpleBonus
+    from gui.impl.backport import TooltipData
 _logger = logging.getLogger(__name__)
 _AWARDS_ORDER = ['premium_plus',
  RewardName.VEHICLE_FOR_GIFT.value,

@@ -34,22 +34,22 @@ class RenewableSubWebApiMixin(object):
 
     def getEnabledBonuses(self, serverSettings):
         enabledBonuses = []
-        if serverSettings.isRenewableSubGoldReserveEnabled():
-            enabledBonuses.append(WoTPlusBonusType.GOLD_BANK)
-        if serverSettings.isRenewableSubPassiveCrewXPEnabled():
-            enabledBonuses.append(WoTPlusBonusType.IDLE_CREW_XP)
         if serverSettings.isWotPlusExcludedMapEnabled():
             enabledBonuses.append(WoTPlusBonusType.EXCLUDED_MAP)
-        if serverSettings.isFreeEquipmentDemountingEnabled():
-            enabledBonuses.append(WoTPlusBonusType.FREE_EQUIPMENT_DEMOUNTING)
-        if serverSettings.isWoTPlusExclusiveVehicleEnabled():
-            enabledBonuses.append(WoTPlusBonusType.EXCLUSIVE_VEHICLE)
-        if serverSettings.isDailyAttendancesEnabled():
-            enabledBonuses.append(WoTPlusBonusType.ATTENDANCE_REWARD)
+        if serverSettings.isRenewableSubGoldReserveEnabled():
+            enabledBonuses.append(WoTPlusBonusType.GOLD_BANK)
         if serverSettings.isDailyQuestsExtraRewardsEnabled():
             enabledBonuses.append(WoTPlusBonusType.DAILY_QUESTS_REWARDS)
+        if serverSettings.isWoTPlusExclusiveVehicleEnabled():
+            enabledBonuses.append(WoTPlusBonusType.EXCLUSIVE_VEHICLE)
+        if serverSettings.isFreeEquipmentDemountingEnabled():
+            enabledBonuses.append(WoTPlusBonusType.FREE_EQUIPMENT_DEMOUNTING)
+        if serverSettings.isRenewableSubPassiveCrewXPEnabled():
+            enabledBonuses.append(WoTPlusBonusType.IDLE_CREW_XP)
         if serverSettings.isTeamCreditsBonusEnabled():
             enabledBonuses.append(WoTPlusBonusType.TEAM_CREDITS_BONUS)
+        if serverSettings.isDailyAttendancesEnabled():
+            enabledBonuses.append(WoTPlusBonusType.ATTENDANCE_REWARD)
         return enabledBonuses
 
     @w2c(W2CSchema, 'subscription_info_window')

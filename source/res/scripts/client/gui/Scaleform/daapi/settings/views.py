@@ -26,7 +26,6 @@ class VIEW_ALIAS(COMMON_VIEW_ALIAS):
     BROWSER_LOBBY_TOP_SUB = 'overlayBrowserView'
     BROWSER_OVERLAY = 'overlayBrowserFull'
     MAP_BOX_INFO_OVERLAY = 'mapboxInfoOverlay'
-    PLAY_STREAK_INFO_OVERLAY = 'playStreakInfoOverlay'
     BATTLE_PASS_BROWSER_VIEW = 'battlePassBrowserView'
     BATTLE_PASS_VIDEO_BROWSER_VIEW = 'battlePassVideoBrowserView'
     MANUAL_BROWSER_VIEW = 'ManualBrowserView'

@@ -13,4 +13,5 @@ class SettingsWebApiMixin(object):
     @w2c(W2CSchema, 'settings')
     def getSettings(self, _):
         return {'client_version': helpers.getClientVersion(),
-         'ui_spam_mode': '' if self.__limitedUIController.isRuleCompleted(LuiRules.LOBBY_HEADER_COUNTERS_STORE) else self._MODE_HIDE_COUNTERS}
+         'ui_spam_mode': '' if self.__limitedUIController.isRuleCompleted(LuiRules.LOBBY_HEADER_COUNTERS_STORE) else self._MODE_HIDE_COUNTERS,
+         'is_frontline_content_available': self.__limitedUIController.isRuleCompleted(LuiRules.FRONTLINE_CONTENT)}

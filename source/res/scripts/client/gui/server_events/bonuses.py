@@ -12,7 +12,7 @@ from battle_pass_common import BATTLE_PASS_OFFER_TOKEN_PREFIX, BATTLE_PASS_Q_CHA
 from blueprints.BlueprintTypes import BlueprintTypes
 from blueprints.FragmentTypes import getFragmentType
 from comp7_common import COMP7_TOKEN_WEEKLY_REWARD_NAME, COMP7_TOKEN_WEEKLY_REWARD_ID, COMP7_TOKEN_COUPON_REWARD_NAME, COMP7_TOKEN_COUPON_REWARD_ID, COMP7_CUSTOMIZATION_PROGRESS_PREFIX, replaceComp7tokenID
-from constants import CURRENCY_TOKEN_PREFIX, DOSSIER_TYPE, EVENT_TYPE as _ET, LOOTBOX_TOKEN_PREFIX, PREMIUM_ENTITLEMENTS, LOOTBOX_KEY_PREFIX, RESOURCE_TOKEN_PREFIX, RentType, CUSTOMIZATION_PROGRESS_PREFIX, WoTPlusBonusType, VERSUS_AI_PROGRESSION_TOKEN_PREFIX, OFFER_TOKEN_PREFIX
+from constants import CURRENCY_TOKEN_PREFIX, DOSSIER_TYPE, EVENT_TYPE as _ET, LOOTBOX_TOKEN_PREFIX, PREMIUM_ENTITLEMENTS, LOOTBOX_KEY_PREFIX, RESOURCE_TOKEN_PREFIX, RentType, CUSTOMIZATION_PROGRESS_PREFIX, WoTPlusBonusType, VERSUS_AI_PROGRESSION_TOKEN_PREFIX, OFFER_TOKEN_PREFIX, LOOTBOX_CUSTOMIZATION_PROGRESS_PREFIX
 from debug_utils import LOG_CURRENT_EXCEPTION, LOG_ERROR
 from dossiers2.custom.records import RECORD_DB_IDS
 from dossiers2.ui.achievements import ACHIEVEMENT_BLOCK, BADGES_BLOCK
@@ -36,7 +36,7 @@ from gui.app_loader.decorators import sf_lobby
 from gui.collection.collections_constants import COLLECTION_ITEM_BONUS_NAME, COLLECTION_ITEM_PREFIX_NAME, COLLECTION_ITEM_RES_KEY_TEMPLATE, COLLECTION_RES_PREFIX, COLLECTION_ITEM_TOKEN_PREFIX_NAME, cllcTokenToEntitlement
 from gui.game_control.links import URLMacros
 from gui.impl import backport
-from gui.impl.backport import TooltipData
+from gui.impl.backport import createTooltipData
 from gui.impl.gen import R
 from gui.impl.gen_utils import INVALID_RES_ID
 from gui.impl.lobby.loot_box.loot_box_helper import getKeyByTokenID
@@ -51,7 +51,7 @@ from gui.shared.gui_items.Tankman import Tankman, calculateRoleLevel, getRoleUse
 from gui.shared.gui_items.Vehicle import getIconResourceName, getWotPlusExclusiveVehicleTypeUserName
 from gui.shared.gui_items.crew_book import orderCmp
 from gui.shared.gui_items.crew_skin import localizedFullName
-from gui.shared.gui_items.customization import CustomizationTooltipContext
+from gui.shared.gui_items.customization import CustomizationTooltipContext, C11nStyleProgressData
 from gui.shared.gui_items.customization.c11n_helpers import getProgressionStyle
 from gui.shared.gui_items.dossier.factories import getAchievementFactory
 from gui.shared.money import Currency, Money
@@ -69,10 +69,11 @@ from optional_bonuses import BONUS_MERGERS
 from paragons_common import getAllParagonsEntitlements
 from personal_missions import PM_BRANCH, PM_BRANCH_TO_FREE_TOKEN_NAME
 from personal_missions_constants import PM3_OFFER_TOKEN_PREFIX
+from preferred_maps import getSlotTypeName
 from shared_utils import CONST_CONTAINER, first, makeTupleByDict, findFirst
 from skeletons.gui.battle_matters import IBattleMattersController
 from skeletons.gui.customization import ICustomizationService
-from skeletons.gui.game_control import ICollectionsSystemController, IWotPlusController
+from skeletons.gui.game_control import ICollectionsSystemController, IWotPlusController, ITankAcademyController
 from skeletons.gui.game_control import IWinbackController
 from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.lobby_context import ILobbyContext
@@ -86,7 +87,6 @@ if typing.TYPE_CHECKING:
     from account_helpers.offers.events_data import OfferEventData
     from account_helpers.offers.offer_bonuses import ItemsOfferBonus
     from gui.goodies.goodie_items import Booster, _PersonalDiscount, DemountKit, RecertificationForm, GoodieType
-    from gui.shared.gui_items.customization import C11nStyleProgressData
     from gui.lobby_context import LobbyContext
     from items.components.crew_skins_components import CrewSkin
     from gui.shared.gui_items.crew_book import CrewBook
@@ -834,7 +834,7 @@ class EpicSelectTokensBonus(TokensBonus):
         return bonusList
 
     def getTooltip(self):
-        return TooltipData(tooltip=None, isSpecial=True, specialAlias=TOOLTIPS_CONSTANTS.EPIC_BATTLE_INSTRUCTION_TOOLTIP, specialArgs=[self.__getGiftTokenName()])
+        return createTooltipData(tooltip=None, isSpecial=True, specialAlias=TOOLTIPS_CONSTANTS.EPIC_BATTLE_INSTRUCTION_TOOLTIP, specialArgs=[self.__getGiftTokenName()])
 
     def __getGiftTokenName(self):
         giftTokenName = first(self.getTokens().keys())
@@ -1423,6 +1423,8 @@ def tokensFactory(name, value, isCompensation=False, ctx=None):
             result.append(CollectionTokenBonus(COLLECTION_ITEM_BONUS_NAME, {tID: tValue}, isCompensation, ctx))
         if tID.startswith(VERSUS_AI_PROGRESSION_TOKEN_PREFIX):
             result.append(VersusAIProgressionsTokenBonus(name, {tID: tValue}, isCompensation, ctx))
+        if tID.startswith(LOOTBOX_CUSTOMIZATION_PROGRESS_PREFIX):
+            result.append(LbC11nProgressTokenBonus({tID: tValue}, isCompensation, ctx))
         result.append(BattleTokensBonus(name, {tID: tValue}, isCompensation, ctx))
 
     return result
@@ -1498,7 +1500,11 @@ class C11nProgressTokenBonus(TokensBonus):
         super(C11nProgressTokenBonus, self).__init__(self.BONUS_NAME, value, isCompensation, ctx)
         token = first(self.getTokens().values())
         self.__tokenID = token.id
-        self.__progressData = parseC11nProgressToken(token)
+        self.__progressData = self._parseC11nProgressToken(token)
+
+    @staticmethod
+    def _parseC11nProgressToken(token):
+        return parseC11nProgressToken(token)
 
     def isShowInGUI(self):
         return True
@@ -1521,6 +1527,21 @@ class C11nProgressTokenBonus(TokensBonus):
         progressLevel = self.getProgressLevel()
         style = getProgressionStyle(styleID, branchID, progressLevel)
         return backport.text(R.strings.quests.bonusName.styleProgress(), name=style.userName, progress=progressLevel)
+
+
+class LbC11nProgressTokenBonus(C11nProgressTokenBonus):
+    BONUS_NAME = 'lbStyleProgress'
+
+    @staticmethod
+    def _parseC11nProgressToken(token):
+        try:
+            _, style, progressLevel = token.id.split(':')
+            styleID, branchID = style.split('_')
+            return C11nStyleProgressData(int(styleID), int(branchID), int(progressLevel))
+        except ValueError:
+            return C11nStyleProgressData(None, None, None)
+
+        return None
 
 
 class ItemsBonus(SimpleBonus):
@@ -3119,6 +3140,63 @@ class DogTagComponentBonus(SimpleBonus):
         return componentConfigAdapter.getComponentById(dogTagId).viewType == checkType
 
 
+def _getPreferredMapSlotAwardTexts(slotName):
+    awardItem = R.strings.tooltips.awardItem.dyn(slotName)
+    if not awardItem:
+        return ('', '')
+    name = backport.text(awardItem.header()) if hasattr(awardItem, 'header') else ''
+    if hasattr(awardItem, 'body'):
+        description = backport.text(awardItem.body())
+    elif hasattr(awardItem, 'body1'):
+        description = backport.text(awardItem.body1())
+    else:
+        description = ''
+    return (name, description)
+
+
+class PreferredMapSlotsBonus(IntegralBonus):
+
+    def __init__(self, *args, **kwargs):
+        super(PreferredMapSlotsBonus, self).__init__(*args, **kwargs)
+        slotID, day = first(self._value.items())
+        self._slotName = getSlotTypeName(slotID).value
+        self._value = day
+
+    def getList(self):
+        return [{'value': self.formatValue(),
+          'itemSource': self.getIconBySize(AWARDS_SIZES.SMALL),
+          'tooltip': self.getTooltip()}]
+
+    def getSlotName(self):
+        return self._slotName
+
+    def getTooltip(self):
+        return _getItemTooltip(self._slotName)
+
+    def hasIconFormat(self):
+        return True
+
+    def getIconLabel(self):
+        return text_styles.hightlight(self.getValue())
+
+    def getIconBySize(self, size):
+        iconName = RES_ICONS.getBonusIcon(size, self._slotName)
+        return super(PreferredMapSlotsBonus, self).getIconBySize(size) if iconName is None else iconName
+
+    def getWrappedEpicBonusList(self):
+        return self.getWrappedLootBoxesBonusList()
+
+    def getWrappedLootBoxesBonusList(self):
+        name, description = _getPreferredMapSlotAwardTexts(self._slotName)
+        return [{'id': 0,
+          'type': 'custom/{}'.format(self._slotName),
+          'value': self.getValue(),
+          'icon': {AWARDS_SIZES.SMALL: self.getIconBySize(AWARDS_SIZES.SMALL),
+                   AWARDS_SIZES.BIG: self.getIconBySize(AWARDS_SIZES.BIG)},
+          'name': name,
+          'description': description}]
+
+
 _BONUSES = {Currency.CREDITS: CreditsBonus,
  Currency.GOLD: GoldBonus,
  Currency.CRYSTAL: CrystalBonus,
@@ -3169,7 +3247,8 @@ _BONUSES = {Currency.CREDITS: CreditsBonus,
  'currencies': {'default': currenciesFactory},
  'subscriptionBonus': subscriptionBonusFactory,
  'paragonsUnlocks': ParagonsUnlocksBonus,
- 'vehicleSelector': SimpleBonus}
+ 'vehicleSelector': SimpleBonus,
+ 'preferredMapSlots': PreferredMapSlotsBonus}
 HIDDEN_BONUSES = (MetaBonus,)
 _BONUSES_PRIORITY = ('tokens', 'oneof')
 _BONUSES_ORDER = dict(((n, idx) for idx, n in enumerate(_BONUSES_PRIORITY)))
@@ -3243,6 +3322,12 @@ def getEventBoardsBonusObj(name, value):
 
 
 def getNonQuestBonuses(name, value, ctx=None):
+    if name == 'preferredMapSlots' and isinstance(value, dict) and len(value) > 1:
+        bonuses = []
+        for slotID, slotDurationDays in value.iteritems():
+            bonuses.extend(_initFromTree((name, 'default'), name, {slotID: slotDurationDays}, ctx=ctx))
+
+        return bonuses
     return _initFromTree((name, 'default'), name, value, ctx=ctx)
 
 
@@ -3484,9 +3569,9 @@ def getVehicleCrewReward(vehiclesReward):
         return tmenBonus
 
 
-@dependency.replace_none_kwargs(bmController=IBattleMattersController, winbackController=IWinbackController)
-def isDynamicOfferToken(bonusID, bmController=None, winbackController=None):
-    return bmController.isDelayedRewardToken(bonusID) or winbackController.isWinbackOfferToken(bonusID)
+@dependency.replace_none_kwargs(bmController=IBattleMattersController, taController=ITankAcademyController, winbackController=IWinbackController)
+def isDynamicOfferToken(bonusID, bmController=None, taController=None, winbackController=None):
+    return bmController.isDelayedRewardToken(bonusID) or taController.isDelayedRewardToken(bonusID) or winbackController.isWinbackOfferToken(bonusID)
 
 
 def formatBlueprint(bonus, count=None):

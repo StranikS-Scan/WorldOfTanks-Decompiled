@@ -8,7 +8,7 @@
   </crew>
   <supplySlots>	1 6 8 8 8	</supplySlots>
   <speedLimits>
-    <forward>	23	</forward>
+    <forward>	28	</forward>
     <backward>	12	</backward>
   </speedLimits>
   <invisibility>
@@ -63,7 +63,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	6283	</weight>
-    <maxHealth>	248	</maxHealth>
+    <maxHealth>	300	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	80	</maxHealth>
       <maxRegenHealth>	55	</maxRegenHealth>
@@ -989,8 +989,8 @@
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
       <rotationSpeed>	30	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.32	</vehicleMovement>
-        <vehicleRotation>	0.32	</vehicleRotation>
+        <vehicleMovement>	0.26	</vehicleMovement>
+        <vehicleRotation>	0.26	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	50	</maxHealth>
@@ -2047,7 +2047,7 @@
           <camouflage></camouflage>
         </customizableVehicleAreas>
       </customization>
-      <repairTime>	6.85714293	</repairTime>
+      <repairTime>	1.71001065	</repairTime>
     </Chassis_RenaultR35>
     <Chassis_RenaultR35_2>
       <userString>	#france_vehicles:Chassis_RenaultR35_2	</userString>
@@ -2064,8 +2064,8 @@
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
       <rotationSpeed>	34	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.3	</vehicleMovement>
-        <vehicleRotation>	0.3	</vehicleRotation>
+        <vehicleMovement>	0.24	</vehicleMovement>
+        <vehicleRotation>	0.24	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	60	</maxHealth>
@@ -3122,13 +3122,17 @@
           <camouflage></camouflage>
         </customizableVehicleAreas>
       </customization>
-      <repairTime>	6.85714293	</repairTime>
+      <repairTime>	1.71001065	</repairTime>
     </Chassis_RenaultR35_2>
   </chassis>
   <turrets0>
     <Turret_1_RenaultR35>
       <userString>	#france_vehicles:Turret_1_RenaultR35	</userString>
       <tags></tags>
+      <unlocks>
+        <turret>	Turret_2_RenaultR35	  <cost>	120	</cost>
+        </turret>
+      </unlocks>
       <level>	1	</level>
       <price>	300	</price>
       <armor>
@@ -3150,14 +3154,14 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	1250	</weight>
-      <maxHealth>	47	</maxHealth>
-      <rotationSpeed>	24	</rotationSpeed>
+      <maxHealth>	20	</maxHealth>
+      <rotationSpeed>	34	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	60	</maxHealth>
         <maxRegenHealth>	30	</maxRegenHealth>
         <repairCost>	1.0	</repairCost>
       </turretRotatorHealth>
-      <circularVisionRadius>	280	</circularVisionRadius>
+      <circularVisionRadius>	300	</circularVisionRadius>
       <surveyingDeviceHealth>
         <maxHealth>	40	</maxHealth>
         <maxRegenHealth>	20	</maxRegenHealth>
@@ -3183,9 +3187,9 @@
             <maxPitch>	0 16 0.375 16 0.388889 11 0.611111 11 0.625 16 1 16	</maxPitch>
           </pitchLimits>
           <invisibilityFactorAtShot>	0.255	</invisibilityFactorAtShot>
-          <shotDispersionRadius>	0.52	</shotDispersionRadius>
+          <shotDispersionRadius>	0.44	</shotDispersionRadius>
           <reloadTime>	2.6	</reloadTime>
-          <aimingTime>	2	</aimingTime>
+          <aimingTime>	1.8	</aimingTime>
           <models>
             <undamaged>	vehicles/french/F49_RenaultR35/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/french/F49_RenaultR35/crash/lod0/Gun_01.model	</destroyed>
@@ -3238,14 +3242,14 @@
             <maxPitch>	0 16 0.291667 16 0.388889 7.5 0.611111 7.5 0.708333 16 1 16	</maxPitch>
           </pitchLimits>
           <invisibilityFactorAtShot>	0.294	</invisibilityFactorAtShot>
-          <shotDispersionRadius>	0.45	</shotDispersionRadius>
+          <shotDispersionRadius>	0.42	</shotDispersionRadius>
           <reloadTime>	2.4	</reloadTime>
           <shotDispersionFactors>
-            <turretRotation>	0.14	</turretRotation>
-            <afterShot>	3	</afterShot>
+            <turretRotation>	0.10	</turretRotation>
+            <afterShot>	2	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <aimingTime>	2	</aimingTime>
+          <aimingTime>	1.8	</aimingTime>
           <models>
             <undamaged>	vehicles/french/F49_RenaultR35/normal/lod0/Gun_02.model	</undamaged>
             <destroyed>	vehicles/french/F49_RenaultR35/crash/lod0/Gun_02.model	</destroyed>
@@ -3286,10 +3290,6 @@
           </camouflage>
         </_25mm_Canon_Raccourci_Mle.1934>
         <_37mm_SA38>	shared	  <maxAmmo>	200	</maxAmmo>
-          <unlocks>
-            <turret>	Turret_2_RenaultR35	  <cost>	120	</cost>
-            </turret>
-          </unlocks>
           <armor>
             <armor_1>	25	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_1>
@@ -3304,8 +3304,8 @@
             <maxPitch>	0 16 0.375 16 0.388889 11 0.611111 11 0.625 16 1 16	</maxPitch>
           </pitchLimits>
           <invisibilityFactorAtShot>	0.255	</invisibilityFactorAtShot>
-          <reloadTime>	2.7	</reloadTime>
-          <aimingTime>	2.1	</aimingTime>
+          <reloadTime>	2.5	</reloadTime>
+          <aimingTime>	1.8	</aimingTime>
           <models>
             <undamaged>	vehicles/french/F49_RenaultR35/normal/lod0/Gun_03.model	</undamaged>
             <destroyed>	vehicles/french/F49_RenaultR35/crash/lod0/Gun_03.model	</destroyed>
@@ -3767,14 +3767,14 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	1250	</weight>
-      <maxHealth>	62	</maxHealth>
-      <rotationSpeed>	24	</rotationSpeed>
+      <maxHealth>	40	</maxHealth>
+      <rotationSpeed>	34	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	60	</maxHealth>
         <maxRegenHealth>	30	</maxRegenHealth>
         <repairCost>	1.0	</repairCost>
       </turretRotatorHealth>
-      <circularVisionRadius>	300	</circularVisionRadius>
+      <circularVisionRadius>	310	</circularVisionRadius>
       <surveyingDeviceHealth>
         <maxHealth>	40	</maxHealth>
         <maxRegenHealth>	20	</maxRegenHealth>
@@ -3794,9 +3794,9 @@
             <maxPitch>	0 16 0.375 16 0.388889 11 0.611111 11 0.625 16 1 16	</maxPitch>
           </pitchLimits>
           <invisibilityFactorAtShot>	0.255	</invisibilityFactorAtShot>
-          <shotDispersionRadius>	0.5	</shotDispersionRadius>
-          <reloadTime>	2.6	</reloadTime>
-          <aimingTime>	2	</aimingTime>
+          <shotDispersionRadius>	0.42	</shotDispersionRadius>
+          <reloadTime>	2.4	</reloadTime>
+          <aimingTime>	1.6	</aimingTime>
           <models>
             <undamaged>	vehicles/french/F49_RenaultR35/normal/lod0/Gun_04.model	</undamaged>
             <destroyed>	vehicles/french/F49_RenaultR35/crash/lod0/Gun_04.model	</destroyed>
@@ -3849,14 +3849,14 @@
             <maxPitch>	0 16 0.291667 16 0.388889 7.5 0.611111 7.5 0.708333 16 1 16	</maxPitch>
           </pitchLimits>
           <invisibilityFactorAtShot>	0.294	</invisibilityFactorAtShot>
-          <shotDispersionRadius>	0.43	</shotDispersionRadius>
+          <shotDispersionRadius>	0.41	</shotDispersionRadius>
           <reloadTime>	2.3	</reloadTime>
           <shotDispersionFactors>
-            <turretRotation>	0.14	</turretRotation>
-            <afterShot>	3	</afterShot>
+            <turretRotation>	0.10	</turretRotation>
+            <afterShot>	2	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <aimingTime>	1.9	</aimingTime>
+          <aimingTime>	1.6	</aimingTime>
           <models>
             <undamaged>	vehicles/french/F49_RenaultR35/normal/lod0/Gun_05.model	</undamaged>
             <destroyed>	vehicles/french/F49_RenaultR35/crash/lod0/Gun_05.model	</destroyed>
@@ -3911,8 +3911,8 @@
             <maxPitch>	0 16 0.375 16 0.388889 11 0.611111 11 0.625 16 1 16	</maxPitch>
           </pitchLimits>
           <invisibilityFactorAtShot>	0.255	</invisibilityFactorAtShot>
-          <reloadTime>	2.6	</reloadTime>
-          <aimingTime>	2	</aimingTime>
+          <reloadTime>	2.4	</reloadTime>
+          <aimingTime>	1.6	</aimingTime>
           <models>
             <undamaged>	vehicles/french/F49_RenaultR35/normal/lod0/Gun_06.model	</undamaged>
             <destroyed>	vehicles/french/F49_RenaultR35/crash/lod0/Gun_06.model	</destroyed>
@@ -4381,11 +4381,11 @@
       <engines>
         <Renault_S4B>
           <smplEnginePower>	78.23881	</smplEnginePower>
-          <smplFwMaxSpeed>	23	</smplFwMaxSpeed>
+          <smplFwMaxSpeed>	28	</smplFwMaxSpeed>
         </Renault_S4B>
         <Renault_V4>
           <smplEnginePower>	86.69705	</smplEnginePower>
-          <smplFwMaxSpeed>	23	</smplFwMaxSpeed>
+          <smplFwMaxSpeed>	28	</smplFwMaxSpeed>
         </Renault_V4>
       </engines>
       <chassis>

@@ -1,0 +1,50 @@
+<TeamOfNations2025_Camo_Summer_name.xml>
+  <xmlns:czech1>	ussr	</xmlns:czech1>
+  <xmlns:germany>	germany	</xmlns:germany>
+  <xmlns:czech0>	usa	</xmlns:czech0>
+  <xmlns:china>	china	</xmlns:china>
+  <xmlns:france>	france	</xmlns:france>
+  <xmlns:uk>	uk	</xmlns:uk>
+  <xmlns:japan>	japan	</xmlns:japan>
+  <xmlns:czech>	czech	</xmlns:czech>
+  <xmlns:sweden>	sweden	</xmlns:sweden>
+  <xmlns:poland>	poland	</xmlns:poland>
+  <xmlns:italy>	italy	</xmlns:italy>
+  <xmlns:intunion>	intunion	</xmlns:intunion>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/opaque	</userString>
+    <season>	summer	</season>
+    <historical>	0	</historical>
+    <priceGroup>	MT camouflages 50g	</priceGroup>
+    <camouflage>
+      <id>	31277	</id>
+      <texture>	vehicles/intunion/Camouflage/TeamOfNations2025_Camo_Summer.dds	</texture>
+      <scales>	1.2 1 0.7	</scales>
+      <palettes>
+        <palette>
+          <c0>	54 69 34 255	</c0>
+          <c1>	92 64 35 255	</c1>
+          <c2>	0 0 0 0	</c2>
+          <c3>	151 138 104 255	</c3>
+        </palette>
+      </palettes>
+      <rotation>
+        <HULL>	-1.448623	</HULL>
+        <TURRET>	-1.448623	</TURRET>
+        <GUN>	-1.448623	</GUN>
+      </rotation>
+      <tilingSettings>
+        <type>	relativewithfactor	</type>
+        <factor>	1.83 1.83	</factor>
+        <offset>	0 -0.04	</offset>
+      </tilingSettings>
+      <description>	#vehicle_customization:TeamOfNations2025_Camo_Summer/description	</description>
+      <userString>	#vehicle_customization:TeamOfNations2025_Camo_Summer/name	</userString>
+    </camouflage>
+    <vehicleFilter>
+      <include>
+        <nations>	intunion	</nations>
+      </include>
+    </vehicleFilter>
+  </itemGroup>
+</TeamOfNations2025_Camo_Summer_name.xml>

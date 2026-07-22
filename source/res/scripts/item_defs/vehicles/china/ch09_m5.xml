@@ -52,7 +52,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_12 armor_4	</primaryArmor>
     <weight>	10035	</weight>
-    <maxHealth>	416	</maxHealth>
+    <maxHealth>	400	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	140	</maxHealth>
       <maxRegenHealth>	90	</maxRegenHealth>
@@ -2336,7 +2336,7 @@
           <camouflage></camouflage>
         </customizableVehicleAreas>
       </customization>
-      <repairTime>	4.57142878	</repairTime>
+      <repairTime>	2.85003138	</repairTime>
     </Chassis_Ch09_M5>
     <Chassis_Ch09_M5_2>
       <userString>	#china_vehicles:Chassis_Ch09_M5_2	</userString>
@@ -3489,13 +3489,17 @@
           <camouflage></camouflage>
         </customizableVehicleAreas>
       </customization>
-      <repairTime>	4.57142878	</repairTime>
+      <repairTime>	2.85003138	</repairTime>
     </Chassis_Ch09_M5_2>
   </chassis>
   <turrets0>
     <Turret_1_Ch09_M5>
       <userString>	#china_vehicles:Turret_1_Ch09_M5	</userString>
       <tags></tags>
+      <unlocks>
+        <turret>	Turret_2_Ch09_M5	  <cost>	1200	</cost>
+        </turret>
+      </unlocks>
       <level>	3	</level>
       <price>	1890	</price>
       <armor>
@@ -3509,7 +3513,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	1020	</weight>
-      <maxHealth>	79	</maxHealth>
+      <maxHealth>	100	</maxHealth>
       <rotationSpeed>	48	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	80	</maxHealth>
@@ -3604,10 +3608,6 @@
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 10 0.325227 10 0.388889 0 0.611111 0 0.674773 10 1 10	</maxPitch>
           </pitchLimits>
-          <unlocks>
-            <turret>	Turret_2_Ch09_M5	  <cost>	1200	</cost>
-            </turret>
-          </unlocks>
           <armor>
             <armor_1>	50.8	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_1>
@@ -4018,7 +4018,7 @@
       <level>	4	</level>
       <price>	5000	</price>
       <unlocks>
-        <vehicle>	Ch21_T34	  <cost>	16000	</cost>
+        <vehicle>	Ch21_T34	  <cost>	19000	</cost>
         </vehicle>
       </unlocks>
       <armor>
@@ -4034,7 +4034,7 @@
       </armor>
       <primaryArmor>	armor_2 armor_3 armor_4	</primaryArmor>
       <weight>	1200	</weight>
-      <maxHealth>	104	</maxHealth>
+      <maxHealth>	120	</maxHealth>
       <rotationSpeed>	48	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	80	</maxHealth>
@@ -4454,11 +4454,6 @@
     <Medium>	shared	</Medium>
   </fuelTanks>
   <radios>
-    <SCR_508>	shared	  <unlocks>
-        <radio>	SCR_506	  <cost>	5600	</cost>
-        </radio>
-      </unlocks>
-    </SCR_508>
     <SCR_506>	shared	</SCR_506>
   </radios>
   <physics>

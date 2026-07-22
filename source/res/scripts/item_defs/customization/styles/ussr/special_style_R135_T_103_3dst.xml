@@ -1,0 +1,43 @@
+<special_style_R135_T_103_3dst.xml>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	MT 3D styles 6-7-8 levels 4000g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	ussr:R135_T_103	</vehicles>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	31018	</id>
+      <texture>	gui/maps/vehicles/styles/R135_T_103_3dst.png	</texture>
+      <modelsSet>	R135_T_103_3dst	</modelsSet>
+      <maxNumber>	1	</maxNumber>
+      <userString>	#vehicle_customization:special_style/R135_T_103_3dst	</userString>
+      <description>	#vehicle_customization:special_style/R135_T_103_3dst/description	</description>
+      <longDescriptionSpecial>	#vehicle_customization:special_style/R135_T_103_3dst/description/long	</longDescriptionSpecial>
+      <tags>	progression_required	</tags>
+      <outfits>
+        <outfit>
+          <season>	All	</season>
+          <camouflages>
+            <item>
+              <id>	1	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+        </outfit>
+      </outfits>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+    </style>
+  </itemGroup>
+</special_style_R135_T_103_3dst.xml>

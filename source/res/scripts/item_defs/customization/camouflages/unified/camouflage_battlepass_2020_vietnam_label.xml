@@ -1,0 +1,54 @@
+<camouflage_battlepass_2020_vietnam_label.xml>
+  <xmlns:china2>	ussr	</xmlns:china2>
+  <xmlns:germany>	germany	</xmlns:germany>
+  <xmlns:china1>	usa	</xmlns:china1>
+  <xmlns:china>	china	</xmlns:china>
+  <xmlns:france>	france	</xmlns:france>
+  <xmlns:china0>	uk	</xmlns:china0>
+  <xmlns:japan>	japan	</xmlns:japan>
+  <xmlns:czech>	czech	</xmlns:czech>
+  <xmlns:sweden>	sweden	</xmlns:sweden>
+  <xmlns:poland>	poland	</xmlns:poland>
+  <xmlns:italy>	italy	</xmlns:italy>
+  <xmlns:intunion>	intunion	</xmlns:intunion>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/opaque	</userString>
+    <season>	ALL	</season>
+    <historical>	0	</historical>
+    <priceGroup>	MT camouflages 50g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <camouflage>
+      <id>	139	</id>
+      <texture>	vehicles/russian/Camouflage/battlepass_2020_vietnam.dds	</texture>
+      <description>	#vehicle_customization:camouflage/battlepass_2020_vietnam/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/battlepass_2020_vietnam/label	</userString>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	37 45 50 255	</c0>
+          <c1>	142 112 81 255	</c1>
+          <c2>	75 84 74 255	</c2>
+          <c3>	173 162 143 255	</c3>
+        </palette>
+      </palettes>
+      <rotation>
+        <HULL>	0.436332	</HULL>
+        <TURRET>	0.436332	</TURRET>
+        <GUN>	0.436332	</GUN>
+      </rotation>
+      <tiling>
+        <uk:GB106_Cobra>	0.9 0.9 0.000000 0.000000	</uk:GB106_Cobra>
+      </tiling>
+      <tilingSettings>
+        <type>	relative	</type>
+        <factor>	3.21 3.21	</factor>
+        <offset>	0.58 0.08	</offset>
+      </tilingSettings>
+    </camouflage>
+  </itemGroup>
+</camouflage_battlepass_2020_vietnam_label.xml>

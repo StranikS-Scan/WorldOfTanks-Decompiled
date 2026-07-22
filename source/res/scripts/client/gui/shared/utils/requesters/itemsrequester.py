@@ -509,7 +509,7 @@ class ItemsRequester(IItemsRequester):
      'layout',
      'layoutState'])
 
-    def __init__(self, inventory, stats, dossiers, goodies, shop, recycleBin, vehicleRotation, ranked, battleRoyale, badges, epicMetaGame, tokens, festivityRequester, armoryYard, blueprints=None, sessionStatsRequester=None, anonymizerRequester=None, battlePassRequester=None, giftSystemRequester=None, gameRestrictionsRequester=None, resourceWellRequester=None, achievements20Requester=None, refProgramRequester=None, playStreakRequester=None):
+    def __init__(self, inventory, stats, dossiers, goodies, shop, recycleBin, vehicleRotation, ranked, battleRoyale, badges, epicMetaGame, tokens, festivityRequester, armoryYard, blueprints=None, sessionStatsRequester=None, anonymizerRequester=None, battlePassRequester=None, giftSystemRequester=None, gameRestrictionsRequester=None, resourceWellRequester=None, achievements20Requester=None, refProgramRequester=None):
         self.__inventory = inventory
         self.__stats = stats
         self.__dossiers = dossiers
@@ -533,7 +533,6 @@ class ItemsRequester(IItemsRequester):
         self.__resourceWell = resourceWellRequester
         self.__achievements20 = achievements20Requester
         self.__refProgram = refProgramRequester
-        self.__playStreak = playStreakRequester
         self.__itemsCache = defaultdict(dict)
         self.__brokenSyncAlreadyLoggedTypes = set()
         self.__fittingItemRequesters = {self.__inventory,
@@ -635,10 +634,6 @@ class ItemsRequester(IItemsRequester):
     def refProgram(self):
         return self.__refProgram
 
-    @property
-    def playStreak(self):
-        return self.__playStreak
-
     def __onCompletedCallback(self, waitingToClose=None, milestone=None):
         from gui.Scaleform.Waiting import Waiting
         if waitingToClose:
@@ -655,7 +650,6 @@ class ItemsRequester(IItemsRequester):
         yield self.__shop.request()
         Waiting.hide('download/shop')
         g_playerEvents.onLoadingMilestoneReached(Milestones.INVENTORY)
-        Waiting.show('download/playStreak')
         Waiting.show('download/refProgram')
         Waiting.show('download/achievements20')
         Waiting.show('download/resourceWell')
@@ -694,8 +688,7 @@ class ItemsRequester(IItemsRequester):
          callerWrapper(self.__gameRestrictions.request(), onCompleted=partial(self.__onCompletedCallback, 'download/gameRestrictions', None)),
          callerWrapper(self.__resourceWell.request(), onCompleted=partial(self.__onCompletedCallback, 'download/resourceWell', None)),
          callerWrapper(self.__achievements20.request(), onCompleted=partial(self.__onCompletedCallback, 'download/achievements20', None)),
-         callerWrapper(self.__refProgram.request(), onCompleted=partial(self.__onCompletedCallback, 'download/refProgram', None)),
-         callerWrapper(self.__playStreak.request(), onCompleted=partial(self.__onCompletedCallback, 'download/playStreak', None)))
+         callerWrapper(self.__refProgram.request(), onCompleted=partial(self.__onCompletedCallback, 'download/refProgram', None)))
         self.__brokenSyncAlreadyLoggedTypes.clear()
         callback(self)
         return

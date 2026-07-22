@@ -79,6 +79,7 @@ def getGameControllersConfig(manager):
     from gui.game_control.collective_goal_marathons_controller import CollectiveGoalMarathonsController
     from gui.game_control.universal_flag_entry_point_controller import UniversalFlagEntryPointController
     from gui.game_control.extension_stubs.fun_random_controller import FunRandomController
+    from gui.game_control.extension_stubs.tank_academy_controller import TankAcademyController
     from gui.game_control.hangar_switch_controller import HangarSpaceSwitchController
     from gui.entitlements.entitlements_controller import EntitlementsController
     from gui.game_control.daily_quests_intro_presenter import DailyQuestsIntroPresenter
@@ -97,7 +98,6 @@ def getGameControllersConfig(manager):
     from gui.game_control.paragons_controller import ParagonsController
     from gui.game_control.paragons_reward_controller import ParagonsRewardsShopController
     from gui.game_control.unseen_events_manager import UnseenEventManager
-    from gui.game_control.play_streak_controller import PlayStreakController
     from gui.game_control.black_market_controller import BlackMarketController
     from gui.game_control.battle_modifiers_controller import BattleModifiersController
     from gui.game_control.newbie_entry_point_controller import NewbieEntryPointController
@@ -195,11 +195,11 @@ def getGameControllersConfig(manager):
     _config(_interface.IEarlyAccessController, EarlyAccessController())
     _config(_interface.IModeSelectorController, ModeSelectorController())
     _config(_interface.IPersonalMissionsController, PersonalMissionsController())
-    _config(_interface.IPlayStreakController, PlayStreakController())
     _config(_interface.IBlackMarketController, BlackMarketController())
     _config(_interface.IUnseenEventsCounter, UnseenEventManager())
     _config(_interface.INewbieEntryPointController, NewbieEntryPointController())
     _config(_interface.IBattleModifiersController, BattleModifiersController())
     _config(_interface.ISummerSaleController, SummerSaleController())
     _config(_interface.IControlPointOverrideController, ControlPointOverrideController())
+    _config(_interface.ITankAcademyController, TankAcademyController())
     collectGameControllers(_config)

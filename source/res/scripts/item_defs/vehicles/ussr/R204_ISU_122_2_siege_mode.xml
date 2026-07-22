@@ -11,8 +11,8 @@
   <postProgressionTree>	role_ATSPG_support	</postProgressionTree>
   <customRoleSlotOptions>	3 5	</customRoleSlotOptions>
   <speedLimits>
-    <forward>	40	</forward>
-    <backward>	20	</backward>
+    <forward>	52	</forward>
+    <backward>	15	</backward>
   </speedLimits>
   <invisibility>
     <moving>	0.138	</moving>
@@ -55,24 +55,24 @@
       <repairCost>	1.0	</repairCost>
     </ammoBayHealth>
     <armor>
-      <armor_1>	75	</armor_1>
-      <armor_2>	100	</armor_2>
-      <armor_3>	65	</armor_3>
-      <armor_4>	40	</armor_4>
-      <armor_5>	35	</armor_5>
+      <armor_1>	20	</armor_1>
+      <armor_2>	20	</armor_2>
+      <armor_3>	15	</armor_3>
+      <armor_4>	10	</armor_4>
+      <armor_5>	15	</armor_5>
       <armor_6>	20	</armor_6>
-      <armor_7>	50	</armor_7>
+      <armor_7>	20	</armor_7>
       <armor_8>	0	</armor_8>
-      <armor_9>	75	</armor_9>
+      <armor_9>	60	</armor_9>
       <armor_10>	40	</armor_10>
-      <armor_11>	40	</armor_11>
-      <armor_12>	100	</armor_12>
+      <armor_11>	90	</armor_11>
+      <armor_12>	75	</armor_12>
       <armor_13>	20	</armor_13>
       <armor_14>	20	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
       </armor_14>
-      <armor_15>	40	</armor_15>
-      <armor_16>	40	</armor_16>
-      <armor_17>	40	</armor_17>
+      <armor_15>	90	</armor_15>
+      <armor_16>	90	</armor_16>
+      <armor_17>	20	</armor_17>
     </armor>
     <models>
       <undamaged>	vehicles/russian/R204_ISU_122_2/normal/lod0/Hull.model	</undamaged>
@@ -1760,11 +1760,11 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <armor>
-        <armor_1>	100	</armor_1>
-        <armor_2>	100	</armor_2>
-        <armor_3>	35	</armor_3>
+        <armor_1>	20	</armor_1>
+        <armor_2>	20	</armor_2>
+        <armor_3>	15	</armor_3>
         <armor_4>	0	</armor_4>
-        <armor_5>	40	</armor_5>
+        <armor_5>	20	</armor_5>
       </armor>
       <guns>
         <_122mm_BL-13C_dualgun>
@@ -1778,22 +1778,22 @@
           <armor>
             <gun>	50	</gun>
           </armor>
-          <shotDispersionRadius>	0.38	</shotDispersionRadius>
-          <reloadTime>	10.5	</reloadTime>
-          <aimingTime>	2.0	</aimingTime>
+          <shotDispersionRadius>	0.36	</shotDispersionRadius>
+          <reloadTime>	10.0	</reloadTime>
+          <aimingTime>	2.1	</aimingTime>
           <shotDispersionFactors>
-            <turretRotation>	0.06	</turretRotation>
+            <turretRotation>	0.12	</turretRotation>
             <afterShot>	3.5	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <invisibilityFactorAtShot>	0.095	</invisibilityFactorAtShot>
           <multiGunEffects>	shot_dualgun_large_mb_L shot_dualgun_large_mb_R	</multiGunEffects>
           <dualGun>
-            <chargeTime>	2	</chargeTime>
+            <chargeTime>	1.5	</chargeTime>
             <shootImpulse>	200	</shootImpulse>
-            <reloadLockTime>	1	</reloadLockTime>
-            <reloadTimes>	10.5 10.5	</reloadTimes>
-            <rateTime>	4	</rateTime>
+            <reloadLockTime>	3	</reloadLockTime>
+            <reloadTimes>	9.3 9.3	</reloadTimes>
+            <rateTime>	4.0	</rateTime>
             <chargeThreshold>	0.5	</chargeThreshold>
             <afterShotDelay>	1	</afterShotDelay>
             <preChargeIndication>	0.25	</preChargeIndication>
@@ -1925,8 +1925,8 @@
     <detailed>
       <engines>
         <V-14>
-          <smplEnginePower>	700	</smplEnginePower>
-          <smplFwMaxSpeed>	40	</smplFwMaxSpeed>
+          <smplEnginePower>	800	</smplEnginePower>
+          <smplFwMaxSpeed>	52	</smplFwMaxSpeed>
         </V-14>
       </engines>
       <chassis>

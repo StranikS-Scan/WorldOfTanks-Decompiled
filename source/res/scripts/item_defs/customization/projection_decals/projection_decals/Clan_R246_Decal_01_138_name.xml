@@ -1,0 +1,42 @@
+<Clan_R246_Decal_01_138_name.xml>
+  <xmlns:czech1>	ussr	</xmlns:czech1>
+  <xmlns:germany>	germany	</xmlns:germany>
+  <xmlns:czech0>	usa	</xmlns:czech0>
+  <xmlns:china>	china	</xmlns:china>
+  <xmlns:france>	france	</xmlns:france>
+  <xmlns:uk>	uk	</xmlns:uk>
+  <xmlns:japan>	japan	</xmlns:japan>
+  <xmlns:czech>	czech	</xmlns:czech>
+  <xmlns:sweden>	sweden	</xmlns:sweden>
+  <xmlns:poland>	poland	</xmlns:poland>
+  <xmlns:italy>	italy	</xmlns:italy>
+  <xmlns:intunion>	intunion	</xmlns:intunion>
+  <itemGroup>
+    <name>	Clan_R246_Decal_138	</name>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <userString>	#vehicle_customization:projection_decals/special	</userString>
+    <projection_decal>
+      <id>	31349	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/Clan_R246_Decal_01_138.dds	</texture>
+      <userString>	#vehicle_customization:Clan_R246_Decal_01_138/name	</userString>
+      <description>	#vehicle_customization:Clan_R246_Decal_01_138/description	</description>
+      <tags>	styleOnly formfactor_rect1x2 hiddenInUI direction_left_to_right	</tags>
+    </projection_decal>
+    <projection_decal>
+      <id>	31350	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/Clan_R246_Decal_02_138.dds	</texture>
+      <userString>	#vehicle_customization:Clan_R246_Decal_02_138/name	</userString>
+      <description>	#vehicle_customization:Clan_R246_Decal_02_138/description	</description>
+      <tags>	styleOnly formfactor_rect1x2 hiddenInUI direction_right_to_left	</tags>
+    </projection_decal>
+    <priceGroup>	MT projection_decals 100g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <nations>	ussr	</nations>
+        <levels>	10	</levels>
+        <vehicles>	ussr:R246_Object_168_122	</vehicles>
+      </include>
+    </vehicleFilter>
+  </itemGroup>
+</Clan_R246_Decal_01_138_name.xml>

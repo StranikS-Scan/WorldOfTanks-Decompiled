@@ -9,7 +9,7 @@
   <supplySlots>	1 1 6 6 8 8 8	</supplySlots>
   <speedLimits>
     <forward>	36	</forward>
-    <backward>	12	</backward>
+    <backward>	16	</backward>
   </speedLimits>
   <invisibility>
     <moving>	0.283	</moving>
@@ -54,7 +54,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	1000	</weight>
-    <maxHealth>	212	</maxHealth>
+    <maxHealth>	450	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	100	</maxHealth>
       <maxRegenHealth>	70	</maxRegenHealth>
@@ -987,8 +987,8 @@
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
       <rotationSpeed>	28	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.28	</vehicleMovement>
-        <vehicleRotation>	0.28	</vehicleRotation>
+        <vehicleMovement>	0.24	</vehicleMovement>
+        <vehicleRotation>	0.24	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	60	</maxHealth>
@@ -1831,7 +1831,7 @@
           <camouflage></camouflage>
         </customizableVehicleAreas>
       </customization>
-      <repairTime>	5.71428585	</repairTime>
+      <repairTime>	2.28001642	</repairTime>
     </Chassis_RenaultUE57>
     <Chassis_RenaultUE57_2>
       <userString>	#france_vehicles:Chassis_RenaultUE57_2	</userString>
@@ -1848,8 +1848,8 @@
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
       <rotationSpeed>	30	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.26	</vehicleMovement>
-        <vehicleRotation>	0.26	</vehicleRotation>
+        <vehicleMovement>	0.20	</vehicleMovement>
+        <vehicleRotation>	0.20	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	70	</maxHealth>
@@ -2692,7 +2692,7 @@
           <camouflage></camouflage>
         </customizableVehicleAreas>
       </customization>
-      <repairTime>	5.71428585	</repairTime>
+      <repairTime>	2.28001642	</repairTime>
     </Chassis_RenaultUE57_2>
   </chassis>
   <turrets0>
@@ -2709,7 +2709,7 @@
         <armor_4>	0	</armor_4>
       </armor>
       <weight>	40	</weight>
-      <maxHealth>	53	</maxHealth>
+      <maxHealth>	50	</maxHealth>
       <rotationSpeed>	44	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	100	</maxHealth>
@@ -2734,7 +2734,7 @@
           <shotDispersionRadius>	0.35	</shotDispersionRadius>
           <reloadTime>	2.2	</reloadTime>
           <shotDispersionFactors>
-            <turretRotation>	0.1	</turretRotation>
+            <turretRotation>	0.08	</turretRotation>
             <afterShot>	3	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
@@ -2795,13 +2795,13 @@
           <armor>
             <gun>	15	</gun>
           </armor>
-          <shotDispersionRadius>	0.39	</shotDispersionRadius>
+          <shotDispersionRadius>	0.36	</shotDispersionRadius>
           <reloadTime>	2.8	</reloadTime>
-          <aimingTime>	2	</aimingTime>
+          <aimingTime>	1.6	</aimingTime>
           <invisibilityFactorAtShot>	0.252	</invisibilityFactorAtShot>
           <shotDispersionFactors>
-            <turretRotation>	0.16	</turretRotation>
-            <afterShot>	4	</afterShot>
+            <turretRotation>	0.08	</turretRotation>
+            <afterShot>	3	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <pitchLimits>

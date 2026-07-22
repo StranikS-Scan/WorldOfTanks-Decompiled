@@ -1,0 +1,45 @@
+<ClanShop_Progression_Paint_02_2025_name.xml>
+  <itemGroup>
+    <name>	ClanShop_Progression_Paint_2025	</name>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <userString>	#vehicle_customization:repaint/color_group_04	</userString>
+    <paint>
+      <id>	31332	</id>
+      <color>	51 25 10 255	</color>
+      <gloss>	0.63	</gloss>
+      <metallic>	0.235	</metallic>
+      <texture>	gui/maps/vehicles/repaints/custom_color_40.png	</texture>
+      <userString>	#vehicle_customization:ClanShop_Progression_Paint_02_2025/name	</userString>
+      <description>	#vehicle_customization:ClanShop_Progression_Paint_02_2025/description	</description>
+    </paint>
+    <paint>
+      <id>	31333	</id>
+      <color>	97 41 78 255	</color>
+      <gloss>	0.63	</gloss>
+      <metallic>	0.235	</metallic>
+      <texture>	gui/maps/vehicles/repaints/custom_color_01.png	</texture>
+      <userString>	#vehicle_customization:ClanShop_Progression_Paint_03_2025/name	</userString>
+      <description>	#vehicle_customization:ClanShop_Progression_Paint_03_2025/description	</description>
+    </paint>
+    <paint>
+      <id>	31334	</id>
+      <color>	0 25 0 255	</color>
+      <gloss>	0.63	</gloss>
+      <metallic>	0.235	</metallic>
+      <texture>	gui/maps/vehicles/repaints/czech_color_02.png	</texture>
+      <userString>	#vehicle_customization:ClanShop_Progression_Paint_04_2025/name	</userString>
+      <description>	#vehicle_customization:ClanShop_Progression_Paint_04_2025/description	</description>
+    </paint>
+    <tags>	hiddenInUI	</tags>
+    <priceGroup>	paints 20g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <levels>	8 9 10	</levels>
+      </include>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+  </itemGroup>
+</ClanShop_Progression_Paint_02_2025_name.xml>

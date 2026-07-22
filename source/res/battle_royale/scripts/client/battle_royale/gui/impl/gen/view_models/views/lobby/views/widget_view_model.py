@@ -11,7 +11,7 @@ class BattleStatus(Enum):
 class WidgetViewModel(ViewModel):
     __slots__ = ()
 
-    def __init__(self, properties=3, commands=0):
+    def __init__(self, properties=4, commands=0):
         super(WidgetViewModel, self).__init__(properties=properties, commands=commands)
 
     def getBattleStatus(self):
@@ -32,8 +32,15 @@ class WidgetViewModel(ViewModel):
     def setIsAlertMode(self, value):
         self._setBool(2, value)
 
+    def getIconPostfix(self):
+        return self._getString(3)
+
+    def setIconPostfix(self, value):
+        self._setString(3, value)
+
     def _initialize(self):
         super(WidgetViewModel, self)._initialize()
         self._addStringProperty('battleStatus')
         self._addNumberProperty('currentProgression', 0)
         self._addBoolProperty('isAlertMode', False)
+        self._addStringProperty('iconPostfix', '')

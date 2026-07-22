@@ -162,6 +162,7 @@ class VehiclePreview(LobbySelectableView, VehiclePreviewMeta):
         self.__style = ctx.get('style')
         self.__subscriptions = ctx.get('subscriptions') or ()
         self.__bottomPanelTextData = ctx.get('bottomPanelTextData')
+        self.__showCloseBtn = ctx.get('showCloseBtn', _SHOW_CLOSE_BTN)
         self.__unmodifiedItemsPack = deepcopy(self._itemsPack)
         addBuiltInEquipment(self._itemsPack, self._itemsCache, self._vehicleCD)
         notInteractive = (VIEW_ALIAS.LOBBY_STORE,
@@ -390,7 +391,7 @@ class VehiclePreview(LobbySelectableView, VehiclePreviewMeta):
         result = {'closeBtnLabel': VEHICLE_PREVIEW.HEADER_CLOSEBTN_LABEL,
          'backBtnLabel': VEHICLE_PREVIEW.HEADER_BACKBTN_LABEL,
          'backBtnDescrLabel': self._getBackBtnLabel(),
-         'showCloseBtn': _SHOW_CLOSE_BTN,
+         'showCloseBtn': self.__showCloseBtn,
          'showBackButton': _SHOW_BACK_BTN,
          'showPostProgressionBtn': vehicle.isPostProgressionExists,
          'vehicleName': vehicleName,

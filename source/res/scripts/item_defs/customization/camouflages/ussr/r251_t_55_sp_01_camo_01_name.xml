@@ -1,0 +1,54 @@
+<r251_t_55_sp_01_camo_01_name.xml>
+  <xmlns:czech1>	ussr	</xmlns:czech1>
+  <xmlns:germany>	germany	</xmlns:germany>
+  <xmlns:czech0>	usa	</xmlns:czech0>
+  <xmlns:china>	china	</xmlns:china>
+  <xmlns:france>	france	</xmlns:france>
+  <xmlns:uk>	uk	</xmlns:uk>
+  <xmlns:japan>	japan	</xmlns:japan>
+  <xmlns:czech>	czech	</xmlns:czech>
+  <xmlns:sweden>	sweden	</xmlns:sweden>
+  <xmlns:poland>	poland	</xmlns:poland>
+  <xmlns:italy>	italy	</xmlns:italy>
+  <xmlns:intunion>	intunion	</xmlns:intunion>
+  <itemGroup>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <camouflage>
+      <id>	31480	</id>
+      <scales>	1.2 1 0.7	</scales>
+      <palettes>
+        <palette>
+          <c0>	0 0 0 0	</c0>
+          <c1>	0 255 0 0	</c1>
+          <c2>	25 33 89 255	</c2>
+          <c3>	0 0 0 0	</c3>
+        </palette>
+      </palettes>
+      <texture>	vehicles/russian/Camouflage/r251_t_55_sp_01_camo_01.dds	</texture>
+      <userString>	#vehicle_customization:r251_t_55_sp_01_camo_01/name	</userString>
+      <description>	#vehicle_customization:r251_t_55_sp_01_camo_01/description	</description>
+      <exclusionImpact>	0.8	</exclusionImpact>
+      <rotation>
+        <HULL>	1.570796	</HULL>
+        <TURRET>	1.570796	</TURRET>
+        <GUN>	1.570796	</GUN>
+      </rotation>
+      <tilingSettings>
+        <type>	relativewithfactor	</type>
+        <factor>	5.5 5.5	</factor>
+        <offset>	1.3 1.2	</offset>
+      </tilingSettings>
+      <gloss>	0.509 0.509 0.7 0.509	</gloss>
+      <metallic>	0.23 0.23 0.2 0.23	</metallic>
+    </camouflage>
+    <userString>	#vehicle_customization:camouflage/transparent	</userString>
+    <tags>	fullRGB hiddenInUI	</tags>
+    <priceGroup>	MT camouflages 50g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	ussr:R251_T_55_SP_01	</vehicles>
+      </include>
+    </vehicleFilter>
+  </itemGroup>
+</r251_t_55_sp_01_camo_01_name.xml>

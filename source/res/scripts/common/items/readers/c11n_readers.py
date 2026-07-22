@@ -291,6 +291,7 @@ class CamouflageXmlReader(BaseCustomizationItemXmlReader):
         target.componentsCovering = readFlagEnum(xmlCtx, section, 'componentsCovering', ApplyArea, target.componentsCovering)
         target.invisibilityFactor = section.readFloat('invisibilityFactor', 1.0)
         target.exclusionImpact = section.readFloat('exclusionImpact', 1.0)
+        target.forceUv0 = section.readBool('forceUv0', False)
         target.glossMetallicSettings = {'glossMetallicMap': section.readString('glossMetallicMap', ''),
          'gloss': section.readVector4('gloss', Math.Vector4(DEFAULT_GLOSS)),
          'metallic': section.readVector4('metallic', Math.Vector4(DEFAULT_METALLIC))}

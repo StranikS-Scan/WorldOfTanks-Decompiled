@@ -90,6 +90,7 @@ def _handleRequestToOpen(context, event, eventLootBoxesCtrl=None):
             auxData['clientData'].update({'usedKeys': {keyID: count}})
             auxData['clientData']['countOfOpened'] = auxData.get('extData', {}).get('openedLootBoxes', {}).get(lootBox.getID(), count)
             auxData['clientData']['giftsInfo'] = auxData.get('giftsInfo')
+            auxData['clientData']['uniqueOpening'] = False
             prepareOpenResult(result)
     context.postGlobalEvent(GlobalEvents.OPEN_RESPONSE_RECEIVED, result)
     return

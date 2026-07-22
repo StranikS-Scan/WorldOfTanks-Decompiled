@@ -13,7 +13,6 @@ from gui.Scaleform.framework import ComponentSettings, ConditionalViewSettings, 
 from gui.Scaleform.framework.managers import containers
 from gui.Scaleform.framework.package_layout import PackageBusinessHandler
 from gui.Scaleform.genConsts.CONTEXT_MENU_HANDLER_TYPE import CONTEXT_MENU_HANDLER_TYPE
-from gui.impl.lobby.play_streak.play_streak_info_overlay import PlayStreakInfoOverlay
 from gui.app_loader import settings as app_settings
 from gui.shared import EVENT_BUS_SCOPE
 from gui.shared.events import ShowDialogEvent
@@ -150,7 +149,6 @@ def getViewSettings():
      ViewSettings(VIEW_ALIAS.REFERRAL_PROGRAM_WINDOW, BrowserView, 'browserScreen.swf', WindowLayer.SUB_VIEW, VIEW_ALIAS.BROWSER_VIEW, ScopeTemplates.LOBBY_SUB_SCOPE, True),
      ViewSettings(VIEW_ALIAS.CLAN_NOTIFICATION_WINDOW, BrowserView, 'browserScreen.swf', WindowLayer.SUB_VIEW, VIEW_ALIAS.BROWSER_VIEW, ScopeTemplates.LOBBY_SUB_SCOPE, True),
      ViewSettings(VIEW_ALIAS.BADGES_PAGE, BadgesPage, 'badgesPage.swf', WindowLayer.TOP_SUB_VIEW, VIEW_ALIAS.BADGES_PAGE, ScopeTemplates.LOBBY_SUB_SCOPE),
-     ViewSettings(VIEW_ALIAS.PLAY_STREAK_INFO_OVERLAY, PlayStreakInfoOverlay, 'browserScreen.swf', WindowLayer.TOP_SUB_VIEW, VIEW_ALIAS.PLAY_STREAK_INFO_OVERLAY, ScopeTemplates.LOBBY_SUB_SCOPE),
      ComponentSettings(VIEW_ALIAS.CALENDAR, CalendarComponent, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(VIEW_ALIAS.MINIMAP_LOBBY, MinimapLobby, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(VIEW_ALIAS.MINIMAP_GRID, MinimapGrid, ScopeTemplates.DEFAULT_SCOPE),
@@ -179,7 +177,6 @@ class LobbyPackageBusinessHandler(PackageBusinessHandler):
          (VIEW_ALIAS.BROWSER_LOBBY_TOP_SUB, self.loadViewByCtxEvent),
          (VIEW_ALIAS.BROWSER_OVERLAY, self.loadViewByCtxEvent),
          (VIEW_ALIAS.MAP_BOX_INFO_OVERLAY, self.loadViewByCtxEvent),
-         (VIEW_ALIAS.PLAY_STREAK_INFO_OVERLAY, self.loadViewByCtxEvent),
          (VIEW_ALIAS.BATTLE_PASS_BROWSER_VIEW, self.loadViewByCtxEvent),
          (VIEW_ALIAS.BATTLE_PASS_VIDEO_BROWSER_VIEW, self.loadViewByCtxEvent),
          (VIEW_ALIAS.DEMONSTRATOR_WINDOW, self.loadViewByCtxEvent),

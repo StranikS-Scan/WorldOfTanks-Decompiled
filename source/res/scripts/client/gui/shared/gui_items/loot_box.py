@@ -15,6 +15,7 @@ from gui.impl.lobby.loot_box.loot_box_helper import isAllVehiclesObtainedInSlot
 from gui.shared.gui_items.gui_item import GUIItem
 from helpers import time_utils
 from lootboxes_common import makeLBKeyID
+from preferred_maps import SlotTypeName
 from shared_utils import CONST_CONTAINER, findFirst
 from web.web_client_api.common import ItemPackType as ipType, ItemPackTypeGroup as ipTypeGroup
 if typing.TYPE_CHECKING:
@@ -100,11 +101,13 @@ _BONUS_GROUPS = {BonusGroup.VEHICLE: ipTypeGroup.VEHICLE,
                                     ipType.BADGE,
                                     ipType.SINGLE_ACHIEVEMENTS,
                                     ipType.PLAYER_BADGE,
-                                    ipType.CUSTOM_DOG_TAG),
+                                    ipType.CUSTOM_DOG_TAG) + tuple(('custom/{}'.format(slotTypeName.value) for slotTypeName in SlotTypeName)),
  BonusGroup.FEATUREITEMS: (ipType.CUSTOM_COLLECTION_ENTITLEMENT,
                            ipType.CUSTOM_ANY_COLLECTION_ITEM,
                            ipType.CUSTOM_LOOTBOXKEY,
-                           ipType.ENTITLEMENTS),
+                           ipType.ENTITLEMENTS,
+                           ipType.CUSTOM_GOLDENTICKET,
+                           ipType.CUSTOM_CURRENCIES),
  BonusGroup.LOOTBOXES: (ipType.CUSTOM_LOOTBOX,)}
 
 class ClientLootBoxTags(Enum):

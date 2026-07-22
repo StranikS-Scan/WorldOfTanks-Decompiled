@@ -1,0 +1,51 @@
+<camouflage_PM_summer_stugiv_label_15145.xml>
+  <xmlns:czech1>	ussr	</xmlns:czech1>
+  <xmlns:germany>	germany	</xmlns:germany>
+  <xmlns:czech0>	usa	</xmlns:czech0>
+  <xmlns:china>	china	</xmlns:china>
+  <xmlns:france>	france	</xmlns:france>
+  <xmlns:uk>	uk	</xmlns:uk>
+  <xmlns:japan>	japan	</xmlns:japan>
+  <xmlns:czech>	czech	</xmlns:czech>
+  <xmlns:sweden>	sweden	</xmlns:sweden>
+  <xmlns:poland>	poland	</xmlns:poland>
+  <xmlns:italy>	italy	</xmlns:italy>
+  <xmlns:intunion>	intunion	</xmlns:intunion>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/opaque	</userString>
+    <season>	summer	</season>
+    <historical>	0	</historical>
+    <priceGroup>	MT camouflages 50g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <nations>	germany	</nations>
+        <vehicles>	germany:G104_Stug_IV	</vehicles>
+      </include>
+    </vehicleFilter>
+    <camouflage>
+      <id>	15145	</id>
+      <texture>	vehicles/german/Camouflage/PM_StugIV.dds	</texture>
+      <description>	#vehicle_customization:camouflage/PM_summer_stugiv/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/PM_summer_stugiv/label	</userString>
+      <tags>	rare	</tags>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	67 74 62 255	</c0>
+          <c1>	73 49 43 255	</c1>
+          <c2>	73 49 43 255	</c2>
+          <c3>	118 106 92 255	</c3>
+        </palette>
+      </palettes>
+      <tiling>
+        <G104_Stug_IV>	2.5 2.5 0.3 2.8	</G104_Stug_IV>
+      </tiling>
+      <tilingSettings>
+        <type>	relative	</type>
+        <factor>	1.123049  1.121249	</factor>
+        <offset>	0.000000 0.000000	</offset>
+      </tilingSettings>
+    </camouflage>
+  </itemGroup>
+</camouflage_PM_summer_stugiv_label_15145.xml>

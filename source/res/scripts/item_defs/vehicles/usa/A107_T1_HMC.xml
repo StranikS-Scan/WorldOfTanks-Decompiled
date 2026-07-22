@@ -75,7 +75,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	3370	</weight>
-    <maxHealth>	128	</maxHealth>
+    <maxHealth>	150	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	60	</maxHealth>
       <maxRegenHealth>	30	</maxRegenHealth>
@@ -1312,8 +1312,8 @@
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
       <rotationSpeed>	18	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.55	</vehicleMovement>
-        <vehicleRotation>	0.55	</vehicleRotation>
+        <vehicleMovement>	0.28	</vehicleMovement>
+        <vehicleRotation>	0.28	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	40	</maxHealth>
@@ -2097,7 +2097,7 @@
           <camouflage></camouflage>
         </customizableVehicleAreas>
       </customization>
-      <repairTime>	8	</repairTime>
+      <repairTime>	1.71001065	</repairTime>
     </Chassis_A107_T1_HMC>
     <Chassis_A107_T1_HMC_2>
       <userString>	#usa_vehicles:Chassis_A107_T1_HMC_2	</userString>
@@ -2114,8 +2114,8 @@
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
       <rotationSpeed>	20	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.5	</vehicleMovement>
-        <vehicleRotation>	0.5	</vehicleRotation>
+        <vehicleMovement>	0.26	</vehicleMovement>
+        <vehicleRotation>	0.26	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	50	</maxHealth>
@@ -2899,7 +2899,7 @@
           <camouflage></camouflage>
         </customizableVehicleAreas>
       </customization>
-      <repairTime>	7.5	</repairTime>
+      <repairTime>	1.71001065	</repairTime>
     </Chassis_A107_T1_HMC_2>
   </chassis>
   <turrets0>
@@ -2922,14 +2922,14 @@
           </pitchLimits>
           <turretYawLimits>	-30 30	</turretYawLimits>
           <invisibilityFactorAtShot>	0.221	</invisibilityFactorAtShot>
-          <shotDispersionRadius>	0.8	</shotDispersionRadius>
+          <shotDispersionRadius>	0.7	</shotDispersionRadius>
           <reloadTime>	9	</reloadTime>
           <shotDispersionFactors>
-            <turretRotation>	0.48	</turretRotation>
+            <turretRotation>	0.30	</turretRotation>
             <afterShot>	6	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <aimingTime>	5.5	</aimingTime>
+          <aimingTime>	5.0	</aimingTime>
           <models>
             <undamaged>	vehicles/american/A107_T1_HMC/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/american/A107_T1_HMC/crash/lod0/Gun_01.model	</destroyed>
@@ -2990,7 +2990,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_1 armor_1	</primaryArmor>
       <weight>	100	</weight>
-      <maxHealth>	32	</maxHealth>
+      <maxHealth>	50	</maxHealth>
       <rotationSpeed>	15	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	100	</maxHealth>

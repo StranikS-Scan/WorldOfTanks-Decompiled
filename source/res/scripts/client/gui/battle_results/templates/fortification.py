@@ -37,3 +37,4 @@ STRONGHOLD_TEAMS_STATS_BLOCK.addComponent(0, vehicles.StrongholdTeamStatsBlock(b
 STRONGHOLD_TEAMS_STATS_BLOCK.addComponent(1, vehicles.StrongholdTeamStatsBlock(base.ListMeta(), field='team2'))
 STRONGHOLD_PERSONAL_STATS_BLOCK = regular.REGULAR_PERSONAL_STATS_BLOCK.clone(8)
 STRONGHOLD_PERSONAL_STATS_BLOCK.addComponent(8, vehicles.PersonalVehiclesStrongholdStatsBlock(base.ListMeta(), 'statValues', _RECORD.PERSONAL))
+STRONGHOLD_TABS_BLOCK = regular.REGULAR_TABS_BLOCK.clone()

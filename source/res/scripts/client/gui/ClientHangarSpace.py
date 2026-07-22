@@ -64,6 +64,10 @@ def _getHangarVisibilityMask(isPremium, spacePath):
     return _EVENT_HANGAR_PATHS[isPremium][1] if isPremium in _EVENT_HANGAR_PATHS else getHangarFullVisibilityMask(spacePath)
 
 
+def _getHangarEnvironment(isPremium):
+    return _EVENT_HANGAR_PATHS[isPremium][2] if isPremium in _EVENT_HANGAR_PATHS else ''
+
+
 _CFG = HangarConfig()
 _HANGAR_CFGS = HangarConfig()
 _EVENT_HANGAR_PATHS = {}
@@ -159,6 +163,7 @@ class ClientHangarSpace(object):
         self.__onVehicleLoadedCallback = onVehicleLoadedCallback
         self.__spacePath = None
         self.__spaceVisibilityMask = None
+        self.__spaceEnvironment = None
         self.__geometryID = None
         self._vsePlans = makeMultiPlanProvider(ASPECT.HANGAR, CallableProviderType.HANGAR)
         initializeHangarsCFG()
@@ -174,18 +179,19 @@ class ClientHangarSpace(object):
         spacePath = _getHangarPath(isPremium, isIGR)
         spaceType = _getHangarType(isPremium)
         spaceVisibilityMask = _getHangarVisibilityMask(isPremium, spacePath)
+        spaceEnvironment = _getHangarEnvironment(isPremium)
         LOG_DEBUG('load hangar: hangar type = <{0:>s}>, space = <{1:>s}>'.format(spaceType, spacePath))
         safeSpacePath = getDefaultHangarPath(False)
         if ResMgr.openSection(spacePath) is None:
             LOG_ERROR('Failed to load hangar from path: %s; default hangar will be loaded instead' % spacePath)
             spacePath = safeSpacePath
         try:
-            self.__spaceMappingId = BigWorld.addSpaceGeometryMapping(self.__spaceId, None, spacePath, spaceVisibilityMask)
+            self.__spaceMappingId = BigWorld.addSpaceGeometryMapping(self.__spaceId, None, spacePath, spaceVisibilityMask, spaceEnvironment)
         except Exception:
             try:
                 LOG_CURRENT_EXCEPTION()
                 spacePath = safeSpacePath
-                self.__spaceMappingId = BigWorld.addSpaceGeometryMapping(self.__spaceId, None, spacePath, spaceVisibilityMask)
+                self.__spaceMappingId = BigWorld.addSpaceGeometryMapping(self.__spaceId, None, spacePath, spaceVisibilityMask, spaceEnvironment)
             except Exception:
                 BigWorld.releaseSpace(self.__spaceId)
                 self.__spaceMappingId = None
@@ -195,6 +201,7 @@ class ClientHangarSpace(object):
 
         self.__spacePath = spacePath
         self.__spaceVisibilityMask = spaceVisibilityMask
+        self.__spaceEnvironment = spaceEnvironment
         spaceKey = _getHangarKey(spacePath)
         _CFG = copy.deepcopy(_HANGAR_CFGS[spaceKey])
         self.turretAndGunAngles.init()
@@ -316,6 +323,7 @@ class ClientHangarSpace(object):
         self.__spaceId = None
         self.__spacePath = None
         self.__spaceVisibilityMask = None
+        self.__spaceEnvironment = None
         self.__vEntityId = None
         BigWorld.disableSpecialFPSMode()
         return
@@ -350,6 +358,10 @@ class ClientHangarSpace(object):
     def visibilityMask(self):
         return self.__spaceVisibilityMask
 
+    @property
+    def environment(self):
+        return self.__spaceEnvironment
+
 
 class _ClientHangarSpacePathOverride(object):
     hangarSpace = dependency.descriptor(IHangarSpace)
@@ -363,7 +375,7 @@ class _ClientHangarSpacePathOverride(object):
     def setPremium(self, isPremium):
         self.hangarSpace.onPremiumChanged(isPremium, 0, 0)
 
-    def setPath(self, path, visibilityMask=None, isPremium=None, isReload=True, event=None):
+    def setPath(self, path, visibilityMask=None, environment='', isPremium=None, isReload=True, event=None):
         if path is not None and not path.startswith('spaces/'):
             path = 'spaces/' + path
         if isPremium is None:
@@ -371,9 +383,12 @@ class _ClientHangarSpacePathOverride(object):
         if path is not None:
             if visibilityMask is None:
                 visibilityMask = getHangarFullVisibilityMask(path)
-            _EVENT_HANGAR_PATHS[isPremium] = (path, visibilityMask)
+            _EVENT_HANGAR_PATHS[isPremium] = (path, visibilityMask, environment)
         elif isPremium in _EVENT_HANGAR_PATHS:
             del _EVENT_HANGAR_PATHS[isPremium]
+        environmentSwitcher = BigWorld.EnvironmentSwitcher.instance()
+        if environmentSwitcher is not None and environment is not None:
+            environmentSwitcher.setMainEnvironment(environment)
         if isReload:
             self.hangarSpace.refreshSpace(self.hangarSpace.isPremium, True)
             if event is None:

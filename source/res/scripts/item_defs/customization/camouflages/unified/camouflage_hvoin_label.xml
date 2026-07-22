@@ -1,0 +1,375 @@
+<camouflage_hvoin_label.xml>
+  <china:Ch05_T34_225>	ussr	</china:Ch05_T34_225>
+  <china:Ch05_T34_217>	germany	</china:Ch05_T34_217>
+  <china:Ch05_T34_224>	usa	</china:Ch05_T34_224>
+  <china:Ch05_T34_214>	china	</china:Ch05_T34_214>
+  <china:Ch05_T34_216>	france	</china:Ch05_T34_216>
+  <china:Ch05_T34_223>	uk	</china:Ch05_T34_223>
+  <china:Ch05_T34_220>	japan	</china:Ch05_T34_220>
+  <china:Ch05_T34_215>	czech	</china:Ch05_T34_215>
+  <china:Ch05_T34_222>	sweden	</china:Ch05_T34_222>
+  <china:Ch05_T34_221>	poland	</china:Ch05_T34_221>
+  <china:Ch05_T34_219>	italy	</china:Ch05_T34_219>
+  <china:Ch05_T34_218>	intunion	</china:Ch05_T34_218>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/opaque	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	MT camouflages 50g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <tags>	premium	</tags>
+        <levels>	8	</levels>
+      </include>
+      <include>
+        <levels>	10	</levels>
+      </include>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R47_ISU-152_Zveroboj ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <camouflage>
+      <id>	624	</id>
+      <texture>	vehicles/russian/Camouflage/hvoin.dds	</texture>
+      <description>	#vehicle_customization:camouflage/hvoin/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/hvoin/label	</userString>
+      <tags>	fullRGB	</tags>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	255 0 0 255	</c0>
+          <c1>	0 255 0 255	</c1>
+          <c2>	0 0 255 255	</c2>
+          <c3>	0 0 0 255	</c3>
+        </palette>
+      </palettes>
+      <rotation>
+        <HULL>	0.261799	</HULL>
+        <TURRET>	-0.261799	</TURRET>
+        <GUN>	-0.261799	</GUN>
+      </rotation>
+      <tiling>
+        <china:Ch01_Type59>	2 2 2.88 4.04	</china:Ch01_Type59>
+        <china:Ch03_WZ-111>	2.74 2.74 5.38 1.23	</china:Ch03_WZ-111>
+        <china:Ch03_WZ_111_A>	2.51 2.51 0.000000 0.000000	</china:Ch03_WZ_111_A>
+        <china:Ch05_T34_2>	4.59 4.59 1.31 0.34	</china:Ch05_T34_2>
+        <china:Ch11_110>	8.91 8.91 1.7 0.000000	</china:Ch11_110>
+        <china:Ch14_T34_3>	3.52 3.52 6.2 7.84	</china:Ch14_T34_3>
+        <china:Ch17_WZ131_1_WZ132>	4.48 4.48 -0.34 0.000000	</china:Ch17_WZ131_1_WZ132>
+        <china:Ch17_WZ131_1_WZ132_FL>	4.48 4.48 -0.34 0.000000	</china:Ch17_WZ131_1_WZ132_FL>
+        <china:Ch19_121>	6.09 6.09 4.4 2.31	</china:Ch19_121>
+        <china:Ch19_121_7x7>	6.09 6.09 4.4 2.31	</china:Ch19_121_7x7>
+        <china:Ch03_WZ-1110>	2.6 2.6 -1.54 9.43	</china:Ch03_WZ-1110>
+        <china:Ch03_WZ-1111>	2.51 2.51 8.11 5.22	</china:Ch03_WZ-1111>
+        <china:Ch03_WZ-1112>	2.61 2.61 -0.46 -0.31	</china:Ch03_WZ-1112>
+        <china:Ch03_WZ-1113>	2.61 2.61 -0.46 -0.31	</china:Ch03_WZ-1113>
+        <china:Ch03_WZ-1114>	6.24 6.24 6.03 5.49	</china:Ch03_WZ-1114>
+        <china:Ch03_WZ-1115>	5.56 5.56 2.74 -0.49	</china:Ch03_WZ-1115>
+        <china:Ch03_WZ-1116>	1.03 1.03 1.62 3.84	</china:Ch03_WZ-1116>
+        <china:Ch03_WZ-1117>	5.08 5.08 -0.09 -0.03	</china:Ch03_WZ-1117>
+        <china:Ch03_WZ-1118>	1.15 1.15 2.6 3.74	</china:Ch03_WZ-1118>
+        <china:Ch03_WZ-1119>	1.15 1.15 2.6 3.74	</china:Ch03_WZ-1119>
+        <china:Ch03_WZ_111_A0>	1.75 1.75 4.63 0.84	</china:Ch03_WZ_111_A0>
+        <china:Ch03_WZ_111_A1>	1.75 1.75 4.63 0.84	</china:Ch03_WZ_111_A1>
+        <china:Ch03_WZ_111_A2>	2.4 2.4 7.71 4.27	</china:Ch03_WZ_111_A2>
+        <china:Ch03_WZ_111_A4>	2.4 2.4 7.71 4.27	</china:Ch03_WZ_111_A4>
+        <china:Ch03_WZ_111_A3>	2.4 2.4 7.71 4.27	</china:Ch03_WZ_111_A3>
+        <china:Ch03_WZ_111_A5>	2.4 2.4 7.71 4.27	</china:Ch03_WZ_111_A5>
+        <china:Ch03_WZ_111_A6>	2.6 2.6 2.53 4.57	</china:Ch03_WZ_111_A6>
+        <china:Ch03_WZ_111_A7>	8 8 8.34 3.9	</china:Ch03_WZ_111_A7>
+        <china:Ch03_WZ_111_A8>	8.84 8.84 -0.98 0.54	</china:Ch03_WZ_111_A8>
+        <china:Ch03_WZ_111_A9>	6.31 6.31 0.09 -0.47	</china:Ch03_WZ_111_A9>
+        <china:Ch05_T34_20>	6.31 6.31 0.09 -0.47	</china:Ch05_T34_20>
+        <china:Ch05_T34_21>	5 5 0.000000 0.000000	</china:Ch05_T34_21>
+        <china:Ch05_T34_22>	2.41 2.41 0.3 -0.17	</china:Ch05_T34_22>
+        <china:Ch05_T34_23>	2.41 2.41 0.3 -0.17	</china:Ch05_T34_23>
+        <china:Ch05_T34_24>	3.88 3.88 0.000000 0.000000	</china:Ch05_T34_24>
+        <china:Ch05_T34_25>	3.3 3.3 0.91 0.37	</china:Ch05_T34_25>
+        <china:Ch05_T34_26>	3.3 3.3 0.91 0.37	</china:Ch05_T34_26>
+        <china:Ch05_T34_27>	3.3 3.3 0.91 0.37	</china:Ch05_T34_27>
+        <china:Ch05_T34_28>	6 6 -0.6 -0.1	</china:Ch05_T34_28>
+        <china:Ch05_T34_29>	5.31 5.31 0.22 1.02	</china:Ch05_T34_29>
+        <china:Ch11_1100>	9.66 9.66 1.06 -0.25	</china:Ch11_1100>
+        <china:Ch11_1101>	9.66 9.66 1.06 -0.25	</china:Ch11_1101>
+        <china:Ch11_1102>	2.55 2.55 4.21 0.99	</china:Ch11_1102>
+        <china:Ch11_1103>	5.31 5.31 -1.53 -0.02	</china:Ch11_1103>
+        <china:Ch11_1104>	5.38 5.38 -0.84 -0.13	</china:Ch11_1104>
+        <china:Ch11_1105>	5.38 5.38 -0.84 -0.13	</china:Ch11_1105>
+        <china:Ch11_1106>	2.76 2.76 2.59 1.15	</china:Ch11_1106>
+        <china:Ch11_1107>	3 3 1.98 1.71	</china:Ch11_1107>
+        <china:Ch11_1108>	3 3 1.98 1.71	</china:Ch11_1108>
+        <china:Ch11_1109>	4.97 4.97 5.85 3.49	</china:Ch11_1109>
+        <china:Ch14_T34_30>	3.46 3.46 5.62 5.73	</china:Ch14_T34_30>
+        <china:Ch14_T34_31>	3.46 3.46 5.62 5.73	</china:Ch14_T34_31>
+        <china:Ch14_T34_32>	5.41 5.41 4.49 0.47	</china:Ch14_T34_32>
+        <china:Ch14_T34_33>	5.41 5.41 4.49 0.47	</china:Ch14_T34_33>
+        <china:Ch14_T34_34>	5.42 5.42 3.07 2.57	</china:Ch14_T34_34>
+        <china:Ch14_T34_35>	4.18 4.18 0.29 0.12	</china:Ch14_T34_35>
+        <china:Ch14_T34_36>	5.49 5.49 3.98 0.55	</china:Ch14_T34_36>
+        <china:Ch14_T34_37>	2.8 2.8 4.97 3.78	</china:Ch14_T34_37>
+        <china:Ch14_T34_38>	3.26 3.26 0.15 -0.14	</china:Ch14_T34_38>
+        <china:Ch14_T34_39>	3.26 3.26 0.15 -0.14	</china:Ch14_T34_39>
+        <china:Ch17_WZ131_1_WZ1320>	2.37 2.37 4.88 1.69	</china:Ch17_WZ131_1_WZ1320>
+        <china:Ch17_WZ131_1_WZ1321>	2.37 2.37 4.88 1.69	</china:Ch17_WZ131_1_WZ1321>
+        <china:Ch17_WZ131_1_WZ1322>	1.2 1.2 0.57 -0.13	</china:Ch17_WZ131_1_WZ1322>
+        <china:Ch17_WZ131_1_WZ1323>	9.18 9.18 4.85 3.52	</china:Ch17_WZ131_1_WZ1323>
+        <china:Ch17_WZ131_1_WZ1324>	9.18 9.18 4.85 3.52	</china:Ch17_WZ131_1_WZ1324>
+        <china:Ch17_WZ131_1_WZ1325>	3.64 3.64 3.05 0.45	</china:Ch17_WZ131_1_WZ1325>
+        <china:Ch17_WZ131_1_WZ1326>	3.88 3.88 -1.67 0.07	</china:Ch17_WZ131_1_WZ1326>
+        <china:Ch17_WZ131_1_WZ1327>	4.87 4.87 5.8 1.67	</china:Ch17_WZ131_1_WZ1327>
+        <china:Ch17_WZ131_1_WZ1328>	3.12 3.12 2.11 4.57	</china:Ch17_WZ131_1_WZ1328>
+        <china:Ch17_WZ131_1_WZ1329>	2.21 2.21 0.17 1.64	</china:Ch17_WZ131_1_WZ1329>
+        <china:Ch17_WZ131_1_WZ132_FL0>	2.1 2.1 0.54 0.16	</china:Ch17_WZ131_1_WZ132_FL0>
+        <china:Ch17_WZ131_1_WZ132_FL1>	4 4 4.39 6.09	</china:Ch17_WZ131_1_WZ132_FL1>
+        <china:Ch17_WZ131_1_WZ132_FL2>	4 4 4.39 6.09	</china:Ch17_WZ131_1_WZ132_FL2>
+        <china:Ch17_WZ131_1_WZ132_FL3>	2.54 2.54 -1.75 0.21	</china:Ch17_WZ131_1_WZ132_FL3>
+        <china:Ch17_WZ131_1_WZ132_FL4>	13.99 13.99 -0.02 -0.22	</china:Ch17_WZ131_1_WZ132_FL4>
+        <china:Ch17_WZ131_1_WZ132_FL5>	2.14 2.14 6.82 6.82	</china:Ch17_WZ131_1_WZ132_FL5>
+        <china:Ch17_WZ131_1_WZ132_FL6>	1.47 1.47 -0.11 0.23	</china:Ch17_WZ131_1_WZ132_FL6>
+        <china:Ch17_WZ131_1_WZ132_FL7>	1.47 1.47 -0.11 0.23	</china:Ch17_WZ131_1_WZ132_FL7>
+        <china:Ch17_WZ131_1_WZ132_FL8>	4 4 3.02 1.33	</china:Ch17_WZ131_1_WZ132_FL8>
+        <china:Ch17_WZ131_1_WZ132_FL9>	4 4 3.02 1.33	</china:Ch17_WZ131_1_WZ132_FL9>
+        <china:Ch19_1210>	2.2 2.2 0.24 0.32	</china:Ch19_1210>
+        <china:Ch19_1211>	2.45 2.45 2.9 6.31	</china:Ch19_1211>
+        <china:Ch19_1212>	4.12 4.12 1.27 -0.16	</china:Ch19_1212>
+        <china:Ch19_1213>	5.66 5.66 0.26 0.26	</china:Ch19_1213>
+        <china:Ch19_1214>	5.66 5.66 0.26 0.26	</china:Ch19_1214>
+        <china:Ch19_1216>	11.24 11.24 0.000000 0.000000	</china:Ch19_1216>
+        <china:Ch19_1217>	11.24 11.24 0.000000 0.000000	</china:Ch19_1217>
+        <china:Ch19_1218>	4.95 4.95 -0.8 0.01	</china:Ch19_1218>
+        <china:Ch03_WZ_111_A88>	4.95 4.95 -0.8 0.01	</china:Ch03_WZ_111_A88>
+        <china:Ch19_1219>	3.11 3.11 -0.14 -0.11	</china:Ch19_1219>
+        <china:Ch19_121_7x70>	3.11 3.11 -0.14 -0.11	</china:Ch19_121_7x70>
+        <china:Ch19_121_7x71>	4.12 4.12 1.27 -0.16	</china:Ch19_121_7x71>
+        <china:Ch19_121_7x72>	4.12 4.12 1.27 -0.16	</china:Ch19_121_7x72>
+        <china:Ch19_121_7x73>	4.14 4.14 7.15 5.14	</china:Ch19_121_7x73>
+        <china:Ch19_1215>	4.14 4.14 7.15 5.14	</china:Ch19_1215>
+        <china:Ch19_121_7x74>	5.8 5.8 3.74 0.92	</china:Ch19_121_7x74>
+        <china:Ch19_121_7x75>	7.43 7.43 0.06 0.22	</china:Ch19_121_7x75>
+        <china:Ch19_121_7x76>	7.43 7.43 0.06 0.22	</china:Ch19_121_7x76>
+        <china:Ch19_121_7x77>	4.85 4.85 4.25 4.73	</china:Ch19_121_7x77>
+        <china:Ch19_121_7x78>	4.02 4.02 1.25 -0.07	</china:Ch19_121_7x78>
+        <china:Ch19_121_7x79>	6.03 6.03 0.02 0.16	</china:Ch19_121_7x79>
+        <china:Ch03_WZ-11100>	2.8 2.8 0.99 1.87	</china:Ch03_WZ-11100>
+        <china:Ch03_WZ-11101>	2.93 2.93 6.53 6.6	</china:Ch03_WZ-11101>
+        <china:Ch03_WZ-11102>	2.93 2.93 6.53 6.6	</china:Ch03_WZ-11102>
+        <china:Ch03_WZ-11103>	2.93 2.93 6.53 6.6	</china:Ch03_WZ-11103>
+        <china:Ch03_WZ-11104>	2.94 2.94 2.21 1.29	</china:Ch03_WZ-11104>
+        <china:Ch03_WZ-11105>	5.38 5.38 -0.05 -0.3	</china:Ch03_WZ-11105>
+        <china:Ch03_WZ-11106>	4.4 4.4 7.23 4.31	</china:Ch03_WZ-11106>
+        <china:Ch03_WZ-11107>	4.4 4.4 7.23 4.31	</china:Ch03_WZ-11107>
+        <china:Ch03_WZ-11108>	3.64 3.64 1.3 0.16	</china:Ch03_WZ-11108>
+        <china:Ch03_WZ-11109>	12.26 12.26 0.23 0.1	</china:Ch03_WZ-11109>
+        <china:Ch03_WZ-11110>	3.89 3.89 9.65 4.92	</china:Ch03_WZ-11110>
+        <china:Ch03_WZ-11111>	4 4 4.47 4.56	</china:Ch03_WZ-11111>
+        <china:Ch03_WZ-11112>	8.09 8.09 0.76 0.3	</china:Ch03_WZ-11112>
+        <china:Ch03_WZ-11113>	1.6 1.6 1.8 4.06	</china:Ch03_WZ-11113>
+        <china:Ch03_WZ-11114>	1.6 1.6 1.8 4.06	</china:Ch03_WZ-11114>
+        <china:Ch03_WZ-11115>	2.02 2.02 2.11 5.23	</china:Ch03_WZ-11115>
+        <china:Ch03_WZ-11116>	2.02 2.02 2.11 5.23	</china:Ch03_WZ-11116>
+        <china:Ch03_WZ-11117>	3.77 3.77 0.52 0.92	</china:Ch03_WZ-11117>
+        <china:Ch03_WZ-11118>	1.6 1.6 1.8 4.06	</china:Ch03_WZ-11118>
+        <china:Ch03_WZ-11119>	1.6 1.6 1.8 4.06	</china:Ch03_WZ-11119>
+        <china:Ch03_WZ-11120>	3.77 3.77 0.52 0.92	</china:Ch03_WZ-11120>
+        <china:Ch03_WZ-11121>	3.77 3.77 0.52 0.92	</china:Ch03_WZ-11121>
+        <china:Ch03_WZ-11122>	4.12 4.12 -0.25 0.000000	</china:Ch03_WZ-11122>
+        <china:Ch03_WZ-11123>	3.5 3.5 2.54 3.32	</china:Ch03_WZ-11123>
+        <china:Ch03_WZ-11124>	5.23 5.23 8.82 1.29	</china:Ch03_WZ-11124>
+        <china:Ch03_WZ-11125>	4.5 4.5 4.8 2.63	</china:Ch03_WZ-11125>
+        <china:Ch03_WZ-11126>	4.5 4.5 4.8 2.63	</china:Ch03_WZ-11126>
+        <china:Ch03_WZ-11127>	9 9 -0.88 0.000000	</china:Ch03_WZ-11127>
+        <china:Ch03_WZ-11128>	9 9 -0.88 0.000000	</china:Ch03_WZ-11128>
+        <china:Ch03_WZ-11129>	2.47 2.47 -0.39 0.52	</china:Ch03_WZ-11129>
+        <china:Ch03_WZ-11130>	2.27 2.27 5.69 1.9	</china:Ch03_WZ-11130>
+        <china:Ch03_WZ-11131>	2.47 2.47 -0.39 0.52	</china:Ch03_WZ-11131>
+        <china:Ch03_WZ-11132>	2.47 2.47 -0.39 0.52	</china:Ch03_WZ-11132>
+        <china:Ch03_WZ-11133>	2.47 2.47 -0.39 0.52	</china:Ch03_WZ-11133>
+        <china:Ch03_WZ-11134>	1.8 1.8 2.87 0.67	</china:Ch03_WZ-11134>
+        <china:Ch03_WZ-11135>	7.21 7.21 1.03 0.5	</china:Ch03_WZ-11135>
+        <china:Ch03_WZ-11136>	1.4 1.4 -0.19 0.79	</china:Ch03_WZ-11136>
+        <china:Ch03_WZ-11137>	1.4 1.4 -0.19 0.79	</china:Ch03_WZ-11137>
+        <china:Ch03_WZ-11138>	2.95 2.95 1.31 -0.18	</china:Ch03_WZ-11138>
+        <china:Ch03_WZ-11139>	6.79 6.79 1.36 0.16	</china:Ch03_WZ-11139>
+        <china:Ch03_WZ-11140>	2.61 2.61 0.04 -0.06	</china:Ch03_WZ-11140>
+        <china:Ch03_WZ-11141>	2.61 2.61 0.04 -0.06	</china:Ch03_WZ-11141>
+        <china:Ch03_WZ-11142>	4.79 4.79 10.8 2.01	</china:Ch03_WZ-11142>
+        <china:Ch03_WZ-11143>	6.85 6.85 0.000000 0.000000	</china:Ch03_WZ-11143>
+        <china:Ch03_WZ-11144>	2.19 2.19 4.3 3.06	</china:Ch03_WZ-11144>
+        <china:Ch03_WZ-11145>	7 7 0.000000 2.02	</china:Ch03_WZ-11145>
+        <china:Ch03_WZ-11146>	6.79 6.79 1.36 0.16	</china:Ch03_WZ-11146>
+        <china:Ch03_WZ-11147>	6.79 6.79 1.36 0.16	</china:Ch03_WZ-11147>
+        <china:Ch03_WZ-11148>	1.4 1.4 -0.19 0.79	</china:Ch03_WZ-11148>
+        <china:Ch03_WZ-11149>	2.39 2.39 0.000000 0.32	</china:Ch03_WZ-11149>
+        <china:Ch03_WZ-11150>	2.14 2.14 0.000000 0.000000	</china:Ch03_WZ-11150>
+        <china:Ch03_WZ-11151>	1.4 1.4 -0.19 0.79	</china:Ch03_WZ-11151>
+        <china:Ch03_WZ-11152>	7.95 7.95 1.99 0.46	</china:Ch03_WZ-11152>
+        <china:Ch03_WZ-11153>	3.65 3.65 0.06 0.56	</china:Ch03_WZ-11153>
+        <china:Ch03_WZ-11154>	3.65 3.65 0.06 0.56	</china:Ch03_WZ-11154>
+        <china:Ch03_WZ-11155>	4.4 4.4 -0.74 -0.4	</china:Ch03_WZ-11155>
+        <china:Ch03_WZ-11156>	8.44 8.44 -0.26 -0.32	</china:Ch03_WZ-11156>
+        <china:Ch03_WZ-11157>	7.35 7.35 0.28 0.49	</china:Ch03_WZ-11157>
+        <china:Ch03_WZ-11158>	4.53 4.53 -0.27 0.23	</china:Ch03_WZ-11158>
+        <china:Ch03_WZ-11159>	3 3 5.47 7.36	</china:Ch03_WZ-11159>
+        <china:Ch03_WZ-11160>	8.34 8.34 -0.06 0.000000	</china:Ch03_WZ-11160>
+        <china:Ch03_WZ-11161>	5.83 5.83 7.58 5.8	</china:Ch03_WZ-11161>
+        <china:Ch03_WZ-11162>	3.37 3.37 1.49 0.99	</china:Ch03_WZ-11162>
+        <china:Ch03_WZ-11163>	3.37 3.37 1.49 0.99	</china:Ch03_WZ-11163>
+        <china:Ch03_WZ-11164>	6.92 6.92 0.73 0.000000	</china:Ch03_WZ-11164>
+        <china:Ch03_WZ-11165>	4.04 4.04 0.85 0.000000	</china:Ch03_WZ-11165>
+        <china:Ch03_WZ-11166>	7.2 7.2 0.63 0.000000	</china:Ch03_WZ-11166>
+        <china:Ch03_WZ-11167>	8.02 8.02 -0.12 0.19	</china:Ch03_WZ-11167>
+        <china:Ch03_WZ-11168>	4.81 4.81 -0.47 -0.17	</china:Ch03_WZ-11168>
+        <china:Ch03_WZ-11169>	10 10 5.28 2.87	</china:Ch03_WZ-11169>
+        <china:Ch03_WZ-11170>	2.27 2.27 7.67 2.6	</china:Ch03_WZ-11170>
+        <china:Ch03_WZ-11171>	2.27 2.27 7.67 2.6	</china:Ch03_WZ-11171>
+        <china:Ch03_WZ-11172>	4.15 4.15 1.66 0.74	</china:Ch03_WZ-11172>
+        <china:Ch03_WZ-11173>	1.4 1.4 4.51 6.37	</china:Ch03_WZ-11173>
+        <china:Ch03_WZ-11174>	2.94 2.94 0.000000 0.56	</china:Ch03_WZ-11174>
+        <china:Ch03_WZ-11175>	1.24 1.24 4.87 6.34	</china:Ch03_WZ-11175>
+        <china:Ch03_WZ-11176>	1.24 1.24 4.87 6.34	</china:Ch03_WZ-11176>
+        <china:Ch03_WZ-11177>	3 3 5.27 1.53	</china:Ch03_WZ-11177>
+        <china:Ch03_WZ-11178>	2.8 2.8 4.51 3.31	</china:Ch03_WZ-11178>
+        <china:Ch03_WZ-11179>	4.4 4.4 8.14 2.32	</china:Ch03_WZ-11179>
+        <china:Ch03_WZ-11180>	1.24 1.24 4.87 6.34	</china:Ch03_WZ-11180>
+        <china:Ch03_WZ-11181>	4.8 4.8 2.77 4.6	</china:Ch03_WZ-11181>
+        <china:Ch03_WZ-11182>	5.76 5.76 2.79 2.61	</china:Ch03_WZ-11182>
+        <china:Ch03_WZ-11183>	2.47 2.47 6.23 -0.25	</china:Ch03_WZ-11183>
+        <china:Ch03_WZ-11184>	2.39 2.39 0.3 7.46	</china:Ch03_WZ-11184>
+        <china:Ch03_WZ-11185>	3.07 3.07 -0.14 0.44	</china:Ch03_WZ-11185>
+        <china:Ch03_WZ-11186>	3.07 3.07 -0.14 0.44	</china:Ch03_WZ-11186>
+        <china:Ch03_WZ-11187>	9.44 9.44 -0.01 0.01	</china:Ch03_WZ-11187>
+        <china:Ch03_WZ-11188>	2.45 2.45 2.9 6.31	</china:Ch03_WZ-11188>
+        <china:Ch03_WZ-11189>	2.45 2.45 2.9 6.31	</china:Ch03_WZ-11189>
+        <china:Ch03_WZ-11190>	7 7 0.000000 0.000000	</china:Ch03_WZ-11190>
+        <china:Ch03_WZ-11191>	2.45 2.45 2.9 6.31	</china:Ch03_WZ-11191>
+        <china:Ch03_WZ-11192>	3.73 3.73 0.81 0.16	</china:Ch03_WZ-11192>
+        <china:Ch03_WZ-11193>	4 4 0.000000 0.000000	</china:Ch03_WZ-11193>
+        <china:Ch03_WZ-11194>	7.8 7.8 -0.05 0.15	</china:Ch03_WZ-11194>
+        <china:Ch03_WZ-11195>	7.8 7.8 -0.05 0.15	</china:Ch03_WZ-11195>
+        <china:Ch03_WZ-11196>	10.66 10.66 0.33 -0.1	</china:Ch03_WZ-11196>
+        <china:Ch03_WZ-11197>	5.69 5.69 -1.88 -0.12	</china:Ch03_WZ-11197>
+        <china:Ch03_WZ-11198>	5.69 5.69 -1.01 0.35	</china:Ch03_WZ-11198>
+        <china:Ch03_WZ-11199>	5.69 5.69 -1.88 -0.12	</china:Ch03_WZ-11199>
+        <china:Ch03_WZ_111_A00>	5.77 5.77 -0.16 0.000000	</china:Ch03_WZ_111_A00>
+        <china:Ch03_WZ_111_A01>	5.77 5.77 -0.16 0.000000	</china:Ch03_WZ_111_A01>
+        <china:Ch03_WZ_111_A02>	3 3 -0.05 0.22	</china:Ch03_WZ_111_A02>
+        <china:Ch03_WZ_111_A03>	2.68 2.68 2.47 5.65	</china:Ch03_WZ_111_A03>
+        <china:Ch03_WZ_111_A04>	4.01 4.01 0.07 -0.1	</china:Ch03_WZ_111_A04>
+        <china:Ch03_WZ_111_A05>	4.81 4.81 0.67 5.42	</china:Ch03_WZ_111_A05>
+        <china:Ch03_WZ_111_A06>	3 3 2.99 0.23	</china:Ch03_WZ_111_A06>
+        <china:Ch03_WZ_111_A07>	3 3 2.99 0.23	</china:Ch03_WZ_111_A07>
+        <china:Ch03_WZ_111_A08>	5 5 0.03 -0.17	</china:Ch03_WZ_111_A08>
+        <china:Ch03_WZ_111_A09>	5 5 0.51 0.06	</china:Ch03_WZ_111_A09>
+        <china:Ch03_WZ_111_A10>	8.25 8.25 3.22 7.18	</china:Ch03_WZ_111_A10>
+        <china:Ch03_WZ_111_A11>	8.25 8.25 3.22 7.18	</china:Ch03_WZ_111_A11>
+        <china:Ch03_WZ_111_A12>	6.58 6.58 2.44 4.69	</china:Ch03_WZ_111_A12>
+        <china:Ch03_WZ_111_A14>	6.58 6.58 2.44 4.69	</china:Ch03_WZ_111_A14>
+        <china:Ch03_WZ_111_A13>	6.58 6.58 2.44 4.69	</china:Ch03_WZ_111_A13>
+        <china:Ch03_WZ_111_A15>	6.5 6.5 0.31 4.34	</china:Ch03_WZ_111_A15>
+        <china:Ch03_WZ_111_A16>	6.5 6.5 0.31 4.34	</china:Ch03_WZ_111_A16>
+        <china:Ch03_WZ_111_A17>	3.73 3.73 0.81 0.16	</china:Ch03_WZ_111_A17>
+        <china:Ch03_WZ_111_A18>	2.5 2.5 2.08 6.01	</china:Ch03_WZ_111_A18>
+        <china:Ch03_WZ_111_A19>	2.5 2.5 2.08 6.01	</china:Ch03_WZ_111_A19>
+        <china:Ch03_WZ_111_A20>	5 5 4.98 4.39	</china:Ch03_WZ_111_A20>
+        <china:Ch03_WZ_111_A21>	10.66 10.66 0.33 -0.1	</china:Ch03_WZ_111_A21>
+        <china:Ch03_WZ_111_A22>	4 4 4.96 4.61	</china:Ch03_WZ_111_A22>
+        <china:Ch03_WZ_111_A23>	3 3 1.98 2.31	</china:Ch03_WZ_111_A23>
+        <china:Ch03_WZ_111_A24>	8.22 8.22 1.19 0.000000	</china:Ch03_WZ_111_A24>
+        <china:Ch03_WZ_111_A25>	8.22 8.22 1.19 0.000000	</china:Ch03_WZ_111_A25>
+        <china:Ch03_WZ_111_A26>	3.09 3.09 1.19 0.58	</china:Ch03_WZ_111_A26>
+        <china:Ch03_WZ_111_A27>	5.69 5.69 -1.01 0.35	</china:Ch03_WZ_111_A27>
+        <china:Ch03_WZ_111_A28>	5.31 5.31 -0.61 -0.44	</china:Ch03_WZ_111_A28>
+        <china:Ch03_WZ_111_A29>	2.34 2.34 -0.97 0.42	</china:Ch03_WZ_111_A29>
+        <china:Ch03_WZ_111_A31>	7.13 7.13 0.26 0.000000	</china:Ch03_WZ_111_A31>
+        <china:Ch03_WZ_111_A32>	7.68 7.68 -0.43 0.000000	</china:Ch03_WZ_111_A32>
+        <china:Ch03_WZ_111_A33>	5.55 5.55 2.86 6.68	</china:Ch03_WZ_111_A33>
+        <china:Ch03_WZ_111_A34>	7 7 2.76 5.04	</china:Ch03_WZ_111_A34>
+        <china:Ch03_WZ_111_A35>	5.2 5.2 3.38 5.45	</china:Ch03_WZ_111_A35>
+        <china:Ch03_WZ_111_A36>	5.2 5.2 3.38 5.45	</china:Ch03_WZ_111_A36>
+        <china:Ch03_WZ_111_A37>	5.2 5.2 3.38 5.45	</china:Ch03_WZ_111_A37>
+        <china:Ch03_WZ_111_A38>	3 3 8.77 3.92	</china:Ch03_WZ_111_A38>
+        <china:Ch03_WZ_111_A39>	5 5 8.54 6.96	</china:Ch03_WZ_111_A39>
+        <china:Ch03_WZ_111_A40>	5 5 8.54 6.96	</china:Ch03_WZ_111_A40>
+        <china:Ch03_WZ_111_A41>	5.79 5.79 0.48 7.51	</china:Ch03_WZ_111_A41>
+        <china:Ch03_WZ_111_A42>	3.09 3.09 3.43 7.93	</china:Ch03_WZ_111_A42>
+        <china:Ch03_WZ_111_A43>	3.09 3.09 3.43 7.93	</china:Ch03_WZ_111_A43>
+        <china:Ch03_WZ_111_A44>	3 4 -3.63 0.83	</china:Ch03_WZ_111_A44>
+        <china:Ch03_WZ_111_A45>	2.57 2.57 7.87 4.48	</china:Ch03_WZ_111_A45>
+        <china:Ch03_WZ_111_A46>	5.14 5.14 3.73 5.14	</china:Ch03_WZ_111_A46>
+        <china:Ch03_WZ_111_A47>	6.72 6.72 8.44 0.04	</china:Ch03_WZ_111_A47>
+        <china:Ch03_WZ_111_A48>	6.92 6.92 3 0.11	</china:Ch03_WZ_111_A48>
+        <china:Ch03_WZ_111_A49>	3.5 3.5 1.62 1.53	</china:Ch03_WZ_111_A49>
+        <china:Ch03_WZ_111_A50>	6.13 6.13 -0.41 0.000000	</china:Ch03_WZ_111_A50>
+        <china:Ch03_WZ_111_A51>	2.78 2.78 3.92 3.09	</china:Ch03_WZ_111_A51>
+        <china:Ch03_WZ_111_A53>	6.99 6.99 4.57 7.35	</china:Ch03_WZ_111_A53>
+        <china:Ch03_WZ_111_A54>	6.99 6.99 4.57 7.35	</china:Ch03_WZ_111_A54>
+        <china:Ch03_WZ_111_A55>	5.62 5.62 5.57 4.83	</china:Ch03_WZ_111_A55>
+        <china:Ch03_WZ_111_A56>	6 6 3.29 5.21	</china:Ch03_WZ_111_A56>
+        <china:Ch03_WZ_111_A52>	6 6 3.29 5.21	</china:Ch03_WZ_111_A52>
+        <china:Ch03_WZ_111_A57>	3.57 3.57 -1.09 0.44	</china:Ch03_WZ_111_A57>
+        <china:Ch03_WZ_111_A58>	1.8 1.8 1.94 2.17	</china:Ch03_WZ_111_A58>
+        <china:Ch03_WZ_111_A59>	2.3 2.3 3.35 4.8	</china:Ch03_WZ_111_A59>
+        <china:Ch03_WZ_111_A60>	2.3 2.3 3.35 4.8	</china:Ch03_WZ_111_A60>
+        <china:Ch03_WZ_111_A61>	2.6 2.6 3.24 6.1	</china:Ch03_WZ_111_A61>
+        <china:Ch03_WZ_111_A62>	2.46 2.46 9.81 5.4	</china:Ch03_WZ_111_A62>
+        <china:Ch03_WZ_111_A63>	1.36 1.36 -0.28 -0.05	</china:Ch03_WZ_111_A63>
+        <china:Ch03_WZ_111_A64>	2.1 2.1 4.92 3.86	</china:Ch03_WZ_111_A64>
+        <china:Ch03_WZ_111_A65>	4.38 4.38 2.68 3.19	</china:Ch03_WZ_111_A65>
+        <china:Ch03_WZ_111_A66>	2.41 2.41 2.01 0.31	</china:Ch03_WZ_111_A66>
+        <china:Ch03_WZ_111_A67>	0.89 0.89 1.97 9.22	</china:Ch03_WZ_111_A67>
+        <china:Ch03_WZ_111_A68>	0.89 0.89 1.97 9.22	</china:Ch03_WZ_111_A68>
+        <china:Ch03_WZ_111_A69>	4.25 4.25 1.06 0.99	</china:Ch03_WZ_111_A69>
+        <china:Ch03_WZ_111_A70>	4.25 4.25 1.06 0.99	</china:Ch03_WZ_111_A70>
+        <china:Ch03_WZ_111_A71>	4 4 2.97 2.4	</china:Ch03_WZ_111_A71>
+        <china:Ch03_WZ_111_A72>	2.41 2.41 2.69 6.97	</china:Ch03_WZ_111_A72>
+        <china:Ch03_WZ_111_A73>	2.28 2.28 5.3 4.18	</china:Ch03_WZ_111_A73>
+        <china:Ch03_WZ_111_A74>	0.81 0.81 4.99 2.58	</china:Ch03_WZ_111_A74>
+        <china:Ch03_WZ_111_A75>	2.6 2.6 3.24 6.1	</china:Ch03_WZ_111_A75>
+        <china:Ch03_WZ_111_A77>	2.6 2.6 3.24 6.1	</china:Ch03_WZ_111_A77>
+        <china:Ch03_WZ_111_A76>	2.6 2.6 3.24 6.1	</china:Ch03_WZ_111_A76>
+        <china:Ch03_WZ_111_A78>	5.3 5.3 5.35 5.98	</china:Ch03_WZ_111_A78>
+        <china:Ch03_WZ_111_A79>	2.1 2.1 4.92 3.86	</china:Ch03_WZ_111_A79>
+        <china:Ch03_WZ_111_A80>	2.1 2.1 4.92 3.86	</china:Ch03_WZ_111_A80>
+        <china:Ch03_WZ_111_A81>	8.91 8.91 -0.03 -0.3	</china:Ch03_WZ_111_A81>
+        <china:Ch03_WZ_111_A82>	1.5 1.5 0.000000 0.000000	</china:Ch03_WZ_111_A82>
+        <china:Ch03_WZ_111_A83>	4 4 2.97 2.4	</china:Ch03_WZ_111_A83>
+        <china:Ch03_WZ_111_A84>	7.87 7.87 -1.59 -0.2	</china:Ch03_WZ_111_A84>
+        <china:Ch03_WZ_111_A85>	7.87 7.87 -1.59 -0.2	</china:Ch03_WZ_111_A85>
+        <china:Ch03_WZ_111_A30>	7.87 7.87 -1.59 -0.2	</china:Ch03_WZ_111_A30>
+        <china:Ch03_WZ_111_A86>	8.09 8.09 2.59 -0.89	</china:Ch03_WZ_111_A86>
+        <china:Ch03_WZ_111_A87>	8.09 8.09 2.59 -0.89	</china:Ch03_WZ_111_A87>
+        <china:Ch03_WZ_111_A89>	9.87 9.87 0.42 0.33	</china:Ch03_WZ_111_A89>
+        <china:Ch03_WZ_111_A90>	4.87 4.87 -1.88 1.91	</china:Ch03_WZ_111_A90>
+        <china:Ch03_WZ_111_A91>	8.91 8.91 -0.03 -0.3	</china:Ch03_WZ_111_A91>
+        <china:Ch03_WZ_111_A92>	8.91 8.91 -0.03 -0.3	</china:Ch03_WZ_111_A92>
+        <china:Ch03_WZ_111_A93>	5 5 0.33 2.52	</china:Ch03_WZ_111_A93>
+        <china:Ch03_WZ_111_A94>	4.4 4.4 6.07 2.88	</china:Ch03_WZ_111_A94>
+        <china:Ch03_WZ_111_A95>	4 4 0.45 0.24	</china:Ch03_WZ_111_A95>
+        <china:Ch03_WZ_111_A96>	3.4 3.4 0.14 0.32	</china:Ch03_WZ_111_A96>
+        <china:Ch03_WZ_111_A97>	5.12 5.12 0.74 4.03	</china:Ch03_WZ_111_A97>
+        <china:Ch03_WZ_111_A98>	4.54 4.54 0.9 0.07	</china:Ch03_WZ_111_A98>
+        <china:Ch03_WZ_111_A99>	5.12 5.12 0.74 4.03	</china:Ch03_WZ_111_A99>
+        <china:Ch05_T34_200>	7.47 7.47 0.06 -0.26	</china:Ch05_T34_200>
+        <china:Ch05_T34_201>	2.84 2.84 6.06 9.8	</china:Ch05_T34_201>
+        <china:Ch05_T34_202>	4.56 4.56 8.64 4.07	</china:Ch05_T34_202>
+        <china:Ch05_T34_203>	5.3 5.3 5.35 5.98	</china:Ch05_T34_203>
+        <china:Ch05_T34_204>	5.3 5.3 5.35 5.98	</china:Ch05_T34_204>
+        <china:Ch05_T34_205>	2.54 2.54 2.82 -0.65	</china:Ch05_T34_205>
+        <china:Ch05_T34_206>	1.1 1.1 11.18 6.26	</china:Ch05_T34_206>
+        <china:Ch05_T34_207>	1.26 1.26 3.73 1.87	</china:Ch05_T34_207>
+        <china:Ch05_T34_208>	5.19 5.19 -0.81 0.34	</china:Ch05_T34_208>
+        <china:Ch05_T34_209>	3.7 3.7 1.92 0.39	</china:Ch05_T34_209>
+        <china:Ch05_T34_210>	3 3 3.79 4.02	</china:Ch05_T34_210>
+        <china:Ch05_T34_211>	3 3 3.79 4.02	</china:Ch05_T34_211>
+        <china:Ch05_T34_212>	6 6 4.6 1.97	</china:Ch05_T34_212>
+        <china:Ch05_T34_213>	5.9 5.9 9.76 4.78	</china:Ch05_T34_213>
+      </tiling>
+      <tilingSettings>
+        <type>	relative	</type>
+        <factor>	4.159012  4.159432	</factor>
+        <offset>	0.000000 0.000000	</offset>
+      </tilingSettings>
+    </camouflage>
+  </itemGroup>
+</camouflage_hvoin_label.xml>

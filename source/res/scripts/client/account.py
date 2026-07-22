@@ -40,7 +40,6 @@ from account_helpers.gift_system import GiftSystem
 from account_helpers.trade_in import TradeIn
 from account_helpers.winback import Winback
 from account_helpers.referral_program import ReferralProgram
-from account_helpers.play_streak import PlayStreak
 from account_shared import NotificationItem
 from version_utils import readClientServerVersion
 from gui.prb_control import prbEntityProperty
@@ -193,7 +192,6 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self.winback = g_accountRepository.winback
         self.achievements20 = g_accountRepository.achievements20
         self.referralProgram = g_accountRepository.referralProgram
-        self.playStreak = g_accountRepository.playStreak
         self.paragons = g_accountRepository.paragons
         self.comp7Storage = g_accountRepository.comp7Storage
         self.stall = g_accountRepository.stall
@@ -229,7 +227,6 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self.telecomRentals.setAccount(self)
         self.tradeIn.setAccount(self)
         self.referralProgram.setAccount(self)
-        self.playStreak.setAccount(self)
         self.stall.setAccount(self)
         g_accountRepository.commandProxy.setGateway(self.__doCmd)
         self.isLongDisconnectedFromCenter = False
@@ -292,7 +289,6 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self.resourceWell.onAccountBecomePlayer()
         self.achievements20.onAccountBecomePlayer()
         self.referralProgram.onAccountBecomePlayer()
-        self.playStreak.onAccountBecomePlayer()
         self.comp7Storage.onAccountBecomePlayer()
         chatManager.switchPlayerProxy(self)
         events.onAccountBecomePlayer()
@@ -341,7 +337,6 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self.resourceWell.onAccountBecomeNonPlayer()
         self.achievements20.onAccountBecomeNonPlayer()
         self.referralProgram.onAccountBecomeNonPlayer()
-        self.playStreak.onAccountBecomeNonPlayer()
         self.comp7Storage.onAccountBecomeNonPlayer()
         self.__cancelCommands()
         self.syncData.setAccount(None)
@@ -369,7 +364,6 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self.offers.setAccount(None)
         self.achievements20.setAccount(None)
         self.referralProgram.setAccount(None)
-        self.playStreak.setAccount(None)
         g_accountRepository.commandProxy.setGateway(None)
         self.unitMgr.clear()
         self.unitBrowser.clear()
@@ -1265,7 +1259,6 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
             self.resourceWell.synchronize(isFullSync, diff)
             self.achievements20.synchronize(isFullSync, diff)
             self.referralProgram.synchronize(isFullSync, diff)
-            self.playStreak.synchronize(isFullSync, diff)
             self.comp7Storage.synchronize(isFullSync, diff)
             self.paragons.synchronize(isFullSync, diff)
             self._synchronizeServerSettings(diff)
@@ -1530,7 +1523,6 @@ class _AccountRepository(object):
         self.platformBlueprintsConvertSaleLimits = {}
         self.freePremiumCrew = {}
         self.referralProgram = ReferralProgram(self.syncData)
-        self.playStreak = PlayStreak(self.syncData)
         self.comp7Storage = Comp7Storage(self.syncData)
         self.gMap = ClientGlobalMap()
         self.onTokenReceived = Event.Event()

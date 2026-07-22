@@ -404,9 +404,11 @@ class OnceOnlyHints(CONST_CONTAINER):
     PARAGONS_FIRST_RESET_HINT = 'ParagonsFirstResetHint'
     PARAGONS_ENTRY_POINT_HINT = 'ParagonsEntryPointHint'
     PARAGONS_RESEARCH_BUTTON_HINT = 'ParagonsResearchButtonHint'
-    BIRTHDAY_POSTBATTLE_EXTRA_TAB_HINT = 'BirthdayPostbattleExtraTabHint'
+    BIRTHDAY_POSTBATTLE_TEAM_STATS_TAB_HINT = 'BirthdayPostbattleTeamStatsTabHint'
     EPIC_SUPPLY_INFO_HINT = 'EpicSupplyInfoHint'
     COMP7_SKILL_HINT = 'Comp7SkillHint'
+    TANK_ACADEMY_FIGHT_BUTTON_HINT = 'TankAcademyFightButtonHint'
+    TANK_ACADEMY_ENTRY_POINT_HINT = 'TankAcademyEntryPointHint'
 
 
 class SESSION_STATS(CONST_CONTAINER):

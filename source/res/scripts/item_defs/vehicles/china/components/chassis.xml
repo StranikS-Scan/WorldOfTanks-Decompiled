@@ -1,128 +1,374 @@
 <chassis.xml>
-  <ids>
-    <Chassis_Ch01_Type59_2>	0	</Chassis_Ch01_Type59_2>
-    <Chassis_Ch02_Type62>	1	</Chassis_Ch02_Type62>
-    <Chassis_Ch01_Type59_gold>	2	</Chassis_Ch01_Type59_gold>
-    <Chassis_Ch03_WZ-111>	3	</Chassis_Ch03_WZ-111>
-    <Chassis_Ch04_T34_1>	4	</Chassis_Ch04_T34_1>
-    <Chassis_Ch04_T34_1_2>	5	</Chassis_Ch04_T34_1_2>
-    <Chassis_Ch06_Renault_NC31_2>	7	</Chassis_Ch06_Renault_NC31_2>
-    <Chassis_Ch06_Renault_NC31>	6	</Chassis_Ch06_Renault_NC31>
-    <Chassis_Ch05_T34_2>	8	</Chassis_Ch05_T34_2>
-    <Chassis_Ch05_T34_2_2>	9	</Chassis_Ch05_T34_2_2>
-    <Chassis_Ch18_WZ-120>	10	</Chassis_Ch18_WZ-120>
-    <Chassis_Ch18_WZ-120_2>	11	</Chassis_Ch18_WZ-120_2>
-    <Chassis_Ch12_111_1_2_3>	12	</Chassis_Ch12_111_1_2_3>
-    <Chassis_Ch12_111_1_2_3_2>	13	</Chassis_Ch12_111_1_2_3_2>
-    <Chassis_Ch07_Vickers_MkE_Type_BT26>	14	</Chassis_Ch07_Vickers_MkE_Type_BT26>
-    <Chassis_Ch07_Vickers_MkE_Type_BT26_2>	15	</Chassis_Ch07_Vickers_MkE_Type_BT26_2>
-    <Chassis_Ch11_110>	17	</Chassis_Ch11_110>
-    <Chassis_Ch11_110_2>	18	</Chassis_Ch11_110_2>
-    <Chassis_Ch09_M5>	19	</Chassis_Ch09_M5>
-    <Chassis_Ch09_M5_2>	20	</Chassis_Ch09_M5_2>
-    <Chassis_Ch16_WZ_131>	21	</Chassis_Ch16_WZ_131>
-    <Chassis_Ch16_WZ_131_2>	22	</Chassis_Ch16_WZ_131_2>
-    <Chassis_Ch10_IS2>	23	</Chassis_Ch10_IS2>
-    <Chassis_Ch10_IS2_2>	24	</Chassis_Ch10_IS2_2>
-    <Chassis_Ch17_WZ131_1_WZ132>	25	</Chassis_Ch17_WZ131_1_WZ132>
-    <Chassis_Ch17_WZ131_1_WZ132_2>	26	</Chassis_Ch17_WZ131_1_WZ132_2>
-    <Chassis_Ch19_121>	27	</Chassis_Ch19_121>
-    <Chassis_Ch08_Type97_Chi_Ha>	29	</Chassis_Ch08_Type97_Chi_Ha>
-    <Chassis_Ch08_Type97_Chi_Ha_2>	30	</Chassis_Ch08_Type97_Chi_Ha_2>
-    <Chassis_Ch21_T34>	31	</Chassis_Ch21_T34>
-    <Chassis_Ch21_T34_2>	32	</Chassis_Ch21_T34_2>
-    <Chassis_Ch15_59_16>	33	</Chassis_Ch15_59_16>
-    <Chassis_Ch15_59_16_2>	34	</Chassis_Ch15_59_16_2>
-    <Chassis_Ch20_Type58>	35	</Chassis_Ch20_Type58>
-    <Chassis_Ch20_Type58_2>	36	</Chassis_Ch20_Type58_2>
-    <Chassis_Ch14_T34_3>	37	</Chassis_Ch14_T34_3>
-    <Chassis_Ch22_113>	38	</Chassis_Ch22_113>
-    <Chassis_Ch23_112>	40	</Chassis_Ch23_112>
-    <Chassis_Ch24_Type64>	41	</Chassis_Ch24_Type64>
-    <Chassis_Ch26_59_Patton>	42	</Chassis_Ch26_59_Patton>
-    <Chassis_Ch25_121_mod_1971B>	43	</Chassis_Ch25_121_mod_1971B>
-    <Chassis_Ch03_WZ_111_A>	45	</Chassis_Ch03_WZ_111_A>
-    <Chassis_Ch28_WZ_132A>	46	</Chassis_Ch28_WZ_132A>
-    <Chassis_Ch28_WZ_132A_2>	47	</Chassis_Ch28_WZ_132A_2>
-    <Chassis_Ch29_Type_62C_prot>	48	</Chassis_Ch29_Type_62C_prot>
-    <Chassis_Ch39_WZ120_1G_FT>	49	</Chassis_Ch39_WZ120_1G_FT>
-    <Chassis_Ch40_WZ120G_FT>	50	</Chassis_Ch40_WZ120G_FT>
-    <Chassis_Ch41_WZ_111_5A>	51	</Chassis_Ch41_WZ_111_5A>
-    <Chassis_Ch30_T-26G_FT>	52	</Chassis_Ch30_T-26G_FT>
-    <Chassis_Ch30_T-26G_FT_2>	53	</Chassis_Ch30_T-26G_FT_2>
-    <Chassis_Ch31_M3G_FT>	54	</Chassis_Ch31_M3G_FT>
-    <Chassis_Ch31_M3G_FT_2>	55	</Chassis_Ch31_M3G_FT_2>
-    <Chassis_Ch32_SU-76G_FT>	56	</Chassis_Ch32_SU-76G_FT>
-    <Chassis_Ch32_SU-76G_FT_2>	57	</Chassis_Ch32_SU-76G_FT_2>
-    <Chassis_Ch33_60G_FT>	58	</Chassis_Ch33_60G_FT>
-    <Chassis_Ch33_60G_FT_2>	59	</Chassis_Ch33_60G_FT_2>
-    <Chassis_Ch34_WZ131G_FT>	60	</Chassis_Ch34_WZ131G_FT>
-    <Chassis_Ch34_WZ131G_FT_2>	61	</Chassis_Ch34_WZ131G_FT_2>
-    <Chassis_Ch35_T-34-2G_FT>	62	</Chassis_Ch35_T-34-2G_FT>
-    <Chassis_Ch35_T-34-2G_FT_2>	63	</Chassis_Ch35_T-34-2G_FT_2>
-    <Chassis_Ch36_WZ111_1G_FT>	64	</Chassis_Ch36_WZ111_1G_FT>
-    <Chassis_Ch36_WZ111_1G_FT_2>	65	</Chassis_Ch36_WZ111_1G_FT_2>
-    <Chassis_Ch37_WZ111G_FT>	66	</Chassis_Ch37_WZ111G_FT>
-    <Chassis_Ch37_WZ111G_FT_2>	67	</Chassis_Ch37_WZ111G_FT_2>
-    <Chassis_Ch38_WZ113G_FT>	68	</Chassis_Ch38_WZ113G_FT>
-    <Chassis_Ch22_113P>	69	</Chassis_Ch22_113P>
-    <Chassis_Ch22_113_Beijing_Opera>	70	</Chassis_Ch22_113_Beijing_Opera>
-    <Chassis_Ch41_WZ_111_QL>	71	</Chassis_Ch41_WZ_111_QL>
-    <Chassis_Ch42_WalkerBulldog_M41D>	72	</Chassis_Ch42_WalkerBulldog_M41D>
-    <Chassis_Ch23_112_FL>	73	</Chassis_Ch23_112_FL>
-    <Chassis_Ch43_WZ_122_2>	75	</Chassis_Ch43_WZ_122_2>
-    <Chassis_Ch39_WZ120_1G_FT_FL>	74	</Chassis_Ch39_WZ120_1G_FT_FL>
-    <Chassis_Ch41_WZ_111_5A_7x7>	76	</Chassis_Ch41_WZ_111_5A_7x7>
-    <Chassis_Ch44_114_SP3>	77	</Chassis_Ch44_114_SP3>
-    <Chassis_Ch46_113_140>	81	</Chassis_Ch46_113_140>
-    <Chassis_Ch45_WZ_114>	83	</Chassis_Ch45_WZ_114>
-    <Chassis_Ch47_BZ_176_1>	84	</Chassis_Ch47_BZ_176_1>
-    <Chassis_Ch53_T_26_China>	85	</Chassis_Ch53_T_26_China>
-    <Chassis_Ch48_BZ_75>	87	</Chassis_Ch48_BZ_75>
-    <Chassis_Ch49_BZ_68>	88	</Chassis_Ch49_BZ_68>
-    <Chassis_Ch49_BZ_68_2>	89	</Chassis_Ch49_BZ_68_2>
-    <Chassis_Ch50_BZ_166>	90	</Chassis_Ch50_BZ_166>
-    <Chassis_Ch50_BZ_166_2>	91	</Chassis_Ch50_BZ_166_2>
-    <Chassis_Ch51_BZ_58>	92	</Chassis_Ch51_BZ_58>
-    <Chassis_Ch51_BZ_58_2>	93	</Chassis_Ch51_BZ_58_2>
-    <Chassis_Ch52_WZ_122_6_F3>	94	</Chassis_Ch52_WZ_122_6_F3>
-    <Chassis_Ch56_BZ_74_1>	95	</Chassis_Ch56_BZ_74_1>
-    <Chassis_Ch58_111_Vz51>	96	</Chassis_Ch58_111_Vz51>
-    <Chassis_Ch25_121_mod_1971B_MK>	97	</Chassis_Ch25_121_mod_1971B_MK>
-    <Chassis_Ch59_BZ58_2>	100	</Chassis_Ch59_BZ58_2>
-    <Chassis_Ch57_BZT_70>	101	</Chassis_Ch57_BZT_70>
-    <Chassis_Ch60_Vickers_TypeB>	102	</Chassis_Ch60_Vickers_TypeB>
-    <Chassis_Ch12_111_1_2_3_2_FL>	501	</Chassis_Ch12_111_1_2_3_2_FL>
-    <Chassis_Ch17_WZ131_1_WZ132_2_FL>	502	</Chassis_Ch17_WZ131_1_WZ132_2_FL>
-    <Chassis_Ch48_BZ_75_7x7>	503	</Chassis_Ch48_BZ_75_7x7>
-    <Chassis_Ch17_WZ131_1_WZ132_2_IGR>	60001	</Chassis_Ch17_WZ131_1_WZ132_2_IGR>
-    <Chassis_Ch11_110_2_IGR>	60002	</Chassis_Ch11_110_2_IGR>
-    <Chassis_Ch19_121_IGR>	60003	</Chassis_Ch19_121_IGR>
-    <Chassis_01_Ch24_Type64_SH>	61000	</Chassis_01_Ch24_Type64_SH>
-    <Chassis_02_Ch02_Type62_SH>	61001	</Chassis_02_Ch02_Type62_SH>
-    <Chassis_03_Ch33_60G_FT_SH>	61002	</Chassis_03_Ch33_60G_FT_SH>
-    <Chassis_Ch00_ClingeBot_SH>	61003	</Chassis_Ch00_ClingeBot_SH>
-    <Chassis_Ch41_WZ_111_TEST>	21003	</Chassis_Ch41_WZ_111_TEST>
-    <Chassis_Ch73_GPT_75_T>	31013	</Chassis_Ch73_GPT_75_T>
-    <Chassis_Ch71_GPT_166_2_T>	31014	</Chassis_Ch71_GPT_166_2_T>
-    <Chassis_Ch41_WZ_111_MT>	31003	</Chassis_Ch41_WZ_111_MT>
-    <Chassis_Ch19_121_7x7>	31004	</Chassis_Ch19_121_7x7>
-    <Chassis_Ch38_WZ113G_FT_7x7>	31005	</Chassis_Ch38_WZ113G_FT_7x7>
-    <Chassis_Ch70_GPT_58>	31006	</Chassis_Ch70_GPT_58>
-    <Chassis_Ch70_GPT_58_2>	31007	</Chassis_Ch70_GPT_58_2>
-    <Chassis_Ch73_GPT_75>	31008	</Chassis_Ch73_GPT_75>
-    <Chassis_Ch71_GPT_166_1>	31009	</Chassis_Ch71_GPT_166_1>
-    <Chassis_Ch71_GPT_166_2>	31010	</Chassis_Ch71_GPT_166_2>
-    <Chassis_Ch72_GPT_68_1>	31011	</Chassis_Ch72_GPT_68_1>
-    <Chassis_Ch72_GPT_68_2>	31012	</Chassis_Ch72_GPT_68_2>
-    <Chassis_Ch22_113_T>	31015	</Chassis_Ch22_113_T>
-    <Chassis_Ch74_WZ_57_I>	31016	</Chassis_Ch74_WZ_57_I>
-    <Chassis_Ch61_DZT_159>	31017	</Chassis_Ch61_DZT_159>
-    <Chassis_Ch41_WZ_111_5A_bob>	31018	</Chassis_Ch41_WZ_111_5A_bob>
-    <Chassis_Ch63_STT_617Q>	31019	</Chassis_Ch63_STT_617Q>
-    <Chassis_Ch62_ZZT_58>	31020	</Chassis_Ch62_ZZT_58>
-    <Chassis_Ch76_HSD_1>	31021	</Chassis_Ch76_HSD_1>
-    <Chassis_Ch57_BZT_70_T>	35001	</Chassis_Ch57_BZT_70_T>
-  </ids>
-  <shared></shared>
+  <xmlns:xmlref>	http://bwt/xmlref	</xmlns:xmlref>
+  <shared>
+    <Chassis_01_Ch24_Type64_SH>
+      <id>	61000	</id>
+    </Chassis_01_Ch24_Type64_SH>
+    <Chassis_02_Ch02_Type62_SH>
+      <id>	61001	</id>
+    </Chassis_02_Ch02_Type62_SH>
+    <Chassis_03_Ch33_60G_FT_SH>
+      <id>	61002	</id>
+    </Chassis_03_Ch33_60G_FT_SH>
+    <Chassis_Ch00_ClingeBot_SH>
+      <id>	61003	</id>
+    </Chassis_Ch00_ClingeBot_SH>
+    <Chassis_Ch01_Type59_2>
+      <id>	0	</id>
+    </Chassis_Ch01_Type59_2>
+    <Chassis_Ch01_Type59_gold>
+      <id>	2	</id>
+    </Chassis_Ch01_Type59_gold>
+    <Chassis_Ch02_Type62>
+      <id>	1	</id>
+    </Chassis_Ch02_Type62>
+    <Chassis_Ch03_WZ-111>
+      <id>	3	</id>
+    </Chassis_Ch03_WZ-111>
+    <Chassis_Ch03_WZ_111_A>
+      <id>	45	</id>
+    </Chassis_Ch03_WZ_111_A>
+    <Chassis_Ch04_T34_1>
+      <id>	4	</id>
+    </Chassis_Ch04_T34_1>
+    <Chassis_Ch04_T34_1_2>
+      <id>	5	</id>
+    </Chassis_Ch04_T34_1_2>
+    <Chassis_Ch05_T34_2>
+      <id>	8	</id>
+    </Chassis_Ch05_T34_2>
+    <Chassis_Ch05_T34_2_2>
+      <id>	9	</id>
+    </Chassis_Ch05_T34_2_2>
+    <Chassis_Ch06_Renault_NC31>
+      <id>	6	</id>
+    </Chassis_Ch06_Renault_NC31>
+    <Chassis_Ch06_Renault_NC31_2>
+      <id>	7	</id>
+    </Chassis_Ch06_Renault_NC31_2>
+    <Chassis_Ch07_Vickers_MkE_Type_BT26>
+      <id>	14	</id>
+    </Chassis_Ch07_Vickers_MkE_Type_BT26>
+    <Chassis_Ch07_Vickers_MkE_Type_BT26_2>
+      <id>	15	</id>
+    </Chassis_Ch07_Vickers_MkE_Type_BT26_2>
+    <Chassis_Ch08_Type97_Chi_Ha>
+      <id>	29	</id>
+    </Chassis_Ch08_Type97_Chi_Ha>
+    <Chassis_Ch08_Type97_Chi_Ha_2>
+      <id>	30	</id>
+    </Chassis_Ch08_Type97_Chi_Ha_2>
+    <Chassis_Ch09_M5>
+      <id>	19	</id>
+    </Chassis_Ch09_M5>
+    <Chassis_Ch09_M5_2>
+      <id>	20	</id>
+    </Chassis_Ch09_M5_2>
+    <Chassis_Ch10_IS2>
+      <id>	23	</id>
+    </Chassis_Ch10_IS2>
+    <Chassis_Ch10_IS2_2>
+      <id>	24	</id>
+    </Chassis_Ch10_IS2_2>
+    <Chassis_Ch11_110>
+      <id>	17	</id>
+    </Chassis_Ch11_110>
+    <Chassis_Ch11_110_2>
+      <id>	18	</id>
+    </Chassis_Ch11_110_2>
+    <Chassis_Ch11_110_2_IGR>
+      <id>	60002	</id>
+    </Chassis_Ch11_110_2_IGR>
+    <Chassis_Ch12_111_1_2_3>
+      <id>	12	</id>
+    </Chassis_Ch12_111_1_2_3>
+    <Chassis_Ch12_111_1_2_3_2>
+      <id>	13	</id>
+    </Chassis_Ch12_111_1_2_3_2>
+    <Chassis_Ch12_111_1_2_3_2_FL>
+      <id>	501	</id>
+    </Chassis_Ch12_111_1_2_3_2_FL>
+    <Chassis_Ch14_T34_3>
+      <id>	37	</id>
+    </Chassis_Ch14_T34_3>
+    <Chassis_Ch15_59_16>
+      <id>	33	</id>
+    </Chassis_Ch15_59_16>
+    <Chassis_Ch15_59_16_2>
+      <id>	34	</id>
+    </Chassis_Ch15_59_16_2>
+    <Chassis_Ch16_WZ_131>
+      <id>	21	</id>
+    </Chassis_Ch16_WZ_131>
+    <Chassis_Ch16_WZ_131_2>
+      <id>	22	</id>
+    </Chassis_Ch16_WZ_131_2>
+    <Chassis_Ch17_WZ131_1_WZ132>
+      <id>	25	</id>
+    </Chassis_Ch17_WZ131_1_WZ132>
+    <Chassis_Ch17_WZ131_1_WZ132_2>
+      <id>	26	</id>
+    </Chassis_Ch17_WZ131_1_WZ132_2>
+    <Chassis_Ch17_WZ131_1_WZ132_2_FL>
+      <id>	502	</id>
+    </Chassis_Ch17_WZ131_1_WZ132_2_FL>
+    <Chassis_Ch17_WZ131_1_WZ132_2_IGR>
+      <id>	60001	</id>
+    </Chassis_Ch17_WZ131_1_WZ132_2_IGR>
+    <Chassis_Ch18_WZ-120>
+      <id>	10	</id>
+    </Chassis_Ch18_WZ-120>
+    <Chassis_Ch18_WZ-120_2>
+      <id>	11	</id>
+    </Chassis_Ch18_WZ-120_2>
+    <Chassis_Ch19_121>
+      <id>	27	</id>
+    </Chassis_Ch19_121>
+    <Chassis_Ch19_121_7x7>
+      <id>	31004	</id>
+    </Chassis_Ch19_121_7x7>
+    <Chassis_Ch19_121_IGR>
+      <id>	60003	</id>
+    </Chassis_Ch19_121_IGR>
+    <Chassis_Ch20_Type58>
+      <id>	35	</id>
+    </Chassis_Ch20_Type58>
+    <Chassis_Ch20_Type58_2>
+      <id>	36	</id>
+    </Chassis_Ch20_Type58_2>
+    <Chassis_Ch21_T34>
+      <id>	31	</id>
+    </Chassis_Ch21_T34>
+    <Chassis_Ch21_T34_2>
+      <id>	32	</id>
+    </Chassis_Ch21_T34_2>
+    <Chassis_Ch22_113>
+      <id>	38	</id>
+    </Chassis_Ch22_113>
+    <Chassis_Ch22_113P>
+      <id>	69	</id>
+    </Chassis_Ch22_113P>
+    <Chassis_Ch22_113_Beijing_Opera>
+      <id>	70	</id>
+    </Chassis_Ch22_113_Beijing_Opera>
+    <Chassis_Ch22_113_T>
+      <id>	31015	</id>
+    </Chassis_Ch22_113_T>
+    <Chassis_Ch23_112>
+      <id>	40	</id>
+    </Chassis_Ch23_112>
+    <Chassis_Ch23_112_FL>
+      <id>	73	</id>
+    </Chassis_Ch23_112_FL>
+    <Chassis_Ch24_Type64>
+      <id>	41	</id>
+    </Chassis_Ch24_Type64>
+    <Chassis_Ch25_121_mod_1971B>
+      <id>	43	</id>
+    </Chassis_Ch25_121_mod_1971B>
+    <Chassis_Ch25_121_mod_1971B_MK>
+      <id>	97	</id>
+    </Chassis_Ch25_121_mod_1971B_MK>
+    <Chassis_Ch26_59_Patton>
+      <id>	42	</id>
+    </Chassis_Ch26_59_Patton>
+    <Chassis_Ch28_WZ_132A>
+      <id>	46	</id>
+    </Chassis_Ch28_WZ_132A>
+    <Chassis_Ch28_WZ_132A_2>
+      <id>	47	</id>
+    </Chassis_Ch28_WZ_132A_2>
+    <Chassis_Ch29_Type_62C_prot>
+      <id>	48	</id>
+    </Chassis_Ch29_Type_62C_prot>
+    <Chassis_Ch30_T-26G_FT>
+      <id>	52	</id>
+    </Chassis_Ch30_T-26G_FT>
+    <Chassis_Ch30_T-26G_FT_2>
+      <id>	53	</id>
+    </Chassis_Ch30_T-26G_FT_2>
+    <Chassis_Ch31_M3G_FT>
+      <id>	54	</id>
+    </Chassis_Ch31_M3G_FT>
+    <Chassis_Ch31_M3G_FT_2>
+      <id>	55	</id>
+    </Chassis_Ch31_M3G_FT_2>
+    <Chassis_Ch32_SU-76G_FT>
+      <id>	56	</id>
+    </Chassis_Ch32_SU-76G_FT>
+    <Chassis_Ch32_SU-76G_FT_2>
+      <id>	57	</id>
+    </Chassis_Ch32_SU-76G_FT_2>
+    <Chassis_Ch33_60G_FT>
+      <id>	58	</id>
+    </Chassis_Ch33_60G_FT>
+    <Chassis_Ch33_60G_FT_2>
+      <id>	59	</id>
+    </Chassis_Ch33_60G_FT_2>
+    <Chassis_Ch34_WZ131G_FT>
+      <id>	60	</id>
+    </Chassis_Ch34_WZ131G_FT>
+    <Chassis_Ch34_WZ131G_FT_2>
+      <id>	61	</id>
+    </Chassis_Ch34_WZ131G_FT_2>
+    <Chassis_Ch35_T-34-2G_FT>
+      <id>	62	</id>
+    </Chassis_Ch35_T-34-2G_FT>
+    <Chassis_Ch35_T-34-2G_FT_2>
+      <id>	63	</id>
+    </Chassis_Ch35_T-34-2G_FT_2>
+    <Chassis_Ch36_WZ111_1G_FT>
+      <id>	64	</id>
+    </Chassis_Ch36_WZ111_1G_FT>
+    <Chassis_Ch36_WZ111_1G_FT_2>
+      <id>	65	</id>
+    </Chassis_Ch36_WZ111_1G_FT_2>
+    <Chassis_Ch37_WZ111G_FT>
+      <id>	66	</id>
+    </Chassis_Ch37_WZ111G_FT>
+    <Chassis_Ch37_WZ111G_FT_2>
+      <id>	67	</id>
+    </Chassis_Ch37_WZ111G_FT_2>
+    <Chassis_Ch38_WZ113G_FT>
+      <id>	68	</id>
+    </Chassis_Ch38_WZ113G_FT>
+    <Chassis_Ch38_WZ113G_FT_7x7>
+      <id>	31005	</id>
+    </Chassis_Ch38_WZ113G_FT_7x7>
+    <Chassis_Ch39_WZ120_1G_FT>
+      <id>	49	</id>
+    </Chassis_Ch39_WZ120_1G_FT>
+    <Chassis_Ch39_WZ120_1G_FT_FL>
+      <id>	74	</id>
+    </Chassis_Ch39_WZ120_1G_FT_FL>
+    <Chassis_Ch40_WZ120G_FT>
+      <id>	50	</id>
+    </Chassis_Ch40_WZ120G_FT>
+    <Chassis_Ch41_WZ_111_5A>
+      <id>	51	</id>
+    </Chassis_Ch41_WZ_111_5A>
+    <Chassis_Ch41_WZ_111_5A_7x7>
+      <id>	76	</id>
+    </Chassis_Ch41_WZ_111_5A_7x7>
+    <Chassis_Ch41_WZ_111_5A_bob>
+      <id>	31018	</id>
+    </Chassis_Ch41_WZ_111_5A_bob>
+    <Chassis_Ch41_WZ_111_MT>
+      <id>	31003	</id>
+    </Chassis_Ch41_WZ_111_MT>
+    <Chassis_Ch41_WZ_111_QL>
+      <id>	71	</id>
+    </Chassis_Ch41_WZ_111_QL>
+    <Chassis_Ch41_WZ_111_TEST>
+      <id>	21003	</id>
+    </Chassis_Ch41_WZ_111_TEST>
+    <Chassis_Ch42_WalkerBulldog_M41D>
+      <id>	72	</id>
+    </Chassis_Ch42_WalkerBulldog_M41D>
+    <Chassis_Ch43_WZ_122_2>
+      <id>	75	</id>
+    </Chassis_Ch43_WZ_122_2>
+    <Chassis_Ch44_114_SP3>
+      <id>	77	</id>
+    </Chassis_Ch44_114_SP3>
+    <Chassis_Ch45_WZ_114>
+      <id>	83	</id>
+    </Chassis_Ch45_WZ_114>
+    <Chassis_Ch46_113_140>
+      <id>	81	</id>
+    </Chassis_Ch46_113_140>
+    <Chassis_Ch47_BZ_176_1>
+      <id>	84	</id>
+    </Chassis_Ch47_BZ_176_1>
+    <Chassis_Ch48_BZ_75>
+      <id>	87	</id>
+    </Chassis_Ch48_BZ_75>
+    <Chassis_Ch48_BZ_75_7x7>
+      <id>	503	</id>
+    </Chassis_Ch48_BZ_75_7x7>
+    <Chassis_Ch49_BZ_68>
+      <id>	88	</id>
+    </Chassis_Ch49_BZ_68>
+    <Chassis_Ch49_BZ_68_2>
+      <id>	89	</id>
+    </Chassis_Ch49_BZ_68_2>
+    <Chassis_Ch50_BZ_166>
+      <id>	90	</id>
+    </Chassis_Ch50_BZ_166>
+    <Chassis_Ch50_BZ_166_2>
+      <id>	91	</id>
+    </Chassis_Ch50_BZ_166_2>
+    <Chassis_Ch51_BZ_58>
+      <id>	92	</id>
+    </Chassis_Ch51_BZ_58>
+    <Chassis_Ch51_BZ_58_2>
+      <id>	93	</id>
+    </Chassis_Ch51_BZ_58_2>
+    <Chassis_Ch52_WZ_122_6_F3>
+      <id>	94	</id>
+    </Chassis_Ch52_WZ_122_6_F3>
+    <Chassis_Ch53_T_26_China>
+      <id>	85	</id>
+    </Chassis_Ch53_T_26_China>
+    <Chassis_Ch56_BZ_74_1>
+      <id>	95	</id>
+    </Chassis_Ch56_BZ_74_1>
+    <Chassis_Ch57_BZT_70>
+      <id>	101	</id>
+    </Chassis_Ch57_BZT_70>
+    <Chassis_Ch57_BZT_70_T>
+      <id>	35001	</id>
+    </Chassis_Ch57_BZT_70_T>
+    <Chassis_Ch58_111_Vz51>
+      <id>	96	</id>
+    </Chassis_Ch58_111_Vz51>
+    <Chassis_Ch59_BZ58_2>
+      <id>	100	</id>
+    </Chassis_Ch59_BZ58_2>
+    <Chassis_Ch60_Vickers_TypeB>
+      <id>	102	</id>
+    </Chassis_Ch60_Vickers_TypeB>
+    <Chassis_Ch61_DZT_159>
+      <id>	31017	</id>
+    </Chassis_Ch61_DZT_159>
+    <Chassis_Ch62_ZZT_58>
+      <id>	31020	</id>
+    </Chassis_Ch62_ZZT_58>
+    <Chassis_Ch63_STT_617Q>
+      <id>	31019	</id>
+    </Chassis_Ch63_STT_617Q>
+    <Chassis_Ch70_GPT_58>
+      <id>	31006	</id>
+    </Chassis_Ch70_GPT_58>
+    <Chassis_Ch70_GPT_58_2>
+      <id>	31007	</id>
+    </Chassis_Ch70_GPT_58_2>
+    <Chassis_Ch71_GPT_166_1>
+      <id>	31009	</id>
+    </Chassis_Ch71_GPT_166_1>
+    <Chassis_Ch71_GPT_166_2>
+      <id>	31010	</id>
+    </Chassis_Ch71_GPT_166_2>
+    <Chassis_Ch71_GPT_166_2_T>
+      <id>	31014	</id>
+    </Chassis_Ch71_GPT_166_2_T>
+    <Chassis_Ch72_GPT_68_1>
+      <id>	31011	</id>
+    </Chassis_Ch72_GPT_68_1>
+    <Chassis_Ch72_GPT_68_2>
+      <id>	31012	</id>
+    </Chassis_Ch72_GPT_68_2>
+    <Chassis_Ch73_GPT_75>
+      <id>	31008	</id>
+    </Chassis_Ch73_GPT_75>
+    <Chassis_Ch73_GPT_75_T>
+      <id>	31013	</id>
+    </Chassis_Ch73_GPT_75_T>
+    <Chassis_Ch74_WZ_57_I>
+      <id>	31016	</id>
+    </Chassis_Ch74_WZ_57_I>
+    <Chassis_Ch76_HSD_1>
+      <id>	31021	</id>
+    </Chassis_Ch76_HSD_1>
+  </shared>
 </chassis.xml>

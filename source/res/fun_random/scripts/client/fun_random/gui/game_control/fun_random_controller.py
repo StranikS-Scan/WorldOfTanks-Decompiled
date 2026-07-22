@@ -112,7 +112,7 @@ class FunRandomController(IFunRandomController, IGlobalListener):
     def getAssetsPointer(self):
         return self.__funRandomSettings.assetsPointer
 
-    def isFunRandomModifiersVisibleSBySubModeID(self, supModeID):
+    def isFunRandomModifiersVisibleBySubModeID(self, supModeID):
         subModeConfig = self.__funRandomSettings.subModes.get(supModeID)
         return False if subModeConfig is None else subModeConfig.isFunRandomMapsVisible
 

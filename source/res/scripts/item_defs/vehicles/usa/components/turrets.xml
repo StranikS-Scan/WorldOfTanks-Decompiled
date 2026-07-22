@@ -1,230 +1,683 @@
 <turrets.xml>
-  <ids>
-    <T-14>	0	</T-14>
-    <D37812>	1	</D37812>
-    <D39273>	2	</D39273>
-    <Cunningham_D2>	4	</Cunningham_D2>
-    <T2D1>	5	</T2D1>
-    <Cunningham_D1>	3	</Cunningham_D1>
-    <M6D1>	6	</M6D1>
-    <M6D2>	7	</M6D2>
-    <D51066>	8	</D51066>
-    <D51072>	9	</D51072>
-    <D51074>	10	</D51074>
-    <D51080>	11	</D51080>
-    <T20D1>	12	</T20D1>
-    <T20D2>	13	</T20D2>
-    <M2D27810>	14	</M2D27810>
-    <M2D27812>	15	</M2D27812>
-    <T51D1>	16	</T51D1>
-    <T23T80>	17	</T23T80>
-    <Ram_II_D1>	19	</Ram_II_D1>
-    <T30D1>	20	</T30D1>
-    <T34T7>	22	</T34T7>
-    <T1D5>	25	</T1D5>
-    <T1D6>	26	</T1D6>
-    <M7D1>	27	</M7D1>
-    <T123>	28	</T123>
-    <T136>	29	</T136>
-    <M14>	30	</M14>
-    <T99E2>	31	</T99E2>
-    <T119>	32	</T119>
-    <M37D1>	33	</M37D1>
-    <M2M19>	34	</M2M19>
-    <M2M7>	35	</M2M7>
-    <MTLS_D1>	36	</MTLS_D1>
-    <M3_S>	37	</M3_S>
-    <M44>	38	</M44>
-    <M7>	39	</M7>
-    <M24A1>	40	</M24A1>
-    <M47>	41	</M47>
-    <T2T1>	42	</T2T1>
-    <T2T2>	43	</T2T2>
-    <Turret_1_Pershing>	44	</Turret_1_Pershing>
-    <Turret_2_Pershing>	45	</Turret_2_Pershing>
-    <T18T47>	46	</T18T47>
-    <Turret_1_M10_Wolverine>	49	</Turret_1_M10_Wolverine>
-    <Turret_2_M10_Wolverine>	50	</Turret_2_M10_Wolverine>
-    <Turret_1_M4A2E4>	51	</Turret_1_M4A2E4>
-    <Turret_1_M36_Slagger_4>	52	</Turret_1_M36_Slagger_4>
-    <Turret_2_M36_Slagger_4>	53	</Turret_2_M36_Slagger_4>
-    <Turret_1_M40M43>	54	</Turret_1_M40M43>
-    <Turret_1_T40>	55	</Turret_1_T40>
-    <Turret_1_M12>	56	</Turret_1_M12>
-    <Turret_1_T28>	57	</Turret_1_T28>
-    <Turret_1_T92>	58	</Turret_1_T92>
-    <Turret_1_T95>	59	</Turret_1_T95>
-    <Turret_1_M6A2E1>	60	</Turret_1_M6A2E1>
-    <Turret_1_M22_Locust>	61	</Turret_1_M22_Locust>
-    <Turret_1_M46_Patton>	62	</Turret_1_M46_Patton>
-    <Turret_2_M46_Patton>	63	</Turret_2_M46_Patton>
-    <Turret_1_T25_AT>	64	</Turret_1_T25_AT>
-    <Turret_1_M103>	65	</Turret_1_M103>
-    <Turret_2_M103>	66	</Turret_2_M103>
-    <Turret_1_M24_Chaffee>	67	</Turret_1_M24_Chaffee>
-    <Turret_2_M24_Chaffee>	68	</Turret_2_M24_Chaffee>
-    <Turret_1_Sherman_Jumbo>	69	</Turret_1_Sherman_Jumbo>
-    <Turret_2_Sherman_Jumbo>	70	</Turret_2_Sherman_Jumbo>
-    <Turret_1_M8A1>	71	</Turret_1_M8A1>
-    <Turret_2_M8A1>	72	</Turret_2_M8A1>
-    <Turret_1_T49>	73	</Turret_1_T49>
-    <Turret_2_T49>	74	</Turret_2_T49>
-    <Turret_2_T110>	75	</Turret_2_T110>
-    <Turret_1_T25_2>	76	</Turret_1_T25_2>
-    <Turret_2_T25_2>	77	</Turret_2_T25_2>
-    <Turret_1_T28_Prototype>	78	</Turret_1_T28_Prototype>
-    <Turret_1_M18_Hellcat>	79	</Turret_1_M18_Hellcat>
-    <Turret_2_M18_Hellcat>	80	</Turret_2_M18_Hellcat>
-    <M62T80>	81	</M62T80>
-    <Turret_1_M4_Improved>	86	</Turret_1_M4_Improved>
-    <Turret_1_T110E4>	88	</Turret_1_T110E4>
-    <Turret_1_T26_E4_SuperPershing>	89	</Turret_1_T26_E4_SuperPershing>
-    <Turret_1_T110E3>	91	</Turret_1_T110E3>
-    <Turret_1_T1_E6>	92	</Turret_1_T1_E6>
-    <Turret_1_A120_M48A5>	93	</Turret_1_A120_M48A5>
-    <Turret_1_T95_E2>	94	</Turret_1_T95_E2>
-    <Turret_1_T69>	96	</Turret_1_T69>
-    <Turret_1_T57_58>	97	</Turret_1_T57_58>
-    <Turret_2_T21>	99	</Turret_2_T21>
-    <Turret_1_T54E1>	100	</Turret_1_T54E1>
-    <Turret_1_T71>	101	</Turret_1_T71>
-    <Turret_1_M60>	105	</Turret_1_M60>
-    <Turret_1_M53_55>	107	</Turret_1_M53_55>
-    <Turret_1_M44>	108	</Turret_1_M44>
-    <Turret_1_T7_Combat_Car>	109	</Turret_1_T7_Combat_Car>
-    <Turret_1_T37>	111	</Turret_1_T37>
-    <Turret_2_T37>	112	</Turret_2_T37>
-    <Turret_1_T95_E6>	116	</Turret_1_T95_E6>
-    <Turret_1_M41_Bulldog>	121	</Turret_1_M41_Bulldog>
-    <Turret_2_M41_Bulldog>	122	</Turret_2_M41_Bulldog>
-    <Turret_1_A104_M4A3E8A>	123	</Turret_1_A104_M4A3E8A>
-    <Turret_1_A100_T49>	124	</Turret_1_A100_T49>
-    <Turret_2_A100_T49>	125	</Turret_2_A100_T49>
-    <Turret_1_A101_M56>	127	</Turret_1_A101_M56>
-    <Turret_1_A102_T28_concept>	128	</Turret_1_A102_T28_concept>
-    <Turret_1_A108_T18_HMC>	132	</Turret_1_A108_T18_HMC>
-    <Turret_1_A106_M48A2_120>	135	</Turret_1_A106_M48A2_120>
-    <Turret_1_A109_T56_GMC>	133	</Turret_1_A109_T56_GMC>
-    <Turret_2_A109_T56_GMC>	134	</Turret_2_A109_T56_GMC>
-    <Turret_1_A46_T3>	139	</Turret_1_A46_T3>
-    <Turret_2_A46_T3>	140	</Turret_2_A46_T3>
-    <Turret_3_A46_T3>	141	</Turret_3_A46_T3>
-    <Turret_1_A27_T82>	142	</Turret_1_A27_T82>
-    <Turret_2_A27_T82>	143	</Turret_2_A27_T82>
-    <Turret_1_A107_T1_HMC>	144	</Turret_1_A107_T1_HMC>
-    <Turret_2_M44>	145	</Turret_2_M44>
-    <Turret_1_M46_Patton_KR>	146	</Turret_1_M46_Patton_KR>
-    <Turret_1_A111_T25_Pilot>	147	</Turret_1_A111_T25_Pilot>
-    <Turret_1_A112_T71E2>	148	</Turret_1_A112_T71E2>
-    <Turret_1_A99_T92_LT>	149	</Turret_1_A99_T92_LT>
-    <Turret_1_A115_Chrysler_K_GF>	152	</Turret_1_A115_Chrysler_K_GF>
-    <Turret_1_A117_T26E5>	153	</Turret_1_A117_T26E5>
-    <Turret_1_A117_T26E5_Patriot>	154	</Turret_1_A117_T26E5_Patriot>
-    <T34T7_BF>	155	</T34T7_BF>
-    <Turret_1_A116_XM551>	156	</Turret_1_A116_XM551>
-    <Turret_1_A118_M4_Thunderbolt>	157	</Turret_1_A118_M4_Thunderbolt>
-    <Turret_2_M12>	158	</Turret_2_M12>
-    <Turret_1_A112_T71E2R>	159	</Turret_1_A112_T71E2R>
-    <Turret_1_A121_M26_Cologne>	163	</Turret_1_A121_M26_Cologne>
-    <Turret_1_A115_Chrysler_K>	164	</Turret_1_A115_Chrysler_K>
-    <Turret_1_A122_TS-5>	165	</Turret_1_A122_TS-5>
-    <T34T7_FL>	166	</T34T7_FL>
-    <Turret_1_T26_E4_SuperPershing_FL>	167	</Turret_1_T26_E4_SuperPershing_FL>
-    <Turret_1_A123_T78>	168	</Turret_1_A123_T78>
-    <Turret_1_A126_PzVI_Tiger_II_capt>	169	</Turret_1_A126_PzVI_Tiger_II_capt>
-    <Turret_1_A125_AEP_1>	170	</Turret_1_A125_AEP_1>
-    <Turret_1_A124_T54E2>	172	</Turret_1_A124_T54E2>
-    <Turret_1_A127_TL_1_LPC>	173	</Turret_1_A127_TL_1_LPC>
-    <Turret_A130_Super_Hellcat>	174	</Turret_A130_Super_Hellcat>
-    <Turret_1_A129_T6_medium>	175	</Turret_1_A129_T6_medium>
-    <Turret_2_A129_T6_medium>	176	</Turret_2_A129_T6_medium>
-    <Turret_1_A128_concept_1b>	177	</Turret_1_A128_concept_1b>
-    <Turret_1_A117_T26E5_FL>	178	</Turret_1_A117_T26E5_FL>
-    <T119_FL>	179	</T119_FL>
-    <Turret_1_A132_T77>	180	</Turret_1_A132_T77>
-    <Turret_1_A134_M24E2_SuperChaffee>	181	</Turret_1_A134_M24E2_SuperChaffee>
-    <Turret_1_A136_T42>	182	</Turret_1_A136_T42>
-    <Turret_1_A140_ASTRON_REX_105mm>	183	</Turret_1_A140_ASTRON_REX_105mm>
-    <Turret_1_A141_M_IV_Y>	184	</Turret_1_A141_M_IV_Y>
-    <Turret_1_A148_Convertible_Medium_Tank_T3>	185	</Turret_1_A148_Convertible_Medium_Tank_T3>
-    <Turret_1_A146_TL_7_120>	186	</Turret_1_A146_TL_7_120>
-    <Turret_1_A149_AMBT>	187	</Turret_1_A149_AMBT>
-    <Turret_1_A145_TS_54>	188	</Turret_1_A145_TS_54>
-    <Turret_1_A142_Pawlack_Tank>	189	</Turret_1_A142_Pawlack_Tank>
-    <Turret_2_A142_Pawlack_Tank>	190	</Turret_2_A142_Pawlack_Tank>
-    <Turret_1_A147_M_II_Y>	191	</Turret_1_A147_M_II_Y>
-    <Turret_2_A147_M_II_Y>	192	</Turret_2_A147_M_II_Y>
-    <Turret_1_A139_M_III_Y>	193	</Turret_1_A139_M_III_Y>
-    <Turret_2_A139_M_III_Y>	194	</Turret_2_A139_M_III_Y>
-    <Turret_1_A144_M_VI_Y>	195	</Turret_1_A144_M_VI_Y>
-    <Turret_2_A144_M_VI_Y>	196	</Turret_2_A144_M_VI_Y>
-    <Turret_1_A143_M_V_Y>	197	</Turret_1_A143_M_V_Y>
-    <Turret_1_A150_MBT_B>	198	</Turret_1_A150_MBT_B>
-    <Turret_1_A151_TS_60>	199	</Turret_1_A151_TS_60>
-    <Turret_1_A156_T54_2022>	200	</Turret_1_A156_T54_2022>
-    <Turret_1_A152_M_Project>	201	</Turret_1_A152_M_Project>
-    <Turret_1_A152_M_Project_2>	202	</Turret_1_A152_M_Project_2>
-    <T119_M>	203	</T119_M>
-    <Turret_1_A158_T832>	204	</Turret_1_A158_T832>
-    <Turret_1_A153_XM66F>	205	</Turret_1_A153_XM66F>
-    <Turret_1_A154_Convertible_Medium_Tank_T3E2>	206	</Turret_1_A154_Convertible_Medium_Tank_T3E2>
-    <Turret_1_A161_ARMT>	208	</Turret_1_A161_ARMT>
-    <Turret_1_T71_IGR>	60001	</Turret_1_T71_IGR>
-    <Turret_1_T69_IGR>	60002	</Turret_1_T69_IGR>
-    <T34T7_IGR>	60003	</T34T7_IGR>
-    <Turret_2_Sherman_Jumbo_IGR>	60004	</Turret_2_Sherman_Jumbo_IGR>
-    <Turret_2_T49_IGR>	60005	</Turret_2_T49_IGR>
-    <Turret_2_Pershing_IGR>	60006	</Turret_2_Pershing_IGR>
-    <T136_IGR>	60007	</T136_IGR>
-    <D51072_IGR>	60008	</D51072_IGR>
-    <Turret_1_A120_M48A5_IGR>	60009	</Turret_1_A120_M48A5_IGR>
-    <Turret_1_T20D1_SH>	345	</Turret_1_T20D1_SH>
-    <Turret_2_M46_Patton_SH>	347	</Turret_2_M46_Patton_SH>
-    <Turret_3_A120_M48A5_SH>	348	</Turret_3_A120_M48A5_SH>
-    <Turret_1_A120_M48A5_7x7>	401	</Turret_1_A120_M48A5_7x7>
-    <Turret_2_T110_cl>	402	</Turret_2_T110_cl>
-    <Turret_1_T110E4_7x7>	403	</Turret_1_T110E4_7x7>
-    <T30D1_FL>	501	</T30D1_FL>
-    <Turret_2_M46_Patton_FL>	502	</Turret_2_M46_Patton_FL>
-    <Turret_2_M41_Bulldog_FL>	503	</Turret_2_M41_Bulldog_FL>
-    <Turret_1_T28_Prototype_FL>	504	</Turret_1_T28_Prototype_FL>
-    <Turret_2_Pershing_FL>	505	</Turret_2_Pershing_FL>
-    <Turret_1_T25_AT_FL>	31002	</Turret_1_T25_AT_FL>
-    <Turret_1_Sherman_Jumbo_bootcamp>	64004	</Turret_1_Sherman_Jumbo_bootcamp>
-    <Turret_2_A129_T6_medium_MapsTraining_Dummy_MT_1>	23	</Turret_2_A129_T6_medium_MapsTraining_Dummy_MT_1>
-    <T-14_MapsTraining_Player_HT_1>	24	</T-14_MapsTraining_Player_HT_1>
-    <Turret_2_T21_MapsTraining_Dummy_LT_2>	47	</Turret_2_T21_MapsTraining_Dummy_LT_2>
-    <Turret_2_T110_7x7>	31001	</Turret_2_T110_7x7>
-    <Turret_1_A141_M_IV_Y_MT_BF>	31003	</Turret_1_A141_M_IV_Y_MT_BF>
-    <Turret_1_A160_M24_594>	31004	</Turret_1_A160_M24_594>
-    <Turret_1_A143_M_V_Y_7x7>	31005	</Turret_1_A143_M_V_Y_7x7>
-    <Turret_1_A157_M_VII_Y>	31006	</Turret_1_A157_M_VII_Y>
-    <Turret_1_A162_ATAC_II>	31007	</Turret_1_A162_ATAC_II>
-    <Turret_1_A165_XM57>	31009	</Turret_1_A165_XM57>
-    <Turret_1_A163_H_3>	31010	</Turret_1_A163_H_3>
-    <Turret_1_A169_TF_3>	31011	</Turret_1_A169_TF_3>
-    <Turret_2_A169_TF_3>	31012	</Turret_2_A169_TF_3>
-    <Turret_1_A172_ASTRON_FL>	31013	</Turret_1_A172_ASTRON_FL>
-    <Turret_1_A170_M4A3FL>	31014	</Turret_1_A170_M4A3FL>
-    <Turret_2_A170_M4A3FL>	31015	</Turret_2_A170_M4A3FL>
-    <Turret_1_A173_TF_2_CLARK>	31016	</Turret_1_A173_TF_2_CLARK>
-    <Turret_1_T57_58_T>	31017	</Turret_1_T57_58_T>
-    <Turret_1_A172_ASTRON_FL_T>	31018	</Turret_1_A172_ASTRON_FL_T>
-    <Turret_1_A163_H_3_2>	31019	</Turret_1_A163_H_3_2>
-    <Turret_1_A171_TF_4>	31020	</Turret_1_A171_TF_4>
-    <Turret_2_A171_TF_4>	31021	</Turret_2_A171_TF_4>
-    <Turret_2_A169_TF_3_T>	31022	</Turret_2_A169_TF_3_T>
-    <Turret_1_A164_TS_6>	31023	</Turret_1_A164_TS_6>
-    <Turret_1_A174_M36B1_GMC>	31024	</Turret_1_A174_M36B1_GMC>
-    <Turret_1_A175_OTAC_MT_58>	31025	</Turret_1_A175_OTAC_MT_58>
-    <M47_02>	31026	</M47_02>
-    <Turret_1_A176_OTAC_LK_7605>	31027	</Turret_1_A176_OTAC_LK_7605>
-    <Turret_1_A175_OTAC_MT_58_02>	31028	</Turret_1_A175_OTAC_MT_58_02>
-    <Turret_1_A182_ALRS_M6>	31034	</Turret_1_A182_ALRS_M6>
-    <Turret_1_A125_AEP_1_T>	31008	</Turret_1_A125_AEP_1_T>
-    <Turret_1_A150_MBT_B_T>	35001	</Turret_1_A150_MBT_B_T>
-    <Turret_1_A1001_OTAC_MT_58_T>	35002	</Turret_1_A1001_OTAC_MT_58_T>
-    <Turret_1_A179_MBT_59>	31030	</Turret_1_A179_MBT_59>
-  </ids>
-  <shared></shared>
+  <xmlns:xmlref>	http://bwt/xmlref	</xmlns:xmlref>
+  <shared>
+    <Cunningham_D1>
+      <id>	3	</id>
+    </Cunningham_D1>
+    <Cunningham_D2>
+      <id>	4	</id>
+    </Cunningham_D2>
+    <D37812>
+      <id>	1	</id>
+    </D37812>
+    <D39273>
+      <id>	2	</id>
+    </D39273>
+    <D51066>
+      <id>	8	</id>
+    </D51066>
+    <D51072>
+      <id>	9	</id>
+    </D51072>
+    <D51072_IGR>
+      <id>	60008	</id>
+    </D51072_IGR>
+    <D51074>
+      <id>	10	</id>
+    </D51074>
+    <D51080>
+      <id>	11	</id>
+    </D51080>
+    <M14>
+      <id>	30	</id>
+    </M14>
+    <M24A1>
+      <id>	40	</id>
+    </M24A1>
+    <M2D27810>
+      <id>	14	</id>
+    </M2D27810>
+    <M2D27812>
+      <id>	15	</id>
+    </M2D27812>
+    <M2M19>
+      <id>	34	</id>
+    </M2M19>
+    <M2M7>
+      <id>	35	</id>
+    </M2M7>
+    <M37D1>
+      <id>	33	</id>
+    </M37D1>
+    <M3_S>
+      <id>	37	</id>
+    </M3_S>
+    <M44>
+      <id>	38	</id>
+    </M44>
+    <M47>
+      <id>	41	</id>
+    </M47>
+    <M47_02>
+      <id>	31026	</id>
+    </M47_02>
+    <M62T80>
+      <id>	81	</id>
+    </M62T80>
+    <M6D1>
+      <id>	6	</id>
+    </M6D1>
+    <M6D2>
+      <id>	7	</id>
+    </M6D2>
+    <M7>
+      <id>	39	</id>
+    </M7>
+    <M7D1>
+      <id>	27	</id>
+    </M7D1>
+    <MTLS_D1>
+      <id>	36	</id>
+    </MTLS_D1>
+    <Ram_II_D1>
+      <id>	19	</id>
+    </Ram_II_D1>
+    <T-14>
+      <id>	0	</id>
+    </T-14>
+    <T-14_MapsTraining_Player_HT_1>
+      <id>	24	</id>
+    </T-14_MapsTraining_Player_HT_1>
+    <T119>
+      <id>	32	</id>
+    </T119>
+    <T119_FL>
+      <id>	179	</id>
+    </T119_FL>
+    <T119_M>
+      <id>	203	</id>
+    </T119_M>
+    <T123>
+      <id>	28	</id>
+    </T123>
+    <T136>
+      <id>	29	</id>
+    </T136>
+    <T136_IGR>
+      <id>	60007	</id>
+    </T136_IGR>
+    <T18T47>
+      <id>	46	</id>
+    </T18T47>
+    <T1D5>
+      <id>	25	</id>
+    </T1D5>
+    <T1D6>
+      <id>	26	</id>
+    </T1D6>
+    <T20D1>
+      <id>	12	</id>
+    </T20D1>
+    <T20D2>
+      <id>	13	</id>
+    </T20D2>
+    <T23T80>
+      <id>	17	</id>
+    </T23T80>
+    <T2D1>
+      <id>	5	</id>
+    </T2D1>
+    <T2T1>
+      <id>	42	</id>
+    </T2T1>
+    <T2T2>
+      <id>	43	</id>
+    </T2T2>
+    <T30D1>
+      <id>	20	</id>
+    </T30D1>
+    <T30D1_FL>
+      <id>	501	</id>
+    </T30D1_FL>
+    <T34T7>
+      <id>	22	</id>
+    </T34T7>
+    <T34T7_BF>
+      <id>	155	</id>
+    </T34T7_BF>
+    <T34T7_FL>
+      <id>	166	</id>
+    </T34T7_FL>
+    <T34T7_IGR>
+      <id>	60003	</id>
+    </T34T7_IGR>
+    <T51D1>
+      <id>	16	</id>
+    </T51D1>
+    <T99E2>
+      <id>	31	</id>
+    </T99E2>
+    <Turret_1_A1001_OTAC_MT_58_T>
+      <id>	35002	</id>
+    </Turret_1_A1001_OTAC_MT_58_T>
+    <Turret_1_A100_T49>
+      <id>	124	</id>
+    </Turret_1_A100_T49>
+    <Turret_1_A101_M56>
+      <id>	127	</id>
+    </Turret_1_A101_M56>
+    <Turret_1_A102_T28_concept>
+      <id>	128	</id>
+    </Turret_1_A102_T28_concept>
+    <Turret_1_A104_M4A3E8A>
+      <id>	123	</id>
+    </Turret_1_A104_M4A3E8A>
+    <Turret_1_A106_M48A2_120>
+      <id>	135	</id>
+    </Turret_1_A106_M48A2_120>
+    <Turret_1_A107_T1_HMC>
+      <id>	144	</id>
+    </Turret_1_A107_T1_HMC>
+    <Turret_1_A108_T18_HMC>
+      <id>	132	</id>
+    </Turret_1_A108_T18_HMC>
+    <Turret_1_A109_T56_GMC>
+      <id>	133	</id>
+    </Turret_1_A109_T56_GMC>
+    <Turret_1_A111_T25_Pilot>
+      <id>	147	</id>
+    </Turret_1_A111_T25_Pilot>
+    <Turret_1_A112_T71E2>
+      <id>	148	</id>
+    </Turret_1_A112_T71E2>
+    <Turret_1_A112_T71E2R>
+      <id>	159	</id>
+    </Turret_1_A112_T71E2R>
+    <Turret_1_A115_Chrysler_K>
+      <id>	164	</id>
+    </Turret_1_A115_Chrysler_K>
+    <Turret_1_A115_Chrysler_K_GF>
+      <id>	152	</id>
+    </Turret_1_A115_Chrysler_K_GF>
+    <Turret_1_A116_XM551>
+      <id>	156	</id>
+    </Turret_1_A116_XM551>
+    <Turret_1_A117_T26E5>
+      <id>	153	</id>
+    </Turret_1_A117_T26E5>
+    <Turret_1_A117_T26E5_FL>
+      <id>	178	</id>
+    </Turret_1_A117_T26E5_FL>
+    <Turret_1_A117_T26E5_Patriot>
+      <id>	154	</id>
+    </Turret_1_A117_T26E5_Patriot>
+    <Turret_1_A118_M4_Thunderbolt>
+      <id>	157	</id>
+    </Turret_1_A118_M4_Thunderbolt>
+    <Turret_1_A120_M48A5>
+      <id>	93	</id>
+    </Turret_1_A120_M48A5>
+    <Turret_1_A120_M48A5_7x7>
+      <id>	401	</id>
+    </Turret_1_A120_M48A5_7x7>
+    <Turret_1_A120_M48A5_IGR>
+      <id>	60009	</id>
+    </Turret_1_A120_M48A5_IGR>
+    <Turret_1_A121_M26_Cologne>
+      <id>	163	</id>
+    </Turret_1_A121_M26_Cologne>
+    <Turret_1_A122_TS-5>
+      <id>	165	</id>
+    </Turret_1_A122_TS-5>
+    <Turret_1_A123_T78>
+      <id>	168	</id>
+    </Turret_1_A123_T78>
+    <Turret_1_A124_T54E2>
+      <id>	172	</id>
+    </Turret_1_A124_T54E2>
+    <Turret_1_A125_AEP_1>
+      <id>	170	</id>
+    </Turret_1_A125_AEP_1>
+    <Turret_1_A125_AEP_1_T>
+      <id>	31008	</id>
+    </Turret_1_A125_AEP_1_T>
+    <Turret_1_A126_PzVI_Tiger_II_capt>
+      <id>	169	</id>
+    </Turret_1_A126_PzVI_Tiger_II_capt>
+    <Turret_1_A127_TL_1_LPC>
+      <id>	173	</id>
+    </Turret_1_A127_TL_1_LPC>
+    <Turret_1_A128_concept_1b>
+      <id>	177	</id>
+    </Turret_1_A128_concept_1b>
+    <Turret_1_A129_T6_medium>
+      <id>	175	</id>
+    </Turret_1_A129_T6_medium>
+    <Turret_1_A132_T77>
+      <id>	180	</id>
+    </Turret_1_A132_T77>
+    <Turret_1_A134_M24E2_SuperChaffee>
+      <id>	181	</id>
+    </Turret_1_A134_M24E2_SuperChaffee>
+    <Turret_1_A136_T42>
+      <id>	182	</id>
+    </Turret_1_A136_T42>
+    <Turret_1_A139_M_III_Y>
+      <id>	193	</id>
+    </Turret_1_A139_M_III_Y>
+    <Turret_1_A140_ASTRON_REX_105mm>
+      <id>	183	</id>
+    </Turret_1_A140_ASTRON_REX_105mm>
+    <Turret_1_A141_M_IV_Y>
+      <id>	184	</id>
+    </Turret_1_A141_M_IV_Y>
+    <Turret_1_A141_M_IV_Y_MT_BF>
+      <id>	31003	</id>
+    </Turret_1_A141_M_IV_Y_MT_BF>
+    <Turret_1_A142_Pawlack_Tank>
+      <id>	189	</id>
+    </Turret_1_A142_Pawlack_Tank>
+    <Turret_1_A143_M_V_Y>
+      <id>	197	</id>
+    </Turret_1_A143_M_V_Y>
+    <Turret_1_A143_M_V_Y_7x7>
+      <id>	31005	</id>
+    </Turret_1_A143_M_V_Y_7x7>
+    <Turret_1_A144_M_VI_Y>
+      <id>	195	</id>
+    </Turret_1_A144_M_VI_Y>
+    <Turret_1_A145_TS_54>
+      <id>	188	</id>
+    </Turret_1_A145_TS_54>
+    <Turret_1_A146_TL_7_120>
+      <id>	186	</id>
+    </Turret_1_A146_TL_7_120>
+    <Turret_1_A147_M_II_Y>
+      <id>	191	</id>
+    </Turret_1_A147_M_II_Y>
+    <Turret_1_A148_Convertible_Medium_Tank_T3>
+      <id>	185	</id>
+    </Turret_1_A148_Convertible_Medium_Tank_T3>
+    <Turret_1_A149_AMBT>
+      <id>	187	</id>
+    </Turret_1_A149_AMBT>
+    <Turret_1_A150_MBT_B>
+      <id>	198	</id>
+    </Turret_1_A150_MBT_B>
+    <Turret_1_A150_MBT_B_T>
+      <id>	35001	</id>
+    </Turret_1_A150_MBT_B_T>
+    <Turret_1_A151_TS_60>
+      <id>	199	</id>
+    </Turret_1_A151_TS_60>
+    <Turret_1_A152_M_Project>
+      <id>	201	</id>
+    </Turret_1_A152_M_Project>
+    <Turret_1_A152_M_Project_2>
+      <id>	202	</id>
+    </Turret_1_A152_M_Project_2>
+    <Turret_1_A153_XM66F>
+      <id>	205	</id>
+    </Turret_1_A153_XM66F>
+    <Turret_1_A154_Convertible_Medium_Tank_T3E2>
+      <id>	206	</id>
+    </Turret_1_A154_Convertible_Medium_Tank_T3E2>
+    <Turret_1_A156_T54_2022>
+      <id>	200	</id>
+    </Turret_1_A156_T54_2022>
+    <Turret_1_A157_M_VII_Y>
+      <id>	31006	</id>
+    </Turret_1_A157_M_VII_Y>
+    <Turret_1_A158_T832>
+      <id>	204	</id>
+    </Turret_1_A158_T832>
+    <Turret_1_A160_M24_594>
+      <id>	31004	</id>
+    </Turret_1_A160_M24_594>
+    <Turret_1_A161_ARMT>
+      <id>	208	</id>
+    </Turret_1_A161_ARMT>
+    <Turret_1_A162_ATAC_II>
+      <id>	31007	</id>
+    </Turret_1_A162_ATAC_II>
+    <Turret_1_A163_H_3>
+      <id>	31010	</id>
+    </Turret_1_A163_H_3>
+    <Turret_1_A163_H_3_2>
+      <id>	31019	</id>
+    </Turret_1_A163_H_3_2>
+    <Turret_1_A164_TS_6>
+      <id>	31023	</id>
+    </Turret_1_A164_TS_6>
+    <Turret_1_A165_XM57>
+      <id>	31009	</id>
+    </Turret_1_A165_XM57>
+    <Turret_1_A169_TF_3>
+      <id>	31011	</id>
+    </Turret_1_A169_TF_3>
+    <Turret_1_A170_M4A3FL>
+      <id>	31014	</id>
+    </Turret_1_A170_M4A3FL>
+    <Turret_1_A171_TF_4>
+      <id>	31020	</id>
+    </Turret_1_A171_TF_4>
+    <Turret_1_A172_ASTRON_FL>
+      <id>	31013	</id>
+    </Turret_1_A172_ASTRON_FL>
+    <Turret_1_A172_ASTRON_FL_T>
+      <id>	31018	</id>
+    </Turret_1_A172_ASTRON_FL_T>
+    <Turret_1_A173_TF_2_CLARK>
+      <id>	31016	</id>
+    </Turret_1_A173_TF_2_CLARK>
+    <Turret_1_A174_M36B1_GMC>
+      <id>	31024	</id>
+    </Turret_1_A174_M36B1_GMC>
+    <Turret_1_A175_OTAC_MT_58>
+      <id>	31025	</id>
+    </Turret_1_A175_OTAC_MT_58>
+    <Turret_1_A175_OTAC_MT_58_02>
+      <id>	31028	</id>
+    </Turret_1_A175_OTAC_MT_58_02>
+    <Turret_1_A176_OTAC_LK_7605>
+      <id>	31027	</id>
+    </Turret_1_A176_OTAC_LK_7605>
+    <Turret_1_A179_MBT_59>
+      <id>	31030	</id>
+    </Turret_1_A179_MBT_59>
+    <Turret_1_A182_ALRS_M6>
+      <id>	31034	</id>
+    </Turret_1_A182_ALRS_M6>
+    <Turret_1_A184_HTPC>
+      <id>	31036	</id>
+    </Turret_1_A184_HTPC>
+    <Turret_1_A27_T82>
+      <id>	142	</id>
+    </Turret_1_A27_T82>
+    <Turret_1_A46_T3>
+      <id>	139	</id>
+    </Turret_1_A46_T3>
+    <Turret_1_A99_T92_LT>
+      <id>	149	</id>
+    </Turret_1_A99_T92_LT>
+    <Turret_1_M103>
+      <id>	65	</id>
+    </Turret_1_M103>
+    <Turret_1_M10_Wolverine>
+      <id>	49	</id>
+    </Turret_1_M10_Wolverine>
+    <Turret_1_M12>
+      <id>	56	</id>
+    </Turret_1_M12>
+    <Turret_1_M18_Hellcat>
+      <id>	79	</id>
+    </Turret_1_M18_Hellcat>
+    <Turret_1_M22_Locust>
+      <id>	61	</id>
+    </Turret_1_M22_Locust>
+    <Turret_1_M24_Chaffee>
+      <id>	67	</id>
+    </Turret_1_M24_Chaffee>
+    <Turret_1_M36_Slagger_4>
+      <id>	52	</id>
+    </Turret_1_M36_Slagger_4>
+    <Turret_1_M40M43>
+      <id>	54	</id>
+    </Turret_1_M40M43>
+    <Turret_1_M41_Bulldog>
+      <id>	121	</id>
+    </Turret_1_M41_Bulldog>
+    <Turret_1_M44>
+      <id>	108	</id>
+    </Turret_1_M44>
+    <Turret_1_M46_Patton>
+      <id>	62	</id>
+    </Turret_1_M46_Patton>
+    <Turret_1_M46_Patton_KR>
+      <id>	146	</id>
+    </Turret_1_M46_Patton_KR>
+    <Turret_1_M4A2E4>
+      <id>	51	</id>
+    </Turret_1_M4A2E4>
+    <Turret_1_M4_Improved>
+      <id>	86	</id>
+    </Turret_1_M4_Improved>
+    <Turret_1_M53_55>
+      <id>	107	</id>
+    </Turret_1_M53_55>
+    <Turret_1_M60>
+      <id>	105	</id>
+    </Turret_1_M60>
+    <Turret_1_M6A2E1>
+      <id>	60	</id>
+    </Turret_1_M6A2E1>
+    <Turret_1_M8A1>
+      <id>	71	</id>
+    </Turret_1_M8A1>
+    <Turret_1_Pershing>
+      <id>	44	</id>
+    </Turret_1_Pershing>
+    <Turret_1_Sherman_Jumbo>
+      <id>	69	</id>
+    </Turret_1_Sherman_Jumbo>
+    <Turret_1_Sherman_Jumbo_bootcamp>
+      <id>	64004	</id>
+    </Turret_1_Sherman_Jumbo_bootcamp>
+    <Turret_1_T110E3>
+      <id>	91	</id>
+    </Turret_1_T110E3>
+    <Turret_1_T110E4>
+      <id>	88	</id>
+    </Turret_1_T110E4>
+    <Turret_1_T110E4_7x7>
+      <id>	403	</id>
+    </Turret_1_T110E4_7x7>
+    <Turret_1_T1_E6>
+      <id>	92	</id>
+    </Turret_1_T1_E6>
+    <Turret_1_T20D1_SH>
+      <id>	345	</id>
+    </Turret_1_T20D1_SH>
+    <Turret_1_T25_2>
+      <id>	76	</id>
+    </Turret_1_T25_2>
+    <Turret_1_T25_AT>
+      <id>	64	</id>
+    </Turret_1_T25_AT>
+    <Turret_1_T25_AT_FL>
+      <id>	31002	</id>
+    </Turret_1_T25_AT_FL>
+    <Turret_1_T26_E4_SuperPershing>
+      <id>	89	</id>
+    </Turret_1_T26_E4_SuperPershing>
+    <Turret_1_T26_E4_SuperPershing_FL>
+      <id>	167	</id>
+    </Turret_1_T26_E4_SuperPershing_FL>
+    <Turret_1_T28>
+      <id>	57	</id>
+    </Turret_1_T28>
+    <Turret_1_T28_Prototype>
+      <id>	78	</id>
+    </Turret_1_T28_Prototype>
+    <Turret_1_T28_Prototype_FL>
+      <id>	504	</id>
+    </Turret_1_T28_Prototype_FL>
+    <Turret_1_T37>
+      <id>	111	</id>
+    </Turret_1_T37>
+    <Turret_1_T40>
+      <id>	55	</id>
+    </Turret_1_T40>
+    <Turret_1_T49>
+      <id>	73	</id>
+    </Turret_1_T49>
+    <Turret_1_T54E1>
+      <id>	100	</id>
+    </Turret_1_T54E1>
+    <Turret_1_T57_58>
+      <id>	97	</id>
+    </Turret_1_T57_58>
+    <Turret_1_T57_58_T>
+      <id>	31017	</id>
+    </Turret_1_T57_58_T>
+    <Turret_1_T69>
+      <id>	96	</id>
+    </Turret_1_T69>
+    <Turret_1_T69_IGR>
+      <id>	60002	</id>
+    </Turret_1_T69_IGR>
+    <Turret_1_T71>
+      <id>	101	</id>
+    </Turret_1_T71>
+    <Turret_1_T71_IGR>
+      <id>	60001	</id>
+    </Turret_1_T71_IGR>
+    <Turret_1_T7_Combat_Car>
+      <id>	109	</id>
+    </Turret_1_T7_Combat_Car>
+    <Turret_1_T92>
+      <id>	58	</id>
+    </Turret_1_T92>
+    <Turret_1_T95>
+      <id>	59	</id>
+    </Turret_1_T95>
+    <Turret_1_T95_E2>
+      <id>	94	</id>
+    </Turret_1_T95_E2>
+    <Turret_1_T95_E6>
+      <id>	116	</id>
+    </Turret_1_T95_E6>
+    <Turret_2_A100_T49>
+      <id>	125	</id>
+    </Turret_2_A100_T49>
+    <Turret_2_A109_T56_GMC>
+      <id>	134	</id>
+    </Turret_2_A109_T56_GMC>
+    <Turret_2_A129_T6_medium>
+      <id>	176	</id>
+    </Turret_2_A129_T6_medium>
+    <Turret_2_A129_T6_medium_MapsTraining_Dummy_MT_1>
+      <id>	23	</id>
+    </Turret_2_A129_T6_medium_MapsTraining_Dummy_MT_1>
+    <Turret_2_A139_M_III_Y>
+      <id>	194	</id>
+    </Turret_2_A139_M_III_Y>
+    <Turret_2_A142_Pawlack_Tank>
+      <id>	190	</id>
+    </Turret_2_A142_Pawlack_Tank>
+    <Turret_2_A144_M_VI_Y>
+      <id>	196	</id>
+    </Turret_2_A144_M_VI_Y>
+    <Turret_2_A147_M_II_Y>
+      <id>	192	</id>
+    </Turret_2_A147_M_II_Y>
+    <Turret_2_A169_TF_3>
+      <id>	31012	</id>
+    </Turret_2_A169_TF_3>
+    <Turret_2_A169_TF_3_T>
+      <id>	31022	</id>
+    </Turret_2_A169_TF_3_T>
+    <Turret_2_A170_M4A3FL>
+      <id>	31015	</id>
+    </Turret_2_A170_M4A3FL>
+    <Turret_2_A171_TF_4>
+      <id>	31021	</id>
+    </Turret_2_A171_TF_4>
+    <Turret_2_A27_T82>
+      <id>	143	</id>
+    </Turret_2_A27_T82>
+    <Turret_2_A46_T3>
+      <id>	140	</id>
+    </Turret_2_A46_T3>
+    <Turret_2_M103>
+      <id>	66	</id>
+    </Turret_2_M103>
+    <Turret_2_M10_Wolverine>
+      <id>	50	</id>
+    </Turret_2_M10_Wolverine>
+    <Turret_2_M12>
+      <id>	158	</id>
+    </Turret_2_M12>
+    <Turret_2_M18_Hellcat>
+      <id>	80	</id>
+    </Turret_2_M18_Hellcat>
+    <Turret_2_M24_Chaffee>
+      <id>	68	</id>
+    </Turret_2_M24_Chaffee>
+    <Turret_2_M36_Slagger_4>
+      <id>	53	</id>
+    </Turret_2_M36_Slagger_4>
+    <Turret_2_M41_Bulldog>
+      <id>	122	</id>
+    </Turret_2_M41_Bulldog>
+    <Turret_2_M41_Bulldog_FL>
+      <id>	503	</id>
+    </Turret_2_M41_Bulldog_FL>
+    <Turret_2_M44>
+      <id>	145	</id>
+    </Turret_2_M44>
+    <Turret_2_M46_Patton>
+      <id>	63	</id>
+    </Turret_2_M46_Patton>
+    <Turret_2_M46_Patton_FL>
+      <id>	502	</id>
+    </Turret_2_M46_Patton_FL>
+    <Turret_2_M46_Patton_SH>
+      <id>	347	</id>
+    </Turret_2_M46_Patton_SH>
+    <Turret_2_M8A1>
+      <id>	72	</id>
+    </Turret_2_M8A1>
+    <Turret_2_Pershing>
+      <id>	45	</id>
+    </Turret_2_Pershing>
+    <Turret_2_Pershing_FL>
+      <id>	505	</id>
+    </Turret_2_Pershing_FL>
+    <Turret_2_Pershing_IGR>
+      <id>	60006	</id>
+    </Turret_2_Pershing_IGR>
+    <Turret_2_Sherman_Jumbo>
+      <id>	70	</id>
+    </Turret_2_Sherman_Jumbo>
+    <Turret_2_Sherman_Jumbo_IGR>
+      <id>	60004	</id>
+    </Turret_2_Sherman_Jumbo_IGR>
+    <Turret_2_T110>
+      <id>	75	</id>
+    </Turret_2_T110>
+    <Turret_2_T110_7x7>
+      <id>	31001	</id>
+    </Turret_2_T110_7x7>
+    <Turret_2_T110_cl>
+      <id>	402	</id>
+    </Turret_2_T110_cl>
+    <Turret_2_T21>
+      <id>	99	</id>
+    </Turret_2_T21>
+    <Turret_2_T21_MapsTraining_Dummy_LT_2>
+      <id>	47	</id>
+    </Turret_2_T21_MapsTraining_Dummy_LT_2>
+    <Turret_2_T25_2>
+      <id>	77	</id>
+    </Turret_2_T25_2>
+    <Turret_2_T37>
+      <id>	112	</id>
+    </Turret_2_T37>
+    <Turret_2_T49>
+      <id>	74	</id>
+    </Turret_2_T49>
+    <Turret_2_T49_IGR>
+      <id>	60005	</id>
+    </Turret_2_T49_IGR>
+    <Turret_3_A120_M48A5_SH>
+      <id>	348	</id>
+    </Turret_3_A120_M48A5_SH>
+    <Turret_3_A46_T3>
+      <id>	141	</id>
+    </Turret_3_A46_T3>
+    <Turret_A130_Super_Hellcat>
+      <id>	174	</id>
+    </Turret_A130_Super_Hellcat>
+  </shared>
 </turrets.xml>

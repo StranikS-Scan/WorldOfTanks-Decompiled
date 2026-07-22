@@ -54,7 +54,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	4520	</weight>
-    <maxHealth>	310	</maxHealth>
+    <maxHealth>	400	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	130	</maxHealth>
       <maxRegenHealth>	90	</maxRegenHealth>
@@ -1646,7 +1646,7 @@
           </sourceCollisionHullPoints>
         </right>
       </physicalTracks>
-      <repairTime>	5.71428585	</repairTime>
+      <repairTime>	2.28001642	</repairTime>
     </Chassis_Cz29_Pzw_39>
   </chassis>
   <turrets0>
@@ -1673,7 +1673,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	1000	</weight>
-      <maxHealth>	120	</maxHealth>
+      <maxHealth>	60	</maxHealth>
       <rotationSpeed>	40	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	70	</maxHealth>
@@ -1688,17 +1688,17 @@
       </surveyingDeviceHealth>
       <guns>
         <_24mm_Oerlikon_vz_38>	shared	  <maxAmmo>	220	</maxAmmo>
-          <reloadTime>	6.8	</reloadTime>
+          <reloadTime>	6.4	</reloadTime>
           <clip>
             <count>	6	</count>
-            <rate>	120	</rate>
+            <rate>	240	</rate>
           </clip>
           <shotDispersionRadius>	0.40	</shotDispersionRadius>
           <aimingTime>	1.2	</aimingTime>
           <invisibilityFactorAtShot>	0.280	</invisibilityFactorAtShot>
           <shotDispersionFactors>
             <turretRotation>	0.12	</turretRotation>
-            <afterShot>	3.0	</afterShot>
+            <afterShot>	1.5	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <armor>

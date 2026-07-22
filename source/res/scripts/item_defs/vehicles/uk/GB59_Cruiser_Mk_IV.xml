@@ -48,7 +48,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	6850	</weight>
-    <maxHealth>	416	</maxHealth>
+    <maxHealth>	400	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	110	</maxHealth>
       <maxRegenHealth>	70	</maxRegenHealth>
@@ -2058,17 +2058,13 @@
           <camouflage></camouflage>
         </customizableVehicleAreas>
       </customization>
-      <repairTime>	4.57142878	</repairTime>
+      <repairTime>	2.85003138	</repairTime>
     </Chassis_GB59_Cruiser_Mk_IV>
     <Chassis_GB59_Cruiser_Mk_IV_2>
       <userString>	#gb_vehicles:Chassis_GB59_Cruiser_Mk_IV_2	</userString>
       <tags></tags>
       <level>	4	</level>
       <price>	3800	</price>
-      <unlocks>
-        <vehicle>	GB60_Covenanter	  <cost>	12300	</cost>
-        </vehicle>
-      </unlocks>
       <armor>
         <leftTrack>	10	</leftTrack>
         <rightTrack>	10	</rightTrack>
@@ -2993,7 +2989,7 @@
           <camouflage></camouflage>
         </customizableVehicleAreas>
       </customization>
-      <repairTime>	4.57142878	</repairTime>
+      <repairTime>	2.85003138	</repairTime>
     </Chassis_GB59_Cruiser_Mk_IV_2>
   </chassis>
   <turrets0>
@@ -3022,7 +3018,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	2650	</weight>
-      <maxHealth>	79	</maxHealth>
+      <maxHealth>	100	</maxHealth>
       <rotationSpeed>	42	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	70	</maxHealth>
@@ -3036,76 +3032,6 @@
         <repairCost>	2.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_2pdr_Gun_Mk_IX>	shared	  <maxAmmo>	240	</maxAmmo>
-          <pitchLimits>
-            <minPitch>	0 -20 1 -20	</minPitch>
-            <maxPitch>	0 15 0.366894 15 0.430556 5 0.569444 5 0.633106 15 1 15	</maxPitch>
-          </pitchLimits>
-          <unlocks>
-            <gun>	_40mm_Pom_Pom	  <cost>	1000	</cost>
-            </gun>
-          </unlocks>
-          <armor>
-            <armor_2>	14	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_2>
-            <gun>	10	</gun>
-          </armor>
-          <shotDispersionRadius>	0.36	</shotDispersionRadius>
-          <reloadTime>	2.2	</reloadTime>
-          <shotDispersionFactors>
-            <turretRotation>	0.1	</turretRotation>
-            <afterShot>	4.0	</afterShot>
-            <whileGunDamaged>	2.0	</whileGunDamaged>
-          </shotDispersionFactors>
-          <aimingTime>	1.9	</aimingTime>
-          <invisibilityFactorAtShot>	0.3	</invisibilityFactorAtShot>
-          <models>
-            <undamaged>	vehicles/british/GB59_Cruiser_Mk_IV/normal/lod0/Gun_01.model	</undamaged>
-            <destroyed>	vehicles/british/GB59_Cruiser_Mk_IV/crash/lod0/Gun_01.model	</destroyed>
-            <exploded>	vehicles/british/GB59_Cruiser_Mk_IV/crash/lod0/Gun_01.model	</exploded>
-          </models>
-          <hitTester>
-            <collisionModelServer>	vehicles/british/GB59_Cruiser_Mk_IV/collision/Gun_01.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/british/GB59_Cruiser_Mk_IV/collision_client/Gun_01.model	</collisionModelClient>
-          </hitTester>
-          <effects>	shot_small	</effects>
-          <reloadEffect>	reload20_45	</reloadEffect>
-          <customizationSlots>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41000	</slotId>
-              <anchorPosition>	0.06591 -0.010448 0.914459	</anchorPosition>
-              <anchorDirection>	-0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41001	</slotId>
-              <anchorPosition>	0.063484 0.111 0.194868	</anchorPosition>
-              <anchorDirection>	-0 0.707107 0.707107	</anchorDirection>
-              <applyTo>	16384	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	camouflage	</slotType>
-              <slotId>	42000	</slotId>
-              <anchorPosition>	0.06591 -0.010451 0.914461	</anchorPosition>
-              <anchorDirection>	-0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-          </customizationSlots>
-          <customization>
-            <customizableVehicleAreas>
-              <paint>	GUN GUN_2	</paint>
-              <camouflage>	GUN	</camouflage>
-            </customizableVehicleAreas>
-          </customization>
-          <shotOffset>	0.067424 -0.010997 0	</shotOffset>
-          <camouflage>
-            <tiling>	0.475 0.25 0.000000 0.000000	</tiling>
-            <density>	172.637 210.499	</density>
-            <aoTextureSize>	512 512	</aoTextureSize>
-          </camouflage>
-        </_2pdr_Gun_Mk_IX>
         <_40mm_Pom_Pom>	shared	  <maxAmmo>	360	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
@@ -3173,7 +3099,6 @@
               <camouflage>	GUN	</camouflage>
             </customizableVehicleAreas>
           </customization>
-          <shotOffset>	0.067424 -0.013645 0	</shotOffset>
           <camouflage>
             <tiling>	0.43 0.25 0.000000 0.000000	</tiling>
             <density>	179.094 190.543	</density>
@@ -3746,7 +3671,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	2650	</weight>
-      <maxHealth>	104	</maxHealth>
+      <maxHealth>	120	</maxHealth>
       <rotationSpeed>	42	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	70	</maxHealth>
@@ -3760,67 +3685,6 @@
         <repairCost>	2.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_2pdr_Gun_Mk_IX>	shared	  <maxAmmo>	240	</maxAmmo>
-          <pitchLimits>
-            <minPitch>	0 -20 1 -20	</minPitch>
-            <maxPitch>	0 15 0.366894 15 0.430556 5 0.569444 5 0.633106 15 1 15	</maxPitch>
-          </pitchLimits>
-          <armor>
-            <armor_1>	30	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_1>
-            <gun>	10	</gun>
-          </armor>
-          <shotDispersionRadius>	0.36	</shotDispersionRadius>
-          <reloadTime>	2.2	</reloadTime>
-          <aimingTime>	1.7	</aimingTime>
-          <invisibilityFactorAtShot>	0.3	</invisibilityFactorAtShot>
-          <models>
-            <undamaged>	vehicles/british/GB59_Cruiser_Mk_IV/normal/lod0/Gun_03.model	</undamaged>
-            <destroyed>	vehicles/british/GB59_Cruiser_Mk_IV/crash/lod0/Gun_03.model	</destroyed>
-            <exploded>	vehicles/british/GB59_Cruiser_Mk_IV/crash/lod0/Gun_03.model	</exploded>
-          </models>
-          <hitTester>
-            <collisionModelServer>	vehicles/british/GB59_Cruiser_Mk_IV/collision/Gun_03.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/british/GB59_Cruiser_Mk_IV/collision_client/Gun_03.model	</collisionModelClient>
-          </hitTester>
-          <effects>	shot_small	</effects>
-          <reloadEffect>	reload20_45	</reloadEffect>
-          <customizationSlots>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41000	</slotId>
-              <anchorPosition>	-0.013193 0.002862 0.706113	</anchorPosition>
-              <anchorDirection>	-0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41001	</slotId>
-              <anchorPosition>	0 0.145084 0.145084	</anchorPosition>
-              <anchorDirection>	0 0.707107 0.707107	</anchorDirection>
-              <applyTo>	16384	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	camouflage	</slotType>
-              <slotId>	42000	</slotId>
-              <anchorPosition>	-0.013193 0.002862 0.706113	</anchorPosition>
-              <anchorDirection>	-0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-          </customizationSlots>
-          <customization>
-            <customizableVehicleAreas>
-              <paint>	GUN GUN_2	</paint>
-              <camouflage>	GUN	</camouflage>
-            </customizableVehicleAreas>
-          </customization>
-          <shotOffset>	-0.013295 0.005435 0	</shotOffset>
-          <camouflage>
-            <tiling>	0.475 0.25 0.000000 0.000000	</tiling>
-            <density>	172.637 210.499	</density>
-            <aoTextureSize>	512 512	</aoTextureSize>
-          </camouflage>
-        </_2pdr_Gun_Mk_IX>
         <_40mm_Pom_Pom>	shared	  <maxAmmo>	360	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
@@ -3888,7 +3752,6 @@
               <camouflage>	GUN	</camouflage>
             </customizableVehicleAreas>
           </customization>
-          <shotOffset>	-0.014448 -0.004509 0	</shotOffset>
           <camouflage>
             <tiling>	0.445 0.34 0.000000 0.000000	</tiling>
             <density>	179.094 190.543	</density>
@@ -3898,6 +3761,8 @@
         <_40mm_Bofors_MkI>	shared	  <maxAmmo>	240	</maxAmmo>
           <unlocks>
             <vehicle>	GB124_AEC_Armoured_Car	  <cost>	10200	</cost>
+            </vehicle>
+            <vehicle>	GB60_Covenanter	  <cost>	12300	</cost>
             </vehicle>
           </unlocks>
           <pitchLimits>
@@ -3966,7 +3831,6 @@
               <camouflage>	GUN	</camouflage>
             </customizableVehicleAreas>
           </customization>
-          <shotOffset>	-0.012843 0.004321 0	</shotOffset>
           <camouflage>
             <tiling>	0.46 0.25 0.000000 0.000000	</tiling>
             <density>	186.302 198.796	</density>
@@ -4527,21 +4391,6 @@
     <Small>	shared	</Small>
   </fuelTanks>
   <radios>
-    <N11>	shared	  <unlocks>
-        <radio>	N9	  <cost>	610	</cost>
-        </radio>
-      </unlocks>
-    </N11>
-    <N9>	shared	  <unlocks>
-        <radio>	N19Mk1	  <cost>	1480	</cost>
-        </radio>
-      </unlocks>
-    </N9>
-    <N19Mk1>	shared	  <unlocks>
-        <radio>	N19Mk2	  <cost>	3600	</cost>
-        </radio>
-      </unlocks>
-    </N19Mk1>
     <N19Mk2>	shared	</N19Mk2>
   </radios>
   <physics>

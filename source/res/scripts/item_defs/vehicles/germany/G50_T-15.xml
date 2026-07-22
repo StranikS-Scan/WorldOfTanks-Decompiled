@@ -51,7 +51,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	7200	</weight>
-    <maxHealth>	372	</maxHealth>
+    <maxHealth>	400	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	100	</maxHealth>
       <maxRegenHealth>	80	</maxRegenHealth>
@@ -1935,7 +1935,7 @@
           <camouflage></camouflage>
         </customizableVehicleAreas>
       </customization>
-      <repairTime>	5.71428585	</repairTime>
+      <repairTime>	2.28001642	</repairTime>
     </Chassis_T-15>
   </chassis>
   <turrets0>
@@ -1958,7 +1958,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	1200	</weight>
-      <maxHealth>	93	</maxHealth>
+      <maxHealth>	70	</maxHealth>
       <rotationSpeed>	44	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	80	</maxHealth>
@@ -1985,6 +1985,14 @@
             <maxPitch>	0 7 0.002778 7 0.016667 10 0.402778 10 0.416667 7 0.583333 7 0.597222 10 0.983333 10 0.997222 7 1 7	</maxPitch>
           </pitchLimits>
           <invisibilityFactorAtShot>	0.3	</invisibilityFactorAtShot>
+          <shotDispersionRadius>	0.38	</shotDispersionRadius>
+          <reloadTime>	2.1	</reloadTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.12	</turretRotation>
+            <afterShot>	1.4	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <aimingTime>	1.6	</aimingTime>
           <models>
             <undamaged>	vehicles/german/G50_T-15/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/german/G50_T-15/crash/lod0/Gun_01.model	</destroyed>

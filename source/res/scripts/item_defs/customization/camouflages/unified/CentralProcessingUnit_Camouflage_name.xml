@@ -1,0 +1,54 @@
+<CentralProcessingUnit_Camouflage_name.xml>
+  <xmlns:czech1>	ussr	</xmlns:czech1>
+  <xmlns:germany>	germany	</xmlns:germany>
+  <xmlns:czech0>	usa	</xmlns:czech0>
+  <xmlns:china>	china	</xmlns:china>
+  <xmlns:france>	france	</xmlns:france>
+  <xmlns:uk>	uk	</xmlns:uk>
+  <xmlns:japan>	japan	</xmlns:japan>
+  <xmlns:czech>	czech	</xmlns:czech>
+  <xmlns:sweden>	sweden	</xmlns:sweden>
+  <xmlns:poland>	poland	</xmlns:poland>
+  <xmlns:italy>	italy	</xmlns:italy>
+  <xmlns:intunion>	intunion	</xmlns:intunion>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/transparent	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <tags>	hiddenInUI fullRGB	</tags>
+    <priceGroup>	MT camouflages 50g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R47_ISU-152_Zveroboj ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <camouflage>
+      <id>	31185	</id>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <texture>	vehicles/russian/Camouflage/White_Tiger_2023_CPU.dds	</texture>
+      <description>	#vehicle_customization:CentralProcessingUnit_Camouflage/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <userString>	#vehicle_customization:CentralProcessingUnit_Camouflage/name	</userString>
+      <palettes>
+        <palette>
+          <c0>	222 136 55 255	</c0>
+          <c1>	74 51 34 255	</c1>
+          <c2>	23 23 23 255	</c2>
+          <c3>	0 0 0 0	</c3>
+        </palette>
+      </palettes>
+      <tilingSettings>
+        <type>	relativewithfactor	</type>
+        <factor>	1.7 1.7	</factor>
+        <offset>	0.08 0.5	</offset>
+      </tilingSettings>
+      <gloss>	1 0.509 0.69 0.509	</gloss>
+      <metallic>	0.71 0.23 0.37 0.23	</metallic>
+      <rotation>
+        <HULL>	1.064651	</HULL>
+        <TURRET>	1.064651	</TURRET>
+        <GUN>	1.064651	</GUN>
+      </rotation>
+    </camouflage>
+  </itemGroup>
+</CentralProcessingUnit_Camouflage_name.xml>

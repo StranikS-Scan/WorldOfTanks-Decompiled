@@ -1,0 +1,70 @@
+<special_style_czech_style.xml>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	MT 2D styles universal 1000g	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <nations>	czech	</nations>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	217	</id>
+      <texture>	gui/maps/vehicles/styles/czech_style.png	</texture>
+      <userString>	#vehicle_customization:special_style/czech_style	</userString>
+      <description>	#vehicle_customization:special_style/czech_style_desc	</description>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	1	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <paints>
+            <item>
+              <id>	309	</id>
+              <appliedTo>	61440	</appliedTo>
+            </item>
+          </paints>
+          <decals>
+            <item>
+              <id>	629	</id>
+              <appliedTo>	17472	</appliedTo>
+            </item>
+            <item>
+              <id>	630	</id>
+              <appliedTo>	34944	</appliedTo>
+            </item>
+          </decals>
+          <projection_decals>
+            <item>
+              <id>	9	</id>
+              <showOn>	HULL TURRET	</showOn>
+              <doubleSided>	1	</doubleSided>
+              <position>
+                <p0>	0	</p0>
+                <p1>	-0.379	</p1>
+                <p2>	-0.062	</p2>
+              </position>
+              <rotation>
+                <r0>	0.000022	</r0>
+                <r1>	-1.5708	</r1>
+                <r2>	3.14157	</r2>
+              </rotation>
+              <scale>
+                <s0>	8	</s0>
+                <s1>	8	</s1>
+                <s2>	8	</s2>
+              </scale>
+            </item>
+          </projection_decals>
+        </outfit>
+      </outfits>
+    </style>
+  </itemGroup>
+</special_style_czech_style.xml>

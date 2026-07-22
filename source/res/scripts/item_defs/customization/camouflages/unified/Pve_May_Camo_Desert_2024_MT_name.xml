@@ -1,0 +1,51 @@
+<Pve_May_Camo_Desert_2024_MT_name.xml>
+  <xmlns:czech1>	ussr	</xmlns:czech1>
+  <xmlns:germany>	germany	</xmlns:germany>
+  <xmlns:czech0>	usa	</xmlns:czech0>
+  <xmlns:china>	china	</xmlns:china>
+  <xmlns:france>	france	</xmlns:france>
+  <xmlns:uk>	uk	</xmlns:uk>
+  <xmlns:japan>	japan	</xmlns:japan>
+  <xmlns:czech>	czech	</xmlns:czech>
+  <xmlns:sweden>	sweden	</xmlns:sweden>
+  <xmlns:poland>	poland	</xmlns:poland>
+  <xmlns:italy>	italy	</xmlns:italy>
+  <xmlns:intunion>	intunion	</xmlns:intunion>
+  <itemGroup>
+    <season>	ALL	</season>
+    <historical>	0	</historical>
+    <priceGroup>	MT camouflages 50g notInShop	</priceGroup>
+    <camouflage>
+      <id>	31095	</id>
+      <scales>	1.2 1 0.7	</scales>
+      <palettes>
+        <palette>
+          <c0>	35 35 35 255	</c0>
+          <c1>	148 82 35 255	</c1>
+          <c2>	81 45 26 255	</c2>
+          <c3>	66 56 51 255	</c3>
+        </palette>
+      </palettes>
+      <userString>	#vehicle_customization:Pve_May_Camo_Desert_2024_MT/name	</userString>
+      <description>	#vehicle_customization:Pve_May_Camo_Desert_2024_MT/description	</description>
+      <rotation>
+        <HULL>	-0.20944	</HULL>
+        <TURRET>	-0.20944	</TURRET>
+        <GUN>	-0.20944	</GUN>
+      </rotation>
+      <tilingSettings>
+        <type>	relative	</type>
+        <factor>	2.2 2.2	</factor>
+        <offset>	1 -0.8	</offset>
+      </tilingSettings>
+      <texture>	vehicles/russian/Camouflage/Pve_May_Camo_Desert_2024_MT.dds	</texture>
+    </camouflage>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <userString>	#vehicle_customization:camouflage/opaque	</userString>
+    <tags>	hiddenInUI styleOnly	</tags>
+  </itemGroup>
+</Pve_May_Camo_Desert_2024_MT_name.xml>

@@ -61,7 +61,8 @@ _CUSTOMIZATION_TYPES_MAP = {ItemPackType.STYLE: CustomizationType.STYLE,
  ItemPackType.DECAL_2: CustomizationType.DECAL,
  ItemPackType.PROJECTION_DECAL: CustomizationType.PROJECTION_DECAL,
  ItemPackType.PERSONAL_NUMBER: CustomizationType.PERSONAL_NUMBER,
- ItemPackType.MODIFICATION: CustomizationType.MODIFICATION}
+ ItemPackType.MODIFICATION: CustomizationType.MODIFICATION,
+ ItemPackType.LB_STYLE_PROGRESS: CustomizationType.CAMOUFLAGE}
 _BOOSTER_ITEM_TYPE = set(ItemPackTypeGroup.GOODIE)
 _UNCOUNTABLE_ITEM_TYPE = {ItemPackType.CUSTOM_PREMIUM,
  ItemPackType.CUSTOM_PREMIUM_PLUS,
@@ -325,6 +326,8 @@ def getItemTitle(rawItem, item, forBox=False, additionalInfo=False):
         title = _ms(TOOLTIPS.AWARDITEM_BUMBLEBEE_COIN_HEADER)
     elif rawItem.type == ItemPackType.CUSTOM_HONEY_COIN:
         title = _ms(TOOLTIPS.AWARDITEM_HONEY_COIN_HEADER)
+    elif rawItem.type == ItemPackType.CUSTOM_GOLDENTICKET:
+        title = backport.text(R.strings.tooltips.awardItem.goldenticket.header())
     else:
         title = rawItem.title or ''
     return title
@@ -381,6 +384,8 @@ def getItemDescription(rawItem, item):
         description = _ms(TOOLTIPS.AWARDITEM_BUMBLEBEE_COIN_BODY)
     elif rawItem.type == ItemPackType.CUSTOM_HONEY_COIN:
         description = _ms(TOOLTIPS.AWARDITEM_HONEY_COIN_BODY)
+    elif rawItem.type == ItemPackType.CUSTOM_GOLDENTICKET:
+        description = backport.text(R.strings.tooltips.awardItem.goldenticket.body())
     else:
         description = rawItem.description or ''
     return description

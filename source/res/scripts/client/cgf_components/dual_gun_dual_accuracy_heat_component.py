@@ -45,13 +45,14 @@ class DualGunDualAccuracyHeatComponent(object):
         self.__gameObject = gameObject
 
     def toggleState(self, gun, state):
-        animatorLink = self.leftLink if gun == DUAL_GUN.ACTIVE_GUN.LEFT else self.rightLink
+        isLeft = gun == DUAL_GUN.ACTIVE_GUN.LEFT
+        animatorLink = self.leftLink if isLeft else self.rightLink
         vehicle = BigWorld.player().getVehicleAttached()
         if vehicle is None:
             return
         else:
-            isLeft = gun == DUAL_GUN.ACTIVE_GUN.LEFT
-            if vehicle.id != self.__vehicleID:
+            isNPC = vehicle.id != self.__vehicleID or not vehicle.isPlayerVehicle or BigWorld.player().isObserver()
+            if isNPC:
                 soundLink = self.npcLeftSoundLink if isLeft else self.npcRightSoundLink
             else:
                 soundLink = self.leftSoundLink if isLeft else self.rightSoundLink

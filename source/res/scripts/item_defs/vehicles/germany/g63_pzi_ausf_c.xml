@@ -52,7 +52,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	3670	</weight>
-    <maxHealth>	328	</maxHealth>
+    <maxHealth>	400	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	100	</maxHealth>
       <maxRegenHealth>	70	</maxRegenHealth>
@@ -1979,7 +1979,7 @@
           <camouflage></camouflage>
         </customizableVehicleAreas>
       </customization>
-      <repairTime>	5.71428585	</repairTime>
+      <repairTime>	2.28001642	</repairTime>
     </Chassis_PzI_ausf_C>
     <Chassis_PzI_ausf_C_2>
       <userString>	#germany_vehicles:Chassis_PzI_ausf_C_2	</userString>
@@ -2891,7 +2891,7 @@
           <camouflage></camouflage>
         </customizableVehicleAreas>
       </customization>
-      <repairTime>	5.71428585	</repairTime>
+      <repairTime>	2.28001642	</repairTime>
     </Chassis_PzI_ausf_C_2>
   </chassis>
   <turrets0>
@@ -2910,7 +2910,7 @@
       </armor>
       <primaryArmor>	armor_2 armor_3 armor_3	</primaryArmor>
       <weight>	600	</weight>
-      <maxHealth>	62	</maxHealth>
+      <maxHealth>	40	</maxHealth>
       <rotationSpeed>	42	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	70	</maxHealth>
@@ -2936,9 +2936,9 @@
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 10 0.366894 10 0.430556 8 0.569444 8 0.633106 10 1 10	</maxPitch>
           </pitchLimits>
-          <shotDispersionRadius>	0.57	</shotDispersionRadius>
+          <shotDispersionRadius>	0.45	</shotDispersionRadius>
           <reloadTime>	3.9	</reloadTime>
-          <aimingTime>	1.6	</aimingTime>
+          <aimingTime>	1.2	</aimingTime>
           <invisibilityFactorAtShot>	0.28	</invisibilityFactorAtShot>
           <clip>
             <count>	10	</count>
@@ -3034,6 +3034,7 @@
           </pitchLimits>
           <shotDispersionRadius>	0.45	</shotDispersionRadius>
           <reloadTime>	3.9	</reloadTime>
+          <aimingTime>	1.2	</aimingTime>
           <invisibilityFactorAtShot>	0.266	</invisibilityFactorAtShot>
           <shotDispersionFactors>
             <turretRotation>	0.08	</turretRotation>
@@ -3564,7 +3565,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	900	</weight>
-      <maxHealth>	82	</maxHealth>
+      <maxHealth>	50	</maxHealth>
       <rotationSpeed>	44	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	70	</maxHealth>
@@ -3593,9 +3594,9 @@
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 10 0.366894 10 0.430556 8 0.569444 8 0.633106 10 1 10	</maxPitch>
           </pitchLimits>
-          <shotDispersionRadius>	0.57	</shotDispersionRadius>
+          <shotDispersionRadius>	0.45	</shotDispersionRadius>
           <reloadTime>	3.5	</reloadTime>
-          <aimingTime>	1.5	</aimingTime>
+          <aimingTime>	1.0	</aimingTime>
           <invisibilityFactorAtShot>	0.28	</invisibilityFactorAtShot>
           <clip>
             <count>	10	</count>
@@ -3692,7 +3693,7 @@
           </pitchLimits>
           <shotDispersionRadius>	0.45	</shotDispersionRadius>
           <reloadTime>	3.5	</reloadTime>
-          <aimingTime>	1.5	</aimingTime>
+          <aimingTime>	1.0	</aimingTime>
           <invisibilityFactorAtShot>	0.266	</invisibilityFactorAtShot>
           <clip>
             <count>	10	</count>
@@ -3789,7 +3790,7 @@
           </pitchLimits>
           <shotDispersionRadius>	0.45	</shotDispersionRadius>
           <reloadTime>	8	</reloadTime>
-          <aimingTime>	1.4	</aimingTime>
+          <aimingTime>	1.0	</aimingTime>
           <invisibilityFactorAtShot>	0.28	</invisibilityFactorAtShot>
           <clip>
             <count>	40	</count>

@@ -1,0 +1,52 @@
+<camouflage_f137_Tornade_3Dst_02_summer_label.xml>
+  <xmlns:czech1>	ussr	</xmlns:czech1>
+  <xmlns:germany>	germany	</xmlns:germany>
+  <xmlns:czech0>	usa	</xmlns:czech0>
+  <xmlns:china>	china	</xmlns:china>
+  <xmlns:france>	france	</xmlns:france>
+  <xmlns:uk>	uk	</xmlns:uk>
+  <xmlns:japan>	japan	</xmlns:japan>
+  <xmlns:czech>	czech	</xmlns:czech>
+  <xmlns:sweden>	sweden	</xmlns:sweden>
+  <xmlns:poland>	poland	</xmlns:poland>
+  <xmlns:italy>	italy	</xmlns:italy>
+  <xmlns:intunion>	intunion	</xmlns:intunion>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/transparent	</userString>
+    <season>	summer	</season>
+    <historical>	0	</historical>
+    <priceGroup>	MT camouflages 50g notInShop	</priceGroup>
+    <requiredToken></requiredToken>
+    <maxNumber>	1	</maxNumber>
+    <camouflage>
+      <id>	31512	</id>
+      <texture>	vehicles/french/Camouflage/f137_Tornade_3Dst_02_summer.dds	</texture>
+      <userString>	#vehicle_customization:camouflage/f137_Tornade_3Dst_02_summer/label	</userString>
+      <description>	#vehicle_customization:camouflage/f137_Tornade_3Dst_02_summer/description	</description>
+      <scales>	1.2 1 0.7	</scales>
+      <palettes>
+        <palette>
+          <c0>	99 82 69 255	</c0>
+          <c1>	41 42 42 255	</c1>
+          <c2>	85 89 83 255	</c2>
+          <c3>	0 0 0 0	</c3>
+        </palette>
+      </palettes>
+      <rotation>
+        <HULL>	0.043633	</HULL>
+        <TURRET>	0.043633	</TURRET>
+        <GUN>	0.043633	</GUN>
+      </rotation>
+      <tilingSettings>
+        <type>	relative	</type>
+        <factor>	2.5 2.5	</factor>
+        <offset>	-2.46 -0.32	</offset>
+      </tilingSettings>
+    </camouflage>
+    <vehicleFilter>
+      <include>
+        <vehicles>	france:F137_Tornade	</vehicles>
+      </include>
+    </vehicleFilter>
+  </itemGroup>
+</camouflage_f137_Tornade_3Dst_02_summer_label.xml>

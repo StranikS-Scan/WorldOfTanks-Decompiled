@@ -265,7 +265,7 @@ class VehicleGun(VehicleModule):
         if self.hasDualGunDualAccuracy():
             return backport.text(R.strings.item_types.dualGunCooling.name())
         if self.hasDualAccuracy():
-            pass
+            return backport.text(R.strings.item_types.gunCooling.name())
         if self.isDualGun():
             return backport.text(R.strings.item_types.dualGun.name())
         return backport.text(R.strings.item_types.autoShootGun.name()) if self.isAutoShootGun() else userType
@@ -299,10 +299,8 @@ class VehicleGun(VehicleModule):
         if self.hasDualGunDualAccuracy():
             return FITTING_TYPES.VEHICLE_DUAL_GUN_COOLING
         if self.hasDualAccuracy():
-            pass
-        elif self.isDualGun():
-            return FITTING_TYPES.VEHICLE_DUAL_GUN
-        return super(VehicleGun, self).getGUIEmblemID()
+            return FITTING_TYPES.VEHICLE_GUN_COOLING
+        return FITTING_TYPES.VEHICLE_DUAL_GUN if self.isDualGun() else super(VehicleGun, self).getGUIEmblemID()
 
     def _getMaxAmmo(self):
         return self.descriptor.maxAmmo

@@ -1,29 +1,8 @@
 <fuelTanks.xml>
-  <ids>
-    <Small>	201	</Small>
-    <Medium>	202	</Medium>
-    <Average>	203	</Average>
-    <Heavy>	204	</Heavy>
-    <Large>	205	</Large>
-  </ids>
+  <xmlns:xmlref>	http://bwt/xmlref	</xmlns:xmlref>
   <shared>
-    <Small>
-      <tags></tags>
-      <price>	100	</price>
-      <weight>	200	</weight>
-      <maxHealth>	100	</maxHealth>
-      <maxRegenHealth>	40	</maxRegenHealth>
-      <repairCost>	1.0	</repairCost>
-    </Small>
-    <Medium>
-      <tags></tags>
-      <price>	100	</price>
-      <weight>	250	</weight>
-      <maxHealth>	125	</maxHealth>
-      <maxRegenHealth>	50	</maxRegenHealth>
-      <repairCost>	1.0	</repairCost>
-    </Medium>
     <Average>
+      <id>	203	</id>
       <tags></tags>
       <price>	100	</price>
       <weight>	250	</weight>
@@ -32,6 +11,7 @@
       <repairCost>	1.0	</repairCost>
     </Average>
     <Heavy>
+      <id>	204	</id>
       <tags></tags>
       <price>	100	</price>
       <weight>	275	</weight>
@@ -40,6 +20,7 @@
       <repairCost>	1.0	</repairCost>
     </Heavy>
     <Large>
+      <id>	205	</id>
       <tags></tags>
       <price>	100	</price>
       <weight>	300	</weight>
@@ -47,5 +28,23 @@
       <maxRegenHealth>	80	</maxRegenHealth>
       <repairCost>	1.0	</repairCost>
     </Large>
+    <Medium>
+      <id>	202	</id>
+      <tags></tags>
+      <price>	100	</price>
+      <weight>	250	</weight>
+      <maxHealth>	125	</maxHealth>
+      <maxRegenHealth>	50	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+    </Medium>
+    <Small>
+      <id>	201	</id>
+      <tags></tags>
+      <price>	100	</price>
+      <weight>	200	</weight>
+      <maxHealth>	100	</maxHealth>
+      <maxRegenHealth>	40	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+    </Small>
   </shared>
 </fuelTanks.xml>

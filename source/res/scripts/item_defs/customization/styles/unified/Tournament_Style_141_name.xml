@@ -1,0 +1,65 @@
+<Tournament_Style_141_name.xml>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	MT 2D styles universal 1000g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <style>
+      <id>	31503	</id>
+      <texture>	gui/maps/vehicles/styles/Tournament_Style_141.png	</texture>
+      <userString>	#vehicle_customization:Tournament_Style_141/name	</userString>
+      <description>	#vehicle_customization:Tournament_Style_141/description	</description>
+      <longDescriptionSpecial>	#vehicle_customization:Tournament_Style_141/longDescription	</longDescriptionSpecial>
+      <outfits>
+        <outfit>
+          <season>	all	</season>
+          <modifications>
+            <item>	4	</item>
+          </modifications>
+          <paints>
+            <item>
+              <id>	31455	</id>
+              <appliedTo>	20753	</appliedTo>
+            </item>
+          </paints>
+          <camouflages>
+            <item>
+              <id>	31471	</id>
+              <patternSize>	1	</patternSize>
+              <appliedTo>	4368	</appliedTo>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <projection_decals>
+            <item>
+              <id>	31411	</id>
+              <scaleFactorId>	2	</scaleFactorId>
+              <tags>	mimic front formfactor_rect1x2	</tags>
+            </item>
+            <item>
+              <id>	31412	</id>
+              <scaleFactorId>	2	</scaleFactorId>
+              <tags>	safe left formfactor_square	</tags>
+            </item>
+            <item>
+              <id>	31413	</id>
+              <scaleFactorId>	2	</scaleFactorId>
+              <tags>	safe right formfactor_square	</tags>
+            </item>
+          </projection_decals>
+          <insignias>
+            <item>
+              <id>	31049	</id>
+              <appliedTo>	4096	</appliedTo>
+            </item>
+          </insignias>
+        </outfit>
+      </outfits>
+    </style>
+  </itemGroup>
+</Tournament_Style_141_name.xml>

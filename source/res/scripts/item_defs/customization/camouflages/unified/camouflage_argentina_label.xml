@@ -1,0 +1,61 @@
+<camouflage_argentina_label.xml>
+  <ussr:R115_IS-3_auto8>	ussr	</ussr:R115_IS-3_auto8>
+  <ussr:R115_IS-3_auto0>	germany	</ussr:R115_IS-3_auto0>
+  <ussr:R115_IS-3_auto7>	usa	</ussr:R115_IS-3_auto7>
+  <xmlns:china>	china	</xmlns:china>
+  <xmlns:france>	france	</xmlns:france>
+  <ussr:R115_IS-3_auto6>	uk	</ussr:R115_IS-3_auto6>
+  <ussr:R115_IS-3_auto3>	japan	</ussr:R115_IS-3_auto3>
+  <xmlns:czech>	czech	</xmlns:czech>
+  <ussr:R115_IS-3_auto5>	sweden	</ussr:R115_IS-3_auto5>
+  <ussr:R115_IS-3_auto4>	poland	</ussr:R115_IS-3_auto4>
+  <ussr:R115_IS-3_auto2>	italy	</ussr:R115_IS-3_auto2>
+  <ussr:R115_IS-3_auto1>	intunion	</ussr:R115_IS-3_auto1>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/opaque	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	MT camouflages 50g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R47_ISU-152_Zveroboj ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <camouflage>
+      <id>	102	</id>
+      <texture>	vehicles/russian/Camouflage/argentina.dds	</texture>
+      <description>	#vehicle_customization:camouflage/argentina/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/argentina/label	</userString>
+      <tags>	hiddenInUI	</tags>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	255 0 0 255	</c0>
+          <c1>	0 255 0 255	</c1>
+          <c2>	0 0 255 255	</c2>
+          <c3>	0 0 0 255	</c3>
+        </palette>
+      </palettes>
+      <rotation>
+        <HULL>	-0.346797	</HULL>
+        <TURRET>	-0.346797	</TURRET>
+        <GUN>	-0.346797	</GUN>
+      </rotation>
+      <tiling>
+        <ussr:R11_MS-1>	2 2 0.08 -0.01	</ussr:R11_MS-1>
+        <ussr:R45_IS-7>	2 2 -0.05 0.2	</ussr:R45_IS-7>
+        <ussr:R73_KV4>	2 2 -0.2 -0.19	</ussr:R73_KV4>
+        <ussr:R108_T34_85M>	1.5 1.5 -0.1 -0.01	</ussr:R108_T34_85M>
+        <ussr:R115_IS-3_auto>	3 3 -0.07 0.13	</ussr:R115_IS-3_auto>
+        <ussr:R148_Object_430_U>	0.5 0.5 0.17 0.07	</ussr:R148_Object_430_U>
+        <ussr:R148_Object_430_U_bob>	0.5 0.5 0.17 0.07	</ussr:R148_Object_430_U_bob>
+      </tiling>
+      <tilingSettings>
+        <type>	relative	</type>
+        <factor>	1.5 1.5	</factor>
+        <offset>	4.07 5.16	</offset>
+      </tilingSettings>
+    </camouflage>
+  </itemGroup>
+</camouflage_argentina_label.xml>

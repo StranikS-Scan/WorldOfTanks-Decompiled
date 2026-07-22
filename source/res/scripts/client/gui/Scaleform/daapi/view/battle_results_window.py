@@ -20,12 +20,13 @@ from gui.battle_results.settings import PROGRESS_ACTION
 from gui.prb_control.dispatcher import g_prbLoader
 from gui.server_events import events_dispatcher as quests_events
 from gui.server_events.events_helpers import isC11nQuest
-from gui.shared import event_bus_handlers, events, EVENT_BUS_SCOPE, g_eventBus
+from gui.shared import events, EVENT_BUS_SCOPE
 from gui.shared import event_dispatcher
 from gui.shared.event_dispatcher import showProgressiveRewardWindow, showShop
 from gui.shared.events import ViewEventType
 from gui.sounds.ambients import BattleResultsEnv
 from helpers import dependency
+from helpers.extension_components import Extendable, extendableMethod, initMethod, destroyMethod
 from skeletons.gui.app_loader import IAppLoader
 from skeletons.gui.battle_results import IBattleResultsService
 from skeletons.gui.game_control import IGameSessionController
@@ -38,14 +39,13 @@ def _wrapEmblemUrl(emblemUrl):
     return makeHtmlString('html_templates:lobby/battleResult', 'emblemUrl', {'url': emblemUrl})
 
 
-class BattleResultsWindow(BattleResultsMeta):
+class BattleResultsWindow(BattleResultsMeta, Extendable):
     __battleResults = dependency.descriptor(IBattleResultsService)
     __lobbyContext = dependency.descriptor(ILobbyContext)
     __gameSession = dependency.descriptor(IGameSessionController)
     __appLoader = dependency.descriptor(IAppLoader)
     __itemsCache = dependency.descriptor(IItemsCache)
     __sound_env__ = BattleResultsEnv
-    __metaclass__ = event_bus_handlers.EventBusListener
 
     def __init__(self, ctx):
         super(BattleResultsWindow, self).__init__()
@@ -55,6 +55,9 @@ class BattleResultsWindow(BattleResultsMeta):
             raise SoftException('Value of "arenaUniqueID" must be greater than 0')
         self.__arenaUniqueID = ctx['arenaUniqueID']
         self.__dataSet = False
+
+    def getArenaUniqueID(self):
+        return self.__arenaUniqueID
 
     def _onRegisterFlashComponent(self, viewPy, alias):
         viewPy.updateQuestsInfo(arenaUniqueID=self.__arenaUniqueID)
@@ -125,11 +128,22 @@ class BattleResultsWindow(BattleResultsMeta):
             BigWorld.callback(0.0, partial(showShop, url))
             self.destroy()
 
+    @extendableMethod
+    def sendGift(self, playerId, stampName):
+        pass
+
+    @extendableMethod
+    def gotoGiftStamps(self):
+        pass
+
+    @initMethod
     def _populate(self):
         super(BattleResultsWindow, self)._populate()
-        g_eventBus.addListener(events.LobbySimpleEvent.PREMIUM_XP_BONUS_CHANGED, self.__updateVO)
-        g_eventBus.addListener(events.LobbySimpleEvent.BATTLE_RESULTS_SHOW_QUEST, self.__onBattleResultWindowShowQuest)
-        g_eventBus.addListener(ViewEventType.LOAD_VIEW, self.__loadViewHandler, EVENT_BUS_SCOPE.LOBBY)
+        self.addListener(events.LobbySimpleEvent.PREMIUM_XP_BONUS_CHANGED, self.__updateVO)
+        self.addListener(events.LobbySimpleEvent.BATTLE_RESULTS_SHOW_QUEST, self.__onBattleResultWindowShowQuest)
+        self.addListener(ViewEventType.LOAD_VIEW, self.__loadViewHandler, EVENT_BUS_SCOPE.LOBBY)
+        self.addListener(events.LobbySimpleEvent.BATTLE_RESULTS_POSTED, self.__handleBattleResultsPosted, EVENT_BUS_SCOPE.LOBBY)
+        self.addListener(events.HideWindowEvent.HIDE_BATTLE_RESULT_WINDOW, self.__handleBattleResultsClose, EVENT_BUS_SCOPE.LOBBY)
         g_clientUpdateManager.addCallbacks({'account._additionalXPCache': self.__updateVO,
          'inventory.1': self.__updateVO,
          'inventory.8': self.__updateVO,
@@ -139,10 +153,13 @@ class BattleResultsWindow(BattleResultsMeta):
         if self.__battleResults.areResultsPosted(self.__arenaUniqueID):
             self.__setBattleResults()
 
+    @destroyMethod
     def _dispose(self):
-        g_eventBus.removeListener(events.LobbySimpleEvent.PREMIUM_XP_BONUS_CHANGED, self.__updateVO)
-        g_eventBus.removeListener(events.LobbySimpleEvent.BATTLE_RESULTS_SHOW_QUEST, self.__onBattleResultWindowShowQuest)
-        g_eventBus.removeListener(ViewEventType.LOAD_VIEW, self.__loadViewHandler, EVENT_BUS_SCOPE.LOBBY)
+        self.removeListener(events.LobbySimpleEvent.BATTLE_RESULTS_POSTED, self.__handleBattleResultsPosted, EVENT_BUS_SCOPE.LOBBY)
+        self.removeListener(events.HideWindowEvent.HIDE_BATTLE_RESULT_WINDOW, self.__handleBattleResultsClose, EVENT_BUS_SCOPE.LOBBY)
+        self.removeListener(events.LobbySimpleEvent.PREMIUM_XP_BONUS_CHANGED, self.__updateVO)
+        self.removeListener(events.LobbySimpleEvent.BATTLE_RESULTS_SHOW_QUEST, self.__onBattleResultWindowShowQuest)
+        self.removeListener(ViewEventType.LOAD_VIEW, self.__loadViewHandler, EVENT_BUS_SCOPE.LOBBY)
         g_clientUpdateManager.removeObjectCallbacks(self)
         self.__gameSession.onPremiumTypeChanged -= self.__onPremiumStateChanged
         self.__lobbyContext.getServerSettings().onServerSettingsChange -= self.__onServerSettingsChange
@@ -165,7 +182,6 @@ class BattleResultsWindow(BattleResultsMeta):
             self.as_setDataS(battleResultsVO)
             self.__dataSet = True
 
-    @event_bus_handlers.eventBusHandler(events.LobbySimpleEvent.BATTLE_RESULTS_POSTED, EVENT_BUS_SCOPE.LOBBY)
     def __handleBattleResultsPosted(self, event):
         ctx = event.ctx
         if 'arenaUniqueID' not in ctx:
@@ -175,7 +191,6 @@ class BattleResultsWindow(BattleResultsMeta):
         if self.__arenaUniqueID == ctx['arenaUniqueID']:
             self.__setBattleResults()
 
-    @event_bus_handlers.eventBusHandler(events.HideWindowEvent.HIDE_BATTLE_RESULT_WINDOW, EVENT_BUS_SCOPE.LOBBY)
     def __handleBattleResultsClose(self, _):
         self.destroy()
 

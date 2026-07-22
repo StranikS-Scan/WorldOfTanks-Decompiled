@@ -1,0 +1,42 @@
+<special_style_Bat_Chatillon25t_NYst.xml>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/unique_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	0	</historical>
+    <priceGroup>	MT 3D styles 9-10 levels 8000g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	france:F18_Bat_Chatillon25t	</vehicles>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	229	</id>
+      <texture>	gui/maps/vehicles/styles/Bat_Chatillon25t_NYst.png	</texture>
+      <longDescriptionSpecial>	#vehicle_customization:special_style/Bat_Chatillon25t_NYst_description/long	</longDescriptionSpecial>
+      <modelsSet>	NYst	</modelsSet>
+      <maxNumber>	1	</maxNumber>
+      <userString>	#vehicle_customization:special_style/Bat_Chatillon25t_NYst	</userString>
+      <tags>	NY_style progression_required	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	1	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+        </outfit>
+      </outfits>
+    </style>
+  </itemGroup>
+</special_style_Bat_Chatillon25t_NYst.xml>

@@ -196,7 +196,8 @@ def getDefaultFormattersMap():
      'rankedBonusBattles': countableIntegralBonusFormatter,
      'tmanToken': TmanTemplateBonusFormatter(),
      'battlePassPoints': BattlePassBonusFormatter(),
-     'currencies': CurrenciesBonusFormatter()}
+     'currencies': CurrenciesBonusFormatter(),
+     'preferredMapSlots': PreferredMapSlotBonusFormatter()}
 
 
 def getEpicFormattersMap():
@@ -1901,3 +1902,22 @@ class EpicSelectTokenFormatter(SimpleBonusFormatter):
         result = {AWARDS_SIZES.SMALL: backport.image(R.images.gui.maps.icons.epicBattles.awards.c_48x48.abilityToken()),
          AWARDS_SIZES.BIG: backport.image(R.images.gui.maps.icons.epicBattles.awards.c_80x80.abilityToken())}
         return result
+
+
+class PreferredMapSlotBonusFormatter(SimpleBonusFormatter):
+
+    def _format(self, bonus):
+        return [PreformattedBonus(bonusName=bonus.getName(), label=self._getLabel(bonus), userName=self._getUserName(bonus), labelFormatter=self._getLabelFormatter(bonus), images=self._getImages(bonus), tooltip=TOOLTIPS_CONSTANTS.PREFERRED_MAP_SLOT_TOOLTIP, align=self._getLabelAlign(bonus), isCompensation=self._isCompensation(bonus), highlightType=self._getHighlightType(bonus), overlayType=self._getOverlayType(bonus), highlightIcon=self._getHighlightIcon(bonus), overlayIcon=self._getOverlayIcon(bonus), compensationReason=self._getCompensationReason(bonus), isWulfTooltip=True, specialArgs=[bonus.getSlotName(), str(bonus.getValue())])]
+
+    @classmethod
+    def _getLabel(cls, bonus):
+        return backport.text(R.strings.tooltips.template.days.short(), value=bonus.getValue())
+
+    @classmethod
+    def _getUserName(cls, bonus):
+        return i18n.makeString(QUESTS.getBonusName(bonus.getSlotName()))
+
+    @classmethod
+    def _getImages(cls, bonus):
+        return {AWARDS_SIZES.SMALL: bonus.getIconBySize(AWARDS_SIZES.SMALL),
+         AWARDS_SIZES.BIG: bonus.getIconBySize(AWARDS_SIZES.BIG)}

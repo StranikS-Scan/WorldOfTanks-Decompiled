@@ -1,0 +1,76 @@
+<camouflage_griffin_label.xml>
+  <germany:G55_E-75_FL0>	ussr	</germany:G55_E-75_FL0>
+  <germany:G55_E-752>	germany	</germany:G55_E-752>
+  <germany:G55_E-759>	usa	</germany:G55_E-759>
+  <germany:G121_Grille_15_L639>	china	</germany:G121_Grille_15_L639>
+  <germany:G55_E-751>	france	</germany:G55_E-751>
+  <germany:G55_E-758>	uk	</germany:G55_E-758>
+  <germany:G55_E-755>	japan	</germany:G55_E-755>
+  <germany:G55_E-750>	czech	</germany:G55_E-750>
+  <germany:G55_E-757>	sweden	</germany:G55_E-757>
+  <germany:G55_E-756>	poland	</germany:G55_E-756>
+  <germany:G55_E-754>	italy	</germany:G55_E-754>
+  <germany:G55_E-753>	intunion	</germany:G55_E-753>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/opaque	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	MT camouflages 50g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <levels>	8 9 10	</levels>
+      </include>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R47_ISU-152_Zveroboj ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <camouflage>
+      <id>	317	</id>
+      <texture>	vehicles/russian/Camouflage/griffin.dds	</texture>
+      <description>	#vehicle_customization:camouflage/griffin/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/griffin/label	</userString>
+      <tags>	fullRGB	</tags>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	255 0 0 255	</c0>
+          <c1>	0 255 0 255	</c1>
+          <c2>	0 0 255 255	</c2>
+          <c3>	0 0 0 255	</c3>
+        </palette>
+      </palettes>
+      <rotation>
+        <HULL>	-0.261799	</HULL>
+        <TURRET>	-0.261799	</TURRET>
+        <GUN>	-0.261799	</GUN>
+      </rotation>
+      <tiling>
+        <france:F82_AMX_M4_Mle1949_Ter>	4 4 1.83 0.548	</france:F82_AMX_M4_Mle1949_Ter>
+        <germany:G121_Grille_15_L63>	8.6 8.6 0.062 0.545	</germany:G121_Grille_15_L63>
+        <germany:G55_E-75>	3.589 3.589 -0.238 0.656	</germany:G55_E-75>
+        <germany:G55_E-75_FL>	3.589 3.589 -0.238 0.656	</germany:G55_E-75_FL>
+        <japan:J28_O_I_100>	1.4 1.4 -0.537 0.737	</japan:J28_O_I_100>
+        <poland:Pl15_60TP_Lewandowskiego>	1.8 1.8 1.3 0.282	</poland:Pl15_60TP_Lewandowskiego>
+        <sweden:S11_Strv_103B>	1 1 0.187 -0.26	</sweden:S11_Strv_103B>
+        <sweden:S16_Kranvagn>	1.1 1.1 -0.116 0.148	</sweden:S16_Kranvagn>
+        <uk:GB83_FV4005>	3.3 3.3 -0.221 0.352	</uk:GB83_FV4005>
+        <uk:GB91_Super_Conqueror>	1.5 1.5 -0.393 -0.109	</uk:GB91_Super_Conqueror>
+        <germany:G121_Grille_15_L630>	3.4 3.4 -0.538 -0.824	</germany:G121_Grille_15_L630>
+        <germany:G121_Grille_15_L631>	3.5 3.5 0.092 -0.003	</germany:G121_Grille_15_L631>
+        <germany:G121_Grille_15_L632>	3.8 3.8 0.071 0.158	</germany:G121_Grille_15_L632>
+        <germany:G121_Grille_15_L633>	3.3 3.3 0.07 -0.745	</germany:G121_Grille_15_L633>
+        <germany:G121_Grille_15_L634>	0.8 0.8 0.11 -0.137	</germany:G121_Grille_15_L634>
+        <germany:G121_Grille_15_L635>	0.8 0.8 0.11 -0.137	</germany:G121_Grille_15_L635>
+        <germany:G121_Grille_15_L636>	3.3 3.3 0.19 0.132	</germany:G121_Grille_15_L636>
+        <germany:G121_Grille_15_L637>	4.3 4.3 -1.155 0.739	</germany:G121_Grille_15_L637>
+        <germany:G121_Grille_15_L638>	3.4 3.4 1.05 -0.148	</germany:G121_Grille_15_L638>
+      </tiling>
+      <tilingSettings>
+        <type>	relative	</type>
+        <factor>	2.6 2.6	</factor>
+        <offset>	-2.033 0.342	</offset>
+      </tilingSettings>
+    </camouflage>
+  </itemGroup>
+</camouflage_griffin_label.xml>

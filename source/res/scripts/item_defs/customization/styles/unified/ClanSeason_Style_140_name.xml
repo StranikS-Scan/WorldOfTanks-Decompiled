@@ -1,0 +1,82 @@
+<ClanSeason_Style_140_name.xml>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <style>
+      <id>	31479	</id>
+      <texture>	gui/maps/vehicles/styles/ClanSeason_Style_140.png	</texture>
+      <userString>	#vehicle_customization:ClanSeason_Style_140/name	</userString>
+      <description>	#vehicle_customization:ClanSeason_Style_140/description	</description>
+      <longDescriptionSpecial>	#vehicle_customization:ClanSeason_Style_140/longDescription	</longDescriptionSpecial>
+      <outfits>
+        <outfit>
+          <season>	all	</season>
+          <paints>
+            <item>
+              <id>	31429	</id>
+              <appliedTo>	1	</appliedTo>
+            </item>
+            <item>
+              <id>	31430	</id>
+              <appliedTo>	24848	</appliedTo>
+            </item>
+            <item>
+              <id>	31431	</id>
+              <appliedTo>	4096	</appliedTo>
+            </item>
+          </paints>
+          <camouflages>
+            <item>
+              <id>	31442	</id>
+              <patternSize>	1	</patternSize>
+              <appliedTo>	16	</appliedTo>
+              <palette>	0	</palette>
+            </item>
+            <item>
+              <id>	31443	</id>
+              <patternSize>	1	</patternSize>
+              <appliedTo>	256	</appliedTo>
+              <palette>	0	</palette>
+            </item>
+            <item>
+              <id>	31444	</id>
+              <patternSize>	1	</patternSize>
+              <appliedTo>	4096	</appliedTo>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <projection_decals>
+            <item>
+              <id>	31385	</id>
+              <scaleFactorId>	2	</scaleFactorId>
+              <tags>	right safe formfactor_square	</tags>
+            </item>
+            <item>
+              <id>	31386	</id>
+              <scaleFactorId>	2	</scaleFactorId>
+              <tags>	left safe formfactor_square	</tags>
+            </item>
+          </projection_decals>
+          <insignias>
+            <item>
+              <id>	31047	</id>
+              <appliedTo>	4096	</appliedTo>
+            </item>
+          </insignias>
+          <modifications>
+            <item>	4	</item>
+          </modifications>
+        </outfit>
+      </outfits>
+    </style>
+    <tags>	lockedOnVehicle	</tags>
+    <priceGroup>	MT 2D styles universal 1000g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	france:F68_AMX_Chasseur_de_char_46_02	</vehicles>
+      </include>
+    </vehicleFilter>
+    <maxNumber>	1	</maxNumber>
+  </itemGroup>
+</ClanSeason_Style_140_name.xml>

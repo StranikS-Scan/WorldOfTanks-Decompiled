@@ -1,0 +1,160 @@
+<camouflage_bp_2023_style_1_label.xml>
+  <germany:G121_Grille_15_L635>	ussr	</germany:G121_Grille_15_L635>
+  <xmlns:germany>	germany	</xmlns:germany>
+  <germany:G121_Grille_15_L634>	usa	</germany:G121_Grille_15_L634>
+  <xmlns:china>	china	</xmlns:china>
+  <xmlns:france>	france	</xmlns:france>
+  <germany:G121_Grille_15_L633>	uk	</germany:G121_Grille_15_L633>
+  <germany:G121_Grille_15_L630>	japan	</germany:G121_Grille_15_L630>
+  <xmlns:czech>	czech	</xmlns:czech>
+  <germany:G121_Grille_15_L632>	sweden	</germany:G121_Grille_15_L632>
+  <germany:G121_Grille_15_L631>	poland	</germany:G121_Grille_15_L631>
+  <xmlns:italy>	italy	</xmlns:italy>
+  <xmlns:intunion>	intunion	</xmlns:intunion>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/opaque	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	MT camouflages 50g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R47_ISU-152_Zveroboj ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <camouflage>
+      <id>	15967	</id>
+      <texture>	vehicles/russian/Camouflage/bp_2023_style_1_camo.dds	</texture>
+      <userString>	#vehicle_customization:camouflage/bp_2023_style_1/label	</userString>
+      <description>	#vehicle_customization:camouflage/bp_2023_style_1/description	</description>
+      <scales>	1.2 1 0.7	</scales>
+      <tags>	fullRGB hiddenInUI	</tags>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	255 0 0 255	</c0>
+          <c1>	0 255 0 255	</c1>
+          <c2>	0 0 255 255	</c2>
+          <c3>	0 0 0 255	</c3>
+        </palette>
+      </palettes>
+      <rotation>
+        <HULL>	-0.240506	</HULL>
+        <TURRET>	-0.240506	</TURRET>
+        <GUN>	-0.240506	</GUN>
+      </rotation>
+      <tilingSettings>
+        <type>	relativewithfactor	</type>
+        <factor>	2.9 2.9	</factor>
+        <offset>	-4.53 -6	</offset>
+      </tilingSettings>
+      <glossMetallicMap>	vehicles/russian/Camouflage/bp_2023_style_1_camo_GM.dds	</glossMetallicMap>
+    </camouflage>
+    <camouflage>
+      <id>	15968	</id>
+      <texture>	vehicles/russian/Camouflage/bp_2023_style_2_camo.dds	</texture>
+      <userString>	#vehicle_customization:camouflage/bp_2023_style_2/label	</userString>
+      <description>	#vehicle_customization:camouflage/bp_2023_style_2/description	</description>
+      <scales>	1.2 1 0.7	</scales>
+      <tags>	fullRGB hiddenInUI	</tags>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	255 0 0 255	</c0>
+          <c1>	0 255 0 255	</c1>
+          <c2>	0 0 255 255	</c2>
+          <c3>	0 0 0 255	</c3>
+        </palette>
+      </palettes>
+      <tilingSettings>
+        <type>	relativewithfactor	</type>
+        <factor>	2.45 2.45	</factor>
+        <offset>	-4.14 -1.22	</offset>
+      </tilingSettings>
+      <tiling>
+        <ussr:R77_KV2>	2.13 2.13 0.28 0.01	</ussr:R77_KV2>
+        <uk:GB91_Super_Conqueror>	2.1 2.1 -0.41 -0.32	</uk:GB91_Super_Conqueror>
+        <germany:G121_Grille_15_L63>	6.25 6.25 -0.59 -0.12	</germany:G121_Grille_15_L63>
+        <china:Ch01_Type59>	2 2 0 -0.5	</china:Ch01_Type59>
+      </tiling>
+    </camouflage>
+    <camouflage>
+      <id>	15969	</id>
+      <texture>	vehicles/russian/Camouflage/bp_2023_style_2_camogun.dds	</texture>
+      <userString>	#vehicle_customization:camouflage/bp_2023_style_2/label	</userString>
+      <description>	#vehicle_customization:camouflage/bp_2023_style_2/description	</description>
+      <scales>	1.2 1 0.7	</scales>
+      <tags>	fullRGB hiddenInUI	</tags>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	255 0 0 255	</c0>
+          <c1>	0 255 0 255	</c1>
+          <c2>	0 0 255 255	</c2>
+          <c3>	0 0 0 255	</c3>
+        </palette>
+      </palettes>
+      <tilingSettings>
+        <type>	relativewithfactor	</type>
+        <factor>	3 3	</factor>
+        <offset>	0 0	</offset>
+      </tilingSettings>
+    </camouflage>
+    <camouflage>
+      <id>	15970	</id>
+      <texture>	vehicles/russian/Camouflage/bp_2023_style_3_camo.dds	</texture>
+      <userString>	#vehicle_customization:camouflage/bp_2023_style_3/label	</userString>
+      <description>	#vehicle_customization:camouflage/bp_2023_style_3/description	</description>
+      <scales>	1.2 1 0.7	</scales>
+      <tags>	fullRGB hiddenInUI	</tags>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	255 0 0 255	</c0>
+          <c1>	0 255 0 255	</c1>
+          <c2>	0 0 255 255	</c2>
+          <c3>	0 0 0 255	</c3>
+        </palette>
+      </palettes>
+      <rotation>
+        <HULL>	-0.468446	</HULL>
+        <TURRET>	-0.468446	</TURRET>
+        <GUN>	-0.468446	</GUN>
+      </rotation>
+      <tilingSettings>
+        <type>	relativewithfactor	</type>
+        <factor>	2.01 2.01	</factor>
+        <offset>	-2.71 -0.03	</offset>
+      </tilingSettings>
+      <gloss>	0.28 0.29 0.3 0.79	</gloss>
+      <metallic>	0.33 0.32 0.34 0.23	</metallic>
+    </camouflage>
+    <camouflage>
+      <id>	15971	</id>
+      <texture>	vehicles/russian/Camouflage/bp_2023_style_4_camo.dds	</texture>
+      <userString>	#vehicle_customization:camouflage/bp_2023_style_4/label	</userString>
+      <description>	#vehicle_customization:camouflage/bp_2023_style_4/description	</description>
+      <scales>	1.2 1 0.7	</scales>
+      <tags>	fullRGB hiddenInUI	</tags>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	255 0 0 255	</c0>
+          <c1>	0 255 0 255	</c1>
+          <c2>	0 0 255 255	</c2>
+          <c3>	0 0 0 255	</c3>
+        </palette>
+      </palettes>
+      <rotation>
+        <HULL>	0.087266	</HULL>
+        <TURRET>	0.087266	</TURRET>
+        <GUN>	0.087266	</GUN>
+      </rotation>
+      <tilingSettings>
+        <type>	relativewithfactor	</type>
+        <factor>	2.3 2.3	</factor>
+        <offset>	0.78 3.24	</offset>
+      </tilingSettings>
+      <glossMetallicMap>	vehicles/russian/Camouflage/bp_2023_style_4_camo_GM.dds	</glossMetallicMap>
+    </camouflage>
+  </itemGroup>
+</camouflage_bp_2023_style_1_label.xml>

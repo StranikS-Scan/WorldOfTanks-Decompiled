@@ -60,7 +60,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	12923	</weight>
-    <maxHealth>	456	</maxHealth>
+    <maxHealth>	500	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	140	</maxHealth>
       <maxRegenHealth>	90	</maxRegenHealth>
@@ -2057,7 +2057,7 @@
           <camouflage></camouflage>
         </customizableVehicleAreas>
       </customization>
-      <repairTime>	5.71428585	</repairTime>
+      <repairTime>	2.85003138	</repairTime>
     </Chassis_GB07_Matilda>
     <Chassis_GB07_Matilda_2>
       <userString>	#gb_vehicles:Chassis_GB07_Matilda_2	</userString>
@@ -2911,13 +2911,17 @@
           <camouflage></camouflage>
         </customizableVehicleAreas>
       </customization>
-      <repairTime>	5.71428585	</repairTime>
+      <repairTime>	2.85003138	</repairTime>
     </Chassis_GB07_Matilda_2>
   </chassis>
   <turrets0>
     <Turret_1_GB07_Matilda>
       <userString>	#gb_vehicles:Turret_1_GB07_Matilda	</userString>
       <tags></tags>
+      <unlocks>
+        <turret>	Turret_2_GB07_Matilda	  <cost>	1200	</cost>
+        </turret>
+      </unlocks>
       <level>	3	</level>
       <price>	2160	</price>
       <armor>
@@ -2934,7 +2938,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	5650	</weight>
-      <maxHealth>	84	</maxHealth>
+      <maxHealth>	100	</maxHealth>
       <rotationSpeed>	34	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	80	</maxHealth>
@@ -2951,8 +2955,6 @@
         <_2pdr_Gun_Mk_X>	shared	  <maxAmmo>	160	</maxAmmo>
           <unlocks>
             <gun>	QF_2pdr_Littlejohn	  <cost>	1800	</cost>
-            </gun>
-            <gun>	_76mm_Howitzer_MkI	  <cost>	2100	</cost>
             </gun>
           </unlocks>
           <armor>
@@ -3029,88 +3031,9 @@
             <aoTextureSize>	256 256	</aoTextureSize>
           </camouflage>
         </_2pdr_Gun_Mk_X>
-        <_76mm_Howitzer_MkI>	shared	  <maxAmmo>	55	</maxAmmo>
-          <unlocks>
-            <turret>	Turret_2_GB07_Matilda	  <cost>	1200	</cost>
-            </turret>
-          </unlocks>
-          <armor>
-            <armor_1>	75	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_1>
-            <armor_2>	70	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_2>
-            <armor_3>	35	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_3>
-            <armor_5>	35	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_5>
-            <armor_6>	70	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_6>
-            <armor_7>	30	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_7>
-            <gun>	20	</gun>
-          </armor>
-          <shotDispersionRadius>	0.53	</shotDispersionRadius>
-          <reloadTime>	4	</reloadTime>
-          <aimingTime>	1.9	</aimingTime>
-          <pitchLimits>
-            <minPitch>	0 -20 1 -20	</minPitch>
-            <maxPitch>	0 10 0.366894 10 0.430556 9 0.569444 9 0.633106 10 1 10	</maxPitch>
-          </pitchLimits>
-          <shotDispersionFactors>
-            <turretRotation>	0.08	</turretRotation>
-            <afterShot>	4.0	</afterShot>
-            <whileGunDamaged>	2.0	</whileGunDamaged>
-          </shotDispersionFactors>
-          <invisibilityFactorAtShot>	0.26	</invisibilityFactorAtShot>
-          <models>
-            <undamaged>	vehicles/british/GB07_Matilda/normal/lod0/Gun_02.model	</undamaged>
-            <destroyed>	vehicles/british/GB07_Matilda/crash/lod0/Gun_02.model	</destroyed>
-            <exploded>	vehicles/british/GB07_Matilda/crash/lod0/Gun_02.model	</exploded>
-          </models>
-          <hitTester>
-            <collisionModelServer>	vehicles/british/GB07_Matilda/collision/Gun_02.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/british/GB07_Matilda/collision_client/Gun_02.model	</collisionModelClient>
-          </hitTester>
-          <effects>	shot_medium	</effects>
-          <reloadEffect>	reload50_75	</reloadEffect>
-          <customizationSlots>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41000	</slotId>
-              <anchorPosition>	-0.000001 -0.028238 0.978187	</anchorPosition>
-              <anchorDirection>	-0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41001	</slotId>
-              <anchorPosition>	0 0.182062 0.182061	</anchorPosition>
-              <anchorDirection>	0 0.707107 0.707107	</anchorDirection>
-              <applyTo>	16384	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	camouflage	</slotType>
-              <slotId>	42000	</slotId>
-              <anchorPosition>	-0.000001 -0.028233 0.978182	</anchorPosition>
-              <anchorDirection>	-0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-          </customizationSlots>
-          <customization>
-            <customizableVehicleAreas>
-              <paint>	GUN GUN_2	</paint>
-              <camouflage>	GUN	</camouflage>
-            </customizableVehicleAreas>
-          </customization>
-          <camouflage>
-            <tiling>	0.7 0.7 0.000000 0.000000	</tiling>
-            <density>	102.218 98.222	</density>
-            <aoTextureSize>	256 256	</aoTextureSize>
-          </camouflage>
-        </_76mm_Howitzer_MkI>
         <QF_2pdr_Littlejohn>	shared	  <maxAmmo>	140	</maxAmmo>
           <unlocks>
-            <vehicle>	GB107_Cavalier	  <cost>	15000	</cost>
+            <vehicle>	GB107_Cavalier	  <cost>	15600	</cost>
             </vehicle>
           </unlocks>
           <armor>
@@ -3575,7 +3498,7 @@
       <level>	4	</level>
       <price>	5000	</price>
       <unlocks>
-        <vehicle>	GB08_Churchill_I	  <cost>	11500	</cost>
+        <vehicle>	GB08_Churchill_I	  <cost>	18600	</cost>
         </vehicle>
       </unlocks>
       <armor>
@@ -3592,7 +3515,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	6050	</weight>
-      <maxHealth>	114	</maxHealth>
+      <maxHealth>	120	</maxHealth>
       <rotationSpeed>	34	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	80	</maxHealth>
@@ -3681,81 +3604,6 @@
             <aoTextureSize>	256 256	</aoTextureSize>
           </camouflage>
         </_2pdr_Gun_Mk_X>
-        <_76mm_Howitzer_MkI>	shared	  <maxAmmo>	55	</maxAmmo>
-          <armor>
-            <armor_1>	75	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_1>
-            <armor_2>	70	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_2>
-            <armor_3>	35	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_3>
-            <armor_5>	35	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_5>
-            <armor_6>	70	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_6>
-            <armor_7>	30	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_7>
-            <gun>	20	</gun>
-          </armor>
-          <shotDispersionRadius>	0.53	</shotDispersionRadius>
-          <reloadTime>	4	</reloadTime>
-          <shotDispersionFactors>
-            <turretRotation>	0.06	</turretRotation>
-            <afterShot>	4.0	</afterShot>
-            <whileGunDamaged>	2.0	</whileGunDamaged>
-          </shotDispersionFactors>
-          <aimingTime>	1.9	</aimingTime>
-          <pitchLimits>
-            <minPitch>	0 -20 1 -20	</minPitch>
-            <maxPitch>	0 10 0.366894 10 0.430556 9 0.569444 9 0.633106 10 1 10	</maxPitch>
-          </pitchLimits>
-          <invisibilityFactorAtShot>	0.26	</invisibilityFactorAtShot>
-          <models>
-            <undamaged>	vehicles/british/GB07_Matilda/normal/lod0/Gun_05.model	</undamaged>
-            <destroyed>	vehicles/british/GB07_Matilda/crash/lod0/Gun_05.model	</destroyed>
-            <exploded>	vehicles/british/GB07_Matilda/crash/lod0/Gun_05.model	</exploded>
-          </models>
-          <hitTester>
-            <collisionModelServer>	vehicles/british/GB07_Matilda/collision/Gun_05.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/british/GB07_Matilda/collision_client/Gun_05.model	</collisionModelClient>
-          </hitTester>
-          <effects>	shot_medium	</effects>
-          <reloadEffect>	reload50_75	</reloadEffect>
-          <customizationSlots>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41000	</slotId>
-              <anchorPosition>	-0 -0.030035 1.0023	</anchorPosition>
-              <anchorDirection>	-0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41001	</slotId>
-              <anchorPosition>	0 0.18206 0.18206	</anchorPosition>
-              <anchorDirection>	0 0.707107 0.707107	</anchorDirection>
-              <applyTo>	16384	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	camouflage	</slotType>
-              <slotId>	42000	</slotId>
-              <anchorPosition>	-0 -0.030035 1.0023	</anchorPosition>
-              <anchorDirection>	-0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-          </customizationSlots>
-          <customization>
-            <customizableVehicleAreas>
-              <paint>	GUN GUN_2	</paint>
-              <camouflage>	GUN	</camouflage>
-            </customizableVehicleAreas>
-          </customization>
-          <camouflage>
-            <tiling>	0.7 0.7 0.000000 0.000000	</tiling>
-            <density>	102.218 98.222	</density>
-            <aoTextureSize>	256 256	</aoTextureSize>
-          </camouflage>
-        </_76mm_Howitzer_MkI>
         <QF_2pdr_Littlejohn>	shared	  <maxAmmo>	140	</maxAmmo>
           <armor>
             <armor_1>	75	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
@@ -4207,21 +4055,6 @@
     <Average>	shared	</Average>
   </fuelTanks>
   <radios>
-    <N11>	shared	  <unlocks>
-        <radio>	N9	  <cost>	610	</cost>
-        </radio>
-      </unlocks>
-    </N11>
-    <N9>	shared	  <unlocks>
-        <radio>	N19Mk1	  <cost>	1480	</cost>
-        </radio>
-      </unlocks>
-    </N9>
-    <N19Mk1>	shared	  <unlocks>
-        <radio>	N19Mk2	  <cost>	3600	</cost>
-        </radio>
-      </unlocks>
-    </N19Mk1>
     <N19Mk2>	shared	</N19Mk2>
   </radios>
   <physics>

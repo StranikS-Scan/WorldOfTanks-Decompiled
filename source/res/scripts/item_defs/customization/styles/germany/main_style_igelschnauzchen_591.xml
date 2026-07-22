@@ -1,0 +1,42 @@
+<main_style_igelschnauzchen_591.xml>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/main_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	0	</historical>
+    <priceGroup>	MT 3D styles 6-7-8 levels 4000g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	germany:G99_RhB_Waffentrager	</vehicles>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	591	</id>
+      <texture>	gui/maps/vehicles/styles/G99_RhB_Waffentrager_3DSt_TIR.png	</texture>
+      <modelsSet>	G99_RhB_Waffentrager_3DSt_TIR	</modelsSet>
+      <maxNumber>	1	</maxNumber>
+      <userString>	#vehicle_customization:main_style/igelschnauzchen	</userString>
+      <longDescriptionSpecial>	#vehicle_customization:main_style/igelschnauzchen_description/long	</longDescriptionSpecial>
+      <tags>	progression_required addNationalEmblem	</tags>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	1	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+        </outfit>
+      </outfits>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+    </style>
+  </itemGroup>
+</main_style_igelschnauzchen_591.xml>

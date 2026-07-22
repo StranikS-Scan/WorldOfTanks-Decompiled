@@ -1,0 +1,62 @@
+<BP18_04_Style_2025_name.xml>
+  <itemGroup>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	MT 2D styles universal 1000g notInShop	</priceGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <style>
+      <id>	31405	</id>
+      <outfits>
+        <outfit>
+          <season>	all	</season>
+          <modifications>
+            <item>	4	</item>
+          </modifications>
+          <paints>
+            <item>
+              <id>	31374	</id>
+              <appliedTo>	20753	</appliedTo>
+            </item>
+          </paints>
+          <camouflages>
+            <item>
+              <id>	31378	</id>
+              <patternSize>	1	</patternSize>
+              <appliedTo>	4368	</appliedTo>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <projection_decals>
+            <item>
+              <id>	31325	</id>
+              <scaleFactorId>	2	</scaleFactorId>
+              <tags>	left safe formfactor_square	</tags>
+            </item>
+            <item>
+              <id>	31326	</id>
+              <scaleFactorId>	1	</scaleFactorId>
+              <tags>	formfactor_rect1x2 safe right	</tags>
+            </item>
+          </projection_decals>
+        </outfit>
+      </outfits>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+      <texture>	gui/maps/vehicles/styles/BP18_04_Style_2025.png	</texture>
+      <userString>	#vehicle_customization:BP18_04_Style_2025/name	</userString>
+      <description>	#vehicle_customization:BP18_04_Style_2025/description	</description>
+      <longDescriptionSpecial>	#vehicle_customization:BP18_04_Style_2025/longDescription	</longDescriptionSpecial>
+    </style>
+    <tags>	progression_required	</tags>
+  </itemGroup>
+</BP18_04_Style_2025_name.xml>

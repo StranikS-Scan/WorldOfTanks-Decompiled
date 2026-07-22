@@ -1,0 +1,46 @@
+<camouflage_gamescom_2020_label.xml>
+  <xmlns:czech1>	ussr	</xmlns:czech1>
+  <xmlns:germany>	germany	</xmlns:germany>
+  <xmlns:czech0>	usa	</xmlns:czech0>
+  <xmlns:china>	china	</xmlns:china>
+  <xmlns:france>	france	</xmlns:france>
+  <xmlns:uk>	uk	</xmlns:uk>
+  <xmlns:japan>	japan	</xmlns:japan>
+  <xmlns:czech>	czech	</xmlns:czech>
+  <xmlns:sweden>	sweden	</xmlns:sweden>
+  <xmlns:poland>	poland	</xmlns:poland>
+  <xmlns:italy>	italy	</xmlns:italy>
+  <xmlns:intunion>	intunion	</xmlns:intunion>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/opaque	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	MT camouflages 50g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R47_ISU-152_Zveroboj ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <camouflage>
+      <id>	174	</id>
+      <texture>	vehicles/russian/Camouflage/lunar_NY.dds	</texture>
+      <description>	#vehicle_customization:camouflage/gamescom_2020/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/gamescom_2020/label	</userString>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	16 19 22 255	</c0>
+          <c1>	58 71 84 255	</c1>
+          <c2>	198 83 29 255	</c2>
+          <c3>	23 27 33 255	</c3>
+        </palette>
+      </palettes>
+      <tilingSettings>
+        <type>	relative	</type>
+        <factor>	2.3 2.3	</factor>
+        <offset>	2.15 0.04	</offset>
+      </tilingSettings>
+    </camouflage>
+  </itemGroup>
+</camouflage_gamescom_2020_label.xml>

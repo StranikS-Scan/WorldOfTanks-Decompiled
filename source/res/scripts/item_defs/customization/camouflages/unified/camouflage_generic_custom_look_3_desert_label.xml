@@ -1,0 +1,57 @@
+<camouflage_generic_custom_look_3_desert_label.xml>
+  <uk:GB107_Cavalier5>	ussr	</uk:GB107_Cavalier5>
+  <xmlns:germany>	germany	</xmlns:germany>
+  <uk:GB107_Cavalier4>	usa	</uk:GB107_Cavalier4>
+  <xmlns:china>	china	</xmlns:china>
+  <xmlns:france>	france	</xmlns:france>
+  <uk:GB107_Cavalier3>	uk	</uk:GB107_Cavalier3>
+  <uk:GB107_Cavalier0>	japan	</uk:GB107_Cavalier0>
+  <xmlns:czech>	czech	</xmlns:czech>
+  <uk:GB107_Cavalier2>	sweden	</uk:GB107_Cavalier2>
+  <uk:GB107_Cavalier1>	poland	</uk:GB107_Cavalier1>
+  <xmlns:italy>	italy	</xmlns:italy>
+  <xmlns:intunion>	intunion	</xmlns:intunion>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/opaque	</userString>
+    <season>	desert	</season>
+    <historical>	0	</historical>
+    <priceGroup>	MT camouflages 50g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <camouflage>
+      <id>	48	</id>
+      <texture>	vehicles/russian/Camouflage/generic_custom_look_3_02.dds	</texture>
+      <description>	#vehicle_customization:camouflage/generic_custom_look_3_desert/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/generic_custom_look_3_desert/label	</userString>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	186 165 122 255	</c0>
+          <c1>	142 105 91 255	</c1>
+          <c2>	62 69 76 255	</c2>
+          <c3>	178 159 121 255	</c3>
+        </palette>
+      </palettes>
+      <rotation>
+        <HULL>	-0.523599	</HULL>
+        <TURRET>	-0.523599	</TURRET>
+        <GUN>	-0.523599	</GUN>
+      </rotation>
+      <tiling>
+        <france:F115_Lorraine_50t>	0.4 0.4 0.000000 0.000000	</france:F115_Lorraine_50t>
+        <uk:GB107_Cavalier>	1.5 1.5 0.000000 0.000000	</uk:GB107_Cavalier>
+        <ussr:R170_IS_2_II>	0.7 0.7 -4.48 -5.21	</ussr:R170_IS_2_II>
+        <ussr:R172_Object_752>	1.2 1.2 0.88 0.12	</ussr:R172_Object_752>
+      </tiling>
+      <tilingSettings>
+        <type>	relative	</type>
+        <factor>	2 2	</factor>
+        <offset>	0.000000 0.000000	</offset>
+      </tilingSettings>
+    </camouflage>
+  </itemGroup>
+</camouflage_generic_custom_look_3_desert_label.xml>

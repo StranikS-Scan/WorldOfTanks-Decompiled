@@ -1,0 +1,75 @@
+<camouflage_10years_strv_hull_label.xml>
+  <xmlns:china2>	ussr	</xmlns:china2>
+  <xmlns:germany>	germany	</xmlns:germany>
+  <xmlns:china1>	usa	</xmlns:china1>
+  <xmlns:china>	china	</xmlns:china>
+  <xmlns:france>	france	</xmlns:france>
+  <xmlns:china0>	uk	</xmlns:china0>
+  <xmlns:japan>	japan	</xmlns:japan>
+  <xmlns:czech>	czech	</xmlns:czech>
+  <xmlns:sweden>	sweden	</xmlns:sweden>
+  <xmlns:poland>	poland	</xmlns:poland>
+  <xmlns:italy>	italy	</xmlns:italy>
+  <xmlns:intunion>	intunion	</xmlns:intunion>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/opaque	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	MT camouflages 50g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	sweden:S01_Strv_74_A2	</vehicles>
+      </include>
+    </vehicleFilter>
+    <camouflage>
+      <id>	171	</id>
+      <texture>	vehicles/russian/Camouflage/10years_strv_hull.dds	</texture>
+      <description>	#vehicle_customization:camouflage/10years_strv_hull/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/10years_strv_hull/label	</userString>
+      <tags>	hiddenInUI	</tags>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	255 0 0 255	</c0>
+          <c1>	0 255 0 255	</c1>
+          <c2>	0 0 255 255	</c2>
+          <c3>	0 0 0 255	</c3>
+        </palette>
+      </palettes>
+      <tiling>
+        <sweden:S01_Strv_74_A2>	1 1 -0.56 -0.77	</sweden:S01_Strv_74_A2>
+      </tiling>
+      <tilingSettings>
+        <type>	relative	</type>
+        <factor>	1.399042  1.393995	</factor>
+        <offset>	0.000000 0.000000	</offset>
+      </tilingSettings>
+    </camouflage>
+    <camouflage>
+      <id>	172	</id>
+      <texture>	vehicles/russian/Camouflage/10years_strv_turret.dds	</texture>
+      <description>	#vehicle_customization:camouflage/10years_strv_turret/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/10years_strv_turret/label	</userString>
+      <tags>	hiddenInUI	</tags>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	255 0 0 255	</c0>
+          <c1>	0 255 0 255	</c1>
+          <c2>	0 0 255 255	</c2>
+          <c3>	0 0 0 255	</c3>
+        </palette>
+      </palettes>
+      <tiling>
+        <sweden:S01_Strv_74_A2>	0.98 0.98 -3.37 0.3	</sweden:S01_Strv_74_A2>
+      </tiling>
+      <tilingSettings>
+        <type>	relative	</type>
+        <factor>	1.371061  1.366115	</factor>
+        <offset>	0.000000 0.000000	</offset>
+      </tilingSettings>
+    </camouflage>
+  </itemGroup>
+</camouflage_10years_strv_hull_label.xml>

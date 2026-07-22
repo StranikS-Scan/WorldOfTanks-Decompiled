@@ -76,6 +76,17 @@ def preformatVehicleItems(rewards):
         return
 
 
+def preformatMeta(rewards, result):
+    meta = rewards.get('meta', {})
+    if not meta:
+        return
+    else:
+        result.auxData['clientData']['uniqueOpening'] |= meta.pop(GLOW, None) is not None
+        if not meta:
+            del rewards['meta']
+        return
+
+
 def prepareOpenResult(result):
     if result and result.success and result.auxData:
         bonus = result.auxData.get('bonus', [])
@@ -86,10 +97,10 @@ def prepareOpenResult(result):
             preformatStyle(rewards)
             preformatKey(rewards, dataUsedKeys, dataFaildKey)
             preformatVehicleItems(rewards)
+            preformatMeta(rewards, result)
 
         rewards = getMergedBonusesFromDicts(bonus)
         openedLootBoxesData = result.auxData.get('extData', {}).get('openedLootBoxes', {})
-        result.auxData['clientData']['uniqueOpening'] = GLOW in rewards.get('meta', {})
         message = {'rewards': rewards,
          'failedKeys': dataFaildKey,
          'usedKeys': dataUsedKeys,

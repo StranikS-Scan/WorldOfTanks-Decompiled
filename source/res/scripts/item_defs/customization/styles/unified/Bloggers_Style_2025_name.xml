@@ -1,0 +1,75 @@
+<Bloggers_Style_2025_name.xml>
+  <itemGroup>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <vehicleFilter>
+      <include>
+        <vehicles>	ussr:R97_Object_140	</vehicles>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	31386	</id>
+      <texture>	gui/maps/vehicles/styles/Bloggers_Style_2025.png	</texture>
+      <outfits>
+        <outfit>
+          <season>	all	</season>
+          <modifications>
+            <item>	4	</item>
+          </modifications>
+          <paints>
+            <item>
+              <id>	31357	</id>
+              <appliedTo>	1	</appliedTo>
+            </item>
+            <item>
+              <id>	31358	</id>
+              <appliedTo>	20752	</appliedTo>
+            </item>
+          </paints>
+          <camouflages>
+            <item>
+              <id>	31357	</id>
+              <patternSize>	1	</patternSize>
+              <appliedTo>	256	</appliedTo>
+              <palette>	0	</palette>
+            </item>
+            <item>
+              <id>	31358	</id>
+              <patternSize>	1	</patternSize>
+              <appliedTo>	4112	</appliedTo>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <projection_decals>
+            <item>
+              <id>	31307	</id>
+              <tags>	front formfactor_square safe	</tags>
+            </item>
+            <item>
+              <id>	31308	</id>
+              <scaleFactorId>	2	</scaleFactorId>
+              <tags>	formfactor_square left safe	</tags>
+            </item>
+            <item>
+              <id>	31309	</id>
+              <tags>	formfactor_rect1x2 mimic right	</tags>
+              <options>	1	</options>
+            </item>
+          </projection_decals>
+          <insignias>
+            <item>
+              <id>	31035	</id>
+              <appliedTo>	4096	</appliedTo>
+            </item>
+          </insignias>
+        </outfit>
+      </outfits>
+      <userString>	#vehicle_customization:Bloggers_Style_2025/name	</userString>
+      <description>	#vehicle_customization:Bloggers_Style_2025/description	</description>
+      <longDescriptionSpecial>	#vehicle_customization:Bloggers_Style_2025/longDescription	</longDescriptionSpecial>
+    </style>
+    <priceGroup>	MT 2D styles direct 1500g notInShop	</priceGroup>
+    <maxNumber>	1	</maxNumber>
+  </itemGroup>
+</Bloggers_Style_2025_name.xml>

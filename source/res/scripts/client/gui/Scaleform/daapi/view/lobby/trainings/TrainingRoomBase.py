@@ -41,6 +41,7 @@ from skeletons.helpers.statistics import IStatisticsCollector
 from helpers.statistics import HANGAR_LOADING_STATE
 from constants import PREBATTLE_MAX_OBSERVERS_IN_TEAM, OBSERVERS_BONUS_TYPES, PREBATTLE_ERRORS, PREBATTLE_TYPE
 from gui.shared.events import CoolDownEvent
+from uilogging.rename_testing.loggers import RenameTestingUILogger
 BATTLE_TYPES_ICONS = {PREBATTLE_TYPE.TRAINING: BATTLE_TYPES.TRAINING,
  PREBATTLE_TYPE.EPIC_TRAINING: BATTLE_TYPES.EPIC_TRAINING}
 
@@ -103,6 +104,8 @@ class TrainingRoomBase(LobbySubView, TrainingRoomBaseMeta, ILegacyListener):
          'ctrlType': CTRL_ENTITY_TYPE.LEGACY}), scope=EVENT_BUS_SCOPE.LOBBY)
 
     def startTraining(self):
+        if self.prbEntity and self.prbEntity.getEntityType() == PREBATTLE_TYPE.TRAINING:
+            RenameTestingUILogger().logTrainingStartBattle()
         self._closeWindows()
         self.__doStartTraining()
 

@@ -21,7 +21,7 @@ class ArenaBonusType(IntEnum):
 class GameModeModel(ViewModel):
     __slots__ = ()
 
-    def __init__(self, properties=5, commands=0):
+    def __init__(self, properties=6, commands=0):
         super(GameModeModel, self).__init__(properties=properties, commands=commands)
 
     def getTitle(self):
@@ -42,21 +42,27 @@ class GameModeModel(ViewModel):
     def setArenaBonusType(self, value):
         self._setNumber(2, value.value)
 
+    def getIconPostfix(self):
+        return self._getString(3)
+
+    def setIconPostfix(self, value):
+        self._setString(3, value)
+
     def getTableRows(self):
-        return self._getArray(3)
+        return self._getArray(4)
 
     def setTableRows(self, value):
-        self._setArray(3, value)
+        self._setArray(4, value)
 
     @staticmethod
     def getTableRowsType():
         return GameModeRowsModel
 
     def getCards(self):
-        return self._getArray(4)
+        return self._getArray(5)
 
     def setCards(self, value):
-        self._setArray(4, value)
+        self._setArray(5, value)
 
     @staticmethod
     def getCardsType():
@@ -67,5 +73,6 @@ class GameModeModel(ViewModel):
         self._addStringProperty('title', '')
         self._addStringProperty('text', '')
         self._addNumberProperty('arenaBonusType')
+        self._addStringProperty('iconPostfix', '')
         self._addArrayProperty('tableRows', Array())
         self._addArrayProperty('cards', Array())

@@ -1,0 +1,50 @@
+<camouflage_Desert_Tiger_217_label.xml>
+  <xmlns:czech1>	ussr	</xmlns:czech1>
+  <xmlns:germany>	germany	</xmlns:germany>
+  <xmlns:czech0>	usa	</xmlns:czech0>
+  <xmlns:china>	china	</xmlns:china>
+  <xmlns:france>	france	</xmlns:france>
+  <xmlns:uk>	uk	</xmlns:uk>
+  <xmlns:japan>	japan	</xmlns:japan>
+  <xmlns:czech>	czech	</xmlns:czech>
+  <xmlns:sweden>	sweden	</xmlns:sweden>
+  <xmlns:poland>	poland	</xmlns:poland>
+  <xmlns:italy>	italy	</xmlns:italy>
+  <xmlns:intunion>	intunion	</xmlns:intunion>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/opaque	</userString>
+    <season>	desert	</season>
+    <historical>	0	</historical>
+    <priceGroup>	MT camouflages 50g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <nations>	germany	</nations>
+        <vehicles>	germany:G137_PzVI_Tiger_217	</vehicles>
+      </include>
+    </vehicleFilter>
+    <camouflage>
+      <id>	15140	</id>
+      <texture>	vehicles/german/Camouflage/Cger_1_12Winter.dds	</texture>
+      <description>	#vehicle_customization:camouflage/Desert_Tiger_217/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/Desert_Tiger_217/label	</userString>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	121 111 89 255	</c0>
+          <c1>	0 0 0 0	</c1>
+          <c2>	0 0 0 0	</c2>
+          <c3>	0 0 0 0	</c3>
+        </palette>
+      </palettes>
+      <tiling>
+        <G137_PzVI_Tiger_217>	2.6 2.6 0.000000 0.000000	</G137_PzVI_Tiger_217>
+      </tiling>
+      <tilingSettings>
+        <type>	relative	</type>
+        <factor>	7.309640  7.297944	</factor>
+        <offset>	0.000000 0.000000	</offset>
+      </tilingSettings>
+    </camouflage>
+  </itemGroup>
+</camouflage_Desert_Tiger_217_label.xml>

@@ -6,7 +6,7 @@ from account_helpers.AccountSettings import IS_BATTLE_PASS_COLLECTION_SEEN
 from gui.collection.collections_constants import COLLECTION_ITEM_BONUS_NAME
 from gui.collection.collections_helpers import getItemName, getItemResKey
 from gui.impl import backport
-from gui.impl.backport import TooltipData
+from gui.impl.backport import createTooltipData
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.collection.reward_model import RewardModel
 from gui.shared.missions.packers.bonus import getDefaultBonusPackersMap, BonusUIPacker, SimpleBonusUIPacker, CustomizationBonusUIPacker, TmanTemplateBonusPacker
@@ -19,6 +19,7 @@ if typing.TYPE_CHECKING:
     from gui.impl.gen.view_models.common.missions.bonuses.icon_bonus_model import IconBonusModel
     from gui.impl.gen.view_models.views.lobby.battle_pass.collection_entry_point_view_model import CollectionEntryPointViewModel
     from gui.server_events.bonuses import SimpleBonus, CollectionEntitlementBonus, BpcoinBonus, CustomizationsBonus
+    from gui.impl.backport import TooltipData
 
 @replace_none_kwargs(collectionsSystem=ICollectionsSystemController)
 def fillCollectionModel(model, collectionId, collectionsSystem=None):
@@ -107,7 +108,7 @@ class CollectionItemBonusPacker(SimpleBonusUIPacker):
     def _getToolTip(cls, bonus):
         itemId = bonus.getItemId()
         collectionId = bonus.getCollectionId()
-        tooltipData = [TooltipData(tooltip=None, isSpecial=True, specialAlias=None, specialArgs=[itemId, collectionId])]
+        tooltipData = [createTooltipData(tooltip=None, isSpecial=True, specialAlias=None, specialArgs=[itemId, collectionId])]
         return tooltipData
 
     @classmethod

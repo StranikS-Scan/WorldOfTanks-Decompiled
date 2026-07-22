@@ -1,56 +1,158 @@
 <chassis.xml>
-  <ids>
-    <Chassis_It13_Progetto_M35_mod_46>	0	</Chassis_It13_Progetto_M35_mod_46>
-    <Chassis_It04_Fiat_3000>	1	</Chassis_It04_Fiat_3000>
-    <Chassis_It05_Carro_L6_40>	2	</Chassis_It05_Carro_L6_40>
-    <Chassis_It05_Carro_L6_40_2>	3	</Chassis_It05_Carro_L6_40_2>
-    <Chassis_It06_M14_41>	4	</Chassis_It06_M14_41>
-    <Chassis_It06_M14_41_2>	5	</Chassis_It06_M14_41_2>
-    <Chassis_It03_M15_42>	6	</Chassis_It03_M15_42>
-    <Chassis_It03_M15_42_2>	7	</Chassis_It03_M15_42_2>
-    <Chassis_It07_P26_40>	8	</Chassis_It07_P26_40>
-    <Chassis_It07_P26_40_2>	9	</Chassis_It07_P26_40_2>
-    <Chassis_It11_P43>	10	</Chassis_It11_P43>
-    <Chassis_It11_P43_2>	11	</Chassis_It11_P43_2>
-    <Chassis_It10_P43_bis>	12	</Chassis_It10_P43_bis>
-    <Chassis_It10_P43_bis_2>	13	</Chassis_It10_P43_bis_2>
-    <Chassis_It09_P43_ter>	14	</Chassis_It09_P43_ter>
-    <Chassis_It09_P43_ter_2>	15	</Chassis_It09_P43_ter_2>
-    <Chassis_It14_P44_Pantera>	16	</Chassis_It14_P44_Pantera>
-    <Chassis_It14_P44_Pantera_2>	17	</Chassis_It14_P44_Pantera_2>
-    <Chassis_It12_Prototipo_Standard_B>	18	</Chassis_It12_Prototipo_Standard_B>
-    <Chassis_It12_Prototipo_Standard_B_2>	19	</Chassis_It12_Prototipo_Standard_B_2>
-    <Chassis_It08_Progetto_M40_mod_65>	20	</Chassis_It08_Progetto_M40_mod_65>
-    <Chassis_It08_Progetto_M40_mod_65_bob>	21	</Chassis_It08_Progetto_M40_mod_65_bob>
-    <Chassis_It15_Rinoceronte>	22	</Chassis_It15_Rinoceronte>
-    <Chassis_It18_Progetto_C45_mod_71>	23	</Chassis_It18_Progetto_C45_mod_71>
-    <Chassis_It16_Carrodassalto_P88>	24	</Chassis_It16_Carrodassalto_P88>
-    <Chassis_It16_Carrodassalto_P88_2>	25	</Chassis_It16_Carrodassalto_P88_2>
-    <Chassis_It19_Progetto_C50_mod_66>	26	</Chassis_It19_Progetto_C50_mod_66>
-    <Chassis_It19_Progetto_C50_mod_66_2>	27	</Chassis_It19_Progetto_C50_mod_66_2>
-    <Chassis_It17_Progetto_CC55_mod_54>	28	</Chassis_It17_Progetto_CC55_mod_54>
-    <Chassis_It17_Progetto_CC55_mod_54_2>	29	</Chassis_It17_Progetto_CC55_mod_54_2>
-    <Chassis_It20_Carro_Combattimento_45t>	30	</Chassis_It20_Carro_Combattimento_45t>
-    <Chassis_It21_Lion>	32	</Chassis_It21_Lion>
-    <Chassis_It31_CC_67_B>	45	</Chassis_It31_CC_67_B>
-    <Chassis_It28_Semovente_M41_Da_75_18>	34	</Chassis_It28_Semovente_M41_Da_75_18>
-    <Chassis_It28_Semovente_M41_Da_75_18_2>	35	</Chassis_It28_Semovente_M41_Da_75_18_2>
-    <Chassis_It27_M43_da_105_25_Bassoto>	36	</Chassis_It27_M43_da_105_25_Bassoto>
-    <Chassis_It27_M43_da_105_25_Bassoto_2>	37	</Chassis_It27_M43_da_105_25_Bassoto_2>
-    <Chassis_It26_CC_56>	38	</Chassis_It26_CC_56>
-    <Chassis_It26_CC_56_2>	39	</Chassis_It26_CC_56_2>
-    <Chassis_It30_CC_mod_64_Prem_2>	40	</Chassis_It30_CC_mod_64_Prem_2>
-    <Chassis_It31_CC_67_B_2>	41	</Chassis_It31_CC_67_B_2>
-    <Chassis_It23_CC_3>	42	</Chassis_It23_CC_3>
-    <Chassis_It24_Controcarro_1_Mk2>	43	</Chassis_It24_Controcarro_1_Mk2>
-    <Chassis_It24_Controcarro_1_Mk2_2>	44	</Chassis_It24_Controcarro_1_Mk2_2>
-    <Chassis_It13_Progetto_M35_mod_46_LE>	46	</Chassis_It13_Progetto_M35_mod_46_LE>
-    <Chassis_It29_Carro_Celere_Sahariano>	47	</Chassis_It29_Carro_Celere_Sahariano>
-    <Chassis_It32_Prototipo_6>	48	</Chassis_It32_Prototipo_6>
-    <Chassis_It33_Orso>	31001	</Chassis_It33_Orso>
-    <Chassis_It23_CC_3_bob>	31002	</Chassis_It23_CC_3_bob>
-    <Chassis_It36_Gasta>	31003	</Chassis_It36_Gasta>
-    <Chassis_It35_Gladiatore>	31004	</Chassis_It35_Gladiatore>
-  </ids>
-  <shared></shared>
+  <xmlns:xmlref>	http://bwt/xmlref	</xmlns:xmlref>
+  <shared>
+    <Chassis_It03_M15_42>
+      <id>	6	</id>
+    </Chassis_It03_M15_42>
+    <Chassis_It03_M15_42_2>
+      <id>	7	</id>
+    </Chassis_It03_M15_42_2>
+    <Chassis_It04_Fiat_3000>
+      <id>	1	</id>
+    </Chassis_It04_Fiat_3000>
+    <Chassis_It05_Carro_L6_40>
+      <id>	2	</id>
+    </Chassis_It05_Carro_L6_40>
+    <Chassis_It05_Carro_L6_40_2>
+      <id>	3	</id>
+    </Chassis_It05_Carro_L6_40_2>
+    <Chassis_It06_M14_41>
+      <id>	4	</id>
+    </Chassis_It06_M14_41>
+    <Chassis_It06_M14_41_2>
+      <id>	5	</id>
+    </Chassis_It06_M14_41_2>
+    <Chassis_It07_P26_40>
+      <id>	8	</id>
+    </Chassis_It07_P26_40>
+    <Chassis_It07_P26_40_2>
+      <id>	9	</id>
+    </Chassis_It07_P26_40_2>
+    <Chassis_It08_Progetto_M40_mod_65>
+      <id>	20	</id>
+    </Chassis_It08_Progetto_M40_mod_65>
+    <Chassis_It08_Progetto_M40_mod_65_bob>
+      <id>	21	</id>
+    </Chassis_It08_Progetto_M40_mod_65_bob>
+    <Chassis_It09_P43_ter>
+      <id>	14	</id>
+    </Chassis_It09_P43_ter>
+    <Chassis_It09_P43_ter_2>
+      <id>	15	</id>
+    </Chassis_It09_P43_ter_2>
+    <Chassis_It10_P43_bis>
+      <id>	12	</id>
+    </Chassis_It10_P43_bis>
+    <Chassis_It10_P43_bis_2>
+      <id>	13	</id>
+    </Chassis_It10_P43_bis_2>
+    <Chassis_It11_P43>
+      <id>	10	</id>
+    </Chassis_It11_P43>
+    <Chassis_It11_P43_2>
+      <id>	11	</id>
+    </Chassis_It11_P43_2>
+    <Chassis_It12_Prototipo_Standard_B>
+      <id>	18	</id>
+    </Chassis_It12_Prototipo_Standard_B>
+    <Chassis_It12_Prototipo_Standard_B_2>
+      <id>	19	</id>
+    </Chassis_It12_Prototipo_Standard_B_2>
+    <Chassis_It13_Progetto_M35_mod_46>
+      <id>	0	</id>
+    </Chassis_It13_Progetto_M35_mod_46>
+    <Chassis_It13_Progetto_M35_mod_46_LE>
+      <id>	46	</id>
+    </Chassis_It13_Progetto_M35_mod_46_LE>
+    <Chassis_It14_P44_Pantera>
+      <id>	16	</id>
+    </Chassis_It14_P44_Pantera>
+    <Chassis_It14_P44_Pantera_2>
+      <id>	17	</id>
+    </Chassis_It14_P44_Pantera_2>
+    <Chassis_It15_Rinoceronte>
+      <id>	22	</id>
+    </Chassis_It15_Rinoceronte>
+    <Chassis_It16_Carrodassalto_P88>
+      <id>	24	</id>
+    </Chassis_It16_Carrodassalto_P88>
+    <Chassis_It16_Carrodassalto_P88_2>
+      <id>	25	</id>
+    </Chassis_It16_Carrodassalto_P88_2>
+    <Chassis_It17_Progetto_CC55_mod_54>
+      <id>	28	</id>
+    </Chassis_It17_Progetto_CC55_mod_54>
+    <Chassis_It17_Progetto_CC55_mod_54_2>
+      <id>	29	</id>
+    </Chassis_It17_Progetto_CC55_mod_54_2>
+    <Chassis_It18_Progetto_C45_mod_71>
+      <id>	23	</id>
+    </Chassis_It18_Progetto_C45_mod_71>
+    <Chassis_It19_Progetto_C50_mod_66>
+      <id>	26	</id>
+    </Chassis_It19_Progetto_C50_mod_66>
+    <Chassis_It19_Progetto_C50_mod_66_2>
+      <id>	27	</id>
+    </Chassis_It19_Progetto_C50_mod_66_2>
+    <Chassis_It20_Carro_Combattimento_45t>
+      <id>	30	</id>
+    </Chassis_It20_Carro_Combattimento_45t>
+    <Chassis_It21_Lion>
+      <id>	32	</id>
+    </Chassis_It21_Lion>
+    <Chassis_It23_CC_3>
+      <id>	42	</id>
+    </Chassis_It23_CC_3>
+    <Chassis_It23_CC_3_bob>
+      <id>	31002	</id>
+    </Chassis_It23_CC_3_bob>
+    <Chassis_It24_Controcarro_1_Mk2>
+      <id>	43	</id>
+    </Chassis_It24_Controcarro_1_Mk2>
+    <Chassis_It24_Controcarro_1_Mk2_2>
+      <id>	44	</id>
+    </Chassis_It24_Controcarro_1_Mk2_2>
+    <Chassis_It26_CC_56>
+      <id>	38	</id>
+    </Chassis_It26_CC_56>
+    <Chassis_It26_CC_56_2>
+      <id>	39	</id>
+    </Chassis_It26_CC_56_2>
+    <Chassis_It27_M43_da_105_25_Bassoto>
+      <id>	36	</id>
+    </Chassis_It27_M43_da_105_25_Bassoto>
+    <Chassis_It27_M43_da_105_25_Bassoto_2>
+      <id>	37	</id>
+    </Chassis_It27_M43_da_105_25_Bassoto_2>
+    <Chassis_It28_Semovente_M41_Da_75_18>
+      <id>	34	</id>
+    </Chassis_It28_Semovente_M41_Da_75_18>
+    <Chassis_It28_Semovente_M41_Da_75_18_2>
+      <id>	35	</id>
+    </Chassis_It28_Semovente_M41_Da_75_18_2>
+    <Chassis_It29_Carro_Celere_Sahariano>
+      <id>	47	</id>
+    </Chassis_It29_Carro_Celere_Sahariano>
+    <Chassis_It30_CC_mod_64_Prem_2>
+      <id>	40	</id>
+    </Chassis_It30_CC_mod_64_Prem_2>
+    <Chassis_It31_CC_67_B>
+      <id>	45	</id>
+    </Chassis_It31_CC_67_B>
+    <Chassis_It31_CC_67_B_2>
+      <id>	41	</id>
+    </Chassis_It31_CC_67_B_2>
+    <Chassis_It32_Prototipo_6>
+      <id>	48	</id>
+    </Chassis_It32_Prototipo_6>
+    <Chassis_It33_Orso>
+      <id>	31001	</id>
+    </Chassis_It33_Orso>
+    <Chassis_It35_Gladiatore>
+      <id>	31004	</id>
+    </Chassis_It35_Gladiatore>
+    <Chassis_It36_Gasta>
+      <id>	31003	</id>
+    </Chassis_It36_Gasta>
+  </shared>
 </chassis.xml>

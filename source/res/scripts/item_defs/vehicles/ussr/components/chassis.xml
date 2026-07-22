@@ -1,359 +1,1067 @@
 <chassis.xml>
-  <ids>
-    <Observer>	255	</Observer>
-    <T-34_mod_1941>	0	</T-34_mod_1941>
-    <T-34_mod_1943>	1	</T-34_mod_1943>
-    <SU-85_mod_1942>	2	</SU-85_mod_1942>
-    <SU-85_mod_1943>	3	</SU-85_mod_1943>
-    <IS-1>	4	</IS-1>
-    <IS-2M>	5	</IS-2M>
-    <BT-5>	6	</BT-5>
-    <BT-7>	7	</BT-7>
-    <T-28_0>	8	</T-28_0>
-    <T-28_A>	9	</T-28_A>
-    <BT-2>	10	</BT-2>
-    <BT-2bis>	11	</BT-2bis>
-    <S-51>	12	</S-51>
-    <S-51bis>	13	</S-51bis>
-    <KV_1>	14	</KV_1>
-    <A-20_mod_1938>	16	</A-20_mod_1938>
-    <A-20_mod_1941>	17	</A-20_mod_1941>
-    <SU-152_mod_1943>	18	</SU-152_mod_1943>
-    <SU-152_mod_1944>	19	</SU-152_mod_1944>
-    <KV_2>	15	</KV_2>
-    <T-34-85>	20	</T-34-85>
-    <T-34-85Bis>	21	</T-34-85Bis>
-    <KV-1s>	22	</KV-1s>
-    <KV-1s_bis>	23	</KV-1s_bis>
-    <T-18>	26	</T-18>
-    <T-46-1>	24	</T-46-1>
-    <T-46-2>	25	</T-46-2>
-    <T-18Bis>	27	</T-18Bis>
-    <SU-100_mod_1944>	28	</SU-100_mod_1944>
-    <SU-100_mod_1945>	29	</SU-100_mod_1945>
-    <SU-18>	30	</SU-18>
-    <SU-18Bis>	31	</SU-18Bis>
-    <SU-14>	32	</SU-14>
-    <SU-14Bis>	33	</SU-14Bis>
-    <T-44>	34	</T-44>
-    <T-44Bis>	35	</T-44Bis>
-    <T-26>	36	</T-26>
-    <T-26M>	37	</T-26M>
-    <SU-5>	38	</SU-5>
-    <SU-5bis>	39	</SU-5bis>
-    <AT-1>	40	</AT-1>
-    <AT-1bis>	41	</AT-1bis>
-    <IS-3>	42	</IS-3>
-    <IS-3M>	43	</IS-3M>
-    <SU-8>	44	</SU-8>
-    <SU-8Bis>	45	</SU-8Bis>
-    <KV-3>	46	</KV-3>
-    <KV-3bis>	47	</KV-3bis>
-    <IS-4>	48	</IS-4>
-    <SU-76>	50	</SU-76>
-    <SU-76bis>	51	</SU-76bis>
-    <T-43>	52	</T-43>
-    <T-43M>	53	</T-43M>
-    <KV220>	54	</KV220>
-    <Matilda>	55	</Matilda>
-    <GAZ-74B>	56	</GAZ-74B>
-    <SU-85A>	57	</SU-85A>
-    <IS-7>	58	</IS-7>
-    <Churchll>	59	</Churchll>
-    <ISU-152>	60	</ISU-152>
-    <ISU-152_mod_1945>	61	</ISU-152_mod_1945>
-    <BT-SV>	63	</BT-SV>
-    <ValentineMK_I>	64	</ValentineMK_I>
-    <Su-26A>	65	</Su-26A>
-    <Su-26B>	66	</Su-26B>
-    <chassisE1_LL>	67	</chassisE1_LL>
-    <A-32>	68	</A-32>
-    <Chassis_T-54_2>	69	</Chassis_T-54_2>
-    <Chassis_T-54_3>	70	</Chassis_T-54_3>
-    <Chassis_Object_704>	71	</Chassis_Object_704>
-    <Chassis_Object_704_2>	72	</Chassis_Object_704_2>
-    <Chassis_Object_212>	73	</Chassis_Object_212>
-    <Chassis_Object_212_2>	74	</Chassis_Object_212_2>
-    <Chassis_Object_261>	75	</Chassis_Object_261>
-    <Chassis_KV-13>	77	</Chassis_KV-13>
-    <Chassis_KV-13_2>	78	</Chassis_KV-13_2>
-    <Chassis_KV-5>	79	</Chassis_KV-5>
-    <Chassis_T-127>	80	</Chassis_T-127>
-    <Chassis_T-50>	83	</Chassis_T-50>
-    <Chassis_T-50_2>	84	</Chassis_T-50_2>
-    <Chassis_T_50_2_1>	85	</Chassis_T_50_2_1>
-    <Chassis_SU-101>	87	</Chassis_SU-101>
-    <Chassis_SU-101_2>	88	</Chassis_SU-101_2>
-    <Chassis_SU_85I>	89	</Chassis_SU_85I>
-    <Chassis_SU100M1>	90	</Chassis_SU100M1>
-    <Chassis_SU100M1_2>	91	</Chassis_SU100M1_2>
-    <Chassis_KV2_1>	92	</Chassis_KV2_1>
-    <Chassis_KV2_2>	93	</Chassis_KV2_2>
-    <KV220_A>	94	</KV220_A>
-    <Chassis_SU76I>	95	</Chassis_SU76I>
-    <Chassis_IS-6>	96	</Chassis_IS-6>
-    <Chassis_ST_I>	97	</Chassis_ST_I>
-    <Chassis_ST_I_2>	98	</Chassis_ST_I_2>
-    <Chassis_Tetrarch_LL>	99	</Chassis_Tetrarch_LL>
-    <Chassis_KV4>	100	</Chassis_KV4>
-    <Chassis_KV4_2>	101	</Chassis_KV4_2>
-    <Chassis_T150>	102	</Chassis_T150>
-    <Chassis_T150_2>	103	</Chassis_T150_2>
-    <Chassis_IS8>	104	</Chassis_IS8>
-    <Chassis_IS8_2>	105	</Chassis_IS8_2>
-    <Chassis_KV1>	106	</Chassis_KV1>
-    <Chassis_KV1_2>	107	</Chassis_KV1_2>
-    <Chassis_SU122_54>	108	</Chassis_SU122_54>
-    <Chassis_SU122_54_2>	109	</Chassis_SU122_54_2>
-    <Chassis_A43>	110	</Chassis_A43>
-    <Chassis_A43_2>	111	</Chassis_A43_2>
-    <Chassis_A44>	112	</Chassis_A44>
-    <Chassis_A44_2>	113	</Chassis_A44_2>
-    <Chassis_SU100Y>	118	</Chassis_SU100Y>
-    <Chassis_Object416>	119	</Chassis_Object416>
-    <Chassis_Object416_2>	120	</Chassis_Object416_2>
-    <Chassis_Object268>	121	</Chassis_Object268>
-    <Chassis_T62A>	123	</Chassis_T62A>
-    <Chassis_SU122_44_2>	125	</Chassis_SU122_44_2>
-    <Chassis_Object263B>	126	</Chassis_Object263B>
-    <Chassis_T-70>	135	</Chassis_T-70>
-    <T-34-85Bis2>	134	</T-34-85Bis2>
-    <Chassis_T-70_2>	136	</Chassis_T-70_2>
-    <Chassis_T-60>	137	</Chassis_T-60>
-    <Chassis_T-60_2>	138	</Chassis_T-60_2>
-    <Chassis_Object_907>	139	</Chassis_Object_907>
-    <Chassis_T80>	140	</Chassis_T80>
-    <Chassis_T80_2>	141	</Chassis_T80_2>
-    <Chassis_SU14_1>	142	</Chassis_SU14_1>
-    <Chassis_SU14_1_2>	143	</Chassis_SU14_1_2>
-    <Chassis_R100_SU122A>	144	</Chassis_R100_SU122A>
-    <Chassis_R100_SU122A_2>	145	</Chassis_R100_SU122A_2>
-    <Chassis_R101_MT25>	146	</Chassis_R101_MT25>
-    <Chassis_R101_MT25_2>	147	</Chassis_R101_MT25_2>
-    <Chassis_LTP>	148	</Chassis_LTP>
-    <Chassis_T44_122>	1479	</Chassis_T44_122>
-    <Chassis_Object_140>	150	</Chassis_Object_140>
-    <Chassis_Object_430B>	152	</Chassis_Object_430B>
-    <Chassis_T44_85>	153	</Chassis_T44_85>
-    <Chassis_R98_T44_85M>	154	</Chassis_R98_T44_85M>
-    <Chassis_R104_Object_430_II>	158	</Chassis_R104_Object_430_II>
-    <Chassis_R104_Object_430_II_2>	159	</Chassis_R104_Object_430_II_2>
-    <Chassis_R109_T54S>	163	</Chassis_R109_T54S>
-    <Chassis_R109_T54S_2>	164	</Chassis_R109_T54S_2>
-    <Chassis_R107_LTB>	165	</Chassis_R107_LTB>
-    <Chassis_R107_LTB_2>	166	</Chassis_R107_LTB_2>
-    <Chassis_R106_KV85>	167	</Chassis_R106_KV85>
-    <Chassis_R106_KV85_2>	168	</Chassis_R106_KV85_2>
-    <Chassis_R108_T34_85M>	169	</Chassis_R108_T34_85M>
-    <Chassis_R110_Object_260>	170	</Chassis_R110_Object_260>
-    <Chassis_R111_ISU130>	171	</Chassis_R111_ISU130>
-    <Chassis_R113_Object_730>	172	</Chassis_R113_Object_730>
-    <Chassis_R71_IS_2B>	174	</Chassis_R71_IS_2B>
-    <Chassis_R117_T34_85_Rudy>	175	</Chassis_R117_T34_85_Rudy>
-    <Chassis_R116_ISU122C_Berlin>	176	</Chassis_R116_ISU122C_Berlin>
-    <Chassis_R112_T54_45>	177	</Chassis_R112_T54_45>
-    <Chassis_R114_Object_244>	178	</Chassis_R114_Object_244>
-    <Chassis_R115_IS-3_auto>	180	</Chassis_R115_IS-3_auto>
-    <Chassis_Object_907A>	181	</Chassis_Object_907A>
-    <Chassis_R105_BT_7A>	182	</Chassis_R105_BT_7A>
-    <Chassis_R119_Object_777C>	183	</Chassis_R119_Object_777C>
-    <Chassis_R119_Object_777>	246	</Chassis_R119_Object_777>
-    <Chassis_R118_T28_F30>	184	</Chassis_R118_T28_F30>
-    <Chassis_R120_T22SR_A22>	185	</Chassis_R120_T22SR_A22>
-    <Chassis_IS-7_fallout>	186	</Chassis_IS-7_fallout>
-    <Chassis_T62A_fallout>	188	</Chassis_T62A_fallout>
-    <Chassis_R122_T44_100>	192	</Chassis_R122_T44_100>
-    <Chassis_R121_KV4_KTT>	193	</Chassis_R121_KV4_KTT>
-    <Chassis_R123_Kirovets_1>	196	</Chassis_R123_Kirovets_1>
-    <Chassis_R127_T44_100_P>	197	</Chassis_R127_T44_100_P>
-    <Chassis_R128_KV4_Kreslavskiy>	198	</Chassis_R128_KV4_Kreslavskiy>
-    <Chassis_R125_T_45>	199	</Chassis_R125_T_45>
-    <Chassis_R126_Object_730_5>	200	</Chassis_R126_Object_730_5>
-    <Chassis_R129_Object_257>	201	</Chassis_R129_Object_257>
-    <Chassis_R133_KV_122>	203	</Chassis_R133_KV_122>
-    <Chassis_R134_Object_252U>	204	</Chassis_R134_Object_252U>
-    <Chassis_R132_VNII_100LT>	205	</Chassis_R132_VNII_100LT>
-    <Chassis_IS-6_BF>	206	</Chassis_IS-6_BF>
-    <Chassis_R131_Tank_Gavalov>	208	</Chassis_R131_Tank_Gavalov>
-    <Chassis_R131_Tank_Gavalov_2>	209	</Chassis_R131_Tank_Gavalov_2>
-    <Chassis_R122_T44_100B>	210	</Chassis_R122_T44_100B>
-    <Chassis_R134_Object_252K>	211	</Chassis_R134_Object_252K>
-    <Chassis_R135_T_103>	212	</Chassis_R135_T_103>
-    <Chassis_R140_M4_Loza>	213	</Chassis_R140_M4_Loza>
-    <Chassis_R143_T_29>	214	</Chassis_R143_T_29>
-    <Chassis_R146_STG>	215	</Chassis_R146_STG>
-    <Chassis_R146_STG_Tday>	216	</Chassis_R146_STG_Tday>
-    <Chassis_R151_Object_257_2>	217	</Chassis_R151_Object_257_2>
-    <Chassis_R151_Object_257_2_2>	218	</Chassis_R151_Object_257_2_2>
-    <Chassis_R148_Object_430_U>	219	</Chassis_R148_Object_430_U>
-    <Chassis_R96_Object_430>	220	</Chassis_R96_Object_430>
-    <Chassis_R96_Object_430_2>	221	</Chassis_R96_Object_430_2>
-    <Chassis_R149_Object_268_4>	222	</Chassis_R149_Object_268_4>
-    <Chassis_R139_IS_M>	223	</Chassis_R139_IS_M>
-    <Chassis_R139_IS_M_2>	224	</Chassis_R139_IS_M_2>
-    <Chassis_R153_Object_705>	225	</Chassis_R153_Object_705>
-    <Chassis_R153_Object_705_2>	226	</Chassis_R153_Object_705_2>
-    <Chassis_R145_Object_705_A>	227	</Chassis_R145_Object_705_A>
-    <Chassis_R93_Object263>	228	</Chassis_R93_Object263>
-    <Chassis_R93_Object263_2>	229	</Chassis_R93_Object263_2>
-    <Chassis_R144_K_91>	231	</Chassis_R144_K_91>
-    <Chassis_R154_T_34E_1943>	232	</Chassis_R154_T_34E_1943>
-    <Chassis_KV2_W>	230	</Chassis_KV2_W>
-    <Chassis_R155_Object_277>	233	</Chassis_R155_Object_277>
-    <Chassis_R157_Object_279R>	234	</Chassis_R157_Object_279R>
-    <Chassis_R156_IS_2M>	235	</Chassis_R156_IS_2M>
-    <Chassis_R127_T44_100_U>	236	</Chassis_R127_T44_100_U>
-    <Chassis_R127_T44_100_K>	237	</Chassis_R127_T44_100_K>
-    <Chassis_R115_IS-3_auto_test>	238	</Chassis_R115_IS-3_auto_test>
-    <Chassis_R158_LT_432>	239	</Chassis_R158_LT_432>
-    <Chassis_R160_T_50_2>	240	</Chassis_R160_T_50_2>
-    <Chassis_R159_SU_130PM>	241	</Chassis_R159_SU_130PM>
-    <Chassis_IS-6_FL>	242	</Chassis_IS-6_FL>
-    <Chassis_R112_T54_45_FL>	243	</Chassis_R112_T54_45_FL>
-    <T-44Bis_FL>	244	</T-44Bis_FL>
-    <Chassis_R161_T_116>	245	</Chassis_R161_T_116>
-    <Chassis_R165_Object_703_II>	249	</Chassis_R165_Object_703_II>
-    <Chassis_R169_ST_II>	254	</Chassis_R169_ST_II>
-    <Chassis_R171_IS_3_II>	250	</Chassis_R171_IS_3_II>
-    <Chassis_R171_IS_3_II_2>	251	</Chassis_R171_IS_3_II_2>
-    <Chassis_R170_IS_2_II>	252	</Chassis_R170_IS_2_II>
-    <Chassis_R170_IS_2_II_2>	253	</Chassis_R170_IS_2_II_2>
-    <Chassis_R165_Object_703_II_2>	256	</Chassis_R165_Object_703_II_2>
-    <Chassis_R172_Object_752>	257	</Chassis_R172_Object_752>
-    <Chassis_R173_K_91_2>	258	</Chassis_R173_K_91_2>
-    <Chassis_R174_BT-5>	259	</Chassis_R174_BT-5>
-    <Chassis_R174_BT-5_2>	260	</Chassis_R174_BT-5_2>
-    <Chassis_R175_IS_2_screen>	261	</Chassis_R175_IS_2_screen>
-    <IS-4_7x7>	262	</IS-4_7x7>
-    <Chassis_R177_ISU_152K_BL10>	263	</Chassis_R177_ISU_152K_BL10>
-    <Chassis_R178_Object_780>	264	</Chassis_R178_Object_780>
-    <Chassis_R180_Object_274_A>	265	</Chassis_R180_Object_274_A>
-    <Chassis_R183_K_91_PT>	267	</Chassis_R183_K_91_PT>
-    <Chassis_R127_T44_100_M>	268	</Chassis_R127_T44_100_M>
-    <Chassis_R186_KV_1_Screened>	269	</Chassis_R186_KV_1_Screened>
-    <Chassis_R185_T_34_L_11_1941>	270	</Chassis_R185_T_34_L_11_1941>
-    <Chassis_R188_Object_259A>	271	</Chassis_R188_Object_259A>
-    <Chassis_R187_Object_590>	272	</Chassis_R187_Object_590>
-    <Chassis_Object_140_cl>	274	</Chassis_Object_140_cl>
-    <Chassis_R127_T44_100_I>	276	</Chassis_R127_T44_100_I>
-    <Chassis_R193_M4A2_T_34>	277	</Chassis_R193_M4A2_T_34>
-    <Chassis_R192_K_2>	278	</Chassis_R192_K_2>
-    <Chassis_R191_Object_283>	279	</Chassis_R191_Object_283>
-    <Chassis_R195_T34M_54>	280	</Chassis_R195_T34M_54>
-    <Chassis_R194_ST_62_var_2>	281	</Chassis_R194_ST_62_var_2>
-    <Chassis_R188_Object_259A_CN>	282	</Chassis_R188_Object_259A_CN>
-    <Chassis_T44_122_CN>	283	</Chassis_T44_122_CN>
-    <Chassis_R115_IS-3_auto_S>	284	</Chassis_R115_IS-3_auto_S>
-    <Chassis_R197_KV_1S_MZ>	285	</Chassis_R197_KV_1S_MZ>
-    <Chassis_R159_SU_130PM_DR>	286	</Chassis_R159_SU_130PM_DR>
-    <Chassis_R196_Object_452K>	287	</Chassis_R196_Object_452K>
-    <Chassis_R202_SU_2_122>	288	</Chassis_R202_SU_2_122>
-    <Chassis_R199_SU_122V>	289	</Chassis_R199_SU_122V>
-    <Chassis_R200_KV_4_Turchaninov>	290	</Chassis_R200_KV_4_Turchaninov>
-    <Chassis_R198_LTS_85>	291	</Chassis_R198_LTS_85>
-    <Chassis_R205_Tank_Rozanova>	293	</Chassis_R205_Tank_Rozanova>
-    <Chassis_R201_IT_3>	295	</Chassis_R201_IT_3>
-    <Chassis_R206_SU_122_54_2022>	296	</Chassis_R206_SU_122_54_2022>
-    <Chassis_R203_Object_168N>	298	</Chassis_R203_Object_168N>
-    <ISU-152_mod_1945_IGR>	60001	</ISU-152_mod_1945_IGR>
-    <T-44Bis_IGR>	60002	</T-44Bis_IGR>
-    <IS-3M_IGR>	60003	</IS-3M_IGR>
-    <Chassis_R106_KV85_2_IGR>	60004	</Chassis_R106_KV85_2_IGR>
-    <Chassis_KV2_2_IGR>	60005	</Chassis_KV2_2_IGR>
-    <SU-152_mod_1944_IGR>	60006	</SU-152_mod_1944_IGR>
-    <Chassis_KV-5_IGR>	60007	</Chassis_KV-5_IGR>
-    <ValentineMK_I_IGR>	60008	</ValentineMK_I_IGR>
-    <IS-7_IGR>	60009	</IS-7_IGR>
-    <Chassis_KV-13_SH>	306	</Chassis_KV-13_SH>
-    <IS-3M_SH>	307	</IS-3M_SH>
-    <Chassis_IS_M_SH>	308	</Chassis_IS_M_SH>
-    <Chassis_T-54_3_FL>	501	</Chassis_T-54_3_FL>
-    <IS-3M_FL>	502	</IS-3M_FL>
-    <ISU-152_mod_1945_FL>	503	</ISU-152_mod_1945_FL>
-    <T-43M_FL>	31006	</T-43M_FL>
-    <Chassis_R93_Object263_2_FL>	31014	</Chassis_R93_Object263_2_FL>
-    <Chassis_T80_2_MapsTraining_Dummy_LT_1>	76	</Chassis_T80_2_MapsTraining_Dummy_LT_1>
-    <SU-5bis_MapsTraining_Dummy_SPG_1>	81	</SU-5bis_MapsTraining_Dummy_SPG_1>
-    <T-34_mod_1943_MapsTraining_Player_MT_1>	82	</T-34_mod_1943_MapsTraining_Player_MT_1>
-    <T-43M_MapsTraining_Player_MT_2>	86	</T-43M_MapsTraining_Player_MT_2>
-    <Chassis_T150_2_MapsTraining_Dummy_HT_2>	114	</Chassis_T150_2_MapsTraining_Dummy_HT_2>
-    <Chassis_R208_Object_156O>	31001	</Chassis_R208_Object_156O>
-    <Chassis_R207_HT_130>	31002	</Chassis_R207_HT_130>
-    <Chassis_R209_T_115>	31003	</Chassis_R209_T_115>
-    <Chassis_R210_ISU_2SH>	31005	</Chassis_R210_ISU_2SH>
-    <Chassis_R211_Object_261_4>	31010	</Chassis_R211_Object_261_4>
-    <Chassis_R211_Object_261_5>	31008	</Chassis_R211_Object_261_5>
-    <Chassis_R173_K_91_2_122>	31007	</Chassis_R173_K_91_2_122>
-    <Chassis_R180_Object_274_A_MT_BF>	31009	</Chassis_R180_Object_274_A_MT_BF>
-    <Chassis_R219_Waffentrager_E100_G>	31011	</Chassis_R219_Waffentrager_E100_G>
-    <ISU-152_mod_1945_zv>	31012	</ISU-152_mod_1945_zv>
-    <Chassis_R163_SU_122_1>	31015	</Chassis_R163_SU_122_1>
-    <Chassis_R163_SU_122_2>	31016	</Chassis_R163_SU_122_2>
-    <Chassis_R166_SU_D15_1>	31018	</Chassis_R166_SU_D15_1>
-    <Chassis_R166_SU_D15_2>	31019	</Chassis_R166_SU_D15_2>
-    <Chassis_R167_Object_715_G_1>	31022	</Chassis_R167_Object_715_G_1>
-    <Chassis_R167_Object_715_G_2>	31023	</Chassis_R167_Object_715_G_2>
-    <Chassis_R61_Object252_02>	31024	</Chassis_R61_Object252_02>
-    <Chassis_R214_ABM_152>	31026	</Chassis_R214_ABM_152>
-    <Chassis_R149_Object_268_4_02>	31027	</Chassis_R149_Object_268_4_02>
-    <Chassis_R218_Panther_N_518>	31028	</Chassis_R218_Panther_N_518>
-    <Chassis_R212_Object_265T>	31031	</Chassis_R212_Object_265T>
-    <Chassis_R177_ISU_152K_BL10_02>	31032	</Chassis_R177_ISU_152K_BL10_02>
-    <IS-4_T>	31033	</IS-4_T>
-    <Chassis_R222_Object_120_Taran>	31034	</Chassis_R222_Object_120_Taran>
-    <Chassis_R45_IS-7_02>	31035	</Chassis_R45_IS-7_02>
-    <Chassis_R211_Object_261_4_II>	31038	</Chassis_R211_Object_261_4_II>
-    <Chassis_R210_ISU_2SH_II>	31039	</Chassis_R210_ISU_2SH_II>
-    <Chassis_R210_ISU_2SH_II_2>	31040	</Chassis_R210_ISU_2SH_II_2>
-    <Chassis_R148_Object_430_U_bob>	31041	</Chassis_R148_Object_430_U_bob>
-    <Chassis_R149_Object_268_4_bob>	31042	</Chassis_R149_Object_268_4_bob>
-    <Chassis_R204_ISU_122_2>	31047	</Chassis_R204_ISU_122_2>
-    <Chassis_R230_Maus>	31048	</Chassis_R230_Maus>
-    <Chassis_R1013_IS_3_T>	31049	</Chassis_R1013_IS_3_T>
-    <Chassis_R223_T_54B_1958>	31050	</Chassis_R223_T_54B_1958>
-    <Chassis_R224_IS_3_1945>	31051	</Chassis_R224_IS_3_1945>
-    <Chassis_R227_Object_407_MZ>	31052	</Chassis_R227_Object_407_MZ>
-    <Chassis_R226_Object_757A>	31054	</Chassis_R226_Object_757A>
-    <Chassis_R229_Object_718B>	31055	</Chassis_R229_Object_718B>
-    <Chassis_R228_Duplet>	31057	</Chassis_R228_Duplet>
-    <Chassis_R246_Object_168_122>	31058	</Chassis_R246_Object_168_122>
-    <Chassis_R112_T54_45_02>	31059	</Chassis_R112_T54_45_02>
-    <Chassis_R248_T44_Storm>	31060	</Chassis_R248_T44_Storm>
-    <Chassis_R213_TET_100>	31061	</Chassis_R213_TET_100>
-    <Chassis_R231_Object_278>	31062	</Chassis_R231_Object_278>
-    <Chassis_R130_KV4_Mikhailov>	31063	</Chassis_R130_KV4_Mikhailov>
-    <Chassis_R130_KV4_Mikhailov_2>	31064	</Chassis_R130_KV4_Mikhailov_2>
-    <Chassis_R236_KV_4_Zeitz>	31065	</Chassis_R236_KV_4_Zeitz>
-    <Chassis_R215_KV_90>	31068	</Chassis_R215_KV_90>
-    <Chassis_R215_KV_90_2>	31069	</Chassis_R215_KV_90_2>
-    <Chassis_R165_Object_703_II_100>	31070	</Chassis_R165_Object_703_II_100>
-    <Chassis_R225_Vasiliev_project>	31075	</Chassis_R225_Vasiliev_project>
-    <Chassis_R164_U_18_2_T>	31025	</Chassis_R164_U_18_2_T>
-    <Chassis_R124_Object_279>	31029	</Chassis_R124_Object_279>
-    <Chassis_R109_T54S_T>	31036	</Chassis_R109_T54S_T>
-    <Chassis_R132_VNII_100LT_7x7>	31037	</Chassis_R132_VNII_100LT_7x7>
-    <Chassis_Un02_Merkava_LP>	31043	</Chassis_Un02_Merkava_LP>
-    <Chassis_Un06_M47_Romach>	31044	</Chassis_Un06_M47_Romach>
-    <Chassis_Un14_T54D>	31045	</Chassis_Un14_T54D>
-    <Chassis_Un04_Vickers_MBT_EXP_2>	31046	</Chassis_Un04_Vickers_MBT_EXP_2>
-    <Chassis_R235_KV_4_Fedorenko>	31071	</Chassis_R235_KV_4_Fedorenko>
-    <Chassis_R235_KV_4_Fedorenko_2>	31072	</Chassis_R235_KV_4_Fedorenko_2>
-    <Chassis_R239_ST_Molot_02>	31077	</Chassis_R239_ST_Molot_02>
-    <Chassis_R251_T_55_SP_01>	31074	</Chassis_R251_T_55_SP_01>
-    <Chassis_R147_Object_701>	31079	</Chassis_R147_Object_701>
-    <Chassis_R171_IS_3_II_02_2>	31078	</Chassis_R171_IS_3_II_02_2>
-    <Chassis_R157_Object_279R_T>	35001	</Chassis_R157_Object_279R_T>
-    <Chassis_R124_Object_279_T>	35003	</Chassis_R124_Object_279_T>
-    <Chassis_R213_TET_100_T>	35004	</Chassis_R213_TET_100_T>
-    <Chassis_R130_KV4_Mikhailov_2_T>	35005	</Chassis_R130_KV4_Mikhailov_2_T>
-    <Chassis_R1008_T34_85M_NewOnBoarding>	10008	</Chassis_R1008_T34_85M_NewOnBoarding>
-    <Chassis_R233_ASU_85>	31082	</Chassis_R233_ASU_85>
-    <Chassis_R239_ST_Molot>	31067	</Chassis_R239_ST_Molot>
-    <Chassis_R189_SU_100i_TR>	31080	</Chassis_R189_SU_100i_TR>
-    <Chassis_R00_Baloon>	40010	</Chassis_R00_Baloon>
-    <Chassis_R241_T_34_100>	31073	</Chassis_R241_T_34_100>
-    <Chassis_R250_NST_130>	31081	</Chassis_R250_NST_130>
-    <Chassis_R253_Object_277_S>	31083	</Chassis_R253_Object_277_S>
-  </ids>
-  <shared></shared>
+  <xmlns:xmlref>	http://bwt/xmlref	</xmlns:xmlref>
+  <shared>
+    <A-20_mod_1938>
+      <id>	16	</id>
+    </A-20_mod_1938>
+    <A-20_mod_1941>
+      <id>	17	</id>
+    </A-20_mod_1941>
+    <A-32>
+      <id>	68	</id>
+    </A-32>
+    <AT-1>
+      <id>	40	</id>
+    </AT-1>
+    <AT-1bis>
+      <id>	41	</id>
+    </AT-1bis>
+    <BT-2>
+      <id>	10	</id>
+    </BT-2>
+    <BT-2bis>
+      <id>	11	</id>
+    </BT-2bis>
+    <BT-5>
+      <id>	6	</id>
+    </BT-5>
+    <BT-7>
+      <id>	7	</id>
+    </BT-7>
+    <BT-SV>
+      <id>	63	</id>
+    </BT-SV>
+    <Chassis_A43>
+      <id>	110	</id>
+    </Chassis_A43>
+    <Chassis_A43_2>
+      <id>	111	</id>
+    </Chassis_A43_2>
+    <Chassis_A44>
+      <id>	112	</id>
+    </Chassis_A44>
+    <Chassis_A44_2>
+      <id>	113	</id>
+    </Chassis_A44_2>
+    <Chassis_IS-6>
+      <id>	96	</id>
+    </Chassis_IS-6>
+    <Chassis_IS-6_BF>
+      <id>	206	</id>
+    </Chassis_IS-6_BF>
+    <Chassis_IS-6_FL>
+      <id>	242	</id>
+    </Chassis_IS-6_FL>
+    <Chassis_IS-7_fallout>
+      <id>	186	</id>
+    </Chassis_IS-7_fallout>
+    <Chassis_IS8>
+      <id>	104	</id>
+    </Chassis_IS8>
+    <Chassis_IS8_2>
+      <id>	105	</id>
+    </Chassis_IS8_2>
+    <Chassis_IS_M_SH>
+      <id>	308	</id>
+    </Chassis_IS_M_SH>
+    <Chassis_KV-13>
+      <id>	77	</id>
+    </Chassis_KV-13>
+    <Chassis_KV-13_2>
+      <id>	78	</id>
+    </Chassis_KV-13_2>
+    <Chassis_KV-13_SH>
+      <id>	306	</id>
+    </Chassis_KV-13_SH>
+    <Chassis_KV-5>
+      <id>	79	</id>
+    </Chassis_KV-5>
+    <Chassis_KV-5_IGR>
+      <id>	60007	</id>
+    </Chassis_KV-5_IGR>
+    <Chassis_KV1>
+      <id>	106	</id>
+    </Chassis_KV1>
+    <Chassis_KV1_2>
+      <id>	107	</id>
+    </Chassis_KV1_2>
+    <Chassis_KV2_1>
+      <id>	92	</id>
+    </Chassis_KV2_1>
+    <Chassis_KV2_2>
+      <id>	93	</id>
+    </Chassis_KV2_2>
+    <Chassis_KV2_2_IGR>
+      <id>	60005	</id>
+    </Chassis_KV2_2_IGR>
+    <Chassis_KV2_W>
+      <id>	230	</id>
+    </Chassis_KV2_W>
+    <Chassis_KV4>
+      <id>	100	</id>
+    </Chassis_KV4>
+    <Chassis_KV4_2>
+      <id>	101	</id>
+    </Chassis_KV4_2>
+    <Chassis_LTP>
+      <id>	148	</id>
+    </Chassis_LTP>
+    <Chassis_Object263B>
+      <id>	126	</id>
+    </Chassis_Object263B>
+    <Chassis_Object268>
+      <id>	121	</id>
+    </Chassis_Object268>
+    <Chassis_Object416>
+      <id>	119	</id>
+    </Chassis_Object416>
+    <Chassis_Object416_2>
+      <id>	120	</id>
+    </Chassis_Object416_2>
+    <Chassis_Object_140>
+      <id>	150	</id>
+    </Chassis_Object_140>
+    <Chassis_Object_140_cl>
+      <id>	274	</id>
+    </Chassis_Object_140_cl>
+    <Chassis_Object_212>
+      <id>	73	</id>
+    </Chassis_Object_212>
+    <Chassis_Object_212_2>
+      <id>	74	</id>
+    </Chassis_Object_212_2>
+    <Chassis_Object_261>
+      <id>	75	</id>
+    </Chassis_Object_261>
+    <Chassis_Object_430B>
+      <id>	152	</id>
+    </Chassis_Object_430B>
+    <Chassis_Object_704>
+      <id>	71	</id>
+    </Chassis_Object_704>
+    <Chassis_Object_704_2>
+      <id>	72	</id>
+    </Chassis_Object_704_2>
+    <Chassis_Object_907>
+      <id>	139	</id>
+    </Chassis_Object_907>
+    <Chassis_Object_907A>
+      <id>	181	</id>
+    </Chassis_Object_907A>
+    <Chassis_R00_Baloon>
+      <id>	40010	</id>
+    </Chassis_R00_Baloon>
+    <Chassis_R1008_T34_85M_NewOnBoarding>
+      <id>	10008	</id>
+    </Chassis_R1008_T34_85M_NewOnBoarding>
+    <Chassis_R100_SU122A>
+      <id>	144	</id>
+    </Chassis_R100_SU122A>
+    <Chassis_R100_SU122A_2>
+      <id>	145	</id>
+    </Chassis_R100_SU122A_2>
+    <Chassis_R1013_IS_3_T>
+      <id>	31049	</id>
+    </Chassis_R1013_IS_3_T>
+    <Chassis_R101_MT25>
+      <id>	146	</id>
+    </Chassis_R101_MT25>
+    <Chassis_R101_MT25_2>
+      <id>	147	</id>
+    </Chassis_R101_MT25_2>
+    <Chassis_R104_Object_430_II>
+      <id>	158	</id>
+    </Chassis_R104_Object_430_II>
+    <Chassis_R104_Object_430_II_2>
+      <id>	159	</id>
+    </Chassis_R104_Object_430_II_2>
+    <Chassis_R105_BT_7A>
+      <id>	182	</id>
+    </Chassis_R105_BT_7A>
+    <Chassis_R106_KV85>
+      <id>	167	</id>
+    </Chassis_R106_KV85>
+    <Chassis_R106_KV85_2>
+      <id>	168	</id>
+    </Chassis_R106_KV85_2>
+    <Chassis_R106_KV85_2_IGR>
+      <id>	60004	</id>
+    </Chassis_R106_KV85_2_IGR>
+    <Chassis_R107_LTB>
+      <id>	165	</id>
+    </Chassis_R107_LTB>
+    <Chassis_R107_LTB_2>
+      <id>	166	</id>
+    </Chassis_R107_LTB_2>
+    <Chassis_R108_T34_85M>
+      <id>	169	</id>
+    </Chassis_R108_T34_85M>
+    <Chassis_R109_T54S>
+      <id>	163	</id>
+    </Chassis_R109_T54S>
+    <Chassis_R109_T54S_2>
+      <id>	164	</id>
+    </Chassis_R109_T54S_2>
+    <Chassis_R109_T54S_T>
+      <id>	31036	</id>
+    </Chassis_R109_T54S_T>
+    <Chassis_R110_Object_260>
+      <id>	170	</id>
+    </Chassis_R110_Object_260>
+    <Chassis_R111_ISU130>
+      <id>	171	</id>
+    </Chassis_R111_ISU130>
+    <Chassis_R112_T54_45>
+      <id>	177	</id>
+    </Chassis_R112_T54_45>
+    <Chassis_R112_T54_45_02>
+      <id>	31059	</id>
+    </Chassis_R112_T54_45_02>
+    <Chassis_R112_T54_45_FL>
+      <id>	243	</id>
+    </Chassis_R112_T54_45_FL>
+    <Chassis_R113_Object_730>
+      <id>	172	</id>
+    </Chassis_R113_Object_730>
+    <Chassis_R114_Object_244>
+      <id>	178	</id>
+    </Chassis_R114_Object_244>
+    <Chassis_R115_IS-3_auto>
+      <id>	180	</id>
+    </Chassis_R115_IS-3_auto>
+    <Chassis_R115_IS-3_auto_S>
+      <id>	284	</id>
+    </Chassis_R115_IS-3_auto_S>
+    <Chassis_R115_IS-3_auto_test>
+      <id>	238	</id>
+    </Chassis_R115_IS-3_auto_test>
+    <Chassis_R116_ISU122C_Berlin>
+      <id>	176	</id>
+    </Chassis_R116_ISU122C_Berlin>
+    <Chassis_R117_T34_85_Rudy>
+      <id>	175	</id>
+    </Chassis_R117_T34_85_Rudy>
+    <Chassis_R118_T28_F30>
+      <id>	184	</id>
+    </Chassis_R118_T28_F30>
+    <Chassis_R119_Object_777>
+      <id>	246	</id>
+    </Chassis_R119_Object_777>
+    <Chassis_R119_Object_777C>
+      <id>	183	</id>
+    </Chassis_R119_Object_777C>
+    <Chassis_R120_T22SR_A22>
+      <id>	185	</id>
+    </Chassis_R120_T22SR_A22>
+    <Chassis_R121_KV4_KTT>
+      <id>	193	</id>
+    </Chassis_R121_KV4_KTT>
+    <Chassis_R122_T44_100>
+      <id>	192	</id>
+    </Chassis_R122_T44_100>
+    <Chassis_R122_T44_100B>
+      <id>	210	</id>
+    </Chassis_R122_T44_100B>
+    <Chassis_R123_Kirovets_1>
+      <id>	196	</id>
+    </Chassis_R123_Kirovets_1>
+    <Chassis_R124_Object_279>
+      <id>	31029	</id>
+    </Chassis_R124_Object_279>
+    <Chassis_R124_Object_279_T>
+      <id>	35003	</id>
+    </Chassis_R124_Object_279_T>
+    <Chassis_R125_T_45>
+      <id>	199	</id>
+    </Chassis_R125_T_45>
+    <Chassis_R126_Object_730_5>
+      <id>	200	</id>
+    </Chassis_R126_Object_730_5>
+    <Chassis_R127_T44_100_I>
+      <id>	276	</id>
+    </Chassis_R127_T44_100_I>
+    <Chassis_R127_T44_100_K>
+      <id>	237	</id>
+    </Chassis_R127_T44_100_K>
+    <Chassis_R127_T44_100_M>
+      <id>	268	</id>
+    </Chassis_R127_T44_100_M>
+    <Chassis_R127_T44_100_P>
+      <id>	197	</id>
+    </Chassis_R127_T44_100_P>
+    <Chassis_R127_T44_100_U>
+      <id>	236	</id>
+    </Chassis_R127_T44_100_U>
+    <Chassis_R128_KV4_Kreslavskiy>
+      <id>	198	</id>
+    </Chassis_R128_KV4_Kreslavskiy>
+    <Chassis_R129_Object_257>
+      <id>	201	</id>
+    </Chassis_R129_Object_257>
+    <Chassis_R130_KV4_Mikhailov>
+      <id>	31063	</id>
+    </Chassis_R130_KV4_Mikhailov>
+    <Chassis_R130_KV4_Mikhailov_2>
+      <id>	31064	</id>
+    </Chassis_R130_KV4_Mikhailov_2>
+    <Chassis_R130_KV4_Mikhailov_2_T>
+      <id>	35005	</id>
+    </Chassis_R130_KV4_Mikhailov_2_T>
+    <Chassis_R131_Tank_Gavalov>
+      <id>	208	</id>
+    </Chassis_R131_Tank_Gavalov>
+    <Chassis_R131_Tank_Gavalov_2>
+      <id>	209	</id>
+    </Chassis_R131_Tank_Gavalov_2>
+    <Chassis_R132_VNII_100LT>
+      <id>	205	</id>
+    </Chassis_R132_VNII_100LT>
+    <Chassis_R132_VNII_100LT_7x7>
+      <id>	31037	</id>
+    </Chassis_R132_VNII_100LT_7x7>
+    <Chassis_R133_KV_122>
+      <id>	203	</id>
+    </Chassis_R133_KV_122>
+    <Chassis_R134_Object_252K>
+      <id>	211	</id>
+    </Chassis_R134_Object_252K>
+    <Chassis_R134_Object_252U>
+      <id>	204	</id>
+    </Chassis_R134_Object_252U>
+    <Chassis_R135_T_103>
+      <id>	212	</id>
+    </Chassis_R135_T_103>
+    <Chassis_R139_IS_M>
+      <id>	223	</id>
+    </Chassis_R139_IS_M>
+    <Chassis_R139_IS_M_2>
+      <id>	224	</id>
+    </Chassis_R139_IS_M_2>
+    <Chassis_R140_M4_Loza>
+      <id>	213	</id>
+    </Chassis_R140_M4_Loza>
+    <Chassis_R143_T_29>
+      <id>	214	</id>
+    </Chassis_R143_T_29>
+    <Chassis_R144_K_91>
+      <id>	231	</id>
+    </Chassis_R144_K_91>
+    <Chassis_R145_Object_705_A>
+      <id>	227	</id>
+    </Chassis_R145_Object_705_A>
+    <Chassis_R146_STG>
+      <id>	215	</id>
+    </Chassis_R146_STG>
+    <Chassis_R146_STG_Tday>
+      <id>	216	</id>
+    </Chassis_R146_STG_Tday>
+    <Chassis_R147_Object_701>
+      <id>	31079	</id>
+    </Chassis_R147_Object_701>
+    <Chassis_R148_Object_430_U>
+      <id>	219	</id>
+    </Chassis_R148_Object_430_U>
+    <Chassis_R148_Object_430_U_bob>
+      <id>	31041	</id>
+    </Chassis_R148_Object_430_U_bob>
+    <Chassis_R149_Object_268_4>
+      <id>	222	</id>
+    </Chassis_R149_Object_268_4>
+    <Chassis_R149_Object_268_4_02>
+      <id>	31027	</id>
+    </Chassis_R149_Object_268_4_02>
+    <Chassis_R149_Object_268_4_bob>
+      <id>	31042	</id>
+    </Chassis_R149_Object_268_4_bob>
+    <Chassis_R151_Object_257_2>
+      <id>	217	</id>
+    </Chassis_R151_Object_257_2>
+    <Chassis_R151_Object_257_2_2>
+      <id>	218	</id>
+    </Chassis_R151_Object_257_2_2>
+    <Chassis_R153_Object_705>
+      <id>	225	</id>
+    </Chassis_R153_Object_705>
+    <Chassis_R153_Object_705_2>
+      <id>	226	</id>
+    </Chassis_R153_Object_705_2>
+    <Chassis_R154_T_34E_1943>
+      <id>	232	</id>
+    </Chassis_R154_T_34E_1943>
+    <Chassis_R155_Object_277>
+      <id>	233	</id>
+    </Chassis_R155_Object_277>
+    <Chassis_R156_IS_2M>
+      <id>	235	</id>
+    </Chassis_R156_IS_2M>
+    <Chassis_R157_Object_279R>
+      <id>	234	</id>
+    </Chassis_R157_Object_279R>
+    <Chassis_R157_Object_279R_T>
+      <id>	35001	</id>
+    </Chassis_R157_Object_279R_T>
+    <Chassis_R158_LT_432>
+      <id>	239	</id>
+    </Chassis_R158_LT_432>
+    <Chassis_R159_SU_130PM>
+      <id>	241	</id>
+    </Chassis_R159_SU_130PM>
+    <Chassis_R159_SU_130PM_DR>
+      <id>	286	</id>
+    </Chassis_R159_SU_130PM_DR>
+    <Chassis_R160_T_50_2>
+      <id>	240	</id>
+    </Chassis_R160_T_50_2>
+    <Chassis_R161_T_116>
+      <id>	245	</id>
+    </Chassis_R161_T_116>
+    <Chassis_R163_SU_122_1>
+      <id>	31015	</id>
+    </Chassis_R163_SU_122_1>
+    <Chassis_R163_SU_122_2>
+      <id>	31016	</id>
+    </Chassis_R163_SU_122_2>
+    <Chassis_R164_U_18_2_T>
+      <id>	31025	</id>
+    </Chassis_R164_U_18_2_T>
+    <Chassis_R165_Object_703_II>
+      <id>	249	</id>
+    </Chassis_R165_Object_703_II>
+    <Chassis_R165_Object_703_II_100>
+      <id>	31070	</id>
+    </Chassis_R165_Object_703_II_100>
+    <Chassis_R165_Object_703_II_2>
+      <id>	256	</id>
+    </Chassis_R165_Object_703_II_2>
+    <Chassis_R166_SU_D15_1>
+      <id>	31018	</id>
+    </Chassis_R166_SU_D15_1>
+    <Chassis_R166_SU_D15_2>
+      <id>	31019	</id>
+    </Chassis_R166_SU_D15_2>
+    <Chassis_R167_Object_715_G_1>
+      <id>	31022	</id>
+    </Chassis_R167_Object_715_G_1>
+    <Chassis_R167_Object_715_G_2>
+      <id>	31023	</id>
+    </Chassis_R167_Object_715_G_2>
+    <Chassis_R169_ST_II>
+      <id>	254	</id>
+    </Chassis_R169_ST_II>
+    <Chassis_R170_IS_2_II>
+      <id>	252	</id>
+    </Chassis_R170_IS_2_II>
+    <Chassis_R170_IS_2_II_2>
+      <id>	253	</id>
+    </Chassis_R170_IS_2_II_2>
+    <Chassis_R171_IS_3_II>
+      <id>	250	</id>
+    </Chassis_R171_IS_3_II>
+    <Chassis_R171_IS_3_II_02_2>
+      <id>	31078	</id>
+    </Chassis_R171_IS_3_II_02_2>
+    <Chassis_R171_IS_3_II_2>
+      <id>	251	</id>
+    </Chassis_R171_IS_3_II_2>
+    <Chassis_R172_Object_752>
+      <id>	257	</id>
+    </Chassis_R172_Object_752>
+    <Chassis_R173_K_91_2>
+      <id>	258	</id>
+    </Chassis_R173_K_91_2>
+    <Chassis_R173_K_91_2_122>
+      <id>	31007	</id>
+    </Chassis_R173_K_91_2_122>
+    <Chassis_R174_BT-5>
+      <id>	259	</id>
+    </Chassis_R174_BT-5>
+    <Chassis_R174_BT-5_2>
+      <id>	260	</id>
+    </Chassis_R174_BT-5_2>
+    <Chassis_R175_IS_2_screen>
+      <id>	261	</id>
+    </Chassis_R175_IS_2_screen>
+    <Chassis_R177_ISU_152K_BL10>
+      <id>	263	</id>
+    </Chassis_R177_ISU_152K_BL10>
+    <Chassis_R177_ISU_152K_BL10_02>
+      <id>	31032	</id>
+    </Chassis_R177_ISU_152K_BL10_02>
+    <Chassis_R178_Object_780>
+      <id>	264	</id>
+    </Chassis_R178_Object_780>
+    <Chassis_R180_Object_274_A>
+      <id>	265	</id>
+    </Chassis_R180_Object_274_A>
+    <Chassis_R180_Object_274_A_MT_BF>
+      <id>	31009	</id>
+    </Chassis_R180_Object_274_A_MT_BF>
+    <Chassis_R183_K_91_PT>
+      <id>	267	</id>
+    </Chassis_R183_K_91_PT>
+    <Chassis_R185_T_34_L_11_1941>
+      <id>	270	</id>
+    </Chassis_R185_T_34_L_11_1941>
+    <Chassis_R186_KV_1_Screened>
+      <id>	269	</id>
+    </Chassis_R186_KV_1_Screened>
+    <Chassis_R187_Object_590>
+      <id>	272	</id>
+    </Chassis_R187_Object_590>
+    <Chassis_R188_Object_259A>
+      <id>	271	</id>
+    </Chassis_R188_Object_259A>
+    <Chassis_R188_Object_259A_CN>
+      <id>	282	</id>
+    </Chassis_R188_Object_259A_CN>
+    <Chassis_R189_SU_100i_TR>
+      <id>	31080	</id>
+    </Chassis_R189_SU_100i_TR>
+    <Chassis_R191_Object_283>
+      <id>	279	</id>
+    </Chassis_R191_Object_283>
+    <Chassis_R192_K_2>
+      <id>	278	</id>
+    </Chassis_R192_K_2>
+    <Chassis_R193_M4A2_T_34>
+      <id>	277	</id>
+    </Chassis_R193_M4A2_T_34>
+    <Chassis_R194_ST_62_var_2>
+      <id>	281	</id>
+    </Chassis_R194_ST_62_var_2>
+    <Chassis_R195_T34M_54>
+      <id>	280	</id>
+    </Chassis_R195_T34M_54>
+    <Chassis_R196_Object_452K>
+      <id>	287	</id>
+    </Chassis_R196_Object_452K>
+    <Chassis_R197_KV_1S_MZ>
+      <id>	285	</id>
+    </Chassis_R197_KV_1S_MZ>
+    <Chassis_R198_LTS_85>
+      <id>	291	</id>
+    </Chassis_R198_LTS_85>
+    <Chassis_R199_SU_122V>
+      <id>	289	</id>
+    </Chassis_R199_SU_122V>
+    <Chassis_R200_KV_4_Turchaninov>
+      <id>	290	</id>
+    </Chassis_R200_KV_4_Turchaninov>
+    <Chassis_R201_IT_3>
+      <id>	295	</id>
+    </Chassis_R201_IT_3>
+    <Chassis_R202_SU_2_122>
+      <id>	288	</id>
+    </Chassis_R202_SU_2_122>
+    <Chassis_R203_Object_168N>
+      <id>	298	</id>
+    </Chassis_R203_Object_168N>
+    <Chassis_R204_ISU_122_2>
+      <id>	31047	</id>
+    </Chassis_R204_ISU_122_2>
+    <Chassis_R205_Tank_Rozanova>
+      <id>	293	</id>
+    </Chassis_R205_Tank_Rozanova>
+    <Chassis_R206_SU_122_54_2022>
+      <id>	296	</id>
+    </Chassis_R206_SU_122_54_2022>
+    <Chassis_R207_HT_130>
+      <id>	31002	</id>
+    </Chassis_R207_HT_130>
+    <Chassis_R208_Object_156O>
+      <id>	31001	</id>
+    </Chassis_R208_Object_156O>
+    <Chassis_R209_T_115>
+      <id>	31003	</id>
+    </Chassis_R209_T_115>
+    <Chassis_R210_ISU_2SH>
+      <id>	31005	</id>
+    </Chassis_R210_ISU_2SH>
+    <Chassis_R210_ISU_2SH_II>
+      <id>	31039	</id>
+    </Chassis_R210_ISU_2SH_II>
+    <Chassis_R210_ISU_2SH_II_2>
+      <id>	31040	</id>
+    </Chassis_R210_ISU_2SH_II_2>
+    <Chassis_R211_Object_261_4>
+      <id>	31010	</id>
+    </Chassis_R211_Object_261_4>
+    <Chassis_R211_Object_261_4_II>
+      <id>	31038	</id>
+    </Chassis_R211_Object_261_4_II>
+    <Chassis_R211_Object_261_5>
+      <id>	31008	</id>
+    </Chassis_R211_Object_261_5>
+    <Chassis_R212_Object_265T>
+      <id>	31031	</id>
+    </Chassis_R212_Object_265T>
+    <Chassis_R213_TET_100>
+      <id>	31061	</id>
+    </Chassis_R213_TET_100>
+    <Chassis_R213_TET_100_T>
+      <id>	35004	</id>
+    </Chassis_R213_TET_100_T>
+    <Chassis_R214_ABM_152>
+      <id>	31026	</id>
+    </Chassis_R214_ABM_152>
+    <Chassis_R215_KV_90>
+      <id>	31068	</id>
+    </Chassis_R215_KV_90>
+    <Chassis_R215_KV_90_2>
+      <id>	31069	</id>
+    </Chassis_R215_KV_90_2>
+    <Chassis_R218_Panther_N_518>
+      <id>	31028	</id>
+    </Chassis_R218_Panther_N_518>
+    <Chassis_R219_Waffentrager_E100_G>
+      <id>	31011	</id>
+    </Chassis_R219_Waffentrager_E100_G>
+    <Chassis_R222_Object_120_Taran>
+      <id>	31034	</id>
+    </Chassis_R222_Object_120_Taran>
+    <Chassis_R223_T_54B_1958>
+      <id>	31050	</id>
+    </Chassis_R223_T_54B_1958>
+    <Chassis_R224_IS_3_1945>
+      <id>	31051	</id>
+    </Chassis_R224_IS_3_1945>
+    <Chassis_R225_Vasiliev_project>
+      <id>	31075	</id>
+    </Chassis_R225_Vasiliev_project>
+    <Chassis_R226_Object_757A>
+      <id>	31054	</id>
+    </Chassis_R226_Object_757A>
+    <Chassis_R227_Object_407_MZ>
+      <id>	31052	</id>
+    </Chassis_R227_Object_407_MZ>
+    <Chassis_R228_Duplet>
+      <id>	31057	</id>
+    </Chassis_R228_Duplet>
+    <Chassis_R229_Object_718B>
+      <id>	31055	</id>
+    </Chassis_R229_Object_718B>
+    <Chassis_R230_Maus>
+      <id>	31048	</id>
+    </Chassis_R230_Maus>
+    <Chassis_R231_Object_278>
+      <id>	31062	</id>
+    </Chassis_R231_Object_278>
+    <Chassis_R233_ASU_85>
+      <id>	31082	</id>
+    </Chassis_R233_ASU_85>
+    <Chassis_R235_KV_4_Fedorenko>
+      <id>	31071	</id>
+    </Chassis_R235_KV_4_Fedorenko>
+    <Chassis_R235_KV_4_Fedorenko_2>
+      <id>	31072	</id>
+    </Chassis_R235_KV_4_Fedorenko_2>
+    <Chassis_R236_KV_4_Zeitz>
+      <id>	31065	</id>
+    </Chassis_R236_KV_4_Zeitz>
+    <Chassis_R239_ST_Molot>
+      <id>	31067	</id>
+    </Chassis_R239_ST_Molot>
+    <Chassis_R239_ST_Molot_02>
+      <id>	31077	</id>
+    </Chassis_R239_ST_Molot_02>
+    <Chassis_R241_T_34_100>
+      <id>	31073	</id>
+    </Chassis_R241_T_34_100>
+    <Chassis_R246_Object_168_122>
+      <id>	31058	</id>
+    </Chassis_R246_Object_168_122>
+    <Chassis_R248_T44_Storm>
+      <id>	31060	</id>
+    </Chassis_R248_T44_Storm>
+    <Chassis_R250_NST_130>
+      <id>	31081	</id>
+    </Chassis_R250_NST_130>
+    <Chassis_R251_T_55_SP_01>
+      <id>	31074	</id>
+    </Chassis_R251_T_55_SP_01>
+    <Chassis_R253_Object_277_S>
+      <id>	31083	</id>
+    </Chassis_R253_Object_277_S>
+    <Chassis_R45_IS-7_02>
+      <id>	31035	</id>
+    </Chassis_R45_IS-7_02>
+    <Chassis_R61_Object252_02>
+      <id>	31024	</id>
+    </Chassis_R61_Object252_02>
+    <Chassis_R71_IS_2B>
+      <id>	174	</id>
+    </Chassis_R71_IS_2B>
+    <Chassis_R93_Object263>
+      <id>	228	</id>
+    </Chassis_R93_Object263>
+    <Chassis_R93_Object263_2>
+      <id>	229	</id>
+    </Chassis_R93_Object263_2>
+    <Chassis_R93_Object263_2_FL>
+      <id>	31014	</id>
+    </Chassis_R93_Object263_2_FL>
+    <Chassis_R96_Object_430>
+      <id>	220	</id>
+    </Chassis_R96_Object_430>
+    <Chassis_R96_Object_430_2>
+      <id>	221	</id>
+    </Chassis_R96_Object_430_2>
+    <Chassis_R98_T44_85M>
+      <id>	154	</id>
+    </Chassis_R98_T44_85M>
+    <Chassis_ST_I>
+      <id>	97	</id>
+    </Chassis_ST_I>
+    <Chassis_ST_I_2>
+      <id>	98	</id>
+    </Chassis_ST_I_2>
+    <Chassis_SU-101>
+      <id>	87	</id>
+    </Chassis_SU-101>
+    <Chassis_SU-101_2>
+      <id>	88	</id>
+    </Chassis_SU-101_2>
+    <Chassis_SU100M1>
+      <id>	90	</id>
+    </Chassis_SU100M1>
+    <Chassis_SU100M1_2>
+      <id>	91	</id>
+    </Chassis_SU100M1_2>
+    <Chassis_SU100Y>
+      <id>	118	</id>
+    </Chassis_SU100Y>
+    <Chassis_SU122_44_2>
+      <id>	125	</id>
+    </Chassis_SU122_44_2>
+    <Chassis_SU122_54>
+      <id>	108	</id>
+    </Chassis_SU122_54>
+    <Chassis_SU122_54_2>
+      <id>	109	</id>
+    </Chassis_SU122_54_2>
+    <Chassis_SU14_1>
+      <id>	142	</id>
+    </Chassis_SU14_1>
+    <Chassis_SU14_1_2>
+      <id>	143	</id>
+    </Chassis_SU14_1_2>
+    <Chassis_SU76I>
+      <id>	95	</id>
+    </Chassis_SU76I>
+    <Chassis_SU_85I>
+      <id>	89	</id>
+    </Chassis_SU_85I>
+    <Chassis_T-127>
+      <id>	80	</id>
+    </Chassis_T-127>
+    <Chassis_T-50>
+      <id>	83	</id>
+    </Chassis_T-50>
+    <Chassis_T-50_2>
+      <id>	84	</id>
+    </Chassis_T-50_2>
+    <Chassis_T-54_2>
+      <id>	69	</id>
+    </Chassis_T-54_2>
+    <Chassis_T-54_3>
+      <id>	70	</id>
+    </Chassis_T-54_3>
+    <Chassis_T-54_3_FL>
+      <id>	501	</id>
+    </Chassis_T-54_3_FL>
+    <Chassis_T-60>
+      <id>	137	</id>
+    </Chassis_T-60>
+    <Chassis_T-60_2>
+      <id>	138	</id>
+    </Chassis_T-60_2>
+    <Chassis_T-70>
+      <id>	135	</id>
+    </Chassis_T-70>
+    <Chassis_T-70_2>
+      <id>	136	</id>
+    </Chassis_T-70_2>
+    <Chassis_T150>
+      <id>	102	</id>
+    </Chassis_T150>
+    <Chassis_T150_2>
+      <id>	103	</id>
+    </Chassis_T150_2>
+    <Chassis_T150_2_MapsTraining_Dummy_HT_2>
+      <id>	114	</id>
+    </Chassis_T150_2_MapsTraining_Dummy_HT_2>
+    <Chassis_T44_122>
+      <id>	1479	</id>
+    </Chassis_T44_122>
+    <Chassis_T44_122_CN>
+      <id>	283	</id>
+    </Chassis_T44_122_CN>
+    <Chassis_T44_85>
+      <id>	153	</id>
+    </Chassis_T44_85>
+    <Chassis_T62A>
+      <id>	123	</id>
+    </Chassis_T62A>
+    <Chassis_T62A_fallout>
+      <id>	188	</id>
+    </Chassis_T62A_fallout>
+    <Chassis_T80>
+      <id>	140	</id>
+    </Chassis_T80>
+    <Chassis_T80_2>
+      <id>	141	</id>
+    </Chassis_T80_2>
+    <Chassis_T80_2_MapsTraining_Dummy_LT_1>
+      <id>	76	</id>
+    </Chassis_T80_2_MapsTraining_Dummy_LT_1>
+    <Chassis_T_50_2_1>
+      <id>	85	</id>
+    </Chassis_T_50_2_1>
+    <Chassis_Tetrarch_LL>
+      <id>	99	</id>
+    </Chassis_Tetrarch_LL>
+    <Chassis_Un02_Merkava_LP>
+      <id>	31043	</id>
+    </Chassis_Un02_Merkava_LP>
+    <Chassis_Un04_Vickers_MBT_EXP_2>
+      <id>	31046	</id>
+    </Chassis_Un04_Vickers_MBT_EXP_2>
+    <Chassis_Un06_M47_Romach>
+      <id>	31044	</id>
+    </Chassis_Un06_M47_Romach>
+    <Chassis_Un14_T54D>
+      <id>	31045	</id>
+    </Chassis_Un14_T54D>
+    <Churchll>
+      <id>	59	</id>
+    </Churchll>
+    <GAZ-74B>
+      <id>	56	</id>
+    </GAZ-74B>
+    <IS-1>
+      <id>	4	</id>
+    </IS-1>
+    <IS-2M>
+      <id>	5	</id>
+    </IS-2M>
+    <IS-3>
+      <id>	42	</id>
+    </IS-3>
+    <IS-3M>
+      <id>	43	</id>
+    </IS-3M>
+    <IS-3M_FL>
+      <id>	502	</id>
+    </IS-3M_FL>
+    <IS-3M_IGR>
+      <id>	60003	</id>
+    </IS-3M_IGR>
+    <IS-3M_SH>
+      <id>	307	</id>
+    </IS-3M_SH>
+    <IS-4>
+      <id>	48	</id>
+    </IS-4>
+    <IS-4_7x7>
+      <id>	262	</id>
+    </IS-4_7x7>
+    <IS-4_T>
+      <id>	31033	</id>
+    </IS-4_T>
+    <IS-7>
+      <id>	58	</id>
+    </IS-7>
+    <IS-7_IGR>
+      <id>	60009	</id>
+    </IS-7_IGR>
+    <ISU-152>
+      <id>	60	</id>
+    </ISU-152>
+    <ISU-152_mod_1945>
+      <id>	61	</id>
+    </ISU-152_mod_1945>
+    <ISU-152_mod_1945_FL>
+      <id>	503	</id>
+    </ISU-152_mod_1945_FL>
+    <ISU-152_mod_1945_IGR>
+      <id>	60001	</id>
+    </ISU-152_mod_1945_IGR>
+    <ISU-152_mod_1945_zv>
+      <id>	31012	</id>
+    </ISU-152_mod_1945_zv>
+    <KV-1s>
+      <id>	22	</id>
+    </KV-1s>
+    <KV-1s_bis>
+      <id>	23	</id>
+    </KV-1s_bis>
+    <KV-3>
+      <id>	46	</id>
+    </KV-3>
+    <KV-3bis>
+      <id>	47	</id>
+    </KV-3bis>
+    <KV220>
+      <id>	54	</id>
+    </KV220>
+    <KV220_A>
+      <id>	94	</id>
+    </KV220_A>
+    <KV_1>
+      <id>	14	</id>
+    </KV_1>
+    <KV_2>
+      <id>	15	</id>
+    </KV_2>
+    <Matilda>
+      <id>	55	</id>
+    </Matilda>
+    <Observer>
+      <id>	255	</id>
+    </Observer>
+    <S-51>
+      <id>	12	</id>
+    </S-51>
+    <S-51bis>
+      <id>	13	</id>
+    </S-51bis>
+    <SU-100_mod_1944>
+      <id>	28	</id>
+    </SU-100_mod_1944>
+    <SU-100_mod_1945>
+      <id>	29	</id>
+    </SU-100_mod_1945>
+    <SU-14>
+      <id>	32	</id>
+    </SU-14>
+    <SU-14Bis>
+      <id>	33	</id>
+    </SU-14Bis>
+    <SU-152_mod_1943>
+      <id>	18	</id>
+    </SU-152_mod_1943>
+    <SU-152_mod_1944>
+      <id>	19	</id>
+    </SU-152_mod_1944>
+    <SU-152_mod_1944_IGR>
+      <id>	60006	</id>
+    </SU-152_mod_1944_IGR>
+    <SU-18>
+      <id>	30	</id>
+    </SU-18>
+    <SU-18Bis>
+      <id>	31	</id>
+    </SU-18Bis>
+    <SU-5>
+      <id>	38	</id>
+    </SU-5>
+    <SU-5bis>
+      <id>	39	</id>
+    </SU-5bis>
+    <SU-5bis_MapsTraining_Dummy_SPG_1>
+      <id>	81	</id>
+    </SU-5bis_MapsTraining_Dummy_SPG_1>
+    <SU-76>
+      <id>	50	</id>
+    </SU-76>
+    <SU-76bis>
+      <id>	51	</id>
+    </SU-76bis>
+    <SU-8>
+      <id>	44	</id>
+    </SU-8>
+    <SU-85A>
+      <id>	57	</id>
+    </SU-85A>
+    <SU-85_mod_1942>
+      <id>	2	</id>
+    </SU-85_mod_1942>
+    <SU-85_mod_1943>
+      <id>	3	</id>
+    </SU-85_mod_1943>
+    <SU-8Bis>
+      <id>	45	</id>
+    </SU-8Bis>
+    <Su-26A>
+      <id>	65	</id>
+    </Su-26A>
+    <Su-26B>
+      <id>	66	</id>
+    </Su-26B>
+    <T-18>
+      <id>	26	</id>
+    </T-18>
+    <T-18Bis>
+      <id>	27	</id>
+    </T-18Bis>
+    <T-26>
+      <id>	36	</id>
+    </T-26>
+    <T-26M>
+      <id>	37	</id>
+    </T-26M>
+    <T-28_0>
+      <id>	8	</id>
+    </T-28_0>
+    <T-28_A>
+      <id>	9	</id>
+    </T-28_A>
+    <T-34-85>
+      <id>	20	</id>
+    </T-34-85>
+    <T-34-85Bis>
+      <id>	21	</id>
+    </T-34-85Bis>
+    <T-34-85Bis2>
+      <id>	134	</id>
+    </T-34-85Bis2>
+    <T-34_mod_1941>
+      <id>	0	</id>
+    </T-34_mod_1941>
+    <T-34_mod_1943>
+      <id>	1	</id>
+    </T-34_mod_1943>
+    <T-34_mod_1943_MapsTraining_Player_MT_1>
+      <id>	82	</id>
+    </T-34_mod_1943_MapsTraining_Player_MT_1>
+    <T-43>
+      <id>	52	</id>
+    </T-43>
+    <T-43M>
+      <id>	53	</id>
+    </T-43M>
+    <T-43M_FL>
+      <id>	31006	</id>
+    </T-43M_FL>
+    <T-43M_MapsTraining_Player_MT_2>
+      <id>	86	</id>
+    </T-43M_MapsTraining_Player_MT_2>
+    <T-44>
+      <id>	34	</id>
+    </T-44>
+    <T-44Bis>
+      <id>	35	</id>
+    </T-44Bis>
+    <T-44Bis_FL>
+      <id>	244	</id>
+    </T-44Bis_FL>
+    <T-44Bis_IGR>
+      <id>	60002	</id>
+    </T-44Bis_IGR>
+    <T-46-1>
+      <id>	24	</id>
+    </T-46-1>
+    <T-46-2>
+      <id>	25	</id>
+    </T-46-2>
+    <ValentineMK_I>
+      <id>	64	</id>
+    </ValentineMK_I>
+    <ValentineMK_I_IGR>
+      <id>	60008	</id>
+    </ValentineMK_I_IGR>
+    <chassisE1_LL>
+      <id>	67	</id>
+    </chassisE1_LL>
+  </shared>
 </chassis.xml>

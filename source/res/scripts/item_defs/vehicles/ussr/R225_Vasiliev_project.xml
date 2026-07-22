@@ -1,8 +1,7 @@
 <R225_Vasiliev_project.xml>
   <xmlns:xmlref>	http://bwt/xmlref	</xmlns:xmlref>
   <crew>
-    <commander>	radioman
-			loader	</commander>
+    <commander>	radioman	</commander>
     <driver></driver>
     <gunner>	loader	</gunner>
   </crew>
@@ -619,8 +618,8 @@
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
       <rotationSpeed>	56	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.08	</vehicleMovement>
-        <vehicleRotation>	0.08	</vehicleRotation>
+        <vehicleMovement>	0.12	</vehicleMovement>
+        <vehicleRotation>	0.12	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	250	</maxHealth>
@@ -1791,7 +1790,7 @@
         <maxRegenHealth>	85	</maxRegenHealth>
         <repairCost>	1.0	</repairCost>
       </turretRotatorHealth>
-      <circularVisionRadius>	400	</circularVisionRadius>
+      <circularVisionRadius>	390	</circularVisionRadius>
       <surveyingDeviceHealth>
         <maxHealth>	120	</maxHealth>
         <maxRegenHealth>	60	</maxRegenHealth>
@@ -1871,8 +1870,8 @@
             <minPitch>	0 -15 1 -15	</minPitch>
             <maxPitch>	0 8 0.34 8 0.38 5 0.62 5 0.66 8 1 8	</maxPitch>
           </pitchLimits>
-          <shotDispersionRadius>	0.4	</shotDispersionRadius>
-          <reloadTime>	11.5	</reloadTime>
+          <shotDispersionRadius>	0.37	</shotDispersionRadius>
+          <reloadTime>	9.8	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.08	</turretRotation>
             <afterShot>	3.5	</afterShot>
@@ -2322,10 +2321,10 @@
               <rollingFriction>	0.15295	</rollingFriction>
             </soft>
             <medium>
-              <rollingFriction>	0.10465	</rollingFriction>
+              <rollingFriction>	0.06465	</rollingFriction>
             </medium>
             <firm>
-              <rollingFriction>	0.0805	</rollingFriction>
+              <rollingFriction>	0.0205	</rollingFriction>
             </firm>
           </grounds>
           <axleCount>	5	</axleCount>

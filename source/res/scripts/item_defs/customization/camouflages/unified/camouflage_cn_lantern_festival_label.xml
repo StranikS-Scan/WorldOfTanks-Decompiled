@@ -1,0 +1,60 @@
+<camouflage_cn_lantern_festival_label.xml>
+  <uk:GB91_Super_Conqueror6>	ussr	</uk:GB91_Super_Conqueror6>
+  <xmlns:germany>	germany	</xmlns:germany>
+  <uk:GB91_Super_Conqueror5>	usa	</uk:GB91_Super_Conqueror5>
+  <xmlns:china>	china	</xmlns:china>
+  <xmlns:france>	france	</xmlns:france>
+  <uk:GB91_Super_Conqueror4>	uk	</uk:GB91_Super_Conqueror4>
+  <uk:GB91_Super_Conqueror1>	japan	</uk:GB91_Super_Conqueror1>
+  <xmlns:czech>	czech	</xmlns:czech>
+  <uk:GB91_Super_Conqueror3>	sweden	</uk:GB91_Super_Conqueror3>
+  <uk:GB91_Super_Conqueror2>	poland	</uk:GB91_Super_Conqueror2>
+  <uk:GB91_Super_Conqueror0>	italy	</uk:GB91_Super_Conqueror0>
+  <xmlns:intunion>	intunion	</xmlns:intunion>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/opaque	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	MT camouflages 50g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R47_ISU-152_Zveroboj ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <camouflage>
+      <id>	475	</id>
+      <texture>	vehicles/russian/Camouflage/cn_lantern_festival.dds	</texture>
+      <description>	#vehicle_customization:camouflage/cn_lantern_festival/description	</description>
+      <scales>	1.2 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/cn_lantern_festival/label	</userString>
+      <tags>	fullRGB hiddenInUI	</tags>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	255 0 0 255	</c0>
+          <c1>	0 255 0 255	</c1>
+          <c2>	0 0 255 255	</c2>
+          <c3>	0 0 0 255	</c3>
+        </palette>
+      </palettes>
+      <rotation>
+        <HULL>	-0.637918	</HULL>
+        <TURRET>	-0.637918	</TURRET>
+        <GUN>	-0.637918	</GUN>
+      </rotation>
+      <tilingSettings>
+        <type>	relativewithfactor	</type>
+        <factor>	2.55 2.55	</factor>
+        <offset>	-6.3 -6.95	</offset>
+      </tilingSettings>
+      <gloss>	0.509 0.509 0.509 0.2	</gloss>
+      <tiling>
+        <germany:G42_Maus>	3.35 3.35 -0.45 -0.95	</germany:G42_Maus>
+        <ussr:R230_Maus>	3.35 3.35 -0.45 -0.95	</ussr:R230_Maus>
+        <ussr:R11_MS-1>	4.36 4.36 -3.95 -2.52	</ussr:R11_MS-1>
+        <ussr:R155_Object_277>	4 4 0.29 -0.18	</ussr:R155_Object_277>
+        <uk:GB91_Super_Conqueror>	1.6 1.6 0.15 -0.1	</uk:GB91_Super_Conqueror>
+      </tiling>
+    </camouflage>
+  </itemGroup>
+</camouflage_cn_lantern_festival_label.xml>

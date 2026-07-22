@@ -1,16 +1,5 @@
 <list.xml>
-  <Pl03_PzV_Poland>
-    <id>	0	</id>
-    <userString>	#poland_vehicles:Pl03_PzV_Poland	</userString>
-    <shortUserString>	#poland_vehicles:Pl03_PzV_Poland_short	</shortUserString>
-    <description>	#poland_vehicles:Pl03_PzV_Poland_descr	</description>
-    <shortDescriptionSpecial>	#poland_vehicles:Pl03_PzV_Poland_short_special	</shortDescriptionSpecial>
-    <longDescriptionSpecial>	#poland_vehicles:Pl03_PzV_Poland_long_special	</longDescriptionSpecial>
-    <price>	6000	  <gold></gold>
-    </price>
-    <tags>	mediumTank role_MT_universal HD lockExceptProgression beast improvedVentilation_class2_user tankRammer_class2_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
-    <level>	6	</level>
-  </Pl03_PzV_Poland>
+  <xmlns:xmlref>	http://bwt/xmlref	</xmlns:xmlref>
   <Pl01_TKS_20mm>
     <id>	1	</id>
     <userString>	#poland_vehicles:Pl01_TKS_20mm	</userString>
@@ -24,36 +13,27 @@
     <tags>	lightTank HD improvedVentilation_class3_user extraHealthReserve_class3_user	</tags>
     <level>	2	</level>
   </Pl01_TKS_20mm>
-  <Pl08_50TP_prototyp>
-    <id>	3	</id>
-    <userString>	#poland_vehicles:Pl08_50TP_prototyp	</userString>
-    <shortUserString>	#poland_vehicles:Pl08_50TP_prototyp_short	</shortUserString>
-    <description>	#poland_vehicles:Pl08_50TP_prototyp_descr	</description>
-    <shortDescriptionSpecial>	#poland_vehicles:Pl08_50TP_prototyp_short_special	</shortDescriptionSpecial>
-    <longDescriptionSpecial>	#poland_vehicles:Pl08_50TP_prototyp_long_special	</longDescriptionSpecial>
-    <price>	11000	  <gold></gold>
+  <Pl03_PzV_Poland>
+    <id>	0	</id>
+    <userString>	#poland_vehicles:Pl03_PzV_Poland	</userString>
+    <shortUserString>	#poland_vehicles:Pl03_PzV_Poland_short	</shortUserString>
+    <description>	#poland_vehicles:Pl03_PzV_Poland_descr	</description>
+    <shortDescriptionSpecial>	#poland_vehicles:Pl03_PzV_Poland_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#poland_vehicles:Pl03_PzV_Poland_long_special	</longDescriptionSpecial>
+    <price>	6000	  <gold></gold>
     </price>
-    <tags>	heavyTank role_HT_break HD improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user	</tags>
-    <level>	8	</level>
-  </Pl08_50TP_prototyp>
-  <Pl14_4TP>
-    <id>	4	</id>
-    <userString>	#poland_vehicles:Pl14_4TP	</userString>
-    <shortUserString>	#poland_vehicles:Pl14_4TP_short	</shortUserString>
-    <description>	#poland_vehicles:Pl14_4TP_descr	</description>
-    <price>	0	</price>
-    <tags>	lightTank HD	</tags>
-    <level>	1	</level>
-  </Pl14_4TP>
-  <Pl09_7TP>
-    <id>	5	</id>
-    <userString>	#poland_vehicles:Pl09_7TP	</userString>
-    <shortUserString>	#poland_vehicles:Pl09_7TP_short	</shortUserString>
-    <description>	#poland_vehicles:Pl09_7TP_descr	</description>
-    <price>	3950	</price>
-    <tags>	lightTank HD improvedVentilation_class3_user extraHealthReserve_class3_user	</tags>
-    <level>	2	</level>
-  </Pl09_7TP>
+    <tags>	mediumTank role_MT_universal HD lockExceptProgression beast improvedVentilation_class2_user tankRammer_class2_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
+    <level>	6	</level>
+  </Pl03_PzV_Poland>
+  <Pl05_50TP_Tyszkiewicza>
+    <id>	12	</id>
+    <userString>	#poland_vehicles:Pl05_50TP_Tyszkiewicza	</userString>
+    <shortUserString>	#poland_vehicles:Pl05_50TP_Tyszkiewicza_short	</shortUserString>
+    <description>	#poland_vehicles:Pl05_50TP_Tyszkiewicza_descr	</description>
+    <price>	3500000	</price>
+    <tags>	heavyTank role_HT_break HD heavyTank1 improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user	</tags>
+    <level>	9	</level>
+  </Pl05_50TP_Tyszkiewicza>
   <Pl06_10TP>
     <id>	6	</id>
     <userString>	#poland_vehicles:Pl06_10TP	</userString>
@@ -72,15 +52,27 @@
     <tags>	lightTank HD improvedVentilation_class3_user extraHealthReserve_class3_user	</tags>
     <level>	4	</level>
   </Pl07_14TP>
-  <Pl12_25TP_KSUST_II>
-    <id>	8	</id>
-    <userString>	#poland_vehicles:Pl12_25TP_KSUST_II	</userString>
-    <shortUserString>	#poland_vehicles:Pl12_25TP_KSUST_II_short	</shortUserString>
-    <description>	#poland_vehicles:Pl12_25TP_KSUST_II_descr	</description>
-    <price>	372000	</price>
-    <tags>	mediumTank HD mediumTank1 improvedVentilation_class2_user tankRammer_class2_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
-    <level>	5	</level>
-  </Pl12_25TP_KSUST_II>
+  <Pl08_50TP_prototyp>
+    <id>	3	</id>
+    <userString>	#poland_vehicles:Pl08_50TP_prototyp	</userString>
+    <shortUserString>	#poland_vehicles:Pl08_50TP_prototyp_short	</shortUserString>
+    <description>	#poland_vehicles:Pl08_50TP_prototyp_descr	</description>
+    <shortDescriptionSpecial>	#poland_vehicles:Pl08_50TP_prototyp_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#poland_vehicles:Pl08_50TP_prototyp_long_special	</longDescriptionSpecial>
+    <price>	11000	  <gold></gold>
+    </price>
+    <tags>	heavyTank role_HT_break HD improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user	</tags>
+    <level>	8	</level>
+  </Pl08_50TP_prototyp>
+  <Pl09_7TP>
+    <id>	5	</id>
+    <userString>	#poland_vehicles:Pl09_7TP	</userString>
+    <shortUserString>	#poland_vehicles:Pl09_7TP_short	</shortUserString>
+    <description>	#poland_vehicles:Pl09_7TP_descr	</description>
+    <price>	3950	</price>
+    <tags>	lightTank HD improvedVentilation_class3_user extraHealthReserve_class3_user	</tags>
+    <level>	2	</level>
+  </Pl09_7TP>
   <Pl10_40TP_Habicha>
     <id>	9	</id>
     <userString>	#poland_vehicles:Pl10_40TP_Habicha	</userString>
@@ -99,6 +91,15 @@
     <tags>	heavyTank role_HT_break HD improvedVentilation_class2_user tankRammer_class2_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
     <level>	7	</level>
   </Pl11_45TP_Habicha>
+  <Pl12_25TP_KSUST_II>
+    <id>	8	</id>
+    <userString>	#poland_vehicles:Pl12_25TP_KSUST_II	</userString>
+    <shortUserString>	#poland_vehicles:Pl12_25TP_KSUST_II_short	</shortUserString>
+    <description>	#poland_vehicles:Pl12_25TP_KSUST_II_descr	</description>
+    <price>	372000	</price>
+    <tags>	mediumTank HD mediumTank1 improvedVentilation_class2_user tankRammer_class2_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
+    <level>	5	</level>
+  </Pl12_25TP_KSUST_II>
   <Pl13_53TP_Markowskiego>
     <id>	11	</id>
     <userString>	#poland_vehicles:Pl13_53TP_Markowskiego	</userString>
@@ -108,15 +109,15 @@
     <tags>	heavyTank role_HT_break HD heavyTank1 improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user	</tags>
     <level>	8	</level>
   </Pl13_53TP_Markowskiego>
-  <Pl05_50TP_Tyszkiewicza>
-    <id>	12	</id>
-    <userString>	#poland_vehicles:Pl05_50TP_Tyszkiewicza	</userString>
-    <shortUserString>	#poland_vehicles:Pl05_50TP_Tyszkiewicza_short	</shortUserString>
-    <description>	#poland_vehicles:Pl05_50TP_Tyszkiewicza_descr	</description>
-    <price>	3500000	</price>
-    <tags>	heavyTank role_HT_break HD heavyTank1 improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user	</tags>
-    <level>	9	</level>
-  </Pl05_50TP_Tyszkiewicza>
+  <Pl14_4TP>
+    <id>	4	</id>
+    <userString>	#poland_vehicles:Pl14_4TP	</userString>
+    <shortUserString>	#poland_vehicles:Pl14_4TP_short	</shortUserString>
+    <description>	#poland_vehicles:Pl14_4TP_descr	</description>
+    <price>	0	</price>
+    <tags>	lightTank HD	</tags>
+    <level>	1	</level>
+  </Pl14_4TP>
   <Pl15_60TP_Lewandowskiego>
     <id>	13	</id>
     <userString>	#poland_vehicles:Pl15_60TP_Lewandowskiego	</userString>
@@ -126,176 +127,6 @@
     <tags>	heavyTank role_HT_break HD heavyTank1 improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user earn_crystals	</tags>
     <level>	10	</level>
   </Pl15_60TP_Lewandowskiego>
-  <Pl17_DS_PZlnz>
-    <id>	14	</id>
-    <userString>	#poland_vehicles:Pl17_DS_PZlnz	</userString>
-    <shortUserString>	#poland_vehicles:Pl17_DS_PZlnz_short	</shortUserString>
-    <description>	#poland_vehicles:Pl17_DS_PZlnz_descr	</description>
-    <price>	365000	</price>
-    <tags>	mediumTank improvedVentilation_class2_user extraHealthReserve_class2_user tankRammer_class2_user antifragmentationLining_medium_user HD	</tags>
-    <level>	5	</level>
-  </Pl17_DS_PZlnz>
-  <Pl18_BUGI>
-    <id>	15	</id>
-    <userString>	#poland_vehicles:Pl18_BUGI	</userString>
-    <shortUserString>	#poland_vehicles:Pl18_BUGI_short	</shortUserString>
-    <description>	#poland_vehicles:Pl18_BUGI_descr	</description>
-    <price>	915000	</price>
-    <tags>	mediumTank role_MT_universal improvedVentilation_class2_user extraHealthReserve_class2_user tankRammer_class2_user antifragmentationLining_medium_user HD	</tags>
-    <level>	6	</level>
-  </Pl18_BUGI>
-  <Pl20_CS_44>
-    <id>	16	</id>
-    <userString>	#poland_vehicles:Pl20_CS_44	</userString>
-    <shortUserString>	#poland_vehicles:Pl20_CS_44_short	</shortUserString>
-    <description>	#poland_vehicles:Pl20_CS_44_descr	</description>
-    <price>	1410000	</price>
-    <tags>	mediumTank role_MT_universal improvedVentilation_class2_user extraHealthReserve_class2_user tankRammer_class2_user antifragmentationLining_medium_user HD	</tags>
-    <level>	7	</level>
-  </Pl20_CS_44>
-  <Pl23_CS_53>
-    <id>	17	</id>
-    <userString>	#poland_vehicles:Pl23_CS_53	</userString>
-    <description>	#poland_vehicles:Pl23_CS_53_descr	</description>
-    <shortUserString>	#poland_vehicles:Pl23_CS_53_short	</shortUserString>
-    <price>	2550000	</price>
-    <tags>	mediumTank role_MT_universal siegeMode turboshaftEngine improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user HD	</tags>
-    <level>	8	</level>
-  </Pl23_CS_53>
-  <Pl21_CS_63>
-    <id>	20	</id>
-    <userString>	#poland_vehicles:Pl21_CS_63	</userString>
-    <description>	#poland_vehicles:Pl21_CS_63_descr	</description>
-    <shortUserString>	#poland_vehicles:Pl21_CS_63_short	</shortUserString>
-    <price>	6100000	</price>
-    <tags>	mediumTank role_MT_sniper mediumTank1 siegeMode turboshaftEngine HD earn_crystals improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
-    <level>	10	</level>
-  </Pl21_CS_63>
-  <Pl17_DS_PZlnz_SH>
-    <id>	22	</id>
-    <userString>	#poland_vehicles:Pl17_DS_PZlnz_SH	</userString>
-    <shortUserString>	#poland_vehicles:Pl17_DS_PZlnz_SH_short	</shortUserString>
-    <description>	#poland_vehicles:Pl17_DS_PZlnz_SH_descr	</description>
-    <price>	1	</price>
-    <notInShop>	true	</notInShop>
-    <tags>	mediumTank lockOutfit HD battle_royale lockCrew lockCrewSkills cannot_be_sold lockDevices lockEquipment lockShells secret private	</tags>
-    <level>	1	</level>
-  </Pl17_DS_PZlnz_SH>
-  <Pl28_SDP_Wz_60>
-    <id>	23	</id>
-    <userString>	#poland_vehicles:Pl28_SDP_Wz_60	</userString>
-    <description>	#poland_vehicles:Pl28_SDP_Wz_60_descr	</description>
-    <shortUserString>	#poland_vehicles:Pl28_SDP_Wz_60_short	</shortUserString>
-    <price>	3650000	</price>
-    <tags>	AT-SPG role_ATSPG_assault HD heavyAT-SPG siegeMode turboshaftEngine improvedVentilation_class1_user tankRammer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user	</tags>
-    <level>	9	</level>
-  </Pl28_SDP_Wz_60>
-  <Pl26_Czolg_P_Wz_46>
-    <id>	24	</id>
-    <userString>	#poland_vehicles:Pl26_Czolg_P_Wz_46	</userString>
-    <shortUserString>	#poland_vehicles:Pl26_Czolg_P_Wz_46_short	</shortUserString>
-    <description>	#poland_vehicles:Pl26_Czolg_P_Wz_46_descr	</description>
-    <shortDescriptionSpecial>	#poland_vehicles:Pl26_Czolg_P_Wz_46_short_special	</shortDescriptionSpecial>
-    <longDescriptionSpecial>	#poland_vehicles:Pl26_Czolg_P_Wz_46_long_special	</longDescriptionSpecial>
-    <price>	25000	  <gold></gold>
-    </price>
-    <notInShop>	true	</notInShop>
-    <tags>	heavyTank new_hp_vfx role_HT_assault HD improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user special earn_crystals	</tags>
-    <level>	10	</level>
-  </Pl26_Czolg_P_Wz_46>
-  <Pl32_SDP_Wz_44>
-    <id>	25	</id>
-    <userString>	#poland_vehicles:Pl32_SDP_Wz_44	</userString>
-    <shortUserString>	#poland_vehicles:Pl32_SDP_Wz_44_short	</shortUserString>
-    <description>	#poland_vehicles:Pl32_SDP_Wz_44_descr	</description>
-    <price>	940000	</price>
-    <tags>	AT-SPG role_ATSPG_assault HD mediumAT-SPG improvedVentilation_class2_user tankRammer_class2_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
-    <level>	6	</level>
-  </Pl32_SDP_Wz_44>
-  <Pl33_SDP_Wz_40>
-    <id>	26	</id>
-    <userString>	#poland_vehicles:Pl33_SDP_Wz_40	</userString>
-    <shortUserString>	#poland_vehicles:Pl33_SDP_Wz_40_short	</shortUserString>
-    <description>	#poland_vehicles:Pl33_SDP_Wz_40_descr	</description>
-    <price>	380000	</price>
-    <tags>	AT-SPG HD mediumAT-SPG improvedVentilation_class2_user tankRammer_class2_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
-    <level>	5	</level>
-  </Pl33_SDP_Wz_40>
-  <Pl29_NC_Wz_70T>
-    <id>	27	</id>
-    <userString>	#poland_vehicles:Pl29_NC_Wz_70T	</userString>
-    <shortUserString>	#poland_vehicles:Pl29_NC_Wz_70T_short	</shortUserString>
-    <description>	#poland_vehicles:Pl29_NC_Wz_70T_descr	</description>
-    <price>	6100000	</price>
-    <tags>	AT-SPG role_ATSPG_assault HD heavyAT-SPG siegeMode turboshaftEngine improvedVentilation_class1_user tankRammer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user earn_crystals	</tags>
-    <level>	10	</level>
-  </Pl29_NC_Wz_70T>
-  <Pl30_SDP_Wz58T>
-    <id>	28	</id>
-    <userString>	#poland_vehicles:Pl30_SDP_Wz58T	</userString>
-    <shortUserString>	#poland_vehicles:Pl30_SDP_Wz58T_short	</shortUserString>
-    <description>	#poland_vehicles:Pl30_SDP_Wz58T_descr	</description>
-    <price>	2650000	</price>
-    <tags>	AT-SPG role_ATSPG_assault HD heavyAT-SPG siegeMode turboshaftEngine improvedVentilation_class1_user tankRammer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user	</tags>
-    <level>	8	</level>
-  </Pl30_SDP_Wz58T>
-  <Pl31_SDP_Wz_57D>
-    <id>	29	</id>
-    <userString>	#poland_vehicles:Pl31_SDP_Wz_57D	</userString>
-    <shortUserString>	#poland_vehicles:Pl31_SDP_Wz_57D_short	</shortUserString>
-    <description>	#poland_vehicles:Pl31_SDP_Wz_57D_descr	</description>
-    <price>	1490000	</price>
-    <tags>	AT-SPG role_ATSPG_assault HD heavyAT-SPG AT-SPG2 improvedVentilation_class2_user tankRammer_class2_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
-    <level>	7	</level>
-  </Pl31_SDP_Wz_57D>
-  <Pl22_CS_59>
-    <id>	31	</id>
-    <userString>	#poland_vehicles:Pl22_CS_59	</userString>
-    <description>	#poland_vehicles:Pl22_CS_59_descr	</description>
-    <shortUserString>	#poland_vehicles:Pl22_CS_59_short	</shortUserString>
-    <price>	3470000	</price>
-    <tags>	mediumTank role_MT_universal siegeMode turboshaftEngine improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user HD	</tags>
-    <level>	9	</level>
-  </Pl22_CS_59>
-  <Pl25_CS_52_C>
-    <id>	197	</id>
-    <userString>	#poland_vehicles:Pl25_CS_52_C	</userString>
-    <description>	#poland_vehicles:Pl25_CS_52_C_descr	</description>
-    <shortUserString>	#poland_vehicles:Pl25_CS_52_C_short	</shortUserString>
-    <shortDescriptionSpecial>	#poland_vehicles:Pl25_CS_52_C_short_special	</shortDescriptionSpecial>
-    <longDescriptionSpecial>	#poland_vehicles:Pl25_CS_52_C_long_special	</longDescriptionSpecial>
-    <price>	11000	  <gold></gold>
-    </price>
-    <notInShop>	true	</notInShop>
-    <tags>	mediumTank role_MT_universal siegeMode turboshaftEngine improvedVentilation_class2_user extraHealthReserve_class2_user tankRammer_class2_user aimingStabilizer_class1_user antifragmentationLining_medium_user HD	</tags>
-    <level>	8	</level>
-  </Pl25_CS_52_C>
-  <Pl24_56TP>
-    <id>	198	</id>
-    <userString>	#poland_vehicles:Pl24_56TP	</userString>
-    <shortUserString>	#poland_vehicles:Pl24_56TP_short	</shortUserString>
-    <description>	#poland_vehicles:Pl24_56TP_descr	</description>
-    <shortDescriptionSpecial>	#poland_vehicles:Pl24_56TP_short_special	</shortDescriptionSpecial>
-    <longDescriptionSpecial>	#poland_vehicles:Pl24_56TP_long_special	</longDescriptionSpecial>
-    <price>	11000	  <gold></gold>
-    </price>
-    <notInShop>	true	</notInShop>
-    <tags>	heavyTank role_HT_universal HD improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user	</tags>
-    <level>	8	</level>
-  </Pl24_56TP>
-  <Pl19_CS_52_LIS>
-    <id>	199	</id>
-    <userString>	#poland_vehicles:Pl19_CS_52_LIS	</userString>
-    <description>	#poland_vehicles:Pl19_CS_52_LIS_descr	</description>
-    <shortUserString>	#poland_vehicles:Pl19_CS_52_LIS_short	</shortUserString>
-    <shortDescriptionSpecial>	#poland_vehicles:Pl19_CS_52_LIS_short_special	</shortDescriptionSpecial>
-    <longDescriptionSpecial>	#poland_vehicles:Pl19_CS_52_LIS_long_special	</longDescriptionSpecial>
-    <price>	11000	  <gold></gold>
-    </price>
-    <notInShop>	true	</notInShop>
-    <tags>	mediumTank role_MT_universal improvedVentilation_class2_user extraHealthReserve_class2_user tankRammer_class2_user aimingStabilizer_class1_user antifragmentationLining_medium_user HD	</tags>
-    <level>	8	</level>
-  </Pl19_CS_52_LIS>
   <Pl16_T34_85_Rudy>
     <id>	200	</id>
     <userString>	#poland_vehicles:Pl16_T34_85_Rudy	</userString>
@@ -309,84 +140,78 @@
     <tags>	mediumTank role_MT_universal HD dog improvedVentilation_class2_user tankRammer_class2_user extraHealthReserve_class3_user antifragmentationLining_medium_user t34_disclaimer	</tags>
     <level>	6	</level>
   </Pl16_T34_85_Rudy>
-  <Pl27_SDP_Wz_66T>
-    <id>	202	</id>
-    <userString>	#poland_vehicles:Pl27_SDP_Wz_66T	</userString>
-    <shortUserString>	#poland_vehicles:Pl27_SDP_Wz_66T_short	</shortUserString>
-    <description>	#poland_vehicles:Pl27_SDP_Wz_66T_descr	</description>
-    <shortDescriptionSpecial>	#poland_vehicles:Pl27_SDP_Wz_66T_short_special	</shortDescriptionSpecial>
-    <longDescriptionSpecial>	#poland_vehicles:Pl27_SDP_Wz_66T_long_special	</longDescriptionSpecial>
+  <Pl17_DS_PZlnz>
+    <id>	14	</id>
+    <userString>	#poland_vehicles:Pl17_DS_PZlnz	</userString>
+    <shortUserString>	#poland_vehicles:Pl17_DS_PZlnz_short	</shortUserString>
+    <description>	#poland_vehicles:Pl17_DS_PZlnz_descr	</description>
+    <price>	365000	</price>
+    <tags>	mediumTank improvedVentilation_class2_user extraHealthReserve_class2_user tankRammer_class2_user antifragmentationLining_medium_user HD	</tags>
+    <level>	5	</level>
+  </Pl17_DS_PZlnz>
+  <Pl17_DS_PZlnz_SH>
+    <id>	22	</id>
+    <userString>	#poland_vehicles:Pl17_DS_PZlnz_SH	</userString>
+    <shortUserString>	#poland_vehicles:Pl17_DS_PZlnz_SH_short	</shortUserString>
+    <description>	#poland_vehicles:Pl17_DS_PZlnz_SH_descr	</description>
+    <price>	1	</price>
+    <notInShop>	true	</notInShop>
+    <tags>	mediumTank lockOutfit HD battle_royale lockCrew lockCrewSkills cannot_be_sold lockDevices lockEquipment lockShells secret private	</tags>
+    <level>	1	</level>
+  </Pl17_DS_PZlnz_SH>
+  <Pl18_BUGI>
+    <id>	15	</id>
+    <userString>	#poland_vehicles:Pl18_BUGI	</userString>
+    <shortUserString>	#poland_vehicles:Pl18_BUGI_short	</shortUserString>
+    <description>	#poland_vehicles:Pl18_BUGI_descr	</description>
+    <price>	915000	</price>
+    <tags>	mediumTank role_MT_universal improvedVentilation_class2_user extraHealthReserve_class2_user tankRammer_class2_user antifragmentationLining_medium_user HD	</tags>
+    <level>	6	</level>
+  </Pl18_BUGI>
+  <Pl19_CS_52_LIS>
+    <id>	199	</id>
+    <userString>	#poland_vehicles:Pl19_CS_52_LIS	</userString>
+    <description>	#poland_vehicles:Pl19_CS_52_LIS_descr	</description>
+    <shortUserString>	#poland_vehicles:Pl19_CS_52_LIS_short	</shortUserString>
+    <shortDescriptionSpecial>	#poland_vehicles:Pl19_CS_52_LIS_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#poland_vehicles:Pl19_CS_52_LIS_long_special	</longDescriptionSpecial>
     <price>	11000	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
-    <tags>	AT-SPG role_ATSPG_assault HD heavyAT-SPG siegeMode turboshaftEngine improvedVentilation_class1_user tankRammer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user	</tags>
+    <tags>	mediumTank role_MT_universal improvedVentilation_class2_user extraHealthReserve_class2_user tankRammer_class2_user aimingStabilizer_class1_user antifragmentationLining_medium_user HD	</tags>
     <level>	8	</level>
-  </Pl27_SDP_Wz_66T>
-  <Pl34_CS_63_02>
-    <id>	203	</id>
-    <userString>	#poland_vehicles:Pl34_CS_63_02	</userString>
-    <description>	#poland_vehicles:Pl34_CS_63_02_descr	</description>
-    <shortUserString>	#poland_vehicles:Pl34_CS_63_02_short	</shortUserString>
-    <shortDescriptionSpecial>	#poland_vehicles:Pl34_CS_63_02_short_special	</shortDescriptionSpecial>
-    <longDescriptionSpecial>	#poland_vehicles:Pl34_CS_63_02_long_special	</longDescriptionSpecial>
-    <price>	25000	  <gold></gold>
+  </Pl19_CS_52_LIS>
+  <Pl209_ULAN>
+    <id>	31002	</id>
+    <userString>	#poland_vehicles:Pl209_ULAN	</userString>
+    <shortUserString>	#poland_vehicles:Pl209_ULAN_short	</shortUserString>
+    <description>	#poland_vehicles:Pl209_ULAN_descr	</description>
+    <shortDescriptionSpecial>	#poland_vehicles:Pl209_ULAN_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#poland_vehicles:Pl209_ULAN_long_special	</longDescriptionSpecial>
+    <price>	17500	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
-    <tags>	mediumTank role_MT_support mediumTank1 siegeMode turboshaftEngine HD earn_crystals improvedVentilation_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user lockOutfit special	</tags>
+    <tags>	heavyTank role_HT_break HD siegeMode dualgun charger improvedVentilation_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user earn_crystals	</tags>
+    <level>	9	</level>
+  </Pl209_ULAN>
+  <Pl20_CS_44>
+    <id>	16	</id>
+    <userString>	#poland_vehicles:Pl20_CS_44	</userString>
+    <shortUserString>	#poland_vehicles:Pl20_CS_44_short	</shortUserString>
+    <description>	#poland_vehicles:Pl20_CS_44_descr	</description>
+    <price>	1410000	</price>
+    <tags>	mediumTank role_MT_universal improvedVentilation_class2_user extraHealthReserve_class2_user tankRammer_class2_user antifragmentationLining_medium_user HD	</tags>
+    <level>	7	</level>
+  </Pl20_CS_44>
+  <Pl21_CS_63>
+    <id>	20	</id>
+    <userString>	#poland_vehicles:Pl21_CS_63	</userString>
+    <description>	#poland_vehicles:Pl21_CS_63_descr	</description>
+    <shortUserString>	#poland_vehicles:Pl21_CS_63_short	</shortUserString>
+    <price>	6100000	</price>
+    <tags>	mediumTank role_MT_sniper mediumTank1 siegeMode turboshaftEngine HD earn_crystals improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
     <level>	10	</level>
-  </Pl34_CS_63_02>
-  <Pl29_NC_Wz_70T_T>
-    <id>	32	</id>
-    <userString>	#poland_vehicles:Pl29_NC_Wz_70T_T	</userString>
-    <shortUserString>	#poland_vehicles:Pl29_NC_Wz_70T_T_short	</shortUserString>
-    <description>	#poland_vehicles:Pl29_NC_Wz_70T_descr	</description>
-    <shortDescriptionSpecial>	#poland_vehicles:Pl29_NC_Wz_70T_T_short_special	</shortDescriptionSpecial>
-    <longDescriptionSpecial>	#poland_vehicles:Pl29_NC_Wz_70T_T_long_special	</longDescriptionSpecial>
-    <price>	100	  <gold></gold>
-    </price>
-    <notInShop>	true	</notInShop>
-    <tags>	AT-SPG role_ATSPG_assault HD heavyAT-SPG siegeMode turboshaftEngine improvedVentilation_class1_user tankRammer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user earn_crystals secret testTank	</tags>
-    <level>	10	</level>
-  </Pl29_NC_Wz_70T_T>
-  <Pl32_SDP_Wz_44_T>
-    <id>	33	</id>
-    <userString>	#poland_vehicles:Pl32_SDP_Wz_44_T	</userString>
-    <shortUserString>	#poland_vehicles:Pl32_SDP_Wz_44_T_short	</shortUserString>
-    <description>	#poland_vehicles:Pl32_SDP_Wz_44_descr	</description>
-    <shortDescriptionSpecial>	#poland_vehicles:Pl32_SDP_Wz_44_T_short_special	</shortDescriptionSpecial>
-    <longDescriptionSpecial>	#poland_vehicles:Pl32_SDP_Wz_44_T_long_special	</longDescriptionSpecial>
-    <price>	100	  <gold></gold>
-    </price>
-    <notInShop>	true	</notInShop>
-    <tags>	AT-SPG role_ATSPG_assault HD mediumAT-SPG improvedVentilation_class2_user tankRammer_class2_user extraHealthReserve_class2_user antifragmentationLining_medium_user secret testTank	</tags>
-    <level>	6	</level>
-  </Pl32_SDP_Wz_44_T>
-  <Pl30_SDP_Wz58T_T>
-    <id>	34	</id>
-    <userString>	#poland_vehicles:Pl30_SDP_Wz58T_T	</userString>
-    <shortUserString>	#poland_vehicles:Pl30_SDP_Wz58T_T_short	</shortUserString>
-    <description>	#poland_vehicles:Pl30_SDP_Wz58T_descr	</description>
-    <shortDescriptionSpecial>	#poland_vehicles:Pl30_SDP_Wz58T_T_short_special	</shortDescriptionSpecial>
-    <longDescriptionSpecial>	#poland_vehicles:Pl30_SDP_Wz58T_T_long_special	</longDescriptionSpecial>
-    <price>	100	  <gold></gold>
-    </price>
-    <notInShop>	true	</notInShop>
-    <tags>	AT-SPG role_ATSPG_assault HD heavyAT-SPG siegeMode turboshaftEngine improvedVentilation_class1_user tankRammer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user secret testTank	</tags>
-    <level>	8	</level>
-  </Pl30_SDP_Wz58T_T>
-  <Pl26_Czolg_P_Wz_46_Verbesserter>
-    <id>	35	</id>
-    <userString>	#poland_vehicles:Pl26_Czolg_P_Wz_46_Verbesserter	</userString>
-    <shortUserString>	#poland_vehicles:Pl26_Czolg_P_Wz_46_Verbesserter_short	</shortUserString>
-    <description>	#poland_vehicles:Pl26_Czolg_P_Wz_46_Verbesserter_descr	</description>
-    <shortDescriptionSpecial>	#poland_vehicles:Pl26_Czolg_P_Wz_46_Verbesserter_short_special	</shortDescriptionSpecial>
-    <longDescriptionSpecial>	#poland_vehicles:Pl26_Czolg_P_Wz_46_Verbesserter_long_special	</longDescriptionSpecial>
-    <price>	25000	  <gold></gold>
-    </price>
-    <notInShop>	true	</notInShop>
-    <tags>	heavyTank new_hp_vfx role_HT_assault HD improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user special earn_crystals lockOutfit	</tags>
-    <level>	10	</level>
-  </Pl26_Czolg_P_Wz_46_Verbesserter>
+  </Pl21_CS_63>
   <Pl21_CS_63_7x7>
     <id>	31001	</id>
     <userString>	#poland_vehicles:Pl21_CS_63_7x7	</userString>
@@ -401,32 +226,129 @@
     <tags>	mediumTank role_MT_sniper mediumTank1 siegeMode turboshaftEngine HD earn_crystals improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user private secret cannot_be_sold comp7 special	</tags>
     <level>	10	</level>
   </Pl21_CS_63_7x7>
-  <Pl209_ULAN>
-    <id>	31002	</id>
-    <userString>	#poland_vehicles:Pl209_ULAN	</userString>
-    <shortUserString>	#poland_vehicles:Pl209_ULAN_short	</shortUserString>
-    <description>	#poland_vehicles:Pl209_ULAN_descr	</description>
-    <shortDescriptionSpecial>	#poland_vehicles:Pl209_ULAN_short_special	</shortDescriptionSpecial>
-    <longDescriptionSpecial>	#poland_vehicles:Pl209_ULAN_long_special	</longDescriptionSpecial>
-    <price>	17500	  <gold></gold>
-    </price>
-    <notInShop>	true	</notInShop>
-    <tags>	heavyTank role_HT_break HD siegeMode dualgun charger improvedVentilation_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user earn_crystals	</tags>
+  <Pl22_CS_59>
+    <id>	31	</id>
+    <userString>	#poland_vehicles:Pl22_CS_59	</userString>
+    <description>	#poland_vehicles:Pl22_CS_59_descr	</description>
+    <shortUserString>	#poland_vehicles:Pl22_CS_59_short	</shortUserString>
+    <price>	3470000	</price>
+    <tags>	mediumTank role_MT_universal siegeMode turboshaftEngine improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user HD	</tags>
     <level>	9	</level>
-  </Pl209_ULAN>
-  <Pl35_CS_57_Sokol>
-    <id>	31003	</id>
-    <userString>	#poland_vehicles:Pl35_CS_57_Sokol	</userString>
-    <shortUserString>	#poland_vehicles:Pl35_CS_57_Sokol_short	</shortUserString>
-    <description>	#poland_vehicles:Pl35_CS_57_Sokol_descr	</description>
-    <shortDescriptionSpecial>	#poland_vehicles:Pl35_CS_57_Sokol_short_special	</shortDescriptionSpecial>
-    <longDescriptionSpecial>	#poland_vehicles:Pl35_CS_57_Sokol_long_special	</longDescriptionSpecial>
+  </Pl22_CS_59>
+  <Pl23_CS_53>
+    <id>	17	</id>
+    <userString>	#poland_vehicles:Pl23_CS_53	</userString>
+    <description>	#poland_vehicles:Pl23_CS_53_descr	</description>
+    <shortUserString>	#poland_vehicles:Pl23_CS_53_short	</shortUserString>
+    <price>	2550000	</price>
+    <tags>	mediumTank role_MT_universal siegeMode turboshaftEngine improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user HD	</tags>
+    <level>	8	</level>
+  </Pl23_CS_53>
+  <Pl24_56TP>
+    <id>	198	</id>
+    <userString>	#poland_vehicles:Pl24_56TP	</userString>
+    <shortUserString>	#poland_vehicles:Pl24_56TP_short	</shortUserString>
+    <description>	#poland_vehicles:Pl24_56TP_descr	</description>
+    <shortDescriptionSpecial>	#poland_vehicles:Pl24_56TP_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#poland_vehicles:Pl24_56TP_long_special	</longDescriptionSpecial>
     <price>	11000	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
-    <tags>	mediumTank role_MT_sniper siegeMode turboshaftEngine improvedVentilation_class2_user tankRammer_class2_user extraHealthReserve_class2_user aimingStabilizer_class1_user antifragmentationLining_medium_user HD	</tags>
+    <tags>	heavyTank role_HT_universal HD improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user	</tags>
     <level>	8	</level>
-  </Pl35_CS_57_Sokol>
+  </Pl24_56TP>
+  <Pl25_CS_52_C>
+    <id>	197	</id>
+    <userString>	#poland_vehicles:Pl25_CS_52_C	</userString>
+    <description>	#poland_vehicles:Pl25_CS_52_C_descr	</description>
+    <shortUserString>	#poland_vehicles:Pl25_CS_52_C_short	</shortUserString>
+    <shortDescriptionSpecial>	#poland_vehicles:Pl25_CS_52_C_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#poland_vehicles:Pl25_CS_52_C_long_special	</longDescriptionSpecial>
+    <price>	11000	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	mediumTank role_MT_universal siegeMode turboshaftEngine improvedVentilation_class2_user extraHealthReserve_class2_user tankRammer_class2_user aimingStabilizer_class1_user antifragmentationLining_medium_user HD	</tags>
+    <level>	8	</level>
+  </Pl25_CS_52_C>
+  <Pl26_Czolg_P_Wz_46>
+    <id>	24	</id>
+    <userString>	#poland_vehicles:Pl26_Czolg_P_Wz_46	</userString>
+    <shortUserString>	#poland_vehicles:Pl26_Czolg_P_Wz_46_short	</shortUserString>
+    <description>	#poland_vehicles:Pl26_Czolg_P_Wz_46_descr	</description>
+    <shortDescriptionSpecial>	#poland_vehicles:Pl26_Czolg_P_Wz_46_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#poland_vehicles:Pl26_Czolg_P_Wz_46_long_special	</longDescriptionSpecial>
+    <price>	25000	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	heavyTank new_hp_vfx role_HT_assault HD improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user special earn_crystals	</tags>
+    <level>	10	</level>
+  </Pl26_Czolg_P_Wz_46>
+  <Pl26_Czolg_P_Wz_46_Verbesserter>
+    <id>	35	</id>
+    <userString>	#poland_vehicles:Pl26_Czolg_P_Wz_46_Verbesserter	</userString>
+    <shortUserString>	#poland_vehicles:Pl26_Czolg_P_Wz_46_Verbesserter_short	</shortUserString>
+    <description>	#poland_vehicles:Pl26_Czolg_P_Wz_46_Verbesserter_descr	</description>
+    <shortDescriptionSpecial>	#poland_vehicles:Pl26_Czolg_P_Wz_46_Verbesserter_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#poland_vehicles:Pl26_Czolg_P_Wz_46_Verbesserter_long_special	</longDescriptionSpecial>
+    <price>	25000	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	heavyTank new_hp_vfx role_HT_assault HD improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user special earn_crystals lockOutfit	</tags>
+    <level>	10	</level>
+  </Pl26_Czolg_P_Wz_46_Verbesserter>
+  <Pl27_SDP_Wz_66T>
+    <id>	202	</id>
+    <userString>	#poland_vehicles:Pl27_SDP_Wz_66T	</userString>
+    <shortUserString>	#poland_vehicles:Pl27_SDP_Wz_66T_short	</shortUserString>
+    <description>	#poland_vehicles:Pl27_SDP_Wz_66T_descr	</description>
+    <shortDescriptionSpecial>	#poland_vehicles:Pl27_SDP_Wz_66T_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#poland_vehicles:Pl27_SDP_Wz_66T_long_special	</longDescriptionSpecial>
+    <price>	11000	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	AT-SPG role_ATSPG_assault HD heavyAT-SPG siegeMode turboshaftEngine improvedVentilation_class1_user tankRammer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user	</tags>
+    <level>	8	</level>
+  </Pl27_SDP_Wz_66T>
+  <Pl28_SDP_Wz_60>
+    <id>	23	</id>
+    <userString>	#poland_vehicles:Pl28_SDP_Wz_60	</userString>
+    <description>	#poland_vehicles:Pl28_SDP_Wz_60_descr	</description>
+    <shortUserString>	#poland_vehicles:Pl28_SDP_Wz_60_short	</shortUserString>
+    <price>	3650000	</price>
+    <tags>	AT-SPG role_ATSPG_assault HD heavyAT-SPG siegeMode turboshaftEngine improvedVentilation_class1_user tankRammer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user	</tags>
+    <level>	9	</level>
+  </Pl28_SDP_Wz_60>
+  <Pl29_NC_Wz_70T>
+    <id>	27	</id>
+    <userString>	#poland_vehicles:Pl29_NC_Wz_70T	</userString>
+    <shortUserString>	#poland_vehicles:Pl29_NC_Wz_70T_short	</shortUserString>
+    <description>	#poland_vehicles:Pl29_NC_Wz_70T_descr	</description>
+    <price>	6100000	</price>
+    <tags>	AT-SPG role_ATSPG_assault HD heavyAT-SPG siegeMode turboshaftEngine improvedVentilation_class1_user tankRammer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user earn_crystals	</tags>
+    <level>	10	</level>
+  </Pl29_NC_Wz_70T>
+  <Pl29_NC_Wz_70T_T>
+    <id>	32	</id>
+    <userString>	#poland_vehicles:Pl29_NC_Wz_70T_T	</userString>
+    <shortUserString>	#poland_vehicles:Pl29_NC_Wz_70T_T_short	</shortUserString>
+    <description>	#poland_vehicles:Pl29_NC_Wz_70T_descr	</description>
+    <shortDescriptionSpecial>	#poland_vehicles:Pl29_NC_Wz_70T_T_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#poland_vehicles:Pl29_NC_Wz_70T_T_long_special	</longDescriptionSpecial>
+    <price>	100	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	AT-SPG role_ATSPG_assault HD heavyAT-SPG siegeMode turboshaftEngine improvedVentilation_class1_user tankRammer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user earn_crystals secret testTank	</tags>
+    <level>	10	</level>
+  </Pl29_NC_Wz_70T_T>
+  <Pl30_SDP_Wz58T>
+    <id>	28	</id>
+    <userString>	#poland_vehicles:Pl30_SDP_Wz58T	</userString>
+    <shortUserString>	#poland_vehicles:Pl30_SDP_Wz58T_short	</shortUserString>
+    <description>	#poland_vehicles:Pl30_SDP_Wz58T_descr	</description>
+    <price>	2650000	</price>
+    <tags>	AT-SPG role_ATSPG_assault HD heavyAT-SPG siegeMode turboshaftEngine improvedVentilation_class1_user tankRammer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user	</tags>
+    <level>	8	</level>
+  </Pl30_SDP_Wz58T>
   <Pl30_SDP_Wz58T_FL>
     <id>	31004	</id>
     <userString>	#poland_vehicles:Pl30_SDP_Wz58T_FL	</userString>
@@ -441,6 +363,85 @@
     <tags>	AT-SPG role_ATSPG_assault private epic_battles HD heavyAT-SPG siegeMode turboshaftEngine improvedVentilation_class1_user tankRammer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user	</tags>
     <level>	8	</level>
   </Pl30_SDP_Wz58T_FL>
+  <Pl30_SDP_Wz58T_T>
+    <id>	34	</id>
+    <userString>	#poland_vehicles:Pl30_SDP_Wz58T_T	</userString>
+    <shortUserString>	#poland_vehicles:Pl30_SDP_Wz58T_T_short	</shortUserString>
+    <description>	#poland_vehicles:Pl30_SDP_Wz58T_descr	</description>
+    <shortDescriptionSpecial>	#poland_vehicles:Pl30_SDP_Wz58T_T_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#poland_vehicles:Pl30_SDP_Wz58T_T_long_special	</longDescriptionSpecial>
+    <price>	100	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	AT-SPG role_ATSPG_assault HD heavyAT-SPG siegeMode turboshaftEngine improvedVentilation_class1_user tankRammer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user secret testTank	</tags>
+    <level>	8	</level>
+  </Pl30_SDP_Wz58T_T>
+  <Pl31_SDP_Wz_57D>
+    <id>	29	</id>
+    <userString>	#poland_vehicles:Pl31_SDP_Wz_57D	</userString>
+    <shortUserString>	#poland_vehicles:Pl31_SDP_Wz_57D_short	</shortUserString>
+    <description>	#poland_vehicles:Pl31_SDP_Wz_57D_descr	</description>
+    <price>	1490000	</price>
+    <tags>	AT-SPG role_ATSPG_assault HD heavyAT-SPG AT-SPG2 improvedVentilation_class2_user tankRammer_class2_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
+    <level>	7	</level>
+  </Pl31_SDP_Wz_57D>
+  <Pl32_SDP_Wz_44>
+    <id>	25	</id>
+    <userString>	#poland_vehicles:Pl32_SDP_Wz_44	</userString>
+    <shortUserString>	#poland_vehicles:Pl32_SDP_Wz_44_short	</shortUserString>
+    <description>	#poland_vehicles:Pl32_SDP_Wz_44_descr	</description>
+    <price>	940000	</price>
+    <tags>	AT-SPG role_ATSPG_assault HD mediumAT-SPG improvedVentilation_class2_user tankRammer_class2_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
+    <level>	6	</level>
+  </Pl32_SDP_Wz_44>
+  <Pl32_SDP_Wz_44_T>
+    <id>	33	</id>
+    <userString>	#poland_vehicles:Pl32_SDP_Wz_44_T	</userString>
+    <shortUserString>	#poland_vehicles:Pl32_SDP_Wz_44_T_short	</shortUserString>
+    <description>	#poland_vehicles:Pl32_SDP_Wz_44_descr	</description>
+    <shortDescriptionSpecial>	#poland_vehicles:Pl32_SDP_Wz_44_T_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#poland_vehicles:Pl32_SDP_Wz_44_T_long_special	</longDescriptionSpecial>
+    <price>	100	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	AT-SPG role_ATSPG_assault HD mediumAT-SPG improvedVentilation_class2_user tankRammer_class2_user extraHealthReserve_class2_user antifragmentationLining_medium_user secret testTank	</tags>
+    <level>	6	</level>
+  </Pl32_SDP_Wz_44_T>
+  <Pl33_SDP_Wz_40>
+    <id>	26	</id>
+    <userString>	#poland_vehicles:Pl33_SDP_Wz_40	</userString>
+    <shortUserString>	#poland_vehicles:Pl33_SDP_Wz_40_short	</shortUserString>
+    <description>	#poland_vehicles:Pl33_SDP_Wz_40_descr	</description>
+    <price>	380000	</price>
+    <tags>	AT-SPG HD mediumAT-SPG improvedVentilation_class2_user tankRammer_class2_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
+    <level>	5	</level>
+  </Pl33_SDP_Wz_40>
+  <Pl34_CS_63_02>
+    <id>	203	</id>
+    <userString>	#poland_vehicles:Pl34_CS_63_02	</userString>
+    <description>	#poland_vehicles:Pl34_CS_63_02_descr	</description>
+    <shortUserString>	#poland_vehicles:Pl34_CS_63_02_short	</shortUserString>
+    <shortDescriptionSpecial>	#poland_vehicles:Pl34_CS_63_02_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#poland_vehicles:Pl34_CS_63_02_long_special	</longDescriptionSpecial>
+    <price>	25000	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	mediumTank role_MT_support mediumTank1 siegeMode turboshaftEngine HD earn_crystals improvedVentilation_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user lockOutfit special	</tags>
+    <level>	10	</level>
+  </Pl34_CS_63_02>
+  <Pl35_CS_57_Sokol>
+    <id>	31003	</id>
+    <userString>	#poland_vehicles:Pl35_CS_57_Sokol	</userString>
+    <shortUserString>	#poland_vehicles:Pl35_CS_57_Sokol_short	</shortUserString>
+    <description>	#poland_vehicles:Pl35_CS_57_Sokol_descr	</description>
+    <shortDescriptionSpecial>	#poland_vehicles:Pl35_CS_57_Sokol_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#poland_vehicles:Pl35_CS_57_Sokol_long_special	</longDescriptionSpecial>
+    <price>	11000	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	mediumTank role_MT_sniper siegeMode turboshaftEngine improvedVentilation_class2_user tankRammer_class2_user extraHealthReserve_class2_user aimingStabilizer_class1_user antifragmentationLining_medium_user HD	</tags>
+    <level>	8	</level>
+  </Pl35_CS_57_Sokol>
   <Pl36_Bobr>
     <id>	31005	</id>
     <userString>	#poland_vehicles:Pl36_Bobr	</userString>

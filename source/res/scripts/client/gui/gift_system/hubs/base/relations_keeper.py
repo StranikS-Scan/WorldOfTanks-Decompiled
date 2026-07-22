@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/gift_system/hubs/base/relations_keeper.py
+import logging
 import typing
 from collections import defaultdict
 from gui.gift_system.constants import GiftMessageType, GifterResponseState
@@ -9,10 +10,11 @@ from gui.impl.gen import R
 from gui.shared.utils.scheduled_notifications import Notifiable, SimpleNotifier
 from helpers.time_utils import getCurrentTimestamp
 if typing.TYPE_CHECKING:
-    from gui.gift_system.wrappers import GiftsWebState, IncomeSysMessage, SendGiftResponse
+    from gui.gift_system.wrappers import GiftsWebState, IncomeSysMessage, SendGiftResponse, GiftsWaitResponse
     from helpers.server_settings import GiftEventConfig
 _DEFAULT_SEND_LIMIT = 1
 _ENDLESS_INTERVAL = -2
+_logger = logging.getLogger(__name__)
 
 class IGiftEventKeeper(BaseMessegesDelayer):
 
@@ -124,6 +126,16 @@ class GiftEventBaseKeeper(IGiftEventKeeper, Notifiable):
         self._processWebState(webState)
         self._processMessagesQueue()
         self.startNotification()
+
+    def processWaitResponse(self, incomeData):
+        _logger.warning('This method is not implemented in child keeper, please check how event uses the method.')
+
+    def getWaitResponseLimit(self):
+        _logger.warning('This method is not implemented in child keeper, please check how event uses the method.')
+
+    def getPlayersWaitingResponse(self):
+        _logger.warning('This method is not implemented in child keeper, please check how event uses the method.')
+        return []
 
     def reset(self):
         super(GiftEventBaseKeeper, self).reset()

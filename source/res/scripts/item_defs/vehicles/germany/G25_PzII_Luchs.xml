@@ -51,7 +51,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	6830	</weight>
-    <maxHealth>	416	</maxHealth>
+    <maxHealth>	400	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	125	</maxHealth>
       <maxRegenHealth>	85	</maxRegenHealth>
@@ -1772,7 +1772,7 @@
           <camouflage></camouflage>
         </customizableVehicleAreas>
       </customization>
-      <repairTime>	5.71428585	</repairTime>
+      <repairTime>	2.85003138	</repairTime>
     </Luchsketten_Ausf_A>
     <Luchsketten_Ausf_B>
       <userString>	#germany_vehicles:Luchsketten_Ausf_B	</userString>
@@ -2624,13 +2624,17 @@
           <camouflage></camouflage>
         </customizableVehicleAreas>
       </customization>
-      <repairTime>	5.71428585	</repairTime>
+      <repairTime>	2.85003138	</repairTime>
     </Luchsketten_Ausf_B>
   </chassis>
   <turrets0>
     <PzIIL_Luchsturm>
       <userString>	#germany_vehicles:PzIIL_Luchsturm	</userString>
       <tags></tags>
+      <unlocks>
+        <turret>	PzIIL_Grosseturm	  <cost>	1980	</cost>
+        </turret>
+      </unlocks>
       <level>	4	</level>
       <price>	1580	</price>
       <armor>
@@ -2645,7 +2649,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	950	</weight>
-      <maxHealth>	79	</maxHealth>
+      <maxHealth>	100	</maxHealth>
       <rotationSpeed>	42	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	80	</maxHealth>
@@ -2659,220 +2663,6 @@
         <repairCost>	2.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_20mm_KwK_38_L55>	shared	  <maxAmmo>	660	</maxAmmo>
-          <reloadTime>	3	</reloadTime>
-          <aimingTime>	1.5	</aimingTime>
-          <shotDispersionRadius>	0.57	</shotDispersionRadius>
-          <shotDispersionFactors>
-            <turretRotation>	0.08	</turretRotation>
-            <afterShot>	1.2	</afterShot>
-            <whileGunDamaged>	2.0	</whileGunDamaged>
-          </shotDispersionFactors>
-          <unlocks>
-            <gun>	_20mm_Flak_38_L112	  <cost>	160	</cost>
-            </gun>
-            <gun>	_37mm_KwK_L46	  <cost>	30	</cost>
-            </gun>
-          </unlocks>
-          <armor>
-            <armor_1>	30	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_1>
-            <armor_2>	15	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_2>
-            <armor_3>	15	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_3>
-            <armor_4>	0	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_4>
-            <gun>	10	</gun>
-          </armor>
-          <invisibilityFactorAtShot>	0.28	</invisibilityFactorAtShot>
-          <pitchLimits>
-            <minPitch>	0 -20 1 -20	</minPitch>
-            <maxPitch>	0 10 0.402901 10 0.411075 8 0.430478 7.9 0.450062 10 0.556266 10 0.577844 8 0.607229 9 0.630098 10 1 10	</maxPitch>
-          </pitchLimits>
-          <models>
-            <undamaged>	vehicles/german/G25_PzII_Luchs/normal/lod0/Gun_01.model	</undamaged>
-            <destroyed>	vehicles/german/G25_PzII_Luchs/crash/lod0/Gun_01.model	</destroyed>
-            <exploded>	vehicles/german/G25_PzII_Luchs/crash/lod0/Gun_01.model	</exploded>
-          </models>
-          <hitTester>
-            <collisionModelServer>	vehicles/german/G25_PzII_Luchs/collision/Gun_01.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/german/G25_PzII_Luchs/collision_client/Gun_01.model	</collisionModelClient>
-          </hitTester>
-          <effects>	shot_auto	</effects>
-          <reloadEffect>	reload20_45	</reloadEffect>
-          <customizationSlots>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41000	</slotId>
-              <anchorPosition>	-0 0.11064 0.110639	</anchorPosition>
-              <anchorDirection>	0 0.707107 0.707107	</anchorDirection>
-              <applyTo>	16384	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	camouflage	</slotType>
-              <slotId>	42000	</slotId>
-              <anchorPosition>	-0.000054 0.002826 0.677701	</anchorPosition>
-              <anchorDirection>	0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-          </customizationSlots>
-          <customization>
-            <customizableVehicleAreas>
-              <paint>	GUN_2	</paint>
-              <camouflage>	GUN	</camouflage>
-            </customizableVehicleAreas>
-          </customization>
-          <shotOffset>	0 0.004199 0	</shotOffset>
-          <camouflage>
-            <tiling>	0.64 0.64 0.000000 0.000000	</tiling>
-            <density>	162.133 163.407	</density>
-            <aoTextureSize>	512 512	</aoTextureSize>
-          </camouflage>
-        </_20mm_KwK_38_L55>
-        <_37mm_KwK_L46>	shared	  <maxAmmo>	175	</maxAmmo>
-          <unlocks>
-            <turret>	PzIIL_Grosseturm	  <cost>	1980	</cost>
-            </turret>
-          </unlocks>
-          <armor>
-            <armor_1>	30	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_1>
-            <armor_2>	15	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_2>
-            <armor_3>	15	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_3>
-            <armor_4>	0	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_4>
-            <gun>	10	</gun>
-          </armor>
-          <shotDispersionRadius>	0.46	</shotDispersionRadius>
-          <reloadTime>	2.3	</reloadTime>
-          <aimingTime>	1.7	</aimingTime>
-          <shotDispersionFactors>
-            <turretRotation>	0.12	</turretRotation>
-            <afterShot>	4.0	</afterShot>
-            <whileGunDamaged>	2.0	</whileGunDamaged>
-          </shotDispersionFactors>
-          <pitchLimits>
-            <minPitch>	0 -16 1 -16	</minPitch>
-            <maxPitch>	0 8 1 8	</maxPitch>
-          </pitchLimits>
-          <invisibilityFactorAtShot>	0.3	</invisibilityFactorAtShot>
-          <models>
-            <undamaged>	vehicles/german/G25_PzII_Luchs/normal/lod0/Gun_02.model	</undamaged>
-            <destroyed>	vehicles/german/G25_PzII_Luchs/crash/lod0/Gun_02.model	</destroyed>
-            <exploded>	vehicles/german/G25_PzII_Luchs/crash/lod0/Gun_02.model	</exploded>
-          </models>
-          <hitTester>
-            <collisionModelServer>	vehicles/german/G25_PzII_Luchs/collision/Gun_02.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/german/G25_PzII_Luchs/collision_client/Gun_02.model	</collisionModelClient>
-          </hitTester>
-          <effects>	shot_KwK_L46	</effects>
-          <reloadEffect>	reload20_45	</reloadEffect>
-          <customizationSlots>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41000	</slotId>
-              <anchorPosition>	-0.000275 0.00319 0.681472	</anchorPosition>
-              <anchorDirection>	0 0.000334 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41001	</slotId>
-              <anchorPosition>	-0 0.11064 0.110639	</anchorPosition>
-              <anchorDirection>	0 0.707107 0.707107	</anchorDirection>
-              <applyTo>	16384	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	camouflage	</slotType>
-              <slotId>	42000	</slotId>
-              <anchorPosition>	-0.000275 0.003218 0.681451	</anchorPosition>
-              <anchorDirection>	-0 0.000343 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-          </customizationSlots>
-          <customization>
-            <customizableVehicleAreas>
-              <paint>	GUN GUN_2	</paint>
-              <camouflage>	GUN	</camouflage>
-            </customizableVehicleAreas>
-          </customization>
-          <shotOffset>	0 0.004199 0	</shotOffset>
-          <camouflage>
-            <tiling>	0.61 0.61 0.000000 0.000000	</tiling>
-            <density>	163.575 163.518	</density>
-            <aoTextureSize>	512 512	</aoTextureSize>
-          </camouflage>
-        </_37mm_KwK_L46>
-        <_20mm_Flak_38_L112>	shared	  <maxAmmo>	660	</maxAmmo>
-          <reloadTime>	3	</reloadTime>
-          <shotDispersionFactors>
-            <turretRotation>	0.08	</turretRotation>
-            <afterShot>	1.2	</afterShot>
-            <whileGunDamaged>	2.0	</whileGunDamaged>
-          </shotDispersionFactors>
-          <unlocks>
-            <gun>	_30mm_MK103	  <cost>	3150	</cost>
-            </gun>
-          </unlocks>
-          <armor>
-            <armor_1>	30	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_1>
-            <armor_3>	15	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_3>
-            <armor_4>	0	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_4>
-            <gun>	10	</gun>
-          </armor>
-          <shotDispersionRadius>	0.45	</shotDispersionRadius>
-          <aimingTime>	1.5	</aimingTime>
-          <invisibilityFactorAtShot>	0.266	</invisibilityFactorAtShot>
-          <pitchLimits>
-            <minPitch>	0 -20 1 -20	</minPitch>
-            <maxPitch>	0 10 0.410297 10 0.416815 9 0.428441 8 0.444739 10 0.559856 10 0.574566 8 0.608727 9 0.620165 10 1 10	</maxPitch>
-          </pitchLimits>
-          <models>
-            <undamaged>	vehicles/german/G25_PzII_Luchs/normal/lod0/Gun_03.model	</undamaged>
-            <destroyed>	vehicles/german/G25_PzII_Luchs/crash/lod0/Gun_03.model	</destroyed>
-            <exploded>	vehicles/german/G25_PzII_Luchs/crash/lod0/Gun_03.model	</exploded>
-          </models>
-          <hitTester>
-            <collisionModelServer>	vehicles/german/G25_PzII_Luchs/collision/Gun_03.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/german/G25_PzII_Luchs/collision_client/Gun_03.model	</collisionModelClient>
-          </hitTester>
-          <effects>	shot_auto	</effects>
-          <reloadEffect>	reload20_45	</reloadEffect>
-          <customizationSlots>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41000	</slotId>
-              <anchorPosition>	0 0.11064 0.110639	</anchorPosition>
-              <anchorDirection>	0 0.707107 0.707107	</anchorDirection>
-              <applyTo>	16384	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	camouflage	</slotType>
-              <slotId>	42000	</slotId>
-              <anchorPosition>	-0.000285 0.002847 1.14193	</anchorPosition>
-              <anchorDirection>	0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-          </customizationSlots>
-          <customization>
-            <customizableVehicleAreas>
-              <paint>	GUN_2	</paint>
-              <camouflage>	GUN	</camouflage>
-            </customizableVehicleAreas>
-          </customization>
-          <shotOffset>	0 0.004199 0	</shotOffset>
-          <camouflage>
-            <tiling>	0.625 0.625 0.000000 0.000000	</tiling>
-            <density>	163.421 163.419	</density>
-            <aoTextureSize>	512 512	</aoTextureSize>
-          </camouflage>
-        </_20mm_Flak_38_L112>
         <_30mm_MK103>	shared	  <maxAmmo>	424	</maxAmmo>
           <armor>
             <armor_1>	30	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
@@ -2885,11 +2675,11 @@
             </armor_4>
             <gun>	10	</gun>
           </armor>
-          <shotDispersionRadius>	0.5	</shotDispersionRadius>
+          <shotDispersionRadius>	0.45	</shotDispersionRadius>
           <reloadTime>	16	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.2	</turretRotation>
-            <afterShot>	2.6	</afterShot>
+            <afterShot>	1.6	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <aimingTime>	2.3	</aimingTime>
@@ -2939,7 +2729,6 @@
               <camouflage>	GUN	</camouflage>
             </customizableVehicleAreas>
           </customization>
-          <shotOffset>	0 0.004199 0	</shotOffset>
           <camouflage>
             <tiling>	0.64 0.64 0.000000 0.000000	</tiling>
             <density>	163.419 163.419	</density>
@@ -3361,8 +3150,6 @@
       <level>	5	</level>
       <price>	10500	</price>
       <unlocks>
-        <vehicle>	G26_VK1602	  <cost>	13500	</cost>
-        </vehicle>
         <gun>	_50mm_KwK_38_L42	  <cost>	500	</cost>
         </gun>
       </unlocks>
@@ -3379,7 +3166,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	2000	</weight>
-      <maxHealth>	104	</maxHealth>
+      <maxHealth>	120	</maxHealth>
       <rotationSpeed>	38	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	80	</maxHealth>
@@ -3394,208 +3181,6 @@
       </surveyingDeviceHealth>
       <invisibilityFactor>	0.985	</invisibilityFactor>
       <guns>
-        <_20mm_KwK_38_L55>	shared	  <maxAmmo>	660	</maxAmmo>
-          <reloadTime>	2.7	</reloadTime>
-          <aimingTime>	1.4	</aimingTime>
-          <shotDispersionRadius>	0.57	</shotDispersionRadius>
-          <shotDispersionFactors>
-            <turretRotation>	0.08	</turretRotation>
-            <afterShot>	1.2	</afterShot>
-            <whileGunDamaged>	2.0	</whileGunDamaged>
-          </shotDispersionFactors>
-          <armor>
-            <armor_1>	50	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_1>
-            <armor_2>	30	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_2>
-            <armor_3>	20	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_3>
-            <armor_4>	0	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_4>
-            <gun>	10	</gun>
-          </armor>
-          <pitchLimits>
-            <minPitch>	0 -20 1 -20	</minPitch>
-            <maxPitch>	0 8 0.1 8 0.163662 10 0.369671 10 0.433333 8 0.566667 8 0.630329 10 0.836338 10 0.9 8 1 8	</maxPitch>
-          </pitchLimits>
-          <invisibilityFactorAtShot>	0.28	</invisibilityFactorAtShot>
-          <models>
-            <undamaged>	vehicles/german/G25_PzII_Luchs/normal/lod0/Gun_05.model	</undamaged>
-            <destroyed>	vehicles/german/G25_PzII_Luchs/crash/lod0/Gun_05.model	</destroyed>
-            <exploded>	vehicles/german/G25_PzII_Luchs/crash/lod0/Gun_05.model	</exploded>
-          </models>
-          <hitTester>
-            <collisionModelServer>	vehicles/german/G25_PzII_Luchs/collision/Gun_05.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/german/G25_PzII_Luchs/collision_client/Gun_05.model	</collisionModelClient>
-          </hitTester>
-          <effects>	shot_auto	</effects>
-          <reloadEffect>	reload20_45	</reloadEffect>
-          <customizationSlots>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41000	</slotId>
-              <anchorPosition>	-0.051423 0.203054 0.202806	</anchorPosition>
-              <anchorDirection>	0.000327 0.707107 0.707107	</anchorDirection>
-              <applyTo>	16384	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	camouflage	</slotType>
-              <slotId>	42000	</slotId>
-              <anchorPosition>	-0.057241 -0.00716 1.21571	</anchorPosition>
-              <anchorDirection>	-0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-          </customizationSlots>
-          <customization>
-            <customizableVehicleAreas>
-              <paint>	GUN_2	</paint>
-              <camouflage>	GUN	</camouflage>
-            </customizableVehicleAreas>
-          </customization>
-          <shotOffset>	-0.052487 -0.015747 -0	</shotOffset>
-          <camouflage>
-            <tiling>	0.805 0.805 0.000000 0.000000	</tiling>
-            <density>	162.133 163.407	</density>
-            <aoTextureSize>	512 512	</aoTextureSize>
-          </camouflage>
-        </_20mm_KwK_38_L55>
-        <_37mm_KwK_L46>	shared	  <maxAmmo>	175	</maxAmmo>
-          <shotDispersionFactors>
-            <turretRotation>	0.1	</turretRotation>
-            <afterShot>	4.0	</afterShot>
-            <whileGunDamaged>	2.0	</whileGunDamaged>
-          </shotDispersionFactors>
-          <armor>
-            <armor_1>	50	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_1>
-            <armor_2>	30	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_2>
-            <armor_3>	20	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_3>
-            <armor_4>	0	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_4>
-            <gun>	10	</gun>
-          </armor>
-          <shotDispersionRadius>	0.46	</shotDispersionRadius>
-          <reloadTime>	2.3	</reloadTime>
-          <aimingTime>	1.7	</aimingTime>
-          <pitchLimits>
-            <minPitch>	0 -20 1 -20	</minPitch>
-            <maxPitch>	0 8 0.1 8 0.163662 10 0.369671 10 0.433333 8 0.566667 8 0.630329 10 0.836338 10 0.9 8 1 8	</maxPitch>
-          </pitchLimits>
-          <invisibilityFactorAtShot>	0.3	</invisibilityFactorAtShot>
-          <models>
-            <undamaged>	vehicles/german/G25_PzII_Luchs/normal/lod0/Gun_06.model	</undamaged>
-            <destroyed>	vehicles/german/G25_PzII_Luchs/crash/lod0/Gun_06.model	</destroyed>
-            <exploded>	vehicles/german/G25_PzII_Luchs/crash/lod0/Gun_06.model	</exploded>
-          </models>
-          <hitTester>
-            <collisionModelServer>	vehicles/german/G25_PzII_Luchs/collision/Gun_06.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/german/G25_PzII_Luchs/collision_client/Gun_06.model	</collisionModelClient>
-          </hitTester>
-          <effects>	shot_KwK_L46	</effects>
-          <reloadEffect>	reload20_45	</reloadEffect>
-          <customizationSlots>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41000	</slotId>
-              <anchorPosition>	-0.054689 -0.014213 0.812714	</anchorPosition>
-              <anchorDirection>	-0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41001	</slotId>
-              <anchorPosition>	-0.051175 0.203098 0.202754	</anchorPosition>
-              <anchorDirection>	0.000395 0.707107 0.707107	</anchorDirection>
-              <applyTo>	16384	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	camouflage	</slotType>
-              <slotId>	42000	</slotId>
-              <anchorPosition>	-0.054689 -0.014215 0.812716	</anchorPosition>
-              <anchorDirection>	-0 -0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-          </customizationSlots>
-          <customization>
-            <customizableVehicleAreas>
-              <paint>	GUN GUN_2	</paint>
-              <camouflage>	GUN	</camouflage>
-            </customizableVehicleAreas>
-          </customization>
-          <shotOffset>	-0.052487 -0.015747 -0	</shotOffset>
-          <camouflage>
-            <tiling>	0.82 0.82 0.000000 0.000000	</tiling>
-            <density>	163.575 163.518	</density>
-            <aoTextureSize>	512 512	</aoTextureSize>
-          </camouflage>
-        </_37mm_KwK_L46>
-        <_20mm_Flak_38_L112>	shared	  <maxAmmo>	660	</maxAmmo>
-          <reloadTime>	2.7	</reloadTime>
-          <aimingTime>	1.4	</aimingTime>
-          <shotDispersionFactors>
-            <turretRotation>	0.08	</turretRotation>
-            <afterShot>	1.2	</afterShot>
-            <whileGunDamaged>	2.0	</whileGunDamaged>
-          </shotDispersionFactors>
-          <armor>
-            <armor_1>	50	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_1>
-            <armor_2>	30	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_2>
-            <armor_3>	20	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_3>
-            <armor_4>	0	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_4>
-            <gun>	10	</gun>
-          </armor>
-          <shotDispersionRadius>	0.45	</shotDispersionRadius>
-          <pitchLimits>
-            <minPitch>	0 -20 1 -20	</minPitch>
-            <maxPitch>	0 10 1 10	</maxPitch>
-          </pitchLimits>
-          <invisibilityFactorAtShot>	0.266	</invisibilityFactorAtShot>
-          <models>
-            <undamaged>	vehicles/german/G25_PzII_Luchs/normal/lod0/Gun_07.model	</undamaged>
-            <destroyed>	vehicles/german/G25_PzII_Luchs/crash/lod0/Gun_07.model	</destroyed>
-            <exploded>	vehicles/german/G25_PzII_Luchs/crash/lod0/Gun_07.model	</exploded>
-          </models>
-          <hitTester>
-            <collisionModelServer>	vehicles/german/G25_PzII_Luchs/collision/Gun_07.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/german/G25_PzII_Luchs/collision_client/Gun_07.model	</collisionModelClient>
-          </hitTester>
-          <effects>	shot_auto	</effects>
-          <reloadEffect>	reload20_45	</reloadEffect>
-          <customizationSlots>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41000	</slotId>
-              <anchorPosition>	-0.05091 0.203103 0.202701	</anchorPosition>
-              <anchorDirection>	0.000467 0.707107 0.707107	</anchorDirection>
-              <applyTo>	16384	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	camouflage	</slotType>
-              <slotId>	42000	</slotId>
-              <anchorPosition>	-0.055736 -0.007783 1.35059	</anchorPosition>
-              <anchorDirection>	0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-          </customizationSlots>
-          <customization>
-            <customizableVehicleAreas>
-              <paint>	GUN_2	</paint>
-              <camouflage>	GUN	</camouflage>
-            </customizableVehicleAreas>
-          </customization>
-          <shotOffset>	-0.052487 -0.015747 -0	</shotOffset>
-          <camouflage>
-            <tiling>	0.805 0.805 0.000000 0.000000	</tiling>
-            <density>	163.421 163.419	</density>
-            <aoTextureSize>	512 512	</aoTextureSize>
-          </camouflage>
-        </_20mm_Flak_38_L112>
         <_30mm_MK103>	shared	  <maxAmmo>	420	</maxAmmo>
           <armor>
             <armor_1>	50	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
@@ -3608,11 +3193,11 @@
             </armor_4>
             <gun>	10	</gun>
           </armor>
-          <shotDispersionRadius>	0.5	</shotDispersionRadius>
+          <shotDispersionRadius>	0.45	</shotDispersionRadius>
           <reloadTime>	18	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.18	</turretRotation>
-            <afterShot>	3	</afterShot>
+            <afterShot>	1.6	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <aimingTime>	2.2	</aimingTime>
@@ -3662,7 +3247,6 @@
               <camouflage>	GUN	</camouflage>
             </customizableVehicleAreas>
           </customization>
-          <shotOffset>	-0.052487 -0.015747 -0	</shotOffset>
           <camouflage>
             <tiling>	0.82 0.82 0.000000 0.000000	</tiling>
             <density>	163.419 163.419	</density>
@@ -3685,14 +3269,14 @@
             </armor_4>
             <gun>	10	</gun>
           </armor>
-          <shotDispersionRadius>	0.48	</shotDispersionRadius>
+          <shotDispersionRadius>	0.40	</shotDispersionRadius>
           <reloadTime>	2.5	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.12	</turretRotation>
-            <afterShot>	4.0	</afterShot>
+            <afterShot>	2.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <aimingTime>	2.3	</aimingTime>
+          <aimingTime>	2.0	</aimingTime>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 8 0.1 8 0.163662 10 0.369671 10 0.433333 8 0.566667 8 0.630329 10 0.836338 10 0.9 8 1 8	</maxPitch>
@@ -3738,14 +3322,17 @@
               <camouflage>	GUN	</camouflage>
             </customizableVehicleAreas>
           </customization>
-          <shotOffset>	-0.052487 -0.015746 -0	</shotOffset>
           <camouflage>
             <tiling>	0.82 0.82 0.000000 0.000000	</tiling>
             <density>	144.319 143.221	</density>
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_50mm_KwK_38_L42>
-        <_50mm_KwK_39_L60>	shared	  <pitchLimits>
+        <_50mm_KwK_39_L60>	shared	  <unlocks>
+            <vehicle>	G26_VK1602	  <cost>	19200	</cost>
+            </vehicle>
+          </unlocks>
+          <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 8 0.1 8 0.163662 10 0.369671 10 0.433333 8 0.566667 8 0.630329 10 0.836338 10 0.9 8 1 8	</maxPitch>
           </pitchLimits>
@@ -3762,10 +3349,10 @@
             <gun>	10	</gun>
           </armor>
           <reloadTime>	2.5	</reloadTime>
-          <aimingTime>	2.3	</aimingTime>
+          <aimingTime>	1.8	</aimingTime>
           <shotDispersionFactors>
             <turretRotation>	0.12	</turretRotation>
-            <afterShot>	4.0	</afterShot>
+            <afterShot>	2.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <invisibilityFactorAtShot>	0.261	</invisibilityFactorAtShot>
@@ -3809,7 +3396,6 @@
               <camouflage>	GUN	</camouflage>
             </customizableVehicleAreas>
           </customization>
-          <shotOffset>	-0.052487 -0.015747 -0	</shotOffset>
           <camouflage>
             <tiling>	0.82 0.82 0.000000 0.000000	</tiling>
             <density>	148.576 148.206	</density>
@@ -4248,11 +3834,6 @@
     </PzIIL_Grosseturm>
   </turrets0>
   <engines>
-    <Maybach_HL62TR>	shared	  <unlocks>
-        <engine>	Maybach_HL66P	  <cost>	700	</cost>
-        </engine>
-      </unlocks>
-    </Maybach_HL62TR>
     <Maybach_HL66P>	shared	  <unlocks>
         <engine>	Maybach_HL90	  <cost>	1150	</cost>
         </engine>
@@ -4264,25 +3845,11 @@
     <Medium>	shared	</Medium>
   </fuelTanks>
   <radios>
-    <FuG5>	shared	  <unlocks>
-        <radio>	FuG7	  <cost>	1360	</cost>
-        </radio>
-      </unlocks>
-    </FuG5>
-    <FuG7>	shared	  <unlocks>
-        <radio>	FuG_Spr.1	  <cost>	3600	</cost>
-        </radio>
-      </unlocks>
-    </FuG7>
     <FuG_Spr.1>	shared	</FuG_Spr.1>
   </radios>
   <physics>
     <detailed>
       <engines>
-        <Maybach_HL62TR>
-          <smplEnginePower>	148.0194	</smplEnginePower>
-          <smplFwMaxSpeed>	60	</smplFwMaxSpeed>
-        </Maybach_HL62TR>
         <Maybach_HL66P>
           <smplEnginePower>	190.3106	</smplEnginePower>
           <smplFwMaxSpeed>	60	</smplFwMaxSpeed>

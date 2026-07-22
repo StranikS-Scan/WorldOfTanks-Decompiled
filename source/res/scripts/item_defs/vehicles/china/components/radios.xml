@@ -1,86 +1,8 @@
 <radios.xml>
-  <ids>
-    <_9RM>	0	</_9RM>
-    <A-220>	1	</A-220>
-    <A-220B>	2	</A-220B>
-    <A-220_1>	3	</A-220_1>
-    <ER_52>	5	</ER_52>
-    <_71-TK-3>	7	</_71-TK-3>
-    <A-220B_1>	8	</A-220B_1>
-    <SCR_508>	9	</SCR_508>
-    <SCR_506>	10	</SCR_506>
-    <_Type94_Hei>	11	</_Type94_Hei>
-    <_Type96_Bo>	12	</_Type96_Bo>
-    <_Type3_Otsu>	13	</_Type3_Otsu>
-    <_9R>	14	</_9R>
-    <_9RM_shop>	15	</_9RM_shop>
-    <AN_GRR_5_Prem>	16	</AN_GRR_5_Prem>
-    <_9RM_R>	17	</_9RM_R>
-    <SCR_210>	19	</SCR_210>
-    <A-220B_1P>	20	</A-220B_1P>
-    <AN_GRC_8>	21	</AN_GRC_8>
-    <_789T>	22	</_789T>
-    <_R_113_P>	26	</_R_113_P>
-    <A_220B_1_QL>	252	</A_220B_1_QL>
-    <A_220B_1_113>	253	</A_220B_1_113>
-    <A-220B_T>	254	</A-220B_T>
-    <A_220A>	255	</A_220A>
-    <_9RM_CZ>	23	</_9RM_CZ>
-    <A-220B-2>	27	</A-220B-2>
-    <Marconi_G2A>	28	</Marconi_G2A>
-    <A-220B_1_MK>	257	</A-220B_1_MK>
-    <A-220B_FL>	501	</A-220B_FL>
-    <A-220B_1_7x7>	502	</A-220B_1_7x7>
-    <A-220B_IGR>	60001	</A-220B_IGR>
-    <A-220B_1_IGR>	60002	</A-220B_1_IGR>
-    <Development_Radio>	65000	</Development_Radio>
-    <_9R_SH>	64002	</_9R_SH>
-    <_9RM_shop_SH>	64003	</_9RM_shop_SH>
-    <A-220B_1_SH>	64004	</A-220B_1_SH>
-    <Ch00_ClingeBot_SH_Radio>	64005	</Ch00_ClingeBot_SH_Radio>
-    <A-220B_1_TEST>	21003	</A-220B_1_TEST>
-    <A-220B_1_P_T>	31008	</A-220B_1_P_T>
-    <A-220B_1_MT>	31003	</A-220B_1_MT>
-    <A-220B_1P_Premium>	31004	</A-220B_1P_Premium>
-    <_9RM_shop_P>	31005	</_9RM_shop_P>
-    <A-220_1_P>	31006	</A-220_1_P>
-    <A-220B_1_P>	31007	</A-220B_1_P>
-    <A-220B-2_70>	31009	</A-220B-2_70>
-    <A-220B_1_T>	31010	</A-220B_1_T>
-    <A_220_57>	31011	</A_220_57>
-    <A-220B_D>	31012	</A-220B_D>
-    <A-220B_1_bob>	31013	</A-220B_1_bob>
-    <A_220_STT>	31014	</A_220_STT>
-    <A_220A_58>	31015	</A_220A_58>
-    <A_220A_Ch76>	31016	</A_220A_Ch76>
-    <A-220B-2_70_T>	35001	</A-220B-2_70_T>
-  </ids>
+  <xmlns:xmlref>	http://bwt/xmlref	</xmlns:xmlref>
   <shared>
-    <_9RM>
-      <userString>	#china_vehicles:_9RM	</userString>
-      <tags></tags>
-      <level>	9	</level>
-      <price>	24240	</price>
-      <notInShop>	true	</notInShop>
-      <weight>	40	</weight>
-      <distance>	600	</distance>
-      <maxHealth>	160	</maxHealth>
-      <maxRegenHealth>	96	</maxRegenHealth>
-      <repairCost>	3.5	</repairCost>
-    </_9RM>
-    <_9RM_CZ>
-      <userString>	#china_vehicles:_9RM	</userString>
-      <tags></tags>
-      <level>	9	</level>
-      <price>	24240	</price>
-      <notInShop>	true	</notInShop>
-      <weight>	40	</weight>
-      <distance>	600	</distance>
-      <maxHealth>	160	</maxHealth>
-      <maxRegenHealth>	96	</maxRegenHealth>
-      <repairCost>	3.5	</repairCost>
-    </_9RM_CZ>
     <A-220>
+      <id>	1	</id>
       <userString>	#china_vehicles:A-220	</userString>
       <tags></tags>
       <level>	9	</level>
@@ -92,64 +14,8 @@
       <maxRegenHealth>	96	</maxRegenHealth>
       <repairCost>	3.5	</repairCost>
     </A-220>
-    <A_220_57>
-      <userString>	#china_vehicles:A_220_57	</userString>
-      <tags></tags>
-      <level>	9	</level>
-      <price>	38000	</price>
-      <notInShop>	true	</notInShop>
-      <weight>	40	</weight>
-      <distance>	600	</distance>
-      <maxHealth>	160	</maxHealth>
-      <maxRegenHealth>	96	</maxRegenHealth>
-      <repairCost>	3.5	</repairCost>
-    </A_220_57>
-    <A_220_STT>
-      <userString>	#china_vehicles:A_220_STT	</userString>
-      <tags></tags>
-      <level>	9	</level>
-      <price>	38000	</price>
-      <notInShop>	true	</notInShop>
-      <weight>	40	</weight>
-      <distance>	600	</distance>
-      <maxHealth>	160	</maxHealth>
-      <maxRegenHealth>	96	</maxRegenHealth>
-      <repairCost>	3.5	</repairCost>
-    </A_220_STT>
-    <A-220_1>
-      <userString>	#china_vehicles:A-220_1	</userString>
-      <tags></tags>
-      <level>	9	</level>
-      <price>	38000	</price>
-      <weight>	40	</weight>
-      <distance>	600	</distance>
-      <maxHealth>	160	</maxHealth>
-      <maxRegenHealth>	96	</maxRegenHealth>
-      <repairCost>	3.5	</repairCost>
-    </A-220_1>
-    <A-220_1_P>
-      <userString>	#china_vehicles:A-220_1_P	</userString>
-      <tags></tags>
-      <level>	9	</level>
-      <price>	38000	</price>
-      <weight>	40	</weight>
-      <distance>	600	</distance>
-      <maxHealth>	160	</maxHealth>
-      <maxRegenHealth>	96	</maxRegenHealth>
-      <repairCost>	3.5	</repairCost>
-    </A-220_1_P>
-    <A-220B>
-      <userString>	#china_vehicles:A-220B	</userString>
-      <tags></tags>
-      <level>	10	</level>
-      <price>	54000	</price>
-      <weight>	40	</weight>
-      <distance>	750	</distance>
-      <maxHealth>	180	</maxHealth>
-      <maxRegenHealth>	108	</maxRegenHealth>
-      <repairCost>	3.5	</repairCost>
-    </A-220B>
     <A-220B-2>
+      <id>	27	</id>
       <userString>	#china_vehicles:A-220B-2	</userString>
       <tags></tags>
       <level>	10	</level>
@@ -162,6 +28,7 @@
       <repairCost>	3.5	</repairCost>
     </A-220B-2>
     <A-220B-2_70>
+      <id>	31009	</id>
       <userString>	#china_vehicles:A-220B-2_70	</userString>
       <tags></tags>
       <level>	11	</level>
@@ -174,6 +41,7 @@
       <repairCost>	3.5	</repairCost>
     </A-220B-2_70>
     <A-220B-2_70_T>
+      <id>	35001	</id>
       <userString>	#china_vehicles:A-220B-2_70_T	</userString>
       <tags></tags>
       <level>	11	</level>
@@ -185,31 +53,20 @@
       <maxRegenHealth>	108	</maxRegenHealth>
       <repairCost>	3.5	</repairCost>
     </A-220B-2_70_T>
-    <A-220B_FL>
+    <A-220B>
+      <id>	2	</id>
       <userString>	#china_vehicles:A-220B	</userString>
       <tags></tags>
       <level>	10	</level>
       <price>	54000	</price>
-      <notInShop>	true	</notInShop>
       <weight>	40	</weight>
       <distance>	750	</distance>
       <maxHealth>	180	</maxHealth>
       <maxRegenHealth>	108	</maxRegenHealth>
       <repairCost>	3.5	</repairCost>
-    </A-220B_FL>
-    <A-220B_D>
-      <userString>	#china_vehicles:A-220B_D	</userString>
-      <tags></tags>
-      <level>	10	</level>
-      <price>	54000	</price>
-      <notInShop>	true	</notInShop>
-      <weight>	40	</weight>
-      <distance>	750	</distance>
-      <maxHealth>	180	</maxHealth>
-      <maxRegenHealth>	108	</maxRegenHealth>
-      <repairCost>	3.5	</repairCost>
-    </A-220B_D>
+    </A-220B>
     <A-220B_1>
+      <id>	8	</id>
       <userString>	#china_vehicles:A-220B_1	</userString>
       <tags></tags>
       <level>	10	</level>
@@ -221,102 +78,8 @@
       <maxRegenHealth>	108	</maxRegenHealth>
       <repairCost>	3.5	</repairCost>
     </A-220B_1>
-    <A-220B_1_P>
-      <userString>	#china_vehicles:A-220B_1_P	</userString>
-      <tags></tags>
-      <level>	10	</level>
-      <price>	54000	</price>
-      <weight>	40	</weight>
-      <distance>	750	</distance>
-      <maxHealth>	180	</maxHealth>
-      <maxRegenHealth>	108	</maxRegenHealth>
-      <repairCost>	3.5	</repairCost>
-    </A-220B_1_P>
-    <A-220B_1_P_T>
-      <userString>	#china_vehicles:A-220B_1_P	</userString>
-      <tags></tags>
-      <level>	10	</level>
-      <price>	54000	</price>
-      <notInShop>	true	</notInShop>
-      <weight>	40	</weight>
-      <distance>	750	</distance>
-      <maxHealth>	180	</maxHealth>
-      <maxRegenHealth>	108	</maxRegenHealth>
-      <repairCost>	3.5	</repairCost>
-    </A-220B_1_P_T>
-    <A-220B_1_T>
-      <userString>	#china_vehicles:A-220B_1_T	</userString>
-      <tags></tags>
-      <level>	10	</level>
-      <price>	54000	</price>
-      <notInShop>	true	</notInShop>
-      <weight>	40	</weight>
-      <distance>	750	</distance>
-      <maxHealth>	180	</maxHealth>
-      <maxRegenHealth>	108	</maxRegenHealth>
-      <repairCost>	3.5	</repairCost>
-    </A-220B_1_T>
-    <A-220B_1_MK>
-      <userString>	#china_vehicles:A-220B_1_MK	</userString>
-      <tags></tags>
-      <level>	10	</level>
-      <price>	54000	</price>
-      <notInShop>	true	</notInShop>
-      <weight>	40	</weight>
-      <distance>	750	</distance>
-      <maxHealth>	180	</maxHealth>
-      <maxRegenHealth>	108	</maxRegenHealth>
-      <repairCost>	3.5	</repairCost>
-    </A-220B_1_MK>
-    <A-220B_1_bob>
-      <userString>	#china_vehicles:A-220B_1	</userString>
-      <tags></tags>
-      <level>	10	</level>
-      <price>	54000	</price>
-      <notInShop>	true	</notInShop>
-      <weight>	40	</weight>
-      <distance>	750	</distance>
-      <maxHealth>	180	</maxHealth>
-      <maxRegenHealth>	108	</maxRegenHealth>
-      <repairCost>	3.5	</repairCost>
-    </A-220B_1_bob>
-    <A-220B_1_7x7>
-      <userString>	#china_vehicles:A-220B_1	</userString>
-      <tags></tags>
-      <level>	10	</level>
-      <price>	54000	</price>
-      <notInShop>	true	</notInShop>
-      <weight>	40	</weight>
-      <distance>	750	</distance>
-      <maxHealth>	180	</maxHealth>
-      <maxRegenHealth>	108	</maxRegenHealth>
-      <repairCost>	3.5	</repairCost>
-    </A-220B_1_7x7>
-    <A-220B_1_TEST>
-      <userString>	#china_vehicles:A-220B_1	</userString>
-      <tags></tags>
-      <level>	10	</level>
-      <price>	54000	</price>
-      <notInShop>	true	</notInShop>
-      <weight>	40	</weight>
-      <distance>	750	</distance>
-      <maxHealth>	180	</maxHealth>
-      <maxRegenHealth>	108	</maxRegenHealth>
-      <repairCost>	3.5	</repairCost>
-    </A-220B_1_TEST>
-    <A-220B_1_MT>
-      <userString>	#china_vehicles:A-220B_1	</userString>
-      <tags></tags>
-      <level>	10	</level>
-      <price>	54000	</price>
-      <notInShop>	true	</notInShop>
-      <weight>	40	</weight>
-      <distance>	750	</distance>
-      <maxHealth>	180	</maxHealth>
-      <maxRegenHealth>	108	</maxRegenHealth>
-      <repairCost>	3.5	</repairCost>
-    </A-220B_1_MT>
     <A-220B_1P>
+      <id>	20	</id>
       <userString>	#china_vehicles:A-220B_1P	</userString>
       <tags></tags>
       <level>	10	</level>
@@ -329,6 +92,7 @@
       <repairCost>	3.5	</repairCost>
     </A-220B_1P>
     <A-220B_1P_Premium>
+      <id>	31004	</id>
       <userString>	#china_vehicles:A-220B_1P	</userString>
       <tags></tags>
       <level>	10	</level>
@@ -340,19 +104,8 @@
       <maxRegenHealth>	108	</maxRegenHealth>
       <repairCost>	3.5	</repairCost>
     </A-220B_1P_Premium>
-    <A_220B_1_QL>
-      <userString>	#china_vehicles:A_220B_1_QL	</userString>
-      <tags></tags>
-      <level>	10	</level>
-      <price>	54000	</price>
-      <notInShop>	true	</notInShop>
-      <weight>	40	</weight>
-      <distance>	750	</distance>
-      <maxHealth>	180	</maxHealth>
-      <maxRegenHealth>	108	</maxRegenHealth>
-      <repairCost>	3.5	</repairCost>
-    </A_220B_1_QL>
-    <A_220B_1_113>
+    <A-220B_1_7x7>
+      <id>	502	</id>
       <userString>	#china_vehicles:A-220B_1	</userString>
       <tags></tags>
       <level>	10	</level>
@@ -363,263 +116,9 @@
       <maxHealth>	180	</maxHealth>
       <maxRegenHealth>	108	</maxRegenHealth>
       <repairCost>	3.5	</repairCost>
-    </A_220B_1_113>
-    <ER_52>
-      <userString>	#china_vehicles:ER_52	</userString>
-      <tags></tags>
-      <level>	2	</level>
-      <price>	0	</price>
-      <notInShop>	true	</notInShop>
-      <weight>	100	</weight>
-      <distance>	300	</distance>
-      <maxHealth>	100	</maxHealth>
-      <maxRegenHealth>	49	</maxRegenHealth>
-      <repairCost>	0.5	</repairCost>
-    </ER_52>
-    <_71-TK-3>
-      <userString>	#china_vehicles:_71-TK-3	</userString>
-      <tags></tags>
-      <level>	3	</level>
-      <price>	570	</price>
-      <notInShop>	true	</notInShop>
-      <weight>	50	</weight>
-      <distance>	300	</distance>
-      <maxHealth>	100	</maxHealth>
-      <maxRegenHealth>	49	</maxRegenHealth>
-      <repairCost>	0.5	</repairCost>
-    </_71-TK-3>
-    <Marconi_G2A>
-      <userString>	#china_vehicles:Marconi_G2A	</userString>
-      <tags></tags>
-      <level>	3	</level>
-      <price>	570	</price>
-      <notInShop>	true	</notInShop>
-      <weight>	50	</weight>
-      <distance>	300	</distance>
-      <maxHealth>	100	</maxHealth>
-      <maxRegenHealth>	49	</maxRegenHealth>
-      <repairCost>	0.5	</repairCost>
-    </Marconi_G2A>
-    <SCR_210>
-      <userString>	#china_vehicles:SCR_210	</userString>
-      <tags></tags>
-      <level>	4	</level>
-      <price>	2000	</price>
-      <weight>	80	</weight>
-      <distance>	325	</distance>
-      <maxHealth>	110	</maxHealth>
-      <maxRegenHealth>	55	</maxRegenHealth>
-      <repairCost>	1	</repairCost>
-    </SCR_210>
-    <SCR_508>
-      <userString>	#china_vehicles:SCR_508	</userString>
-      <tags></tags>
-      <level>	6	</level>
-      <price>	21600	</price>
-      <weight>	91	</weight>
-      <distance>	395	</distance>
-      <maxHealth>	120	</maxHealth>
-      <maxRegenHealth>	60	</maxRegenHealth>
-      <repairCost>	1.2	</repairCost>
-    </SCR_508>
-    <_R_113_P>
-      <userString>	#china_vehicles:_R_113_P	</userString>
-      <tags></tags>
-      <level>	9	</level>
-      <price>	43500	</price>
-      <notInShop>	true	</notInShop>
-      <weight>	100	</weight>
-      <distance>	700	</distance>
-      <maxHealth>	200	</maxHealth>
-      <maxRegenHealth>	150	</maxRegenHealth>
-      <repairCost>	3	</repairCost>
-    </_R_113_P>
-    <SCR_506>
-      <userString>	#china_vehicles:SCR_506	</userString>
-      <tags></tags>
-      <level>	9	</level>
-      <price>	33600	</price>
-      <weight>	97	</weight>
-      <distance>	615	</distance>
-      <maxHealth>	200	</maxHealth>
-      <maxRegenHealth>	150	</maxRegenHealth>
-      <repairCost>	3	</repairCost>
-    </SCR_506>
-    <_Type94_Hei>
-      <userString>	#china_vehicles:_Type94_Hei	</userString>
-      <tags></tags>
-      <level>	4	</level>
-      <price>	180	</price>
-      <weight>	90	</weight>
-      <distance>	350	</distance>
-      <maxHealth>	70	</maxHealth>
-      <maxRegenHealth>	42	</maxRegenHealth>
-      <repairCost>	0.5	</repairCost>
-    </_Type94_Hei>
-    <_Type96_Bo>
-      <userString>	#china_vehicles:_Type96_Bo	</userString>
-      <tags></tags>
-      <level>	6	</level>
-      <price>	14000	</price>
-      <weight>	50	</weight>
-      <distance>	425	</distance>
-      <maxHealth>	100	</maxHealth>
-      <maxRegenHealth>	60	</maxRegenHealth>
-      <repairCost>	3.5	</repairCost>
-    </_Type96_Bo>
-    <_Type3_Otsu>
-      <userString>	#china_vehicles:_Type3_Otsu	</userString>
-      <tags></tags>
-      <level>	8	</level>
-      <price>	22000	</price>
-      <weight>	240	</weight>
-      <distance>	550	</distance>
-      <maxHealth>	140	</maxHealth>
-      <maxRegenHealth>	84	</maxRegenHealth>
-      <repairCost>	3.5	</repairCost>
-    </_Type3_Otsu>
-    <_9R>
-      <userString>	#china_vehicles:_9R	</userString>
-      <tags></tags>
-      <level>	4	</level>
-      <price>	1980	</price>
-      <weight>	80	</weight>
-      <distance>	325	</distance>
-      <maxHealth>	110	</maxHealth>
-      <maxRegenHealth>	55	</maxRegenHealth>
-      <repairCost>	1	</repairCost>
-    </_9R>
-    <_9RM_shop>
-      <userString>	#china_vehicles:_9RM_shop	</userString>
-      <tags></tags>
-      <level>	8	</level>
-      <price>	24240	</price>
-      <weight>	100	</weight>
-      <distance>	525	</distance>
-      <maxHealth>	120	</maxHealth>
-      <maxRegenHealth>	60	</maxRegenHealth>
-      <repairCost>	1.5	</repairCost>
-    </_9RM_shop>
-    <_9RM_shop_P>
-      <userString>	#china_vehicles:_9RM_shop_P	</userString>
-      <tags></tags>
-      <level>	8	</level>
-      <price>	24240	</price>
-      <weight>	100	</weight>
-      <distance>	525	</distance>
-      <maxHealth>	120	</maxHealth>
-      <maxRegenHealth>	60	</maxRegenHealth>
-      <repairCost>	1.5	</repairCost>
-    </_9RM_shop_P>
-    <_9RM_R>
-      <userString>	#china_vehicles:_9RM_R	</userString>
-      <tags></tags>
-      <level>	8	</level>
-      <price>	24240	</price>
-      <notInShop>	true	</notInShop>
-      <weight>	100	</weight>
-      <distance>	525	</distance>
-      <maxHealth>	120	</maxHealth>
-      <maxRegenHealth>	60	</maxRegenHealth>
-      <repairCost>	1.5	</repairCost>
-    </_9RM_R>
-    <AN_GRR_5_Prem>
-      <userString>	#china_vehicles:AN_GRR_5_Prem	</userString>
-      <tags></tags>
-      <level>	8	</level>
-      <price>	25000	</price>
-      <notInShop>	true	</notInShop>
-      <weight>	34	</weight>
-      <distance>	700	</distance>
-      <maxHealth>	140	</maxHealth>
-      <maxRegenHealth>	84	</maxRegenHealth>
-      <repairCost>	3	</repairCost>
-    </AN_GRR_5_Prem>
-    <A-220B_T>
-      <userString>	#china_vehicles:A-220B	</userString>
-      <tags></tags>
-      <level>	10	</level>
-      <price>	54000	</price>
-      <notInShop>	true	</notInShop>
-      <weight>	40	</weight>
-      <distance>	750	</distance>
-      <maxHealth>	180	</maxHealth>
-      <maxRegenHealth>	108	</maxRegenHealth>
-      <repairCost>	3.5	</repairCost>
-    </A-220B_T>
-    <AN_GRC_8>
-      <userString>	#china_vehicles:AN_GRC_8	</userString>
-      <tags></tags>
-      <level>	10	</level>
-      <price>	54000	</price>
-      <notInShop>	true	</notInShop>
-      <weight>	105	</weight>
-      <distance>	745	</distance>
-      <maxHealth>	200	</maxHealth>
-      <maxRegenHealth>	150	</maxRegenHealth>
-      <repairCost>	3	</repairCost>
-    </AN_GRC_8>
-    <A_220A>
-      <userString>	#china_vehicles:A_220A	</userString>
-      <tags></tags>
-      <level>	10	</level>
-      <notInShop>	true	</notInShop>
-      <price>	51600	</price>
-      <weight>	160	</weight>
-      <distance>	720	</distance>
-      <maxHealth>	250	</maxHealth>
-      <maxRegenHealth>	75	</maxRegenHealth>
-      <repairCost>	3.5	</repairCost>
-    </A_220A>
-    <A_220A_58>
-      <userString>	#china_vehicles:A_220A_58	</userString>
-      <tags></tags>
-      <level>	8	</level>
-      <price>	25000	</price>
-      <notInShop>	true	</notInShop>
-      <weight>	40	</weight>
-      <distance>	700	</distance>
-      <maxHealth>	140	</maxHealth>
-      <maxRegenHealth>	84	</maxRegenHealth>
-      <repairCost>	3	</repairCost>
-    </A_220A_58>
-    <A_220A_Ch76>
-      <userString>	#china_vehicles:A_220A_Ch76	</userString>
-      <tags></tags>
-      <level>	10	</level>
-      <notInShop>	true	</notInShop>
-      <price>	51600	</price>
-      <weight>	40	</weight>
-      <distance>	720	</distance>
-      <maxHealth>	250	</maxHealth>
-      <maxRegenHealth>	75	</maxRegenHealth>
-      <repairCost>	3.5	</repairCost>
-    </A_220A_Ch76>
-    <_789T>
-      <userString>	#china_vehicles:_789T	</userString>
-      <tags></tags>
-      <level>	10	</level>
-      <notInShop>	true	</notInShop>
-      <price>	45000	</price>
-      <weight>	160	</weight>
-      <distance>	700	</distance>
-      <maxHealth>	200	</maxHealth>
-      <maxRegenHealth>	150	</maxRegenHealth>
-      <repairCost>	3	</repairCost>
-    </_789T>
-    <A-220B_IGR>
-      <userString>	#igr_vehicles:A-220B_IGR	</userString>
-      <tags></tags>
-      <level>	10	</level>
-      <price>	54000	</price>
-      <notInShop>	true	</notInShop>
-      <weight>	40	</weight>
-      <distance>	750	</distance>
-      <maxHealth>	180	</maxHealth>
-      <maxRegenHealth>	108	</maxRegenHealth>
-      <repairCost>	3.5	</repairCost>
-    </A-220B_IGR>
+    </A-220B_1_7x7>
     <A-220B_1_IGR>
+      <id>	60002	</id>
       <userString>	#igr_vehicles:A-220B_1_IGR	</userString>
       <tags></tags>
       <level>	10	</level>
@@ -631,47 +130,59 @@
       <maxRegenHealth>	108	</maxRegenHealth>
       <repairCost>	3.5	</repairCost>
     </A-220B_1_IGR>
-    <Development_Radio>
-      <userString>	Development Radio	</userString>
+    <A-220B_1_MK>
+      <id>	257	</id>
+      <userString>	#china_vehicles:A-220B_1_MK	</userString>
       <tags></tags>
+      <level>	10	</level>
+      <price>	54000	</price>
       <notInShop>	true	</notInShop>
-      <level>	1	</level>
-      <price>	0	</price>
-      <weight>	1	</weight>
-      <distance>	90	</distance>
-      <maxHealth>	90	</maxHealth>
-      <maxRegenHealth>	75	</maxRegenHealth>
-      <repairCost>	0	</repairCost>
-    </Development_Radio>
-    <_9R_SH>
-      <userString>	#china_vehicles:_9R_SH	</userString>
+      <weight>	40	</weight>
+      <distance>	750	</distance>
+      <maxHealth>	180	</maxHealth>
+      <maxRegenHealth>	108	</maxRegenHealth>
+      <repairCost>	3.5	</repairCost>
+    </A-220B_1_MK>
+    <A-220B_1_MT>
+      <id>	31003	</id>
+      <userString>	#china_vehicles:A-220B_1	</userString>
       <tags></tags>
-      <level>	1	</level>
-      <price>	0	</price>
+      <level>	10	</level>
+      <price>	54000	</price>
       <notInShop>	true	</notInShop>
-      <weight>	100	</weight>
-      <distance>	2000	</distance>
-      <maxHealth>	100	</maxHealth>
-      <maxRegenHealth>	60	</maxRegenHealth>
-      <repairCost>	0	</repairCost>
-      <radarRadius>	430	</radarRadius>
-      <radarCooldown>	25	</radarCooldown>
-    </_9R_SH>
-    <_9RM_shop_SH>
-      <userString>	#china_vehicles:_9RM_shop_SH	</userString>
+      <weight>	40	</weight>
+      <distance>	750	</distance>
+      <maxHealth>	180	</maxHealth>
+      <maxRegenHealth>	108	</maxRegenHealth>
+      <repairCost>	3.5	</repairCost>
+    </A-220B_1_MT>
+    <A-220B_1_P>
+      <id>	31007	</id>
+      <userString>	#china_vehicles:A-220B_1_P	</userString>
       <tags></tags>
-      <level>	2	</level>
-      <price>	0	</price>
+      <level>	10	</level>
+      <price>	54000	</price>
+      <weight>	40	</weight>
+      <distance>	750	</distance>
+      <maxHealth>	180	</maxHealth>
+      <maxRegenHealth>	108	</maxRegenHealth>
+      <repairCost>	3.5	</repairCost>
+    </A-220B_1_P>
+    <A-220B_1_P_T>
+      <id>	31008	</id>
+      <userString>	#china_vehicles:A-220B_1_P	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	54000	</price>
       <notInShop>	true	</notInShop>
-      <weight>	100	</weight>
-      <distance>	2000	</distance>
-      <maxHealth>	200	</maxHealth>
-      <maxRegenHealth>	150	</maxRegenHealth>
-      <repairCost>	0	</repairCost>
-      <radarRadius>	300	</radarRadius>
-      <radarCooldown>	15	</radarCooldown>
-    </_9RM_shop_SH>
+      <weight>	40	</weight>
+      <distance>	750	</distance>
+      <maxHealth>	180	</maxHealth>
+      <maxRegenHealth>	108	</maxRegenHealth>
+      <repairCost>	3.5	</repairCost>
+    </A-220B_1_P_T>
     <A-220B_1_SH>
+      <id>	64004	</id>
       <userString>	#china_vehicles:A-220B_1_SH	</userString>
       <tags></tags>
       <level>	2	</level>
@@ -685,7 +196,240 @@
       <radarRadius>	530	</radarRadius>
       <radarCooldown>	25	</radarCooldown>
     </A-220B_1_SH>
+    <A-220B_1_T>
+      <id>	31010	</id>
+      <userString>	#china_vehicles:A-220B_1_T	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	54000	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	40	</weight>
+      <distance>	750	</distance>
+      <maxHealth>	180	</maxHealth>
+      <maxRegenHealth>	108	</maxRegenHealth>
+      <repairCost>	3.5	</repairCost>
+    </A-220B_1_T>
+    <A-220B_1_TEST>
+      <id>	21003	</id>
+      <userString>	#china_vehicles:A-220B_1	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	54000	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	40	</weight>
+      <distance>	750	</distance>
+      <maxHealth>	180	</maxHealth>
+      <maxRegenHealth>	108	</maxRegenHealth>
+      <repairCost>	3.5	</repairCost>
+    </A-220B_1_TEST>
+    <A-220B_1_bob>
+      <id>	31013	</id>
+      <userString>	#china_vehicles:A-220B_1	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	54000	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	40	</weight>
+      <distance>	750	</distance>
+      <maxHealth>	180	</maxHealth>
+      <maxRegenHealth>	108	</maxRegenHealth>
+      <repairCost>	3.5	</repairCost>
+    </A-220B_1_bob>
+    <A-220B_D>
+      <id>	31012	</id>
+      <userString>	#china_vehicles:A-220B_D	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	54000	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	40	</weight>
+      <distance>	750	</distance>
+      <maxHealth>	180	</maxHealth>
+      <maxRegenHealth>	108	</maxRegenHealth>
+      <repairCost>	3.5	</repairCost>
+    </A-220B_D>
+    <A-220B_FL>
+      <id>	501	</id>
+      <userString>	#china_vehicles:A-220B	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	54000	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	40	</weight>
+      <distance>	750	</distance>
+      <maxHealth>	180	</maxHealth>
+      <maxRegenHealth>	108	</maxRegenHealth>
+      <repairCost>	3.5	</repairCost>
+    </A-220B_FL>
+    <A-220B_IGR>
+      <id>	60001	</id>
+      <userString>	#igr_vehicles:A-220B_IGR	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	54000	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	40	</weight>
+      <distance>	750	</distance>
+      <maxHealth>	180	</maxHealth>
+      <maxRegenHealth>	108	</maxRegenHealth>
+      <repairCost>	3.5	</repairCost>
+    </A-220B_IGR>
+    <A-220B_T>
+      <id>	254	</id>
+      <userString>	#china_vehicles:A-220B	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	54000	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	40	</weight>
+      <distance>	750	</distance>
+      <maxHealth>	180	</maxHealth>
+      <maxRegenHealth>	108	</maxRegenHealth>
+      <repairCost>	3.5	</repairCost>
+    </A-220B_T>
+    <A-220_1>
+      <id>	3	</id>
+      <userString>	#china_vehicles:A-220_1	</userString>
+      <tags></tags>
+      <level>	9	</level>
+      <price>	38000	</price>
+      <weight>	40	</weight>
+      <distance>	600	</distance>
+      <maxHealth>	160	</maxHealth>
+      <maxRegenHealth>	96	</maxRegenHealth>
+      <repairCost>	3.5	</repairCost>
+    </A-220_1>
+    <A-220_1_P>
+      <id>	31006	</id>
+      <userString>	#china_vehicles:A-220_1_P	</userString>
+      <tags></tags>
+      <level>	9	</level>
+      <price>	38000	</price>
+      <weight>	40	</weight>
+      <distance>	600	</distance>
+      <maxHealth>	160	</maxHealth>
+      <maxRegenHealth>	96	</maxRegenHealth>
+      <repairCost>	3.5	</repairCost>
+    </A-220_1_P>
+    <AN_GRC_8>
+      <id>	21	</id>
+      <userString>	#china_vehicles:AN_GRC_8	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	54000	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	105	</weight>
+      <distance>	745	</distance>
+      <maxHealth>	200	</maxHealth>
+      <maxRegenHealth>	150	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+    </AN_GRC_8>
+    <AN_GRR_5_Prem>
+      <id>	16	</id>
+      <userString>	#china_vehicles:AN_GRR_5_Prem	</userString>
+      <tags></tags>
+      <level>	8	</level>
+      <price>	25000	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	34	</weight>
+      <distance>	700	</distance>
+      <maxHealth>	140	</maxHealth>
+      <maxRegenHealth>	84	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+    </AN_GRR_5_Prem>
+    <A_220A>
+      <id>	255	</id>
+      <userString>	#china_vehicles:A_220A	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <notInShop>	true	</notInShop>
+      <price>	51600	</price>
+      <weight>	160	</weight>
+      <distance>	720	</distance>
+      <maxHealth>	250	</maxHealth>
+      <maxRegenHealth>	75	</maxRegenHealth>
+      <repairCost>	3.5	</repairCost>
+    </A_220A>
+    <A_220A_58>
+      <id>	31015	</id>
+      <userString>	#china_vehicles:A_220A_58	</userString>
+      <tags></tags>
+      <level>	8	</level>
+      <price>	25000	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	40	</weight>
+      <distance>	700	</distance>
+      <maxHealth>	140	</maxHealth>
+      <maxRegenHealth>	84	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+    </A_220A_58>
+    <A_220A_Ch76>
+      <id>	31016	</id>
+      <userString>	#china_vehicles:A_220A_Ch76	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <notInShop>	true	</notInShop>
+      <price>	51600	</price>
+      <weight>	40	</weight>
+      <distance>	720	</distance>
+      <maxHealth>	250	</maxHealth>
+      <maxRegenHealth>	75	</maxRegenHealth>
+      <repairCost>	3.5	</repairCost>
+    </A_220A_Ch76>
+    <A_220B_1_113>
+      <id>	253	</id>
+      <userString>	#china_vehicles:A-220B_1	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	54000	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	40	</weight>
+      <distance>	750	</distance>
+      <maxHealth>	180	</maxHealth>
+      <maxRegenHealth>	108	</maxRegenHealth>
+      <repairCost>	3.5	</repairCost>
+    </A_220B_1_113>
+    <A_220B_1_QL>
+      <id>	252	</id>
+      <userString>	#china_vehicles:A_220B_1_QL	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	54000	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	40	</weight>
+      <distance>	750	</distance>
+      <maxHealth>	180	</maxHealth>
+      <maxRegenHealth>	108	</maxRegenHealth>
+      <repairCost>	3.5	</repairCost>
+    </A_220B_1_QL>
+    <A_220_57>
+      <id>	31011	</id>
+      <userString>	#china_vehicles:A_220_57	</userString>
+      <tags></tags>
+      <level>	9	</level>
+      <price>	38000	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	40	</weight>
+      <distance>	600	</distance>
+      <maxHealth>	160	</maxHealth>
+      <maxRegenHealth>	96	</maxRegenHealth>
+      <repairCost>	3.5	</repairCost>
+    </A_220_57>
+    <A_220_STT>
+      <id>	31014	</id>
+      <userString>	#china_vehicles:A_220_STT	</userString>
+      <tags></tags>
+      <level>	9	</level>
+      <price>	38000	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	40	</weight>
+      <distance>	600	</distance>
+      <maxHealth>	160	</maxHealth>
+      <maxRegenHealth>	96	</maxRegenHealth>
+      <repairCost>	3.5	</repairCost>
+    </A_220_STT>
     <Ch00_ClingeBot_SH_Radio>
+      <id>	64005	</id>
       <userString>	#china_vehicles:Ch00_ClingeBot_SH_Radio	</userString>
       <tags></tags>
       <level>	1	</level>
@@ -697,5 +441,260 @@
       <maxRegenHealth>	49	</maxRegenHealth>
       <repairCost>	0.5	</repairCost>
     </Ch00_ClingeBot_SH_Radio>
+    <Development_Radio>
+      <id>	65000	</id>
+      <userString>	Development Radio	</userString>
+      <tags></tags>
+      <notInShop>	true	</notInShop>
+      <level>	1	</level>
+      <price>	0	</price>
+      <weight>	1	</weight>
+      <distance>	90	</distance>
+      <maxHealth>	90	</maxHealth>
+      <maxRegenHealth>	75	</maxRegenHealth>
+      <repairCost>	0	</repairCost>
+    </Development_Radio>
+    <ER_52>
+      <id>	5	</id>
+      <userString>	#china_vehicles:ER_52	</userString>
+      <tags></tags>
+      <level>	2	</level>
+      <price>	0	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	100	</weight>
+      <distance>	300	</distance>
+      <maxHealth>	100	</maxHealth>
+      <maxRegenHealth>	49	</maxRegenHealth>
+      <repairCost>	0.5	</repairCost>
+    </ER_52>
+    <Marconi_G2A>
+      <id>	28	</id>
+      <userString>	#china_vehicles:Marconi_G2A	</userString>
+      <tags></tags>
+      <level>	3	</level>
+      <price>	570	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	50	</weight>
+      <distance>	300	</distance>
+      <maxHealth>	100	</maxHealth>
+      <maxRegenHealth>	49	</maxRegenHealth>
+      <repairCost>	0.5	</repairCost>
+    </Marconi_G2A>
+    <SCR_210>
+      <id>	19	</id>
+      <userString>	#china_vehicles:SCR_210	</userString>
+      <tags></tags>
+      <level>	4	</level>
+      <price>	2000	</price>
+      <weight>	80	</weight>
+      <distance>	325	</distance>
+      <maxHealth>	110	</maxHealth>
+      <maxRegenHealth>	55	</maxRegenHealth>
+      <repairCost>	1	</repairCost>
+    </SCR_210>
+    <SCR_506>
+      <id>	10	</id>
+      <userString>	#china_vehicles:SCR_506	</userString>
+      <tags></tags>
+      <level>	9	</level>
+      <price>	33600	</price>
+      <weight>	97	</weight>
+      <distance>	615	</distance>
+      <maxHealth>	200	</maxHealth>
+      <maxRegenHealth>	150	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+    </SCR_506>
+    <SCR_508>
+      <id>	9	</id>
+      <userString>	#china_vehicles:SCR_508	</userString>
+      <tags></tags>
+      <level>	6	</level>
+      <price>	21600	</price>
+      <weight>	91	</weight>
+      <distance>	395	</distance>
+      <maxHealth>	120	</maxHealth>
+      <maxRegenHealth>	60	</maxRegenHealth>
+      <repairCost>	1.2	</repairCost>
+    </SCR_508>
+    <_71-TK-3>
+      <id>	7	</id>
+      <userString>	#china_vehicles:_71-TK-3	</userString>
+      <tags></tags>
+      <level>	3	</level>
+      <price>	570	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	50	</weight>
+      <distance>	300	</distance>
+      <maxHealth>	100	</maxHealth>
+      <maxRegenHealth>	49	</maxRegenHealth>
+      <repairCost>	0.5	</repairCost>
+    </_71-TK-3>
+    <_789T>
+      <id>	22	</id>
+      <userString>	#china_vehicles:_789T	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <notInShop>	true	</notInShop>
+      <price>	45000	</price>
+      <weight>	160	</weight>
+      <distance>	700	</distance>
+      <maxHealth>	200	</maxHealth>
+      <maxRegenHealth>	150	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+    </_789T>
+    <_9R>
+      <id>	14	</id>
+      <userString>	#china_vehicles:_9R	</userString>
+      <tags></tags>
+      <level>	4	</level>
+      <price>	1980	</price>
+      <weight>	80	</weight>
+      <distance>	325	</distance>
+      <maxHealth>	110	</maxHealth>
+      <maxRegenHealth>	55	</maxRegenHealth>
+      <repairCost>	1	</repairCost>
+    </_9R>
+    <_9RM>
+      <id>	0	</id>
+      <userString>	#china_vehicles:_9RM	</userString>
+      <tags></tags>
+      <level>	9	</level>
+      <price>	24240	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	40	</weight>
+      <distance>	600	</distance>
+      <maxHealth>	160	</maxHealth>
+      <maxRegenHealth>	96	</maxRegenHealth>
+      <repairCost>	3.5	</repairCost>
+    </_9RM>
+    <_9RM_CZ>
+      <id>	23	</id>
+      <userString>	#china_vehicles:_9RM	</userString>
+      <tags></tags>
+      <level>	9	</level>
+      <price>	24240	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	40	</weight>
+      <distance>	600	</distance>
+      <maxHealth>	160	</maxHealth>
+      <maxRegenHealth>	96	</maxRegenHealth>
+      <repairCost>	3.5	</repairCost>
+    </_9RM_CZ>
+    <_9RM_R>
+      <id>	17	</id>
+      <userString>	#china_vehicles:_9RM_R	</userString>
+      <tags></tags>
+      <level>	8	</level>
+      <price>	24240	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	100	</weight>
+      <distance>	525	</distance>
+      <maxHealth>	120	</maxHealth>
+      <maxRegenHealth>	60	</maxRegenHealth>
+      <repairCost>	1.5	</repairCost>
+    </_9RM_R>
+    <_9RM_shop>
+      <id>	15	</id>
+      <userString>	#china_vehicles:_9RM_shop	</userString>
+      <tags></tags>
+      <level>	8	</level>
+      <price>	24240	</price>
+      <weight>	100	</weight>
+      <distance>	525	</distance>
+      <maxHealth>	120	</maxHealth>
+      <maxRegenHealth>	60	</maxRegenHealth>
+      <repairCost>	1.5	</repairCost>
+    </_9RM_shop>
+    <_9RM_shop_P>
+      <id>	31005	</id>
+      <userString>	#china_vehicles:_9RM_shop_P	</userString>
+      <tags></tags>
+      <level>	8	</level>
+      <price>	24240	</price>
+      <weight>	100	</weight>
+      <distance>	525	</distance>
+      <maxHealth>	120	</maxHealth>
+      <maxRegenHealth>	60	</maxRegenHealth>
+      <repairCost>	1.5	</repairCost>
+    </_9RM_shop_P>
+    <_9RM_shop_SH>
+      <id>	64003	</id>
+      <userString>	#china_vehicles:_9RM_shop_SH	</userString>
+      <tags></tags>
+      <level>	2	</level>
+      <price>	0	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	100	</weight>
+      <distance>	2000	</distance>
+      <maxHealth>	200	</maxHealth>
+      <maxRegenHealth>	150	</maxRegenHealth>
+      <repairCost>	0	</repairCost>
+      <radarRadius>	300	</radarRadius>
+      <radarCooldown>	15	</radarCooldown>
+    </_9RM_shop_SH>
+    <_9R_SH>
+      <id>	64002	</id>
+      <userString>	#china_vehicles:_9R_SH	</userString>
+      <tags></tags>
+      <level>	1	</level>
+      <price>	0	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	100	</weight>
+      <distance>	2000	</distance>
+      <maxHealth>	100	</maxHealth>
+      <maxRegenHealth>	60	</maxRegenHealth>
+      <repairCost>	0	</repairCost>
+      <radarRadius>	430	</radarRadius>
+      <radarCooldown>	25	</radarCooldown>
+    </_9R_SH>
+    <_R_113_P>
+      <id>	26	</id>
+      <userString>	#china_vehicles:_R_113_P	</userString>
+      <tags></tags>
+      <level>	9	</level>
+      <price>	43500	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	100	</weight>
+      <distance>	700	</distance>
+      <maxHealth>	200	</maxHealth>
+      <maxRegenHealth>	150	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+    </_R_113_P>
+    <_Type3_Otsu>
+      <id>	13	</id>
+      <userString>	#china_vehicles:_Type3_Otsu	</userString>
+      <tags></tags>
+      <level>	8	</level>
+      <price>	22000	</price>
+      <weight>	240	</weight>
+      <distance>	550	</distance>
+      <maxHealth>	140	</maxHealth>
+      <maxRegenHealth>	84	</maxRegenHealth>
+      <repairCost>	3.5	</repairCost>
+    </_Type3_Otsu>
+    <_Type94_Hei>
+      <id>	11	</id>
+      <userString>	#china_vehicles:_Type94_Hei	</userString>
+      <tags></tags>
+      <level>	4	</level>
+      <price>	180	</price>
+      <weight>	90	</weight>
+      <distance>	350	</distance>
+      <maxHealth>	70	</maxHealth>
+      <maxRegenHealth>	42	</maxRegenHealth>
+      <repairCost>	0.5	</repairCost>
+    </_Type94_Hei>
+    <_Type96_Bo>
+      <id>	12	</id>
+      <userString>	#china_vehicles:_Type96_Bo	</userString>
+      <tags></tags>
+      <level>	6	</level>
+      <price>	14000	</price>
+      <weight>	50	</weight>
+      <distance>	425	</distance>
+      <maxHealth>	100	</maxHealth>
+      <maxRegenHealth>	60	</maxRegenHealth>
+      <repairCost>	3.5	</repairCost>
+    </_Type96_Bo>
   </shared>
 </radios.xml>

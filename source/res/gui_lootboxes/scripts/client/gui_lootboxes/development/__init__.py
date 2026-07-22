@@ -91,6 +91,7 @@ def devShowRewardScreenWindow(bonuses=None, itemsCache=None, mainReward='vehicle
         bonuses = {'tokens': {'lb_comp:credits:1000:cllc:31001': {'count': 1,
                                                         'expires': {'at': 0},
                                                         'limit': 0}},
+         'preferredMapSlots': {3: 3},
          'vehicles': [{itemsCache.items.getItem(GUI_ITEM_TYPE.VEHICLE, 0, 144).intCD: {'customCompensation': (0, 10550),
                                                                                        'compensatedNumber': 1}}]}
     elif bonuses is None:

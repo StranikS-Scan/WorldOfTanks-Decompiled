@@ -24,12 +24,12 @@ def showLootBoxOpenErrorWindow(parent=None):
     SystemMessages.pushMessage(text=backport.text(R.strings.system_messages.lootboxes.open.server_error.DISABLED()), priority=NotificationPriorityLevel.MEDIUM, type=SystemMessages.SM_TYPE.Error)
 
 
-def showStorageView(returnPlace=None, initialLootBoxId=0):
+def showStorageView(returnPlace=None, initialLootBoxId=0, closeCallback=None):
     from gui_lootboxes.gui.impl.lobby.gui_lootboxes.lootboxes_storage import LootBoxesStorageWindow
     from gui_lootboxes.gui.storage_context.context import ReturnPlaces
     if returnPlace is None:
         returnPlace = ReturnPlaces.TO_HANGAR
-    window = LootBoxesStorageWindow(returnPlace, initialLootBoxId)
+    window = LootBoxesStorageWindow(returnPlace, initialLootBoxId, closeCallback)
     window.load()
     return
 
@@ -78,11 +78,12 @@ def showBonusProbabilitiesWindow(lootBox, parent=None):
 def showRewardScreenWindow(rewards, lootBox=None, clientData=None, parent=None):
     from gui_lootboxes.gui.impl.lobby.gui_lootboxes.reward_screen import LootBoxesRewardScreenWindow
     from gui_lootboxes.gui.impl.lobby.gui_lootboxes.loot_boxes_lose_reward_screen import LootBoxesLoseRewardScreenWindow
-    if clientData.get('countOfOpened', 0) == 0:
+    if clientData is not None and clientData.get('countOfOpened', 0) == 0:
         window = LootBoxesLoseRewardScreenWindow(rewards=rewards, lootBox=lootBox, clientData=clientData, parent=parent)
     else:
         window = LootBoxesRewardScreenWindow(rewards=rewards, lootBox=lootBox, clientData=clientData, parent=parent)
     window.load()
+    return
 
 
 def showUniqueRewardScreenWindow(vehicle):

@@ -1,0 +1,52 @@
+<camouflage_localpartner2_2018_label.xml>
+  <xmlns:china2>	ussr	</xmlns:china2>
+  <xmlns:germany>	germany	</xmlns:germany>
+  <xmlns:china1>	usa	</xmlns:china1>
+  <xmlns:china>	china	</xmlns:china>
+  <xmlns:france>	france	</xmlns:france>
+  <xmlns:china0>	uk	</xmlns:china0>
+  <xmlns:japan>	japan	</xmlns:japan>
+  <xmlns:czech>	czech	</xmlns:czech>
+  <xmlns:sweden>	sweden	</xmlns:sweden>
+  <xmlns:poland>	poland	</xmlns:poland>
+  <xmlns:italy>	italy	</xmlns:italy>
+  <xmlns:intunion>	intunion	</xmlns:intunion>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/opaque	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	MT camouflages 50g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	ussr:R127_T44_100_I	</vehicles>
+      </include>
+      <exclude>
+        <vehicles>	ussr:R47_ISU-152_Zveroboj	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <camouflage>
+      <id>	524	</id>
+      <texture>	vehicles/russian/Camouflage/localpartner2_2018.dds	</texture>
+      <description>	#vehicle_customization:camouflage/localpartner2_2018/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/localpartner2_2018/label	</userString>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	73 87 95 255	</c0>
+          <c1>	54 68 84 255	</c1>
+          <c2>	149 164 179 255	</c2>
+          <c3>	146 95 61 255	</c3>
+        </palette>
+      </palettes>
+      <tiling>
+        <ussr:R127_T44_100_I>	3.7 3.7 1.9 5.1	</ussr:R127_T44_100_I>
+      </tiling>
+      <tilingSettings>
+        <type>	relative	</type>
+        <factor>	2.102100  2.091684	</factor>
+        <offset>	0.000000 0.000000	</offset>
+      </tilingSettings>
+    </camouflage>
+  </itemGroup>
+</camouflage_localpartner2_2018_label.xml>

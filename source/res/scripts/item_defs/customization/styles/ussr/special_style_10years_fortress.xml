@@ -1,0 +1,48 @@
+<special_style_10years_fortress.xml>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	MT 2D styles direct 1500g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	ussr:R54_KV-5	</vehicles>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	287	</id>
+      <texture>	gui/maps/vehicles/styles/10years_fortress.png	</texture>
+      <description>	#vehicle_customization:special_style/10years_fortress_desc	</description>
+      <longDescriptionSpecial>	#vehicle_customization:special_style/10years_fortress_desc/long	</longDescriptionSpecial>
+      <maxNumber>	1	</maxNumber>
+      <userString>	#vehicle_customization:special_style/10years_fortress	</userString>
+      <tags>	progression_required	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	106	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <decals>
+            <item>
+              <id>	122	</id>
+              <appliedTo>	52416	</appliedTo>
+            </item>
+          </decals>
+        </outfit>
+      </outfits>
+    </style>
+  </itemGroup>
+</special_style_10years_fortress.xml>

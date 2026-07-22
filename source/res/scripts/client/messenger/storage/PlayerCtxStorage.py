@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/messenger/storage/PlayerCtxStorage.py
 import types
 import Event
-from constants import ACCOUNT_ATTR, CURRENT_GAME_ID
+from constants import ACCOUNT_ATTR
 from debug_utils import LOG_WARNING
 from messenger.storage import SimpleCachedStorage
 
@@ -60,7 +60,7 @@ class PlayerCtxStorage(SimpleCachedStorage):
 
     def isBanned(self, components=None):
         if self.__banInfo:
-            result = self.__banInfo.isBanned(game=CURRENT_GAME_ID, components=components)
+            result = self.__banInfo.isBanned(game=self.__banInfo.getCurrentGame(), components=components)
         else:
             result = False
         return result

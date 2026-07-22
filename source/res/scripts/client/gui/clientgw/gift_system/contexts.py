@@ -3,7 +3,7 @@
 import logging
 import time
 import typing
-from gui.gift_system.wrappers import GiftsWebState, SendGiftResponse
+from gui.gift_system.wrappers import GiftsWebState, SendGiftResponse, GiftsWaitResponse
 from gui.clientgw.base.contexts import CommonWebRequestCtx
 from gui.clientgw.settings import WebRequestDataType
 from shared_utils import makeTupleByDict
@@ -119,3 +119,50 @@ class GiftSystemSendGiftMultipleCtx(GiftSystemBaseSendGiftCtx):
 
     def getRequestType(self):
         return WebRequestDataType.GIFT_SYSTEM_POST_GIFT_MULTIPLE
+
+
+class GiftSystemWaitResponseCtx(CommonWebRequestCtx):
+
+    def __init__(self, reqEventId, spaID, metaInfo=None, waitingID=''):
+        super(GiftSystemWaitResponseCtx, self).__init__(waitingID)
+        self.__reqEventId = reqEventId
+        self.__spaID = spaID
+        self.__metaInfo = metaInfo or {}
+
+    def isAuthorizationRequired(self):
+        return True
+
+    def isClanSyncRequired(self):
+        return False
+
+    def isCaching(self):
+        return False
+
+    def getReqEventId(self):
+        return self.__reqEventId
+
+    def getRequestType(self):
+        return WebRequestDataType.GIFT_SYSTEM_WAIT_RESPONSE
+
+    def getSpaID(self):
+        return self.__spaID
+
+    def getMetaInfo(self):
+        return self.__metaInfo
+
+    def getDataObj(self, incomeData):
+        resultData = self.getDefDataObj()
+        if incomeData is not None and isinstance(incomeData, dict):
+            try:
+                resultData['players'] = incomeData['players']
+                resultData['lastPlayerUpdatedAt'] = incomeData['last_player_updated_at']
+                resultData['firstPlayerUpdatedAt'] = incomeData['first_player_updated_at']
+            except (KeyError, TypeError):
+                _logger.exception('Can not pack event waiting response players because of invalid incomeData')
+
+        return makeTupleByDict(GiftsWaitResponse, resultData)
+
+    def getDefDataObj(self):
+        return {'players': [],
+         'lastPlayerUpdatedAt': None,
+         'firstPlayerUpdatedAt': None}

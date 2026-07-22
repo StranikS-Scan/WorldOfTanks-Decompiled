@@ -13,6 +13,7 @@ from gui.impl.gen.view_models.views.lobby.crew.tooltips.vehicle_params_item impo
 from gui.impl.pub import ViewImpl
 from gui.shared.gui_items import KPI, getKpiAbilityFormatter
 from gui.impl import backport
+from gui.shared.items_parameters.params_helper import RELATIVE_PARAMS
 from gui.shared.items_parameters.param_name_helper import getVehicleParameterText
 from gui.shared.items_parameters import formatters as param_formatter
 from helpers import i18n
@@ -312,7 +313,9 @@ class BaseVehicleAdvancedParamsTooltipView(BaseVehicleParamsTooltipView):
 
     @staticmethod
     def __getIcon(parameter):
-        return R.images.gui.maps.icons.vehParams.big.dyn(parameter)
+        pathToIcons = R.images.gui.maps.icons.vehParams.big
+        defaultIcon = R.invalid() if parameter in RELATIVE_PARAMS else pathToIcons.param_not_found
+        return pathToIcons.dyn(parameter, defaultIcon)
 
     def __getKpiTitle(self):
         customTitlePath = R.strings.tank_setup.kpi.title.dyn(self._paramName)

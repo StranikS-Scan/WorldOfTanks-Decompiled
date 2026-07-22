@@ -1,0 +1,50 @@
+<TeamOfNations2025_Camo_Desert_name.xml>
+  <xmlns:czech1>	ussr	</xmlns:czech1>
+  <xmlns:germany>	germany	</xmlns:germany>
+  <xmlns:czech0>	usa	</xmlns:czech0>
+  <xmlns:china>	china	</xmlns:china>
+  <xmlns:france>	france	</xmlns:france>
+  <xmlns:uk>	uk	</xmlns:uk>
+  <xmlns:japan>	japan	</xmlns:japan>
+  <xmlns:czech>	czech	</xmlns:czech>
+  <xmlns:sweden>	sweden	</xmlns:sweden>
+  <xmlns:poland>	poland	</xmlns:poland>
+  <xmlns:italy>	italy	</xmlns:italy>
+  <xmlns:intunion>	intunion	</xmlns:intunion>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/transparent	</userString>
+    <season>	desert	</season>
+    <historical>	0	</historical>
+    <priceGroup>	MT camouflages 50g	</priceGroup>
+    <camouflage>
+      <id>	31278	</id>
+      <texture>	vehicles/intunion/Camouflage/TeamOfNations2025_Camo_Desert.dds	</texture>
+      <scales>	1.3 1 0.7	</scales>
+      <palettes>
+        <palette>
+          <c0>	161 135 91 255	</c0>
+          <c1>	68 79 50 255	</c1>
+          <c2>	0 0 0 0	</c2>
+          <c3>	0 0 0 0	</c3>
+        </palette>
+      </palettes>
+      <rotation>
+        <HULL>	-0.436332	</HULL>
+        <TURRET>	-0.436332	</TURRET>
+        <GUN>	-0.436332	</GUN>
+      </rotation>
+      <tilingSettings>
+        <type>	relative	</type>
+        <factor>	4.2 4.2	</factor>
+        <offset>	0 0	</offset>
+      </tilingSettings>
+      <description>	#vehicle_customization:TeamOfNations2025_Camo_Desert/description	</description>
+      <userString>	#vehicle_customization:TeamOfNations2025_Camo_Desert/name	</userString>
+    </camouflage>
+    <vehicleFilter>
+      <include>
+        <nations>	intunion	</nations>
+      </include>
+    </vehicleFilter>
+  </itemGroup>
+</TeamOfNations2025_Camo_Desert_name.xml>

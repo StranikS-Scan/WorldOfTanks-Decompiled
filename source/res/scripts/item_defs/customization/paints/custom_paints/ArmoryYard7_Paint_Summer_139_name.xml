@@ -1,0 +1,45 @@
+<ArmoryYard7_Paint_Summer_139_name.xml>
+  <itemGroup>
+    <name>	ArmoryYard7_Paint_139	</name>
+    <userString>	#vehicle_customization:repaint/color_group_04	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <paint>
+      <id>	31402	</id>
+      <color>	97 96 39 255	</color>
+      <gloss>	0.63	</gloss>
+      <metallic>	0.235	</metallic>
+      <season>	summer	</season>
+      <userString>	#vehicle_customization:ArmoryYard7_Paint_Summer_139/name	</userString>
+      <description>	#vehicle_customization:ArmoryYard7_Paint_Summer_139/description	</description>
+      <texture>	gui/maps/vehicles/repaints/china_color_01.png	</texture>
+    </paint>
+    <paint>
+      <id>	31403	</id>
+      <color>	104 134 143 255	</color>
+      <gloss>	0.63	</gloss>
+      <metallic>	0.235	</metallic>
+      <season>	winter	</season>
+      <userString>	#vehicle_customization:ArmoryYard7_Paint_Winter_139/name	</userString>
+      <description>	#vehicle_customization:ArmoryYard7_Paint_Winter_139/description	</description>
+      <texture>	gui/maps/vehicles/repaints/custom_color_39.png	</texture>
+    </paint>
+    <paint>
+      <id>	31404	</id>
+      <color>	102 79 51 255	</color>
+      <gloss>	0.63	</gloss>
+      <metallic>	0.235	</metallic>
+      <season>	desert	</season>
+      <userString>	#vehicle_customization:ArmoryYard7_Paint_Desert_139/name	</userString>
+      <description>	#vehicle_customization:ArmoryYard7_Paint_Desert_139/description	</description>
+      <texture>	gui/maps/vehicles/repaints/italy_color_02.png	</texture>
+    </paint>
+    <tags>	hiddenInUI	</tags>
+    <priceGroup>	paints 20g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+  </itemGroup>
+</ArmoryYard7_Paint_Summer_139_name.xml>

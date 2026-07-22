@@ -1,0 +1,192 @@
+<camouflage_ny_2022_east_label.xml>
+  <germany:G72_JagdPz_E1002>	ussr	</germany:G72_JagdPz_E1002>
+  <germany:G42_Maus4>	germany	</germany:G42_Maus4>
+  <germany:G72_JagdPz_E1001>	usa	</germany:G72_JagdPz_E1001>
+  <germany:G42_Maus1>	china	</germany:G42_Maus1>
+  <germany:G42_Maus3>	france	</germany:G42_Maus3>
+  <germany:G72_JagdPz_E1000>	uk	</germany:G72_JagdPz_E1000>
+  <germany:G42_Maus7>	japan	</germany:G42_Maus7>
+  <germany:G42_Maus2>	czech	</germany:G42_Maus2>
+  <germany:G42_Maus9>	sweden	</germany:G42_Maus9>
+  <germany:G42_Maus8>	poland	</germany:G42_Maus8>
+  <germany:G42_Maus6>	italy	</germany:G42_Maus6>
+  <germany:G42_Maus5>	intunion	</germany:G42_Maus5>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/opaque	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	MT camouflages 50g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R47_ISU-152_Zveroboj ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <camouflage>
+      <id>	364	</id>
+      <texture>	vehicles/russian/Camouflage/ny_2022_east.dds	</texture>
+      <description>	#vehicle_customization:camouflage/ny_2022_east/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/ny_2022_east/label	</userString>
+      <tags>	hiddenInUI fullRGB	</tags>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	255 0 0 255	</c0>
+          <c1>	0 255 0 255	</c1>
+          <c2>	0 0 255 255	</c2>
+          <c3>	0 0 0 255	</c3>
+        </palette>
+      </palettes>
+      <rotation>
+        <HULL>	0.174533	</HULL>
+        <TURRET>	0.174533	</TURRET>
+        <GUN>	0.174533	</GUN>
+      </rotation>
+      <tilingSettings>
+        <type>	relativeWithFactor	</type>
+        <factor>	2.6 2.6	</factor>
+        <offset>	2.28 -3.65	</offset>
+      </tilingSettings>
+    </camouflage>
+    <camouflage>
+      <id>	365	</id>
+      <texture>	vehicles/russian/Camouflage/ny_2022_newyear.dds	</texture>
+      <description>	#vehicle_customization:camouflage/ny_2022_newyear/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/ny_2022_newyear/label	</userString>
+      <tags>	hiddenInUI fullRGB	</tags>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	255 0 0 255	</c0>
+          <c1>	0 255 0 255	</c1>
+          <c2>	0 0 255 255	</c2>
+          <c3>	0 0 0 255	</c3>
+        </palette>
+      </palettes>
+      <rotation>
+        <HULL>	-0.39619	</HULL>
+        <TURRET>	-0.39619	</TURRET>
+        <GUN>	-0.39619	</GUN>
+      </rotation>
+      <tilingSettings>
+        <type>	relativeWithFactor	</type>
+        <factor>	3.5 3.5	</factor>
+        <offset>	-0.14 -0.55	</offset>
+      </tilingSettings>
+    </camouflage>
+    <camouflage>
+      <id>	366	</id>
+      <texture>	vehicles/russian/Camouflage/ny_2022_xmas.dds	</texture>
+      <description>	#vehicle_customization:camouflage/ny_2022_xmas/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/ny_2022_xmas/label	</userString>
+      <tags>	hiddenInUI fullRGB	</tags>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	255 0 0 255	</c0>
+          <c1>	0 255 0 255	</c1>
+          <c2>	0 0 255 255	</c2>
+          <c3>	0 0 0 255	</c3>
+        </palette>
+      </palettes>
+      <tiling>
+        <germany:G110_Typ_205>	3.12 3.12 0.45 0.01	</germany:G110_Typ_205>
+        <germany:G42_Maus>	3.21 3.21 0.01 0.01	</germany:G42_Maus>
+        <ussr:R230_Maus>	3.21 3.21 0.01 0.01	</ussr:R230_Maus>
+        <germany:G72_JagdPz_E100>	1.84 1.84 0.45 0.01	</germany:G72_JagdPz_E100>
+        <japan:J20_Type_2605>	2.61 2.61 0.45 0.01	</japan:J20_Type_2605>
+        <japan:J20_Type_2605_7x7>	2.61 2.61 0.45 0.01	</japan:J20_Type_2605_7x7>
+        <japan:J25_Type_4>	2.64 2.64 0.45 0.01	</japan:J25_Type_4>
+        <uk:GB32_Tortoise>	4.13 4.13 0.45 0.01	</uk:GB32_Tortoise>
+        <uk:GB83_FV4005>	3.2 3.2 0.45 0.01	</uk:GB83_FV4005>
+        <germany:G42_Maus0>	3.59 3.59 0.45 0.01	</germany:G42_Maus0>
+      </tiling>
+      <tilingSettings>
+        <type>	relative	</type>
+        <factor>	2.5 2.5	</factor>
+        <offset>	0.45 -1.64	</offset>
+      </tilingSettings>
+    </camouflage>
+    <camouflage>
+      <id>	367	</id>
+      <texture>	vehicles/russian/Camouflage/ny_2022_fantasy.dds	</texture>
+      <description>	#vehicle_customization:camouflage/ny_2022_fantasy/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/ny_2022_fantasy/label	</userString>
+      <tags>	hiddenInUI fullRGB	</tags>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	255 0 0 255	</c0>
+          <c1>	0 255 0 255	</c1>
+          <c2>	0 0 255 255	</c2>
+          <c3>	0 0 0 255	</c3>
+        </palette>
+      </palettes>
+      <tilingSettings>
+        <type>	relativeWithFactor	</type>
+        <factor>	3 3	</factor>
+        <offset>	-0.75 -0.72	</offset>
+      </tilingSettings>
+    </camouflage>
+    <camouflage>
+      <id>	368	</id>
+      <texture>	vehicles/russian/Camouflage/ny_2022_bro.dds	</texture>
+      <description>	#vehicle_customization:camouflage/ny_2022_bro/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/ny_2022_bro/label	</userString>
+      <tags>	hiddenInUI fullRGB	</tags>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	255 0 0 255	</c0>
+          <c1>	0 255 0 255	</c1>
+          <c2>	0 0 255 255	</c2>
+          <c3>	0 0 0 255	</c3>
+        </palette>
+      </palettes>
+      <rotation>
+        <HULL>	0.349066	</HULL>
+        <TURRET>	0.349066	</TURRET>
+        <GUN>	0.349066	</GUN>
+      </rotation>
+      <tilingSettings>
+        <type>	relativeWithFactor	</type>
+        <factor>	2 2	</factor>
+        <offset>	1.41 -0.13	</offset>
+      </tilingSettings>
+    </camouflage>
+    <camouflage>
+      <id>	378	</id>
+      <texture>	vehicles/russian/Camouflage/ny_2022_schwarz.dds	</texture>
+      <description>	#vehicle_customization:camouflage/ny_2022_schwarz/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/ny_2022_schwarz/label	</userString>
+      <tags>	hiddenInUI fullRGB	</tags>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	255 0 0 255	</c0>
+          <c1>	0 255 0 255	</c1>
+          <c2>	0 0 255 255	</c2>
+          <c3>	0 0 0 255	</c3>
+        </palette>
+      </palettes>
+      <rotation>
+        <HULL>	0.523599	</HULL>
+        <TURRET>	0.523599	</TURRET>
+        <GUN>	0.523599	</GUN>
+      </rotation>
+      <tiling>
+        <usa:A63_M46_Patton>	2.64 2.64 0.91 -0.02	</usa:A63_M46_Patton>
+      </tiling>
+      <tilingSettings>
+        <type>	relativeWithFactor	</type>
+        <factor>	2.6 2.6	</factor>
+        <offset>	0.91 -0.02	</offset>
+      </tilingSettings>
+    </camouflage>
+  </itemGroup>
+</camouflage_ny_2022_east_label.xml>

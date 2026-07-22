@@ -341,13 +341,14 @@ class SimpleImagePath(HasID):
 
 class ChainHint(ActionsHolder, HasTargetID):
 
-    def __init__(self, entityID, targetID, text, hasBox=None, arrow=None, padding=None, hideImmediately=False):
+    def __init__(self, entityID, targetID, text, hasBox=None, arrow=None, padding=None, hideImmediately=False, updateRuntime=False):
         super(ChainHint, self).__init__(entityID=entityID, targetID=targetID)
         self.__text = text
         self.__hasBox = hasBox
         self.__arrow = arrow
         self.__padding = padding
         self.__hideImmediately = hideImmediately
+        self.__updateRuntime = updateRuntime
 
     def getText(self):
         return self.__text
@@ -363,6 +364,9 @@ class ChainHint(ActionsHolder, HasTargetID):
 
     def getHideImmediately(self):
         return self.__hideImmediately
+
+    def getUpdateRuntime(self):
+        return self.__updateRuntime
 
 
 class PopUp(ActionsHolder):

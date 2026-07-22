@@ -17,17 +17,17 @@ from gui.impl.pub import ViewImpl
 from gui.limited_ui.lui_rules_storage import LuiRules
 from gui.platform.base.statuses.constants import StatusTypes
 from gui.platform.products_fetcher.fetch_result import FetchResult
-from gui.shared import EVENT_BUS_SCOPE, events
-from gui.shared import event_dispatcher as shared_events
-from gui.shared.event_dispatcher import showOfferGiftsWindow, showBrowserOverlayView, showShop, showWotPlusInfoPage, showSteamRedirectWotPlus, showWotPlusProductPage
+from gui.shared import EVENT_BUS_SCOPE, event_dispatcher as shared_events, events
+from gui.shared.event_dispatcher import showBrowserOverlayView, showOfferGiftsWindow, showShop, showSteamRedirectWotPlus, showWotPlusInfoPage, showWotPlusProductPage
 from helpers import dependency
-from skeletons.gui.game_control import IExternalLinksController, ISteamCompletionController, IWotPlusController, ILimitedUIController
+from skeletons.gui.game_control import IExternalLinksController, ILimitedUIController, ISteamCompletionController, IWotPlusController
+from skeletons.gui.impl import IGuiLoader
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.platform.product_fetch_controller import ISubscriptionsFetchController
 from skeletons.gui.platform.wgnp_controllers import IWGNPSteamAccRequestController
+from th_async import th_async, th_await
 from uilogging.wot_plus.loggers import WotPlusSubscriptionViewLogger
-from uilogging.wot_plus.logging_constants import WotPlusInfoPageSource, SubscriptionPageKeys
-from th_async import th_await, th_async
+from uilogging.wot_plus.logging_constants import SubscriptionPageKeys, WotPlusInfoPageSource
 _logger = logging.getLogger(__name__)
 if typing.TYPE_CHECKING:
     from typing import Optional, Dict, Any
@@ -75,6 +75,7 @@ class PlayerSubscriptionsView(ViewImpl):
     _steamCompletionCtrl = dependency.descriptor(ISteamCompletionController)
     _wotPlusCtrl = dependency.descriptor(IWotPlusController)
     __limitedUIController = dependency.descriptor(ILimitedUIController)
+    __gui = dependency.descriptor(IGuiLoader)
     __slots__ = ('__subscriptionsFetchResult', '__incompleteSteamAccount', '__subscriptions', '_wotPlusUILogger')
 
     def __init__(self, layoutID=R.views.lobby.player_subscriptions.PlayerSubscriptions()):
@@ -167,8 +168,10 @@ class PlayerSubscriptionsView(ViewImpl):
 
     def __onBackClick(self):
         self._wotPlusUILogger.logCloseEvent()
-        shared_events.showDashboardView()
+        if self.__gui.windowsManager.getViewByLayoutID(R.views.lobby.account_dashboard.AccountDashboard()) is None:
+            shared_events.showDashboardView()
         self.destroyWindow()
+        return
 
     def __onCardClick(self, args):
         id_ = args['subscriptionId']

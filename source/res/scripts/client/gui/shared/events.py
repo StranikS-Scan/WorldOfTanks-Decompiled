@@ -422,7 +422,7 @@ class TutorialEvent(SharedEvent):
     SET_HANGAR_HEADER_ENABLED = 'setHangarHeaderEnabled'
     OVERRIDE_BATTLE_SELECTOR_HINT = 'overrideBattleSelectorHint'
 
-    def __init__(self, eventType, settingsID='', targetID='', reloadIfRun=False, initialChapter=None, restoreIfRun=False, isStopForced=False, isAfterBattle=False, state=False, arguments=''):
+    def __init__(self, eventType, settingsID='', targetID='', reloadIfRun=False, initialChapter=None, restoreIfRun=False, isStopForced=False, isAfterBattle=False, state=False, arguments='', showWaiting=True):
         super(TutorialEvent, self).__init__(eventType)
         self.settingsID = settingsID
         self.targetID = targetID
@@ -433,6 +433,7 @@ class TutorialEvent(SharedEvent):
         self.isAfterBattle = isAfterBattle
         self.componentState = state
         self.arguments = arguments
+        self.showWaiting = showWaiting
 
     def getState(self):
         return {'reloadIfRun': self.reloadIfRun,

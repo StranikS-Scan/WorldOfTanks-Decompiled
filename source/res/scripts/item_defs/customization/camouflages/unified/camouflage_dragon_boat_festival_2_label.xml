@@ -1,0 +1,59 @@
+<camouflage_dragon_boat_festival_2_label.xml>
+  <germany:G10_PzIII_AusfJ1>	ussr	</germany:G10_PzIII_AusfJ1>
+  <germany:G102_Pz_III3>	germany	</germany:G102_Pz_III3>
+  <germany:G10_PzIII_AusfJ0>	usa	</germany:G10_PzIII_AusfJ0>
+  <germany:G102_Pz_III0>	china	</germany:G102_Pz_III0>
+  <germany:G102_Pz_III2>	france	</germany:G102_Pz_III2>
+  <germany:G102_Pz_III9>	uk	</germany:G102_Pz_III9>
+  <germany:G102_Pz_III6>	japan	</germany:G102_Pz_III6>
+  <germany:G102_Pz_III1>	czech	</germany:G102_Pz_III1>
+  <germany:G102_Pz_III8>	sweden	</germany:G102_Pz_III8>
+  <germany:G102_Pz_III7>	poland	</germany:G102_Pz_III7>
+  <germany:G102_Pz_III5>	italy	</germany:G102_Pz_III5>
+  <germany:G102_Pz_III4>	intunion	</germany:G102_Pz_III4>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/opaque	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	MT camouflages 50g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R47_ISU-152_Zveroboj ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <camouflage>
+      <id>	15943	</id>
+      <texture>	vehicles/russian/Camouflage/dragon_boat_festival_2.dds	</texture>
+      <description>	#vehicle_customization:camouflage/dragon_boat_festival_2/description	</description>
+      <scales>	1.2 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/dragon_boat_festival_2/label	</userString>
+      <tags>	hiddenInUI fullRGB	</tags>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	255 0 0 255	</c0>
+          <c1>	0 255 0 255	</c1>
+          <c2>	0 0 255 255	</c2>
+          <c3>	0 0 0 255	</c3>
+        </palette>
+      </palettes>
+      <tiling>
+        <france:F114_Projet_4_1>	1.24 1.24 -6.15 2.24	</france:F114_Projet_4_1>
+        <germany:G102_Pz_III>	1.93 1.93 2.82 1.59	</germany:G102_Pz_III>
+        <germany:G10_PzIII_AusfJ>	5.24 5.24 0.16 3.73	</germany:G10_PzIII_AusfJ>
+        <germany:G42_Maus>	3 3 -1.75 5.75	</germany:G42_Maus>
+        <ussr:R230_Maus>	3 3 -1.75 5.75	</ussr:R230_Maus>
+        <germany:G89_Leopard1>	3 3 -0.25 1.32	</germany:G89_Leopard1>
+        <italy:It13_Progetto_M35_mod_46>	1.53 1.53 -0.21 3.23	</italy:It13_Progetto_M35_mod_46>
+        <uk:GB83_FV4005>	2.67 2.67 -3.29 2.24	</uk:GB83_FV4005>
+        <usa:A129_T6_medium>	3.85 3.85 -1.3 5.17	</usa:A129_T6_medium>
+        <ussr:R80_KV1>	3.53 3.53 -0.95 0.03	</ussr:R80_KV1>
+      </tiling>
+      <tilingSettings>
+        <type>	relativewithfactor	</type>
+        <factor>	2.34 2.34	</factor>
+        <offset>	2.86 -2.51	</offset>
+      </tilingSettings>
+    </camouflage>
+  </itemGroup>
+</camouflage_dragon_boat_festival_2_label.xml>

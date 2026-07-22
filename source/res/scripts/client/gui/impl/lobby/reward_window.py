@@ -8,7 +8,7 @@ from gui.Scaleform.daapi.view.lobby.missions.awards_formatters import PackRentVe
 from gui.Scaleform.daapi.view.lobby.missions.missions_helper import getMissionInfoData
 from gui.Scaleform.daapi.view.lobby.store.browser.shop_helpers import getBuyPremiumUrl
 from gui.Scaleform.framework.entities.View import ViewKey
-from gui.impl.backport import TooltipData, BackportTooltipWindow
+from gui.impl.backport import BackportTooltipWindow, createTooltipData
 from gui.impl.gen import R
 from gui.impl.gen.view_models.ui_kit.reward_renderer_model import RewardRendererModel
 from gui.impl.gen.view_models.views.lobby.player_subscriptions.subscription_reward_view_model import SubscriptionRewardViewModel
@@ -114,7 +114,7 @@ class BaseRewardWindowContent(ViewImpl):
             self._setShowRewards(tx)
 
     def _initTooltip(self, bonus, index):
-        self.__items[index] = TooltipData(tooltip=bonus.get('tooltip', None), isSpecial=bonus.get('isSpecial', False), specialAlias=bonus.get('specialAlias', ''), specialArgs=bonus.get('specialArgs', None))
+        self.__items[index] = createTooltipData(tooltip=bonus.get('tooltip', None), isSpecial=bonus.get('isSpecial', False), specialAlias=bonus.get('specialAlias', ''), specialArgs=bonus.get('specialArgs', None))
         return
 
     def _setShowRewards(self, tx):

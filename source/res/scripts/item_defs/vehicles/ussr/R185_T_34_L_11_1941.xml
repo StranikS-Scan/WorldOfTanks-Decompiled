@@ -55,7 +55,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_11 armor_4	</primaryArmor>
     <weight>	13900	</weight>
-    <maxHealth>	448	</maxHealth>
+    <maxHealth>	500	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	130	</maxHealth>
       <maxRegenHealth>	85	</maxRegenHealth>
@@ -310,8 +310,8 @@
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
       <rotationSpeed>	37	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.29	</vehicleMovement>
-        <vehicleRotation>	0.29	</vehicleRotation>
+        <vehicleMovement>	0.20	</vehicleMovement>
+        <vehicleRotation>	0.20	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	90	</maxHealth>
@@ -1132,7 +1132,7 @@
           <trackPairIdx>	0	</trackPairIdx>
         </right>
       </physicalTracks>
-      <repairTime>	6.85714293	</repairTime>
+      <repairTime>	2.85003138	</repairTime>
     </Chassis_R185_T_34_L_11_1941>
   </chassis>
   <turrets0>
@@ -1153,7 +1153,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	3200	</weight>
-      <maxHealth>	112	</maxHealth>
+      <maxHealth>	120	</maxHealth>
       <rotationSpeed>	40	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	100	</maxHealth>
@@ -1184,13 +1184,13 @@
             <minPitch>	0 -25 1 -25	</minPitch>
             <maxPitch>	0 5 0.333333 5 0.361111 1 0.638889 1 0.666667 5 1 5	</maxPitch>
           </pitchLimits>
-          <reloadTime>	7	</reloadTime>
-          <shotDispersionRadius>	0.51	</shotDispersionRadius>
-          <aimingTime>	2.9	</aimingTime>
+          <reloadTime>	5.6	</reloadTime>
+          <shotDispersionRadius>	0.42	</shotDispersionRadius>
+          <aimingTime>	1.8	</aimingTime>
           <invisibilityFactorAtShot>	0.26	</invisibilityFactorAtShot>
           <shotDispersionFactors>
-            <turretRotation>	0.16	</turretRotation>
-            <afterShot>	4	</afterShot>
+            <turretRotation>	0.12	</turretRotation>
+            <afterShot>	2	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <models>

@@ -1,0 +1,42 @@
+<special_style_KanonenPanter_105.xml>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	MT 2D styles direct 1500g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	germany:G112_KanonenJagdPanzer_105	</vehicles>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	194	</id>
+      <texture>	gui/maps/vehicles/styles/KanonenPanter_105.png	</texture>
+      <modelsSet>	KanonenPanter	</modelsSet>
+      <maxNumber>	1	</maxNumber>
+      <userString>	#vehicle_customization:special_style/KanonenPanter_105	</userString>
+      <longDescriptionSpecial>	#vehicle_customization:special_style/KanonenPanter_105_desc/long	</longDescriptionSpecial>
+      <tags>	progression_required	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	1	</id>
+              <appliedTo>	16	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+        </outfit>
+      </outfits>
+    </style>
+  </itemGroup>
+</special_style_KanonenPanter_105.xml>

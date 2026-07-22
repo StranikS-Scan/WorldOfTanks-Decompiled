@@ -8,7 +8,7 @@
   <supplySlots>	1 1 6 6 8 8 8	</supplySlots>
   <speedLimits>
     <forward>	40	</forward>
-    <backward>	12	</backward>
+    <backward>	16	</backward>
   </speedLimits>
   <invisibility>
     <moving>	0.226	</moving>
@@ -61,7 +61,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	6590	</weight>
-    <maxHealth>	236	</maxHealth>
+    <maxHealth>	450	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	100	</maxHealth>
       <maxRegenHealth>	70	</maxRegenHealth>
@@ -1354,8 +1354,8 @@
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
       <rotationSpeed>	34	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.32	</vehicleMovement>
-        <vehicleRotation>	0.32	</vehicleRotation>
+        <vehicleMovement>	0.26	</vehicleMovement>
+        <vehicleRotation>	0.26	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	60	</maxHealth>
@@ -2203,7 +2203,7 @@
           <camouflage></camouflage>
         </customizableVehicleAreas>
       </customization>
-      <repairTime>	5.71428585	</repairTime>
+      <repairTime>	2.28001642	</repairTime>
     </MarderII>
     <MarderIIketten_ausf_B>
       <userString>	#germany_vehicles:MarderIIketten_ausf_B	</userString>
@@ -2221,8 +2221,8 @@
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
       <rotationSpeed>	38	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.3	</vehicleMovement>
-        <vehicleRotation>	0.3	</vehicleRotation>
+        <vehicleMovement>	0.24	</vehicleMovement>
+        <vehicleRotation>	0.24	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	70	</maxHealth>
@@ -3070,7 +3070,7 @@
           <camouflage></camouflage>
         </customizableVehicleAreas>
       </customization>
-      <repairTime>	5.71428585	</repairTime>
+      <repairTime>	2.28001642	</repairTime>
     </MarderIIketten_ausf_B>
   </chassis>
   <turrets0>
@@ -3087,7 +3087,7 @@
         <armor_8>	8	</armor_8>
       </armor>
       <weight>	100	</weight>
-      <maxHealth>	59	</maxHealth>
+      <maxHealth>	50	</maxHealth>
       <rotationSpeed>	26	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	100	</maxHealth>
@@ -3112,8 +3112,8 @@
             </gun>
           </unlocks>
           <shotDispersionFactors>
-            <turretRotation>	0.2	</turretRotation>
-            <afterShot>	4	</afterShot>
+            <turretRotation>	0.10	</turretRotation>
+            <afterShot>	2	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <armor>
@@ -3123,8 +3123,8 @@
             </armor_2>
             <gun>	20	</gun>
           </armor>
-          <shotDispersionRadius>	0.44	</shotDispersionRadius>
-          <aimingTime>	2.7	</aimingTime>
+          <shotDispersionRadius>	0.40	</shotDispersionRadius>
+          <aimingTime>	1.8	</aimingTime>
           <invisibilityFactorAtShot>	0.247	</invisibilityFactorAtShot>
           <turretYawLimits>	-32 25	</turretYawLimits>
           <models>
@@ -3180,8 +3180,8 @@
           </pitchLimits>
           <reloadTime>	4.8	</reloadTime>
           <shotDispersionFactors>
-            <turretRotation>	0.18	</turretRotation>
-            <afterShot>	4	</afterShot>
+            <turretRotation>	0.10	</turretRotation>
+            <afterShot>	2	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <armor>
@@ -3190,7 +3190,7 @@
             <gun>	20	</gun>
           </armor>
           <shotDispersionRadius>	0.4	</shotDispersionRadius>
-          <aimingTime>	2.5	</aimingTime>
+          <aimingTime>	1.6	</aimingTime>
           <invisibilityFactorAtShot>	0.247	</invisibilityFactorAtShot>
           <turretYawLimits>	-32 25	</turretYawLimits>
           <models>

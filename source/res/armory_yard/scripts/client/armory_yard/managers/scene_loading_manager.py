@@ -59,6 +59,7 @@ class SceneLoadingManager(object):
             self.__sceneIsLoaded = False
             self.__hangarSwitchController.customEventModeEnabled = False
             self.__hangarSwitchController.onCheckSceneChange -= self.__updateHangarScene
+            self.__hangarSpace.setSelectionEnabled(False)
             if isReload:
                 self.__hangarSwitchController.processPossibleSceneChange()
 

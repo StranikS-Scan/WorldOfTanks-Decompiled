@@ -1,0 +1,81 @@
+<camouflage_football_event_2022_1_label.xml>
+  <xmlns:czech1>	ussr	</xmlns:czech1>
+  <xmlns:germany>	germany	</xmlns:germany>
+  <xmlns:czech0>	usa	</xmlns:czech0>
+  <xmlns:china>	china	</xmlns:china>
+  <xmlns:france>	france	</xmlns:france>
+  <xmlns:uk>	uk	</xmlns:uk>
+  <xmlns:japan>	japan	</xmlns:japan>
+  <xmlns:czech>	czech	</xmlns:czech>
+  <xmlns:sweden>	sweden	</xmlns:sweden>
+  <xmlns:poland>	poland	</xmlns:poland>
+  <xmlns:italy>	italy	</xmlns:italy>
+  <xmlns:intunion>	intunion	</xmlns:intunion>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/transparent	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	MT camouflages 50g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R47_ISU-152_Zveroboj ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <camouflage>
+      <id>	464	</id>
+      <texture>	vehicles/russian/Camouflage/football_event_2022_1.dds	</texture>
+      <description>	#vehicle_customization:camouflage/football_event_2022_1/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/football_event_2022_1/label	</userString>
+      <tags>	hiddenInUI	</tags>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	199 89 85 255	</c0>
+          <c1>	116 151 163 255	</c1>
+          <c2>	20 36 51 255	</c2>
+          <c3>	31 59 74 255	</c3>
+        </palette>
+      </palettes>
+      <rotation>
+        <HULL>	1.406561	</HULL>
+        <TURRET>	1.406561	</TURRET>
+        <GUN>	1.406561	</GUN>
+      </rotation>
+      <tilingSettings>
+        <type>	relativewithfactor	</type>
+        <factor>	2.36 2.36	</factor>
+        <offset>	-0.14 0.14	</offset>
+      </tilingSettings>
+    </camouflage>
+    <camouflage>
+      <id>	465	</id>
+      <texture>	vehicles/russian/Camouflage/football_event_2022_2.dds	</texture>
+      <description>	#vehicle_customization:camouflage/football_event_2022_2/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/football_event_2022_2/label	</userString>
+      <tags>	hiddenInUI	</tags>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	191 142 76 255	</c0>
+          <c1>	40 184 167 255	</c1>
+          <c2>	25 18 40 255	</c2>
+          <c3>	41 19 64 255	</c3>
+        </palette>
+      </palettes>
+      <rotation>
+        <HULL>	1.739744	</HULL>
+        <TURRET>	1.739744	</TURRET>
+        <GUN>	1.739744	</GUN>
+      </rotation>
+      <tilingSettings>
+        <type>	relativewithfactor	</type>
+        <factor>	2.36 2.36	</factor>
+        <offset>	-3.32 1.53	</offset>
+      </tilingSettings>
+      <gloss>	0.49 0.57 0.49 0.49	</gloss>
+      <metallic>	0.23 0.27 0.23 0.23	</metallic>
+    </camouflage>
+  </itemGroup>
+</camouflage_football_event_2022_1_label.xml>

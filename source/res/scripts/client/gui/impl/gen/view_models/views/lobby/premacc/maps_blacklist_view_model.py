@@ -4,9 +4,9 @@ from frameworks.wulf import ViewModel
 from gui.impl.gen.view_models.ui_kit.list_model import ListModel
 
 class MapsBlacklistViewModel(ViewModel):
-    __slots__ = ('onBackAction', 'onCloseEvent', 'onMapAddToBlacklistEvent', 'onMapRemoveFromBlacklistEvent', 'onFilterReset', 'onInitialized', 'onFilterClick')
+    __slots__ = ('onBackAction', 'onCloseEvent', 'onMapAddToBlacklistEvent', 'onMapRemoveFromBlacklistEvent', 'onFilterReset', 'onInitialized', 'onFilterClick', 'onBuyPremiumClick', 'onGetSubscriptionClick')
 
-    def __init__(self, properties=8, commands=7):
+    def __init__(self, properties=8, commands=9):
         super(MapsBlacklistViewModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -80,3 +80,5 @@ class MapsBlacklistViewModel(ViewModel):
         self.onFilterReset = self._addCommand('onFilterReset')
         self.onInitialized = self._addCommand('onInitialized')
         self.onFilterClick = self._addCommand('onFilterClick')
+        self.onBuyPremiumClick = self._addCommand('onBuyPremiumClick')
+        self.onGetSubscriptionClick = self._addCommand('onGetSubscriptionClick')

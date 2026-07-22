@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/auxiliary/bonus_list_manager.py
 from gui.impl.auxiliary.rewards_helper import getRewardRendererModelPresenter
-from gui.impl.backport import createTooltipData, BackportTooltipWindow, TooltipData
+from gui.impl.backport import createTooltipData, BackportTooltipWindow
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.blueprints.blueprint_screen_tooltips import BlueprintScreenTooltips
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
@@ -25,7 +25,7 @@ class BonusListManager(object):
             rewardsList.addViewModel(rewardRender)
             compensationReason = reward.get('compensationReason', None)
             ttTarget = compensationReason if compensationReason is not None else reward
-            self.__tooltipsData[index] = TooltipData(tooltip=ttTarget.get('tooltip', None), isSpecial=ttTarget.get('isSpecial', False), specialAlias=ttTarget.get('specialAlias', ''), specialArgs=ttTarget.get('specialArgs', None))
+            self.__tooltipsData[index] = createTooltipData(tooltip=ttTarget.get('tooltip', None), isSpecial=ttTarget.get('isSpecial', False), specialAlias=ttTarget.get('specialAlias', ''), specialArgs=ttTarget.get('specialArgs', None))
 
         rewardsList.invalidate()
         return

@@ -8,7 +8,6 @@ from gui.Scaleform.daapi.view.lobby.header.LobbyHeader import HeaderMenuVisibili
 from gui.Scaleform.daapi.view.lobby.store.browser.shop_helpers import getBonsDevicesUrl, getBonsVehiclesUrl, getBonsInstructionsUrl, getComp7ProductsUrl
 from gui.impl.auxiliary.layer_monitor import LayerMonitor
 from gui.impl.backport.backport_system_locale import getIntegralFormat
-from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.crystals_promo.battle_type_model import BattleTypeModel
 from gui.impl.gen.view_models.views.lobby.crystals_promo.condition_model import ConditionModel
 from gui.impl.gen.view_models.views.lobby.crystals_promo.crystals_promo_view_model import CrystalsPromoViewModel
@@ -20,6 +19,7 @@ from gui.shop import showIngameShop, Origin
 from gui.sounds.filters import switchHangarOverlaySoundFilter
 from helpers import dependency, server_settings
 from skeletons.gui.app_loader import IAppLoader
+from skeletons.gui.game_control import IRankedBattlesController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 _DEFAULT_VEHICLE_PRICE = 3000
@@ -30,12 +30,15 @@ _DEFAULT_LEVEL = 10
 _COMP7_TOP_2 = 2
 _COMP7_TOP_5 = 5
 _COMP7_TOP_7 = 7
-_STR_PATH = R.strings.menu.crystals.info.tab.get
-_IMG_PATH = R.images.gui.maps.icons.crystalsInfo.get
-_SHOWED_BONUS_TYPES = (ARENA_BONUS_TYPE.REGULAR, ARENA_BONUS_TYPE.EPIC_RANDOM, ARENA_BONUS_TYPE.COMP7)
-_BONUS_TYPE_INFO = {ARENA_BONUS_TYPE.REGULAR: 'random',
- ARENA_BONUS_TYPE.EPIC_RANDOM: 'general',
- ARENA_BONUS_TYPE.COMP7: 'comp7'}
+_RANKED_TOP_7 = 7
+_SHOWED_BONUS_TYPES = (ARENA_BONUS_TYPE.REGULAR,
+ ARENA_BONUS_TYPE.EPIC_RANDOM,
+ ARENA_BONUS_TYPE.COMP7,
+ ARENA_BONUS_TYPE.RANKED)
+_BONUS_TYPE_INFO = {ARENA_BONUS_TYPE.REGULAR: BattleTypeModel.RANDOM,
+ ARENA_BONUS_TYPE.EPIC_RANDOM: BattleTypeModel.GENERAL,
+ ARENA_BONUS_TYPE.COMP7: BattleTypeModel.COMP7,
+ ARENA_BONUS_TYPE.RANKED: BattleTypeModel.RANKED}
 _shopUrlsMap = {CrystalsPromoViewModel.TANKS_TAB: getBonsVehiclesUrl(),
  CrystalsPromoViewModel.EQUIPMENT_TAB: getBonsDevicesUrl(),
  CrystalsPromoViewModel.INSTRUCTIONS_TAB: getBonsInstructionsUrl(),
@@ -45,6 +48,7 @@ class CrystalsPromoView(ViewImpl):
     __slots__ = ('__visibility', '__destroyViewObject')
     __lobbyContext = dependency.descriptor(ILobbyContext)
     __appLoader = dependency.descriptor(IAppLoader)
+    __rankedController = dependency.descriptor(IRankedBattlesController)
     _itemsCache = dependency.descriptor(IItemsCache)
 
     def __init__(self, layoutID, visibility=HeaderMenuVisibilityState.ALL):
@@ -113,9 +117,22 @@ class CrystalsPromoView(ViewImpl):
         criteria = REQ_CRITERIA.OPTIONAL_DEVICE.DELUXE
         return self._getMinCrystalPrice(itemId, criteria, _DEFAULT_EQUIPMENT_PRICE)
 
-    def __updateCondition(self, model):
+    def __getBattleTypeItems(self):
         config = self.__lobbyContext.getServerSettings().getCrystalRewardConfig().getRewardInfoData()
-        items = [ item for item in config if item.arenaType in _SHOWED_BONUS_TYPES and item.level == _DEFAULT_LEVEL ]
+        items = []
+        for item in config:
+            if item.arenaType not in _SHOWED_BONUS_TYPES:
+                continue
+            if item.arenaType == ARENA_BONUS_TYPE.RANKED:
+                if self.__rankedController.isAvailable() and item.level == self.__rankedController.getSuitableVehicleLevels()[-1]:
+                    items.append(item)
+            if item.level == _DEFAULT_LEVEL:
+                items.append(item)
+
+        return items
+
+    def __updateCondition(self, model):
+        items = self.__getBattleTypeItems()
         model.battleTypes.clearItems()
         battleTypes = model.battleTypes.getItems()
         for item in sorted(items, key=lambda item: _SHOWED_BONUS_TYPES.index(item.arenaType)):
@@ -141,15 +158,16 @@ class CrystalsPromoView(ViewImpl):
         bonusTypeLabel = _BONUS_TYPE_INFO[item.arenaType]
         if item.arenaType == ARENA_BONUS_TYPE.COMP7:
             tops = [cls.__createConditionModel(_COMP7_TOP_2, item.winTop2, item.loseTop2), cls.__createConditionModel(_COMP7_TOP_5, item.winTop5, item.loseTop5), cls.__createConditionModel(_COMP7_TOP_7, item.winTop7, item.loseTop7)]
+        elif item.arenaType == ARENA_BONUS_TYPE.RANKED:
+            tops = [cls.__createConditionModel(item.firstTopLength, item.winTop3, item.loseTop3), cls.__createConditionModel(_RANKED_TOP_7, item.winTop7, item.loseTop7), cls.__createConditionModel(item.topLength, item.winTop10, item.loseTop10)]
         else:
             tops = [cls.__createConditionModel(item.firstTopLength, item.winTop3, item.loseTop3), cls.__createConditionModel(item.topLength, item.winTop10, item.loseTop10)]
-        model.addViewModel(cls.__createBattleTypeModel(_STR_PATH.dyn(bonusTypeLabel)(), _IMG_PATH.dyn(bonusTypeLabel)(), tops))
+        model.addViewModel(cls.__createBattleTypeModel(bonusTypeLabel, tops))
 
     @staticmethod
-    def __createBattleTypeModel(title, icon, conditions):
+    def __createBattleTypeModel(type, conditions):
         battleType = BattleTypeModel()
-        battleType.setTitle(title)
-        battleType.setIcon(icon)
+        battleType.setBattleType(type)
         for condition in conditions:
             battleType.conditions.addViewModel(condition)
 

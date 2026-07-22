@@ -1,0 +1,51 @@
+<WebEventHW_Camo_Turret_138_name.xml>
+  <xmlns:china2>	ussr	</xmlns:china2>
+  <xmlns:germany>	germany	</xmlns:germany>
+  <xmlns:china1>	usa	</xmlns:china1>
+  <xmlns:china>	china	</xmlns:china>
+  <xmlns:france>	france	</xmlns:france>
+  <xmlns:china0>	uk	</xmlns:china0>
+  <xmlns:japan>	japan	</xmlns:japan>
+  <xmlns:czech>	czech	</xmlns:czech>
+  <xmlns:sweden>	sweden	</xmlns:sweden>
+  <xmlns:poland>	poland	</xmlns:poland>
+  <xmlns:italy>	italy	</xmlns:italy>
+  <xmlns:intunion>	intunion	</xmlns:intunion>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/opaque	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <tags>	hiddenInUI vehicleBound fullRGB	</tags>
+    <priceGroup>	MT camouflages 50g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	usa:A23_M7_med_02	</vehicles>
+        <nations>	usa	</nations>
+        <levels>	5	</levels>
+      </include>
+    </vehicleFilter>
+    <camouflage>
+      <id>	31410	</id>
+      <texture>	vehicles/russian/Camouflage/WebEventHW_Camo_Turret_138.dds	</texture>
+      <scales>	1.3 1 0.7	</scales>
+      <palettes>
+        <palette>
+          <c0>	255 0 0 255	</c0>
+          <c1>	0 255 0 255	</c1>
+          <c2>	0 0 255 255	</c2>
+          <c3>	0 0 0 255	</c3>
+        </palette>
+      </palettes>
+      <glossMetallicMap>	vehicles/russian/Camouflage/WebEventHW_Camo_Turret_138_GMM.dds	</glossMetallicMap>
+      <userString>	#vehicle_customization:WebEventHW_Camo_Turret_138/name	</userString>
+      <description>	#vehicle_customization:WebEventHW_Camo_Turret_138/description	</description>
+      <tiling>
+        <usa:A23_M7_med_02>	1.77 1.77 -0.13 0	</usa:A23_M7_med_02>
+      </tiling>
+      <tilingSettings>
+        <factor>	1 1	</factor>
+        <offset>	0.0 0.0	</offset>
+      </tilingSettings>
+    </camouflage>
+  </itemGroup>
+</WebEventHW_Camo_Turret_138_name.xml>

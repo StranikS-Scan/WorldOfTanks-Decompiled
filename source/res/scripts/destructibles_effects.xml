@@ -7581,6 +7581,54 @@
         </effects>
       </variant1>
     </hd_env_UNI_007_SnagHeap_burning_06>
+    <hd_env_UNI_0085_OldTruck_01_hit>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/environment/objects/hd_env_su_045_gazm20.eff	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_generative	</wwsound>
+            <params>
+              <debrisAmount>	80.000000	</debrisAmount>
+              <weight>	7000.000000	</weight>
+              <metal_1>	30.000000	</metal_1>
+              <metal_2>	45.000000	</metal_2>
+            </params>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </hd_env_UNI_0085_OldTruck_01_hit>
+    <hd_env_UNI_0085_OldTruck_01_ram>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/environment/objects/hd_env_su_045_gazm20_ram.eff	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_generative	</wwsound>
+            <params>
+              <debrisAmount>	80.000000	</debrisAmount>
+              <weight>	7000.000000	</weight>
+              <metal_1>	30.000000	</metal_1>
+              <metal_2>	45.000000	</metal_2>
+            </params>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </hd_env_UNI_0085_OldTruck_01_ram>
     <hd_env_UNI_020_Gold_01>
       <variant1>
         <stages>

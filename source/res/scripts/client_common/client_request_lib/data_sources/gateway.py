@@ -644,6 +644,12 @@ class GatewayDataAccessor(base.BaseDataAccessor):
         get_params = {'event_id': req_event_ids}
         return self._request_data(callback, url, get_data=get_params, method='GET')
 
+    def get_gift_system_wait_response(self, callback, req_event_id, meta_info):
+        url = '/giftsystem/wait_response/players'
+        get_params = {'event_id': req_event_id}
+        get_params.update(meta_info)
+        return self._request_data(callback, url, get_data=get_params, method='GET')
+
     def post_gift_system_gift(self, callback, entitlement_code, receiver_id, meta_info):
         url = '/giftsystem/gift'
         post_data = {'entitlement_code': entitlement_code,

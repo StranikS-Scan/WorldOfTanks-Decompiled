@@ -168,6 +168,11 @@ class OffersDataProvider(IOffersDataProvider):
 
     @_ifFeatureDisabled(())
     @_ifNotSynced(())
+    def getAllOffers(self):
+        return list(self._ioffers())
+
+    @_ifFeatureDisabled(())
+    @_ifNotSynced(())
     def iAvailableOffers(self, onlyVisible=True):
         for offer in self._ioffers():
             if offer.isOfferAvailable:

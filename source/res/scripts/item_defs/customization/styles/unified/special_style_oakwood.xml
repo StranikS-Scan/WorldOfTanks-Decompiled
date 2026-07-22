@@ -1,0 +1,67 @@
+<special_style_oakwood.xml>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	MT 2D styles universal 1000g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <style>
+      <id>	643	</id>
+      <texture>	gui/maps/vehicles/styles/oakwood.png	</texture>
+      <description>	#vehicle_customization:special_style/oakwood_desc	</description>
+      <userString>	#vehicle_customization:special_style/oakwood	</userString>
+      <longDescriptionSpecial>	#vehicle_customization:special_style/oakwood_desc/long	</longDescriptionSpecial>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	429	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <modifications>
+            <item>	4	</item>
+          </modifications>
+          <paints>
+            <item>
+              <id>	325	</id>
+              <appliedTo>	22391	</appliedTo>
+            </item>
+          </paints>
+        </outfit>
+      </outfits>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+      <alternateItems>
+        <camouflage>
+          <id>	429 430	</id>
+        </camouflage>
+        <paint>
+          <id>	325 326	</id>
+        </paint>
+      </alternateItems>
+      <dependencies>
+        <camouflage>
+          <id>	429	</id>
+          <paint>	325	</paint>
+        </camouflage>
+        <camouflage>
+          <id>	430	</id>
+          <paint>	326	</paint>
+        </camouflage>
+      </dependencies>
+    </style>
+  </itemGroup>
+</special_style_oakwood.xml>

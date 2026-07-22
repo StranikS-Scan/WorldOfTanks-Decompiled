@@ -8,6 +8,7 @@ else:
 PyObjectArray = _py_objects.PyObjectArray
 PyObjectCommand = _py_objects.PyObjectCommand
 PyGuiApplication = _py_objects.PyGuiApplication
+ResourceDescriptor = _py_objects.PyResourceDescriptor
 PyObjectViewSettings = _py_objects.PyObjectViewSettings
 PyObjectView = _py_objects.PyObjectView
 PyObjectViewModel = _py_objects.PyObjectViewModel
@@ -29,4 +30,5 @@ getRealFormat = _py_objects.getRealFormat
 getTimeFormat = _py_objects.getTimeFormat
 getDateFormat = _py_objects.getDateFormat
 caseMap = _py_objects.caseMap
-__all__ = ('PyObjectArray', 'PyObjectCommand', 'PyGuiApplication', 'PyObjectViewSettings', 'PyObjectView', 'PyObjectViewModel', 'PyObjectWindowSettings', 'PyObjectWindow', 'PyObjectWindowsArea', 'isTranslatedKeyValid', 'isTranslatedTextExisted', 'getTranslatedText', 'getTranslatedPluralText', 'getImagePath', 'getSoundEffectId', 'getLayoutPath', 'getTranslatedTextByResId', 'getTranslatedPluralTextByResId', 'getTranslatedKey', 'getNumberFormat', 'getRealFormat', 'getTimeFormat', 'getDateFormat', 'caseMap')
+ResourceType = _py_objects.PyResourceType
+__all__ = ('PyObjectArray', 'PyObjectCommand', 'PyGuiApplication', 'ResourceDescriptor', 'PyObjectViewSettings', 'PyObjectView', 'PyObjectViewModel', 'PyObjectWindowSettings', 'PyObjectWindow', 'PyObjectWindowsArea', 'isTranslatedKeyValid', 'isTranslatedTextExisted', 'getTranslatedText', 'getTranslatedPluralText', 'getImagePath', 'getSoundEffectId', 'getLayoutPath', 'getTranslatedTextByResId', 'getTranslatedPluralTextByResId', 'getTranslatedKey', 'getNumberFormat', 'getRealFormat', 'getTimeFormat', 'getDateFormat', 'caseMap', 'ResourceType')

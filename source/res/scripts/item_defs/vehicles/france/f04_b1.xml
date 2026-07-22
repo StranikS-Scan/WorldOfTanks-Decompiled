@@ -10,7 +10,7 @@
   <supplySlots>	1 1 1 6 6 6 8 8 8	</supplySlots>
   <speedLimits>
     <forward>	30	</forward>
-    <backward>	10	</backward>
+    <backward>	14	</backward>
   </speedLimits>
   <invisibility>
     <moving>	0.072	</moving>
@@ -54,7 +54,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	18500.0	</weight>
-    <maxHealth>	528	</maxHealth>
+    <maxHealth>	600	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	140	</maxHealth>
       <maxRegenHealth>	90	</maxRegenHealth>
@@ -2191,17 +2191,13 @@
           <camouflage></camouflage>
         </customizableVehicleAreas>
       </customization>
-      <repairTime>	6.85714293	</repairTime>
+      <repairTime>	2.85003138	</repairTime>
     </Chassis_B1>
     <Chassis_B1_2>
       <userString>	#france_vehicles:Chassis_B1_2	</userString>
       <tags></tags>
       <level>	4	</level>
       <price>	4680	</price>
-      <unlocks>
-        <vehicle>	F05_BDR_G1B	  <cost>	15800	</cost>
-        </vehicle>
-      </unlocks>
       <armor>
         <leftTrack>	20	</leftTrack>
         <rightTrack>	20	</rightTrack>
@@ -3095,13 +3091,17 @@
           <camouflage></camouflage>
         </customizableVehicleAreas>
       </customization>
-      <repairTime>	6.85714293	</repairTime>
+      <repairTime>	2.85003138	</repairTime>
     </Chassis_B1_2>
   </chassis>
   <turrets0>
     <Turret_1_B1>
       <userString>	#france_vehicles:Turret_1_B1	</userString>
       <tags></tags>
+      <unlocks>
+        <turret>	Turret_2_B1	  <cost>	1220	</cost>
+        </turret>
+      </unlocks>
       <level>	3	</level>
       <price>	1950	</price>
       <armor>
@@ -3115,7 +3115,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	1700	</weight>
-      <maxHealth>	102	</maxHealth>
+      <maxHealth>	100	</maxHealth>
       <rotationSpeed>	30	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	100	</maxHealth>
@@ -3129,87 +3129,7 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_47mm_SA34>	shared	  <maxAmmo>	225	</maxAmmo>
-          <unlocks>
-            <gun>	_47mm_SA35	  <cost>	265	</cost>
-            </gun>
-          </unlocks>
-          <armor>
-            <armor_1>	30	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_1>
-            <armor_2>	20	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_2>
-            <armor_3>	20	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_3>
-            <armor_4>	0	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_4>
-            <armor_5>	15	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_5>
-            <gun>	15	</gun>
-          </armor>
-          <shotDispersionFactors>
-            <turretRotation>	0.1	</turretRotation>
-            <afterShot>	3	</afterShot>
-            <whileGunDamaged>	2.0	</whileGunDamaged>
-          </shotDispersionFactors>
-          <aimingTime>	1.7	</aimingTime>
-          <pitchLimits>
-            <minPitch>	0 -12 1 -12	</minPitch>
-            <maxPitch>	0 5 0.111111 5 0.174773 10 0.380783 10 0.444444 0 0.555556 0 0.619218 10 0.825227 10 0.888889 5 1 5	</maxPitch>
-          </pitchLimits>
-          <shotDispersionRadius>	0.53	</shotDispersionRadius>
-          <reloadTime>	2.3	</reloadTime>
-          <invisibilityFactorAtShot>	0.29	</invisibilityFactorAtShot>
-          <models>
-            <undamaged>	vehicles/french/F04_B1/normal/lod0/Gun_01.model	</undamaged>
-            <destroyed>	vehicles/french/F04_B1/crash/lod0/Gun_01.model	</destroyed>
-            <exploded>	vehicles/french/F04_B1/crash/lod0/Gun_01.model	</exploded>
-          </models>
-          <hitTester>
-            <collisionModelServer>	vehicles/french/F04_B1/collision/Gun_01.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/french/F04_B1/collision_client/Gun_01.model	</collisionModelClient>
-          </hitTester>
-          <effects>	shot_small	</effects>
-          <reloadEffect>	reload20_45	</reloadEffect>
-          <customizationSlots>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41000	</slotId>
-              <anchorPosition>	-0.000002 -0.011623 0.548536	</anchorPosition>
-              <anchorDirection>	0 0.000348 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41001	</slotId>
-              <anchorPosition>	0.000005 0.226539 0.132014	</anchorPosition>
-              <anchorDirection>	-0 0.707107 0.707107	</anchorDirection>
-              <applyTo>	16384	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	camouflage	</slotType>
-              <slotId>	42000	</slotId>
-              <anchorPosition>	-0.000003 -0.011624 0.548536	</anchorPosition>
-              <anchorDirection>	-0 0.000368 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-          </customizationSlots>
-          <customization>
-            <customizableVehicleAreas>
-              <paint>	GUN GUN_2	</paint>
-              <camouflage>	GUN	</camouflage>
-            </customizableVehicleAreas>
-          </customization>
-          <camouflage>
-            <density>	118.354 118.307	</density>
-            <aoTextureSize>	256 256	</aoTextureSize>
-          </camouflage>
-        </_47mm_SA34>
         <_47mm_SA35>	shared	  <maxAmmo>	195	</maxAmmo>
-          <unlocks>
-            <turret>	Turret_2_B1	  <cost>	1220	</cost>
-            </turret>
-          </unlocks>
           <armor>
             <armor_1>	30	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_1>
@@ -3225,14 +3145,14 @@
           </armor>
           <shotDispersionFactors>
             <turretRotation>	0.1	</turretRotation>
-            <afterShot>	3	</afterShot>
+            <afterShot>	2	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <pitchLimits>
             <minPitch>	0 -18 1 -18	</minPitch>
             <maxPitch>	0 7 0.166667 7 0.230329 18 0.297449 18 0.361111 0 0.638889 0 0.702551 18 0.769671 18 0.833333 7 1 7	</maxPitch>
           </pitchLimits>
-          <shotDispersionRadius>	0.47	</shotDispersionRadius>
+          <shotDispersionRadius>	0.37	</shotDispersionRadius>
           <reloadTime>	2.3	</reloadTime>
           <aimingTime>	1.7	</aimingTime>
           <invisibilityFactorAtShot>	0.29	</invisibilityFactorAtShot>
@@ -3695,7 +3615,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	2000	</weight>
-      <maxHealth>	132	</maxHealth>
+      <maxHealth>	120	</maxHealth>
       <rotationSpeed>	30	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	100	</maxHealth>
@@ -3710,78 +3630,6 @@
       </surveyingDeviceHealth>
       <invisibilityFactor>	0.903	</invisibilityFactor>
       <guns>
-        <_47mm_SA34>	shared	  <maxAmmo>	225	</maxAmmo>
-          <armor>
-            <armor_1>	30	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_1>
-            <armor_2>	20	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_2>
-            <armor_3>	20	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_3>
-            <armor_4>	0	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_4>
-            <armor_5>	15	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_5>
-            <gun>	15	</gun>
-          </armor>
-          <shotDispersionRadius>	0.52	</shotDispersionRadius>
-          <reloadTime>	2.1	</reloadTime>
-          <shotDispersionFactors>
-            <turretRotation>	0.08	</turretRotation>
-            <afterShot>	3	</afterShot>
-            <whileGunDamaged>	2.0	</whileGunDamaged>
-          </shotDispersionFactors>
-          <aimingTime>	1.5	</aimingTime>
-          <pitchLimits>
-            <minPitch>	0 -18 1 -18	</minPitch>
-            <maxPitch>	0 18 0.380783 18 0.444444 7 0.555556 7 0.619218 18 1 18	</maxPitch>
-          </pitchLimits>
-          <invisibilityFactorAtShot>	0.29	</invisibilityFactorAtShot>
-          <models>
-            <undamaged>	vehicles/french/F04_B1/normal/lod0/Gun_03.model	</undamaged>
-            <destroyed>	vehicles/french/F04_B1/crash/lod0/Gun_03.model	</destroyed>
-            <exploded>	vehicles/french/F04_B1/crash/lod0/Gun_03.model	</exploded>
-          </models>
-          <hitTester>
-            <collisionModelServer>	vehicles/french/F04_B1/collision/Gun_03.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/french/F04_B1/collision_client/Gun_03.model	</collisionModelClient>
-          </hitTester>
-          <effects>	shot_small	</effects>
-          <reloadEffect>	reload20_45	</reloadEffect>
-          <customizationSlots>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41000	</slotId>
-              <anchorPosition>	-0.009561 0.018774 0.544448	</anchorPosition>
-              <anchorDirection>	0 -0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41001	</slotId>
-              <anchorPosition>	-0.01302 0.268548 0.109696	</anchorPosition>
-              <anchorDirection>	-0 0.707107 0.707107	</anchorDirection>
-              <applyTo>	16384	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	camouflage	</slotType>
-              <slotId>	42000	</slotId>
-              <anchorPosition>	-0.009561 0.018774 0.544445	</anchorPosition>
-              <anchorDirection>	-0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-          </customizationSlots>
-          <customization>
-            <customizableVehicleAreas>
-              <paint>	GUN GUN_2	</paint>
-              <camouflage>	GUN	</camouflage>
-            </customizableVehicleAreas>
-          </customization>
-          <camouflage>
-            <density>	118.354 118.307	</density>
-            <aoTextureSize>	256 256	</aoTextureSize>
-          </camouflage>
-        </_47mm_SA34>
         <_47mm_SA35>	shared	  <maxAmmo>	195	</maxAmmo>
           <armor>
             <armor_1>	30	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
@@ -3796,10 +3644,10 @@
             </armor_5>
             <gun>	15	</gun>
           </armor>
-          <shotDispersionRadius>	0.46	</shotDispersionRadius>
+          <shotDispersionRadius>	0.36	</shotDispersionRadius>
           <shotDispersionFactors>
             <turretRotation>	0.08	</turretRotation>
-            <afterShot>	3	</afterShot>
+            <afterShot>	2	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <aimingTime>	1.5	</aimingTime>
@@ -3854,7 +3702,11 @@
             <aoTextureSize>	256 256	</aoTextureSize>
           </camouflage>
         </_47mm_SA35>
-        <_47mm_SA37>	shared	  <maxAmmo>	195	</maxAmmo>
+        <_47mm_SA37>	shared	  <unlocks>
+            <vehicle>	F05_BDR_G1B	  <cost>	15800	</cost>
+            </vehicle>
+          </unlocks>
+          <maxAmmo>	195	</maxAmmo>
           <armor>
             <armor_1>	30	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_1>
@@ -3868,11 +3720,11 @@
             </armor_5>
             <gun>	15	</gun>
           </armor>
-          <shotDispersionRadius>	0.39	</shotDispersionRadius>
+          <shotDispersionRadius>	0.36	</shotDispersionRadius>
           <reloadTime>	2.1	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.08	</turretRotation>
-            <afterShot>	3	</afterShot>
+            <afterShot>	2	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <aimingTime>	1.5	</aimingTime>
@@ -4311,11 +4163,6 @@
     </Turret_2_B1>
   </turrets0>
   <engines>
-    <Renault_S6Bis>	shared	  <unlocks>
-        <engine>	Renault_Naeder-FIEUX	  <cost>	770	</cost>
-        </engine>
-      </unlocks>
-    </Renault_S6Bis>
     <Renault_Naeder-FIEUX>	shared	  <unlocks>
         <engine>	Renault_BDR	  <cost>	850	</cost>
         </engine>
@@ -4327,25 +4174,11 @@
     <Medium>	shared	</Medium>
   </fuelTanks>
   <radios>
-    <ER_51>	shared	  <unlocks>
-        <radio>	ER_53	  <cost>	610	</cost>
-        </radio>
-      </unlocks>
-    </ER_51>
-    <ER_53>	shared	  <unlocks>
-        <radio>	ER_55	  <cost>	7300	</cost>
-        </radio>
-      </unlocks>
-    </ER_53>
     <ER_55>	shared	</ER_55>
   </radios>
   <physics>
     <detailed>
       <engines>
-        <Renault_S6Bis>
-          <smplEnginePower>	190.3106	</smplEnginePower>
-          <smplFwMaxSpeed>	30	</smplFwMaxSpeed>
-        </Renault_S6Bis>
         <Renault_Naeder-FIEUX>
           <smplEnginePower>	324.5853	</smplEnginePower>
           <smplFwMaxSpeed>	30	</smplFwMaxSpeed>

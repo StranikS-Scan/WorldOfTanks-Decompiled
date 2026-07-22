@@ -1,0 +1,111 @@
+<ClanShop_Style_03_2025_name.xml>
+  <itemGroup>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	MT 2D styles universal 1000g notInShop	</priceGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <vehicleFilter>
+      <include>
+        <levels>	8 9 10	</levels>
+      </include>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <style>
+      <id>	31344	</id>
+      <texture>	gui/maps/vehicles/styles/ClanShop_Style_03_2025.png	</texture>
+      <outfits>
+        <outfit>
+          <season>	event	</season>
+        </outfit>
+        <outfit>
+          <season>	summer	</season>
+          <paints>
+            <item>
+              <id>	31314	</id>
+              <appliedTo>	20753	</appliedTo>
+            </item>
+          </paints>
+          <projection_decals>
+            <item>
+              <id>	31295	</id>
+              <tags>	safe formfactor_square front	</tags>
+            </item>
+          </projection_decals>
+          <modifications>
+            <item>	4	</item>
+          </modifications>
+          <camouflages>
+            <item>
+              <id>	31306	</id>
+              <patternSize>	1	</patternSize>
+              <appliedTo>	4368	</appliedTo>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+        </outfit>
+        <outfit>
+          <season>	winter	</season>
+          <paints>
+            <item>
+              <id>	31315	</id>
+              <appliedTo>	20753	</appliedTo>
+            </item>
+          </paints>
+          <projection_decals>
+            <item>
+              <id>	31295	</id>
+              <tags>	safe formfactor_square front	</tags>
+            </item>
+          </projection_decals>
+          <modifications>
+            <item>	4	</item>
+          </modifications>
+          <camouflages>
+            <item>
+              <id>	31307	</id>
+              <patternSize>	1	</patternSize>
+              <appliedTo>	4368	</appliedTo>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+        </outfit>
+        <outfit>
+          <season>	desert	</season>
+          <paints>
+            <item>
+              <id>	31316	</id>
+              <appliedTo>	20753	</appliedTo>
+            </item>
+          </paints>
+          <projection_decals>
+            <item>
+              <id>	31295	</id>
+              <tags>	safe formfactor_square front	</tags>
+            </item>
+          </projection_decals>
+          <modifications>
+            <item>	4	</item>
+          </modifications>
+          <camouflages>
+            <item>
+              <id>	31308	</id>
+              <patternSize>	1	</patternSize>
+              <appliedTo>	4368	</appliedTo>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+        </outfit>
+      </outfits>
+      <userString>	#vehicle_customization:ClanShop_Style_03_2025/name	</userString>
+      <description>	#vehicle_customization:ClanShop_Style_03_2025/description	</description>
+      <longDescriptionSpecial>	#vehicle_customization:ClanShop_Style_03_2025/longDescription	</longDescriptionSpecial>
+      <alternateItems>
+        <decal>
+          <id>	31332 31333 31334 31335 31336	</id>
+        </decal>
+      </alternateItems>
+    </style>
+  </itemGroup>
+</ClanShop_Style_03_2025_name.xml>

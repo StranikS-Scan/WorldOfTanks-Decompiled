@@ -487,6 +487,20 @@ class Quest(ServerEventAbstract):
     def _checkVehicleConditions(self, vehicle):
         return self.vehicleReqs.isAnyVehicleAcceptable() or vehicle.intCD in self.vehicleReqs.getSuitableVehicles()
 
+    def getRequiredVehicleDescr(self):
+        conditions = self.vehicleReqs.getConditions().find('vehicleDescr')
+        if conditions:
+            vehicleTypes, vehicleNations, vehicleLevels, vehicleClasses, _ = conditions.parseFilters()
+            levels = set()
+            if vehicleTypes:
+                for vehicleTypeCD in vehicleTypes:
+                    currentVehicle = self.itemsCache.items.getItemByCD(int(vehicleTypeCD))
+                    levels.add(currentVehicle.level)
+
+            vehicleLevels = vehicleLevels or levels
+            return (vehicleClasses or tuple(), sorted(vehicleLevels), vehicleNations or tuple())
+        return (tuple(), list(), tuple())
+
 
 class TokenQuest(Quest):
 
@@ -526,6 +540,33 @@ class BattleMattersQuest(Quest):
 
     def getConditionLbl(self):
         return _getConditionLbl(self._data)
+
+
+class ITankAcademyGroup(Group):
+
+    def getOrder(self):
+        raise NotImplementedError
+
+    def getABTestGroup(self):
+        raise NotImplementedError
+
+
+class ITankAcademyQuest(object):
+
+    def getOrder(self):
+        raise NotImplementedError
+
+    def getABTestGroup(self):
+        raise NotImplementedError
+
+    def getConditionLbl(self):
+        raise NotImplementedError
+
+    def hasDelayedRewardBonus(self):
+        raise NotImplementedError
+
+    def getVehicleOfferTokens(self):
+        raise NotImplementedError
 
 
 def _getConditionLbl(data):

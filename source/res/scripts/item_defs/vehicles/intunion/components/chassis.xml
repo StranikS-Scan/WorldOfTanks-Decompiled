@@ -1,35 +1,95 @@
 <chassis.xml>
-  <ids>
-    <Chassis_Un04_Vickers_MBT_EXP_2_FL>	501	</Chassis_Un04_Vickers_MBT_EXP_2_FL>
-    <Chassis_Un01_Cromwell_VII>	31001	</Chassis_Un01_Cromwell_VII>
-    <Chassis_Un01_Cromwell_VII_2>	31002	</Chassis_Un01_Cromwell_VII_2>
-    <Chassis_Un02_Merkava_LP>	31003	</Chassis_Un02_Merkava_LP>
-    <Chassis_Un03_Degem_Yud>	31004	</Chassis_Un03_Degem_Yud>
-    <Chassis_Un03_Degem_Yud_2>	31005	</Chassis_Un03_Degem_Yud_2>
-    <Chassis_Un06_M47_Romach>	31006	</Chassis_Un06_M47_Romach>
-    <Chassis_Un04_Vickers_MBT_EXP>	31007	</Chassis_Un04_Vickers_MBT_EXP>
-    <Chassis_Un04_Vickers_MBT_EXP_2>	31008	</Chassis_Un04_Vickers_MBT_EXP_2>
-    <Chassis_Un05_Shot_Kal_Alef>	31009	</Chassis_Un05_Shot_Kal_Alef>
-    <Chassis_Un05_Shot_Kal_Alef_2>	31010	</Chassis_Un05_Shot_Kal_Alef_2>
-    <Chassis_Un14_T54D>	31011	</Chassis_Un14_T54D>
-    <Chassis_Un11_Sherman_M3_IDF>	31012	</Chassis_Un11_Sherman_M3_IDF>
-    <Chassis_Un11_Sherman_M3_IDF_2>	31013	</Chassis_Un11_Sherman_M3_IDF_2>
-    <Chassis_Un10_Sherman_Krupp_IDF>	31014	</Chassis_Un10_Sherman_Krupp_IDF>
-    <Chassis_Un10_Sherman_Krupp_IDF_2>	31015	</Chassis_Un10_Sherman_Krupp_IDF_2>
-    <Chassis_Un09_Locust>	31016	</Chassis_Un09_Locust>
-    <Chassis_Un09_Locust_2>	31017	</Chassis_Un09_Locust_2>
-    <Chassis_Un08_Hotchkiss_H_39_IDF>	31018	</Chassis_Un08_Hotchkiss_H_39_IDF>
-    <Chassis_Un08_Hotchkiss_H_39_IDF_2>	31019	</Chassis_Un08_Hotchkiss_H_39_IDF_2>
-    <Chassis_Un07_Renault_R35>	31020	</Chassis_Un07_Renault_R35>
-    <Chassis_Un13_T-54>	31021	</Chassis_Un13_T-54>
-    <Chassis_Un13_T-54_2>	31022	</Chassis_Un13_T-54_2>
-    <Chassis_Un12_Merkava_M48>	31023	</Chassis_Un12_Merkava_M48>
-    <Chassis_Un24_Vz_68_2_Britva>	31030	</Chassis_Un24_Vz_68_2_Britva>
-    <Chassis_Un17_RDT_62>	31025	</Chassis_Un17_RDT_62>
-    <Chassis_Un15_SBM_44>	31026	</Chassis_Un15_SBM_44>
-    <Chassis_Un15_SBM_44_2>	31027	</Chassis_Un15_SBM_44_2>
-    <Chassis_Un1017_RDT_62_T>	35001	</Chassis_Un1017_RDT_62_T>
-    <Chassis_Un1015_SBM_44_T_2>	35002	</Chassis_Un1015_SBM_44_T_2>
-  </ids>
-  <shared></shared>
+  <xmlns:xmlref>	http://bwt/xmlref	</xmlns:xmlref>
+  <shared>
+    <Chassis_Un01_Cromwell_VII>
+      <id>	31001	</id>
+    </Chassis_Un01_Cromwell_VII>
+    <Chassis_Un01_Cromwell_VII_2>
+      <id>	31002	</id>
+    </Chassis_Un01_Cromwell_VII_2>
+    <Chassis_Un02_Merkava_LP>
+      <id>	31003	</id>
+    </Chassis_Un02_Merkava_LP>
+    <Chassis_Un03_Degem_Yud>
+      <id>	31004	</id>
+    </Chassis_Un03_Degem_Yud>
+    <Chassis_Un03_Degem_Yud_2>
+      <id>	31005	</id>
+    </Chassis_Un03_Degem_Yud_2>
+    <Chassis_Un04_Vickers_MBT_EXP>
+      <id>	31007	</id>
+    </Chassis_Un04_Vickers_MBT_EXP>
+    <Chassis_Un04_Vickers_MBT_EXP_2>
+      <id>	31008	</id>
+    </Chassis_Un04_Vickers_MBT_EXP_2>
+    <Chassis_Un04_Vickers_MBT_EXP_2_FL>
+      <id>	501	</id>
+    </Chassis_Un04_Vickers_MBT_EXP_2_FL>
+    <Chassis_Un05_Shot_Kal_Alef>
+      <id>	31009	</id>
+    </Chassis_Un05_Shot_Kal_Alef>
+    <Chassis_Un05_Shot_Kal_Alef_2>
+      <id>	31010	</id>
+    </Chassis_Un05_Shot_Kal_Alef_2>
+    <Chassis_Un06_M47_Romach>
+      <id>	31006	</id>
+    </Chassis_Un06_M47_Romach>
+    <Chassis_Un07_Renault_R35>
+      <id>	31020	</id>
+    </Chassis_Un07_Renault_R35>
+    <Chassis_Un08_Hotchkiss_H_39_IDF>
+      <id>	31018	</id>
+    </Chassis_Un08_Hotchkiss_H_39_IDF>
+    <Chassis_Un08_Hotchkiss_H_39_IDF_2>
+      <id>	31019	</id>
+    </Chassis_Un08_Hotchkiss_H_39_IDF_2>
+    <Chassis_Un09_Locust>
+      <id>	31016	</id>
+    </Chassis_Un09_Locust>
+    <Chassis_Un09_Locust_2>
+      <id>	31017	</id>
+    </Chassis_Un09_Locust_2>
+    <Chassis_Un1015_SBM_44_T_2>
+      <id>	35002	</id>
+    </Chassis_Un1015_SBM_44_T_2>
+    <Chassis_Un1017_RDT_62_T>
+      <id>	35001	</id>
+    </Chassis_Un1017_RDT_62_T>
+    <Chassis_Un10_Sherman_Krupp_IDF>
+      <id>	31014	</id>
+    </Chassis_Un10_Sherman_Krupp_IDF>
+    <Chassis_Un10_Sherman_Krupp_IDF_2>
+      <id>	31015	</id>
+    </Chassis_Un10_Sherman_Krupp_IDF_2>
+    <Chassis_Un11_Sherman_M3_IDF>
+      <id>	31012	</id>
+    </Chassis_Un11_Sherman_M3_IDF>
+    <Chassis_Un11_Sherman_M3_IDF_2>
+      <id>	31013	</id>
+    </Chassis_Un11_Sherman_M3_IDF_2>
+    <Chassis_Un12_Merkava_M48>
+      <id>	31023	</id>
+    </Chassis_Un12_Merkava_M48>
+    <Chassis_Un13_T-54>
+      <id>	31021	</id>
+    </Chassis_Un13_T-54>
+    <Chassis_Un13_T-54_2>
+      <id>	31022	</id>
+    </Chassis_Un13_T-54_2>
+    <Chassis_Un14_T54D>
+      <id>	31011	</id>
+    </Chassis_Un14_T54D>
+    <Chassis_Un15_SBM_44>
+      <id>	31026	</id>
+    </Chassis_Un15_SBM_44>
+    <Chassis_Un15_SBM_44_2>
+      <id>	31027	</id>
+    </Chassis_Un15_SBM_44_2>
+    <Chassis_Un17_RDT_62>
+      <id>	31025	</id>
+    </Chassis_Un17_RDT_62>
+    <Chassis_Un24_Vz_68_2_Britva>
+      <id>	31030	</id>
+    </Chassis_Un24_Vz_68_2_Britva>
+  </shared>
 </chassis.xml>

@@ -80,7 +80,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	4000	</weight>
-    <maxHealth>	196	</maxHealth>
+    <maxHealth>	200	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	70	</maxHealth>
       <maxRegenHealth>	48	</maxRegenHealth>
@@ -1122,8 +1122,8 @@
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
       <rotationSpeed>	42	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.38	</vehicleMovement>
-        <vehicleRotation>	0.38	</vehicleRotation>
+        <vehicleMovement>	0.10	</vehicleMovement>
+        <vehicleRotation>	0.10	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	50	</maxHealth>
@@ -1862,22 +1862,48 @@
           <camouflage></camouflage>
         </customizableVehicleAreas>
       </customization>
-      <repairTime>	3.41880345	</repairTime>
+      <repairTime>	1.70988882	</repairTime>
     </Cunningham_E2>
   </chassis>
   <turrets0>
     <Cunningham_D2>
+      <userString>	#usa_vehicles:Cunningham_D2	</userString>
+      <tags></tags>
+      <level>	1	</level>
+      <price>	0	</price>
+      <notInShop>	true	</notInShop>
+      <armor>
+        <armor_1>	9.5	</armor_1>
+        <armor_2>	9.5	</armor_2>
+        <armor_3>	6.3	</armor_3>
+        <armor_4>	6.3	</armor_4>
+        <armor_5>	6.3	</armor_5>
+        <armor_8>	0	</armor_8>
+        <surveyingDevice>	0	  <chanceToHitByProjectile>	0	</chanceToHitByProjectile>
+          <chanceToHitByExplosion>	0	</chanceToHitByExplosion>
+        </surveyingDevice>
+        <commander>	0	  <chanceToHitByProjectile>	0	</chanceToHitByProjectile>
+          <chanceToHitByExplosion>	0	</chanceToHitByExplosion>
+        </commander>
+      </armor>
+      <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+      <weight>	950	</weight>
+      <maxHealth>	80	</maxHealth>
+      <rotationSpeed>	35	</rotationSpeed>
+      <turretRotatorHealth>
+        <maxHealth>	50	</maxHealth>
+        <maxRegenHealth>	25	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </turretRotatorHealth>
+      <circularVisionRadius>	300	</circularVisionRadius>
+      <surveyingDeviceHealth>
+        <maxHealth>	30	</maxHealth>
+        <maxRegenHealth>	15	</maxRegenHealth>
+        <repairCost>	2.0	</repairCost>
+      </surveyingDeviceHealth>
+      <invisibilityFactor>	0.995	</invisibilityFactor>
       <guns>
-        <_37mm_Gun_M1916>	shared	  <pitchLimits>
-            <minPitch>	0 -20 1 -20	</minPitch>
-            <maxPitch>	0 7 1 7	</maxPitch>
-          </pitchLimits>
-          <maxAmmo>	240	</maxAmmo>
-          <shotDispersionFactors>
-            <turretRotation>	0.14	</turretRotation>
-            <afterShot>	4.0	</afterShot>
-            <whileGunDamaged>	2.0	</whileGunDamaged>
-          </shotDispersionFactors>
+        <_37mm_Gun_M1916>	shared	  <maxAmmo>	240	</maxAmmo>
           <unlocks>
             <gun>	_37mm_semiautomatic_gun_M1924	  <cost>	30	</cost>
             </gun>
@@ -1891,10 +1917,19 @@
               <chanceToHitByExplosion>	0	</chanceToHitByExplosion>
             </gun>
           </armor>
-          <reloadTime>	2.5	</reloadTime>
-          <shotDispersionRadius>	0.54	</shotDispersionRadius>
-          <aimingTime>	2.5	</aimingTime>
+          <pitchLimits>
+            <minPitch>	0 -20 1 -20	</minPitch>
+            <maxPitch>	0 7 1 7	</maxPitch>
+          </pitchLimits>
+          <reloadTime>	2.0	</reloadTime>
+          <shotDispersionRadius>	0.34	</shotDispersionRadius>
+          <aimingTime>	1.8	</aimingTime>
           <invisibilityFactorAtShot>	0.255	</invisibilityFactorAtShot>
+          <shotDispersionFactors>
+            <turretRotation>	0.10	</turretRotation>
+            <afterShot>	3.0	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
           <models>
             <undamaged>	vehicles/american/A01_T1_Cunningham/normal/lod0/Gun_03.model	</undamaged>
             <destroyed>	vehicles/american/A01_T1_Cunningham/crash/lod0/Gun_03.model	</destroyed>
@@ -1941,16 +1976,7 @@
             <aoTextureSize>	512 256	</aoTextureSize>
           </camouflage>
         </_37mm_Gun_M1916>
-        <_37mm_semiautomatic_gun_M1924>	shared	  <maxAmmo>	230	</maxAmmo>
-          <pitchLimits>
-            <minPitch>	0 -20 1 -20	</minPitch>
-            <maxPitch>	0 7 1 7	</maxPitch>
-          </pitchLimits>
-          <shotDispersionFactors>
-            <turretRotation>	0.14	</turretRotation>
-            <afterShot>	4.0	</afterShot>
-            <whileGunDamaged>	2.0	</whileGunDamaged>
-          </shotDispersionFactors>
+        <_37mm_semiautomatic_gun_M1924>	shared	  <maxAmmo>	240	</maxAmmo>
           <unlocks>
             <vehicle>	A02_M2_lt	  <cost>	280	</cost>
             </vehicle>
@@ -1964,10 +1990,27 @@
               <chanceToHitByExplosion>	0	</chanceToHitByExplosion>
             </gun>
           </armor>
-          <reloadTime>	8	</reloadTime>
-          <aimingTime>	2.5	</aimingTime>
-          <shotDispersionRadius>	0.51	</shotDispersionRadius>
+          <pitchLimits>
+            <minPitch>	0 -20 1 -20	</minPitch>
+            <maxPitch>	0 7 1 7	</maxPitch>
+          </pitchLimits>
+          <reloadTime>	9	</reloadTime>
+          <clip>
+            <count>	6	</count>
+            <rate>	60	</rate>
+          </clip>
+          <burst>
+            <count>	2	</count>
+            <rate>	120	</rate>
+          </burst>
+          <aimingTime>	2.0	</aimingTime>
+          <shotDispersionRadius>	0.41	</shotDispersionRadius>
           <invisibilityFactorAtShot>	0.195	</invisibilityFactorAtShot>
+          <shotDispersionFactors>
+            <turretRotation>	0.10	</turretRotation>
+            <afterShot>	2.0	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
           <models>
             <undamaged>	vehicles/american/A01_T1_Cunningham/normal/lod0/Gun_04.model	</undamaged>
             <destroyed>	vehicles/american/A01_T1_Cunningham/crash/lod0/Gun_04.model	</destroyed>
@@ -2015,41 +2058,6 @@
           </camouflage>
         </_37mm_semiautomatic_gun_M1924>
       </guns>
-      <userString>	#usa_vehicles:Cunningham_D2	</userString>
-      <tags></tags>
-      <level>	1	</level>
-      <price>	0	</price>
-      <notInShop>	true	</notInShop>
-      <armor>
-        <armor_1>	9.5	</armor_1>
-        <armor_2>	9.5	</armor_2>
-        <armor_3>	6.3	</armor_3>
-        <armor_4>	6.3	</armor_4>
-        <armor_5>	6.3	</armor_5>
-        <armor_8>	0	</armor_8>
-        <surveyingDevice>	0	  <chanceToHitByProjectile>	0	</chanceToHitByProjectile>
-          <chanceToHitByExplosion>	0	</chanceToHitByExplosion>
-        </surveyingDevice>
-        <commander>	0	  <chanceToHitByProjectile>	0	</chanceToHitByProjectile>
-          <chanceToHitByExplosion>	0	</chanceToHitByExplosion>
-        </commander>
-      </armor>
-      <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
-      <weight>	950	</weight>
-      <maxHealth>	49	</maxHealth>
-      <rotationSpeed>	35	</rotationSpeed>
-      <turretRotatorHealth>
-        <maxHealth>	50	</maxHealth>
-        <maxRegenHealth>	25	</maxRegenHealth>
-        <repairCost>	1.0	</repairCost>
-      </turretRotatorHealth>
-      <circularVisionRadius>	280	</circularVisionRadius>
-      <surveyingDeviceHealth>
-        <maxHealth>	30	</maxHealth>
-        <maxRegenHealth>	15	</maxRegenHealth>
-        <repairCost>	2.0	</repairCost>
-      </surveyingDeviceHealth>
-      <invisibilityFactor>	0.995	</invisibilityFactor>
       <models>
         <undamaged>	vehicles/american/A01_T1_Cunningham/normal/lod0/Turret_02.model	</undamaged>
         <destroyed>	vehicles/american/A01_T1_Cunningham/crash/lod0/Turret_02.model	</destroyed>

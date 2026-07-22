@@ -7,7 +7,7 @@ from gui.prb_control.factories.PreQueueFactory import DEFAULT_QUEUE_TYPE_PRIORIT
 from gui.prb_control.prb_getters import _ARENA_GUI_TYPE_BY_QUEUE_TYPE
 from gui.prb_control.settings import FUNCTIONAL_FLAG, _FUNCTIONAL_FLAG_NAMES, QUEUE_TYPE_TO_PREBATTLE_TYPE, PREBATTLE_TYPE_TO_QUEUE_TYPE, REQUEST_TYPE, REQUEST_TYPE_NAMES
 from messenger.ext.channel_num_gen import PRB_CLIENT_COMBINED_IDS, initPrbTypeToClientID
-from gui.shared.system_factory import registerQueueEntity, registerUnitEntryPoint, registerUnitEntity, registerUnitEntryPointByType, registerModeSelectorItem, registerBannerEntryPointValidator, registerSquadFinder, registerArenaDescrs, registerCanSelectPrbEntity, registerBattleQueueProvider, registerBannerEntryPointLUIRule
+from gui.shared.system_factory import registerQueueEntity, registerUnitEntryPoint, registerUnitEntity, registerUnitEntryPointByType, registerModeSelectorItem, registerBannerEntryPointValidator, registerSquadFinder, registerArenaDescrs, registerCanSelectPrbEntity, registerBattleQueueProvider, registerBannerEntryPointLUIRule, registerBattleModifiersPanel
 from gui.shared.system_factory import registerEntryPoint
 from soft_exception import SoftException
 _logger = logging.getLogger(__name__)
@@ -102,6 +102,13 @@ def addBannerEntryPointValidatorMethod(alias, validator, personality):
 def addBannerEntryPointLUIRule(alias, ruleID, personality):
     registerBannerEntryPointLUIRule(alias, ruleID)
     msg = 'alias:{alias} was registered for Limited UI with ruleID:{ruleID}. Personality: {p}'.format(alias=alias, p=personality, ruleID=ruleID)
+    logging.debug(msg)
+
+
+def addBattleModifiersPanel(views, personality):
+    alias, viewClass = views
+    registerBattleModifiersPanel(alias, viewClass)
+    msg = 'BattleModifiersPanel alias:{alias} was registered. Personality: {p}'.format(alias=alias, p=personality)
     logging.debug(msg)
 
 

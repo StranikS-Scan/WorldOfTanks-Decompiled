@@ -7,44 +7,44 @@ from gui.impl.gen.view_models.views.lobby.common.vehicle_model import VehicleMod
 class EarlyAccessQuestModel(QuestModel):
     __slots__ = ()
 
-    def __init__(self, properties=17, commands=0):
+    def __init__(self, properties=19, commands=0):
         super(EarlyAccessQuestModel, self).__init__(properties=properties, commands=commands)
 
     def getChapterId(self):
-        return self._getString(11)
-
-    def setChapterId(self, value):
-        self._setString(11, value)
-
-    def getTokensForCompletion(self):
-        return self._getNumber(12)
-
-    def setTokensForCompletion(self, value):
-        self._setNumber(12, value)
-
-    def getVehicleType(self):
         return self._getString(13)
 
-    def setVehicleType(self, value):
+    def setChapterId(self, value):
         self._setString(13, value)
 
-    def getMinVehicleLvl(self):
+    def getTokensForCompletion(self):
         return self._getNumber(14)
 
-    def setMinVehicleLvl(self, value):
+    def setTokensForCompletion(self, value):
         self._setNumber(14, value)
 
+    def getVehicleType(self):
+        return self._getString(15)
+
+    def setVehicleType(self, value):
+        self._setString(15, value)
+
+    def getMinVehicleLvl(self):
+        return self._getNumber(16)
+
+    def setMinVehicleLvl(self, value):
+        self._setNumber(16, value)
+
     def getMaxVehicleLvl(self):
-        return self._getNumber(15)
+        return self._getNumber(17)
 
     def setMaxVehicleLvl(self, value):
-        self._setNumber(15, value)
+        self._setNumber(17, value)
 
     def getRequiredVehicles(self):
-        return self._getArray(16)
+        return self._getArray(18)
 
     def setRequiredVehicles(self, value):
-        self._setArray(16, value)
+        self._setArray(18, value)
 
     @staticmethod
     def getRequiredVehiclesType():

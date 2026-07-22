@@ -9,15 +9,21 @@ from gui.impl.lobby.common.view_helpers import packBonusModelAndTooltipData
 from gui.impl.lobby.common.view_wrappers import createBackportTooltipDecorator
 from gui.impl.lobby.loot_box.loot_box_helper import createTooltipLootBoxContentDecorator
 from gui.impl.lobby.promo_code_reward_screen.bonuses import getRewardsBonusPacker
-from gui.impl.lobby.promo_code_reward_screen.bonuses_sorter import sortBonuses
 from gui.impl.pub import ViewImpl, WindowImpl
 from gui.impl.wrappers.function_helpers import replaceNoneKwargsModel
-from gui.server_events.bonuses import getNonQuestBonuses, mergeBonuses, splitBonuses
+from gui.server_events.bonuses import getNonQuestBonuses, mergeBonuses, splitBonuses, VehiclesBonus
 from gui.shared import EVENT_BUS_SCOPE, events, g_eventBus
 from gui.shared.event_dispatcher import selectVehicleInHangar
+from gui.shared.money import Currency
+from gui.summer_sale.common import getBonusName, MAIN_COIN, ADDITIONAL_COIN
 from helpers import dependency
 from shared_utils import findFirst
 from skeletons.gui.shared import IItemsCache
+_BONUSES_ORDER = {bonusName:order for order, bonusName in enumerate((VehiclesBonus.VEHICLES_BONUS,
+ ADDITIONAL_COIN,
+ MAIN_COIN,
+ 'lootBoxToken',
+ Currency.CREDITS))}
 
 class SummerSaleRewardsView(ViewImpl):
     __itemsCache = dependency.descriptor(IItemsCache)
@@ -76,7 +82,7 @@ class SummerSaleRewardsView(ViewImpl):
             rewards.extend(getNonQuestBonuses(bonusType, bonusValue))
 
         rewards = splitBonuses(mergeBonuses(rewards))
-        rewards = sortBonuses(rewards)
+        rewards = sorted(rewards, key=lambda b: _BONUSES_ORDER.get(getBonusName(b), -1))
         vehicleBonus = findFirst(lambda bonus: bonus.getName() == 'vehicles', rewards)
         if vehicleBonus:
             vehicle, _ = vehicleBonus.getVehicles()[0]

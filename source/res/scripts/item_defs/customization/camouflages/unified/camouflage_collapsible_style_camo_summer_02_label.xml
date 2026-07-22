@@ -1,0 +1,55 @@
+<camouflage_collapsible_style_camo_summer_02_label.xml>
+  <xmlns:china2>	ussr	</xmlns:china2>
+  <xmlns:germany>	germany	</xmlns:germany>
+  <xmlns:china1>	usa	</xmlns:china1>
+  <xmlns:china>	china	</xmlns:china>
+  <xmlns:france>	france	</xmlns:france>
+  <xmlns:china0>	uk	</xmlns:china0>
+  <xmlns:japan>	japan	</xmlns:japan>
+  <xmlns:czech>	czech	</xmlns:czech>
+  <xmlns:sweden>	sweden	</xmlns:sweden>
+  <xmlns:poland>	poland	</xmlns:poland>
+  <xmlns:italy>	italy	</xmlns:italy>
+  <xmlns:intunion>	intunion	</xmlns:intunion>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/opaque	</userString>
+    <season>	summer	</season>
+    <historical>	0	</historical>
+    <priceGroup>	MT camouflages 50g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <camouflage>
+      <id>	122	</id>
+      <texture>	vehicles/russian/Camouflage/Collapsible_style_STONES.dds	</texture>
+      <description>	#vehicle_customization:camouflage/collapsible_style/camo_summer_02/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/collapsible_style/camo_summer_02/label	</userString>
+      <tags>	styleOnly	</tags>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	17 22 8 255	</c0>
+          <c1>	16 22 8 255	</c1>
+          <c2>	129 135 82 255	</c2>
+          <c3>	43 63 48 255	</c3>
+        </palette>
+      </palettes>
+      <rotation>
+        <HULL>	-0.785398	</HULL>
+        <TURRET>	-0.785398	</TURRET>
+        <GUN>	-0.785398	</GUN>
+      </rotation>
+      <tiling>
+        <france:F115_Lorraine_50t>	1 0.9 0.000000 0.000000	</france:F115_Lorraine_50t>
+      </tiling>
+      <tilingSettings>
+        <type>	relative	</type>
+        <factor>	2.8 2.8	</factor>
+        <offset>	-0.33715 -0.622888	</offset>
+      </tilingSettings>
+    </camouflage>
+  </itemGroup>
+</camouflage_collapsible_style_camo_summer_02_label.xml>

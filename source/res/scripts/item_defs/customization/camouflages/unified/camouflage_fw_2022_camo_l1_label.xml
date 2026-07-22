@@ -1,0 +1,230 @@
+<camouflage_fw_2022_camo_l1_label.xml>
+  <xmlns:czech1>	ussr	</xmlns:czech1>
+  <xmlns:germany>	germany	</xmlns:germany>
+  <xmlns:czech0>	usa	</xmlns:czech0>
+  <xmlns:china>	china	</xmlns:china>
+  <xmlns:france>	france	</xmlns:france>
+  <xmlns:uk>	uk	</xmlns:uk>
+  <xmlns:japan>	japan	</xmlns:japan>
+  <xmlns:czech>	czech	</xmlns:czech>
+  <xmlns:sweden>	sweden	</xmlns:sweden>
+  <xmlns:poland>	poland	</xmlns:poland>
+  <xmlns:italy>	italy	</xmlns:italy>
+  <xmlns:intunion>	intunion	</xmlns:intunion>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/opaque	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	MT camouflages 50g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <levels>	10	</levels>
+      </include>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <camouflage>
+      <id>	15930	</id>
+      <texture>	vehicles/russian/Camouflage/FW_2022_Camo_L1.dds	</texture>
+      <userString>	#vehicle_customization:camouflage/fw_2022_camo_l1/label	</userString>
+      <description>	#vehicle_customization:camouflage/fw_2022_camo_l1/description	</description>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <scales>	1.2 1 0.7	</scales>
+      <tags>	styleOnly questsProgression	</tags>
+      <palettes>
+        <palette>
+          <c0>	94 89 85 255	</c0>
+          <c1>	55 57 58 255	</c1>
+          <c2>	66 60 56 255	</c2>
+          <c3>	124 127 130 255	</c3>
+        </palette>
+      </palettes>
+      <rotation>
+        <HULL>	-0.20944	</HULL>
+        <TURRET>	-0.20944	</TURRET>
+        <GUN>	-0.20944	</GUN>
+      </rotation>
+      <tilingSettings>
+        <type>	relativewithfactor	</type>
+        <factor>	2 2	</factor>
+        <offset>	0 0	</offset>
+      </tilingSettings>
+      <style>	735	</style>
+    </camouflage>
+    <camouflage>
+      <id>	15931	</id>
+      <texture>	vehicles/russian/Camouflage/FW_2022_Camo_L2.dds	</texture>
+      <userString>	#vehicle_customization:camouflage/fw_2022_camo_l2/label	</userString>
+      <description>	#vehicle_customization:camouflage/fw_2022_camo_l2/description	</description>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <scales>	1.2 1 0.7	</scales>
+      <tags>	styleOnly questsProgression	</tags>
+      <palettes>
+        <palette>
+          <c0>	112 117 128 255	</c0>
+          <c1>	61 63 71 255	</c1>
+          <c2>	40 37 36 255	</c2>
+          <c3>	127 132 143 0	</c3>
+        </palette>
+      </palettes>
+      <rotation>
+        <HULL>	-0.20944	</HULL>
+        <TURRET>	-0.20944	</TURRET>
+        <GUN>	-0.20944	</GUN>
+      </rotation>
+      <tilingSettings>
+        <type>	relativewithfactor	</type>
+        <factor>	2 2	</factor>
+        <offset>	0 0	</offset>
+      </tilingSettings>
+      <style>	736	</style>
+    </camouflage>
+    <camouflage>
+      <id>	15932	</id>
+      <texture>	vehicles/russian/Camouflage/FW_2022_Camo_L3.dds	</texture>
+      <userString>	#vehicle_customization:camouflage/fw_2022_camo_l3/label	</userString>
+      <description>	#vehicle_customization:camouflage/fw_2022_camo_l3/description	</description>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <scales>	1.2 1 0.7	</scales>
+      <tags>	styleOnly questsProgression	</tags>
+      <palettes>
+        <palette>
+          <c0>	47 56 42 255	</c0>
+          <c1>	97 73 58 255	</c1>
+          <c2>	32 35 28 255	</c2>
+          <c3>	107 88 62 255	</c3>
+        </palette>
+      </palettes>
+      <rotation>
+        <HULL>	-0.20944	</HULL>
+        <TURRET>	-0.20944	</TURRET>
+        <GUN>	-0.20944	</GUN>
+      </rotation>
+      <tilingSettings>
+        <type>	relativewithfactor	</type>
+        <factor>	2 2	</factor>
+        <offset>	0 0	</offset>
+      </tilingSettings>
+      <style>	737	</style>
+    </camouflage>
+    <camouflage>
+      <id>	15933	</id>
+      <texture>	vehicles/russian/Camouflage/FW_2022_Camo_L4.dds	</texture>
+      <userString>	#vehicle_customization:camouflage/fw_2022_camo_l4/label	</userString>
+      <description>	#vehicle_customization:camouflage/fw_2022_camo_l4/description	</description>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <scales>	1.2 1 0.7	</scales>
+      <tags>	styleOnly questsProgression	</tags>
+      <palettes>
+        <palette>
+          <c0>	100 104 110 255	</c0>
+          <c1>	128 133 140 255	</c1>
+          <c2>	105 78 48 255	</c2>
+          <c3>	38 39 46 255	</c3>
+        </palette>
+      </palettes>
+      <rotation>
+        <HULL>	-0.20944	</HULL>
+        <TURRET>	-0.20944	</TURRET>
+        <GUN>	-0.20944	</GUN>
+      </rotation>
+      <tilingSettings>
+        <type>	relativewithfactor	</type>
+        <factor>	2 2	</factor>
+        <offset>	0 0	</offset>
+      </tilingSettings>
+      <style>	738	</style>
+    </camouflage>
+    <camouflage>
+      <id>	15934	</id>
+      <texture>	vehicles/russian/Camouflage/FW_2022_Camo_L5.dds	</texture>
+      <userString>	#vehicle_customization:camouflage/fw_2022_camo_l5/label	</userString>
+      <description>	#vehicle_customization:camouflage/fw_2022_camo_l5/description	</description>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <scales>	1.2 1 0.7	</scales>
+      <tags>	styleOnly questsProgression	</tags>
+      <palettes>
+        <palette>
+          <c0>	132 138 145 255	</c0>
+          <c1>	77 60 44 255	</c1>
+          <c2>	38 40 51 255	</c2>
+          <c3>	130 100 75 255	</c3>
+        </palette>
+      </palettes>
+      <rotation>
+        <HULL>	-0.20944	</HULL>
+        <TURRET>	-0.20944	</TURRET>
+        <GUN>	-0.20944	</GUN>
+      </rotation>
+      <tilingSettings>
+        <type>	relativewithfactor	</type>
+        <factor>	2 2	</factor>
+        <offset>	0 0	</offset>
+      </tilingSettings>
+      <gloss>	0.509000 0.780000 0.509000 0.560000	</gloss>
+      <metallic>	0.230000 0.870000 0.230000 0.750000	</metallic>
+      <style>	739	</style>
+    </camouflage>
+    <camouflage>
+      <id>	15928	</id>
+      <texture>	vehicles/russian/Camouflage/FW_2022_Camo_L6.dds	</texture>
+      <userString>	#vehicle_customization:camouflage/fw_2022_camo_l6/label	</userString>
+      <description>	#vehicle_customization:camouflage/fw_2022_camo_l6/description	</description>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <scales>	1.2 1 0.7	</scales>
+      <tags>	styleOnly questsProgression	</tags>
+      <palettes>
+        <palette>
+          <c0>	109 120 122 255	</c0>
+          <c1>	15 22 25 255	</c1>
+          <c2>	31 41 51 255	</c2>
+          <c3>	115 86 57 255	</c3>
+        </palette>
+      </palettes>
+      <rotation>
+        <HULL>	-0.20944	</HULL>
+        <TURRET>	-0.20944	</TURRET>
+        <GUN>	-0.20944	</GUN>
+      </rotation>
+      <tilingSettings>
+        <type>	relativewithfactor	</type>
+        <factor>	2 2	</factor>
+        <offset>	0 0	</offset>
+      </tilingSettings>
+      <gloss>	0.509000 0.509000 0.509000 0.780000	</gloss>
+      <metallic>	0.230000 0.230000 0.230000 0.870000	</metallic>
+      <style>	741	</style>
+    </camouflage>
+    <camouflage>
+      <id>	15929	</id>
+      <texture>	vehicles/russian/Camouflage/FW_2022_Camo_L7.dds	</texture>
+      <userString>	#vehicle_customization:camouflage/fw_2022_camo_l7/label	</userString>
+      <description>	#vehicle_customization:camouflage/fw_2022_camo_l7/description	</description>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <scales>	1.2 1 0.7	</scales>
+      <tags>	styleOnly questsProgression	</tags>
+      <palettes>
+        <palette>
+          <c0>	61 75 79 255	</c0>
+          <c1>	15 22 25 255	</c1>
+          <c2>	204 41 52 255	</c2>
+          <c3>	115 86 57 255	</c3>
+        </palette>
+      </palettes>
+      <rotation>
+        <HULL>	-0.20944	</HULL>
+        <TURRET>	-0.20944	</TURRET>
+        <GUN>	-0.20944	</GUN>
+      </rotation>
+      <tilingSettings>
+        <type>	relativewithfactor	</type>
+        <factor>	2 2	</factor>
+        <offset>	0 0	</offset>
+      </tilingSettings>
+      <gloss>	0.509000 0.509000 0.509000 0.780000	</gloss>
+      <metallic>	0.230000 0.230000 0.230000 0.870000	</metallic>
+      <style>	742	</style>
+    </camouflage>
+  </itemGroup>
+</camouflage_fw_2022_camo_l1_label.xml>

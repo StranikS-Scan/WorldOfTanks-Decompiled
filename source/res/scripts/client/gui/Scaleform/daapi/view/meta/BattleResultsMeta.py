@@ -31,6 +31,12 @@ class BattleResultsMeta(AbstractWindowView):
     def showDogTagWindow(self, componentId):
         self._printOverrideError('showDogTagWindow')
 
+    def sendGift(self, playerId, stampName):
+        self._printOverrideError('sendGift')
+
+    def gotoGiftStamps(self):
+        self._printOverrideError('gotoGiftStamps')
+
     def as_setDataS(self, data):
         return self.flashObject.as_setData(data) if self._isDAAPIInited() else None
 
@@ -42,3 +48,6 @@ class BattleResultsMeta(AbstractWindowView):
 
     def as_setIsInBattleQueueS(self, value):
         return self.flashObject.as_setIsInBattleQueue(value) if self._isDAAPIInited() else None
+
+    def as_setGiftSystemDataS(self, data):
+        return self.flashObject.as_setGiftSystemData(data) if self._isDAAPIInited() else None

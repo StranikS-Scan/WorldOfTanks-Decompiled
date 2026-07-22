@@ -81,6 +81,7 @@ SERVER_FORMATTERS = {_SM_TYPE.serverReboot.index(): _sc.ServerRebootFormatter(),
  _SM_TYPE.progressiveReward.index(): _sc.ProgressiveRewardFormatter(),
  _SM_TYPE.piggyBankSmashed.index(): _sc.PiggyBankSmashedFormatter(),
  _SM_TYPE.blackMapRemoved.index(): _sc.BlackMapRemovedFormatter(),
+ _SM_TYPE.excludedMapSlotKillSwitch.index(): _sc.ExcludedMapSlotKillSwitchFormatter(),
  _SM_TYPE.enhancementRemoved.index(): _sc.EnhancementRemovedFormatter(),
  _SM_TYPE.enhancementsWiped.index(): _sc.EnhancementsWipedFormatter(),
  _SM_TYPE.battlePassReward.index(): _sc.BattlePassRewardFormatter(),
@@ -103,6 +104,7 @@ SERVER_FORMATTERS = {_SM_TYPE.serverReboot.index(): _sc.ServerRebootFormatter(),
  _SM_TYPE.premiumSubsUpdated.index(): _wotPlusFormatters.PremiumSubsUpdatedFormatter(),
  _SM_TYPE.wotPlusExpired.index(): _wotPlusFormatters.WotPlusExpiredFormatter(),
  _SM_TYPE.bonusExcludedMap.index(): _sc.SimpleFormatter('BonusExcludedMapAvailable'),
+ _SM_TYPE.bonusExcludedMapPremium.index(): _sc.SimpleFormatter('BonusExcludedMapPremiumAvailable'),
  _SM_TYPE.wotPlusExcludedVehicleEnabled.index(): _sc.ExclusiveVehicleWotPlusFormatter(isEnabled=True),
  _SM_TYPE.wotPlusExcludedVehicleExpired.index(): _sc.ExclusiveVehicleWotPlusFormatter(isEnabled=False),
  _SM_TYPE.goldReserveIsFull.index(): _sc.SimpleFormatter('GoldReserveFullMessage'),
@@ -132,9 +134,6 @@ SERVER_FORMATTERS = {_SM_TYPE.serverReboot.index(): _sc.ServerRebootFormatter(),
  _SM_TYPE.earlyAccessVehicle.index(): _sc.EarlyAccessVehicleObtainFormatter(),
  _SM_TYPE.paragonsLevelRewardsReceived.index(): _sc.ParagonsLevelCompletedFormatter(),
  _SM_TYPE.paragonsCoinsGranted.index(): _sc.ParagonsCoinsGrantedFormatter(),
- _SM_TYPE.playStreakRewards.index(): _sc.PlayStreakRewardsFormatter(),
- _SM_TYPE.playStreakSysMessage.index(): _sc.PlayStreakSysMessageFormatter(),
- _SM_TYPE.playStreakSysWithRewardsMessage.index(): _sc.PlayStreakSysMessageRewardsFormatter(),
  _SM_TYPE.tradingCaravanMessage.index(): _sc.TradingCaravanMessageFormatter()}
 
 def initRegistrationFormatters():
@@ -190,6 +189,7 @@ def initRegistrationFormatters():
     registerMessengerServerFormatter(_SM_TYPE.progressiveReward.index(), _sc.ProgressiveRewardFormatter())
     registerMessengerServerFormatter(_SM_TYPE.piggyBankSmashed.index(), _sc.PiggyBankSmashedFormatter())
     registerMessengerServerFormatter(_SM_TYPE.blackMapRemoved.index(), _sc.BlackMapRemovedFormatter())
+    registerMessengerServerFormatter(_SM_TYPE.excludedMapSlotKillSwitch.index(), _sc.ExcludedMapSlotKillSwitchFormatter())
     registerMessengerServerFormatter(_SM_TYPE.enhancementRemoved.index(), _sc.EnhancementRemovedFormatter())
     registerMessengerServerFormatter(_SM_TYPE.enhancementsWiped.index(), _sc.EnhancementsWipedFormatter())
     registerMessengerServerFormatter(_SM_TYPE.battlePassReward.index(), _sc.BattlePassRewardFormatter())
@@ -218,8 +218,7 @@ def initRegistrationFormatters():
     registerMessengerServerFormatter(_SM_TYPE.wotPlusExcludedVehicleExpired.index(), _sc.ExclusiveVehicleWotPlusFormatter(isEnabled=False))
     registerMessengerServerFormatter(_SM_TYPE.wotPlusExpired.index(), _wotPlusFormatters.WotPlusExpiredFormatter())
     registerMessengerServerFormatter(_SM_TYPE.bonusExcludedMap.index(), _sc.SimpleFormatter('BonusExcludedMapAvailable'))
-    registerMessengerServerFormatter(_SM_TYPE.playStreakSysMessage.index(), _sc.PlayStreakSysMessageFormatter())
-    registerMessengerServerFormatter(_SM_TYPE.playStreakSysWithRewardsMessage.index(), _sc.PlayStreakSysMessageRewardsFormatter())
+    registerMessengerServerFormatter(_SM_TYPE.bonusExcludedMapPremium.index(), _sc.SimpleFormatter('BonusExcludedMapPremiumAvailable'))
     registerMessengerServerFormatter(_SM_TYPE.tradingCaravanMessage.index(), _sc.TradingCaravanMessageFormatter())
     registerMessengerServerFormatter(_SM_TYPE.goldReserveIsFull.index(), _sc.SimpleFormatter('GoldReserveFullMessage'))
     registerMessengerServerFormatter(_SM_TYPE.passiveXPNoTank.index(), _sc.SimpleFormatter('PassiveXPNoTankMessage'))
@@ -281,7 +280,6 @@ def initRegistrationFormatters():
     registerMessengerServerFormatter(_SM_TYPE.paragonsLevelRewardsReceived.index(), _sc.ParagonsLevelCompletedFormatter())
     registerMessengerServerFormatter(_SM_TYPE.paragonsCoinsGranted.index(), _sc.ParagonsCoinsGrantedFormatter())
     registerMessengerClientFormatter(SCH_CLIENT_MSG_TYPE.GF_SM_TYPE, _sc.GFSMFormatter())
-    registerMessengerServerFormatter(_SM_TYPE.playStreakRewards.index(), _sc.PlayStreakRewardsFormatter())
     registerMessengerClientFormatter(SCH_CLIENT_MSG_TYPE.LIMITED_UI_CONTENT_UNLOCKED, _sc.LimitedUIContentUnlockedFormatter())
     registerMessengerClientFormatter(SCH_CLIENT_MSG_TYPE.LIMITED_UI_PLATOON_LOCKED, _sc.LimitedUIPlatoonLockedFormatter())
     registerMessengerClientFormatter(SCH_CLIENT_MSG_TYPE.STALL_RECEIPT, _sc.StallPurchaseReceiptMessageFormatter())

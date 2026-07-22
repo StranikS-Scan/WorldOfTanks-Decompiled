@@ -1,0 +1,49 @@
+<ny_style_asian_ny_style_01.xml>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	MT 2D styles universal 1000g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <nations>	china	</nations>
+      </include>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <style>
+      <id>	128	</id>
+      <texture>	gui/maps/vehicles/styles/NY_4.png	</texture>
+      <userString>	#vehicle_customization:ny_style/asian_ny_style_01	</userString>
+      <longDescriptionSpecial>	#vehicle_customization:ny_style/asian_ny_style_01_desc/long	</longDescriptionSpecial>
+      <tags>	NY2018_style progression_required addNationalEmblem	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	518	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	2	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <paints>
+            <item>
+              <id>	262	</id>
+              <appliedTo>	30583	</appliedTo>
+            </item>
+          </paints>
+        </outfit>
+      </outfits>
+    </style>
+  </itemGroup>
+</ny_style_asian_ny_style_01.xml>

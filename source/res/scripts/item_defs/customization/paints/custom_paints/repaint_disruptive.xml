@@ -1,0 +1,44 @@
+<repaint_disruptive.xml>
+  <itemGroup>
+    <name>	NA 2020	</name>
+    <userString>	#vehicle_customization:repaint/color_group_04	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	paints 20g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <paint>
+      <id>	75	</id>
+      <texture>	gui/maps/vehicles/repaints/custom_color_03.png	</texture>
+      <color>	49 50 79 255	</color>
+      <gloss>	0.346	</gloss>
+      <metallic>	0.2	</metallic>
+      <userString>	#vehicle_customization:repaint/disruptive	</userString>
+    </paint>
+    <paint>
+      <id>	78	</id>
+      <texture>	gui/maps/vehicles/repaints/custom_color_13.png	</texture>
+      <color>	101 96 76 255	</color>
+      <gloss>	0.509	</gloss>
+      <metallic>	0.23	</metallic>
+      <userString>	#vehicle_customization:repaint/derelict	</userString>
+    </paint>
+    <paint>
+      <id>	81	</id>
+      <texture>	gui/maps/vehicles/repaints/custom_color_17.png	</texture>
+      <color>	142 133 124 255	</color>
+      <gloss>	0.509	</gloss>
+      <metallic>	0.23	</metallic>
+      <userString>	#vehicle_customization:repaint/chile_2020	</userString>
+    </paint>
+    <usages>
+      <item>
+        <componentType>	ALL	</componentType>
+        <cost>	1	</cost>
+      </item>
+    </usages>
+  </itemGroup>
+</repaint_disruptive.xml>

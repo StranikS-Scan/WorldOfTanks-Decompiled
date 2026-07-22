@@ -1,4 +1,14 @@
 <list.xml>
+  <xmlns:xmlref>	http://bwt/xmlref	</xmlns:xmlref>
+  <It03_M15_42>
+    <id>	3	</id>
+    <userString>	#italy_vehicles:It03_M15_42	</userString>
+    <shortUserString>	#italy_vehicles:It03_M15_42_short	</shortUserString>
+    <description>	#italy_vehicles:It03_M15_42_descr	</description>
+    <price>	45400	</price>
+    <tags>	mediumTank HD improvedVentilation_class3_user extraHealthReserve_class3_user	</tags>
+    <level>	3	</level>
+  </It03_M15_42>
   <It04_Fiat_3000>
     <id>	0	</id>
     <userString>	#italy_vehicles:It04_Fiat_3000	</userString>
@@ -26,15 +36,6 @@
     <tags>	mediumTank HD improvedVentilation_class3_user extraHealthReserve_class3_user	</tags>
     <level>	2	</level>
   </It06_M14_41>
-  <It03_M15_42>
-    <id>	3	</id>
-    <userString>	#italy_vehicles:It03_M15_42	</userString>
-    <shortUserString>	#italy_vehicles:It03_M15_42_short	</shortUserString>
-    <description>	#italy_vehicles:It03_M15_42_descr	</description>
-    <price>	45400	</price>
-    <tags>	mediumTank HD improvedVentilation_class3_user extraHealthReserve_class3_user	</tags>
-    <level>	3	</level>
-  </It03_M15_42>
   <It07_P26_40>
     <id>	4	</id>
     <userString>	#italy_vehicles:It07_P26_40	</userString>
@@ -44,51 +45,6 @@
     <tags>	mediumTank HD improvedVentilation_class3_user extraHealthReserve_class3_user	</tags>
     <level>	4	</level>
   </It07_P26_40>
-  <It11_P43>
-    <id>	5	</id>
-    <userString>	#italy_vehicles:It11_P43	</userString>
-    <shortUserString>	#italy_vehicles:It11_P43_short	</shortUserString>
-    <description>	#italy_vehicles:It11_P43_descr	</description>
-    <price>	375000	</price>
-    <tags>	mediumTank HD mediumTank1 improvedVentilation_class2_user tankRammer_class2_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
-    <level>	5	</level>
-  </It11_P43>
-  <It10_P43_bis>
-    <id>	6	</id>
-    <userString>	#italy_vehicles:It10_P43_bis	</userString>
-    <shortUserString>	#italy_vehicles:It10_P43_bis_short	</shortUserString>
-    <description>	#italy_vehicles:It10_P43_bis_descr	</description>
-    <price>	905000	</price>
-    <tags>	mediumTank role_MT_universal HD mediumTank1 improvedVentilation_class2_user tankRammer_class2_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
-    <level>	6	</level>
-  </It10_P43_bis>
-  <It09_P43_ter>
-    <id>	7	</id>
-    <userString>	#italy_vehicles:It09_P43_ter	</userString>
-    <shortUserString>	#italy_vehicles:It09_P43_ter_short	</shortUserString>
-    <description>	#italy_vehicles:It09_P43_ter_descr	</description>
-    <price>	1440000	</price>
-    <tags>	mediumTank role_MT_universal HD mediumTank1 improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class2_user extraHealthReserve_class3_user antifragmentationLining_medium_user	</tags>
-    <level>	7	</level>
-  </It09_P43_ter>
-  <It14_P44_Pantera>
-    <id>	8	</id>
-    <userString>	#italy_vehicles:It14_P44_Pantera	</userString>
-    <shortUserString>	#italy_vehicles:It14_P44_Pantera_short	</shortUserString>
-    <description>	#italy_vehicles:It14_P44_Pantera_descr	</description>
-    <price>	2530000	</price>
-    <tags>	mediumTank role_MT_support HD mediumTank2 improvedVentilation_class2_user aimingStabilizer_class1_user extraHealthReserve_class3_user antifragmentationLining_medium_user	</tags>
-    <level>	8	</level>
-  </It14_P44_Pantera>
-  <It12_Prototipo_Standard_B>
-    <id>	9	</id>
-    <userString>	#italy_vehicles:It12_Prototipo_Standard_B	</userString>
-    <shortUserString>	#italy_vehicles:It12_Prototipo_Standard_B_short	</shortUserString>
-    <description>	#italy_vehicles:It12_Prototipo_Standard_B_descr	</description>
-    <price>	3500000	</price>
-    <tags>	mediumTank role_MT_support HD mediumTank2 improvedVentilation_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
-    <level>	9	</level>
-  </It12_Prototipo_Standard_B>
   <It08_Progetto_M40_mod_65>
     <id>	10	</id>
     <userString>	#italy_vehicles:It08_Progetto_M40_mod_65	</userString>
@@ -98,150 +54,53 @@
     <tags>	mediumTank role_MT_support HD mediumTank2 improvedVentilation_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user earn_crystals	</tags>
     <level>	10	</level>
   </It08_Progetto_M40_mod_65>
-  <It15_Rinoceronte>
-    <id>	11	</id>
-    <userString>	#italy_vehicles:It15_Rinoceronte	</userString>
-    <shortUserString>	#italy_vehicles:It15_Rinoceronte_short	</shortUserString>
-    <description>	#italy_vehicles:It15_Rinoceronte_descr	</description>
+  <It08_Progetto_M40_mod_65_bob>
+    <id>	201	</id>
+    <userString>	#italy_vehicles:It08_Progetto_M40_mod_65_bob	</userString>
+    <shortUserString>	#italy_vehicles:It08_Progetto_M40_mod_65_bob_short	</shortUserString>
+    <description>	#italy_vehicles:It08_Progetto_M40_mod_65_descr	</description>
     <price>	6100000	</price>
-    <tags>	heavyTank role_HT_support heavyTank2 improvedVentilation_class1_user extraHealthReserve_class1_user aimingStabilizer_class1_user antifragmentationLining_heavy_user HD earn_crystals	</tags>
+    <notInShop>	true	</notInShop>
+    <cannotBeBought>	true	</cannotBeBought>
+    <tags>	mediumTank role_MT_support private HD secret bob cannot_be_sold mediumTank2 improvedVentilation_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
     <level>	10	</level>
-  </It15_Rinoceronte>
-  <It16_Carro_d_assalto_P88>
-    <id>	12	</id>
-    <userString>	#italy_vehicles:It16_It16_Carrodassalto_P88	</userString>
-    <shortUserString>	#italy_vehicles:It16_It16_Carrodassalto_P88_short	</shortUserString>
-    <description>	#italy_vehicles:It16_It16_Carrodassalto_P88_descr	</description>
-    <price>	1480000	</price>
-    <tags>	heavyTank role_HT_break tankRammer_class2_user improvedVentilation_class2_user extraHealthReserve_class2_user antifragmentationLining_medium_user HD	</tags>
+  </It08_Progetto_M40_mod_65_bob>
+  <It09_P43_ter>
+    <id>	7	</id>
+    <userString>	#italy_vehicles:It09_P43_ter	</userString>
+    <shortUserString>	#italy_vehicles:It09_P43_ter_short	</shortUserString>
+    <description>	#italy_vehicles:It09_P43_ter_descr	</description>
+    <price>	1440000	</price>
+    <tags>	mediumTank role_MT_universal HD mediumTank1 improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class2_user extraHealthReserve_class3_user antifragmentationLining_medium_user	</tags>
     <level>	7	</level>
-  </It16_Carro_d_assalto_P88>
-  <It19_Progetto_C50_mod_66>
-    <id>	13	</id>
-    <userString>	#italy_vehicles:It19_Progetto_C50_mod_66	</userString>
-    <shortUserString>	#italy_vehicles:It19_Progetto_C50_mod_66_short	</shortUserString>
-    <description>	#italy_vehicles:It19_Progetto_C50_mod_66_descr	</description>
-    <price>	3600000	</price>
-    <tags>	heavyTank role_HT_support heavyTank2 improvedVentilation_class1_user extraHealthReserve_class1_user aimingStabilizer_class1_user antifragmentationLining_heavy_user HD	</tags>
-    <level>	9	</level>
-  </It19_Progetto_C50_mod_66>
-  <It17_Progetto_CC55_mod_54>
-    <id>	14	</id>
-    <userString>	#italy_vehicles:It17_Progetto_CC55_mod_54	</userString>
-    <shortUserString>	#italy_vehicles:It17_Progetto_CC55_mod_54_short	</shortUserString>
-    <description>	#italy_vehicles:It17_Progetto_CC55_mod_54_descr	</description>
-    <price>	2600000	</price>
-    <tags>	heavyTank role_HT_support HD heavyTank2 improvedVentilation_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user	</tags>
-    <level>	8	</level>
-  </It17_Progetto_CC55_mod_54>
-  <It27_M43_da_105_25_Bassoto>
-    <id>	16	</id>
-    <userString>	#italy_vehicles:It27_M43_da_105_25_Bassoto	</userString>
-    <shortUserString>	#italy_vehicles:It27_M43_da_105_25_Bassoto_short	</shortUserString>
-    <description>	#italy_vehicles:It27_M43_da_105_25_Bassoto_descr	</description>
-    <price>	890000	</price>
-    <tags>	AT-SPG role_ATSPG_universal HD mediumAT-SPG improvedVentilation_class2_user tankRammer_class2_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
+  </It09_P43_ter>
+  <It10_P43_bis>
+    <id>	6	</id>
+    <userString>	#italy_vehicles:It10_P43_bis	</userString>
+    <shortUserString>	#italy_vehicles:It10_P43_bis_short	</shortUserString>
+    <description>	#italy_vehicles:It10_P43_bis_descr	</description>
+    <price>	905000	</price>
+    <tags>	mediumTank role_MT_universal HD mediumTank1 improvedVentilation_class2_user tankRammer_class2_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
     <level>	6	</level>
-  </It27_M43_da_105_25_Bassoto>
-  <It26_CC_56>
-    <id>	17	</id>
-    <userString>	#italy_vehicles:It26_CC_56	</userString>
-    <shortUserString>	#italy_vehicles:It26_CC_56_short	</shortUserString>
-    <description>	#italy_vehicles:It26_CC_56_descr	</description>
-    <price>	1370000	</price>
-    <tags>	AT-SPG role_ATSPG_assault HD heavyAT-SPG improvedVentilation_class2_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
-    <level>	7	</level>
-  </It26_CC_56>
-  <It31_CC_67_B>
-    <id>	18	</id>
-    <userString>	#italy_vehicles:It31_CC_67_B	</userString>
-    <description>	#italy_vehicles:It31_CC_67_B_descr	</description>
-    <shortUserString>	#italy_vehicles:It31_CC_67_B_short	</shortUserString>
-    <shortDescriptionSpecial>	#italy_vehicles:It31_CC_67_B_short_special	</shortDescriptionSpecial>
-    <longDescriptionSpecial>	#italy_vehicles:It31_CC_67_B_long_special	</longDescriptionSpecial>
-    <price>	2530000	</price>
-    <tags>	AT-SPG role_ATSPG_assault HD heavyAT-SPG improvedVentilation_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user	</tags>
-    <level>	8	</level>
-  </It31_CC_67_B>
-  <It23_CC_3>
-    <id>	20	</id>
-    <userString>	#italy_vehicles:It23_CC_3	</userString>
-    <shortUserString>	#italy_vehicles:It23_CC_3_short	</shortUserString>
-    <description>	#italy_vehicles:It23_CC_3_descr	</description>
-    <price>	6100000	</price>
-    <tags>	AT-SPG role_ATSPG_assault HD heavyAT-SPG improvedVentilation_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user earn_crystals	</tags>
-    <level>	10	</level>
-  </It23_CC_3>
-  <It24_Controcarro_1_Mk2>
-    <id>	21	</id>
-    <userString>	#italy_vehicles:It24_Controcarro_1_Mk2	</userString>
-    <shortUserString>	#italy_vehicles:It24_Controcarro_1_Mk2_short	</shortUserString>
-    <description>	#italy_vehicles:It24_Controcarro_1_Mk2_descr	</description>
-    <price>	3550000	</price>
-    <tags>	AT-SPG role_ATSPG_assault HD heavyAT-SPG improvedVentilation_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user	</tags>
-    <level>	9	</level>
-  </It24_Controcarro_1_Mk2>
-  <It28_Semovente_M41_Da_75_18>
-    <id>	22	</id>
-    <userString>	#italy_vehicles:It28_Semovente_M41_Da_75_18	</userString>
-    <shortUserString>	#italy_vehicles:It28_Semovente_M41_Da_75_18_short	</shortUserString>
-    <description>	#italy_vehicles:It28_Semovente_M41_Da_75_18_descr	</description>
-    <price>	370000	</price>
-    <tags>	AT-SPG HD mediumAT-SPG improvedVentilation_class2_user tankRammer_class2_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
+  </It10_P43_bis>
+  <It11_P43>
+    <id>	5	</id>
+    <userString>	#italy_vehicles:It11_P43	</userString>
+    <shortUserString>	#italy_vehicles:It11_P43_short	</shortUserString>
+    <description>	#italy_vehicles:It11_P43_descr	</description>
+    <price>	375000	</price>
+    <tags>	mediumTank HD mediumTank1 improvedVentilation_class2_user tankRammer_class2_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
     <level>	5	</level>
-  </It28_Semovente_M41_Da_75_18>
-  <It30_CC_mod_64_Prem>
-    <id>	196	</id>
-    <userString>	#italy_vehicles:It30_CC_mod_64_Prem	</userString>
-    <description>	#italy_vehicles:It30_CC_mod_64_Prem_descr	</description>
-    <shortUserString>	#italy_vehicles:It30_CC_mod_64_Prem_short	</shortUserString>
-    <shortDescriptionSpecial>	#italy_vehicles:It30_CC_mod_64_Prem_short_special	</shortDescriptionSpecial>
-    <longDescriptionSpecial>	#italy_vehicles:It30_CC_mod_64_Prem_long_special	</longDescriptionSpecial>
-    <price>	11000	  <gold></gold>
-    </price>
-    <notInShop>	true	</notInShop>
-    <tags>	AT-SPG role_ATSPG_assault HD heavyAT-SPG improvedVentilation_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user	</tags>
-    <level>	8	</level>
-  </It30_CC_mod_64_Prem>
-  <It21_Lion>
-    <id>	197	</id>
-    <userString>	#italy_vehicles:It21_Lion	</userString>
-    <shortUserString>	#italy_vehicles:It21_Lion_short	</shortUserString>
-    <description>	#italy_vehicles:It21_Lion_descr	</description>
-    <shortDescriptionSpecial>	#italy_vehicles:It21_Lion_short_special	</shortDescriptionSpecial>
-    <longDescriptionSpecial>	#italy_vehicles:It21_Lion_long_special	</longDescriptionSpecial>
-    <price>	25000	  <gold></gold>
-    </price>
-    <notInShop>	true	</notInShop>
-    <tags>	mediumTank role_MT_sniper HD mediumTank1 improvedVentilation_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user earn_crystals special	</tags>
-    <level>	10	</level>
-  </It21_Lion>
-  <It20_Carro_Combattimento_45t>
-    <id>	198	</id>
-    <userString>	#italy_vehicles:It20_Carro_Combattimento_45t	</userString>
-    <shortUserString>	#italy_vehicles:It20_Carro_Combattimento_45t_short	</shortUserString>
-    <description>	#italy_vehicles:It20_Carro_Combattimento_45t_descr	</description>
-    <shortDescriptionSpecial>	#italy_vehicles:It20_Carro_Combattimento_45t_short_special	</shortDescriptionSpecial>
-    <longDescriptionSpecial>	#italy_vehicles:It20_Carro_Combattimento_45t_long_special	</longDescriptionSpecial>
-    <price>	25000	  <gold></gold>
-    </price>
-    <notInShop>	true	</notInShop>
-    <tags>	mediumTank role_MT_support HD special mediumTank2 improvedVentilation_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user earn_crystals	</tags>
-    <level>	10	</level>
-  </It20_Carro_Combattimento_45t>
-  <It18_Progetto_C45_mod_71>
-    <id>	199	</id>
-    <userString>	#italy_vehicles:It18_Progetto_C45_mod_71	</userString>
-    <description>	#italy_vehicles:It18_Progetto_C45_mod_71_descr	</description>
-    <shortUserString>	#italy_vehicles:It18_Progetto_C45_mod_71_short	</shortUserString>
-    <shortDescriptionSpecial>	#italy_vehicles:It18_Progetto_C45_mod_71_short_special	</shortDescriptionSpecial>
-    <longDescriptionSpecial>	#italy_vehicles:IIt18_Progetto_C45_mod_71_long_special	</longDescriptionSpecial>
-    <price>	11000	  <gold></gold>
-    </price>
-    <notInShop>	true	</notInShop>
-    <tags>	heavyTank role_HT_support heavyTank2 improvedVentilation_class1_user extraHealthReserve_class1_user aimingStabilizer_class1_user antifragmentationLining_heavy_user HD	</tags>
-    <level>	8	</level>
-  </It18_Progetto_C45_mod_71>
+  </It11_P43>
+  <It12_Prototipo_Standard_B>
+    <id>	9	</id>
+    <userString>	#italy_vehicles:It12_Prototipo_Standard_B	</userString>
+    <shortUserString>	#italy_vehicles:It12_Prototipo_Standard_B_short	</shortUserString>
+    <description>	#italy_vehicles:It12_Prototipo_Standard_B_descr	</description>
+    <price>	3500000	</price>
+    <tags>	mediumTank role_MT_support HD mediumTank2 improvedVentilation_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
+    <level>	9	</level>
+  </It12_Prototipo_Standard_B>
   <It13_Progetto_M35_mod_46>
     <id>	200	</id>
     <userString>	#italy_vehicles:It13_Progetto_M35_mod_46	</userString>
@@ -268,6 +127,146 @@
     <tags>	mediumTank role_MT_support HD improvedVentilation_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user lockOutfit restoreWithStyle builtinStyle	</tags>
     <level>	8	</level>
   </It13_Progetto_M35_mod_46_LE>
+  <It14_P44_Pantera>
+    <id>	8	</id>
+    <userString>	#italy_vehicles:It14_P44_Pantera	</userString>
+    <shortUserString>	#italy_vehicles:It14_P44_Pantera_short	</shortUserString>
+    <description>	#italy_vehicles:It14_P44_Pantera_descr	</description>
+    <price>	2530000	</price>
+    <tags>	mediumTank role_MT_support HD mediumTank2 improvedVentilation_class2_user aimingStabilizer_class1_user extraHealthReserve_class3_user antifragmentationLining_medium_user	</tags>
+    <level>	8	</level>
+  </It14_P44_Pantera>
+  <It15_Rinoceronte>
+    <id>	11	</id>
+    <userString>	#italy_vehicles:It15_Rinoceronte	</userString>
+    <shortUserString>	#italy_vehicles:It15_Rinoceronte_short	</shortUserString>
+    <description>	#italy_vehicles:It15_Rinoceronte_descr	</description>
+    <price>	6100000	</price>
+    <tags>	heavyTank role_HT_support heavyTank2 improvedVentilation_class1_user extraHealthReserve_class1_user aimingStabilizer_class1_user antifragmentationLining_heavy_user HD earn_crystals	</tags>
+    <level>	10	</level>
+  </It15_Rinoceronte>
+  <It16_Carro_d_assalto_P88>
+    <id>	12	</id>
+    <userString>	#italy_vehicles:It16_It16_Carrodassalto_P88	</userString>
+    <shortUserString>	#italy_vehicles:It16_It16_Carrodassalto_P88_short	</shortUserString>
+    <description>	#italy_vehicles:It16_It16_Carrodassalto_P88_descr	</description>
+    <price>	1480000	</price>
+    <tags>	heavyTank role_HT_break tankRammer_class2_user improvedVentilation_class2_user extraHealthReserve_class2_user antifragmentationLining_medium_user HD	</tags>
+    <level>	7	</level>
+  </It16_Carro_d_assalto_P88>
+  <It17_Progetto_CC55_mod_54>
+    <id>	14	</id>
+    <userString>	#italy_vehicles:It17_Progetto_CC55_mod_54	</userString>
+    <shortUserString>	#italy_vehicles:It17_Progetto_CC55_mod_54_short	</shortUserString>
+    <description>	#italy_vehicles:It17_Progetto_CC55_mod_54_descr	</description>
+    <price>	2600000	</price>
+    <tags>	heavyTank role_HT_support HD heavyTank2 improvedVentilation_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user	</tags>
+    <level>	8	</level>
+  </It17_Progetto_CC55_mod_54>
+  <It18_Progetto_C45_mod_71>
+    <id>	199	</id>
+    <userString>	#italy_vehicles:It18_Progetto_C45_mod_71	</userString>
+    <description>	#italy_vehicles:It18_Progetto_C45_mod_71_descr	</description>
+    <shortUserString>	#italy_vehicles:It18_Progetto_C45_mod_71_short	</shortUserString>
+    <shortDescriptionSpecial>	#italy_vehicles:It18_Progetto_C45_mod_71_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#italy_vehicles:IIt18_Progetto_C45_mod_71_long_special	</longDescriptionSpecial>
+    <price>	11000	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	heavyTank role_HT_support heavyTank2 improvedVentilation_class1_user extraHealthReserve_class1_user aimingStabilizer_class1_user antifragmentationLining_heavy_user HD	</tags>
+    <level>	8	</level>
+  </It18_Progetto_C45_mod_71>
+  <It19_Progetto_C50_mod_66>
+    <id>	13	</id>
+    <userString>	#italy_vehicles:It19_Progetto_C50_mod_66	</userString>
+    <shortUserString>	#italy_vehicles:It19_Progetto_C50_mod_66_short	</shortUserString>
+    <description>	#italy_vehicles:It19_Progetto_C50_mod_66_descr	</description>
+    <price>	3600000	</price>
+    <tags>	heavyTank role_HT_support heavyTank2 improvedVentilation_class1_user extraHealthReserve_class1_user aimingStabilizer_class1_user antifragmentationLining_heavy_user HD	</tags>
+    <level>	9	</level>
+  </It19_Progetto_C50_mod_66>
+  <It20_Carro_Combattimento_45t>
+    <id>	198	</id>
+    <userString>	#italy_vehicles:It20_Carro_Combattimento_45t	</userString>
+    <shortUserString>	#italy_vehicles:It20_Carro_Combattimento_45t_short	</shortUserString>
+    <description>	#italy_vehicles:It20_Carro_Combattimento_45t_descr	</description>
+    <shortDescriptionSpecial>	#italy_vehicles:It20_Carro_Combattimento_45t_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#italy_vehicles:It20_Carro_Combattimento_45t_long_special	</longDescriptionSpecial>
+    <price>	25000	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	mediumTank role_MT_support HD special mediumTank2 improvedVentilation_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user earn_crystals	</tags>
+    <level>	10	</level>
+  </It20_Carro_Combattimento_45t>
+  <It21_Lion>
+    <id>	197	</id>
+    <userString>	#italy_vehicles:It21_Lion	</userString>
+    <shortUserString>	#italy_vehicles:It21_Lion_short	</shortUserString>
+    <description>	#italy_vehicles:It21_Lion_descr	</description>
+    <shortDescriptionSpecial>	#italy_vehicles:It21_Lion_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#italy_vehicles:It21_Lion_long_special	</longDescriptionSpecial>
+    <price>	25000	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	mediumTank role_MT_sniper HD mediumTank1 improvedVentilation_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user earn_crystals special	</tags>
+    <level>	10	</level>
+  </It21_Lion>
+  <It23_CC_3>
+    <id>	20	</id>
+    <userString>	#italy_vehicles:It23_CC_3	</userString>
+    <shortUserString>	#italy_vehicles:It23_CC_3_short	</shortUserString>
+    <description>	#italy_vehicles:It23_CC_3_descr	</description>
+    <price>	6100000	</price>
+    <tags>	AT-SPG role_ATSPG_assault HD heavyAT-SPG improvedVentilation_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user earn_crystals	</tags>
+    <level>	10	</level>
+  </It23_CC_3>
+  <It23_CC_3_bob>
+    <id>	31002	</id>
+    <userString>	#italy_vehicles:It23_CC_3_bob	</userString>
+    <shortUserString>	#italy_vehicles:It23_CC_3_bob_short	</shortUserString>
+    <description>	#italy_vehicles:It23_CC_3_descr	</description>
+    <price>	6100000	</price>
+    <notInShop>	true	</notInShop>
+    <cannotBeBought>	true	</cannotBeBought>
+    <tags>	AT-SPG role_ATSPG_assault private HD secret bob cannot_be_sold heavyAT-SPG improvedVentilation_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user earn_crystals	</tags>
+    <level>	10	</level>
+  </It23_CC_3_bob>
+  <It24_Controcarro_1_Mk2>
+    <id>	21	</id>
+    <userString>	#italy_vehicles:It24_Controcarro_1_Mk2	</userString>
+    <shortUserString>	#italy_vehicles:It24_Controcarro_1_Mk2_short	</shortUserString>
+    <description>	#italy_vehicles:It24_Controcarro_1_Mk2_descr	</description>
+    <price>	3550000	</price>
+    <tags>	AT-SPG role_ATSPG_assault HD heavyAT-SPG improvedVentilation_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user	</tags>
+    <level>	9	</level>
+  </It24_Controcarro_1_Mk2>
+  <It26_CC_56>
+    <id>	17	</id>
+    <userString>	#italy_vehicles:It26_CC_56	</userString>
+    <shortUserString>	#italy_vehicles:It26_CC_56_short	</shortUserString>
+    <description>	#italy_vehicles:It26_CC_56_descr	</description>
+    <price>	1370000	</price>
+    <tags>	AT-SPG role_ATSPG_assault HD heavyAT-SPG improvedVentilation_class2_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
+    <level>	7	</level>
+  </It26_CC_56>
+  <It27_M43_da_105_25_Bassoto>
+    <id>	16	</id>
+    <userString>	#italy_vehicles:It27_M43_da_105_25_Bassoto	</userString>
+    <shortUserString>	#italy_vehicles:It27_M43_da_105_25_Bassoto_short	</shortUserString>
+    <description>	#italy_vehicles:It27_M43_da_105_25_Bassoto_descr	</description>
+    <price>	890000	</price>
+    <tags>	AT-SPG role_ATSPG_universal HD mediumAT-SPG improvedVentilation_class2_user tankRammer_class2_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
+    <level>	6	</level>
+  </It27_M43_da_105_25_Bassoto>
+  <It28_Semovente_M41_Da_75_18>
+    <id>	22	</id>
+    <userString>	#italy_vehicles:It28_Semovente_M41_Da_75_18	</userString>
+    <shortUserString>	#italy_vehicles:It28_Semovente_M41_Da_75_18_short	</shortUserString>
+    <description>	#italy_vehicles:It28_Semovente_M41_Da_75_18_descr	</description>
+    <price>	370000	</price>
+    <tags>	AT-SPG HD mediumAT-SPG improvedVentilation_class2_user tankRammer_class2_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
+    <level>	5	</level>
+  </It28_Semovente_M41_Da_75_18>
   <It29_Carro_Celere_Sahariano>
     <id>	204	</id>
     <userString>	#italy_vehicles:It29_Carro_Celere_Sahariano	</userString>
@@ -281,17 +280,30 @@
     <tags>	mediumTank HD improvedVentilation_class3_user extraHealthReserve_class3_user	</tags>
     <level>	3	</level>
   </It29_Carro_Celere_Sahariano>
-  <It08_Progetto_M40_mod_65_bob>
-    <id>	201	</id>
-    <userString>	#italy_vehicles:It08_Progetto_M40_mod_65_bob	</userString>
-    <shortUserString>	#italy_vehicles:It08_Progetto_M40_mod_65_bob_short	</shortUserString>
-    <description>	#italy_vehicles:It08_Progetto_M40_mod_65_descr	</description>
-    <price>	6100000	</price>
+  <It30_CC_mod_64_Prem>
+    <id>	196	</id>
+    <userString>	#italy_vehicles:It30_CC_mod_64_Prem	</userString>
+    <description>	#italy_vehicles:It30_CC_mod_64_Prem_descr	</description>
+    <shortUserString>	#italy_vehicles:It30_CC_mod_64_Prem_short	</shortUserString>
+    <shortDescriptionSpecial>	#italy_vehicles:It30_CC_mod_64_Prem_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#italy_vehicles:It30_CC_mod_64_Prem_long_special	</longDescriptionSpecial>
+    <price>	11000	  <gold></gold>
+    </price>
     <notInShop>	true	</notInShop>
-    <cannotBeBought>	true	</cannotBeBought>
-    <tags>	mediumTank role_MT_support private HD secret bob cannot_be_sold mediumTank2 improvedVentilation_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
-    <level>	10	</level>
-  </It08_Progetto_M40_mod_65_bob>
+    <tags>	AT-SPG role_ATSPG_assault HD heavyAT-SPG improvedVentilation_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user	</tags>
+    <level>	8	</level>
+  </It30_CC_mod_64_Prem>
+  <It31_CC_67_B>
+    <id>	18	</id>
+    <userString>	#italy_vehicles:It31_CC_67_B	</userString>
+    <description>	#italy_vehicles:It31_CC_67_B_descr	</description>
+    <shortUserString>	#italy_vehicles:It31_CC_67_B_short	</shortUserString>
+    <shortDescriptionSpecial>	#italy_vehicles:It31_CC_67_B_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#italy_vehicles:It31_CC_67_B_long_special	</longDescriptionSpecial>
+    <price>	2530000	</price>
+    <tags>	AT-SPG role_ATSPG_assault HD heavyAT-SPG improvedVentilation_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user	</tags>
+    <level>	8	</level>
+  </It31_CC_67_B>
   <It32_Prototipo_6>
     <id>	23	</id>
     <userString>	#italy_vehicles:It32_Prototipo_6	</userString>
@@ -318,30 +330,6 @@
     <tags>	heavyTank role_HT_universal improvedVentilation_class1_user tankRammer_class1_user extraHealthReserve_class1_user aimingStabilizer_class1_user antifragmentationLining_heavy_user HD earn_crystals special	</tags>
     <level>	10	</level>
   </It33_Orso>
-  <It23_CC_3_bob>
-    <id>	31002	</id>
-    <userString>	#italy_vehicles:It23_CC_3_bob	</userString>
-    <shortUserString>	#italy_vehicles:It23_CC_3_bob_short	</shortUserString>
-    <description>	#italy_vehicles:It23_CC_3_descr	</description>
-    <price>	6100000	</price>
-    <notInShop>	true	</notInShop>
-    <cannotBeBought>	true	</cannotBeBought>
-    <tags>	AT-SPG role_ATSPG_assault private HD secret bob cannot_be_sold heavyAT-SPG improvedVentilation_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user earn_crystals	</tags>
-    <level>	10	</level>
-  </It23_CC_3_bob>
-  <It36_Gasta>
-    <id>	31003	</id>
-    <userString>	#italy_vehicles:It36_Gasta	</userString>
-    <shortUserString>	#italy_vehicles:It36_Gasta_short	</shortUserString>
-    <description>	#italy_vehicles:It36_Gasta_descr	</description>
-    <shortDescriptionSpecial>	#italy_vehicles:It36_Gasta_short_special	</shortDescriptionSpecial>
-    <longDescriptionSpecial>	#italy_vehicles:It36_Gasta_long_special	</longDescriptionSpecial>
-    <price>	17500	  <gold></gold>
-    </price>
-    <notInShop>	true	</notInShop>
-    <tags>	mediumTank role_MT_sniper HD mediumTank2 tankRammer_class2_user improvedVentilation_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user earn_crystals	</tags>
-    <level>	9	</level>
-  </It36_Gasta>
   <It35_Gladiatore>
     <id>	31004	</id>
     <userString>	#italy_vehicles:It35_Gladiatore	</userString>
@@ -355,4 +343,17 @@
     <tags>	heavyTank role_HT_support improvedVentilation_class1_user extraHealthReserve_class1_user aimingStabilizer_class1_user antifragmentationLining_heavy_user HD earn_crystals secret testTank lockOutfit	</tags>
     <level>	9	</level>
   </It35_Gladiatore>
+  <It36_Gasta>
+    <id>	31003	</id>
+    <userString>	#italy_vehicles:It36_Gasta	</userString>
+    <shortUserString>	#italy_vehicles:It36_Gasta_short	</shortUserString>
+    <description>	#italy_vehicles:It36_Gasta_descr	</description>
+    <shortDescriptionSpecial>	#italy_vehicles:It36_Gasta_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#italy_vehicles:It36_Gasta_long_special	</longDescriptionSpecial>
+    <price>	17500	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	mediumTank role_MT_sniper HD mediumTank2 tankRammer_class2_user improvedVentilation_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user earn_crystals secret testTank lockOutfit	</tags>
+    <level>	9	</level>
+  </It36_Gasta>
 </list.xml>

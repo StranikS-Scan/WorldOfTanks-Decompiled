@@ -1,0 +1,58 @@
+<main_style_R77_KV2_3Dst_02.xml>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <vehicleFilter>
+      <include>
+        <vehicles>	ussr:R77_KV2	</vehicles>
+      </include>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <style>
+      <isRent>	false	</isRent>
+      <userString>	#vehicle_customization:main_style/R77_KV2_3Dst_02	</userString>
+      <longDescriptionSpecial>	#vehicle_customization:main_style/R77_KV2_3Dst_02_desc/long	</longDescriptionSpecial>
+      <id>	31332	</id>
+      <modelsSet>	R77_KV2_3Dst_02	</modelsSet>
+      <tags>	progression_required	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+      <outfits>
+        <outfit>
+          <season>	all	</season>
+          <attachments>
+            <item>
+              <id>	31055	</id>
+              <slotId>	38000	</slotId>
+            </item>
+          </attachments>
+          <camouflages>
+            <item>
+              <id>	1	</id>
+              <patternSize>	1	</patternSize>
+              <appliedTo>	4368	</appliedTo>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <insignias>
+            <item>
+              <id>	31025	</id>
+              <appliedTo>	28672	</appliedTo>
+            </item>
+          </insignias>
+        </outfit>
+      </outfits>
+      <texture>	gui/maps/vehicles/styles/R77_KV2_3Dst_02.png	</texture>
+      <maxNumber>	1	</maxNumber>
+    </style>
+    <priceGroup>	MT 3D styles 6-7-8 levels 4000g notInShop	</priceGroup>
+  </itemGroup>
+</main_style_R77_KV2_3Dst_02.xml>

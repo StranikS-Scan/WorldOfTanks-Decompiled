@@ -26,6 +26,7 @@ from gui.server_events.bonuses import getNonQuestBonuses, mergeBonuses
 from gui.shared.event_dispatcher import selectVehicleInHangar
 from gui_lootboxes.gui.lb_gui_constants import SHOW_GIFT_PHRASE_TAG
 from helpers import dependency
+from gui_lootboxes.gui.impl.lobby.gui_lootboxes.tooltips.players_list_tooltip import PlayersListTooltip
 from shared_utils import findFirst, first
 from skeletons.gui.game_control import IGuiLootBoxesController, IGiftSystemController
 from skeletons.gui.shared import IItemsCache
@@ -35,7 +36,10 @@ if typing.TYPE_CHECKING:
     from helpers.server_settings import GiftSystemConfig, GiftEventConfig
     from gui.shared.gui_items.loot_box import LootBox
 SECONDARY_REWARDS_PROCESSORS = []
-PlayerData = namedtuple('_PlayerData', ('name', 'clanAbbrev', 'spaID', 'isNameLoading'))
+PlayerData = namedtuple('_PlayerData', ('name',
+ 'clanAbbrev',
+ 'spaID',
+ 'isNameLoading'))
 
 class LootBoxesRewardScreen(ViewImpl):
     __slots__ = ('__rewards', '__tooltipData', '__mainVehicleCd', '__lootbox', '__clientData', '__bonusData', '__key', '__userInfoHelper', '__giftsInfo', '__spaIdOfReceivedName')
@@ -110,7 +114,7 @@ class LootBoxesRewardScreen(ViewImpl):
         if contentID in RegisteredTooltips.REGISTERED_TOOLTIPS:
             view = RegisteredTooltips.REGISTERED_TOOLTIPS.get(contentID)
             return view(event)
-        return super(LootBoxesRewardScreen, self).createToolTipContent(event, contentID)
+        return PlayersListTooltip(playersIds=self._processGiftsSenders()) if contentID == R.views.gui_lootboxes.lobby.gui_lootboxes.tooltips.PlayersListTooltip() else super(LootBoxesRewardScreen, self).createToolTipContent(event, contentID)
 
     @createBackportTooltipDecorator()
     def createToolTip(self, event):
@@ -150,6 +154,16 @@ class LootBoxesRewardScreen(ViewImpl):
             senders.add(senderSpaID)
 
         return (len(senders), messageID, PlayerData(senderName, clanAbbrev, senderID, isNameLoading))
+
+    def _processGiftsSenders(self):
+        giftSenders = []
+        firstSenderID = self.__giftsInfo[0][0]
+        for gift in self.__giftsInfo[1:]:
+            senderID = gift[0]
+            if senderID != firstSenderID:
+                giftSenders.append(senderID)
+
+        return giftSenders
 
     def getSenderNameAndClanAbbrev(self, senderID):
         name = self.__userInfoHelper.getUserName(senderID)

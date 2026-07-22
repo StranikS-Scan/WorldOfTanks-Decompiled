@@ -121,6 +121,8 @@ class ItemPackType(CONST_CONTAINER):
     CUSTOM_LOOTBOX = 'custom/lootbox'
     CUSTOM_LOOTBOXKEY = 'custom/LootBoxKey'
     CUSTOM_BERTHS = 'custom/berths'
+    CUSTOM_GOLDENTICKET = 'custom/goldenticket'
+    CUSTOM_CURRENCIES = 'custom/currencies'
     TOKEN = 'token'
     PAINT_ALL = 'paint/all'
     PAINT_SUMMER = 'paint/summer'
@@ -136,6 +138,7 @@ class ItemPackType(CONST_CONTAINER):
     PERSONAL_NUMBER = 'personal_number/all'
     MODIFICATION = 'modification/all'
     STYLE = 'style/all'
+    LB_STYLE_PROGRESS = 'custom/lbStyleProgress'
     ACHIEVEMENT = 'achievement'
     BADGE = 'badge'
     REFERRAL_BADGE = 'referralBadge'
@@ -192,7 +195,7 @@ class ItemPackTypeGroup(CONST_CONTAINER):
      ItemPackType.PAINT_DESERT,
      ItemPackType.PAINT_SUMMER,
      ItemPackType.PAINT_WINTER)
-    STYLE = (ItemPackType.STYLE,)
+    STYLE = (ItemPackType.STYLE, ItemPackType.LB_STYLE_PROGRESS)
     MODIFICATION = (ItemPackType.MODIFICATION,)
     DECAL = (ItemPackType.DECAL_1, ItemPackType.DECAL_2)
     PROJECTION_DECAL = (ItemPackType.PROJECTION_DECAL,)
@@ -209,7 +212,8 @@ class ItemPackTypeGroup(CONST_CONTAINER):
      ItemPackType.CUSTOM_SLOT,
      ItemPackType.CUSTOM_SUPPLY_POINT,
      ItemPackType.CUSTOM_BUMBLEE_COIN,
-     ItemPackType.CUSTOM_HONEY_COIN)
+     ItemPackType.CUSTOM_HONEY_COIN,
+     ItemPackType.CUSTOM_GOLDENTICKET)
     CREW = (ItemPackType.CREW_50,
      ItemPackType.CREW_75,
      ItemPackType.CREW_100,

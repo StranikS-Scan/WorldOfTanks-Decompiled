@@ -1,0 +1,49 @@
+<special_style_kv2_w.xml>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/unique_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	MT 3D styles 6-7-8 levels 4000g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	ussr:R152_KV2_W	</vehicles>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	170	</id>
+      <texture>	gui/maps/vehicles/styles/kv2_w.png	</texture>
+      <description>	#vehicle_customization:special_style/kv2_w_description	</description>
+      <longDescriptionSpecial>	#vehicle_customization:special_style/kv2_w_description/long	</longDescriptionSpecial>
+      <modelsSet>	WH	</modelsSet>
+      <maxNumber>	1	</maxNumber>
+      <userString>	#vehicle_customization:special_style/kv2_w	</userString>
+      <tags>	progression_required	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	1	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <insignias>
+            <item>
+              <id>	12	</id>
+              <appliedTo>	4096	</appliedTo>
+            </item>
+          </insignias>
+        </outfit>
+      </outfits>
+    </style>
+  </itemGroup>
+</special_style_kv2_w.xml>

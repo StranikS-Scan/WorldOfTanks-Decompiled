@@ -38,7 +38,7 @@ if typing.TYPE_CHECKING:
     from gui.ranked_battles.ranked_helpers.web_season_provider import RankedWebSeasonProvider, WebSeasonInfo
     from gui.ranked_battles.ranked_models import BattleRankInfo, Division, PostBattleRankInfo, Rank
     from gui.server_events.bonuses import BattlePassSelectTokensBonus, BattlePassStyleProgressTokenBonus, SimpleBonus, TokensBonus, WoTPlusBonus, SelectableBonus, DossierBonus
-    from gui.server_events.event_items import RankedQuest, Quest, PMOperation, PersonalMission
+    from gui.server_events.event_items import RankedQuest, Quest, PMOperation, PersonalMission, ITankAcademyQuest, ITankAcademyGroup
     from gui.shared.event_bus import SharedEvent
     from gui.shared.gui_items import Tankman, Vehicle, ItemsCollection
     from gui.shared.gui_items.artefacts import OptionalDevice
@@ -62,6 +62,7 @@ if typing.TYPE_CHECKING:
     from gui.game_control.paragons_controller import _ParagonsBranchesController
     from account_helpers import AccountSettings
     from gui.game_control.summer_sale_controller import ProductsStates
+    from gui.Scaleform.daapi.view.lobby.hangar.entry_points.gf_header_widget import GFWidgetAliases
     BattlePassBonusOpts = Optional[TokensBonus, BattlePassSelectTokensBonus]
     BonusOpts = Optional[TokensBonus, SelectableBonus]
 
@@ -1698,6 +1699,12 @@ class IBRProgressionOnTokensController(IGameController):
         raise NotImplementedError
 
     def getProgressionLevelsData(self):
+        raise NotImplementedError
+
+    def getBirthdayIconPostfix(self):
+        raise NotImplementedError
+
+    def checkBRBattleTypeForIcon(self, battleType):
         raise NotImplementedError
 
     def getProgessionPointsData(self):
@@ -3921,6 +3928,9 @@ class IDebutBoxesController(IGameController):
     def isQuestsAvailableOnVehicle(self, vehicle):
         raise NotImplementedError
 
+    def isQuestsAvailableOnBattle(self):
+        raise NotImplementedError
+
     def getQuestForVehicle(self, vehicle):
         raise NotImplementedError
 
@@ -4543,25 +4553,6 @@ class IUnseenEventsCounter(IGameController):
         raise NotImplementedError
 
 
-class IPlayStreakController(IGameController):
-    onDataUpdated = None
-
-    def getSkipDayCount(self):
-        raise NotImplementedError
-
-    def getStreakProgress(self):
-        raise NotImplementedError
-
-    def getRewardsCalendar(self):
-        raise NotImplementedError
-
-    def getBattleTypes(self):
-        raise NotImplementedError
-
-    def getIsBlocked(self):
-        raise NotImplementedError
-
-
 class IBlackMarketController(IGameController):
     onStateChanged = None
     onBlackMarketUpdated = None
@@ -4722,3 +4713,125 @@ class ISummerSaleController(IGameController):
 
 class IControlPointOverrideController(IGameController):
     pass
+
+
+class ITankAcademyController(IGameController):
+    onStateChanged = None
+    onFinish = None
+
+    def isEnabled(self):
+        raise NotImplementedError
+
+    def isFinished(self):
+        raise NotImplementedError
+
+    def isActive(self):
+        raise NotImplementedError
+
+    def isValidConfiguration(self):
+        raise NotImplementedError
+
+    def hasUnobtainedDelayedRewards(self):
+        raise NotImplementedError
+
+    def hasOfferToken(self, offerToken):
+        raise NotImplementedError
+
+    def hasDelayedRewardToken(self, delayedRewardToken):
+        raise NotImplementedError
+
+    def hasDelayedRewardsInQuest(self, quest):
+        raise NotImplementedError
+
+    def isFinalQuest(self, quest):
+        raise NotImplementedError
+
+    def getFinalQuest(self):
+        raise NotImplementedError
+
+    def getFirstQuest(self):
+        raise NotImplementedError
+
+    def isTankAcademyQuestID(self, questID):
+        raise NotImplementedError
+
+    def getQuestByIdx(self, questIdx):
+        raise NotImplementedError
+
+    def getCompletedTankAcademyQuests(self):
+        raise NotImplementedError
+
+    def getCompletedTankAcademyQuestsCount(self):
+        raise NotImplementedError
+
+    def markPostBattleAutoShowSuppressed(self, arenaUniqueID):
+        raise NotImplementedError
+
+    def consumePostBattleAutoShowSuppressed(self, arenaUniqueID):
+        raise NotImplementedError
+
+    def getNotCompletedTankAcademyQuests(self):
+        raise NotImplementedError
+
+    def getTankAcademyQuestsByGroup(self, questGroup):
+        raise NotImplementedError
+
+    def getTankAcademyQuests(self, filterFunc=None):
+        raise NotImplementedError
+
+    def getTankAcademyQuestGroups(self, filterFunc=None):
+        raise NotImplementedError
+
+    def getCountTankAcademyQuests(self):
+        raise NotImplementedError
+
+    def showAwardView(self, questsData, clientCtx=None):
+        raise NotImplementedError
+
+    def getCurrentQuest(self):
+        raise NotImplementedError
+
+    def getQuestProgress(self, quest):
+        raise NotImplementedError
+
+    def getSelectedVehicle(self, offerToken):
+        raise NotImplementedError
+
+    def hasAccessToken(self):
+        raise NotImplementedError
+
+    def getDelayedRewardCurrencyTokens(self):
+        raise NotImplementedError
+
+    def getVehicleOfferTokensWithUnobtainedGifts(self):
+        raise NotImplementedError
+
+    def getDelayedRewardExpirationTime(self):
+        raise NotImplementedError
+
+    def isTAOfferToken(self, token):
+        raise NotImplementedError
+
+    def isDelayedRewardToken(self, token):
+        raise NotImplementedError
+
+    def isOfferRewardObtained(self, offerToken):
+        raise NotImplementedError
+
+    def isDelayedRewardObtained(self, delayedRewardToken):
+        raise NotImplementedError
+
+    def getOfferProperties(self, offerToken):
+        raise NotImplementedError
+
+    def getOfferTokenByDelayedRewardCurrencyToken(self, delayedRewardCurrencyToken):
+        raise NotImplementedError
+
+    def getABTestConfiguration(self):
+        raise NotImplementedError
+
+    def getHangarWidgetAlias(self):
+        raise NotImplementedError
+
+    def isFirstQuestCompleted(self):
+        raise NotImplementedError

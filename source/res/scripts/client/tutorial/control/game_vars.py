@@ -2,6 +2,9 @@
 # Embedded file name: scripts/client/tutorial/control/game_vars.py
 import types
 from CurrentVehicle import g_currentVehicle
+from gui.techtree.dumpers import StubDumper
+from gui.techtree.research_items_data import ResearchItemsData
+from gui.techtree.settings import NODE_STATE, RESEARCH_ITEMS
 from gui.techtree.techtree_dp import g_techTreeDP
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from helpers import dependency
@@ -9,6 +12,7 @@ from skeletons.gui.shared import IItemsCache
 from skeletons.gui.game_control import IBootcampController
 from tutorial.logger import LOG_ERROR
 from tutorial.data.conditions import CONDITION_STATE
+_RESEARCH_ITEM_TYPE_ORDER = dict(((itemTypeID, idx) for idx, itemTypeID in enumerate(RESEARCH_ITEMS)))
 __all__ = ('getUnlockedItems', 'getItemByIntCD', 'getVehicleByIntCD', 'getItemStateGetter', 'getAttribute')
 
 @dependency.replace_none_kwargs(itemsCache=IItemsCache)
@@ -60,6 +64,75 @@ def _getBootcampNationDataField(fieldName, bootcampCtrl=None):
     else:
         nationData = bootcampCtrl.nationData
         return None if nationData is None else nationData.get(fieldName, None)
+
+
+def _getCurrentVehicleCD():
+    return g_currentVehicle.item.intCD if g_currentVehicle.isPresent() else None
+
+
+def _getCurrentResearchModule(column=None):
+    column = int(column) if column is not None else None
+    data = ResearchItemsData(StubDumper())
+    try:
+        data.setRootCD(g_currentVehicle.item.intCD)
+        data.load()
+        result = []
+        for index, node in enumerate(data.getNodes()):
+            if node is None:
+                continue
+            itemCD = node.getNodeCD()
+            item = data.getItem(itemCD)
+            if item is None or item.itemTypeID not in GUI_ITEM_TYPE.VEHICLE_MODULES:
+                continue
+            state = node.getState()
+            if not NODE_STATE.isAvailable2Unlock(state):
+                continue
+            displayInfo = node.getDisplayInfo() or {}
+            path = displayInfo.get('path') or ()
+            if column is None or len(path) == column:
+                order = _RESEARCH_ITEM_TYPE_ORDER.get(item.itemTypeID, len(RESEARCH_ITEMS))
+                result.append((len(path),
+                 order,
+                 index,
+                 itemCD))
+
+        if result:
+            return min(result)[3]
+    finally:
+        data.clear(full=True)
+
+    return
+
+
+def _getCurrentResearchVehicle():
+    data = ResearchItemsData(StubDumper())
+    try:
+        data.setRootCD(g_currentVehicle.item.intCD)
+        data.load()
+        available = []
+        fallback = []
+        for index, node in enumerate(data.getNodes()):
+            if node is None:
+                continue
+            itemCD = node.getNodeCD()
+            item = data.getItem(itemCD)
+            if item is None or item.itemTypeID != GUI_ITEM_TYPE.VEHICLE or item.isUnlocked:
+                continue
+            displayInfo = node.getDisplayInfo() or {}
+            path = displayInfo.get('path') or ()
+            candidate = (len(path), index, itemCD)
+            if NODE_STATE.isAvailable2Unlock(node.getState()):
+                available.append(candidate)
+            fallback.append(candidate)
+
+        if available:
+            return min(available)[2]
+        if fallback:
+            return min(fallback)[2]
+    finally:
+        data.clear(full=True)
+
+    return
 
 
 def _isItemSelected(intCD):
@@ -159,9 +232,23 @@ def _vehicleHasRegularConsumables(vehicleCD):
     return False if vehicle is None or vehicle.invID == -1 else bool(filter(None, vehicle.consumables.installed))
 
 
+def _vehicleHasAllEquipmentInstalled(vehicleCD):
+    vehicle = getVehicleByIntCD(vehicleCD)
+    if vehicle is None or vehicle.invID == -1:
+        return False
+    else:
+        installed = vehicle.consumables.installed
+        return bool(installed) and all(installed)
+
+
 def _vehicleHasOptionalDevices(vehicleCD):
     vehicle = getVehicleByIntCD(vehicleCD)
     return False if vehicle is None or vehicle.invID == -1 else bool(filter(None, vehicle.optDevices.installed))
+
+
+def _vehicleHasMultipliedXP(vehicleCD):
+    vehicle = getVehicleByIntCD(vehicleCD)
+    return False if vehicle is None or vehicle.invID == -1 else vehicle.dailyXPFactor > 1
 
 
 def _isItemLevelEqual(itemCD, level):
@@ -176,6 +263,18 @@ def _isItemLevelEqual(itemCD, level):
         return result
 
 
+def _isItemLevelInRange(itemCD, minLevel, maxLevel):
+    if minLevel is None or maxLevel is None:
+        return False
+    else:
+        item = getItemByIntCD(itemCD)
+        if item is not None:
+            result = int(minLevel) <= item.level <= int(maxLevel)
+        else:
+            result = False
+        return result
+
+
 _ITEM_STATES = {CONDITION_STATE.SELECTED: _isItemSelected,
  CONDITION_STATE.PREMIUM: _isItemPremium,
  CONDITION_STATE.UNLOCKED: _isItemUnlocked,
@@ -184,10 +283,13 @@ _ITEM_STATES = {CONDITION_STATE.SELECTED: _isItemSelected,
  CONDITION_STATE.XP_ENOUGH: _isItemXPEnough,
  CONDITION_STATE.MONEY_ENOUGH: _isItemMoneyEnough,
  CONDITION_STATE.LEVEL: _isItemLevelEqual,
+ CONDITION_STATE.LEVEL_RANGE: _isItemLevelInRange,
  CONDITION_STATE.MAY_INSTALL: _isItemMayInstall,
  CONDITION_STATE.INSTALLED: _isItemInstalled,
  CONDITION_STATE.HAS_REGULAR_CONSUMABLES: _vehicleHasRegularConsumables,
- CONDITION_STATE.HAS_OPTIONAL_DEVICES: _vehicleHasOptionalDevices}
+ CONDITION_STATE.ALL_EQUIPMENT_INSTALLED: _vehicleHasAllEquipmentInstalled,
+ CONDITION_STATE.HAS_OPTIONAL_DEVICES: _vehicleHasOptionalDevices,
+ CONDITION_STATE.HAS_MULTIPLIED_XP: _vehicleHasMultipliedXP}
 
 def getItemStateGetter(state):
     if state in _ITEM_STATES:
@@ -199,7 +301,11 @@ def getItemStateGetter(state):
 
 _AVAILABLE_ATTRIBUTES = {'TankmanID': _getTankmanID,
  'BootcampNationID': _getBootcampNationID,
- 'BootcampNationDataField': _getBootcampNationDataField}
+ 'BootcampNationDataField': _getBootcampNationDataField,
+ 'CurrentVehicleCD': _getCurrentVehicleCD,
+ 'CurrentResearchModule': _getCurrentResearchModule,
+ 'CurrentResearchTopLockedModule': _getCurrentResearchModule,
+ 'CurrentResearchVehicle': _getCurrentResearchVehicle}
 
 def getAttribute(name, *args):
     if name in _AVAILABLE_ATTRIBUTES:

@@ -1,0 +1,49 @@
+<Rush_2024_ThunderWolf_MT_2_name.xml>
+  <itemGroup>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <tags>	hiddenInUI	</tags>
+    <priceGroup>	MT 2D styles universal 1000g notInShop	</priceGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <style>
+      <id>	31106	</id>
+      <texture>	gui/maps/vehicles/styles/Rush_2024_ThunderWolf_MT.png	</texture>
+      <userString>	#vehicle_customization:Rush_2024_ThunderWolf_MT_2/name	</userString>
+      <description>	#vehicle_customization:Rush_2024_ThunderWolf_MT_2/description	</description>
+      <longDescriptionSpecial>	#vehicle_customization:Rush_2024_ThunderWolf_MT_2/longDescription	</longDescriptionSpecial>
+      <outfits>
+        <outfit>
+          <season>	all	</season>
+          <paints>
+            <item>
+              <id>	31080	</id>
+              <appliedTo>	20753	</appliedTo>
+            </item>
+          </paints>
+          <camouflages>
+            <item>
+              <id>	31082	</id>
+              <patternSize>	1	</patternSize>
+              <appliedTo>	4368	</appliedTo>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <modifications>
+            <item>	4	</item>
+          </modifications>
+          <projection_decals>
+            <item>
+              <id>	31102	</id>
+              <tags>	front formfactor_square safe	</tags>
+            </item>
+          </projection_decals>
+        </outfit>
+      </outfits>
+    </style>
+  </itemGroup>
+</Rush_2024_ThunderWolf_MT_2_name.xml>

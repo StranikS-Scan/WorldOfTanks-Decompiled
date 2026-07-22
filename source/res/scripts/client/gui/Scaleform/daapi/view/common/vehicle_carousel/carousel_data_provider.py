@@ -98,7 +98,7 @@ def _getVehicleDataVO(vehicle, bootcampCtrl, debutBoxCtrl, earlyAccessCtrl, para
         bonusImage = getButtonsAssetPath('bonus_x{}'.format(vehicle.dailyXPFactor))
     else:
         bonusImage = ''
-    if debutBoxCtrl.isEnabled() and Vehicle.VEHICLE_STATE.UNSUITABLE_TO_QUEUE not in vState and debutBoxCtrl.isQuestsAvailableOnVehicle(vehicle):
+    if debutBoxCtrl.isEnabled() and Vehicle.VEHICLE_STATE.UNSUITABLE_TO_QUEUE not in vState and debutBoxCtrl.isQuestsAvailableOnVehicle(vehicle) and debutBoxCtrl.isQuestsAvailableOnBattle():
         debutBoxesImage = getButtonsAssetPath('debut_boxes')
     else:
         debutBoxesImage = ''

@@ -5,7 +5,9 @@ import BigWorld
 import GUI
 import SCALEFORM
 import SoundGroups
+from AvatarInputHandler import aih_global_binding
 from account_helpers.settings_core.settings_constants import SOUND, DAMAGE_INDICATOR, GRAPHICS, SIXTH_SENSE
+from aih_constants import CTRL_MODE_NAME
 from constants import VEHICLE_SIEGE_STATE as _SIEGE_STATE, ROCKET_ACCELERATION_STATE
 from debug_utils import LOG_DEBUG, LOG_DEBUG_DEV, LOG_WARNING
 from gui import DEPTH_OF_Aim, GUI_SETTINGS
@@ -442,6 +444,7 @@ class SixthSenseIndicator(SixthSenseMeta):
         self.__lossSoundEvent = None
         self.__enabled = True
         self.__alphaValue = SIXTHSENSEINDICATOR_CONSTS.MAX_VALUE
+        self.__isFreeCamMode = False
         return
 
     @property
@@ -464,6 +467,10 @@ class SixthSenseIndicator(SixthSenseMeta):
         if ctrl is not None:
             ctrl.onVehicleStateUpdated += self.__onVehicleStateUpdated
             ctrl.onVehicleControlling += self.__onVehicleChanged
+        aih_global_binding.subscribe(aih_global_binding.BINDING_ID.CTRL_MODE_NAME, self.__onControlModeChanged)
+        crosshairCtrl = self.sessionProvider.shared.crosshair
+        if crosshairCtrl is not None:
+            self.__onControlModeChanged(crosshairCtrl.getCtrlMode())
         return
 
     def _dispose(self):
@@ -472,6 +479,7 @@ class SixthSenseIndicator(SixthSenseMeta):
         if ctrl is not None:
             ctrl.onVehicleStateUpdated -= self.__onVehicleStateUpdated
             ctrl.onVehicleControlling -= self.__onVehicleChanged
+        aih_global_binding.unsubscribe(aih_global_binding.BINDING_ID.CTRL_MODE_NAME, self.__onControlModeChanged)
         self.settingsCore.onSettingsChanged -= self.__onSettingsChanged
         super(SixthSenseIndicator, self)._dispose()
         return
@@ -493,6 +501,8 @@ class SixthSenseIndicator(SixthSenseMeta):
                     if activated:
                         timeout = 0.1
             yield th_await(delay(timeout))
+            if not self.__enabled or self.__isFreeCamMode:
+                return
             self.as_showS(immidiate)
             return
 
@@ -520,25 +530,44 @@ class SixthSenseIndicator(SixthSenseMeta):
             self.__callbackID = None
         return
 
+    def __hideAndSetEnabled(self, finalEnabled, immidiate=False):
+        wasEnabled = self.__enabled
+        self.enabled = True
+        self.__hide(immidiate or not wasEnabled)
+        self.enabled = finalEnabled
+
+    def __applyIndicatorState(self, finalEnabled, shouldShow, showImmediate=False, hideImmediate=False):
+        if shouldShow:
+            self.enabled = finalEnabled
+            self.__show(showImmediate)
+            return
+        self.__hideAndSetEnabled(finalEnabled, hideImmediate)
+
     def __onVehicleChanged(self, vehicle):
-        sixthSenseState = vehicle.sixthSenseState
+        sixthSenseState = bool(vehicle.sixthSenseState)
+        shouldShow = sixthSenseState and vehicle.isAlive() and not self.__isFreeCamMode
         self.__cancelCallback()
-        if sixthSenseState and vehicle.isAlive():
-            self.enabled = bool(sixthSenseState)
-            self.__show(True)
-        else:
-            self.__hide(True)
-            self.enabled = bool(sixthSenseState)
+        self.__applyIndicatorState(finalEnabled=sixthSenseState, shouldShow=shouldShow, showImmediate=True, hideImmediate=True)
 
     def __onVehicleStateUpdated(self, state, value):
-        if state == VEHICLE_VIEW_STATE.OBSERVED_BY_ENEMY:
-            self.__cancelCallback()
-            if value:
-                self.enabled = bool(value)
-                self.__show()
-            else:
-                self.__hide()
-                self.enabled = bool(value)
+        if state != VEHICLE_VIEW_STATE.OBSERVED_BY_ENEMY:
+            return
+        observedByEnemy = bool(value)
+        shouldShow = observedByEnemy and not self.__isFreeCamMode
+        self.__cancelCallback()
+        self.__applyIndicatorState(finalEnabled=observedByEnemy, shouldShow=shouldShow, hideImmediate=self.__isFreeCamMode)
+
+    def __onControlModeChanged(self, ctrlMode):
+        isFreeCamMode = ctrlMode == CTRL_MODE_NAME.VIDEO
+        if self.__isFreeCamMode == isFreeCamMode:
+            return
+        self.__isFreeCamMode = isFreeCamMode
+        self.__cancelCallback()
+        ctrl = self.sessionProvider.shared.vehicleState
+        value = ctrl and ctrl.getStateValue(VEHICLE_VIEW_STATE.OBSERVED_BY_ENEMY)
+        observedByEnemy = bool(value)
+        shouldShow = observedByEnemy and not self.__isFreeCamMode
+        self.__applyIndicatorState(finalEnabled=observedByEnemy, shouldShow=shouldShow, showImmediate=True, hideImmediate=True)
 
     def __onSettingsChanged(self, diff):
         key = SOUND.DETECTION_ALERT_SOUND

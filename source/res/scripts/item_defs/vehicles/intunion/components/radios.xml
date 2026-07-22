@@ -1,192 +1,8 @@
 <radios.xml>
-  <ids>
-    <N22_FL>	501	</N22_FL>
-    <N19Mk1>	31001	</N19Mk1>
-    <N19Mk2>	31002	</N19Mk2>
-    <AN_VRC_12>	31003	</AN_VRC_12>
-    <SCR_538>	31004	</SCR_538>
-    <SCR_508_1>	31005	</SCR_508_1>
-    <AN_GRC_8>	31006	</AN_GRC_8>
-    <N19Mk3>	31007	</N19Mk3>
-    <N22>	31008	</N22>
-    <R_113>	31009	</R_113>
-    <SCR_506>	31010	</SCR_506>
-    <AN_VRC_12A>	31011	</AN_VRC_12A>
-    <N9>	31012	</N9>
-    <SCR_200>	31013	</SCR_200>
-    <SCR_510>	31014	</SCR_510>
-    <SCR_510M2>	31015	</SCR_510M2>
-    <ER_52>	31016	</ER_52>
-    <_9RM>	31017	</_9RM>
-    <R113>	31018	</R113>
-    <AN_VRC_12M>	31019	</AN_VRC_12M>
-    <R_123>	31020	</R_123>
-    <R_113_44>	31021	</R_113_44>
-    <R_113_68>	31023	</R_113_68>
-    <R_123_T>	35001	</R_123_T>
-    <R_113_44_T>	35002	</R_113_44_T>
-    <Development_Radio>	65000	</Development_Radio>
-  </ids>
+  <xmlns:xmlref>	http://bwt/xmlref	</xmlns:xmlref>
   <shared>
-    <ER_52>
-      <userString>	#intunion_vehicles:ER_52	</userString>
-      <tags></tags>
-      <level>	1	</level>
-      <price>	0	</price>
-      <notInShop>	true	</notInShop>
-      <weight>	60	</weight>
-      <distance>	300	</distance>
-      <maxHealth>	100	</maxHealth>
-      <maxRegenHealth>	49	</maxRegenHealth>
-      <repairCost>	0.5	</repairCost>
-    </ER_52>
-    <SCR_510>
-      <userString>	#intunion_vehicles:SCR_510	</userString>
-      <tags></tags>
-      <level>	4	</level>
-      <price>	2000	</price>
-      <weight>	80	</weight>
-      <distance>	325	</distance>
-      <maxHealth>	110	</maxHealth>
-      <maxRegenHealth>	55	</maxRegenHealth>
-      <repairCost>	1	</repairCost>
-    </SCR_510>
-    <SCR_510M2>
-      <userString>	#intunion_vehicles:SCR_510M2	</userString>
-      <tags></tags>
-      <level>	5	</level>
-      <price>	4000	</price>
-      <weight>	80	</weight>
-      <distance>	350	</distance>
-      <maxHealth>	110	</maxHealth>
-      <maxRegenHealth>	55	</maxRegenHealth>
-      <repairCost>	1	</repairCost>
-    </SCR_510M2>
-    <SCR_200>
-      <userString>	#intunion_vehicles:SCR_200	</userString>
-      <tags></tags>
-      <level>	5	</level>
-      <price>	3500	</price>
-      <weight>	80	</weight>
-      <distance>	350	</distance>
-      <maxHealth>	110	</maxHealth>
-      <maxRegenHealth>	55	</maxRegenHealth>
-      <repairCost>	1	</repairCost>
-    </SCR_200>
-    <N9>
-      <userString>	#intunion_vehicles:N9	</userString>
-      <tags></tags>
-      <level>	5	</level>
-      <price>	5500	</price>
-      <weight>	40	</weight>
-      <distance>	350	</distance>
-      <maxHealth>	80	</maxHealth>
-      <maxRegenHealth>	48	</maxRegenHealth>
-      <repairCost>	0.5	</repairCost>
-    </N9>
-    <N19Mk1>
-      <userString>	#intunion_vehicles:N19Mk1	</userString>
-      <tags></tags>
-      <level>	6	</level>
-      <price>	15000	</price>
-      <weight>	40	</weight>
-      <distance>	400	</distance>
-      <maxHealth>	100	</maxHealth>
-      <maxRegenHealth>	60	</maxRegenHealth>
-      <repairCost>	0.5	</repairCost>
-    </N19Mk1>
-    <N19Mk2>
-      <userString>	#intunion_vehicles:N19Mk2	</userString>
-      <tags></tags>
-      <level>	7	</level>
-      <price>	21000	</price>
-      <weight>	40	</weight>
-      <distance>	450	</distance>
-      <maxHealth>	120	</maxHealth>
-      <maxRegenHealth>	72	</maxRegenHealth>
-      <repairCost>	3.5	</repairCost>
-    </N19Mk2>
-    <N19Mk3>
-      <userString>	#intunion_vehicles:N19Mk3	</userString>
-      <tags></tags>
-      <level>	8	</level>
-      <price>	22000	</price>
-      <weight>	40	</weight>
-      <distance>	550	</distance>
-      <maxHealth>	140	</maxHealth>
-      <maxRegenHealth>	84	</maxRegenHealth>
-      <repairCost>	3.5	</repairCost>
-    </N19Mk3>
-    <N22>
-      <userString>	#intunion_vehicles:N22	</userString>
-      <tags></tags>
-      <level>	9	</level>
-      <price>	36000	</price>
-      <weight>	40	</weight>
-      <distance>	615	</distance>
-      <maxHealth>	140	</maxHealth>
-      <maxRegenHealth>	84	</maxRegenHealth>
-      <repairCost>	3	</repairCost>
-    </N22>
-    <N22_FL>
-      <userString>	#intunion_vehicles:N22	</userString>
-      <tags></tags>
-      <level>	9	</level>
-      <price>	36000	</price>
-      <notInShop>	true	</notInShop>
-      <weight>	40	</weight>
-      <distance>	615	</distance>
-      <maxHealth>	140	</maxHealth>
-      <maxRegenHealth>	84	</maxRegenHealth>
-      <repairCost>	3	</repairCost>
-    </N22_FL>
-    <SCR_538>
-      <userString>	#intunion_vehicles:SCR_538	</userString>
-      <tags></tags>
-      <level>	7	</level>
-      <price>	21000	</price>
-      <weight>	100	</weight>
-      <distance>	480	</distance>
-      <maxHealth>	150	</maxHealth>
-      <maxRegenHealth>	75	</maxRegenHealth>
-      <repairCost>	1.5	</repairCost>
-    </SCR_538>
-    <SCR_508_1>
-      <userString>	#intunion_vehicles:SCR_508_1	</userString>
-      <tags></tags>
-      <level>	8	</level>
-      <price>	28000	</price>
-      <weight>	100	</weight>
-      <distance>	550	</distance>
-      <maxHealth>	200	</maxHealth>
-      <maxRegenHealth>	150	</maxRegenHealth>
-      <repairCost>	3	</repairCost>
-    </SCR_508_1>
-    <AN_VRC_12>
-      <userString>	#intunion_vehicles:AN_VRC_12	</userString>
-      <tags></tags>
-      <level>	10	</level>
-      <price>	54000	</price>
-      <notInShop>	true	</notInShop>
-      <weight>	26	</weight>
-      <distance>	750	</distance>
-      <maxHealth>	180	</maxHealth>
-      <maxRegenHealth>	108	</maxRegenHealth>
-      <repairCost>	3.5	</repairCost>
-    </AN_VRC_12>
-    <AN_VRC_12M>
-      <userString>	#intunion_vehicles:AN_VRC_12M	</userString>
-      <tags></tags>
-      <level>	10	</level>
-      <price>	54000	</price>
-      <notInShop>	true	</notInShop>
-      <weight>	26	</weight>
-      <distance>	750	</distance>
-      <maxHealth>	180	</maxHealth>
-      <maxRegenHealth>	108	</maxRegenHealth>
-      <repairCost>	3.5	</repairCost>
-    </AN_VRC_12M>
     <AN_GRC_8>
+      <id>	31006	</id>
       <userString>	#intunion_vehicles:AN_GRC_8	</userString>
       <tags></tags>
       <level>	8	</level>
@@ -198,42 +14,21 @@
       <maxRegenHealth>	150	</maxRegenHealth>
       <repairCost>	3	</repairCost>
     </AN_GRC_8>
-    <R_113>
-      <userString>	#intunion_vehicles:R_113	</userString>
+    <AN_VRC_12>
+      <id>	31003	</id>
+      <userString>	#intunion_vehicles:AN_VRC_12	</userString>
       <tags></tags>
       <level>	10	</level>
-      <price>	52000	</price>
+      <price>	54000	</price>
       <notInShop>	true	</notInShop>
-      <weight>	42	</weight>
-      <distance>	730	</distance>
-      <maxHealth>	200	</maxHealth>
-      <maxRegenHealth>	150	</maxRegenHealth>
-      <repairCost>	3	</repairCost>
-    </R_113>
-    <R_113_68>
-      <userString>	#intunion_vehicles:R_113_68	</userString>
-      <tags></tags>
-      <level>	10	</level>
-      <price>	52000	</price>
-      <notInShop>	true	</notInShop>
-      <weight>	42	</weight>
-      <distance>	730	</distance>
-      <maxHealth>	200	</maxHealth>
-      <maxRegenHealth>	150	</maxRegenHealth>
-      <repairCost>	3	</repairCost>
-    </R_113_68>
-    <SCR_506>
-      <userString>	#intunion_vehicles:SCR_506	</userString>
-      <tags></tags>
-      <level>	9	</level>
-      <price>	32000	</price>
-      <weight>	110	</weight>
-      <distance>	615	</distance>
-      <maxHealth>	200	</maxHealth>
-      <maxRegenHealth>	150	</maxRegenHealth>
-      <repairCost>	3	</repairCost>
-    </SCR_506>
+      <weight>	26	</weight>
+      <distance>	750	</distance>
+      <maxHealth>	180	</maxHealth>
+      <maxRegenHealth>	108	</maxRegenHealth>
+      <repairCost>	3.5	</repairCost>
+    </AN_VRC_12>
     <AN_VRC_12A>
+      <id>	31011	</id>
       <userString>	#intunion_vehicles:AN_VRC_12A	</userString>
       <tags></tags>
       <level>	10	</level>
@@ -244,77 +39,21 @@
       <maxRegenHealth>	108	</maxRegenHealth>
       <repairCost>	3.5	</repairCost>
     </AN_VRC_12A>
-    <_9RM>
-      <userString>	#intunion_vehicles:_9RM	</userString>
-      <tags></tags>
-      <level>	8	</level>
-      <price>	24000	</price>
-      <weight>	100	</weight>
-      <distance>	615	</distance>
-      <maxHealth>	120	</maxHealth>
-      <maxRegenHealth>	60	</maxRegenHealth>
-      <repairCost>	1.5	</repairCost>
-    </_9RM>
-    <R113>
-      <userString>	#intunion_vehicles:R113	</userString>
-      <tags></tags>
-      <level>	10	</level>
-      <price>	52000	</price>
-      <weight>	80	</weight>
-      <distance>	730	</distance>
-      <maxHealth>	200	</maxHealth>
-      <maxRegenHealth>	150	</maxRegenHealth>
-      <repairCost>	3	</repairCost>
-    </R113>
-    <R_123>
-      <userString>	#intunion_vehicles:R_123	</userString>
+    <AN_VRC_12M>
+      <id>	31019	</id>
+      <userString>	#intunion_vehicles:AN_VRC_12M	</userString>
       <tags></tags>
       <level>	10	</level>
       <price>	54000	</price>
       <notInShop>	true	</notInShop>
-      <weight>	42	</weight>
+      <weight>	26	</weight>
       <distance>	750	</distance>
-      <maxHealth>	200	</maxHealth>
-      <maxRegenHealth>	150	</maxRegenHealth>
-      <repairCost>	3	</repairCost>
-    </R_123>
-    <R_113_44>
-      <userString>	#intunion_vehicles:R_113_44	</userString>
-      <tags></tags>
-      <level>	9	</level>
-      <price>	36000	</price>
-      <notInShop>	true	</notInShop>
-      <weight>	42	</weight>
-      <distance>	650	</distance>
-      <maxHealth>	140	</maxHealth>
-      <maxRegenHealth>	84	</maxRegenHealth>
-      <repairCost>	3	</repairCost>
-    </R_113_44>
-    <R_123_T>
-      <userString>	#intunion_vehicles:R_123_T	</userString>
-      <tags></tags>
-      <level>	10	</level>
-      <price>	54000	</price>
-      <notInShop>	true	</notInShop>
-      <weight>	42	</weight>
-      <distance>	750	</distance>
-      <maxHealth>	200	</maxHealth>
-      <maxRegenHealth>	150	</maxRegenHealth>
-      <repairCost>	3	</repairCost>
-    </R_123_T>
-    <R_113_44_T>
-      <userString>	#intunion_vehicles:R_113_44_T	</userString>
-      <tags></tags>
-      <level>	9	</level>
-      <price>	36000	</price>
-      <notInShop>	true	</notInShop>
-      <weight>	42	</weight>
-      <distance>	650	</distance>
-      <maxHealth>	140	</maxHealth>
-      <maxRegenHealth>	84	</maxRegenHealth>
-      <repairCost>	3	</repairCost>
-    </R_113_44_T>
+      <maxHealth>	180	</maxHealth>
+      <maxRegenHealth>	108	</maxRegenHealth>
+      <repairCost>	3.5	</repairCost>
+    </AN_VRC_12M>
     <Development_Radio>
+      <id>	65000	</id>
       <userString>	Development Radio	</userString>
       <tags></tags>
       <notInShop>	true	</notInShop>
@@ -326,5 +65,265 @@
       <maxRegenHealth>	75	</maxRegenHealth>
       <repairCost>	0	</repairCost>
     </Development_Radio>
+    <ER_52>
+      <id>	31016	</id>
+      <userString>	#intunion_vehicles:ER_52	</userString>
+      <tags></tags>
+      <level>	1	</level>
+      <price>	0	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	60	</weight>
+      <distance>	300	</distance>
+      <maxHealth>	100	</maxHealth>
+      <maxRegenHealth>	49	</maxRegenHealth>
+      <repairCost>	0.5	</repairCost>
+    </ER_52>
+    <N19Mk1>
+      <id>	31001	</id>
+      <userString>	#intunion_vehicles:N19Mk1	</userString>
+      <tags></tags>
+      <level>	6	</level>
+      <price>	15000	</price>
+      <weight>	40	</weight>
+      <distance>	400	</distance>
+      <maxHealth>	100	</maxHealth>
+      <maxRegenHealth>	60	</maxRegenHealth>
+      <repairCost>	0.5	</repairCost>
+    </N19Mk1>
+    <N19Mk2>
+      <id>	31002	</id>
+      <userString>	#intunion_vehicles:N19Mk2	</userString>
+      <tags></tags>
+      <level>	7	</level>
+      <price>	21000	</price>
+      <weight>	40	</weight>
+      <distance>	450	</distance>
+      <maxHealth>	120	</maxHealth>
+      <maxRegenHealth>	72	</maxRegenHealth>
+      <repairCost>	3.5	</repairCost>
+    </N19Mk2>
+    <N19Mk3>
+      <id>	31007	</id>
+      <userString>	#intunion_vehicles:N19Mk3	</userString>
+      <tags></tags>
+      <level>	8	</level>
+      <price>	22000	</price>
+      <weight>	40	</weight>
+      <distance>	550	</distance>
+      <maxHealth>	140	</maxHealth>
+      <maxRegenHealth>	84	</maxRegenHealth>
+      <repairCost>	3.5	</repairCost>
+    </N19Mk3>
+    <N22>
+      <id>	31008	</id>
+      <userString>	#intunion_vehicles:N22	</userString>
+      <tags></tags>
+      <level>	9	</level>
+      <price>	36000	</price>
+      <weight>	40	</weight>
+      <distance>	615	</distance>
+      <maxHealth>	140	</maxHealth>
+      <maxRegenHealth>	84	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+    </N22>
+    <N22_FL>
+      <id>	501	</id>
+      <userString>	#intunion_vehicles:N22	</userString>
+      <tags></tags>
+      <level>	9	</level>
+      <price>	36000	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	40	</weight>
+      <distance>	615	</distance>
+      <maxHealth>	140	</maxHealth>
+      <maxRegenHealth>	84	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+    </N22_FL>
+    <N9>
+      <id>	31012	</id>
+      <userString>	#intunion_vehicles:N9	</userString>
+      <tags></tags>
+      <level>	5	</level>
+      <price>	5500	</price>
+      <weight>	40	</weight>
+      <distance>	350	</distance>
+      <maxHealth>	80	</maxHealth>
+      <maxRegenHealth>	48	</maxRegenHealth>
+      <repairCost>	0.5	</repairCost>
+    </N9>
+    <R113>
+      <id>	31018	</id>
+      <userString>	#intunion_vehicles:R113	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	52000	</price>
+      <weight>	80	</weight>
+      <distance>	730	</distance>
+      <maxHealth>	200	</maxHealth>
+      <maxRegenHealth>	150	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+    </R113>
+    <R_113>
+      <id>	31009	</id>
+      <userString>	#intunion_vehicles:R_113	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	52000	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	42	</weight>
+      <distance>	730	</distance>
+      <maxHealth>	200	</maxHealth>
+      <maxRegenHealth>	150	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+    </R_113>
+    <R_113_44>
+      <id>	31021	</id>
+      <userString>	#intunion_vehicles:R_113_44	</userString>
+      <tags></tags>
+      <level>	9	</level>
+      <price>	36000	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	42	</weight>
+      <distance>	650	</distance>
+      <maxHealth>	140	</maxHealth>
+      <maxRegenHealth>	84	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+    </R_113_44>
+    <R_113_44_T>
+      <id>	35002	</id>
+      <userString>	#intunion_vehicles:R_113_44_T	</userString>
+      <tags></tags>
+      <level>	9	</level>
+      <price>	36000	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	42	</weight>
+      <distance>	650	</distance>
+      <maxHealth>	140	</maxHealth>
+      <maxRegenHealth>	84	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+    </R_113_44_T>
+    <R_113_68>
+      <id>	31023	</id>
+      <userString>	#intunion_vehicles:R_113_68	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	52000	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	42	</weight>
+      <distance>	730	</distance>
+      <maxHealth>	200	</maxHealth>
+      <maxRegenHealth>	150	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+    </R_113_68>
+    <R_123>
+      <id>	31020	</id>
+      <userString>	#intunion_vehicles:R_123	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	54000	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	42	</weight>
+      <distance>	750	</distance>
+      <maxHealth>	200	</maxHealth>
+      <maxRegenHealth>	150	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+    </R_123>
+    <R_123_T>
+      <id>	35001	</id>
+      <userString>	#intunion_vehicles:R_123_T	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	54000	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	42	</weight>
+      <distance>	750	</distance>
+      <maxHealth>	200	</maxHealth>
+      <maxRegenHealth>	150	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+    </R_123_T>
+    <SCR_200>
+      <id>	31013	</id>
+      <userString>	#intunion_vehicles:SCR_200	</userString>
+      <tags></tags>
+      <level>	5	</level>
+      <price>	3500	</price>
+      <weight>	80	</weight>
+      <distance>	350	</distance>
+      <maxHealth>	110	</maxHealth>
+      <maxRegenHealth>	55	</maxRegenHealth>
+      <repairCost>	1	</repairCost>
+    </SCR_200>
+    <SCR_506>
+      <id>	31010	</id>
+      <userString>	#intunion_vehicles:SCR_506	</userString>
+      <tags></tags>
+      <level>	9	</level>
+      <price>	32000	</price>
+      <weight>	110	</weight>
+      <distance>	615	</distance>
+      <maxHealth>	200	</maxHealth>
+      <maxRegenHealth>	150	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+    </SCR_506>
+    <SCR_508_1>
+      <id>	31005	</id>
+      <userString>	#intunion_vehicles:SCR_508_1	</userString>
+      <tags></tags>
+      <level>	8	</level>
+      <price>	28000	</price>
+      <weight>	100	</weight>
+      <distance>	550	</distance>
+      <maxHealth>	200	</maxHealth>
+      <maxRegenHealth>	150	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+    </SCR_508_1>
+    <SCR_510>
+      <id>	31014	</id>
+      <userString>	#intunion_vehicles:SCR_510	</userString>
+      <tags></tags>
+      <level>	4	</level>
+      <price>	2000	</price>
+      <weight>	80	</weight>
+      <distance>	325	</distance>
+      <maxHealth>	110	</maxHealth>
+      <maxRegenHealth>	55	</maxRegenHealth>
+      <repairCost>	1	</repairCost>
+    </SCR_510>
+    <SCR_510M2>
+      <id>	31015	</id>
+      <userString>	#intunion_vehicles:SCR_510M2	</userString>
+      <tags></tags>
+      <level>	5	</level>
+      <price>	4000	</price>
+      <weight>	80	</weight>
+      <distance>	350	</distance>
+      <maxHealth>	110	</maxHealth>
+      <maxRegenHealth>	55	</maxRegenHealth>
+      <repairCost>	1	</repairCost>
+    </SCR_510M2>
+    <SCR_538>
+      <id>	31004	</id>
+      <userString>	#intunion_vehicles:SCR_538	</userString>
+      <tags></tags>
+      <level>	7	</level>
+      <price>	21000	</price>
+      <weight>	100	</weight>
+      <distance>	480	</distance>
+      <maxHealth>	150	</maxHealth>
+      <maxRegenHealth>	75	</maxRegenHealth>
+      <repairCost>	1.5	</repairCost>
+    </SCR_538>
+    <_9RM>
+      <id>	31017	</id>
+      <userString>	#intunion_vehicles:_9RM	</userString>
+      <tags></tags>
+      <level>	8	</level>
+      <price>	24000	</price>
+      <weight>	100	</weight>
+      <distance>	615	</distance>
+      <maxHealth>	120	</maxHealth>
+      <maxRegenHealth>	60	</maxRegenHealth>
+      <repairCost>	1.5	</repairCost>
+    </_9RM>
   </shared>
 </radios.xml>

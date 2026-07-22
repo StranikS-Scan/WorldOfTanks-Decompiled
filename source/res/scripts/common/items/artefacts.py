@@ -2436,6 +2436,10 @@ class VisualScriptEquipment(Equipment):
     def _readConfig(self, xmlCtx, section):
         self.visualScript = readVisualScriptSection(section)
 
+    def _readBasicConfig(self, xmlCtx, section):
+        super(VisualScriptEquipment, self)._readBasicConfig(xmlCtx, section)
+        self._checkIconExist()
+
     def _exportSlotsToVSE(self):
         params = self._getExportParamsDict(ExportParamsTag.VSE)
         if not params:
@@ -2445,6 +2449,15 @@ class VisualScriptEquipment(Equipment):
                 planDef['params'].update(params)
 
         self._exportParams[ExportParamsTag.VSE.value].clear()
+
+    def _checkIconExist(self):
+        if not IS_CLIENT:
+            return
+        if self.hasTag('visualScriptAbilityEquipment') or self.hasTag('abilityEquipment'):
+            resId = R.images.gui.maps.icons.artefact.dyn(self.iconName)
+            if not resId.exists():
+                self.iconName = 'not_found_artefact'
+                self.icon = (self.iconName, self.icon[1], self.icon[2])
 
 
 class LevelBasedVisualScriptEquipment(VisualScriptEquipment):

@@ -10,7 +10,7 @@ from gui.ranked_battles.ranked_formatters import getFormattedBonusesForYearAward
 from gui.shared import event_dispatcher
 from gui.impl.pub import ViewImpl
 from gui.impl.pub.lobby_window import LobbyNotificationWindow
-from gui.impl.backport import BackportTooltipWindow, TooltipData
+from gui.impl.backport import BackportTooltipWindow, createTooltipData
 from gui.ranked_battles.ranked_helpers.sound_manager import RankedSoundManager
 from helpers import dependency
 from skeletons.gui.game_control import IRankedBattlesController
@@ -114,7 +114,7 @@ class RankedYearAwardView(ViewImpl):
                         self.__vehicleCD = specialArgs[0]
                 rewardRender = formatter.getModel(reward, index, showCongrats=showCongrats)
                 vmRewardsList.addViewModel(rewardRender)
-                self.__items[index] = TooltipData(tooltip=reward.get('tooltip', None), isSpecial=reward.get('isSpecial', False), specialAlias=reward.get('specialAlias', ''), specialArgs=reward.get('specialArgs', None))
+                self.__items[index] = createTooltipData(tooltip=reward.get('tooltip', None), isSpecial=reward.get('isSpecial', False), specialAlias=reward.get('specialAlias', ''), specialArgs=reward.get('specialArgs', None))
 
             vmRewardsList.invalidate()
         return

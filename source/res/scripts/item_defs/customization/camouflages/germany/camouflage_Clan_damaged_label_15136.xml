@@ -1,0 +1,51 @@
+<camouflage_Clan_damaged_label_15136.xml>
+  <xmlns:czech1>	ussr	</xmlns:czech1>
+  <xmlns:germany>	germany	</xmlns:germany>
+  <xmlns:czech0>	usa	</xmlns:czech0>
+  <xmlns:china>	china	</xmlns:china>
+  <xmlns:france>	france	</xmlns:france>
+  <xmlns:uk>	uk	</xmlns:uk>
+  <xmlns:japan>	japan	</xmlns:japan>
+  <xmlns:czech>	czech	</xmlns:czech>
+  <xmlns:sweden>	sweden	</xmlns:sweden>
+  <xmlns:poland>	poland	</xmlns:poland>
+  <xmlns:italy>	italy	</xmlns:italy>
+  <xmlns:intunion>	intunion	</xmlns:intunion>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/opaque	</userString>
+    <season>	summer	</season>
+    <historical>	0	</historical>
+    <priceGroup>	MT camouflages 50g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <nations>	germany	</nations>
+        <vehicles>	germany:G92_VK7201	</vehicles>
+      </include>
+    </vehicleFilter>
+    <camouflage>
+      <id>	15136	</id>
+      <texture>	vehicles/german/Camouflage/Clan_damaged.dds	</texture>
+      <description>	#vehicle_customization:camouflage/Clan_damaged/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/Clan_damaged/label	</userString>
+      <tags>	vehicleBound	</tags>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	40 40 40 255	</c0>
+          <c1>	152 158 160 255	</c1>
+          <c2>	85 88 84 255	</c2>
+          <c3>	111 109 106 255	</c3>
+        </palette>
+      </palettes>
+      <tiling>
+        <G92_VK7201>	5 5 0.28 0.38	</G92_VK7201>
+      </tiling>
+      <tilingSettings>
+        <type>	relative	</type>
+        <factor>	4.049591  4.048813	</factor>
+        <offset>	0.000000 0.000000	</offset>
+      </tilingSettings>
+    </camouflage>
+  </itemGroup>
+</camouflage_Clan_damaged_label_15136.xml>

@@ -10,7 +10,7 @@
   <supplySlots>	1 1 1 6 6 6 8 8 8	</supplySlots>
   <speedLimits>
     <forward>	37	</forward>
-    <backward>	12	</backward>
+    <backward>	15	</backward>
   </speedLimits>
   <invisibility>
     <moving>	0.169	</moving>
@@ -60,7 +60,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	16800	</weight>
-    <maxHealth>	344	</maxHealth>
+    <maxHealth>	450	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	125	</maxHealth>
       <maxRegenHealth>	85	</maxRegenHealth>
@@ -1553,8 +1553,8 @@
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
       <rotationSpeed>	28	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.26	</vehicleMovement>
-        <vehicleRotation>	0.26	</vehicleRotation>
+        <vehicleMovement>	0.22	</vehicleMovement>
+        <vehicleRotation>	0.22	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	70	</maxHealth>
@@ -2628,17 +2628,14 @@
           <camouflage></camouflage>
         </customizableVehicleAreas>
       </customization>
-      <repairTime>	5.71428585	</repairTime>
+      <repairTime>	2.85003138	</repairTime>
     </Chassis_Somua_Sau_40>
     <Chassis_Somua_Sau_40_2>
       <userString>	#france_vehicles:Chassis_Somua_Sau_40_2	</userString>
       <tags></tags>
       <level>	4	</level>
       <price>	4760	</price>
-      <unlocks>
-        <vehicle>	F33_S_35CA	  <cost>	12550	</cost>
-        </vehicle>
-      </unlocks>
+      <unlocks></unlocks>
       <armor>
         <leftTrack>	15	</leftTrack>
         <rightTrack>	15	</rightTrack>
@@ -2649,8 +2646,8 @@
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
       <rotationSpeed>	30	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.24	</vehicleMovement>
-        <vehicleRotation>	0.24	</vehicleRotation>
+        <vehicleMovement>	0.20	</vehicleMovement>
+        <vehicleRotation>	0.20	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	80	</maxHealth>
@@ -3724,7 +3721,7 @@
           <camouflage></camouflage>
         </customizableVehicleAreas>
       </customization>
-      <repairTime>	5.71428585	</repairTime>
+      <repairTime>	2.85003138	</repairTime>
     </Chassis_Somua_Sau_40_2>
   </chassis>
   <turrets0>
@@ -3738,7 +3735,7 @@
         <armor_3>	0	</armor_3>
       </armor>
       <weight>	170	</weight>
-      <maxHealth>	86	</maxHealth>
+      <maxHealth>	110	</maxHealth>
       <rotationSpeed>	44	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	100	</maxHealth>
@@ -3754,6 +3751,8 @@
       <guns>
         <_75mm_APX>	shared	  <maxAmmo>	60	</maxAmmo>
           <unlocks>
+            <gun>	Canon_de_105_court_mle_1934S_AC	  <cost>	3900	</cost>
+            </gun>
             <gun>	_75mm_Long_44_AC	  <cost>	2700	</cost>
             </gun>
           </unlocks>
@@ -3766,11 +3765,11 @@
             </armor_3>
             <gun>	20	</gun>
           </armor>
-          <shotDispersionRadius>	0.45	</shotDispersionRadius>
+          <shotDispersionRadius>	0.38	</shotDispersionRadius>
           <reloadTime>	3.8	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.08	</turretRotation>
-            <afterShot>	3	</afterShot>
+            <afterShot>	2	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <aimingTime>	1.7	</aimingTime>
@@ -3826,80 +3825,6 @@
             <aoTextureSize>	512 256	</aoTextureSize>
           </camouflage>
         </_75mm_APX>
-        <_75mm_Long_44_AC>	shared	  <maxAmmo>	60	</maxAmmo>
-          <unlocks>
-            <gun>	Canon_de_105_court_mle_1934S_AC	  <cost>	3900	</cost>
-            </gun>
-          </unlocks>
-          <armor>
-            <armor_1>	35	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_1>
-            <armor_2>	25	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_2>
-            <armor_3>	12	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-            </armor_3>
-            <gun>	20	</gun>
-          </armor>
-          <shotDispersionRadius>	0.41	</shotDispersionRadius>
-          <reloadTime>	3.8	</reloadTime>
-          <shotDispersionFactors>
-            <turretRotation>	0.08	</turretRotation>
-            <afterShot>	3	</afterShot>
-            <whileGunDamaged>	2.0	</whileGunDamaged>
-          </shotDispersionFactors>
-          <aimingTime>	1.7	</aimingTime>
-          <invisibilityFactorAtShot>	0.26	</invisibilityFactorAtShot>
-          <pitchLimits>
-            <minPitch>	0 -30 1 -30	</minPitch>
-            <maxPitch>	0 10 1 10	</maxPitch>
-          </pitchLimits>
-          <turretYawLimits>	-7 8	</turretYawLimits>
-          <models>
-            <undamaged>	vehicles/french/F32_Somua_Sau_40/normal/lod0/Gun_02.model	</undamaged>
-            <destroyed>	vehicles/french/F32_Somua_Sau_40/crash/lod0/Gun_02.model	</destroyed>
-            <exploded>	vehicles/french/F32_Somua_Sau_40/crash/lod0/Gun_02.model	</exploded>
-          </models>
-          <hitTester>
-            <collisionModelServer>	vehicles/french/F32_Somua_Sau_40/collision/Gun_02.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/french/F32_Somua_Sau_40/collision_client/Gun_02.model	</collisionModelClient>
-          </hitTester>
-          <effects>	shot_medium	</effects>
-          <reloadEffect>	reload50_75	</reloadEffect>
-          <customizationSlots>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41000	</slotId>
-              <anchorPosition>	-0.000001 0 1.60984	</anchorPosition>
-              <anchorDirection>	0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	paint	</slotType>
-              <slotId>	41001	</slotId>
-              <anchorPosition>	0 0.159177 0.159177	</anchorPosition>
-              <anchorDirection>	0 0.707107 0.707107	</anchorDirection>
-              <applyTo>	16384	</applyTo>
-            </slot>
-            <slot>
-              <slotType>	camouflage	</slotType>
-              <slotId>	42000	</slotId>
-              <anchorPosition>	-0.000001 0 1.60984	</anchorPosition>
-              <anchorDirection>	-0 0 1	</anchorDirection>
-              <applyTo>	4096	</applyTo>
-            </slot>
-          </customizationSlots>
-          <customization>
-            <customizableVehicleAreas>
-              <paint>	GUN GUN_2	</paint>
-              <camouflage>	GUN	</camouflage>
-            </customizableVehicleAreas>
-          </customization>
-          <camouflage>
-            <tiling>	1 0.5 0.000000 0.000000	</tiling>
-            <density>	149.468 149.306	</density>
-            <aoTextureSize>	512 256	</aoTextureSize>
-          </camouflage>
-        </_75mm_Long_44_AC>
         <Canon_de_105_court_mle_1934S_AC>	shared	  <unlocks>
             <vehicle>	F22_AMX_105AM	  <cost>	15220	</cost>
             </vehicle>
@@ -3914,7 +3839,7 @@
             </armor_3>
             <gun>	40	</gun>
           </armor>
-          <shotDispersionRadius>	0.53	</shotDispersionRadius>
+          <shotDispersionRadius>	0.50	</shotDispersionRadius>
           <reloadTime>	8.5	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.08	</turretRotation>
@@ -3974,6 +3899,80 @@
             <aoTextureSize>	512 256	</aoTextureSize>
           </camouflage>
         </Canon_de_105_court_mle_1934S_AC>
+        <_75mm_Long_44_AC>	shared	  <maxAmmo>	60	</maxAmmo>
+          <unlocks>
+            <vehicle>	F33_S_35CA	  <cost>	12550	</cost>
+            </vehicle>
+          </unlocks>
+          <armor>
+            <armor_1>	35	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	25	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	12	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_3>
+            <gun>	20	</gun>
+          </armor>
+          <shotDispersionRadius>	0.36	</shotDispersionRadius>
+          <reloadTime>	3.8	</reloadTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.08	</turretRotation>
+            <afterShot>	2	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <aimingTime>	1.7	</aimingTime>
+          <invisibilityFactorAtShot>	0.26	</invisibilityFactorAtShot>
+          <pitchLimits>
+            <minPitch>	0 -30 1 -30	</minPitch>
+            <maxPitch>	0 10 1 10	</maxPitch>
+          </pitchLimits>
+          <turretYawLimits>	-7 8	</turretYawLimits>
+          <models>
+            <undamaged>	vehicles/french/F32_Somua_Sau_40/normal/lod0/Gun_02.model	</undamaged>
+            <destroyed>	vehicles/french/F32_Somua_Sau_40/crash/lod0/Gun_02.model	</destroyed>
+            <exploded>	vehicles/french/F32_Somua_Sau_40/crash/lod0/Gun_02.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModelServer>	vehicles/french/F32_Somua_Sau_40/collision/Gun_02.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/french/F32_Somua_Sau_40/collision_client/Gun_02.model	</collisionModelClient>
+          </hitTester>
+          <effects>	shot_medium	</effects>
+          <reloadEffect>	reload50_75	</reloadEffect>
+          <customizationSlots>
+            <slot>
+              <slotType>	paint	</slotType>
+              <slotId>	41000	</slotId>
+              <anchorPosition>	-0.000001 0 1.60984	</anchorPosition>
+              <anchorDirection>	0 0 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+            <slot>
+              <slotType>	paint	</slotType>
+              <slotId>	41001	</slotId>
+              <anchorPosition>	0 0.159177 0.159177	</anchorPosition>
+              <anchorDirection>	0 0.707107 0.707107	</anchorDirection>
+              <applyTo>	16384	</applyTo>
+            </slot>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	42000	</slotId>
+              <anchorPosition>	-0.000001 0 1.60984	</anchorPosition>
+              <anchorDirection>	-0 0 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
+          <customization>
+            <customizableVehicleAreas>
+              <paint>	GUN GUN_2	</paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <camouflage>
+            <tiling>	1 0.5 0.000000 0.000000	</tiling>
+            <density>	149.468 149.306	</density>
+            <aoTextureSize>	512 256	</aoTextureSize>
+          </camouflage>
+        </_75mm_Long_44_AC>
       </guns>
       <models>
         <undamaged>	vehicles/french/F32_Somua_Sau_40/normal/lod0/Turret_01.model	</undamaged>
@@ -4007,16 +4006,6 @@
     <Average>	shared	</Average>
   </fuelTanks>
   <radios>
-    <ER_52>	shared	  <unlocks>
-        <radio>	ER_53	  <cost>	610	</cost>
-        </radio>
-      </unlocks>
-    </ER_52>
-    <ER_53>	shared	  <unlocks>
-        <radio>	ER_56	  <cost>	650	</cost>
-        </radio>
-      </unlocks>
-    </ER_53>
     <ER_56>	shared	</ER_56>
   </radios>
   <physics>

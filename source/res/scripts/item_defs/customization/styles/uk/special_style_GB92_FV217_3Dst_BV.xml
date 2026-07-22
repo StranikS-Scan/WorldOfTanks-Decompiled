@@ -1,0 +1,75 @@
+<special_style_GB92_FV217_3Dst_BV.xml>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	0	</historical>
+    <priceGroup>	MT Progression 3D style 10 level 2000g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	uk:GB92_FV217	</vehicles>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	262	</id>
+      <texture>	gui/maps/vehicles/styles/GB92_FV217_3Dst_BV.png	</texture>
+      <modelsSet>	GB92_FV217_3Dst_BV	</modelsSet>
+      <maxNumber>	1	</maxNumber>
+      <userString>	#vehicle_customization:special_style/GB92_FV217_3Dst_BV	</userString>
+      <longDescriptionSpecial>	#vehicle_customization:special_style/GB92_FV217_3Dst_BV_desc/long	</longDescriptionSpecial>
+      <tags>	styleProgression progression_required	</tags>
+      <styleProgressions>
+        <stage>
+          <materials></materials>
+        </stage>
+        <stage>
+          <materials>	tank_upgrade_02	</materials>
+        </stage>
+        <stage>
+          <materials>	tank_upgrade_03	</materials>
+        </stage>
+        <stage>
+          <materials>	tank_upgrade_04	</materials>
+          <outfits>
+            <outfit>
+              <season>	ALL	</season>
+              <camouflages>
+                <item>
+                  <id>	299	</id>
+                  <appliedTo>	4368	</appliedTo>
+                  <patternSize>	1	</patternSize>
+                  <palette>	0	</palette>
+                </item>
+              </camouflages>
+              <sequences>
+                <item>
+                  <id>	22	</id>
+                  <slotId>	18000	</slotId>
+                </item>
+              </sequences>
+            </outfit>
+          </outfits>
+        </stage>
+      </styleProgressions>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	1	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+        </outfit>
+      </outfits>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+    </style>
+  </itemGroup>
+</special_style_GB92_FV217_3Dst_BV.xml>

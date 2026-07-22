@@ -55,7 +55,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_10	</primaryArmor>
     <weight>	6060	</weight>
-    <maxHealth>	304	</maxHealth>
+    <maxHealth>	450	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	110	</maxHealth>
       <maxRegenHealth>	75	</maxRegenHealth>
@@ -2411,7 +2411,7 @@
           <camouflage></camouflage>
         </customizableVehicleAreas>
       </customization>
-      <repairTime>	5.71428585	</repairTime>
+      <repairTime>	2.85003138	</repairTime>
     </Chassis_Ch32_SU-76G_FT>
     <Chassis_Ch32_SU-76G_FT_2>
       <userString>	#china_vehicles:Chassis_Ch32_SU-76G_FT_2	</userString>
@@ -3315,7 +3315,7 @@
           <camouflage></camouflage>
         </customizableVehicleAreas>
       </customization>
-      <repairTime>	5.71428585	</repairTime>
+      <repairTime>	2.85003138	</repairTime>
     </Chassis_Ch32_SU-76G_FT_2>
   </chassis>
   <turrets0>
@@ -3332,7 +3332,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_3	</primaryArmor>
       <weight>	100	</weight>
-      <maxHealth>	76	</maxHealth>
+      <maxHealth>	110	</maxHealth>
       <rotationSpeed>	40	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	100	</maxHealth>
@@ -3363,13 +3363,13 @@
             <minPitch>	0 -15 1 -15	</minPitch>
             <maxPitch>	0 5 1 5	</maxPitch>
           </pitchLimits>
-          <shotDispersionRadius>	0.4	</shotDispersionRadius>
-          <aimingTime>	2.3	</aimingTime>
+          <shotDispersionRadius>	0.38	</shotDispersionRadius>
+          <aimingTime>	2.0	</aimingTime>
           <invisibilityFactorAtShot>	0.266	</invisibilityFactorAtShot>
           <reloadTime>	3	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.1	</turretRotation>
-            <afterShot>	4.0	</afterShot>
+            <afterShot>	2.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <unlocks>
@@ -3471,7 +3471,7 @@
           <reloadTime>	4.4	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.1	</turretRotation>
-            <afterShot>	4.0	</afterShot>
+            <afterShot>	2.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <models>
@@ -3533,7 +3533,7 @@
         </_76mm_ZiS_3>
         <_85mm_56_85TG_FT>	shared	  <maxAmmo>	65	</maxAmmo>
           <unlocks>
-            <vehicle>	Ch33_60G_FT	  <cost>	10300	</cost>
+            <vehicle>	Ch33_60G_FT	  <cost>	17300	</cost>
             </vehicle>
           </unlocks>
           <armor>
@@ -3552,13 +3552,13 @@
             <minPitch>	0 -15 1 -15	</minPitch>
             <maxPitch>	0 5 1 5	</maxPitch>
           </pitchLimits>
-          <shotDispersionRadius>	0.42	</shotDispersionRadius>
+          <shotDispersionRadius>	0.36	</shotDispersionRadius>
           <reloadTime>	5.5	</reloadTime>
-          <aimingTime>	2.3	</aimingTime>
+          <aimingTime>	2.0	</aimingTime>
           <invisibilityFactorAtShot>	0.238	</invisibilityFactorAtShot>
           <shotDispersionFactors>
             <turretRotation>	0.1	</turretRotation>
-            <afterShot>	4.0	</afterShot>
+            <afterShot>	1.9	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <models>
@@ -3681,11 +3681,6 @@
     <Medium>	shared	</Medium>
   </fuelTanks>
   <radios>
-    <_9RM_shop>	shared	  <unlocks>
-        <radio>	A-220_1	  <cost>	7000	</cost>
-        </radio>
-      </unlocks>
-    </_9RM_shop>
     <A-220_1>	shared	</A-220_1>
   </radios>
   <clientAdjustmentFactors></clientAdjustmentFactors>

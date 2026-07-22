@@ -1,52 +1,146 @@
 <turrets.xml>
-  <ids>
-    <Turret_1_It13_Progetto_M35_mod_46>	0	</Turret_1_It13_Progetto_M35_mod_46>
-    <Turret_1_It04_Fiat_3000>	1	</Turret_1_It04_Fiat_3000>
-    <Turret_1_It05_Carro_L6_40>	2	</Turret_1_It05_Carro_L6_40>
-    <Turret_1_It06_M14_41>	3	</Turret_1_It06_M14_41>
-    <Turret_1_It03_M15_42>	4	</Turret_1_It03_M15_42>
-    <Turret_2_It03_M15_42>	5	</Turret_2_It03_M15_42>
-    <Turret_1_It07_P26_40>	6	</Turret_1_It07_P26_40>
-    <Turret_2_It07_P26_40>	7	</Turret_2_It07_P26_40>
-    <Turret_1_It11_P43>	8	</Turret_1_It11_P43>
-    <Turret_2_It11_P43>	9	</Turret_2_It11_P43>
-    <Turret_1_It10_P43_bis>	10	</Turret_1_It10_P43_bis>
-    <Turret_2_It10_P43_bis>	11	</Turret_2_It10_P43_bis>
-    <Turret_1_It09_P43_ter>	12	</Turret_1_It09_P43_ter>
-    <Turret_2_It09_P43_ter>	13	</Turret_2_It09_P43_ter>
-    <Turret_1_It14_P44_Pantera>	14	</Turret_1_It14_P44_Pantera>
-    <Turret_2_It14_P44_Pantera>	15	</Turret_2_It14_P44_Pantera>
-    <Turret_1_It12_Prototipo_Standard_B>	16	</Turret_1_It12_Prototipo_Standard_B>
-    <Turret_2_It12_Prototipo_Standard_B>	17	</Turret_2_It12_Prototipo_Standard_B>
-    <Turret_1_It08_Progetto_M40_mod_65>	18	</Turret_1_It08_Progetto_M40_mod_65>
-    <Turret_1_It08_Progetto_M40_mod_65_bob>	19	</Turret_1_It08_Progetto_M40_mod_65_bob>
-    <Turret_1_It15_Rinoceronte>	20	</Turret_1_It15_Rinoceronte>
-    <Turret_1_It18_Progetto_C45_mod_71>	21	</Turret_1_It18_Progetto_C45_mod_71>
-    <Turret_1_It16_Carrodassalto_P88>	22	</Turret_1_It16_Carrodassalto_P88>
-    <Turret_2_It16_Carrodassalto_P88>	23	</Turret_2_It16_Carrodassalto_P88>
-    <Turret_1_It19_Progetto_C50_mod_66>	24	</Turret_1_It19_Progetto_C50_mod_66>
-    <Turret_2_It19_Progetto_C50_mod_66>	25	</Turret_2_It19_Progetto_C50_mod_66>
-    <Turret_1_It17_Progetto_CC55_mod_54>	26	</Turret_1_It17_Progetto_CC55_mod_54>
-    <Turret_2_It17_Progetto_CC55_mod_54>	27	</Turret_2_It17_Progetto_CC55_mod_54>
-    <Turret_1_It20_Carro_Combattimento_45t>	28	</Turret_1_It20_Carro_Combattimento_45t>
-    <Turret_1_It21_Lion>	30	</Turret_1_It21_Lion>
-    <Turret_1_It31_CC_67_B>	41	</Turret_1_It31_CC_67_B>
-    <Turret_1_It28_Semovente_M41_Da_75_18>	32	</Turret_1_It28_Semovente_M41_Da_75_18>
-    <Turret_1_It27_M43_da_105_25_Bassoto>	33	</Turret_1_It27_M43_da_105_25_Bassoto>
-    <Turret_1_It26_CC_56>	34	</Turret_1_It26_CC_56>
-    <Turret_2_It26_CC_56>	35	</Turret_2_It26_CC_56>
-    <Turret_1_It30_CC_mod_64_Prem>	36	</Turret_1_It30_CC_mod_64_Prem>
-    <Turret_1_It23_CC_3>	38	</Turret_1_It23_CC_3>
-    <Turret_1_It24_Controcarro_1_Mk2>	39	</Turret_1_It24_Controcarro_1_Mk2>
-    <Turret_2_It24_Controcarro_1_Mk2>	40	</Turret_2_It24_Controcarro_1_Mk2>
-    <Turret_2_It31_CC_67_B>	42	</Turret_2_It31_CC_67_B>
-    <Turret_1_It13_Progetto_M35_mod_46_LE>	43	</Turret_1_It13_Progetto_M35_mod_46_LE>
-    <Turret_1_It29_Carro_Celere_Sahariano>	44	</Turret_1_It29_Carro_Celere_Sahariano>
-    <Turret_1_It32_Prototipo_6>	45	</Turret_1_It32_Prototipo_6>
-    <Turret_1_It33_Orso>	31001	</Turret_1_It33_Orso>
-    <Turret_1_It23_CC_3_bob>	31002	</Turret_1_It23_CC_3_bob>
-    <Turret_1_It36_Gasta>	31003	</Turret_1_It36_Gasta>
-    <Turret_1_It35_Gladiatore>	31004	</Turret_1_It35_Gladiatore>
-  </ids>
-  <shared></shared>
+  <xmlns:xmlref>	http://bwt/xmlref	</xmlns:xmlref>
+  <shared>
+    <Turret_1_It03_M15_42>
+      <id>	4	</id>
+    </Turret_1_It03_M15_42>
+    <Turret_1_It04_Fiat_3000>
+      <id>	1	</id>
+    </Turret_1_It04_Fiat_3000>
+    <Turret_1_It05_Carro_L6_40>
+      <id>	2	</id>
+    </Turret_1_It05_Carro_L6_40>
+    <Turret_1_It06_M14_41>
+      <id>	3	</id>
+    </Turret_1_It06_M14_41>
+    <Turret_1_It07_P26_40>
+      <id>	6	</id>
+    </Turret_1_It07_P26_40>
+    <Turret_1_It08_Progetto_M40_mod_65>
+      <id>	18	</id>
+    </Turret_1_It08_Progetto_M40_mod_65>
+    <Turret_1_It08_Progetto_M40_mod_65_bob>
+      <id>	19	</id>
+    </Turret_1_It08_Progetto_M40_mod_65_bob>
+    <Turret_1_It09_P43_ter>
+      <id>	12	</id>
+    </Turret_1_It09_P43_ter>
+    <Turret_1_It10_P43_bis>
+      <id>	10	</id>
+    </Turret_1_It10_P43_bis>
+    <Turret_1_It11_P43>
+      <id>	8	</id>
+    </Turret_1_It11_P43>
+    <Turret_1_It12_Prototipo_Standard_B>
+      <id>	16	</id>
+    </Turret_1_It12_Prototipo_Standard_B>
+    <Turret_1_It13_Progetto_M35_mod_46>
+      <id>	0	</id>
+    </Turret_1_It13_Progetto_M35_mod_46>
+    <Turret_1_It13_Progetto_M35_mod_46_LE>
+      <id>	43	</id>
+    </Turret_1_It13_Progetto_M35_mod_46_LE>
+    <Turret_1_It14_P44_Pantera>
+      <id>	14	</id>
+    </Turret_1_It14_P44_Pantera>
+    <Turret_1_It15_Rinoceronte>
+      <id>	20	</id>
+    </Turret_1_It15_Rinoceronte>
+    <Turret_1_It16_Carrodassalto_P88>
+      <id>	22	</id>
+    </Turret_1_It16_Carrodassalto_P88>
+    <Turret_1_It17_Progetto_CC55_mod_54>
+      <id>	26	</id>
+    </Turret_1_It17_Progetto_CC55_mod_54>
+    <Turret_1_It18_Progetto_C45_mod_71>
+      <id>	21	</id>
+    </Turret_1_It18_Progetto_C45_mod_71>
+    <Turret_1_It19_Progetto_C50_mod_66>
+      <id>	24	</id>
+    </Turret_1_It19_Progetto_C50_mod_66>
+    <Turret_1_It20_Carro_Combattimento_45t>
+      <id>	28	</id>
+    </Turret_1_It20_Carro_Combattimento_45t>
+    <Turret_1_It21_Lion>
+      <id>	30	</id>
+    </Turret_1_It21_Lion>
+    <Turret_1_It23_CC_3>
+      <id>	38	</id>
+    </Turret_1_It23_CC_3>
+    <Turret_1_It23_CC_3_bob>
+      <id>	31002	</id>
+    </Turret_1_It23_CC_3_bob>
+    <Turret_1_It24_Controcarro_1_Mk2>
+      <id>	39	</id>
+    </Turret_1_It24_Controcarro_1_Mk2>
+    <Turret_1_It26_CC_56>
+      <id>	34	</id>
+    </Turret_1_It26_CC_56>
+    <Turret_1_It27_M43_da_105_25_Bassoto>
+      <id>	33	</id>
+    </Turret_1_It27_M43_da_105_25_Bassoto>
+    <Turret_1_It28_Semovente_M41_Da_75_18>
+      <id>	32	</id>
+    </Turret_1_It28_Semovente_M41_Da_75_18>
+    <Turret_1_It29_Carro_Celere_Sahariano>
+      <id>	44	</id>
+    </Turret_1_It29_Carro_Celere_Sahariano>
+    <Turret_1_It30_CC_mod_64_Prem>
+      <id>	36	</id>
+    </Turret_1_It30_CC_mod_64_Prem>
+    <Turret_1_It31_CC_67_B>
+      <id>	41	</id>
+    </Turret_1_It31_CC_67_B>
+    <Turret_1_It32_Prototipo_6>
+      <id>	45	</id>
+    </Turret_1_It32_Prototipo_6>
+    <Turret_1_It33_Orso>
+      <id>	31001	</id>
+    </Turret_1_It33_Orso>
+    <Turret_1_It35_Gladiatore>
+      <id>	31004	</id>
+    </Turret_1_It35_Gladiatore>
+    <Turret_1_It36_Gasta>
+      <id>	31003	</id>
+    </Turret_1_It36_Gasta>
+    <Turret_2_It03_M15_42>
+      <id>	5	</id>
+    </Turret_2_It03_M15_42>
+    <Turret_2_It07_P26_40>
+      <id>	7	</id>
+    </Turret_2_It07_P26_40>
+    <Turret_2_It09_P43_ter>
+      <id>	13	</id>
+    </Turret_2_It09_P43_ter>
+    <Turret_2_It10_P43_bis>
+      <id>	11	</id>
+    </Turret_2_It10_P43_bis>
+    <Turret_2_It11_P43>
+      <id>	9	</id>
+    </Turret_2_It11_P43>
+    <Turret_2_It12_Prototipo_Standard_B>
+      <id>	17	</id>
+    </Turret_2_It12_Prototipo_Standard_B>
+    <Turret_2_It14_P44_Pantera>
+      <id>	15	</id>
+    </Turret_2_It14_P44_Pantera>
+    <Turret_2_It16_Carrodassalto_P88>
+      <id>	23	</id>
+    </Turret_2_It16_Carrodassalto_P88>
+    <Turret_2_It17_Progetto_CC55_mod_54>
+      <id>	27	</id>
+    </Turret_2_It17_Progetto_CC55_mod_54>
+    <Turret_2_It19_Progetto_C50_mod_66>
+      <id>	25	</id>
+    </Turret_2_It19_Progetto_C50_mod_66>
+    <Turret_2_It24_Controcarro_1_Mk2>
+      <id>	40	</id>
+    </Turret_2_It24_Controcarro_1_Mk2>
+    <Turret_2_It26_CC_56>
+      <id>	35	</id>
+    </Turret_2_It26_CC_56>
+    <Turret_2_It31_CC_67_B>
+      <id>	42	</id>
+    </Turret_2_It31_CC_67_B>
+  </shared>
 </turrets.xml>

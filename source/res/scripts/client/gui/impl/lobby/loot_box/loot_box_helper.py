@@ -12,6 +12,7 @@ from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 if typing.TYPE_CHECKING:
     from typing import Optional
+    from gui.impl.backport import TooltipData
 BonusInfo = namedtuple('SlotBonusInfo', ['probabilitiesList',
  'bonusProbability',
  'limitIDs',

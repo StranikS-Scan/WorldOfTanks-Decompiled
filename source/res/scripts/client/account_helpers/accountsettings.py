@@ -397,17 +397,6 @@ class Paragons(object):
     CHAPTER_COUNTER = 'ParagonsChapterCounter'
 
 
-class PlayStreak(object):
-    PLAY_STREAK_SETTINGS = 'PlayStreakSettings'
-    PLAY_STREAK_CLICK = 'PlayStreakClick'
-    PLAY_STREAK_LAST_LEVEL_SEEN = 'PlayStreakLastLevelSeen'
-    PLAY_STREAK_LAST_LEVEL_SEEN_WIDGET = 'PlayStreakLastLevelSeenWidget'
-    PLAY_STREAK_LAST_LEVEL_SEEN_TAB = 'PlayStreakLastLevelSeenTab'
-    PLAY_STREAK_LAST_LEVEL_FREEZE_SEEN = 'PlayStreakLastLevelFreezeSeen'
-    PLAY_STREAK_LAST_LEVEL_FREEZE_SEEN_WIDGET = 'PlayStreakLastLevelFreezeSeenWidget'
-    PLAY_STREAK_LAST_LEVEL_FREEZE_SEEN_TAB = 'PlayStreakLastLevelFreezeSeenTab'
-
-
 class BlackMarket(object):
     BLACK_MARKET_SETTINGS = 'BlackMarketSettings'
     BLACK_MARKET_ENTRY_CLICKED = 'BlackMarketEntryClicked'
@@ -1232,6 +1221,8 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                            'isPassiveXpEnabled': True,
                            'isFreeDemountingEnabled': True,
                            'isExcludedMapEnabled': False,
+                           'isSubscrbExcludedMapSlotsEnabled': False,
+                           'isExcludedMapsKillSwitchInitialized': False,
                            'isExclusiveVehicleEnabled': True,
                            'isDailyQuestsExtraRewardsEnabled': True,
                            'isTeamCreditsBonusEnabled': True,
@@ -1717,13 +1708,6 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
  FunRandomMaps.FUN_RANDOM_MAPS_SETTINGS: {FunRandomMaps.FUN_RANDOM_LAST_SELECTED_MAP: None,
                                           FunRandomMaps.FUN_RANDOM_WIDGET_VISITED_SUBMODES: set(),
                                           FunRandomMaps.FUN_RANDOM_MODE_SELECTOR_CARD_SEEN_FEP_TYPES: set()},
- PlayStreak.PLAY_STREAK_SETTINGS: {PlayStreak.PLAY_STREAK_CLICK: False,
-                                   PlayStreak.PLAY_STREAK_LAST_LEVEL_SEEN: 0,
-                                   PlayStreak.PLAY_STREAK_LAST_LEVEL_SEEN_WIDGET: 0,
-                                   PlayStreak.PLAY_STREAK_LAST_LEVEL_SEEN_TAB: 0,
-                                   PlayStreak.PLAY_STREAK_LAST_LEVEL_FREEZE_SEEN: 0,
-                                   PlayStreak.PLAY_STREAK_LAST_LEVEL_FREEZE_SEEN_WIDGET: 0,
-                                   PlayStreak.PLAY_STREAK_LAST_LEVEL_FREEZE_SEEN_TAB: 0},
  BlackMarket.BLACK_MARKET_SETTINGS: {BlackMarket.BLACK_MARKET_ENTRY_CLICKED: False,
                                      BlackMarket.BLACK_MARKET_LAST_PHASE_SEEN: None},
  Epic.EPIC_SETTINGS: {Epic.SUPPLY_AIRSHIP_HINT_VIEWED: False,
@@ -1765,7 +1749,7 @@ def _recursiveStep(defaultDict, savedDict, finalDict):
 
 class AccountSettings(object):
     onSettingsChanging = Event.Event()
-    version = 79
+    version = 80
     settingsCore = dependency.descriptor(ISettingsCore)
     __cache = {'login': None,
      'section': None}
@@ -2512,6 +2496,17 @@ class AccountSettings(object):
 
             if currVersion < 79:
                 AccountSettings.__addDeferredLogPlayerSettingsInitAction(ads)
+            if currVersion < 80:
+                mtBirthdayKey = 'MT_BIRTHDAY'
+                for key, section in _filterAccountSection(ads):
+                    accSettings = AccountSettings._readSection(section, KEY_SETTINGS)
+                    if mtBirthdayKey in accSettings.keys():
+                        mtBirthdaySettings = _unpack(accSettings[mtBirthdayKey].asString)
+                        mtBirthdaySettings['BirthdayWelcomeNotification'] = False
+                        mtBirthdaySettings['GIFT_RECEIVED'] = False
+                        mtBirthdaySettings['BONUS_RECEIVED'] = False
+                        accSettings.write(mtBirthdayKey, _pack(mtBirthdaySettings))
+
             ads.writeInt('version', AccountSettings.version)
         return
 
@@ -2749,14 +2744,6 @@ class AccountSettings(object):
         if settingSection not in DEFAULT_VALUES:
             raise SoftException('"{}" does not exist in DEFAULT_VALUES'.format(settingSection))
         return False
-
-    @staticmethod
-    def getPlayStreak(name):
-        return AccountSettings._getValue(name, PlayStreak.PLAY_STREAK_SETTINGS, True)
-
-    @staticmethod
-    def setPlayStreak(name, value):
-        AccountSettings._setValue(name, value, PlayStreak.PLAY_STREAK_SETTINGS, True)
 
     @staticmethod
     def getBlackMarket(name):

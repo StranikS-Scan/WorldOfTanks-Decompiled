@@ -49,6 +49,8 @@ from gui.shared.utils.requesters.blueprints_requester import getUniqueBlueprints
 from helpers import dependency, int2roman
 from shared_utils import first
 from skeletons.gui.shared import IItemsCache
+if typing.TYPE_CHECKING:
+    from gui.impl.backport import TooltipData
 STYLES_TAGS = []
 VIDEO_TAGS = []
 _logger = logging.getLogger(__name__)

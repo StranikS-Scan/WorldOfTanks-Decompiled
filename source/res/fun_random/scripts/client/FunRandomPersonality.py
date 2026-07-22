@@ -85,6 +85,12 @@ class ClientFunRandomBattleMode(AbstractBattleMode):
         return LuiRules.FUN_RANDOM_ENTRY_POINT
 
     @property
+    def _client_battleModifiersPanel(self):
+        from gui.impl.gen import R
+        from fun_random.gui.impl.lobby.feature.fun_random_modifiers_panel_view import FunRandomModifiersPanel
+        return (R.views.fun_random.lobby.feature.FunRandomModifiersPanel(), FunRandomModifiersPanel)
+
+    @property
     def _client_prbSquadEntityClass(self):
         from fun_random.gui.prb_control.entities.squad.entity import FunRandomSquadEntity
         return FunRandomSquadEntity
@@ -166,6 +172,7 @@ def preInit():
     battleMode.registerMessengerClientFormatters(fun_gui_constants)
     battleMode.registerClientTokenQuestsSubFormatters()
     battleMode.registerVehicleViewStates()
+    battleMode.registerBattleModifierPanels()
     registerFunRandomOthersPrbParams()
     registerFunRandomAwardControllers()
     registerFunRandomHangarPresets()

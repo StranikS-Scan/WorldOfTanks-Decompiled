@@ -1,0 +1,50 @@
+<camouflage_italian_marathon_camo_label.xml>
+  <xmlns:china2>	ussr	</xmlns:china2>
+  <xmlns:germany>	germany	</xmlns:germany>
+  <xmlns:china1>	usa	</xmlns:china1>
+  <xmlns:china>	china	</xmlns:china>
+  <xmlns:france>	france	</xmlns:france>
+  <xmlns:china0>	uk	</xmlns:china0>
+  <xmlns:japan>	japan	</xmlns:japan>
+  <xmlns:czech>	czech	</xmlns:czech>
+  <xmlns:sweden>	sweden	</xmlns:sweden>
+  <xmlns:poland>	poland	</xmlns:poland>
+  <xmlns:italy>	italy	</xmlns:italy>
+  <xmlns:intunion>	intunion	</xmlns:intunion>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/opaque	</userString>
+    <season>	ALL	</season>
+    <historical>	0	</historical>
+    <priceGroup>	MT camouflages 50g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	italy:It09_P43_ter italy:It10_P43_bis	</vehicles>
+      </include>
+    </vehicleFilter>
+    <camouflage>
+      <id>	505	</id>
+      <texture>	vehicles/italy/Camouflage/Italian_Marathons.dds	</texture>
+      <description>	#vehicle_customization:camouflage/italian_marathon_camo/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/italian_marathon_camo/label	</userString>
+      <tags>	hiddenInUI	</tags>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	128 95 68 255	</c0>
+          <c1>	83 62 49 255	</c1>
+          <c2>	177 165 120 255	</c2>
+          <c3>	118 109 76 255	</c3>
+        </palette>
+      </palettes>
+      <tiling>
+        <italy:It10_P43_bis>	1.39 1.39 0.000000 0.000000	</italy:It10_P43_bis>
+      </tiling>
+      <tilingSettings>
+        <type>	relative	</type>
+        <factor>	2.353351  2.337602	</factor>
+        <offset>	0.000000 0.000000	</offset>
+      </tilingSettings>
+    </camouflage>
+  </itemGroup>
+</camouflage_italian_marathon_camo_label.xml>

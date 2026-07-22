@@ -1,494 +1,8 @@
 <engines.xml>
-  <ids>
-    <Skoda_16_ADH_140>	1	</Skoda_16_ADH_140>
-    <Hanomag_WD_50PS>	2	</Hanomag_WD_50PS>
-    <Skoda_T_11_0>	3	</Skoda_T_11_0>
-    <Skoda_T_11_2>	4	</Skoda_T_11_2>
-    <Praga_TNHPS>	5	</Praga_TNHPS>
-    <Praga_TNHPS_II>	6	</Praga_TNHPS_II>
-    <Praga_TNHPS_dvojkarb>	7	</Praga_TNHPS_dvojkarb>
-    <Praga_NR>	8	</Praga_NR>
-    <Praga_V_8_H_Sv>	9	</Praga_V_8_H_Sv>
-    <Praga_V_8_H>	10	</Praga_V_8_H>
-    <Skoda_V12_16_2_liter>	11	</Skoda_V12_16_2_liter>
-    <Skoda_V12_19_8_liter_450>	12	</Skoda_V12_19_8_liter_450>
-    <Skoda_V12_19_8_liter_500>	13	</Skoda_V12_19_8_liter_500>
-    <V_2_34>	14	</V_2_34>
-    <V_2_34M>	15	</V_2_34M>
-    <Skoda_V16_diesel_600>	16	</Skoda_V16_diesel_600>
-    <Skoda_V16_diesel_660>	17	</Skoda_V16_diesel_660>
-    <Skoda_16_ADH_140_A>	18	</Skoda_16_ADH_140_A>
-    <Skoda_16_AH_145>	19	</Skoda_16_AH_145>
-    <Skoda_AHK>	20	</Skoda_AHK>
-    <Praga_AXK>	21	</Praga_AXK>
-    <Skoda_16_AH_145_A>	22	</Skoda_16_AH_145_A>
-    <Skoda_16_ADH_134>	24	</Skoda_16_ADH_134>
-    <CKD_AXK>	25	</CKD_AXK>
-    <CKD_AXL>	26	</CKD_AXL>
-    <CKD_AXK2>	27	</CKD_AXK2>
-    <CKD_AXK_proto>	28	</CKD_AXK_proto>
-    <Skoda_V16_AHK_2>	29	</Skoda_V16_AHK_2>
-    <Skoda_16_ADH_140_P>	30	</Skoda_16_ADH_140_P>
-    <Skoda_V16_diesel_660_a>	31	</Skoda_V16_diesel_660_a>
-    <Skoda_V16_diesel_600_a>	32	</Skoda_V16_diesel_600_a>
-    <Skoda_16_ADH_140_F>	33	</Skoda_16_ADH_140_F>
-    <CKD_AXL_CN>	34	</CKD_AXL_CN>
-    <Saurer_CT1D_SZ1007>	37	</Saurer_CT1D_SZ1007>
-    <Skoda_AHK_TST>	31001	</Skoda_AHK_TST>
-    <Tatra_T-78>	31002	</Tatra_T-78>
-    <Skoda_AHK_FL>	31003	</Skoda_AHK_FL>
-    <DTN_10>	31004	</DTN_10>
-    <V_12_6>	31005	</V_12_6>
-    <Praga_AXK_X16>	31006	</Praga_AXK_X16>
-    <V_55>	31007	</V_55>
-    <V_12_F>	31008	</V_12_F>
-    <Skoda_16_AH_145_S>	31009	</Skoda_16_AH_145_S>
-    <V_12_7>	31013	</V_12_7>
-    <Development_Engine>	65000	</Development_Engine>
-    <GravEngine_02>	40003	</GravEngine_02>
-    <PepelacEngine_02>	40002	</PepelacEngine_02>
-  </ids>
+  <xmlns:xmlref>	http://bwt/xmlref	</xmlns:xmlref>
   <shared>
-    <Hanomag_WD_50PS>
-      <userString>	#czech_vehicles:Hanomag_WD_50PS	</userString>
-      <tags>	gasoline	</tags>
-      <level>	1	</level>
-      <price>	0	</price>
-      <notInShop>	true	</notInShop>
-      <wwsoundPC>	eng_gaz_aa_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_gaz_aa_npc	</wwsoundNPC>
-      <power>	50	</power>
-      <weight>	300	</weight>
-      <maxHealth>	25	</maxHealth>
-      <maxRegenHealth>	17	</maxRegenHealth>
-      <repairCost>	1	</repairCost>
-      <fireStartingChance>	0.2	</fireStartingChance>
-      <rpm_min>	437	</rpm_min>
-      <rpm_max>	2201	</rpm_max>
-    </Hanomag_WD_50PS>
-    <Skoda_T_11_0>
-      <userString>	#czech_vehicles:Skoda_T_11_0	</userString>
-      <tags>	gasoline	</tags>
-      <level>	2	</level>
-      <price>	840	</price>
-      <wwsoundPC>	eng_gaz_aa_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_gaz_aa_npc	</wwsoundNPC>
-      <power>	120	</power>
-      <weight>	900	</weight>
-      <maxHealth>	40	</maxHealth>
-      <maxRegenHealth>	19	</maxRegenHealth>
-      <repairCost>	2	</repairCost>
-      <fireStartingChance>	0.2	</fireStartingChance>
-      <rpm_min>	349	</rpm_min>
-      <rpm_max>	2482	</rpm_max>
-    </Skoda_T_11_0>
-    <Skoda_T_11_2>
-      <userString>	#czech_vehicles:Skoda_T_11_2	</userString>
-      <tags>	gasoline	</tags>
-      <level>	3	</level>
-      <price>	3600	</price>
-      <wwsoundPC>	eng_gaz_aa_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_gaz_aa_npc	</wwsoundNPC>
-      <power>	135	</power>
-      <weight>	900	</weight>
-      <maxHealth>	55	</maxHealth>
-      <maxRegenHealth>	27	</maxRegenHealth>
-      <repairCost>	3	</repairCost>
-      <fireStartingChance>	0.2	</fireStartingChance>
-      <rpm_min>	330	</rpm_min>
-      <rpm_max>	2542	</rpm_max>
-    </Skoda_T_11_2>
-    <Praga_TNHPS>
-      <userString>	#czech_vehicles:Praga_TNHPS	</userString>
-      <tags>	gasoline	</tags>
-      <level>	2	</level>
-      <price>	1150	</price>
-      <wwsoundPC>	eng_gaz_aa_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_gaz_aa_npc	</wwsoundNPC>
-      <power>	120	</power>
-      <weight>	500	</weight>
-      <maxHealth>	40	</maxHealth>
-      <maxRegenHealth>	19	</maxRegenHealth>
-      <repairCost>	2	</repairCost>
-      <fireStartingChance>	0.2	</fireStartingChance>
-      <rpm_min>	349	</rpm_min>
-      <rpm_max>	2482	</rpm_max>
-    </Praga_TNHPS>
-    <Saurer_CT1D_SZ1007>
-      <userString>	#czech_vehicles:Saurer_CT1D_SZ1007	</userString>
-      <tags>	gasoline	</tags>
-      <level>	2	</level>
-      <price>	1150	</price>
-      <notInShop>	true	</notInShop>
-      <wwsoundPC>	eng_gaz_aa_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_gaz_aa_npc	</wwsoundNPC>
-      <power>	110	</power>
-      <weight>	500	</weight>
-      <maxHealth>	40	</maxHealth>
-      <maxRegenHealth>	19	</maxRegenHealth>
-      <repairCost>	2	</repairCost>
-      <fireStartingChance>	0.2	</fireStartingChance>
-      <rpm_min>	361	</rpm_min>
-      <rpm_max>	2442	</rpm_max>
-    </Saurer_CT1D_SZ1007>
-    <Praga_TNHPS_II>
-      <userString>	#czech_vehicles:Praga_TNHPS_II	</userString>
-      <tags>	gasoline	</tags>
-      <level>	2	</level>
-      <price>	1250	</price>
-      <wwsoundPC>	eng_gaz_aa_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_gaz_aa_npc	</wwsoundNPC>
-      <power>	125	</power>
-      <weight>	500	</weight>
-      <maxHealth>	40	</maxHealth>
-      <maxRegenHealth>	19	</maxRegenHealth>
-      <repairCost>	2	</repairCost>
-      <fireStartingChance>	0.2	</fireStartingChance>
-      <rpm_min>	342	</rpm_min>
-      <rpm_max>	2502	</rpm_max>
-    </Praga_TNHPS_II>
-    <Praga_TNHPS_dvojkarb>
-      <userString>	#czech_vehicles:Praga_TNHPS_dvojkarb	</userString>
-      <tags>	gasoline	</tags>
-      <level>	3	</level>
-      <price>	3750	</price>
-      <wwsoundPC>	eng_gaz_aa_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_gaz_aa_npc	</wwsoundNPC>
-      <power>	140	</power>
-      <weight>	520	</weight>
-      <maxHealth>	55	</maxHealth>
-      <maxRegenHealth>	27	</maxRegenHealth>
-      <repairCost>	3	</repairCost>
-      <fireStartingChance>	0.2	</fireStartingChance>
-      <rpm_min>	324	</rpm_min>
-      <rpm_max>	2562	</rpm_max>
-    </Praga_TNHPS_dvojkarb>
-    <Praga_NR>
-      <userString>	#czech_vehicles:Praga_NR	</userString>
-      <tags>	gasoline	</tags>
-      <level>	3	</level>
-      <price>	4400	</price>
-      <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
-      <power>	225	</power>
-      <weight>	600	</weight>
-      <maxHealth>	80	</maxHealth>
-      <maxRegenHealth>	39	</maxRegenHealth>
-      <repairCost>	2	</repairCost>
-      <fireStartingChance>	0.2	</fireStartingChance>
-      <rpm_min>	479	</rpm_min>
-      <rpm_max>	2266	</rpm_max>
-    </Praga_NR>
-    <Praga_V_8_H_Sv>
-      <userString>	#czech_vehicles:Praga_V_8_H_Sv	</userString>
-      <tags>	gasoline	</tags>
-      <level>	4	</level>
-      <price>	9400	</price>
-      <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
-      <power>	240	</power>
-      <weight>	600	</weight>
-      <maxHealth>	82	</maxHealth>
-      <maxRegenHealth>	40	</maxRegenHealth>
-      <repairCost>	4	</repairCost>
-      <fireStartingChance>	0.2	</fireStartingChance>
-      <rpm_min>	466	</rpm_min>
-      <rpm_max>	2307	</rpm_max>
-    </Praga_V_8_H_Sv>
-    <Praga_V_8_H>
-      <userString>	#czech_vehicles:Praga_V_8_H	</userString>
-      <tags>	gasoline	</tags>
-      <level>	4	</level>
-      <price>	11200	</price>
-      <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
-      <power>	260	</power>
-      <weight>	600	</weight>
-      <maxHealth>	82	</maxHealth>
-      <maxRegenHealth>	40	</maxRegenHealth>
-      <repairCost>	4	</repairCost>
-      <fireStartingChance>	0.2	</fireStartingChance>
-      <rpm_min>	449	</rpm_min>
-      <rpm_max>	2360	</rpm_max>
-    </Praga_V_8_H>
-    <Tatra_T-78>
-      <userString>	#czech_vehicles:Tatra_T-78	</userString>
-      <tags>	gasoline	</tags>
-      <level>	4	</level>
-      <price>	11000	</price>
-      <notInShop>	true	</notInShop>
-      <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
-      <power>	260	</power>
-      <weight>	500	</weight>
-      <maxHealth>	82	</maxHealth>
-      <maxRegenHealth>	40	</maxRegenHealth>
-      <repairCost>	4	</repairCost>
-      <fireStartingChance>	0.2	</fireStartingChance>
-      <rpm_min>	449	</rpm_min>
-      <rpm_max>	2360	</rpm_max>
-    </Tatra_T-78>
-    <Skoda_V12_16_2_liter>
-      <userString>	#czech_vehicles:Skoda_V12_16_2_liter	</userString>
-      <tags>	gasoline	</tags>
-      <level>	4	</level>
-      <price>	11000	</price>
-      <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
-      <power>	380	</power>
-      <weight>	510	</weight>
-      <maxHealth>	84	</maxHealth>
-      <maxRegenHealth>	41	</maxRegenHealth>
-      <repairCost>	4	</repairCost>
-      <fireStartingChance>	0.2	</fireStartingChance>
-      <rpm_min>	349	</rpm_min>
-      <rpm_max>	2681	</rpm_max>
-    </Skoda_V12_16_2_liter>
-    <Skoda_V12_19_8_liter_450>
-      <userString>	#czech_vehicles:Skoda_V12_19_8_liter_450	</userString>
-      <tags>	gasoline	</tags>
-      <level>	5	</level>
-      <price>	15100	</price>
-      <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
-      <power>	450	</power>
-      <weight>	510	</weight>
-      <maxHealth>	100	</maxHealth>
-      <maxRegenHealth>	49	</maxRegenHealth>
-      <repairCost>	4	</repairCost>
-      <fireStartingChance>	0.2	</fireStartingChance>
-      <rpm_min>	290	</rpm_min>
-      <rpm_max>	2868	</rpm_max>
-    </Skoda_V12_19_8_liter_450>
-    <Skoda_V12_19_8_liter_500>
-      <userString>	#czech_vehicles:Skoda_V12_19_8_liter_500	</userString>
-      <tags>	gasoline	</tags>
-      <level>	6	</level>
-      <price>	25400	</price>
-      <wwsoundPC>	eng_Continental_R975_C1_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_Continental_R975_C1_npc	</wwsoundNPC>
-      <power>	500	</power>
-      <weight>	700	</weight>
-      <maxHealth>	145	</maxHealth>
-      <maxRegenHealth>	73	</maxRegenHealth>
-      <repairCost>	7	</repairCost>
-      <fireStartingChance>	0.2	</fireStartingChance>
-      <rpm_min>	500	</rpm_min>
-      <rpm_max>	2200	</rpm_max>
-    </Skoda_V12_19_8_liter_500>
-    <V_2_34>
-      <userString>	#czech_vehicles:V_2_34	</userString>
-      <tags>	diesel	</tags>
-      <level>	6	</level>
-      <price>	27860	</price>
-      <wwsoundPC>	eng_V2K_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_V2K_npc	</wwsoundNPC>
-      <power>	500	</power>
-      <weight>	750	</weight>
-      <maxHealth>	145	</maxHealth>
-      <maxRegenHealth>	72	</maxRegenHealth>
-      <repairCost>	6	</repairCost>
-      <fireStartingChance>	0.15	</fireStartingChance>
-      <rpm_min>	399	</rpm_min>
-      <rpm_max>	2101	</rpm_max>
-    </V_2_34>
-    <V_2_34M>
-      <userString>	#czech_vehicles:V_2_34M	</userString>
-      <tags>	diesel	</tags>
-      <level>	6	</level>
-      <price>	29500	</price>
-      <wwsoundPC>	eng_V2K_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_V2K_npc	</wwsoundNPC>
-      <power>	520	</power>
-      <weight>	750	</weight>
-      <maxHealth>	190	</maxHealth>
-      <maxRegenHealth>	95	</maxRegenHealth>
-      <repairCost>	7	</repairCost>
-      <fireStartingChance>	0.15	</fireStartingChance>
-      <rpm_min>	379	</rpm_min>
-      <rpm_max>	2141	</rpm_max>
-    </V_2_34M>
-    <Skoda_16_ADH_140_P>
-      <userString>	#czech_vehicles:Skoda_16_ADH_140_P	</userString>
-      <tags>	diesel	</tags>
-      <level>	6	</level>
-      <price>	27500	</price>
-      <wwsoundPC>	eng_V2K_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_V2K_npc	</wwsoundNPC>
-      <power>	500	</power>
-      <weight>	750	</weight>
-      <maxHealth>	145	</maxHealth>
-      <maxRegenHealth>	72	</maxRegenHealth>
-      <repairCost>	6	</repairCost>
-      <fireStartingChance>	0.15	</fireStartingChance>
-      <rpm_min>	399	</rpm_min>
-      <rpm_max>	2101	</rpm_max>
-    </Skoda_16_ADH_140_P>
-    <Skoda_V16_diesel_600>
-      <userString>	#czech_vehicles:Skoda_V16_diesel_600	</userString>
-      <tags>	diesel	</tags>
-      <level>	7	</level>
-      <price>	33000	</price>
-      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
-      <power>	600	</power>
-      <weight>	1400	</weight>
-      <maxHealth>	190	</maxHealth>
-      <maxRegenHealth>	95	</maxRegenHealth>
-      <repairCost>	7	</repairCost>
-      <fireStartingChance>	0.15	</fireStartingChance>
-      <rpm_min>	400	</rpm_min>
-      <rpm_max>	2000	</rpm_max>
-    </Skoda_V16_diesel_600>
-    <Skoda_V16_diesel_600_a>
-      <userString>	#czech_vehicles:Skoda_V16_diesel_600_a	</userString>
-      <tags>	diesel	</tags>
-      <level>	7	</level>
-      <price>	33400	</price>
-      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
-      <power>	600	</power>
-      <weight>	1400	</weight>
-      <maxHealth>	190	</maxHealth>
-      <maxRegenHealth>	95	</maxRegenHealth>
-      <repairCost>	7	</repairCost>
-      <fireStartingChance>	0.15	</fireStartingChance>
-      <rpm_min>	400	</rpm_min>
-      <rpm_max>	2000	</rpm_max>
-    </Skoda_V16_diesel_600_a>
-    <Skoda_V16_diesel_660>
-      <userString>	#czech_vehicles:Skoda_V16_diesel_660	</userString>
-      <tags>	diesel	</tags>
-      <level>	7	</level>
-      <price>	37600	</price>
-      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
-      <power>	660	</power>
-      <weight>	1400	</weight>
-      <maxHealth>	190	</maxHealth>
-      <maxRegenHealth>	95	</maxRegenHealth>
-      <repairCost>	7	</repairCost>
-      <fireStartingChance>	0.15	</fireStartingChance>
-      <rpm_min>	339	</rpm_min>
-      <rpm_max>	2180	</rpm_max>
-    </Skoda_V16_diesel_660>
-    <Skoda_V16_diesel_660_a>
-      <userString>	#czech_vehicles:Skoda_V16_diesel_660_a	</userString>
-      <tags>	diesel	</tags>
-      <level>	7	</level>
-      <price>	37800	</price>
-      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
-      <power>	680	</power>
-      <weight>	1400	</weight>
-      <maxHealth>	190	</maxHealth>
-      <maxRegenHealth>	95	</maxRegenHealth>
-      <repairCost>	7	</repairCost>
-      <fireStartingChance>	0.15	</fireStartingChance>
-      <rpm_min>	319	</rpm_min>
-      <rpm_max>	2241	</rpm_max>
-    </Skoda_V16_diesel_660_a>
-    <Skoda_16_ADH_134>
-      <userString>	#czech_vehicles:Skoda_16_ADH_134	</userString>
-      <tags>	diesel	</tags>
-      <level>	7	</level>
-      <price>	36000	</price>
-      <notInShop>	true	</notInShop>
-      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
-      <power>	660	</power>
-      <weight>	1400	</weight>
-      <maxHealth>	190	</maxHealth>
-      <maxRegenHealth>	95	</maxRegenHealth>
-      <repairCost>	7	</repairCost>
-      <fireStartingChance>	0.15	</fireStartingChance>
-      <rpm_min>	339	</rpm_min>
-      <rpm_max>	2180	</rpm_max>
-    </Skoda_16_ADH_134>
-    <Skoda_16_ADH_140_A>
-      <userString>	#czech_vehicles:Skoda_16_ADH_140_A	</userString>
-      <tags>	diesel	</tags>
-      <level>	8	</level>
-      <price>	52000	</price>
-      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
-      <power>	700	</power>
-      <weight>	1400	</weight>
-      <maxHealth>	255	</maxHealth>
-      <maxRegenHealth>	127	</maxRegenHealth>
-      <repairCost>	8	</repairCost>
-      <fireStartingChance>	0.15	</fireStartingChance>
-      <rpm_min>	299	</rpm_min>
-      <rpm_max>	2301	</rpm_max>
-    </Skoda_16_ADH_140_A>
-    <Skoda_16_ADH_140>
-      <userString>	#czech_vehicles:Skoda_16_ADH_140	</userString>
-      <tags>	diesel	</tags>
-      <level>	8	</level>
-      <price>	45300	</price>
-      <notInShop>	true	</notInShop>
-      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
-      <power>	700	</power>
-      <weight>	1400	</weight>
-      <maxHealth>	255	</maxHealth>
-      <maxRegenHealth>	127	</maxRegenHealth>
-      <repairCost>	8	</repairCost>
-      <fireStartingChance>	0.15	</fireStartingChance>
-      <rpm_min>	299	</rpm_min>
-      <rpm_max>	2301	</rpm_max>
-    </Skoda_16_ADH_140>
-    <Skoda_16_ADH_140_F>
-      <userString>	#czech_vehicles:Skoda_16_ADH_140_F	</userString>
-      <tags>	diesel	</tags>
-      <level>	8	</level>
-      <price>	45300	</price>
-      <notInShop>	true	</notInShop>
-      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
-      <power>	700	</power>
-      <weight>	1400	</weight>
-      <maxHealth>	255	</maxHealth>
-      <maxRegenHealth>	127	</maxRegenHealth>
-      <repairCost>	8	</repairCost>
-      <fireStartingChance>	0.15	</fireStartingChance>
-      <rpm_min>	299	</rpm_min>
-      <rpm_max>	2301	</rpm_max>
-    </Skoda_16_ADH_140_F>
-    <V_12_7>
-      <userString>	#czech_vehicles:V_12_7	</userString>
-      <tags>	diesel	</tags>
-      <level>	8	</level>
-      <price>	45300	</price>
-      <notInShop>	true	</notInShop>
-      <wwsoundPC>	eng_V2_34_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_V2_34_npc	</wwsoundNPC>
-      <power>	850	</power>
-      <weight>	1000	</weight>
-      <maxHealth>	255	</maxHealth>
-      <maxRegenHealth>	127	</maxRegenHealth>
-      <repairCost>	8	</repairCost>
-      <fireStartingChance>	0.15	</fireStartingChance>
-      <rpm_min>	475	</rpm_min>
-      <rpm_max>	1950	</rpm_max>
-    </V_12_7>
-    <CKD_AXK_proto>
-      <userString>	#czech_vehicles:CKD_AXK_proto	</userString>
-      <tags>	diesel	</tags>
-      <level>	8	</level>
-      <price>	51700	</price>
-      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
-      <power>	680	</power>
-      <weight>	1400	</weight>
-      <maxHealth>	255	</maxHealth>
-      <maxRegenHealth>	127	</maxRegenHealth>
-      <repairCost>	8	</repairCost>
-      <fireStartingChance>	0.15	</fireStartingChance>
-      <rpm_min>	319	</rpm_min>
-      <rpm_max>	2241	</rpm_max>
-    </CKD_AXK_proto>
     <CKD_AXK>
+      <id>	25	</id>
       <userString>	#czech_vehicles:CKD_AXK	</userString>
       <tags>	diesel	</tags>
       <level>	9	</level>
@@ -506,6 +20,7 @@
       <rpm_max>	2150	</rpm_max>
     </CKD_AXK>
     <CKD_AXK2>
+      <id>	27	</id>
       <userString>	#czech_vehicles:CKD_AXK2	</userString>
       <tags>	diesel	</tags>
       <level>	9	</level>
@@ -521,157 +36,25 @@
       <rpm_min>	249	</rpm_min>
       <rpm_max>	2452	</rpm_max>
     </CKD_AXK2>
-    <Skoda_AHK_TST>
-      <userString>	#czech_vehicles:Skoda_AHK_TST	</userString>
+    <CKD_AXK_proto>
+      <id>	28	</id>
+      <userString>	#czech_vehicles:CKD_AXK_proto	</userString>
       <tags>	diesel	</tags>
       <level>	8	</level>
       <price>	51700	</price>
-      <notInShop>	true	</notInShop>
-      <wwsoundPC>	eng_V2_34_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_V2_34_npc	</wwsoundNPC>
-      <power>	800	</power>
-      <weight>	1000	</weight>
-      <maxHealth>	255	</maxHealth>
-      <maxRegenHealth>	127	</maxRegenHealth>
-      <repairCost>	8	</repairCost>
-      <fireStartingChance>	0.15	</fireStartingChance>
-      <rpm_min>	500	</rpm_min>
-      <rpm_max>	1900	</rpm_max>
-    </Skoda_AHK_TST>
-    <V_55>
-      <userString>	#czech_vehicles:V_55	</userString>
-      <tags>	diesel	</tags>
-      <level>	8	</level>
-      <price>	50000	</price>
-      <notInShop>	true	</notInShop>
-      <wwsoundPC>	eng_V2_34_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_V2_34_npc	</wwsoundNPC>
-      <power>	1050	</power>
-      <weight>	940	</weight>
-      <maxHealth>	255	</maxHealth>
-      <maxRegenHealth>	127	</maxRegenHealth>
-      <repairCost>	8	</repairCost>
-      <fireStartingChance>	0.15	</fireStartingChance>
-      <rpm_min>	375	</rpm_min>
-      <rpm_max>	2150	</rpm_max>
-    </V_55>
-    <DTN_10>
-      <userString>	#czech_vehicles:DTN_10	</userString>
-      <tags>	diesel	</tags>
-      <level>	9	</level>
-      <price>	80000	</price>
-      <notInShop>	true	</notInShop>
-      <wwsoundPC>	eng_V2_34_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_V2_34_npc	</wwsoundNPC>
-      <power>	900	</power>
-      <weight>	1000	</weight>
-      <maxHealth>	255	</maxHealth>
-      <maxRegenHealth>	127	</maxRegenHealth>
-      <repairCost>	8	</repairCost>
-      <fireStartingChance>	0.15	</fireStartingChance>
-      <rpm_min>	450	</rpm_min>
-      <rpm_max>	2000	</rpm_max>
-    </DTN_10>
-    <Skoda_16_AH_145>
-      <userString>	#czech_vehicles:Skoda_16_AH_145	</userString>
-      <tags>	diesel	</tags>
-      <level>	9	</level>
-      <price>	82000	</price>
       <wwsoundPC>	eng_v55_pc	</wwsoundPC>
       <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
-      <power>	750	</power>
+      <power>	680	</power>
       <weight>	1400	</weight>
-      <maxHealth>	320	</maxHealth>
-      <maxRegenHealth>	160	</maxRegenHealth>
-      <repairCost>	9	</repairCost>
-      <fireStartingChance>	0.12	</fireStartingChance>
-      <rpm_min>	249	</rpm_min>
-      <rpm_max>	2452	</rpm_max>
-    </Skoda_16_AH_145>
-    <Skoda_V16_AHK_2>
-      <userString>	#czech_vehicles:Skoda_V16_AHK_2	</userString>
-      <tags>	diesel	</tags>
-      <level>	9	</level>
-      <price>	83000	</price>
-      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
-      <power>	750	</power>
-      <weight>	1600	</weight>
-      <maxHealth>	370	</maxHealth>
-      <maxRegenHealth>	185	</maxRegenHealth>
-      <repairCost>	9	</repairCost>
-      <fireStartingChance>	0.15	</fireStartingChance>
-      <rpm_min>	249	</rpm_min>
-      <rpm_max>	2452	</rpm_max>
-    </Skoda_V16_AHK_2>
-    <Skoda_AHK>
-      <userString>	#czech_vehicles:Skoda_AHK	</userString>
-      <tags>	diesel	</tags>
-      <level>	10	</level>
-      <price>	110000	</price>
-      <wwsoundPC>	eng_V2_34_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_V2_34_npc	</wwsoundNPC>
-      <power>	1000	</power>
-      <weight>	1700	</weight>
-      <maxHealth>	360	</maxHealth>
-      <maxRegenHealth>	170	</maxRegenHealth>
-      <repairCost>	9	</repairCost>
-      <fireStartingChance>	0.1	</fireStartingChance>
-      <rpm_min>	400	</rpm_min>
-      <rpm_max>	2100	</rpm_max>
-    </Skoda_AHK>
-    <Skoda_AHK_FL>
-      <userString>	#czech_vehicles:Skoda_AHK	</userString>
-      <tags>	diesel	</tags>
-      <level>	10	</level>
-      <price>	110000	</price>
-      <notInShop>	true	</notInShop>
-      <wwsoundPC>	eng_V2_34_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_V2_34_npc	</wwsoundNPC>
-      <power>	1000	</power>
-      <weight>	1700	</weight>
-      <maxHealth>	360	</maxHealth>
-      <maxRegenHealth>	170	</maxRegenHealth>
-      <repairCost>	9	</repairCost>
-      <fireStartingChance>	0.1	</fireStartingChance>
-      <rpm_min>	400	</rpm_min>
-      <rpm_max>	2100	</rpm_max>
-    </Skoda_AHK_FL>
-    <Praga_AXK>
-      <userString>	#czech_vehicles:Praga_AXK	</userString>
-      <tags>	diesel	</tags>
-      <level>	10	</level>
-      <price>	110000	</price>
-      <notInShop>	true	</notInShop>
-      <wwsoundPC>	eng_V2_34_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_V2_34_npc	</wwsoundNPC>
-      <power>	1000	</power>
-      <weight>	1700	</weight>
-      <maxHealth>	360	</maxHealth>
-      <maxRegenHealth>	170	</maxRegenHealth>
-      <repairCost>	9	</repairCost>
-      <fireStartingChance>	0.1	</fireStartingChance>
-      <rpm_min>	400	</rpm_min>
-      <rpm_max>	2100	</rpm_max>
-    </Praga_AXK>
-    <Praga_AXK_X16>
-      <userString>	#czech_vehicles:Praga_AXK_X16	</userString>
-      <tags>	diesel	</tags>
-      <level>	9	</level>
-      <price>	90000	</price>
-      <notInShop>	true	</notInShop>
-      <wwsoundPC>	eng_V2_34_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_V2_34_npc	</wwsoundNPC>
-      <power>	800	</power>
-      <weight>	1700	</weight>
       <maxHealth>	255	</maxHealth>
       <maxRegenHealth>	127	</maxRegenHealth>
       <repairCost>	8	</repairCost>
       <fireStartingChance>	0.15	</fireStartingChance>
-      <rpm_min>	500	</rpm_min>
-      <rpm_max>	1900	</rpm_max>
-    </Praga_AXK_X16>
+      <rpm_min>	319	</rpm_min>
+      <rpm_max>	2241	</rpm_max>
+    </CKD_AXK_proto>
     <CKD_AXL>
+      <id>	26	</id>
       <userString>	#czech_vehicles:CKD_AXL	</userString>
       <tags>	diesel	</tags>
       <level>	10	</level>
@@ -689,6 +72,7 @@
       <rpm_max>	1950	</rpm_max>
     </CKD_AXL>
     <CKD_AXL_CN>
+      <id>	34	</id>
       <userString>	#czech_vehicles:CKD_AXL_CN	</userString>
       <tags>	diesel	</tags>
       <level>	10	</level>
@@ -705,7 +89,359 @@
       <rpm_min>	475	</rpm_min>
       <rpm_max>	1950	</rpm_max>
     </CKD_AXL_CN>
+    <DTN_10>
+      <id>	31004	</id>
+      <userString>	#czech_vehicles:DTN_10	</userString>
+      <tags>	diesel	</tags>
+      <level>	9	</level>
+      <price>	80000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_V2_34_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_V2_34_npc	</wwsoundNPC>
+      <power>	900	</power>
+      <weight>	1000	</weight>
+      <maxHealth>	255	</maxHealth>
+      <maxRegenHealth>	127	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+      <rpm_min>	450	</rpm_min>
+      <rpm_max>	2000	</rpm_max>
+    </DTN_10>
+    <Development_Engine>
+      <id>	65000	</id>
+      <userString>	Development Engine	</userString>
+      <tags>	diesel	</tags>
+      <level>	5	</level>
+      <notInShop>	true	</notInShop>
+      <price>	1	</price>
+      <wwsoundPC>	eng_V2_34_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_V2_34_npc	</wwsoundNPC>
+      <power>	2200	</power>
+      <weight>	1000	</weight>
+      <maxHealth>	9000	</maxHealth>
+      <maxRegenHealth>	9000	</maxRegenHealth>
+      <repairCost>	0	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+      <rpm_min>	300	</rpm_min>
+      <rpm_max>	2300	</rpm_max>
+    </Development_Engine>
+    <GravEngine_02>
+      <id>	40003	</id>
+      <userString>	#czech_vehicles:GravEngine_02	</userString>
+      <tags>	diesel	</tags>
+      <level>	1	</level>
+      <price>	0	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_V2_34_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_V2_34_npc	</wwsoundNPC>
+      <power>	2000	</power>
+      <weight>	1000	</weight>
+      <maxHealth>	30000	</maxHealth>
+      <maxRegenHealth>	100	</maxRegenHealth>
+      <repairCost>	0	</repairCost>
+      <fireStartingChance>	0.0	</fireStartingChance>
+      <rpm_min>	300	</rpm_min>
+      <rpm_max>	2300	</rpm_max>
+    </GravEngine_02>
+    <Hanomag_WD_50PS>
+      <id>	2	</id>
+      <userString>	#czech_vehicles:Hanomag_WD_50PS	</userString>
+      <tags>	gasoline	</tags>
+      <level>	1	</level>
+      <price>	0	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_gaz_aa_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_gaz_aa_npc	</wwsoundNPC>
+      <power>	50	</power>
+      <weight>	300	</weight>
+      <maxHealth>	25	</maxHealth>
+      <maxRegenHealth>	17	</maxRegenHealth>
+      <repairCost>	1	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	437	</rpm_min>
+      <rpm_max>	2201	</rpm_max>
+    </Hanomag_WD_50PS>
+    <PepelacEngine_02>
+      <id>	40002	</id>
+      <userString>	#czech_vehicles:PepelacEngine_02	</userString>
+      <tags>	diesel	</tags>
+      <level>	1	</level>
+      <price>	0	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_V2_34_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_V2_34_npc	</wwsoundNPC>
+      <power>	2200	</power>
+      <weight>	1000	</weight>
+      <maxHealth>	30000	</maxHealth>
+      <maxRegenHealth>	100	</maxRegenHealth>
+      <repairCost>	0	</repairCost>
+      <fireStartingChance>	0.0	</fireStartingChance>
+      <rpm_min>	300	</rpm_min>
+      <rpm_max>	2300	</rpm_max>
+    </PepelacEngine_02>
+    <Praga_AXK>
+      <id>	21	</id>
+      <userString>	#czech_vehicles:Praga_AXK	</userString>
+      <tags>	diesel	</tags>
+      <level>	10	</level>
+      <price>	110000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_V2_34_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_V2_34_npc	</wwsoundNPC>
+      <power>	1000	</power>
+      <weight>	1700	</weight>
+      <maxHealth>	360	</maxHealth>
+      <maxRegenHealth>	170	</maxRegenHealth>
+      <repairCost>	9	</repairCost>
+      <fireStartingChance>	0.1	</fireStartingChance>
+      <rpm_min>	400	</rpm_min>
+      <rpm_max>	2100	</rpm_max>
+    </Praga_AXK>
+    <Praga_AXK_X16>
+      <id>	31006	</id>
+      <userString>	#czech_vehicles:Praga_AXK_X16	</userString>
+      <tags>	diesel	</tags>
+      <level>	9	</level>
+      <price>	90000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_V2_34_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_V2_34_npc	</wwsoundNPC>
+      <power>	800	</power>
+      <weight>	1700	</weight>
+      <maxHealth>	255	</maxHealth>
+      <maxRegenHealth>	127	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+      <rpm_min>	500	</rpm_min>
+      <rpm_max>	1900	</rpm_max>
+    </Praga_AXK_X16>
+    <Praga_NR>
+      <id>	8	</id>
+      <userString>	#czech_vehicles:Praga_NR	</userString>
+      <tags>	gasoline	</tags>
+      <level>	3	</level>
+      <price>	4400	</price>
+      <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
+      <power>	225	</power>
+      <weight>	600	</weight>
+      <maxHealth>	80	</maxHealth>
+      <maxRegenHealth>	39	</maxRegenHealth>
+      <repairCost>	2	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	479	</rpm_min>
+      <rpm_max>	2266	</rpm_max>
+    </Praga_NR>
+    <Praga_TNHPS>
+      <id>	5	</id>
+      <userString>	#czech_vehicles:Praga_TNHPS	</userString>
+      <tags>	gasoline	</tags>
+      <level>	2	</level>
+      <price>	1150	</price>
+      <wwsoundPC>	eng_gaz_aa_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_gaz_aa_npc	</wwsoundNPC>
+      <power>	120	</power>
+      <weight>	500	</weight>
+      <maxHealth>	40	</maxHealth>
+      <maxRegenHealth>	19	</maxRegenHealth>
+      <repairCost>	2	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	349	</rpm_min>
+      <rpm_max>	2482	</rpm_max>
+    </Praga_TNHPS>
+    <Praga_TNHPS_II>
+      <id>	6	</id>
+      <userString>	#czech_vehicles:Praga_TNHPS_II	</userString>
+      <tags>	gasoline	</tags>
+      <level>	2	</level>
+      <price>	1250	</price>
+      <wwsoundPC>	eng_gaz_aa_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_gaz_aa_npc	</wwsoundNPC>
+      <power>	125	</power>
+      <weight>	500	</weight>
+      <maxHealth>	40	</maxHealth>
+      <maxRegenHealth>	19	</maxRegenHealth>
+      <repairCost>	2	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	342	</rpm_min>
+      <rpm_max>	2502	</rpm_max>
+    </Praga_TNHPS_II>
+    <Praga_TNHPS_dvojkarb>
+      <id>	7	</id>
+      <userString>	#czech_vehicles:Praga_TNHPS_dvojkarb	</userString>
+      <tags>	gasoline	</tags>
+      <level>	3	</level>
+      <price>	3750	</price>
+      <wwsoundPC>	eng_gaz_aa_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_gaz_aa_npc	</wwsoundNPC>
+      <power>	140	</power>
+      <weight>	520	</weight>
+      <maxHealth>	55	</maxHealth>
+      <maxRegenHealth>	27	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	324	</rpm_min>
+      <rpm_max>	2562	</rpm_max>
+    </Praga_TNHPS_dvojkarb>
+    <Praga_V_8_H>
+      <id>	10	</id>
+      <userString>	#czech_vehicles:Praga_V_8_H	</userString>
+      <tags>	gasoline	</tags>
+      <level>	4	</level>
+      <price>	11200	</price>
+      <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
+      <power>	260	</power>
+      <weight>	600	</weight>
+      <maxHealth>	82	</maxHealth>
+      <maxRegenHealth>	40	</maxRegenHealth>
+      <repairCost>	4	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	449	</rpm_min>
+      <rpm_max>	2360	</rpm_max>
+    </Praga_V_8_H>
+    <Praga_V_8_H_Sv>
+      <id>	9	</id>
+      <userString>	#czech_vehicles:Praga_V_8_H_Sv	</userString>
+      <tags>	gasoline	</tags>
+      <level>	4	</level>
+      <price>	9400	</price>
+      <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
+      <power>	240	</power>
+      <weight>	600	</weight>
+      <maxHealth>	82	</maxHealth>
+      <maxRegenHealth>	40	</maxRegenHealth>
+      <repairCost>	4	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	466	</rpm_min>
+      <rpm_max>	2307	</rpm_max>
+    </Praga_V_8_H_Sv>
+    <Saurer_CT1D_SZ1007>
+      <id>	37	</id>
+      <userString>	#czech_vehicles:Saurer_CT1D_SZ1007	</userString>
+      <tags>	gasoline	</tags>
+      <level>	2	</level>
+      <price>	1150	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_gaz_aa_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_gaz_aa_npc	</wwsoundNPC>
+      <power>	110	</power>
+      <weight>	500	</weight>
+      <maxHealth>	40	</maxHealth>
+      <maxRegenHealth>	19	</maxRegenHealth>
+      <repairCost>	2	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	361	</rpm_min>
+      <rpm_max>	2442	</rpm_max>
+    </Saurer_CT1D_SZ1007>
+    <Skoda_16_ADH_134>
+      <id>	24	</id>
+      <userString>	#czech_vehicles:Skoda_16_ADH_134	</userString>
+      <tags>	diesel	</tags>
+      <level>	7	</level>
+      <price>	36000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <power>	660	</power>
+      <weight>	1400	</weight>
+      <maxHealth>	190	</maxHealth>
+      <maxRegenHealth>	95	</maxRegenHealth>
+      <repairCost>	7	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+      <rpm_min>	339	</rpm_min>
+      <rpm_max>	2180	</rpm_max>
+    </Skoda_16_ADH_134>
+    <Skoda_16_ADH_140>
+      <id>	1	</id>
+      <userString>	#czech_vehicles:Skoda_16_ADH_140	</userString>
+      <tags>	diesel	</tags>
+      <level>	8	</level>
+      <price>	45300	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <power>	700	</power>
+      <weight>	1400	</weight>
+      <maxHealth>	255	</maxHealth>
+      <maxRegenHealth>	127	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+      <rpm_min>	299	</rpm_min>
+      <rpm_max>	2301	</rpm_max>
+    </Skoda_16_ADH_140>
+    <Skoda_16_ADH_140_A>
+      <id>	18	</id>
+      <userString>	#czech_vehicles:Skoda_16_ADH_140_A	</userString>
+      <tags>	diesel	</tags>
+      <level>	8	</level>
+      <price>	52000	</price>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <power>	700	</power>
+      <weight>	1400	</weight>
+      <maxHealth>	255	</maxHealth>
+      <maxRegenHealth>	127	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+      <rpm_min>	299	</rpm_min>
+      <rpm_max>	2301	</rpm_max>
+    </Skoda_16_ADH_140_A>
+    <Skoda_16_ADH_140_F>
+      <id>	33	</id>
+      <userString>	#czech_vehicles:Skoda_16_ADH_140_F	</userString>
+      <tags>	diesel	</tags>
+      <level>	8	</level>
+      <price>	45300	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <power>	700	</power>
+      <weight>	1400	</weight>
+      <maxHealth>	255	</maxHealth>
+      <maxRegenHealth>	127	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+      <rpm_min>	299	</rpm_min>
+      <rpm_max>	2301	</rpm_max>
+    </Skoda_16_ADH_140_F>
+    <Skoda_16_ADH_140_P>
+      <id>	30	</id>
+      <userString>	#czech_vehicles:Skoda_16_ADH_140_P	</userString>
+      <tags>	diesel	</tags>
+      <level>	6	</level>
+      <price>	27500	</price>
+      <wwsoundPC>	eng_V2K_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_V2K_npc	</wwsoundNPC>
+      <power>	500	</power>
+      <weight>	750	</weight>
+      <maxHealth>	145	</maxHealth>
+      <maxRegenHealth>	72	</maxRegenHealth>
+      <repairCost>	6	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+      <rpm_min>	399	</rpm_min>
+      <rpm_max>	2101	</rpm_max>
+    </Skoda_16_ADH_140_P>
+    <Skoda_16_AH_145>
+      <id>	19	</id>
+      <userString>	#czech_vehicles:Skoda_16_AH_145	</userString>
+      <tags>	diesel	</tags>
+      <level>	9	</level>
+      <price>	82000	</price>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <power>	750	</power>
+      <weight>	1400	</weight>
+      <maxHealth>	320	</maxHealth>
+      <maxRegenHealth>	160	</maxRegenHealth>
+      <repairCost>	9	</repairCost>
+      <fireStartingChance>	0.12	</fireStartingChance>
+      <rpm_min>	249	</rpm_min>
+      <rpm_max>	2452	</rpm_max>
+    </Skoda_16_AH_145>
     <Skoda_16_AH_145_A>
+      <id>	22	</id>
       <userString>	#czech_vehicles:Skoda_16_AH_145_A	</userString>
       <tags>	diesel	</tags>
       <level>	8	</level>
@@ -723,6 +459,7 @@
       <rpm_max>	2000	</rpm_max>
     </Skoda_16_AH_145_A>
     <Skoda_16_AH_145_S>
+      <id>	31009	</id>
       <userString>	#czech_vehicles:Skoda_16_AH_145_S	</userString>
       <tags>	diesel	</tags>
       <level>	8	</level>
@@ -739,7 +476,249 @@
       <rpm_min>	249	</rpm_min>
       <rpm_max>	2452	</rpm_max>
     </Skoda_16_AH_145_S>
+    <Skoda_AHK>
+      <id>	20	</id>
+      <userString>	#czech_vehicles:Skoda_AHK	</userString>
+      <tags>	diesel	</tags>
+      <level>	10	</level>
+      <price>	110000	</price>
+      <wwsoundPC>	eng_V2_34_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_V2_34_npc	</wwsoundNPC>
+      <power>	1000	</power>
+      <weight>	1700	</weight>
+      <maxHealth>	360	</maxHealth>
+      <maxRegenHealth>	170	</maxRegenHealth>
+      <repairCost>	9	</repairCost>
+      <fireStartingChance>	0.1	</fireStartingChance>
+      <rpm_min>	400	</rpm_min>
+      <rpm_max>	2100	</rpm_max>
+    </Skoda_AHK>
+    <Skoda_AHK_FL>
+      <id>	31003	</id>
+      <userString>	#czech_vehicles:Skoda_AHK	</userString>
+      <tags>	diesel	</tags>
+      <level>	10	</level>
+      <price>	110000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_V2_34_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_V2_34_npc	</wwsoundNPC>
+      <power>	1000	</power>
+      <weight>	1700	</weight>
+      <maxHealth>	360	</maxHealth>
+      <maxRegenHealth>	170	</maxRegenHealth>
+      <repairCost>	9	</repairCost>
+      <fireStartingChance>	0.1	</fireStartingChance>
+      <rpm_min>	400	</rpm_min>
+      <rpm_max>	2100	</rpm_max>
+    </Skoda_AHK_FL>
+    <Skoda_AHK_TST>
+      <id>	31001	</id>
+      <userString>	#czech_vehicles:Skoda_AHK_TST	</userString>
+      <tags>	diesel	</tags>
+      <level>	8	</level>
+      <price>	51700	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_V2_34_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_V2_34_npc	</wwsoundNPC>
+      <power>	800	</power>
+      <weight>	1000	</weight>
+      <maxHealth>	255	</maxHealth>
+      <maxRegenHealth>	127	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+      <rpm_min>	500	</rpm_min>
+      <rpm_max>	1900	</rpm_max>
+    </Skoda_AHK_TST>
+    <Skoda_T_11_0>
+      <id>	3	</id>
+      <userString>	#czech_vehicles:Skoda_T_11_0	</userString>
+      <tags>	gasoline	</tags>
+      <level>	2	</level>
+      <price>	840	</price>
+      <wwsoundPC>	eng_gaz_aa_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_gaz_aa_npc	</wwsoundNPC>
+      <power>	120	</power>
+      <weight>	900	</weight>
+      <maxHealth>	40	</maxHealth>
+      <maxRegenHealth>	19	</maxRegenHealth>
+      <repairCost>	2	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	349	</rpm_min>
+      <rpm_max>	2482	</rpm_max>
+    </Skoda_T_11_0>
+    <Skoda_T_11_2>
+      <id>	4	</id>
+      <userString>	#czech_vehicles:Skoda_T_11_2	</userString>
+      <tags>	gasoline	</tags>
+      <level>	3	</level>
+      <price>	3600	</price>
+      <wwsoundPC>	eng_gaz_aa_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_gaz_aa_npc	</wwsoundNPC>
+      <power>	135	</power>
+      <weight>	900	</weight>
+      <maxHealth>	55	</maxHealth>
+      <maxRegenHealth>	27	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	330	</rpm_min>
+      <rpm_max>	2542	</rpm_max>
+    </Skoda_T_11_2>
+    <Skoda_V12_16_2_liter>
+      <id>	11	</id>
+      <userString>	#czech_vehicles:Skoda_V12_16_2_liter	</userString>
+      <tags>	gasoline	</tags>
+      <level>	4	</level>
+      <price>	11000	</price>
+      <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
+      <power>	380	</power>
+      <weight>	510	</weight>
+      <maxHealth>	84	</maxHealth>
+      <maxRegenHealth>	41	</maxRegenHealth>
+      <repairCost>	4	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	349	</rpm_min>
+      <rpm_max>	2681	</rpm_max>
+    </Skoda_V12_16_2_liter>
+    <Skoda_V12_19_8_liter_450>
+      <id>	12	</id>
+      <userString>	#czech_vehicles:Skoda_V12_19_8_liter_450	</userString>
+      <tags>	gasoline	</tags>
+      <level>	5	</level>
+      <price>	15100	</price>
+      <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
+      <power>	450	</power>
+      <weight>	510	</weight>
+      <maxHealth>	100	</maxHealth>
+      <maxRegenHealth>	49	</maxRegenHealth>
+      <repairCost>	4	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	290	</rpm_min>
+      <rpm_max>	2868	</rpm_max>
+    </Skoda_V12_19_8_liter_450>
+    <Skoda_V12_19_8_liter_500>
+      <id>	13	</id>
+      <userString>	#czech_vehicles:Skoda_V12_19_8_liter_500	</userString>
+      <tags>	gasoline	</tags>
+      <level>	6	</level>
+      <price>	25400	</price>
+      <wwsoundPC>	eng_Continental_R975_C1_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Continental_R975_C1_npc	</wwsoundNPC>
+      <power>	500	</power>
+      <weight>	700	</weight>
+      <maxHealth>	145	</maxHealth>
+      <maxRegenHealth>	73	</maxRegenHealth>
+      <repairCost>	7	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	500	</rpm_min>
+      <rpm_max>	2200	</rpm_max>
+    </Skoda_V12_19_8_liter_500>
+    <Skoda_V16_AHK_2>
+      <id>	29	</id>
+      <userString>	#czech_vehicles:Skoda_V16_AHK_2	</userString>
+      <tags>	diesel	</tags>
+      <level>	9	</level>
+      <price>	83000	</price>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <power>	750	</power>
+      <weight>	1600	</weight>
+      <maxHealth>	370	</maxHealth>
+      <maxRegenHealth>	185	</maxRegenHealth>
+      <repairCost>	9	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+      <rpm_min>	249	</rpm_min>
+      <rpm_max>	2452	</rpm_max>
+    </Skoda_V16_AHK_2>
+    <Skoda_V16_diesel_600>
+      <id>	16	</id>
+      <userString>	#czech_vehicles:Skoda_V16_diesel_600	</userString>
+      <tags>	diesel	</tags>
+      <level>	7	</level>
+      <price>	33000	</price>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <power>	600	</power>
+      <weight>	1400	</weight>
+      <maxHealth>	190	</maxHealth>
+      <maxRegenHealth>	95	</maxRegenHealth>
+      <repairCost>	7	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+      <rpm_min>	400	</rpm_min>
+      <rpm_max>	2000	</rpm_max>
+    </Skoda_V16_diesel_600>
+    <Skoda_V16_diesel_600_a>
+      <id>	32	</id>
+      <userString>	#czech_vehicles:Skoda_V16_diesel_600_a	</userString>
+      <tags>	diesel	</tags>
+      <level>	7	</level>
+      <price>	33400	</price>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <power>	600	</power>
+      <weight>	1400	</weight>
+      <maxHealth>	190	</maxHealth>
+      <maxRegenHealth>	95	</maxRegenHealth>
+      <repairCost>	7	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+      <rpm_min>	400	</rpm_min>
+      <rpm_max>	2000	</rpm_max>
+    </Skoda_V16_diesel_600_a>
+    <Skoda_V16_diesel_660>
+      <id>	17	</id>
+      <userString>	#czech_vehicles:Skoda_V16_diesel_660	</userString>
+      <tags>	diesel	</tags>
+      <level>	7	</level>
+      <price>	37600	</price>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <power>	660	</power>
+      <weight>	1400	</weight>
+      <maxHealth>	190	</maxHealth>
+      <maxRegenHealth>	95	</maxRegenHealth>
+      <repairCost>	7	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+      <rpm_min>	339	</rpm_min>
+      <rpm_max>	2180	</rpm_max>
+    </Skoda_V16_diesel_660>
+    <Skoda_V16_diesel_660_a>
+      <id>	31	</id>
+      <userString>	#czech_vehicles:Skoda_V16_diesel_660_a	</userString>
+      <tags>	diesel	</tags>
+      <level>	7	</level>
+      <price>	37800	</price>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <power>	680	</power>
+      <weight>	1400	</weight>
+      <maxHealth>	190	</maxHealth>
+      <maxRegenHealth>	95	</maxRegenHealth>
+      <repairCost>	7	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+      <rpm_min>	319	</rpm_min>
+      <rpm_max>	2241	</rpm_max>
+    </Skoda_V16_diesel_660_a>
+    <Tatra_T-78>
+      <id>	31002	</id>
+      <userString>	#czech_vehicles:Tatra_T-78	</userString>
+      <tags>	gasoline	</tags>
+      <level>	4	</level>
+      <price>	11000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
+      <power>	260	</power>
+      <weight>	500	</weight>
+      <maxHealth>	82	</maxHealth>
+      <maxRegenHealth>	40	</maxRegenHealth>
+      <repairCost>	4	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	449	</rpm_min>
+      <rpm_max>	2360	</rpm_max>
+    </Tatra_T-78>
     <V_12_6>
+      <id>	31005	</id>
       <userString>	#czech_vehicles:V_12_6	</userString>
       <tags>	diesel	</tags>
       <level>	9	</level>
@@ -756,7 +735,26 @@
       <rpm_min>	339	</rpm_min>
       <rpm_max>	2180	</rpm_max>
     </V_12_6>
+    <V_12_7>
+      <id>	31013	</id>
+      <userString>	#czech_vehicles:V_12_7	</userString>
+      <tags>	diesel	</tags>
+      <level>	8	</level>
+      <price>	45300	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_V2_34_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_V2_34_npc	</wwsoundNPC>
+      <power>	850	</power>
+      <weight>	1000	</weight>
+      <maxHealth>	255	</maxHealth>
+      <maxRegenHealth>	127	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+      <rpm_min>	475	</rpm_min>
+      <rpm_max>	1950	</rpm_max>
+    </V_12_7>
     <V_12_F>
+      <id>	31008	</id>
       <userString>	#czech_vehicles:V_12_F	</userString>
       <tags>	diesel	</tags>
       <level>	9	</level>
@@ -773,56 +771,57 @@
       <rpm_min>	309	</rpm_min>
       <rpm_max>	2271	</rpm_max>
     </V_12_F>
-    <GravEngine_02>
-      <userString>	#czech_vehicles:GravEngine_02	</userString>
+    <V_2_34>
+      <id>	14	</id>
+      <userString>	#czech_vehicles:V_2_34	</userString>
       <tags>	diesel	</tags>
-      <level>	1	</level>
-      <price>	0	</price>
-      <notInShop>	true	</notInShop>
-      <wwsoundPC>	eng_V2_34_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_V2_34_npc	</wwsoundNPC>
-      <power>	2000	</power>
-      <weight>	1000	</weight>
-      <maxHealth>	30000	</maxHealth>
-      <maxRegenHealth>	100	</maxRegenHealth>
-      <repairCost>	0	</repairCost>
-      <fireStartingChance>	0.0	</fireStartingChance>
-      <rpm_min>	300	</rpm_min>
-      <rpm_max>	2300	</rpm_max>
-    </GravEngine_02>
-    <PepelacEngine_02>
-      <userString>	#czech_vehicles:PepelacEngine_02	</userString>
-      <tags>	diesel	</tags>
-      <level>	1	</level>
-      <price>	0	</price>
-      <notInShop>	true	</notInShop>
-      <wwsoundPC>	eng_V2_34_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_V2_34_npc	</wwsoundNPC>
-      <power>	2200	</power>
-      <weight>	1000	</weight>
-      <maxHealth>	30000	</maxHealth>
-      <maxRegenHealth>	100	</maxRegenHealth>
-      <repairCost>	0	</repairCost>
-      <fireStartingChance>	0.0	</fireStartingChance>
-      <rpm_min>	300	</rpm_min>
-      <rpm_max>	2300	</rpm_max>
-    </PepelacEngine_02>
-    <Development_Engine>
-      <userString>	Development Engine	</userString>
-      <tags>	diesel	</tags>
-      <level>	5	</level>
-      <notInShop>	true	</notInShop>
-      <price>	1	</price>
-      <wwsoundPC>	eng_V2_34_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_V2_34_npc	</wwsoundNPC>
-      <power>	2200	</power>
-      <weight>	1000	</weight>
-      <maxHealth>	9000	</maxHealth>
-      <maxRegenHealth>	9000	</maxRegenHealth>
-      <repairCost>	0	</repairCost>
+      <level>	6	</level>
+      <price>	27860	</price>
+      <wwsoundPC>	eng_V2K_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_V2K_npc	</wwsoundNPC>
+      <power>	500	</power>
+      <weight>	750	</weight>
+      <maxHealth>	145	</maxHealth>
+      <maxRegenHealth>	72	</maxRegenHealth>
+      <repairCost>	6	</repairCost>
       <fireStartingChance>	0.15	</fireStartingChance>
-      <rpm_min>	300	</rpm_min>
-      <rpm_max>	2300	</rpm_max>
-    </Development_Engine>
+      <rpm_min>	399	</rpm_min>
+      <rpm_max>	2101	</rpm_max>
+    </V_2_34>
+    <V_2_34M>
+      <id>	15	</id>
+      <userString>	#czech_vehicles:V_2_34M	</userString>
+      <tags>	diesel	</tags>
+      <level>	6	</level>
+      <price>	29500	</price>
+      <wwsoundPC>	eng_V2K_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_V2K_npc	</wwsoundNPC>
+      <power>	520	</power>
+      <weight>	750	</weight>
+      <maxHealth>	190	</maxHealth>
+      <maxRegenHealth>	95	</maxRegenHealth>
+      <repairCost>	7	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+      <rpm_min>	379	</rpm_min>
+      <rpm_max>	2141	</rpm_max>
+    </V_2_34M>
+    <V_55>
+      <id>	31007	</id>
+      <userString>	#czech_vehicles:V_55	</userString>
+      <tags>	diesel	</tags>
+      <level>	8	</level>
+      <price>	50000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_V2_34_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_V2_34_npc	</wwsoundNPC>
+      <power>	1050	</power>
+      <weight>	940	</weight>
+      <maxHealth>	255	</maxHealth>
+      <maxRegenHealth>	127	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+      <rpm_min>	375	</rpm_min>
+      <rpm_max>	2150	</rpm_max>
+    </V_55>
   </shared>
 </engines.xml>

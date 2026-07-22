@@ -3,7 +3,7 @@
 import typing
 from skeletons.gui import INovelty
 if typing.TYPE_CHECKING:
-    from typing import Callable, Dict, Iterable, Optional, Union
+    from typing import Callable, Dict, Iterable, Optional, Union, List
     from account_helpers.offers.events_data import OfferEventData
     from Event import Event
 
@@ -74,6 +74,9 @@ class IOffersDataProvider(object):
         raise NotImplementedError
 
     def getOfferByGiftToken(self, giftToken):
+        raise NotImplementedError
+
+    def getAllOffers(self):
         raise NotImplementedError
 
     def iAvailableOffers(self, onlyVisible=True):

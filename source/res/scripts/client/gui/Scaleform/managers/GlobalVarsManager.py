@@ -4,7 +4,7 @@ import constants
 from gui import GUI_SETTINGS
 from gui.Scaleform.framework.entities.abstract.GlobalVarsMgrMeta import GlobalVarsMgrMeta
 from helpers import getClientOverride, dependency
-from skeletons.gui.game_control import IWalletController, ITradeInController
+from skeletons.gui.game_control import IWalletController, ITradeInController, IBRProgressionOnTokensController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 from skeletons.tutorial import ITutorialLoader
@@ -16,6 +16,7 @@ class GlobalVarsManager(GlobalVarsMgrMeta):
     tradeIn = dependency.descriptor(ITradeInController)
     lobbyContext = dependency.descriptor(ILobbyContext)
     __tutorialLoader = dependency.descriptor(ITutorialLoader)
+    __brProgression = dependency.descriptor(IBRProgressionOnTokensController)
 
     def isDevelopment(self):
         return constants.IS_DEVELOPMENT
@@ -70,3 +71,6 @@ class GlobalVarsManager(GlobalVarsMgrMeta):
 
     def isTradeInEnabled(self):
         return self.tradeIn.isEnabled()
+
+    def isBirthday(self):
+        return self.__brProgression.getBirthdayIconPostfix() != ''

@@ -19,7 +19,7 @@ from gui.impl.pub.lobby_window import LobbyWindow
 from gui.server_events.events_dispatcher import showDailyQuests
 from gui.shared.event_dispatcher import showHangar
 from helpers import dependency
-from skeletons.gui.game_control import IBattlePassController
+from skeletons.gui.game_control import IBattlePassController, IBRProgressionOnTokensController
 from skeletons.gui.shared import IItemsCache
 _rBattlePass = R.strings.battle_pass
 _logger = logging.getLogger(__name__)
@@ -28,6 +28,7 @@ class BattlePassHowToEarnPointsView(ViewImpl):
     __slots__ = ('__chapterID',)
     __itemsCache = dependency.descriptor(IItemsCache)
     __battlePass = dependency.descriptor(IBattlePassController)
+    __brProgression = dependency.descriptor(IBRProgressionOnTokensController)
 
     def __init__(self, layoutID, chapterID):
         settings = ViewSettings(layoutID)
@@ -86,6 +87,7 @@ class BattlePassHowToEarnPointsView(ViewImpl):
         return viewModel
 
     def __createBattleRoyalTable(self, gameType, viewModel):
+        viewModel.setIconPostfix(self.__brProgression.getBirthdayIconPostfix())
         self.__createBattleRoyalTableHeader(gameType, viewModel)
         previousLevelSolo = 1
         previousLevelSquad = 1

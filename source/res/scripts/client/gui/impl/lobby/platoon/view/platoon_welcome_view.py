@@ -18,6 +18,7 @@ from skeletons.gui.lobby_context import ILobbyContext
 from gui.impl.lobby.platoon.tooltip.platoon_alert_tooltip import AlertTooltip
 from gui.shared import g_eventBus
 from gui.prb_control.settings import REQUEST_TYPE
+from uilogging.rename_testing.loggers import RenameTestingUILogger
 _logger = logging.getLogger(__name__)
 strButtons = R.strings.platoon.buttons
 
@@ -110,9 +111,11 @@ class WelcomeView(ViewImpl):
             model.setIsSettingsVisible(state)
 
     def __onCreate(self):
+        RenameTestingUILogger().logCreateNewPlatoon()
         self.__platoonCtrl.createPlatoon(startAutoSearchOnUnitJoin=False)
 
     def __onFind(self):
+        RenameTestingUILogger().logPlatoonFindPlayers()
         self.__platoonCtrl.createPlatoon(startAutoSearchOnUnitJoin=True)
         SearchView.resetState()
 

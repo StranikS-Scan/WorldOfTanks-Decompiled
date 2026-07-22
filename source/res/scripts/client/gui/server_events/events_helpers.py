@@ -19,7 +19,7 @@ from gui.shared.gui_items.customization import C11nStyleProgressData
 from helpers import time_utils, i18n, dependency, isPlayerAccount
 from shared_utils import CONST_CONTAINER, findFirst, first
 from skeletons.gui.customization import ICustomizationService
-from skeletons.gui.game_control import IMarathonEventsController, IArmoryYardController, IDebutBoxesController, IEarlyAccessController, ISummerSaleController
+from skeletons.gui.game_control import IMarathonEventsController, IArmoryYardController, IDebutBoxesController, IEarlyAccessController, ISummerSaleController, ITankAcademyController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
@@ -588,10 +588,10 @@ def isActiveEarlyAccessQuest(eventID, earlyAccessCtrl=None):
 
 
 @dependency.replace_none_kwargs(lobbyContext=ILobbyContext)
-def isPlayStreakEnable(lobbyContext=None):
-    return lobbyContext.getServerSettings().getPlayStreakConfig().get('isEnabled', False)
-
-
-@dependency.replace_none_kwargs(lobbyContext=ILobbyContext)
 def isIngameBrowserEventEnable(lobbyContext=None):
     return lobbyContext.getServerSettings().getIngameBrowserEventConfig().get('isEnabled', False)
+
+
+@dependency.replace_none_kwargs(tankAcademyController=ITankAcademyController)
+def isTankAcademyQuest(eventID, tankAcademyController=None):
+    return tankAcademyController.isTankAcademyQuestID(eventID)

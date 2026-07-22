@@ -1,0 +1,48 @@
+<NatiskTiger_00_Style_141_name.xml>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <style>
+      <id>	31521	</id>
+      <texture>	gui/maps/vehicles/styles/NatiskTiger_Style_141.png	</texture>
+      <userString>	#vehicle_customization:NatiskTiger_00_Style_141/name	</userString>
+      <description>	#vehicle_customization:NatiskTiger_00_Style_141/description	</description>
+      <longDescriptionSpecial>	#vehicle_customization:NatiskTiger_00_Style_141/longDescription	</longDescriptionSpecial>
+      <outfits>
+        <outfit>
+          <season>	all	</season>
+          <camouflages>
+            <item>
+              <id>	31487	</id>
+              <patternSize>	1	</patternSize>
+              <appliedTo>	4368	</appliedTo>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <insignias>
+            <item>
+              <id>	31052	</id>
+              <appliedTo>	4096	</appliedTo>
+            </item>
+          </insignias>
+        </outfit>
+      </outfits>
+      <alternateItems>
+        <camouflage>
+          <id>	31487 31488 31489 31490 31491 31492	</id>
+        </camouflage>
+        <decal>
+          <id>	31437 31438 31439 31440 31441 31442 31443 31444 31445 31446 31447 31448 31449 31450 31451 31452 31453 31454 31455 31456 31457 31458	</id>
+        </decal>
+      </alternateItems>
+    </style>
+    <priceGroup>	MT 2D styles universal 1000g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <tags>	questsProgression	</tags>
+  </itemGroup>
+</NatiskTiger_00_Style_141_name.xml>

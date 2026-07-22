@@ -1,0 +1,73 @@
+<camouflage_kohaku2020_label.xml>
+  <japan:J28_O_I_1001>	ussr	</japan:J28_O_I_1001>
+  <germany:G42_Maus3>	germany	</germany:G42_Maus3>
+  <japan:J28_O_I_1000>	usa	</japan:J28_O_I_1000>
+  <germany:G42_Maus0>	china	</germany:G42_Maus0>
+  <germany:G42_Maus2>	france	</germany:G42_Maus2>
+  <germany:G42_Maus9>	uk	</germany:G42_Maus9>
+  <germany:G42_Maus6>	japan	</germany:G42_Maus6>
+  <germany:G42_Maus1>	czech	</germany:G42_Maus1>
+  <germany:G42_Maus8>	sweden	</germany:G42_Maus8>
+  <germany:G42_Maus7>	poland	</germany:G42_Maus7>
+  <germany:G42_Maus5>	italy	</germany:G42_Maus5>
+  <germany:G42_Maus4>	intunion	</germany:G42_Maus4>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/transparent	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	MT camouflages 50g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R47_ISU-152_Zveroboj ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <camouflage>
+      <id>	66	</id>
+      <texture>	vehicles/russian/Camouflage/KOHAKU2020.dds	</texture>
+      <description>	#vehicle_customization:camouflage/kohaku2020/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/kohaku2020/label	</userString>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	89 15 2 255	</c0>
+          <c1>	127 126 119 255	</c1>
+          <c2>	122 18 0 255	</c2>
+          <c3>	32 36 38 71	</c3>
+        </palette>
+      </palettes>
+      <rotation>
+        <HULL>	-0.436332	</HULL>
+        <TURRET>	-0.436332	</TURRET>
+        <GUN>	-0.436332	</GUN>
+      </rotation>
+      <tiling>
+        <france:F114_Projet_4_1>	1.34 1.34 0.000000 0.000000	</france:F114_Projet_4_1>
+        <germany:G121_Grille_15_L63>	8.52 8.52 -1.24 0.37	</germany:G121_Grille_15_L63>
+        <germany:G42_Maus>	3.8 3.8 0.000000 0.05	</germany:G42_Maus>
+        <germany:G121_Grille_15_L637>	3.8 3.8 0.000000 0.05	</germany:G121_Grille_15_L637>
+        <japan:J28_O_I_100>	1.6 1.6 1.6 0.000000	</japan:J28_O_I_100>
+        <sweden:S11_Strv_103B>	0.99 0.99 -0.99 -0.56	</sweden:S11_Strv_103B>
+        <uk:GB91_Super_Conqueror>	1.48 1.48 1.79 1.4	</uk:GB91_Super_Conqueror>
+        <usa:A128_concept_1b>	1 1 -0.187909 0.41363	</usa:A128_concept_1b>
+        <usa:A129_T6_medium>	3 3 0.000000 0.000000	</usa:A129_T6_medium>
+        <usa:A13_T34_hvy>	3.86 3.86 -0.73 0.76	</usa:A13_T34_hvy>
+        <ussr:R108_T34_85M>	3.97 3.97 -2.92 -2.71	</ussr:R108_T34_85M>
+        <germany:G121_Grille_15_L630>	3.96 3.96 -0.09 -0.54	</germany:G121_Grille_15_L630>
+        <germany:G121_Grille_15_L631>	4.5 4.5 -2.27 -0.58	</germany:G121_Grille_15_L631>
+        <germany:G121_Grille_15_L632>	3.86 3.86 -0.12 -0.32	</germany:G121_Grille_15_L632>
+        <germany:G121_Grille_15_L633>	0.74 0.74 -0.36 -0.42	</germany:G121_Grille_15_L633>
+        <germany:G121_Grille_15_L634>	0.74 0.74 -0.36 -0.42	</germany:G121_Grille_15_L634>
+        <germany:G121_Grille_15_L635>	2 2 0.01 -0.02	</germany:G121_Grille_15_L635>
+        <germany:G121_Grille_15_L636>	4.13 4.13 0.42 -1.53	</germany:G121_Grille_15_L636>
+        <germany:G121_Grille_15_L638>	0.89 0.89 0.32 0.81	</germany:G121_Grille_15_L638>
+        <germany:G121_Grille_15_L639>	3.25 3.25 0.33 -3.05	</germany:G121_Grille_15_L639>
+      </tiling>
+      <tilingSettings>
+        <type>	relative	</type>
+        <factor>	2.44 2.44	</factor>
+        <offset>	-2.12 -1.02	</offset>
+      </tilingSettings>
+    </camouflage>
+  </itemGroup>
+</camouflage_kohaku2020_label.xml>

@@ -6,7 +6,7 @@ from functools import partial
 import typing
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.impl import backport
-from gui.impl.backport import TooltipData
+from gui.impl.backport import createTooltipData
 from gui.impl.gen import R
 from gui.impl.gen.view_models.common.missions.bonuses.bonus_model import BonusModel
 from gui.impl.gen.view_models.views.lobby.personal_missions.pm3_reward_item_model import Pm3RewardItemModel
@@ -22,6 +22,7 @@ import gui.server_events.bonuses as serverBonuses
 if typing.TYPE_CHECKING:
     from gui.server_events.bonuses import SimpleBonus
     from account_helpers.offers.events_data import OfferEventData
+    from gui.impl.backport import TooltipData
 _logger = logging.getLogger(__name__)
 
 def getPersonalMissionsBonusPackersMap():
@@ -156,7 +157,7 @@ class SelectBonusPacker(BaseBonusUIPacker):
     def _getToolTip(cls, bonus):
         tooltipData = []
         for tokenID in bonus.getTokens().iterkeys():
-            tooltipData.append(TooltipData(tooltip=None, isSpecial=True, specialAlias=TOOLTIPS_CONSTANTS.PM3_GIFT_TOKEN, specialArgs=[tokenID] + [bonus.getContext().get('isReceived', True)]))
+            tooltipData.append(createTooltipData(tooltip=None, isSpecial=True, specialAlias=TOOLTIPS_CONSTANTS.PM3_GIFT_TOKEN, specialArgs=[tokenID] + [bonus.getContext().get('isReceived', True)]))
 
         return tooltipData
 

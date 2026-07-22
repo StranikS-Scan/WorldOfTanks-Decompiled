@@ -1085,6 +1085,15 @@ def __readBonus_freePremiumCrew(bonus, _name, section, eventType, checkLimit):
     freePremiumCrewBonus[vehLevel] = count
 
 
+def __readBonus_preferredMapSlots(bonus, _name, section, eventType, checkLimit):
+    preferredMapSlots = bonus.setdefault('preferredMapSlots', {})
+    for _, subsection in section.items():
+        slotID = subsection.readInt('id')
+        days = subsection.readInt('days')
+        if days > 0:
+            preferredMapSlots[slotID] = days
+
+
 def __readBonus_group(config, bonusReaders, bonus, section, eventType):
     limitIDs, subBonus = __readBonusSubSection(config, bonusReaders, section, eventType)
     bonus.setdefault('groups', []).append(subBonus)
@@ -1144,6 +1153,7 @@ __BONUS_READERS = {'meta': __readMetaSection,
  'battlePassPoints': __readBonus_battlePassPoints,
  'dailyQuestReroll': __readBonus_dailyQuestReroll,
  'noviceReset': __readBonus_noviceReset,
+ 'preferredMapSlots': __readBonus_preferredMapSlots,
  'vehicleChoice': __readBonus_vehicleChoice,
  'blueprint': __readBonus_blueprint,
  'blueprintAny': __readBonus_blueprintAny,

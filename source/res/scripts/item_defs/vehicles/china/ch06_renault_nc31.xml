@@ -8,7 +8,7 @@
   </crew>
   <supplySlots>	8 8 8	</supplySlots>
   <speedLimits>
-    <forward>	25	</forward>
+    <forward>	30	</forward>
     <backward>	8	</backward>
   </speedLimits>
   <invisibility>
@@ -77,7 +77,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	4923	</weight>
-    <maxHealth>	188	</maxHealth>
+    <maxHealth>	200	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	65	</maxHealth>
       <maxRegenHealth>	45	</maxRegenHealth>
@@ -1017,8 +1017,8 @@
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
       <rotationSpeed>	60	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.38	</vehicleMovement>
-        <vehicleRotation>	0.38	</vehicleRotation>
+        <vehicleMovement>	0.10	</vehicleMovement>
+        <vehicleRotation>	0.10	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	50	</maxHealth>
@@ -1760,21 +1760,52 @@
           <camouflage></camouflage>
         </customizableVehicleAreas>
       </customization>
-      <repairTime>	3.41880345	</repairTime>
+      <repairTime>	1.70988882	</repairTime>
     </Chassis_Ch06_Renault_NC31_2>
   </chassis>
   <turrets0>
     <Turret_2_Ch06_Renault_NC31>
+      <userString>	#china_vehicles:Turret_2_Ch06_Renault_NC31	</userString>
+      <tags></tags>
+      <level>	1	</level>
+      <price>	0	</price>
+      <notInShop>	true	</notInShop>
+      <armor>
+        <armor_1>	22	</armor_1>
+        <armor_2>	22	</armor_2>
+        <armor_3>	22	</armor_3>
+        <armor_5>	22	</armor_5>
+        <armor_6>	8	</armor_6>
+        <armor_7>	8	</armor_7>
+        <armor_8>	0	</armor_8>
+        <surveyingDevice>	0	  <chanceToHitByProjectile>	0	</chanceToHitByProjectile>
+          <chanceToHitByExplosion>	0	</chanceToHitByExplosion>
+        </surveyingDevice>
+        <commander>	0	  <chanceToHitByProjectile>	0	</chanceToHitByProjectile>
+          <chanceToHitByExplosion>	0	</chanceToHitByExplosion>
+        </commander>
+      </armor>
+      <primaryArmor>	armor_1 armor_3 armor_3	</primaryArmor>
+      <weight>	200	</weight>
+      <maxHealth>	80	</maxHealth>
+      <rotationSpeed>	34	</rotationSpeed>
+      <turretRotatorHealth>
+        <maxHealth>	50	</maxHealth>
+        <maxRegenHealth>	25	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </turretRotatorHealth>
+      <circularVisionRadius>	300	</circularVisionRadius>
+      <surveyingDeviceHealth>
+        <maxHealth>	30	</maxHealth>
+        <maxRegenHealth>	15	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </surveyingDeviceHealth>
       <guns>
-        <_37mm_APX_SA18>	shared	  <unlocks>
+        <_37mm_APX_SA18>	shared	  <maxAmmo>	545	</maxAmmo>
+          <unlocks>
             <gun>	_37mm_KwK_L46	  <cost>	35	</cost>
             </gun>
           </unlocks>
-          <pitchLimits>
-            <minPitch>	0 -35 1 -35	</minPitch>
-            <maxPitch>	0 6 0.422449 6 0.486111 0 0.513889 0 0.577551 6 1 6	</maxPitch>
-          </pitchLimits>
-          <maxAmmo>	545	</maxAmmo>
           <armor>
             <armor_1>	22	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_1>
@@ -1786,14 +1817,18 @@
               <chanceToHitByExplosion>	0	</chanceToHitByExplosion>
             </gun>
           </armor>
-          <shotDispersionRadius>	0.54	</shotDispersionRadius>
+          <pitchLimits>
+            <minPitch>	0 -35 1 -35	</minPitch>
+            <maxPitch>	0 6 0.422449 6 0.486111 0 0.513889 0 0.577551 6 1 6	</maxPitch>
+          </pitchLimits>
+          <shotDispersionRadius>	0.40	</shotDispersionRadius>
           <reloadTime>	2.5	</reloadTime>
           <shotDispersionFactors>
-            <turretRotation>	0.14	</turretRotation>
-            <afterShot>	3.5	</afterShot>
+            <turretRotation>	0.10	</turretRotation>
+            <afterShot>	3.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <aimingTime>	2	</aimingTime>
+          <aimingTime>	1.8	</aimingTime>
           <invisibilityFactorAtShot>	0.255	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/chinese/Ch06_Renault_NC31/normal/lod0/Gun_01.model	</undamaged>
@@ -1845,14 +1880,11 @@
             <aoTextureSize>	256 256	</aoTextureSize>
           </camouflage>
         </_37mm_APX_SA18>
-        <_37mm_KwK_L46>	shared	  <unlocks>
+        <_37mm_KwK_L46>	shared	  <maxAmmo>	345	</maxAmmo>
+          <unlocks>
             <vehicle>	Ch07_Vickers_MkE_Type_BT26	  <cost>	275	</cost>
             </vehicle>
           </unlocks>
-          <pitchLimits>
-            <minPitch>	0 -35 1 -35	</minPitch>
-            <maxPitch>	0 6 0.422449 6 0.486111 0 0.513889 0 0.577551 6 1 6	</maxPitch>
-          </pitchLimits>
           <armor>
             <armor_1>	22	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_1>
@@ -1864,15 +1896,18 @@
               <chanceToHitByExplosion>	0	</chanceToHitByExplosion>
             </gun>
           </armor>
-          <maxAmmo>	345	</maxAmmo>
-          <shotDispersionRadius>	0.46	</shotDispersionRadius>
+          <pitchLimits>
+            <minPitch>	0 -35 1 -35	</minPitch>
+            <maxPitch>	0 6 0.422449 6 0.486111 0 0.513889 0 0.577551 6 1 6	</maxPitch>
+          </pitchLimits>
+          <shotDispersionRadius>	0.40	</shotDispersionRadius>
           <reloadTime>	2.3	</reloadTime>
           <shotDispersionFactors>
-            <turretRotation>	0.14	</turretRotation>
-            <afterShot>	3.5	</afterShot>
+            <turretRotation>	0.10	</turretRotation>
+            <afterShot>	3.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <aimingTime>	2	</aimingTime>
+          <aimingTime>	1.8	</aimingTime>
           <invisibilityFactorAtShot>	0.255	</invisibilityFactorAtShot>
           <models>
             <undamaged>	vehicles/chinese/Ch06_Renault_NC31/normal/lod0/Gun_05.model	</undamaged>
@@ -1932,41 +1967,6 @@
           </camouflage>
         </_37mm_KwK_L46>
       </guns>
-      <userString>	#china_vehicles:Turret_2_Ch06_Renault_NC31	</userString>
-      <tags></tags>
-      <level>	1	</level>
-      <price>	0	</price>
-      <notInShop>	true	</notInShop>
-      <armor>
-        <armor_1>	22	</armor_1>
-        <armor_2>	22	</armor_2>
-        <armor_3>	22	</armor_3>
-        <armor_5>	22	</armor_5>
-        <armor_6>	8	</armor_6>
-        <armor_7>	8	</armor_7>
-        <armor_8>	0	</armor_8>
-        <surveyingDevice>	0	  <chanceToHitByProjectile>	0	</chanceToHitByProjectile>
-          <chanceToHitByExplosion>	0	</chanceToHitByExplosion>
-        </surveyingDevice>
-        <commander>	0	  <chanceToHitByProjectile>	0	</chanceToHitByProjectile>
-          <chanceToHitByExplosion>	0	</chanceToHitByExplosion>
-        </commander>
-      </armor>
-      <primaryArmor>	armor_1 armor_3 armor_3	</primaryArmor>
-      <weight>	200	</weight>
-      <maxHealth>	47	</maxHealth>
-      <rotationSpeed>	34	</rotationSpeed>
-      <turretRotatorHealth>
-        <maxHealth>	50	</maxHealth>
-        <maxRegenHealth>	25	</maxRegenHealth>
-        <repairCost>	1.0	</repairCost>
-      </turretRotatorHealth>
-      <circularVisionRadius>	280	</circularVisionRadius>
-      <surveyingDeviceHealth>
-        <maxHealth>	30	</maxHealth>
-        <maxRegenHealth>	15	</maxRegenHealth>
-        <repairCost>	1.0	</repairCost>
-      </surveyingDeviceHealth>
       <models>
         <undamaged>	vehicles/chinese/Ch06_Renault_NC31/normal/lod0/Turret_02.model	</undamaged>
         <destroyed>	vehicles/chinese/Ch06_Renault_NC31/crash/lod0/Turret_02.model	</destroyed>
@@ -2362,7 +2362,7 @@
       <engines>
         <_Renault_NC>
           <smplEnginePower>	79.29608	</smplEnginePower>
-          <smplFwMaxSpeed>	25	</smplFwMaxSpeed>
+          <smplFwMaxSpeed>	30	</smplFwMaxSpeed>
         </_Renault_NC>
       </engines>
       <chassis>

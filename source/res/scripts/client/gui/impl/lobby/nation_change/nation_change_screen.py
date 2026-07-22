@@ -10,7 +10,7 @@ from gui import SystemMessages
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.impl import backport
-from gui.impl.backport.backport_tooltip import TooltipData, BackportTooltipWindow
+from gui.impl.backport.backport_tooltip import BackportTooltipWindow, createTooltipData
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.nation_change.nation_change_device_model import NationChangeDeviceModel
 from gui.impl.gen.view_models.views.lobby.nation_change.nation_change_screen_model import NationChangeScreenModel
@@ -121,7 +121,7 @@ class NationChangeScreen(ViewImpl):
             args = [vehicleIntCD, int(event.getArgument('intCD')), int(event.getArgument('layoutIDx'))]
         else:
             args = [vehicleIntCD, int(event.getArgument('intCD'))]
-        return TooltipData(tooltip=tooltipId, isSpecial=True, specialAlias=tooltipId, specialArgs=args)
+        return createTooltipData(tooltip=tooltipId, isSpecial=True, specialAlias=tooltipId, specialArgs=args)
 
     def __updateTankSlot(self, tankSlotVM, vehicle):
         tankSlotVM.setTankImage(R.images.gui.maps.shop.vehicles.c_600x450.dyn(getIconResourceName(getNationLessName(vehicle.name)))())

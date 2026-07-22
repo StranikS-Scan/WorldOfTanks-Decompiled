@@ -1,0 +1,60 @@
+<camouflage_czech_Cz_winter_label.xml>
+  <xmlns:china2>	ussr	</xmlns:china2>
+  <xmlns:germany>	germany	</xmlns:germany>
+  <xmlns:china1>	usa	</xmlns:china1>
+  <xmlns:china>	china	</xmlns:china>
+  <xmlns:france>	france	</xmlns:france>
+  <xmlns:china0>	uk	</xmlns:china0>
+  <xmlns:japan>	japan	</xmlns:japan>
+  <xmlns:czech>	czech	</xmlns:czech>
+  <xmlns:sweden>	sweden	</xmlns:sweden>
+  <xmlns:poland>	poland	</xmlns:poland>
+  <xmlns:italy>	italy	</xmlns:italy>
+  <xmlns:intunion>	intunion	</xmlns:intunion>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/transparent	</userString>
+    <season>	winter	</season>
+    <historical>	0	</historical>
+    <priceGroup>	MT camouflages 50g	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <nations>	czech	</nations>
+      </include>
+    </vehicleFilter>
+    <camouflage>
+      <id>	15700	</id>
+      <texture>	vehicles/czech/Camouflage/Cz_winter.dds	</texture>
+      <description>	#vehicle_customization:camouflage/czech/Cz_winter/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/czech/Cz_winter/label	</userString>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	159 159 159 255	</c0>
+          <c1>	0 0 0 0	</c1>
+          <c2>	0 0 0 0	</c2>
+          <c3>	0 0 0 0	</c3>
+        </palette>
+      </palettes>
+      <tiling>
+        <Cz01_Skoda_T40>	3.9 3.9 0.1 0.16	</Cz01_Skoda_T40>
+        <Cz02_TVP_T50>	8.8 8.8 0.000000 0.18	</Cz02_TVP_T50>
+        <Cz02_TVP_T50_FL>	8.8 8.8 0.000000 0.18	</Cz02_TVP_T50_FL>
+        <Cz04_T50_51>	9.9 9.9 0.000000 0.000000	</Cz04_T50_51>
+        <Cz05_T34_100>	9.8 9.8 0.000000 0.000000	</Cz05_T34_100>
+        <Cz06_Kolohousenka>	7.5 7.5 0.39 0.68	</Cz06_Kolohousenka>
+        <Cz07_TVP_46>	11 11 0.000000 0.000000	</Cz07_TVP_46>
+        <Cz08_T_25>	4.8 4.8 0.14 0.08	</Cz08_T_25>
+        <Cz09_T_24>	6.9 6.9 0.000000 0.000000	</Cz09_T_24>
+        <Cz10_LT_vz38>	6.2 6.2 0.000000 0.04	</Cz10_LT_vz38>
+        <Cz11_V_8_H>	5.1 5.1 0.000000 0.000000	</Cz11_V_8_H>
+        <czech:Cz13_T_27>	5.54 5.54 0.000000 0.000000	</czech:Cz13_T_27>
+      </tiling>
+      <tilingSettings>
+        <type>	relative	</type>
+        <factor>	4.696409  4.707334	</factor>
+        <offset>	0.000000 0.000000	</offset>
+      </tilingSettings>
+    </camouflage>
+  </itemGroup>
+</camouflage_czech_Cz_winter_label.xml>

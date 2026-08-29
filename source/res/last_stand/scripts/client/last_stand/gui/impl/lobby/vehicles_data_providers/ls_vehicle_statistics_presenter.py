@@ -3,7 +3,7 @@
 from __future__ import absolute_import
 import typing
 import logging
-from future.utils import iteritems, itervalues
+from future.utils import viewitems, viewvalues
 from gui.impl.gen import R
 from gui.impl.lobby.battle_pass.tooltips.vehicle_points_tooltip_view import VehiclePointsTooltipView
 from gui.impl.gen.view_models.views.lobby.hangar.sub_views.vehicle_statistic_model import VehicleStatisticModel
@@ -57,7 +57,7 @@ class LSVehiclesStatisticsPresenter(ViewComponent[VehicleStatisticsModel]):
     def __onBPVehiclesPointsUpdated(self, updates):
         with self.viewModel.transaction() as model:
             statistics = model.getStatistics()
-            for intCD, points in iteritems(updates):
+            for intCD, points in viewitems(updates):
                 vehID = str(intCD)
                 vehicle = statistics.get(vehID, None)
                 if vehicle is None:
@@ -124,7 +124,7 @@ class LSVehiclesStatisticsPresenter(ViewComponent[VehicleStatisticsModel]):
             accountRandomStats = self.__itemsCache.items.getAccountDossier().getRandomStats()
             vehiclePrestige = getVehiclePrestigeMap()
             statistics = model.getStatistics()
-            for vehicle in itervalues(vehicles):
+            for vehicle in viewvalues(vehicles):
                 prestigeLevel, _ = vehiclePrestige.get(vehicle.intCD, DEFAULT_PRESTIGE)
                 item = self.__convertToStatisticsModel(vehicle, accountRandomStats, prestigeLevel)
                 statistics.set(item.getId(), item)

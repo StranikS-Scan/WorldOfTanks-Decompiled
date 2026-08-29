@@ -6,15 +6,19 @@ from future.utils import viewitems
 import BigWorld
 import CommandMapping
 import SoundGroups
+from constants import ARENA_PERIOD
 from gui.Scaleform.daapi.view.battle.shared.hint_panel import plugins
 from gui.Scaleform.daapi.view.meta.BattleHintPanelMeta import BattleHintPanelMeta
 from gui.battle_control.controllers.period_ctrl import IAbstractPeriodView
-from gui.shared import EVENT_BUS_SCOPE, events
+from gui.shared import EVENT_BUS_SCOPE
 from gui.shared.events import GameEvent
 from gui.shared.utils.plugins import PluginsCollection
+from helpers import dependency
 from shared_utils import first
+from skeletons.gameplay import IGameplayLogic, GameplayStateID
 
 class BattleHintPanel(BattleHintPanelMeta, IAbstractPeriodView):
+    __gameplayLogic = dependency.descriptor(IGameplayLogic)
 
     def __init__(self):
         super(BattleHintPanel, self).__init__()
@@ -43,6 +47,8 @@ class BattleHintPanel(BattleHintPanelMeta, IAbstractPeriodView):
     def setPeriod(self, period):
         if self._plugins is not None:
             self._plugins.setPeriod(period)
+        if period == ARENA_PERIOD.PREBATTLE:
+            self.__gameplayLogic.addOneshotObserver([GameplayStateID.PREBATTLE], self, enterFn=BattleHintPanel._onPrebattleEnter)
         return
 
     def getActiveHint(self):
@@ -56,13 +62,11 @@ class BattleHintPanel(BattleHintPanelMeta, IAbstractPeriodView):
 
     def _populate(self):
         super(BattleHintPanel, self)._populate()
-        self.addListener(events.GameEvent.BATTLE_LOADING, self.__handleBattleLoading, EVENT_BUS_SCOPE.BATTLE)
         self._initPlugins()
 
     def _dispose(self):
         self._finiPlugins()
         self._hints = None
-        self.removeListener(events.GameEvent.BATTLE_LOADING, self.__handleBattleLoading, scope=EVENT_BUS_SCOPE.BATTLE)
         if self.__invalidateCallbackID is not None:
             BigWorld.cancelCallback(self.__invalidateCallbackID)
         self.__invalidateCallbackID = None
@@ -112,8 +116,8 @@ class BattleHintPanel(BattleHintPanelMeta, IAbstractPeriodView):
             self.as_toggleS(hintCanBeDisplayed)
             return
 
-    def __handleBattleLoading(self, event):
-        self.__isBattleLoaded = not event.ctx['isShown']
+    def _onPrebattleEnter(self, _=None, __=None):
+        self.__isBattleLoaded = True
         self.__invalidateBtnHint()
 
     def __makeHotKey(self, hint):

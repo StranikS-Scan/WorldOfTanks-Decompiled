@@ -13,20 +13,10 @@ from helpers import dependency
 from shared_utils import CONST_CONTAINER
 from skeletons.gui.game_control import ILootBoxSystemController
 if TYPE_CHECKING:
-    from typing import Dict, Optional
+    from typing import Dict, Optional, Tuple
 
 class NewYearLootBoxes(CONST_CONTAINER):
     PREMIUM = 'newYear_premium'
-    SPECIAL = 'newYear_special'
-    SPECIAL_AUTO = 'newYear_special_auto'
-    COMMON = 'newYear_usual'
-
-
-class NewYearCategories(CONST_CONTAINER):
-    NEWYEAR = 'NewYear'
-    CHRISTMAS = 'Christmas'
-    ORIENTAL = 'Oriental'
-    FAIRYTALE = 'Fairytale'
 
 
 class WTLootBoxes(CONST_CONTAINER):
@@ -44,14 +34,9 @@ class LunarNYLootBoxTypes(Enum):
 ALL_LUNAR_NY_LOOT_BOX_TYPES = ('lunar_base', 'lunar_simple', 'lunar_special')
 LUNAR_NY_LOOT_BOXES_CATEGORIES = 'LunarNY'
 SENIORITY_AWARDS_LOOT_BOXES_TYPE = 'seniorityAwards'
-GUI_ORDER_NY = (NewYearLootBoxes.COMMON, NewYearLootBoxes.PREMIUM)
-CATEGORIES_GUI_ORDER_NY = (NewYearCategories.NEWYEAR,
- NewYearCategories.CHRISTMAS,
- NewYearCategories.ORIENTAL,
- NewYearCategories.FAIRYTALE)
 
 class LootBox(GUIItem):
-    __slots__ = ('__id', '__invCount', '__isEnabled', '__type', '__category', '__bonus', '__historyName', '__statsName', '__guaranteedFrequency', '__guaranteedFrequencyName', '__probabilityBonusName', '__probabilityBonusLimit')
+    __slots__ = ('__id', '__invCount', '__isEnabled', '__type', '__category', '__bonus', '__historyName', '__statsName', '__guaranteedFrequency', '__guaranteedFrequencyName', '__probabilityBonusName', '__probabilityBonusLimit', '__rerollCurrency', '__rerollPrices', '__rerollMaxAttempts', '__bonuses')
     __lootBoxSystem = dependency.descriptor(ILootBoxSystemController)
 
     def __init__(self, lootBoxID, lootBoxConfig, invCount):
@@ -94,7 +79,7 @@ class LootBox(GUIItem):
         return self.__category
 
     def isFree(self):
-        return self.__type == NewYearLootBoxes.COMMON
+        return self.__type != NewYearLootBoxes.PREMIUM
 
     def getBonusInfo(self):
         return self.__bonus
@@ -120,8 +105,23 @@ class LootBox(GUIItem):
     def getUseStats(self):
         return bool(self.__statsName)
 
+    def getRerollCurrency(self):
+        return self.__rerollCurrency
+
+    def getRerollPrices(self):
+        return self.__rerollPrices
+
+    def getRerollMaxAttempts(self):
+        return self.__rerollMaxAttempts
+
+    def isRerollable(self):
+        return self.__rerollMaxAttempts is not None
+
     def _compare(self, other):
         return cmp(self.getID(), other.getID())
+
+    def getBonuses(self):
+        return self.__bonuses
 
     def __updateByConfig(self, lootBoxConfig):
         self.__isEnabled = lootBoxConfig.get('enabled')
@@ -133,12 +133,16 @@ class LootBox(GUIItem):
         limitsConfig = lootBoxConfig.get('limits', {})
         self.__guaranteedFrequencyName, self.__guaranteedFrequency = self.__readFrequencyLimit(limitsConfig)
         self.__probabilityBonusName, self.__probabilityBonusLimit = self.__readProbabilityBonusLimit(limitsConfig)
+        self.__rerollCurrency, self.__rerollPrices, self.__rerollMaxAttempts = self.__readRerolls(lootBoxConfig.get('reroll'))
+        self.__bonuses = lootBoxConfig.get('bonus', {})
 
     @staticmethod
     def __readProbabilityBonusLimit(limitsCfg):
         for probabilityBonusName, limit in iteritems(limitsCfg):
             if 'useBonusProbabilityAfter' in limit:
                 return (probabilityBonusName, limit['useBonusProbabilityAfter'] + 1)
+            if 'guaranteedFrequency' in limit:
+                return (probabilityBonusName, limit['guaranteedFrequency'])
 
         return (None, 0)
 
@@ -149,3 +153,7 @@ class LootBox(GUIItem):
                 return (limitName, limit['guaranteedFrequency'])
 
         return (None, 0)
+
+    @staticmethod
+    def __readRerolls(rerollCfg):
+        return (None, None, None) if rerollCfg is None else (rerollCfg['currency'], tuple(rerollCfg['prices']), rerollCfg['maxAttempts'])

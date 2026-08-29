@@ -112,7 +112,7 @@ class Comp7CustomizationProgressPresenter(ViewComponent[Comp7CustomizationQuests
             return (totalProgress, pCur.get(None, {}).get('bonusCount', 0))
         else:
             for cond in data.bonusCond.getConditions().items:
-                if isinstance(cond, conditions._Cumulativable):
+                if isinstance(cond, conditions.Cumulativable):
                     progressData = first(cond.getProgressPerGroup(pCur, pPrev, True).values())
                     if progressData:
                         current, _, diff, _ = progressData

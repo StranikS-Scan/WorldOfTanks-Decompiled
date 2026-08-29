@@ -76,7 +76,6 @@ class BaseSubTypeGetter(object):
     @staticmethod
     def getSubType(bonus):
         _logger.debug('No subType getter for bonus: %s', bonus.getName())
-        return None
 
 
 class VehiclesSubTypeGetter(BaseSubTypeGetter):
@@ -171,7 +170,6 @@ class BaseValueGetter(object):
     @classmethod
     def getValue(cls, bonus, _):
         _logger.debug('No value getter for bonus: %s', bonus.getName())
-        return None
 
 
 class IntCDValueGetter(BaseValueGetter):

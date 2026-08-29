@@ -17,7 +17,7 @@ from gui.Scaleform.daapi.view.lobby.store.browser.shop_helpers import getBattleP
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.battle_pass.battle_pass_bonuses_packers import packBonusModelAndTooltipData, packSpecialTooltipData
 from gui.battle_pass.battle_pass_constants import ChapterState, MIN_LEVEL
-from gui.battle_pass.battle_pass_helpers import getChapterType, getDataByTankman, getExtraInfoPageURL, getFinalTankmen, getInfoPageURL, getRewardSourceByType, getStyleForChapter, getVehicleInfoForChapter, isSeasonEndingSoon, updateBuyAnimationFlag, showFinalRewardPreviewBattlePassState, getTimeExpirations
+from gui.battle_pass.battle_pass_helpers import getChapterType, getDataByTankman, getExtraInfoPageURL, getFinalTankmen, getInfoPageURL, getRewardSourceByType, getStyleForChapter, getVehicleInfoForChapter, isSeasonEndingSoon, updateBuyAnimationFlag, showFinalRewardPreviewBattlePassState, getTimeExpirations, getAttachmentsSetInfoForChapter
 from gui.battle_pass.sounds import BattlePassSounds
 from gui.collection.collections_helpers import loadCollectionsFromBattlePass
 from gui.customization.shared import getSingleVehicleForCustomization
@@ -44,6 +44,7 @@ from skeletons.gui.impl import IGuiLoader
 from skeletons.gui.shared import IItemsCache
 from tutorial.control.game_vars import getVehicleByIntCD
 if typing.TYPE_CHECKING:
+    from gui.impl.gen.view_models.views.lobby.battle_pass.attachments_set_info_model import AttachmentsSetInfoModel
     from gui.impl.gen.view_models.views.lobby.battle_pass.character_widget_view_model import CharacterWidgetViewModel
     from gui.impl.gen.view_models.views.lobby.battle_pass.style_info_model import StyleInfoModel
     from gui.shared.gui_items.customization.c11n_items import Style
@@ -282,12 +283,19 @@ class ProgressionPresenter(ViewComponent[BattlePassProgressionsViewModel]):
         model.setHasVoice(self.__battlePass.isVoicedTankman(groupName))
         packSpecialTooltipData(TOOLTIPS_CONSTANTS.TANKMAN_NOT_RECRUITED, self.__specialTooltipItems, character.getRecruitID())
 
+    def __setAttachmentSetWidget(self, model, attachmentsSetName):
+        model.setAttachmentsSetName(attachmentsSetName)
+
     def __setFinalRewardsWidget(self, model):
         if not self.__battlePass.getRewardTypes(self.__chapterID):
             _logger.error('Cannot find rewards for widget in progression for chapter=%s', self.__chapterID)
             return
         elif getRewardSourceByType(FinalReward.PROGRESSIVE_STYLE, self.__chapterID) == BattlePassConsts.REWARD_FREE:
             self.__setProgressiveStyleWidget(model)
+            return
+        elif getRewardSourceByType(FinalReward.ATTACHMENTS_SET, self.__chapterID) == BattlePassConsts.REWARD_FREE:
+            attachmentsSetName, _ = getAttachmentsSetInfoForChapter(self.__chapterID)
+            self.__setAttachmentSetWidget(model.widgetFinalRewards.attachmentsSetInfo, attachmentsSetName)
             return
         else:
             maxLevel = self.__battlePass.getMaxLevelInChapter(self.__chapterID)

@@ -1,5 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: battle_royale/scripts/client/battle_royale/gui/impl/lobby/views/pre_battle.py
+from __future__ import absolute_import
+from future.utils import viewvalues
 import BigWorld
 import ArenaType
 from BattleRoyaleTournament import MAX_PLAYERS_IN_SQUAD
@@ -177,7 +179,7 @@ class PreBattleView(ViewImpl):
                 teams[teamID] = []
             teams[teamID].append(p)
 
-        for p in teams.itervalues():
+        for p in viewvalues(teams):
             p.sort(key=lambda x: (-x['role'], x['name']))
 
         return teams

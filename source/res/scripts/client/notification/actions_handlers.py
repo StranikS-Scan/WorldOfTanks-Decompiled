@@ -9,6 +9,7 @@ from battle_pass_common import isPostProgressionChapter
 from constants import PREBATTLE_TYPE, PENALTY_TYPES, FAIRPLAY_VIOLATION_SYS_MSG_SAVED_DATA, IS_CHINA
 from debug_utils import LOG_DEBUG, LOG_ERROR
 from gui import DialogsInterface, SystemMessages, makeHtmlString
+from wg_async import wg_async, wg_await
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.customization.shared import CustomizationTabs
 from gui.Scaleform.daapi.view.lobby.store.browser.shop_helpers import getIntegratedAuctionUrl, getWotPlusShopUrl
@@ -35,7 +36,7 @@ from gui.shared.event_dispatcher import hideWebBrowserOverlay, showBattlePass, s
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.processors.common import ClaimRewardForPostProgression
 from gui.shared.notifications import NotificationPriorityLevel
-from gui.shared.system_factory import collectAllNotificationsActionsHandlers, registerNotificationsActionsHandlers
+from gui.shared.system_factory import registerNotificationsActionsHandlers, collectAllNotificationsActionsHandlers
 from gui.shared.utils import decorators
 from gui.wgcg.clan import contexts as clan_ctxs
 from gui.wgnc import g_wgncProvider
@@ -48,7 +49,7 @@ from shared_utils import first
 from skeletons.gui.battle_results import IBattleResultsService
 from skeletons.gui.challenges import IChallengesController
 from skeletons.gui.customization import ICustomizationService
-from skeletons.gui.game_control import IBattlePassController, IBattleRoyaleController, IBrowserController, ICollectionsSystemController, IMapboxController, IRankedBattlesController, ISeniorityAwardsController, IWinbackController, ISteamCompletionController
+from skeletons.gui.game_control import IBattlePassController, IBattleRoyaleController, IBrowserController, ICollectionsSystemController, IMapboxController, IRankedBattlesController, ISeniorityAwardsController, IWinbackController, ISteamCompletionController, ILootBoxSystemController
 from skeletons.gui.impl import INotificationWindowController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.platform.wgnp_controllers import IWGNPSteamAccRequestController
@@ -60,7 +61,6 @@ from uilogging.advanced_achievement.logging_constants import AdvancedAchievement
 from uilogging.seniority_awards.loggers import VehicleSelectionNotificationLogger
 from web.web_client_api import webApiCollection
 from web.web_client_api.sound import HangarSoundWebApi
-from wg_async import wg_async, wg_await
 if typing.TYPE_CHECKING:
     from typing import Tuple
     from notification.NotificationsModel import NotificationsModel
@@ -283,7 +283,6 @@ class _ShowClanAppUserInfoHandler(_ClanAppHandler):
             shared_events.showProfileWindow(databaseID, userName)
 
         shared_events.requestProfile(accID, model.getNotification(self.getNotType(), entityID).getUserName(), successCallback=onDossierReceived)
-        return None
 
 
 class _ClanInviteHandler(ActionHandler):
@@ -890,12 +889,13 @@ class _LootBoxesAutoOpenHandler(NavigationDisabledActionHandler):
     def doAction(self, model, entityID, action):
         notification = model.getNotification(self.getNotType(), entityID)
         savedData = notification.getSavedData()
-        if savedData is not None and 'rewards' in savedData:
+        if savedData is not None and 'rewards' in savedData and 'boxIDs' in savedData:
             pass
         return
 
 
 class _OpenLootBoxSystemHandler(NavigationDisabledActionHandler):
+    _lootBoxes = dependency.descriptor(ILootBoxSystemController)
 
     @classmethod
     def getNotType(cls):
@@ -908,8 +908,13 @@ class _OpenLootBoxSystemHandler(NavigationDisabledActionHandler):
     def doAction(self, model, entityID, action):
         notification = model.getNotification(self.getNotType(), entityID)
         savedData = notification.getSavedData()
-        if savedData and 'eventName' in savedData:
-            Views.load(ViewID.MAIN, eventName=savedData['eventName'])
+        if not savedData:
+            return
+        else:
+            eventName = savedData.get('eventName')
+            if eventName is not None and self._lootBoxes.isAvailable(eventName):
+                Views.load(ViewID.MAIN, eventName=eventName)
+            return
 
 
 class _LootBoxSystemAutoOpenHandler(NavigationDisabledActionHandler):

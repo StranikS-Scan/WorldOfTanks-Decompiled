@@ -6,13 +6,10 @@ import ResMgr
 from items import _xml
 from items.components import component_constants
 from items.components import gun_components
-from items.components.component_constants import ZERO_FLOAT
 from items.components.shell_components import Stun
 from items.stun import g_cfg as stunConfig
 from items.readers import shared_readers
-from items.readers.shared_readers import readFloatPair
-from constants import IS_EDITOR, IS_UE_EDITOR, IS_CLIENT, IS_WEB
-from math_common import ceilTo
+from constants import IS_EDITOR
 if TYPE_CHECKING:
     from items.vehicles import Cache
 
@@ -36,24 +33,6 @@ def readRecoilEffect(xmlCtx, section, cache):
         if IS_EDITOR:
             recoil.effectName = effName
         return recoil
-
-
-def readShot(xmlCtx, section, nationID, projectileSpeedFactor, cache):
-    shellName = section.name
-    shellID = cache.shellIDs(nationID).get(shellName)
-    if shellID is None:
-        _xml.raiseWrongXml(xmlCtx, '', 'unknown shell type name')
-    shellDescr = cache.shells(nationID)[shellID]
-    defaultPortion = ZERO_FLOAT
-    if section.has_key('defaultPortion'):
-        defaultPortion = _xml.readFraction(xmlCtx, section, 'defaultPortion')
-    if IS_CLIENT or IS_WEB:
-        defaultPortion = ceilTo(defaultPortion, decimals=-3, epsilon=1e-06)
-    shot = gun_components.GunShot(shellDescr, defaultPortion, readFloatPair(xmlCtx, section, 'piercingPower'), _xml.readPositiveFloat(xmlCtx, section, 'speed') * projectileSpeedFactor, _xml.readNonNegativeFloat(xmlCtx, section, 'gravity') * projectileSpeedFactor ** 2, _xml.readPositiveFloat(xmlCtx, section, 'maxDistance'), _xml.readFloat(xmlCtx, section, 'maxHeight', 1000000.0))
-    if not IS_UE_EDITOR:
-        from helpers_common import computeShotMaxDistance
-        shot.maxDistance = computeShotMaxDistance(shot)
-    return shot
 
 
 def readStunParams(section, xmlCtx=None, useDefaults=False):

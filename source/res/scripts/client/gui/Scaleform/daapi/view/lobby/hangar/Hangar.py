@@ -2,9 +2,9 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/hangar/Hangar.py
 from __future__ import absolute_import
 import logging
+import typing
 from functools import partial
 import BigWorld
-import typing
 from helpers.CallbackDelayer import CallbackDelayer
 from helpers.i18n import makeString as _ms
 from helpers.statistics import HANGAR_LOADING_STATE
@@ -16,7 +16,7 @@ from account_helpers import AccountSettings
 from account_helpers.AccountSettings import NATION_CHANGE_VIEWED
 from account_helpers.settings_core.ServerSettingsManager import SETTINGS_SECTIONS
 from battle_pass_common import BATTLE_PASS_CONFIG_NAME
-from constants import Configs, DOG_TAGS_CONFIG
+from constants import DOG_TAGS_CONFIG, Configs
 from frameworks.wulf import ViewStatus, WindowFlags, WindowLayer, WindowStatus
 from gui import SystemMessages
 from gui.ClientUpdateManager import g_clientUpdateManager
@@ -44,9 +44,9 @@ from gui.prb_control import prb_getters
 from gui.prb_control.ctrl_events import g_prbCtrlEvents
 from gui.prb_control.entities.listener import IGlobalListener
 from gui.prestige.prestige_helpers import hasVehiclePrestige
-from gui.promo.hangar_teaser_widget import TeaserViewer
-from gui.server_events.pm_constants import IS_REGULAR_QUEST_ENABLED
-from gui.shared import EVENT_BUS_SCOPE, event_dispatcher as shared_events, events
+from gui.shared import EVENT_BUS_SCOPE
+from gui.shared import event_dispatcher as shared_events
+from gui.shared import events
 from gui.shared.events import AmmunitionPanelViewEvent, LobbySimpleEvent
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.processors.tankman import TankmanAutoReturn
@@ -59,11 +59,12 @@ from gui.shared.utils.requesters.ItemsRequester import REQ_CRITERIA
 from gui.sounds.filters import States, StatesGroup
 from helpers import dependency
 from nation_change_helpers.client_nation_change_helper import getChangeNationTooltip
+from personal_missions import PM_SWITCHES
 from renewable_subscription_common.schema import renewableSubscriptionsConfigSchema
 from shared_utils import nextTick
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.connection_mgr import IConnectionManager
-from skeletons.gui.game_control import IBattlePassController, IBattleRoyaleController, IComp7Controller, IEpicBattleMetaGameController, IHangarGuiController, IIGRController, ILootBoxSystemController, IMapboxController, IMarathonEventsController, IPromoController, IRankedBattlesController, ILimitedUIController
+from skeletons.gui.game_control import IBattlePassController, IBattleRoyaleController, IComp7Controller, IEpicBattleMetaGameController, IHangarGuiController, IIGRController, ILimitedUIController, ILootBoxSystemController, IMapboxController, IMarathonEventsController, IPromoController, IRankedBattlesController
 from skeletons.gui.impl import IGuiLoader
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.offers import IOffersBannerController
@@ -245,7 +246,6 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         self.epicController.onUpdated += self.__onEpicBattleUpdated
         self.epicController.onPrimeTimeStatusUpdated += self.__onEpicBattleUpdated
         self.epicController.onGameModeStatusTick += self.__updateAlertMessage
-        self._promoController.onNewTeaserReceived += self.__onTeaserReceived
         self.hangarSpace.lockVehicleSelectable(self)
         g_prbCtrlEvents.onVehicleClientStateChanged += self.__onVehicleClientStateChanged
         g_playerEvents.onPrebattleInvitationAccepted += self.__onPrebattleInvitationAccepted
@@ -297,7 +297,6 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         self.epicController.onUpdated -= self.__onEpicBattleUpdated
         self.epicController.onPrimeTimeStatusUpdated -= self.__onEpicBattleUpdated
         self.epicController.onGameModeStatusTick -= self.__updateAlertMessage
-        self._promoController.onNewTeaserReceived -= self.__onTeaserReceived
         if self.__teaser is not None:
             self.__teaser.stop()
             self.__teaser = None
@@ -408,12 +407,6 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
                         shared_events.showHeroTankPreview(vehicleCD)
         self.__checkVehicleCameraState()
         self.__updateState()
-        return
-
-    def __onTeaserReceived(self, teaserData, showCallback, closeCallback):
-        if self.__teaser is None:
-            self.__teaser = TeaserViewer(self, showCallback, closeCallback)
-        self.__teaser.show(teaserData, self._promoController.getPromoCount())
         return
 
     def _highlight3DEntityAndShowTT(self, entity):
@@ -549,7 +542,7 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         return
 
     def __onServerSettingChanged(self, diff):
-        if IS_REGULAR_QUEST_ENABLED in diff:
+        if PM_SWITCHES.IS_REGULAR_QUEST_ENABLED in diff:
             self.__updateHeaderComponent()
         if 'isCustomizationEnabled' in diff or 'isNationChangeEnabled' in diff:
             self.__updateState()

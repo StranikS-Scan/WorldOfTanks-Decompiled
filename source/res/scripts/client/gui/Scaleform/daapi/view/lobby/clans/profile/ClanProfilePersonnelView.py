@@ -26,7 +26,7 @@ from messenger.gui.Scaleform.data.contacts_vo_converter import ContactConverter
 from messenger.m_constants import USER_ACTION_ID
 from messenger.proto.bw.find_criteria import BWClanChannelFindCriteria
 from messenger.proto.events import g_messengerEvents
-from messenger.storage import storage_getter
+from messenger.storage import MessengerStorageDescriptor, ChannelsStorage, UsersStorage
 OPEN_INVITES_ACTION_ID = 'openInvites'
 OPEN_CLAN_CHANNEL_ACTION_ID = 'openClanChannel'
 _UNAVAILABLE_EFFICIENCY_VALUE = -1
@@ -110,15 +110,12 @@ def _getWeighedAvgStringValue(dataList, key, weightKey, formatter=None):
 
 
 class ClanProfilePersonnelView(ClanProfilePersonnelViewMeta):
+    channelsStorage = MessengerStorageDescriptor(ChannelsStorage)
 
     def __init__(self):
         super(ClanProfilePersonnelView, self).__init__()
         self.__membersDP = None
         return
-
-    @storage_getter('channels')
-    def channelsStorage(self):
-        return None
 
     @adisp_process
     def setClanDossier(self, clanDossier):
@@ -205,6 +202,7 @@ class ClanProfilePersonnelView(ClanProfilePersonnelViewMeta):
 
 
 class _ClanMembersDataProvider(SortableDAAPIDataProvider, UsersInfoHelper):
+    usersStorage = MessengerStorageDescriptor(UsersStorage)
 
     def __init__(self):
         super(_ClanMembersDataProvider, self).__init__()
@@ -227,10 +225,6 @@ class _ClanMembersDataProvider(SortableDAAPIDataProvider, UsersInfoHelper):
         usersEvents.onUserActionReceived += self.__me_onUserActionReceived
         usersEvents.onClanMembersListChanged += self.__me_onClanMembersListChanged
         usersEvents.onUserStatusUpdated += self.__me_onUserStatusUpdated
-
-    @storage_getter('users')
-    def userStorage(self):
-        return None
 
     @property
     def collection(self):
@@ -311,7 +305,7 @@ class _ClanMembersDataProvider(SortableDAAPIDataProvider, UsersInfoHelper):
 
     def _makeVO(self, memberData):
         memberDBID = memberData.getDbID()
-        contactEntity = self.userStorage.getUser(memberDBID)
+        contactEntity = self.usersStorage.getUser(memberDBID)
         if contactEntity:
             userVO = ContactConverter().makeVO(contactEntity)
             userVO['userProps']['clanAbbrev'] = ''

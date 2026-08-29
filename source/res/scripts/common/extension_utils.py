@@ -31,13 +31,15 @@ def importClass(classPath, defaultMod):
         mod = importlib.import_module(modPath or defaultMod)
     except ImportError:
         LOG_CURRENT_EXCEPTION()
-        return
+        return None
 
     try:
         return getattr(mod, className)
     except AttributeError:
         LOG_CURRENT_EXCEPTION()
-        return
+        return None
+
+    return None
 
 
 class _MergeExtensionFile(object):

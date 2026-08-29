@@ -7,7 +7,7 @@ from ids_generators import SequenceIDGenerator
 from gui.shared.utils.decorators import ReprInjector
 from messenger.m_constants import USER_GUI_TYPE, MESSAGES_HISTORY_MAX_LEN, MESSENGER_COMMAND_TYPE, USER_TAG, USER_DEFAULT_NAME_PREFIX, GAME_ONLINE_STATUS, PRIMARY_CHANNEL_ORDER, UserEntityScope
 from messenger.proto.events import ChannelEvents, MemberEvents
-from messenger.storage import storage_getter
+from messenger.storage import MessengerStorageDescriptor, UsersStorage
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.battle_session import IBattleSessionProvider
 if typing.TYPE_CHECKING:
@@ -76,6 +76,7 @@ class ReceivedUnitChatCommand(_ChatCommand):
 
 
 class ReceivedBattleChatCommand(_ChatCommand):
+    usersStorage = MessengerStorageDescriptor(UsersStorage)
 
     def getCommandType(self):
         return MESSENGER_COMMAND_TYPE.BATTLE
@@ -122,7 +123,7 @@ class ReceivedBattleChatCommand(_ChatCommand):
         return 'chat_shortcut_common_fx'
 
     def isIgnored(self):
-        user = storage_getter('users')().getUser(self.getSenderID(), scope=UserEntityScope.BATTLE)
+        user = self.usersStorage.getUser(self.getSenderID(), scope=UserEntityScope.BATTLE)
         return user.isIgnored() if user else False
 
     def isOnMinimap(self):
@@ -141,7 +142,7 @@ class ReceivedBattleChatCommand(_ChatCommand):
         return False
 
     def isSender(self):
-        user = storage_getter('users')().getUser(self.getSenderID(), scope=UserEntityScope.BATTLE)
+        user = self.usersStorage.getUser(self.getSenderID(), scope=UserEntityScope.BATTLE)
         return user.isCurrentPlayer() if user else False
 
     def showMarkerForReceiver(self):

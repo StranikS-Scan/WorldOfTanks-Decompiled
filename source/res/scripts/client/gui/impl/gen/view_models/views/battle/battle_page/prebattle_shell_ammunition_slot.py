@@ -12,14 +12,14 @@ class ShellBattleState(IntEnum):
 class PrebattleShellAmmunitionSlot(ShellAmmunitionSlot):
     __slots__ = ()
 
-    def __init__(self, properties=16, commands=0):
+    def __init__(self, properties=17, commands=0):
         super(PrebattleShellAmmunitionSlot, self).__init__(properties=properties, commands=commands)
 
     def getShellState(self):
-        return ShellBattleState(self._getNumber(15))
+        return ShellBattleState(self._getNumber(16))
 
     def setShellState(self, value):
-        self._setNumber(15, value.value)
+        self._setNumber(16, value.value)
 
     def _initialize(self):
         super(PrebattleShellAmmunitionSlot, self)._initialize()

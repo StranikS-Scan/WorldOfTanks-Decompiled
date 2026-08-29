@@ -955,6 +955,8 @@ class StrongholdEntity(UnitEntity):
                         self.__slotVehicleFilters = {}
                         if key == 'STRONGHOLDS_MODE_CHANGED':
                             self.resetPlayerReadiness()
+                            if self.__strongholdSettings.clearSelectedReserves():
+                                self.__onUpdateReserve()
                             self.__checkStrongholdEvent()
                         break
 

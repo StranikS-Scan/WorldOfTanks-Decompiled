@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: battle_royale/scripts/client/battle_royale/gui/battle_results/composer.py
+from __future__ import absolute_import
 from gui.battle_results.composer import IBattleResultStatsCtrl
 from gui.battle_results.components import base
 from battle_royale.gui.battle_results import templates

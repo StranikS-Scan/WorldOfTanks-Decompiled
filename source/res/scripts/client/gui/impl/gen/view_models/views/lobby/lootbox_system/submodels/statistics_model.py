@@ -6,7 +6,7 @@ from gui.impl.gen.view_models.views.lobby.lootbox_system.submodels.rewards_categ
 class StatisticsModel(ViewModel):
     __slots__ = ('onReset', 'onUpdateResetState')
 
-    def __init__(self, properties=4, commands=2):
+    def __init__(self, properties=5, commands=2):
         super(StatisticsModel, self).__init__(properties=properties, commands=commands)
 
     def getEventName(self):
@@ -37,11 +37,18 @@ class StatisticsModel(ViewModel):
     def getCategoriesType():
         return RewardsCategoriesModel
 
+    def getPluginPath(self):
+        return self._getString(4)
+
+    def setPluginPath(self, value):
+        self._setString(4, value)
+
     def _initialize(self):
         super(StatisticsModel, self)._initialize()
         self._addStringProperty('eventName', '')
         self._addNumberProperty('openedCount', 0)
         self._addBoolProperty('isResetCompleted', False)
         self._addArrayProperty('categories', Array())
+        self._addStringProperty('pluginPath', '')
         self.onReset = self._addCommand('onReset')
         self.onUpdateResetState = self._addCommand('onUpdateResetState')

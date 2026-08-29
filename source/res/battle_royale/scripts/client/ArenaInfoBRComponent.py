@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: battle_royale/scripts/client/ArenaInfoBRComponent.py
+from __future__ import absolute_import
 import functools
 import BigWorld
 import CGF

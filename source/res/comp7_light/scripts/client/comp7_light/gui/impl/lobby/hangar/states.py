@@ -8,7 +8,7 @@ from comp7_light.gui.impl.lobby.comp7_light_intro_screen import Comp7LightIntroS
 from comp7_light.gui.impl.lobby.comp7_light_no_vehicles_screen import Comp7LightNoVehiclesScreen
 from comp7_light.gui.impl.lobby.progression_main_view import ProgressionMainView
 from comp7_light.gui.shared.event_dispatcher import showComp7LightInfoPage
-from frameworks.state_machine import StateFlags
+from frameworks_common.state_machine import StateFlags
 from gui.Scaleform.framework import ScopeTemplates
 from gui.Scaleform.framework.entities.View import ViewKey
 from gui.impl import backport

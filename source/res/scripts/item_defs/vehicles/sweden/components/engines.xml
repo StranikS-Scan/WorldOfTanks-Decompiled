@@ -1,4 +1,5 @@
 <engines.xml>
+  <xmlns:xmlref>	http://bwt/xmlref	</xmlns:xmlref>
   <ids>
     <_2_st_Scania_Vabis_607_1>	0	</_2_st_Scania_Vabis_607_1>
     <BNAG_L8V_36TR_A>	1	</BNAG_L8V_36TR_A>
@@ -50,6 +51,7 @@
     <AOS_895_S>	53	</AOS_895_S>
     <Maybach_DSO>	55	</Maybach_DSO>
     <Volvo_SFA_12_Ambassador>	57	</Volvo_SFA_12_Ambassador>
+    <Volvo_SFA_12B>	58	</Volvo_SFA_12B>
     <Motoraggregat_3_FL>	501	</Motoraggregat_3_FL>
     <_2_st_Scania_DS14>	52	</_2_st_Scania_DS14>
     <Scania_Vabis_1664_Sav>	2000	</Scania_Vabis_1664_Sav>
@@ -849,6 +851,23 @@
       <rpm_min>	325	</rpm_min>
       <rpm_max>	2224	</rpm_max>
     </Motoraggregat_10>
+    <Volvo_SFA_12B>
+      <userString>	#sweden_vehicles:Volvo_SFA_12B	</userString>
+      <tags>	diesel	</tags>
+      <level>	11	</level>
+      <price>	150000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <power>	10	</power>
+      <weight>	100	</weight>
+      <maxHealth>	380	</maxHealth>
+      <maxRegenHealth>	190	</maxRegenHealth>
+      <repairCost>	11	</repairCost>
+      <fireStartingChance>	0.10	</fireStartingChance>
+      <rpm_min>	341	</rpm_min>
+      <rpm_max>	2176	</rpm_max>
+    </Volvo_SFA_12B>
     <Meteor_Mark_IVB>
       <userString>	#sweden_vehicles:Meteor_Mark_IVB	</userString>
       <tags>	gasoline	</tags>

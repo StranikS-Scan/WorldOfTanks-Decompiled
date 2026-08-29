@@ -12,7 +12,7 @@ from comp7.gui.impl.lobby.meta_view.meta_root_view import MetaRootView
 from comp7.gui.impl.lobby.tournaments.wci_view import WciView
 from comp7.gui.impl.lobby.tournaments.ols_view import OlsView
 from comp7.gui.shared.event_dispatcher import showComp7InfoPage, showComp7WhatsNewScreen, showWciInfoPage, showOlsInfoPage
-from frameworks.state_machine import StateFlags
+from frameworks_common.state_machine import StateFlags
 from gui.Scaleform.daapi.view.lobby.store.browser.states import ShopState
 from gui.Scaleform.framework import ScopeTemplates
 from gui.Scaleform.framework.entities.View import ViewKey

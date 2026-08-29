@@ -1,9 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: story_mode/scripts/common/story_mode_common/battle_mode.py
+from __future__ import absolute_import
 from constants import ARENA_BONUS_TYPE, ARENA_GUI_TYPE, PREBATTLE_TYPE, QUEUE_TYPE
 from constants_utils import AbstractBattleMode
 from story_mode_common.battle_results import story_mode
-from story_mode_constants import SM_CONGRATULATIONS_MESSAGE
+from story_mode_common.story_mode_constants import SM_CONGRATULATIONS_MESSAGE
 from story_mode_common.configs.story_mode_settings import settingsSchema
 
 class StoryModeBattleMode(AbstractBattleMode):

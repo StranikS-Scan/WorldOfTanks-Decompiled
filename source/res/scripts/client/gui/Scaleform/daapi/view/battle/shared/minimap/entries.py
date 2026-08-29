@@ -112,8 +112,7 @@ class VehicleEntry(MinimapEntry):
             elif self._classTag != 'SPG':
                 self._spottedTime = BigWorld.serverTime()
             return True
-        else:
-            return False
+        return False
 
     def updatePosition(self, position):
         self._matrix.source.setTranslate(position)

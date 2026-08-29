@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: battle_royale/scripts/client/battle_royale/gui/game_control/battle_royale_tournament_controller.py
+from __future__ import absolute_import
 import logging
 import calendar
 from collections import Counter
@@ -101,13 +102,13 @@ class BattleRoyaleTournamentController(IBattleRoyaleTournamentController):
     def notReady(self):
         self.__tournamentComponent.tournamentNotReady(str(self.__currentToken.tournamentID), self.__notReadyResult)
 
-    def leaveCurrentAndJoinToAnotherTournament(self, internalTournamentID):
+    def leaveCurrentAndJoinToAnotherTournament(self, tournamentID):
         if self.__isReady:
             self.__pushErrorSystemMessage('JOINING forbidden during READY')
             return
         self.__isReJoin = True
         self.__isChangingInternalState = True
-        self.__currentToken = self.__tokens.get(internalTournamentID)
+        self.__currentToken = self.__tokens.get(tournamentID)
         self.leave()
 
     def leaveBattleRoyaleTournament(self, isChangingToBattleRoyaleHangar=False):

@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: battle_royale/scripts/client/battle_royale/gui/game_control/br_season_provider.py
+from __future__ import absolute_import
 from helpers import dependency
 from skeletons.gui.game_control import IBattleRoyaleController
 from constants import GameSeasonType

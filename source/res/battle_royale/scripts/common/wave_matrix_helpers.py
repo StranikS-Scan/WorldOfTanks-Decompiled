@@ -1,10 +1,13 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: battle_royale/scripts/common/wave_matrix_helpers.py
+from __future__ import absolute_import
 import heapq
 import random
+from future.utils import lrange
 from math import sqrt
 from death_zones_helpers import zoneIdFrom, idxFrom, getZoneCenterFromIdFor
 from debug_utils import LOG_DEBUG_DEV
+from math_common import decimal_round
 
 class WaveMatrix(object):
 
@@ -22,16 +25,16 @@ class WaveMatrix(object):
         return -1 < x < self.size and -1 < y < self.size
 
     def fillWave(self, fromX, fromY, weight):
-        for y in xrange(self.size):
-            for x in xrange(self.size):
-                distance = round(sqrt((fromX - x) * (fromX - x) + (fromY - y) * (fromY - y)), 2)
+        for y in range(self.size):
+            for x in range(self.size):
+                distance = decimal_round(sqrt((fromX - x) * (fromX - x) + (fromY - y) * (fromY - y)), 2)
                 if distance < weight:
                     self.setValue(x, y, int(weight - distance))
 
     def dump(self):
-        for y in xrange(self.size):
+        for y in range(self.size):
             row = []
-            for x in xrange(self.size):
+            for x in range(self.size):
                 row.append(self.getValue(x, y))
 
             LOG_DEBUG_DEV(row)
@@ -40,9 +43,9 @@ class WaveMatrix(object):
         sz = self.size
         matrixSz = matrix.size
         matrixGrid = matrix._grid
-        fromX = centerX - int(matrixSz / 2)
-        fromY = centerY - int(matrixSz / 2)
-        for y in xrange(matrixSz):
+        fromX = centerX - matrixSz // 2
+        fromY = centerY - matrixSz // 2
+        for y in range(matrixSz):
             localY = fromY + y
             if localY < 0:
                 continue
@@ -50,7 +53,7 @@ class WaveMatrix(object):
                 break
             offset = localY * sz
             matrixOffset = y * matrixSz
-            for x in xrange(matrixSz):
+            for x in range(matrixSz):
                 localX = fromX + x
                 if localX < 0:
                     continue
@@ -59,11 +62,11 @@ class WaveMatrix(object):
                 self._grid[localX + offset] += matrixGrid[x + matrixOffset] * sign
 
     def randomSafeCell(self):
-        idx = heapq.nsmallest(1, random.sample(xrange(self.size ** 2), self.size ** 2), key=lambda i: self._grid[i])[0]
+        idx = heapq.nsmallest(1, random.sample(lrange(self.size ** 2), self.size ** 2), key=lambda i: self._grid[i])[0]
         return idxFrom(idx, self.size)
 
     def randomNSafeCells(self, arenaTypeID, cellCount):
-        safeCells = heapq.nsmallest(cellCount, random.sample(xrange(self.size ** 2), self.size ** 2), key=lambda i: self._grid[i])
+        safeCells = heapq.nsmallest(cellCount, random.sample(lrange(self.size ** 2), self.size ** 2), key=lambda i: self._grid[i])
         for idx, safeCell in enumerate(safeCells):
             safeCells[idx] = getZoneCenterFromIdFor(self.size, arenaTypeID, safeCell)
 
@@ -72,7 +75,7 @@ class WaveMatrix(object):
 
 def createCenterWaweMatrix(weight):
     size = lambda w: max(w * 2 - 1, 0)
-    center = lambda s: max((s - 1) / 2, 0)
+    center = lambda s: max((s - 1) // 2, 0)
     wave = WaveMatrix(size(weight))
     wave.fillWave(center(size(weight)), center(size(weight)), weight)
     return wave

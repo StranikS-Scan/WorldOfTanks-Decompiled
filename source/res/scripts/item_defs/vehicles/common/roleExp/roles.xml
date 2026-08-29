@@ -38,9 +38,12 @@
   <role_LT_universal>
     <actions>	searchEnemy doOwnDamage doInvisAssist	</actions>
   </role_LT_universal>
-  <role_LT_wheeled>
-    <actions>	searchEnemy fragAssist doOwnDamage	</actions>
-  </role_LT_wheeled>
+  <role_LT_scout>
+    <actions>	searchEnemy doOwnDamage doInvisAssist	</actions>
+  </role_LT_scout>
+  <role_LT_support>
+    <actions>	searchEnemy doOwnDamage doInvisAssist	</actions>
+  </role_LT_support>
   <role_SPG>
     <actions>	doStun doGroupStun doSpgDamage	</actions>
   </role_SPG>

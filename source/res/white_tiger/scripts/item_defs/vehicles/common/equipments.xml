@@ -1,0 +1,478 @@
+<equipments.xml>
+  <builtinAfterburning_wt>
+    <id>	6001	</id>
+    <userString>	#white_tiger.artefacts.extend:builtinAfterburning_wt/name	</userString>
+    <description>	#white_tiger.artefacts.extend:builtinAfterburning_wt/descr	</description>
+    <shortDescriptionSpecial>	#white_tiger.artefacts.extend:builtinAfterburning_wt/short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#white_tiger.artefacts.extend:builtinAfterburning_wt/long_special	</longDescriptionSpecial>
+    <icon>	wt_ability_nitro 0 0	</icon>
+    <soundNotification>	wt_ability	</soundNotification>
+    <soundPressedReady>	ev_white_tiger_ability_button	</soundPressedReady>
+    <soundPressedNotReady>	ev_white_tiger_ability_button_not_ready	</soundPressedNotReady>
+    <price>	0	</price>
+    <tags>	notForSale builtin trigger builtin_priority_1	</tags>
+    <type>	regular	</type>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <tags>	builtinAfterburning_wt_user	</tags>
+        </vehicle>
+      </include>
+    </vehicleFilter>
+    <script>	white_tiger_common.items.white_tiger_artefacts.WTEquipment	  <cooldownSeconds>	50	</cooldownSeconds>
+      <consumeSeconds>	12	</consumeSeconds>
+      <reuseCount>	-1	</reuseCount>
+      <visualScript>
+        <client>
+          <plan>	abilities/afterburning_client	</plan>
+        </client>
+        <server>
+          <plan>
+            <name>	abilities/afterburning	</name>
+            <params>
+              <COOLDOWN>	50.000000	</COOLDOWN>
+              <DURATION>	12	</DURATION>
+              <INITIAL_BOOST_FORCE>	50	</INITIAL_BOOST_FORCE>
+              <STARTING_DELAY>	0.0	</STARTING_DELAY>
+              <BASE_RAMMING_MULTIPLIER>	1.5	</BASE_RAMMING_MULTIPLIER>
+              <PLASMA_RAMMING_BOOST>	0.25	</PLASMA_RAMMING_BOOST>
+              <INITIAL_BOOST_TIME>	0.5	</INITIAL_BOOST_TIME>
+            </params>
+          </plan>
+        </server>
+      </visualScript>
+    </script>
+  </builtinAfterburning_wt>
+  <builtinInstantStunShoot_wt>
+    <id>	6002	</id>
+    <userString>	#white_tiger.artefacts.extend:builtinInstantStunShoot_wt/name	</userString>
+    <description>	#white_tiger.artefacts.extend:builtinInstantStunShoot_wt/descr	</description>
+    <shortDescriptionSpecial>	#white_tiger.artefacts.extend:builtinInstantStunShoot_wt/short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#white_tiger.artefacts.extend:builtinInstantStunShoot_wt/long_special	</longDescriptionSpecial>
+    <icon>	wt_ability_stan 0 0	</icon>
+    <soundNotification>	wt_ability	</soundNotification>
+    <soundPressedReady>	ev_white_tiger_ability_button	</soundPressedReady>
+    <soundPressedNotReady>	ev_white_tiger_ability_button_not_ready	</soundPressedNotReady>
+    <price>	0	</price>
+    <tags>	notForSale builtin trigger builtin_priority_1	</tags>
+    <type>	regular	</type>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <tags>	builtinInstantStunShoot_wt_user	</tags>
+        </vehicle>
+      </include>
+    </vehicleFilter>
+    <script>	white_tiger_common.items.white_tiger_artefacts.WTEquipment	  <cooldownSeconds>	15	</cooldownSeconds>
+      <reuseCount>	-1	</reuseCount>
+      <visualScript>
+        <client>
+          <plan>	abilities/instantStunShoot_client	</plan>
+        </client>
+        <server>
+          <plan>
+            <name>	abilities/instantStunShoot	</name>
+            <params>
+              <COOLDOWN>	15.000000	</COOLDOWN>
+            </params>
+          </plan>
+        </server>
+      </visualScript>
+    </script>
+  </builtinInstantStunShoot_wt>
+  <builtinImpulse_wt>
+    <id>	6003	</id>
+    <userString>	#white_tiger.artefacts.extend:builtinImpulse_wt/name	</userString>
+    <description>	#white_tiger.artefacts.extend:builtinImpulse_wt/descr	</description>
+    <shortDescriptionSpecial>	#white_tiger.artefacts.extend:builtinImpulse_wt/short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#white_tiger.artefacts.extend:builtinImpulse_wt/long_special	</longDescriptionSpecial>
+    <icon>	wt_ability_emi 0 0	</icon>
+    <soundNotification>	wt_ability	</soundNotification>
+    <soundPressedReady>	ev_white_tiger_ability_button	</soundPressedReady>
+    <soundPressedNotReady>	ev_white_tiger_ability_button_not_ready	</soundPressedNotReady>
+    <price>	0	</price>
+    <tags>	notForSale builtin trigger builtin_priority_2	</tags>
+    <type>	regular	</type>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <tags>	builtinImpulse_wt_user	</tags>
+        </vehicle>
+      </include>
+    </vehicleFilter>
+    <script>	white_tiger_common.items.white_tiger_artefacts.WTEquipment	  <cooldownSeconds>	22	</cooldownSeconds>
+      <consumeSeconds>	3	</consumeSeconds>
+      <reuseCount>	-1	</reuseCount>
+      <visualScript>
+        <client>
+          <plan>	abilities/impulse_client	</plan>
+        </client>
+        <server>
+          <plan>	abilities/impulse	  <name>	abilities/impulse	</name>
+            <params>
+              <COOLDOWN>	22.000000	</COOLDOWN>
+              <DURATION>	3.000000	</DURATION>
+              <STUN_RADIUS>	50.000000	</STUN_RADIUS>
+              <DAMAGE_RADIUS>	15.000000	</DAMAGE_RADIUS>
+              <IMPULSE_DAMAGE>	600	</IMPULSE_DAMAGE>
+            </params>
+          </plan>
+        </server>
+      </visualScript>
+    </script>
+  </builtinImpulse_wt>
+  <builtinShield_wt>
+    <id>	6004	</id>
+    <userString>	#white_tiger.artefacts.extend:builtinShield_wt/name	</userString>
+    <description>	#white_tiger.artefacts.extend:builtinShield_wt/descr	</description>
+    <shortDescriptionSpecial>	#white_tiger.artefacts.extend:builtinShield_wt/short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#white_tiger.artefacts.extend:builtinShield_wt/long_special	</longDescriptionSpecial>
+    <icon>	wt_ability_shield 0 0	</icon>
+    <soundNotification>	wt_ability	</soundNotification>
+    <soundPressedReady>	ev_white_tiger_ability_button	</soundPressedReady>
+    <soundPressedNotReady>	ev_white_tiger_ability_button_not_ready	</soundPressedNotReady>
+    <price>	0	</price>
+    <tags>	notForSale builtin trigger builtin_priority_2	</tags>
+    <type>	regular	</type>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <tags>	builtinShield_wt_user	</tags>
+        </vehicle>
+      </include>
+    </vehicleFilter>
+    <script>	white_tiger_common.items.white_tiger_artefacts.WTEquipment	  <cooldownSeconds>	50	</cooldownSeconds>
+      <reuseCount>	-1	</reuseCount>
+      <visualScript>
+        <client>
+          <plan>	abilities/shield_client	</plan>
+        </client>
+        <server>
+          <plan>
+            <name>	abilities/shield	</name>
+            <params>
+              <COOLDOWN>	50.000000	</COOLDOWN>
+              <DURATION>	6.000000	</DURATION>
+              <WT_STUN_SHELL_COMPDESCR>	1538842	</WT_STUN_SHELL_COMPDESCR>
+            </params>
+          </plan>
+        </server>
+      </visualScript>
+    </script>
+  </builtinShield_wt>
+  <builtinSelfRepair_wt>
+    <id>	6005	</id>
+    <userString>	#white_tiger.artefacts.extend:builtinSelfRepair_wt/name	</userString>
+    <description>	#white_tiger.artefacts.extend:builtinSelfRepair_wt/descr	</description>
+    <shortDescriptionSpecial>	#white_tiger.artefacts.extend:builtinSelfRepair_wt/short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#white_tiger.artefacts.extend:builtinSelfRepair_wt/long_special	</longDescriptionSpecial>
+    <icon>	wt_ability_selfRepair 0 0	</icon>
+    <soundNotification>	wt_ability	</soundNotification>
+    <soundPressedReady>	ev_white_tiger_ability_button	</soundPressedReady>
+    <soundPressedNotReady>	ev_white_tiger_ability_button_not_ready	</soundPressedNotReady>
+    <price>	0	</price>
+    <tags>	notForSale builtin trigger builtin_priority_1	</tags>
+    <type>	regular	</type>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <tags>	builtinSelfRepair_wt_user	</tags>
+        </vehicle>
+      </include>
+    </vehicleFilter>
+    <script>	white_tiger_common.items.white_tiger_artefacts.WTEquipment	  <cooldownSeconds>	45	</cooldownSeconds>
+      <reuseCount>	-1	</reuseCount>
+      <visualScript>
+        <client>
+          <plan>	abilities/selfRepair_client	</plan>
+        </client>
+        <server>
+          <plan>	abilities/selfRepair	</plan>
+        </server>
+      </visualScript>
+    </script>
+  </builtinSelfRepair_wt>
+  <builtinStronghold_wt>
+    <id>	6006	</id>
+    <userString>	#white_tiger.artefacts.extend:builtinStronghold_wt/name	</userString>
+    <description>	#white_tiger.artefacts.extend:builtinStronghold_wt/descr	</description>
+    <shortDescriptionSpecial>	#white_tiger.artefacts.extend:builtinStronghold_wt/short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#white_tiger.artefacts.extend:builtinStronghold_wt/long_special	</longDescriptionSpecial>
+    <icon>	wt_ability_stronghold 0 0	</icon>
+    <soundNotification>	wt_ability	</soundNotification>
+    <soundPressedReady>	ev_white_tiger_ability_button	</soundPressedReady>
+    <soundPressedNotReady>	ev_white_tiger_ability_button_not_ready	</soundPressedNotReady>
+    <price>	0	</price>
+    <tags>	notForSale builtin trigger builtin_priority_2	</tags>
+    <type>	regular	</type>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <tags>	builtinStronghold_wt_user	</tags>
+        </vehicle>
+      </include>
+    </vehicleFilter>
+    <script>	white_tiger_common.items.white_tiger_artefacts.WTEquipment	  <cooldownSeconds>	50	</cooldownSeconds>
+      <reuseCount>	-1	</reuseCount>
+      <visualScript>
+        <client>
+          <plan>	abilities/stronghold_client	</plan>
+        </client>
+        <server>
+          <plan>
+            <name>	abilities/stronghold	</name>
+            <params>
+              <COOLDOWN>	50.000000	</COOLDOWN>
+              <DURATION>	10	</DURATION>
+              <STARTING_DELAY>	0.0	</STARTING_DELAY>
+            </params>
+          </plan>
+        </server>
+      </visualScript>
+    </script>
+  </builtinStronghold_wt>
+  <builtinTeleport_wt>
+    <id>	6007	</id>
+    <userString>	#white_tiger.artefacts.extend:builtinTeleport_wt/name	</userString>
+    <description>	#white_tiger.artefacts.extend:builtinTeleport_wt/descr	</description>
+    <shortDescriptionSpecial>	#white_tiger.artefacts.extend:builtinTeleport_wt/short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#white_tiger.artefacts.extend:builtinTeleport_wt/long_special	</longDescriptionSpecial>
+    <icon>	wt_ability_teleport 0 0	</icon>
+    <soundNotification>	wt_ability	</soundNotification>
+    <soundPressedReady>	ev_white_tiger_ability_button	</soundPressedReady>
+    <soundPressedNotReady>	ev_white_tiger_ability_button_not_ready	</soundPressedNotReady>
+    <price>	0	</price>
+    <tags>	notForSale builtin trigger builtin_priority_3	</tags>
+    <type>	regular	</type>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <tags>	builtinTeleport_wt_user	</tags>
+        </vehicle>
+      </include>
+    </vehicleFilter>
+    <script>	white_tiger_common.items.white_tiger_artefacts.WTEquipment	  <deploySeconds>	60	</deploySeconds>
+      <cooldownSeconds>	120	</cooldownSeconds>
+      <consumeSeconds>	6	</consumeSeconds>
+      <reuseCount>	-1	</reuseCount>
+      <visualScript>
+        <client>
+          <plan>	abilities/teleport_client	</plan>
+        </client>
+        <server>
+          <plan>
+            <name>	abilities/teleport	</name>
+            <params>
+              <COOLDOWN>	120.000000	</COOLDOWN>
+              <DURATION>	6.000000	</DURATION>
+              <STARTING_DELAY>	0.0	</STARTING_DELAY>
+            </params>
+          </plan>
+        </server>
+      </visualScript>
+    </script>
+  </builtinTeleport_wt>
+  <builtinChargedShot_wt>
+    <id>	6008	</id>
+    <userString>	#white_tiger.artefacts.extend:builtinChargedShot_wt/name	</userString>
+    <description>	#white_tiger.artefacts.extend:builtinChargedShot_wt/descr	</description>
+    <shortDescriptionSpecial>	#white_tiger.artefacts.extend:builtinChargedShot_wt/short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#white_tiger.artefacts.extend:builtinChargedShot_wt/long_special	</longDescriptionSpecial>
+    <icon>	wt_ability_charged_shot 0 0	</icon>
+    <soundNotification>	wt_ability	</soundNotification>
+    <soundPressedReady>	ev_white_tiger_ability_button	</soundPressedReady>
+    <soundPressedNotReady>	ev_white_tiger_ability_button_not_ready	</soundPressedNotReady>
+    <price>	0	</price>
+    <tags>	notForSale builtin trigger builtin_priority_2	</tags>
+    <type>	regular	</type>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <tags>	builtinChargedShot_wt_user	</tags>
+        </vehicle>
+      </include>
+    </vehicleFilter>
+    <script>	white_tiger_common.items.white_tiger_artefacts.WTEquipment	  <cooldownSeconds>	50	</cooldownSeconds>
+      <reuseCount>	-1	</reuseCount>
+      <visualScript>
+        <client>
+          <plan>	abilities/chargedShot_client	</plan>
+        </client>
+        <server>
+          <plan>
+            <name>	abilities/chargedShot	</name>
+            <params>
+              <COOLDOWN>	50.000000	</COOLDOWN>
+              <STARTING_DELAY>	0.000000	</STARTING_DELAY>
+            </params>
+          </plan>
+        </server>
+      </visualScript>
+    </script>
+  </builtinChargedShot_wt>
+  <builtinExplosiveShot_wt>
+    <id>	6009	</id>
+    <userString>	#white_tiger.artefacts.extend:builtinExplosiveShot_wt/name	</userString>
+    <description>	#white_tiger.artefacts.extend:builtinExplosiveShot_wt/descr	</description>
+    <shortDescriptionSpecial>	#white_tiger.artefacts.extend:builtinExplosiveShot_wt/short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#white_tiger.artefacts.extend:builtinExplosiveShot_wt/long_special	</longDescriptionSpecial>
+    <icon>	wt_ability_explosive_shot 0 0	</icon>
+    <soundNotification>	wt_ability	</soundNotification>
+    <soundPressedReady>	ev_white_tiger_ability_button	</soundPressedReady>
+    <soundPressedNotReady>	ev_white_tiger_ability_button_not_ready	</soundPressedNotReady>
+    <price>	0	</price>
+    <tags>	notForSale builtin trigger builtin_priority_2	</tags>
+    <type>	regular	</type>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <tags>	builtinExplosiveShot_wt_user	</tags>
+        </vehicle>
+      </include>
+    </vehicleFilter>
+    <script>	white_tiger_common.items.white_tiger_artefacts.WTEquipment	  <cooldownSeconds>	50	</cooldownSeconds>
+      <reuseCount>	-1	</reuseCount>
+      <visualScript>
+        <client>
+          <plan>	abilities/explosiveShot_client	</plan>
+        </client>
+        <server>
+          <plan>
+            <name>	abilities/explosiveShot	</name>
+            <params>
+              <PLASMA_BONUS_MULTIPLIERS>	MS4wMDAwMDA= MS4yNTAwMDA= MS41MDAwMDA= MS43NTAwMDA= Mi4wMDAwMDA=	</PLASMA_BONUS_MULTIPLIERS>
+              <BASE_DAMAGE>	350.000000	</BASE_DAMAGE>
+              <COOLDOWN>	50.000000	</COOLDOWN>
+              <DAMAGE_RADIUS>	32.000000	</DAMAGE_RADIUS>
+            </params>
+          </plan>
+        </server>
+      </visualScript>
+    </script>
+  </builtinExplosiveShot_wt>
+  <builtinRepairkit_wt>
+    <id>	6010	</id>
+    <userString>	#white_tiger.artefacts.extend:builtinRepairkit_wt/name	</userString>
+    <description>	#white_tiger.artefacts.extend:builtinRepairkit_wt/descr	</description>
+    <shortDescriptionSpecial>	#white_tiger.artefacts.extend:largeRepairkit_wt/short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#white_tiger.artefacts.extend:builtinRepairkit_wt/long_special	</longDescriptionSpecial>
+    <icon>	wt_largeRepairkit 0 0	</icon>
+    <soundNotification>	wt_ability	</soundNotification>
+    <soundPressedReady>	ev_white_tiger_ability_button	</soundPressedReady>
+    <soundPressedNotReady>	ev_white_tiger_ability_button_not_ready	</soundPressedNotReady>
+    <price>	0	</price>
+    <tags>	notForSale builtin repairkit builtin_priority_3	</tags>
+    <type>	regular	</type>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <tags>	builtinRepairkit_wt_user	</tags>
+        </vehicle>
+      </include>
+    </vehicleFilter>
+    <script>	white_tiger_common.items.white_tiger_artefacts.WTRepairkit	  <repairAll>	true	</repairAll>
+      <bonusValue>	0.15	</bonusValue>
+      <cooldownSeconds>	90	</cooldownSeconds>
+      <reuseCount>	-1	</reuseCount>
+    </script>
+    <kpi>
+      <mul>
+        <name>	vehicleRepairSpeed	</name>
+        <value>	1.15	</value>
+      </mul>
+    </kpi>
+  </builtinRepairkit_wt>
+  <builtinLargeMedkit_wt>
+    <id>	6011	</id>
+    <userString>	#white_tiger.artefacts.extend:builtinLargeMedkit_wt/name	</userString>
+    <description>	#white_tiger.artefacts.extend:builtinLargeMedkit_wt/stunDisabled/descr	</description>
+    <shortDescriptionSpecial>	#white_tiger.artefacts.extend:builtinLargeMedkit_wt/short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#white_tiger.artefacts.extend:builtinLargeMedkit_wt/long_special	</longDescriptionSpecial>
+    <icon>	wt_largeMedkit 0 0	</icon>
+    <soundNotification>	wt_ability	</soundNotification>
+    <soundPressedReady>	ev_white_tiger_ability_button	</soundPressedReady>
+    <soundPressedNotReady>	ev_white_tiger_ability_button_not_ready	</soundPressedNotReady>
+    <price>	0	</price>
+    <tags>	notForSale builtin medkit builtin_priority_4	</tags>
+    <type>	regular	</type>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <tags>	builtinLargeMedkit_wt_user	</tags>
+        </vehicle>
+      </include>
+    </vehicleFilter>
+    <script>	white_tiger_common.items.white_tiger_artefacts.WTRepairkit	  <repairAll>	true	</repairAll>
+      <bonusValue>	0.0	</bonusValue>
+      <stunResistanceEffect>	0.0	</stunResistanceEffect>
+      <stunResistanceDuration>	0.0	</stunResistanceDuration>
+      <cooldownSeconds>	90	</cooldownSeconds>
+      <reuseCount>	-1	</reuseCount>
+    </script>
+    <kpi>
+      <mul>
+        <name>	crewHitChance	</name>
+        <value>	1.15	</value>
+      </mul>
+      <mul>
+        <name>	crewStunDuration	</name>
+        <value>	0.95	</value>
+      </mul>
+    </kpi>
+  </builtinLargeMedkit_wt>
+  <builtinHyperion_wt>
+    <id>	6012	</id>
+    <userString>	#white_tiger.artefacts.extend:builtinHyperion_wt/name	</userString>
+    <description>	#white_tiger.artefacts.extend:builtinHyperion_wt/descr	</description>
+    <shortDescriptionSpecial>	#white_tiger.artefacts.extend:builtinHyperion_wt/short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#white_tiger.artefacts.extend:builtinHyperion_wt/long_special	</longDescriptionSpecial>
+    <icon>	wt_ability_hyperion 0 0	</icon>
+    <soundNotification>	wt_ability	</soundNotification>
+    <soundPressedReady>	ev_white_tiger_ability_button	</soundPressedReady>
+    <soundPressedNotReady>	ev_white_tiger_ability_button_not_ready	</soundPressedNotReady>
+    <soundPressedCancel>	ev_wt_hyperion_reset	</soundPressedCancel>
+    <price>	0	</price>
+    <tags>	notForSale builtin trigger builtin_priority_4	</tags>
+    <type>	regular	</type>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <tags>	builtinHyperion_wt_user	</tags>
+        </vehicle>
+      </include>
+    </vehicleFilter>
+    <script>	white_tiger_common.items.white_tiger_artefacts.WTEquipment	  <reuseCount>	-1	</reuseCount>
+      <deploySeconds>	6	</deploySeconds>
+      <visualScript>
+        <common>
+          <params>
+            <HYPERION_RADIUS>	75.0	</HYPERION_RADIUS>
+          </params>
+        </common>
+        <client>
+          <plan>
+            <name>	abilities/hyperion_client	</name>
+            <params>
+              <areaVisual>	particles/Environment/event_white_tiger/player_tank/hyperion/Hyperion_Aiming_Circle.visual	</areaVisual>
+              <areaColor>	0xFFFFFF00	</areaColor>
+            </params>
+          </plan>
+        </client>
+        <server>
+          <plan>
+            <name>	abilities/hyperion	</name>
+            <params>
+              <HYPERION_RADIUS>	75.000000	</HYPERION_RADIUS>
+              <HYPERION_CHARGE_FACTOR>	0.016000	</HYPERION_CHARGE_FACTOR>
+              <HYPERION_CHARGE_MAX>	100.000000	</HYPERION_CHARGE_MAX>
+              <HYPERION_CHARHING_DELAY>	6	</HYPERION_CHARHING_DELAY>
+              <HYPERION_DAMAGE_PER_SHOT>	500.000000	</HYPERION_DAMAGE_PER_SHOT>
+              <HYPERION_SHOTS_AMOUNT>	4	</HYPERION_SHOTS_AMOUNT>
+              <SHOT_DURATION>	1.000000	</SHOT_DURATION>
+            </params>
+          </plan>
+        </server>
+      </visualScript>
+    </script>
+  </builtinHyperion_wt>
+</equipments.xml>

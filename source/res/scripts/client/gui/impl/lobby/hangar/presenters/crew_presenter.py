@@ -51,6 +51,7 @@ from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 from wg_async import wg_async, wg_await
 if typing.TYPE_CHECKING:
+    from gui.shared.gui_items.artefacts import BattleBooster
     from gui.shared.gui_items.Vehicle import Vehicle
     from frameworks.wulf import Array
 DOG = 'dog'
@@ -371,11 +372,13 @@ class CrewPresenter(ViewComponent[CrewModel]):
             lessMastered = self.__findLessMasteredTman()
             battleBoosterBonus = self.__calcVehicleBooster(vehicle)
             vehicleBonusDetails = self.__calcVehicleBonusDetails(vehicle)
-            vehicleCrewBoosterBonusDetails = self.__calcVehicleCrewBoosterBonusDetails(vehicle)
+            vehicleCrewBoosters = self.__getVehicleCrewBoosters(vehicle)
             optDeviceBonuses = self.__calcOptDeviceBonuses(vehicle)
             for _, tman in vehicle.crew:
                 if tman:
-                    quickTrainingEnabled = vehicle.crewIndices.get(tman.invID) == lessMastered and vehicle.isXPToTman
+                    idxInCrew = vehicle.crewIndices.get(tman.invID)
+                    quickTrainingEnabled = idxInCrew == lessMastered and vehicle.isXPToTman
+                    vehicleCrewBoosterBonusDetails = [ self.__createVehicleBonusDetail(name=booster.descriptor.iconName, bonusType=TankSetupConstants.CREW_BOOSTERS, bonus=100) for booster in vehicleCrewBoosters if tman.descriptor.validateSkillEquipment(vehicle.descriptor, idxInCrew, booster.descriptor) ]
                     tankman = self._createTankmanModel(tman, battleBoosterBonus, quickTrainingEnabled, vehicleBonusDetails, vehicleCrewBoosterBonusDetails, optDeviceBonuses)
                     crew.addViewModel(tankman)
 
@@ -392,12 +395,12 @@ class CrewPresenter(ViewComponent[CrewModel]):
             crew.invalidate()
             slots.invalidate()
 
-    def __calcVehicleCrewBoosterBonusDetails(self, vehicle):
+    def __getVehicleCrewBoosters(self, vehicle):
         if vehicle.consumables.layoutCapacity:
             basic = REQ_CRITERIA.VEHICLE.SUITABLE([vehicle], [GUI_ITEM_TYPE.EQUIPMENT])
             criteria = basic | ~REQ_CRITERIA.HIDDEN | ~REQ_CRITERIA.SECRET
-            battleBusters = self.__itemsCache.items.getItems(GUI_ITEM_TYPE.BATTLE_BOOSTER, criteria, nationID=vehicle.nationID).values()
-            return [ self.__createVehicleBonusDetail(name=battleBuster.descriptor.iconName, bonusType=TankSetupConstants.CREW_BOOSTERS, bonus=100) for battleBuster in battleBusters if battleBuster.getOverlayType(vehicle) == 'battleBoosterReplace' and battleBuster.isInstalled(vehicle) ]
+            battleBoosters = self.__itemsCache.items.getItems(GUI_ITEM_TYPE.BATTLE_BOOSTER, criteria, nationID=vehicle.nationID).values()
+            return [ battleBooster for battleBooster in battleBoosters if battleBooster.getOverlayType(vehicle) == 'battleBoosterReplace' and battleBooster.isInstalled(vehicle) ]
         return []
 
     def __calcVehicleBonusDetails(self, vehicle):

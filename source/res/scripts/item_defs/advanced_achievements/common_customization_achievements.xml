@@ -1,0 +1,136 @@
+<common_customization_achievements.xml>
+  <achievement>
+    <id>	1	</id>
+    <UI>
+      <type>	subcategory	</type>
+      <stringKey>	customization	</stringKey>
+      <background>	customization	</background>
+    </UI>
+    <stages>
+      <stage>
+        <value>	1	</value>
+        <points>	50	</points>
+      </stage>
+    </stages>
+    <conditions>
+      <requiredAchievementIDs>	2 3 4	</requiredAchievementIDs>
+    </conditions>
+  </achievement>
+  <achievement>
+    <id>	2	</id>
+    <UI>
+      <stringKey>	total_3D_style_count	</stringKey>
+      <background>	customization	</background>
+    </UI>
+    <stages>
+      <stage>
+        <value>	1	</value>
+        <points>	10	</points>
+      </stage>
+      <stage>
+        <value>	5	</value>
+        <points>	10	</points>
+      </stage>
+      <stage>
+        <value>	10	</value>
+        <points>	10	</points>
+      </stage>
+      <stage>
+        <value>	15	</value>
+        <points>	10	</points>
+      </stage>
+      <stage>
+        <value>	20	</value>
+        <points>	10	</points>
+      </stage>
+      <stage>
+        <value>	25	</value>
+        <points>	10	</points>
+      </stage>
+      <stage>
+        <value>	30	</value>
+        <points>	10	</points>
+      </stage>
+      <stage>
+        <value>	35	</value>
+        <points>	10	</points>
+      </stage>
+      <stage>
+        <value>	40	</value>
+        <points>	10	</points>
+      </stage>
+    </stages>
+    <conditions>
+      <customizationItemFilter>
+        <custTypes>	STYLE	</custTypes>
+        <tags>	c11n3D	</tags>
+      </customizationItemFilter>
+    </conditions>
+  </achievement>
+  <achievement>
+    <id>	3	</id>
+    <UI>
+      <stringKey>	total_2D_style_count	</stringKey>
+      <background>	customization	</background>
+    </UI>
+    <stages>
+      <stage>
+        <value>	1	</value>
+        <points>	10	</points>
+      </stage>
+      <stage>
+        <value>	5	</value>
+        <points>	10	</points>
+      </stage>
+      <stage>
+        <value>	10	</value>
+        <points>	10	</points>
+      </stage>
+      <stage>
+        <value>	25	</value>
+        <points>	10	</points>
+      </stage>
+      <stage>
+        <value>	50	</value>
+        <points>	10	</points>
+      </stage>
+      <stage>
+        <value>	100	</value>
+        <points>	10	</points>
+      </stage>
+    </stages>
+    <conditions>
+      <customizationItemFilter>
+        <custTypes>	STYLE	</custTypes>
+        <tags>	c11n2D	</tags>
+      </customizationItemFilter>
+    </conditions>
+  </achievement>
+  <achievement>
+    <id>	4	</id>
+    <UI>
+      <stringKey>	total_progressive_decals_count	</stringKey>
+      <background>	customization	</background>
+    </UI>
+    <stages>
+      <stage>
+        <value>	1	</value>
+        <points>	10	</points>
+      </stage>
+      <stage>
+        <value>	5	</value>
+        <points>	10	</points>
+      </stage>
+      <stage>
+        <value>	11	</value>
+        <points>	10	</points>
+      </stage>
+    </stages>
+    <conditions>
+      <customizationItemFilter>
+        <custTypes>	PROJECTION_DECAL	</custTypes>
+        <progressiveTypes>	progressive	</progressiveTypes>
+      </customizationItemFilter>
+    </conditions>
+  </achievement>
+</common_customization_achievements.xml>

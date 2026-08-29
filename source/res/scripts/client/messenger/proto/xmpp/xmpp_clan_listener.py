@@ -13,9 +13,12 @@ from messenger.proto.xmpp.entities import XMPPUserEntity
 from messenger.proto.xmpp.find_criteria import XmppClanChannelCriteria
 from messenger.proto.xmpp.gloox_wrapper import ClientHolder
 from messenger.proto.xmpp.xmpp_constants import XMPP_MUC_CHANNEL_TYPE
-from messenger.storage import storage_getter
+from messenger.storage import MessengerStorageDescriptor, ChannelsStorage, PlayerCtxStorage, UsersStorage
 
 class XmppClanListener(ClientHolder):
+    usersStorage = MessengerStorageDescriptor(UsersStorage)
+    channelsStorage = MessengerStorageDescriptor(ChannelsStorage)
+    playerCtx = MessengerStorageDescriptor(PlayerCtxStorage)
     __slots__ = ('__channelCriteria', '__clanChannel', '__clanDBID', '__clanAbbrev')
 
     def __init__(self):
@@ -24,18 +27,6 @@ class XmppClanListener(ClientHolder):
         self.__clanDBID = 0
         self.__clanAbbrev = ''
         return
-
-    @storage_getter('users')
-    def usersStorage(self):
-        return None
-
-    @storage_getter('playerCtx')
-    def playerCtx(self):
-        return None
-
-    @storage_getter('channels')
-    def channelsStorage(self):
-        return None
 
     def registerHandlers(self):
         g_messengerEvents.onPluginConnected += self.__onPluginConnected

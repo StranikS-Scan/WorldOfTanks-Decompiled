@@ -1,14 +1,14 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/game_loading/state_machine/states/components/progress_bar.py
 import typing
-from frameworks.state_machine import StateFlags
+from frameworks_common.state_machine import StateFlags
 import game_loading_bindings
 from gui.game_loading import loggers
 from gui.game_loading.state_machine.const import TickingMode
 from gui.game_loading.state_machine.states.base import BaseTickingState
 from gui.game_loading.state_machine.states.handlers.milestones import ProgressBarMilestonesHandler
 if typing.TYPE_CHECKING:
-    from frameworks.state_machine import StateEvent
+    from frameworks_common.state_machine import StateEvent
     from gui.game_loading.preferences import GameLoadingPreferences
     from gui.game_loading.state_machine.models import ProgressSettingsModel, LoadingMilestoneModel
 _logger = loggers.getStatesLogger()

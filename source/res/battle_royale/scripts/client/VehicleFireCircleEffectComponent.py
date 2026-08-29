@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: battle_royale/scripts/client/VehicleFireCircleEffectComponent.py
+from __future__ import absolute_import
 from typing import TYPE_CHECKING
 from battle_royale.gui.constants import BattleRoyaleEquipments
 from gui.battle_control.battle_constants import VEHICLE_VIEW_STATE

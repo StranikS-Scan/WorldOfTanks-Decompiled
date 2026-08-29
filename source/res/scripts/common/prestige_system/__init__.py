@@ -95,6 +95,7 @@ def computeLevelCost(levelCostArgs, levels):
             return [ int(levelCostBaseValue * coefficient ** int(level // frequency)) for level in levels ]
         if formulaType == 'linear':
             return [ int(levelCostBaseValue + coefficient * int(level // frequency)) for level in levels ]
+    return []
 
 
 def applyOverridePoints(prestigePointsDict, overridePoints, vehicles, defaultLevelCostArgs, newMaxLevel=None):

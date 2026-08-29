@@ -27,6 +27,7 @@ def getViewSettings():
     from comp7_core.gui.Scaleform.daapi.view.battle import indicators
     from comp7_core.gui.Scaleform.daapi.view.battle import full_stats
     from comp7_core.gui.Scaleform.daapi.view.battle import players_panel
+    from comp7_core.gui.Scaleform.daapi.view.battle import game_messages_panel
     from comp7_light.gui.Scaleform.daapi.view.battle import messages
     from comp7_light.gui.Scaleform.daapi.view.battle import comp7_light_battle_carousel
     from comp7_light.gui.Scaleform.daapi.view.battle import stats_exchange
@@ -39,7 +40,6 @@ def getViewSettings():
     from gui.Scaleform.daapi.view.battle.shared import battle_timers
     from gui.Scaleform.daapi.view.battle.shared import situation_indicators
     from gui.Scaleform.daapi.view.battle.shared import ribbons_panel
-    from gui.Scaleform.daapi.view.battle.shared import game_messages_panel
     from gui.Scaleform.daapi.view.battle.shared import postmortem_panel
     from gui.Scaleform.daapi.view.battle.shared.points_of_interest import poi_notification_panel
     from gui.Scaleform.framework import getSwfExtensionUrl
@@ -56,13 +56,13 @@ def getViewSettings():
      ComponentSettings(BATTLE_VIEW_ALIASES.BATTLE_END_WARNING_PANEL, battle_end_warning_panel.BattleEndWarningPanel, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.SITUATION_INDICATORS, situation_indicators.SituationIndicators, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.RIBBONS_PANEL, ribbons_panel.BattleRibbonsPanel, ScopeTemplates.DEFAULT_SCOPE),
-     ComponentSettings(BATTLE_VIEW_ALIASES.GAME_MESSAGES_PANEL, game_messages_panel.GameMessagesPanel, ScopeTemplates.DEFAULT_SCOPE),
+     ComponentSettings(BATTLE_VIEW_ALIASES.GAME_MESSAGES_PANEL, game_messages_panel.Comp7GameMessagesPanel, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.POINT_OF_INTEREST_NOTIFICATIONS_PANEL, poi_notification_panel.PointsOfInterestPanel, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.COMP7_TANK_CAROUSEL, comp7_light_battle_carousel.Comp7LightPrebattleTankCarousel, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.POSTMORTEM_PANEL, postmortem_panel.PostmortemPanel, ScopeTemplates.DEFAULT_SCOPE),
      GroupedViewSettings(BATTLE_VIEW_ALIASES.COMP7_TANK_CAROUSEL_FILTER_POPOVER, Comp7TankCarouselFilterPopover, 'filtersPopoverView.swf', WindowLayer.TOP_WINDOW, BATTLE_VIEW_ALIASES.COMP7_TANK_CAROUSEL_FILTER_POPOVER, BATTLE_VIEW_ALIASES.COMP7_TANK_CAROUSEL_FILTER_POPOVER, SETTINGS_WINDOW_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.FRAG_CORRELATION_BAR, frag_correlation_bar.FragCorrelationBar, ScopeTemplates.DEFAULT_SCOPE),
-     ComponentSettings(BATTLE_VIEW_ALIASES.COMP7_RECON_FLIGHT, indicators.ReconFlightIndicator, ScopeTemplates.DEFAULT_SCOPE),
+     ComponentSettings(BATTLE_VIEW_ALIASES.COMP7_SIXTH_SENSE_INDICATOR, indicators.Comp7SixthSenseIndicator, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.QUEST_PROGRESS_TOP_VIEW, quest_progress_top_view.QuestProgressTopView, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.PREBATTLE_AMMUNITION_PANEL, prebattle_ammunition_panel_inject.Comp7LightPrebattleAmmunitionPanelInject, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.BATTLE_STATISTIC_DATA_CONTROLLER, stats_exchange.Comp7LightStatisticsDataController, ScopeTemplates.DEFAULT_SCOPE),

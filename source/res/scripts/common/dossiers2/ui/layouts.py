@@ -68,7 +68,10 @@ PERSONAL_MISSIONS_GROUP = [_single('firstMerit'),
  _single('meritPM3'),
  _total('readyForBattleAssault'),
  _total('readyForBattleSniper'),
- _total('readyForBattleSupport')]
+ _total('readyForBattleSupport'),
+ _total('readyForBattleFossaAssault'),
+ _total('readyForBattleFossaSniper'),
+ _total('readyForBattleFossaSupport')]
 CHRISTMAS_QUESTS_GROUP = [_single('xmasTreeBronze'), _single('xmasTreeSilver'), _single('xmasTreeGold')]
 HE17_QUESTS_GROUP = [_single('HE17A1'), _single('HE17A2'), _single('HE17A3')]
 NY18_QUESTS_GROUP = [_single('NY18A1'), _single('NY18A2'), _single('NY18A3')]

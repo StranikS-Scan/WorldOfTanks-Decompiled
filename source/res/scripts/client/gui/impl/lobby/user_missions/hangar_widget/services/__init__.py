@@ -1,10 +1,14 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/user_missions/hangar_widget/services/__init__.py
-import Event
+from __future__ import absolute_import
+import typing
 from gui.prb_control.entities.listener import IGlobalListener
+if typing.TYPE_CHECKING:
+    from typing import List
+    from gui.impl.lobby.user_missions.hangar_widget.plugins import IUserMissionPlugin
 
 class IBattlePassService(IGlobalListener):
-    onBattlePassChanged = Event.Event()
+    onBattlePassChanged = None
 
     def startListening(self):
         raise NotImplementedError
@@ -20,7 +24,7 @@ class IBattlePassService(IGlobalListener):
 
 
 class IEventsService(IGlobalListener):
-    onEventsListChanged = Event.Event()
+    onEventsListChanged = None
 
     def startListening(self):
         raise NotImplementedError
@@ -46,7 +50,7 @@ class IEventsService(IGlobalListener):
 
 
 class IMissionsService(IGlobalListener):
-    onMissionsChanged = Event.Event()
+    onMissionsChanged = None
 
     def startListening(self):
         raise NotImplementedError
@@ -61,16 +65,57 @@ class IMissionsService(IGlobalListener):
         raise NotImplementedError
 
 
-class ICampaignService(IGlobalListener):
-    onEventsListChanged = Event.Event()
+class IPersonalMissionsService(IMissionsService):
+    onPersonalMissionsChanged = None
+    onWidgetQuestIDMarkedAsNew = None
+    onServicePMSyncCompleted = None
 
-    def startListening(self):
+    def clearWidgetQuestIDMarkedAsNew(self):
         raise NotImplementedError
 
-    def stopListening(self):
+    def setWidgetQuestIDMarkedAsNew(self, questID, doUpdateWidget=True):
         raise NotImplementedError
 
-    def getEntries(self):
+    def getWidgetQuestIDMarkedAsNew(self):
+        raise NotImplementedError
+
+
+class IMissionsContainerService(IGlobalListener):
+    onShowPlugin = None
+    onHidePlugin = None
+
+    def showPlugin(self, viewAlias):
+        raise NotImplementedError
+
+    def hidePlugin(self, viewAlias):
+        raise NotImplementedError
+
+    def getVisiblePlugins(self):
+        raise NotImplementedError
+
+    def isPluginVisible(self, viewAlias):
+        raise NotImplementedError
+
+    def getSelectedSlide(self, sliderId):
+        raise NotImplementedError
+
+    def onSlideChanged(self, selectedSlide):
+        raise NotImplementedError
+
+    def finalize(self):
+        raise NotImplementedError
+
+
+class IUserMissionWidgetService(object):
+    onVisibleGroupsChanged = None
+
+    def setGroupVisibility(self, groupName, isVisible):
+        raise NotImplementedError
+
+    def getVisibleGroups(self):
+        raise NotImplementedError
+
+    def isGroupVisible(self, groupName):
         raise NotImplementedError
 
     def finalize(self):

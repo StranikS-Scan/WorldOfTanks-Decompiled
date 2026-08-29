@@ -4,6 +4,7 @@ from __future__ import absolute_import
 import typing
 import constants
 from gui.impl.backport import BackportTooltipWindow, createTooltipData
+from gui.impl.lobby.user_missions.hangar_widget.presenters.base_child_presenter import UserMissionChildPresenter
 from gui.impl.pub.view_component import ViewComponent
 from gui.server_events import IEventsCache
 from gui.server_events.event_items import ServerEventAbstract
@@ -28,7 +29,7 @@ if typing.TYPE_CHECKING:
     from gui.server_events.parsers import BonusConditions
 _R_BACKPORT_TOOLTIP = R.views.common.tooltip_window.backport_tooltip_content.BackportTooltipContent()
 
-class QuestsCardPresenter(ViewComponent[QuestsViewModel]):
+class QuestsCardPresenter(UserMissionChildPresenter, ViewComponent[QuestsViewModel]):
     __questsCache = dependency.descriptor(ILSQuestsUICache)
     __eventsCache = dependency.descriptor(IEventsCache)
     __lsCtrl = dependency.descriptor(ILSController)

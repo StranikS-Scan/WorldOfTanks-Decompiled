@@ -97,5 +97,5 @@ def getReceivedTokensInfo(arenaUniqueID, battleResultsService=None):
 @dependency.replace_none_kwargs(eventsCache=IEventsCache)
 def isPMOperationAndMissionEnabled(quest, eventsCache=None):
     operationID = quest.getOperationID()
-    operation = eventsCache.getPersonalMissions().getAllOperations(PM_BRANCH.V2_BRANCHES).get(operationID)
+    operation = eventsCache.getPersonalMissions().getAllOperations(PM_BRANCH.WITHOUT_AWARD_LIST_BRANCHES).get(operationID)
     return not operation.isDisabled()

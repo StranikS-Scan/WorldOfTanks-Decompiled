@@ -8,16 +8,13 @@ from messenger.gui.interfaces import IControllerFactory
 from messenger.m_constants import BATTLE_CHANNEL
 from messenger.proto.bw_chat2 import find_criteria
 from messenger.proto.bw_chat2.wrappers import CHAT_TYPE
-from messenger.storage import storage_getter
+from messenger.storage import MessengerStorageDescriptor, ChannelsStorage
 from gui.shared.system_factory import registerBattleChanelController, collectBattleChanelController
 from helpers import dependency
 from skeletons.gui.battle_session import IBattleSessionProvider
 
 class LobbyControllersFactory(IControllerFactory):
-
-    @storage_getter('channels')
-    def channelsStorage(self):
-        return None
+    channelsStorage = MessengerStorageDescriptor(ChannelsStorage)
 
     def init(self):
         controllers = []
@@ -49,10 +46,7 @@ for guiType in ARENA_GUI_TYPE.EPIC_RANGE:
     registerBattleChanelController(BATTLE_CHANNEL.TEAM, guiType, battle_controllers.EpicTeamChannelController)
 
 class BattleControllersFactory(IControllerFactory):
-
-    @storage_getter('channels')
-    def channelsStorage(self):
-        return None
+    channelsStorage = MessengerStorageDescriptor(ChannelsStorage)
 
     def init(self):
         controllers = []

@@ -26,3 +26,10 @@ class VehicleDamageLoggerComponent(object):
     def __init__(self):
         self.topMostParentName = None
         return
+
+
+@registerComponent
+class VehicleSequenceParamsAttachedComponent(object):
+    category = 'Vehicle'
+    editorTitle = 'Vehicle Sequence Params Attached Component'
+    domain = CGF.Domain.All

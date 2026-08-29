@@ -6,7 +6,7 @@ from gui.impl.backport import BackportTooltipWindow, TooltipData
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.battle_results.progression.weekly_quest_progress_model import WeeklyQuestProgressModel
 from gui.impl.gen.view_models.views.lobby.battle_results.progression.weekly_quests_progress_model import WeeklyQuestsProgressModel
-from gui.impl.lobby.battle_results.missions_progress.rewards_helper import packBonusesWithActualTokensConvertion
+from gui.impl.lobby.battle_results.missions_progress.rewards_helper import packBonusesWithTokensConvertionIfCompleted
 from gui.impl.lobby.battle_results.missions_progress.progression_presenter_interface import IProgressionCategoryPresenter
 from gui.impl.lobby.common.tooltips.extended_text_tooltip import ExtendedTextTooltip
 from gui.impl.lobby.tooltips.additional_rewards_tooltip import AdditionalRewardsTooltip
@@ -120,19 +120,19 @@ class WeeklyMissionsProgressPresenter(ViewComponent[WeeklyQuestsProgressModel], 
         model.setNavigationEnabled(True)
         if not reset:
             for cond in data.bonusCond.getConditions().items:
-                if isinstance(cond, conditions._Cumulativable):
+                if isinstance(cond, conditions.Cumulativable):
                     for curProg, totalProg, diff, _ in cond.getProgressPerGroup(pCur, pPrev, True).values():
                         model.setCurrentProgress(curProg)
                         model.setEarned(diff)
                         model.setIsCompleted(complete)
                         model.setTotalProgress(totalProg)
 
-        self._packBonuses(pCur, model, data, questTokensConvertion, questTokensCount)
+        self._packBonuses(pCur, model, data, questTokensConvertion, questTokensCount, complete)
         return model
 
-    def _packBonuses(self, pCur, model, data, questTokensConvertion, questTokensCount):
+    def _packBonuses(self, pCur, model, data, questTokensConvertion, questTokensCount, complete):
         bonusPacker = getWeeklyMissionsBonusPacker()
-        packBonusesWithActualTokensConvertion(pCur, model, data, questTokensConvertion, questTokensCount, self.__tooltipData[data.getID()], bonusPacker)
+        packBonusesWithTokensConvertionIfCompleted(pCur, model, data, questTokensConvertion, questTokensCount, self.__tooltipData[data.getID()], bonusPacker, complete)
         self.__bonusesModel[data.getID()] = model.getBonuses()
 
     def __getTooltipData(self, event):

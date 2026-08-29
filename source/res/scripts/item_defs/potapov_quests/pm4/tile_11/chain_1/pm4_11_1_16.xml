@@ -1,0 +1,68 @@
+<pm4_11_1_16.xml>
+  <quests>
+    <potapovQuest>
+      <enabled>	true	</enabled>
+      <id>	pm4_11_1_16_main	</id>
+      <serverOnly>	true	</serverOnly>
+      <conditions>
+        <postBattle>
+          <and>
+            <results>
+              <key>	damageDealt	</key>
+              <max>	1	</max>
+            </results>
+            <achievements>	achievements:steelwall	</achievements>
+          </and>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <credits>	200000	</credits>
+        <freeXP>	1750	</freeXP>
+        <customizations>
+          <item>
+            <value>	1	</value>
+            <custType>	attachment	</custType>
+            <id>	1241	</id>
+          </item>
+        </customizations>
+        <token>
+          <id>	token:pt:final:s4:t11:main	</id>
+          <expires>	01.01.2050 00:01	</expires>
+          <count>	1	</count>
+          <limit>	63	</limit>
+        </token>
+      </bonus>
+    </potapovQuest>
+    <potapovQuest>
+      <enabled>	true	</enabled>
+      <id>	pm4_11_1_16_add	</id>
+      <serverOnly>	true	</serverOnly>
+      <conditions>
+        <preBattle>
+          <account>
+            <token>
+              <id>	token:pt:s4:t11:finished:base	</id>
+              <equal>	0	</equal>
+            </token>
+          </account>
+        </preBattle>
+        <postBattle>
+          <and>
+            <results>
+              <key>	damageDealt	</key>
+              <max>	1	</max>
+            </results>
+            <achievements>	achievements:steelwall	</achievements>
+          </and>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <token>
+          <id>	pm4:11:points	</id>
+          <expires>	01.01.2050 00:01	</expires>
+          <count>	500	</count>
+        </token>
+      </bonus>
+    </potapovQuest>
+  </quests>
+</pm4_11_1_16.xml>

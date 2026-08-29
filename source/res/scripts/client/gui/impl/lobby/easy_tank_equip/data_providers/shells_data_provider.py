@@ -18,10 +18,11 @@ if TYPE_CHECKING:
 
 class ShellsPresetSlotInfo(object):
 
-    def __init__(self, shell, info, slotIdx):
+    def __init__(self, shell, info, slotIdx, mechanics):
         self.shell = shell
         self.slotIdx = slotIdx
         self.info = info
+        self.mechanics = mechanics
 
 
 class ShellsPresetInfo(PresetInfo):
@@ -102,7 +103,7 @@ class ShellsDataProvider(BaseDataProvider):
         return ShellsPresetInfo(installed=self.__isShellsPresetInstalled(shells), storedItemsCount=storedItemsCount, installedItemsCount=installedItemsCount, itemPrice=itemPrice, presetType=presetType, items=presetItems)
 
     def __getShellsPresetItems(self, shells):
-        return [ ShellsPresetSlotInfo(shell=shell, info=self.__getSlotInfo(shell), slotIdx=slotIdx) for slotIdx, shell in enumerate(shells) ]
+        return [ ShellsPresetSlotInfo(shell=shell, info=self.__getSlotInfo(shell), slotIdx=slotIdx, mechanics=self.__getMechanics(shell)) for slotIdx, shell in enumerate(shells) ]
 
     def __getSlotInfo(self, shell):
         shellOnVehicleCount = max((item.count for item in self.vehicle.shells.setupLayouts if item == shell))
@@ -132,6 +133,10 @@ class ShellsDataProvider(BaseDataProvider):
             advancedShells[0].count -= diff
             advancedShells[1].count += diff
             return self.__sortPresetByAnother(advancedShells, self.__installedShells)
+
+    def __getMechanics(self, shell):
+        vehicle = g_currentVehicle.item
+        return [ item for item in shell.getShellMechanicItems(vehicle) if not item.isHidden and item.priority >= 1 ]
 
     @staticmethod
     def __sortPresetByAnother(shells, sampleShells):

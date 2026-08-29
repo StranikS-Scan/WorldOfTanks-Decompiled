@@ -7,7 +7,7 @@
     <radioman></radioman>
   </crew>
   <supplySlots>	3 1 1 6 6 6 7 8 8 8	</supplySlots>
-  <postProgressionTree>	role_LT_wheeled	</postProgressionTree>
+  <postProgressionTree>	role_LT_scout	</postProgressionTree>
   <customRoleSlotOptions>	2 4	</customRoleSlotOptions>
   <speedLimits>
     <forward>	70	</forward>
@@ -56,7 +56,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	8131	</weight>
-    <maxHealth>	1120	</maxHealth>
+    <maxHealth>	1200	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	260	</maxHealth>
       <maxRegenHealth>	180	</maxRegenHealth>
@@ -1043,14 +1043,14 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	4000	</weight>
-      <maxHealth>	280	</maxHealth>
+      <maxHealth>	300	</maxHealth>
       <rotationSpeed>	66	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	150	</maxHealth>
         <maxRegenHealth>	75	</maxRegenHealth>
         <repairCost>	1.0	</repairCost>
       </turretRotatorHealth>
-      <circularVisionRadius>	340	</circularVisionRadius>
+      <circularVisionRadius>	350	</circularVisionRadius>
       <surveyingDeviceHealth>
         <maxHealth>	110	</maxHealth>
         <maxRegenHealth>	55	</maxRegenHealth>
@@ -1186,6 +1186,7 @@
           <effects>	shot_large_mb	</effects>
           <reloadEffect>	reload85_107	</reloadEffect>
           <edgeByVisualModel>	false	</edgeByVisualModel>
+          <muzzleBrake>	HORIZONTAL	</muzzleBrake>
           <camouflage>
             <tiling>	0.68 0.68 0.000000 0.000000	</tiling>
             <density>	150.02 148.15	</density>

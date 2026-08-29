@@ -5,7 +5,6 @@ from fun_random.gui.feature.util.fun_mixins import FunProgressionWatcher
 from fun_random.gui.impl.lobby.hangar.presenters.fun_random_progression_presenter import FunRandomProgressionPresenter
 from fun_random.gui.impl.lobby.hangar.presenters.fun_random_progression_quests_presenter import FunRandomProgressionQuestsPresenter
 from gui.impl.gen import R
-from gui.impl.gen.view_models.views.lobby.hangar.user_missions_widget_model import UserMissionsWidgetModel
 from gui.impl.lobby.hangar.presenters.user_missions_presenter import UserMissionsPresenter
 from gui.impl.lobby.user_missions.hangar_widget.presenters.battle_pass_presenter import BattlePassPresenter
 from gui.impl.lobby.user_missions.hangar_widget.presenters.quests_presenter import QuestsPresenter
@@ -25,18 +24,3 @@ class FunRandomUserMissionsPresenter(UserMissionsPresenter, FunProgressionWatche
     def _getChildComponents(self):
         return {R.aliases.fun_random.shared.ProgressionEntryPoint(): FunRandomProgressionPresenter,
          R.aliases.fun_random.shared.ProgressionQuests(): FunRandomProgressionQuestsPresenter}
-
-    def _onLoading(self, *args, **kwargs):
-        super(FunRandomUserMissionsPresenter, self)._onLoading(*args, **kwargs)
-        self.startProgressionListening(self.__invalidate)
-
-    def _finalize(self):
-        self.stopProgressionListening(self.__invalidate)
-        super(FunRandomUserMissionsPresenter, self)._finalize()
-
-    def _updateEntryPoints(self, vm):
-        vm.setIsAnyEntryPointAvailable(self.getActiveProgression() is not None)
-        return
-
-    def __invalidate(self, *_):
-        self._updateEntryPoints(self.viewModel)

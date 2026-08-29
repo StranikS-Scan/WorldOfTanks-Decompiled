@@ -13,8 +13,9 @@ from gui.impl import backport
 from gui.impl.gen import R
 from gui.battle_control.battle_constants import COUNTDOWN_STATE
 from gui.battle_control.controllers.period_ctrl import IAbstractPeriodView
-from gui.shared import events, EVENT_BUS_SCOPE
+from gui.shared import EVENT_BUS_SCOPE, events
 from helpers import dependency
+from skeletons.gameplay import IGameplayLogic, GameplayStateID
 from skeletons.gui.battle_session import IBattleSessionProvider
 from gui.shared.utils.key_mapping import getReadableKey
 
@@ -30,11 +31,13 @@ _BATTLE_END_TIME = 0
 _logger = logging.getLogger(__name__)
 
 class PreBattleTimer(PrebattleTimerMeta):
+    __gameplayLogic = dependency.descriptor(IGameplayLogic)
 
     def __init__(self):
         self.__isPMBattleProgressEnabled = False
         self.__isRankedBattle = False
         self.__sounds = {}
+        self.__displayWinCondition = False
         super(PreBattleTimer, self).__init__()
 
     def _populate(self):
@@ -59,9 +62,18 @@ class PreBattleTimer(PrebattleTimerMeta):
     def onHideInfo(self):
         self.__callWWISE(_WWISE_EVENTS.FLAG_DISAPPEAR)
 
+    def updateBattleCtx(self, battleCtx):
+        self._battleTypeStr = battleCtx.getArenaDescriptionString(isInBattle=False)
+        self.as_setMessageS(self._getMessage())
+        if self.__displayWinCondition:
+            self.as_setWinConditionTextS(self._getWinConditionText(battleCtx))
+
+    def _getWinConditionText(self, battleCtx):
+        return battleCtx.getArenaWinString()
+
     def _onPersonalQuestConditionsUpdate(self, *args):
         questProgress = self.sessionProvider.shared.questProgress
-        if questProgress.hasQuestsToPerform():
+        if questProgress.hasQuestsToPerform() and self.__displayWinCondition:
             self.as_addInfoS(PREBATTLE_TIMER.QP_ANIM_FLAG_LINKAGE, questProgress.getQuestShortInfoData())
 
     def __onMappingChanged(self, *args):
@@ -92,9 +104,28 @@ class PreBattleTimer(PrebattleTimerMeta):
         super(PreBattleTimer, self)._dispose()
         return
 
+    def _onShowInfo(self, _=None, __=None):
+        pbhCtrl = self.sessionProvider.dynamic.prebattleHighlightsController
+        pbhShowing = pbhCtrl is not None and pbhCtrl.displayingHighlights
+        self.__displayWinCondition = not pbhShowing
+        battleCtx = self.sessionProvider.getCtx()
+        if battleCtx:
+            self.as_setWinConditionTextS(self._getWinConditionText(battleCtx))
+        self._onPersonalQuestConditionsUpdate()
+        self.__onMappingChanged()
+        self.as_showInfoS()
+        return
+
+    def _onPrebattleHighlightsStart(self, _=None):
+        super(PreBattleTimer, self)._onPrebattleHighlightsStart()
+        self.__displayWinCondition = False
+        self.as_setWinConditionTextS('')
+        self.as_setInfoHintS('')
+        self.__gameplayLogic.addOneshotObserver([GameplayStateID.PREBATTLE], self, enterFn=PreBattleTimer._onShowInfo)
+
     def __handleBattleLoading(self, event):
         if not event.ctx['isShown']:
-            self.as_showInfoS()
+            self._onShowInfo()
 
 
 class BattleTimer(BattleTimerMeta, IAbstractPeriodView):

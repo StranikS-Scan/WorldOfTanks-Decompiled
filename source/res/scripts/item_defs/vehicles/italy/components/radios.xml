@@ -1,4 +1,5 @@
 <radios.xml>
+  <xmlns:xmlref>	http://bwt/xmlref	</xmlns:xmlref>
   <ids>
     <R528>	0	</R528>
     <R_F_C_R>	1	</R_F_C_R>
@@ -27,6 +28,7 @@
     <SEM_24C>	25	</SEM_24C>
     <RV_4B>	26	</RV_4B>
     <RV_4C>	27	</RV_4C>
+    <SEM_25_71>	28	</SEM_25_71>
     <RV_4_213_V_7x7>	501	</RV_4_213_V_7x7>
     <Development_Radio>	65000	</Development_Radio>
   </ids>
@@ -312,6 +314,18 @@
       <maxRegenHealth>	115	</maxRegenHealth>
       <repairCost>	3.5	</repairCost>
     </SEM_24C>
+    <SEM_25_71>
+      <userString>	#italy_vehicles:SEM_25_71	</userString>
+      <tags></tags>
+      <level>	11	</level>
+      <price>	80000	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	100	</weight>
+      <distance>	104	</distance>
+      <maxHealth>	250	</maxHealth>
+      <maxRegenHealth>	125	</maxRegenHealth>
+      <repairCost>	4	</repairCost>
+    </SEM_25_71>
     <Selex_STR_70>
       <userString>	#italy_vehicles:Selex_STR_70	</userString>
       <tags></tags>

@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: battle_royale/scripts/client/battle_royale/skeletons/game_controller.py
+from __future__ import absolute_import
 import typing
 from skeletons.gui.game_control import IGameController
 if typing.TYPE_CHECKING:

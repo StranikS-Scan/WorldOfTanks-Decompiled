@@ -3,7 +3,7 @@
 from __future__ import absolute_import
 from enum import Enum
 import BigWorld
-from frameworks.state_machine import StateFlags
+from frameworks_common.state_machine import StateFlags
 from gui.Scaleform.daapi.view.battle.pve_base.base.state_machine.states import BaseState, BaseTimerState
 from math_common import round_py2_style
 from pve_battle_hud import SecondaryObjectiveState

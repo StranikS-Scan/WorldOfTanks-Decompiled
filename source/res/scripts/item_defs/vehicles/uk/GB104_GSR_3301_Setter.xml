@@ -6,9 +6,9 @@
     <gunner>	loader	</gunner>
   </crew>
   <supplySlots>	3 1 1 6 6 6 7 8 8 8	</supplySlots>
-  <postProgressionTree>	role_LT_universal	</postProgressionTree>
+  <postProgressionTree>	role_LT_scout	</postProgressionTree>
   <speedLimits>
-    <forward>	63	</forward>
+    <forward>	66	</forward>
     <backward>	23	</backward>
   </speedLimits>
   <invisibility>
@@ -3334,6 +3334,7 @@
             </customizableVehicleAreas>
           </customization>
           <shotOffset>	0.069088 -0.001264 0.000000	</shotOffset>
+          <muzzleBrake>	RADIAL	</muzzleBrake>
           <camouflage>
             <tiling>	1 0.5 0.000000 0.000000	</tiling>
             <density>	110.289 109.889	</density>
@@ -3869,11 +3870,11 @@
       <engines>
         <Cummins_BTA_5_9>
           <smplEnginePower>	200	</smplEnginePower>
-          <smplFwMaxSpeed>	63	</smplFwMaxSpeed>
+          <smplFwMaxSpeed>	66	</smplFwMaxSpeed>
         </Cummins_BTA_5_9>
         <Jaguar_4_2_XK6>
           <smplEnginePower>	220	</smplEnginePower>
-          <smplFwMaxSpeed>	63	</smplFwMaxSpeed>
+          <smplFwMaxSpeed>	66	</smplFwMaxSpeed>
         </Jaguar_4_2_XK6>
       </engines>
       <chassis>

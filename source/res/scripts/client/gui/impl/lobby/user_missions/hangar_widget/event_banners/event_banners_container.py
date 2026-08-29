@@ -1,28 +1,27 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/user_missions/hangar_widget/event_banners/event_banners_container.py
+from __future__ import absolute_import
 import typing
 import Event
 from soft_exception import SoftException
 if typing.TYPE_CHECKING:
     from typing import Dict, Type
-    from base_event_banner import BaseEventBanner
-
-class _Singleton(type):
-    __instance = None
-
-    def __call__(cls, *args, **kwargs):
-        if cls.__instance is None:
-            cls.__instance = super(_Singleton, cls).__call__(*args, **kwargs)
-        return cls.__instance
-
+    from gui.impl.lobby.user_missions.hangar_widget.event_banners.base_event_banner import BaseEventBanner
 
 class EventBannersContainer(object):
-    __metaclass__ = _Singleton
-    __slots__ = ('__eventsMap', 'onBannerUpdate')
+    _instance = None
+
+    def __new__(cls, *args, **kwargs):
+        if cls._instance is None:
+            cls._instance = super(EventBannersContainer, cls).__new__(cls)
+        return cls._instance
 
     def __init__(self):
-        self.onBannerUpdate = Event.Event()
+        if getattr(self, '_initialized', False):
+            return
         self.__eventsMap = {}
+        self.onBannerUpdate = Event.Event()
+        self._initialized = True
 
     @property
     def events(self):

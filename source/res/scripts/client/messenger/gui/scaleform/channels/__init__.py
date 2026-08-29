@@ -8,17 +8,14 @@ from messenger.gui.interfaces import IControllersCollection
 from messenger.m_constants import PROTO_TYPE, LAZY_CHANNEL
 from messenger.proto import XMPP_MUC_CHANNEL_TYPE
 from messenger.proto.events import g_messengerEvents
-from messenger.storage import storage_getter
+from messenger.storage import MessengerStorageDescriptor, ChannelsStorage
 
 class ControllersCollection(IControllersCollection):
+    channelsStorage = MessengerStorageDescriptor(ChannelsStorage)
 
     def __init__(self, factories):
         self._factories = factories
         self._controllers = {}
-
-    @storage_getter('channels')
-    def channelsStorage(self):
-        return None
 
     def init(self):
         self._addListeners()

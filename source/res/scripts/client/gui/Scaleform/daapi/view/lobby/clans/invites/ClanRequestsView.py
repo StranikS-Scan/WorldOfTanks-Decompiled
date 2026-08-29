@@ -178,11 +178,12 @@ class RequestDataProvider(ClanInvitesAbstractDataProvider):
     def _makeRequestTooltip(self, status, date, user=None):
         if status == CLAN_INVITE_STATES.ACCEPTED:
             return text_styles.concatStylesToMultiLine(text_styles.standard(_ms(CLANS.CLANINVITESWINDOW_TOOLTIPS_REQUEST_REQUESTACCEPTED)), text_styles.main(date), text_styles.main(''), text_styles.standard(_ms(CLANS.CLANINVITESWINDOW_TOOLTIPS_REQUEST_BYUSER)), text_styles.stats(user))
-        if status in (CLAN_INVITE_STATES.DECLINED, CLAN_INVITE_STATES.DECLINED_RESENT):
+        elif status in (CLAN_INVITE_STATES.DECLINED, CLAN_INVITE_STATES.DECLINED_RESENT):
             return text_styles.concatStylesToMultiLine(text_styles.standard(_ms(CLANS.CLANINVITESWINDOW_TOOLTIPS_REQUEST_REQUESTDECLINED)), text_styles.main(date), text_styles.main(''), text_styles.standard(_ms(CLANS.CLANINVITESWINDOW_TOOLTIPS_REQUEST_BYUSER)), text_styles.stats(user))
-        if status in (CLAN_INVITE_STATES.EXPIRED, CLAN_INVITE_STATES.EXPIRED_RESENT):
+        elif status in (CLAN_INVITE_STATES.EXPIRED, CLAN_INVITE_STATES.EXPIRED_RESENT):
             return text_styles.concatStylesToMultiLine(text_styles.standard(_ms(CLANS.CLANINVITESWINDOW_TOOLTIPS_REQUEST_REQUESTEXPIRED)), text_styles.main(date))
-        return text_styles.concatStylesToMultiLine(text_styles.standard(_ms(CLANS.CLANINVITESWINDOW_TOOLTIPS_REQUEST_REQUESTSENT)), text_styles.main(date)) if status == CLAN_INVITE_STATES.ACTIVE else None
+        else:
+            return text_styles.concatStylesToMultiLine(text_styles.standard(_ms(CLANS.CLANINVITESWINDOW_TOOLTIPS_REQUEST_REQUESTSENT)), text_styles.main(date)) if status == CLAN_INVITE_STATES.ACTIVE else None
 
     def __buildActionsSection(self, accountDbId, inviteStatus):
         acceptButtonEnabled = False

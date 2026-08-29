@@ -20,7 +20,7 @@ from gui.shared.view_helpers import UsersInfoHelper
 from gui.shared.utils.functions import makeTooltip
 from helpers import time_utils
 from helpers import dependency
-from messenger.storage import storage_getter
+from messenger.storage import UsersStorage, MessengerStorageDescriptor
 from skeletons.gui.app_loader import IAppLoader
 from skeletons.gui.game_control import IExternalLinksController
 from skeletons.gui.goodies import IGoodiesCache
@@ -137,6 +137,7 @@ class UtilWebApiMixin(object):
     goodiesCache = dependency.descriptor(IGoodiesCache)
     _webCtrl = dependency.descriptor(IWebController)
     _lnkCtrl = dependency.descriptor(IExternalLinksController)
+    usersStorage = MessengerStorageDescriptor(UsersStorage)
 
     def __init__(self):
         super(UtilWebApiMixin, self).__init__()
@@ -190,7 +191,7 @@ class UtilWebApiMixin(object):
              achievement.getBlock(),
              cmd.itemId,
              isRareAchievement(achievement)]
-        self.__getTooltipMgr().onCreateTypedTooltip(tooltipType, args, 'INFO')
+        self._getTooltipMgr().onCreateTypedTooltip(tooltipType, args, 'INFO')
 
     @w2c(_ShowItemTooltipSchema, 'show_item_tooltip')
     def showItemTooltip(self, cmd):
@@ -203,27 +204,30 @@ class UtilWebApiMixin(object):
             itemId = getCDFromId(itemType=cmd.type, itemId=cmd.id)
         rawItem = ItemPackEntry(type=itemType, id=itemId, count=cmd.count or 1, extra=cmd.extra or {})
         item = lookupItem(rawItem, self.itemsCache, self.goodiesCache)
-        showItemTooltip(self.__getTooltipMgr(), rawItem, item)
+        showItemTooltip(self._getTooltipMgr(), rawItem, item)
 
     @w2c(_ShowAwardsTooltipSchema, 'show_awards_tooltip')
     def showAwardsTooltip(self, cmd):
-        showAwardsTooltip(self.__getTooltipMgr(), cmd.type, cmd.data)
+        showAwardsTooltip(self._getTooltipMgr(), cmd.type, cmd.data)
 
     @w2c(_ShowCustomTooltipSchema, 'show_custom_tooltip')
     def showCustomTooltip(self, cmd):
-        self.__getTooltipMgr().onCreateComplexTooltip(makeTooltip(header=cmd.header, body=cmd.body), 'INFO')
+        self._getTooltipMgr().onCreateComplexTooltip(makeTooltip(header=cmd.header, body=cmd.body), 'INFO')
 
     @w2c(_ShowSimpleTooltipSchema, 'show_simple_tooltip')
     def showSimpleTooltip(self, cmd):
-        self.__getTooltipMgr().onCreateComplexTooltip(makeTooltip(body=cmd.body), 'INFO')
+        self._getTooltipMgr().onCreateComplexTooltip(makeTooltip(body=cmd.body), 'INFO')
 
     @w2c(W2CSchema, 'hide_tooltip')
     def hideToolTip(self, _):
-        self.__getTooltipMgr().hide()
+        self._getTooltipMgr().hide()
 
     @w2c(W2CSchema, 'hide_window_tooltip')
     def hideWulfToolTip(self, _):
-        self.__getTooltipMgr().onHideTooltip('')
+        self._hideWulfToolTip()
+
+    def _hideWulfToolTip(self):
+        self._getTooltipMgr().onHideTooltip('')
 
     @w2c(_ShowAdditionalRewardsTooltipSchema, 'show_additional_rewards_tooltip')
     def showAdditionalRewardsTooltip(self, cmd):
@@ -231,11 +235,11 @@ class UtilWebApiMixin(object):
         for key, value in cmd.rewards.iteritems():
             bonuses.extend(getNonQuestBonuses(key, value))
 
-        self.__getTooltipMgr().onCreateWulfTooltip(TC.ADDITIONAL_REWARDS, [bonuses], cmd.x, cmd.y)
+        self._getTooltipMgr().onCreateWulfTooltip(TC.ADDITIONAL_REWARDS, [bonuses], cmd.x, cmd.y)
 
     @w2c(_ShowCollectionItemTooltipSchema, 'show_collection_item_tooltip')
     def showCollectionItemTooltip(self, cmd):
-        self.__getTooltipMgr().onCreateWulfTooltip(TC.COLLECTION_ITEM, [cmd.cd, False], cmd.x, cmd.y)
+        self._getTooltipMgr().onCreateWulfTooltip(TC.COLLECTION_ITEM, [cmd.cd, False], cmd.x, cmd.y)
 
     @w2c(W2CSchema, 'server_timestamp')
     def getCurrentLocalServerTimestamp(self, _):
@@ -260,10 +264,6 @@ class UtilWebApiMixin(object):
         else:
             yield {'error': self.__getErrorResponse(response.data, 'Unable to obtain account attrs.')}
 
-    @storage_getter('users')
-    def usersStorage(self):
-        return None
-
     @w2c(_ChatAvailabilitySchema, 'check_if_chat_available')
     def checkIfChatAvailable(self, cmd):
         receiverId = cmd.receiver_id
@@ -287,7 +287,7 @@ class UtilWebApiMixin(object):
         result = canInstallStyle(cmd.style_id)
         return {'can_install': result.canInstall}
 
-    def __getTooltipMgr(self):
+    def _getTooltipMgr(self):
         appLoader = dependency.instance(IAppLoader)
         return appLoader.getApp().getToolTipMgr()
 

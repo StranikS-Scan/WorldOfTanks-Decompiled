@@ -11,7 +11,7 @@ from BWUtil import AsyncReturn
 from ClientSelectableCameraObject import ClientSelectableCameraObject
 from CurrentVehicle import g_currentVehicle, g_currentPreviewVehicle
 from WeakMethod import WeakMethodProxy
-from frameworks.state_machine import StateFlags, visitor
+from frameworks_common.state_machine import StateFlags, visitor
 from gui.Scaleform.Waiting import Waiting
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.framework import ScopeTemplates

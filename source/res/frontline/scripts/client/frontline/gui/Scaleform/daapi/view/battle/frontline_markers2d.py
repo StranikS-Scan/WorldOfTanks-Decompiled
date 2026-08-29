@@ -974,6 +974,8 @@ class SectorWarningPlugin(plugins.MarkerPlugin):
         elif direction == self.Z_DIR:
             clampMatrix.max = Vector3(edgeStart[0], 10000, max(edgeStart[2], edgeEnd[2]))
             clampMatrix.min = Vector3(edgeStart[0], -10000, min(edgeStart[2], edgeEnd[2]))
+        else:
+            raise AssertionError
         return terrainMp
 
 

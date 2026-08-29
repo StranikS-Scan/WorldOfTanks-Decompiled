@@ -2,7 +2,7 @@
 # Embedded file name: scripts/common/maps_training_common/helpers.py
 from __future__ import absolute_import
 from future.utils import listvalues, viewitems
-from bonus_readers import SUPPORTED_BONUSES_IDS, SUPPORTED_BONUSES_NAMES
+import bonus_readers
 from constants import VEHICLE_CLASS_INDICES, VEHICLE_CLASSES, MAPS_REWARDS_INDEX
 from maps_training_common.maps_training_constants import PROGRESS_DATA_MASK, VEHICLE_TYPE, MAX_SCENARIO_PROGRESS
 
@@ -54,13 +54,14 @@ def unpackMapsTrainingScenarios(scenarios):
 
 
 def packMapsTrainingRewards(rewards):
+    supportedBonusIds, _ = bonus_readers.getSupportedBonusesIdsNames()
     out = [ [] for _ in range(len(rewards)) ]
     for stageName, stageRewards in viewitems(rewards):
         stageOut = []
         for rewardName, rewardData in viewitems(stageRewards):
-            rewardIndex = SUPPORTED_BONUSES_IDS.get(rewardName)
+            rewardIndex = supportedBonusIds.get(rewardName)
             if rewardIndex is None and rewardName == 'items':
-                rewardIndex = SUPPORTED_BONUSES_IDS['item']
+                rewardIndex = supportedBonusIds.get('item')
                 rewardData = [ (rewardID, rewardData[rewardID]) for rewardID in sorted(rewardData) ]
             if rewardIndex is not None:
                 stageOut.append((rewardIndex, rewardData))
@@ -72,12 +73,13 @@ def packMapsTrainingRewards(rewards):
 
 def unpackMapsTrainingRewards(rewards):
     out = {}
+    supportedBonusIds, supportedBonusNames = bonus_readers.getSupportedBonusesIdsNames()
     for stageIndex, stageRewards in enumerate(rewards):
         stageName = list(MAPS_REWARDS_INDEX)[listvalues(MAPS_REWARDS_INDEX).index(stageIndex)]
         out[stageName] = stageOut = {}
         for rewardIndex, rewardData in stageRewards:
-            rewardName = SUPPORTED_BONUSES_NAMES[rewardIndex]
-            if rewardIndex == SUPPORTED_BONUSES_IDS['item']:
+            rewardName = supportedBonusNames[rewardIndex]
+            if rewardIndex == supportedBonusIds['item']:
                 rewardName = 'items'
                 rewardData = dict(rewardData)
             stageOut[rewardName] = rewardData

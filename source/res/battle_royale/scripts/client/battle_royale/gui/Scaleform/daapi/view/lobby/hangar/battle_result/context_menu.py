@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: battle_royale/scripts/client/battle_royale/gui/Scaleform/daapi/view/lobby/hangar/battle_result/context_menu.py
+from __future__ import absolute_import
 from stats_params import BATTLE_ROYALE_STATS_ENABLED
 from helpers import dependency
 from gui.shared import utils, events, g_eventBus
@@ -7,7 +8,7 @@ from gui.Scaleform.framework.managers.context_menu import AbstractContextMenuHan
 from gui.shared import event_dispatcher as shared_events
 from skeletons.gui.lobby_context import ILobbyContext
 from gui.prb_control.entities.base.ctx import PrbAction
-from messenger.storage import storage_getter
+from messenger.storage import UsersStorage, MessengerStorageDescriptor
 from messenger.proto import proto_getter
 from messenger import g_settings
 from messenger.m_constants import PROTO_TYPE
@@ -29,6 +30,7 @@ class VEHICLE(object):
 
 class BRBattleResultContextMenu(AbstractContextMenuHandler):
     __lobbyContext = dependency.descriptor(ILobbyContext)
+    usersStorage = MessengerStorageDescriptor(UsersStorage)
 
     def __init__(self, cmProxy, ctx=None):
         handlers = {VEHICLE.USER_INFO: 'showUserInfo',
@@ -94,10 +96,6 @@ class BRBattleResultContextMenu(AbstractContextMenuHandler):
 
     def removeFromIgnored(self):
         self.proto.contacts.removeIgnored(self.__playerDBId)
-
-    @storage_getter('users')
-    def usersStorage(self):
-        return None
 
     @proto_getter(PROTO_TYPE.MIGRATION)
     def proto(self):

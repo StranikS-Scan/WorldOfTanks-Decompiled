@@ -3,12 +3,13 @@
 from __future__ import absolute_import
 import logging
 import typing
+from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS
 from constants import ARENA_GUI_TYPE
 from debug_utils import LOG_ERROR, LOG_DEBUG
 from gui.battle_control.arena_info.interfaces import IArenaController
 from gui.battle_control.battle_constants import BATTLE_CTRL_ID, REUSABLE_BATTLE_CTRL_IDS, getBattleCtrlName
 from gui.battle_control.controllers import aiming_sounds_ctrl
-from gui.battle_control.controllers import arena_border_ctrl, arena_load_ctrl, battle_field_ctrl, avatar_stats_ctrl, chat_cmd_ctrl, spectator_ctrl, consumables, debug_ctrl, drr_scale_ctrl, dyn_squad_functional, feedback_adaptor, game_messages_ctrl, hit_direction_ctrl, interfaces, msgs_ctrl, period_ctrl, personal_efficiency_ctrl, team_bases_ctrl, vehicle_state_ctrl, view_points_ctrl, ingame_help_ctrl, vehicle_passenger, vehicles_tracking, default_maps_ctrl, anonymizer_fakes_ctrl, game_restrictions_msgs_ctrl, callout_ctrl, deathzones_ctrl, dog_tags_ctrl, team_health_bar_ctrl, battle_notifier_ctrl, prebattle_setups_ctrl, perk_ctrl, kill_cam_ctrl, commendations_messages_ctrl, spotting_indicators_ctrl
+from gui.battle_control.controllers import arena_border_ctrl, arena_load_ctrl, battle_field_ctrl, avatar_stats_ctrl, chat_cmd_ctrl, spectator_ctrl, consumables, debug_ctrl, drr_scale_ctrl, dyn_squad_functional, feedback_adaptor, game_messages_ctrl, hit_direction_ctrl, interfaces, msgs_ctrl, period_ctrl, personal_efficiency_ctrl, team_bases_ctrl, vehicle_state_ctrl, view_points_ctrl, ingame_help_ctrl, vehicle_passenger, vehicles_tracking, default_maps_ctrl, anonymizer_fakes_ctrl, game_restrictions_msgs_ctrl, callout_ctrl, deathzones_ctrl, dog_tags_ctrl, team_health_bar_ctrl, battle_notifier_ctrl, prebattle_setups_ctrl, perk_ctrl, kill_cam_ctrl, commendations_messages_ctrl, spotting_indicators_ctrl, prefab_effects_availability_ctrl
 from gui.battle_control.controllers import map_zones_ctrl
 from gui.battle_control.controllers import points_of_interest_ctrl
 from gui.battle_control.controllers.appearance_cache_ctrls.default_appearance_cache_ctrl import DefaultAppearanceCacheController
@@ -16,6 +17,7 @@ from gui.battle_control.controllers.appearance_cache_ctrls.event_appearance_cach
 from gui.battle_control.controllers.appearance_cache_ctrls.maps_training_appearance_cache_ctrl import MapsTrainingAppearanceCacheController
 from gui.battle_control.controllers.auto_shoot_guns.auto_shoot_ctrl import AutoShootControllerFactory
 from gui.battle_control.controllers.battle_hints import controller as battle_hints_ctrl
+from gui.battle_control.controllers.prebattle_highlights.controller import PrebattleHighlightsController
 from gui.battle_control.controllers.quest_progress import quest_progress_ctrl
 from gui.battle_control.controllers.sound_ctrls.common import ShotsResultSoundController
 from gui.battle_control.controllers.sound_ctrls.stronghold_battle_sounds import StrongholdBattleSoundController
@@ -355,6 +357,10 @@ class DynamicControllersLocator(_ControllersLocator, IDynamicControllersLocator)
     def w2GTBattleController(self):
         return self._repository.getController(BATTLE_CTRL_ID.W2GT_CTRL)
 
+    @property
+    def prebattleHighlightsController(self):
+        return self._repository.getController(BATTLE_CTRL_ID.PREBATTLE_HIGHLIGHTS)
+
 
 class _EmptyRepository(interfaces.IBattleControllersRepository):
     __slots__ = ()
@@ -471,6 +477,7 @@ class SharedControllersRepository(_ControllersRepository):
         repository.addController(aiming_sounds_ctrl.AimingSoundsCtrl())
         repository.addArenaController(ArmorFlashlightBattleController(), setup)
         repository.addController(spotting_indicators_ctrl.createCtrl(setup, state))
+        repository.addArenaController(prefab_effects_availability_ctrl.PrefabEffectsAvailabilityController(), setup)
         return repository
 
     @classmethod
@@ -510,6 +517,10 @@ class ControllersRepositoryByBonuses(_ControllersRepository):
             repository.addController(points_of_interest_ctrl.PointsOfInterestController(setup))
         if arenaVisitor.hasCommendationsMessages():
             repository.addController(commendations_messages_ctrl.CommendationsMessagesController(setup))
+        if arenaVisitor.hasW2gtTag():
+            repository.addArenaController(w2gt_ctrl.W2GTBattleController(), setup)
+        if arenaVisitor.bonus.hasBonusCap(ARENA_BONUS_TYPE_CAPS.PRE_BATTLE_HIGHLIGHTS) and not setup.isReplayPlaying:
+            repository.addArenaViewController(PrebattleHighlightsController(), setup)
         return repository
 
 
@@ -527,8 +538,6 @@ class ClassicControllersRepository(ControllersRepositoryByBonuses):
         repository.addArenaViewController(battle_field_ctrl.BattleFieldCtrl(), setup)
         repository.addArenaController(cls._getAppearanceCacheController(setup), setup)
         repository.addController(ShotsResultSoundController())
-        if setup.arenaVisitor.hasW2gtTag():
-            repository.addArenaController(w2gt_ctrl.W2GTBattleController(), setup)
         return repository
 
     @staticmethod

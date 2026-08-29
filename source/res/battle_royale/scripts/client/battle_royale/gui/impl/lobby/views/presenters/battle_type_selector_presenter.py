@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: battle_royale/scripts/client/battle_royale/gui/impl/lobby/views/presenters/battle_type_selector_presenter.py
+from __future__ import absolute_import
 from battle_royale.gui.constants import BattleRoyaleSubMode
 from battle_royale.gui.impl.gen.view_models.views.lobby.views.battle_type_selector_view_model import BattleTypeSelectorViewModel, BattleType
 from gui.impl.pub.view_component import ViewComponent

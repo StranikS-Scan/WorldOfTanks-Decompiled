@@ -3,7 +3,7 @@
 from __future__ import absolute_import
 import logging
 import typing
-from frameworks.state_machine.visitor import isDescendantOf, getAncestors
+from frameworks_common.state_machine.visitor import isDescendantOf, getAncestors
 from frameworks.wulf import WindowStatus
 from gui.lobby_state_machine.states import LobbyState, compareViewKeys
 from helpers import dependency

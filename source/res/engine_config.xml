@@ -1,7 +1,7 @@
 <engine_config.xml>
   <xmlns:xmlref>	http://bwt/xmlref	</xmlns:xmlref>
   <personality>	game	</personality>
-  <preferences>	preferences.xml	</preferences>
+  <preferences>	preferences_ct.xml	</preferences>
   <enableBalanceCPU>	true	</enableBalanceCPU>
   <enableServerTimeSync>	true	</enableServerTimeSync>
   <lod>
@@ -646,6 +646,9 @@
         <bank>
           <name>	abilities.pck	</name>
         </bank>
+        <bank>
+          <name>	pbh.bnk	</name>
+        </bank>
       </SFX_soundbanks_arena>
       <SFX_soundbanks_editor>
         <bank>
@@ -894,44 +897,13 @@
     <logToMessageLogger>	false	</logToMessageLogger>
     <loggerID>	111	</loggerID>
     <file>	game.log	  <enabled>	true	</enabled>
+      <enabledInConsumerRelease>	true	</enabledInConsumerRelease>
       <openMode>	a	</openMode>
-      <maxSizeKB>	2048	</maxSizeKB>
-      <trimToKB>	512	</trimToKB>
+      <maxSizeKB>	20000	</maxSizeKB>
+      <trimToKB>	16384	</trimToKB>
       <showTime>	true	</showTime>
       <disableBuffering>	false	</disableBuffering>
-      <messageLength>	8192	</messageLength>
-    </file>
-    <file>	python.log	  <enabled>	true	</enabled>
-      <severity>	DEBUG	</severity>
-      <severity>	INFO	</severity>
-      <severity>	NOTICE	</severity>
-      <severity>	WARNING	</severity>
-      <severity>	ERROR	</severity>
-      <severity>	CRITICAL	</severity>
-      <severity>	HACK	</severity>
-      <source>	SCRIPT	</source>
-      <source>	UI	</source>
-      <openMode>	a	</openMode>
-      <maxSizeKB>	2048	</maxSizeKB>
-      <trimToKB>	512	</trimToKB>
-      <showTime>	true	</showTime>
-      <disableBuffering>	false	</disableBuffering>
-      <messageLength>	8192	</messageLength>
-    </file>
-    <file>	ui.log	  <enabled>	true	</enabled>
-      <severity>	TRACE	</severity>
-      <severity>	DEBUG	</severity>
-      <severity>	INFO	</severity>
-      <severity>	WARNING	</severity>
-      <severity>	ERROR	</severity>
-      <severity>	CRITICAL	</severity>
-      <source>	UI	</source>
-      <openMode>	a	</openMode>
-      <maxSizeKB>	2048	</maxSizeKB>
-      <trimToKB>	512	</trimToKB>
-      <showTime>	true	</showTime>
-      <disableBuffering>	false	</disableBuffering>
-      <messageLength>	8192	</messageLength>
+      <messageLength>	16384	</messageLength>
     </file>
   </logging>
   <webBrowser>

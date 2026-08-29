@@ -5,7 +5,7 @@ from frameworks.wulf import ViewModel
 class InfoPageModel(ViewModel):
     __slots__ = ('onClose',)
 
-    def __init__(self, properties=2, commands=1):
+    def __init__(self, properties=3, commands=1):
         super(InfoPageModel, self).__init__(properties=properties, commands=commands)
 
     def getRerollInterval(self):
@@ -20,8 +20,15 @@ class InfoPageModel(ViewModel):
     def setIsWeeklySectionAvailable(self, value):
         self._setBool(1, value)
 
+    def getStandardBlockPlugin(self):
+        return self._getString(2)
+
+    def setStandardBlockPlugin(self, value):
+        self._setString(2, value)
+
     def _initialize(self):
         super(InfoPageModel, self)._initialize()
         self._addNumberProperty('rerollInterval', 0)
         self._addBoolProperty('isWeeklySectionAvailable', False)
+        self._addStringProperty('standardBlockPlugin', '')
         self.onClose = self._addCommand('onClose')

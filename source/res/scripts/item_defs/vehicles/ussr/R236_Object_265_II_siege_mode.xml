@@ -1539,7 +1539,6 @@
           <reloadTime>	13.5	</reloadTime>
           <aimingTime>	3.2	</aimingTime>
           <invisibilityFactorAtShot>	0.095	</invisibilityFactorAtShot>
-          <multiGunEffects>	shot_dualgun_large_mb_L shot_dualgun_large_mb_R	</multiGunEffects>
           <dualGun>
             <chargeTime>	3	</chargeTime>
             <shootImpulse>	200	</shootImpulse>
@@ -1555,6 +1554,9 @@
             <whileGunDamaged>	2.0	</whileGunDamaged>
             <afterShot>	4	</afterShot>
           </shotDispersionFactors>
+          <prefabs>
+            <main>	content/CGFPrefabs/Vehicle/guns/ussr/gun_122mm_BL_13D_dualgun.prefab	</main>
+          </prefabs>
           <models>
             <undamaged>	vehicles/russian/R236_Object_265_II/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/russian/R236_Object_265_II/crash/lod0/Gun_01.model	</destroyed>
@@ -2147,20 +2149,25 @@
         <slot>
           <slotType>	attachment	</slotType>
           <slotId>	38001	</slotId>
-          <position>	-0.973063 0.968664 -0.317497	</position>
-          <rotation>	-0 0 0	</rotation>
+          <position>	-0.000001 0.868963 1.068524	</position>
+          <rotation>	0.000001 0 0	</rotation>
           <scale>	1 1 1	</scale>
           <applyType>	gunMantlet	</applyType>
           <size>	small	</size>
+          <enableVisTunnel>	true	</enableVisTunnel>
+          <hangerId>	2	</hangerId>
         </slot>
         <slot>
           <slotType>	attachment	</slotType>
           <slotId>	38002	</slotId>
-          <position>	0 0.970298 -1.09765	</position>
+          <position>	-0.773422 1.028604 -0.469956	</position>
           <rotation>	-0 0 0	</rotation>
           <scale>	1 1 1	</scale>
           <applyType>	turret	</applyType>
           <size>	small	</size>
+          <enableVisTunnel>	true	</enableVisTunnel>
+          <hangerId>	6	</hangerId>
+          <hangerRotation>	-0 3.141593 0	</hangerRotation>
         </slot>
       </customizationSlots>
       <multiGun>

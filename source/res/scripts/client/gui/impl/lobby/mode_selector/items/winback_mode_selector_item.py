@@ -46,6 +46,6 @@ class WinbackModeSelectorItem(RandomModeSelectorItem):
     @replaceNoneKwargsModel
     def __fillCardModel(self, model=None):
         isBattleSelectorSettingsBulletShown = getWinbackSetting(Winback.BATTLE_SELECTOR_SETTINGS_BULLET_SHOWN)
-        model.setSettingsPopoverID(R.views.lobby.winback.popovers.WinbackLeaveModePopoverView())
+        model.setSettingsPopoverID(R.views.mono.winback.popovers.winback_leave_mode_popover_view())
         model.setWithSettingsNotification(not isBattleSelectorSettingsBulletShown)
         model.setIsSettingsActive(False)

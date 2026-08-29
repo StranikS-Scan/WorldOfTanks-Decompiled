@@ -42,6 +42,10 @@ class SteamCompletionController(ISteamCompletionController):
         return self._loginManager.isWgcSteam
 
     @property
+    def isLockNotificationManagerNeeded(self):
+        return self._overlayController.isActive or not self.isSteamAccount or not self.__canSteamShadeShow()
+
+    @property
     def isAddEmailOverlayShown(self):
         uiStorage = self.__settingsCore.serverSettings.getUIStorage2()
         return uiStorage.get(UI_STORAGE_KEYS.STEAM_ADD_EMAIL_OVERLAY_SHOWN)
@@ -85,7 +89,7 @@ class SteamCompletionController(ISteamCompletionController):
     @wg_async
     def __onSpaceCreate(self):
         self.__unsubscribe()
-        if self._overlayController.isActive or not self.isSteamAccount or not self.__canSteamShadeShow():
+        if self.isLockNotificationManagerNeeded:
             lockNotificationManager(lock=False, releasePostponed=True)
             return
         status = yield wg_await(self._wgnpSteamAccCtrl.getEmailStatus(waitingID=CONTENT_WAITING))

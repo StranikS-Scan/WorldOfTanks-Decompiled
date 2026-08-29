@@ -2211,4 +2211,131 @@
       </itemFilters>
     </style>
   </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	0	</historical>
+    <priceGroup>	styles 3000g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	france:F141_Durendal	</vehicles>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	1342	</id>
+      <texture>	gui/maps/vehicles/styles/F141_Durendal_RW26_3Dst.png	</texture>
+      <userString>	#vehicle_customization:special_style/F141_Durendal_RW26_3Dst	</userString>
+      <longDescriptionSpecial>	#vehicle_customization:special_style/F141_Durendal_RW26_3Dst_desc/long	</longDescriptionSpecial>
+      <modelsSet>	F141_Durendal_RW26_3Dst	</modelsSet>
+      <maxNumber>	1	</maxNumber>
+      <tags>	styleSerialNumber c11n3D	</tags>
+      <outfits>
+        <outfit>
+          <season>	summer	</season>
+          <camouflages>
+            <item>
+              <id>	1160	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <modifications>
+            <item>	9	</item>
+          </modifications>
+          <paints>
+            <item>
+              <id>	684	</id>
+              <appliedTo>	30583	</appliedTo>
+            </item>
+          </paints>
+          <attachments>
+            <item>
+              <slotId>	18003	</slotId>
+              <id>	192	</id>
+              <scaleFactorId>	0	</scaleFactorId>
+              <rotated>	0	</rotated>
+            </item>
+            <item>
+              <slotId>	18004	</slotId>
+              <id>	193	</id>
+              <scaleFactorId>	0	</scaleFactorId>
+              <rotated>	0	</rotated>
+            </item>
+          </attachments>
+        </outfit>
+        <outfit>
+          <season>	desert	</season>
+          <camouflages>
+            <item>
+              <id>	1161	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <modifications>
+            <item>	9	</item>
+          </modifications>
+          <paints>
+            <item>
+              <id>	684	</id>
+              <appliedTo>	30583	</appliedTo>
+            </item>
+          </paints>
+          <attachments>
+            <item>
+              <slotId>	18003	</slotId>
+              <id>	192	</id>
+              <scaleFactorId>	0	</scaleFactorId>
+              <rotated>	0	</rotated>
+            </item>
+            <item>
+              <slotId>	18004	</slotId>
+              <id>	193	</id>
+              <scaleFactorId>	0	</scaleFactorId>
+              <rotated>	0	</rotated>
+            </item>
+          </attachments>
+        </outfit>
+        <outfit>
+          <season>	winter	</season>
+          <camouflages>
+            <item>
+              <id>	1162	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <modifications>
+            <item>	9	</item>
+          </modifications>
+          <paints>
+            <item>
+              <id>	684	</id>
+              <appliedTo>	30583	</appliedTo>
+            </item>
+          </paints>
+          <attachments>
+            <item>
+              <slotId>	18003	</slotId>
+              <id>	192	</id>
+              <scaleFactorId>	0	</scaleFactorId>
+              <rotated>	0	</rotated>
+            </item>
+            <item>
+              <slotId>	18004	</slotId>
+              <id>	196	</id>
+              <scaleFactorId>	0	</scaleFactorId>
+              <rotated>	0	</rotated>
+            </item>
+          </attachments>
+        </outfit>
+        <outfit>
+          <season>	event	</season>
+        </outfit>
+      </outfits>
+    </style>
+  </itemGroup>
 </france.xml>

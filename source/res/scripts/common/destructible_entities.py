@@ -112,10 +112,7 @@ def init():
 
 def determineDestructibleEntityTypeID(validVehicleLevels, defaultTypeID):
     validVehicleLevelsType3 = {8, 9}
-    if set(validVehicleLevels) == validVehicleLevelsType3:
-        return 3
-    else:
-        return defaultTypeID
+    return 3 if set(validVehicleLevels) == validVehicleLevelsType3 else defaultTypeID
 
 
 def _readType(xmlCtx, section):

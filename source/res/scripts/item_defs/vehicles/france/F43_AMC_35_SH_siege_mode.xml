@@ -3181,7 +3181,6 @@
           <reloadTime>	7.5	</reloadTime>
           <aimingTime>	1.5	</aimingTime>
           <invisibilityFactorAtShot>	0.18	</invisibilityFactorAtShot>
-          <multiGunEffects>	shot_dualgun1_main_L shot_dualgun1_main_R	</multiGunEffects>
           <dualGun>
             <chargeTime>	1	</chargeTime>
             <shootImpulse>	80	</shootImpulse>
@@ -3224,6 +3223,9 @@
             </ammoBay>
             <gun>	10	</gun>
           </armor>
+          <prefabs>
+            <main>	content/CGFPrefabs/Vehicle/guns/france/gun_Canon_de_75mm_Vo_920_m_s_dualgun_SH.prefab	</main>
+          </prefabs>
           <models>
             <undamaged>	vehicles/french/F43_AMC_35_SH/normal/lod0/Gun_02.model	</undamaged>
             <destroyed>	vehicles/french/F43_AMC_35_SH/crash/lod0/Gun_02.model	</destroyed>
@@ -3263,6 +3265,7 @@
             </customizableVehicleAreas>
           </customization>
           <edgeByVisualModel>	false	</edgeByVisualModel>
+          <muzzleBrake>	HORIZONTAL	</muzzleBrake>
           <camouflage>
             <tiling>	0.4 0.4 0.000000 0.000000	</tiling>
           </camouflage>
@@ -3359,6 +3362,7 @@
           <shotOffset>	0.215000 0.000000 0.000000	</shotOffset>
           <multiGunState></multiGunState>
           <edgeByVisualModel>	false	</edgeByVisualModel>
+          <muzzleBrake>	HORIZONTAL	</muzzleBrake>
           <camouflage>
             <tiling>	0.61 0.61 0.000000 0.000000	</tiling>
           </camouflage>
@@ -3470,7 +3474,6 @@
           <reloadTime>	7.5	</reloadTime>
           <aimingTime>	1.5	</aimingTime>
           <invisibilityFactorAtShot>	0.18	</invisibilityFactorAtShot>
-          <multiGunEffects>	shot_dualgun1_main_mb_L shot_dualgun1_main_mb_R	</multiGunEffects>
           <dualGun>
             <chargeTime>	1	</chargeTime>
             <shootImpulse>	80	</shootImpulse>
@@ -3499,6 +3502,9 @@
             </armor_5>
             <gun>	10	</gun>
           </armor>
+          <prefabs>
+            <main>	content/CGFPrefabs/Vehicle/guns/france/gun_Canon_de_75mm_Vo_920_m_s_dualgun_SH.prefab	</main>
+          </prefabs>
           <models>
             <undamaged>	vehicles/french/F43_AMC_35_SH/normal/lod0/Gun_04.model	</undamaged>
             <destroyed>	vehicles/french/F43_AMC_35_SH/crash/lod0/Gun_04.model	</destroyed>
@@ -3538,6 +3544,7 @@
             </customizableVehicleAreas>
           </customization>
           <edgeByVisualModel>	false	</edgeByVisualModel>
+          <muzzleBrake>	HORIZONTAL	</muzzleBrake>
           <camouflage>
             <tiling>	0.4 0.4 0.000000 0.000000	</tiling>
           </camouflage>
@@ -3614,6 +3621,7 @@
           <shotOffset>	0.223394 -0.000002 0.000000	</shotOffset>
           <multiGunState></multiGunState>
           <edgeByVisualModel>	false	</edgeByVisualModel>
+          <muzzleBrake>	HORIZONTAL	</muzzleBrake>
           <camouflage>
             <tiling>	0.61 0.61 0.000000 0.000000	</tiling>
           </camouflage>
@@ -3691,6 +3699,7 @@
           <shotOffset>	0.223000 0.000000 0.000000	</shotOffset>
           <multiGunState></multiGunState>
           <edgeByVisualModel>	false	</edgeByVisualModel>
+          <muzzleBrake>	HORIZONTAL	</muzzleBrake>
           <camouflage>
             <tiling>	0.445 0.445 0.000000 0.000000	</tiling>
           </camouflage>
@@ -3704,7 +3713,6 @@
           <shotDispersionRadius>	0.30	</shotDispersionRadius>
           <aimingTime>	1.5	</aimingTime>
           <invisibilityFactorAtShot>	0.153	</invisibilityFactorAtShot>
-          <multiGunEffects>	shot_dualgun1_large_mb_L shot_dualgun1_large_mb_R	</multiGunEffects>
           <dualGun>
             <chargeTime>	1	</chargeTime>
             <shootImpulse>	150	</shootImpulse>
@@ -3733,6 +3741,9 @@
             </armor_5>
             <gun>	10	</gun>
           </armor>
+          <prefabs>
+            <main>	content/CGFPrefabs/Vehicle/guns/france/gun_90mm_canon_DCA_45_AC_A_dualgun_SH.prefab	</main>
+          </prefabs>
           <models>
             <undamaged>	vehicles/french/F43_AMC_35_SH/normal/lod0/Gun_07.model	</undamaged>
             <destroyed>	vehicles/french/F43_AMC_35_SH/crash/lod0/Gun_07.model	</destroyed>
@@ -3772,6 +3783,7 @@
             </customizableVehicleAreas>
           </customization>
           <edgeByVisualModel>	false	</edgeByVisualModel>
+          <muzzleBrake>	VERTICAL	</muzzleBrake>
           <camouflage>
             <tiling>	0.52 0.25 0.000000 0.000000	</tiling>
           </camouflage>
@@ -3876,7 +3888,6 @@
           <reloadTime>	7.5	</reloadTime>
           <aimingTime>	1.5	</aimingTime>
           <invisibilityFactorAtShot>	0.18	</invisibilityFactorAtShot>
-          <multiGunEffects>	shot_dualgun1_large_mb_L shot_dualgun1_large_mb_R	</multiGunEffects>
           <dualGun>
             <chargeTime>	1	</chargeTime>
             <shootImpulse>	80	</shootImpulse>
@@ -3920,6 +3931,9 @@
             </surveyingDevice>
             <gun>	10	</gun>
           </armor>
+          <prefabs>
+            <main>	content/CGFPrefabs/Vehicle/guns/france/gun_Canon_de_75mm_Vo_920_m_s_dualgun_SH.prefab	</main>
+          </prefabs>
           <models>
             <undamaged>	vehicles/french/F43_AMC_35_SH/normal/lod0/Gun_08.model	</undamaged>
             <destroyed>	vehicles/french/F43_AMC_35_SH/crash/lod0/Gun_08.model	</destroyed>
@@ -3959,6 +3973,7 @@
             </customizableVehicleAreas>
           </customization>
           <edgeByVisualModel>	false	</edgeByVisualModel>
+          <muzzleBrake>	HORIZONTAL	</muzzleBrake>
           <camouflage>
             <tiling>	0.4 0.4 0.000000 0.000000	</tiling>
           </camouflage>
@@ -4050,6 +4065,7 @@
           <shotOffset>	0.265000 0.161000 0.000000	</shotOffset>
           <multiGunState></multiGunState>
           <edgeByVisualModel>	false	</edgeByVisualModel>
+          <muzzleBrake>	HORIZONTAL	</muzzleBrake>
           <camouflage>
             <tiling>	0.61 0.61 0.000000 0.000000	</tiling>
           </camouflage>
@@ -4063,7 +4079,6 @@
           <shotDispersionRadius>	0.30	</shotDispersionRadius>
           <aimingTime>	1.5	</aimingTime>
           <invisibilityFactorAtShot>	0.153	</invisibilityFactorAtShot>
-          <multiGunEffects>	shot_dualgun1_large_mb_L shot_dualgun1_large_mb_R	</multiGunEffects>
           <dualGun>
             <chargeTime>	1	</chargeTime>
             <shootImpulse>	150	</shootImpulse>
@@ -4107,6 +4122,9 @@
             </surveyingDevice>
             <gun>	10	</gun>
           </armor>
+          <prefabs>
+            <main>	content/CGFPrefabs/Vehicle/guns/france/gun_90mm_canon_DCA_45_AC_A_dualgun_SH.prefab	</main>
+          </prefabs>
           <models>
             <undamaged>	vehicles/french/F43_AMC_35_SH/normal/lod0/Gun_10.model	</undamaged>
             <destroyed>	vehicles/french/F43_AMC_35_SH/crash/lod0/Gun_10.model	</destroyed>
@@ -4146,6 +4164,7 @@
             </customizableVehicleAreas>
           </customization>
           <edgeByVisualModel>	false	</edgeByVisualModel>
+          <muzzleBrake>	VERTICAL	</muzzleBrake>
           <camouflage>
             <tiling>	0.52 0.25 0.000000 0.000000	</tiling>
           </camouflage>
@@ -4237,6 +4256,7 @@
           <shotOffset>	0.265281 0.160998 0.000000	</shotOffset>
           <multiGunState></multiGunState>
           <edgeByVisualModel>	false	</edgeByVisualModel>
+          <muzzleBrake>	RADIAL	</muzzleBrake>
           <camouflage>
             <tiling>	0.46 0.46 0.000000 0.000000	</tiling>
           </camouflage>

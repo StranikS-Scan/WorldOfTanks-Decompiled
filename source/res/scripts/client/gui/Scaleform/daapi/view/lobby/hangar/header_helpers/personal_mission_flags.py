@@ -5,13 +5,12 @@ from future.utils import viewitems, viewvalues
 import nations
 from gui.limited_ui.lui_rules_storage import LUI_RULES
 from gui.Scaleform.daapi.view.lobby.hangar.header_helpers.base_flags import IQuestsFlag
-from gui.Scaleform.daapi.view.lobby.hangar.header_helpers.flag_helpers import headerQuestFormatterVo, wrapQuestGroup, LabelState
+from gui.Scaleform.daapi.view.lobby.hangar.header_helpers.flag_helpers import LabelState, headerQuestFormatterVo, wrapQuestGroup
 from gui.Scaleform.genConsts.HANGAR_HEADER_QUESTS import HANGAR_HEADER_QUESTS
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
-from gui.server_events import finders
 from gui.server_events.events_dispatcher import showPersonalMission, showPersonalMissionOperationsPage, showPersonalMissionsOperationsMap
 from gui.shared.formatters import icons
 from helpers import dependency
@@ -133,7 +132,7 @@ def _findPersonalMissionsState(eventsCache, vehicle, branch):
         if currentState & priorState == priorState:
             return (priorState, None)
 
-    return None
+    return (None, None)
 
 
 def _getPersonalMissionsIcon(vehicle, branch, active):
@@ -177,9 +176,10 @@ class PersonalMissionsFlag(IQuestsFlag):
             states = []
             if vehicle.isOnlyForBattleRoyaleBattles:
                 return []
-            for branch in reversed(PM_BRANCH.V1_BRANCHES):
+            for branchName in reversed(PM_BRANCH.MUTUAL_EXCLUSION_BRANCHES[PM_BRANCH.QUEST_GROUPS.GROUP_1]):
+                branch = PM_BRANCH.NAME_TO_TYPE[branchName]
                 questType = QUEST_TYPE_BY_PM_BRANCH[branch]
-                if not cls.__lobbyContext.getServerSettings().isPersonalMissionsEnabled(branch):
+                if not cls.__lobbyContext.getServerSettings().isPersonalMissionsEnabled(branchName):
                     result.append(headerQuestFormatterVo(False, _getPersonalMissionsIcon(vehicle, branch, False), _ms(MENU.hangarHeaderPersonalMissionsLabel(LabelState.EMPTY)), questType, tooltip=_getPersonalMissionsTooltip(branch, WIDGET_PM_STATE.BRANCH_DISABLED)))
                     states.append(WIDGET_PM_STATE.BRANCH_DISABLED)
                 pmState, quest = _findPersonalMissionsState(cls.__eventsCache, vehicle, branch)
@@ -250,7 +250,7 @@ class PersonalMissionsFlag(IQuestsFlag):
 
     @classmethod
     def __showAvailablePMOperation(cls, branch):
-        for operationID in finders.BRANCH_TO_OPERATION_IDS[branch]:
+        for operationID in PM_BRANCH.BRANCH_TO_OPERATION_IDS[branch]:
             operation = cls.__eventsCache.getPersonalMissions().getAllOperations()[operationID]
             result, _ = operation.isAvailable()
             if result:

@@ -1506,7 +1506,6 @@
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <aimingTime>	2.3	</aimingTime>
-          <multiGunEffects>	shot_dualgun1_large_L shot_dualgun1_large_R	</multiGunEffects>
           <dualGun>
             <chargeTime>	3	</chargeTime>
             <shootImpulse>	200	</shootImpulse>
@@ -1517,6 +1516,9 @@
             <afterShotDelay>	1	</afterShotDelay>
             <preChargeIndication>	0.25	</preChargeIndication>
           </dualGun>
+          <prefabs>
+            <main>	content/CGFPrefabs/Vehicle/guns/japan/gun_Rensouhou_127_mm_Type_89.prefab	</main>
+          </prefabs>
           <customizationSlots>
             <slot>
               <slotType>	paint	</slotType>

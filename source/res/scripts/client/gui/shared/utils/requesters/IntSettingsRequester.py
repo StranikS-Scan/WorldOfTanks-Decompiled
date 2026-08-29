@@ -5,7 +5,7 @@ import logging
 from copy import copy
 from future.utils import viewitems
 from functools import wraps
-from account_helpers.AccountSettings import MAPBOX_CAROUSEL_FILTER_1, MAPBOX_CAROUSEL_FILTER_2, FUN_RANDOM_CAROUSEL_FILTER_1, FUN_RANDOM_CAROUSEL_FILTER_2, COMP7_CAROUSEL_FILTER_1, COMP7_CAROUSEL_FILTER_2, CAROUSEL_FILTER_3, RANKED_CAROUSEL_FILTER_3, EPICBATTLE_CAROUSEL_FILTER_3, MAPBOX_CAROUSEL_FILTER_3, COMP7_CAROUSEL_FILTER_3, FUN_RANDOM_CAROUSEL_FILTER_3, COMP7_LIGHT_CAROUSEL_FILTER_1, COMP7_LIGHT_CAROUSEL_FILTER_2, COMP7_LIGHT_CAROUSEL_FILTER_3
+from account_helpers.AccountSettings import MAPBOX_CAROUSEL_FILTER_1, MAPBOX_CAROUSEL_FILTER_2, FUN_RANDOM_CAROUSEL_FILTER_1, FUN_RANDOM_CAROUSEL_FILTER_2, COMP7_CAROUSEL_FILTER_1, COMP7_CAROUSEL_FILTER_2, CAROUSEL_FILTER_3, RANKED_CAROUSEL_FILTER_3, EPICBATTLE_CAROUSEL_FILTER_3, MAPBOX_CAROUSEL_FILTER_3, COMP7_CAROUSEL_FILTER_3, FUN_RANDOM_CAROUSEL_FILTER_3, COMP7_LIGHT_CAROUSEL_FILTER_1, COMP7_LIGHT_CAROUSEL_FILTER_2, COMP7_LIGHT_CAROUSEL_FILTER_3, HOLIDAY_OPS, PERSONAL_MISSION_4
 import BigWorld
 import constants
 from account_helpers.settings_core.ServerSettingsManager import SETTINGS_SECTIONS
@@ -85,6 +85,7 @@ class IntSettingsRequester(object):
      'SPG_AIM': constants.USER_SERVER_SETTINGS.SPG_AIM,
      MAPBOX_CAROUSEL_FILTER_1: 103,
      MAPBOX_CAROUSEL_FILTER_2: 104,
+     HOLIDAY_OPS: 105,
      'CONTOUR': constants.USER_SERVER_SETTINGS.CONTOUR,
      FUN_RANDOM_CAROUSEL_FILTER_1: 107,
      FUN_RANDOM_CAROUSEL_FILTER_2: 108,
@@ -105,7 +106,8 @@ class IntSettingsRequester(object):
      COMP7_LIGHT_CAROUSEL_FILTER_1: 125,
      COMP7_LIGHT_CAROUSEL_FILTER_2: 126,
      COMP7_LIGHT_CAROUSEL_FILTER_3: 127,
-     SETTINGS_SECTIONS.SITUATIONAL_PERKS: 128}
+     SETTINGS_SECTIONS.SITUATIONAL_PERKS: 128,
+     PERSONAL_MISSION_4: constants.USER_SERVER_SETTINGS.PERSONAL_MISSION_4}
 
     def __init__(self):
         self.__isSynced = False
@@ -150,7 +152,8 @@ class IntSettingsRequester(object):
     def _response(self, resID, value, callback):
         if resID < 0:
             _logger.error('[class %s] There is error while getting data from cache: %s[%d]', self.__class__.__name__, code2str(resID), resID)
-            return callback({})
+            callback({})
+            return
         self.__isSynced = True
         callback(copy(value))
 

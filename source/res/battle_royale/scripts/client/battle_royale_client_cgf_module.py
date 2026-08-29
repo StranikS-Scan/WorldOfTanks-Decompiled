@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: battle_royale/scripts/client/battle_royale_client_cgf_module.py
+from __future__ import absolute_import
 import CGF
 from battleground.berserker_effect import BerserkerEffectObjectsSystem
 from battleground.components import BattlegroundSequenceSystem

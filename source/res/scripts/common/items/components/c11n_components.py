@@ -827,7 +827,7 @@ class CustomizationCache(with_metaclass(ReflectionMetaclass, object)):
         self._CustomizationCache__questStyles = None
         self.itemGroupByProgressionBonusType = {arenaTypeID : [] for arenaTypeID in ARENA_BONUS_TYPE_NAMES.values() if ARENA_BONUS_TYPE_CAPS.checkAny(arenaTypeID, ARENA_BONUS_TYPE_CAPS.CUSTOMIZATION_PROGRESSION)}
         self.topVehiclesByNation = {}
-        self.itemTypes = {CustomizationType.INSIGNIA: self.insignias, CustomizationType.ATTACHMENT: self.attachments, CustomizationType.DECAL: self.decals, CustomizationType.STYLE: self.styles, CustomizationType.SEQUENCE: self.sequences, CustomizationType.CAMOUFLAGE: self.camouflages, CustomizationType.MODIFICATION: self.modifications, CustomizationType.PERSONAL_NUMBER: self.personal_numbers, CustomizationType.PAINT: self.paints, CustomizationType.STAT_TRACKER: self.stat_trackers, CustomizationType.PROJECTION_DECAL: self.projection_decals}
+        self.itemTypes = {CustomizationType.INSIGNIA: self.insignias, CustomizationType.PERSONAL_NUMBER: self.personal_numbers, CustomizationType.DECAL: self.decals, CustomizationType.STYLE: self.styles, CustomizationType.SEQUENCE: self.sequences, CustomizationType.MODIFICATION: self.modifications, CustomizationType.CAMOUFLAGE: self.camouflages, CustomizationType.ATTACHMENT: self.attachments, CustomizationType.PAINT: self.paints, CustomizationType.STAT_TRACKER: self.stat_trackers, CustomizationType.PROJECTION_DECAL: self.projection_decals}
         super(CustomizationCache, self).__init__()
 
     def getQuestProgressionStyles(self):

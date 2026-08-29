@@ -20,22 +20,28 @@ from gui.shared.event_dispatcher import showSellDialog
 VERSION = 1
 _TABS_DATA = ({'id': STORAGE_CONSTANTS.INVENTORY_TAB_ALL,
   'label': R.strings.storage.storage.tabs.all,
-  'linkage': STORAGE_CONSTANTS.STORAGE_REGULAR_ITEMS_TAB},
+  'linkage': STORAGE_CONSTANTS.STORAGE_REGULAR_ITEMS_TAB,
+  'viewId': STORAGE_CONSTANTS.STORAGE_REGULAR_ITEMS_TAB},
  {'id': STORAGE_CONSTANTS.INVENTORY_TAB_EQUIPMENT,
   'label': R.strings.storage.storage.tabs.equipment,
-  'linkage': STORAGE_CONSTANTS.STORAGE_DEVICES_TAB},
+  'linkage': STORAGE_CONSTANTS.STORAGE_DEVICES_TAB,
+  'viewId': STORAGE_CONSTANTS.STORAGE_DEVICES_TAB},
  {'id': STORAGE_CONSTANTS.INVENTORY_TAB_CONSUMABLE,
   'label': R.strings.storage.storage.tabs.consumable,
-  'linkage': STORAGE_CONSTANTS.STORAGE_CONSUMABLES_TAB},
+  'linkage': STORAGE_CONSTANTS.STORAGE_CONSUMABLES_TAB,
+  'viewId': STORAGE_CONSTANTS.STORAGE_CONSUMABLES_TAB},
  {'id': STORAGE_CONSTANTS.INVENTORY_TAB_MODULES,
   'label': R.strings.storage.storage.tabs.modules,
-  'linkage': STORAGE_CONSTANTS.STORAGE_MODULES_TAB},
+  'linkage': STORAGE_CONSTANTS.STORAGE_MODULES_TAB,
+  'viewId': STORAGE_CONSTANTS.STORAGE_MODULES_TAB},
  {'id': STORAGE_CONSTANTS.INVENTORY_TAB_SHELLS,
   'label': R.strings.storage.storage.tabs.shells,
-  'linkage': STORAGE_CONSTANTS.STORAGE_SHELLS_TAB},
+  'linkage': STORAGE_CONSTANTS.STORAGE_SHELLS_TAB,
+  'viewId': STORAGE_CONSTANTS.STORAGE_SHELLS_TAB},
  {'id': STORAGE_CONSTANTS.INVENTORY_TAB_CREW_BOOKS,
   'label': R.strings.storage.storage.tabs.crewBooks,
-  'linkage': STORAGE_CONSTANTS.STORAGE_CREW_BOOKS_TAB})
+  'linkage': STORAGE_CONSTANTS.STORAGE_CREW_BOOKS_TAB,
+  'viewId': STORAGE_CONSTANTS.STORAGE_CREW_BOOKS_TAB})
 
 def _getTabDataIndexById(tabID):
     for i, section in enumerate(_TABS_DATA):

@@ -54,6 +54,7 @@ _ARENA_PERIOD_STATE_NAME = 'STATE_arenastate'
 _ARENA_PERIOD_STATE = {ARENA_PERIOD.WAITING: 'STATE_arenastate_waiting',
  ARENA_PERIOD.PREBATTLE: 'STATE_arenastate_counter',
  ARENA_PERIOD.BATTLE: 'STATE_arenastate_battle'}
+_ON_BECOME_PLAYER_STATES = ((_ARENA_PERIOD_STATE_NAME, _ARENA_PERIOD_STATE[ARENA_PERIOD.WAITING]), ('STATE_ext_pbh', 'STATE_ext_pbh_off'))
 g_musicController = None
 
 def create():
@@ -243,7 +244,8 @@ class MusicController(object):
         WWISE.WW_setRTCPGlobal(paramName, paramValue)
 
     def onBecomePlayer(self):
-        WWISE.WW_setState(_ARENA_PERIOD_STATE_NAME, _ARENA_PERIOD_STATE[ARENA_PERIOD.WAITING])
+        for group, state in _ON_BECOME_PLAYER_STATES:
+            WWISE.WW_setState(group, state)
 
     def onEnterArena(self):
         BigWorld.player().arena.onPeriodChange += self.__onArenaStateChanged

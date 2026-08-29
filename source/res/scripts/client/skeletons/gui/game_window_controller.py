@@ -13,8 +13,8 @@ class GameWindowController(IGameWindowController):
     lobbyContext = dependency.descriptor(ILobbyContext)
 
     def __init__(self):
+        self._isLobbyInited = False
         self.__urlMacros = URLMacros()
-        self.__isLobbyInited = False
         super(GameWindowController, self).__init__()
 
     def fini(self):
@@ -25,18 +25,18 @@ class GameWindowController(IGameWindowController):
         return
 
     def onLobbyInited(self, event):
-        self.__isLobbyInited = True
+        self._isLobbyInited = True
         self._addListeners()
 
     def onAvatarBecomePlayer(self):
         self._removeListeners()
-        if self.__isLobbyInited:
+        if self._isLobbyInited:
             self.hideWindow()
-        self.__isLobbyInited = False
+        self._isLobbyInited = False
         super(GameWindowController, self).onAvatarBecomePlayer()
 
     def onDisconnected(self):
-        self.__isLobbyInited = False
+        self._isLobbyInited = False
         self._removeListeners()
         self.hideWindow()
         super(GameWindowController, self).onDisconnected()

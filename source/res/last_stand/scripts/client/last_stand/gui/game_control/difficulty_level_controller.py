@@ -90,6 +90,8 @@ class DifficultyLevelController(IDifficultyLevelController, IGlobalListener):
             if levelItem.level.value == levelNum:
                 return levelItem
 
+        return None
+
     def onLobbyInited(self, event):
         self.startGlobalListening()
 

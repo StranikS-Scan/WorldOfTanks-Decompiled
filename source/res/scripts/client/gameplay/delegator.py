@@ -1,10 +1,12 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gameplay/delegator.py
 import BigWorld
-from frameworks.state_machine import StringEvent
-from frameworks.state_machine import StateMachine
-from frameworks.state_machine import BaseStateObserver
+from frameworks_common.state_machine import StringEvent
+from frameworks_common.state_machine import StateMachine
+from frameworks_common.state_machine import BaseStateObserver
+from frameworks_common.state_machine import OneshotStateIdsObserver
 from gameplay import listeners
+from gameplay.blockers import BlockingStateMixin
 from helpers import dependency
 from skeletons.connection_mgr import IConnectionManager, DisconnectReason
 from skeletons.gui.login_manager import ILoginManager
@@ -32,6 +34,9 @@ class GameplayLogic(IGameplayLogic):
     def addStateObserver(self, observer):
         self.__machine.connect(observer)
 
+    def addOneshotObserver(self, gameplayStateIDs, observerLifetimeObj, enterFn=None, exitFn=None):
+        self.__machine.connect(OneshotStateIdsObserver(gameplayStateIDs, self.__machine, observerLifetimeObj, enterFn, exitFn))
+
     def removeStateObserver(self, observer):
         self.__machine.disconnect(observer)
 
@@ -40,6 +45,14 @@ class GameplayLogic(IGameplayLogic):
 
     def tick(self):
         self.__machine.post(StringEvent(''))
+
+    def addStateEnterBlocker(self, stateID, event):
+        state = self.__machine.getStateByID(stateID)
+        state.addEnterBlocker(event)
+
+    def addStateExitBlocker(self, stateID, event):
+        state = self.__machine.getStateByID(stateID)
+        state.addExitBlocker(event)
 
     def goToLoginByRQ(self):
         self.connectionMgr.disconnect()

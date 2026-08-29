@@ -1779,7 +1779,6 @@
           </shotDispersionFactors>
           <turretYawLimits>	-180 180	</turretYawLimits>
           <invisibilityFactorAtShot>	0.112	</invisibilityFactorAtShot>
-          <multiGunEffects>	shot_dualgun_main_mb_L shot_dualgun_main_mb_R	</multiGunEffects>
           <dualGun>
             <chargeTime>	1.5	</chargeTime>
             <shootImpulse>	200	</shootImpulse>
@@ -1790,6 +1789,9 @@
             <afterShotDelay>	1	</afterShotDelay>
             <preChargeIndication>	0.25	</preChargeIndication>
           </dualGun>
+          <prefabs>
+            <main>	content/CGFPrefabs/Vehicle/guns/germany/gun_88mm_Zwillingskanone_L_71.prefab	</main>
+          </prefabs>
           <customizationSlots>
             <slot>
               <slotType>	paint	</slotType>
@@ -1873,6 +1875,7 @@
             <collisionModelClient>	vehicles/german/G177_E65_Zwilling/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
           <edgeByVisualModel>	false	</edgeByVisualModel>
+          <muzzleBrake>	HORIZONTAL	</muzzleBrake>
           <camouflage>
             <density>	101.188324 100.214172	</density>
             <aoTextureSize>	512 256	</aoTextureSize>

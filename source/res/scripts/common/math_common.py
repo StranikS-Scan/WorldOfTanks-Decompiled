@@ -51,7 +51,4 @@ def decimal_round(number, precision=0, rounding=ROUND_HALF_UP):
     if not isinstance(number, Decimal):
         decimal_for_processing = Decimal(repr(number))
     rounded = decimal_for_processing.quantize(Decimal(10) ** (-precision), rounding=rounding)
-    if precision == 0:
-        return int(rounded)
-    else:
-        return float(rounded)
+    return int(rounded) if precision == 0 else float(rounded)

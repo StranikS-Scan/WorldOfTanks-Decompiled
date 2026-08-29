@@ -11,6 +11,7 @@ from gui.impl.pub.view_component import ViewComponent
 from gui.impl.wrappers.function_helpers import replaceNoneKwargsModel
 from gui.periodic_battles.models import PeriodType
 from helpers import dependency
+from math_common import round_py2_style_int
 from skeletons.gui.game_control import IComp7Controller
 if typing.TYPE_CHECKING:
     from typing import Any
@@ -65,7 +66,6 @@ class AlertMessagePresenter(ViewComponent[AlertMessageModel]):
          PeriodType.AFTER_CYCLE,
          PeriodType.BETWEEN_SEASONS,
          PeriodType.ALL_NOT_AVAILABLE_END,
-         PeriodType.NOT_AVAILABLE_END,
          PeriodType.STANDALONE_NOT_AVAILABLE_END):
             return State.SEASONEND
         if self.__comp7Controller.isQualificationResultsProcessing() or self.__comp7Controller.isQualificationCalculationRating():
@@ -80,7 +80,7 @@ class AlertMessagePresenter(ViewComponent[AlertMessageModel]):
     def __updateAlertData(self, _=None, model=None):
         preannouncedSeason = self.__comp7Controller.getPreannouncedSeason()
         model.setState(self.__getAlertState())
-        model.setBanTimeleftInSeconds(int(round(self.__comp7Controller.banDuration)))
+        model.setBanTimeleftInSeconds(round_py2_style_int(self.__comp7Controller.banDuration))
         fillIntsArray(self.__comp7Controller.getModeSettings().levels, model.getLevels())
         if preannouncedSeason is not None:
             model.setStartEventDateTime(backport.getShortDateTimeFormat(preannouncedSeason.getStartDate()))

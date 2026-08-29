@@ -96,7 +96,15 @@
       <blacksand>	turret_pull_blacksand	</blacksand>
     </pull>
   </defaultTurretDetachmentEffects>
-  <defaultPrefabEffects></defaultPrefabEffects>
+  <defaultPrefabEffects>
+    <gun>	defaultShot	</gun>
+    <shot>
+      <HOLLOW_CHARGE>	HollowChargeHit	</HOLLOW_CHARGE>
+      <HIGH_EXPLOSIVE>	HighExplosiveHit	</HIGH_EXPLOSIVE>
+      <ARMOR_PIERCING>	ArmorPiercingHit	</ARMOR_PIERCING>
+      <ARMOR_PIERCING_CR>	ArmorPiercingCRHit	</ARMOR_PIERCING_CR>
+    </shot>
+  </defaultPrefabEffects>
   <extras>
     <undefined>	NoneExtra : NoneExtra	</undefined>
     <attributeModifier>	NoneExtra : AttributeModifier	</attributeModifier>
@@ -177,6 +185,7 @@
     <exampleAbility>	NoneExtra : VisualScriptEquipmentExtra	</exampleAbility>
     <poi_radar>	NoneExtra : VisualScriptEquipmentExtra	</poi_radar>
     <poi_artillery_aoe>	NoneExtra : VisualScriptEquipmentExtra	</poi_artillery_aoe>
+    <poi_illumination_flare>	NoneExtra : VisualScriptEquipmentExtra	</poi_illumination_flare>
     <engineHealth>	DamageMarker : EngineHealth	  <sounds>
         <critical>	engine_damaged	</critical>
         <destroyed>	engine_destroyed	</destroyed>

@@ -1,7 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: battle_royale/scripts/client/battle_royale/gui/impl/lobby/views/battle_result_view/battle_result_view.py
-import typing
+from __future__ import absolute_import
 from collections import OrderedDict
+from future.utils import viewvalues, viewitems
+from typing import Any, Dict, TYPE_CHECKING
 import SoundGroups
 from constants import ARENA_BONUS_TYPE
 from battle_royale.gui.impl.lobby.tooltips.reward_currency_tooltip_view import RewardCurrencyTooltipView
@@ -39,11 +41,11 @@ from gui.impl.backport.backport_context_menu import BackportContextMenuWindow
 from gui.impl.backport.backport_context_menu import createContextMenuData
 from gui.Scaleform.genConsts.CONTEXT_MENU_HANDLER_TYPE import CONTEXT_MENU_HANDLER_TYPE
 from skeletons.connection_mgr import IConnectionManager
-from messenger.storage import storage_getter
+from messenger.storage import UsersStorage, MessengerStorageDescriptor
 from messenger.formatters.service_channel_helpers import parseTokenBonusCount
 from gui.impl.gen.view_models.views.battle_royale.battle_results.player_battle_type_status_model import BattleType
 from gui.prb_control.entities.base.listener import IPrbListener
-if typing.TYPE_CHECKING:
+if TYPE_CHECKING:
     from gui.impl.gen.view_models.views.battle_royale.battle_results.player_battle_type_status_model import PlayerBattleTypeStatusModel
     from battle_royale.gui.impl.gen.view_models.views.lobby.views.battle_result_view.leaderboard_model import LeaderboardModel
 _THE_BEST_PLACE = 1
@@ -73,6 +75,7 @@ class BattleRoyaleBattleResultsView(ViewComponent[BattleResultViewModel], IPrbLi
     __connectionMgr = dependency.descriptor(IConnectionManager)
     __brProgressionController = dependency.descriptor(IBRProgressionOnTokensController)
     __platoonCtrl = dependency.descriptor(IPlatoonController)
+    usersStorage = MessengerStorageDescriptor(UsersStorage)
     __sound_env__ = BattleResultsEnv
 
     def __init__(self, *args, **kwargs):
@@ -167,10 +170,6 @@ class BattleRoyaleBattleResultsView(ViewComponent[BattleResultViewModel], IPrbLi
     def _getListeners(self):
         return ((BattleRoyalePlatoonEvent.LEAVED_PLATOON, self.__onLeavedPlatoon, EVENT_BUS_SCOPE.LOBBY),)
 
-    @storage_getter('users')
-    def usersStorage(self):
-        return None
-
     def __update(self):
         with self.viewModel.transaction() as model:
             setEventInfo(model.eventInfo)
@@ -189,11 +188,10 @@ class BattleRoyaleBattleResultsView(ViewComponent[BattleResultViewModel], IPrbLi
     def __updateSquadState(self):
         if not self.__squadCreatedByInvite or not self.__isCommander():
             if self.__brController.isInBattleRoyaleSquad():
-                if all([ slot.get('player') is not None for slot in self.__platoonCtrl.getPlatoonSlotsData() ]):
+                if all((slot.get('player') is not None for slot in self.__platoonCtrl.getPlatoonSlotsData())):
                     self.__setIsPlatoonWindowOpen(True)
                     return
             self.__setIsPlatoonWindowOpen(False)
-        return
 
     def __onInviteToPlatoonClick(self):
         self.__brController.selectSubModeBattle(BattleRoyaleSubMode.SQUAD_MODE_ID, accountsToInvite=(self.__ally.get('databaseID', 0),))
@@ -240,23 +238,24 @@ class BattleRoyaleBattleResultsView(ViewComponent[BattleResultViewModel], IPrbLi
         leaderboard = self.__data.get(BRSections.LEADERBOARD)
         if leaderboard is None:
             raise SoftException("There is no players' table in battle results")
+        placesData = []
         if self.__isSquadMode():
             vehiclesBySquad = {}
             for vehicle in leaderboard:
                 vehiclesBySquad.setdefault(vehicle['squadIdx'], []).append(vehicle)
 
-            placesData = vehiclesBySquad.values()
+            placesData = list(viewvalues(vehiclesBySquad))
         else:
-            placesData = []
             for vehicle in leaderboard:
                 placesData.append([vehicle])
 
-        placesData.sort(key=lambda v: v[0]['place'])
+        placesData.sort(key=lambda v: v[0].get('place', 0))
         groupList = leaderboardModel.getPlacesList()
         groupList.clear()
         for placeData in placesData:
             placeModel = PlaceModel()
-            placeModel.setPlace(str(placeData[0]['place']))
+            firstVehicle = placeData[0]
+            placeModel.setPlace(str(firstVehicle.get('place', 0)))
             placeModel.setIsSquadMode(self.__isSquadMode())
             rowList = placeModel.getPlayersList()
             rowList.clear()
@@ -378,13 +377,13 @@ class BattleRoyaleBattleResultsView(ViewComponent[BattleResultViewModel], IPrbLi
             progressionTokensEarned = self.__getBrProgressionTokenCount()
             if progressionTokensEarned:
                 earned[BattleRewardItemModel.BR_PROGRESSION_TOKEN] = progressionTokensEarned
-        sortedEarned = OrderedDict(sorted(earned.iteritems(), key=lambda x: _BATTLE_REWARD_TYPES.index(x[0])))
+        sortedEarned = OrderedDict(sorted(viewitems(earned), key=lambda x: _BATTLE_REWARD_TYPES.index(x[0])))
         financialList = []
         if self.__brController.isStPatrick():
             additionalHiddenZeroBonuses = (BattleRewardItemModel.BATTLE_ROYALE_COIN,)
         else:
             additionalHiddenZeroBonuses = (BattleRewardItemModel.ST_PATRICK_COIN,)
-        for bonusType, value in sortedEarned.iteritems():
+        for bonusType, value in sortedEarned.items():
             if bonusType in _HIDDEN_BONUSES_WITH_ZERO_VALUES or bonusType in additionalHiddenZeroBonuses:
                 if value == 0:
                     continue

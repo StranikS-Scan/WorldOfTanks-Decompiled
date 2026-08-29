@@ -1,0 +1,22 @@
+<TeamInfoPBHComponent.def>
+  <CellMethods>
+    <setWinners>
+      <Args>
+        <teamID>	INT32	</teamID>
+        <winners>	PBH_WINNER	</winners>
+      </Args>
+    </setWinners>
+  </CellMethods>
+  <ClientMethods></ClientMethods>
+  <Properties>
+    <winners>
+      <Type>	ARRAY	  <of>	PBH_WINNER	</of>
+      </Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </winners>
+  </Properties>
+  <ofEntity>
+    <TeamInfo></TeamInfo>
+  </ofEntity>
+  <DefaultKeyName>	pbh	</DefaultKeyName>
+</TeamInfoPBHComponent.def>

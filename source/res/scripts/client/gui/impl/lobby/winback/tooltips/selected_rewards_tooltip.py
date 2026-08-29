@@ -12,7 +12,7 @@ class SelectedRewardsTooltip(ViewImpl):
     __slots__ = ()
 
     def __init__(self, *args, **kwargs):
-        settings = ViewSettings(R.views.lobby.winback.tooltips.SelectedRewardsTooltip(), model=SelectedRewardsTooltipModel())
+        settings = ViewSettings(R.views.mono.winback.tooltips.selected_rewards_tooltip(), model=SelectedRewardsTooltipModel())
         settings.args = args
         settings.kwargs = kwargs
         super(SelectedRewardsTooltip, self).__init__(settings)

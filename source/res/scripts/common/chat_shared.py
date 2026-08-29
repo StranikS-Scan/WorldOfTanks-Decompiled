@@ -845,9 +845,9 @@ def parseCommandMessage(message, verifyArgs=True):
         if cmdProcessor is None:
             LOG_ERROR('Can`t process arguments: command %s hasn`t argument processor. command ignored' % (cmd,))
             return (0, 0, '', '')
-        else:
-            return cmdProcessor.parseRawData(rawData, verifyArgs)
-    return
+        return cmdProcessor.parseRawData(rawData, verifyArgs)
+    else:
+        return
 
 
 def verifyCommandData(command, int64Arg=0, int16arg=0, stringArg1='', stringArg2=''):
@@ -857,7 +857,6 @@ def verifyCommandData(command, int64Arg=0, int16arg=0, stringArg1='', stringArg2
         return False
     else:
         return cmdProcessor.verifyParsedData(int64Arg, int16arg, stringArg1, stringArg2)
-        return
 
 
 def isPermanentBan(banTime):
@@ -939,11 +938,7 @@ class UserBannedError(ChatError):
          'banEndTime': self.__banEndTime}
 
     def _getMessage(self):
-        if self.__banEndTime is not None:
-            return 'You are banned by user %s till %s. Reason: %s.' % (self.__banOwnerNick, self.__banEndTime, self.__banReason)
-        else:
-            return 'You are banned by user %s till %s. Reason: %s.' % (self.__banOwnerNick, self.__banEndTime, self.__banReason)
-            return
+        return 'You are banned by user %s till %s. Reason: %s.' % (self.__banOwnerNick, self.__banEndTime, self.__banReason) if self.__banEndTime is not None else 'You are banned by user %s till %s. Reason: %s.' % (self.__banOwnerNick, self.__banEndTime, self.__banReason)
 
 
 class ChatBannedError(ChatError):
@@ -956,11 +951,7 @@ class ChatBannedError(ChatError):
          'banEndTime': self.__banEndTime}
 
     def _getMessage(self):
-        if self.__banEndTime is not None:
-            return 'You are banned till %s. Reason: %s.' % (self.__banEndTime, self.__banReason)
-        else:
-            return 'You are banned. Reason: %s.' % self.__banReason
-            return
+        return 'You are banned till %s. Reason: %s.' % (self.__banEndTime, self.__banReason) if self.__banEndTime is not None else 'You are banned. Reason: %s.' % self.__banReason
 
 
 class ChatSQLError(ChatError):
@@ -1349,7 +1340,8 @@ SYS_MESSAGE_TYPE = Enumeration('systemMessageType', ['serverReboot',
  'wotPlusProUnlocked',
  'wotPlusUpgrade',
  'piggyBankCreditsFull',
- 'challengeMissionFail'])
+ 'challengeMissionFail',
+ 'personalMission4Quest'])
 SYS_MESSAGE_IMPORTANCE = Enumeration('systemMessageImportance', ['normal', 'high'])
 SM_REQUEST_PERSONAL_MESSAGES_FLAG = 1
 SM_REQUEST_SYSTEM_MESSAGES_FLAG = 2
@@ -1361,11 +1353,7 @@ class MapRemovalReason(object):
 
 
 def isMembersListSupported(channelInfo):
-    if channelInfo is None:
-        return False
-    else:
-        return isMembersListSupportedByFlags(channelInfo.get('notifyFlags', 0))
-        return
+    return False if channelInfo is None else isMembersListSupportedByFlags(channelInfo.get('notifyFlags', 0))
 
 
 def isMembersListSupportedByFlags(channelNotifyFlags):

@@ -1,0 +1,89 @@
+<pm4_11_3_7.xml>
+  <quests>
+    <potapovQuest>
+      <enabled>	true	</enabled>
+      <id>	pm4_11_3_7_main	</id>
+      <serverOnly>	true	</serverOnly>
+      <conditions>
+        <postBattle>
+          <and>
+            <vehicleKills>
+              <classes>	SPG	</classes>
+              <greaterOrEqual>	1	</greaterOrEqual>
+            </vehicleKills>
+            <results>
+              <plus>
+                <key>	damageAssistedTrack	</key>
+                <key>	damageAssistedRadio	</key>
+                <key>	damageAssistedStun	</key>
+              </plus>
+              <greaterOrEqual>	4000	</greaterOrEqual>
+            </results>
+          </and>
+        </postBattle>
+        <common>
+          <battles>
+            <uniqueVehicles></uniqueVehicles>
+            <count>	3	</count>
+          </battles>
+        </common>
+      </conditions>
+      <bonus>
+        <credits>	125000	</credits>
+        <premium_plus>	3	</premium_plus>
+        <item>	40185	  <count>	1	</count>
+        </item>
+        <token>
+          <id>	token:pt:final:s4:t11:main	</id>
+          <expires>	01.01.2050 00:01	</expires>
+          <count>	1	</count>
+          <limit>	63	</limit>
+        </token>
+      </bonus>
+    </potapovQuest>
+    <potapovQuest>
+      <enabled>	true	</enabled>
+      <id>	pm4_11_3_7_add	</id>
+      <serverOnly>	true	</serverOnly>
+      <conditions>
+        <preBattle>
+          <account>
+            <token>
+              <id>	token:pt:s4:t11:finished:base	</id>
+              <equal>	0	</equal>
+            </token>
+          </account>
+        </preBattle>
+        <postBattle>
+          <and>
+            <vehicleKills>
+              <classes>	SPG	</classes>
+              <greaterOrEqual>	1	</greaterOrEqual>
+            </vehicleKills>
+            <results>
+              <plus>
+                <key>	damageAssistedTrack	</key>
+                <key>	damageAssistedRadio	</key>
+                <key>	damageAssistedStun	</key>
+              </plus>
+              <greaterOrEqual>	4000	</greaterOrEqual>
+            </results>
+          </and>
+        </postBattle>
+        <common>
+          <battles>
+            <uniqueVehicles></uniqueVehicles>
+            <count>	3	</count>
+          </battles>
+        </common>
+      </conditions>
+      <bonus>
+        <token>
+          <id>	pm4:11:points	</id>
+          <expires>	01.01.2050 00:01	</expires>
+          <count>	225	</count>
+        </token>
+      </bonus>
+    </potapovQuest>
+  </quests>
+</pm4_11_3_7.xml>

@@ -8,6 +8,7 @@ from gui.impl.gen import R
 
 class Comp7PagesBuilder(Comp7CorePagesBuilder):
     _SUITABLE_CTX_KEYS = ('isComp7',)
+    _PAGE_NAMES = ('seasonModifiers', 'poi', 'roleSkills', 'nightMaps', 'rules')
     _MODE_RES_ROOT_TEXTS = R.strings.ingame_help.detailsHelp.comp7
     _MODE_RES_ROOT_IMAGES = R.images.comp7.gui.maps.icons.battleHelp
 

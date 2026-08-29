@@ -14,8 +14,8 @@ from battle_modifiers_ext.constants_ext import BATTLE_MODIFIERS_DIR, BATTLE_MODI
 from battle_modifiers_ext.modification_cache import vehicle_modifications, constants_modifications
 from typing import TYPE_CHECKING, Optional, Any, Tuple, Union, List
 from soft_exception import SoftException
-from debug_utils import LOG_WARNING, LOG_DEBUG
-from constants import IS_DEVELOPMENT, IS_BASEAPP, IS_CLIENT
+from debug_utils import LOG_WARNING, LOG_DEBUG_DEV
+from constants import IS_DEVELOPMENT
 from ResMgr import DataSection
 from collections import OrderedDict
 if TYPE_CHECKING:
@@ -272,6 +272,9 @@ class BattleModifiers(Serializable, battle_modifiers.BattleModifiers):
     def __eq__(self, other):
         return self.id() == other.id()
 
+    def __ne__(self, other):
+        return self.id() != other.id()
+
     def __repr__(self):
         return 'BattleModifiers({})'.format(listvalues(self.__modifiers))
 
@@ -399,27 +402,27 @@ class BattleModifiers(Serializable, battle_modifiers.BattleModifiers):
         return hash(tuple(sorted(ids)))
 
 
-def getGlobalModifiers():
+def getDevGlobalModifiers():
     global g_cache
     if g_cache is None:
-        g_cache = _readGlobalBattleModifiers()
+        if IS_DEVELOPMENT:
+            g_cache = readGlobalBattleModifiers(BATTLE_MODIFIERS_XML)
+        else:
+            g_cache = BattleModifiers()
     return g_cache
 
 
-def _readGlobalBattleModifiers():
-    hasGlobalSupport = IS_DEVELOPMENT and (IS_CLIENT or IS_BASEAPP)
-    if not hasGlobalSupport:
-        return BattleModifiers()
-    modifiersSection = _readModifiersSection()
+def readGlobalBattleModifiers(battleModifiersXML=BATTLE_MODIFIERS_XML):
+    modifiersSection = _readModifiersSection(battleModifiersXML)
     if not modifiersSection:
         return BattleModifiers()
     modifiers = BattleModifiers(modifiersSection)
-    LOG_DEBUG('[BattleModifiers] Use global battle modifiers: {}'.format(modifiers))
+    LOG_DEBUG_DEV('[BattleModifiers] Use global battle modifiers: {}'.format(modifiers))
     return modifiers
 
 
-def _readModifiersSection():
-    config = ResMgr.openSection(BATTLE_MODIFIERS_DIR + BATTLE_MODIFIERS_XML)
+def _readModifiersSection(battleModifiersXML=BATTLE_MODIFIERS_XML):
+    config = ResMgr.openSection(BATTLE_MODIFIERS_DIR + battleModifiersXML)
     if config is None:
         return
     else:

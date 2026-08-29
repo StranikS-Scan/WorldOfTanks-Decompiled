@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: battle_royale/scripts/client/Placement.py
+from __future__ import absolute_import
 import BigWorld
 from constants import AirdropType
 from debug_utils import LOG_DEBUG_DEV, LOG_ERROR

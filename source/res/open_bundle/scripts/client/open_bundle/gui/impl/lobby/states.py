@@ -2,7 +2,7 @@
 # Embedded file name: open_bundle/scripts/client/open_bundle/gui/impl/lobby/states.py
 from __future__ import absolute_import
 import typing
-from frameworks.state_machine import StateFlags
+from frameworks_common.state_machine import StateFlags
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.impl.lobby.vehicle_hub import OverviewState

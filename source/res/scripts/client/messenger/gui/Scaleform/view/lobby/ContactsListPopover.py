@@ -12,20 +12,17 @@ from messenger.gui.Scaleform.view.lobby.ContactsCMListener import ContactsCMList
 from messenger.m_constants import PROTO_TYPE
 from messenger.proto import proto_getter
 from messenger.proto.events import g_messengerEvents
-from messenger.storage import storage_getter
+from messenger.storage import MessengerStorageDescriptor, UsersStorage
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.lobby_context import ILobbyContext
 
 class ContactsListPopover(ContactsListPopoverMeta, ContactsCMListener):
     settingsCore = dependency.descriptor(ISettingsCore)
     lobbyContext = dependency.descriptor(ILobbyContext)
+    usersStorage = MessengerStorageDescriptor(UsersStorage)
 
     @proto_getter(PROTO_TYPE.MIGRATION)
     def proto(self):
-        return None
-
-    @storage_getter('users')
-    def usersStorage(self):
         return None
 
     @property

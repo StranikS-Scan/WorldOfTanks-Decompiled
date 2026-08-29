@@ -2,8 +2,8 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/store/browser/states.py
 from __future__ import absolute_import
 import typing
-from frameworks.state_machine import StateFlags
-from frameworks.state_machine.transitions import TransitionType
+from frameworks_common.state_machine import StateFlags
+from frameworks_common.state_machine.transitions import TransitionType
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.lobby_state_machine.states import SFViewLobbyState, SubScopeSubLayerState, LobbyStateDescription, UntrackedState, LobbyStateFlags

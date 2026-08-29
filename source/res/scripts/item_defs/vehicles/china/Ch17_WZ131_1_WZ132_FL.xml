@@ -8,14 +8,14 @@
   </crew>
   <supplySlots>	3 1 1 6 6 6 7 8 8 8	</supplySlots>
   <speedLimits>
-    <forward>	64	</forward>
+    <forward>	68	</forward>
     <backward>	23	</backward>
   </speedLimits>
   <invisibility>
-    <moving>	0.293	</moving>
-    <still>	0.293	</still>
+    <moving>	0.282	</moving>
+    <still>	0.282	</still>
     <camouflageBonus>	0.03	</camouflageBonus>
-    <firePenalty>	0.44	</firePenalty>
+    <firePenalty>	0.423	</firePenalty>
   </invisibility>
   <optDevsOverrides>
     <camouflageNet>
@@ -54,12 +54,14 @@
       <armor_7>	25	</armor_7>
       <armor_8>	20	</armor_8>
       <armor_9>	16	</armor_9>
-      <armor_10>	12.5	</armor_10>
       <armor_11>	12.5	</armor_11>
+      <armor_12>	25	</armor_12>
+      <armor_13>	25	</armor_13>
+      <armor_14>	25	</armor_14>
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	10000	</weight>
-    <maxHealth>	1000	</maxHealth>
+    <maxHealth>	1040	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	180	</maxHealth>
       <maxRegenHealth>	120	</maxRegenHealth>
@@ -725,17 +727,17 @@
       <price>	32000	</price>
       <notInShop>	true	</notInShop>
       <armor>
-        <leftTrack>	15	</leftTrack>
-        <rightTrack>	15	</rightTrack>
+        <leftTrack>	10	</leftTrack>
+        <rightTrack>	10	</rightTrack>
       </armor>
       <weight>	5500	</weight>
       <terrainResistance>	0.5 0.6 1.3	</terrainResistance>
       <brakeForce>	40000	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
-      <rotationSpeed>	56	</rotationSpeed>
+      <rotationSpeed>	45	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.1	</vehicleMovement>
-        <vehicleRotation>	0.1	</vehicleRotation>
+        <vehicleMovement>	0.12	</vehicleMovement>
+        <vehicleRotation>	0.12	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	200	</maxHealth>
@@ -1701,7 +1703,6 @@
         <armor_7>	45	</armor_7>
         <armor_8>	35	</armor_8>
         <armor_9>	20	</armor_9>
-        <armor_10>	20	</armor_10>
         <armor_11>	12.5	</armor_11>
         <armor_12>	0	</armor_12>
         <armor_14>	12.5	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
@@ -1710,14 +1711,14 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	5500	</weight>
-      <maxHealth>	250	</maxHealth>
-      <rotationSpeed>	48	</rotationSpeed>
+      <maxHealth>	260	</maxHealth>
+      <rotationSpeed>	43	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	140	</maxHealth>
         <maxRegenHealth>	70	</maxRegenHealth>
         <repairCost>	1.0	</repairCost>
       </turretRotatorHealth>
-      <circularVisionRadius>	380	</circularVisionRadius>
+      <circularVisionRadius>	390	</circularVisionRadius>
       <surveyingDeviceHealth>
         <maxHealth>	100	</maxHealth>
         <maxRegenHealth>	50	</maxRegenHealth>
@@ -1727,19 +1728,50 @@
         <_100mm_60-100TA_FL>	shared	  <maxAmmo>	43	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
-            <maxPitch>	0 5 1 5	</maxPitch>
+            <maxPitch>	0.00000 6 0.41667 6 0.43056 3 0.56944 3 0.58333 6 1 6	</maxPitch>
           </pitchLimits>
           <armor>
             <armor_1>	55	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_1>
             <armor_2>	45	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_2>
-            <gun>	40	</gun>
+            <gun>	25	</gun>
+            <armor_3>	25	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_3>
+            <armor_5>	20	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_5>
+            <armor_6>	10	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_6>
+            <armor_7>	40	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_7>
+            <armor_8>	20	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_8>
+            <armor_9>	30	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_9>
+            <armor_10>	20	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_10>
+            <armor_11>	20	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_11>
+            <armor_12>	25	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_12>
+            <armor_13>	45	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_13>
+            <armor_14>	25	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_14>
+            <armor_15>	25	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_15>
+            <armor_16>	25	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_16>
+            <armor_17>	30	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_17>
+            <armor_18>	40	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_18>
+            <armor_4>	45	</armor_4>
           </armor>
           <shotDispersionRadius>	0.38	</shotDispersionRadius>
-          <reloadTime>	7.5	</reloadTime>
+          <reloadTime>	8.4	</reloadTime>
           <shotDispersionFactors>
-            <turretRotation>	0.08	</turretRotation>
+            <turretRotation>	0.1	</turretRotation>
             <afterShot>	4.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
@@ -1815,6 +1847,7 @@
               <camouflage>	GUN	</camouflage>
             </customizableVehicleAreas>
           </customization>
+          <edgeByVisualModel>	false	</edgeByVisualModel>
           <camouflage>
             <tiling>	1 0.8 0.000000 2.7	</tiling>
             <density>	124.507 130.06	</density>
@@ -2338,12 +2371,13 @@
     <detailed>
       <engines>
         <_8V135_FL>
-          <smplEnginePower>	700	</smplEnginePower>
-          <smplFwMaxSpeed>	64	</smplFwMaxSpeed>
+          <smplEnginePower>	750	</smplEnginePower>
+          <smplFwMaxSpeed>	68	</smplFwMaxSpeed>
         </_8V135_FL>
       </engines>
       <chassis>
         <Chassis_Ch17_WZ131_1_WZ132_2_FL>
+          <axleCount>	5	</axleCount>
           <grounds>
             <soft>
               <rollingFriction>	0.10465	</rollingFriction>

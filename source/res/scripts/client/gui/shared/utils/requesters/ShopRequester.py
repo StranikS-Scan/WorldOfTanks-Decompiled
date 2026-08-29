@@ -398,6 +398,14 @@ class ShopRequester(AbstractSyncDataRequester, ShopCommonStats, IShopRequester):
 
         return False
 
+    def getPetCostWithDiscount(self, petPrice):
+        petGoodies = self.personalPetDiscounts
+        if petGoodies:
+            bestGoody = self.bestGoody(petGoodies)
+            currency = petPrice.getCurrency()
+            return Money.makeFrom(currency, getPriceWithDiscount(petPrice.get(petPrice.getCurrency(), 0), bestGoody.resource))
+        return petPrice
+
     def getVehicleSlotsPrice(self, currentSlotsCount):
         price = super(ShopRequester, self).getVehicleSlotsPrice(currentSlotsCount)
         slotGoodies = self.personalSlotDiscounts
@@ -463,6 +471,10 @@ class ShopRequester(AbstractSyncDataRequester, ShopCommonStats, IShopRequester):
     @property
     def personalSlotDiscounts(self):
         return self.__personalDiscountsByTarget(GOODIE_TARGET_TYPE.ON_BUY_SLOT)
+
+    @property
+    def personalPetDiscounts(self):
+        return self.__personalDiscountsByTarget(GOODIE_TARGET_TYPE.ON_BUY_PET)
 
     @property
     def personalTankmanDiscounts(self):

@@ -21,7 +21,9 @@ from helpers.CallbackDelayer import CallbackDelayer
 _DistRangeSetting = namedtuple('_DistRangeSetting', ['minArenaSize',
  'distRange',
  'scrollMultiplier',
- 'acceleration'])
+ 'acceleration',
+ 'gameplayID',
+ 'requiresPoiType'])
 _CAM_YAW_ROUND = 4
 
 def getCameraAsSettingsHolder(settingsDataSec):
@@ -437,30 +439,53 @@ class StrategicCamera(CameraWithSettings, CallbackDelayer):
         if section is None:
             return dynamicDistRanges
         else:
-            value = section['dynamicDistRange']
-            minArenaSize = readFloat(value, 'minArenaSize', 0.1, 2000, 2000.0)
-            distRange = readVec2(value, 'distRangeOverride', (1, 1), (2000, 2000), (40, 300))
-            acceleration = readFloat(value, 'acceleration', 0.0, 100.0, 0.0)
-            scrollMultiplier = readFloat(value, 'scrollMultiplier', 0.0, 100.0, 1.0)
-            dynamicDistRanges.append(_DistRangeSetting(minArenaSize, distRange, scrollMultiplier, acceleration))
+            for value in section.values():
+                minArenaSize = readFloat(value, 'minArenaSize', 0.1, 2000, 2000.0)
+                distRange = readVec2(value, 'distRangeOverride', (1, 1), (2000, 2000), (40, 300))
+                acceleration = readFloat(value, 'acceleration', 0.0, 100.0, 0.0)
+                scrollMultiplier = readFloat(value, 'scrollMultiplier', 0.0, 100.0, 1.0)
+                gameplayIDSec = value['gameplayID']
+                gameplayID = gameplayIDSec.asString.strip() if gameplayIDSec is not None else None
+                requiresPoiTypeSec = value['requiresPoiType']
+                requiresPoiType = requiresPoiTypeSec.asInt if requiresPoiTypeSec is not None else None
+                dynamicDistRanges.append(_DistRangeSetting(minArenaSize, distRange, scrollMultiplier, acceleration, gameplayID, requiresPoiType))
+
             return dynamicDistRanges
 
     def __getActiveDistRangeForArena(self):
-        bb = BigWorld.player().arena.arenaType.boundingBox
+        arenaType = BigWorld.player().arena.arenaType
+        bb = arenaType.boundingBox
         arenaBottomLeft = bb[0]
         arenaUpperRight = bb[1]
         arenaX = arenaUpperRight[0] - arenaBottomLeft[0]
         arenaZ = arenaUpperRight[1] - arenaBottomLeft[1]
         arenaSize = min(arenaX, arenaZ)
+        gameplayName = arenaType.gameplayName
+        poiTypes = {poi['type'] for poi in arenaType.pointsOfInterest}
         availableDistRanges = self._cfg['distRangeForArenaSize']
+        filtered = [ pt for pt in availableDistRanges if pt.gameplayID is not None or pt.requiresPoiType is not None ]
+        unfiltered = [ pt for pt in availableDistRanges if pt.gameplayID is None and pt.requiresPoiType is None ]
         currentDistRange = None
-        choosenArenaMinSize = 0
-        for pt in availableDistRanges:
+        choosenArenaMinSize = -1
+        for pt in filtered:
+            if pt.gameplayID is not None and pt.gameplayID != gameplayName:
+                continue
+            if pt.requiresPoiType is not None and pt.requiresPoiType not in poiTypes:
+                continue
             if arenaSize >= pt.minArenaSize and pt.minArenaSize > choosenArenaMinSize:
                 choosenArenaMinSize = pt.minArenaSize
                 currentDistRange = pt
 
-        return currentDistRange
+        if currentDistRange is not None:
+            return currentDistRange
+        else:
+            choosenArenaMinSize = 0
+            for pt in unfiltered:
+                if arenaSize >= pt.minArenaSize and pt.minArenaSize > choosenArenaMinSize:
+                    choosenArenaMinSize = pt.minArenaSize
+                    currentDistRange = pt
+
+            return currentDistRange
 
     def __getDistRange(self):
         return self._cfg['distRange'] if not self.__activeDistRangeSettings else self.__activeDistRangeSettings.distRange

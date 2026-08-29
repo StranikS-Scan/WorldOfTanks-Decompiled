@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/gui/game_loading/state_machine/states/login_screen.py
 import typing
 import game_loading_bindings
-from frameworks.state_machine import StateFlags
+from frameworks_common.state_machine import StateFlags
 from gui.game_loading.state_machine.const import GameLoadingStates
 from gui.game_loading.state_machine.models import ImageViewSettingsModel
 from gui.game_loading.state_machine.states.slide import StaticSlideState

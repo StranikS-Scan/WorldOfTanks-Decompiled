@@ -14,7 +14,7 @@ from messenger.ext.filters.chain import IIncomingMessageFilter
 from messenger.ext.filters.chain import IOutgoingMessageFilter
 from messenger.ext.player_helpers import isCurrentPlayer
 from messenger.m_constants import MESSAGE_FLOOD_COOLDOWN
-from messenger.storage import storage_getter
+from messenger.storage import MessengerStorageDescriptor, UsersStorage
 
 class ObsceneLanguageFilter(IIncomingMessageFilter):
 
@@ -37,6 +37,7 @@ def getObsceneLanguageFilter():
 
 
 class ColoringObsceneLanguageFilter(IIncomingMessageFilter):
+    usersStorage = MessengerStorageDescriptor(UsersStorage)
 
     def __init__(self):
         super(ColoringObsceneLanguageFilter, self).__init__()
@@ -48,10 +49,6 @@ class ColoringObsceneLanguageFilter(IIncomingMessageFilter):
         if self.usersStorage is not None:
             self.usersStorage.clearBreakers()
         return
-
-    @storage_getter('users')
-    def usersStorage(self):
-        return None
 
     def __processBadWord(self, word):
         self.usersStorage.markAsBreaker(self.__currentID, True)

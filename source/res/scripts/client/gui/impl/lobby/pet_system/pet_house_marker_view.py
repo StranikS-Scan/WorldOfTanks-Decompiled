@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/pet_system/pet_house_marker_view.py
 from Event import Event
-from frameworks.state_machine import BaseStateObserver
+from frameworks_common.state_machine import BaseStateObserver
 from frameworks.wulf import ViewFlags, ViewSettings, WindowLayer, WindowStatus
 from gui.Scaleform.lobby_entry import getLobbyStateMachine
 from gui.impl.gen import R

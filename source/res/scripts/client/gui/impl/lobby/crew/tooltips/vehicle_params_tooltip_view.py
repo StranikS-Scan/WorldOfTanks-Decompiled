@@ -17,7 +17,7 @@ from gui.shared.gui_items import KPI
 from gui.shared.items_parameters import isTemperatureGun
 from gui.shared.items_parameters import formatters as param_formatter
 from gui.shared.items_parameters.bonus_helper import isSituationalBonus, isAppropriateVehicle
-from gui.shared.items_parameters.comparator import addParameterValuesOfTheSameType
+from gui.shared.items_parameters.comparator import combineParameterInfos
 from gui.shared.items_parameters.formatters import isRelativeParameter
 from gui.shared.items_parameters.param_name_helper import getVehicleParameterText
 from gui.shared.items_parameters.params_constants import PIERCING_DISTANCES
@@ -317,7 +317,7 @@ class VehicleAdvancedParamsTooltipView(BaseVehicleAdvancedParamsTooltipView):
         installedArchetypes = set()
         isVehSkillTree = vehicle.postProgression.isVehSkillTree()
         vehSkillTreeActiveBonusParams = None
-        vehSkillTreeActiveBonusValues = []
+        vehSkillTreeActiveBonusInfos = []
         vehSkillTreeInactiveBonusShown = False
         for bnsType, bnsId, pInfo in bonusExtractor.getBonusInfo():
             tooltipSection, archetype = self._getTooltipGroupingForBonus(bnsType, bnsId)
@@ -333,7 +333,7 @@ class VehicleAdvancedParamsTooltipView(BaseVehicleAdvancedParamsTooltipView):
                 hasSituational = hasSituational or isSituational
                 bonusCreationParams = BonusCreationParams(bnsType, bnsId, pInfo, scheme, isSituational, vehPostProgressionBonusLevels)
                 if isVehSkillTree and bnsType == constants.BonusTypes.BASE_MODIFICATION:
-                    vehSkillTreeActiveBonusValues.append(pInfo.getParamDiff())
+                    vehSkillTreeActiveBonusInfos.append(pInfo)
                     if vehSkillTreeActiveBonusParams is None:
                         vehSkillTreeActiveBonusParams = bonusCreationParams
                     continue
@@ -342,14 +342,11 @@ class VehicleAdvancedParamsTooltipView(BaseVehicleAdvancedParamsTooltipView):
                 appliedOptDeviceBonuses.append(bnsId)
                 result[tooltipSection].append(itemModel)
 
-        if isVehSkillTree and vehSkillTreeActiveBonusParams is not None and vehSkillTreeActiveBonusValues:
+        if isVehSkillTree and vehSkillTreeActiveBonusParams is not None and vehSkillTreeActiveBonusInfos:
             tooltipSection, _ = self._getTooltipGroupingForBonus(vehSkillTreeActiveBonusParams.bnsType, vehSkillTreeActiveBonusParams.bnsId)
-            valueStacked = vehSkillTreeActiveBonusValues[0]
-            for value in vehSkillTreeActiveBonusValues[1:]:
-                valueStacked = addParameterValuesOfTheSameType(valueStacked, value)
-
+            combinedParams = vehSkillTreeActiveBonusParams._replace(pInfo=combineParameterInfos(vehSkillTreeActiveBonusInfos))
             itemModel = VehicleParamsItem()
-            self._fillActiveVehicleParamItem(itemModel, vehSkillTreeActiveBonusParams, valueStacked)
+            self._fillActiveVehicleParamItem(itemModel, combinedParams)
             result[tooltipSection].append(itemModel)
         for bnsId, bnsType in sorted(self._extendedData.possibleBonuses, cmp=_bonusCmp):
             if bnsType == constants.BonusTypes.PERK and not self._hasPerksBonuses:
@@ -432,12 +429,12 @@ class VehicleAdvancedParamsTooltipView(BaseVehicleAdvancedParamsTooltipView):
 
         return
 
-    def _fillActiveVehicleParamItem(self, itemModel, bonusCreationParams, value=None):
+    def _fillActiveVehicleParamItem(self, itemModel, bonusCreationParams):
         bnsType, bnsId, pInfo, scheme, isSituational, vehPostProgressionBonusLevels = bonusCreationParams
         isVehSkillTree = self.vehicle.postProgression.isVehSkillTree()
         formattedBnsID = _getBonusID(bnsType, bnsId)
         bonusName = _getBonusName(bnsType, formattedBnsID, isVehSkillTree=isVehSkillTree)
-        valueStr = param_formatter.formatParameterDelta(pInfo, scheme, diffReady=value)
+        valueStr = param_formatter.formatParameterDelta(pInfo, scheme)
         itemModel.setIsEnabled(True)
         itemModel.setValue(valueStr)
         itemModel.setTitle(bonusName)
@@ -505,7 +502,7 @@ class VehicleAvgParamsTooltipView(BaseVehicleAdvancedParamsTooltipView):
         for rangeParamName in rangeParamNames:
             value = self._context.getComparator().getExtendedData(rangeParamName).value
             fmtValue = param_formatter.formatParameter(rangeParamName, value)
-            args = {'units': i18n.makeString(param_formatter.MEASURE_UNITS.get(rangeParamName))}
+            args = {'units': i18n.makeString(param_formatter.MEASURE_UNITS.get(rangeParamName, ''))}
             if rangeParamName in ('minPiercingPower', 'minMutableDamage'):
                 args['distance'] = int(min(self.vehicle.descriptor.shot.maxDistance, PIERCING_DISTANCES[1]))
             title = backport.text(R.strings.tooltips.tank_params.avgParamComment.dyn(rangeParamName)(), **args)

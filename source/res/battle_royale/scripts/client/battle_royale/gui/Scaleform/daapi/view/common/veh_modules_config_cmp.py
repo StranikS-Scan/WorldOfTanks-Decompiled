@@ -1,6 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: battle_royale/scripts/client/battle_royale/gui/Scaleform/daapi/view/common/veh_modules_config_cmp.py
+from __future__ import absolute_import
 import logging
+import typing
+from future.utils import lrange
 from gui.Scaleform.daapi.view.meta.VehModulesConfiguratorCmpMeta import VehModulesConfiguratorCmpMeta
 from gui.doc_loaders.battle_royale_settings_loader import getTreeModuleIcon
 from gui.impl import backport
@@ -84,8 +87,8 @@ class VehicleModulesConfiguratorCmp(VehModulesConfiguratorCmpMeta):
     def onClick(self, intCD, columnIdx, moduleIdx):
         return False
 
-    def _syncVehicle(self, changedModuleIntCD):
-        colID, modID = self.__moduleIntCdToPosition[changedModuleIntCD]
+    def _syncVehicle(self, intCD):
+        colID, modID = self.__moduleIntCdToPosition[intCD]
         if not self._columnsVOs[colID]['modules'][modID]['selected']:
             self._recreate()
             _logger.info('Module has been changed outside current view.')
@@ -198,7 +201,7 @@ class VehicleModulesConfiguratorCmp(VehModulesConfiguratorCmpMeta):
         alreadyHasHighlight = False
         while j <= availableColumn and j < totalColumns:
             columnVO = self._columnsVOs[j]
-            availableForSelection = j <= availableColumn and j > currentColumn
+            availableForSelection = currentColumn < j <= availableColumn
             if columnVO['availableForSelection'] != availableForSelection:
                 columnVO['availableForSelection'] = availableForSelection
                 changedColumns.add(j)
@@ -220,7 +223,7 @@ class VehicleModulesConfiguratorCmp(VehModulesConfiguratorCmpMeta):
         return changedColumns
 
     def _updateLinks(self, vehicle):
-        for i in reversed(range(1, len(self._columnsVOs))):
+        for i in reversed(lrange(1, len(self._columnsVOs))):
             currentColumn = self._columnsVOs[i]
             if not currentColumn:
                 return

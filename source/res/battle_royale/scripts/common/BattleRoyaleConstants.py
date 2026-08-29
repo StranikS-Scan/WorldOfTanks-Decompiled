@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: battle_royale/scripts/common/BattleRoyaleConstants.py
+from __future__ import absolute_import
 CMD_BATTLE_ROYALE_OPERATE_BRCOIN = 21003
 CMD_BATTLE_ROYALE_OPERATE_STPCOIN = 21004
 CMD_BATTLE_ROYALE_SET_RATING = 21005

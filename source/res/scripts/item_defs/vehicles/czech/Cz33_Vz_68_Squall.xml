@@ -6,7 +6,7 @@
     <driver></driver>
   </crew>
   <supplySlots>	3 1 1 6 6 6 7 8 8 8	</supplySlots>
-  <postProgressionTree>	role_LT_universal	</postProgressionTree>
+  <postProgressionTree>	role_LT_support	</postProgressionTree>
   <customRoleSlotOptions>	2 4	</customRoleSlotOptions>
   <speedLimits>
     <forward>	55	</forward>
@@ -1910,6 +1910,7 @@
             <collisionModelClient>	vehicles/czech/Cz33_Vz_68_Squall/collision_client/Gun_03.model	</collisionModelClient>
           </hitTester>
           <edgeByVisualModel>	false	</edgeByVisualModel>
+          <muzzleBrake>	HORIZONTAL	</muzzleBrake>
           <camouflage>
             <density>	137.76326 137.713165	</density>
             <aoTextureSize>	512 512	</aoTextureSize>

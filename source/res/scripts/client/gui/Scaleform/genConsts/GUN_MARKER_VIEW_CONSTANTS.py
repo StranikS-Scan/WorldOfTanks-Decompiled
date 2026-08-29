@@ -20,6 +20,10 @@ class GUN_MARKER_VIEW_CONSTANTS(object):
     TWIN_GUN_MARKER_DEBUG_LINKAGE = 'TwinGunMarkerDebugUI'
     PENETRATION_FX_LINKAGE = 'PenetrationFxUI'
     LOW_CHARGE_SHOT_GUN_MARKER_LINKAGE = 'LowChargeShotGunMarkerUI'
+    AUXILIARY_ROCKET_LAUNCHER_GUN_MARKER_ARCADE_LINKAGE = 'AuxiliaryRocketLauncherGunMarkerArcadeUI'
+    AUXILIARY_ROCKET_LAUNCHER_GUN_MARKER_SNIPER_LINKAGE = 'AuxiliaryRocketLauncherGunMarkerSniperUI'
+    AUXILIARY_ROCKET_LAUNCHER_GUN_MARKER_ARCADE_DEBUG_LINKAGE = 'AuxiliaryRocketLauncherGunMarkerArcadeDebugUI'
+    AUXILIARY_ROCKET_LAUNCHER_GUN_MARKER_SNIPER_DEBUG_LINKAGE = 'AuxiliaryRocketLauncherGunMarkerSniperDebugUI'
     ARCADE_GUN_MARKER_NAME = 'arcadeGunMarker'
     SNIPER_GUN_MARKER_NAME = 'sniperGunMarker'
     SPG_GUN_MARKER_NAME = 'spgGunMarker'
@@ -50,6 +54,10 @@ class GUN_MARKER_VIEW_CONSTANTS(object):
     LOW_CHARGE_SHOT_GUN_SNIPER_MARKER_NAME = 'sniperLowChargeShotGunMarker'
     DEBUG_LOW_CHARGE_SHOT_GUN_ARCADE_MARKER_NAME = 'arcadeDebugLowChargeShotGunMarker'
     DEBUG_LOW_CHARGE_SHOT_GUN_SNIPER_MARKER_NAME = 'sniperDebugLowChargeShotGunMarker'
+    AUXILIARY_ROCKET_LAUNCHER_GUN_ARCADE_MARKER_NAME = 'arcadeAuxiliaryRocketLauncherGunMarker'
+    AUXILIARY_ROCKET_LAUNCHER_GUN_SNIPER_MARKER_NAME = 'sniperAuxiliaryRocketLauncherGunMarker'
+    DEBUG_AUXILIARY_ROCKET_LAUNCHER_GUN_ARCADE_MARKER_NAME = 'arcadeDebugAuxiliaryRocketLauncherGunMarker'
+    DEBUG_AUXILIARY_ROCKET_LAUNCHER_GUN_SNIPER_MARKER_NAME = 'sniperDebugAuxiliaryRocketLauncherGunMarker'
     GUN_TAG_RELOADING_TYPES = [1,
      4,
      7,

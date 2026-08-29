@@ -13,6 +13,9 @@
     <ArenaCommendationsMasterComponent></ArenaCommendationsMasterComponent>
     <ArenaDynObstaclesComponent></ArenaDynObstaclesComponent>
     <ArenaFogOfWarComponent></ArenaFogOfWarComponent>
+    <ArenaRiggedBattleComponent></ArenaRiggedBattleComponent>
+    <ArenaPBHComponent></ArenaPBHComponent>
+    <AccountPBHComponent></AccountPBHComponent>
   </StaticComponents>
   <DynamicComponents>
     <OwnVehicle></OwnVehicle>
@@ -49,6 +52,8 @@
     <AvatarCommendations></AvatarCommendations>
     <VehicleCircle></VehicleCircle>
     <VehicleRadarDetection></VehicleRadarDetection>
+    <IlluminationFlareDetection></IlluminationFlareDetection>
+    <IlluminationFlareTargetController></IlluminationFlareTargetController>
     <VehicleBuff></VehicleBuff>
     <IncomingDamageModifier></IncomingDamageModifier>
     <GunReloadBoost></GunReloadBoost>
@@ -76,6 +81,7 @@
     <VehicleRespawnComponent></VehicleRespawnComponent>
     <VehicleLivesComponent></VehicleLivesComponent>
     <TeamInfoLivesComponent></TeamInfoLivesComponent>
+    <TeamInfoPBHComponent></TeamInfoPBHComponent>
     <PveHudWidgetsStateComponent></PveHudWidgetsStateComponent>
     <PveMinimapController></PveMinimapController>
     <TargetMarkersComponent></TargetMarkersComponent>
@@ -113,10 +119,17 @@
     <TargetDesignatorTargetController></TargetDesignatorTargetController>
     <TargetDesignatorTeamController></TargetDesignatorTeamController>
     <StanceDanceController></StanceDanceController>
+    <AutoreloaderSurgeController></AutoreloaderSurgeController>
+    <CrestMovingController></CrestMovingController>
     <ChargeableBurstComponent></ChargeableBurstComponent>
     <DebuffController></DebuffController>
     <StagedJetBoostersController></StagedJetBoostersController>
     <PropellantGunController></PropellantGunController>
     <WheeledDashController></WheeledDashController>
+    <SightPointerComponent></SightPointerComponent>
+    <AuxiliaryRocketLauncherComponent></AuxiliaryRocketLauncherComponent>
+    <ShellParamsSwitcherController></ShellParamsSwitcherController>
+    <ShellCalibrationController></ShellCalibrationController>
+    <BustleFeedController></BustleFeedController>
   </DynamicComponents>
 </components.xml>

@@ -74,6 +74,7 @@ _TOKENS = (Type.LOOTBOX,
 class Statistics(object):
     __slots__ = ('__eventName',)
     __lootBoxes = dependency.descriptor(ILootBoxSystemController)
+    REWARD_ORDER = _REWARD_ORDER
 
     def __init__(self):
         self.__eventName = ''
@@ -95,27 +96,31 @@ class Statistics(object):
         for rewardModel in self.__iterLootBoxesRewardModels(rewardsData):
             categories.addViewModel(rewardModel)
 
-        for rewardType in _REWARD_ORDER:
-            if rewardType in _CUSTOMIZATIONS:
-                rewardData = rewardsData.get('customizations')
-            elif rewardType in _ITEMS:
-                rewardData = rewardsData.get('items')
-            elif rewardType in _COMBINED:
-                rewardData = rewardsData
-            elif rewardType in _GOODIES:
-                rewardData = rewardsData.get('goodies')
-            elif rewardType == Type.BLUEPRINTS:
-                rewardData = rewardsData.get('blueprints')
-            elif rewardType in _TOKENS:
-                rewardData = rewardsData.get('tokens')
-            else:
-                rewardData = rewardsData.get(rewardType.value)
-            rewardModel = _getRewardModel(rewardType, rewardData)
+        for rewardType in self.REWARD_ORDER:
+            rewardModel = self._prepareRewardModel(rewardType, rewardsData)
             if rewardModel is not None:
                 categories.addViewModel(rewardModel)
 
         categories.invalidate()
         return
+
+    @classmethod
+    def _prepareRewardModel(cls, rewardType, rewardsData):
+        if rewardType in _CUSTOMIZATIONS:
+            rewardData = rewardsData.get('customizations')
+        elif rewardType in _ITEMS:
+            rewardData = rewardsData.get('items')
+        elif rewardType in _COMBINED:
+            rewardData = rewardsData
+        elif rewardType in _GOODIES:
+            rewardData = rewardsData.get('goodies')
+        elif rewardType == Type.BLUEPRINTS:
+            rewardData = rewardsData.get('blueprints')
+        elif rewardType in _TOKENS:
+            rewardData = rewardsData.get('tokens')
+        else:
+            rewardData = rewardsData.get(rewardType.value)
+        return cls._getRewardModel(rewardType, rewardData)
 
     def __iterLootBoxesRewardModels(self, rewardData):
         lootBoxData = [ (self.__lootBoxes.getBoxInfo(int(tokenName.split(':')[1]))['category'], tokenData['count']) for tokenName, tokenData in rewardData.get('tokens', {}).iteritems() if tokenName.startswith('lootBox') and tokenData['count'] ]
@@ -123,13 +128,13 @@ class Statistics(object):
         lootBoxData.sort(key=lambda d: boxesPriority.get(d[0], len(boxesPriority)), reverse=True)
         return (_makeRewardModel('lootBox_{}'.format(category), count) for category, count in lootBoxData)
 
-
-def _getRewardModel(rewardType, rewardData):
-    if not rewardData:
-        return None
-    else:
-        count = _COUNT_REWARDS[rewardType](rewardData)
-        return None if not count else _makeRewardModel(rewardType.value, count)
+    @classmethod
+    def _getRewardModel(cls, rewardType, rewardData):
+        if not rewardData:
+            return None
+        else:
+            count = _COUNT_REWARDS[rewardType](rewardData)
+            return None if not count else _makeRewardModel(rewardType.value, count)
 
 
 def _countVehicles(rewardData):

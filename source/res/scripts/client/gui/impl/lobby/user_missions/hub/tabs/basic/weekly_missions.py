@@ -8,7 +8,7 @@ from future.utils import viewvalues
 from constants import Configs
 from gui.impl.gen.view_models.views.lobby.tooltips.additional_rewards_tooltip_model import AdditionalRewardsTooltipModel
 from gui.impl.lobby.missions.missions_helpers import markQuestProgressAsViewed
-from gui.server_events.conditions import _Cumulativable
+from gui.server_events.conditions import Cumulativable
 from gui.server_events.settings import visitEventsGUI
 from helpers import dependency, time_utils
 from gui import SystemMessages
@@ -116,10 +116,11 @@ class WeeklyMissions(ViewComponent[WeeklyMissionsModel]):
         missionParam = event.getArgument('tooltipId', '')
         missionParams = missionParam.rsplit(':', 1)
         if len(missionParams) != 2:
-            return
-        missionId, tooltipId = missionParams
-        data = self._tooltipData.get(missionId, {})
-        return data.get(tooltipId)
+            return None
+        else:
+            missionId, tooltipId = missionParams
+            data = self._tooltipData.get(missionId, {})
+            return data.get(tooltipId)
 
     def _markQuestsAsVisited(self):
         seenQuests = self.eventsCache.getWeeklyQuests().values()
@@ -164,7 +165,7 @@ class WeeklyMissions(ViewComponent[WeeklyMissionsModel]):
         conditions = quest.bonusCond.getConditions()
         if conditions and len(conditions.items) == 1:
             item = conditions.items[0]
-            if isinstance(item, _Cumulativable):
+            if isinstance(item, Cumulativable):
                 currentProgress, total, earned, isCompleted = item.getProgressPerGroup(prevProgData=self.eventsCache.questsProgress.getLastViewedProgress(quest.getID())).get(None, [])
                 if not isCompleted:
                     return (currentProgress, earned)

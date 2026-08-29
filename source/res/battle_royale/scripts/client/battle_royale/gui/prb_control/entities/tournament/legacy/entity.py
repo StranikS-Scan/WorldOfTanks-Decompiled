@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: battle_royale/scripts/client/battle_royale/gui/prb_control/entities/tournament/legacy/entity.py
+from __future__ import absolute_import
 from helpers import dependency
 from gui.prb_control import prb_getters
 from gui.prb_control.settings import FUNCTIONAL_FLAG

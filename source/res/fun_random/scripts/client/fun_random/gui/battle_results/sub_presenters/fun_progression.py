@@ -11,9 +11,9 @@ from fun_random.gui.feature.util.fun_mixins import FunAssetPacksMixin, FunProgre
 from fun_random.gui.impl.gen.view_models.views.lobby.feature.battle_results.fun_random_progress_model import FunRandomProgressModel
 from fun_random.gui.impl.lobby.common.fun_view_helpers import packBonuses, packStageRewards, sortFunProgressionBonuses
 from gui.battle_results.presenters.battle_results_sub_presenter import BattleResultsSubPresenter
-from gui.impl.backport.backport_tooltip import createBackportTooltipContent
 from gui.impl.gen import R
 from gui.impl.lobby.tooltips.additional_rewards_tooltip import AdditionalRewardsTooltip
+from gui.impl.lobby.common.view_wrappers import createBackportTooltipDecorator
 if typing.TYPE_CHECKING:
     from frameworks.wulf import ViewModel
     from gui.battle_results.stats_ctrl import BattleResults
@@ -53,7 +53,7 @@ class FunProgressionSubPresenter(BattleResultsSubPresenter, FunProgressionWatche
 
     def createToolTipContent(self, event, contentID):
         if contentID == R.views.fun_random.mono.lobby.tooltips.loot_box_tooltip():
-            tooltipData = self.__getTooltipData(event)
+            tooltipData = self.getTooltipData(event)
             lootboxID = tooltipData.specialArgs[0] if tooltipData and tooltipData.specialArgs else None
             from fun_random.gui.impl.lobby.tooltips.fun_random_loot_box_tooltip_view import FunRandomLootBoxTooltipView
             if lootboxID:
@@ -65,13 +65,14 @@ class FunProgressionSubPresenter(BattleResultsSubPresenter, FunProgressionWatche
             if bonuses:
                 return AdditionalRewardsTooltip(bonuses)
             return
-        elif contentID == R.views.common.tooltip_window.backport_tooltip_content.BackportTooltipContent():
-            tooltipId = event.getArgument('tooltipId')
-            return createBackportTooltipContent(specialAlias=tooltipId, tooltipData=self.__getTooltipData(event))
         else:
             return super(FunProgressionSubPresenter, self).createToolTipContent(event, contentID)
 
-    def __getTooltipData(self, event):
+    @createBackportTooltipDecorator()
+    def createToolTip(self, event):
+        return super(FunProgressionSubPresenter, self).createToolTip(event)
+
+    def getTooltipData(self, event):
         tooltipId = event.getArgument('tooltipId')
         return None if tooltipId is None else self.__rewardsData.tooltips.get(tooltipId)
 

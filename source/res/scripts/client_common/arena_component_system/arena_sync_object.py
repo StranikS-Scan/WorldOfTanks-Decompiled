@@ -13,6 +13,9 @@ class AttributeDict(dict):
             return self[item]
         except KeyError:
             LOG_ERROR('sync data object has no key: ', item)
+            return None
+
+        return None
 
 
 class ArenaSyncObject(object):
@@ -27,6 +30,9 @@ class ArenaSyncObject(object):
             return self.__cache[item]
         except KeyError:
             LOG_ERROR('sync data object has no key: ', item)
+            return None
+
+        return None
 
     def synchronize(self, isFullSync, diff):
         if isFullSync:
@@ -64,7 +70,7 @@ class ArenaSyncObject(object):
         else:
             cache = self.__cache
             for item in keyList:
-                cache = cache.__getattr__(item)
+                cache = getattr(cache, item)
 
             return cache
 

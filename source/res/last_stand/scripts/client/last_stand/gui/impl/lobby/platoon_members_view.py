@@ -128,11 +128,12 @@ class ExtMembersView(SquadMembersView, IGlobalListener, IUnitListener):
         entity = self._platoonCtrl.getPrbEntity()
         _, unit = entity.getUnit()
         if not unit:
-            return
-        queueType = unit._extras.get(CURRENT_QUEUE_TYPE_KEY)
-        slots, squadSize = getPlatoonSlotsData(self._platoonCtrl.getPrbEntity(), queueType)
-        slots.sort(key=slotsPlayerSortKey)
-        return slots[:squadSize]
+            return None
+        else:
+            queueType = unit._extras.get(CURRENT_QUEUE_TYPE_KEY)
+            slots, squadSize = getPlatoonSlotsData(self._platoonCtrl.getPrbEntity(), queueType)
+            slots.sort(key=slotsPlayerSortKey)
+            return slots[:squadSize]
 
     def _updateCommandersDifficultyLevel(self):
         entity = self._platoonCtrl.getPrbEntity()

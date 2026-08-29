@@ -3,13 +3,18 @@
 import logging
 import BattleReplay
 from constants import HAS_DEV_RESOURCES
-from frameworks.state_machine import StateMachine
+from frameworks_common.state_machine import StateMachine
 from gameplay import states
+from gameplay.observers import BlockingStateClearObserver
 _logger = logging.getLogger(__name__)
 _logger.addHandler(logging.NullHandler())
 
 class GameplayStateMachine(StateMachine):
     __slots__ = ()
+
+    def start(self, doValidate=True):
+        self.connect(BlockingStateClearObserver())
+        super(GameplayStateMachine, self).start(doValidate)
 
     @property
     def offline(self):

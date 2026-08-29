@@ -14,6 +14,7 @@ from CurrentVehicle import g_currentPreviewVehicle
 from account_helpers.settings_core import settings_constants
 from constants import VehicleArmorTags
 from frameworks.wulf import ViewStatus
+from frameworks.wulf.view.array import fillViewModelsArray
 from gui import g_mouseEventHandlers
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.app_loader import app_getter
@@ -21,9 +22,11 @@ from gui.impl.backport import createTooltipData
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.vehicle_hub.views.sub_models.armor_model import Modes
 from gui.impl.gen.view_models.views.lobby.vehicle_hub.views.sub_models.armor_vehicle_module import ArmorVehicleModule
+from gui.impl.gen.view_models.views.lobby.vehicle_hub.views.sub_models.armor_shell_model import ArmorShellModel
 from gui.impl.lobby.common.vehicle_model_helpers import fillVehicleModel
 from gui.impl.lobby.common.view_wrappers import createBackportTooltipDecorator
 from gui.impl.lobby.select_vehicle.select_vehicle import SelectVehicleWindow, SelectVehicleTitles
+from gui.impl.lobby.tank_setup.tank_setup_helper import createShellMechanicsModels
 from gui.impl.lobby.vehicle_hub.sub_presenters.armor.armor_tooltip import ArmorTooltipWindow
 from cgf_components.armor_inspector_component import ArmorInspectorComponent
 from gui.impl.lobby.vehicle_hub.sub_presenters.armor.minor_tooltip import MinorTooltip
@@ -40,6 +43,7 @@ from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.app_loader import IAppLoader
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.shared.utils import IHangarSpace
+from vehicles.mechanics.mechanic_constants import VehicleMechanic
 from uilogging.vehicle_hub.loggers import ArmorTabLogger
 if typing.TYPE_CHECKING:
     import CGF
@@ -48,6 +52,7 @@ if typing.TYPE_CHECKING:
     from gui.impl.gen.view_models.views.lobby.vehicle_hub.views.sub_models.armor_model import ArmorModel
     from gui.impl.lobby.vehicle_hub.sub_presenters.armor.penetration_utils import ShellParams
 _ROTATION_PER_PX = 0.0015
+_SUPPORTED_MECHANICS = frozenset([VehicleMechanic.SHELL_PARAMS_SWITCHER, VehicleMechanic.BUSTLE_FEED])
 _logger = logging.getLogger(__name__)
 
 class _ModeBase(object):
@@ -164,21 +169,10 @@ class ArmorSubPresenter(SubPresenterBase):
     def initialize(self, vhCtx, *args, **kwargs):
         super(ArmorSubPresenter, self).initialize(vhCtx, *args, **kwargs)
         self.vehicleEntity = self._hangarSpace.space.getVehicleEntity()
-        self._level = self.vehicleEntity.typeDescriptor.level
-        self._normalArmorMax, self._spacedArmorMax = getMaxArmor(self.vehicleEntity)
-        g_mouseEventHandlers.add(self._handleMouseEvent)
-        self._hangarSpace.lockVehicleSelectable(self)
-        self._startUILogger()
-        self.viewModel.setSelectedMode(self._currentModeId)
-        self._attackerSetup = _AttackerSetup(getArmorInspectorAttackerVehicleConfig(self._level), self)
-        self._fillArmorData()
-        self._modulesSetup = _ModulesSetup(self.vehicleEntity, self.viewModel)
-        self._setupModes()
-        if self._hangarSpace.isModelLoaded:
-            self._currentMode.enter()
+        if self.vehicleEntity.appearance.isLoaded():
+            self._initialize()
         else:
-            self._hangarSpace.onVehicleChanged += self._onVehicleChanged
-        self._modulesMover = _ModulesMover(self.vehicleEntity, self.viewModel)
+            self.vehicleEntity.appearance.loadState.subscribe(self._onAppearanceLoadingFinished, self._onAppearanceLoadingStarted)
 
     def finalize(self):
         self.isClosing = True
@@ -201,7 +195,9 @@ class ArmorSubPresenter(SubPresenterBase):
         if self._attackerSetup is not None:
             self._attackerSetup.finalize(self.viewModel)
             self._attackerSetup = None
-        self.vehicleEntity = None
+        if self.vehicleEntity is not None:
+            self._unsubscribeAppearanceLoadEvents()
+            self.vehicleEntity = None
         self.isClosing = False
         self._shellParams = None
         super(ArmorSubPresenter, self).finalize()
@@ -245,6 +241,33 @@ class ArmorSubPresenter(SubPresenterBase):
 
     def _fillArmorData(self):
         fillArmorData(self.getViewModel(), self._level, self._normalArmorMax, self._spacedArmorMax, self._settingsCore.getSetting(settings_constants.GRAPHICS.COLOR_BLIND))
+
+    def _onAppearanceLoadingFinished(self):
+        self._initialize()
+        self._unsubscribeAppearanceLoadEvents()
+
+    def _onAppearanceLoadingStarted(self):
+        self._unsubscribeAppearanceLoadEvents()
+
+    def _unsubscribeAppearanceLoadEvents(self):
+        self.vehicleEntity.appearance.loadState.unsubscribe(self._onAppearanceLoadingFinished, self._onAppearanceLoadingStarted)
+
+    def _initialize(self):
+        self._level = self.vehicleEntity.typeDescriptor.level
+        self._normalArmorMax, self._spacedArmorMax = getMaxArmor(self.vehicleEntity)
+        g_mouseEventHandlers.add(self._handleMouseEvent)
+        self._hangarSpace.lockVehicleSelectable(self)
+        self._startUILogger()
+        self.viewModel.setSelectedMode(self._currentModeId)
+        self._attackerSetup = _AttackerSetup(getArmorInspectorAttackerVehicleConfig(self._level), self)
+        self._fillArmorData()
+        self._modulesSetup = _ModulesSetup(self.vehicleEntity, self.viewModel)
+        self._setupModes()
+        if self._hangarSpace.isModelLoaded:
+            self._currentMode.enter()
+        else:
+            self._hangarSpace.onVehicleChanged += self._onVehicleChanged
+        self._modulesMover = _ModulesMover(self.vehicleEntity, self.viewModel)
 
     def _onComponentInstalled(self, *_):
         if not self.isClosing:
@@ -686,6 +709,7 @@ class _AttackerSetup(object):
                         attackerDescr.installComponent(gun.compactDescr)
                     attackerModel.setCurrentGun(gun.compactDescr)
                     attackerModel.setShells(','.join((shot.shell.iconName for shot in gun.shots)))
+                    self.__updateShellMechanics(attackerModel.getShellDetails(), gun)
 
         self._updateAttackerShell(activeGunShotIndex, attackerModel)
 
@@ -724,6 +748,21 @@ class _AttackerSetup(object):
         setArmorInspectorAttackerVehicleConfig(self._parent.vehicleLevel, compactDescr=vehicleCD)
         with self._parent.viewModel.attacker.transaction() as attackerModel:
             self._update(attackerModel, getDefaultAttackerVehicleConfigByCD(vehicleCD))
+
+    def __updateShellMechanics(self, shellDetailsModel, gun):
+        shellDetailsModel.clear()
+        shellsMap = {shell.intCD:shell for shell in self._attackerVehicle.shells.layout.getItems()}
+        for idx, shot in enumerate(gun.shots):
+            shell = shellsMap.get(shot.shell.compactDescr)
+            if shell is None:
+                continue
+            mechanics = [ m for m in shell.getShellMechanicItems(self._attackerVehicle) if m.mechanic in _SUPPORTED_MECHANICS ]
+            if mechanics:
+                shellModel = ArmorShellModel()
+                fillViewModelsArray(createShellMechanicsModels(mechanics), shellModel.getMechanics())
+                shellDetailsModel.set(idx, shellModel)
+
+        return
 
 
 class _ModulesSortKey(SortKey):

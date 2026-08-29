@@ -469,6 +469,7 @@ class CrewWidget(ViewImpl, IGlobalListener):
     def _fillTankmanModel(self, vmTankman, tman, isLessMastered=False):
         if tman is not None:
             tmanSkillsEfficiency = tman.currentVehicleSkillsEfficiency
+            isMaxSkillsEfficiency = tman.isMaxCurrentVehicleSkillsEfficiency
             vmTankman.setTankmanID(tman.invID)
             vmTankman.setFullName(tman.getFullUserNameWithSkin())
             vmTankman.setIcon(tman.getExtensionLessIconWithSkin())
@@ -483,7 +484,7 @@ class CrewWidget(ViewImpl, IGlobalListener):
                 lastSkillLevel = SkillLvlFormatter()
             vmTankman.setLastSkillLevel(self._getLastSkillLevelFormat(lastSkillLevel))
             vmTankman.setLastSkillLevelFull(lastSkillLevel.realSkillLvl)
-            vmTankman.setHasPostProgression(tman.descriptor.isMaxSkillXp())
+            vmTankman.setHasPostProgression(tman.descriptor.isMaxSkillXp() and isMaxSkillsEfficiency)
             vmTankmanRolesList = vmTankman.getRoles()
             for role in tman.roles():
                 vmTankmanRolesList.addString(role)

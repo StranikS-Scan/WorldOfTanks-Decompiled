@@ -135,6 +135,7 @@ class VehicleDynamicComponent(ReplicableDynamicScriptComponent, ILifeCycleCompon
     @ifPlayerVehicle
     def __onAvatarReady(self, player=None):
         self._onAvatarReady(player)
+        self.__lifeCycleEvents.processComponentAvatarReady()
         self._onComponentAvatarUpdate(player)
 
     def __processAppearanceReady(self):

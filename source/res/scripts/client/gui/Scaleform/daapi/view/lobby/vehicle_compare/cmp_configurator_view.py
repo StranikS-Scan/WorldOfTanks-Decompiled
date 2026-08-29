@@ -436,28 +436,31 @@ class VehicleCompareConfiguratorMain(LobbySubView, VehicleCompareConfiguratorMai
 
     def getInitialVehicleData(self):
         basketVehicle = self.getBasketVehCmpData()
-        if basketVehicle.isInInventory():
-            strCD = basketVehicle.getInvVehStrCD()
-            crewLvl, crewSkills = basketVehicle.getInventoryCrewData()
-            equipment = basketVehicle.getInvEquipment()
+        if basketVehicle is None:
+            return (None, None)
         else:
-            strCD = basketVehicle.getStockVehStrCD()
-            crewLvl = basketVehicle.getStockCrewLvl()
-            crewSkills = basketVehicle.getStockCrewSkills()
-            equipment = basketVehicle.getStockEquipment()
-        vehicle = Vehicle(strCD)
-        for slotIndex, equipmentSlot in enumerate(equipment):
-            vehicle_adjusters.installEquipment(vehicle, equipmentSlot, slotIndex)
+            if basketVehicle.isInInventory():
+                strCD = basketVehicle.getInvVehStrCD()
+                crewLvl, crewSkills = basketVehicle.getInventoryCrewData()
+                equipment = basketVehicle.getInvEquipment()
+            else:
+                strCD = basketVehicle.getStockVehStrCD()
+                crewLvl = basketVehicle.getStockCrewLvl()
+                crewSkills = basketVehicle.getStockCrewSkills()
+                equipment = basketVehicle.getStockEquipment()
+            vehicle = Vehicle(strCD)
+            for slotIndex, equipmentSlot in enumerate(equipment):
+                vehicle_adjusters.installEquipment(vehicle, equipmentSlot, slotIndex)
 
-        cmp_helpers.applyCamouflage(vehicle, basketVehicle.invHasCamouflage())
-        battleBooster = basketVehicle.getBattleBooster()
-        if battleBooster is not None:
-            vehicle_adjusters.installBattleBoosterOnVehicle(vehicle, battleBooster.intCD)
-        postProgressionState = basketVehicle.getInvPostProgressionState()
-        vehicle.installPostProgression(postProgressionState, rebuildAttrs=False)
-        dynSlotType = basketVehicle.getInvDynSlotType()
-        vehicle.optDevices.dynSlotType = dynSlotType
-        return (vehicle, CrewSkillsManager(vehicle, crewLvl, crewSkills))
+            cmp_helpers.applyCamouflage(vehicle, basketVehicle.invHasCamouflage())
+            battleBooster = basketVehicle.getBattleBooster()
+            if battleBooster is not None:
+                vehicle_adjusters.installBattleBoosterOnVehicle(vehicle, battleBooster.intCD)
+            postProgressionState = basketVehicle.getInvPostProgressionState()
+            vehicle.installPostProgression(postProgressionState, rebuildAttrs=False)
+            dynSlotType = basketVehicle.getInvDynSlotType()
+            vehicle.optDevices.dynSlotType = dynSlotType
+            return (vehicle, CrewSkillsManager(vehicle, crewLvl, crewSkills))
 
     def getCurrentCrewSkills(self):
         return self.__crewSkillsManager.getSelectedSkills()

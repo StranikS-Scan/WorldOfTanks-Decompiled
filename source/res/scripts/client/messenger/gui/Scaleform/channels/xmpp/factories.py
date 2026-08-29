@@ -4,13 +4,10 @@ from messenger.gui.Scaleform.channels.xmpp import lobby_controllers
 from messenger.gui.interfaces import IControllerFactory
 from messenger.proto.xmpp import find_criteria
 from messenger.proto.xmpp.gloox_constants import MESSAGE_TYPE
-from messenger.storage import storage_getter
+from messenger.storage import MessengerStorageDescriptor, ChannelsStorage
 
 class LobbyControllersFactory(IControllerFactory):
-
-    @storage_getter('channels')
-    def channelsStorage(self):
-        return None
+    channelsStorage = MessengerStorageDescriptor(ChannelsStorage)
 
     def init(self):
         controllers = []

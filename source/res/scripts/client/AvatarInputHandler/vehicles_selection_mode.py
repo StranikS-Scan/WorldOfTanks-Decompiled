@@ -87,6 +87,9 @@ class _CameraManager(object):
                 else:
                     self.__pendingVehicles.add(vehicleID)
                     continue
+                if vehicle.appearance is None:
+                    self.__pendingVehicles.add(vehicleID)
+                    continue
                 if not vehicle.appearance.collisions:
                     continue
                 vehMatrix = Math.Matrix(vehicle.matrix)
@@ -103,24 +106,26 @@ class _CameraManager(object):
             BigWorld.player().onVehicleEnterWorld += self.__onVehicleEnteredWorld
         if numVehs == 0:
             return
-        targetPosition = targetPos.scale(1.0 / numVehs)
-        yawMatrix = math_utils.createRTMatrix((rotationVector.yaw, self.__CAMERA_PITCH, 0), targetPosition)
-        yawMatrix.invert()
-        rotatedPoints = [ yawMatrix.applyPoint(p) for p in vehiclesBBPoints ]
-        maxX = max((p.x for p in rotatedPoints))
-        minX = min((p.x for p in rotatedPoints))
-        maxZ = max((p.z for p in rotatedPoints))
-        minZ = min((p.z for p in rotatedPoints))
-        maxY = max((rp.y for rp in rotatedPoints if rp.x in (minX, maxX) or rp.z in (minZ, maxZ)))
-        width = maxX - minX
-        height = maxZ - minZ
-        hFov = BigWorld.projection().fov
-        ratio = cameras.getScreenAspectRatio()
-        halfFOVTan = math.tan(hFov / 2)
-        distanceToTarget = max(width / (2 * halfFOVTan * ratio), height / (2 * halfFOVTan)) + maxY
-        initialRotations = math_utils.createRotationMatrix((rotationVector.yaw, -self.__CAMERA_PITCH, 0))
-        self.__initialCamSetup = (targetPosition, initialRotations, distanceToTarget)
-        self.__setCamera()
+        else:
+            targetPosition = targetPos.scale(1.0 / numVehs)
+            yawMatrix = math_utils.createRTMatrix((rotationVector.yaw, self.__CAMERA_PITCH, 0), targetPosition)
+            yawMatrix.invert()
+            rotatedPoints = [ yawMatrix.applyPoint(p) for p in vehiclesBBPoints ]
+            maxX = max((p.x for p in rotatedPoints))
+            minX = min((p.x for p in rotatedPoints))
+            maxZ = max((p.z for p in rotatedPoints))
+            minZ = min((p.z for p in rotatedPoints))
+            maxY = max((rp.y for rp in rotatedPoints if rp.x in (minX, maxX) or rp.z in (minZ, maxZ)))
+            width = maxX - minX
+            height = maxZ - minZ
+            hFov = BigWorld.projection().fov
+            ratio = cameras.getScreenAspectRatio()
+            halfFOVTan = math.tan(hFov / 2)
+            distanceToTarget = max(width / (2 * halfFOVTan * ratio), height / (2 * halfFOVTan)) + maxY
+            initialRotations = math_utils.createRotationMatrix((rotationVector.yaw, -self.__CAMERA_PITCH, 0))
+            self.__initialCamSetup = (targetPosition, initialRotations, distanceToTarget)
+            self.__setCamera()
+            return
 
     def __setCamera(self):
         self.__camera.setup(*self.__initialCamSetup)

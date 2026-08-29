@@ -3,8 +3,8 @@
 from __future__ import absolute_import
 import typing
 from WeakMethod import WeakMethodProxy
-from frameworks.state_machine import StateFlags
-from frameworks.state_machine.transitions import TransitionType
+from frameworks_common.state_machine import StateFlags
+from frameworks_common.state_machine.transitions import TransitionType
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.techtree.settings import SelectedNation
 from gui.Scaleform.daapi.view.lobby.vehicle_compare.states import VehicleCompareState

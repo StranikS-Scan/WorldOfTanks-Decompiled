@@ -5,7 +5,10 @@
   <enums>
     <muzzleBrakeType>
       <none>	0	</none>
-      <standard>	1	</standard>
+      <horizontal>	1	</horizontal>
+      <vertical>	2	</vertical>
+      <radial>	3	</radial>
+      <angled>	4	</angled>
     </muzzleBrakeType>
     <armorHitPlacement>
       <regular>	0	</regular>
@@ -58,6 +61,7 @@
       <multi>	1	</multi>
       <startContinuous>	2	</startContinuous>
       <stopContinuous>	3	</stopContinuous>
+      <previewEditor>	4	</previewEditor>
     </shotEvent>
   </enums>
 </expression_constants.xml>

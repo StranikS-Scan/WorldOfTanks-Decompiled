@@ -21,7 +21,7 @@ def makeExtensionPath(extension, path):
     return _EXTENSION_PATH_TEMPLATE.format(root=_EXTENSIONS_RELATIVE_DIR, extension=extension, path=path)
 
 
-Extension = namedtuple('Extension', ('path', 'name', 'isEnabled', 'dirName', 'personality', 'editorPersonality'))
+Extension = namedtuple('Extension', ('path', 'name', 'isEnabled', 'dirName', 'personality', 'commonPersonality', 'editorPersonality'))
 
 class ExtensionsManager(object):
     __slots__ = ('_extensions',)
@@ -68,7 +68,7 @@ class ExtensionsManager(object):
     @staticmethod
     def _readExtension(root):
         section = ResMgr.openSection(root + '/extension.xml')
-        return None if not section else Extension(root + '/', section.readString('FeatureName'), section.readBool('IsEnabled'), root.split('/')[-1], section.readString('Personality'), section.readString('EditorPersonality'))
+        return None if not section else Extension(root + '/', section.readString('FeatureName'), section.readBool('IsEnabled'), root.split('/')[-1], section.readString('Personality'), section.readString('CommonPersonality'), section.readString('EditorPersonality'))
 
     @staticmethod
     def _getExtensionsDirList():

@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: battle_royale/scripts/client/battle_royale/gui/impl/lobby/br_helpers/respawn_ability.py
+from __future__ import absolute_import
 from constants import ARENA_BONUS_TYPE
 from helpers import dependency
 from skeletons.gui.game_control import IBattleRoyaleController

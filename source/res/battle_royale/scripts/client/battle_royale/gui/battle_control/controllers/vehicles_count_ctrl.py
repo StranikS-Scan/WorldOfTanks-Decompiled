@@ -1,5 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: battle_royale/scripts/client/battle_royale/gui/battle_control/controllers/vehicles_count_ctrl.py
+from __future__ import absolute_import
+from future.utils import viewvalues
 from constants import ARENA_BONUS_TYPE
 from debug_utils import LOG_ERROR, LOG_WARNING
 from Event import Event
@@ -141,9 +143,9 @@ class VehicleCountController(IVehicleCountController):
     def invalidateVehiclesStats(self, arenaDP):
         self.__updateFrags(arenaDP)
 
-    def addVehicleInfo(self, vInfoVO, arenaDP):
-        if vInfoVO.isAlive() and vInfoVO.isPlayer():
-            self.__updateVehicleInfo(vInfoVO, arenaDP)
+    def addVehicleInfo(self, vo, arenaDP):
+        if vo.isAlive() and vo.isPlayer():
+            self.__updateVehicleInfo(vo, arenaDP)
             self.__updateData()
 
     def getEnemiesCount(self):
@@ -218,7 +220,7 @@ class VehicleCountController(IVehicleCountController):
     def __updateFriends(self):
         arenaDP = self.__sessionProvider.getArenaDP()
         for _, v in self.__vehicles.items():
-            for data in v.itervalues():
+            for data in viewvalues(v):
                 if data[3] == arenaDP.getVehicleInfo().team:
                     data[2] = False
 
@@ -229,7 +231,7 @@ class VehicleCountController(IVehicleCountController):
         self.__totalCount = 0
         teams = set()
         for _, v in self.__vehicles.items():
-            for data in v.itervalues():
+            for data in viewvalues(v):
                 isDead, _, isEnemy, team, isRespawn = data
                 if not isDead or isRespawn:
                     if isEnemy:

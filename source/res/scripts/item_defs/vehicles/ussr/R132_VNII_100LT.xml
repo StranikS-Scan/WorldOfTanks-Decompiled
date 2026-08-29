@@ -6,11 +6,11 @@
     <gunner>	loader	</gunner>
   </crew>
   <supplySlots>	3 1 1 6 6 6 7 8 8 8	</supplySlots>
-  <postProgressionTree>	role_LT_universal	</postProgressionTree>
+  <postProgressionTree>	role_LT_scout	</postProgressionTree>
   <customRoleSlotOptions>	2 4	</customRoleSlotOptions>
   <speedLimits>
-    <forward>	72	</forward>
-    <backward>	25	</backward>
+    <forward>	75	</forward>
+    <backward>	30	</backward>
   </speedLimits>
   <invisibility>
     <moving>	0.348	</moving>
@@ -53,7 +53,6 @@
       <armor_7>	90	</armor_7>
       <armor_8>	0	</armor_8>
       <armor_9>	50	</armor_9>
-      <armor_10>	50	</armor_10>
       <armor_11>	180	</armor_11>
       <armor_12>	120	</armor_12>
     </armor>
@@ -756,7 +755,7 @@
       <terrainResistance>	1.0 1.3 1.9	</terrainResistance>
       <brakeForce>	15000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
-      <rotationSpeed>	56	</rotationSpeed>
+      <rotationSpeed>	54	</rotationSpeed>
       <shotDispersionFactors>
         <vehicleMovement>	0.06	</vehicleMovement>
         <vehicleRotation>	0.06	</vehicleRotation>
@@ -2043,7 +2042,7 @@
         <maxRegenHealth>	85	</maxRegenHealth>
         <repairCost>	1.0	</repairCost>
       </turretRotatorHealth>
-      <circularVisionRadius>	390	</circularVisionRadius>
+      <circularVisionRadius>	400	</circularVisionRadius>
       <surveyingDeviceHealth>
         <maxHealth>	120	</maxHealth>
         <maxRegenHealth>	60	</maxRegenHealth>
@@ -2069,8 +2068,8 @@
             <minPitch>	0 -15 1 -15	</minPitch>
             <maxPitch>	0 5 0.402778 5 0.430556 1 0.569444 1 0.597222 5 1 5	</maxPitch>
           </pitchLimits>
-          <shotDispersionRadius>	0.46	</shotDispersionRadius>
-          <reloadTime>	7.8	</reloadTime>
+          <shotDispersionRadius>	0.4	</shotDispersionRadius>
+          <reloadTime>	7.5	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.05	</turretRotation>
             <afterShot>	3.5	</afterShot>
@@ -2720,7 +2719,7 @@
       <engines>
         <UTD_20>
           <smplEnginePower>	720	</smplEnginePower>
-          <smplFwMaxSpeed>	72	</smplFwMaxSpeed>
+          <smplFwMaxSpeed>	75	</smplFwMaxSpeed>
         </UTD_20>
       </engines>
       <chassis>
@@ -2728,13 +2727,13 @@
           <axleCount>	5	</axleCount>
           <grounds>
             <soft>
-              <rollingFriction>	0.191188	</rollingFriction>
+              <rollingFriction>	0.15295	</rollingFriction>
             </soft>
             <medium>
-              <rollingFriction>	0.130813	</rollingFriction>
+              <rollingFriction>	0.10465	</rollingFriction>
             </medium>
             <firm>
-              <rollingFriction>	0.100625	</rollingFriction>
+              <rollingFriction>	0.0805	</rollingFriction>
             </firm>
           </grounds>
         </Chassis_R132_VNII_100LT>

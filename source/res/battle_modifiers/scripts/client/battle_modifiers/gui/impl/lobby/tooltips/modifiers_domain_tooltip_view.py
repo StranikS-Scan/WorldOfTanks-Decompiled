@@ -11,12 +11,20 @@ if typing.TYPE_CHECKING:
     from battle_modifiers.gui.feature.modifiers_data_provider import ModifiersDataProvider
 
 class ModifiersDomainTooltipView(ViewImpl):
-    __slots__ = ('__modifiersDomain',)
+    __slots__ = ('_modifiersDomain',)
 
-    def __init__(self, modifiersDomain, *args):
-        settings = ViewSettings(layoutID=R.views.battle_modifiers.lobby.tooltips.ModifiersDomainTooltipView(), model=ModifiersDomainTooltipViewModel(), args=args)
+    def __init__(self, modifiersDomain, layoutID=R.views.battle_modifiers.lobby.tooltips.ModifiersDomainTooltipView(), model=None, *args):
+        if model is None:
+            model = ModifiersDomainTooltipViewModel()
+        settings = ViewSettings(layoutID=layoutID, model=model, args=args)
+        self._modifiersDomain = modifiersDomain
         super(ModifiersDomainTooltipView, self).__init__(settings)
-        self.__modifiersDomain = modifiersDomain
+        return
+
+    def _finalize(self):
+        self._modifiersDomain = None
+        super(ModifiersDomainTooltipView, self)._finalize()
+        return
 
     @property
     def viewModel(self):
@@ -28,15 +36,19 @@ class ModifiersDomainTooltipView(ViewImpl):
     def _onLoading(self, *args, **kwargs):
         super(ModifiersDomainTooltipView, self)._onLoading(*args, **kwargs)
         with self.viewModel.transaction() as model:
-            model.setModifiersDomain(self.__modifiersDomain)
+            model.setModifiersDomain(self._modifiersDomain)
             self.__invalidateModifiers(model.getModifiers())
+            self._invalidateSubModes(model)
 
     def __invalidateModifiers(self, modifiers):
         modifiers.clear()
         modifiersProvider = self.getModifiersDataProvider()
-        rawModifiers = () if modifiersProvider is None else modifiersProvider.getDomainModifiers(self.__modifiersDomain)
+        rawModifiers = () if modifiersProvider is None else modifiersProvider.getDomainModifiers(self._modifiersDomain)
         for modifier in rawModifiers:
             modifiers.addViewModel(packModifierModel(modifier))
 
         modifiers.invalidate()
         return
+
+    def _invalidateSubModes(self, model):
+        pass

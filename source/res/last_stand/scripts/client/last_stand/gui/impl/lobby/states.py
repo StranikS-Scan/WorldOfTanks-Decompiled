@@ -4,7 +4,7 @@ from __future__ import absolute_import
 import time
 import typing
 from WeakMethod import WeakMethodProxy
-from frameworks.state_machine import StateFlags
+from frameworks_common.state_machine import StateFlags
 from gui.Scaleform.daapi.view.lobby.battle_queue.states import BattleQueueContainerState
 from gui.Scaleform.daapi.view.lobby.veh_post_progression.states import VehiclePostProgressionState
 from gui.Scaleform.framework import ScopeTemplates

@@ -7,7 +7,7 @@ import Event
 from Account import PlayerAccount
 from adisp import adisp_async, adisp_process
 from constants import ARENA_BONUS_TYPE, PREMIUM_TYPE, PlayerSatisfactionRating
-from frameworks.state_machine import BaseStateObserver
+from frameworks_common.state_machine import BaseStateObserver
 from frameworks.wulf import WindowLayer
 from gui import SystemMessages
 from gui.Scaleform.lobby_entry import getLobbyStateMachine

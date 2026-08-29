@@ -10,13 +10,13 @@ from vehicles.mechanics.mechanic_constants import VehicleMechanic
 if typing.TYPE_CHECKING:
     VehicleModule = typing.TypeVar('VehicleModule')
 
-@ReprInjector.simple('guiName')
+@ReprInjector.simple('mechanic', 'guiName')
 class ModuleMechanicItem(GUIItem):
     __slots__ = ('_mechanic',)
     _GUI_SUPPORTED_MECHANICS = {}
     _EXTRA_STATUSES = {}
 
-    def __init__(self, mechanic, _=None):
+    def __init__(self, mechanic, *args, **kwargs):
         super(ModuleMechanicItem, self).__init__()
         self._mechanic = mechanic
 
@@ -27,6 +27,10 @@ class ModuleMechanicItem(GUIItem):
     @property
     def guiName(self):
         return VEHICLE_MECHANICS_GUI_MAP.get(self._mechanic, MechanicsEnum.UNKNOWN)
+
+    @property
+    def mechanic(self):
+        return self._mechanic
 
     def getExtraStatuses(self, _):
         return self.guiName.value if self._mechanic in self._EXTRA_STATUSES else None
@@ -43,6 +47,7 @@ class GunMechanicItem(ModuleMechanicItem):
      VehicleMechanic.MAGAZINE_GUN,
      VehicleMechanic.OVERHEAT_GUN,
      VehicleMechanic.PROPELLANT_GUN,
+     VehicleMechanic.SHELL_PARAMS_SWITCHER,
      VehicleMechanic.STUN,
      VehicleMechanic.TWIN_GUN,
      VehicleMechanic.LOW_CHARGE_SHOT}
@@ -56,6 +61,7 @@ class GunMechanicItem(ModuleMechanicItem):
      VehicleMechanic.MAGAZINE_GUN,
      VehicleMechanic.OVERHEAT_GUN,
      VehicleMechanic.PROPELLANT_GUN,
+     VehicleMechanic.SHELL_PARAMS_SWITCHER,
      VehicleMechanic.TWIN_GUN,
      VehicleMechanic.LOW_CHARGE_SHOT}
 

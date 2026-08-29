@@ -49,7 +49,6 @@ class BuyLevelsPresenter(ViewComponent[BattlePassBuyLevelViewModel]):
             self.__chapterID = newChapterID
             self.__package = PackageAnyLevels(self.__chapterID)
         self.__fillModel()
-        switchHangarOverlaySoundFilter(on=True)
         return
 
     def activate(self):

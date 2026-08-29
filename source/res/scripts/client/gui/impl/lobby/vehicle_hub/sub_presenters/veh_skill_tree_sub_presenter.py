@@ -3,7 +3,7 @@
 from __future__ import absolute_import
 import logging
 from Event import Event
-from frameworks.state_machine import StateIdsObserver
+from frameworks_common.state_machine import StateIdsObserver
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import VEH_SKILL_TREE_INTRO_SHOWN
 from gui.Scaleform.lobby_entry import getLobbyStateMachine

@@ -1,6 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: battle_royale/scripts/client/battle_royale/messenger/formatters/service_channel.py
+from __future__ import absolute_import
 from copy import deepcopy
+from future.utils import viewvalues
 from battle_royale.notification.decorators import BRProgressionLockButtonDecorator
 from constants import LOOTBOX_TOKEN_PREFIX
 from gui.impl import backport
@@ -34,7 +36,7 @@ class BRProgressionAchievesFormatter(QuestAchievesFormatter):
             stpcoinResult = g_settings.htmlTemplates.format(cls.__STPCOIN_TEMPLATE, {'text': backport.text(R.strings.messenger.progression.received.stpcoin(), value=text_styles.stPatrick(stpcoinsCount))})
             idx = 1 if [ t for t in data.get('tokens', {}) if t.startswith(LOOTBOX_TOKEN_PREFIX) ] else 0
             result.insert(idx, stpcoinResult)
-        battlePassPoints = sum((points for points in data.get('battlePassPoints', {}).get('vehicles', {}).itervalues()))
+        battlePassPoints = sum(viewvalues(data.get('battlePassPoints', {}).get('vehicles', {})))
         if battlePassPoints > 0:
             result.append(g_settings.htmlTemplates.format(cls.__BATTLE_PASS_TEMPLATE, ctx={'battlePassProgression': backport.text(R.strings.messenger.serviceChannelMessages.BRbattleResults.battlePass(), pointsDiff=text_styles.neutral(battlePassPoints))}))
         return result

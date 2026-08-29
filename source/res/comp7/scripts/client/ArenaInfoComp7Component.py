@@ -1,5 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: comp7/scripts/client/ArenaInfoComp7Component.py
+from __future__ import absolute_import
+from future.utils import viewitems
 from ArenaInfoComp7BaseComponent import ArenaInfoComp7BaseComponent
 from comp7_core.gui.comp7_core_constants import BATTLE_CTRL_ID
 from comp7.gui.battle_control.arena_info.arena_vos import Comp7Keys
@@ -76,8 +78,8 @@ class ArenaInfoComp7Component(ArenaInfoComp7BaseComponent, IArenaVehiclesControl
         arena = avatar_getter.getArena()
         if not arena:
             return
-        stats = dict()
-        for vehID, rank in ranks.iteritems():
+        stats = {}
+        for vehID, rank in viewitems(ranks):
             stats[vehID] = {Comp7Keys.RANK: rank['divisionRank'],
              Comp7Keys.IS_QUAL_ACTIVE: rank['isQualActive']}
 

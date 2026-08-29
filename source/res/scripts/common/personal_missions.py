@@ -2,6 +2,7 @@
 # Embedded file name: scripts/common/personal_missions.py
 from __future__ import absolute_import
 import typing
+from enum import Enum
 import potapov_quests
 import persistent_data_cache_common as pdc
 from quest_xml_source import QuestValidationSerializer
@@ -10,6 +11,7 @@ g_operationsCache = None
 g_campaignsCache = None
 PERSONAL_MISSIONS_XML_PATH = potapov_quests.POTAPOV_QUEST_XML_PATH
 REGULAR_OPERATION_SPEC_LVL_RESTRICTION = 1
+OPERATION_11_LVL_RESTRICTION = 11
 PERSONAL_MISSION_REGULAR_MIN_LEVEL = 6
 
 class PM_BRANCH(potapov_quests.PQ_BRANCH):
@@ -25,6 +27,10 @@ class PM_STATE(potapov_quests.PQ_STATE):
 
 
 class PM_FLAG(potapov_quests.PQ_FLAG):
+    pass
+
+
+class PM_SWITCHES(potapov_quests.PQ_SWITCHES):
     pass
 
 
@@ -101,3 +107,16 @@ class PMCache(potapov_quests.PQCache):
 
 class PMStorage(potapov_quests.PQStorage):
     pass
+
+
+class PMProgressKeys(str, Enum):
+    REGULAR = 'potapovQuests'
+    PM2_PROGRESS = 'pm2_progress'
+    PM3_PROGRESS = 'pm3_progress'
+    PM4_PROGRESS = 'pm4_progress'
+
+
+PM_BRANCH_TO_PM_PROGRESS_KEY = {PM_BRANCH.PM1_NAME: PMProgressKeys.REGULAR,
+ PM_BRANCH.PM2_NAME: PMProgressKeys.PM2_PROGRESS,
+ PM_BRANCH.PM3_NAME: PMProgressKeys.PM3_PROGRESS,
+ PM_BRANCH.PM4_NAME: PMProgressKeys.PM4_PROGRESS}

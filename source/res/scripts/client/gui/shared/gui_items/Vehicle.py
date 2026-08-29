@@ -16,6 +16,7 @@ from operator import itemgetter
 import BigWorld
 from backports.functools_lru_cache import lru_cache
 from shared_utils import findFirst, CONST_CONTAINER
+from skeletons.gui.shared.gui_items import IGuiItemsFactory
 from vehicle_outfit.outfit import Area, REGIONS_BY_SLOT_TYPE, ANCHOR_TYPE_TO_SLOT_TYPE_MAP
 import constants
 from AccountCommands import LOCK_REASON, VEHICLE_SETTINGS_FLAG, VEHICLE_EXTRA_SETTING_FLAG
@@ -68,6 +69,7 @@ if typing.TYPE_CHECKING:
     from typing import Any, Dict, List, Optional, Tuple, Iterable
     from skeletons.gui.shared import IItemsRequester
     from items.customizations import CustomizationOutfit
+    from items.vehicles import VehicleDescr
     from vehicle_outfit.outfit import Outfit
     from gui.shared.gui_items.vehicle_mechanics.vehicle_mechanic_item import VehicleMechanicItem
     from gui.veh_post_progression.models.progression import PostProgressionItem, AvailabilityCheckResult
@@ -115,7 +117,8 @@ VEHICLE_BATTLE_TYPES_ORDER = (VEHICLE_CLASS_NAME.HEAVY_TANK,
  VEHICLE_CLASS_NAME.SPG)
 VEHICLE_BATTLE_TYPES_ORDER_INDICES = {n:i for i, n in enumerate(VEHICLE_BATTLE_TYPES_ORDER)}
 _ALL_ROLES_ORDER = [constants.ROLE_TYPE.LT_UNIVERSAL,
- constants.ROLE_TYPE.LT_WHEELED,
+ constants.ROLE_TYPE.LT_SCOUT,
+ constants.ROLE_TYPE.LT_SUPPORT,
  constants.ROLE_TYPE.HT_UNIVERSAL,
  constants.ROLE_TYPE.MT_UNIVERSAL,
  constants.ROLE_TYPE.ATSPG_UNIVERSAL,
@@ -129,7 +132,7 @@ _ALL_ROLES_ORDER = [constants.ROLE_TYPE.LT_UNIVERSAL,
  constants.ROLE_TYPE.HT_SUPPORT,
  constants.ROLE_TYPE.ATSPG_SUPPORT,
  constants.ROLE_TYPE.SPG]
-_LIGHT_GROUPS = [constants.ROLE_TYPE.LT_UNIVERSAL, constants.ROLE_TYPE.LT_WHEELED]
+_LIGHT_GROUPS = [constants.ROLE_TYPE.LT_UNIVERSAL, constants.ROLE_TYPE.LT_SCOUT, constants.ROLE_TYPE.LT_SUPPORT]
 _MEDIUM_GROUPS = [constants.ROLE_TYPE.MT_ASSAULT,
  constants.ROLE_TYPE.MT_UNIVERSAL,
  constants.ROLE_TYPE.MT_SNIPER,
@@ -190,6 +193,29 @@ RentPackagesInfo = namedtuple('RentPackagesInfo', ('hasAvailableRentPackages', '
 CrystalsEarnedInfo = namedtuple('CrystalsEarnedInfo', ('current', 'max'))
 EliteStatusProgress = typing.NamedTuple('EliteStatusProgress', (('unlocked', typing.Set[int]), ('toUnlock', typing.Set[int]), ('total', typing.Set[int])))
 NO_VEHICLE_ID = -1
+
+class _OutfitCacheKey(object):
+    __slots__ = ('vehicle',)
+
+    def __init__(self, vehicle):
+        self.vehicle = vehicle
+
+    def __hash__(self):
+        return id(self.vehicle)
+
+    def __eq__(self, other):
+        return self.vehicle is other.vehicle
+
+    def __ne__(self, other):
+        return not self.__eq__(other)
+
+
+@lru_cache(10)
+def _getOutfit(vehKey, component, vehicleCD):
+    itemsFactory = dependency.instance(IGuiItemsFactory)
+    outfit = itemsFactory.createOutfit(component=component, vehicleCD=vehicleCD)
+    return outfit
+
 
 class Vehicle(FittingItem):
     __slots__ = ('__customState', '__weakref__', '_inventoryID', '_xp', '_dailyXPFactor', '_isElite', '_isFullyElite', '_clanLock', '_isUnique', '_rentPackages', '_rentPackagesInfo', '_isDisabledForBuy', '_isSelected', '_restorePrice', '_searchableUserName', '_personalDiscountPrice', '_rotationGroupNum', '_rotationBattlesLeft', '_isRotationGroupLocked', '_isInfiniteRotationGroup', '_settings', '_lock', '_repairCost', '_health', '_gun', '_turret', '_engine', '_chassis', '_radio', '_fuelTank', '_equipment', '_bonuses', '_crewIndices', '_crew', '_lastCrew', '_hasModulesToSelect', '_outfitComponents', '_slotsAnchors', '_unlockedBy', '_maxRentDuration', '_minRentDuration', '_slotsAnchorsById', '_hasNationGroup', '_extraSettings', '_groupIDs', '_postProgression', '_invData', '_proxy')
@@ -559,10 +585,14 @@ class Vehicle(FittingItem):
 
         return (None, None)
 
-    def getMechanics(self, withOverrides=False):
+    def getMechanics(self, vehDescr=None, withOverrides=False):
         vehDescr = self.descriptor
         vehicleType = vehDescr.type
-        modules = chain.from_iterable(((factory(descr.compactDescr, descriptor=descr) for descr in descriptors) for descriptors, factory in ((vehicleType.getGuns(), self.itemsFactory.createVehicleGun), (vehicleType.chassis, self.itemsFactory.createVehicleChassis), (vehDescr.type.engines, self.itemsFactory.createVehicleEngine))))
+        secondaryGuns = [ slot.gun for slot in vehDescr.gunInstallations if not slot.isMainInstallation() ]
+        modules = chain.from_iterable(((factory(descr.compactDescr, descriptor=descr) for descr in descriptors) for descriptors, factory in ((vehicleType.getGuns(), self.itemsFactory.createVehicleGun),
+         (secondaryGuns, self.itemsFactory.createVehicleGun),
+         (vehicleType.chassis, self.itemsFactory.createVehicleChassis),
+         (vehDescr.type.engines, self.itemsFactory.createVehicleEngine))))
         mechanics = set()
         mechanics.update(chain.from_iterable((module.getMechanics(vehDescr, withOverrides) for module in modules)))
         mechanics.update(VehicleMechanicFactory.getMechanics(self, vehDescr, mechanics, withOverrides))
@@ -2076,10 +2106,8 @@ class Vehicle(FittingItem):
             return customizations.CustomizationOutfit(camouflages=[camoComp])
         return customizations.CustomizationOutfit()
 
-    @lru_cache(4)
     def __getOutfit(self, component, vehicleCD):
-        outfit = self.itemsFactory.createOutfit(component=component, vehicleCD=vehicleCD)
-        return outfit
+        return _getOutfit(_OutfitCacheKey(self), component, vehicleCD)
 
 
 def getTypeUserName(vehType, isElite):

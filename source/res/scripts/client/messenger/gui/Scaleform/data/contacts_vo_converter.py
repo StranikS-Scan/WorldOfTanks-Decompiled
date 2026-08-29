@@ -12,7 +12,7 @@ from helpers import i18n
 from helpers.html import escape
 from messenger import g_settings
 from messenger.m_constants import USER_TAG
-from messenger.storage import storage_getter
+from messenger.storage import MessengerStorageDescriptor, UsersStorage
 from predefined_hosts import g_preDefinedHosts
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.lobby_context import ILobbyContext
@@ -504,6 +504,7 @@ class FriendsWoGroupConverter(_ContactsConverter):
 
 
 class FriendsGroupsConverter(IContactsConverter):
+    usersStorage = MessengerStorageDescriptor(UsersStorage)
     __slots__ = ('_groups', '_mapping', '_rules', '_showEmptyItem', '_conditionClass', '__parentCategory')
 
     def __init__(self, parent):
@@ -514,10 +515,6 @@ class FriendsGroupsConverter(IContactsConverter):
         self._showEmptyItem = False
         self._conditionClass = OnlineTotalCondition
         self.__parentCategory = parent
-
-    @storage_getter('users')
-    def userStorage(self):
-        return None
 
     def getContacts(self):
         result = {}
@@ -571,7 +568,7 @@ class FriendsGroupsConverter(IContactsConverter):
 
     def removeContact(self, dbID):
         groups = self._mapping.pop(dbID, set())
-        isExists = self.userStorage.isGroupExists
+        isExists = self.usersStorage.isGroupExists
         for group in groups:
             if group in self._groups:
                 converter = self._groups[group]

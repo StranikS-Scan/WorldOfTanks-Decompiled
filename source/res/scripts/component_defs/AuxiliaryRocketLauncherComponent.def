@@ -1,0 +1,22 @@
+<AuxiliaryRocketLauncherComponent.def>
+  <Implements>
+    <Interface>	SecondaryGunActivatorInterface	</Interface>
+  </Implements>
+  <Properties>
+    <status>
+      <Type>	AUXILIARY_ROCKET_LAUNCHER_STATUS	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <DetailLevel>	MY_VEHICLE	</DetailLevel>
+    </status>
+    <visualStatus>
+      <Type>	AUXILIARY_ROCKET_LAUNCHER_VISUAL_STATUS	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </visualStatus>
+    <gunInstallationIndex>
+      <Type>	UINT8	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <Default>	0	</Default>
+    </gunInstallationIndex>
+  </Properties>
+  <DefaultKeyName>	auxiliaryRocketLauncher	</DefaultKeyName>
+</AuxiliaryRocketLauncherComponent.def>

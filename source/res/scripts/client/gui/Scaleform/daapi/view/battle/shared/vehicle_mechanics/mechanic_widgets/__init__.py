@@ -6,6 +6,8 @@ from .chargeable_burst_widget import ChargeableBurstMechanicWidget
 from .concentration_widget import ConcentrationMechanicWidget
 from .power_mode_widget import PowerModeMechanicWidget
 from .pillbox_siege_widget import PillboxSiegeMechanicWidget
+from .shell_calibration_widget import ShellCalibrationMechanicWidget
+from .sight_pointer_widget import SightPointerMechanicWidget
 from .stance_dance_turbo_widget import StanceDanceTurboMechanicWidget
 from .stance_dance_fight_widget import StanceDanceFightMechanicWidget
 from .stationary_reloading_widget import StationaryReloadingMechanicWidget
@@ -17,4 +19,8 @@ from .low_charge_shot_widget import LowChargeShotMechanicWidget
 from .staged_jet_boosters_widget import StagedJetBoostersMechanicWidget
 from .propellant_gun_widget import PropellantGunMechanicWidget
 from .wheeled_dash_widget import WheeledDashMechanicWidget
-__all__ = ('ChargeShotMechanicWidget', 'ChargeableBurstMechanicWidget', 'ConcentrationMechanicWidget', 'PowerModeMechanicWidget', 'PillboxSiegeMechanicWidget', 'StanceDanceFightMechanicWidget', 'StanceDanceTurboMechanicWidget', 'StationaryReloadingMechanicWidget', 'SupportWeaponMechanicWidget', 'TargetDesignatorMechanicWidget', 'TemperatureOverheatGunWidget', 'TemperatureHeatingZonesGunWidget', 'LowChargeShotMechanicWidget', 'StagedJetBoostersMechanicWidget', 'PropellantGunMechanicWidget', 'WheeledDashMechanicWidget')
+from .auxiliary_rocket_launcher_widget import AuxiliaryRocketLauncherWidget
+from .shell_params_switcher_widget import ShellParamsSwitcherWidget
+from .autoreloader_surge_widget import AutoreloaderSurgeMechanicWidget
+from .bustle_feed_widget import BustleFeedMechanicWidget
+__all__ = ('ChargeShotMechanicWidget', 'ChargeableBurstMechanicWidget', 'ConcentrationMechanicWidget', 'PowerModeMechanicWidget', 'PillboxSiegeMechanicWidget', 'StanceDanceFightMechanicWidget', 'StanceDanceTurboMechanicWidget', 'StationaryReloadingMechanicWidget', 'SupportWeaponMechanicWidget', 'TargetDesignatorMechanicWidget', 'TemperatureOverheatGunWidget', 'TemperatureHeatingZonesGunWidget', 'LowChargeShotMechanicWidget', 'StagedJetBoostersMechanicWidget', 'PropellantGunMechanicWidget', 'WheeledDashMechanicWidget', 'AuxiliaryRocketLauncherWidget', 'ShellParamsSwitcherWidget', 'ShellCalibrationMechanicWidget', 'AutoreloaderSurgeMechanicWidget', 'BustleFeedMechanicWidget', 'SightPointerMechanicWidget')

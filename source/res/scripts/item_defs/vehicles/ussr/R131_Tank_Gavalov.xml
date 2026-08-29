@@ -7,10 +7,10 @@
     <loader>	radioman	</loader>
   </crew>
   <supplySlots>	3 1 1 6 6 6 7 8 8 8	</supplySlots>
-  <postProgressionTree>	role_LT_universal	</postProgressionTree>
+  <postProgressionTree>	role_LT_scout	</postProgressionTree>
   <speedLimits>
-    <forward>	63	</forward>
-    <backward>	20	</backward>
+    <forward>	70	</forward>
+    <backward>	23	</backward>
   </speedLimits>
   <invisibility>
     <moving>	0.346	</moving>
@@ -57,7 +57,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	12000	</weight>
-    <maxHealth>	784	</maxHealth>
+    <maxHealth>	800	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	160	</maxHealth>
       <maxRegenHealth>	110	</maxRegenHealth>
@@ -2858,7 +2858,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	6000	</weight>
-      <maxHealth>	196	</maxHealth>
+      <maxHealth>	200	</maxHealth>
       <rotationSpeed>	48	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	130	</maxHealth>
@@ -3597,12 +3597,12 @@
     <detailed>
       <engines>
         <GAZ_O>
-          <smplEnginePower>	600	</smplEnginePower>
-          <smplFwMaxSpeed>	63	</smplFwMaxSpeed>
+          <smplEnginePower>	700	</smplEnginePower>
+          <smplFwMaxSpeed>	70	</smplFwMaxSpeed>
         </GAZ_O>
         <GAZ_OU>
-          <smplEnginePower>	650	</smplEnginePower>
-          <smplFwMaxSpeed>	63	</smplFwMaxSpeed>
+          <smplEnginePower>	750	</smplEnginePower>
+          <smplFwMaxSpeed>	70	</smplFwMaxSpeed>
         </GAZ_OU>
       </engines>
       <chassis>

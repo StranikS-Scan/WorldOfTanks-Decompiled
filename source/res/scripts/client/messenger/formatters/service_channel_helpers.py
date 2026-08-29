@@ -112,9 +112,9 @@ def extractLockedStyle(data):
 
 
 @dependency.replace_none_kwargs(eventsCache=IEventsCache)
-def getPMOperationAndQuest(operationID, chainID, questID, eventsCache=None):
-    branch = PM_BRANCH.PERSONAL_MISSION_3
-    operation = eventsCache.getPersonalMissions().getOperationsForBranch(branch).get(operationID)
+def getPMAdvancedOperationAndQuest(operationID, chainID, questID, eventsCache=None):
+    branches = PM_BRANCH.WITHOUT_AWARD_LIST_BRANCHES
+    operation = eventsCache.getPersonalMissions().getAllOperations(branches).get(operationID)
     if operation is None:
         return (None, None)
     elif chainID is None:

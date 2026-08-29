@@ -54,13 +54,12 @@
       <armor_6>	10	</armor_6>
       <armor_7>	30	</armor_7>
       <armor_8>	0	</armor_8>
-      <armor_9>	25	</armor_9>
       <armor_10>	50	</armor_10>
       <armor_11>	40	</armor_11>
     </armor>
     <primaryArmor>	armor_10 armor_3 armor_4	</primaryArmor>
     <weight>	7475	</weight>
-    <maxHealth>	1120	</maxHealth>
+    <maxHealth>	1200	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	200	</maxHealth>
       <maxRegenHealth>	135	</maxRegenHealth>
@@ -1217,14 +1216,14 @@
         </chassis>
       </unlocks>
       <armor>
-        <leftTrack>	20	</leftTrack>
-        <rightTrack>	20	</rightTrack>
+        <leftTrack>	10	</leftTrack>
+        <rightTrack>	10	</rightTrack>
       </armor>
       <weight>	1400	</weight>
       <terrainResistance>	0.8 0.9 1.4	</terrainResistance>
       <brakeForce>	35500	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
-      <rotationSpeed>	38	</rotationSpeed>
+      <rotationSpeed>	36	</rotationSpeed>
       <shotDispersionFactors>
         <vehicleMovement>	0.13	</vehicleMovement>
         <vehicleRotation>	0.13	</vehicleRotation>
@@ -2311,14 +2310,14 @@
       <level>	9	</level>
       <price>	52000	</price>
       <armor>
-        <leftTrack>	20	</leftTrack>
-        <rightTrack>	20	</rightTrack>
+        <leftTrack>	10	</leftTrack>
+        <rightTrack>	10	</rightTrack>
       </armor>
       <weight>	1400	</weight>
       <terrainResistance>	0.8 0.9 1.4	</terrainResistance>
       <brakeForce>	35500	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
-      <rotationSpeed>	40	</rotationSpeed>
+      <rotationSpeed>	38	</rotationSpeed>
       <shotDispersionFactors>
         <vehicleMovement>	0.12	</vehicleMovement>
         <vehicleRotation>	0.12	</vehicleRotation>
@@ -3409,7 +3408,6 @@
       <notInShop>	true	</notInShop>
       <armor>
         <armor_1>	30	</armor_1>
-        <armor_2>	20	</armor_2>
         <armor_3>	20	</armor_3>
         <armor_4>	20	</armor_4>
         <armor_5>	10	</armor_5>
@@ -3420,7 +3418,7 @@
       </armor>
       <primaryArmor>	armor_9 armor_3 armor_4	</primaryArmor>
       <weight>	2670	</weight>
-      <maxHealth>	280	</maxHealth>
+      <maxHealth>	300	</maxHealth>
       <rotationSpeed>	46	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	150	</maxHealth>
@@ -3455,18 +3453,18 @@
             <armor_9>	40	</armor_9>
             <gun>	20	</gun>
           </armor>
-          <reloadTime>	16	</reloadTime>
+          <reloadTime>	17	</reloadTime>
           <invisibilityFactorAtShot>	0.234	</invisibilityFactorAtShot>
           <clip>
             <count>	4	</count>
             <rate>	30	</rate>
           </clip>
           <shotDispersionFactors>
-            <turretRotation>	0.12	</turretRotation>
+            <turretRotation>	0.1	</turretRotation>
             <afterShot>	3	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <shotDispersionRadius>	0.36	</shotDispersionRadius>
+          <shotDispersionRadius>	0.37	</shotDispersionRadius>
           <aimingTime>	2	</aimingTime>
           <models>
             <undamaged>	vehicles/french/F17_AMX_13_90/normal/lod0/Gun_01.model	</undamaged>
@@ -4019,6 +4017,7 @@
             </customizableVehicleAreas>
           </customization>
           <edgeByVisualModel>	false	</edgeByVisualModel>
+          <muzzleBrake>	HORIZONTAL	</muzzleBrake>
           <camouflage>
             <tiling>	1.78 1.78 0.000000 0.000000	</tiling>
             <density>	89.12 91.5433	</density>
@@ -4044,12 +4043,12 @@
             <armor_7>	40	</armor_7>
             <armor_8>	0	</armor_8>
             <armor_9>	40	</armor_9>
-            <gun>	35	</gun>
+            <gun>	20	</gun>
           </armor>
           <reloadTime>	22	</reloadTime>
           <invisibilityFactorAtShot>	0.238	</invisibilityFactorAtShot>
           <shotDispersionFactors>
-            <turretRotation>	0.12	</turretRotation>
+            <turretRotation>	0.11	</turretRotation>
             <afterShot>	4	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
@@ -4057,7 +4056,7 @@
             <count>	4	</count>
             <rate>	24	</rate>
           </clip>
-          <aimingTime>	2.5	</aimingTime>
+          <aimingTime>	2.4	</aimingTime>
           <shotDispersionRadius>	0.38	</shotDispersionRadius>
           <models>
             <undamaged>	vehicles/french/F17_AMX_13_90/normal/lod0/Gun_02.model	</undamaged>
@@ -4610,6 +4609,7 @@
             </customizableVehicleAreas>
           </customization>
           <edgeByVisualModel>	false	</edgeByVisualModel>
+          <muzzleBrake>	HORIZONTAL	</muzzleBrake>
           <camouflage>
             <tiling>	1.72 1.72 0.000000 0.000000	</tiling>
             <density>	89.3144 91.6574	</density>
@@ -4716,6 +4716,7 @@
       </engines>
       <chassis>
         <Chassis_F17_AMX_13_90>
+          <axleCount>	5	</axleCount>
           <grounds>
             <soft>
               <rollingFriction>	0.1127	</rollingFriction>
@@ -4729,6 +4730,7 @@
           </grounds>
         </Chassis_F17_AMX_13_90>
         <Chassis_F17_AMX_13_90_2>
+          <axleCount>	5	</axleCount>
           <grounds>
             <soft>
               <rollingFriction>	0.1127	</rollingFriction>

@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: battle_royale/scripts/client/battle_royale/gui/battle_control/controllers/repository.py
+from __future__ import absolute_import
 from battle_royale.gui.battle_control.controllers.battle_royale_voip_ctrl import BRVOIPController
 from battle_royale.gui.battle_control.controllers.notification_manager import NotificationManager
 from gui.battle_control.controllers import battle_field_ctrl, debug_ctrl, default_maps_ctrl, perk_ctrl

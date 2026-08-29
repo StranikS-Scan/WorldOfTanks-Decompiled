@@ -113,4 +113,4 @@ class FreeXpStepperCalculator(object):
         targetFreeXp = max(value, 1) / self._exchangeRate
         if value % self._exchangeRate != 0:
             targetFreeXp += 1
-        return targetFreeXp
+        return max(targetFreeXp, 1)

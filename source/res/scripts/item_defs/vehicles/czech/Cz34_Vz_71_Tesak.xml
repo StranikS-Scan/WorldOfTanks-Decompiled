@@ -6,11 +6,11 @@
     <driver></driver>
   </crew>
   <supplySlots>	3 1 1 6 6 6 7 8 8 8	</supplySlots>
-  <postProgressionTree>	role_LT_universal	</postProgressionTree>
+  <postProgressionTree>	role_LT_support	</postProgressionTree>
   <customRoleSlotOptions>	2 4	</customRoleSlotOptions>
   <speedLimits>
     <forward>	65	</forward>
-    <backward>	25	</backward>
+    <backward>	27	</backward>
   </speedLimits>
   <invisibility>
     <moving>	0.267	</moving>
@@ -63,7 +63,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	8112	</weight>
-    <maxHealth>	1320	</maxHealth>
+    <maxHealth>	1520	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	260	</maxHealth>
       <maxRegenHealth>	180	</maxRegenHealth>
@@ -1093,6 +1093,36 @@
         <hiddenForUser>	true	</hiddenForUser>
         <scale>	1 1 1	</scale>
       </slot>
+      <slot>
+        <slotType>	attachment	</slotType>
+        <slotId>	18001	</slotId>
+        <position>	-1.731783 0.320997 -1.5386	</position>
+        <rotation>	-0 -0 1.5691	</rotation>
+        <scale>	1 1 1	</scale>
+        <applyType>	universal	</applyType>
+        <size>	medium	</size>
+        <hangerId>	9	</hangerId>
+      </slot>
+      <slot>
+        <slotType>	attachment	</slotType>
+        <slotId>	18002	</slotId>
+        <position>	0 0.129228 -3.418512	</position>
+        <rotation>	0 -1.570797 1.569102	</rotation>
+        <scale>	0.999999 0.999998 0.999998	</scale>
+        <applyType>	universal	</applyType>
+        <size>	medium	</size>
+        <hangerId>	11	</hangerId>
+      </slot>
+      <slot>
+        <slotType>	attachment	</slotType>
+        <slotId>	18003	</slotId>
+        <position>	1.835916 0.320998 -1.538596	</position>
+        <rotation>	-0 3.141593 1.570796	</rotation>
+        <scale>	1 1 1	</scale>
+        <applyType>	universal	</applyType>
+        <size>	medium	</size>
+        <hangerId>	9	</hangerId>
+      </slot>
     </customizationSlots>
     <customization>
       <customizableVehicleAreas>
@@ -1121,7 +1151,7 @@
       <terrainResistance>	0.8 0.9 1.8	</terrainResistance>
       <brakeForce>	17000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
-      <rotationSpeed>	45	</rotationSpeed>
+      <rotationSpeed>	50	</rotationSpeed>
       <shotDispersionFactors>
         <vehicleMovement>	0.08	</vehicleMovement>
         <vehicleRotation>	0.08	</vehicleRotation>
@@ -2323,14 +2353,14 @@
       </armor>
       <primaryArmor>	armor_1 armor_17 armor_4	</primaryArmor>
       <weight>	2500	</weight>
-      <maxHealth>	330	</maxHealth>
+      <maxHealth>	380	</maxHealth>
       <rotationSpeed>	60	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	150	</maxHealth>
         <maxRegenHealth>	75	</maxRegenHealth>
         <repairCost>	1.0	</repairCost>
       </turretRotatorHealth>
-      <circularVisionRadius>	390	</circularVisionRadius>
+      <circularVisionRadius>	400	</circularVisionRadius>
       <surveyingDeviceHealth>
         <maxHealth>	110	</maxHealth>
         <maxRegenHealth>	55	</maxRegenHealth>
@@ -2548,6 +2578,18 @@
               <anchorShift>	0.05	</anchorShift>
             </slot>
             <slot>
+              <slotType>	attachment	</slotType>
+              <slotId>	48000	</slotId>
+              <size>	medium	</size>
+              <position>	0.523395 0.375471 0.540428	</position>
+              <rotation>	-0 -0 0	</rotation>
+              <scale>	1 1 1	</scale>
+              <enableVisTunnel>	true	</enableVisTunnel>
+              <applyType>	gunMantlet	</applyType>
+              <hangerId>	2	</hangerId>
+              <hangerRotation>	0 1.570796 0	</hangerRotation>
+            </slot>
+            <slot>
               <slotType>	insigniaOnGun	</slotType>
               <slotId>	49000	</slotId>
               <rayStart>	-0.13 0.1 2.5	</rayStart>
@@ -2611,6 +2653,7 @@
             <collisionModelClient>	vehicles/czech/Cz34_Vz_71_Tesak/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
           <shotOffset>	0.032258 0.100612 0	</shotOffset>
+          <muzzleBrake>	ANGLED	</muzzleBrake>
           <camouflage>
             <density>	109.59407 109.984528	</density>
             <aoTextureSize>	512 512	</aoTextureSize>
@@ -2779,6 +2822,18 @@
           <clipAngle>	1.236081	</clipAngle>
           <anchorShift>	-0.033893	</anchorShift>
         </slot>
+        <slot>
+          <slotType>	attachment	</slotType>
+          <slotId>	38000	</slotId>
+          <position>	-1.10585 0.451962 0.006491	</position>
+          <rotation>	-0 -0 0	</rotation>
+          <scale>	1 1 1	</scale>
+          <applyType>	turret	</applyType>
+          <size>	medium	</size>
+          <enableVisTunnel>	true	</enableVisTunnel>
+          <hangerId>	2	</hangerId>
+          <hangerRotation>	-0 -1.570796 0	</hangerRotation>
+        </slot>
       </customizationSlots>
       <customization>
         <customizableVehicleAreas>
@@ -2808,12 +2863,13 @@
     <detailed>
       <engines>
         <UTD_20_71TD>
-          <smplEnginePower>	650	</smplEnginePower>
+          <smplEnginePower>	700	</smplEnginePower>
           <smplFwMaxSpeed>	65	</smplFwMaxSpeed>
         </UTD_20_71TD>
       </engines>
       <chassis>
         <Chassis_Cz34_Vz_71_Tesak>
+          <axleCount>	5	</axleCount>
           <grounds>
             <soft>
               <rollingFriction>	0.1449	</rollingFriction>
@@ -2825,7 +2881,6 @@
               <rollingFriction>	0.0644	</rollingFriction>
             </firm>
           </grounds>
-          <axleCount>	5	</axleCount>
         </Chassis_Cz34_Vz_71_Tesak>
       </chassis>
     </detailed>

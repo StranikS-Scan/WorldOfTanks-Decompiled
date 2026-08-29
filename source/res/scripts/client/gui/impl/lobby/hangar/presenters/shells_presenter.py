@@ -2,33 +2,33 @@
 # Embedded file name: scripts/client/gui/impl/lobby/hangar/presenters/shells_presenter.py
 from __future__ import absolute_import
 import typing
+from itertools import chain
 from CurrentVehicle import g_currentVehicle
+from frameworks.wulf.view.array import fillViewModelsArray
 from gui.Scaleform.lobby_entry import getLobbyStateMachine
 from gui.impl.gen.view_models.views.lobby.loadout.shells.shell_model import ShellModel
 from gui.impl.gen.view_models.views.lobby.loadout.shells.shells_model import ShellsModel
-from gui.impl.gen.view_models.views.lobby.tank_setup.sub_views.shell_specification_model import ShellSpecificationModel
 from gui.impl.gen.view_models.views.lobby.tank_setup.tank_setup_constants import TankSetupConstants
 from gui.impl.lobby.hangar.presenters.loadout_presenter_base import LoadoutPresenterBase, LoadoutEntityProvider
 from gui.impl.lobby.tank_setup.array_providers.shell import ShellProvider
 from gui.impl.lobby.tank_setup.configurations.shell import ShellTabs, ShellDealPanel
 from gui.impl.lobby.tank_setup.interactors.shell import ShellInteractor
+from gui.impl.lobby.tank_setup.tank_setup_helper import createShellSpecificationModel, createShellMechanicsModels, createShellMechanicsSubtypesModel
 from gui.impl.wrappers.user_compound_price_model import BuyPriceModelBuilder
 from gui.shared import sound_helpers
 from gui.shared.gui_items import GUI_ITEM_TYPE
-from gui.shared.items_parameters import params_helper, getShellsLoadSize
-from gui.shared.items_parameters.formatters import formatParameter, MEASURE_UNITS
-from helpers import i18n, dependency
-from items.utils import getVehicleDescriptorWithoutMechanics
+from gui.shared.items_parameters import getShellsLoadSize
+from gui.shared.items_parameters.shell_params import BASE_SHELL_PARAMETERS, getMechanicParameters
+from gui.shared.items_parameters.shell_mechanics_helper import getShellParameters
+from helpers import dependency
 from post_progression_common import TankSetupGroupsId
 from shared_utils import first
 from skeletons.gui.game_control import IWalletController, IExchangeRatesWithDiscountsProvider
 from skeletons.gui.shared import IItemsCache
-from vehicles.mechanics.mechanic_constants import VehicleMechanic
-from vehicles.mechanics.mechanic_helpers import hasVehicleDescrMechanic
 if typing.TYPE_CHECKING:
     from gui.shared.gui_items.vehicle_modules import Shell
     from gui.impl.lobby.tank_setup.interactors.base import InteractingItem
-_SHELLS_INFO_PARAMS = ('avgDamage', 'avgDamagePerSecond', 'avgPiercingPower', 'shotSpeed', 'explosionRadius', 'stunDurationList')
+_MIN_MECHANIC_PRIORITY = 1
 
 class ShellsPresenter(LoadoutPresenterBase[ShellsModel]):
     __itemsCache = dependency.descriptor(IItemsCache)
@@ -156,11 +156,20 @@ class ShellsPresenter(LoadoutPresenterBase[ShellsModel]):
         item.setItemInstalledSetupIdx(vehicle.shells.setupLayouts.layoutIndex)
         item.setIsMounted(shell in self._interactor.getInstalledLayout())
         item.setIsMountedMoreThanOne(vehicle.shells.installed.getIntCDs().count(shell.intCD))
+        shellMechanics = shell.getShellMechanicItems(vehicle)
+        visibleMechanics = [ m for m in shellMechanics if not m.isHidden and m.priority >= _MIN_MECHANIC_PRIORITY ]
+        mechanic, parameters = getShellParameters(vehicle, shell)
+        if all((mechanic != m.mechanic for m in visibleMechanics)):
+            mechanic = None
         properties = item.getPropertiesList()
-        for paramName in _SHELLS_INFO_PARAMS:
-            properties.addViewModel(self.__createShellSpecificationModel(shell, paramName))
+        for paramName in chain(BASE_SHELL_PARAMETERS, getMechanicParameters(mechanic, parameters)):
+            properties.addViewModel(createShellSpecificationModel(paramName, parameters, mechanic))
 
         self.__fillShellItemPriceModel(shell.buyPrices.itemPrice.price, item.itemPrice)
+        mechanicsModels = createShellMechanicsModels(visibleMechanics, minPriority=_MIN_MECHANIC_PRIORITY)
+        fillViewModelsArray(mechanicsModels, item.getMechanics())
+        mechanicsSubtypesModels = createShellMechanicsSubtypesModel(shellMechanics, minPriority=_MIN_MECHANIC_PRIORITY)
+        fillViewModelsArray(mechanicsSubtypesModels, item.getMechanicsSubtypes())
         BuyPriceModelBuilder.clearPriceModel(item.price)
         BuyPriceModelBuilder.fillPriceModelByItemPrice(item.price, shell.getBuyPrice(), checkBalanceAvailability=True)
         item.setBuyCount(buyCount)
@@ -168,17 +177,6 @@ class ShellsPresenter(LoadoutPresenterBase[ShellsModel]):
         if buyCount:
             BuyPriceModelBuilder.fillPriceModelByItemPrice(item.totalPrice, shell.getBuyPrice() * buyCount, checkBalanceAvailability=True)
         return item
-
-    def __createShellSpecificationModel(self, shell, paramName):
-        specificationModel = ShellSpecificationModel()
-        specificationModel.setParamName(paramName)
-        specificationModel.setMetricValue(i18n.makeString(MEASURE_UNITS.get(paramName, '')))
-        vehDescr = g_currentVehicle.item.descriptor
-        if hasVehicleDescrMechanic(vehDescr, VehicleMechanic.LOW_CHARGE_SHOT):
-            vehDescr = getVehicleDescriptorWithoutMechanics(vehDescr, VehicleMechanic.LOW_CHARGE_SHOT.value)
-        shellParam = params_helper.getParameters(shell, vehDescr)
-        specificationModel.setValue(formatParameter(paramName, shellParam.get(paramName)) or '')
-        return specificationModel
 
     def __fillShellItemPriceModel(self, shellItemPrice, itemPriceModel):
         with itemPriceModel.transaction() as model:

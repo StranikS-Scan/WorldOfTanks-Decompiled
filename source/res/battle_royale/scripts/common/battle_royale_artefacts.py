@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: battle_royale/scripts/common/battle_royale_artefacts.py
+from __future__ import absolute_import, division
 from Math import Vector3
 from constants import IS_CLIENT, ATTACK_REASON, ATTACK_REASON_INDICES, SERVER_TICK_LENGTH
 from items.artefacts import Repairkit, CountableConsumableConfigReader, Equipment, VehicleFactorsXmlReader, DOTParams, HOTParams, Bomber, ArcadeEquipmentConfigReader, Smoke, TooltipConfigReader, AreaMarkerConfigReader, HealPointConfigReader, PREDEFINED_HEAL_GROUPS, Minefield
@@ -29,9 +30,9 @@ class RepairkitBattleRoyale(Repairkit, CountableConsumableConfigReader):
         super(RepairkitBattleRoyale, self).__init__()
         self.initCountableConsumableSlots()
 
-    def _readConfig(self, xmlCtx, section):
-        super(RepairkitBattleRoyale, self)._readConfig(xmlCtx, section)
-        self.readCountableConsumableConfig(xmlCtx, section)
+    def _readConfig(self, xmlCtx, scriptSection):
+        super(RepairkitBattleRoyale, self)._readConfig(xmlCtx, scriptSection)
+        self.readCountableConsumableConfig(xmlCtx, scriptSection)
 
 
 class AfterburningBattleRoyale(Equipment, CountableConsumableConfigReader, BattleDescriptionConfigReader):
@@ -48,13 +49,13 @@ class AfterburningBattleRoyale(Equipment, CountableConsumableConfigReader, Battl
         self.initCountableConsumableSlots()
         self.initBattleDescriptionSlots()
 
-    def _readConfig(self, xmlCtx, section):
-        self.consumeSeconds = _xml.readInt(xmlCtx, section, 'consumeSeconds', 0)
-        self.enginePowerFactor = _xml.readPositiveFloat(xmlCtx, section, 'enginePowerFactor')
-        self.maxSpeedFactor = _xml.readPositiveFloat(xmlCtx, section, 'maxSpeedFactor')
-        self.vehicleRotationSpeed = _xml.readPositiveFloat(xmlCtx, section, 'vehicleRotationSpeed')
-        self.readCountableConsumableConfig(xmlCtx, section)
-        self.readBattleDescriptionConfig(xmlCtx, section)
+    def _readConfig(self, xmlCtx, scriptSection):
+        self.consumeSeconds = _xml.readInt(xmlCtx, scriptSection, 'consumeSeconds', 0)
+        self.enginePowerFactor = _xml.readPositiveFloat(xmlCtx, scriptSection, 'enginePowerFactor')
+        self.maxSpeedFactor = _xml.readPositiveFloat(xmlCtx, scriptSection, 'maxSpeedFactor')
+        self.vehicleRotationSpeed = _xml.readPositiveFloat(xmlCtx, scriptSection, 'vehicleRotationSpeed')
+        self.readCountableConsumableConfig(xmlCtx, scriptSection)
+        self.readBattleDescriptionConfig(xmlCtx, scriptSection)
         if IS_CLIENT:
             self.battleDescription = self._prepareDescription(self.battleDescription)
 
@@ -127,12 +128,12 @@ class TrapPoint(Equipment, CountableConsumableConfigReader, BattleDescriptionCon
         self.initCountableConsumableSlots()
         self.initBattleDescriptionSlots()
 
-    def _readConfig(self, xmlCtx, section):
-        super(TrapPoint, self)._readConfig(xmlCtx, section)
-        self.influenceZone._readConfig(xmlCtx, section['influenceZone'])
+    def _readConfig(self, xmlCtx, scriptSection):
+        super(TrapPoint, self)._readConfig(xmlCtx, scriptSection)
+        self.influenceZone._readConfig(xmlCtx, scriptSection['influenceZone'])
         self.radius = self.influenceZone.radius
-        self.readCountableConsumableConfig(xmlCtx, section)
-        self.readBattleDescriptionConfig(xmlCtx, section)
+        self.readCountableConsumableConfig(xmlCtx, scriptSection)
+        self.readBattleDescriptionConfig(xmlCtx, scriptSection)
         if IS_CLIENT:
             self.battleDescription = self._prepareDescription(self.battleDescription)
 
@@ -357,14 +358,14 @@ class RegenerationKit(Equipment, CountableConsumableConfigReader, BattleDescript
         self.initBattleDescriptionSlots()
         return
 
-    def _readConfig(self, xmlCtx, section):
-        self.healthRegenPerTick = _xml.readNonNegativeFloat(xmlCtx, section, 'healthRegenPerTick', 0.0)
-        self.initialHeal = _xml.readNonNegativeFloat(xmlCtx, section, 'initialHeal', 0.0)
-        self.healTime = _xml.readNonNegativeFloat(xmlCtx, section, 'healTime', 0.0)
-        self.healGroup = _xml.readIntOrNone(xmlCtx, section, 'healGroup')
-        self.tickInterval = _xml.readPositiveFloat(xmlCtx, section, 'tickInterval', 1.0)
-        self.readCountableConsumableConfig(xmlCtx, section)
-        self.readBattleDescriptionConfig(xmlCtx, section)
+    def _readConfig(self, xmlCtx, scriptSection):
+        self.healthRegenPerTick = _xml.readNonNegativeFloat(xmlCtx, scriptSection, 'healthRegenPerTick', 0.0)
+        self.initialHeal = _xml.readNonNegativeFloat(xmlCtx, scriptSection, 'initialHeal', 0.0)
+        self.healTime = _xml.readNonNegativeFloat(xmlCtx, scriptSection, 'healTime', 0.0)
+        self.healGroup = _xml.readIntOrNone(xmlCtx, scriptSection, 'healGroup')
+        self.tickInterval = _xml.readPositiveFloat(xmlCtx, scriptSection, 'tickInterval', 1.0)
+        self.readCountableConsumableConfig(xmlCtx, scriptSection)
+        self.readBattleDescriptionConfig(xmlCtx, scriptSection)
         if IS_CLIENT:
             self.battleDescription = self._prepareDescription(self.battleDescription)
 
@@ -385,9 +386,9 @@ class BRMinefield(Minefield, BattleDescriptionConfigReader):
         super(BRMinefield, self).__init__()
         self.initBattleDescriptionSlots()
 
-    def _readConfig(self, xmlCtx, section):
-        super(BRMinefield, self)._readConfig(xmlCtx, section)
-        self.readBattleDescriptionConfig(xmlCtx, section)
+    def _readConfig(self, xmlCtx, scriptSection):
+        super(BRMinefield, self)._readConfig(xmlCtx, scriptSection)
+        self.readBattleDescriptionConfig(xmlCtx, scriptSection)
         if IS_CLIENT:
             self.battleDescription = i18n.makeString(self.battleDescription, duration=int(self.mineParams.lifetime))
 
@@ -457,12 +458,12 @@ class ZonesCircle(Equipment):
         self.vehicleHeightMultiplier = 1.0
         self.influenceZone = InfluenceZone()
 
-    def _readConfig(self, xmlCtx, section):
-        super(ZonesCircle, self)._readConfig(xmlCtx, section)
-        self.radius = _xml.readFloat(xmlCtx, section, 'radius')
-        self.zonesCount = _xml.readPositiveInt(xmlCtx, section, 'zonesCount')
-        self.vehicleHeightMultiplier = _xml.readNonNegativeFloat(xmlCtx, section, 'vehicleHeightMultiplier')
-        self.influenceZone._readConfig(xmlCtx, section['influenceZone'])
+    def _readConfig(self, xmlCtx, scriptSection):
+        super(ZonesCircle, self)._readConfig(xmlCtx, scriptSection)
+        self.radius = _xml.readFloat(xmlCtx, scriptSection, 'radius')
+        self.zonesCount = _xml.readPositiveInt(xmlCtx, scriptSection, 'zonesCount')
+        self.vehicleHeightMultiplier = _xml.readNonNegativeFloat(xmlCtx, scriptSection, 'vehicleHeightMultiplier')
+        self.influenceZone._readConfig(xmlCtx, scriptSection['influenceZone'])
 
     def _getDescription(self, descr):
         localizeDescr = super(ZonesCircle, self)._getDescription(descr)
@@ -476,12 +477,12 @@ class FireCircle(ZonesCircle, CountableConsumableConfigReader, BattleDescription
         self.initCountableConsumableSlots()
         self.initBattleDescriptionSlots()
 
-    def _readConfig(self, xmlCtx, section):
-        super(FireCircle, self)._readConfig(xmlCtx, section)
+    def _readConfig(self, xmlCtx, scriptSection):
+        super(FireCircle, self)._readConfig(xmlCtx, scriptSection)
         self.influenceZone.dotParams.attackReasonID = ATTACK_REASON_INDICES[ATTACK_REASON.FIRE_CIRCLE]
         self.influenceZone.componentName = 'VehicleFireCircleEffectComponent'
-        self.readCountableConsumableConfig(xmlCtx, section)
-        self.readBattleDescriptionConfig(xmlCtx, section)
+        self.readCountableConsumableConfig(xmlCtx, scriptSection)
+        self.readBattleDescriptionConfig(xmlCtx, scriptSection)
         if IS_CLIENT:
             self.battleDescription = self._prepareDescription(self.battleDescription)
 
@@ -510,16 +511,16 @@ class CorrodingShot(Equipment, CountableConsumableConfigReader, BattleDescriptio
         self.initCountableConsumableSlots()
         self.initBattleDescriptionSlots()
 
-    def _readConfig(self, xmlCtx, section):
-        self.damagePercentAfterShot = _xml.readFloat(xmlCtx, section, 'damagePercentAfterShot', 0.0)
-        self.canBeStoppedRepairKit = _xml.readBool(xmlCtx, section, 'canBeStoppedRepairKit', False)
-        self.increaseFactors = VehicleFactorsXmlReader.readFactors(xmlCtx, section, 'increaseFactors')
-        self.dotEffectDuration = _xml.readInt(xmlCtx, section, 'dotEffectDuration', 0)
-        self.dotParams._readConfig(xmlCtx, section['dotParams'])
-        self.tooltipMovie = _xml.readStringOrEmpty(xmlCtx, section, 'tooltipMovie')
-        self.effectsIndex = vehicles.g_cache.shotEffectsIndexes[_xml.readString(xmlCtx, section, 'shotEffect')]
-        self.readCountableConsumableConfig(xmlCtx, section)
-        self.readBattleDescriptionConfig(xmlCtx, section)
+    def _readConfig(self, xmlCtx, scriptSection):
+        self.damagePercentAfterShot = _xml.readFloat(xmlCtx, scriptSection, 'damagePercentAfterShot', 0.0)
+        self.canBeStoppedRepairKit = _xml.readBool(xmlCtx, scriptSection, 'canBeStoppedRepairKit', False)
+        self.increaseFactors = VehicleFactorsXmlReader.readFactors(xmlCtx, scriptSection, 'increaseFactors')
+        self.dotEffectDuration = _xml.readInt(xmlCtx, scriptSection, 'dotEffectDuration', 0)
+        self.dotParams._readConfig(xmlCtx, scriptSection['dotParams'])
+        self.tooltipMovie = _xml.readStringOrEmpty(xmlCtx, scriptSection, 'tooltipMovie')
+        self.effectsIndex = vehicles.g_cache.shotEffectsIndexes[_xml.readString(xmlCtx, scriptSection, 'shotEffect')]
+        self.readCountableConsumableConfig(xmlCtx, scriptSection)
+        self.readBattleDescriptionConfig(xmlCtx, scriptSection)
         if IS_CLIENT:
             self.battleDescription = self._prepareDescription(self.battleDescription)
 
@@ -552,15 +553,15 @@ class AdaptationHealthRestore(Equipment, CountableConsumableConfigReader, Battle
         super(AdaptationHealthRestore, self)._readBasicConfig(xmlCtx, section)
         self.posteffectPrefab = _xml.readStringOrNone(xmlCtx, section, 'posteffectPrefab')
 
-    def _readConfig(self, xmlCtx, section):
-        self.duration = _xml.readInt(xmlCtx, section, 'duration', 0)
-        self.immediatelyRestore = _xml.readInt(xmlCtx, section, 'immediatelyRestore', 0.0)
-        self.restoringCoefficient = _xml.readFloat(xmlCtx, section, 'restoringCoefficient', 0.0)
-        self.restoringCoefficientTeamMates = _xml.readFloat(xmlCtx, section, 'restoringCoefficientTeamMates', 0.0)
-        self.teamMateRestoringRadius = _xml.readInt(xmlCtx, section, 'teamMateRestoringRadius', 0)
-        self.areaVisual = _xml.readStringOrNone(xmlCtx, section, 'areaVisual')
-        self.readCountableConsumableConfig(xmlCtx, section)
-        self.readBattleDescriptionConfig(xmlCtx, section)
+    def _readConfig(self, xmlCtx, scriptSection):
+        self.duration = _xml.readInt(xmlCtx, scriptSection, 'duration', 0)
+        self.immediatelyRestore = _xml.readInt(xmlCtx, scriptSection, 'immediatelyRestore', 0.0)
+        self.restoringCoefficient = _xml.readFloat(xmlCtx, scriptSection, 'restoringCoefficient', 0.0)
+        self.restoringCoefficientTeamMates = _xml.readFloat(xmlCtx, scriptSection, 'restoringCoefficientTeamMates', 0.0)
+        self.teamMateRestoringRadius = _xml.readInt(xmlCtx, scriptSection, 'teamMateRestoringRadius', 0)
+        self.areaVisual = _xml.readStringOrNone(xmlCtx, scriptSection, 'areaVisual')
+        self.readCountableConsumableConfig(xmlCtx, scriptSection)
+        self.readBattleDescriptionConfig(xmlCtx, scriptSection)
         if IS_CLIENT:
             self.battleDescription = self._prepareDescription(self.battleDescription)
 
@@ -599,24 +600,24 @@ class ThunderStrike(Equipment, ArcadeEquipmentConfigReader, TooltipConfigReader,
         self.initBattleDescriptionSlots()
         return
 
-    def _readConfig(self, xmlCtx, section):
-        self.cooldownTime = _xml.readNonNegativeFloat(xmlCtx, section, 'cooldownSeconds')
-        self.canBeStoppedRepairKit = _xml.readBool(xmlCtx, section, 'canBeStoppedRepairKit', False)
-        self.damageRadius = _xml.readInt(xmlCtx, section, 'damageRadius', 0)
-        self.duration = _xml.readInt(xmlCtx, section, 'duration', 0)
-        self.delay = _xml.readPositiveFloat(xmlCtx, section, 'delay', 0)
-        self.damage = _xml.readInt(xmlCtx, section, 'damage', 0)
-        self.thunderCount = _xml.readInt(xmlCtx, section, 'thunderCount', 0)
-        self.thunderPeriod = _xml.readPositiveFloat(xmlCtx, section, 'thunderPeriod', 0)
-        self.areaLength = _xml.readPositiveFloat(xmlCtx, section, 'areaLength')
-        self.areaWidth = _xml.readPositiveFloat(xmlCtx, section, 'areaWidth')
-        self.areaVisual = _xml.readStringOrNone(xmlCtx, section, 'areaVisual')
-        self.isDamageAll = _xml.readBool(xmlCtx, section, 'isDamageAll', False)
-        self.decreaseFactors = VehicleFactorsXmlReader.readFactors(xmlCtx, section, 'decreaseFactors')
-        self.readArcadeInformation(xmlCtx, section)
-        self.readTooltipInformation(xmlCtx, section)
-        self.readCountableConsumableConfig(xmlCtx, section)
-        self.readBattleDescriptionConfig(xmlCtx, section)
+    def _readConfig(self, xmlCtx, scriptSection):
+        self.cooldownTime = _xml.readNonNegativeFloat(xmlCtx, scriptSection, 'cooldownSeconds')
+        self.canBeStoppedRepairKit = _xml.readBool(xmlCtx, scriptSection, 'canBeStoppedRepairKit', False)
+        self.damageRadius = _xml.readInt(xmlCtx, scriptSection, 'damageRadius', 0)
+        self.duration = _xml.readInt(xmlCtx, scriptSection, 'duration', 0)
+        self.delay = _xml.readPositiveFloat(xmlCtx, scriptSection, 'delay', 0)
+        self.damage = _xml.readInt(xmlCtx, scriptSection, 'damage', 0)
+        self.thunderCount = _xml.readInt(xmlCtx, scriptSection, 'thunderCount', 0)
+        self.thunderPeriod = _xml.readPositiveFloat(xmlCtx, scriptSection, 'thunderPeriod', 0)
+        self.areaLength = _xml.readPositiveFloat(xmlCtx, scriptSection, 'areaLength')
+        self.areaWidth = _xml.readPositiveFloat(xmlCtx, scriptSection, 'areaWidth')
+        self.areaVisual = _xml.readStringOrNone(xmlCtx, scriptSection, 'areaVisual')
+        self.isDamageAll = _xml.readBool(xmlCtx, scriptSection, 'isDamageAll', False)
+        self.decreaseFactors = VehicleFactorsXmlReader.readFactors(xmlCtx, scriptSection, 'decreaseFactors')
+        self.readArcadeInformation(xmlCtx, scriptSection)
+        self.readTooltipInformation(xmlCtx, scriptSection)
+        self.readCountableConsumableConfig(xmlCtx, scriptSection)
+        self.readBattleDescriptionConfig(xmlCtx, scriptSection)
         if IS_CLIENT and self.longDescription:
             self.longDescription = self._prepareDescription(self.longDescription)
             self.battleDescription = self._prepareDescription(self.battleDescription)
@@ -641,14 +642,14 @@ class ShotPassion(Equipment, CountableConsumableConfigReader, BattleDescriptionC
         super(ShotPassion, self)._readBasicConfig(xmlCtx, section)
         self.posteffectPrefab = _xml.readStringOrNone(xmlCtx, section, 'posteffectPrefab')
 
-    def _readConfig(self, xmlCtx, section):
-        self.duration = _xml.readInt(xmlCtx, section, 'duration', 0)
-        self.increaseFactors = VehicleFactorsXmlReader.readFactors(xmlCtx, section, 'increaseFactors')
-        self.damageIncreasePerShot = _xml.readFloat(xmlCtx, section, 'damageIncreasePerShot', component_constants.ZERO_FLOAT)
-        self.maxDamageIncreasePerShot = _xml.readFloat(xmlCtx, section, 'maxDamageIncreasePerShot', component_constants.ZERO_FLOAT)
-        self.cooldownTime = _xml.readInt(xmlCtx, section, 'cooldownSeconds', component_constants.ZERO_INT)
-        self.readCountableConsumableConfig(xmlCtx, section)
-        self.readBattleDescriptionConfig(xmlCtx, section)
+    def _readConfig(self, xmlCtx, scriptSection):
+        self.duration = _xml.readInt(xmlCtx, scriptSection, 'duration', 0)
+        self.increaseFactors = VehicleFactorsXmlReader.readFactors(xmlCtx, scriptSection, 'increaseFactors')
+        self.damageIncreasePerShot = _xml.readFloat(xmlCtx, scriptSection, 'damageIncreasePerShot', component_constants.ZERO_FLOAT)
+        self.maxDamageIncreasePerShot = _xml.readFloat(xmlCtx, scriptSection, 'maxDamageIncreasePerShot', component_constants.ZERO_FLOAT)
+        self.cooldownTime = _xml.readInt(xmlCtx, scriptSection, 'cooldownSeconds', component_constants.ZERO_INT)
+        self.readCountableConsumableConfig(xmlCtx, scriptSection)
+        self.readBattleDescriptionConfig(xmlCtx, scriptSection)
         if IS_CLIENT:
             self.battleDescription = self._prepareDescription(self.battleDescription)
 

@@ -15,7 +15,7 @@ from helpers import i18n
 from constants import DENUNCIATIONS_PER_DAY, IS_CHINA
 from messenger.m_constants import PROTO_TYPE, UserEntityScope
 from messenger.proto import proto_getter
-from messenger.storage import storage_getter
+from messenger.storage import MessengerStorageDescriptor, UsersStorage
 from skeletons.gui.battle_session import IBattleSessionProvider
 from skeletons.gui.game_control import ICommendationsController
 from uilogging.player_satisfaction_rating.loggers import InBattleContextMenuLogger
@@ -83,6 +83,7 @@ _BOT_NO_ACTIONS_OPTION_ID = 'botNoActions'
 
 class PlayerContextMenuInfo(object):
     sessionProvider = dependency.descriptor(IBattleSessionProvider)
+    usersStorage = MessengerStorageDescriptor(UsersStorage)
     __slots__ = ('avatarSessionID', 'isBot', 'isFriend', 'isIgnored', 'isTemporaryIgnored', 'isMuted', 'userName', 'isAlly', 'battleUser')
 
     def __init__(self, avatarSessionID, userName):
@@ -102,10 +103,6 @@ class PlayerContextMenuInfo(object):
             self.isTemporaryIgnored = self.battleUser.isTemporaryIgnored()
             self.isMuted = self.battleUser.isMuted()
         return
-
-    @storage_getter('users')
-    def usersStorage(self):
-        return None
 
 
 class PlayerMenuHandler(AbstractContextMenuHandler):

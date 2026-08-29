@@ -3,8 +3,10 @@
 from __future__ import absolute_import
 import typing
 from events_handler import eventHandler
-from gui.battle_control.controllers.vehicle_passenger import hasVehiclePassengerCtrl, VehiclePassengerInfoWatcher
+from gui.battle_control.controllers.vehicle_passenger import VehiclePassengerInfoWatcher, hasVehiclePassengerCtrl
 from gui.veh_mechanics.battle.updaters.mechanics.mechanics_common import VehicleMechanicUpdater
+if typing.TYPE_CHECKING:
+    from vehicles.mechanics.mechanic_constants import VehicleMechanic
 
 class IMechanicPassengerView(object):
 
@@ -14,8 +16,8 @@ class IMechanicPassengerView(object):
 
 class VehicleMechanicPassengerUpdater(VehicleMechanicUpdater, VehiclePassengerInfoWatcher):
 
-    def __init__(self, mechanicTracker, view):
-        super(VehicleMechanicPassengerUpdater, self).__init__(mechanicTracker, view)
+    def __init__(self, vehicleMechanic, view):
+        super(VehicleMechanicPassengerUpdater, self).__init__(vehicleMechanic, view)
         self.__isVisibleForPassenger = None
         self.__hasMechanicComponent = None
         return

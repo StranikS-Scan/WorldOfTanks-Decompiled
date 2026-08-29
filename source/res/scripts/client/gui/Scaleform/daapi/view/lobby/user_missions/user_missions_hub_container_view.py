@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/user_missions/user_missions_hub_container_view.py
+from __future__ import absolute_import
 from account_helpers.AccountSettings import MISSIONS_PAGE
 from account_helpers import AccountSettings
 from gui.Scaleform.lobby_entry import getLobbyStateMachine
@@ -73,11 +74,7 @@ class UserMissionsHubContainerView(UserMissionsHubContainerViewMeta):
         return
 
     def __filterApplied(self):
-        for attr in self.__filterData:
-            if self.__filterData[attr]:
-                return True
-
-        return False
+        return any(self.__filterData.values())
 
     def __updateFilterLabel(self):
         totalQuests = self.__commonTabView.getTotalQuestsCount()
@@ -105,9 +102,9 @@ class UserMissionsHubContainerView(UserMissionsHubContainerViewMeta):
         isCommonTab = self.__tabID == TabId.COMMON
         self.as_updateCommonMissionsTabVisibilityS(isCommonTab)
         if isCommonTab:
-            self.__updateFilterLabel()
             if resetFilters:
                 self.resetFilters()
+            self.__updateFilterLabel()
         background = R.images.gui.maps.icons.userMissions.hub.background.dyn(self.__tabID)
         self.as_setBackgroundS(backport.image(background()) if background.exists() else '')
 
@@ -136,5 +133,5 @@ class UserMissionsHubContainerView(UserMissionsHubContainerViewMeta):
         self.__eventID = event.eventID
         self.__groupID = event.groupID
         self.__showMissionDetails = event.showMissionDetails
-        self.__onShowTab(resetFilters=True)
+        self.__onShowTab(resetFilters=bool(event.eventID))
         self.__showMission()

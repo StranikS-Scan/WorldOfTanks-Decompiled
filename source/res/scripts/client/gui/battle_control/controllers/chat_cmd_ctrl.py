@@ -113,7 +113,6 @@ def getAimedAtPositionWithinBorders(aimOffsetX, aimOffsetY):
         return staticHitPoint
     else:
         return
-        return
 
 
 class ChatCommandsController(IBattleController):

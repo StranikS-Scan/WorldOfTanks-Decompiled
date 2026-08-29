@@ -9,6 +9,7 @@ from vehicles.components.component_wrappers import ifPlayerVehicle
 from vehicles.parts.guns.common import GunShootingCustomIntegrations
 from vehicles.parts.guns.auto_shoot.guns_interfaces import IAutoShootingListenerLogic
 from vehicle_systems.shake_helpers import shakePlayerDynamicCamera
+from vehicle_systems.shooting_helpers import notifyArenaVehicleShot
 _logger = logging.getLogger(__name__)
 
 class AutoShootCustomIntegrations(GunShootingCustomIntegrations, IAutoShootingListenerLogic):
@@ -16,6 +17,7 @@ class AutoShootCustomIntegrations(GunShootingCustomIntegrations, IAutoShootingLi
     @eventHandler
     def onContinuousBurstActivation(self):
         shakePlayerDynamicCamera(self._vehicle, self._gunInstallationSlot)
+        notifyArenaVehicleShot(self._vehicle)
         self.__processAvatarContinuousActivation()
 
     @eventHandler

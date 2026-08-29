@@ -384,9 +384,8 @@ class BattleReplay(object):
             self.__playList = []
             self.__isPlayingPlayList = True
             try:
-                f = open(fileName, mode='r', encoding='utf-8')
-                s = f.read()
-                f.close()
+                with open(fileName, mode='r', encoding='utf-8') as f:
+                    s = f.read()
                 self.__playList = s.replace('\r\n', '\n').replace('\r', '\n').split('\n')
                 fileName = None
             except Exception:
@@ -515,25 +514,24 @@ class BattleReplay(object):
                 return True
         controlMode = self.getControlMode()
         isKillCamActive = self.__isKillCamActive()
-        if key == Keys.KEY_LEFTMOUSE or cmdMap.isFired(CommandMapping.CMD_CM_SHOOT, key):
-            if isDown and not isCursorVisible:
-                if self.isServerSideReplay:
-                    if self.__arenaPeriod == ARENA_PERIOD.BATTLE:
-                        player.switchObserverFPV()
-                    return True
-                if self.isControllingCamera:
-                    self.appLoader.detachCursor(settings.APP_NAME_SPACE.SF_BATTLE)
-                    if controlMode in CTRL_MODE_NAME.POSTMORTEM_CONTROL_MODES:
-                        self.onControlModeChanged(controlMode)
-                    else:
-                        self.onControlModeChanged('arcade')
-                    self.__replayCtrl.isControllingCamera = False
-                    self.__showInfoMessage('replayFreeCameraActivated')
-                else:
-                    if not self.__isAllowedSavedCamera():
-                        return False
-                    self.__gotoBoundMode()
+        if (key == Keys.KEY_LEFTMOUSE or cmdMap.isFired(CommandMapping.CMD_CM_SHOOT, key)) and isDown and not isCursorVisible:
+            if self.isServerSideReplay:
+                if self.__arenaPeriod == ARENA_PERIOD.BATTLE:
+                    player.switchObserverFPV()
                 return True
+            if self.isControllingCamera:
+                self.appLoader.detachCursor(settings.APP_NAME_SPACE.SF_BATTLE)
+                if controlMode in CTRL_MODE_NAME.POSTMORTEM_CONTROL_MODES:
+                    self.onControlModeChanged(controlMode)
+                else:
+                    self.onControlModeChanged('arcade')
+                self.__replayCtrl.isControllingCamera = False
+                self.__showInfoMessage('replayFreeCameraActivated')
+            else:
+                if not self.__isAllowedSavedCamera():
+                    return False
+                self.__gotoBoundMode()
+            return True
         if cmdMap.isFired(CommandMapping.CMD_CM_ALTERNATE_MODE, key) and isDown:
             if self.isControllingCamera:
                 return True
@@ -903,6 +901,9 @@ class BattleReplay(object):
         player = BigWorld.player()
         controlMode = self.getControlMode()
         recordedControlMode = self.getRecordedControlMode() if forceControlMode is None else forceControlMode
+        if recordedControlMode == CTRL_MODE_NAME.PREBATTLE_HIGHLIGHTS:
+            if self.isControllingCamera:
+                self.__replayCtrl.isControllingCamera = False
         previousMode = self.__previousMode
         self.__previousMode = recordedControlMode
         if controlMode == CTRL_MODE_NAME.KILL_CAM:

@@ -2,6 +2,7 @@
 # Embedded file name: scripts/common/serializable_types/customizations/personal_number.py
 from __future__ import absolute_import
 from collections import OrderedDict
+from typing import Dict
 from items.components.c11n_constants import ApplyArea
 from py2to3.patched_future import with_metaclass
 from serialization.field import intField, strField, applyAreaEnumField
@@ -23,3 +24,8 @@ class PersonalNumberComponent(with_metaclass(ReflectionMetaclass, SerializableCo
 
     def isFilled(self):
         return bool(self.number)
+
+    def toDict(self):
+        at = self.appliedTo
+        p = self.id
+        return {i:p for i in ApplyArea.RANGE if i & at}

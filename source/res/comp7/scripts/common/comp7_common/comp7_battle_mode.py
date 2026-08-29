@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: comp7/scripts/common/comp7_common/comp7_battle_mode.py
+from __future__ import absolute_import
 from comp7_common import comp7_constants
 from comp7_common.comp7_battle_results import comp7
 from constants import ARENA_BONUS_TYPE, QUEUE_TYPE
@@ -24,7 +25,7 @@ class Comp7BattleMode(AbstractBattleMode):
     def registerAdditionalBattleResultSysMsgType(self):
         from battle_results import ARENA_BONUS_TYPE_TO_SM_TYPE_BATTLE_RESULT
         from chat_shared import SYS_MESSAGE_TYPE
-        msgTypeIndex = SYS_MESSAGE_TYPE.__getattr__(self._SM_TYPE_BATTLE_RESULT).index()
+        msgTypeIndex = getattr(SYS_MESSAGE_TYPE, self._SM_TYPE_BATTLE_RESULT).index()
         for arenaBonusType in (ARENA_BONUS_TYPE.TOURNAMENT_COMP7, ARENA_BONUS_TYPE.TRAINING_COMP7):
             ARENA_BONUS_TYPE_TO_SM_TYPE_BATTLE_RESULT.update({arenaBonusType: msgTypeIndex})
 

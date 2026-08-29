@@ -165,10 +165,11 @@ class VehicleModifier(object):
                 reloadTime = modifiers(BattleParams.TWIN_GUN_RELOAD_TIME, gun.twinGun.twinGunReloadTime)
                 gun.twinGun = gun.twinGun._replace(twinGunReloadTime=reloadTime)
             if IS_CLIENT:
-                if gun.dualGun != DEFAULT_GUN_DUALGUN or gun.twinGun != DEFAULT_GUN_TWINGUN:
-                    gun.effects = [ modifiers(BattleParams.GUN_EFFECTS, effects) for effects in gun.effects ]
-                else:
-                    gun.effects = modifiers(BattleParams.GUN_EFFECTS, gun.effects)
+                if gun.effects is not None:
+                    if isinstance(gun.effects, list):
+                        gun.effects = [ modifiers(BattleParams.GUN_EFFECTS, effects) for effects in gun.effects ]
+                    else:
+                        gun.effects = modifiers(BattleParams.GUN_EFFECTS, gun.effects)
                 if gun.prefabEffects is not None:
                     gun.prefabEffects = modifiers(BattleParams.GUN_PREFAB_EFFECTS, gun.prefabEffects)
             if gun.prefabs:

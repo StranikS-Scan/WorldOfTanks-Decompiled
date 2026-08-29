@@ -1,10 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/account_helpers/settings_core/migrations.py
+import string
 import BigWorld
 import constants
 from account_helpers.AccountSettings import NEW_SETTINGS_COUNTER
-from account_helpers.settings_core.settings_constants import GAME, CONTROLS, VERSION, DAMAGE_INDICATOR, DAMAGE_LOG, BATTLE_EVENTS, SESSION_STATS, BattlePassStorageKeys, BattleCommStorageKeys, OnceOnlyHints, ScorePanelStorageKeys, SPGAim, GuiSettingsBehavior, SITUATIONAL_PERKS
-from adisp import adisp_process, adisp_async
+from account_helpers.settings_core.settings_constants import BATTLE_EVENTS, CONTROLS, DAMAGE_INDICATOR, DAMAGE_LOG, GAME, SESSION_STATS, SITUATIONAL_PERKS, VERSION, BattleCommStorageKeys, BattlePassStorageKeys, GuiSettingsBehavior, OnceOnlyHints, ScorePanelStorageKeys, SPGAim
+from adisp import adisp_async, adisp_process
 from debug_utils import LOG_DEBUG
 from helpers import dependency
 from skeletons.account_helpers.settings_core import ISettingsCache
@@ -607,9 +608,10 @@ def _migrateTo71(core, data, initialized):
      'role_ATSPG_universal': False,
      'role_ATSPG_sniper': False,
      'role_ATSPG_support': False,
+     'role_SPG': False,
      'role_LT_universal': False,
-     'role_LT_wheeled': False,
-     'role_SPG': False}
+     'role_LT_scout': False,
+     'role_LT_support': False}
 
 
 def _migrateTo72(core, data, initialized):
@@ -729,9 +731,10 @@ def _migrateTo81(core, data, initialized):
      'role_ATSPG_universal': False,
      'role_ATSPG_sniper': False,
      'role_ATSPG_support': False,
+     'role_SPG': False,
      'role_LT_universal': False,
-     'role_LT_wheeled': False,
-     'role_SPG': False}
+     'role_LT_scout': False,
+     'role_LT_support': False}
 
 
 def _migrateTo82(core, data, initialized):
@@ -896,9 +899,10 @@ def _migrateTo96(core, data, initialized):
      'role_ATSPG_universal': False,
      'role_ATSPG_sniper': False,
      'role_ATSPG_support': False,
+     'role_SPG': False,
      'role_LT_universal': False,
-     'role_LT_wheeled': False,
-     'role_SPG': False}
+     'role_LT_scout': False,
+     'role_LT_support': False}
 
 
 def _migrateTo97(core, data, initialized):
@@ -1297,7 +1301,7 @@ def _migrateTo134(core, data, initialized):
     from account_helpers.AccountSettings import AccountSettings
     from gui.server_events import recruit_helper
     for recruitUniqueIDs in AccountSettings.getNotifications('recruitNotifications', set()):
-        recruit_helper.setNewRecruitVisited(recruitUniqueIDs.lstrip('0123456789'))
+        recruit_helper.setNewRecruitVisited(recruitUniqueIDs.lstrip(string.digits))
 
 
 def _migrateTo135(core, data, initialized):
@@ -1502,6 +1506,48 @@ def _migrateTo156(core, data, initialized):
     offset = 524288
     if battlePassStorage & offset:
         data['clear'][battlePassUpdateKey] = data['clear'].get(battlePassUpdateKey, 0) | offset
+
+
+def _migrateTo157(core, data, initialized):
+    from account_helpers.settings_core.ServerSettingsManager import SETTINGS_SECTIONS
+    clear = data['clear']
+    holidayOpsFilter = 1024
+    storedValue = _getSettingsCache().getSectionSettings(SETTINGS_SECTIONS.CAROUSEL_FILTER_2, 0)
+    if storedValue & holidayOpsFilter:
+        clear['carousel_filter'] = clear.get('carousel_filter', 0) | holidayOpsFilter
+    storedValue = _getSettingsCache().getSectionSettings(SETTINGS_SECTIONS.EPICBATTLE_CAROUSEL_FILTER_2, 0)
+    if storedValue & holidayOpsFilter:
+        clear['epicCarouselFilter2'] = clear.get('epicCarouselFilter2', 0) | holidayOpsFilter
+
+
+def _migrateTo158(_, data, __):
+    from account_helpers.settings_core.ServerSettingsManager import SETTINGS_SECTIONS
+    hangarFiltersSections = ('carousel_filter',
+     'epicCarouselFilter2',
+     'rankedCarouselFilter2',
+     SETTINGS_SECTIONS.FUN_RANDOM_CAROUSEL_FILTER_2,
+     'comp7CarouselFilter2',
+     'comp7LightCarouselFilter2',
+     SETTINGS_SECTIONS.MAPBOX_CAROUSEL_FILTER_2)
+    fieldsToClear = ('role_HT_assault', 'role_HT_break', 'role_HT_support', 'role_HT_universal', 'role_MT_universal', 'role_MT_sniper', 'role_MT_assault', 'role_MT_support', 'role_ATSPG_assault', 'role_ATSPG_universal', 'role_ATSPG_sniper', 'role_ATSPG_support', 'role_SPG', 'role_LT_universal', 'role_LT_scout', 'role_LT_support')
+    for dataName in hangarFiltersSections:
+        for fieldKey in fieldsToClear:
+            data.setdefault(dataName, {})[fieldKey] = False
+
+
+def _migrateTo159(core, data, initialized):
+    from account_helpers.settings_core.ServerSettingsManager import SETTINGS_SECTIONS
+    from account_helpers.AccountSettings import AccountSettings, PERSONAL_MISSION_4
+    storedValue = _getSettingsCache().getSectionSettings(SETTINGS_SECTIONS.PERSONAL_MISSION_3, 0)
+    clear = data['clear']
+    settingOffset = 33554432
+    if storedValue & settingOffset:
+        clear[SETTINGS_SECTIONS.PERSONAL_MISSION_3] = clear.get(SETTINGS_SECTIONS.PERSONAL_MISSION_3, 0) | settingOffset
+    settings = _getSettingsCache().getSectionSettings(SETTINGS_SECTIONS.PERSONAL_MISSION_4, 0)
+    if settings:
+        clear[SETTINGS_SECTIONS.PERSONAL_MISSION_4] = clear.get(SETTINGS_SECTIONS.PERSONAL_MISSION_4, 0) | settings
+    else:
+        data[SETTINGS_SECTIONS.PERSONAL_MISSION_4] = AccountSettings.getSettingsDefault(PERSONAL_MISSION_4)
 
 
 _versions = ((1,
@@ -2122,6 +2168,18 @@ _versions = ((1,
   False),
  (156,
   _migrateTo156,
+  False,
+  False),
+ (157,
+  _migrateTo157,
+  False,
+  False),
+ (158,
+  _migrateTo158,
+  False,
+  False),
+ (159,
+  _migrateTo159,
   False,
   False))
 

@@ -11,10 +11,10 @@ from gui.impl.gen.view_models.views.lobby.hangar.main_menu_model import MainMenu
 from gui.impl.lobby.hangar.presenters.utils import fillMenuItems
 from gui.impl.pub.view_component import ViewComponent
 from gui.prb_control.entities.listener import IGlobalListener
-from gui.server_events.pm_constants import IS_PM3_QUEST_ENABLED, IS_PM2_QUEST_ENABLED, IS_REGULAR_QUEST_ENABLED
 from gui.shared.image_helper import getTextureLinkByID
 from gui.shared.view_helpers import ClanEmblemsHelper
 from helpers import dependency
+from personal_missions import PM_SWITCHES
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.techtree_events import ITechTreeEventsListener
 if typing.TYPE_CHECKING:
@@ -74,7 +74,7 @@ class MainMenuPresenter(ViewComponent[MainMenuModel], ClanEmblemsHelper, IGlobal
 
     def __updateModel(self):
         with self.viewModel.transaction() as model:
-            fillMenuItems(model, self.__menuItems)
+            fillMenuItems(model, menuData=self.__menuItems)
             if self.__techTreeEventsListener.getNations():
                 model.setHasTechTreeEvents(True)
 
@@ -96,11 +96,6 @@ class MainMenuPresenter(ViewComponent[MainMenuModel], ClanEmblemsHelper, IGlobal
 
     def __onServerSettingsChanged(self, diff=None):
         diff = diff or {}
-        settingsKeys = [DAILY_QUESTS_CONFIG,
-         PremiumConfigs.PREM_QUESTS,
-         'strongholdSettings',
-         IS_REGULAR_QUEST_ENABLED,
-         IS_PM2_QUEST_ENABLED,
-         IS_PM3_QUEST_ENABLED]
+        settingsKeys = (DAILY_QUESTS_CONFIG, PremiumConfigs.PREM_QUESTS, 'strongholdSettings') + PM_SWITCHES.ALL
         if any((key in diff for key in settingsKeys)):
             self.__updateModel()

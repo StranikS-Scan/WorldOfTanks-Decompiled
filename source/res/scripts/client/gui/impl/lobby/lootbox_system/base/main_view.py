@@ -16,22 +16,22 @@ from skeletons.gui.game_control import ILootBoxSystemController
 if TYPE_CHECKING:
     from typing import Any, Dict, Deque, Optional, Tuple
 
-class _Presenters(PresentersMap):
+class MainViewPresenters(PresentersMap):
 
     def _makeLoadersMap(self):
-        return {SubViewID.HOME: self.__loadHome,
-         SubViewID.SINGLE_BOX_REWARDS: self.__loadSingleBoxRewards,
-         SubViewID.MULTIPLE_BOXES_REWARDS: self.__loadMultipleBoxesRewards}
+        return {SubViewID.HOME: self._loadHome,
+         SubViewID.SINGLE_BOX_REWARDS: self._loadSingleBoxRewards,
+         SubViewID.MULTIPLE_BOXES_REWARDS: self._loadMultipleBoxesRewards}
 
-    def __loadHome(self):
+    def _loadHome(self):
         from gui.impl.lobby.lootbox_system.base.submodels.home import Home
         return Home(self._mainView.viewModel.home, self._mainView)
 
-    def __loadSingleBoxRewards(self):
+    def _loadSingleBoxRewards(self):
         from gui.impl.lobby.lootbox_system.base.submodels.single_box_rewards import SingleBoxRewards
         return SingleBoxRewards(self._mainView.viewModel.singleBoxRewards, self._mainView)
 
-    def __loadMultipleBoxesRewards(self):
+    def _loadMultipleBoxesRewards(self):
         from gui.impl.lobby.lootbox_system.base.submodels.multiple_boxes_rewards import MultipleBoxesRewards
         return MultipleBoxesRewards(self._mainView.viewModel.multipleBoxesRewards, self._mainView)
 
@@ -90,7 +90,7 @@ class MainView(MainViewImpl):
         return ((self.viewModel.onResourcesLoadCompleted, self.__onResourcesLoadCompleted),)
 
     def _getPresentersMap(self):
-        return _Presenters(self)
+        return MainViewPresenters(self)
 
     def _getDefaultSubViewID(self):
         return SubViewID.HOME
@@ -109,10 +109,11 @@ class MainView(MainViewImpl):
             subviewIDsModel.clear()
             while self.__pendingSubviews:
                 subviewID, args, kwargs = self.__pendingSubviews.popleft()
-                if self.currentSubview is not None:
-                    self.currentSubview.finalize()
-                self.__subviewID = subviewID
-                self.currentSubview.initialize(*args, **kwargs)
+                if self.__subviewID != subviewID:
+                    if self.currentSubview is not None:
+                        self.currentSubview.finalize()
+                    self.__subviewID = subviewID
+                    self.currentSubview.initialize(*args, **kwargs)
                 subviewIDsModel.addNumber(self.__subviewID)
 
             subviewIDsModel.invalidate()

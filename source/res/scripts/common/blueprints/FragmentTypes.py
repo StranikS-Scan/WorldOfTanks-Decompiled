@@ -11,6 +11,8 @@ from debug_utils import LOG_DEBUG_DEV, LOG_ERROR
 from . import g_cache, BlueprintsException, getAllResearchableVehicles
 from blueprints.BlueprintTypes import BlueprintTypes
 from math_common import round_py2_style
+if typing.TYPE_CHECKING:
+    from typing import Optional, Tuple
 
 class BlueprintFragment(object):
     __slots__ = ('vehTypeCD', 'total')
@@ -194,11 +196,13 @@ def normalizeFragment(ifragmentCD):
 def _makeIntCompDescr(vehTypeCD, fType, normalized):
     if BlueprintTypes.INTELLIGENCE_DATA == fType:
         return ((65521 if normalized else vehTypeCD) & 65520) + fType
-    if BlueprintTypes.NATIONAL == fType:
+    elif BlueprintTypes.NATIONAL == fType:
         return ((vehTypeCD | 65280 if normalized else vehTypeCD) & 65520) + fType
-    if BlueprintTypes.VEHICLE == fType:
+    elif BlueprintTypes.VEHICLE == fType:
         return (vehTypeCD & 65520) + fType
-    LOG_ERROR('Incorrect fType={}'.format(fType))
+    else:
+        LOG_ERROR('Incorrect fType={}'.format(fType))
+        return None
 
 
 @lru_cache(maxsize=512)

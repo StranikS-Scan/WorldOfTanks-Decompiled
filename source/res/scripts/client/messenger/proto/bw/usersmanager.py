@@ -9,7 +9,7 @@ from messenger.proto.bw import entities
 from messenger.proto.bw.ChatActionsListener import ChatActionsListener
 from messenger.proto.events import g_messengerEvents
 from messenger.proto.shared_find_criteria import ProtoFindCriteria
-from messenger.storage import storage_getter
+from messenger.storage import MessengerStorageDescriptor, UsersStorage
 
 def _getTagsByRoster(bwRoster):
     tags = set()
@@ -22,6 +22,7 @@ def _getTagsByRoster(bwRoster):
 
 
 class UsersManager(ChatActionsListener):
+    usersStorage = MessengerStorageDescriptor(UsersStorage)
 
     def __init__(self):
         CHAT_RESPONSES = chat_shared.CHAT_RESPONSES
@@ -29,10 +30,6 @@ class UsersManager(ChatActionsListener):
          CHAT_RESPONSES.incorrectCharacter: '_UsersManager__onIncorrectCharacter'})
         self.__isPrivateOpen = False
         self.__isRosterReceivedOnce = False
-
-    @storage_getter('users')
-    def usersStorage(self):
-        return None
 
     def addListeners(self):
         self.__addContactsListeners()

@@ -18,13 +18,12 @@ from gui.impl import backport
 from gui.impl.gen import R
 from gui.prb_control import prbInvitesProperty
 from gui.prb_control.formatters.invites import getPrbInviteHtmlFormatter
-from gui.server_events.pm_constants import IS_PM3_QUEST_ENABLED
 from gui.server_events.recruit_helper import getNewRecruitsCounter
 from gui.shared import EVENT_BUS_SCOPE, g_eventBus
 from gui.shared.events import HangarSpacesSwitcherEvent, ViewEventType
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.notifications import NotificationGroup, NotificationGuiSettings, NotificationPriorityLevel
-from gui.shared.system_factory import collectCustomizationHangarDecorator
+from gui.shared.system_factory import collectCustomizationHangarDecorator, collectC11nMessageLockAliases
 from gui.shared.utils.functions import makeTooltip
 from gui.wgnc.settings import WGNC_DEFAULT_ICON, WGNC_POP_UP_BUTTON_WIDTH
 from helpers import dependency, time_utils
@@ -32,13 +31,13 @@ from helpers.events_handler import EventsHandler
 from items import makeIntCompactDescrByID
 from items.components.c11n_constants import CustomizationType
 from messenger import g_settings
-from messenger.formatters.service_channel_helpers import getPMOperationAndQuest
+from messenger.formatters.service_channel_helpers import getPMAdvancedOperationAndQuest
 from messenger.formatters.users_messages import makeFriendshipRequestText
 from messenger.m_constants import PROTO_TYPE
 from messenger.proto import proto_getter
 from messenger.proto.xmpp.xmpp_constants import XMPP_ITEM_TYPE
 from notification.settings import NOTIFICATION_BUTTON_STATE, NOTIFICATION_TYPE, makePathToIcon
-from personal_missions import PM_BRANCH
+from personal_missions import PM_BRANCH, PM_SWITCHES
 from pet_system_common import pet_constants
 from shared_utils import first
 from skeletons.gui.battle_matters import IBattleMattersController
@@ -71,6 +70,7 @@ class _NotificationDecorator(EventsHandler):
         self._isOrderChanged = False
         self._entityID = entityID
         self._entity = entity
+        self._settings = settings
         self._make(entity, settings)
         self._subscribe()
 
@@ -78,10 +78,10 @@ class _NotificationDecorator(EventsHandler):
         return '{0:>s}(typeID = {1:n}, entityID = {2:n})'.format(self.__class__.__name__, self.getType(), self.getID())
 
     def __cmp__(self, other):
-        return cmp(self.getOrder(), other.getOrder())
+        return cmp(self.getOrder(), other.getOrder()) if isinstance(other, _NotificationDecorator) else -1
 
     def __eq__(self, other):
-        return self.getType() == other.getType() and self.getID() == other.getID()
+        return isinstance(other, _NotificationDecorator) and self.getType() == other.getType() and self.getID() == other.getID()
 
     def clear(self):
         self._unsubscribe()
@@ -228,7 +228,7 @@ class MessageDecorator(_NotificationDecorator):
                 self._settings.showAt = _makeShowTime()
         message = formatted.copy() if formatted else {}
         for key in _ICONS_FIELDS:
-            if key in formatted:
+            if key in message:
                 message[key] = makePathToIcon(message[key])
             message[key] = ''
 
@@ -295,12 +295,14 @@ class LockButtonMessageDecorator(MessageDecorator):
     def __init__(self, entityID, entity=None, settings=None, model=None):
         super(LockButtonMessageDecorator, self).__init__(entityID, entity, settings, model)
         g_eventBus.addListener(ViewEventType.LOAD_VIEW, self._viewLoaded, EVENT_BUS_SCOPE.LOBBY)
+        g_eventBus.addListener(ViewEventType.LOAD_GUI_IMPL_VIEW, self._viewLoaded, EVENT_BUS_SCOPE.LOBBY)
         g_playerEvents.onEnqueued += self._onEqueued
         g_playerEvents.onDequeued += self._onDequeued
 
     def clear(self):
         super(LockButtonMessageDecorator, self).clear()
         g_eventBus.removeListener(ViewEventType.LOAD_VIEW, self._viewLoaded, EVENT_BUS_SCOPE.LOBBY)
+        g_eventBus.removeListener(ViewEventType.LOAD_GUI_IMPL_VIEW, self._viewLoaded, EVENT_BUS_SCOPE.LOBBY)
         g_playerEvents.onEnqueued -= self._onEqueued
         g_playerEvents.onDequeued -= self._onDequeued
 
@@ -375,7 +377,7 @@ class C11nMessageDecorator(LockButtonMessageDecorator):
         self._updateButtonsState(lock=self._getIsLocked())
 
     def _getLockAliases(self):
-        return (VIEW_ALIAS.HERO_VEHICLE_PREVIEW,) + super(C11nMessageDecorator, self)._getLockAliases()
+        return (VIEW_ALIAS.HERO_VEHICLE_PREVIEW,) + tuple(collectC11nMessageLockAliases()) + super(C11nMessageDecorator, self)._getLockAliases()
 
     def _getIsLocked(self):
         isLocked = True
@@ -1444,16 +1446,17 @@ class PostProgressionDecorator(LockButtonMessageDecorator):
         return
 
 
-class PersonalMission3QuestDecorator(LockButtonMessageDecorator):
+class PM3QuestDecorator(LockButtonMessageDecorator):
     __lobbyContext = dependency.descriptor(ILobbyContext)
+    _branchName = PM_BRANCH.PM3_NAME
 
     def __init__(self, entityID, entity=None, settings=None, model=None):
-        super(PersonalMission3QuestDecorator, self).__init__(entityID, entity, settings, model)
+        super(PM3QuestDecorator, self).__init__(entityID, entity, settings, model)
         self.__lobbyContext.getServerSettings().onServerSettingsChange += self.__onServerSettingsChange
 
     def clear(self):
         self.__lobbyContext.getServerSettings().onServerSettingsChange -= self.__onServerSettingsChange
-        super(PersonalMission3QuestDecorator, self).clear()
+        super(PM3QuestDecorator, self).clear()
 
     def _getButtonType(self):
         pass
@@ -1463,29 +1466,33 @@ class PersonalMission3QuestDecorator(LockButtonMessageDecorator):
 
     def _updateButtonsState(self, lock=False):
         serverSettings = self.__lobbyContext.getServerSettings()
-        isPM3Enabled = serverSettings.isPersonalMissionsEnabled(PM_BRANCH.PERSONAL_MISSION_3)
+        isPMEnabled = serverSettings.isPersonalMissionsEnabled(self._branchName)
         disabledPMOperations = serverSettings.getDisabledPMOperations()
         savedData = self.getSavedData()
         operationID = savedData.get('operationID')
-        lock |= not isPM3Enabled or operationID in disabledPMOperations
-        super(PersonalMission3QuestDecorator, self)._updateButtonsState(lock)
+        lock |= not isPMEnabled or operationID in disabledPMOperations
+        super(PM3QuestDecorator, self)._updateButtonsState(lock)
 
     def _getBtnState(self, lock):
         savedData = self.getSavedData()
         operationID = savedData.get('operationID')
         chainID = savedData.get('chainID')
         questID = savedData.get('questID')
-        _, quest = getPMOperationAndQuest(operationID, chainID, questID)
-        return NOTIFICATION_BUTTON_STATE.HIDDEN if not quest or not quest.isCompleted() else super(PersonalMission3QuestDecorator, self)._getBtnState(lock)
+        _, quest = getPMAdvancedOperationAndQuest(operationID, chainID, questID)
+        return NOTIFICATION_BUTTON_STATE.HIDDEN if not quest or not quest.isCompleted() else super(PM3QuestDecorator, self)._getBtnState(lock)
 
     def __onServerSettingsChange(self, diff):
-        if IS_PM3_QUEST_ENABLED not in diff:
+        if PM_SWITCHES.MAP_BRANCH_NAME_TO_SWITCH_NAME.get(self._branchName) not in diff:
             return
         else:
             if self._model is not None:
                 self._updateButtonsState()
                 self._model.updateNotification(self.getType(), self._entityID, self._entity, False)
             return
+
+
+class PM4QuestDecorator(PM3QuestDecorator):
+    _branchName = PM_BRANCH.PM4_NAME
 
 
 class VehSkillTreePerkAvailableDecorator(MessageDecorator):

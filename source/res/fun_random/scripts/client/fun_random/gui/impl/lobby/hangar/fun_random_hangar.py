@@ -5,8 +5,9 @@ import typing
 from ClientSelectableCameraObject import ClientSelectableCameraObject
 from CurrentVehicle import g_currentPreviewVehicle, g_currentVehicle
 from PlayerEvents import g_playerEvents
-from account_helpers.AccountSettings import HANGAR_VIEW_SETTINGS, HANGAR_KEY_BINDINGS
+from account_helpers.AccountSettings import AccountSettings, FUN_RANDOM_BANNER_LAST_VISITED_SEASON_BORDER, HANGAR_VIEW_SETTINGS, HANGAR_KEY_BINDINGS
 from frameworks.wulf import WindowFlags
+from fun_random.gui.feature.fun_constants import FunSubModesState
 from fun_random.gui.feature.util.fun_mixins import FunSubModesWatcher
 from fun_random.gui.feature.util.fun_wrappers import hasDesiredSubMode
 from fun_random.gui.filters.fun_random_carousel_filter import FunRandomCarouselFilter
@@ -149,16 +150,19 @@ class FunRandomHangar(ViewComponent[RouterModel], IRoutableView, FunSubModesWatc
         g_currentPreviewVehicle.selectNoVehicle()
         if g_currentVehicle.isPresent():
             g_currentVehicle.refreshModel()
-        self.__showInfoPageIfNeeded()
+        self.__processAccountSettings()
 
     def __onSubModeChanged(self, funSelectionEvent):
         if funSelectionEvent.selectedSubModeID is not None and funSelectionEvent.selectedSubModeID != UNKNOWN_EVENT_ID:
-            self.__showInfoPageIfNeeded()
+            self.__processAccountSettings()
         return
 
     @hasDesiredSubMode()
-    def __showInfoPageIfNeeded(self):
+    def __processAccountSettings(self):
         currentSubMode = self.getDesiredSubMode()
+        status = self.getSubModesStatus()
+        if status.state == FunSubModesState.AVAILABLE:
+            AccountSettings.setSettings(FUN_RANDOM_BANNER_LAST_VISITED_SEASON_BORDER, status.rightBorder)
         showInfoPageOnFirstVisit = currentSubMode.getConfigurationModel().subMode.showInfoPageOnFirstVisit
         if showInfoPageOnFirstVisit:
             subModeAccountSettings = FunSubModeAccountSettings(currentSubMode.getSettings().client.settingsKey)

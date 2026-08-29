@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: battle_royale/scripts/client/battle_royale/gui/Scaleform/daapi/view/battle/veh_configurator.py
+from __future__ import absolute_import
 import logging
 import GUI
 from adisp import adisp_process
@@ -145,9 +146,9 @@ class BattleVehicleConfigurator(BattleVehicleConfiguratorMeta, IProgressionListe
         for cmpnt in self.components.values():
             cmpnt.updateData(arenaLevelData)
 
-    def setVehicleChanged(self, vehicle, moduleIntCD, vehicleRecreated):
+    def setVehicleChanged(self, vehicle, newModuleIntCD, vehicleRecreated):
         for cmpnt in self.components.values():
-            cmpnt.setVehicleChanged(vehicle, moduleIntCD, vehicleRecreated)
+            cmpnt.setVehicleChanged(vehicle, newModuleIntCD, vehicleRecreated)
 
     def onMaxLvlAchieved(self):
         for cmpnt in self.components.values():

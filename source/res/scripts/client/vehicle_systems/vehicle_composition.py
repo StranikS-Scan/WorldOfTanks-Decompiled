@@ -23,7 +23,7 @@ if typing.TYPE_CHECKING:
     from SimulatedVehicle import SimulatedVehicle
     from vehicle_appearance.common_tank_appearance import CommonTankAppearance
     from gui.hangar_vehicle_appearance import HangarVehicleAppearance
-    from typing import Iterable
+    from typing import Iterable, List, Tuple, Optional
     TAppearance = typing.Union[HangarVehicleAppearance, CommonTankAppearance, None]
 
 class VehicleSlots(enum.Enum):
@@ -47,7 +47,7 @@ def removeComposition(gameObject, queue=None):
     queue.removeComponent(gameObject, Compound.CompoundBasedComposerComponent)
 
 
-def createVehicleComposition(gameObject, vehicleGameObject=CGF.GameObject.INVALID_GAME_OBJECT, prefabMap=None, followNodes=True, extraSlots=None, dynSlotNodes=None, queue=None):
+def createVehicleComposition(gameObject, vehicleGameObject=CGF.GameObject.INVALID_GAME_OBJECT, prefabMap=None, followNodes=True, extraSlots=None, dynSlotNodes=None, extraSlotComponents=None, queue=None):
     dynSlotNodes = dynSlotNodes or {}
     if IS_UE_EDITOR:
 
@@ -65,7 +65,7 @@ def createVehicleComposition(gameObject, vehicleGameObject=CGF.GameObject.INVALI
     slotsMap = {node:node for node in dynSlotNodes}
     slotsMap.update(_VEHICLE_SLOTS_MAP)
     queue = queue or CGF.CommandQueue(gameObject.spaceID)
-    queue.createComponent(gameObject, Compound.CompoundBasedComposerComponent, vehicleGameObject, predicate, nodeInteractTypeResolver, slotsMap, prefabMap or [], extraSlots or [])
+    queue.createComponent(gameObject, Compound.CompoundBasedComposerComponent, vehicleGameObject, predicate, nodeInteractTypeResolver, slotsMap, prefabMap or [], extraSlots or [], extraSlotComponents or [])
 
 
 def _getSlotTransform(scale, rotation, position):
@@ -115,7 +115,7 @@ def getExtraSlotMap(vDesc, appearance):
 
 def createDetachedTurretComposition(gameObject, prefabMap=None, extraSlots=None):
     queue = CGF.CommandQueue(gameObject.spaceID)
-    queue.createComponent(gameObject, Compound.CompoundBasedComposerComponent, CGF.GameObject.INVALID_GAME_OBJECT, lambda *args: True, lambda *args: Compound.NodeInteractType.NONE, _DETACHED_TURRET_SLOTS_MAP, prefabMap or [], extraSlots or [])
+    queue.createComponent(gameObject, Compound.CompoundBasedComposerComponent, CGF.GameObject.INVALID_GAME_OBJECT, lambda *args: True, lambda *args: Compound.NodeInteractType.NONE, _DETACHED_TURRET_SLOTS_MAP, prefabMap or [], extraSlots or [], [])
 
 
 def findParentVehicle(gameObject):

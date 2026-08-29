@@ -12,18 +12,15 @@ from gui.prb_control.entities.base.unit.actions_handler import AbstractActionsHa
 from gui.prb_control.events_dispatcher import g_eventDispatcher
 from gui.prb_control.settings import REQUEST_TYPE, FUNCTIONAL_FLAG
 from gui.shared.event_dispatcher import showPlatoonInfoDialog, showPlatoonWarningDialog
-from messenger.storage import storage_getter
+from messenger.storage import MessengerStorageDescriptor, UsersStorage
 from wg_async import await_callback, wg_async, wg_await
 
 class SquadActionsHandler(AbstractActionsHandler):
+    usersStorage = MessengerStorageDescriptor(UsersStorage)
 
     def __init__(self, entity):
         super(SquadActionsHandler, self).__init__(entity)
         g_playerEvents.onKickedFromQueue += self._onKickedFromQueue
-
-    @storage_getter('users')
-    def usersStorage(self):
-        return None
 
     def setUnitChanged(self, loadHangar=False):
         flags = self._entity.getFlags()

@@ -31,7 +31,7 @@ SHOP_RENT_SEASON_TYPE_MAP = {GameSeasonType.NONE: 'none',
  GameSeasonType.RANKED: 'ranked',
  GameSeasonType.EPIC: 'frontline'}
 
-class _GoldPurchaseReason(object):
+class GoldPurchaseReason(object):
     VEHICLE = 'vehicle'
     RENT = 'rent'
     XP = 'experience'
@@ -136,52 +136,56 @@ def showTradeOffOverlay(parent=None):
 
 
 def showBuyGoldForVehicleWebOverlay(fullPrice, intCD, parent=None):
-    showBuyGoldWebOverlay(_getParams(_GoldPurchaseReason.VEHICLE, fullPrice, intCD), parent)
+    showBuyGoldWebOverlay(_getParams(GoldPurchaseReason.VEHICLE, fullPrice, intCD), parent)
 
 
 def showBuyGoldForRentWebOverlay(fullPrice, intCD):
-    showBuyGoldWebOverlay(_getParams(_GoldPurchaseReason.RENT, fullPrice, intCD))
+    showBuyGoldWebOverlay(_getParams(GoldPurchaseReason.RENT, fullPrice, intCD))
 
 
 def showBuyGoldForXpWebOverlay(fullPrice):
-    showBuyGoldWebOverlay(_getParams(_GoldPurchaseReason.XP, fullPrice))
+    showBuyGoldWebOverlay(_getParams(GoldPurchaseReason.XP, fullPrice))
 
 
 def showBuyGoldForSlot(fullPrice):
-    showBuyGoldWebOverlay(_getParams(_GoldPurchaseReason.SLOT, fullPrice))
+    showBuyGoldWebOverlay(_getParams(GoldPurchaseReason.SLOT, fullPrice))
 
 
 def showBuyGoldForBerth(fullPrice):
-    showBuyGoldWebOverlay(_getParams(_GoldPurchaseReason.BERTH, fullPrice))
+    showBuyGoldWebOverlay(_getParams(GoldPurchaseReason.BERTH, fullPrice))
 
 
 def showBuyGoldForCrew(fullPrice):
-    showBuyGoldWebOverlay(_getParams(_GoldPurchaseReason.CREW, fullPrice))
+    showBuyGoldWebOverlay(_getParams(GoldPurchaseReason.CREW, fullPrice))
 
 
 def showBuyGoldForEquipment(fullPrice):
-    showBuyGoldWebOverlay(_getParams(_GoldPurchaseReason.EQUIPMENT, fullPrice))
+    showBuyGoldWebOverlay(_getParams(GoldPurchaseReason.EQUIPMENT, fullPrice))
 
 
 def showBuyGoldForCustomization(fullPrice):
-    showBuyGoldWebOverlay(_getParams(_GoldPurchaseReason.CUSTOMIZATION, fullPrice))
+    showBuyGoldWebOverlay(_getParams(GoldPurchaseReason.CUSTOMIZATION, fullPrice))
 
 
 def showBuyGoldForBattlePass(fullPrice):
-    showBuyGoldWebOverlay(_getParams(_GoldPurchaseReason.BATTLE_PASS, fullPrice))
+    showBuyGoldWebOverlay(_getParams(GoldPurchaseReason.BATTLE_PASS, fullPrice))
 
 
 def showBuyGoldForBattlePassLevels(fullPrice):
-    showBuyGoldWebOverlay(_getParams(_GoldPurchaseReason.BATTLE_PASS_LEVELS, fullPrice))
+    showBuyGoldWebOverlay(_getParams(GoldPurchaseReason.BATTLE_PASS_LEVELS, fullPrice))
 
 
 def showBuyGoldForPersonalReserves(fullPrice):
-    showBuyGoldWebOverlay(_getParams(_GoldPurchaseReason.PERSONAL_RESERVES, fullPrice))
+    showBuyGoldWebOverlay(_getParams(GoldPurchaseReason.PERSONAL_RESERVES, fullPrice))
+
+
+def showBuyGoldForLootboxReroll(fullPrice):
+    showBuyGoldWebOverlay(_getParams('', fullPrice))
 
 
 def showBuyGoldForBundle(fullPrice, params=None):
     params = dict(params) or {}
-    params.update(_getParams(_GoldPurchaseReason.BUNDLE, fullPrice))
+    params.update(_getParams(GoldPurchaseReason.BUNDLE, fullPrice))
     showBuyGoldWebOverlay(params)
 
 

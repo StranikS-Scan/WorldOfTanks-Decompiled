@@ -31,7 +31,7 @@ from helpers import i18n
 from messenger import g_settings
 from messenger.m_constants import USER_GUI_TYPE, PROTO_TYPE, USER_TAG
 from messenger.proto import proto_getter
-from messenger.storage import storage_getter
+from messenger.storage import MessengerStorageDescriptor, UsersStorage
 from nations import INDICES as NATIONS_INDICES, NAMES as NATIONS_NAMES
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
@@ -267,7 +267,8 @@ def _getSlotsData(unitMgrID, fullData, levelsRange=None, checkForVehicles=True, 
     isPlayerCreator = pInfo.isCommander()
     isPlayerInSlot = pInfo.isInSlot
     slots = []
-    userGetter = storage_getter('users')().getUser
+    usersStorage = MessengerStorageDescriptor(UsersStorage).get()
+    userGetter = usersStorage.getUser
     colorGetter = g_settings.getColorScheme('rosters').getColors
     itemsCache = dependency.instance(IItemsCache)
     vehicleGetter = itemsCache.items.getItemByCD

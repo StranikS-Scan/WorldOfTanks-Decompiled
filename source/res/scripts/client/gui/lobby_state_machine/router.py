@@ -4,7 +4,7 @@ from __future__ import absolute_import
 import json
 import logging
 import typing
-from frameworks.state_machine import BaseStateObserver, visitor
+from frameworks_common.state_machine import BaseStateObserver, visitor
 from gui.Scaleform.lobby_entry import getLobbyStateMachine
 from gui.lobby_state_machine.resource_mapping import resLayoutToStateId, stateIdToResLayout
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
@@ -12,7 +12,7 @@ from gui.shared.events import NavigationEvent
 from helpers.events_handler import EventsHandler
 from gui.lobby_state_machine.states import UntrackedState, LobbyState
 if typing.TYPE_CHECKING:
-    from frameworks.state_machine import State
+    from frameworks_common.state_machine import State
     from gui.impl.gen.view_models.views.lobby.common.router_model import RouterModel
     from gui.lobby_state_machine.lobby_state_machine import LobbyStateMachine
     from gui.lobby_state_machine.routable_view import IRoutableView

@@ -3,6 +3,7 @@
 import cPickle
 import logging
 from functools import partial, wraps
+import typing
 import AccountCommands
 import constants
 import items
@@ -413,44 +414,22 @@ class Stats(object):
             self.__account._doCmdInt2(AccountCommands.CMD_ADD_BATTLE_PASS_POINTS, vehTypeCD, points, proxy)
             return
 
+    @_checkIfNonPlayer()
     def completePersonalMission(self, questID, withAdditional=False, callback=None):
-        if self.__ignore:
-            if callback is not None:
-                callback(AccountCommands.RES_NON_PLAYER)
-            return
-        else:
-            pmCache = personal_missions.g_cache
-            if not self._eventsCache.getPersonalMissions().isCampaignActive(pmCache.branchByMissionID(questID)):
-                _logger.error('No active campaign for personal mission with id: %s', questID)
-                return
-            if callback is not None:
-                proxy = lambda requestID, resultID, errorStr, ext={}: callback(resultID)
-            else:
-                proxy = None
-            self.__account._doCmdIntArr(AccountCommands.CMD_COMPLETE_PERSONAL_MISSION, [questID, int(withAdditional)], proxy)
-            return
+        self.__completePersonalMissionQuests([questID], withAdditional, callback)
 
-    def completePersonalMissionRange(self, missionIdRange, withAdditional=False, callback=None):
-        missionsId = missionIdRange.split('-')
-        if len(missionsId) == 2:
-            if self.__ignore:
-                if callback is not None:
-                    callback(AccountCommands.RES_NON_PLAYER)
-                return
-            if callback is not None:
-                proxy = lambda requestID, resultID, errorStr, ext={}: callback(resultID)
-            else:
-                proxy = None
-            pmCache = personal_missions.g_cache
-            startMissionRange = int(missionsId[0])
-            endMissionRange = int(missionsId[1]) + 1
-            for missionID in range(startMissionRange, endMissionRange):
-                if not self._eventsCache.getPersonalMissions().isCampaignActive(pmCache.branchByMissionID(missionID)):
-                    _logger.error('No active campaign for personal mission with id: %s', missionID)
-                    continue
-                self.__account._doCmdIntArr(AccountCommands.CMD_COMPLETE_PERSONAL_MISSION, [missionID, int(withAdditional)], proxy)
-
-        return
+    @_checkIfNonPlayer()
+    def completePersonalMissionRange(self, questIDRange, withAdditional=False, callback=None):
+        questIDs = questIDRange.split('-')
+        if len(questIDs) != 2:
+            _logger.error('Quest IDs range should be string in format int-int: %s', questIDRange)
+            return
+        startQuestID = int(questIDs[0])
+        endQuestID = int(questIDs[1])
+        if startQuestID > endQuestID:
+            _logger.error('Incorrect quest IDs range: %s', questIDRange)
+            return
+        self.__completePersonalMissionQuests(range(startQuestID, endQuestID + 1), withAdditional, callback)
 
     def completeQuests(self, questIDs, callback=None):
         if self.__ignore:
@@ -769,3 +748,11 @@ class Stats(object):
                 proxy = None
             self.__account._doCmdInt3(AccountCommands.CMD_BUY_BERTHS, shopRev, countPacksBerths, 0, proxy)
             return
+
+    def __completePersonalMissionQuests(self, questIDs, withAdditional=False, callback=None):
+        pmCache = personal_missions.g_cache
+        for questID in questIDs:
+            if not self._eventsCache.getPersonalMissions().isCampaignActive(pmCache.branchByMissionID(questID)):
+                _logger.error('No active campaign for personal mission with id: %s', questID)
+                continue
+            self.__account._doCmdIntArr(AccountCommands.CMD_COMPLETE_PERSONAL_MISSION, [questID, int(withAdditional)], _get_callback_proxy(callback))

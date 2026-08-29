@@ -18,7 +18,7 @@ def shakePlayerDynamicCamera(vehicle, gunInstallationSlot, shakeReason=ShakeReas
         gunFireNode = appearance.compoundModel.node(gunFireNodeName)
         if gunFireNode is None or gunNode is None:
             return
-        BigWorld.player().inputHandler.onVehicleShaken(vehicle, shakeReason, Math.Matrix(gunFireNode).translation, Math.Matrix(gunNode).applyVector(Math.Vector3(0, 0, -1)), gunInstallationSlot.gun.effectsCaliber, withEvents=gunInstallationSlot.isMainInstallation())
+        BigWorld.player().inputHandler.onVehicleShaken(vehicle, shakeReason, Math.Matrix(gunFireNode).translation, Math.Matrix(gunNode).applyVector(Math.Vector3(0, 0, -1)), gunInstallationSlot.gun.effectsCaliber)
         return
 
 

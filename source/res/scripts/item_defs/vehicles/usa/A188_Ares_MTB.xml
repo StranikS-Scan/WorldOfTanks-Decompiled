@@ -2431,7 +2431,7 @@
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	8200	</weight>
       <maxHealth>	370	</maxHealth>
-      <rotationSpeed>	45	</rotationSpeed>
+      <rotationSpeed>	48	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	170	</maxHealth>
         <maxRegenHealth>	85	</maxRegenHealth>
@@ -2465,12 +2465,12 @@
             <armor_15>	127	</armor_15>
             <armor_16>	101.6	</armor_16>
           </armor>
-          <shotDispersionRadius>	0.36	</shotDispersionRadius>
+          <shotDispersionRadius>	0.35	</shotDispersionRadius>
           <reloadTime>	6	</reloadTime>
           <invisibilityFactorAtShot>	0.112	</invisibilityFactorAtShot>
           <turretYawLimits>	-180 180	</turretYawLimits>
           <shotDispersionFactors>
-            <turretRotation>	0.1	</turretRotation>
+            <turretRotation>	0.09	</turretRotation>
             <afterShot>	4.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
@@ -2534,6 +2534,7 @@
             </customizableVehicleAreas>
           </customization>
           <edgeByVisualModel>	false	</edgeByVisualModel>
+          <muzzleBrake>	RADIAL	</muzzleBrake>
           <camouflage>
             <density>	117.882126 118.182518	</density>
             <aoTextureSize>	512 512	</aoTextureSize>
@@ -2872,7 +2873,7 @@
     <detailed>
       <engines>
         <Continental_AV_1790_5BX>
-          <smplEnginePower>	960	</smplEnginePower>
+          <smplEnginePower>	1010	</smplEnginePower>
           <smplFwMaxSpeed>	52	</smplFwMaxSpeed>
         </Continental_AV_1790_5BX>
       </engines>

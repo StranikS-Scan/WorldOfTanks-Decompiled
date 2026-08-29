@@ -2114,6 +2114,9 @@
           </pitchLimits>
           <invisibilityFactorAtShot>	0.24	</invisibilityFactorAtShot>
           <turretYawLimits>	-180 180	</turretYawLimits>
+          <prefabs>
+            <main>	content/CGFPrefabs/Vehicle/guns/usa/gun_A33_MTLS-1G14.prefab	</main>
+          </prefabs>
           <models>
             <undamaged>	vehicles/american/A33_MTLS-1G14/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/american/A33_MTLS-1G14/crash/lod0/Gun_01.model	</destroyed>
@@ -2123,7 +2126,6 @@
             <collisionModelServer>	vehicles/american/A33_MTLS-1G14/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/american/A33_MTLS-1G14/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
-          <effects>	shot_MTLS_auto	</effects>
           <reloadEffect>	reload20_45	</reloadEffect>
           <customizationSlots>
             <slot>

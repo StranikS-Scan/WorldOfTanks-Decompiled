@@ -35,6 +35,7 @@ class Comp7StatusNotificationTimerPanel(StatusNotificationTimerPanel):
     def _generateItems(self):
         items = [Comp7BattleHighPriorityGroup,
          PoiNotificationsGroup,
+         comp7_sn_items.IlluminationFlareSN,
          sn_items.StunSN,
          comp7_sn_items.AoeHealSN,
          comp7_sn_items.AoeInspireSN,
@@ -70,6 +71,7 @@ class Comp7StatusNotificationTimerPanel(StatusNotificationTimerPanel):
         self._addNotificationTimerSetting(data, _TYPES.UNDER_FIRE, _LINKS.UNDER_FIRE_ICON, link)
         self.__genPoiTimersSettings(data)
         link = _LINKS.SECONDARY_TIMER_UI
+        self._addNotificationTimerSetting(data, _TYPES.COMP7_ILLUMINATION_FLARE, _LINKS.COMP7_ILLUMINATION_FLARE_ICON, link, _COLORS.ORANGE)
         self._addNotificationTimerSetting(data, _TYPES.STUN, _LINKS.STUN_ICON, link, _COLORS.ORANGE, noiseVisible=True, text=INGAME_GUI.STUN_INDICATOR)
         self.__gerRoleSkillsTimersSettings(data)
         return data

@@ -11,19 +11,21 @@ from gui.Scaleform.genConsts.PERSONAL_MISSIONS_ALIASES import PERSONAL_MISSIONS_
 from gui.Scaleform.genConsts.QUESTS_ALIASES import QUESTS_ALIASES
 from gui.impl.gen.view_models.views.lobby.user_missions.hub.tabs.tab_id import TabId
 from gui.impl.lobby.reward_window import GiveAwayRewardWindow, PiggyBankRewardWindow, TwitchRewardWindow
-from gui.impl.pub.notification_commands import WindowNotificationCommand, EventNotificationCommand, NotificationEvent
+from gui.impl.pub.notification_commands import EventNotificationCommand, NotificationEvent, WindowNotificationCommand
 from gui.prb_control.dispatcher import g_prbLoader
 from gui.server_events import anniversary_helper, awards, events_helpers, recruit_helper
 from gui.server_events.events_helpers import getLootboxesFromBonuses, isC11nQuest
 from gui.server_events.finders import getBranchByOperationId
-from gui.shared import EVENT_BUS_SCOPE, event_dispatcher as shared_events, events, g_eventBus
-from gui.shared.event_dispatcher import showProgressiveItemsView, hideWebBrowserOverlay, showBrowserOverlayView, showPersonalMissionMainWindow, showPersonalMissionChain
+from gui.shared import EVENT_BUS_SCOPE
+from gui.shared import event_dispatcher as shared_events
+from gui.shared import events, g_eventBus
+from gui.shared.event_dispatcher import hideWebBrowserOverlay, showBrowserOverlayView, showPersonalMissionChain, showPersonalMissionMainWindow, showProgressiveItemsView
 from gui.shared.events import PersonalMissionsEvent, UserMissionsEvent
 from helpers import dependency
 from shared_utils import first
 from skeletons.gui.customization import ICustomizationService
 from skeletons.gui.game_control import IMarathonEventsController
-from skeletons.gui.impl import INotificationWindowController, IGuiLoader
+from skeletons.gui.impl import IGuiLoader, INotificationWindowController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 OPERATIONS = {PERSONAL_MISSIONS_ALIASES.PERONAL_MISSIONS_OPERATIONS_SEASON_1_ID: PERSONAL_MISSIONS_ALIASES.PERSONAL_MISSIONS_OPERATIONS_PAGE_ALIAS,
@@ -95,7 +97,7 @@ def canOpenPMPage(branchID=None, operationID=None, missionID=None):
     disabledMissionsIds = serverSettings.getDisabledPersonalMissions()
 
     def checkBranch(idx):
-        return serverSettings.isPersonalMissionsEnabled(int(idx))
+        return serverSettings.isPersonalMissionsEnabled(PM_BRANCH.TYPE_TO_NAME[int(idx)])
 
     def checkOperation(idx):
         return int(idx) not in disabledOperationsIds
@@ -105,7 +107,7 @@ def canOpenPMPage(branchID=None, operationID=None, missionID=None):
 
     if missionID is not None:
         from personal_missions import PM_BRANCH
-        mission = eventsCache.getPersonalMissions().getAllQuests(branches=PM_BRANCH.ALL).get(int(missionID))
+        mission = eventsCache.getPersonalMissions().getAllQuests(branches=PM_BRANCH.ALL_NAMES).get(int(missionID))
         if mission is None:
             return False
         operationID = mission.getOperationID()
@@ -113,7 +115,7 @@ def canOpenPMPage(branchID=None, operationID=None, missionID=None):
         return checkBranch(branchID) and checkOperation(operationID) and checkMission(missionID)
     elif operationID is not None:
         from personal_missions import PM_BRANCH
-        operation = eventsCache.getPersonalMissions().getAllOperations(branches=PM_BRANCH.ALL).get(int(operationID))
+        operation = eventsCache.getPersonalMissions().getAllOperations(branches=PM_BRANCH.ALL_NAMES).get(int(operationID))
         if operation is None:
             return False
         return checkBranch(operation.getBranch()) and checkOperation(operationID)
@@ -132,7 +134,7 @@ def showPersonalMissionsChain(operationID, chainID, missionCategory=None):
     if not canOpenPMPage(operationID=operationID):
         return
     from personal_missions import PM_BRANCH
-    if PM_BRANCH.PERSONAL_MISSION_3 in [getBranchByOperationId(operationID)]:
+    if PM_BRANCH.TYPE_TO_NAME[getBranchByOperationId(operationID)] in PM_BRANCH.WITHOUT_AWARD_LIST_BRANCHES:
         showPersonalMissionChain(operationID, missionCategory)
         return
 
@@ -148,16 +150,18 @@ def showPersonalMissionsChain(operationID, chainID, missionCategory=None):
         PersonalMissionsPageState.goTo(chainID=chainID, operationID=operationID)
 
 
-def showPersonalMissionOperationsPage(branchID, operationID):
+def showPersonalMissionOperationsPage(branchID, operationID, chainID=None):
     from personal_missions import PM_BRANCH
     from gui.Scaleform.daapi.view.lobby.missions.personal.state import PersonalMissionsPageState
     if not canOpenPMPage(branchID, operationID):
         showPersonalMissionsOperationsMap()
         return
-    if PM_BRANCH.PERSONAL_MISSION_3 in [branchID, getBranchByOperationId(operationID)]:
+    branchName = PM_BRANCH.TYPE_TO_NAME[branchID]
+    operationBranchName = PM_BRANCH.TYPE_TO_NAME[getBranchByOperationId(operationID)]
+    if set(PM_BRANCH.WITHOUT_AWARD_LIST_BRANCHES).intersection((branchName, operationBranchName)):
         showPersonalMissionMainWindow(operationID)
         return
-    PersonalMissionsPageState.goTo(branch=branchID, operationID=operationID)
+    PersonalMissionsPageState.goTo(branch=branchID, operationID=operationID, chainID=chainID)
 
 
 def showPersonalMissionsOperationsMap():

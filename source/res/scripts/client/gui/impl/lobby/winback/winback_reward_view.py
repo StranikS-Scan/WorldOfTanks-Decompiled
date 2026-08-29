@@ -59,7 +59,7 @@ class WinbackRewardView(ViewImpl):
     _COMMON_SOUND_SPACE = CommonSoundSpaceSettings(name=SOUNDS.ACTIVATE_CHAPTER_STATE, entranceStates={SOUNDS.ACTIVATE_CHAPTER_STATE: SOUNDS.ACTIVATE_CHAPTER_STATE_ON}, exitStates={SOUNDS.ACTIVATE_CHAPTER_STATE: SOUNDS.ACTIVATE_CHAPTER_STATE_OFF}, persistentSounds=(), stoppableSounds=(), priorities=(), autoStart=True, enterEvent=SOUNDS.REWARD_SCREEN, exitEvent='')
 
     def __init__(self, ctx=None):
-        super(WinbackRewardView, self).__init__(ViewSettings(layoutID=R.views.lobby.winback.WinbackRewardView(), flags=ViewFlags.VIEW, model=WinbackRewardViewModel(), args=ctx))
+        super(WinbackRewardView, self).__init__(ViewSettings(layoutID=R.views.mono.winback.winback_reward_view(), flags=ViewFlags.VIEW, model=WinbackRewardViewModel(), args=ctx))
         self.__questIDs = ctx.get('quests', [])
         self.__tooltipData = {}
         self.__selectedRewards = ctx.get('selectedRewards', False)
@@ -86,7 +86,7 @@ class WinbackRewardView(ViewImpl):
         return window
 
     def createToolTipContent(self, event, contentID):
-        if contentID == R.views.lobby.winback.tooltips.SelectableRewardTooltip():
+        if contentID == R.views.mono.winback.tooltips.selectable_reward_tooltip():
             tooltipId = event.getArgument('tooltipId')
             tooltipData = self.__tooltipData.get(tooltipId)
             if tooltipData:

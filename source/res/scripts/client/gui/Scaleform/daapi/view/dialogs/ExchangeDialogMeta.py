@@ -426,8 +426,7 @@ class _ExchangeDialogMeta(I18nConfirmDialogMeta):
             if item.isElite:
                 icon += '_elite'
             return icon
-        else:
-            return item.getGUIEmblemID()
+        return item.getGUIEmblemID()
 
 
 class _ExchangeItem(object):

@@ -6,7 +6,7 @@ from gui.shared.view_helpers import UsersInfoHelper
 from helpers import isPlayerAccount
 from messenger.m_constants import USER_TAG
 from messenger.proto.shared_find_criteria import MutualFriendsFindCriteria
-from messenger.storage import storage_getter
+from messenger.storage import MessengerStorageDescriptor, UsersStorage
 from web.web_client_api import w2capi, w2c, W2CSchema, Field
 from web.web_client_api.common import SPA_ID_TYPES
 from helpers import dependency
@@ -40,14 +40,11 @@ class _PlayerStatusSchema(W2CSchema):
 @w2capi(name='social', key='action')
 class SocialWebApi(object):
     lobbyContext = dependency.descriptor(ILobbyContext)
+    usersStorage = MessengerStorageDescriptor(UsersStorage)
 
     def __init__(self):
         super(SocialWebApi, self).__init__()
         self.__usersInfoHelper = UsersInfoHelper()
-
-    @storage_getter('users')
-    def usersStorage(self):
-        return None
 
     @w2c(W2CSchema, name='friends_status')
     def friendsStatus(self, cmd):

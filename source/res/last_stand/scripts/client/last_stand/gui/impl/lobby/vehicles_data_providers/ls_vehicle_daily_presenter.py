@@ -19,7 +19,7 @@ from last_stand_common import last_stand_constants
 from last_stand_common.last_stand_constants import LS_VEHILCE_DAILY_QUEST
 from last_stand.skeletons.ls_quests_ui_cache import ILSQuestsUICache
 from skeletons.gui.shared import IItemsCache
-from future.utils import itervalues, viewitems
+from future.utils import viewvalues, viewitems
 
 class LSVehiclesDailyPresenter(ViewComponent[VehiclesDailyModel]):
     __itemsCache = dependency.descriptor(IItemsCache)
@@ -66,7 +66,7 @@ class LSVehiclesDailyPresenter(ViewComponent[VehiclesDailyModel]):
         with self.viewModel.transaction() as model:
             dailyVehicles = model.getDailyVehicles()
             dailyVehicles.clear()
-            for vehicle in itervalues(vehicles):
+            for vehicle in viewvalues(vehicles):
                 dailyModel = self.__getDailyModel(vehicle.intCD)
                 dailyVehicles.set(dailyModel.getId(), dailyModel)
 

@@ -3,7 +3,7 @@
 from __future__ import absolute_import
 import typing
 from battle_pass_common import BattlePassRewardReason as BPReason
-from frameworks.state_machine import StringEvent, StateEvent
+from frameworks_common.state_machine import StringEvent, StateEvent
 from gui.battle_pass.state_machine.state_machine_helpers import separateRewards
 from gui.battle_pass.state_machine.states import StateMachineEventID
 from helpers import dependency

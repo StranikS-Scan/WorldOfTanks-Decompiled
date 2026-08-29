@@ -484,7 +484,7 @@ class AdvancedChatComponent(ClientArenaComponent):
         uniqueCBID = None
         if not command.isServerCommand():
             self._tryRemovalOfPreviousLocationCommands(commandCreatorID)
-            if commandName in AUTOCOMMIT_COMMAND_NAMES:
+            if commandName in AUTOCOMMIT_COMMAND_NAMES or commandName in LOCATION_CMD_NAMES:
                 self._removeReplyContributionFromPlayer(commandCreatorID, markerType, commandTargetID)
             uniqueCBID = self._getUniqueCallbackID()
             self._delayer.delayCallback(uniqueCBID, activeTime, self._removeCommandMarkerCB, commandID, commandTargetID)

@@ -90,7 +90,7 @@ def updateDictRecords(updateCtx, block, keyFormat, valueFormat, values):
 def setStaticSizeBlockRecordValues(updateCtx, block, recordsPacking, recordsValues):
     blockIndex = updateCtx['blocksLayout'].index(block)
     if updateCtx['header'][blockIndex + 1] == 0:
-        return {}
+        return
     blockOffset = updateCtx['headerLength'] + sum(updateCtx['header'][1:blockIndex + 1])
     for key, value in viewitems(recordsValues):
         offset, format = recordsPacking[key]

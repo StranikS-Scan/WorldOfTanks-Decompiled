@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: story_mode/scripts/common/story_mode_common/configs/story_mode_missions.py
+from __future__ import absolute_import
 import logging
 import datetime
 import typing
@@ -9,13 +10,13 @@ from dict2model import models, schemas, fields, validate, exceptions
 from game_params_common.scope import GameParamsScopeFlags
 from items import vehicles
 from story_mode_common.configs.task_conditions import TaskConditionType
+from story_mode_common.configs.sounds_schema import SoundSchema
 from story_mode_common.helpers import isMissionCompleted
 from story_mode_common.story_mode_constants import STORY_MODE_BONUS_TYPES, TaskId, MissionId, MissionsDifficulty, MissionType, MissionLockCondition
-from sounds_schema import SoundSchema
 if typing.TYPE_CHECKING:
     from dict2model.types import ValidatorsType, TFilterParams, TFilter
     from dict2model.schemas import SchemaModelType, TRawData
-    from sounds_schema import SoundModel
+    from story_mode_common.configs.sounds_schema import SoundModel
 _logger = logging.getLogger(__name__)
 EVENT_MISSION_MIN_ID = 1000
 
@@ -131,7 +132,7 @@ class MissionLockerModel(models.Model):
         if self.active == MissionLockCondition.BY_MISSION and self.byMission is not None:
             return self.byMission.getLockReason(progress)
         else:
-            return self.battlesCount.getLockReason(battlesCount) if self.active == MissionLockCondition.BATTLES_COUNT and self.battlesCount is not None else None
+            return self.battlesCount.getLockReason(battlesCount) if self.active == MissionLockCondition.BATTLES_COUNT and self.battlesCount is not None else ''
 
 
 class MissionModel(models.Model):
@@ -417,7 +418,7 @@ onboardingSchema = schemas.Schema[OnboardingModel](fields={'reward': _RewardFiel
 
 def _getRewardReaders(*args, **kwargs):
     import bonus_readers
-    return bonus_readers.readBonusSection(bonus_readers.SUPPORTED_BONUSES, *args, **kwargs)
+    return bonus_readers.readBonusSection(bonus_readers.getSupportedBonuses(), *args, **kwargs)
 
 
 missionsSchema = GameParamsSchema[MissionsModel](gameParamsKey='story_mode_missions', fields={'missions': fields.UniCapList(fieldOrSchema=missionSchema, required=True, deserializedValidators=[validate.Length(minValue=1), validate.ValidateIterable([ValidateMissionIds(),

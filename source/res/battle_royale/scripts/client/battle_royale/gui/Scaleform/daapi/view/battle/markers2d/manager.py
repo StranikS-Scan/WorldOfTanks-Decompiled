@@ -1,7 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: battle_royale/scripts/client/battle_royale/gui/Scaleform/daapi/view/battle/markers2d/manager.py
-import plugins
+from __future__ import absolute_import
 import BattleReplay
+from battle_royale.gui.Scaleform.daapi.view.battle.markers2d import plugins
 from gui.Scaleform.daapi.view.battle.shared.markers2d.manager import MarkersManager
 
 class BattleRoyaleMarkersManager(MarkersManager):

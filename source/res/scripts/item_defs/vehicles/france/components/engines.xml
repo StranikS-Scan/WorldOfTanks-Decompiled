@@ -121,6 +121,7 @@
     <SOFAM_12_6S_D>	140	</SOFAM_12_6S_D>
     <AMX_APX_E_P_C_Moteur_F>	141	</AMX_APX_E_P_C_Moteur_F>
     <Continental_AV_1790_5B_Chevalier>	142	</Continental_AV_1790_5B_Chevalier>
+    <Moteur_E_P_C_version_S6>	144	</Moteur_E_P_C_version_S6>
     <SOFAM_8_Gxb_105_AM>	2000	</SOFAM_8_Gxb_105_AM>
     <Baudouin_6F_11_SRY_105_AM>	2001	</Baudouin_6F_11_SRY_105_AM>
     <Maybach_HL_230_TRM_P30_L50>	2002	</Maybach_HL_230_TRM_P30_L50>
@@ -825,8 +826,8 @@
       <maxRegenHealth>	173	</maxRegenHealth>
       <repairCost>	10	</repairCost>
       <fireStartingChance>	0.2	</fireStartingChance>
-      <rpm_min>	488	</rpm_min>
-      <rpm_max>	2035	</rpm_max>
+      <rpm_min>	474	</rpm_min>
+      <rpm_max>	2080	</rpm_max>
     </SOFAM_12_6S_D>
     <Moteur_EPC_version_S5>
       <userString>	#france_vehicles:Moteur_EPC_version_S5	</userString>
@@ -1854,6 +1855,23 @@
       <rpm_min>	253	</rpm_min>
       <rpm_max>	2440	</rpm_max>
     </Saurer_F155>
+    <Moteur_E_P_C_version_S6>
+      <userString>	#france_vehicles:Moteur_E_P_C_version_S6	</userString>
+      <tags>	diesel	</tags>
+      <level>	10	</level>
+      <price>	120000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <power>	950	</power>
+      <weight>	750	</weight>
+      <maxHealth>	345	</maxHealth>
+      <maxRegenHealth>	173	</maxRegenHealth>
+      <repairCost>	10	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+      <rpm_min>	266	</rpm_min>
+      <rpm_max>	2400	</rpm_max>
+    </Moteur_E_P_C_version_S6>
     <Aster_M>
       <userString>	#france_vehicles:Aster_M	</userString>
       <tags>	diesel	</tags>

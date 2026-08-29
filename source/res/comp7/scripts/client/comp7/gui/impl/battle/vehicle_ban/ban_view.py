@@ -31,7 +31,7 @@ from helpers import dependency
 from helpers.CallbackDelayer import CallbackDelayer
 from messenger.m_constants import USER_ACTION_ID, UserEntityScope
 from messenger.proto.events import g_messengerEvents
-from messenger.storage import storage_getter
+from messenger.storage import MessengerStorageDescriptor, UsersStorage
 from skeletons.gui.app_loader import IAppLoader
 from skeletons.gui.battle_session import IBattleSessionProvider
 from skeletons.gui.game_control import IComp7Controller
@@ -40,7 +40,6 @@ if typing.TYPE_CHECKING:
     from frameworks.wulf import Array
     from gui.battle_control.arena_info.arena_vos import VehicleArenaInfoVO
     from messenger.proto.entities import UserEntity
-    from messenger.storage.UsersStorage import UsersStorage
 SOUND_NAME = 'comp_7_bans_choice_confirm'
 
 class BanView(ViewImpl, BattleGUIKeyHandler):
@@ -49,6 +48,7 @@ class BanView(ViewImpl, BattleGUIKeyHandler):
     __comp7Controller = dependency.descriptor(IComp7Controller)
     __sessionProvider = dependency.descriptor(IBattleSessionProvider)
     __appLoader = dependency.descriptor(IAppLoader)
+    __usersStorage = MessengerStorageDescriptor(UsersStorage)
     __muteActions = {USER_ACTION_ID.MUTE_SET,
      USER_ACTION_ID.MUTE_UNSET,
      USER_ACTION_ID.IGNORED_ADDED,
@@ -60,7 +60,6 @@ class BanView(ViewImpl, BattleGUIKeyHandler):
         settings = ViewSettings(R.views.comp7.mono.battle.ban_view())
         settings.model = BanViewModel()
         self.__selectionTimer = CallbackDelayer()
-        self.__usersStorage = storage_getter('users')()
         super(BanView, self).__init__(settings)
 
     def handleEscKey(self, isDown):

@@ -66,14 +66,13 @@ class ReferralProgramController(GameWindowController, IReferralProgramController
 
     def hideWindow(self):
         browserView = self.__getBrowserView()
-        if not browserView:
-            return
-        state = getLobbyStateMachine().getStateFromView(browserView)
-        if state:
-            state.goBack()
-        else:
-            showHangar()
-        browserView.onCloseView()
+        if browserView and self._isLobbyInited:
+            state = getLobbyStateMachine().getStateFromView(browserView)
+            if state:
+                state.goBack()
+            else:
+                showHangar()
+            browserView.onCloseView()
 
     def isFirstIndication(self):
         return not self.__settingsCore.serverSettings.getUIStorage().get(UI_STORAGE_KEYS.REFERRAL_BUTTON_CIRCLES_SHOWN) and isCurrentUserRecruit()

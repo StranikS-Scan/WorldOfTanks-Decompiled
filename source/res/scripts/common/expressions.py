@@ -7,9 +7,7 @@ from py2to3.moves.io import FastStringIO
 from soft_exception import SoftException
 
 class ParserException(SoftException):
-
-    def __init__(self, message):
-        super(ParserException, self).__init__(message)
+    pass
 
 
 class _Tokenizer:
@@ -81,7 +79,6 @@ class ExpressionParser(object):
             return operators[tokval]
         else:
             return None
-            return None
 
     def _parseExpression(self, tokenizer):
         return self._parseOrExpression(tokenizer)
@@ -93,14 +90,13 @@ class ExpressionParser(object):
             tokenizer.match(token.NAME)
             right = self._parseOrExpression(tokenizer)
             return lambda context: left(context) or right(context)
-        elif tokval == 'if':
+        if tokval == 'if':
             tokenizer.match(token.NAME)
             condition = self._parseCondition(tokenizer)
             tokenizer.match(token.NAME)
             right = self._parseExpression(tokenizer)
             return lambda context: left(context) if condition(context) else right(context)
-        else:
-            return left
+        return left
 
     def _parseAndExpression(self, tokenizer):
         left = self._parseCondition(tokenizer)
@@ -109,8 +105,7 @@ class ExpressionParser(object):
             tokenizer.match(token.NAME)
             right = self._parseAndExpression(tokenizer)
             return lambda context: left(context) and right(context)
-        else:
-            return left
+        return left
 
     def _parseCondition(self, tokenizer):
         toknum, tokval = tokenizer.peek()
@@ -118,14 +113,13 @@ class ExpressionParser(object):
             tokenizer.match(token.NAME, 'not')
             expression = self._parseCondition(tokenizer)
             return lambda context: not expression(context)
+        left = self._parseSum(tokenizer)
+        op = self._parseOperator(tokenizer, self._CMP_OPERATORS)
+        if op is not None:
+            right = self._parseSum(tokenizer)
+            return op(left, right)
         else:
-            left = self._parseSum(tokenizer)
-            op = self._parseOperator(tokenizer, self._CMP_OPERATORS)
-            if op is not None:
-                right = self._parseSum(tokenizer)
-                return op(left, right)
             return left
-            return
 
     def _parseSum(self, tokenizer):
         toknum, tokval = tokenizer.peek()
@@ -142,7 +136,6 @@ class ExpressionParser(object):
             return op(left, right)
         else:
             return left
-            return
 
     def _parseTerm(self, tokenizer):
         toknum, tokval = tokenizer.peek()

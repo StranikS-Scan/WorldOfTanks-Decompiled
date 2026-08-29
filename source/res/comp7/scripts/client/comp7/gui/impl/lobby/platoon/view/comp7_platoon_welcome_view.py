@@ -31,6 +31,9 @@ class Comp7WelcomeView(WelcomeView):
             model.createPlatoonForTwo.setCaption(backport.text(strButtons.createPlatoon.caption()))
             model.createPlatoonForTwo.setTooltipCaption(backport.text(strButtons.createPlatoon.comp7.forTwo.caption()))
             model.createPlatoonForTwo.setDescription(backport.text(strButtons.createPlatoon.comp7.forTwo.description()))
+            if not self.__comp7Ctrl.isSuperSquadEnabled():
+                model.createPlatoonForSeven.setIsEnabled(False)
+                return
             model.createPlatoonForSeven.setText(backport.text(strButtons.createPlatoon.comp7.forSeven.text()))
             model.createPlatoonForSeven.setCaption(backport.text(strButtons.createSuperPlatoon.caption()))
             model.createPlatoonForSeven.setTooltipCaption(backport.text(strButtons.createPlatoon.comp7.forSeven.caption()))
@@ -57,19 +60,17 @@ class Comp7WelcomeView(WelcomeView):
         else:
             super(Comp7WelcomeView, self)._setBattleTypeRelatedProps()
 
-    @staticmethod
-    def __onCreateForTwo():
-        comp7Config = Comp7WelcomeView.__comp7Ctrl.getModeSettings()
+    def __onCreateForTwo(self):
+        comp7Config = self.__comp7Ctrl.getModeSettings()
         if comp7Config is None:
             return
         else:
             comp7_prb_helpers.createComp7Squad(squadSize=comp7Config.squadSizes[0])
             return
 
-    @staticmethod
-    def __onCreateForSeven():
-        comp7Config = Comp7WelcomeView.__comp7Ctrl.getModeSettings()
-        if comp7Config is None:
+    def __onCreateForSeven(self):
+        comp7Config = self.__comp7Ctrl.getModeSettings()
+        if comp7Config is None or not self.__comp7Ctrl.isSuperSquadEnabled():
             return
         else:
             comp7_prb_helpers.createComp7Squad(squadSize=comp7Config.squadSizes[1])

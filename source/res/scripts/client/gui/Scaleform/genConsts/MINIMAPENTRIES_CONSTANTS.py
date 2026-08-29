@@ -10,6 +10,7 @@ class MINIMAPENTRIES_CONSTANTS(object):
     POINT_TYPE_CONTROL = 'control'
     POINT_TYPE_BASE = 'base'
     POI_TYPE_RECON = 'recon'
+    POI_TYPE_ILLUMINATION_FLARE = 'illumination_flare'
     POI_TYPE_ARTY = 'artillery'
     COLOR_RED = 'red'
     COLOR_BLUE = 'blue'

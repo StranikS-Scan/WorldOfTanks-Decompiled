@@ -188,7 +188,8 @@ class MapsTrainingController(IMapsTrainingController, IGlobalListener):
             g_replayCtrl.serializeCallbackData(CallbackDataNames.MT_CONFIG_CALLBACK, (self.__config,))
             self.__replayConfigStored = True
         if self.__config and not self.__configIsOld and callback:
-            return callback()
+            callback()
+            return
         if g_replayCtrl.isPlaying:
             self.__replayCallbacks.append(callback)
         else:

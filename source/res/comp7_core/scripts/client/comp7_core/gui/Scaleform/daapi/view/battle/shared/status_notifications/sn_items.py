@@ -159,3 +159,21 @@ class AggressiveDetectionSN(_Comp7BuffSN):
 
     def _getTitle(self, value):
         return backport.text(self._stringResource.aggressiveDetection())
+
+
+class IlluminationFlareSN(_Comp7BuffSN):
+    _ITEM_ID = VEHICLE_VIEW_STATE.ILLUMINATION_FLARE_SPOTTED
+    _VIEW_TYPE_ID = _TIMER_TYPES.COMP7_ILLUMINATION_FLARE
+
+    def _update(self, ctrl):
+        marker = getattr(ctrl, 'spottedMarker', None) if ctrl is not None else None
+        self._isVisible = marker is not None
+        if self._isVisible:
+            endTime = marker.endTime
+            duration = endTime - marker.startTime
+            self._updateTimeParams(duration, endTime)
+        self._sendUpdate()
+        return
+
+    def _getTitle(self, value):
+        return backport.text(self._stringResource.illuminationFlare())

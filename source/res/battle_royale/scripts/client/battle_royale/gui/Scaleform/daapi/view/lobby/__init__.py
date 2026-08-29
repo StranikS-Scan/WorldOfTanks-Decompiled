@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: battle_royale/scripts/client/battle_royale/gui/Scaleform/daapi/view/lobby/__init__.py
+from __future__ import absolute_import
 from frameworks.wulf import WindowLayer
 from gui.Scaleform.framework import ScopeTemplates, ViewSettings, ComponentSettings
 from gui.Scaleform.framework.package_layout import PackageBusinessHandler
@@ -8,7 +9,7 @@ from gui.app_loader.settings import APP_NAME_SPACE
 from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.Scaleform.genConsts.HANGAR_ALIASES import HANGAR_ALIASES
 from gui.Scaleform.genConsts.CONTEXT_MENU_HANDLER_TYPE import CONTEXT_MENU_HANDLER_TYPE
-from hangar.carousel.handlers import BRVehicleContextMenuHandler
+from battle_royale.gui.Scaleform.daapi.view.lobby.hangar.carousel.handlers import BRVehicleContextMenuHandler
 from battle_royale.gui.Scaleform.daapi.view.lobby.hangar.battle_result.context_menu import BRBattleResultContextMenu
 
 def getContextMenuHandlers():
@@ -16,10 +17,10 @@ def getContextMenuHandlers():
 
 
 def getViewSettings():
-    from hangar_vehicle_info_view import HangarVehicleModulesConfigurator
-    from hangar_vehicle_info_view import HangarVehicleInfo
-    from battle_royale_prime_time import BattleRoyalePrimeTimeView
-    from battle_royale_browser_view import BattleRoyaleBrowserView
+    from battle_royale.gui.Scaleform.daapi.view.lobby.hangar_vehicle_info_view import HangarVehicleModulesConfigurator
+    from battle_royale.gui.Scaleform.daapi.view.lobby.hangar_vehicle_info_view import HangarVehicleInfo
+    from battle_royale.gui.Scaleform.daapi.view.lobby.battle_royale_prime_time import BattleRoyalePrimeTimeView
+    from battle_royale.gui.Scaleform.daapi.view.lobby.battle_royale_browser_view import BattleRoyaleBrowserView
     from battle_royale.gui.impl.lobby.views.battle_result_view.battle_result_view import BattleRoyaleBattleResultsWindow
     from battle_royale.gui.impl.lobby.views.battle_royale_hangar_view import BattleRoyaleHangarWindow
     from battle_royale.gui.impl.lobby.views.pre_battle import BattleRoyalePreBattleWindow

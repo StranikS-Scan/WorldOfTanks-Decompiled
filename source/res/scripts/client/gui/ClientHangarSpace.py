@@ -160,7 +160,7 @@ class ClientHangarSpace(object):
         _HANGAR_CFGS = _readHangarSettings()
         return
 
-    def create(self, isPremium, onSpaceLoadedCallback=None):
+    def create(self, isPremium, onSpaceLoadedCallback=None, environment=''):
         global _CFG
         BigWorld.worldDrawEnabled(False)
         BigWorld.wg_setSpecialFPSMode()
@@ -176,12 +176,12 @@ class ClientHangarSpace(object):
             LOG_ERROR('Failed to load hangar from path: %s; default hangar will be loaded instead' % spacePath)
             spacePath = safeSpacePath
         try:
-            self.__spaceMappingId = BigWorld.addSpaceGeometryMapping(self.__space.id, None, spacePath, spaceVisibilityMask)
+            self.__spaceMappingId = BigWorld.addSpaceGeometryMapping(self.__space.id, None, spacePath, spaceVisibilityMask, environment)
         except Exception:
             try:
                 LOG_CURRENT_EXCEPTION()
                 spacePath = safeSpacePath
-                self.__spaceMappingId = BigWorld.addSpaceGeometryMapping(self.__space.id, None, spacePath, spaceVisibilityMask)
+                self.__spaceMappingId = BigWorld.addSpaceGeometryMapping(self.__space.id, None, spacePath, spaceVisibilityMask, environment)
             except Exception:
                 BigWorld.releaseSpace(self.__space.id)
                 self.__spaceMappingId = None
@@ -191,6 +191,8 @@ class ClientHangarSpace(object):
 
         self.__spacePath = spacePath
         self.__spaceVisibilityMask = spaceVisibilityMask
+        if environment:
+            self.__space.setDefaultEnvironment(environment)
         spaceKey = _getHangarKey(spacePath)
         _CFG = copy.deepcopy(_HANGAR_CFGS[spaceKey])
         self.turretAndGunAngles.init()

@@ -11,7 +11,7 @@ from vehicles.components.vehicle_prefabs import createMechanicPrefabSpawner
 from vehicles.mechanics.common import IMechanicComponent
 from vehicles.mechanics.mechanic_commands import createMechanicCommandsEvents, IMechanicCommandsComponent
 from vehicles.mechanics.mechanic_constants import VehicleMechanic, VehicleMechanicCommand
-from vehicles.mechanics.mechanic_states import IMechanicState, IMechanicStatesComponent, createMechanicStatesEvents
+from vehicles.mechanics.mechanic_states import IMechanicState, createMechanicStatesEvents, IMechanicStatesComponent
 if typing.TYPE_CHECKING:
     from vehicles.mechanics.mechanic_commands import IMechanicCommandsEvents
     from vehicles.mechanics.mechanic_states import IMechanicStatesEvents

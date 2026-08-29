@@ -126,9 +126,7 @@ class EntitiesFactories(object):
     def initSettings(self, settingsList):
         result = set()
         add = self.addSettings
-        for settings in settingsList:
-            result.add(add(settings))
-
+        result.update((add(settings) for settings in settingsList))
         return result
 
     def clearSettings(self, aliases):

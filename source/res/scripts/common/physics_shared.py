@@ -886,14 +886,15 @@ def decodeTrackScrolling(code):
 
 def __deepUpdate(orig_dict, new_dict):
     if orig_dict is new_dict:
-        return
-    for key, val in viewitems(new_dict):
-        if isinstance(val, collections.Mapping):
-            tmp = __deepUpdate(orig_dict.get(key, {}), val)
-            orig_dict[key] = tmp
-        orig_dict[key] = new_dict[key]
+        return None
+    else:
+        for key, val in viewitems(new_dict):
+            if isinstance(val, collections.Mapping):
+                tmp = __deepUpdate(orig_dict.get(key, {}), val)
+                orig_dict[key] = tmp
+            orig_dict[key] = new_dict[key]
 
-    return orig_dict
+        return orig_dict
 
 
 def __buildConfigurations(configuration):
@@ -912,6 +913,10 @@ def __buildConfigurations(configuration):
 
 def getShootTimeCorrection(roundTripTime):
     return min(SHOT_PREDICTION_BUFFER, roundTripTime + HALF_SERVER_TICK)
+
+
+def getShotPredictionWindow(roundTripTime):
+    return max(SHOT_PREDICTION_BUFFER, roundTripTime + HALF_SERVER_TICK)
 
 
 _DEFAULT_FAKE_GEARBOX_SETTINGS = {'fwdgears': {'switchSpeed': (2, 5, 15),

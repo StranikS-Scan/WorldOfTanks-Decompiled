@@ -355,7 +355,7 @@ class EffectSelectorDesc(SelectorDesc):
 
     def __makeIdWithHP(self, effects):
         if effects is not None:
-            nodeDesc = gNodes.get(self.__hardPoint, None)
+            nodeDesc = gNodes.get(self.__hardPoint)
             waterY = False
             drawOrder = 0
             if nodeDesc is not None:

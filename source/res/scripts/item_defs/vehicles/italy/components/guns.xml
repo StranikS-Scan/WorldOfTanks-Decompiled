@@ -1,4 +1,5 @@
 <guns.xml>
+  <xmlns:xmlref>	http://bwt/xmlref	</xmlns:xmlref>
   <ids>
     <Cannone_da_90_50_T119E1>	0	</Cannone_da_90_50_T119E1>
     <Cannone_da_37_20>	1	</Cannone_da_37_20>
@@ -49,14 +50,15 @@
     <_120mm_Cannone_binato_da_120_59>	50	</_120mm_Cannone_binato_da_120_59>
     <_60mm_OTO_HVGS_Donnola>	51	</_60mm_OTO_HVGS_Donnola>
     <_127mm_OTO_Melara_B>	54	</_127mm_OTO_Melara_B>
+    <Cannone_da_127_OTO_Melara_veloce>	52	</Cannone_da_127_OTO_Melara_veloce>
+    <_105mm_OTO_Melara_105_mod_57>	53	</_105mm_OTO_Melara_105_mod_57>
+    <Cannone_da_105_55_Sperimentale>	55	</Cannone_da_105_55_Sperimentale>
     <Cannone_da_90_42_ter>	2000	</Cannone_da_90_42_ter>
     <Cannone_da_90_53_ter>	2001	</Cannone_da_90_53_ter>
     <Cannone_da_37_40_3000>	2002	</Cannone_da_37_40_3000>
     <Cannone_da_37_40_M14>	2003	</Cannone_da_37_40_M14>
     <Cannone_da_47_32_M14>	2004	</Cannone_da_47_32_M14>
     <Cannone_da_75_50_Skoda_P43>	2005	</Cannone_da_75_50_Skoda_P43>
-    <Cannone_da_127_OTO_Melara_veloce>	52	</Cannone_da_127_OTO_Melara_veloce>
-    <_105mm_OTO_Melara_105_mod_57>	53	</_105mm_OTO_Melara_105_mod_57>
     <_130mm_Cannone_da_130_45_7x7>	501	</_130mm_Cannone_da_130_45_7x7>
   </ids>
   <shared>
@@ -2177,12 +2179,6 @@
       <price>	200000	</price>
       <notInShop>	true	</notInShop>
       <impulse>	0.44	</impulse>
-      <recoil>
-        <lodDist>	MEDIUM	</lodDist>
-        <amplitude>	0.26	</amplitude>
-        <recoilEffect>	main	</recoilEffect>
-      </recoil>
-      <effects>	shot_large_mb	</effects>
       <reloadEffect>	dualgun_reload115_152	</reloadEffect>
       <pitchLimits>
         <minPitch>	0.0 -18.0 1.0 -18.0	</minPitch>
@@ -2523,6 +2519,68 @@
         </_105mm_HVHE_105_51>
       </shots>
     </_105mm_OTO_M_105_51>
+    <Cannone_da_105_55_Sperimentale>
+      <userString>	#italy_vehicles:Cannone_da_105_55_Sperimentale	</userString>
+      <tags></tags>
+      <level>	11	</level>
+      <price>	500000	</price>
+      <notInShop>	true	</notInShop>
+      <impulse>	0.48	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.24	</amplitude>
+        <recoilEffect>	main	</recoilEffect>
+      </recoil>
+      <effects>	shot_large_mb	</effects>
+      <reloadEffect>	autoloader_reload85_107	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -10 1.0 -10	</minPitch>
+        <maxPitch>	0.0 10 1.0 10	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	0.96	</rotationSpeed>
+      <reloadTime>	60	</reloadTime>
+      <maxAmmo>	60	</maxAmmo>
+      <aimingTime>	10.43	</aimingTime>
+      <weight>	100	</weight>
+      <maxHealth>	240	</maxHealth>
+      <maxRegenHealth>	120	</maxRegenHealth>
+      <repairCost>	11	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	1.04	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.05	</turretRotation>
+        <afterShot>	4.0	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_105mm_PPS_T_Sperimentale>
+          <defaultPortion>	1	</defaultPortion>
+          <speed>	1470	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	100	</piercingPower>
+        </_105mm_PPS_T_Sperimentale>
+        <_105mm_Gr_EP_T_Sperimentale>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	1180	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	100	</piercingPower>
+        </_105mm_Gr_EP_T_Sperimentale>
+        <_105mm_Gr_D_Sperimentale>
+          <defaultPortion>	0	</defaultPortion>
+          <speed>	750	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	100	</piercingPower>
+        </_105mm_Gr_D_Sperimentale>
+      </shots>
+      <clip>
+        <count>	1	</count>
+        <rate>	1	</rate>
+      </clip>
+    </Cannone_da_105_55_Sperimentale>
     <_105mm_OTO_Melara_105_mod_57>
       <userString>	#italy_vehicles:_105mm_OTO_Melara_105_mod_57	</userString>
       <tags></tags>

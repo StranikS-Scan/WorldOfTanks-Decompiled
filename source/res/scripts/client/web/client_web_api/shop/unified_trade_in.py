@@ -26,8 +26,10 @@ class UnifiedTradeInEventHandler(C2WHandler, EventSystemEntity):
         super(UnifiedTradeInEventHandler, self).fini()
 
     def __onTokensUpdate(self, diff):
-        if self.__tradeIn.getConfig().allAccessTokenSet.intersection(diff.keys()):
+        config = self.__tradeIn.getConfig()
+        if config is not None and config.allAccessTokenSet.intersection(diff.keys()):
             self.__onTradeInDataChanged()
+        return
 
     @c2w(name='unified_trade_in_update')
     def __onTradeInDataChanged(self, *args, **kwargs):

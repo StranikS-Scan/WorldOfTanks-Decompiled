@@ -30,7 +30,7 @@ from messenger import g_settings
 from messenger.ext import isNotFriendSenderIgnored
 from messenger.m_constants import USER_ACTION_ID, USER_TAG, UserEntityScope
 from messenger.proto.events import g_messengerEvents
-from messenger.storage import storage_getter
+from messenger.storage import MessengerStorageDescriptor, UsersStorage
 from messenger.ext.player_helpers import isCurrentPlayer
 from predefined_hosts import g_preDefinedHosts
 from shared_utils import CONST_CONTAINER
@@ -301,6 +301,7 @@ class InvitesManager(UsersInfoHelper):
     settingsCore = dependency.descriptor(ISettingsCore)
     lobbyContext = dependency.descriptor(ILobbyContext)
     appLoader = dependency.descriptor(IAppLoader)
+    usersStorage = MessengerStorageDescriptor(UsersStorage)
 
     def __init__(self, loader):
         super(InvitesManager, self).__init__()
@@ -372,10 +373,6 @@ class InvitesManager(UsersInfoHelper):
                 self.onInvitesListInited()
         self.__isInBattle = True
         self.__clearAcceptChain()
-
-    @storage_getter('users')
-    def users(self):
-        return None
 
     def isInited(self):
         return self.__inited == PRB_INVITES_INIT_STEP.INITED
@@ -505,7 +502,7 @@ class InvitesManager(UsersInfoHelper):
 
     def onUserNamesReceived(self, names):
         updated = defaultdict(list)
-        rosterGetter = self.users.getUser
+        rosterGetter = self.usersStorage.getUser
         inviteMaker = self._getNewInviteMaker(rosterGetter)
         prebattleInvitations = _getNewInvites()
         for invite in self.getInvites(version=_InviteVersion.NEW, withIgnored=True):
@@ -578,14 +575,14 @@ class InvitesManager(UsersInfoHelper):
             for item in invitesData:
                 _, invite = maker(item)
                 if invite:
-                    creator = self.users.getUser(invite.creatorID, scope=UserEntityScope.BATTLE if invite.creatorVehID else UserEntityScope.LOBBY)
+                    creator = self.usersStorage.getUser(invite.creatorID, scope=UserEntityScope.BATTLE if invite.creatorVehID else UserEntityScope.LOBBY)
                     self._addInvite(invite, creator)
 
         if self.appLoader.getSpaceID() != GuiGlobalSpaceID.BATTLE:
             self.syncUsersInfo()
 
     def _rebuildInvitesLists(self):
-        rosterGetter = self.users.getUser
+        rosterGetter = self.usersStorage.getUser
         self._buildReceivedInvitesList([(sorted(_getOldInvites().items(), key=_getOldInviteOrderKey, reverse=False), self._getOldInviteMaker()), (sorted(_getNewInvites().values(), key=operator.itemgetter('sentAt'), reverse=False), self._getNewInviteMaker(rosterGetter))])
 
     def _getOldInviteMaker(self):
@@ -735,7 +732,7 @@ class InvitesManager(UsersInfoHelper):
                 continue
             inList = inviteID in self.__invites or inviteID in self.__invitesIgnored
             if not inList:
-                creator = self.users.getUser(invite.creatorID)
+                creator = self.usersStorage.getUser(invite.creatorID)
                 if self._addInvite(invite, creator):
                     modified = True
                     added.append(inviteID)
@@ -752,7 +749,7 @@ class InvitesManager(UsersInfoHelper):
         changed = defaultdict(list)
         deleted = defaultdict(list)
         modified = dict(((v, False) for v in (True, False)))
-        rosterGetter = self.users.getUser
+        rosterGetter = self.usersStorage.getUser
         inviteMaker = self._getNewInviteMaker(rosterGetter)
         newInvites = {}
         for data in sorted(prbInvites.itervalues(), key=operator.itemgetter('sentAt')):
@@ -866,7 +863,7 @@ class InvitesManager(UsersInfoHelper):
             isFriends = diff['invitesFromFriendsOnly']
             if isFriends:
                 for invite in self.__invites.itervalues():
-                    user = self.users.getUser(invite.creatorID)
+                    user = self.usersStorage.getUser(invite.creatorID)
                     if self.__isInviteSenderIgnored(invite, user, isFriends):
                         invitations.append(invite.clientID)
 
@@ -876,7 +873,7 @@ class InvitesManager(UsersInfoHelper):
                 self.onReceivedInviteListModified([], [], invitations)
             else:
                 for invite in self.__invitesIgnored.itervalues():
-                    user = self.users.getUser(invite.creatorID)
+                    user = self.usersStorage.getUser(invite.creatorID)
                     if not self.__isInviteSenderIgnored(invite, user, isFriends):
                         invitations.append(invite.clientID)
 

@@ -26,6 +26,7 @@ class PetsConsts(object):
     PET_ID = 'id'
     PET_TYPE = 'type'
     PET_PREFAB = 'prefab'
+    PET_BATTLE_PREFAB = 'battlePrefab'
     PET_BREED = 'breed'
     PET_EVENTS = 'events'
     PET_EVENT_IDS = 'eventIDs'
@@ -121,13 +122,15 @@ class PetTrigger(object):
     FIRST_CLICK = 'firstClick'
     TO_EVENT_SCREEN = 'toEventScreen'
     FROM_EVENT_SCREEN = 'fromEventScreen'
+    PBH_HIGHLIGHT = 'pbhHighlight'
     ALL = (LOGIN,
      TO_STORAGE,
      FROM_STORAGE,
      MEDAL,
      FIRST_CLICK,
      TO_EVENT_SCREEN,
-     FROM_EVENT_SCREEN)
+     FROM_EVENT_SCREEN,
+     PBH_HIGHLIGHT)
 
 
 class StorageStaticTrigger(object):

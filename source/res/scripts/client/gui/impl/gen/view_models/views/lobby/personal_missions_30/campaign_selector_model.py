@@ -12,12 +12,12 @@ class CampaignSelectorViewState(Enum):
 
 
 class CampaignSelectorModel(ViewModel):
-    __slots__ = ('onOperation', 'onMoreInfo', 'switchCampaign', 'onClose')
+    __slots__ = ('onOperation', 'switchCampaign', 'onClose')
     OPERATION_ID = 'operationId'
     CAMPAIGNS_STATE = 'campaignsState'
     FIRST_ACTIVATE = 'firstActivate'
 
-    def __init__(self, properties=4, commands=4):
+    def __init__(self, properties=4, commands=3):
         super(CampaignSelectorModel, self).__init__(properties=properties, commands=commands)
 
     def getCampaigns(self):
@@ -55,6 +55,5 @@ class CampaignSelectorModel(ViewModel):
         self._addBoolProperty('firstTimeEntrance', False)
         self._addStringProperty('campaignSelectorViewState')
         self.onOperation = self._addCommand('onOperation')
-        self.onMoreInfo = self._addCommand('onMoreInfo')
         self.switchCampaign = self._addCommand('switchCampaign')
         self.onClose = self._addCommand('onClose')

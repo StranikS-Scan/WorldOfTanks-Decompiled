@@ -5511,7 +5511,7 @@
         <item>	gold	  <name>	highlight	</name>
           <type>	string	</type>
         </item>
-        <item>	True	  <name>	achievable	</name>
+        <item>	False	  <name>	achievable	</name>
           <type>	bool	</type>
         </item>
       </value>
@@ -5535,7 +5535,7 @@
         <item>	gold	  <name>	highlight	</name>
           <type>	string	</type>
         </item>
-        <item>	True	  <name>	achievable	</name>
+        <item>	False	  <name>	achievable	</name>
           <type>	bool	</type>
         </item>
       </value>
@@ -5562,7 +5562,7 @@
         <item>	1	  <name>	type	</name>
           <type>	int	</type>
         </item>
-        <item>	True	  <name>	achievable	</name>
+        <item>	False	  <name>	achievable	</name>
           <type>	bool	</type>
         </item>
       </value>
@@ -5615,6 +5615,219 @@
         </item>
         <item>	gold	  <name>	highlight	</name>
           <type>	string	</type>
+        </item>
+        <item>	True	  <name>	achievable	</name>
+          <type>	bool	</type>
+        </item>
+      </value>
+    </badge>
+    <badge>
+      <name>	WT26_PG_badge	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	236	  <name>	id	</name>
+          <type>	int	</type>
+        </item>
+        <item>	4.25	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	14	  <name>	group	</name>
+          <type>	int	</type>
+        </item>
+        <item>	1	  <name>	class	</name>
+          <type>	int	</type>
+        </item>
+        <item>	gold	  <name>	highlight	</name>
+          <type>	string	</type>
+        </item>
+        <item>	1	  <name>	type	</name>
+          <type>	int	</type>
+        </item>
+        <item>	True	  <name>	achievable	</name>
+          <type>	bool	</type>
+        </item>
+      </value>
+    </badge>
+    <badge>
+      <name>	personal_missions_3_4_1	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	237	  <name>	id	</name>
+          <type>	int	</type>
+        </item>
+        <item>	1.5	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	violet	  <name>	highlight	</name>
+          <type>	string	</type>
+        </item>
+        <item>	True	  <name>	achievable	</name>
+          <type>	bool	</type>
+        </item>
+      </value>
+    </badge>
+    <badge>
+      <name>	personal_missions_3_4_2	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	238	  <name>	id	</name>
+          <type>	int	</type>
+        </item>
+        <item>	1.5	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	violet	  <name>	highlight	</name>
+          <type>	string	</type>
+        </item>
+        <item>	True	  <name>	achievable	</name>
+          <type>	bool	</type>
+        </item>
+      </value>
+    </badge>
+    <badge>
+      <name>	comp7_6_1_master	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	239	  <name>	id	</name>
+          <type>	int	</type>
+        </item>
+        <item>	4.25	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	14	  <name>	group	</name>
+          <type>	int	</type>
+        </item>
+        <item>	1	  <name>	class	</name>
+          <type>	int	</type>
+        </item>
+        <item>	gold	  <name>	highlight	</name>
+          <type>	string	</type>
+        </item>
+        <item>	True	  <name>	achievable	</name>
+          <type>	bool	</type>
+        </item>
+      </value>
+    </badge>
+    <badge>
+      <name>	comp7_6_1_elite	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	240	  <name>	id	</name>
+          <type>	int	</type>
+        </item>
+        <item>	4.25	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	14	  <name>	group	</name>
+          <type>	int	</type>
+        </item>
+        <item>	1	  <name>	class	</name>
+          <type>	int	</type>
+        </item>
+        <item>	gold	  <name>	highlight	</name>
+          <type>	string	</type>
+        </item>
+        <item>	True	  <name>	achievable	</name>
+          <type>	bool	</type>
+        </item>
+      </value>
+    </badge>
+    <badge>
+      <name>	comp7_6_1_elite_suffix	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	241	  <name>	id	</name>
+          <type>	int	</type>
+        </item>
+        <item>	1.0	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	19	  <name>	group	</name>
+          <type>	int	</type>
+        </item>
+        <item>	3	  <name>	class	</name>
+          <type>	int	</type>
+        </item>
+        <item>	2	  <name>	layout	</name>
+          <type>	int	</type>
+        </item>
+        <item>	1	  <name>	type	</name>
+          <type>	int	</type>
+        </item>
+        <item>	True	  <name>	achievable	</name>
+          <type>	bool	</type>
+        </item>
+      </value>
+    </badge>
+    <badge>
+      <name>	comp7_6_yearly_champion	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	242	  <name>	id	</name>
+          <type>	int	</type>
+        </item>
+        <item>	4.25	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	14	  <name>	group	</name>
+          <type>	int	</type>
+        </item>
+        <item>	1	  <name>	class	</name>
+          <type>	int	</type>
+        </item>
+        <item>	gold	  <name>	highlight	</name>
+          <type>	string	</type>
+        </item>
+        <item>	True	  <name>	achievable	</name>
+          <type>	bool	</type>
+        </item>
+      </value>
+    </badge>
+    <badge>
+      <name>	comp7_6_yearly_legend	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	243	  <name>	id	</name>
+          <type>	int	</type>
+        </item>
+        <item>	4.25	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	14	  <name>	group	</name>
+          <type>	int	</type>
+        </item>
+        <item>	1	  <name>	class	</name>
+          <type>	int	</type>
+        </item>
+        <item>	gold	  <name>	highlight	</name>
+          <type>	string	</type>
+        </item>
+        <item>	True	  <name>	achievable	</name>
+          <type>	bool	</type>
+        </item>
+      </value>
+    </badge>
+    <badge>
+      <name>	comp7_6_yearly_suffix	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	244	  <name>	id	</name>
+          <type>	int	</type>
+        </item>
+        <item>	1.0	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	19	  <name>	group	</name>
+          <type>	int	</type>
+        </item>
+        <item>	3	  <name>	class	</name>
+          <type>	int	</type>
+        </item>
+        <item>	2	  <name>	layout	</name>
+          <type>	int	</type>
+        </item>
+        <item>	1	  <name>	type	</name>
+          <type>	int	</type>
         </item>
         <item>	True	  <name>	achievable	</name>
           <type>	bool	</type>

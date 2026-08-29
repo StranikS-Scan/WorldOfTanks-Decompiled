@@ -13,24 +13,22 @@ from past.utils import old_div
 import typing
 import BigWorld
 from py2to3.moves.collections.abc import Sequence, Iterable
-from constants import SHELL_TYPES, BonusTypes, SHELL_MECHANICS_TYPE
+from constants import SHELL_TYPES, BonusTypes
 from debug_utils import LOG_DEBUG
 from gui.shared.gui_items import KPI
 from gui.shared.gui_items.Tankman import isSkillLearnt, crewMemberRealSkillLevel
-from gui.shared.items_parameters import calcShellParams, getShotsPerMinute, isAutoReloadGun, isDualGun, isTwinGun, isUnlimitedClipGun, isTemperatureGun, isOverheatedUnlimitedGun, getMechanicsReloadDelay, getShellDescriptors, getOptionalDeviceWeight, NO_DATA, isLowChargeShotGun
-from gui.shared.items_parameters.params_constants import ONE_HUNDRED_PERCENTS, AUTOCANNON_SHOT_DISTANCE, MIN_VISION_RADIUS, MAX_VISION_RADIUS, PIERCING_DISTANCES, MIN_RELATIVE_VALUE, EXTRAS_CAMOUFLAGE, MAX_DAMAGED_MODULES_DETECTION_PERK_VAL, MAX_ART_NOTIFICATION_DELAY_PERK_VAL, METERS_PER_SECOND_TO_KILOMETERS_PER_HOUR, HIDDEN_PARAM_DEFAULTS, EPSILON
-from gui.shared.items_parameters.base_params import CompatibleParams, ParameterBase, ParamsDictProxy, WeightedParam
+from gui.shared.items_parameters import getShotsPerMinute, isAutoReloadGun, isDualGun, isTwinGun, isUnlimitedClipGun, isTemperatureGun, isOverheatedUnlimitedGun, getMechanicsReloadDelay, getOptionalDeviceWeight
+from gui.shared.items_parameters.params_constants import ONE_HUNDRED_PERCENTS, MIN_VISION_RADIUS, MAX_VISION_RADIUS, PIERCING_DISTANCES, MIN_RELATIVE_VALUE, EXTRAS_CAMOUFLAGE, MAX_DAMAGED_MODULES_DETECTION_PERK_VAL, MAX_ART_NOTIFICATION_DELAY_PERK_VAL, METERS_PER_SECOND_TO_KILOMETERS_PER_HOUR, HIDDEN_PARAM_DEFAULTS
+from gui.shared.items_parameters.base_params import ParameterBase, ParamsDictProxy, WeightedParam
 from gui.shared.items_parameters.comparator import rateParameterState, PARAM_STATE
 from gui.shared.items_parameters import functions
-from gui.shared.items_parameters.functions import getClientShotDispersion, getClientCoolingDelay, getTurboshaftEnginePower, getMaxSteeringLockAngle, isStunParamVisible, getRocketAccelerationEnginePower, getRocketAccelerationKpiFactors, getBasicShell, getLowChargePiercingPower, getLowChargeDamage, getLowChargeShotSpeed
+from gui.shared.items_parameters.functions import getClientShotDispersion, getClientCoolingDelay, getTurboshaftEnginePower, getMaxSteeringLockAngle, isStunParamVisible, getRocketAccelerationEnginePower, getRocketAccelerationKpiFactors
 from gui.shared.items_parameters.params_cache import g_paramsCache
-from gui.shared.utils import AUTO_SHOOT_CLIP_FIRE_RATE, AUTO_RELOAD_PROP_NAME, BURST_FIRE_RATE, CHASSIS_REPAIR_TIME, DAMAGE_PROP_NAME, DUAL_ACCURACY_COOLING_DELAY, DUAL_GUN_CHARGE_TIME, MAX_STEERING_LOCK_ANGLE, PIERCING_POWER_PROP_NAME, RELOAD_TIME_PROP_NAME, ROCKET_ACCELERATION_ENGINE_POWER, ROCKET_ACCELERATION_SPEED_LIMITS, ROCKET_ACCELERATION_REUSE_AND_DURATION, TURBOSHAFT_ENGINE_POWER, TURBOSHAFT_SPEED_MODE_SPEED, TURBOSHAFT_INVISIBILITY_MOVING_FACTOR, TURBOSHAFT_INVISIBILITY_STILL_FACTOR, TURBOSHAFT_SWITCH_TIME, TURBOSHAFT_SWITCH_ON_TIME, TURBOSHAFT_SWITCH_OFF_TIME, TWIN_GUN_SWITCH_FIRE_MODE_TIME, TWIN_GUN_TOP_SPEED, WHEELED_SWITCH_OFF_TIME, WHEELED_SWITCH_ON_TIME, WHEELED_SWITCH_TIME, WHEELED_SPEED_MODE_SPEED, SHELL_LOADING_TIME_PROP_NAME, TEMPERATURE_RELOAD_TIME, TEMPERATURE_AVG_DAMAGE_PER_MINUTE
-from gui.shared.utils.functions import getShellImpactParams
+from gui.shared.utils import AUTO_SHOOT_CLIP_FIRE_RATE, AUTO_RELOAD_PROP_NAME, BURST_FIRE_RATE, CHASSIS_REPAIR_TIME, DUAL_ACCURACY_COOLING_DELAY, DUAL_GUN_CHARGE_TIME, MAX_STEERING_LOCK_ANGLE, RELOAD_TIME_PROP_NAME, ROCKET_ACCELERATION_ENGINE_POWER, ROCKET_ACCELERATION_SPEED_LIMITS, ROCKET_ACCELERATION_REUSE_AND_DURATION, TURBOSHAFT_ENGINE_POWER, TURBOSHAFT_SPEED_MODE_SPEED, TURBOSHAFT_INVISIBILITY_MOVING_FACTOR, TURBOSHAFT_INVISIBILITY_STILL_FACTOR, TURBOSHAFT_SWITCH_TIME, TURBOSHAFT_SWITCH_ON_TIME, TURBOSHAFT_SWITCH_OFF_TIME, TWIN_GUN_SWITCH_FIRE_MODE_TIME, TWIN_GUN_TOP_SPEED, WHEELED_SWITCH_OFF_TIME, WHEELED_SWITCH_ON_TIME, WHEELED_SWITCH_TIME, WHEELED_SPEED_MODE_SPEED, SHELL_LOADING_TIME_PROP_NAME, TEMPERATURE_RELOAD_TIME, TEMPERATURE_AVG_DAMAGE_PER_MINUTE
 from helpers import time_utils
-from items import getTypeInfoByIndex, ITEM_TYPES, vehicles, tankmen
+from items import getTypeInfoByIndex, ITEM_TYPES, tankmen
 from items import utils as items_utils
 from items.components import component_constants
-from items.components.component_constants import MODERN_HE_PIERCING_POWER_REDUCTION_FACTOR_FOR_SHIELDS
 from items.params_utils import getHeatedAimingTime, getTemperatureRateOfFire
 from math_common import decimal_round, round_py2_style, round_py2_style_int
 from post_progression_common import ACTION_TYPES
@@ -62,11 +60,6 @@ _FACTOR_TO_SKILL_PENALTY_MAP = {'turret/rotationSpeed': ('turretRotationSpeed', 
  'chassis/terrainResistance': ('chassisRotationSpeed', 'relativeMobility'),
  'shotDispersion': ('shotDispersionAngle',),
  'dualAccuracyCoolingDelay': (DUAL_ACCURACY_COOLING_DELAY,)}
-_SHELL_KINDS = (SHELL_TYPES.HOLLOW_CHARGE,
- SHELL_TYPES.HIGH_EXPLOSIVE,
- SHELL_TYPES.ARMOR_PIERCING,
- SHELL_TYPES.ARMOR_PIERCING_HE,
- SHELL_TYPES.ARMOR_PIERCING_CR)
 
 def _processExtraBonuses(vehicle):
     result = []
@@ -78,10 +71,6 @@ def _processExtraBonuses(vehicle):
 
 def _universalSum(a, b):
     return lmap(operator.add, a, b) if isinstance(a, Sequence) else a + b
-
-
-def _average(listOfNumbers):
-    return old_div(sum(listOfNumbers), len(listOfNumbers))
 
 
 def _timesToSecs(timesPerMinutes):
@@ -874,8 +863,7 @@ class VehicleParams(ParameterBase):
 
         perksSet = set()
         for perksScope in BigWorld.player().inventory.abilities.abilitiesManager.getPerksByVehicle(vehicle.invID):
-            for perkID, _ in perksScope:
-                perksSet.add((str(perkID), 'perk'))
+            perksSet.update(((str(perkID), 'perk') for perkID, _ in perksScope))
 
         result.extend(list(perksSet))
         result.extend(_processExtraBonuses(vehicle))
@@ -1190,7 +1178,7 @@ class VehicleParams(ParameterBase):
             argName = 'gunReloadSpeed'
             loaderSecondChanceReloadFactor = self.__getFactorValueFromSkill(skillName, argName)
             skillsFactors = [loaderMeleeReloadFactor, loaderDesperadoReloadFactor, loaderSecondChanceReloadFactor]
-            if not self._itemDescr.isAutoShootGunVehicle:
+            if self.__hasClipGun() and not self.__hasAutoReload() and not self._itemDescr.isAutoShootGunVehicle:
                 skillName = 'loader_magMastery'
                 argName = 'magazineGunReloadSpeed'
                 loaderMagMasteryReloadFactor = self.__getFactorValueFromSkill(skillName, argName)
@@ -1246,163 +1234,6 @@ class VehicleParams(ParameterBase):
                     result = baseValue - (baseValue - _kpi.value) * realSkillLevel / tankmen.MAX_SKILL_LEVEL
 
         return result
-
-
-class ShellParams(CompatibleParams):
-
-    @property
-    def caliber(self):
-        return self._itemDescr.caliber
-
-    @property
-    def piercingPower(self):
-        piercingPower = self._getRawParams()[PIERCING_POWER_PROP_NAME]
-        shot = self.__getShellDescriptor()
-        if not isLowChargeShotGun(self._vehicleDescr) or shot is None:
-            return piercingPower
-        else:
-            return [ getLowChargePiercingPower(self._vehicleDescr, shot.shell, piercingPower) for piercingPower in piercingPower ]
-
-    @property
-    def damage(self):
-        return self._getRawParams()[DAMAGE_PROP_NAME]
-
-    @property
-    def avgDamage(self):
-        damage = self._itemDescr.armorDamage[0]
-        shot = self.__getShellDescriptor()
-        if shot is None:
-            return damage
-        else:
-            return getLowChargeDamage(self._vehicleDescr, shot.shell, damage) if isLowChargeShotGun(self._vehicleDescr) else shot.shell.armorDamage[0]
-
-    @property
-    def avgMutableDamage(self):
-        return self._itemDescr.armorDamage if self._itemDescr.isDamageMutable else None
-
-    @property
-    def avgDamagePerSecond(self):
-        return round_py2_style(float(self.avgDamage) / self._vehicleDescr.gun.clip[1]) if self._vehicleDescr and self._vehicleDescr.isAutoShootGunVehicle else None
-
-    @property
-    def avgPiercingPower(self):
-        return _average(self.piercingPower)
-
-    @property
-    def explosionRadius(self):
-        return self._itemDescr.type.explosionRadius if self._itemDescr.kind == SHELL_TYPES.HIGH_EXPLOSIVE else 0
-
-    @property
-    def piercingPowerTable(self):
-        if self._itemDescr.kind in (SHELL_TYPES.ARMOR_PIERCING, SHELL_TYPES.ARMOR_PIERCING_CR):
-            if self._vehicleDescr is None:
-                return NO_DATA
-            result = []
-            shellDescriptor = self.__getShellDescriptor()
-            if not shellDescriptor:
-                return
-            maxDistance = self.maxShotDistance
-            lowChargeShotGun = isLowChargeShotGun(self._vehicleDescr)
-            for distance in PIERCING_DISTANCES:
-                if distance > maxDistance:
-                    distance = int(maxDistance)
-                currPiercing = computePiercingPowerAtDist(shellDescriptor.piercingPower, distance)
-                if lowChargeShotGun:
-                    result.append((distance, getLowChargePiercingPower(self._vehicleDescr, shellDescriptor.shell, currPiercing)))
-                result.append((distance, currPiercing))
-
-            return result
-        else:
-            return
-
-    @property
-    def maxShotDistance(self):
-        if self._itemDescr.kind in _SHELL_KINDS:
-            result = self.__getShellDescriptor()
-            if result:
-                return result.maxDistance
-        return None
-
-    @property
-    def isBasic(self):
-        return self._vehicleDescr is not None and getBasicShell(self._vehicleDescr).compactDescr == self._itemDescr.compactDescr
-
-    @property
-    def compatibles(self):
-        getter = vehicles.getItemByCompactDescr
-        overallList = [ getter(gunCD).userString for gunCD in self._getPrecachedInfo().guns ]
-        uniques = []
-        for weapon in overallList:
-            if weapon not in uniques:
-                uniques.append(weapon)
-
-        return uniques
-
-    @property
-    def stunMaxDuration(self):
-        return self._itemDescr.stun.stunDuration if self._itemDescr.hasStun else None
-
-    @property
-    def stunMinDuration(self):
-        return self._itemDescr.stun.guaranteedStunDuration * self._itemDescr.stun.stunDuration if self._itemDescr.hasStun else None
-
-    @property
-    def stunDurationList(self):
-        return (self.stunMinDuration, self.stunMaxDuration) if self._itemDescr.hasStun else None
-
-    @property
-    def shotSpeed(self):
-        shot = self.__getShellDescriptor()
-        if shot is None or self._itemDescr.kind not in _SHELL_KINDS:
-            return
-        else:
-            projSpeedFactor = vehicles.g_cache.commonConfig['miscParams']['projectileSpeedFactor']
-            shotSpeed = shot.speed / projSpeedFactor
-            return getLowChargeShotSpeed(self._vehicleDescr, shot.shell, shotSpeed) if isLowChargeShotGun(self._vehicleDescr) else shotSpeed
-
-    @property
-    def normalizationAngle(self):
-        _, normalizationAngle, _, _ = getShellImpactParams(self._itemDescr.type)
-        return round_py2_style_int(math.degrees(normalizationAngle))
-
-    @property
-    def ricochetAngle(self):
-        ricochetAngleCos, _, _, _ = getShellImpactParams(self._itemDescr.type)
-        return round_py2_style_int(math.degrees(math.acos(ricochetAngleCos)))
-
-    @property
-    def penetrationLoss(self):
-        shellType = self._itemDescr.type
-        return None if not hasattr(shellType, 'piercingPowerLossFactorByDistance') else round_py2_style_int(shellType.piercingPowerLossFactorByDistance * 10 + EPSILON)
-
-    @property
-    def screensArmorMultiplier(self):
-        shellType = self._itemDescr.type
-        isModernHE = shellType.mechanics == SHELL_MECHANICS_TYPE.MODERN
-        return None if not isModernHE else int(MODERN_HE_PIERCING_POWER_REDUCTION_FACTOR_FOR_SHIELDS)
-
-    def getParamsDict(self):
-        stunConditionParams = ('stunMaxDuration', 'stunMinDuration')
-        result = ParamsDictProxy(self, conditions=((['maxShotDistance'], lambda v: v == AUTOCANNON_SHOT_DISTANCE), (stunConditionParams, lambda s: isStunParamVisible(self._itemDescr))))
-        return result
-
-    def _extractRawParams(self):
-        if self._vehicleDescr is not None:
-            descriptors = getShellDescriptors(self._itemDescr, self._vehicleDescr)
-            params = calcShellParams(descriptors)
-        else:
-            params = self._getPrecachedInfo().params
-        return params
-
-    def _getCompatible(self):
-        return (('shellGuns', ', '.join(self.compatibles)),)
-
-    def __getShellDescriptor(self):
-        if self._vehicleDescr is None:
-            return
-        else:
-            shellDescriptors = getShellDescriptors(self._itemDescr, self._vehicleDescr)
-            return shellDescriptors[0] if shellDescriptors else None
 
 
 class OptionalDeviceParams(WeightedParam):

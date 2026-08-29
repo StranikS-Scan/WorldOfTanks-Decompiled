@@ -1,5 +1,5 @@
 <tiles.xml>
-  <tail_1>
+  <tile_1>
     <id>	1	</id>
     <seasonID>	1	</seasonID>
     <nextTileIDs>	2	</nextTileIDs>
@@ -18,8 +18,8 @@
       <chain_4>	readyForBattleATSPG	</chain_4>
       <chain_5>	readyForBattleSPG	</chain_5>
     </achievements>
-  </tail_1>
-  <tail_2>
+  </tile_1>
+  <tile_2>
     <id>	2	</id>
     <seasonID>	1	</seasonID>
     <nextTileIDs>	3	</nextTileIDs>
@@ -38,8 +38,8 @@
       <chain_4>	readyForBattleATSPG	</chain_4>
       <chain_5>	readyForBattleSPG	</chain_5>
     </achievements>
-  </tail_2>
-  <tail_3>
+  </tile_2>
+  <tile_3>
     <id>	3	</id>
     <seasonID>	1	</seasonID>
     <nextTileIDs>	4	</nextTileIDs>
@@ -58,8 +58,8 @@
       <chain_4>	readyForBattleATSPG	</chain_4>
       <chain_5>	readyForBattleSPG	</chain_5>
     </achievements>
-  </tail_3>
-  <tail_4>
+  </tile_3>
+  <tile_4>
     <id>	4	</id>
     <seasonID>	1	</seasonID>
     <nextTileIDs></nextTileIDs>
@@ -78,8 +78,8 @@
       <chain_4>	readyForBattleATSPG	</chain_4>
       <chain_5>	readyForBattleSPG	</chain_5>
     </achievements>
-  </tail_4>
-  <tail_5>
+  </tile_4>
+  <tile_5>
     <id>	5	</id>
     <seasonID>	2	</seasonID>
     <nextTileIDs>	6	</nextTileIDs>
@@ -97,8 +97,8 @@
       <chain_3>	readyForBattleAllianceUSA	</chain_3>
       <chain_4>	readyForBattleAllianceFrance	</chain_4>
     </achievements>
-  </tail_5>
-  <tail_6>
+  </tile_5>
+  <tile_6>
     <id>	6	</id>
     <seasonID>	2	</seasonID>
     <nextTileIDs>	7	</nextTileIDs>
@@ -116,8 +116,8 @@
       <chain_3>	readyForBattleAllianceUSA	</chain_3>
       <chain_4>	readyForBattleAllianceFrance	</chain_4>
     </achievements>
-  </tail_6>
-  <tail_7>
+  </tile_6>
+  <tile_7>
     <id>	7	</id>
     <seasonID>	2	</seasonID>
     <nextTileIDs></nextTileIDs>
@@ -135,8 +135,8 @@
       <chain_3>	readyForBattleAllianceUSA	</chain_3>
       <chain_4>	readyForBattleAllianceFrance	</chain_4>
     </achievements>
-  </tail_7>
-  <tail_8>
+  </tile_7>
+  <tile_8>
     <id>	8	</id>
     <seasonID>	3	</seasonID>
     <nextTileIDs>	9	</nextTileIDs>
@@ -153,8 +153,8 @@
       <chain_2>	readyForBattleSniper	</chain_2>
       <chain_3>	readyForBattleSupport	</chain_3>
     </achievements>
-  </tail_8>
-  <tail_9>
+  </tile_8>
+  <tile_9>
     <id>	9	</id>
     <seasonID>	3	</seasonID>
     <nextTileIDs>	10	</nextTileIDs>
@@ -171,8 +171,8 @@
       <chain_2>	readyForBattleSniper	</chain_2>
       <chain_3>	readyForBattleSupport	</chain_3>
     </achievements>
-  </tail_9>
-  <tail_10>
+  </tile_9>
+  <tile_10>
     <id>	10	</id>
     <seasonID>	3	</seasonID>
     <nextTileIDs></nextTileIDs>
@@ -189,7 +189,25 @@
       <chain_2>	readyForBattleSniper	</chain_2>
       <chain_3>	readyForBattleSupport	</chain_3>
     </achievements>
-  </tail_10>
+  </tile_10>
+  <tile_11>
+    <id>	11	</id>
+    <seasonID>	4	</seasonID>
+    <nextTileIDs></nextTileIDs>
+    <chainsCount>	3	</chainsCount>
+    <questsInChain>	21	</questsInChain>
+    <chainsCountToUnlockNext>	0	</chainsCountToUnlockNext>
+    <userString>	#personal_missions_details:tile_11	</userString>
+    <description>	#personal_missions_details:tile_11_descr	</description>
+    <iconID>	tile_11_1	</iconID>
+    <price>	0	</price>
+    <tokens>	token:pt:final:s4:t11 token:pt:s4:t11:reward:claimed	</tokens>
+    <achievements>
+      <chain_1>	readyForBattleFossaAssault	</chain_1>
+      <chain_2>	readyForBattleFossaSniper	</chain_2>
+      <chain_3>	readyForBattleFossaSupport	</chain_3>
+    </achievements>
+  </tile_11>
   <quests>
     <tokenQuest>
       <enabled>	true	</enabled>
@@ -1645,7 +1663,7 @@
     <tokenQuest>
       <enabled>	true	</enabled>
       <hidden>	true	</hidden>
-      <id>	pm3:convertion:operation:8	</id>
+      <id>	pm3:conversion:operation:8	</id>
       <conditions>
         <preBattle>
           <account>
@@ -1682,7 +1700,7 @@
     <tokenQuest>
       <enabled>	true	</enabled>
       <hidden>	true	</hidden>
-      <id>	pm3:convertion:operation:9	</id>
+      <id>	pm3:conversion:operation:9	</id>
       <conditions>
         <preBattle>
           <account>
@@ -1719,7 +1737,7 @@
     <tokenQuest>
       <enabled>	true	</enabled>
       <hidden>	true	</hidden>
-      <id>	pm3:convertion:operation:10	</id>
+      <id>	pm3:conversion:operation:10	</id>
       <conditions>
         <preBattle>
           <account>
@@ -1756,16 +1774,22 @@
     <tokenQuest>
       <enabled>	true	</enabled>
       <hidden>	true	</hidden>
-      <id>	pm3:no_active_operation	</id>
+      <id>	pm_no_active_operation_for_conversion	</id>
       <conditions>
         <preBattle>
           <account>
             <and>
               <or>
-                <token>
-                  <id>	token:pt:s3:finished:honor	</id>
-                  <equal>	1	</equal>
-                </token>
+                <and>
+                  <token>
+                    <id>	token:pt:s3:finished:honor	</id>
+                    <equal>	1	</equal>
+                  </token>
+                  <token>
+                    <id>	token:pt:s4:finished:honor	</id>
+                    <equal>	1	</equal>
+                  </token>
+                </and>
                 <and>
                   <pmActiveOperation>	8	</pmActiveOperation>
                   <or>
@@ -1805,11 +1829,25 @@
                     </token>
                   </or>
                 </and>
+                <and>
+                  <pmActiveOperation>	11	</pmActiveOperation>
+                  <or>
+                    <token>
+                      <id>	token:pt:s4:t11:finished:base	</id>
+                      <equal>	1	</equal>
+                    </token>
+                    <token>
+                      <id>	pm4:11:points	</id>
+                      <greaterOrEqual>	21000	</greaterOrEqual>
+                    </token>
+                  </or>
+                </and>
                 <not>
                   <or>
                     <pmActiveOperation>	8	</pmActiveOperation>
                     <pmActiveOperation>	9	</pmActiveOperation>
                     <pmActiveOperation>	10	</pmActiveOperation>
+                    <pmActiveOperation>	11	</pmActiveOperation>
                   </or>
                 </not>
               </or>
@@ -4271,6 +4309,879 @@
       <bonus>
         <token>
           <id>	token:pt:s3:t10:vehElement:15	</id>
+          <expires>	01.01.2050 00:00	</expires>
+          <count>	1	</count>
+        </token>
+      </bonus>
+    </tokenQuest>
+    <tokenQuest>
+      <enabled>	true	</enabled>
+      <hidden>	true	</hidden>
+      <id>	pm4_conversion_operation_11	</id>
+      <conditions>
+        <preBattle>
+          <account>
+            <and>
+              <pmActiveOperation>	11	</pmActiveOperation>
+              <token>
+                <id>	pm4:11:points	</id>
+                <less>	21000	</less>
+              </token>
+              <token>
+                <id>	token:pt:s4:finished:honor	</id>
+                <equal>	0	</equal>
+              </token>
+              <token>
+                <id>	token:pt:s4:t11:finished:base	</id>
+                <equal>	0	</equal>
+              </token>
+              <token>
+                <id>	pm:points	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+                <convert>
+                  <id>	pm4:11:points	</id>
+                  <expires>	01.12.2050 06:00	</expires>
+                </convert>
+              </token>
+            </and>
+          </account>
+        </preBattle>
+        <common>
+          <bonusLimit>	1000000	</bonusLimit>
+        </common>
+      </conditions>
+    </tokenQuest>
+    <tokenQuest>
+      <enabled>	True	</enabled>
+      <hidden>	True	</hidden>
+      <id>	pm4_operation_11_entrypoint	</id>
+      <conditions>
+        <preBattle>
+          <account>
+            <and>
+              <vehiclesOwned>
+                <excludeTags>	event_battles	</excludeTags>
+                <greaterOrEqual>	1	</greaterOrEqual>
+              </vehiclesOwned>
+              <token>
+                <id>	token:pt:s4:t11:unlock	</id>
+                <equal>	0	</equal>
+              </token>
+              <token>
+                <id>	token:pt:s4:finished:honor	</id>
+                <equal>	0	</equal>
+              </token>
+            </and>
+          </account>
+        </preBattle>
+      </conditions>
+      <bonus>
+        <token>
+          <id>	token:pt:s4:t11:unlock	</id>
+          <expires>	01.01.2050 00:00	</expires>
+          <count>	1	</count>
+        </token>
+        <token>
+          <id>	token:pt:s4:t11:ms1:unlock	</id>
+          <expires>	01.01.2050 00:00	</expires>
+          <count>	1	</count>
+        </token>
+      </bonus>
+    </tokenQuest>
+    <tokenQuest>
+      <enabled>	True	</enabled>
+      <hidden>	True	</hidden>
+      <id>	pt_final_s4_t11	</id>
+      <conditions>
+        <preBattle>
+          <account>
+            <and>
+              <token>
+                <id>	token:pt:s4:t11:finished:base	</id>
+                <equal>	0	</equal>
+              </token>
+              <token>
+                <id>	token:pt:s4:t11:reward:claimed	</id>
+                <equal>	1	</equal>
+              </token>
+            </and>
+          </account>
+        </preBattle>
+      </conditions>
+      <bonus>
+        <token>
+          <id>	token:pt:s4:t11:finished:base	</id>
+          <expires>	01.01.2050 00:00	</expires>
+          <count>	1	</count>
+        </token>
+      </bonus>
+    </tokenQuest>
+    <tokenQuest>
+      <enabled>	True	</enabled>
+      <hidden>	True	</hidden>
+      <id>	pt_final_s4_t11_honor	</id>
+      <conditions>
+        <preBattle>
+          <account>
+            <and>
+              <token>
+                <id>	token:pt:s4:t11:finished:honor	</id>
+                <equal>	0	</equal>
+              </token>
+              <token>
+                <id>	token:pt:final:s4:t11	</id>
+                <equal>	3	</equal>
+                <consume>	3	</consume>
+              </token>
+              <token>
+                <id>	token:pt:s4:t11:reward:claimed	</id>
+                <equal>	1	</equal>
+                <consume>	1	</consume>
+              </token>
+            </and>
+          </account>
+        </preBattle>
+      </conditions>
+      <bonus>
+        <token>
+          <id>	token:pt:s4:t11:finished:honor	</id>
+          <expires>	01.01.2050 00:00	</expires>
+          <count>	1	</count>
+        </token>
+        <dossier>
+          <name>	playerBadges:238	</name>
+          <value>	timestamp	</value>
+          <type>	set	</type>
+        </dossier>
+        <customizations>
+          <item>
+            <value>	1	</value>
+            <custType>	style	</custType>
+            <id>	1344	</id>
+          </item>
+        </customizations>
+      </bonus>
+    </tokenQuest>
+    <tokenQuest>
+      <enabled>	True	</enabled>
+      <hidden>	True	</hidden>
+      <id>	pm4_operation_11_points_draw	</id>
+      <conditions>
+        <preBattle>
+          <account>
+            <and>
+              <or>
+                <token>
+                  <id>	token:pt:s4:finished:honor	</id>
+                  <equal>	1	</equal>
+                </token>
+                <token>
+                  <id>	token:pt:s4:t11:finished:base	</id>
+                  <equal>	1	</equal>
+                </token>
+              </or>
+              <token>
+                <id>	pm4:11:points	</id>
+                <greaterOrEqual>	1	</greaterOrEqual>
+                <consume>	21000	  <force></force>
+                </consume>
+              </token>
+            </and>
+          </account>
+        </preBattle>
+      </conditions>
+    </tokenQuest>
+    <tokenQuest>
+      <enabled>	True	</enabled>
+      <hidden>	True	</hidden>
+      <id>	pm4_campaign_finished_honor	</id>
+      <conditions>
+        <preBattle>
+          <account>
+            <and>
+              <token>
+                <id>	token:pt:s4:t11:unlock	</id>
+                <equal>	1	</equal>
+                <consume>	1	</consume>
+              </token>
+              <token>
+                <id>	token:pt:s4:t11:finished:base	</id>
+                <equal>	1	</equal>
+              </token>
+              <token>
+                <id>	token:pt:s4:t11:finished:honor	</id>
+                <equal>	1	</equal>
+              </token>
+              <token>
+                <id>	token:pt:s4:finished:honor	</id>
+                <equal>	0	</equal>
+              </token>
+            </and>
+          </account>
+        </preBattle>
+      </conditions>
+      <bonus>
+        <token>
+          <id>	token:pt:s4:finished:honor	</id>
+          <expires>	01.01.2050 00:00	</expires>
+          <count>	1	</count>
+        </token>
+      </bonus>
+    </tokenQuest>
+    <tokenQuest>
+      <enabled>	True	</enabled>
+      <hidden>	True	</hidden>
+      <id>	pm4_campaign_tokens_draw	</id>
+      <conditions>
+        <preBattle>
+          <account>
+            <and>
+              <token>
+                <id>	token:pt:s4:t11:finished:base	</id>
+                <equal>	1	</equal>
+                <consume>	1	</consume>
+              </token>
+              <token>
+                <id>	token:pt:s4:t11:finished:honor	</id>
+                <equal>	1	</equal>
+                <consume>	1	</consume>
+              </token>
+              <token>
+                <id>	token:pt:s4:finished:honor	</id>
+                <equal>	1	</equal>
+              </token>
+            </and>
+          </account>
+        </preBattle>
+      </conditions>
+    </tokenQuest>
+    <tokenQuest>
+      <enabled>	True	</enabled>
+      <hidden>	True	</hidden>
+      <id>	pm4_operation_11_reward	</id>
+      <conditions>
+        <preBattle>
+          <account>
+            <and>
+              <token>
+                <id>	token:pt:s4:t11:vehElement:1	</id>
+                <equal>	1	</equal>
+                <consume>	1	</consume>
+              </token>
+              <token>
+                <id>	token:pt:s4:t11:vehElement:2	</id>
+                <equal>	1	</equal>
+                <consume>	1	</consume>
+              </token>
+              <token>
+                <id>	token:pt:s4:t11:vehElement:3	</id>
+                <equal>	1	</equal>
+                <consume>	1	</consume>
+              </token>
+              <token>
+                <id>	token:pt:s4:t11:vehElement:4	</id>
+                <equal>	1	</equal>
+                <consume>	1	</consume>
+              </token>
+              <token>
+                <id>	token:pt:s4:t11:vehElement:5	</id>
+                <equal>	1	</equal>
+                <consume>	1	</consume>
+              </token>
+              <token>
+                <id>	token:pt:s4:t11:vehElement:6	</id>
+                <equal>	1	</equal>
+                <consume>	1	</consume>
+              </token>
+              <token>
+                <id>	token:pt:s4:t11:vehElement:7	</id>
+                <equal>	1	</equal>
+                <consume>	1	</consume>
+              </token>
+              <token>
+                <id>	token:pt:s4:t11:vehElement:8	</id>
+                <equal>	1	</equal>
+                <consume>	1	</consume>
+              </token>
+              <token>
+                <id>	token:pt:s4:t11:vehElement:9	</id>
+                <equal>	1	</equal>
+                <consume>	1	</consume>
+              </token>
+              <token>
+                <id>	token:pt:s4:t11:vehElement:10	</id>
+                <equal>	1	</equal>
+                <consume>	1	</consume>
+              </token>
+              <token>
+                <id>	token:pt:s4:t11:vehElement:11	</id>
+                <equal>	1	</equal>
+                <consume>	1	</consume>
+              </token>
+              <token>
+                <id>	token:pt:s4:t11:vehElement:12	</id>
+                <equal>	1	</equal>
+                <consume>	1	</consume>
+              </token>
+              <token>
+                <id>	token:pt:s4:t11:vehElement:13	</id>
+                <equal>	1	</equal>
+                <consume>	1	</consume>
+              </token>
+              <token>
+                <id>	token:pt:s4:t11:vehElement:14	</id>
+                <equal>	1	</equal>
+                <consume>	1	</consume>
+              </token>
+              <token>
+                <id>	token:pt:s4:t11:vehElement:15	</id>
+                <equal>	1	</equal>
+                <consume>	1	</consume>
+              </token>
+              <token>
+                <id>	pm4:11:points	</id>
+                <greaterOrEqual>	21000	</greaterOrEqual>
+              </token>
+            </and>
+          </account>
+        </preBattle>
+      </conditions>
+      <bonusDelayed>
+        <slots>	1	</slots>
+        <token>
+          <id>	token:pt:s4:t11:reward:claimed	</id>
+          <expires>	01.01.2050 00:00	</expires>
+          <count>	1	</count>
+        </token>
+        <dossier>
+          <name>	playerBadges:237	</name>
+          <value>	timestamp	</value>
+          <type>	set	</type>
+        </dossier>
+        <vehicle>	germany:G183_Fossa_VM_68	  <crewLvl>	100	</crewLvl>
+          <customCompensation>
+            <credits>	0	</credits>
+            <gold>	0	</gold>
+          </customCompensation>
+        </vehicle>
+        <customizations>
+          <item>
+            <value>	6	</value>
+            <custType>	projection_decal	</custType>
+            <id>	1387	</id>
+          </item>
+        </customizations>
+        <token>
+          <id>	tman_template:::tankmen_pm4_1:630180:::brotherhood::tankmen_pm4_1:	</id>
+          <expires>	28.01.2100 00:01	</expires>
+          <count>	1	</count>
+        </token>
+      </bonusDelayed>
+    </tokenQuest>
+    <tokenQuest>
+      <enabled>	True	</enabled>
+      <hidden>	True	</hidden>
+      <id>	pm4_operation_11_milestone_1	</id>
+      <conditions>
+        <preBattle>
+          <account>
+            <and>
+              <token>
+                <id>	token:pt:s4:t11:ms1:unlock	</id>
+                <equal>	1	</equal>
+                <consume>	1	</consume>
+              </token>
+              <token>
+                <id>	token:pt:s4:t11:unlock	</id>
+                <equal>	1	</equal>
+              </token>
+              <token>
+                <id>	pm4:11:points	</id>
+                <greaterOrEqual>	500	</greaterOrEqual>
+              </token>
+            </and>
+          </account>
+        </preBattle>
+      </conditions>
+      <bonus>
+        <token>
+          <id>	token:pt:s4:t11:ms2:unlock	</id>
+          <expires>	01.01.2050 00:00	</expires>
+          <count>	1	</count>
+        </token>
+        <token>
+          <id>	token:pt:s4:t11:vehElement:1	</id>
+          <expires>	01.01.2050 00:00	</expires>
+          <count>	1	</count>
+        </token>
+      </bonus>
+    </tokenQuest>
+    <tokenQuest>
+      <enabled>	True	</enabled>
+      <hidden>	True	</hidden>
+      <id>	pm4_operation_11_milestone_2	</id>
+      <conditions>
+        <preBattle>
+          <account>
+            <and>
+              <token>
+                <id>	token:pt:s4:t11:ms2:unlock	</id>
+                <equal>	1	</equal>
+                <consume>	1	</consume>
+              </token>
+              <token>
+                <id>	pm4:11:points	</id>
+                <greaterOrEqual>	1050	</greaterOrEqual>
+              </token>
+            </and>
+          </account>
+        </preBattle>
+      </conditions>
+      <bonus>
+        <token>
+          <id>	token:pt:s4:t11:ms3:unlock	</id>
+          <expires>	01.01.2050 00:00	</expires>
+          <count>	1	</count>
+        </token>
+        <token>
+          <id>	token:pt:s4:t11:vehElement:2	</id>
+          <expires>	01.01.2050 00:00	</expires>
+          <count>	1	</count>
+        </token>
+      </bonus>
+    </tokenQuest>
+    <tokenQuest>
+      <enabled>	True	</enabled>
+      <hidden>	True	</hidden>
+      <id>	pm4_operation_11_milestone_3	</id>
+      <conditions>
+        <preBattle>
+          <account>
+            <and>
+              <token>
+                <id>	token:pt:s4:t11:ms3:unlock	</id>
+                <equal>	1	</equal>
+                <consume>	1	</consume>
+              </token>
+              <token>
+                <id>	pm4:11:points	</id>
+                <greaterOrEqual>	1650	</greaterOrEqual>
+              </token>
+            </and>
+          </account>
+        </preBattle>
+      </conditions>
+      <bonus>
+        <token>
+          <id>	token:pt:s4:t11:ms4:unlock	</id>
+          <expires>	01.01.2050 00:00	</expires>
+          <count>	1	</count>
+        </token>
+        <token>
+          <id>	token:pt:s4:t11:vehElement:3	</id>
+          <expires>	01.01.2050 00:00	</expires>
+          <count>	1	</count>
+        </token>
+      </bonus>
+    </tokenQuest>
+    <tokenQuest>
+      <enabled>	True	</enabled>
+      <hidden>	True	</hidden>
+      <id>	pm4_operation_11_milestone_4	</id>
+      <conditions>
+        <preBattle>
+          <account>
+            <and>
+              <token>
+                <id>	token:pt:s4:t11:ms4:unlock	</id>
+                <equal>	1	</equal>
+                <consume>	1	</consume>
+              </token>
+              <token>
+                <id>	pm4:11:points	</id>
+                <greaterOrEqual>	2300	</greaterOrEqual>
+              </token>
+            </and>
+          </account>
+        </preBattle>
+      </conditions>
+      <bonus>
+        <token>
+          <id>	token:pt:s4:t11:ms5:unlock	</id>
+          <expires>	01.01.2050 00:00	</expires>
+          <count>	1	</count>
+        </token>
+        <token>
+          <id>	token:pt:s4:t11:vehElement:4	</id>
+          <expires>	01.01.2050 00:00	</expires>
+          <count>	1	</count>
+        </token>
+      </bonus>
+    </tokenQuest>
+    <tokenQuest>
+      <enabled>	True	</enabled>
+      <hidden>	True	</hidden>
+      <id>	pm4_operation_11_milestone_5	</id>
+      <conditions>
+        <preBattle>
+          <account>
+            <and>
+              <token>
+                <id>	token:pt:s4:t11:ms5:unlock	</id>
+                <equal>	1	</equal>
+                <consume>	1	</consume>
+              </token>
+              <token>
+                <id>	pm4:11:points	</id>
+                <greaterOrEqual>	3000	</greaterOrEqual>
+              </token>
+            </and>
+          </account>
+        </preBattle>
+      </conditions>
+      <bonus>
+        <token>
+          <id>	token:pt:s4:t11:ms6:unlock	</id>
+          <expires>	01.01.2050 00:00	</expires>
+          <count>	1	</count>
+        </token>
+        <token>
+          <id>	token:pt:s4:t11:vehElement:5	</id>
+          <expires>	01.01.2050 00:00	</expires>
+          <count>	1	</count>
+        </token>
+      </bonus>
+    </tokenQuest>
+    <tokenQuest>
+      <enabled>	True	</enabled>
+      <hidden>	True	</hidden>
+      <id>	pm4_operation_11_milestone_6	</id>
+      <conditions>
+        <preBattle>
+          <account>
+            <and>
+              <token>
+                <id>	token:pt:s4:t11:ms6:unlock	</id>
+                <equal>	1	</equal>
+                <consume>	1	</consume>
+              </token>
+              <token>
+                <id>	pm4:11:points	</id>
+                <greaterOrEqual>	3800	</greaterOrEqual>
+              </token>
+            </and>
+          </account>
+        </preBattle>
+      </conditions>
+      <bonus>
+        <token>
+          <id>	token:pt:s4:t11:ms7:unlock	</id>
+          <expires>	01.01.2050 00:00	</expires>
+          <count>	1	</count>
+        </token>
+        <token>
+          <id>	token:pt:s4:t11:vehElement:6	</id>
+          <expires>	01.01.2050 00:00	</expires>
+          <count>	1	</count>
+        </token>
+      </bonus>
+    </tokenQuest>
+    <tokenQuest>
+      <enabled>	True	</enabled>
+      <hidden>	True	</hidden>
+      <id>	pm4_operation_11_milestone_7	</id>
+      <conditions>
+        <preBattle>
+          <account>
+            <and>
+              <token>
+                <id>	token:pt:s4:t11:ms7:unlock	</id>
+                <equal>	1	</equal>
+                <consume>	1	</consume>
+              </token>
+              <token>
+                <id>	pm4:11:points	</id>
+                <greaterOrEqual>	4700	</greaterOrEqual>
+              </token>
+            </and>
+          </account>
+        </preBattle>
+      </conditions>
+      <bonus>
+        <token>
+          <id>	token:pt:s4:t11:ms8:unlock	</id>
+          <expires>	01.01.2050 00:00	</expires>
+          <count>	1	</count>
+        </token>
+        <token>
+          <id>	token:pt:s4:t11:vehElement:7	</id>
+          <expires>	01.01.2050 00:00	</expires>
+          <count>	1	</count>
+        </token>
+      </bonus>
+    </tokenQuest>
+    <tokenQuest>
+      <enabled>	True	</enabled>
+      <hidden>	True	</hidden>
+      <id>	pm4_operation_11_milestone_8	</id>
+      <conditions>
+        <preBattle>
+          <account>
+            <and>
+              <token>
+                <id>	token:pt:s4:t11:ms8:unlock	</id>
+                <equal>	1	</equal>
+                <consume>	1	</consume>
+              </token>
+              <token>
+                <id>	pm4:11:points	</id>
+                <greaterOrEqual>	5750	</greaterOrEqual>
+              </token>
+            </and>
+          </account>
+        </preBattle>
+      </conditions>
+      <bonus>
+        <token>
+          <id>	token:pt:s4:t11:ms9:unlock	</id>
+          <expires>	01.01.2050 00:00	</expires>
+          <count>	1	</count>
+        </token>
+        <token>
+          <id>	token:pt:s4:t11:vehElement:8	</id>
+          <expires>	01.01.2050 00:00	</expires>
+          <count>	1	</count>
+        </token>
+      </bonus>
+    </tokenQuest>
+    <tokenQuest>
+      <enabled>	True	</enabled>
+      <hidden>	True	</hidden>
+      <id>	pm4_operation_11_milestone_9	</id>
+      <conditions>
+        <preBattle>
+          <account>
+            <and>
+              <token>
+                <id>	token:pt:s4:t11:ms9:unlock	</id>
+                <equal>	1	</equal>
+                <consume>	1	</consume>
+              </token>
+              <token>
+                <id>	pm4:11:points	</id>
+                <greaterOrEqual>	7000	</greaterOrEqual>
+              </token>
+            </and>
+          </account>
+        </preBattle>
+      </conditions>
+      <bonus>
+        <token>
+          <id>	token:pt:s4:t11:ms10:unlock	</id>
+          <expires>	01.01.2050 00:00	</expires>
+          <count>	1	</count>
+        </token>
+        <token>
+          <id>	token:pt:s4:t11:vehElement:9	</id>
+          <expires>	01.01.2050 00:00	</expires>
+          <count>	1	</count>
+        </token>
+      </bonus>
+    </tokenQuest>
+    <tokenQuest>
+      <enabled>	True	</enabled>
+      <hidden>	True	</hidden>
+      <id>	pm4_operation_11_milestone_10	</id>
+      <conditions>
+        <preBattle>
+          <account>
+            <and>
+              <token>
+                <id>	token:pt:s4:t11:ms10:unlock	</id>
+                <equal>	1	</equal>
+                <consume>	1	</consume>
+              </token>
+              <token>
+                <id>	pm4:11:points	</id>
+                <greaterOrEqual>	8500	</greaterOrEqual>
+              </token>
+            </and>
+          </account>
+        </preBattle>
+      </conditions>
+      <bonus>
+        <token>
+          <id>	token:pt:s4:t11:ms11:unlock	</id>
+          <expires>	01.01.2050 00:00	</expires>
+          <count>	1	</count>
+        </token>
+        <token>
+          <id>	token:pt:s4:t11:vehElement:10	</id>
+          <expires>	01.01.2050 00:00	</expires>
+          <count>	1	</count>
+        </token>
+      </bonus>
+    </tokenQuest>
+    <tokenQuest>
+      <enabled>	True	</enabled>
+      <hidden>	True	</hidden>
+      <id>	pm4_operation_11_milestone_11	</id>
+      <conditions>
+        <preBattle>
+          <account>
+            <and>
+              <token>
+                <id>	token:pt:s4:t11:ms11:unlock	</id>
+                <equal>	1	</equal>
+                <consume>	1	</consume>
+              </token>
+              <token>
+                <id>	pm4:11:points	</id>
+                <greaterOrEqual>	10250	</greaterOrEqual>
+              </token>
+            </and>
+          </account>
+        </preBattle>
+      </conditions>
+      <bonus>
+        <token>
+          <id>	token:pt:s4:t11:ms12:unlock	</id>
+          <expires>	01.01.2050 00:00	</expires>
+          <count>	1	</count>
+        </token>
+        <token>
+          <id>	token:pt:s4:t11:vehElement:11	</id>
+          <expires>	01.01.2050 00:00	</expires>
+          <count>	1	</count>
+        </token>
+      </bonus>
+    </tokenQuest>
+    <tokenQuest>
+      <enabled>	True	</enabled>
+      <hidden>	True	</hidden>
+      <id>	pm4_operation_11_milestone_12	</id>
+      <conditions>
+        <preBattle>
+          <account>
+            <and>
+              <token>
+                <id>	token:pt:s4:t11:ms12:unlock	</id>
+                <equal>	1	</equal>
+                <consume>	1	</consume>
+              </token>
+              <token>
+                <id>	pm4:11:points	</id>
+                <greaterOrEqual>	12300	</greaterOrEqual>
+              </token>
+            </and>
+          </account>
+        </preBattle>
+      </conditions>
+      <bonus>
+        <token>
+          <id>	token:pt:s4:t11:ms13:unlock	</id>
+          <expires>	01.01.2050 00:00	</expires>
+          <count>	1	</count>
+        </token>
+        <token>
+          <id>	token:pt:s4:t11:vehElement:12	</id>
+          <expires>	01.01.2050 00:00	</expires>
+          <count>	1	</count>
+        </token>
+      </bonus>
+    </tokenQuest>
+    <tokenQuest>
+      <enabled>	True	</enabled>
+      <hidden>	True	</hidden>
+      <id>	pm4_operation_11_milestone_13	</id>
+      <conditions>
+        <preBattle>
+          <account>
+            <and>
+              <token>
+                <id>	token:pt:s4:t11:ms13:unlock	</id>
+                <equal>	1	</equal>
+                <consume>	1	</consume>
+              </token>
+              <token>
+                <id>	pm4:11:points	</id>
+                <greaterOrEqual>	14700	</greaterOrEqual>
+              </token>
+            </and>
+          </account>
+        </preBattle>
+      </conditions>
+      <bonus>
+        <token>
+          <id>	token:pt:s4:t11:ms14:unlock	</id>
+          <expires>	01.01.2050 00:00	</expires>
+          <count>	1	</count>
+        </token>
+        <token>
+          <id>	token:pt:s4:t11:vehElement:13	</id>
+          <expires>	01.01.2050 00:00	</expires>
+          <count>	1	</count>
+        </token>
+      </bonus>
+    </tokenQuest>
+    <tokenQuest>
+      <enabled>	True	</enabled>
+      <hidden>	True	</hidden>
+      <id>	pm4_operation_11_milestone_14	</id>
+      <conditions>
+        <preBattle>
+          <account>
+            <and>
+              <token>
+                <id>	token:pt:s4:t11:ms14:unlock	</id>
+                <equal>	1	</equal>
+                <consume>	1	</consume>
+              </token>
+              <token>
+                <id>	pm4:11:points	</id>
+                <greaterOrEqual>	17600	</greaterOrEqual>
+              </token>
+            </and>
+          </account>
+        </preBattle>
+      </conditions>
+      <bonus>
+        <token>
+          <id>	token:pt:s4:t11:ms15:unlock	</id>
+          <expires>	01.01.2050 00:00	</expires>
+          <count>	1	</count>
+        </token>
+        <token>
+          <id>	token:pt:s4:t11:vehElement:14	</id>
+          <expires>	01.01.2050 00:00	</expires>
+          <count>	1	</count>
+        </token>
+      </bonus>
+    </tokenQuest>
+    <tokenQuest>
+      <enabled>	True	</enabled>
+      <hidden>	True	</hidden>
+      <id>	pm4_operation_11_milestone_15	</id>
+      <conditions>
+        <preBattle>
+          <account>
+            <and>
+              <token>
+                <id>	token:pt:s4:t11:ms15:unlock	</id>
+                <equal>	1	</equal>
+                <consume>	1	</consume>
+              </token>
+              <token>
+                <id>	pm4:11:points	</id>
+                <greaterOrEqual>	21000	</greaterOrEqual>
+              </token>
+            </and>
+          </account>
+        </preBattle>
+      </conditions>
+      <bonus>
+        <token>
+          <id>	token:pt:s4:t11:vehElement:15	</id>
           <expires>	01.01.2050 00:00	</expires>
           <count>	1	</count>
         </token>

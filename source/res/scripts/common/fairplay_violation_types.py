@@ -92,12 +92,14 @@ def getPenaltyTypeAndViolationName(fairplayViolations, banDuration):
     if banDuration:
         violationName = getFairPlayViolationName(penalty)
         return (PENALTY_TYPES.BAN, violationName, getViolationType(violationName) == FairplayViolationType.AFK)
-    if penalty != 0:
+    elif penalty != 0:
         violationName = getFairPlayViolationName(penalty)
         return (PENALTY_TYPES.PENALTY, violationName, getViolationType(violationName) == FairplayViolationType.AFK)
-    if warning != 0:
+    elif warning != 0:
         violationName = getFairPlayViolationName(warning)
         return (PENALTY_TYPES.WARNING, violationName, getViolationType(violationName) == FairplayViolationType.AFK)
+    else:
+        return (None, '', False)
 
 
 def getFairplayViolationLocale(violationName):

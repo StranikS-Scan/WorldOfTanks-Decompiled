@@ -150,6 +150,8 @@ class Comp7VehicleMarkerPlugin(VehicleMarkerPlugin):
                 self.__updatePointReconMarker(vehicleID, handle, value)
             elif eventID == FEEDBACK_EVENT_ID.VEHICLE_RED_LINE:
                 self.__updateRedLineMarker(vehicleID, handle, value)
+            elif eventID == FEEDBACK_EVENT_ID.ILLUMINATION_FLARE_SPOTTED_MARKER:
+                self.__updateIlluminationFlareSpottedMarker(vehicleID, handle, value)
             elif eventID == FEEDBACK_EVENT_ID.VEHICLE_DEAD:
                 self.__setRoleSkillLevel(marker, vInfo)
             return
@@ -162,6 +164,9 @@ class Comp7VehicleMarkerPlugin(VehicleMarkerPlugin):
             return _COMP7_STATUS_EFFECTS_PRIORITY.index(markerState.statusID)
         except ValueError:
             return -1
+
+    def _getGuiPropsName(self, vInfo, guiProps):
+        return guiProps.name()
 
     def __setModeSpecificData(self, marker, vInfo):
         self.__setRole(marker, vInfo)
@@ -244,6 +249,18 @@ class Comp7VehicleMarkerPlugin(VehicleMarkerPlugin):
 
     def __updateRedLineMarker(self, vehicleID, handle, state):
         self.__updateAbilityMarker(vehicleID, state, handle, BATTLE_MARKER_STATES.COMP7_ARTYLLERY_SUPPORT_STATE)
+
+    def __updateIlluminationFlareSpottedMarker(self, vehicleID, handle, ctrl):
+        statusID = BATTLE_MARKER_STATES.COMP7_ILLUMINATION_FLARE_MARKER
+        marker = ctrl.spottedMarker
+        if marker is None:
+            self._removeMarkerTimer(handle, statusID)
+            return
+        else:
+            endTime = marker.endTime
+            timeLeft = min(endTime - BigWorld.serverTime(), endTime - marker.startTime)
+            self._updateMarkerTimer(vehicleID, handle, timeLeft, statusID, isSourceVehicle=True, newEndTime=endTime)
+            return
 
     def __updateConfirmedMarker(self, vehicleID, handle, isShown):
         self._updateStatusMarkerState(vehicleID=vehicleID, isShown=isShown, handle=handle, statusID=BATTLE_MARKER_STATES.CONFIRMED_STATE, duration=0, animated=True, isSourceVehicle=False, blinkAnim=False)

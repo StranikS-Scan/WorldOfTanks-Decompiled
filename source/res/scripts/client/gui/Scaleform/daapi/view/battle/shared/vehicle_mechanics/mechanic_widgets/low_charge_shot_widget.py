@@ -47,9 +47,9 @@ class LowChargeShotMechanicWidget(LowChargeShotWidgetMeta, ContainersListener, I
             timeLeft = state.calculateTimeLeft()
             self.as_setTimeLeftS(timeLeft, state.reloadingState, True)
 
-    def setShellChangeTime(self, isVisible, shellChangeTime):
+    def setShellChangeTime(self, isVisible, shellChangeTimes):
         if self.__mechanicState.reloadingState not in (LowChargeShotReloadingState.NONE, LowChargeShotReloadingState.EMPTY, LowChargeShotReloadingState.QUICK_RELOAD):
-            self.__updateShellChangeTime(shellChangeTime if isVisible else 0.0)
+            self.__updateShellChangeTime(shellChangeTimes if isVisible else [0.0])
             self.__updateInitialTime()
 
     def setBaseTimeBeforeBattleOrEmpty(self, baseTimeSet):
@@ -68,8 +68,8 @@ class LowChargeShotMechanicWidget(LowChargeShotWidgetMeta, ContainersListener, I
     def __updateState(self, state):
         self.__mechanicState = state
 
-    def __updateShellChangeTime(self, shellChangeTime):
-        self.__shellChangeTime = shellChangeTime
+    def __updateShellChangeTime(self, shellChangeTimes):
+        self.__shellChangeTime = max(shellChangeTimes)
 
     def __updateTimeLeft(self, timeLeft, state):
         if state.reloadingState == LowChargeShotReloadingState.NONE:

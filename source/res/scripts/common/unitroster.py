@@ -23,7 +23,9 @@ class BaseUnitRoster:
     MIN_VEHICLES = 1
     MAX_VEHICLES = 1
 
-    def __init__(self, limitsDefs={}, slotDefs={}, slotCount=None, packedRoster=''):
+    def __init__(self, limitsDefs=None, slotDefs=None, slotCount=None, packedRoster=''):
+        if limitsDefs is None:
+            limitsDefs = {}
         if self.SLOT_TYPE is None and self.LIMITS_TYPE is None:
             raise NotImplementedError()
         if packedRoster:
@@ -103,7 +105,7 @@ class BaseUnitRoster:
 
         return matchList
 
-    def matchVehicleListToSlotList(self, vehTypeCompDescrList, unitSlotIdxList=[]):
+    def matchVehicleListToSlotList(self, vehTypeCompDescrList, unitSlotIdxList=()):
         matchDict = {}
         for vehTypeCompDescr in vehTypeCompDescrList:
             if not self.limits.checkVehicle(vehTypeCompDescr):
@@ -375,7 +377,6 @@ class BaseUnitRosterLimits(object):
                 return packed
             isTuple = limitName in ('totalLevelLimits', 'vehicleLevelLimits')
             return struct.pack(packFormat[0], *(limitValue if isTuple else (limitValue,)))
-            return
 
     def pack(self):
         mask = self.mask
@@ -400,11 +401,10 @@ class BaseUnitRosterLimits(object):
                 packed = packed[limitSize:]
 
             return packed
-        else:
-            limitValue = struct.unpack_from(packFormat[0], packed)
-            isTuple = limitName in ('totalLevelLimits', 'vehicleLevelLimits')
-            limits[limitName] = limitValue if isTuple else limitValue[0]
-            return packed[packFormat[1]:]
+        limitValue = struct.unpack_from(packFormat[0], packed)
+        isTuple = limitName in ('totalLevelLimits', 'vehicleLevelLimits')
+        limits[limitName] = limitValue if isTuple else limitValue[0]
+        return packed[packFormat[1]:]
 
     def unpack(self, packed):
         mask = self.mask = struct.unpack_from('<H', packed)[0]

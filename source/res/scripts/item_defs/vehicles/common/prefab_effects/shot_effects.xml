@@ -1,65 +1,402 @@
 <shot_effects.xml>
-  <regularDefault>
+  <HollowChargeHit>
     <defaultVehicleHit>
-      <prefab>	content/EffectPrefabs/armor_hit.prefab	</prefab>
-      <decal>	common	</decal>
+      <prefab>	content/EffectPrefabs/regular/hit/armor_hit_hc.prefab	</prefab>
+      <decal>	hc	</decal>
+      <replaces>
+        <pixie></pixie>
+        <light></light>
+      </replaces>
     </defaultVehicleHit>
-    <defaultSceneHit>
-      <prefab>	content/EffectPrefabs/ground_hit.prefab	</prefab>
-    </defaultSceneHit>
-  </regularDefault>
-  <regularHollowCharge>
+    <armorBasicRicochet>
+      <prefab>	content/EffectPrefabs/regular/hit/armor_hit_ricochet.prefab	</prefab>
+      <decal>	hc	</decal>
+      <replaces>
+        <pixie></pixie>
+        <light></light>
+      </replaces>
+    </armorBasicRicochet>
+    <armorRicochet>
+      <prefab>	content/EffectPrefabs/regular/hit/armor_hit_ricochet.prefab	</prefab>
+      <decal>	hc	</decal>
+      <replaces>
+        <pixie></pixie>
+        <light></light>
+      </replaces>
+    </armorRicochet>
+  </HollowChargeHit>
+  <HighExplosiveHit>
     <defaultVehicleHit>
-      <prefab>	content/EffectPrefabs/armor_hit_hc.prefab	</prefab>
-      <decal>	regularHollowCharge	</decal>
+      <prefab>	content/EffectPrefabs/regular/hit/armor_hit_he.prefab	</prefab>
+      <decal>	he	</decal>
+      <replaces>
+        <pixie></pixie>
+        <light></light>
+      </replaces>
     </defaultVehicleHit>
-    <defaultSceneHit>
-      <prefab>	content/EffectPrefabs/ground_hit.prefab	</prefab>
-    </defaultSceneHit>
-  </regularHollowCharge>
-  <regularHighExplosive>
+    <armorBasicRicochet>
+      <prefab>	content/EffectPrefabs/regular/hit/armor_hit_ricochet.prefab	</prefab>
+      <decal>	he	</decal>
+      <replaces>
+        <pixie></pixie>
+        <light></light>
+      </replaces>
+    </armorBasicRicochet>
+    <armorRicochet>
+      <prefab>	content/EffectPrefabs/regular/hit/armor_hit_ricochet.prefab	</prefab>
+      <decal>	he	</decal>
+      <replaces>
+        <pixie></pixie>
+        <light></light>
+      </replaces>
+    </armorRicochet>
+  </HighExplosiveHit>
+  <ArmorPiercingHit>
     <defaultVehicleHit>
-      <prefab>	content/EffectPrefabs/armor_hit_he.prefab	</prefab>
-      <decal>	regularHighExplosive	</decal>
+      <prefab>	content/EffectPrefabs/regular/hit/armor_hit_ap.prefab	</prefab>
+      <decal>	ap	</decal>
+      <replaces>
+        <pixie></pixie>
+        <light></light>
+      </replaces>
     </defaultVehicleHit>
-    <defaultSceneHit>
-      <prefab>	content/EffectPrefabs/ground_hit.prefab	</prefab>
-    </defaultSceneHit>
-  </regularHighExplosive>
-  <regularArmorPiercing>
+    <armorBasicRicochet>
+      <prefab>	content/EffectPrefabs/regular/hit/armor_hit_ricochet.prefab	</prefab>
+      <decal>	ap	</decal>
+      <replaces>
+        <pixie></pixie>
+        <light></light>
+      </replaces>
+    </armorBasicRicochet>
+    <armorRicochet>
+      <prefab>	content/EffectPrefabs/regular/hit/armor_hit_ricochet.prefab	</prefab>
+      <decal>	ap	</decal>
+      <replaces>
+        <pixie></pixie>
+        <light></light>
+      </replaces>
+    </armorRicochet>
+  </ArmorPiercingHit>
+  <ArmorPiercingCRHit>
     <defaultVehicleHit>
-      <prefab>	content/EffectPrefabs/armor_hit_ap.prefab	</prefab>
-      <decal>	regularArmorPiercing	</decal>
+      <prefab>	content/EffectPrefabs/regular/hit/armor_hit_apcr.prefab	</prefab>
+      <decal>	apcr	</decal>
+      <replaces>
+        <pixie></pixie>
+        <light></light>
+      </replaces>
     </defaultVehicleHit>
-    <defaultSceneHit>
-      <prefab>	content/EffectPrefabs/ground_hit.prefab	</prefab>
-    </defaultSceneHit>
-  </regularArmorPiercing>
-  <regularArmorPiercingHE>
+    <armorBasicRicochet>
+      <prefab>	content/EffectPrefabs/regular/hit/armor_hit_ricochet.prefab	</prefab>
+      <decal>	apcr	</decal>
+      <replaces>
+        <pixie></pixie>
+        <light></light>
+      </replaces>
+    </armorBasicRicochet>
+    <armorRicochet>
+      <prefab>	content/EffectPrefabs/regular/hit/armor_hit_ricochet.prefab	</prefab>
+      <decal>	apcr	</decal>
+      <replaces>
+        <pixie></pixie>
+        <light></light>
+      </replaces>
+    </armorRicochet>
+  </ArmorPiercingCRHit>
+  <ArmorPiercingHitSPG>
     <defaultVehicleHit>
-      <prefab>	content/EffectPrefabs/armor_hit_ap_he.prefab	</prefab>
-      <decal>	regularArmorPiercingHE	</decal>
+      <prefab>	content/EffectPrefabs/spg/hit/armor_hit_ap_spg.prefab	</prefab>
+      <decal>	ap	</decal>
+      <replaces>
+        <pixie></pixie>
+        <light></light>
+      </replaces>
     </defaultVehicleHit>
-    <defaultSceneHit>
-      <prefab>	content/EffectPrefabs/ground_hit.prefab	</prefab>
-    </defaultSceneHit>
-  </regularArmorPiercingHE>
-  <regularArmorPiercingCR>
+    <armorBasicRicochet>
+      <prefab>	content/EffectPrefabs/regular/hit/armor_hit_ricochet.prefab	</prefab>
+      <decal>	ap	</decal>
+      <replaces>
+        <pixie></pixie>
+        <light></light>
+      </replaces>
+    </armorBasicRicochet>
+    <armorRicochet>
+      <prefab>	content/EffectPrefabs/regular/hit/armor_hit_ricochet.prefab	</prefab>
+      <decal>	ap	</decal>
+      <replaces>
+        <pixie></pixie>
+        <light></light>
+      </replaces>
+    </armorRicochet>
+  </ArmorPiercingHitSPG>
+  <HighExplosiveHitSPG>
     <defaultVehicleHit>
-      <prefab>	content/EffectPrefabs/armor_hit_ap_cr.prefab	</prefab>
-      <decal>	regularArmorPiercingCR	</decal>
+      <prefab>	content/EffectPrefabs/spg/hit/armor_hit_he_spg.prefab	</prefab>
+      <decal>	he	</decal>
+      <replaces>
+        <pixie></pixie>
+        <light></light>
+      </replaces>
     </defaultVehicleHit>
-    <defaultSceneHit>
-      <prefab>	content/EffectPrefabs/ground_hit.prefab	</prefab>
-    </defaultSceneHit>
-  </regularArmorPiercingCR>
-  <regularSmoke>
+    <armorBasicRicochet>
+      <prefab>	content/EffectPrefabs/regular/hit/armor_hit_ricochet.prefab	</prefab>
+      <decal>	he	</decal>
+      <replaces>
+        <pixie></pixie>
+        <light></light>
+      </replaces>
+    </armorBasicRicochet>
+    <armorRicochet>
+      <prefab>	content/EffectPrefabs/regular/hit/armor_hit_ricochet.prefab	</prefab>
+      <decal>	he	</decal>
+      <replaces>
+        <pixie></pixie>
+        <light></light>
+      </replaces>
+    </armorRicochet>
+  </HighExplosiveHitSPG>
+  <HighExplosiveSFHitSPG>
     <defaultVehicleHit>
-      <prefab>	content/EffectPrefabs/armor_hit_smoke.prefab	</prefab>
-      <decal>	regularSmoke	</decal>
+      <prefab>	content/EffectPrefabs/spg/hit/armor_hit_hesh_spg.prefab	</prefab>
+      <decal>	he	</decal>
+      <replaces>
+        <pixie></pixie>
+        <light></light>
+      </replaces>
     </defaultVehicleHit>
-    <defaultSceneHit>
-      <prefab>	content/EffectPrefabs/ground_hit.prefab	</prefab>
-    </defaultSceneHit>
-  </regularSmoke>
+    <armorBasicRicochet>
+      <prefab>	content/EffectPrefabs/regular/hit/armor_hit_ricochet.prefab	</prefab>
+      <decal>	he	</decal>
+      <replaces>
+        <pixie></pixie>
+        <light></light>
+      </replaces>
+    </armorBasicRicochet>
+    <armorRicochet>
+      <prefab>	content/EffectPrefabs/regular/hit/armor_hit_ricochet.prefab	</prefab>
+      <decal>	he	</decal>
+      <replaces>
+        <pixie></pixie>
+        <light></light>
+      </replaces>
+    </armorRicochet>
+  </HighExplosiveSFHitSPG>
+  <HollowChargeHitSPG>
+    <defaultVehicleHit>
+      <prefab>	content/EffectPrefabs/spg/hit/armor_hit_hc_spg.prefab	</prefab>
+      <decal>	hc	</decal>
+      <replaces>
+        <pixie></pixie>
+        <light></light>
+      </replaces>
+    </defaultVehicleHit>
+    <armorBasicRicochet>
+      <prefab>	content/EffectPrefabs/regular/hit/armor_hit_ricochet.prefab	</prefab>
+      <decal>	hc	</decal>
+      <replaces>
+        <pixie></pixie>
+        <light></light>
+      </replaces>
+    </armorBasicRicochet>
+    <armorRicochet>
+      <prefab>	content/EffectPrefabs/regular/hit/armor_hit_ricochet.prefab	</prefab>
+      <decal>	hc	</decal>
+      <replaces>
+        <pixie></pixie>
+        <light></light>
+      </replaces>
+    </armorRicochet>
+  </HollowChargeHitSPG>
+  <ArmorPiercingHitAuto>
+    <defaultVehicleHit>
+      <prefab>	content/EffectPrefabs/autocannon/hit/armor_hit_ap_auto.prefab	</prefab>
+      <decal>	ap	</decal>
+      <replaces>
+        <pixie></pixie>
+        <light></light>
+      </replaces>
+    </defaultVehicleHit>
+    <armorBasicRicochet>
+      <prefab>	content/EffectPrefabs/autocannon/hit/armor_hit_ricochet_auto.prefab	</prefab>
+      <decal>	ap	</decal>
+      <replaces>
+        <pixie></pixie>
+        <light></light>
+      </replaces>
+    </armorBasicRicochet>
+    <armorRicochet>
+      <prefab>	content/EffectPrefabs/autocannon/hit/armor_hit_ricochet_auto.prefab	</prefab>
+      <decal>	ap	</decal>
+      <replaces>
+        <pixie></pixie>
+        <light></light>
+      </replaces>
+    </armorRicochet>
+  </ArmorPiercingHitAuto>
+  <ArmorPiercingCRHitAuto>
+    <defaultVehicleHit>
+      <prefab>	content/EffectPrefabs/autocannon/hit/armor_hit_apcr_auto.prefab	</prefab>
+      <decal>	apcr	</decal>
+      <replaces>
+        <pixie></pixie>
+        <light></light>
+      </replaces>
+    </defaultVehicleHit>
+    <armorBasicRicochet>
+      <prefab>	content/EffectPrefabs/autocannon/hit/armor_hit_ricochet_auto.prefab	</prefab>
+      <decal>	apcr	</decal>
+      <replaces>
+        <pixie></pixie>
+        <light></light>
+      </replaces>
+    </armorBasicRicochet>
+    <armorRicochet>
+      <prefab>	content/EffectPrefabs/autocannon/hit/armor_hit_ricochet_auto.prefab	</prefab>
+      <decal>	apcr	</decal>
+      <replaces>
+        <pixie></pixie>
+        <light></light>
+      </replaces>
+    </armorRicochet>
+  </ArmorPiercingCRHitAuto>
+  <HollowChargeHitAuto>
+    <armorBasicRicochet>
+      <prefab>	content/EffectPrefabs/autocannon/hit/armor_hit_ricochet_auto.prefab	</prefab>
+      <decal>	hc	</decal>
+      <replaces>
+        <pixie></pixie>
+        <light></light>
+      </replaces>
+    </armorBasicRicochet>
+    <armorRicochet>
+      <prefab>	content/EffectPrefabs/autocannon/hit/armor_hit_ricochet_auto.prefab	</prefab>
+      <decal>	hc	</decal>
+      <replaces>
+        <pixie></pixie>
+        <light></light>
+      </replaces>
+    </armorRicochet>
+  </HollowChargeHitAuto>
+  <HighExplosiveHitAuto>
+    <defaultVehicleHit>
+      <prefab>	content/EffectPrefabs/autocannon/hit/armor_hit_he_auto.prefab	</prefab>
+      <decal>	he	</decal>
+      <replaces>
+        <pixie></pixie>
+        <light></light>
+      </replaces>
+    </defaultVehicleHit>
+    <armorBasicRicochet>
+      <prefab>	content/EffectPrefabs/autocannon/hit/armor_hit_ricochet_auto.prefab	</prefab>
+      <decal>	he	</decal>
+      <replaces>
+        <pixie></pixie>
+        <light></light>
+      </replaces>
+    </armorBasicRicochet>
+    <armorRicochet>
+      <prefab>	content/EffectPrefabs/autocannon/hit/armor_hit_ricochet_auto.prefab	</prefab>
+      <decal>	he	</decal>
+      <replaces>
+        <pixie></pixie>
+        <light></light>
+      </replaces>
+    </armorRicochet>
+  </HighExplosiveHitAuto>
+  <ArmorPiercingHitAutoLowFireRate>
+    <defaultVehicleHit>
+      <prefab>	content/EffectPrefabs/autocannon/hit/armor_hit_ap_auto_lfr.prefab	</prefab>
+      <decal>	ap	</decal>
+      <replaces>
+        <pixie></pixie>
+        <light></light>
+      </replaces>
+    </defaultVehicleHit>
+    <armorBasicRicochet>
+      <prefab>	content/EffectPrefabs/regular/hit/armor_hit_ricochet.prefab	</prefab>
+      <decal>	ap	</decal>
+      <replaces>
+        <pixie></pixie>
+        <light></light>
+      </replaces>
+    </armorBasicRicochet>
+    <armorRicochet>
+      <prefab>	content/EffectPrefabs/regular/hit/armor_hit_ricochet.prefab	</prefab>
+      <decal>	ap	</decal>
+      <replaces>
+        <pixie></pixie>
+        <light></light>
+      </replaces>
+    </armorRicochet>
+  </ArmorPiercingHitAutoLowFireRate>
+  <ArmorPiercingCRHitAutoLowFireRate>
+    <defaultVehicleHit>
+      <prefab>	content/EffectPrefabs/autocannon/hit/armor_hit_apcr_auto_lfr.prefab	</prefab>
+      <decal>	apcr	</decal>
+      <replaces>
+        <pixie></pixie>
+        <light></light>
+      </replaces>
+    </defaultVehicleHit>
+    <armorBasicRicochet>
+      <prefab>	content/EffectPrefabs/regular/hit/armor_hit_ricochet.prefab	</prefab>
+      <decal>	apcr	</decal>
+      <replaces>
+        <pixie></pixie>
+        <light></light>
+      </replaces>
+    </armorBasicRicochet>
+    <armorRicochet>
+      <prefab>	content/EffectPrefabs/regular/hit/armor_hit_ricochet.prefab	</prefab>
+      <decal>	apcr	</decal>
+      <replaces>
+        <pixie></pixie>
+        <light></light>
+      </replaces>
+    </armorRicochet>
+  </ArmorPiercingCRHitAutoLowFireRate>
+  <HollowChargeHitAutoLowFireRate>
+    <armorBasicRicochet>
+      <prefab>	content/EffectPrefabs/regular/hit/armor_hit_ricochet.prefab	</prefab>
+      <decal>	hc	</decal>
+      <replaces>
+        <pixie></pixie>
+        <light></light>
+      </replaces>
+    </armorBasicRicochet>
+    <armorRicochet>
+      <prefab>	content/EffectPrefabs/regular/hit/armor_hit_ricochet.prefab	</prefab>
+      <decal>	hc	</decal>
+      <replaces>
+        <pixie></pixie>
+        <light></light>
+      </replaces>
+    </armorRicochet>
+  </HollowChargeHitAutoLowFireRate>
+  <HighExplosiveHitAutoLowFireRate>
+    <defaultVehicleHit>
+      <prefab>	content/EffectPrefabs/autocannon/hit/armor_hit_he_auto_lfr.prefab	</prefab>
+      <decal>	he	</decal>
+      <replaces>
+        <pixie></pixie>
+        <light></light>
+      </replaces>
+    </defaultVehicleHit>
+    <armorBasicRicochet>
+      <prefab>	content/EffectPrefabs/regular/hit/armor_hit_ricochet.prefab	</prefab>
+      <decal>	he	</decal>
+      <replaces>
+        <pixie></pixie>
+        <light></light>
+      </replaces>
+    </armorBasicRicochet>
+    <armorRicochet>
+      <prefab>	content/EffectPrefabs/regular/hit/armor_hit_ricochet.prefab	</prefab>
+      <decal>	he	</decal>
+      <replaces>
+        <pixie></pixie>
+        <light></light>
+      </replaces>
+    </armorRicochet>
+  </HighExplosiveHitAutoLowFireRate>
 </shot_effects.xml>

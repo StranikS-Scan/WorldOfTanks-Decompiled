@@ -1,7 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: battle_royale/scripts/client/battle_royale/gui/Scaleform/daapi/view/battle/minimap/component.py
+from __future__ import absolute_import
 import logging
-import plugins
+from battle_royale.gui.Scaleform.daapi.view.battle.minimap import plugins
 from gui.Scaleform.daapi.view.battle.epic.minimap import EpicMinimapComponent
 _logger = logging.getLogger(__name__)
 

@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/personal_missions_30/intro_view.py
+from __future__ import absolute_import
 import SoundGroups
 from frameworks.wulf import ViewFlags, ViewSettings, WindowFlags, WindowLayer
 from gui.impl.gen import R
@@ -48,7 +49,7 @@ class IntroViewWindow(WindowImpl):
 class MainIntroViewWindow(IntroViewWindow):
 
     def __init__(self):
-        self.introKey = IntroKeys.MAIN_INTRO_VIEW.value
+        self.introKey = IntroKeys.PM3_MAIN_INTRO_VIEW.value
         super(MainIntroViewWindow, self).__init__()
 
 

@@ -2,8 +2,8 @@
 # Embedded file name: scripts/client/gui/lobby_state_machine/transitions.py
 from __future__ import absolute_import
 import sys
-from frameworks.state_machine import StateEvent, BaseTransition, State
-from frameworks.state_machine.transitions import TransitionType
+from frameworks_common.state_machine import StateEvent, BaseTransition, State
+from frameworks_common.state_machine.transitions import TransitionType
 from gui.lobby_state_machine.events import _StopEvent
 from gui.shared.events import NavigationEvent
 from shared_utils import first

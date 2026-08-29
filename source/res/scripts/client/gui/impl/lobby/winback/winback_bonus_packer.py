@@ -191,7 +191,7 @@ class WinbackVehiclesBonusUIPacker(BaseBonusUIPacker):
         model.setVehicleLvl(bonus.getLevel())
         model.setPriceDiscount(bonus.getPurchaseDiscount())
         model.setExpDiscount(bonus.getResearchDiscount())
-        model.setTooltipContentId(str(R.views.lobby.winback.tooltips.SelectableRewardTooltip()))
+        model.setTooltipContentId(str(R.views.mono.winback.tooltips.selectable_reward_tooltip()))
         return [model]
 
     @classmethod

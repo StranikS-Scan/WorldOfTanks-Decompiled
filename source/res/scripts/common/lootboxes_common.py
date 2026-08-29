@@ -1,11 +1,15 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/lootboxes_common.py
 from __future__ import absolute_import
-from constants import LOOTBOX_TOKEN_PREFIX
+from constants import LOOTBOX_TOKEN_PREFIX, REROLL_STOP_TOKEN_PREFIX
 from soft_exception import SoftException
 
 def makeLootboxTokenID(boxID):
     return LOOTBOX_TOKEN_PREFIX + str(boxID)
+
+
+def makeStopRerollTokenID(boxID):
+    return REROLL_STOP_TOKEN_PREFIX + str(boxID)
 
 
 def makeLootboxID(tokenName):

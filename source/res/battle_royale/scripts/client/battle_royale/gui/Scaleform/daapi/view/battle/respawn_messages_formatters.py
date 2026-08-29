@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: battle_royale/scripts/client/battle_royale/gui/Scaleform/daapi/view/battle/respawn_messages_formatters.py
+from __future__ import absolute_import
 from battle_royale.gui.battle_control.controllers.notification_manager import RespawnMessage, MessageType
 from gui.Scaleform.genConsts.BATTLE_ROYAL_CONSTS import BATTLE_ROYAL_CONSTS
 from gui.impl import backport

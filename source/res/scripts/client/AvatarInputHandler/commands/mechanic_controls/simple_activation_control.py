@@ -11,7 +11,8 @@ class SimpleActivationControl(InputHandlerCommand):
     _VEHICLE_MECHANIC_KEYS = {VehicleMechanic.ROCKET_ACCELERATION: CommandMapping.CMD_CM_VEHICLE_SWITCH_AUTOROTATION,
      VehicleMechanic.CONCENTRATION_MODE: CommandMapping.CMD_CM_VEHICLE_SWITCH_AUTOROTATION,
      VehicleMechanic.STATIONARY_RELOAD: CommandMapping.CMD_RELOAD_PARTIAL_CLIP,
-     VehicleMechanic.PROPELLANT_GUN: CommandMapping.CMD_CM_VEHICLE_SWITCH_AUTOROTATION}
+     VehicleMechanic.PROPELLANT_GUN: CommandMapping.CMD_CM_VEHICLE_SWITCH_AUTOROTATION,
+     VehicleMechanic.AUTORELOADER_SURGE: CommandMapping.CMD_CM_SPECIAL_ABILITY}
 
     def __init__(self, mechanic):
         self.__mechanic = mechanic

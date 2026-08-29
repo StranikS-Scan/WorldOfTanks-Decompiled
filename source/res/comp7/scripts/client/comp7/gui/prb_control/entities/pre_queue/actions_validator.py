@@ -38,7 +38,6 @@ class Comp7Validator(BaseActionsValidator):
          PeriodType.AFTER_CYCLE,
          PeriodType.BETWEEN_SEASONS,
          PeriodType.ALL_NOT_AVAILABLE_END,
-         PeriodType.NOT_AVAILABLE_END,
          PeriodType.STANDALONE_NOT_AVAILABLE_END):
             season = getSeasonNameEnum(self.__comp7Ctrl, SeasonName).value
             return ValidationResult(False, PRE_QUEUE_RESTRICTION.MODE_SEASON_ENDED, ctx={'season': season})

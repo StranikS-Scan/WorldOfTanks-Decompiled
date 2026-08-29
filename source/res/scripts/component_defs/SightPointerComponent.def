@@ -1,0 +1,22 @@
+<SightPointerComponent.def>
+  <Properties>
+    <status>
+      <Type>	SIGHT_POINTER_STATUS	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </status>
+    <abilityInfo>
+      <Type>	SIGHT_POINTER_ABILITY_INFO	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <DetailLevel>	MY_VEHICLE	</DetailLevel>
+    </abilityInfo>
+  </Properties>
+  <CellMethods>
+    <tryActivate>
+      <Exposed>	OWN_CLIENT	</Exposed>
+    </tryActivate>
+    <tryDeactivate>
+      <Exposed>	OWN_CLIENT	</Exposed>
+    </tryDeactivate>
+  </CellMethods>
+  <DefaultKeyName>	sightPointerComponent	</DefaultKeyName>
+</SightPointerComponent.def>

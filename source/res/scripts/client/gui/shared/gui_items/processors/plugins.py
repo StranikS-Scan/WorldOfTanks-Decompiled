@@ -23,7 +23,6 @@ from gui.goodies.demount_kit import getDemountKitForOptDevice
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.server_events.pm_constants import PM_SUIT_OP_PLUGIN_ERR_RESPONSE, PAUSABLE_OPERATIONS_IDS
-from gui.server_events.finders import BRANCH_TO_OPERATION_IDS
 from gui.shared.formatters.tankmen import formatDeletedTankmanStr
 from gui.shared.gui_items import GUI_ITEM_ECONOMY_CODE, GUI_ITEM_TYPE
 from gui.shared.gui_items.Vehicle import VEHICLE_TAGS
@@ -698,16 +697,17 @@ class PMLockedByVehicle(_EventsCacheValidator):
 
 class PMLockedByOperation(_EventsCacheValidator):
 
-    def __init__(self, operation, messageKeyPrefix='', isEnabled=True):
+    def __init__(self, operationID, branch, messageKeyPrefix='', isEnabled=True):
         super(PMLockedByOperation, self).__init__(isEnabled)
         self._messageKeyPrefix = messageKeyPrefix
-        self.operation = operation
+        self.operationID = operationID
+        self.branch = branch
         self._lockedChains = self.eventsCache.getLockedPersonalMissions()
 
     def _validate(self):
-        if self.operation in BRANCH_TO_OPERATION_IDS[PM_BRANCH.PERSONAL_MISSION_3]:
+        if self.operationID in PM_BRANCH.BRANCH_TO_OPERATION_IDS[self.branch]:
             for lockedPM in self._lockedChains:
-                if lockedPM.getOperationID in BRANCH_TO_OPERATION_IDS[PM_BRANCH.PERSONAL_MISSION_3]:
+                if lockedPM.getOperationID in PM_BRANCH.BRANCH_TO_OPERATION_IDS[self.branch]:
                     return makeError(self._messageKeyPrefix + 'LOCKED_BY_VEHICLE_QUEST')
 
         return makeSuccess()
@@ -752,13 +752,11 @@ class PMActiveCampaignValidator(_EventsCacheValidator):
 
     def __init__(self, quest, isEnabled=True):
         super(PMActiveCampaignValidator, self).__init__(isEnabled)
-        self._branch = quest.getPMType().branch
+        self._quest = quest
 
     def _validate(self):
-        activeCampaigns = self.eventsCache.getPersonalMissions().getActiveCampaigns()
-        namePM3 = PM_BRANCH.TYPE_TO_NAME[PM_BRANCH.PERSONAL_MISSION_3]
-        if namePM3 in activeCampaigns:
-            logging.warning('WARNING: You are trying to activate the operation which not suitable for this branch')
+        if self.eventsCache.getPersonalMissions().isBranchWithoutAwardListActive():
+            logging.warning('WARNING: You are trying to activate the operation which not suitable for %r branch', self._quest.getQuestBranchName())
             return makeError(PM_SUIT_OP_PLUGIN_ERR_RESPONSE)
         return makeSuccess()
 

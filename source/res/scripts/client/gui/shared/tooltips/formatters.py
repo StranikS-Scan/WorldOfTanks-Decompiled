@@ -75,14 +75,14 @@ def packTextParameterBlockData(name, value, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP
     return packBlockDataItem(linkage, data, padding, blockWidth)
 
 
-def packTextParameterTwoColBlockData(name, value, value2, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_TEXT_PARAMETER_BLOCK_TWO_COL_LINKAGE, valueWidth=-1, value2Gap=-1, gap=5, padding=None, highlight=False, blockWidth=0):
+def packTextParameterTwoColBlockData(name, leftValue, rightValue, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_TEXT_PARAMETER_BLOCK_TWO_COL_LINKAGE, valueWidth=-1, valueGap=-1, gap=5, padding=None, highlight=False, blockWidth=0):
     data = {'name': name,
-     'value': value,
-     'value2': value2}
+     'value': leftValue,
+     'value2': rightValue}
     if valueWidth != -1:
         data['valueWidth'] = valueWidth
-    if value2Gap != -1:
-        data['value2Gap'] = value2Gap
+    if valueGap != -1:
+        data['valueGap'] = valueGap
     if gap != -1:
         data['gap'] = gap
     if highlight:
@@ -90,14 +90,18 @@ def packTextParameterTwoColBlockData(name, value, value2, linkage=BLOCKS_TOOLTIP
     return packBlockDataItem(linkage, data, padding, blockWidth)
 
 
-def packTextParameterTwoColWithIconBlockData(leftText, rightText, icon, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_TEXT_PARAMETER_BLOCK_TWO_COL_WITH_ICON_LINKAGE, valueWidth=-1, value2Gap=-1, padding=None, iconPadding=None, highlight=False, blockWidth=0):
-    data = {'name': rightText,
-     'value': leftText,
-     'icon': icon}
+def packTextParameterTwoColWithIconsBlockData(name, leftValue, leftIcon, rightValue, rightIcon, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_TEXT_PARAMETER_BLOCK_TWO_COL_WITH_ICONS_LINKAGE, valueWidth=-1, valueGap=-1, gap=5, iconPadding=None, padding=None, highlight=False, blockWidth=0):
+    data = {'name': name,
+     'value': leftValue,
+     'value2': rightValue,
+     'icon': leftIcon,
+     'icon2': rightIcon}
     if valueWidth != -1:
         data['valueWidth'] = valueWidth
-    if value2Gap != -1:
-        data['value2Gap'] = value2Gap
+    if valueGap != -1:
+        data['valueGap'] = valueGap
+    if gap != -1:
+        data['gap'] = gap
     if iconPadding is not None:
         data['iconPadding'] = iconPadding
     if highlight:
@@ -154,12 +158,13 @@ def packTextParameterWithIconBlockData(name, value, icon, linkage=BLOCKS_TOOLTIP
     return packBlockDataItem(linkage, data, padding)
 
 
-def packTitleDescParameterWithIconBlockData(title, value='', icon=None, desc=None, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_TITLE_DESC_PARAMETER_WITH_ICON_BLOCK_LINKAGE, valueAtRight=False, valueWidth=-1, titleWidth=-1, gap=5, titlePadding=None, valuePadding=None, iconPadding=None, padding=None, iconAlpha=1):
+def packTitleDescParameterWithIconBlockData(title, value='', icon=None, desc=None, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_TITLE_DESC_PARAMETER_WITH_ICON_BLOCK_LINKAGE, valueAtRight=False, valueWidth=-1, titleWidth=-1, gap=5, titlePadding=None, valuePadding=None, iconPadding=None, padding=None, iconAlpha=1, verticalAlignment='top'):
     data = {'name': title,
      'value': value,
      'valueAtRight': valueAtRight,
      'iconAlpha': iconAlpha,
-     'gap': gap}
+     'gap': gap,
+     'verticalAlignment': verticalAlignment}
     if icon is not None:
         data['icon'] = icon
     if valueWidth != -1:

@@ -2675,7 +2675,6 @@
           <reloadTime>	7.8	</reloadTime>
           <aimingTime>	2.3	</aimingTime>
           <invisibilityFactorAtShot>	0.22	</invisibilityFactorAtShot>
-          <multiGunEffects>	shot_dualgun1_mainext_L shot_dualgun1_mainext_R	</multiGunEffects>
           <dualGun>
             <chargeTime>	2.5	</chargeTime>
             <shootImpulse>	200	</shootImpulse>
@@ -2686,6 +2685,9 @@
             <afterShotDelay>	1	</afterShotDelay>
             <preChargeIndication>	0.25	</preChargeIndication>
           </dualGun>
+          <prefabs>
+            <main>	content/CGFPrefabs/Vehicle/guns/ussr/gun_100mm_S_34D.prefab	</main>
+          </prefabs>
           <models>
             <undamaged>	vehicles/russian/R171_IS_3_II/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/russian/R171_IS_3_II/crash/lod0/Gun_01.model	</destroyed>
@@ -3490,7 +3492,6 @@
           <reloadTime>	7.7	</reloadTime>
           <aimingTime>	2.3	</aimingTime>
           <invisibilityFactorAtShot>	0.22	</invisibilityFactorAtShot>
-          <multiGunEffects>	shot_dualgun1_mainext_L shot_dualgun1_mainext_R	</multiGunEffects>
           <dualGun>
             <chargeTime>	2	</chargeTime>
             <shootImpulse>	200	</shootImpulse>
@@ -3501,6 +3502,9 @@
             <afterShotDelay>	1	</afterShotDelay>
             <preChargeIndication>	0.25	</preChargeIndication>
           </dualGun>
+          <prefabs>
+            <main>	content/CGFPrefabs/Vehicle/guns/ussr/gun_100mm_S_34D.prefab	</main>
+          </prefabs>
           <models>
             <undamaged>	vehicles/russian/R171_IS_3_II/normal/lod0/Gun_04.model	</undamaged>
             <destroyed>	vehicles/russian/R171_IS_3_II/crash/lod0/Gun_04.model	</destroyed>
@@ -3692,7 +3696,6 @@
           <reloadTime>	10.5	</reloadTime>
           <aimingTime>	3	</aimingTime>
           <invisibilityFactorAtShot>	0.18	</invisibilityFactorAtShot>
-          <multiGunEffects>	shot_dualgun1_large_mb_L shot_dualgun1_large_mb_R	</multiGunEffects>
           <dualGun>
             <chargeTime>	2.5	</chargeTime>
             <shootImpulse>	200	</shootImpulse>
@@ -3708,6 +3711,9 @@
             <whileGunDamaged>	2.0	</whileGunDamaged>
             <afterShot>	4	</afterShot>
           </shotDispersionFactors>
+          <prefabs>
+            <main>	content/CGFPrefabs/Vehicle/guns/ussr/gun_122mm_BL_9D.prefab	</main>
+          </prefabs>
           <models>
             <undamaged>	vehicles/russian/R171_IS_3_II/normal/lod0/Gun_06.model	</undamaged>
             <destroyed>	vehicles/russian/R171_IS_3_II/crash/lod0/Gun_06.model	</destroyed>
@@ -3831,6 +3837,7 @@
             </customizableVehicleAreas>
           </customization>
           <reloadEffect>	dualgun_reload115_152	</reloadEffect>
+          <muzzleBrake>	HORIZONTAL	</muzzleBrake>
           <camouflage>
             <density>	102.158 103.319	</density>
             <aoTextureSize>	512 512	</aoTextureSize>

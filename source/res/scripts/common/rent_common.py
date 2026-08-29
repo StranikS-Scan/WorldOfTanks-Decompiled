@@ -30,8 +30,7 @@ def calculateSeasonRentPrice(priceForLastCycle, priceForSeason, currentCycleIdx,
     if numCycles <= 1 or currentCycleIdx + 1 == numCycles:
         if priceForSeason[0] > 0:
             return (int(creditsPerCycle), 0)
-        else:
-            return (0, int(creditsPerCycle * CREDITS_TO_GOLD_CONVERSION_RATE))
+        return (0, int(creditsPerCycle * CREDITS_TO_GOLD_CONVERSION_RATE))
     sumCyclesCost = creditsPerCycle * numCycles
     cycleFactor = float(currentCycleIdx) / (numCycles - 1.0)
     seasonFactor = 1.0 - cycleFactor
@@ -39,10 +38,7 @@ def calculateSeasonRentPrice(priceForLastCycle, priceForSeason, currentCycleIdx,
     creditsSeasonPrice = (sumCyclesCost * cycleFactor + creditsPerSeason * seasonFactor) / numCycles * timeLeftFactor
     if creditsPerSeason < creditsSeasonPrice:
         creditsSeasonPrice = creditsPerSeason
-    if priceForSeason[0] > 0:
-        return (int(creditsSeasonPrice), 0)
-    else:
-        return (0, int(creditsSeasonPrice * CREDITS_TO_GOLD_CONVERSION_RATE))
+    return (int(creditsSeasonPrice), 0) if priceForSeason[0] > 0 else (0, int(creditsSeasonPrice * CREDITS_TO_GOLD_CONVERSION_RATE))
 
 
 def isWithinMaxRentTime(maxRentDuration, rentLeftTime, daysToRent):

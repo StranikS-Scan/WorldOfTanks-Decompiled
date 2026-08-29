@@ -92,21 +92,28 @@ class DefaultFadingCover(View, ICover):
 
 
 class FadingCoverWindow(Window):
-    __slots__ = ()
+    __slots__ = ('_preloaded',)
 
     def __init__(self, content, layer):
         settings = WindowSettings()
         settings.flags = WindowFlags.WINDOW | WindowFlags.WINDOW_FULLSCREEN
         settings.layer = layer
         settings.content = content
+        self._preloaded = False
         super(FadingCoverWindow, self).__init__(settings)
+
+    def preload(self):
+        if not self._preloaded:
+            self.load()
+            self._preloaded = True
 
     @property
     def _cover(self):
         return super(FadingCoverWindow, self).content
 
     def fadeOut(self, callback):
-        self.load()
+        if not self._preloaded:
+            self.load()
         self._cover.fadeOut(callback)
 
     def fadeIn(self, callback):

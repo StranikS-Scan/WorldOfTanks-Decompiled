@@ -46,6 +46,17 @@ class GameMessagesPanel(GameMessagesPanelMeta):
         pass
 
     def sendEndGameMessage(self, winningTeam, reason):
+        messageType = self._getMessageType(winningTeam)
+        subTitle = makeRegularFinishResultLabel(reason, messageType)
+        self._sendEndGameMessage(messageType, subTitle)
+
+    def _sendEndGameMessage(self, messageType, subTitle):
+        endGameMsgData = {'title': toUpper(backport.text(R.strings.menu.finalStatistic.commonStats.resultlabel.dyn(messageType)())),
+         'subTitle': subTitle}
+        msg = PlayerMessageData(messageType, GAME_MESSAGES_CONSTS.DEFAULT_MESSAGE_LENGTH, GAME_MESSAGES_CONSTS.GAME_MESSAGE_PRIORITY_END_GAME, endGameMsgData)
+        self._addMessage(msg.getDict())
+
+    def _getMessageType(self, winningTeam):
         isWinner = avatar_getter.getPlayerTeam() == winningTeam
         if winningTeam == 0:
             messageType = GAME_MESSAGES_CONSTS.DRAW
@@ -53,10 +64,7 @@ class GameMessagesPanel(GameMessagesPanelMeta):
             messageType = GAME_MESSAGES_CONSTS.WIN
         else:
             messageType = GAME_MESSAGES_CONSTS.DEFEAT
-        endGameMsgData = {'title': toUpper(backport.text(R.strings.menu.finalStatistic.commonStats.resultlabel.dyn(messageType)())),
-         'subTitle': makeRegularFinishResultLabel(reason, messageType)}
-        msg = PlayerMessageData(messageType, GAME_MESSAGES_CONSTS.DEFAULT_MESSAGE_LENGTH, GAME_MESSAGES_CONSTS.GAME_MESSAGE_PRIORITY_END_GAME, endGameMsgData)
-        self._addMessage(msg.getDict())
+        return messageType
 
     def setFlashObject(self, movieClip, autoPopulate=True, setScript=True):
         if movieClip is None and BattleReplay.g_replayCtrl.isPlaying:

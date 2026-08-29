@@ -7,7 +7,7 @@ from enum import Enum
 import typing
 from BWUtil import AsyncReturn
 from WeakMethod import WeakMethodProxy
-from frameworks.state_machine import StateFlags
+from frameworks_common.state_machine import StateFlags
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.impl.lobby.hangar.dialogs.vehicle_playlists import showSaveBeforeLeavePlaylistDialog

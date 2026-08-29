@@ -366,11 +366,8 @@ def getUnlockPrice(compactDescr, parentCD=None, vehicleLevel=UNKNOWN_VEHICLE_LEV
                 minUnlockPrice = pricesDict[vcd]
                 minUnlockPriceVehCD = vcd
 
-        if minUnlockPriceVehCD is None:
-            return (isAvailable,
-             0,
-             0,
-             0,
-             0)
-        return getUnlockProps(isAvailable, minUnlockPriceVehCD)
-        return
+        return (isAvailable,
+         0,
+         0,
+         0,
+         0) if minUnlockPriceVehCD is None else getUnlockProps(isAvailable, minUnlockPriceVehCD)

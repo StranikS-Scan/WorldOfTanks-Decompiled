@@ -10,8 +10,7 @@ def _parseDataSection(dataSection, readers=None, normalizeValues=False):
     if not dataSection:
         if normalizeValues:
             return _normalizeValue(dataSection.asString)
-        else:
-            return dataSection.asString
+        return dataSection.asString
     result = {}
     for section in dataSection.values():
         if section.isAttribute:

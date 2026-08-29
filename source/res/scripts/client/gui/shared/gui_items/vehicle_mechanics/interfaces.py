@@ -11,5 +11,5 @@ if typing.TYPE_CHECKING:
 class IMechanicFactory(object):
 
     @classmethod
-    def getMechanics(cls, guiItem, vehDescr, mechanics, withOverrides=False):
+    def getMechanics(cls, guiItem, vehDescr, mechanics=None, withOverrides=False):
         raise NotImplementedError

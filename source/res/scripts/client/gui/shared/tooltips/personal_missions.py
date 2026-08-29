@@ -23,10 +23,9 @@ from gui.impl import backport
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.personal_missions_30.common.enums import OperationState
 from gui.impl.lobby.missions.missions_helpers import formatCompleteCount
-from gui.impl.lobby.personal_missions_30.views_helpers import getOperationStatus, getSortedPm3Operations, isOperationAvailableByVehicles, wasOperationActivatedBefore
+from gui.impl.lobby.personal_missions_30.views_helpers import getOperationStatus, isOperationAvailableByVehicles, wasOperationActivatedBefore, getPMInstalledVehDetails
 from gui.server_events.awards_formatters import AWARDS_SIZES, CompletionTokensBonusFormatter, getPersonalMissionsOperationTooltipsPacker
 from gui.server_events.events_helpers import AwardSheetPresenter
-from gui.server_events.finders import BRANCH_TO_OPERATION_IDS
 from gui.server_events.personal_progress.formatters import PMTooltipConditionsFormatters
 from gui.shared.formatters import text_styles, icons
 from gui.shared.tooltips import TOOLTIP_TYPE, formatters
@@ -260,7 +259,7 @@ class OperationTooltipData(BlocksTooltipData):
             blocksData.extend([formatters.packAlignedTextBlockData(text=text_styles.concatStylesToSingleLine(cls._getOperationOperationStateIcon(PERSONAL_MISSIONS_ALIASES.OPERATION_PAUSED_STATE), text_styles.neutral(backport.text(R.strings.tooltips.personalMissions.operation.footer.title.onPause()))), align=BLOCKS_TOOLTIP_TYPES.ALIGN_CENTER, padding=firstRowPadding), formatters.packAlignedTextBlockData(text=footerText, align=BLOCKS_TOOLTIP_TYPES.ALIGN_CENTER, padding=secondRowPadding)])
         elif operation.isAwardAchieved():
             blocksData.append(formatters.packAlignedTextBlockData(text=text_styles.concatStylesToSingleLine(cls._getOperationOperationStateIcon(PERSONAL_MISSIONS_ALIASES.OPERATION_COMPLETE_STATE), text_styles.bonusAppliedText(backport.text(R.strings.tooltips.personalMissions.operation.footer.title.done()))), align=BLOCKS_TOOLTIP_TYPES.ALIGN_CENTER, padding=firstRowPadding))
-            if operation.getBranch() == PM_BRANCH.PERSONAL_MISSION_3:
+            if operation.isWithoutAwardListBranch():
                 blocksData.append(formatters.packAlignedTextBlockData(text=text_styles.main(backport.text(R.strings.tooltips.personalMissions.operation.footer.descr.mainRewardReceived())), align=BLOCKS_TOOLTIP_TYPES.ALIGN_CENTER, padding=secondRowPadding))
             else:
                 currentCount = operation.getFreeTokensCount()
@@ -281,8 +280,8 @@ class OperationTooltipData(BlocksTooltipData):
 
     @classmethod
     def _getOperationCompletionTokensCount(cls, operation):
-        if operation.getBranch() == PM_BRANCH.PERSONAL_MISSION_3:
-            currentCount = cls.__settingsCore.serverSettings.getPM3InstalledVehDetails()
+        if operation.isWithoutAwardListBranch():
+            currentCount = getPMInstalledVehDetails(operation.getBranch())
             totalCount = len(operation.getVehDetails())
         else:
             currentCount, totalCount = operation.getTokensCount()
@@ -290,7 +289,7 @@ class OperationTooltipData(BlocksTooltipData):
 
     @staticmethod
     def _getOperationCompletionTokensDescription(operation):
-        if operation.getBranch() == PM_BRANCH.PERSONAL_MISSION_3:
+        if operation.isWithoutAwardListBranch():
             descriptionKey = R.strings.tooltips.personalMissions.operation.footer.descr.completionTokens.pm3()
         elif operation.getBranch() == PM_BRANCH.PERSONAL_MISSION_2:
             descriptionKey = R.strings.tooltips.personalMissions.operation.footer.descr.completionTokens.pm2()
@@ -309,14 +308,19 @@ class OperationTooltipData(BlocksTooltipData):
     @classmethod
     def _isOperationUnavailable(cls, operation):
         isLocked = not operation.isUnlocked()
-        isPM3Unavailable = operation.getID() in BRANCH_TO_OPERATION_IDS[PM_BRANCH.PERSONAL_MISSION_3][1:] and getOperationStatus(operation, getSortedPm3Operations()) == OperationState.UNAVAILABLE
-        return isLocked or isPM3Unavailable
+        isOperationUnavailable = operation.getID() in PM_BRANCH.BRANCH_TO_OPERATION_IDS[PM_BRANCH.PERSONAL_MISSION_3][1:] and getOperationStatus(operation) == OperationState.UNAVAILABLE
+        return isLocked or isOperationUnavailable
 
     @classmethod
     def _isOperationPaused(cls, operation):
-        isPaused = operation.isPaused()
-        isPM3Paused = not operation.isStarted() and wasOperationActivatedBefore(operation) and not cls.__eventsCache.getPersonalMissions().isCampaignActive(PM_BRANCH.TYPE_TO_NAME[operation.getBranch()])
-        return isPaused or isPM3Paused
+        if operation.isWithoutAwardListBranch():
+            activeCampaigns = set(cls.__eventsCache.getPersonalMissions().getActiveCampaigns())
+            isCampaignActive = bool(activeCampaigns.intersection(PM_BRANCH.WITHOUT_AWARD_LIST_BRANCHES))
+        else:
+            isCampaignActive = cls.__eventsCache.getPersonalMissions().isCampaignActive(operation.getBranchName())
+        isOperationPaused = operation.isPaused()
+        isCampaignPaused = not operation.isStarted() and wasOperationActivatedBefore(operation) and not isCampaignActive
+        return isOperationPaused or isCampaignPaused
 
     @classmethod
     def _isOperationInProgress(cls, operation):

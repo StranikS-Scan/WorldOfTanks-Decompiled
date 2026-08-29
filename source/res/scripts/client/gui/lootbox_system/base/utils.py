@@ -1,19 +1,22 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/lootbox_system/base/utils.py
+from __future__ import absolute_import
 import logging
 import random
+from future.utils import viewitems, viewvalues
 from typing import TYPE_CHECKING
 import BigWorld
 from CurrentVehicle import g_currentVehicle
 from account_helpers.AccountSettings import LOOT_BOXES_OPEN_ANIMATION_ENABLED
-from adisp import adisp_process
+from adisp import adisp_async, adisp_process
+from constants import REROLL_STOP_TOKEN_PREFIX
 from gui import GUI_SETTINGS, SystemMessages
 from gui.Scaleform.daapi.view.lobby.store.browser.shop_helpers import getShopURL
 from gui.impl import backport
 from gui.lootbox_system.base.awards_manager import AwardsManager
-from gui.lootbox_system.base.common import COUNTRY_CODES_FOR_EXTERNAL_LOOT_LIST, getTextResource
+from gui.lootbox_system.base.common import COUNTRY_CODES_FOR_EXTERNAL_LOOT_LIST, REROLLABLE_BOX_OPEN_COUNT, getTextResource
 from gui.shared import EVENT_BUS_SCOPE, events, g_eventBus
-from gui.shared.gui_items.processors.loot_boxes import LootBoxSystemOpenProcessor
+from gui.shared.gui_items.processors.loot_boxes import LootBoxSystemOpenProcessor, AcceptLootBoxRerollProcessor, RerollLootBoxProcessor
 from gui.shared.notifications import NotificationPriorityLevel
 from gui.shared.utils.requesters import REQ_CRITERIA
 from helpers import dependency
@@ -30,23 +33,69 @@ _logger = logging.getLogger(__name__)
 
 @adisp_process
 @dependency.replace_none_kwargs(lootBoxes=ILootBoxSystemController)
-def openBoxes(eventName, category, count, processResult=None, lootBoxes=None):
-
-    def isCompatibleBox(b):
-        return b.getType() == eventName and b.getCategory() == category and b.isEnabled()
-
-    box = first(lootBoxes.getBoxes(eventName, isCompatibleBox))
+def openBoxes(eventName, category, count, processResult=None, lootBoxes=None, isReroll=False):
+    box = lootBoxes.getBox(eventName, category)
     if box is not None:
-        result = yield LootBoxSystemOpenProcessor(box, count).request()
-        if result and result.success:
-            if callable(processResult):
-                processResult([ AwardsManager.composeBonuses(eventName, [slot]) for slot in result.auxData['bonus'] ])
+        if box.isRerollable():
+            if count != REROLLABLE_BOX_OPEN_COUNT:
+                _logger.error('Tried to open %d rerollable boxes at once', count)
+                _pushOpeningErrorEvent()
+                return
+            if not isReroll and lootBoxes.getPendingRerollRewards(eventName, category) is not None:
+                success = yield acceptRerollableBoxRewards(eventName, category)
+                if not success:
+                    _pushOpeningErrorEvent()
+                    return
+            _openRerollableBox(eventName, category, processResult)
         else:
-            _logger.error('Failed to open loot box')
+            result = yield LootBoxSystemOpenProcessor(box, count).request()
+            if result is not None and result.success:
+                if callable(processResult):
+                    processResult([ AwardsManager.composeBonuses(eventName, [slot]) for slot in result.auxData['bonus'] ])
+            else:
+                _logger.error('Failed to open loot box')
+                _pushOpeningErrorEvent()
     else:
         pathParts = ['serviceChannelMessages', 'server_error']
         SystemMessages.pushMessage(text=backport.text(getTextResource(pathParts + ['DISABLED'], eventName)()), type=SystemMessages.SM_TYPE.ErrorSimple, priority=NotificationPriorityLevel.MEDIUM)
-        g_eventBus.handleEvent(events.LootBoxSystemEvent(events.LootBoxSystemEvent.OPENING_ERROR), scope=EVENT_BUS_SCOPE.LOBBY)
+        _pushOpeningErrorEvent()
+    return
+
+
+@adisp_process
+def _openRerollableBox(eventName, category, processResult=None):
+    result = yield RerollLootBoxProcessor(eventName, category).request()
+    if result is None:
+        _pushOpeningErrorEvent()
+        return
+    else:
+        if not result.success or result.userMsg:
+            SystemMessages.pushMessage(result.userMsg, type=result.sysMsgType, priority=result.msgPriority, messageData=result.msgData)
+        if result.success:
+            rewardsResult = result.auxData.get('rewardsResult')
+            if rewardsResult is not None:
+                SystemMessages.pushMessagesFromResult(rewardsResult)
+            if callable(processResult):
+                processResult([AwardsManager.composeBonuses(eventName, [result.auxData['rewards']])])
+        else:
+            _pushOpeningErrorEvent()
+        return
+
+
+def _pushOpeningErrorEvent():
+    g_eventBus.handleEvent(events.LootBoxSystemEvent(events.LootBoxSystemEvent.OPENING_ERROR), scope=EVENT_BUS_SCOPE.LOBBY)
+
+
+@adisp_async
+@adisp_process
+def acceptRerollableBoxRewards(eventName, category, callback):
+    success = False
+    result = yield AcceptLootBoxRerollProcessor(eventName, category).request()
+    if result is not None:
+        if not result.success or result.userMsg:
+            SystemMessages.pushMessage(result.userMsg, type=result.sysMsgType, priority=result.msgPriority, messageData=result.msgData)
+        success = result.success
+    callback(success)
     return
 
 
@@ -81,9 +130,14 @@ def getIsStartFinishNotificationsVisible(eventName):
     return notificationSettings.get('default', True) if notificationSettings.get(eventName) is None else notificationSettings.get(eventName)
 
 
-def getOpeningOptions(eventName):
-    options = getSystemSettings('openingOptions').get(eventName)
-    return tuple(options if options is not None else getSystemSettings('openingOptions').get('default', [1, 5]))
+@dependency.replace_none_kwargs(lootBoxes=ILootBoxSystemController)
+def getOpeningOptions(eventName, category, lootBoxes=None):
+    box = lootBoxes.getBox(eventName, category)
+    if box is None or box.isRerollable():
+        return (REROLLABLE_BOX_OPEN_COUNT,)
+    else:
+        options = getSystemSettings('openingOptions').get(eventName)
+        return tuple(options if options is not None else getSystemSettings('openingOptions').get('default', [1, 5]))
 
 
 def getShopOverlayUrl(eventName):
@@ -118,7 +172,7 @@ def setIsAnimationActive(eventName, value, lootBoxes=None):
 
 @dependency.replace_none_kwargs(itemsCache=IItemsCache)
 def getLootboxStatisticsKey(eventName, boxID=None, itemsCache=None):
-    box = findFirst(lambda b: b.getID() == boxID, itemsCache.items.tokens.getLootBoxes().itervalues())
+    box = findFirst(lambda b: b.getID() == boxID, viewvalues(itemsCache.items.tokens.getLootBoxes()))
     return box.getStatsName() or str(boxID) if box is not None else getPreferredBox(eventName).getStatsName()
 
 
@@ -130,7 +184,7 @@ def getVehicleForStyle(style, itemsCache=None):
     else:
         getVehicleByCD = itemsCache.items.getItemByCD
         getVehiclesStats = itemsCache.items.getAccountDossier().getRandomStats().getVehicles
-        vehiclesStats = {vehicleCD:value for vehicleCD, value in getVehiclesStats().iteritems() if not getVehicleByCD(vehicleCD).descriptor.type.isCustomizationLocked and style.mayInstall(getVehicleByCD(vehicleCD))}
+        vehiclesStats = {vehicleCD:value for vehicleCD, value in viewitems(getVehiclesStats()) if not getVehicleByCD(vehicleCD).descriptor.type.isCustomizationLocked and style.mayInstall(getVehicleByCD(vehicleCD))}
         if vehiclesStats:
             sortedVehicles = sorted(vehiclesStats.items(), key=lambda vStat: vStat[1].battlesCount, reverse=True)
             if sortedVehicles:
@@ -145,3 +199,13 @@ def getVehicleForStyle(style, itemsCache=None):
 @dependency.replace_none_kwargs(itemsCache=IItemsCache)
 def _getVehiclesForStylePreview(criteria=None, itemsCache=None):
     return sorted(itemsCache.items.getVehicles(criteria=criteria).values(), key=lambda item: item.level, reverse=True)
+
+
+def hasStopRerollToken(bonuses):
+    for bonus in bonuses:
+        if bonus.getName() == 'battleToken':
+            for tokenID in bonus.getTokens():
+                if tokenID.startswith(REROLL_STOP_TOKEN_PREFIX):
+                    return True
+
+    return False

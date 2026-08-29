@@ -3,10 +3,8 @@
 from __future__ import absolute_import
 import typing
 from gui.impl.gen import R
-from gui.impl.gen.view_models.views.lobby.hangar.user_missions_widget_model import UserMissionsWidgetModel
 from gui.impl.lobby.hangar.presenters.user_missions_presenter import UserMissionsPresenter
 from gui.impl.lobby.user_missions.hangar_widget.presenters.battle_pass_presenter import BattlePassPresenter
-from gui.impl.lobby.user_missions.hangar_widget.services import IBattlePassService
 from gui.impl.lobby.user_missions.hangar_widget.tooltip_positioner import TooltipPositionerMixin
 from helpers import dependency
 from skeletons.gui.game_control import IBattlePassController
@@ -19,6 +17,7 @@ if typing.TYPE_CHECKING:
     from frameworks.wulf import View
 
 class _BattlePassPresenter(BattlePassPresenter, LastStandOverlapCtrlMixin):
+    _battlePassController = dependency.descriptor(IBattlePassController)
 
     @property
     def isPaused(self):
@@ -27,6 +26,9 @@ class _BattlePassPresenter(BattlePassPresenter, LastStandOverlapCtrlMixin):
     def _createInProgressTooltipView(self):
         return LSBattlePassInProgressTooltipView()
 
+    def isVisible(self):
+        return not self._battlePassController.isDisabled()
+
 
 class _QuestsCardPresenter(TooltipPositionerMixin, LastStandOverlapCtrlMixin, QuestsCardPresenter):
 
@@ -34,26 +36,12 @@ class _QuestsCardPresenter(TooltipPositionerMixin, LastStandOverlapCtrlMixin, Qu
         self.initOverlapCtrl()
         super(_QuestsCardPresenter, self)._onLoading(*args, **kwargs)
 
+    def isVisible(self):
+        return True
+
 
 class LastStandUserMissionsPresenter(UserMissionsPresenter):
-    __battlePassController = dependency.descriptor(IBattlePassController)
-    __battlePassService = dependency.descriptor(IBattlePassService)
     _CHILDREN = {R.aliases.user_missions.hangarWidget.BattlePass(): _BattlePassPresenter,
      R.aliases.last_stand.shared.Shop(): ShopCardPresenter,
      R.aliases.last_stand.shared.RewardPath(): RewardPathCardPresenter,
      R.aliases.last_stand.shared.Quests(): _QuestsCardPresenter}
-
-    def _getChildComponents(self):
-        return self._CHILDREN
-
-    def _getEvents(self):
-        baseEvents = self._getBaseEvents()
-        return baseEvents + ((self.__battlePassService.onBattlePassChanged, self._onBattlePassEvent), (self.viewModel.onPresenterDisappear, self._onPresenterDisappear), (self.viewModel.onWidgetUnmounted, self._onWidgetUnmounted))
-
-    def _updateEntryPoints(self, vm):
-        pass
-
-    def _updateBattlePass(self, vm):
-        isAvailable = not self.__battlePassController.isDisabled()
-        self._addChild(self._WIDGET_ALIAS.BattlePass(), isAvailable)
-        vm.setIsBattlePassActive(isAvailable)

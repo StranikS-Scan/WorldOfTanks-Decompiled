@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/web/web_client_api/ui/chat.py
 from messenger.m_constants import PROTO_TYPE
 from messenger.proto import proto_getter
-from messenger.storage import storage_getter
+from messenger.storage import UsersStorage, MessengerStorageDescriptor
 from web.web_client_api import W2CSchema, Field, w2c
 from web.web_client_api.common import SPA_ID_TYPES
 
@@ -12,13 +12,10 @@ class _OpenChatSchema(W2CSchema):
 
 
 class ChatWebApiMixin(object):
+    usersStorage = MessengerStorageDescriptor(UsersStorage)
 
     @proto_getter(PROTO_TYPE.MIGRATION)
     def proto(self):
-        return None
-
-    @storage_getter('users')
-    def usersStorage(self):
         return None
 
     @w2c(_OpenChatSchema, 'chat_window')

@@ -1,11 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/user_missions/hangar_widget/event_banners/base_event_banner.py
-from abc import ABCMeta
+from __future__ import absolute_import
 from helpers import time_utils
 from gui.impl.gen.view_models.views.lobby.user_missions.constants.event_banner_state import EventBannerState
 
 class BaseEventBanner(object):
-    __metaclass__ = ABCMeta
     NAME = ''
 
     def __init__(self):

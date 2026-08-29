@@ -4,21 +4,23 @@ from __future__ import absolute_import
 import logging
 import operator
 from future.utils import listvalues
+import typing
 import BigWorld
 from constants import EVENT_TYPE
 from gui import SystemMessages
 from gui.SystemMessages import SM_TYPE
 from gui.impl import backport
 from gui.impl.gen import R
-from gui.server_events.finders import PM_CAMPAIGNS_IDS
 from gui.server_events.pm_constants import DISCARDABLE_OPERATIONS_IDS, PM_SUIT_OP_PLUGIN_ERR_RESPONSE
-from gui.shared.gui_items.processors import Processor, makeI18nError, makeI18nSuccess, plugins, makeSuccess
+from gui.shared.gui_items.processors import Processor, makeI18nError, makeI18nSuccess, makeSuccess, plugins
 from gui.shared.notifications import NotificationPriorityLevel
 from helpers import dependency
-from items import tankmen, ITEM_TYPES
+from items import ITEM_TYPES, tankmen
 from personal_missions import PM_BRANCH
 from shared_utils import first
 from skeletons.gui.server_events import IEventsCache
+if typing.TYPE_CHECKING:
+    from gui.server_events.event_items import PersonalMission
 _logger = logging.getLogger(__name__)
 
 class _PMRequest(Processor):
@@ -59,11 +61,11 @@ class _PMRequest(Processor):
 class PMQuestSelect(_PMRequest):
     eventsCache = dependency.descriptor(IEventsCache)
 
-    def __init__(self, branch, personalMission):
+    def __init__(self, branch, personalMission, isOperationActivation=False):
         currentSelectedQuests = listvalues(self.eventsCache.getPersonalMissions().getSelectedQuestsForBranch(branch))
         operationID = personalMission.getOperationID()
         operation = self.eventsCache.getPersonalMissions().getOperationsForBranch(branch).get(operationID)
-        if not operation.isStarted() and not operation.getCompletedQuests():
+        if not operation.isStarted() and not operation.getCompletedQuests() and isOperationActivation:
             quests, oldQuest = self._removeFromSameChain(currentSelectedQuests, listvalues(operation.getInitialQuests()))
         else:
             quests, oldQuest = self._removeFromSameChain(currentSelectedQuests, [personalMission])
@@ -104,20 +106,19 @@ class PMQuestSelect(_PMRequest):
         return makeI18nError(sysMsgKey=errorI18nKey, questNames=questNames)
 
 
-class PM3OperationSelect(_PMRequest):
+class PMOperationSelect(_PMRequest):
     __eventsCache = dependency.descriptor(IEventsCache)
 
     def __init__(self, branch, operationID, missions=None, skipValidation=False, isFirstTimeEntrance=False):
-        if not missions:
-            personalMissions = self.__eventsCache.getPersonalMissions().getActualQuests(branch, operationID, withCompleted=False)
-        else:
-            personalMissions = missions
+        self.__pmCache = self.__eventsCache.getPersonalMissions()
+        super(PMOperationSelect, self).__init__(missions if missions else self.__pmCache.getActualQuests(branch, operationID, withCompleted=False), branch)
         self.__operationID = operationID
         self.__isFirstTimeEntrance = isFirstTimeEntrance
-        super(PM3OperationSelect, self).__init__(personalMissions, branch)
-        self.__inProgressPM3Operations = [ operation for operation in self.__eventsCache.getPersonalMissions().getStartedOperations(PM_BRANCH.V2_BRANCHES) if not operation.isFullCompleted() ]
-        self.__currentActivePM3Operation = first(self.__eventsCache.getPersonalMissions().getActiveOperations(PM_BRANCH.V2_BRANCHES))
-        self.addPlugins([plugins.PMLockedByOperation(operationID, not skipValidation)])
+        self.__branches = PM_BRANCH.WITHOUT_AWARD_LIST_BRANCHES if PM_BRANCH.TYPE_TO_NAME[branch] in PM_BRANCH.WITHOUT_AWARD_LIST_BRANCHES else PM_BRANCH.WITH_AWARD_LIST_BRANCHES
+        self.__inProgressPMOperations = [ operation for operation in self.__pmCache.getStartedOperations(self.__branches) if not operation.isFullCompleted() ]
+        activeCampaigns = self.__pmCache.getActiveCampaigns()
+        self.__currentActivePMOperation = first((operation for operation in self.__pmCache.getActiveOperations(self.__branches) if operation.getBranchName() in activeCampaigns))
+        self.addPlugins([plugins.PMLockedByOperation(operationID, branch, isEnabled=not skipValidation)])
 
     def _getMessagePrefix(self):
         pass
@@ -129,9 +130,9 @@ class PM3OperationSelect(_PMRequest):
 
     def _successHandler(self, code, ctx=None):
         priority = NotificationPriorityLevel.LOW if self.__isFirstTimeEntrance else NotificationPriorityLevel.MEDIUM
-        operation = self.__eventsCache.getPersonalMissions().getAllOperations(PM_BRANCH.V2_BRANCHES).get(self.__operationID)
+        operation = self.__pmCache.getAllOperations(self.__branches).get(self.__operationID)
         pmMessageSource = R.strings.system_messages.personalMissions
-        if operation not in self.__inProgressPM3Operations:
+        if operation not in self.__inProgressPMOperations:
             text = backport.text(pmMessageSource.operationActivation.body())
             title = backport.text(pmMessageSource.operationActivation.title(), operationName=operation.getUserName())
             self._pushMessage(text, title, priority)
@@ -139,12 +140,12 @@ class PM3OperationSelect(_PMRequest):
             text = backport.text(pmMessageSource.operationResumed.body())
             title = backport.text(pmMessageSource.operationResumed.title(), operationName=operation.getUserName())
             self._pushMessage(text, title, priority)
-        if self.__currentActivePM3Operation and self.__currentActivePM3Operation.getID() != operation.getID():
+        if self.__currentActivePMOperation and self.__currentActivePMOperation.getID() != operation.getID() and not self.__currentActivePMOperation.isFullCompleted(isFinalRewardReceived=False):
             text = backport.text(pmMessageSource.operationPaused.body())
-            title = backport.text(pmMessageSource.operationPaused.title(), operationName=self.__currentActivePM3Operation.getUserName())
+            title = backport.text(pmMessageSource.operationPaused.title(), operationName=self.__currentActivePMOperation.getUserName())
             messageType = SystemMessages.SM_TYPE.Pause
             self._pushMessage(text, title, priority, messageType)
-            self.__currentActivePM3Operation = operation
+            self.__currentActivePMOperation = operation
         return makeSuccess()
 
     def _errorHandler(self, code, errStr='', ctx=None):
@@ -158,12 +159,12 @@ class PMDiscard(_PMRequest):
     def __init__(self, personalMission, branch):
         quests = [personalMission]
         super(PMDiscard, self).__init__(quests, branch)
-        isSuitableOperation = personalMission.getOperationID() in DISCARDABLE_OPERATIONS_IDS
-        namePM3 = PM_BRANCH.TYPE_TO_NAME[PM_BRANCH.PERSONAL_MISSION_3]
-        isPM3Active = namePM3 in self.eventsCache.getPersonalMissions().getActiveCampaigns() or personalMission.getQuestBranch() == PM_BRANCH.PERSONAL_MISSION_3
-        self.addPlugins([plugins.DiscardSuitableOperationValidator(isSuitableOperation, personalMission.getOperationID()),
+        operationID = personalMission.getOperationID()
+        isSuitableOperation = operationID in DISCARDABLE_OPERATIONS_IDS
+        isSuitableBranch = personalMission.getPMType().isBranchWithAwardListQuests and PM_BRANCH.TYPE_TO_NAME[branch] in PM_BRANCH.MUTUAL_EXCLUSION_BRANCHES[PM_BRANCH.QUEST_GROUPS.GROUP_1]
+        self.addPlugins([plugins.DiscardSuitableOperationValidator(isSuitableOperation, operationID),
          plugins.PMActiveCampaignValidator(personalMission),
-         plugins.PMDiscardConfirmator(personalMission, isEnabled=isSuitableOperation and not isPM3Active),
+         plugins.PMDiscardConfirmator(personalMission, isEnabled=isSuitableOperation and isSuitableBranch),
          plugins.PMLockedByVehicle(branch, quests)])
 
     def _request(self, callback):
@@ -204,17 +205,17 @@ class PMPause(_PMRequest):
 class PMActivateSeason(_PMRequest):
     __eventsCache = dependency.descriptor(IEventsCache)
 
-    def __init__(self, events_cache, branch, isFirstTimeEntrance=False):
-        self.__activeCampaigns = self.__eventsCache.getPersonalMissions().getActiveCampaigns()
-        self.__campaignOnActivation = PM_BRANCH.TYPE_TO_NAME[branch]
+    def __init__(self, branch):
+        self.__pmCache = self.__eventsCache.getPersonalMissions()
+        self.__activeCampaigns = self.__pmCache.getActiveCampaigns()
         selectedQuestsInActiveBranch = set()
         for campaign in self.__activeCampaigns:
-            selectedQuestsInActiveBranch.union(set(events_cache.getSelectedQuestsForBranch(PM_BRANCH.NAME_TO_TYPE[campaign]).values()))
+            selectedQuestsInActiveBranch.union(set(self.__pmCache.getSelectedQuestsForBranch(PM_BRANCH.NAME_TO_TYPE[campaign]).values()))
 
-        self.__isFirstTimeEntrance = isFirstTimeEntrance
         super(PMActivateSeason, self).__init__(selectedQuestsInActiveBranch, branch)
         self.addPlugins([plugins.PMLockedByVehicle(branch, selectedQuestsInActiveBranch), plugins.PMActivateSameCampaignValidator(branch)])
-        self._season = PM_BRANCH.V1_BRANCHES if branch in PM_BRANCH.V1_BRANCHES else PM_BRANCH.V2_BRANCHES
+        branchName = PM_BRANCH.TYPE_TO_NAME[branch]
+        self._season = PM_BRANCH.convertNameToType(first([ branches for branches in PM_BRANCH.MUTUAL_EXCLUSION_BRANCHES.values() if branchName in branches ], default=()))
 
     def _request(self, callback):
         _logger.debug('Make server request to activate %s season', PM_BRANCH.TYPE_TO_NAME[self._season[0]])
@@ -224,34 +225,7 @@ class PMActivateSeason(_PMRequest):
         pass
 
     def _successHandler(self, code, ctx=None):
-        priority = NotificationPriorityLevel.LOW if self.__isFirstTimeEntrance else NotificationPriorityLevel.MEDIUM
-        pm3Branch = PM_BRANCH.PERSONAL_MISSION_3
-        namePM3 = PM_BRANCH.TYPE_TO_NAME[pm3Branch]
-        allCampaigns = self.__eventsCache.getPersonalMissions().getAllCampaigns(branches=PM_BRANCH.ALL)
-        pm3Campaign = allCampaigns.get(PM_CAMPAIGNS_IDS[pm3Branch])
-        regularBranchName = PM_BRANCH.TYPE_TO_NAME[PM_BRANCH.REGULAR]
-        regularCampaign = allCampaigns.get(PM_CAMPAIGNS_IDS[PM_BRANCH.REGULAR])
-        pm2Campaign = allCampaigns.get(PM_CAMPAIGNS_IDS[PM_BRANCH.PERSONAL_MISSION_2])
-        pmMessageSource = R.strings.system_messages.personalMissions
-        if regularBranchName in self.__activeCampaigns:
-            text = backport.text(pmMessageSource.campaign12Paused.body())
-            title = backport.text(pmMessageSource.campaign12Paused.title(), campaignName1=regularCampaign.getUserName(), campaignName2=pm2Campaign.getUserName())
-            messageType = SystemMessages.SM_TYPE.Pause
-            self._pushMessage(text, title, priority, messageType)
-        if namePM3 in self.__activeCampaigns and not pm3Campaign.isFullCompleted():
-            text = backport.text(pmMessageSource.campaign3Paused.body())
-            title = backport.text(pmMessageSource.campaign3Paused.title(), campaignName=pm3Campaign.getUserName())
-            messageType = SystemMessages.SM_TYPE.Pause
-            self._pushMessage(text, title, priority, messageType)
-        if self._branch in PM_BRANCH.V1_BRANCHES and any(allCampaigns):
-            text = backport.text(pmMessageSource.campaign12Resumed.body())
-            title = backport.text(pmMessageSource.campaign12Resumed.title(), campaignName1=regularCampaign.getUserName(), campaignName2=pm2Campaign.getUserName())
-            self._pushMessage(text, title, priority)
-        if self._branch in PM_BRANCH.V2_BRANCHES and pm3Campaign.isStarted():
-            text = backport.text(pmMessageSource.campaign3Resumed.body())
-            title = backport.text(pmMessageSource.campaign3Resumed.title(), campaignName=pm3Campaign.getUserName())
-            self._pushMessage(text, title, priority)
-        return makeSuccess()
+        pass
 
     def _errorHandler(self, code, errStr='', ctx=None):
         errorI18nKey = '{}/server_error'.format(self._getMessagePrefix())
@@ -297,14 +271,15 @@ class PMGetReward(_PMGetReward):
         super(PMGetReward, self).__init__(personalMission, False, 0, 0, 'commander')
 
 
-class PM3GetQuestRewards(Processor):
+class PMGetQuestRewards(Processor):
 
-    def __init__(self, quest):
-        super(PM3GetQuestRewards, self).__init__()
+    def __init__(self, quest, branchName):
+        super(PMGetQuestRewards, self).__init__()
         self.__quest = quest
+        self.__branchName = branchName
 
     def _getMessagePrefix(self):
-        pass
+        return 'personalMissions/reward/%s' % self.__branchName
 
     def _errorHandler(self, code, errStr='', ctx=None):
         return makeI18nError('{}/server_error/{}'.format(self._getMessagePrefix(), errStr), defaultSysMsgKey='{}/server_error'.format(self._getMessagePrefix()))
@@ -322,9 +297,8 @@ class PMPawn(Processor):
     eventsCache = dependency.descriptor(IEventsCache)
 
     def __init__(self, personalMission):
-        namePM3 = PM_BRANCH.TYPE_TO_NAME[PM_BRANCH.PERSONAL_MISSION_3]
-        isPM3Active = namePM3 in self.eventsCache.getPersonalMissions().getActiveCampaigns() or personalMission.getQuestBranch() == PM_BRANCH.PERSONAL_MISSION_3
-        super(PMPawn, self).__init__((plugins.PMPawnConfirmator(personalMission, isEnabled=not isPM3Active),
+        isNotSupportedBranchActive = personalMission.getPMType().isBranchWithoutAwardListQuests or self.eventsCache.getPersonalMissions().isBranchWithoutAwardListActive()
+        super(PMPawn, self).__init__((plugins.PMPawnConfirmator(personalMission, isEnabled=not isNotSupportedBranchActive),
          plugins.PMPawnValidator([personalMission]),
          plugins.PMFreeTokensValidator(personalMission),
          plugins.PMActiveCampaignValidator(personalMission)))

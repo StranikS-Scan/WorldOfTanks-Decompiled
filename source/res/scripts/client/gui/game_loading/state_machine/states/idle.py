@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/game_loading/state_machine/states/idle.py
-from frameworks.state_machine import StateFlags
+from frameworks_common.state_machine import StateFlags
 import game_loading_bindings
 from gui.game_loading import loggers
 from gui.game_loading.state_machine.states.base import BaseState

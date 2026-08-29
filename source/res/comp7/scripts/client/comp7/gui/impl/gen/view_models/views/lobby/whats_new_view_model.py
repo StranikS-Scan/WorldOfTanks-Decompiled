@@ -7,7 +7,7 @@ from gui.impl.gen.view_models.views.lobby.common.vehicle_model import VehicleMod
 class WhatsNewViewModel(ViewModel):
     __slots__ = ('onClose', 'onVideoOpen')
 
-    def __init__(self, properties=5, commands=2):
+    def __init__(self, properties=2, commands=2):
         super(WhatsNewViewModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -28,38 +28,9 @@ class WhatsNewViewModel(ViewModel):
     def getRentalVehiclesType():
         return VehicleModel
 
-    def getNewAvailableVehicles(self):
-        return self._getArray(2)
-
-    def setNewAvailableVehicles(self, value):
-        self._setArray(2, value)
-
-    @staticmethod
-    def getNewAvailableVehiclesType():
-        return VehicleModel
-
-    def getVehicles(self):
-        return self._getArray(3)
-
-    def setVehicles(self, value):
-        self._setArray(3, value)
-
-    @staticmethod
-    def getVehiclesType():
-        return VehicleModel
-
-    def getTopPercentage(self):
-        return self._getNumber(4)
-
-    def setTopPercentage(self, value):
-        self._setNumber(4, value)
-
     def _initialize(self):
         super(WhatsNewViewModel, self)._initialize()
         self._addViewModelProperty('scheduleInfo', ScheduleInfoModel())
         self._addArrayProperty('rentalVehicles', Array())
-        self._addArrayProperty('newAvailableVehicles', Array())
-        self._addArrayProperty('vehicles', Array())
-        self._addNumberProperty('topPercentage', 0)
         self.onClose = self._addCommand('onClose')
         self.onVideoOpen = self._addCommand('onVideoOpen')

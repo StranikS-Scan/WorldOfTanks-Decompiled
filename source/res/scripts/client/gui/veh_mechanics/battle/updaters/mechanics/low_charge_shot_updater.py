@@ -14,7 +14,7 @@ class LowChargeShotUpdater(ViewUpdater):
         if ammoCtrl is not None:
             ammoCtrl.onShellChangeTimeUpdated += self.__onShellChangeTimeUpdated
             ammoCtrl.onGunReloadTimeSet += self.__onGunReloadTimeSet
-            self.__onShellChangeTimeUpdated(ammoCtrl.canQuickShellChange(), ammoCtrl.getQuickShellChangeTime())
+            self.__onShellChangeTimeUpdated(ammoCtrl.canQuickShellChange(), ammoCtrl.getQuickShellChangeTimes())
         return
 
     def finalize(self):
@@ -25,8 +25,8 @@ class LowChargeShotUpdater(ViewUpdater):
         super(LowChargeShotUpdater, self).finalize()
         return
 
-    def __onShellChangeTimeUpdated(self, isVisible, shellChangeTime):
-        self.view.setShellChangeTime(isVisible, shellChangeTime)
+    def __onShellChangeTimeUpdated(self, isVisible, shellChangeTimes):
+        self.view.setShellChangeTime(isVisible, shellChangeTimes)
 
     def __onGunReloadTimeSet(self, _, state, __):
         self.view.setBaseTimeBeforeBattleOrEmpty(state.getBaseValue())

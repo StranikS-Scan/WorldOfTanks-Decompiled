@@ -13,10 +13,10 @@ from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.Scaleform.locale.PERSONAL_MISSIONS import PERSONAL_MISSIONS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.server_events.personal_missions_navigation import PersonalMissionsNavigation
-from gui.server_events.pm_constants import SOUNDS, PERSONAL_MISSIONS_SOUND_SPACE, DISABLED_PM_OPERATIONS, DISABLED_PM_MISSIONS, IS_PM2_QUEST_ENABLED, IS_REGULAR_QUEST_ENABLED
-from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
+from gui.server_events.pm_constants import PERSONAL_MISSIONS_SOUND_SPACE, SOUNDS
+from gui.shared import EVENT_BUS_SCOPE, events, g_eventBus
 from gui.shared.event_dispatcher import showHangar
-from personal_missions import PM_BRANCH
+from personal_missions import PM_BRANCH, PM_SWITCHES
 
 class PersonalMissionOperations(LobbySubView, PersonalMissionOperationsMeta, PersonalMissionsNavigation):
     _COMMON_SOUND_SPACE = PERSONAL_MISSIONS_SOUND_SPACE
@@ -52,7 +52,8 @@ class PersonalMissionOperations(LobbySubView, PersonalMissionOperationsMeta, Per
     def __update(self):
         operations = []
         timeIconAlreadySet = False
-        for branch in PM_BRANCH.V1_BRANCHES:
+        for branchName in PM_BRANCH.MUTUAL_EXCLUSION_BRANCHES[PM_BRANCH.QUEST_GROUPS.GROUP_1]:
+            branch = PM_BRANCH.NAME_TO_TYPE[branchName]
             for oID, o in sorted(viewitems(self._eventsCache.getPersonalMissions().getOperationsForBranch(branch)), key=operator.itemgetter(0)):
                 state = PERSONAL_MISSIONS_ALIASES.OPERATION_LOCKED_STATE
                 tooltipAlias = TOOLTIPS_CONSTANTS.OPERATION
@@ -107,5 +108,5 @@ class PersonalMissionOperations(LobbySubView, PersonalMissionOperationsMeta, Per
         return PERSONAL_MISSIONS_ALIASES.OPERATION_COMPLETE_STATE if state == PERSONAL_MISSIONS_ALIASES.OPERATION_COMPLETE_FULL_STATE else state
 
     def _onSettingsChanged(self, diff):
-        if IS_REGULAR_QUEST_ENABLED in diff and not diff[IS_REGULAR_QUEST_ENABLED] or IS_PM2_QUEST_ENABLED in diff and not diff[IS_PM2_QUEST_ENABLED] or DISABLED_PM_OPERATIONS in diff and diff[DISABLED_PM_OPERATIONS] or DISABLED_PM_MISSIONS in diff and diff[DISABLED_PM_MISSIONS]:
+        if not diff.get(PM_SWITCHES.IS_REGULAR_QUEST_ENABLED, True) or not diff.get(PM_SWITCHES.IS_PM2_QUEST_ENABLED, True) or diff.get(PM_SWITCHES.DISABLED_PM_OPERATIONS, False) or diff.get(PM_SWITCHES.DISABLED_PM_MISSIONS, False):
             self.__update()

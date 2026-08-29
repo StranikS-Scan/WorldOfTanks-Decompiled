@@ -285,6 +285,30 @@ class OwnVehicleBase(BigWorld.DynamicScriptComponent):
             self._doLog('onObservedByEnemy {}'.format(detectionType))
         avatar.onObservedByEnemy(self.entity.id, detectionType)
 
+    def onSightPointerInSectorChanged(self, isScanning):
+        avatar = self._avatar()
+        if not avatar:
+            return
+        if _DO_LOG:
+            self._doLog('onSightPointerInSectorChanged {}'.format(isScanning))
+        avatar.onSightPointerInSectorChanged(isScanning)
+
+    def onSightPointerVehicleDetected(self):
+        avatar = self._avatar()
+        if not avatar:
+            return
+        if _DO_LOG:
+            self._doLog('onSightPointerVehicleDetected')
+        avatar.onSightPointerVehicleDetected()
+
+    def onSightPointerEnemySpotted(self, vehicleID):
+        avatar = self._avatar()
+        if not avatar:
+            return
+        if _DO_LOG:
+            self._doLog('onSightPointerEnemySpotted')
+        avatar.onSightPointerEnemySpotted(vehicleID)
+
     def onSectorShooting(self, sectorID):
         avatar = self._avatar()
         if not avatar:

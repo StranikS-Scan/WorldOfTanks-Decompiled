@@ -1,5 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: battle_royale/scripts/client/battle_royale/gui/Scaleform/daapi/view/battle/consumables_panel.py
+from __future__ import absolute_import
+from future.utils import lrange
 import BigWorld
 from Event import EventsSubscriber
 from battle_royale.gui.battle_control.controllers.spawn_ctrl import ISpawnListener
@@ -26,7 +28,7 @@ class BattleRoyaleConsumablesPanel(ConsumablesPanel, ISpawnListener):
     def __init__(self):
         super(BattleRoyaleConsumablesPanel, self).__init__()
         self.__quantityMap = [None] * self._PANEL_MAX_LENGTH
-        self.__equipmentRange = range(self._EQUIPMENT_START_IDX, self._EQUIPMENT_END_IDX + 1)
+        self.__equipmentRange = lrange(self._EQUIPMENT_START_IDX, self._EQUIPMENT_END_IDX + 1)
         self.__es = EventsSubscriber()
         self.__respawnTimestampSent = False
         return
@@ -102,7 +104,7 @@ class BattleRoyaleConsumablesPanel(ConsumablesPanel, ISpawnListener):
     def _resetOptDevices(self):
         pass
 
-    def _addOptionalDeviceSlot(self, idx, intCD):
+    def _addOptionalDeviceSlot(self, idx, optDeviceInBattle):
         pass
 
     def _buildEquipmentSlotTooltipText(self, item):
@@ -145,10 +147,10 @@ class BattleRoyaleConsumablesPanel(ConsumablesPanel, ISpawnListener):
                 self.as_setEquipmentActivatedS(idx, False)
             return
 
-    def _updateOptionalDeviceSlot(self, idx, isOn):
+    def _updateOptionalDeviceSlot(self, idx, optDeviceInBattle):
         pass
 
-    def _showEquipmentGlow(self, equipmentIndex, glowType=CONSUMABLES_PANEL_SETTINGS.GLOW_ID_ORANGE):
+    def _showEquipmentGlow(self, idx, glowType=CONSUMABLES_PANEL_SETTINGS.GLOW_ID_ORANGE):
         pass
 
     def _onPostMortemSwitched(self, noRespawnPossible, respawnAvailable):
@@ -239,7 +241,7 @@ class BattleRoyaleConsumablesPanel(ConsumablesPanel, ISpawnListener):
         arenaInfo = BigWorld.player().arena.arenaInfo
         respawnPeriod = arenaInfo.arenaInfoBRComponent.respawnPeriod if arenaInfo else 0
         timeToResurrect = arenaInfo.arenaInfoBRComponent.timeToResurrect if arenaInfo else 0
-        return backport.text(R.strings.artefacts.br_respawn.platoon.descr(), duration=respawnPeriod / ONE_MINUTE, timeToResurrect=timeToResurrect) if isSquadMode else backport.text(R.strings.artefacts.br_respawn.solo.descr(), duration=respawnPeriod / ONE_MINUTE)
+        return backport.text(R.strings.artefacts.br_respawn.platoon.descr(), duration=respawnPeriod // ONE_MINUTE, timeToResurrect=timeToResurrect) if isSquadMode else backport.text(R.strings.artefacts.br_respawn.solo.descr(), duration=respawnPeriod // ONE_MINUTE)
 
     def _onRespawnBaseMoving(self):
         super(BattleRoyaleConsumablesPanel, self)._onRespawnBaseMoving()

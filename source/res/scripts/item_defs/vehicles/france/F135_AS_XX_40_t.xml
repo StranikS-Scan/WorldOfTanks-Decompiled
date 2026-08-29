@@ -389,6 +389,36 @@
         <rotation>	-0 -0 0	</rotation>
         <scale>	1 1 1	</scale>
       </slot>
+      <slot>
+        <slotType>	attachment	</slotType>
+        <slotId>	18001	</slotId>
+        <position>	-1.712 0.508 0.136	</position>
+        <rotation>	-0 0 1.570796	</rotation>
+        <scale>	1 1 1	</scale>
+        <applyType>	universal	</applyType>
+        <size>	medium	</size>
+        <hangerId>	8	</hangerId>
+      </slot>
+      <slot>
+        <slotType>	attachment	</slotType>
+        <slotId>	18002	</slotId>
+        <position>	-1.712 0.606 -1.945	</position>
+        <rotation>	-0 0 1.570796	</rotation>
+        <scale>	1 0.999999 1	</scale>
+        <applyType>	universal	</applyType>
+        <size>	medium	</size>
+        <hangerId>	7	</hangerId>
+      </slot>
+      <slot>
+        <slotType>	attachment	</slotType>
+        <slotId>	18003	</slotId>
+        <position>	1.711999 0.488264 0.136	</position>
+        <rotation>	-0 -3.141593 1.569051	</rotation>
+        <scale>	1 1 1	</scale>
+        <applyType>	universal	</applyType>
+        <size>	medium	</size>
+        <hangerId>	8	</hangerId>
+      </slot>
     </customizationSlots>
     <customization>
       <customizableVehicleAreas>
@@ -398,7 +428,7 @@
     </customization>
     <hangarShadowTexture>	vehicles/french/F135_AS_XX_40_t/AS_XX_40_t_HangarShadowMap.dds	</hangarShadowTexture>
     <slotPrefabs>
-      <HP_pod>	content/CGFPrefabs/Vehicle/mechanic_effects/france/F135_stationary_reload.prefab	</HP_pod>
+      <HP_pod>	content/CGFPrefabs/Vehicle/dynamic_parts/france/F135_stationary_reload.prefab	</HP_pod>
     </slotPrefabs>
     <objectSlots>
       <slot>
@@ -1923,6 +1953,29 @@
               <rotation>	-0 -0 0	</rotation>
               <scale>	1 1 1	</scale>
               <applyType>	gun	</applyType>
+            </slot>
+            <slot>
+              <slotType>	attachment	</slotType>
+              <slotId>	48001	</slotId>
+              <size>	medium	</size>
+              <position>	0.000002 0.55465 0.84975	</position>
+              <rotation>	0 0 -0	</rotation>
+              <scale>	1 1 1	</scale>
+              <enableVisTunnel>	true	</enableVisTunnel>
+              <applyType>	gunMantlet	</applyType>
+              <hangerId>	2	</hangerId>
+            </slot>
+            <slot>
+              <slotType>	attachment	</slotType>
+              <slotId>	48002	</slotId>
+              <position>	-0.639 0.69 -0.39	</position>
+              <rotation>	0 0 -0	</rotation>
+              <scale>	1 1 1	</scale>
+              <applyType>	turret	</applyType>
+              <size>	medium	</size>
+              <enableVisTunnel>	true	</enableVisTunnel>
+              <hangerId>	2	</hangerId>
+              <hangerRotation>	0 -0.785398 0	</hangerRotation>
             </slot>
             <slot>
               <slotType>	insigniaOnGun	</slotType>

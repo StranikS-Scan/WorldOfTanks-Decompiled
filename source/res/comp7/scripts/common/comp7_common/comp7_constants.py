@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: comp7/scripts/common/comp7_common/comp7_constants.py
+from __future__ import absolute_import
 import enum
 import UnitBase
 import constants

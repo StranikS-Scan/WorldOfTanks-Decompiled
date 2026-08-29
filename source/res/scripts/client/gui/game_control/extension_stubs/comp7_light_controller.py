@@ -144,6 +144,9 @@ class Comp7LightController(IComp7LightController):
     def getPreannouncedSeason(self):
         return None
 
+    def getRoleEquipmentKey(self, vehType):
+        pass
+
     def getRoleEquipment(self, roleName):
         return None
 

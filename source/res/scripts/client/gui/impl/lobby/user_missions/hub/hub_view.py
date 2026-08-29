@@ -18,6 +18,7 @@ from gui.shared import EVENT_BUS_SCOPE
 from gui.shared import g_eventBus
 from gui.shared.event_dispatcher import showWinbackIntroView
 from gui.shared.events import UserMissionsEvent
+from gui.shared.system_factory import collectDynamicUmgIntroPresenters
 from gui.winback.winback_helpers import getWinbackSetting, setWinbackSetting
 from helpers import dependency
 from skeletons.gui.game_control import IWinbackController
@@ -89,6 +90,9 @@ class HubView(ViewComponent[HubViewModel]):
 
     def _getListeners(self):
         return ((UserMissionsEvent.TRANSITION_TO_MISSION, self.__onTransitionToMission, EVENT_BUS_SCOPE.LOBBY),)
+
+    def _getChildComponents(self):
+        return collectDynamicUmgIntroPresenters()
 
     def __createTab(self, tabID, title):
         tab = TabModel()

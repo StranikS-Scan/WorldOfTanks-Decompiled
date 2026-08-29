@@ -3,17 +3,20 @@
 from __future__ import absolute_import
 import typing
 if typing.TYPE_CHECKING:
-    from typing import Iterable, Optional
+    from typing import Any, Iterable, Optional
     from ClientArena import ClientArena
+    from avatar_components.AvatarObserver import ObservedVehicleData
     from gui.armor_flashlight.interfaces import IArmorFlashlightBattleController
     from gui.battle_control.arena_info.arena_vos import VehicleArenaInfoVO
-    from gui.battle_control.arena_info.interfaces import IAppearanceCacheController, IPointsOfInterestController, IMapZonesController, IProgressionController, IRadarController, ISpawnController, IArenaVehiclesController, IVehicleCountController, IOverrideSettingsController, IVSEHUDSettingsController, IBattleSpamController, IPrebattleSetupController, IW2GTBattleController
+    from gui.battle_control.arena_info.interfaces import IAppearanceCacheController, IArenaVehiclesController, IBattleSpamController, IMapZonesController, IOverrideSettingsController, IPointsOfInterestController, IPrebattleSetupController, IProgressionController, IRadarController, ISpawnController, IVehicleCountController, IVSEHUDSettingsController, IW2GTBattleController
     from gui.battle_control.controllers.consumables.ammo_ctrl import AmmoController
     from gui.battle_control.controllers.consumables.equipment_ctrl import EquipmentsController
-    from gui.battle_control.controllers.vehicles_tracking import IVehiclesTrackingController
+    from gui.battle_control.controllers.msgs_ctrl import BattleMessagesController
     from gui.battle_control.controllers.spotting_indicators_ctrl import ISpottingIndicatorsController
     from gui.battle_control.controllers.vehicle_passenger import IVehiclePassengerController
     from gui.battle_control.controllers.vehicle_state_ctrl import VehicleStateController
+    from gui.battle_control.controllers.vehicles_tracking import IVehiclesTrackingController
+    from Vehicle import Vehicle
 
 class ISharedControllersLocator(object):
     __slots__ = ()
@@ -265,6 +268,10 @@ class IDynamicControllersLocator(object):
     def w2GTBattleController(self):
         raise NotImplementedError
 
+    @property
+    def prebattleHighlightsController(self):
+        raise NotImplementedError
+
 
 class ISquadInvitationsHandler(object):
     __slots__ = ()
@@ -343,6 +350,9 @@ class IClientArenaVisitor(object):
         raise NotImplementedError
 
     def getVisibilityMinRadius(self):
+        raise NotImplementedError
+
+    def getVisibilityMaxRadius(self):
         raise NotImplementedError
 
     def getVehicleCircularAoiRadius(self):

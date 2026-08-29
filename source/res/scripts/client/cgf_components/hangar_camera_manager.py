@@ -173,6 +173,7 @@ class HangarCameraSystem(CGF.System):
             self.__prevDOFParams = _DOFParams()
             self.__currentDOFParams = _DOFParams()
             self.__currentHorizontalFov = fovInstance.horizontalFov
+            self.__prevHorizontalFov = fovInstance.getFovAbsoluteValue()
             self.__isActive = True
             _logger.info('HangarCameraSystem::activate')
             return
@@ -547,7 +548,9 @@ class HangarCameraSystem(CGF.System):
             self.__cam.movementHalfLife = cameraComponent.fluency
             self.__cam.pivotMaxDist = distance
             if forceUpdate:
+                self.__cam.enableCollisions(False)
                 self.__cam.forceUpdate()
+                self.__cam.enableCollisions(True)
             self.__prevHorizontalFov = FovExtended.instance().getFovAbsoluteValue()
             fovAccess = self.reaction(self.FovAccess)
             fovComponent = fovAccess.find(gameObject)

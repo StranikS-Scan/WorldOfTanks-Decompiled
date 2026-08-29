@@ -1,43 +1,48 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/visual_script_client/vehicle_mechanics_blocks.py
 import logging
-import BigWorld
 import typing
-from constants import OVERHEAT_GAIN_STATE, TARGET_DESIGNATOR_STATE
+import BigWorld
+from constants import AUTORELOADER_SURGE_RESTRICTION, BUSTLE_FEED_SWITCH_ACCESS, OVERHEAT_GAIN_STATE, SIGHT_POINTER_COMMON_CONSTANTS, TARGET_DESIGNATOR_STATE
 from events_handler import eventHandler
 from vehicles.mechanics.generic_mechanics.wheeled_dash import IWheeledDashListenerLogic
 from vehicles.mechanics.mechanic_commands import IMechanicCommandsListenerLogic
-from vehicles.mechanics.mechanic_constants import VehicleMechanic, VEHICLE_MECHANIC_USED_COMMANDS
+from vehicles.mechanics.mechanic_constants import VEHICLE_MECHANIC_USED_COMMANDS, VehicleMechanic
 from visual_script.block import Block
 from visual_script.dependency import dependencyImporter
 from visual_script.misc import ASPECT
 from visual_script.slot_types import SLOT_TYPE
-from visual_script.vehicle_mechanics_blocks import ConcentrationModeStateEnum, PowerModeStateEnum, SecondaryGunStateEnum, VehicleSiegeStateEnum, OverheatGainStateEnum, RechargeableNitroStateEnum, TargetDesignatorStateEnum, StationaryReloadEnum, StationaryReloadLockEnum, OverheatGunEnum, TemperatureGunEnum, HeatingZonesGunEnum, PhasedMechanicStateEnum, AcceleratorStatusEnum, LowChargeShotStateEnum, VehicleMechanicsMeta, PropellantGunEnum, WheeledDashDirectionEnum
-from visual_script_client.vehicle_mechanics_common import VehicleSelectableMechanicEventsBlock, VehicleMechanicStateEventsBlock, VehicleMechanicLifeCycleEventsBlock, VehicleMechanicEventsBlock
+from visual_script.vehicle_mechanics_blocks import AcceleratorStatusEnum, BustleFeedStateEnum, ConcentrationModeStateEnum, HeatingZonesGunEnum, LowChargeShotStateEnum, OverheatGainStateEnum, OverheatGunEnum, PhasedMechanicStateEnum, PowerModeStateEnum, PropellantGunEnum, RechargeableNitroStateEnum, SecondaryGunStateEnum, SightPointerStateEnum, StationaryReloadEnum, StationaryReloadLockEnum, TargetDesignatorStateEnum, TemperatureGunEnum, VehicleMechanicsMeta, VehicleSiegeStateEnum, WheeledDashDirectionEnum, ShellParamsSwitcherGunEnum, AutoreloaderSurgeStateEnum
+from visual_script_client.vehicle_mechanics_common import VehicleMechanicEventsBlock, VehicleMechanicLifeCycleEventsBlock, VehicleMechanicStateEventsBlock, VehicleSelectableMechanicEventsBlock
 cgf_helpers = dependencyImporter('cgf_common.cgf_helpers')
 if typing.TYPE_CHECKING:
     from typing import Any, List
     from AccuracyStacksController import AccuracyStacksState
     from BattleFuryController import BattleFuryState
-    from ConcentrationModeComponent import ConcentrationModeState
-    from SupportWeaponComponent import SupportWeaponState
-    from PillboxSiegeComponent import PillboxSiegeModeState
-    from vehicles.mechanics.mechanic_constants import VehicleMechanicCommand
-    from PowerModeController import PowerModeState
-    from OverheatStacksController import OverheatStacksState
-    from StanceDanceController import StanceDanceState
-    from RechargeableNitroController import RechargeableNitroState
     from ChargeShotComponent import ChargeShotState
+    from ConcentrationModeComponent import ConcentrationModeState
+    from vehicles.mechanics.generic_mechanics.bustle_feed import BustleFeedState
     from items.components.shared_components import ChargeShotParams
-    from TargetDesignatorController import TargetDesignatorState
-    from StagedJetBoostersController import StagedJetBoostersState
-    from StationaryReloadController import StationaryReloadModeState
-    from WheeledDashController import WheeledDashState
-    from vehicles.mechanics.gun_mechanics.temperature.overheat_gun import IOverheatGunMechanicState, IOverheatGunComponentParams
-    from TemperatureGunController import TemperatureGunMechanicState
-    from vehicles.mechanics.gun_mechanics.temperature.heating_zones_gun import IHeatingZonesGunMechanicState
     from LowChargeShotController import LowChargeShotMechanicState
+    from OverheatStacksController import OverheatStacksState
+    from PillboxSiegeComponent import PillboxSiegeModeState
+    from PowerModeController import PowerModeState
+    from RechargeableNitroController import RechargeableNitroState
+    from SightPointerComponent import SightPointerState
+    from StagedJetBoostersController import StagedJetBoostersState
+    from StanceDanceController import StanceDanceState
+    from StationaryReloadController import StationaryReloadModeState
+    from SupportWeaponComponent import SupportWeaponState
+    from TargetDesignatorController import TargetDesignatorState
+    from TemperatureGunController import TemperatureGunMechanicState
     from vehicles.mechanics.gun_mechanics.propellant_gun import IPropellantGunMechanicState
+    from vehicles.mechanics.gun_mechanics.temperature.heating_zones_gun import IHeatingZonesGunMechanicState
+    from vehicles.mechanics.gun_mechanics.temperature.overheat_gun import IOverheatGunComponentParams, IOverheatGunMechanicState
+    from vehicles.mechanics.mechanic_constants import VehicleMechanicCommand
+    from WheeledDashController import WheeledDashState
+    from vehicles.mechanics.gun_mechanics.auxiliary_rocket_launcher import AuxiliaryRocketLauncherState
+    from ShellCalibrationController import ShellCalibrationModeState
+    from AutoreloaderSurgeController import AutoreloaderSurgeState
 _logger = logging.getLogger(__name__)
 
 class ServerTime(Block):
@@ -773,3 +778,173 @@ class OnWheeledDashImpulse(VehicleMechanicEventsBlock, IWheeledDashListenerLogic
     def onImpulseStarted(self, direction):
         self._direction.setValue(direction)
         self._onImpulseStarted.call()
+
+
+class OnAuxiliaryRocketLauncherState(VehicleMechanicStateEventsBlock):
+
+    def __init__(self, *args, **kwargs):
+        super(OnAuxiliaryRocketLauncherState, self).__init__(*args, **kwargs)
+        self._state = self._makeDataOutputSlot('state', SecondaryGunStateEnum.slotType(), None)
+        self._duration = self._makeDataOutputSlot('duration', SLOT_TYPE.FLOAT, None)
+        self._isInAimingMode = self._makeDataOutputSlot('isInAimingMode', SLOT_TYPE.BOOL, None)
+        return
+
+    @classmethod
+    def _getVehicleMechanic(cls, _):
+        return VehicleMechanic.AUXILIARY_ROCKET_LAUNCHER
+
+    def _onStatePrepared(self, state):
+        self.__forwardStateToVSE(state)
+
+    def _onStateTransition(self, _, newState):
+        self.__forwardStateToVSE(newState)
+
+    def _onStateObservation(self, state):
+        self.__forwardStateToVSE(state)
+
+    def __forwardStateToVSE(self, state):
+        self._state.setValue(state.state)
+        self._duration.setValue(state.timeLeft)
+        self._isInAimingMode.setValue(state.isInAimingMode)
+
+
+class OnShellParamsSwitcherGunState(VehicleMechanicStateEventsBlock):
+
+    def __init__(self, *args, **kwargs):
+        super(OnShellParamsSwitcherGunState, self).__init__(*args, **kwargs)
+        self._state = self._makeDataOutputSlot('state', ShellParamsSwitcherGunEnum.slotType(), None)
+        self._isBroken = self._makeDataOutputSlot('isBroken', SLOT_TYPE.BOOL, None)
+        self._isNoAmmo = self._makeDataOutputSlot('isNoAmmo', SLOT_TYPE.BOOL, None)
+        return
+
+    @classmethod
+    def _getVehicleMechanic(cls, initParams):
+        return VehicleMechanic.SHELL_PARAMS_SWITCHER
+
+    def _onStatePrepared(self, state):
+        self.__setState(state)
+
+    def _onStateTransition(self, prevState, newState):
+        self.__setState(newState)
+
+    def __setState(self, state):
+        self._state.setValue(state.baseState)
+        self._isBroken.setValue(state.isCritState())
+        self._isNoAmmo.setValue(state.isNoAmmo())
+
+
+class OnShellCalibrationState(VehicleMechanicStateEventsBlock):
+
+    def __init__(self, *args, **kwargs):
+        super(OnShellCalibrationState, self).__init__(*args, **kwargs)
+        self._isPenBonusActive = self._makeDataOutputSlot('isPenBonusActive', SLOT_TYPE.BOOL, None)
+        self._isNonPenBonusActive = self._makeDataOutputSlot('isNonPenBonusActive', SLOT_TYPE.BOOL, None)
+        return
+
+    @classmethod
+    def _getVehicleMechanic(cls, initParams):
+        return VehicleMechanic.SHELL_CALIBRATION
+
+    def _onStateTransition(self, prevState, newState):
+        self._isPenBonusActive.setValue(bool(newState.isPenBonusActive))
+        self._isNonPenBonusActive.setValue(bool(newState.isNonPenBonusActive))
+
+
+_AUTORELOADER_SURGE_RESTRICTION_TO_ERROR_KEY = {AUTORELOADER_SURGE_RESTRICTION.NO_CHARGES: 'autoreloaderSurgeNoCharges',
+ AUTORELOADER_SURGE_RESTRICTION.CLIP_FULL: 'autoreloaderSurgeClipFull',
+ AUTORELOADER_SURGE_RESTRICTION.SHORT_RELOAD_TIME: 'autoreloaderSurgeReloadingSmall',
+ AUTORELOADER_SURGE_RESTRICTION.NO_AMMO: 'autoreloaderSurgeNoAmmo'}
+
+class OnAutoreloaderSurgeState(VehicleMechanicStateEventsBlock):
+
+    def __init__(self, *args, **kwargs):
+        super(OnAutoreloaderSurgeState, self).__init__(*args, **kwargs)
+        self._state = self._makeDataOutputSlot('state', AutoreloaderSurgeStateEnum.slotType(), None)
+        self._hasRestrictions = self._makeDataOutputSlot('hasRestrictions', SLOT_TYPE.BOOL, None)
+        self._chargeIntervalEnd = self._makeDataOutputSlot('chargeIntervalEnd', SLOT_TYPE.FLOAT, None)
+        self._restrictionErrorKey = self._makeDataOutputSlot('restrictionErrorKey', SLOT_TYPE.STR, None)
+        return
+
+    @classmethod
+    def _getVehicleMechanic(cls, initParams):
+        return VehicleMechanic.AUTORELOADER_SURGE
+
+    @eventHandler
+    def onMechanicComponentCatching(self, component):
+        super(OnAutoreloaderSurgeState, self).onMechanicComponentCatching(component)
+
+    def _onStatePrepared(self, state):
+        self.__forwardStateToVSE(state)
+
+    def _onStateTransition(self, prevState, newState):
+        self.__forwardStateToVSE(newState)
+
+    def _onStateObservation(self, state):
+        self.__forwardStateToVSE(state)
+
+    def __forwardStateToVSE(self, state):
+        self._state.setValue(state.state)
+        self._hasRestrictions.setValue(state.restrictions != 0)
+        self._chargeIntervalEnd.setValue(state.chargeIntervalEnd)
+        topRestriction = AUTORELOADER_SURGE_RESTRICTION.getTopPriorityRestriction(state.restrictions)
+        self._restrictionErrorKey.setValue(_AUTORELOADER_SURGE_RESTRICTION_TO_ERROR_KEY.get(topRestriction, ''))
+
+
+class OnBustleFeedState(VehicleMechanicStateEventsBlock):
+
+    def __init__(self, *args, **kwargs):
+        super(OnBustleFeedState, self).__init__(*args, **kwargs)
+        self._state = self._makeDataOutputSlot('state', BustleFeedStateEnum.slotType(), None)
+        self._prevState = self._makeDataOutputSlot('prevState', BustleFeedStateEnum.slotType(), None)
+        self._canSwitch = self._makeDataOutputSlot('canSwitch', SLOT_TYPE.BOOL, None)
+        return
+
+    @classmethod
+    def _getVehicleMechanic(cls, initParams):
+        return VehicleMechanic.BUSTLE_FEED
+
+    def _onStatePrepared(self, state):
+        self.__forwardStateToVSE(state)
+
+    def _onStateObservation(self, state):
+        self.__forwardStateToVSE(state)
+
+    def _onStateTransition(self, prevState, newState):
+        self._prevState.setValue(prevState.state)
+        self.__forwardStateToVSE(newState)
+
+    def __forwardStateToVSE(self, state):
+        self._state.setValue(state.state)
+        self._canSwitch.setValue(state.switchAccessState == BUSTLE_FEED_SWITCH_ACCESS.ENABLED)
+
+
+class OnSightPointerState(VehicleMechanicStateEventsBlock):
+
+    def __init__(self, *args, **kwargs):
+        super(OnSightPointerState, self).__init__(*args, **kwargs)
+        self._state = self._makeDataOutputSlot('state', SightPointerStateEnum.slotType(), None)
+        self._hasVehicles = self._makeDataOutputSlot('hasVehicles', SLOT_TYPE.BOOL, None)
+        self._stage = self._makeDataOutputSlot('stage', SLOT_TYPE.INT, None)
+        self._startTime = self._makeDataOutputSlot('startTime', SLOT_TYPE.FLOAT, None)
+        self._minActiveTime = self._makeDataOutputSlot('minActiveTime', SLOT_TYPE.FLOAT, None)
+        self._minActiveTime.setValue(SIGHT_POINTER_COMMON_CONSTANTS.MIN_ACTIVE_DURATION)
+        return
+
+    @classmethod
+    def _getVehicleMechanic(cls, initParams):
+        return VehicleMechanic.SIGHT_POINTER
+
+    def __forwardStateToVSE(self, state):
+        self._state.setValue(state.state)
+        self._hasVehicles.setValue(state.vehiclesUnderScan)
+        self._stage.setValue(state.stage)
+        self._startTime.setValue(state.baseTime)
+
+    def _onStatePrepared(self, state):
+        self.__forwardStateToVSE(state)
+
+    def _onStateObservation(self, state):
+        self.__forwardStateToVSE(state)
+
+    def _onStateTransition(self, _, newState):
+        self.__forwardStateToVSE(newState)

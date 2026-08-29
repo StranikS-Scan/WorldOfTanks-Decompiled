@@ -11,7 +11,7 @@
   <customRoleSlotOptions>	2 4	</customRoleSlotOptions>
   <speedLimits>
     <forward>	70	</forward>
-    <backward>	23	</backward>
+    <backward>	25	</backward>
   </speedLimits>
   <invisibility>
     <moving>	0.28	</moving>
@@ -48,19 +48,18 @@
     <armor>
       <armor_1>	50	</armor_1>
       <armor_2>	35	</armor_2>
-      <armor_3>	25	</armor_3>
+      <armor_3>	30	</armor_3>
       <armor_4>	20	</armor_4>
       <armor_5>	16	</armor_5>
       <armor_6>	12.5	</armor_6>
       <armor_7>	25	</armor_7>
       <armor_8>	0	</armor_8>
       <armor_9>	20	</armor_9>
-      <armor_10>	5	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
-      </armor_10>
+      <armor_10>	20	</armor_10>
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	12943	</weight>
-    <maxHealth>	1360	</maxHealth>
+    <maxHealth>	1400	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	210	</maxHealth>
       <maxRegenHealth>	140	</maxRegenHealth>
@@ -1017,14 +1016,14 @@
       <price>	82500	</price>
       <notInShop>	true	</notInShop>
       <armor>
-        <leftTrack>	20	</leftTrack>
-        <rightTrack>	20	</rightTrack>
+        <leftTrack>	15	</leftTrack>
+        <rightTrack>	15	</rightTrack>
       </armor>
       <weight>	5500	</weight>
       <terrainResistance>	0.7 0.8 1.6	</terrainResistance>
       <brakeForce>	30000	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
-      <rotationSpeed>	60	</rotationSpeed>
+      <rotationSpeed>	45	</rotationSpeed>
       <shotDispersionFactors>
         <vehicleMovement>	0.12	</vehicleMovement>
         <vehicleRotation>	0.12	</vehicleRotation>
@@ -1907,14 +1906,14 @@
       </armor>
       <primaryArmor>	armor_10 armor_3 armor_9	</primaryArmor>
       <weight>	9000	</weight>
-      <maxHealth>	340	</maxHealth>
+      <maxHealth>	350	</maxHealth>
       <rotationSpeed>	43	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	170	</maxHealth>
         <maxRegenHealth>	85	</maxRegenHealth>
         <repairCost>	1.0	</repairCost>
       </turretRotatorHealth>
-      <circularVisionRadius>	400	</circularVisionRadius>
+      <circularVisionRadius>	410	</circularVisionRadius>
       <surveyingDeviceHealth>
         <maxHealth>	120	</maxHealth>
         <maxRegenHealth>	60	</maxRegenHealth>
@@ -1922,21 +1921,55 @@
       </surveyingDeviceHealth>
       <guns>
         <_105mm_L7A3C>	shared	  <maxAmmo>	40	</maxAmmo>
+          <unlocks>
+            <vehicle>	Ch71_WZ_219	  <cost>	325000	</cost>
+            </vehicle>
+          </unlocks>
           <armor>
             <armor_1>	200	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_1>
-            <armor_2>	60	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            <armor_2>	200	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_2>
             <armor_3>	40	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_3>
-            <armor_4>	0	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            <armor_4>	200	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_4>
             <gun>	40	</gun>
+            <armor_5>	20	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_5>
+            <armor_6>	90	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_6>
+            <armor_8>	20	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_8>
+            <armor_9>	200	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_9>
+            <armor_10>	70	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_10>
+            <armor_11>	70	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_11>
+            <armor_12>	70	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_12>
+            <armor_13>	70	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_13>
+            <armor_14>	70	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_14>
+            <armor_15>	70	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_15>
+            <armor_16>	60	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_16>
+            <armor_17>	70	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_17>
+            <armor_18>	90	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_18>
+            <armor_19>	90	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_19>
+            <armor_20>	90	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_20>
           </armor>
           <turretYawLimits>	-180 180	</turretYawLimits>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
-            <maxPitch>	0 5 0.416667 5 0.444444 2 0.555556 2 0.583333 5 1 5	</maxPitch>
+            <maxPitch>	0 6 0.416667 6 0.444444 2 0.555556 2 0.583333 6 1 6	</maxPitch>
           </pitchLimits>
           <shotDispersionRadius>	0.38	</shotDispersionRadius>
           <reloadTime>	9.4	</reloadTime>
@@ -2028,6 +2061,7 @@
               <camouflage>	GUN	</camouflage>
             </customizableVehicleAreas>
           </customization>
+          <edgeByVisualModel>	false	</edgeByVisualModel>
           <camouflage>
             <tiling>	2 2 0.000000 0.000000	</tiling>
             <density>	137.392 143.615	</density>
@@ -2481,7 +2515,7 @@
     <detailed>
       <engines>
         <_12150L8>
-          <smplEnginePower>	1080	</smplEnginePower>
+          <smplEnginePower>	1170	</smplEnginePower>
           <smplFwMaxSpeed>	70	</smplFwMaxSpeed>
         </_12150L8>
       </engines>
@@ -2490,13 +2524,13 @@
           <axleCount>	5	</axleCount>
           <grounds>
             <soft>
-              <rollingFriction>	0.161	</rollingFriction>
+              <rollingFriction>	0.1288	</rollingFriction>
             </soft>
             <medium>
-              <rollingFriction>	0.0805	</rollingFriction>
+              <rollingFriction>	0.0644	</rollingFriction>
             </medium>
             <firm>
-              <rollingFriction>	0.070438	</rollingFriction>
+              <rollingFriction>	0.05635	</rollingFriction>
             </firm>
           </grounds>
         </Chassis_Ch29_Type_62C_prot>

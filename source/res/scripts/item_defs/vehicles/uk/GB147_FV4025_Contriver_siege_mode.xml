@@ -2979,7 +2979,6 @@
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <aimingTime>	3.2	</aimingTime>
-          <multiGunEffects>	shot_dualgun_large_mb_L shot_dualgun_large_mb_R	</multiGunEffects>
           <twinGun>
             <afterShotDelay>	1	</afterShotDelay>
             <twinGunReloadTime>	20	</twinGunReloadTime>
@@ -3065,6 +3064,7 @@
             <collisionModelClient>	vehicles/british/GB147_FV4025_Contriver/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
           <edgeByVisualModel>	false	</edgeByVisualModel>
+          <muzzleBrake>	VERTICAL	</muzzleBrake>
           <camouflage>
             <density>	92.28569 93.789787	</density>
             <aoTextureSize>	1024 512	</aoTextureSize>

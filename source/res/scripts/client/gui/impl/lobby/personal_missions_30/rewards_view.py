@@ -1,23 +1,27 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/personal_missions_30/rewards_view.py
-from itertools import ifilter
+from __future__ import absolute_import
+from itertools import chain
 from typing import TYPE_CHECKING
 import SoundGroups
 from frameworks.wulf import ViewSettings, WindowFlags
+from gui.Scaleform.lobby_entry import getLobbyStateMachine
 from gui.impl.auxiliary.vehicle_helper import fillVehicleInfo
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.personal_missions_30.rewards_view_model import RewardsViewModel, RewardsViewType
 from gui.impl.lobby.common.view_wrappers import createBackportTooltipDecorator
-from gui.impl.lobby.personal_missions_30.bonus_sorter import packMissionsBonusModelAndTooltipData, getBonusPacker
-from gui.impl.lobby.personal_missions_30.personal_mission_constants import PM3_CAMPAIGN_ID
-from gui.impl.lobby.personal_missions_30.views_helpers import getDetailNameByToken, showRewardVehicleInHangar, setForceLeavePM3State, setVideoOverlayOn, setVideoOverlayOff
+from gui.impl.lobby.personal_missions_30.bonus_packers import packMissionsBonusModelAndTooltipData, getBonusPacker
+from gui.impl.lobby.personal_missions_30.state import PersonalMissions3EntryState
+from gui.impl.lobby.personal_missions_30.views_helpers import getDetailNameByToken, showRewardVehicleInHangar, setForceLeavePM3State, setVideoOverlayOn, setVideoOverlayOff, canOpenOperationPage
 from gui.impl.pub import ViewImpl
 from gui.impl.pub.lobby_window import LobbyNotificationWindow
 from gui.server_events.bonuses import getNonQuestBonuses
-from gui.server_events.finders import PM3_CAMPAIGN_FINISHED_QUEST, PM3_VEHICLE_DETAIL_TOKEN
+from gui.server_events.finders import NO_AWARD_LIST_FINISHED_QUEST, NO_AWARD_LIST_VEHICLE_DETAIL_TOKEN
 from gui.shared.event_dispatcher import showPersonalMissionMainWindow
 from helpers import dependency
-from personal_missions import PM_BRANCH
+from personal_missions import PM_BRANCH, PM_SWITCHES
+from shared_utils import findFirst
+from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
 if TYPE_CHECKING:
@@ -26,6 +30,7 @@ if TYPE_CHECKING:
 class RewardsView(ViewImpl):
     __eventsCache = dependency.descriptor(IEventsCache)
     __itemsCache = dependency.descriptor(IItemsCache)
+    __lobbyContext = dependency.descriptor(ILobbyContext)
 
     def __init__(self, ctx):
         settings = ViewSettings(layoutID=R.views.mono.personal_missions_30.rewards(), model=RewardsViewModel())
@@ -56,33 +61,48 @@ class RewardsView(ViewImpl):
         return ((self.viewModel.close, self.__onClose),
          (self.viewModel.goToOperation, self.__onShowOperation),
          (self.viewModel.goToVehicle, self.__onShowVehicle),
-         (self.viewModel.disableVideoOverlaySound, self.__onDisableVideoOverlaySound))
+         (self.viewModel.disableVideoOverlaySound, self.__onDisableVideoOverlaySound),
+         (self.__lobbyContext.getServerSettings().onServerSettingsChange, self.__onServerSettingsChanged))
 
     def _onLoading(self, *args, **kwargs):
         super(RewardsView, self)._onLoading(*args, **kwargs)
         self.currentOperation = self.__defineCurrentOperation()
         if self.rewardType == RewardsViewType.OPERATION:
             setVideoOverlayOn()
+        operationID = self.currentOperation.getID()
+        branchID = self.currentOperation.getBranch()
+        isCompleted = self.currentOperation.isCompleted()
+        lsm = getLobbyStateMachine()
         with self.viewModel.transaction() as tx:
             tx.setType(self.rewardType)
-            tx.setOperationId(self.currentOperation.getID())
-            tx.setOperationName(self.__getOperationName(self.currentOperation.getID()))
-            tx.setCampaignName(self.__getCampaignName())
+            tx.setOperationId(operationID)
+            tx.setButtonDisabled(not canOpenOperationPage(operationID))
+            tx.setButtonVisible(not lsm.getStateByCls(PersonalMissions3EntryState).isEntered())
+            tx.setOperationName(self.__getOperationName(operationID))
+            tx.setCampaignName(self.__getCampaignName(branchID))
             if self.rewardType == RewardsViewType.VEHICLE_PART:
-                vehDetail = self.__getVehDetail()
+                vehDetail = self.__getVehDetail(branchID, operationID)
                 if vehDetail:
-                    tx.setVehicleDetailName(self.__getVehDetail())
-            self.__fillRewards(tx.getRewards(), getBonusPacker(isRewardScreen=True))
+                    tx.setVehicleDetailName(vehDetail)
+            self.__fillRewards(tx.getRewards(), getBonusPacker(isRewardScreen=True, isOperationCompleted=isCompleted))
             if self.rewardType == RewardsViewType.OPERATION_WITH_HONORS:
-                self.nextOperationID = self.__defineNextOperationID()
-                tx.setNextOperationName(self.__getOperationName(self.nextOperationID))
+                self.nextOperationID = self.__defineNextOperationID(branchID)
+                if self.nextOperationID:
+                    tx.setNextOperationName(self.__getOperationName(self.nextOperationID))
             if self.rewardType == RewardsViewType.OPERATION:
-                fillVehicleInfo(tx.vehicle, self.currentOperation.getPM3VehicleBonus())
+                fillVehicleInfo(tx.vehicle, self.currentOperation.getPMAwardListVehicleBonus())
 
     def _finalize(self):
         self.__onViewClosed()
         SoundGroups.g_instance.playSound2D('vid_pm_stop')
         super(RewardsView, self)._finalize()
+
+    def __onServerSettingsChanged(self, diff=None):
+        diff = diff or {}
+        campaignSwitcher = PM_SWITCHES.MAP_BRANCH_NAME_TO_SWITCH_NAME.get(self.currentOperation.getBranchName())
+        operationID = self.currentOperation.getID()
+        if not diff.get(campaignSwitcher, True) or operationID in diff.get(PM_SWITCHES.DISABLED_PM_OPERATIONS, {}):
+            self.__onClose()
 
     def __onClose(self):
         self.__onViewClosed()
@@ -110,15 +130,15 @@ class RewardsView(ViewImpl):
         self.destroyWindow()
         showRewardVehicleInHangar(self.currentOperation)
 
-    def __getVehDetail(self):
+    def __getVehDetail(self, branchID, operationID):
         detailName = None
-        detailToken = next(ifilter(lambda reward: reward.startswith(PM3_VEHICLE_DETAIL_TOKEN % self.currentOperation.getID()), self.rewards[self.questID].get('tokens', [])), None)
+        detailToken = findFirst(lambda reward: reward.startswith(NO_AWARD_LIST_VEHICLE_DETAIL_TOKEN % (PM_BRANCH.PM_CAMPAIGNS_IDS[branchID], operationID)), self.rewards[self.questID].get('tokens', []))
         if detailToken:
             detailName = getDetailNameByToken(detailToken)
         return detailName
 
     def __isCampaignFinished(self):
-        return all([ operation.isFullCompleted() for operation in self.__eventsCache.getPersonalMissions().getAllOperations(PM_BRANCH.V2_BRANCHES).values() ])
+        return all((operation.isFullCompleted() for operation in self.__eventsCache.getPersonalMissions().getAllOperations(PM_BRANCH.MUTUAL_EXCLUSION_BRANCHES[PM_BRANCH.QUEST_GROUPS.GROUP_2]).values()))
 
     def __defineCurrentOperation(self):
         currentOperationByType = {RewardsViewType.VEHICLE_PART: lambda q: int(q.split('_')[2]),
@@ -126,18 +146,18 @@ class RewardsView(ViewImpl):
          RewardsViewType.CAMPAIGN_WITH_HONORS: lambda q: int(q.split('_')[3].rsplit('t')[-1]),
          RewardsViewType.OPERATION: lambda q: int(q.split('_')[2])}
         operationID = currentOperationByType[self.rewardType](self.questID)
-        return self.__eventsCache.getPersonalMissions().getAllOperations(PM_BRANCH.V2_BRANCHES).get(operationID)
+        return self.__eventsCache.getPersonalMissions().getAllOperations(PM_BRANCH.WITHOUT_AWARD_LIST_BRANCHES).get(operationID)
 
-    def __defineNextOperationID(self):
-        allOperations = list(sorted(self.__eventsCache.getPersonalMissions().getAllOperations(PM_BRANCH.V2_BRANCHES).values(), key=lambda o: o.getID()))
+    def __defineNextOperationID(self, branchID):
+        allOperations = list(sorted(self.__eventsCache.getPersonalMissions().getAllOperations((PM_BRANCH.TYPE_TO_NAME[branchID],)).values(), key=lambda o: o.getID()))
         notFullCompletedOperations = [ operation for operation in allOperations if not operation.isFullCompleted() ]
         return notFullCompletedOperations[0].getID() if notFullCompletedOperations else None
 
     def __getOperationName(self, operationID):
-        return self.__eventsCache.getPersonalMissions().getAllOperations(PM_BRANCH.V2_BRANCHES).get(operationID).getShortUserName()
+        return self.__eventsCache.getPersonalMissions().getAllOperations(PM_BRANCH.WITHOUT_AWARD_LIST_BRANCHES).get(operationID).getShortUserName()
 
-    def __getCampaignName(self):
-        return self.__eventsCache.getPersonalMissions().getCampaignsForBranch(PM_BRANCH.PERSONAL_MISSION_3)[PM3_CAMPAIGN_ID].getUserName()
+    def __getCampaignName(self, branchID):
+        return self.__eventsCache.getPersonalMissions().getCampaignsForBranch(branchID).get(PM_BRANCH.PM_CAMPAIGNS_IDS[branchID]).getUserName()
 
     def __getBonuses(self, rewards):
         if self.rewardType == RewardsViewType.OPERATION:
@@ -152,7 +172,8 @@ class RewardsView(ViewImpl):
 
     def __fillRewards(self, rewardsModel, packer):
         if self.rewardType == RewardsViewType.CAMPAIGN_WITH_HONORS:
-            bonuses = self.__getBonuses(self.rewards.get(self.questID, [])) + self.__getBonuses(self.rewards.get(PM3_CAMPAIGN_FINISHED_QUEST, []))
+            bonuses = self.__getBonuses(self.rewards.get(self.questID, {}))
+            bonuses.extend(chain(*(self.__getBonuses(self.rewards.get(NO_AWARD_LIST_FINISHED_QUEST % PM_BRANCH.PM_CAMPAIGNS_IDS[PM_BRANCH.NAME_TO_TYPE[branchName]], {})) for branchName in PM_BRANCH.WITHOUT_AWARD_LIST_BRANCHES)))
         else:
             bonuses = self.__getBonuses(self.rewards[self.questID])
         rewardsModel.clear()

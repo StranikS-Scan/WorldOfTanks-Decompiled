@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/gui/game_loading/state_machine/states/init_client/logos_loading.py
 import typing
 import game_loading_bindings
-from frameworks.state_machine import StringEvent, StateFlags
+from frameworks_common.state_machine import StringEvent, StateFlags
 from gui.game_loading import loggers
 from gui.game_loading.state_machine.const import GameLoadingStates, GameLoadingStatesEvents, TickingMode
 from gui.game_loading.state_machine.states.base import BaseViewResourcesTickingState

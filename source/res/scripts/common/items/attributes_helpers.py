@@ -65,7 +65,9 @@ ALLOWED_STATIC_ATTRS = {'additiveShotDispersionFactor',
  'turretRotatorHealthFactor',
  'vehicleByChassisDamageFactor',
  'hullMaxHealth',
- 'turretMaxHealth'}
+ 'turretMaxHealth',
+ 'damageDistributionLowerBound',
+ 'piercingDistributionLowerBound'}
 ALLOWED_DYNAMIC_ATTRS = {'additiveShotDispersionFactor',
  'chassis/shotDispersionFactors/movement',
  'chassis/shotDispersionFactors/rotation',
@@ -104,7 +106,11 @@ ALLOWED_DYNAMIC_ATTRS = {'additiveShotDispersionFactor',
  'vehicle/fwMaxSpeedBonus',
  'multShotDispersionFactor',
  'gun/shotDispersionFactors/afterShot',
- 'hull_aiming/pitch/wheelsCorrectionSpeedFactor'}
+ 'hull_aiming/pitch/wheelsCorrectionSpeedFactor',
+ 'inConeVision/visionFactor',
+ 'inConeVision/demaskFoliageFactor',
+ 'inConeVision/demaskMovingFactor',
+ 'inConeVision/circularVisionRadiusFactor'}
 AUTOSHOOT_DYNAMIC_ATTRS = {'shotIntervalMultFactor', 'shotDispersionPerShotFactor', 'maxShotDispersionFactor'}
 
 class DescrModifyAttrsCheker(object):

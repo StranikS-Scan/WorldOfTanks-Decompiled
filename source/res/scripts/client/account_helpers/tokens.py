@@ -1,15 +1,21 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/account_helpers/tokens.py
+from __future__ import absolute_import
 from functools import partial
 import AccountCommands
 from shared_utils.account_helpers.diff_utils import synchronizeDicts
 from debug_utils import deprecated
 
+def _getProxy(callback):
+    return (lambda requestID, resultID, errorStr, ext=None: callback(resultID, errorStr, ext if ext is not None else {})) if callback is not None else None
+
+
 class Tokens(object):
 
-    def __init__(self, syncData):
+    def __init__(self, syncData, commandProxy):
         self.__account = None
         self.__syncData = syncData
+        self.__commandProxy = commandProxy
         self.__cache = {}
         self.__ignore = True
         return
@@ -37,29 +43,20 @@ class Tokens(object):
         self.__syncData.waitForSync(partial(self.__onGetCacheResponse, callback))
 
     def openLootBox(self, boxID, count, callback):
-        if callback is not None:
-            proxy = lambda requestID, resultID, errorStr, ext={}: callback(resultID, errorStr, ext)
-        else:
-            proxy = None
-        self.__account._doCmdInt2(AccountCommands.CMD_LOOTBOX_OPEN, boxID, count, proxy)
-        return
+        self.__account._doCmdInt2(AccountCommands.CMD_LOOTBOX_OPEN, boxID, count, _getProxy(callback))
 
     @deprecated
     def getInfoLootBox(self, boxIDs, callback):
-        if callback is not None:
-            proxy = lambda requestID, resultID, errorStr, ext={}: callback(resultID, errorStr, ext)
-        else:
-            proxy = None
-        self.__account._doCmdIntArr(AccountCommands.CMD_LOOTBOX_GETINFO, boxIDs, proxy)
-        return
+        self.__account._doCmdIntArr(AccountCommands.CMD_LOOTBOX_GETINFO, boxIDs, _getProxy(callback))
 
     def resetLootBoxStatistics(self, boxIDs, callback):
-        if callback is not None:
-            proxy = lambda requestID, resultID, errorStr, ext={}: callback(resultID, errorStr, ext)
-        else:
-            proxy = None
-        self.__account._doCmdIntArr(AccountCommands.CMD_LOOTBOX_RESET_STATS, boxIDs, proxy)
-        return
+        self.__account._doCmdIntArr(AccountCommands.CMD_LOOTBOX_RESET_STATS, boxIDs, _getProxy(callback))
+
+    def rerollBox(self, boxID, callback):
+        self.__commandProxy.perform(AccountCommands.CMD_LOOTBOX_REROLL, boxID, _getProxy(callback))
+
+    def acceptBoxRerollRewards(self, boxID, callback):
+        self.__commandProxy.perform(AccountCommands.CMD_LOOTBOX_ACCEPT_REWARD, boxID, _getProxy(callback))
 
     def __onGetCacheResponse(self, callback, resultID):
         if resultID < 0:

@@ -19,6 +19,10 @@ class GameplayStateID(object):
     AVATAR_ARENA_INFO = 'avatar.arena.info'
     AVATAR_ARENA_LOADED = 'avatar.arena.loaded'
     AVATAR_EXITING = 'avatar.exiting'
+    PREBATTLE_LOADING = 'avatar.arena.loaded.prebattle_loading'
+    PREBATTLE_HIGHLIGHTS = 'avatar.arena.loaded.prebattle_highlights'
+    PREBATTLE = 'avatar.arena.loaded.prebattle'
+    BATTLE = 'avatar.arena.loaded.battle'
     SERVER_REPLAY_ENTERING = 'replay.server.entering'
     SERVER_REPLAY_EXITING = 'replay.server.exiting'
     BATTLE_REPLAY_LOADING = 'replay.loading'
@@ -45,6 +49,9 @@ class PlayerEventID(object):
     AVATAR_ARENA_LOADING = 'player.avatar.arena.loading'
     AVATAR_ARENA_LOADED = 'player.avatar.arena.loaded'
     AVATAR_BECOME_NON_PLAYER = 'player.avatar.exiting'
+    PREBATTLE_HIGHLIGHTS_START = 'prebattle_highlights.start'
+    PREBATTLE_START = 'prebattle.start'
+    BATTLE_START = 'player.avatar.arena.loaded.battle'
     NON_PLAYER_BECOME_PLAYER = 'player.non_player'
 
 
@@ -74,6 +81,15 @@ class IGameplayLogic(object):
         raise NotImplementedError
 
     def removeStateObserver(self, observer):
+        raise NotImplementedError
+
+    def addOneshotObserver(self, gameplayStateIDs, observerLifetimeObj, enterFn=None, exitFn=None):
+        raise NotImplementedError
+
+    def addStateEnterBlocker(self, stateID, event):
+        raise NotImplementedError
+
+    def addStateExitBlocker(self, stateID, event):
         raise NotImplementedError
 
     def goToLoginByRQ(self):

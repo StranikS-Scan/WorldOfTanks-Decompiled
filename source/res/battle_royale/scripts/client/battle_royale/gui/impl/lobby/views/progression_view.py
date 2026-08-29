@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: battle_royale/scripts/client/battle_royale/gui/impl/lobby/views/progression_view.py
+from __future__ import absolute_import
 from battle_royale.gui.impl.gen.view_models.views.lobby.views.progression.progress_level_model import ProgressLevelModel
 from battle_royale.gui.impl.gen.view_models.views.lobby.views.progression.progression_view_model import ProgressionViewModel, ProgressionState
 from battle_royale.gui.impl.lobby.br_helpers.utils import setEventInfo
@@ -21,6 +22,7 @@ from gui.shared import event_dispatcher
 from gui.shared.utils.scheduled_notifications import SimpleNotifier
 from helpers import dependency, time_utils
 from helpers.time_utils import ONE_DAY, ONE_MINUTE, getServerUTCTime
+from math_common import round_py2_style_int
 from skeletons.gui.game_control import IBattleRoyaleController
 from skeletons.gui.server_events import IEventsCache
 
@@ -51,7 +53,7 @@ class ProgressionView(SubModelPresenter):
         if contentID == R.views.lobby.tooltips.AdditionalRewardsTooltip():
             fromIndex = int(event.getArgument('fromIndex'))
             index = int(event.getArgument('index'))
-            bonuses = [ bonus for bonus in self.__bonuses[index][fromIndex:] ]
+            bonuses = list(self.__bonuses[index][fromIndex:])
             return AdditionalRewardsTooltip(bonuses)
         return super(ProgressionView, self).createToolTipContent(event, contentID)
 
@@ -137,7 +139,7 @@ class ProgressionView(SubModelPresenter):
             model.setState(state)
             model.setStartTimestamp(self.battleRoyale.getStartTime())
             model.setEndTimestamp(self.battleRoyale.getEndTime())
-            model.setServerTimestamp(round(getServerUTCTime()))
+            model.setServerTimestamp(round_py2_style_int(getServerUTCTime()))
             model.setCalendarTooltipId(TOOLTIPS_CONSTANTS.BATTLE_ROYALE_SELECTOR_CALENDAR_INFO)
             setEventInfo(model.eventInfo)
             self.__updateBattleQuestsCards(model.battleQuests, data)
@@ -155,7 +157,7 @@ class ProgressionView(SubModelPresenter):
         model.setCurProgressPoints(pointsData['curPoints'])
         model.setPrevProgressPoints(pointsData['prevPoints'])
         if totalLevels > 0:
-            model.setPointsForLevel(int(pointsData['totalPoints'] / totalLevels))
+            model.setPointsForLevel(pointsData['totalPoints'] // totalLevels)
         progressionLevels = model.getProgressLevels()
         progressionLevels.clear()
         for levelData in progressionLevelsList:

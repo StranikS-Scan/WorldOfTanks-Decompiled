@@ -373,6 +373,8 @@
     <showDevelopmentInfo>
       <Arg>	UINT8	</Arg>
       <Arg>	STRING	</Arg>
+      <VariableLengthHeaderSize>	1	  <WarnLevel>	none	</WarnLevel>
+      </VariableLengthHeaderSize>
     </showDevelopmentInfo>
     <showHittingArea>
       <ReplayExposureLevel>	ALL_CLIENTS	</ReplayExposureLevel>
@@ -422,6 +424,7 @@
       <Arg>	FLOAT32	</Arg>
       <Arg>	ARRAY	  <of>	UINT32	</of>
       </Arg>
+      <VariableLengthHeaderSize>	2	</VariableLengthHeaderSize>
     </explodeProjectile>
     <onRoundFinished>
       <ReplayExposureLevel>	ALL_CLIENTS	</ReplayExposureLevel>
@@ -499,6 +502,7 @@
       <Arg>	STRING	</Arg>
       <Arg>	PYTHON	</Arg>
       <AllowUnsafeData>	true	</AllowUnsafeData>
+      <VariableLengthHeaderSize>	2	</VariableLengthHeaderSize>
     </updateQuestProgress>
     <updateVehicleQuickShellChanger>
       <Arg>	OBJECT_ID	</Arg>
@@ -521,6 +525,7 @@
     <setUpdatedGoodiesSnapshot>
       <Arg>	BATTLE_GOODIES_LIST	</Arg>
       <AllowUnsafeData>	true	</AllowUnsafeData>
+      <VariableLengthHeaderSize>	2	</VariableLengthHeaderSize>
     </setUpdatedGoodiesSnapshot>
     <onRandomEvent>
       <Arg>	STRING	</Arg>
@@ -805,6 +810,7 @@
     <onBattleResultsAvailable>
       <Arg>	STRING	</Arg>
     </onBattleResultsAvailable>
+    <onEmptyBattleResultsAvailable></onEmptyBattleResultsAvailable>
     <smartDestroy></smartDestroy>
     <stopByFailure>
       <Arg>	UINT8	</Arg>

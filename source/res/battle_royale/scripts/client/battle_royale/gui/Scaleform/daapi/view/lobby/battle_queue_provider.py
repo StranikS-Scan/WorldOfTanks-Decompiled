@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: battle_royale/scripts/client/battle_royale/gui/Scaleform/daapi/view/lobby/battle_queue_provider.py
+from __future__ import absolute_import
 import constants
 from battle_royale.gui.constants import BattleRoyaleSubMode
 from gui.Scaleform.daapi.view.lobby.battle_queue.battle_queue import RandomQueueProvider

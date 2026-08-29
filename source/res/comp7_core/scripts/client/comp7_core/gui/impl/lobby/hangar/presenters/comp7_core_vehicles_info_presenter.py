@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: comp7_core/scripts/client/comp7_core/gui/impl/lobby/hangar/presenters/comp7_core_vehicles_info_presenter.py
+from __future__ import absolute_import
 import typing
 from gui.impl.lobby.common.presenters.vehicles_info_presenter import VehiclesInfoPresenter
 if typing.TYPE_CHECKING:

@@ -1681,7 +1681,6 @@
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <aimingTime>	3.3	</aimingTime>
-          <multiGunEffects>	shot_dualgun_large_mb_L shot_dualgun_large_mb_R	</multiGunEffects>
           <twinGun>
             <afterShotDelay>	1	</afterShotDelay>
             <twinGunReloadTime>	15	</twinGunReloadTime>
@@ -1746,6 +1745,7 @@
             <collisionModelClient>	vehicles/british/GB130_FV225_Collector/collision_client/Gun_03.model	</collisionModelClient>
           </hitTester>
           <edgeByVisualModel>	false	</edgeByVisualModel>
+          <muzzleBrake>	HORIZONTAL	</muzzleBrake>
           <camouflage>
             <density>	105.358353 106.451874	</density>
             <aoTextureSize>	1024 512	</aoTextureSize>

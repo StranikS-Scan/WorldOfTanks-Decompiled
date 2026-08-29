@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: story_mode/scripts/common/story_mode_common/configs/sounds_schema.py
+from __future__ import absolute_import
 import typing
 from dict2model import models
 from dict2model.schemas import Schema

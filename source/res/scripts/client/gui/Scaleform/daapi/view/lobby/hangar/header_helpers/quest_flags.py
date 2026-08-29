@@ -22,7 +22,7 @@ from helpers import dependency
 from helpers.i18n import makeString
 from skeletons.connection_mgr import IConnectionManager
 from skeletons.gui.event_boards_controllers import IEventBoardController
-from skeletons.gui.game_control import IFestivityController, ILimitedUIController, IMapboxController, IMarathonEventsController, IQuestsController, IRankedBattlesController
+from skeletons.gui.game_control import ILimitedUIController, IMapboxController, IMarathonEventsController, IQuestsController, IRankedBattlesController
 _logger = logging.getLogger(__name__)
 
 class BaseQuestFlag(IQuestsFlag):
@@ -37,7 +37,6 @@ class BaseQuestFlag(IQuestsFlag):
 class BattleQuestsFlag(BaseQuestFlag):
     __slots__ = ()
     _QUEST_TYPE = HANGAR_HEADER_QUESTS.QUEST_TYPE_COMMON
-    _festivityController = dependency.descriptor(IFestivityController)
     _limitedUIController = dependency.descriptor(ILimitedUIController)
     _questController = dependency.descriptor(IQuestsController)
 
@@ -49,14 +48,13 @@ class BattleQuestsFlag(BaseQuestFlag):
             quests = cls._getQuests(vehicle)
             totalCount = len(quests)
             completedQuests = len([ q for q in quests if q.isCompleted() ])
-            festivityFlagData = cls._festivityController.getHangarQuestsFlagData()
             if totalCount > 0:
-                commonQuestsIcon = festivityFlagData.icon or RES_ICONS.MAPS_ICONS_LIBRARY_OUTLINE_QUESTS_AVAILABLE
+                commonQuestsIcon = RES_ICONS.MAPS_ICONS_LIBRARY_OUTLINE_QUESTS_AVAILABLE
                 label, questType = cls._getLabelAndFlagType(totalCount, completedQuests)
             else:
-                commonQuestsIcon = festivityFlagData.iconDisabled or RES_ICONS.MAPS_ICONS_LIBRARY_OUTLINE_QUESTS_DISABLED
+                commonQuestsIcon = RES_ICONS.MAPS_ICONS_LIBRARY_OUTLINE_QUESTS_DISABLED
                 label, questType = '', cls._QUEST_TYPE
-            quests = [headerQuestFormatterVo(totalCount > 0, commonQuestsIcon, label, questType, flag=festivityFlagData.flagBackground, tooltip=TOOLTIPS_CONSTANTS.QUESTS_PREVIEW, isTooltipSpecial=True)]
+            quests = [headerQuestFormatterVo(totalCount > 0, commonQuestsIcon, label, questType, tooltip=TOOLTIPS_CONSTANTS.QUESTS_PREVIEW, isTooltipSpecial=True)]
             return wrapQuestGroup(HANGAR_HEADER_QUESTS.QUEST_GROUP_COMMON, '', quests)
 
     @classmethod
@@ -177,10 +175,7 @@ class ElenQuestsFlag(BaseQuestFlag):
                 notValidEvent = regIsFinished and not isRegistered or hangarFlagData.wasCanceled(eventId)
                 if notValidEvent and not hasAnotherActiveEvents:
                     return
-                if notValidEvent and hasAnotherActiveEvents:
-                    enable = False
-                else:
-                    enable = True
+                enable = not notValidEvent or not hasAnotherActiveEvents
             else:
                 if not eventsData.hasActiveEventsByState(hangarFlagData.getHangarFlags()):
                     return

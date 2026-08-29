@@ -1,0 +1,83 @@
+<pm4_11_3_11.xml>
+  <quests>
+    <potapovQuest>
+      <enabled>	true	</enabled>
+      <id>	pm4_11_3_11_main	</id>
+      <serverOnly>	true	</serverOnly>
+      <conditions>
+        <postBattle>
+          <results>
+            <plus>
+              <key>	damageAssistedStun	</key>
+              <key>	damageAssistedTrack	</key>
+              <key>	damageAssistedRadio	</key>
+            </plus>
+            <greaterOrEqual>	8000	</greaterOrEqual>
+          </results>
+        </postBattle>
+        <common>
+          <battles>
+            <uniqueVehicles></uniqueVehicles>
+            <count>	2	</count>
+          </battles>
+        </common>
+      </conditions>
+      <bonus>
+        <credits>	150000	</credits>
+        <customizations>
+          <item>
+            <value>	1	</value>
+            <custType>	attachment	</custType>
+            <id>	1243	</id>
+          </item>
+        </customizations>
+        <item>	40953	  <count>	1	</count>
+        </item>
+        <token>
+          <id>	token:pt:final:s4:t11:main	</id>
+          <expires>	01.01.2050 00:01	</expires>
+          <count>	1	</count>
+          <limit>	63	</limit>
+        </token>
+      </bonus>
+    </potapovQuest>
+    <potapovQuest>
+      <enabled>	true	</enabled>
+      <id>	pm4_11_3_11_add	</id>
+      <serverOnly>	true	</serverOnly>
+      <conditions>
+        <preBattle>
+          <account>
+            <token>
+              <id>	token:pt:s4:t11:finished:base	</id>
+              <equal>	0	</equal>
+            </token>
+          </account>
+        </preBattle>
+        <postBattle>
+          <results>
+            <plus>
+              <key>	damageAssistedStun	</key>
+              <key>	damageAssistedTrack	</key>
+              <key>	damageAssistedRadio	</key>
+            </plus>
+            <greaterOrEqual>	8000	</greaterOrEqual>
+          </results>
+        </postBattle>
+        <common>
+          <battles>
+            <uniqueVehicles></uniqueVehicles>
+            <count>	2	</count>
+          </battles>
+        </common>
+      </conditions>
+      <bonus>
+        <token>
+          <id>	pm4:11:points	</id>
+          <expires>	01.01.2050 00:01	</expires>
+          <count>	300	</count>
+        </token>
+      </bonus>
+    </potapovQuest>
+  </quests>
+</pm4_11_3_11.xml>

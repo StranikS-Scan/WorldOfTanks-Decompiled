@@ -4,18 +4,22 @@ import weakref
 from functools import partial
 import typing
 import BattleReplay
-from constants import ARENA_GUI_TYPE, ACCOUNT_KICK_REASONS
-from frameworks.state_machine import BaseStateObserver
-from frameworks.state_machine import StateEvent
-from frameworks.state_machine import StateObserversContainer
-from frameworks.state_machine.observers import StateIdsObserver
+import BigWorld
+from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS
+from constants import ARENA_GUI_TYPE, ACCOUNT_KICK_REASONS, ARENA_PERIOD
+from frameworks_common.state_machine import BaseStateObserver
+from frameworks_common.state_machine import StateEvent
+from frameworks_common.state_machine import StateObserversContainer
+from frameworks_common.state_machine.observers import StateIdsObserver
 from frameworks.wulf import WindowLayer
 from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
 from gui.app_loader import spaces
 from helpers import dependency
 from skeletons.connection_mgr import DisconnectReason
-from skeletons.gameplay import GameplayStateID, IGameplayLogic
+from skeletons.gameplay import GameplayStateID, IGameplayLogic, PlayerEventID
 from skeletons.gui.app_loader import GuiGlobalSpaceID
+if typing.TYPE_CHECKING:
+    from frameworks_common.state_machine import State
 _BATTLE_OBSERVER_OVERRIDE_HANDLERS = set()
 
 def registerBattleObserverOverrideHandler(handler):
@@ -311,6 +315,27 @@ class ReplayRewindObserver(AppLoaderObserver):
         return
 
 
+class PrebattleLoadingObserver(AppLoaderObserver):
+    __slots__ = ()
+
+    def onEnterState(self, state, event):
+        machine = state.getMachine()
+        from frameworks_common.state_machine import StringEvent
+        player = BigWorld.player()
+        if player is not None and player.arena is not None:
+            arenaPeriod = player.arena.period
+            if arenaPeriod in (ARENA_PERIOD.BATTLE, ARENA_PERIOD.AFTERBATTLE):
+                machine.post(StringEvent(PlayerEventID.BATTLE_START))
+                return
+        prebattleHighlights = machine.getStateByID(GameplayStateID.PREBATTLE_HIGHLIGHTS)
+        hasPbhCaps = player is not None and player.hasBonusCap(ARENA_BONUS_TYPE_CAPS.PRE_BATTLE_HIGHLIGHTS) and not BattleReplay.isPlaying()
+        if hasPbhCaps and prebattleHighlights.enterBlockersSatisfied():
+            machine.post(StringEvent(PlayerEventID.PREBATTLE_HIGHLIGHTS_START))
+        else:
+            machine.post(StringEvent(PlayerEventID.PREBATTLE_START))
+        return
+
+
 class NormalAppTracker(StateObserversContainer):
     __slots__ = ()
 
@@ -320,9 +345,9 @@ class NormalAppTracker(StateObserversContainer):
          LobbyObserver(GameplayStateID.ACCOUNT_SHOW_GUI, proxy),
          ReplayEnteringOnlineObserver(GameplayStateID.SERVER_REPLAY_ENTERING, proxy),
          ReplayExitingOnlineObserver(GameplayStateID.SERVER_REPLAY_EXITING, proxy))
-        battle = makePredicatedObservers(lambda : not BattleReplay.isPlaying(), SwitchToBattleObserver(GameplayStateID.AVATAR_ENTERING, proxy), BattleLoadingObserver(GameplayStateID.AVATAR_ARENA_INFO, proxy), BattleLoadingObserver(GameplayStateID.AVATAR_SHOW_GUI, proxy), BattlePageObserver(GameplayStateID.AVATAR_ARENA_LOADED, proxy), SwitchToLobbyObserver(GameplayStateID.ACCOUNT_ENTERING, GameplayStateID.AVATAR_EXITING, proxy))
+        battle = makePredicatedObservers(lambda : not BattleReplay.isPlaying(), SwitchToBattleObserver(GameplayStateID.AVATAR_ENTERING, proxy), BattleLoadingObserver(GameplayStateID.AVATAR_ARENA_INFO, proxy), BattleLoadingObserver(GameplayStateID.AVATAR_SHOW_GUI, proxy), PrebattleLoadingObserver(GameplayStateID.PREBATTLE_LOADING, proxy), BattlePageObserver(GameplayStateID.AVATAR_ARENA_LOADED, proxy), SwitchToLobbyObserver(GameplayStateID.ACCOUNT_ENTERING, GameplayStateID.AVATAR_EXITING, proxy))
         battle = extendBattleObserverList(battle, proxy)
-        replay = makePredicatedObservers(BattleReplay.isPlaying, ReplayCreateBattleObserver(GameplayStateID.AVATAR_ENTERING, proxy), ReplayBattleLoadingObserver(GameplayStateID.AVATAR_ARENA_INFO, GameplayStateID.AVATAR_ARENA_LOADED, proxy), ReplayBattleLoadingObserver(GameplayStateID.AVATAR_SHOW_GUI, GameplayStateID.AVATAR_ARENA_LOADED, proxy), ReplayBattlePageObserver(GameplayStateID.AVATAR_ARENA_LOADED, proxy), ReplayFinishObserver(GameplayStateID.BATTLE_REPLAY_FINISHED), ReplayRewindObserver(GameplayStateID.BATTLE_REPLAY_REWIND, proxy))
+        replay = makePredicatedObservers(BattleReplay.isPlaying, ReplayCreateBattleObserver(GameplayStateID.AVATAR_ENTERING, proxy), ReplayBattleLoadingObserver(GameplayStateID.AVATAR_ARENA_INFO, GameplayStateID.AVATAR_ARENA_LOADED, proxy), ReplayBattleLoadingObserver(GameplayStateID.AVATAR_SHOW_GUI, GameplayStateID.AVATAR_ARENA_LOADED, proxy), PrebattleLoadingObserver(GameplayStateID.PREBATTLE_LOADING, proxy), ReplayBattlePageObserver(GameplayStateID.AVATAR_ARENA_LOADED, proxy), ReplayFinishObserver(GameplayStateID.BATTLE_REPLAY_FINISHED), ReplayRewindObserver(GameplayStateID.BATTLE_REPLAY_REWIND, proxy))
         observers = common + battle + replay
         super(NormalAppTracker, self).__init__(*observers)
 
@@ -331,7 +356,7 @@ class ReplayAppTracker(StateObserversContainer):
     __slots__ = ()
 
     def __init__(self, proxy):
-        super(ReplayAppTracker, self).__init__(ReplayVersionDiffersObserver(GameplayStateID.BATTLE_REPLAY_VERSION_DIFFERS, proxy), ReplayCreateBattleObserver(GameplayStateID.AVATAR_ENTERING, proxy), ReplayBattleLoadingObserver(GameplayStateID.AVATAR_ARENA_INFO, GameplayStateID.AVATAR_ARENA_LOADED, proxy), ReplayBattleLoadingObserver(GameplayStateID.AVATAR_SHOW_GUI, GameplayStateID.AVATAR_ARENA_LOADED, proxy), ReplayBattlePageObserver(GameplayStateID.AVATAR_ARENA_LOADED, proxy), ReplayFinishObserver(GameplayStateID.BATTLE_REPLAY_FINISHED), ReplayRewindObserver(GameplayStateID.BATTLE_REPLAY_REWIND, proxy))
+        super(ReplayAppTracker, self).__init__(ReplayVersionDiffersObserver(GameplayStateID.BATTLE_REPLAY_VERSION_DIFFERS, proxy), ReplayCreateBattleObserver(GameplayStateID.AVATAR_ENTERING, proxy), ReplayBattleLoadingObserver(GameplayStateID.AVATAR_ARENA_INFO, GameplayStateID.AVATAR_ARENA_LOADED, proxy), ReplayBattleLoadingObserver(GameplayStateID.AVATAR_SHOW_GUI, GameplayStateID.AVATAR_ARENA_LOADED, proxy), PrebattleLoadingObserver(GameplayStateID.PREBATTLE_LOADING, proxy), ReplayBattlePageObserver(GameplayStateID.AVATAR_ARENA_LOADED, proxy), ReplayFinishObserver(GameplayStateID.BATTLE_REPLAY_FINISHED), ReplayRewindObserver(GameplayStateID.BATTLE_REPLAY_REWIND, proxy))
 
 
 class GameplayStatesObserver(BaseStateObserver):

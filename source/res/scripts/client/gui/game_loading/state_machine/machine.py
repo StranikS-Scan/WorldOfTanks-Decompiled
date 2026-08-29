@@ -3,7 +3,7 @@
 import typing
 from functools import wraps
 import wg_async
-from frameworks.state_machine import StateMachine, StringEvent
+from frameworks_common.state_machine import StateMachine, StringEvent
 from gui.game_loading import loggers
 from gui.game_loading.resources.cdn.images import CdnImagesResources
 from gui.game_loading.resources.consts import LoadingTypes
@@ -16,7 +16,7 @@ from gui.game_loading.state_machine.states.player_loading import PlayerLoadingSt
 from gui.game_loading.state_machine.states.idle import IdleState
 from gui.game_loading.state_machine.states.transitions import LoginScreenTransition, LoginScreenTransitionWithLastShownImage, PlayerLoadingTransition, ClientInitToPlayerLoadingTransition, LoginScreenToPlayerLoadingTransition, IdleTransition
 if typing.TYPE_CHECKING:
-    from frameworks.state_machine import StateEvent
+    from frameworks_common.state_machine import StateEvent
     from gui.game_loading.settings import GameLoadingSettings
     from gui.game_loading.preferences import GameLoadingPreferences
 _logger = loggers.getStateMachineLogger()

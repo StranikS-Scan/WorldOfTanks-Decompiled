@@ -19,7 +19,7 @@ from gui.battle_control.arena_info.interfaces import IContactsAndPersonalInvitat
 from gui.battle_control.battle_constants import BATTLE_CTRL_ID
 from gui.shared import EVENT_BUS_SCOPE
 from messenger.proto import proto_getter
-from messenger.storage import storage_getter
+from messenger.storage import MessengerStorageDescriptor, UsersStorage
 from messenger import g_settings
 from messenger.ext import isBattleChatEnabled
 from messenger.gui.Scaleform import FILL_COLORS
@@ -114,6 +114,7 @@ def _isSet(number, mask):
 
 class BattleMessengerView(BattleMessengerMeta, IBattleChannelView, IContactsAndPersonalInvitationsController):
     sessionProvider = dependency.descriptor(IBattleSessionProvider)
+    usersStorage = MessengerStorageDescriptor(UsersStorage)
 
     def __init__(self):
         super(BattleMessengerView, self).__init__()
@@ -129,10 +130,6 @@ class BattleMessengerView(BattleMessengerMeta, IBattleChannelView, IContactsAndP
         self._addedMsgIDs = set()
         self._ignoreActionCooldown = CooldownHelper((CLIENT_ACTION_ID.ADD_IGNORED, CLIENT_ACTION_ID.REMOVE_IGNORED), self._onIgnoreActionCooldownHandle, CoolDownEvent.BATTLE_ACTION)
         return
-
-    @storage_getter('users')
-    def usersStorage(self):
-        return None
 
     @proto_getter(PROTO_TYPE.BW_CHAT2)
     def protoBwChat2(self):

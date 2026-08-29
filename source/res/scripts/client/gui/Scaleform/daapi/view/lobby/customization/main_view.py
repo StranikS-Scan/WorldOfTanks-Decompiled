@@ -71,6 +71,7 @@ class _ModalWindowsPopupHandler(IViewLifecycleHandler):
      CUSTOMIZATION_ALIASES.CONFIRM_CUSTOMIZATION_ITEM_DIALOG,
      R.views.lobby.customization.CustomizationCart(),
      R.views.lobby.customization.progressive_items_view.ProgressiveItemsView())
+    __VIEW_KEYS_THAT_SELECT_NONE_IN_THE_HIGHLIGHTER = frozenset((ViewKey(VIEW_ALIAS.LOBBY_MENU),))
 
     def __init__(self, onViewCreatedCallback, onViewDestroyedCallback):
         super(_ModalWindowsPopupHandler, self).__init__([ ViewKey(alias) for alias in self.__SUB_VIEWS ] + [ ViewKeyDynamic(alias) for alias in self.__DYNAMIC ])
@@ -82,6 +83,8 @@ class _ModalWindowsPopupHandler(IViewLifecycleHandler):
         self.onViewWithKeyCreated(view.key)
 
     def onViewWithKeyCreated(self, key):
+        if key in self.__VIEW_KEYS_THAT_SELECT_NONE_IN_THE_HIGHLIGHTER:
+            self.service.selectRegions(ApplyArea.NONE)
         self.__onViewCreatedCallback()
         self.__viewStack.append(key)
 
@@ -691,11 +694,16 @@ class MainView(LobbySubView, CustomizationMainViewMeta):
     def __getModifyMessage(self, originalOutfits, modifiedOutfits, isAutoRentChanged):
         forwardDiffs = False
         backwardDiffs = False
+        emptyOutfit = self.service.getEmptyOutfitWithNationalEmblems(g_currentVehicle.strCD)
+        emptyDiff = False
         for season in SeasonType.REGULAR:
             originalOutfit = originalOutfits[season]
             modifiedOutfit = modifiedOutfits[season]
             forwardDiffs |= not originalOutfit.diff(modifiedOutfit).isEmpty()
             backwardDiffs |= not modifiedOutfit.diff(originalOutfit).isEmpty()
+            if season == SeasonType.ALL:
+                emptyDiff |= not modifiedOutfit.isEmpty()
+            emptyDiff |= not emptyOutfit.isEqual(modifiedOutfit)
 
         originalProgression = originalOutfits[SeasonType.SUMMER].progressionLevel
         modifiedProgression = modifiedOutfits[SeasonType.SUMMER].progressionLevel
@@ -703,7 +711,9 @@ class MainView(LobbySubView, CustomizationMainViewMeta):
         hasModifications = forwardDiffs or isStyleProgressionLevelChanged
         hasRemovalsOnly = not hasModifications and backwardDiffs
         msgKey = R.strings.messenger.serviceChannelMessages.sysMsg.customization
-        if hasModifications:
+        if not emptyDiff:
+            msgText = backport.text(msgKey.remove())
+        elif hasModifications:
             msgText = backport.text(msgKey.change())
         elif hasRemovalsOnly:
             msgText = backport.text(msgKey.remove())

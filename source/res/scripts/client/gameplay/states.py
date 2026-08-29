@@ -7,10 +7,11 @@ import BattleReplay
 import BigWorld
 import persistent_data_cache as pdc
 import wg_async
+from gameplay.blockers import BlockableTransition, BlockingState
 from PlayerEvents import g_playerEvents
 from constants import IS_DEVELOPMENT
-from frameworks.state_machine import State, StateFlags, StringEvent
-from frameworks.state_machine import StringEventTransition
+from frameworks_common.state_machine import State, StateFlags, StringEvent
+from frameworks_common.state_machine import StringEventTransition
 from gui.game_loading import loading as gameLoading
 from gui.game_loading.resources.consts import Milestones
 from shared_utils import safeCancelCallback
@@ -279,19 +280,52 @@ class AvatarState(State):
     def configure(self):
         entering = State(stateID=GameplayStateID.AVATAR_ENTERING, flags=StateFlags.INITIAL | StateFlags.SINGULAR)
         arenaInfo = State(stateID=GameplayStateID.AVATAR_ARENA_INFO)
-        showGUI = State(stateID=GameplayStateID.AVATAR_SHOW_GUI)
-        arenaLoaded = State(stateID=GameplayStateID.AVATAR_ARENA_LOADED)
+        showGUI = BlockingState(stateID=GameplayStateID.AVATAR_SHOW_GUI, blockerClearLifetimeStateID=GameplayStateID.AVATAR)
+        inBattle = InBattleState(stateID=GameplayStateID.AVATAR_ARENA_LOADED, blockerClearLifetimeStateID=GameplayStateID.AVATAR)
+        inBattle.configure()
         exiting = State(stateID=GameplayStateID.AVATAR_EXITING)
         self.addChildState(entering)
         self.addChildState(arenaInfo)
         self.addChildState(showGUI)
-        self.addChildState(arenaLoaded)
+        self.addChildState(inBattle)
         self.addChildState(exiting)
         entering.addTransition(StringEventTransition(PlayerEventID.AVATAR_ARENA_INFO), target=arenaInfo)
         arenaInfo.addTransition(StringEventTransition(PlayerEventID.AVATAR_SHOW_GUI), target=showGUI)
-        arenaInfo.addTransition(StringEventTransition(PlayerEventID.AVATAR_ARENA_LOADED), target=arenaLoaded)
-        showGUI.addTransition(StringEventTransition(PlayerEventID.AVATAR_ARENA_LOADED), target=arenaLoaded)
-        arenaLoaded.addTransition(StringEventTransition(PlayerEventID.AVATAR_BECOME_NON_PLAYER), target=exiting)
+        showGUI.addTransition(BlockableTransition(PlayerEventID.AVATAR_ARENA_LOADED), target=inBattle)
+        arenaInfo.addTransition(StringEventTransition(PlayerEventID.AVATAR_ARENA_LOADED), target=inBattle)
+        inBattle.addTransition(StringEventTransition(PlayerEventID.AVATAR_BECOME_NON_PLAYER), target=exiting)
+
+
+class InBattleState(BlockingState):
+    __slots__ = ()
+
+    @property
+    def prebattleHighlihgts(self):
+        return self.getChildByIndex(1)
+
+    @property
+    def prebattle(self):
+        return self.getChildByIndex(2)
+
+    @property
+    def battle(self):
+        return self.getChildByIndex(3)
+
+    def configure(self):
+        prebattleLoading = State(stateID=GameplayStateID.PREBATTLE_LOADING, flags=StateFlags.INITIAL)
+        prebattleHighlights = BlockingState(stateID=GameplayStateID.PREBATTLE_HIGHLIGHTS, blockerClearLifetimeStateID=GameplayStateID.AVATAR)
+        prebattle = BlockingState(stateID=GameplayStateID.PREBATTLE, blockerClearLifetimeStateID=GameplayStateID.AVATAR)
+        battle = State(stateID=GameplayStateID.BATTLE)
+        self.addChildState(prebattleLoading)
+        self.addChildState(prebattleHighlights)
+        self.addChildState(prebattle)
+        self.addChildState(battle)
+        prebattleLoading.addTransition(BlockableTransition(PlayerEventID.PREBATTLE_HIGHLIGHTS_START), target=prebattleHighlights)
+        prebattleLoading.addTransition(BlockableTransition(PlayerEventID.PREBATTLE_START), target=prebattle)
+        prebattleLoading.addTransition(StringEventTransition(PlayerEventID.BATTLE_START), target=battle)
+        prebattleHighlights.addTransition(BlockableTransition(PlayerEventID.PREBATTLE_START), target=prebattle)
+        prebattle.addTransition(BlockableTransition(PlayerEventID.PREBATTLE_HIGHLIGHTS_START), target=prebattleHighlights)
+        prebattle.addTransition(StringEventTransition(PlayerEventID.BATTLE_START), target=battle)
 
 
 class BattleReplayLoadingState(State):

@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: battle_royale/scripts/client/battle_royale/gui/Scaleform/daapi/view/lobby/tooltips/hangar_vehicle_info.py
+from __future__ import absolute_import
 import CommandMapping
 from gui.Scaleform.daapi.view.common.battle_royale.br_helpers import getHotKeyString
 from gui.Scaleform.genConsts.BLOCKS_TOOLTIP_TYPES import BLOCKS_TOOLTIP_TYPES

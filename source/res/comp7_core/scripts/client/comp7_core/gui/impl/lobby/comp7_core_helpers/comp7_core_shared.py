@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: comp7_core/scripts/client/comp7_core/gui/impl/lobby/comp7_core_helpers/comp7_core_shared.py
+from __future__ import absolute_import
 from gui.impl.gen.view_models.views.lobby.user_missions.constants.event_banner_state import EventBannerState
 from gui.periodic_battles.models import PeriodType, PrimeTimeStatus
 from gui.shared.utils.SelectorBattleTypesUtils import isKnownBattleType

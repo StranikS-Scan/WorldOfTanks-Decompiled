@@ -3,7 +3,7 @@
 from __future__ import absolute_import
 import logging
 import typing
-from frameworks.state_machine import ConditionTransition, StateMachine
+from frameworks_common.state_machine import ConditionTransition, StateMachine
 from gui.battle_pass.state_machine import lockNotificationManager, states
 from gui.battle_pass.state_machine.state_machine_helpers import isProgressionComplete, packToken
 if typing.TYPE_CHECKING:

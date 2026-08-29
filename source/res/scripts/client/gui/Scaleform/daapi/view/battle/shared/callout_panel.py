@@ -9,6 +9,7 @@ from gui.Scaleform.genConsts.BATTLEDAMAGELOG_IMAGES import BATTLEDAMAGELOG_IMAGE
 from gui.Scaleform.locale.READABLE_KEY_NAMES import READABLE_KEY_NAMES
 from gui.impl import backport
 from gui.impl.gen import R
+from gui.shared import EVENT_BUS_SCOPE, events
 from gui.shared.utils.key_mapping import getReadableKey
 from helpers import dependency
 from helpers.i18n import makeString
@@ -46,18 +47,23 @@ class CalloutPanel(CalloutPanelMeta):
         self.onHidingFinished()
 
     def setShowData(self, senderVehicleID, cmdName):
-        vInfoVO = self.sessionProvider.getArenaDP().getVehicleInfo(senderVehicleID)
-        if not vInfoVO:
+        pbhCtrl = self.sessionProvider.dynamic.prebattleHighlightsController
+        if pbhCtrl is not None and pbhCtrl.displayingHighlights:
             return
-        vehicleTypeImg = _VEHICLE_CLASS_TAGS_ICONS[vInfoVO.vehicleType.classTag]
-        vehName = vInfoVO.vehicleType.shortNameWithPrefix
-        pressText = backport.text(R.strings.ingame_gui.quickReply.hint.press())
-        hintText = backport.text(_HINT_TEXT_MAP.get(cmdName, _HINT_TEXT_DEFAULT))
-        if cmdName == BATTLE_CHAT_COMMAND_NAMES.COMMENDATION:
-            keyName = makeString(READABLE_KEY_NAMES.KEY_TAB)
         else:
-            keyName = getReadableKey(CommandMapping.CMD_RADIAL_MENU_SHOW)
-        self.as_setDataS(cmdName, vehicleTypeImg, vehName, pressText, hintText, keyName)
+            vInfoVO = self.sessionProvider.getArenaDP().getVehicleInfo(senderVehicleID)
+            if not vInfoVO:
+                return
+            vehicleTypeImg = _VEHICLE_CLASS_TAGS_ICONS[vInfoVO.vehicleType.classTag]
+            vehName = vInfoVO.vehicleType.shortNameWithPrefix
+            pressText = backport.text(R.strings.ingame_gui.quickReply.hint.press())
+            hintText = backport.text(_HINT_TEXT_MAP.get(cmdName, _HINT_TEXT_DEFAULT))
+            if cmdName == BATTLE_CHAT_COMMAND_NAMES.COMMENDATION:
+                keyName = makeString(READABLE_KEY_NAMES.KEY_TAB)
+            else:
+                keyName = getReadableKey(CommandMapping.CMD_RADIAL_MENU_SHOW)
+            self.as_setDataS(cmdName, vehicleTypeImg, vehName, pressText, hintText, keyName)
+            return
 
     def setHideData(self, wasAnswered=False, commandReceived=None):
         if self.__hidingInProgress is True:
@@ -74,6 +80,7 @@ class CalloutPanel(CalloutPanelMeta):
         if crosshairCtrl is not None:
             crosshairCtrl.onCrosshairViewChanged += self.__onCrosshairViewChanged
             self.__onCrosshairViewChanged(crosshairCtrl.getViewID())
+        self.addListener(events.GameEvent.GO_TO_PREBATTLE_HIGHLIGHTS, self.__onPrebattleHighlightsStart, scope=EVENT_BUS_SCOPE.BATTLE)
         return
 
     def _dispose(self):
@@ -81,6 +88,7 @@ class CalloutPanel(CalloutPanelMeta):
         crosshairCtrl = self.sessionProvider.shared.crosshair
         if crosshairCtrl is not None:
             crosshairCtrl.onCrosshairViewChanged -= self.__onCrosshairViewChanged
+        self.removeListener(events.GameEvent.GO_TO_PREBATTLE_HIGHLIGHTS, self.__onPrebattleHighlightsStart, scope=EVENT_BUS_SCOPE.BATTLE)
         super(CalloutPanel, self)._dispose()
         return
 
@@ -89,3 +97,8 @@ class CalloutPanel(CalloutPanelMeta):
 
     def __onCrosshairViewChanged(self, viewID):
         self.as_setCrosshairTypeS(viewID=viewID)
+
+    def __onPrebattleHighlightsStart(self, _=None):
+        if not self.__hidingInProgress:
+            self.setHideData(wasAnswered=False, commandReceived=None)
+        return

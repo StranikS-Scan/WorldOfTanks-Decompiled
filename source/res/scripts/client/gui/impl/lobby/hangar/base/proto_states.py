@@ -6,8 +6,8 @@ import typing
 import adisp
 from BWUtil import AsyncReturn
 from WeakMethod import WeakMethodProxy
-from frameworks.state_machine import StateFlags
-from frameworks.state_machine.transitions import TransitionType
+from frameworks_common.state_machine import StateFlags
+from frameworks_common.state_machine.transitions import TransitionType
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.framework.entities.View import ViewKey
 from gui.game_control.loadout_controller import updateInteractor

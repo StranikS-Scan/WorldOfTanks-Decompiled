@@ -11,12 +11,14 @@ import Windowing
 import Event
 import nations
 from CurrentVehicle import g_currentVehicle, g_currentPreviewVehicle
+from frameworks.wulf import ViewStatus
 from gui.server_events.events_helpers import getC11nQuestsConfig, isC11nQuest
 from helpers import dependency, time_utils
 from customization_quests_common import CustQuestsCache, deserializeToken
 from gui import SystemMessages, g_tankActiveCamouflage
 from gui.Scaleform.daapi.view.lobby.customization.context.context import CustomizationContext
 from gui.Scaleform.daapi.view.lobby.customization.shared import vehicleHasSlot
+from gui.customization.constants import C11N_VIEW_IDS_THAT_SUSPEND_HIGHLIGHTER
 from gui.customization.shared import C11N_ITEM_TYPE_MAP, HighlightingMode, C11nId
 from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
 from gui.shared.gui_items import GUI_ITEM_TYPE, ItemsCollection
@@ -24,6 +26,7 @@ from gui.shared.gui_items.customization.c11n_items import Customization
 from items import vehicles
 from items.customizations import createNationalEmblemComponents, parseOutfitDescr
 from serializable_types.customizations import CustomizationOutfit
+from skeletons.gui.impl import IGuiLoader
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from vehicle_outfit.outfit import Outfit, Area
@@ -159,17 +162,13 @@ class _ServiceHelpersMixin(object):
             SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType)
 
     def _getVehicleCD(self):
-        if g_currentVehicle.isPresent():
-            vehicleData = self.itemsCache.items.inventory.getItemData(g_currentVehicle.item.intCD)
-            vehicleCD = vehicleData.compDescr
-        else:
-            vehicleCD = ''
-        return vehicleCD
+        return g_currentVehicle.strCD
 
 
 class CustomizationService(_ServiceItemShopMixin, _ServiceHelpersMixin, ICustomizationService):
     hangarSpace = dependency.descriptor(IHangarSpace)
     __lobbyContext = dependency.descriptor(ILobbyContext)
+    __guiLoader = dependency.descriptor(IGuiLoader)
     __FADE_OUT_DELAY = 0.15
 
     @property
@@ -240,6 +239,7 @@ class CustomizationService(_ServiceItemShopMixin, _ServiceHelpersMixin, ICustomi
 
     def showCustomization(self, vehInvID=None, callback=None, season=None, modeId=None, tabId=None, itemCD=None):
         from gui.Scaleform.daapi.view.lobby.customization.states import CustomizationState
+        self.__guiLoader.windowsManager.onViewStatusChanged += self.__onViewStatusChanged
         CustomizationState.goTo(vehInvID=vehInvID, callback=callback, season=season, modeId=modeId, tabId=tabId, itemCD=itemCD)
 
     def closeCustomization(self):
@@ -251,6 +251,7 @@ class CustomizationService(_ServiceItemShopMixin, _ServiceHelpersMixin, ICustomi
                     cameraManager.switchToTank()
         self.destroyCtx()
         self.onVisibilityChanged(False)
+        self.__guiLoader.windowsManager.onViewStatusChanged -= self.__onViewStatusChanged
         return
 
     def getCtx(self):
@@ -570,3 +571,11 @@ class CustomizationService(_ServiceItemShopMixin, _ServiceHelpersMixin, ICustomi
 
     def __onSyncCompleted(self):
         self.__updateProgressionQuests()
+
+    def __onViewStatusChanged(self, uniqueId, newStatus):
+        view = self.__guiLoader.windowsManager.getView(uniqueId)
+        if view and view.layoutID in C11N_VIEW_IDS_THAT_SUSPEND_HIGHLIGHTER:
+            if newStatus == ViewStatus.LOADING:
+                self.suspendHighlighter()
+            elif newStatus == ViewStatus.DESTROYING:
+                self.resumeHighlighter()

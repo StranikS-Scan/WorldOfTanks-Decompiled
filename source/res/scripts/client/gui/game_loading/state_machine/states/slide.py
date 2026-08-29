@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/gui/game_loading/state_machine/states/slide.py
 import typing
 import game_loading_bindings
-from frameworks.state_machine import StateFlags
+from frameworks_common.state_machine import StateFlags
 from gui.game_loading import loggers
 from gui.game_loading.resources.consts import InfoStyles
 from gui.game_loading.state_machine.const import TickingMode
@@ -10,7 +10,7 @@ from gui.game_loading.state_machine.models import ImageViewSettingsModel
 from gui.game_loading.state_machine.states.base import BaseViewResourcesTickingState, BaseState
 from gui.impl.utils.path import normalizeGfImagePath
 if typing.TYPE_CHECKING:
-    from frameworks.state_machine import StateEvent
+    from frameworks_common.state_machine import StateEvent
     from gui.game_loading.resources.models import LocalImageModel
     from gui.game_loading.resources.base import BaseResources
 _logger = loggers.getStatesLogger()

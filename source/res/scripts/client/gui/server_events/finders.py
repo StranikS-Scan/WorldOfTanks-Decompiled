@@ -1,7 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/server_events/finders.py
 import re
-from gui.server_events.pm_constants import IS_PM3_QUEST_ENABLED, IS_PM2_QUEST_ENABLED, IS_REGULAR_QUEST_ENABLED
 from helpers import dependency
 from personal_missions import PM_BRANCH
 from shared_utils import findFirst, first
@@ -14,56 +13,48 @@ PERSONAL_MISSION_COMPLETE_TOKEN = PERSONAL_MISSION_TOKEN + ':complete'
 PERSONAL_MISSION_BADGES_TOKEN = PT_TOKEN_PREFIX + 's%s:badges'
 FINAL_PT_TOKEN_PREFIX = 'pt_final_'
 FINAL_PERSONAL_MISSION_TOKEN = FINAL_PT_TOKEN_PREFIX + 's%s_t%s'
-PM3_CAMPAIGN_FINISHED_QUEST = 'pm3_campaign_finished_honor'
-PM3_OPERATION_FINISHED_HONOR_QUEST = 'pt_final_s%s_t%s_honor'
-PM3_OPERATION_REWARD_QUEST = 'pm3_operation_%s_reward'
-PM3_PERSONAL_MISSION_BASE_TOKEN = PT_TOKEN_PREFIX + 's%s:t%s:finished:base'
-PM3_PERSONAL_MISSION_HONOR_POSTFIX = 'honor'
-PM3_PERSONAL_MISSION_REWARD_CLAIMED = PT_TOKEN_PREFIX + 's3:t%s:reward:claimed'
-PM3_FINISHED_CAMPAIGN_TOKEN = PT_TOKEN_PREFIX + 's3:finished:' + PM3_PERSONAL_MISSION_HONOR_POSTFIX
-PM3_VEHICLE_DETAIL_TOKEN = PT_TOKEN_PREFIX + 's3:t%s:vehElement'
-PM3_QUEST_PREFIX = 'pm3_'
-PM3_MILESTONE_QUEST_PREFIX = PM3_QUEST_PREFIX + 'operation'
-PM3_MILESTONE_QUEST_POSTFIX = 'milestone'
-PM_POINTS_PREFIX = 'pm'
+NO_AWARD_LIST_FINISHED_QUEST = 'pm%s_campaign_finished_honor'
+NO_AWARD_LIST_OPERATION_FINISHED_HONOR_QUEST = 'pt_final_s%s_t%s_honor'
+NO_AWARD_LIST_OPERATION_REWARD_QUEST = 'pm%s_operation_%s_reward'
+NO_AWARD_LIST_PM_BASE_TOKEN = PT_TOKEN_PREFIX + 's%s:t%s:finished:base'
+NO_AWARD_LIST_HONOR_POSTFIX = 'honor'
+NO_AWARD_LIST_PM_REWARD_CLAIMED = PT_TOKEN_PREFIX + 's%s:t%s:reward:claimed'
+NO_AWARD_LIST_FINISHED_CAMPAIGN_TOKEN = PT_TOKEN_PREFIX + 's%s:finished:' + NO_AWARD_LIST_HONOR_POSTFIX
+NO_AWARD_LIST_VEHICLE_DETAIL_TOKEN = PT_TOKEN_PREFIX + 's%s:t%s:vehElement'
+NO_AWARD_LIST_QUEST_PREFIX_TEMPLATE = 'pm%s_'
+NO_AWARD_LIST_MILESTONE_QUEST_PREFIX = NO_AWARD_LIST_QUEST_PREFIX_TEMPLATE + 'operation'
+NO_AWARD_LIST_MILESTONE_QUEST_POSTFIX = 'milestone'
+PM_POINTS_PREFIX = PM_NO_AWARD_LIST_QUESTS_PREFIX = 'pm'
 PM_POINTS_POSTFIX = ':points'
-PM_POINTS = PM_POINTS_PREFIX + '%s:%s' + PM_POINTS_POSTFIX
+PM_POINTS_TOKEN = PM_POINTS_PREFIX + PM_POINTS_POSTFIX
+PM_OPERATION_POINTS_TOKEN = PM_POINTS_PREFIX + '%s:%s' + PM_POINTS_POSTFIX
 isPMQuestRegExp = re.compile('pt_(s\\d_t\\d+_c\\d|final(_s\\d_t\\d+)?)(_[A-Za-z_]+)?')
 CHAMPION_BADGES_BY_BRANCH = {PM_BRANCH.REGULAR: FINAL_PT_TOKEN_PREFIX + 'badge',
  PM_BRANCH.PERSONAL_MISSION_2: FINAL_PT_TOKEN_PREFIX + 'badge_s2'}
 OPERATIONS_TOKENS_PATTERNS = (PERSONAL_MISSION_TOKEN, MAIN_PERSONAL_MISSION_TOKEN, ADD_PERSONAL_MISSION_TOKEN)
-BRANCH_TO_OPERATION_IDS = {PM_BRANCH.REGULAR: (1, 2, 3, 4),
- PM_BRANCH.PERSONAL_MISSION_2: (5, 6, 7),
- PM_BRANCH.PERSONAL_MISSION_3: (8, 9, 10)}
-PM_CAMPAIGNS_IDS = {PM_BRANCH.REGULAR: 1,
- PM_BRANCH.PERSONAL_MISSION_2: 2,
- PM_BRANCH.PERSONAL_MISSION_3: 3}
-PM_SWITCHER_CAMPAIGN = {IS_REGULAR_QUEST_ENABLED: PM_BRANCH.REGULAR,
- IS_PM2_QUEST_ENABLED: PM_BRANCH.PERSONAL_MISSION_2,
- IS_PM3_QUEST_ENABLED: PM_BRANCH.PERSONAL_MISSION_3}
-OPERATION_ID_TO_BRANCH = {operationsId:branch for branch in BRANCH_TO_OPERATION_IDS.iterkeys() for operationsId in BRANCH_TO_OPERATION_IDS[branch]}
-CHAMPION_BADGE_AT_OPERATION_ID = {operationIds[-1]:CHAMPION_BADGES_BY_BRANCH[branch] for branch, operationIds in BRANCH_TO_OPERATION_IDS.iteritems() if CHAMPION_BADGES_BY_BRANCH.get(branch)}
+CHAMPION_BADGE_AT_OPERATION_ID = {operationIds[-1]:CHAMPION_BADGES_BY_BRANCH[branch] for branch, operationIds in PM_BRANCH.BRANCH_TO_OPERATION_IDS.items() if CHAMPION_BADGES_BY_BRANCH.get(branch)}
+NO_AWARD_LIST_QUEST_PREFIXES = [ NO_AWARD_LIST_QUEST_PREFIX_TEMPLATE % PM_BRANCH.PM_CAMPAIGNS_IDS[PM_BRANCH.NAME_TO_TYPE[branchName]] for branchName in PM_BRANCH.WITHOUT_AWARD_LIST_BRANCHES ]
 
-def getBranchByOperationId(operationId):
-    return OPERATION_ID_TO_BRANCH.get(operationId)
+def getBranchByOperationId(operationID):
+    return PM_BRANCH.OPERATION_ID_TO_BRANCH[operationID]
 
 
-def isPM3Milestone(questID):
-    return questID and questID.startswith(PM3_MILESTONE_QUEST_PREFIX) and PM3_MILESTONE_QUEST_POSTFIX in questID
+def isPMNoAwardListMilestone(questID):
+    return questID and questID.startswith(PM_NO_AWARD_LIST_QUESTS_PREFIX) and NO_AWARD_LIST_MILESTONE_QUEST_POSTFIX in questID
 
 
-def getPM3Milestones(quests, operationID):
-    milestonesName = (PM3_MILESTONE_QUEST_PREFIX + '_{}_' + PM3_MILESTONE_QUEST_POSTFIX).format(operationID)
+def getPMNoAwardListMilestones(quests, branch, operationID):
+    milestonesName = (NO_AWARD_LIST_MILESTONE_QUEST_PREFIX % PM_BRANCH.PM_CAMPAIGNS_IDS[branch] + '_{}_' + NO_AWARD_LIST_MILESTONE_QUEST_POSTFIX).format(operationID)
     result = {questID:quest for questID, quest in quests.items() if questID.startswith(milestonesName)}
     return result
 
 
-def isPM3Points(tokenName):
+def isPMPoints(tokenName):
     return tokenName.startswith(PM_POINTS_PREFIX) and tokenName.endswith(PM_POINTS_POSTFIX)
 
 
 def getFinalTokenQuestIdByOperationId(operationId):
-    return FINAL_PERSONAL_MISSION_TOKEN % (PM_CAMPAIGNS_IDS[getBranchByOperationId(operationId)], operationId)
+    return FINAL_PERSONAL_MISSION_TOKEN % (PM_BRANCH.PM_CAMPAIGNS_IDS[getBranchByOperationId(operationId)], operationId)
 
 
 def getAdditionalTokenQuestIdByOperationId(operationId, addCamouflage=False, addBadge=False):
@@ -80,7 +71,7 @@ def getAdditionalTokenQuestIdByOperationId(operationId, addCamouflage=False, add
     return result
 
 
-PM_FINAL_TOKEN_QUEST_IDS_BY_OPERATION_ID = {opId:getFinalTokenQuestIdByOperationId(opId) for opId in OPERATION_ID_TO_BRANCH.iterkeys()}
+PM_FINAL_TOKEN_QUEST_IDS_BY_OPERATION_ID = {opId:getFinalTokenQuestIdByOperationId(opId) for opId in PM_BRANCH.OPERATION_ID_TO_BRANCH.keys()}
 
 def getPersonalMissionDataFromToken(token):
     eventsCache = dependency.instance(IEventsCache)
@@ -145,7 +136,7 @@ def mainQuestTokenFinder(operation):
 
 
 def pmPointsTokenFinder(operation):
-    return tokenFinder(PM_POINTS % (operation.getCampaignID(), operation.getID()))
+    return tokenFinder(PM_OPERATION_POINTS_TOKEN % (operation.getCampaignID(), operation.getID()))
 
 
 def addQuestTokenFinder(operation):
@@ -161,7 +152,7 @@ def tokenBonusFinder(tokenID):
 
 
 def getOperationCompleteToken(operation):
-    return (PM3_PERSONAL_MISSION_BASE_TOKEN if operation.getBranch() == PM_BRANCH.PERSONAL_MISSION_3 else PERSONAL_MISSION_COMPLETE_TOKEN) % (operation.getCampaignID(), operation.getID())
+    return (NO_AWARD_LIST_PM_BASE_TOKEN if operation.isWithoutAwardListBranch() else PERSONAL_MISSION_COMPLETE_TOKEN) % (operation.getCampaignID(), operation.getID())
 
 
 def operationCompletionBonusFinder(operation):

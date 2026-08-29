@@ -12,6 +12,7 @@ class _PlayerEvents(ClientEventsContainer):
         self.isPlayerEntityChanging = True
         self.onAvatarObserverVehicleChanged = self._createEvent()
         self.onObservedByEnemy = self._createEvent()
+        self.onSightPointerEnemySpotted = self._createEvent()
         self.onAccountBecomePlayer = self._createEvent()
         self.onAccountBecomeNonPlayer = self._createEvent()
         self.onAccountShowGUI = self._createEvent()

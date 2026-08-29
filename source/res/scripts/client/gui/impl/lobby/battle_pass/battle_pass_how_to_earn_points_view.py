@@ -18,6 +18,7 @@ from gui.impl.pub.lobby_window import LobbyWindow
 from gui.server_events.events_dispatcher import showDailyQuests
 from gui.shared.event_dispatcher import showHangar, showShop
 from gui.Scaleform.daapi.view.lobby.store.browser.shop_helpers import getWotPlusProShopUrl
+from gui.sounds.filters import switchHangarOverlaySoundFilter
 from helpers import dependency
 from skeletons.gui.game_control import IBattlePassController
 from skeletons.gui.shared import IItemsCache
@@ -47,7 +48,12 @@ class BattlePassHowToEarnPointsView(ViewImpl):
 
     def _onLoading(self, *args, **kwargs):
         super(BattlePassHowToEarnPointsView, self)._onLoading(*args, **kwargs)
+        switchHangarOverlaySoundFilter(on=True)
         self.__createGeneralModel()
+
+    def _finalize(self):
+        switchHangarOverlaySoundFilter(on=False)
+        super(BattlePassHowToEarnPointsView, self)._finalize()
 
     def _getEvents(self):
         return ((self.__battlePass.onBattlePassSettingsChange, self.__onBattlePassSettingsChange), (self.viewModel.onGoToMissions, self.__goToMissions), (self.viewModel.onWotPlusClick, self.__goToWotPlus))

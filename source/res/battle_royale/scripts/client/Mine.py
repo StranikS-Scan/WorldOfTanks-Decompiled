@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: battle_royale/scripts/client/Mine.py
+from __future__ import absolute_import
 import logging
 import typing
 import BigWorld
@@ -61,10 +62,10 @@ class Mine(EntityWorldObject):
     def _loadWorldObject(self):
         return loadMines(self.ownerVehicleID, self._registerWorldObject)
 
-    def _registerWorldObject(self, mines):
-        mines.setPosition(self.position)
-        mines.setIsEnemyMarkerEnabled(True)
-        super(Mine, self)._registerWorldObject(mines)
+    def _registerWorldObject(self, worldObject):
+        worldObject.setPosition(self.position)
+        worldObject.setIsEnemyMarkerEnabled(True)
+        super(Mine, self)._registerWorldObject(worldObject)
 
     def __onAvatarReady(self):
         self.__currentObservedVehicleID = avatar_getter.getVehicleIDAttached()

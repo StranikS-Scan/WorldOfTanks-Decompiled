@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/personal_missions_30/personal_mission_constants.py
+from __future__ import absolute_import
 from enum import Enum
 from typing import TYPE_CHECKING
 from gui.impl.gen import R
@@ -10,7 +11,6 @@ from shared_utils import CONST_CONTAINER
 from sound_gui_manager import CommonSoundSpaceSettings
 if TYPE_CHECKING:
     from typing import Optional, Set
-PM3_CAMPAIGN_ID = 3
 MAX_DETAIL_ID = 15
 MAX_DAILY_QUESTS_PM_POINTS = 25
 MAX_NEWBIE_DAILY_QUESTS_PM_POINTS = 15
@@ -26,7 +26,7 @@ REWARD_CLASSES = {RewardsType.MAIN: 'operation',
  RewardsType.OPERATION: 'honor'}
 
 class IntroKeys(Enum):
-    MAIN_INTRO_VIEW = 'INTRO'
+    PM3_MAIN_INTRO_VIEW = 'INTRO'
     OPERATION_INTRO_VIEW = 'INTRO_OP_%s'
 
 
@@ -34,6 +34,7 @@ class OperationIDs(int, Enum):
     OPERATION_FIRST = 8
     OPERATION_SECOND = 9
     OPERATION_THIRD = 10
+    OPERATION_FOURTH = 11
 
 
 class CameraNameTemplates(str, Enum):
@@ -173,5 +174,21 @@ _STAGES_CONFIG_DATA = {OperationIDs.OPERATION_FIRST: {0: (set(range(0, 1)), {Sta
                                 12: (set(range(11, 13)), {StageAdditions.SUPPORT}),
                                 13: (set(range(11, 14)), {StageAdditions.SUPPORT}),
                                 14: (set(range(11, 15)), {StageAdditions.SUPPORT}),
-                                15: (set(range(11, 16)), set())}}
+                                15: (set(range(11, 16)), set())},
+ OperationIDs.OPERATION_FOURTH: {0: (set(range(0, 1)), {StageAdditions.CAPE, StageAdditions.SUPPORT}),
+                                 1: (set(range(0, 2)), {StageAdditions.CAPE, StageAdditions.SUPPORT}),
+                                 2: (set(range(0, 3)), {StageAdditions.SUPPORT}),
+                                 3: (set(range(0, 4)), {StageAdditions.SUPPORT}),
+                                 4: (set(range(0, 5)), {StageAdditions.SUPPORT}),
+                                 5: (set(range(0, 6)), {StageAdditions.SUPPORT}),
+                                 6: (set(range(6, 7)), {StageAdditions.SUPPORT}),
+                                 7: (set(range(6, 8)), {StageAdditions.SUPPORT}),
+                                 8: (set(range(6, 9)), {StageAdditions.SUPPORT}),
+                                 9: (set(range(6, 10)), {StageAdditions.SUPPORT}),
+                                 10: (set(range(6, 11)), {StageAdditions.SUPPORT}),
+                                 11: (set(range(6, 12)), {StageAdditions.SUPPORT}),
+                                 12: (set(range(6, 13)), {StageAdditions.SUPPORT}),
+                                 13: (set(range(6, 14)), {StageAdditions.SUPPORT}),
+                                 14: (set(range(6, 15)), {StageAdditions.SUPPORT}),
+                                 15: (set(range(6, 16)), set())}}
 STAGES_CONFIG = {operationId:{stageNumber:StageInfo(operationId, stageNumber, stages=stageData[0], additions=stageData[1]) for stageNumber, stageData in operationStages.items()} for operationId, operationStages in _STAGES_CONFIG_DATA.items()}

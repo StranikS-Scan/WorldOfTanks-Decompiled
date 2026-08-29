@@ -93,7 +93,7 @@ class AdvancedShellBuilder(AdvancedDataBuilder):
     __slots__ = ()
 
     def _buildData(self, _advanced, intCD, *args, **kwargs):
-        return super(AdvancedShellBuilder, self)._buildData(_advanced, intCD)
+        return super(AdvancedShellBuilder, self)._buildData(_advanced, intCD, *args)
 
 
 def getTooltipBuilders():

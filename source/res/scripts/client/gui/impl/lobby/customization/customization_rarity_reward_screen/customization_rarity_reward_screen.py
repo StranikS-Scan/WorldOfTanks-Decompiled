@@ -99,7 +99,8 @@ class CustomizationRarityRewardWindow(LobbyWindow):
         self._blur = CachedBlur(enabled=True, ownLayer=self.layer - 1)
 
     def _finalize(self):
-        self._blur.fini()
-        self._blur = None
+        if self._blur:
+            self._blur.fini()
+            self._blur = None
         super(CustomizationRarityRewardWindow, self)._finalize()
         return

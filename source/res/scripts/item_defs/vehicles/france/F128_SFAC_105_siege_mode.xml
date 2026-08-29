@@ -1395,7 +1395,6 @@
           </shotDispersionFactors>
           <invisibilityFactorAtShot>	0.099	</invisibilityFactorAtShot>
           <shotDispersionRadius>	0.2	</shotDispersionRadius>
-          <multiGunEffects>	shot_dualgun_large_mb_L shot_dualgun_large_mb_R	</multiGunEffects>
           <dualGun>
             <chargeTime>	3	</chargeTime>
             <shootImpulse>	150	</shootImpulse>
@@ -1406,6 +1405,9 @@
             <afterShotDelay>	1	</afterShotDelay>
             <preChargeIndication>	0.25	</preChargeIndication>
           </dualGun>
+          <prefabs>
+            <main>	content/CGFPrefabs/Vehicle/guns/france/gun_Canon_bitube_de_105_mm_D_1507.prefab	</main>
+          </prefabs>
           <customizationSlots>
             <slot>
               <slotType>	paint	</slotType>
@@ -1602,6 +1604,7 @@
             <collisionModelClient>	vehicles/french/F128_SFAC_105/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
           <edgeByVisualModel>	false	</edgeByVisualModel>
+          <muzzleBrake>	HORIZONTAL	</muzzleBrake>
           <camouflage>
             <density>	65.0 65.0	</density>
             <aoTextureSize>	512 512	</aoTextureSize>

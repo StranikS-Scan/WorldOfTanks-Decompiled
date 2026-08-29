@@ -30,10 +30,13 @@ class MechanicsEnum(Enum):
     SUPPORT_WEAPON = 'supportWeapon'
     PILLBOX_SIEGE_MODE = 'pillboxSiegeMode'
     CHARGEABLE_BURST = 'chargeableBurst'
+    SHELL_CALIBRATION = 'shellCalibration'
     RECHARGEABLE_NITRO = 'rechargeableNitro'
     CHARGE_SHOT = 'chargeShot'
     OVERHEAT_STACKS = 'overheatStacks'
+    SIGHT_POINTER = 'sightPointer'
     STANCE_DANCE = 'stanceDance'
+    AUTORELOADER_SURGE = 'autoreloaderSurge'
     STATIONARY_RELOAD = 'stationaryReload'
     OVERHEAT_GUN = 'overheatGun'
     HEATING_ZONES_GUN = 'heatingZonesGun'
@@ -41,6 +44,9 @@ class MechanicsEnum(Enum):
     STAGED_JET_BOOSTERS = 'stagedJetBoosters'
     PROPELLANT_GUN = 'propellantAfterburnerGun'
     WHEELED_DASH = 'wheeledDash'
+    AUXILIARY_ROCKET_LAUNCHER = 'auxiliaryRocketLauncher'
+    SHELL_PARAMS_SWITCHER = 'shellParamsSwitcher'
+    BUSTLE_FEED = 'bustleFeed'
 
 
 class MechanicsRank(Enum):

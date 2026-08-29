@@ -793,10 +793,10 @@ class PlatoonController(IPlatoonController, IGlobalListener, CallbackDelayer):
                     if not view.getParentWindow().isHidden():
                         view.getParentWindow().hide()
                 else:
-                    if ePlatoonLayout == EPlatoonLayout.MEMBER and self.__isPlatoonVisualizationEnabled:
-                        self.onPlatoonTankVisualizationChanged(False)
                     view.getParentWindow().destroy()
 
+        if not hideOnly and self.__isPlatoonVisualizationEnabled:
+            self.onPlatoonTankVisualizationChanged(False)
         self.__closeSendInviteView()
 
     def __getView(self, ePlatoonLayout):

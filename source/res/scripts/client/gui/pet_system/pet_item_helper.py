@@ -3,7 +3,10 @@
 import typing
 from gui.impl import backport
 from gui.impl.gen import R
+from gui.impl.gen.view_models.views.lobby.pet_system.promotion_model import PromoBonus
+from gui.pet_system.bonus_helper import BonusItem, BonusNameToPromoStr
 from gui.pet_system.constants import PET_NAME_FORMAT
+from shared_utils import first
 from skeletons.gui.lobby_context import ILobbyContext
 from helpers import dependency
 from skeletons.gui.pet_system import IPetSystemController
@@ -70,3 +73,13 @@ class PromoPetItem(PetItem):
     @classmethod
     def getPromoShopUrl(cls, petId):
         return cls.getPetsPromoConfig().getShopUrl(petId)
+
+    @classmethod
+    def getPetBenefits(cls, petID):
+        promoStrList = []
+        petBonusID = first(BonusItem.getPetBonuses(petID))
+        promoStrList.append(BonusNameToPromoStr.get(BonusItem.getBonusName(petBonusID)))
+        promoStrList.append(PromoBonus.EVENTS.value)
+        if cls.petController.getGeneralConfig().showCaseEnabled:
+            promoStrList.append(PromoBonus.SHOWOFF.value)
+        return promoStrList

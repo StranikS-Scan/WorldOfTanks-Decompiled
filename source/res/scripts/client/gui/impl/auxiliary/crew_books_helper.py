@@ -11,7 +11,6 @@ from account_helpers import AccountSettings
 from account_helpers.AccountSettings import CREW_BOOKS_VIEWED
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.items_cache import CACHE_SYNC_REASON
-from gui.shared.utils.requesters import REQ_CRITERIA
 from helpers.dependency import descriptor
 from items import tankmen
 from items.components.crew_books_constants import CREW_BOOK_RARITY
@@ -130,9 +129,7 @@ class _CrewBooksViewedCache(object):
                 item = tankmen.getItemByCompactDescr(cd)
                 if count is None:
                     count = 0
-                if item.type in CREW_BOOK_RARITY.NO_NATION_TYPES:
-                    self.__booksCountByNation[item.type] = count
-                self.__booksCountByNation[item.type][self.__getNationID(item.nation)] = count
+                self.__setBooksCount(item.type, self.__getNationID(item.nation), count)
 
             self._setState(self.STATE.UPDATE)
         return
@@ -155,14 +152,24 @@ class _CrewBooksViewedCache(object):
 
     def __syncOwnedItems(self):
         self.__booksCountByNation.clear()
-        items = self._itemsCache.items.getItems(GUI_ITEM_TYPE.CREW_BOOKS, REQ_CRITERIA.CREW_ITEM.IN_ACCOUNT)
+        items = self._itemsCache.items.getItems(GUI_ITEM_TYPE.CREW_BOOKS)
         for item in itervalues(items):
-            bookType = item.getBookType()
-            if bookType in CREW_BOOK_RARITY.NO_NATION_TYPES:
-                self.__booksCountByNation[bookType] = item.getFreeCount()
-            self.__booksCountByNation[bookType][item.getNationID()] = item.getFreeCount()
+            self.__setBooksCount(item.getBookType(), item.getNationID(), item.getFreeCount())
 
         self._setState(self.STATE.UPDATE)
+
+    def __setBooksCount(self, bookType, nationID, count):
+        if bookType in CREW_BOOK_RARITY.NO_NATION_TYPES:
+            ownedBooks = self.__booksCountByNation
+            viewedBooks = self.__viewedItems
+            key = bookType
+        else:
+            ownedBooks = self.__booksCountByNation[bookType]
+            viewedBooks = self.__viewedItems.setdefault(bookType, {})
+            key = nationID
+        ownedBooks[key] = count
+        if viewedBooks.get(key, 0) > count:
+            viewedBooks[key] = count
 
     def __getNationID(self, nationName):
         return INDICES.get(nationName, NONE_INDEX)

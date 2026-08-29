@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/user_missions/hub/tabs/basic/daily_section/daily_missions_section_presenter.py
+from __future__ import absolute_import
 from constants import PremiumConfigs, DAILY_QUESTS_CONFIG
 from gui.impl import backport
 from gui.impl.gen import R

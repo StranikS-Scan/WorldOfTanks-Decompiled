@@ -1236,13 +1236,11 @@ class Marker(object):
 
     def readConfig(self, xmlCtx, section):
         if not self._sectionName or not section.has_key(self._sectionName):
-            return None
-        else:
-            markerSection = section[self._sectionName]
-            self.name = _xml.readStringOrNone(xmlCtx, markerSection, 'name')
-            self.textColor = _xml.readStringOrNone(xmlCtx, markerSection, 'textColor')
-            self._validate()
-            return None
+            return
+        markerSection = section[self._sectionName]
+        self.name = _xml.readStringOrNone(xmlCtx, markerSection, 'name')
+        self.textColor = _xml.readStringOrNone(xmlCtx, markerSection, 'textColor')
+        self._validate()
 
     def _validate(self):
         if IS_CLIENT:
@@ -1266,14 +1264,12 @@ class Markers(object):
 
     def readConfig(self, xmlCtx, section):
         if not self._sectionName or not section.has_key(self._sectionName):
-            return None
-        else:
-            markersSection = section[self._sectionName]
-            self.ally = Marker('ally')
-            self.enemy = Marker('enemy')
-            self.ally.readConfig(xmlCtx, markersSection)
-            self.enemy.readConfig(xmlCtx, markersSection)
-            return None
+            return
+        markersSection = section[self._sectionName]
+        self.ally = Marker('ally')
+        self.enemy = Marker('enemy')
+        self.ally.readConfig(xmlCtx, markersSection)
+        self.enemy.readConfig(xmlCtx, markersSection)
 
 
 class MarkersConfigReader(object):
@@ -2220,6 +2216,47 @@ class PoiRadarEquipment(VisualScriptEquipment):
     def _readConfig(self, xmlCtx, scriptSection):
         super(PoiRadarEquipment, self)._readConfig(xmlCtx, scriptSection)
         self.duration = scriptSection.readFloat('duration')
+        self._exportSlotsToVSE()
+
+
+class PoiIlluminationFlareEquipment(VisualScriptEquipment, BaseMarkerConfigReader):
+    __slots__ = BaseMarkerConfigReader._MARKER_SLOTS_ + ('duration', 'startRadius', 'endRadius', 'unSpotDuration', 'delay', 'areaPrefabColorAlly', 'areaPrefabColorEnemy', 'areaPrefabColorEnemyCB', 'startYFlare', 'endYFlare', 'damageIncomeFactor', 'decayPhaseDuration')
+
+    def __init__(self):
+        super(PoiIlluminationFlareEquipment, self).__init__()
+        self.initMarkerInformation()
+
+    def initMarkerInformation(self):
+        super(PoiIlluminationFlareEquipment, self).initMarkerInformation()
+        self.duration = None
+        self.delay = None
+        self.startRadius = None
+        self.endRadius = None
+        self.unSpotDuration = None
+        self.areaPrefabColorAlly = None
+        self.areaPrefabColorEnemy = None
+        self.areaPrefabColorEnemyCB = None
+        self.startYFlare = None
+        self.endYFlare = None
+        self.damageIncomeFactor = None
+        self.decayPhaseDuration = None
+        return
+
+    def _readConfig(self, xmlCtx, scriptSection):
+        super(PoiIlluminationFlareEquipment, self)._readConfig(xmlCtx, scriptSection)
+        self.duration = scriptSection.readFloat('duration')
+        self.delay = scriptSection.readFloat('delay')
+        self.startRadius = scriptSection.readFloat('startRadius')
+        self.endRadius = scriptSection.readFloat('endRadius')
+        self.unSpotDuration = scriptSection.readFloat('unSpotDuration')
+        self.areaPrefabColorAlly = _xml.readIntOrNone(xmlCtx, scriptSection, 'areaPrefabColorAlly')
+        self.areaPrefabColorEnemy = _xml.readIntOrNone(xmlCtx, scriptSection, 'areaPrefabColorEnemy')
+        self.areaPrefabColorEnemyCB = _xml.readIntOrNone(xmlCtx, scriptSection, 'areaPrefabColorEnemyCB')
+        self.startYFlare = scriptSection.readFloat('startYFlare')
+        self.endYFlare = scriptSection.readFloat('endYFlare')
+        self.damageIncomeFactor = scriptSection.readFloat('damageIncomeFactor', 1.0)
+        self.decayPhaseDuration = scriptSection.readFloat('decayPhaseDuration', 1.0)
+        self.readMarkerConfig(xmlCtx, scriptSection)
         self._exportSlotsToVSE()
 
 

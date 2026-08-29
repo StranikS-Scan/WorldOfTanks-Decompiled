@@ -8,10 +8,11 @@ from messenger.m_constants import PROTO_TYPE
 from messenger.proto import proto_getter
 from messenger.proto.xmpp.xmpp_constants import CONTACT_LIMIT
 from messenger.proto.xmpp.xmpp_string_utils import validateRosterItemGroup
-from messenger.storage import storage_getter
+from messenger.storage import MessengerStorageDescriptor, UsersStorage
 from messenger.ext import passCensor
 
 class GroupManageView(BaseManageContactViewMeta):
+    usersStorage = MessengerStorageDescriptor(UsersStorage)
 
     def __init__(self):
         super(GroupManageView, self).__init__()
@@ -20,10 +21,6 @@ class GroupManageView(BaseManageContactViewMeta):
 
     @proto_getter(PROTO_TYPE.MIGRATION)
     def proto(self):
-        return None
-
-    @storage_getter('users')
-    def usersStorage(self):
         return None
 
     def checkText(self, name):

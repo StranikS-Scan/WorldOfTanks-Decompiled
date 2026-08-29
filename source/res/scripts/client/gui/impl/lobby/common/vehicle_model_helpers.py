@@ -9,7 +9,8 @@ from gui.shared.gui_items.Vehicle import Vehicle
 from gui.shared.utils.functions import replaceHyphenToUnderscore
 if typing.TYPE_CHECKING:
     from frameworks.wulf import Array
-    from typing import Optional, Iterable
+    from typing import Optional, Iterable, List
+    from gui.shared.gui_items.vehicle_mechanics.vehicle_mechanic_item import VehicleMechanicItem
 
 def fillVehicleModel(model, vehicleItem, tags=None):
     model.setIsPremium(vehicleItem.isElite)

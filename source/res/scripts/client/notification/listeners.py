@@ -12,13 +12,11 @@ from typing import TYPE_CHECKING
 from account_helpers.AccountSettings import INTEGRATED_AUCTION_NOTIFICATIONS, IS_BATTLE_PASS_EXTRA_START_NOTIFICATION_SEEN, IS_BATTLE_PASS_START_NOTIFICATION_SEEN, LOOT_BOXES_WAS_FINISHED, LOOT_BOXES_WAS_STARTED, PROGRESSIVE_REWARD_VISITED, RECRUITS_NOTIFICATIONS, SENIORITY_AWARDS_COINS_REMINDER_SHOWN_TIMESTAMP, VEH_SKILL_TREE_POPUP_SHOWN, VEH_SKILL_TREE_RECORDED_NOFITICATION_NODE, BattleMatters, CHALLENGES_START_SEEN_NOTIFICATION, CHALLENGES_REMINDER_SEEN_NOTIFICATION
 from account_helpers.settings_core.settings_constants import SeniorityAwardsStorageKeys
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
-from gui.server_events.finders import PM_CAMPAIGNS_IDS, PM_SWITCHER_CAMPAIGN
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.framework.entities.View import ViewKey
 from gui.impl.lobby.gf_notifications import GFNotificationTemplates
 from gui.impl.lobby.gf_notifications.cache import getCache
 from gui.impl.lobby.vehicle_hub.sub_presenters.veh_skill_tree.utils import getCheapestAvailablePerk
-from gui.server_events.pm_constants import IS_PM3_QUEST_ENABLED, DISABLED_PM_OPERATIONS, DISABLED_PM_MISSIONS, IS_PM2_QUEST_ENABLED, IS_REGULAR_QUEST_ENABLED
 from helpers.events_handler import EventsHandler
 from helpers.time_utils import getTimestampByStrDate
 from PlayerEvents import g_playerEvents
@@ -53,7 +51,7 @@ from gui.prb_control import prbInvitesProperty
 from gui.prb_control.entities.listener import IGlobalListener
 from gui.prestige.prestige_helpers import MAX_GRADE_ID, isFirstEntryNotificationShown, mapGradeIDToUI, setFirstEntryNotificationShown
 from gui.server_events.recruit_helper import getAllRecruitsInfo
-from gui.shared import events, g_eventBus
+from gui.shared import g_eventBus, events
 from gui.shared.formatters import text_styles
 from gui.shared.notifications import NotificationPriorityLevel
 from gui.shared.system_factory import collectAllNotificationsListeners, registerNotificationsListeners
@@ -70,9 +68,9 @@ from messenger.m_constants import PROTO_TYPE, SCH_CLIENT_MSG_TYPE, USER_ACTION_I
 from messenger.proto import proto_getter
 from messenger.proto.events import g_messengerEvents
 from messenger.proto.xmpp.xmpp_constants import XMPP_ITEM_TYPE
-from notification.decorators import BattleMattersReminderDecorator, BattlePassLockButtonDecorator, BattlePassSwitchChapterReminderDecorator, C2DProgressionStyleDecorator, C11nMessageDecorator, C11nProgressiveItemDecorator, ClanAppActionDecorator, ClanAppsDecorator, ClanInvitesActionDecorator, ClanInvitesDecorator, ClanSingleAppDecorator, ClanSingleInviteDecorator, CollectionCustomMessageDecorator, CollectionsLockButtonDecorator, EmailConfirmationReminderMessageDecorator, ExchangeRateDiscountDecorator, FriendshipRequestDecorator, IntegratedAuctionStageFinishDecorator, IntegratedAuctionStageStartDecorator, LockButtonMessageDecorator, LootBoxSystemDecorator, LowPriorityDecorator, MapboxButtonDecorator, MessageDecorator, MissingEventsDecorator, PersonalMission3QuestDecorator, PetSystemDecorator, PostProgressionDecorator, PrbInviteDecorator, PrestigeFirstEntryDecorator, PrestigeLvlUpDecorator, ProgressiveRewardDecorator, RecruitReminderMessageDecorator, SeniorityAwardsDecorator, VehSkillTreePerkAvailableDecorator, WGNCPopUpDecorator, WinbackSelectableRewardReminderDecorator, ChallengesStartDecorator, ChallengesReminderDecorator
+from notification.decorators import BattleMattersReminderDecorator, BattlePassLockButtonDecorator, BattlePassSwitchChapterReminderDecorator, C2DProgressionStyleDecorator, C11nMessageDecorator, C11nProgressiveItemDecorator, ClanAppActionDecorator, ClanAppsDecorator, ClanInvitesActionDecorator, ClanInvitesDecorator, ClanSingleAppDecorator, ClanSingleInviteDecorator, CollectionCustomMessageDecorator, CollectionsLockButtonDecorator, EmailConfirmationReminderMessageDecorator, ExchangeRateDiscountDecorator, FriendshipRequestDecorator, IntegratedAuctionStageFinishDecorator, IntegratedAuctionStageStartDecorator, LockButtonMessageDecorator, LootBoxSystemDecorator, LowPriorityDecorator, MapboxButtonDecorator, MessageDecorator, MissingEventsDecorator, PetSystemDecorator, PM3QuestDecorator, PM4QuestDecorator, PostProgressionDecorator, PrbInviteDecorator, PrestigeFirstEntryDecorator, PrestigeLvlUpDecorator, ProgressiveRewardDecorator, RecruitReminderMessageDecorator, SeniorityAwardsDecorator, VehSkillTreePerkAvailableDecorator, WGNCPopUpDecorator, WinbackSelectableRewardReminderDecorator, ChallengesStartDecorator, ChallengesReminderDecorator
 from notification.settings import NOTIFICATION_TYPE, NotificationData
-from personal_missions import PM_BRANCH
+from personal_missions import PM_BRANCH, PM_SWITCHES
 from shared_utils import first
 from skeletons.account_helpers.settings_core import ISettingsCache
 from skeletons.gui.app_loader import IAppLoader
@@ -300,7 +298,9 @@ class ServiceChannelListener(_NotificationListener):
         elif self.__isCollectionsSysMessageTypes(messageType) or self.__isCollectionsSMType(settings):
             return CollectionsLockButtonDecorator
         elif messageType == SYS_MESSAGE_TYPE.personalMission3Quest.index():
-            return PersonalMission3QuestDecorator
+            return PM3QuestDecorator
+        elif messageType == SYS_MESSAGE_TYPE.personalMission4Quest.index():
+            return PM4QuestDecorator
         elif self.__needToLowerPriority(messageType):
             return LowPriorityDecorator
         else:
@@ -2311,14 +2311,14 @@ class PM3NotificationListener(_NotificationListener):
         self.__currentDisabledMissions = set(self.__lobbyContext.getServerSettings().getDisabledPersonalMissions())
 
     def __onServerSettingsChange(self, diff):
-        if IS_PM3_QUEST_ENABLED in diff and IS_PM2_QUEST_ENABLED in diff and IS_REGULAR_QUEST_ENABLED in diff:
+        if all((diff.get(switch) for switch in PM_SWITCHES.ALL)):
             self.__allCampaignsSwitcherNotify(diff)
         else:
             self.__campaignSwitcherNotify(diff)
-        if diff.get(DISABLED_PM_OPERATIONS) is not None:
-            self.__operationSwitcherNotify(diff)
-        if diff.get(DISABLED_PM_MISSIONS) is not None:
-            self.__missionSwitcherNotify(diff)
+        if diff.get(PM_SWITCHES.DISABLED_PM_OPERATIONS) is not None:
+            self.__operationSwitcherNotify()
+        if diff.get(PM_SWITCHES.DISABLED_PM_MISSIONS) is not None:
+            self.__missionSwitcherNotify()
         return
 
     @staticmethod
@@ -2326,16 +2326,19 @@ class PM3NotificationListener(_NotificationListener):
         SystemMessages.pushMessage(text=text, type=messageType, priority=priority, messageData={'title': title})
 
     def __allCampaignsSwitcherNotify(self, diff):
-        if all((diff[IS_PM3_QUEST_ENABLED], diff[IS_PM2_QUEST_ENABLED], diff[IS_REGULAR_QUEST_ENABLED])):
+        if all((diff.get(switch) for switch in PM_SWITCHES.ALL)):
             SystemMessages.pushI18nMessage(SYSTEM_MESSAGES.PERSONALMISSION_SWITCHERNOTIFICATION_ALLCAMPAIGNSON, type=SystemMessages.SM_TYPE.Information, priority=NotificationPriorityLevel.HIGH)
-        if not any((diff[IS_PM3_QUEST_ENABLED], diff[IS_PM2_QUEST_ENABLED], diff[IS_REGULAR_QUEST_ENABLED])):
+        if not any((diff.get(switch) for switch in PM_SWITCHES.ALL)):
             SystemMessages.pushI18nMessage(SYSTEM_MESSAGES.PERSONALMISSION_SWITCHERNOTIFICATION_ALLCAMPAIGNSOFF, type=SystemMessages.SM_TYPE.ErrorSimple, priority=NotificationPriorityLevel.HIGH)
 
     def __campaignSwitcherNotify(self, diff):
-        for campaignSwitcher in PM_SWITCHER_CAMPAIGN:
+        for branchName, campaignSwitcher in PM_SWITCHES.MAP_BRANCH_NAME_TO_SWITCH_NAME.items():
             if campaignSwitcher in diff:
-                branch = PM_SWITCHER_CAMPAIGN[campaignSwitcher]
-                campaignName = self.__eventsCache.getPersonalMissions().getAllCampaigns(branches=PM_BRANCH.ALL)[PM_CAMPAIGNS_IDS[branch]].getUserName()
+                branch = PM_BRANCH.NAME_TO_TYPE.get(branchName)
+                if branch is None:
+                    _logger.error('Personal Missions branch name "%s" is unknown', branchName)
+                    continue
+                campaignName = self.__eventsCache.getPersonalMissions().getAllCampaigns(branches=PM_BRANCH.ALL_NAMES)[PM_BRANCH.PM_CAMPAIGNS_IDS[branch]].getUserName()
                 if not diff[campaignSwitcher]:
                     message = SYSTEM_MESSAGES.PERSONALMISSION_SWITCHERNOTIFICATION_CAMPAIGNOFF
                     iconType = SystemMessages.SM_TYPE.ErrorSimple
@@ -2344,14 +2347,16 @@ class PM3NotificationListener(_NotificationListener):
                     message = SYSTEM_MESSAGES.PERSONALMISSION_SWITCHERNOTIFICATION_CAMPAIGNON
                 SystemMessages.pushI18nMessage(message, type=iconType, priority=NotificationPriorityLevel.HIGH, campaignName=campaignName)
 
-    def __getCampaignName(self, operation):
-        return self.__eventsCache.getPersonalMissions().getAllCampaigns(PM_BRANCH.ALL)[operation.getCampaignID()].getUserName()
+        return
 
-    def __operationSwitcherNotify(self, diff):
+    def __getCampaignName(self, operation):
+        return self.__eventsCache.getPersonalMissions().getAllCampaigns(PM_BRANCH.ALL_NAMES)[operation.getCampaignID()].getUserName()
+
+    def __operationSwitcherNotify(self):
         newDisabledOperations = set(self.__eventsCache.getPersonalMissions().getDisabledPMOperations())
         disabledOperationsToNotify = newDisabledOperations - self.__currentDisabledOperations
         newEnabledOperations = self.__currentDisabledOperations - newDisabledOperations
-        allOperations = self.__eventsCache.getPersonalMissions().getAllOperations(PM_BRANCH.ALL)
+        allOperations = self.__eventsCache.getPersonalMissions().getAllOperations(PM_BRANCH.ALL_NAMES)
         self.__currentDisabledOperations = newDisabledOperations
         for operationID in disabledOperationsToNotify:
             operation = allOperations.get(operationID)
@@ -2366,17 +2371,17 @@ class PM3NotificationListener(_NotificationListener):
             if operation is None:
                 _logger.error('Wrong enabled personal mission operationID "%s"', operationID)
                 continue
-            campaignName = self.__eventsCache.getPersonalMissions().getAllCampaigns(PM_BRANCH.ALL)[operation.getCampaignID()].getUserName()
+            campaignName = self.__eventsCache.getPersonalMissions().getAllCampaigns(PM_BRANCH.ALL_NAMES)[operation.getCampaignID()].getUserName()
             SystemMessages.pushI18nMessage(SYSTEM_MESSAGES.PERSONALMISSION_SWITCHERNOTIFICATION_OPERATIONON, type=SystemMessages.SM_TYPE.Information, priority=NotificationPriorityLevel.MEDIUM, operationName=operation.getShortUserName(), campaignName=campaignName)
 
         return
 
-    def __missionSwitcherNotify(self, diff):
-        newDisabledMissions = set(diff.get(DISABLED_PM_MISSIONS, {}))
+    def __missionSwitcherNotify(self):
+        newDisabledMissions = set(self.__lobbyContext.getServerSettings().getDisabledPersonalMissions())
         newDisabledMissionsToNotify = newDisabledMissions - self.__currentDisabledMissions
         newEnabledMissions = self.__currentDisabledMissions - newDisabledMissions
-        allMissions = self.__eventsCache.getPersonalMissions().getAllQuests(PM_BRANCH.ALL)
-        allOperations = self.__eventsCache.getPersonalMissions().getAllOperations(PM_BRANCH.ALL)
+        allMissions = self.__eventsCache.getPersonalMissions().getAllQuests(PM_BRANCH.ALL_NAMES)
+        allOperations = self.__eventsCache.getPersonalMissions().getAllOperations(PM_BRANCH.ALL_NAMES)
         for missionID in newDisabledMissionsToNotify:
             mission = allMissions.get(missionID)
             if not mission:

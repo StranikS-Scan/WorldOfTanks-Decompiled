@@ -16,14 +16,13 @@ from cgf_demo.test_movers import TestScriptAxisRotator
 from HealthComponent import HealthComponent
 from constants import IS_CLIENT
 _logger = logging.getLogger(__name__)
-if not IS_CLIENT:
+if IS_CLIENT:
+    from Vehicle import Vehicle
+else:
 
     class Vehicle(object):
         pass
 
-
-else:
-    from Vehicle import Vehicle
 
 @registerComponent
 class TestRotateWhileInTrigger(object):

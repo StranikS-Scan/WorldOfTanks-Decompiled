@@ -1,4 +1,5 @@
 <guns.xml>
+  <xmlns:xmlref>	http://bwt/xmlref	</xmlns:xmlref>
   <ids>
     <_75mm_Type5_1>	0	</_75mm_Type5_1>
     <_13.2mm_Type93>	1	</_13.2mm_Type93>
@@ -69,6 +70,7 @@
     <_105mm_Cannon_Type_92_SP>	72	</_105mm_Cannon_Type_92_SP>
     <_105mm_Gun_Type_52>	73	</_105mm_Gun_Type_52>
     <_137_2mm_TK_DK>	74	</_137_2mm_TK_DK>
+    <_15_5_cm_Gun_Shin>	75	</_15_5_cm_Gun_Shin>
     <_90mm_Gun_Type_61_MHI>	2000	</_90mm_Gun_Type_61_MHI>
     <_105mm_Rifled_Gun_61>	2001	</_105mm_Rifled_Gun_61>
     <_75mm_Tank_Gun_Type_5_Model_I_CR>	2002	</_75mm_Tank_Gun_Type_5_Model_I_CR>
@@ -95,6 +97,7 @@
     <_90mm_Gun_Type61_IGR>	60001	</_90mm_Gun_Type61_IGR>
     <_75mm_Gun_Type5_M1_auto_IGR>	60002	</_75mm_Gun_Type5_M1_auto_IGR>
     <_105mm_Rifled_Gun_IGR>	60003	</_105mm_Rifled_Gun_IGR>
+    <_12_cm_Shisei_Funshinhou>	76	</_12_cm_Shisei_Funshinhou>
   </ids>
   <shared>
     <_13.2mm_Type93>
@@ -4617,12 +4620,6 @@
       <price>	200000	</price>
       <notInShop>	true	</notInShop>
       <impulse>	0.38	</impulse>
-      <recoil>
-        <lodDist>	MEDIUM	</lodDist>
-        <amplitude>	0.65	</amplitude>
-        <recoilEffect>	large	</recoilEffect>
-      </recoil>
-      <effects>	shot_largeext	</effects>
       <reloadEffect>	dualgun_reload115_152	</reloadEffect>
       <pitchLimits>
         <minPitch>	0.0 -15.0 1.0 -15.0	</minPitch>
@@ -5467,6 +5464,89 @@
         </_149mm_Type_1_HE_7x7>
       </shots>
     </_149mm_Gun_Type_97_7x7>
+    <_15_5_cm_Gun_Shin>
+      <userString>	#japan_vehicles:_15_5_cm_Gun_Shin	</userString>
+      <tags></tags>
+      <level>	11	</level>
+      <price>	500000	</price>
+      <notInShop>	true	</notInShop>
+      <impulse>	0.62	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.4	</amplitude>
+        <recoilEffect>	huge	</recoilEffect>
+      </recoil>
+      <effects>	shot_huge	</effects>
+      <reloadEffect>	reload155_170	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -10 1.0 -10	</minPitch>
+        <maxPitch>	0.0 10 1.0 10	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	0.96	</rotationSpeed>
+      <reloadTime>	62.58	</reloadTime>
+      <maxAmmo>	40	</maxAmmo>
+      <aimingTime>	10.43	</aimingTime>
+      <weight>	100	</weight>
+      <maxHealth>	240	</maxHealth>
+      <maxRegenHealth>	120	</maxRegenHealth>
+      <repairCost>	11	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	1.04	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.10	</turretRotation>
+        <afterShot>	4.0	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_15_5_cm_AP_Shin>
+          <defaultPortion>	0.95	</defaultPortion>
+          <speed>	1100	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	100	</piercingPower>
+        </_15_5_cm_AP_Shin>
+        <_15_5_cm_AP_Shin_Toku_Kou>
+          <defaultPortion>	0.00	</defaultPortion>
+          <speed>	1100	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	100	</piercingPower>
+        </_15_5_cm_AP_Shin_Toku_Kou>
+        <_15_5_cm_HE_Shin>
+          <defaultPortion>	0.05	</defaultPortion>
+          <speed>	1150	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	100	</piercingPower>
+        </_15_5_cm_HE_Shin>
+      </shots>
+    </_15_5_cm_Gun_Shin>
+    <_12_cm_Shisei_Funshinhou>
+      <userString>	#japan_vehicles:_12_cm_Shisei_Funshinhou	</userString>
+      <tags>	secondaryGun	</tags>
+      <level>	11	</level>
+      <price>	500000	</price>
+      <notInShop>	True	</notInShop>
+      <reloadTime>	62.58	</reloadTime>
+      <aimingTime>	10.43	</aimingTime>
+      <shotDispersionRadius>	1.04	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.08	</turretRotation>
+        <afterShot>	1.2	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+      <shots>
+        <_12_cm_Shisei_HE_Funshindan>
+          <defaultPortion>	1.0	</defaultPortion>
+          <speed>	320	</speed>
+          <gravity>	0.8	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	100	</piercingPower>
+        </_12_cm_Shisei_HE_Funshindan>
+      </shots>
+    </_12_cm_Shisei_Funshinhou>
     <_90mm_Gun_Type61_IGR>
       <userString>	#igr_vehicles:_90mm_Gun_Type61_IGR	</userString>
       <tags></tags>

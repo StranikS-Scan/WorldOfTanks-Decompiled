@@ -10,11 +10,10 @@ from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.pet_system.pet_card_model import PetCardModel
 from gui.impl.gen.view_models.views.lobby.pet_system.pet_name_model import PetNameModel
 from gui.impl.gen.view_models.views.lobby.pet_system.pet_storage_view_model import PetStorageViewModel, SynergyStateEnum, VisibilityStateEnum
-from gui.impl.gen.view_models.views.lobby.pet_system.promotion_model import PromoBonus
 from gui.impl.lobby.pet_system.tooltips.synergy_tooltip import SynergyTooltip
 from gui.impl.pub import WindowImpl
 from gui.impl.pub.view_component import ViewComponent
-from gui.pet_system.bonus_helper import BonusItem, BonusNameToPromoStr
+from gui.pet_system.bonus_helper import BonusItem
 from gui.pet_system.pet_item_helper import PetItem, PromoPetItem
 from gui.pet_system.pet_ui_settings import PetUISettings
 from gui.pet_system.processor import SelectActivePetProcessor, SelectPetActiveBonusProcessor, SelectPetNameProcessor, SelectPetStateProcessor
@@ -116,12 +115,7 @@ class PetStorageView(ViewComponent):
                     promoPetSources = self.__petController.getPetsPromoConfig().getSources(currentPetId)
                     tx.promotionModel.setIsChallengeButtonEnabled(PromoSource.QUEST_PROGRESSION in promoPetSources)
                     tx.promotionModel.setIsPurchaseButtonEnabled(PromoSource.SHOP in promoPetSources)
-                    promoStrList = []
-                    petBonusID = first(BonusItem.getPetBonuses(currentPetId))
-                    promoStrList.append(BonusNameToPromoStr.get(BonusItem.getBonusName(petBonusID)))
-                    promoStrList.append(PromoBonus.EVENTS.value)
-                    if self.__petController.getGeneralConfig().showCaseEnabled:
-                        promoStrList.append(PromoBonus.SHOWOFF.value)
+                    promoStrList = itemClass.getPetBenefits(currentPetId)
                     promoBonuses = tx.promotionModel.getPromotionBonuses()
                     fillStringsArray(promoStrList, promoBonuses)
                     self.__markPromoAsSeen(currentPetId, tx)

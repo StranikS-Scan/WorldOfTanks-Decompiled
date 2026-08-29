@@ -5,7 +5,7 @@ from collections import namedtuple
 import typing
 import BigWorld
 from PlayerEvents import g_playerEvents
-from frameworks.state_machine import BaseStateObserver
+from frameworks_common.state_machine import BaseStateObserver
 from frameworks.wulf import WindowLayer
 from frameworks.wulf.gui_constants import ShowingStatus, ViewFlags
 from gui.Scaleform.framework import g_entitiesFactories, ScopeTemplates

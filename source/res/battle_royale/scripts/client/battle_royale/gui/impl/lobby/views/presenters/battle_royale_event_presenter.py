@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: battle_royale/scripts/client/battle_royale/gui/impl/lobby/views/presenters/battle_royale_event_presenter.py
+from __future__ import absolute_import
 from battle_royale.gui.impl.gen.view_models.views.lobby.views.battle_royale_event_model import BattleRoyaleEventModel
 from battle_royale.gui.impl.lobby.br_helpers.utils import setEventInfo
 from gui.impl.pub.view_component import ViewComponent

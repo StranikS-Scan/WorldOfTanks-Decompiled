@@ -4,11 +4,13 @@ import importlib
 import random
 from logging import getLogger
 import typing
+from Event import Event
 from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
 from gui.shared.event_dispatcher import showPrebattleHintsWindow
 from helpers import dependency
 from hints_common.prebattle.manager import getInstance
 from hints_common.prebattle.schemas import BaseHintModel, configSchema
+from skeletons.gameplay import IGameplayLogic, GameplayStateID
 from skeletons.gui.battle_session import IBattleSessionProvider
 from skeletons.gui.prebattle_hints.controller import IPrebattleHintsController, IPrebattleHintsControlStrategy
 from soft_exception import SoftException
@@ -16,6 +18,7 @@ _logger = getLogger(__name__)
 
 class PrebattleHintsController(IPrebattleHintsController):
     __sessionProvider = dependency.descriptor(IBattleSessionProvider)
+    __gameplayLogic = dependency.descriptor(IGameplayLogic)
 
     def __init__(self):
         self.__strategies = {}
@@ -24,6 +27,7 @@ class PrebattleHintsController(IPrebattleHintsController):
         self.__sessionProvider.onBattleSessionStart += self.__onBattleSessionStart
         self.__sessionProvider.onBattleSessionStop += self.__onBattleSessionStop
         g_eventBus.addListener(events.GameEvent.BATTLE_LOADING, self.__handleBattleLoading, EVENT_BUS_SCOPE.BATTLE)
+        self._hintsClosed = Event()
 
     def fini(self):
         self.__strategies.clear()
@@ -32,6 +36,7 @@ class PrebattleHintsController(IPrebattleHintsController):
         self.__sessionProvider.onBattleSessionStart -= self.__onBattleSessionStart
         self.__sessionProvider.onBattleSessionStop -= self.__onBattleSessionStop
         g_eventBus.removeListener(events.GameEvent.BATTLE_LOADING, self.__handleBattleLoading, EVENT_BUS_SCOPE.BATTLE)
+        self._hintsClosed.clear()
         return
 
     def isEnabled(self):
@@ -52,6 +57,7 @@ class PrebattleHintsController(IPrebattleHintsController):
 
     def onShowHintsWindowSuccess(self, hint):
         self.__getControlStrategy(self.__sessionProvider.arenaVisitor.getArenaBonusType()).onShowHintsWindowSuccess(hint)
+        self._hintsClosed()
 
     def __getControlStrategy(self, arenaBonusType):
         return self.__strategies.get(arenaBonusType, self.__defaultStrategy)
@@ -82,9 +88,11 @@ class PrebattleHintsController(IPrebattleHintsController):
                 if not hasattr(module, className):
                     _logger.error('Hint view class(%s) not found', className)
                     return
-                showPrebattleHintsWindow(hintModel, getattr(module, className))
+                isShown = showPrebattleHintsWindow(hintModel, getattr(module, className))
             else:
-                showPrebattleHintsWindow(hintModel)
+                isShown = showPrebattleHintsWindow(hintModel)
+            if isShown:
+                self.__gameplayLogic.addStateExitBlocker(GameplayStateID.AVATAR_SHOW_GUI, self._hintsClosed)
             return
 
     def __onBattleSessionStart(self):

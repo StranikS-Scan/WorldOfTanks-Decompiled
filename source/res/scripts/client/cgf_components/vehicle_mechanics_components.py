@@ -276,3 +276,65 @@ class PropellantGunEffects(object):
     soundShotNocharge = ComponentProperty(type=CGF.PropertyType.String, editorName='Shot under charge limit', value='gui_abl_afterburner_nocharge_shot')
     soundDropOvercharge = ComponentProperty(type=CGF.PropertyType.String, editorName='Drop overcharge', value='gui_abl_afterburner_drop_max_switch')
     soundUtilityStop = ComponentProperty(type=CGF.PropertyType.String, editorName='Propellant utility stop', value='gui_abl_afterburner_stop_utility')
+
+
+@registerComponent
+class ShellParamsSwitcherGunEffects(object):
+    category = 'ShellParamsSwitcherGun'
+    editorTitle = 'Shell Params Switcher Gun Effects'
+    domain = CGF.Domain.Client
+    soundActivationDisabled = ComponentProperty(type=CGF.PropertyType.String, editorName='Disabled activation sound', value='gui_abl_button_not_ready')
+    soundTriggered = ComponentProperty(type=CGF.PropertyType.String, editorName='Control activation', value='gui_abl_button_trigger')
+    soundCharge2Noncharge = ComponentProperty(type=CGF.PropertyType.String, editorName='Switch the chargeable state to the non-chargeable state', value='gui_abl_scs_chrgble_to_nonchrgble')
+    soundNoncharge2Charge = ComponentProperty(type=CGF.PropertyType.String, editorName='Switch the non-chargeable state to the chargeable state', value='gui_abl_scs_nonchrgble_to_chrgble')
+    soundFinish = ComponentProperty(type=CGF.PropertyType.String, editorName='The transition to any state is completed', value='gui_abl_scs_finish')
+    soundBroken = ComponentProperty(type=CGF.PropertyType.String, editorName='Weapon breakdown', value='gui_abl_scs_broken')
+    soundUtilityStop = ComponentProperty(type=CGF.PropertyType.String, editorName='Shell Switcher utility stop', value='gui_abl_scs_stop_utility')
+
+
+@registerComponent
+class ShellCalibrationEffects(object):
+    category = _VEHICLE_MECHANICS_CATEGORY
+    domain = CGF.Domain.Client
+    editorTitle = 'Shell Calibration Mechanic Effects'
+    soundShellCalibrationPenetrationActivation = ComponentProperty(type=CGF.PropertyType.String, editorName='Shell Calibration Penetration activation', value='gui_abl_afs_pen_buff')
+    soundShellCalibrationDamageActivation = ComponentProperty(type=CGF.PropertyType.String, editorName='Shell Calibration Damage activation', value='gui_abl_afs_dam_buff')
+
+
+@registerComponent
+class AutoreloaderSurgeEffects(object):
+    editorTitle = 'Autoreloader Surge Effects'
+    category = 'AutoreloaderSurge'
+    domain = CGF.Domain.Client
+    soundActivationStart = ComponentProperty(type=CGF.PropertyType.String, editorName='Sound of applied ability', value='gui_abl_flm_start')
+    soundChargeAlmostReady = ComponentProperty(type=CGF.PropertyType.String, editorName='Sound of almost ready charge', value='gui_abl_flm_charge_complete')
+
+
+@registerComponent
+class BustleFeedEffects(object):
+    editorTitle = 'Bustle Feed Effects'
+    category = _VEHICLE_MECHANICS_CATEGORY
+    domain = CGF.Domain.Client
+    soundActivation = ComponentProperty(type=CGF.PropertyType.String, editorName='Activation (from Versatile to BAF)', value='gui_abl_swmt_change_from_versatile')
+    soundActive = ComponentProperty(type=CGF.PropertyType.String, editorName='Active (BAF enabled)', value='gui_abl_swmt_set_bustle')
+    soundDeactivation = ComponentProperty(type=CGF.PropertyType.String, editorName='Deactivation (from BAF to Versatile)', value='gui_abl_swmt_change_from_bustle')
+    soundInactive = ComponentProperty(type=CGF.PropertyType.String, editorName='Inactive (BAF disabled)', value='gui_abl_swmt_set_versatile')
+    soundNotReady = ComponentProperty(type=CGF.PropertyType.String, editorName='Switch attempt while locked', value='gui_abl_swmt_not_ready')
+    soundStopUtility = ComponentProperty(type=CGF.PropertyType.String, editorName='Mechanic stop utility', value='gui_abl_swmt_stop_utility')
+
+
+@registerComponent
+class SightPointerEffects(object):
+    category = _VEHICLE_MECHANICS_CATEGORY
+    editorTitle = 'Sight Pointer Effects'
+    domain = CGF.Domain.Client
+    soundReady = ComponentProperty(type=CGF.PropertyType.String, editorName='Ready sound event', value='gui_abl_sp_ready')
+    soundActivateButton = ComponentProperty(type=CGF.PropertyType.String, editorName='Successful button press sound event', value='gui_abl_button_trigger')
+    soundActivationFail = ComponentProperty(type=CGF.PropertyType.String, editorName='Unsuccessful button press sound event', value='gui_abl_button_not_ready')
+    soundActivate = ComponentProperty(type=CGF.PropertyType.String, editorName='Activation sound event', value='gui_abl_sp_start')
+    soundConeOn = ComponentProperty(type=CGF.PropertyType.String, editorName='Cone stages on sound event', value='gui_abl_sp_cone_on')
+    soundRTPCStage = ComponentProperty(type=CGF.PropertyType.String, editorName='RTPC for cone stages', value='RTPC_ext_abl_sp_stage')
+    soundConeOff = ComponentProperty(type=CGF.PropertyType.String, editorName='Cone stages off sound event', value='gui_abl_sp_cone_off')
+    soundEnemyEnterSector = ComponentProperty(type=CGF.PropertyType.String, editorName='Enemy enter sector sound event', value='gui_abl_sp_enemy_indication_on')
+    soundEnemyLeftSector = ComponentProperty(type=CGF.PropertyType.String, editorName='Enemy left sector sound event', value='gui_abl_sp_enemy_indication_off')
+    soundStop = ComponentProperty(type=CGF.PropertyType.String, editorName='Stop ability utility sound event', value='gui_abl_sp_utility_stop')

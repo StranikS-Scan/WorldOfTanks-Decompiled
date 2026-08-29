@@ -16,7 +16,7 @@ from avatar_components.avatar_postmortem_component import SimulatedVehicleType
 from avatar_components.CombatEquipmentManager import CombatEquipmentManager
 from battleground.kill_cam_visuals import EffectsController
 from cgf_components.sequence_components import SequencePauseComponent, SequenceSnapshotComponent
-from cgf_components_common.vehicle_mechanics import StationaryReloadSequenceParamsComponent
+from cgf_components_common.vehicle_components import VehicleSequenceParamsAttachedComponent
 from constants import SHELL_TYPES, DEFAULT_GUN_INSTALLATION_INDEX
 from gui.shared.gui_items.Vehicle import VEHICLE_CLASS_NAME
 from helpers import dependency
@@ -681,7 +681,7 @@ def _calculateWorldHitPoint(vehicle, segments):
 
 def _updateDynAttachments(simulatedVehicle, dynAttachmentInfo):
     parentGameObject = simulatedVehicle.entityGameObject
-    result = CGF.findInHierarchyWithComponent(parentGameObject, StationaryReloadSequenceParamsComponent)
+    result = CGF.findInHierarchyWithComponent(parentGameObject, VehicleSequenceParamsAttachedComponent)
     if not result:
         return
     for accessor in result:

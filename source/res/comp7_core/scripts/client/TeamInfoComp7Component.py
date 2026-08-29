@@ -1,8 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: comp7_core/scripts/client/TeamInfoComp7Component.py
+from __future__ import absolute_import
 import typing
-from script_component.DynamicScriptComponent import DynamicScriptComponent
+from future.utils import viewitems
 import VOIP
+from script_component.DynamicScriptComponent import DynamicScriptComponent
 from comp7_core.gui.battle_control.arena_info.arena_vos import Comp7CoreKeys
 from comp7_core.gui.comp7_core_constants import BATTLE_CTRL_ID
 from constants import REQUEST_COOLDOWN
@@ -80,14 +82,14 @@ class TeamInfoComp7Component(DynamicScriptComponent):
         arena = avatar_getter.getArena()
         if not arena:
             return
-        gameModeStats = {vID:{Comp7CoreKeys.ROLE_SKILL_LEVEL: level} for vID, level in self.roleSkillLevels.iteritems()}
+        gameModeStats = {vID:{Comp7CoreKeys.ROLE_SKILL_LEVEL: level} for vID, level in viewitems(self.roleSkillLevels)}
         arena.updateGameModeSpecificStats(isStatic=True, stats=gameModeStats)
 
     def __invalidateTeamVivoxChannel(self):
         arena = avatar_getter.getArena()
         if not arena:
             return
-        gameModeStats = {vID:{Comp7CoreKeys.VOIP_CONNECTED: bool(connected)} for vID, connected in self.teamVivoxChannel.iteritems()}
+        gameModeStats = {vID:{Comp7CoreKeys.VOIP_CONNECTED: bool(connected)} for vID, connected in viewitems(self.teamVivoxChannel)}
         arena.updateGameModeSpecificStats(isStatic=True, stats=gameModeStats)
 
     def __updateVoipConnection(self):

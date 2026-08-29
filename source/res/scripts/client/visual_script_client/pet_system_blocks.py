@@ -9,7 +9,7 @@ from visual_script.slot_types import SLOT_TYPE
 from visual_script import ASPECT
 from visual_script.block import Block, Meta
 from visual_script.dependency import dependencyImporter
-Event, dependency, game_control, event_dispatcher, lobby_entry, ps_states, state_machine, GenericComponents, guiShared = dependencyImporter('Event', 'helpers.dependency', 'skeletons.gui.game_control', 'gui.shared.event_dispatcher', 'gui.Scaleform.lobby_entry', 'gui.impl.lobby.pet_system.states', 'frameworks.state_machine', 'GenericComponents', 'gui.shared')
+Event, dependency, game_control, shared, events, event_dispatcher, lobby_entry, ps_states, state_machine, GenericComponents, guiShared = dependencyImporter('Event', 'helpers.dependency', 'skeletons.gui.game_control', 'gui.shared', 'gui.shared.events', 'gui.shared.event_dispatcher', 'gui.Scaleform.lobby_entry', 'gui.impl.lobby.pet_system.states', 'frameworks_common.state_machine', 'GenericComponents', 'gui.shared')
 
 class PetSystemMeta(Meta):
 
@@ -27,7 +27,7 @@ class PetSystemMeta(Meta):
 
     @classmethod
     def blockAspects(cls):
-        return [ASPECT.HANGAR]
+        return [ASPECT.HANGAR, ASPECT.CLIENT]
 
 
 class OnEventShow(Block, PetSystemMeta):
@@ -93,7 +93,7 @@ class IsInPetFullscreenEventView(Block, PetSystemMeta):
         self._state = self._makeDataOutputSlot('inState', SLOT_TYPE.BOOL, self._execute)
 
     def _execute(self):
-        self._state.setValue(self.__petController.isInEventFulscreen)
+        self._state.setValue(self.__petController.isInEventFullscreen)
 
 
 class PetTriggerEnum(VScriptEnum):
@@ -120,7 +120,7 @@ class PetTriggerEnum(VScriptEnum):
 
     @classmethod
     def vs_aspects(cls):
-        return [ASPECT.HANGAR]
+        return [ASPECT.HANGAR, ASPECT.CLIENT]
 
 
 class StorageStaticTriggerEnum(VScriptEnum):
@@ -221,14 +221,26 @@ class OnPetAnimationTriggered(Block, PetSystemMeta):
         return
 
     def onStartScript(self):
-        self.__petController.petProxy.onTrigger += self._onTrigger
+        self.__subscribe()
 
     def onFinishScript(self):
-        self.__petController.petProxy.onTrigger -= self._onTrigger
+        self.__unsubscribe()
 
     def _onTrigger(self, trigger):
         self._trigger.setValue(PetTriggerEnum.nameToIndex(trigger))
         self._out.call()
+
+    def __subscribe(self):
+        self.__petController.petProxy.onTrigger += self._onTrigger
+        shared.g_eventBus.addListener(events.PetSystemEvent.PET_SEQUENCE, self.__onPetSequence, scope=shared.EVENT_BUS_SCOPE.BATTLE)
+
+    def __unsubscribe(self):
+        self.__petController.petProxy.onTrigger -= self._onTrigger
+        shared.g_eventBus.removeListener(events.PetSystemEvent.PET_SEQUENCE, self.__onPetSequence, scope=shared.EVENT_BUS_SCOPE.BATTLE)
+
+    def __onPetSequence(self, event):
+        trigger = event.ctx['trigger']
+        self._onTrigger(trigger)
 
 
 class GetStorageStaticTrigger(Block, PetSystemMeta):

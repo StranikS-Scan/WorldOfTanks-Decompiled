@@ -1,11 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: comp7/scripts/client/comp7/gui/impl/lobby/hangar/presenters/comp7_optional_devices_assistant_presenter.py
 import typing
-from frameworks.state_machine import visitor
+from frameworks_common.state_machine import visitor
 from gui.impl.lobby.hangar.presenters.optional_devices_assistant_presenter import _OptionalDevicesObserver, OptionalDevicesAssistantPresenter
 if typing.TYPE_CHECKING:
     from gui.lobby_state_machine.lobby_state_machine import LobbyStateMachine
-    from frameworks.state_machine import State
+    from frameworks_common.state_machine import State
 
 class _Comp7OptionalDevicesObserver(_OptionalDevicesObserver):
 

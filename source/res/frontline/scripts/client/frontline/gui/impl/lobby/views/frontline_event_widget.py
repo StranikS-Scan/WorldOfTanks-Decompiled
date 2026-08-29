@@ -10,6 +10,8 @@ from frontline.gui.impl.lobby.tooltips.banner_tooltip import BannerTooltipView
 from frontline.gui.impl.lobby.user_missions.hangar_widget.overlap_ctrl import FLOverlapCtrlMixin
 from gui.Scaleform.daapi.view.lobby.store.browser.shop_helpers import getRentVehicleUrl
 from gui.impl.gen.view_models.views.lobby.tank_setup.common.ammunition_panel_constants import AmmunitionPanelConstants
+from gui.impl.lobby.user_missions.hangar_widget.presenters.constants import UserMissionGroups
+from gui.impl.lobby.user_missions.hangar_widget.presenters.base_child_presenter import UserMissionChildPresenter
 from gui.impl.lobby.user_missions.hangar_widget.tooltip_positioner import TooltipPositionerMixin
 from gui.impl.pub.view_component import ViewComponent
 from gui.shared.event_dispatcher import showShop, showEpicRewardsSelectionWindow
@@ -50,7 +52,8 @@ class BattleAbilitiesLoadoutParams(object):
 
 _g_entryLastState = _LastEntryState()
 
-class FrontlineEventWidget(TooltipPositionerMixin, FLOverlapCtrlMixin, ViewComponent[EventWidgetModel]):
+class FrontlineEventWidget(UserMissionChildPresenter, TooltipPositionerMixin, FLOverlapCtrlMixin, ViewComponent[EventWidgetModel]):
+    GROUP = UserMissionGroups.EVENTS
     __epicController = dependency.descriptor(IEpicBattleMetaGameController)
     __itemsCache = dependency.descriptor(IItemsCache)
     __hangarSpace = dependency.descriptor(IHangarSpace)

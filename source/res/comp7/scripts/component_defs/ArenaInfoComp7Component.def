@@ -17,6 +17,12 @@
       </Type>
       <Flags>	ALL_CLIENTS	</Flags>
     </vehicleBanList>
+    <teamsDamageDealt>
+      <Type>	ARRAY	  <of>	INT32	</of>
+        <size>	2	</size>
+      </Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </teamsDamageDealt>
   </Properties>
   <ofEntity>
     <ArenaInfo></ArenaInfo>

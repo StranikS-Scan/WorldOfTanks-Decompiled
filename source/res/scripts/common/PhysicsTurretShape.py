@@ -239,9 +239,8 @@ class _Scene:
             self.svgname = filename
         else:
             self.svgname = self.name + '.svg'
-        file = open(self.svgname, 'w', encoding='utf-8')
-        UnicodeFileAdapter(file).writelines(self.strarray())
-        file.close()
+        with open(self.svgname, 'w', encoding='utf-8') as file:
+            UnicodeFileAdapter(file).writelines(self.strarray())
 
     def display(self, prog='explorer'):
         import os

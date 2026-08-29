@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: battle_royale/scripts/client/battle_royale/gui/impl/lobby/tooltips/progression_widget_tooltip.py
+from __future__ import absolute_import
 from battle_royale.skeletons.game_controller import IBRProgressionOnTokensController
 from battle_royale.gui.impl.lobby.br_helpers.utils import setEventInfo
 from battle_royale.gui.impl.gen.view_models.views.lobby.views.widget.progression_model import ProgressionModel, ProgressionStatus

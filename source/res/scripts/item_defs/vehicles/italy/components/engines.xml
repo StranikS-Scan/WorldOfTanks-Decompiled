@@ -1,4 +1,5 @@
 <engines.xml>
+  <xmlns:xmlref>	http://bwt/xmlref	</xmlns:xmlref>
   <ids>
     <ID36S_6V_CA>	0	</ID36S_6V_CA>
     <FIAT_604>	1	</FIAT_604>
@@ -50,6 +51,7 @@
     <MB_838_CaM_500A>	48	</MB_838_CaM_500A>
     <Continental_AV_1790_5B>	49	</Continental_AV_1790_5B>
     <MTU_870_B>	50	</MTU_870_B>
+    <OM_Fiat_V12_TCA>	51	</OM_Fiat_V12_TCA>
     <V_2_34_modificato_ter>	2000	</V_2_34_modificato_ter>
     <SPA_15T_M41_S>	2001	</SPA_15T_M41_S>
     <SPA_15TB_M41_S>	2002	</SPA_15TB_M41_S>
@@ -910,6 +912,23 @@
       <rpm_min>	200	</rpm_min>
       <rpm_max>	2600	</rpm_max>
     </MB_838_CaM_500A>
+    <OM_Fiat_V12_TCA>
+      <userString>	#italy_vehicles:OM_Fiat_V12_TCA	</userString>
+      <tags>	diesel	</tags>
+      <level>	11	</level>
+      <price>	150000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <power>	10	</power>
+      <weight>	100	</weight>
+      <maxHealth>	380	</maxHealth>
+      <maxRegenHealth>	190	</maxRegenHealth>
+      <repairCost>	11	</repairCost>
+      <fireStartingChance>	0.1	</fireStartingChance>
+      <rpm_min>	320	</rpm_min>
+      <rpm_max>	2240	</rpm_max>
+    </OM_Fiat_V12_TCA>
     <MTU_MB_837_Ba_500A>
       <userString>	#italy_vehicles:MTU_MB_837_Ba_500A	</userString>
       <tags>	diesel	</tags>

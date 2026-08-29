@@ -486,9 +486,6 @@ class SixthSenseIndicator(SixthSenseMeta, ISpottingIndicator):
     def _isSixthSenseEnabled(self):
         return False
 
-    _sixthSenseToggle = typing.cast(ISpottingIndicator.ToggleType, _sixthSenseToggle)
-    _isSixthSenseEnabled = typing.cast(ISpottingIndicator.EnabledType, _isSixthSenseEnabled)
-
 
 class SixthSenseSound(object):
     __settingsCore = dependency.descriptor(ISettingsCore)
@@ -564,8 +561,69 @@ class TargetDesignatorUnspottedIndicator(SixthSenseMeta, ISpottingIndicator):
     def __isEnabled(self):
         return True
 
-    __toggle = typing.cast(ISpottingIndicator.ToggleType, __toggle)
-    __isEnabled = typing.cast(ISpottingIndicator.EnabledType, __isEnabled)
+
+class SightPointerUnderScanningIndicator(SixthSenseMeta, ISpottingIndicator):
+    __SFX_WARNING_STATE = 'STATE_ext_abl_sp_wn'
+    __SFX_WARNING_ON = 'gui_abl_sp_warning'
+    __SFX_WARNING_STATE_ON = 'STATE_ext_abl_sp_wn_on'
+    __SFX_WARNING_OFF = 'gui_abl_sp_warning_off'
+    __SFX_WARNING_STATE_OFF = 'STATE_ext_abl_sp_wn_off'
+
+    def getIndicatorTogglesByType(self):
+        return [(DIRECT_DETECTION_TYPE.SIGHT_POINTER_IN_SECTOR,
+          self.__toggle,
+          0.0,
+          self.__isEnabled)]
+
+    def _populate(self):
+        super(SightPointerUnderScanningIndicator, self)._populate()
+        bindSpottingIndicator(self)
+
+    def _dispose(self):
+        unbindSpottingIndicator(self)
+        super(SightPointerUnderScanningIndicator, self)._dispose()
+
+    def __toggle(self, isVisible, force):
+        if isVisible:
+            self.as_showS()
+            SoundGroups.g_instance.playSound2D(self.__SFX_WARNING_ON)
+            SoundGroups.g_instance.setState(self.__SFX_WARNING_STATE, self.__SFX_WARNING_STATE_ON)
+        else:
+            self.as_hideS(force)
+            SoundGroups.g_instance.playSound2D(self.__SFX_WARNING_OFF)
+            SoundGroups.g_instance.setState(self.__SFX_WARNING_STATE, self.__SFX_WARNING_STATE_OFF)
+
+    def __isEnabled(self):
+        return True
+
+
+class SightPointerSpottedIndicator(SixthSenseMeta, ISpottingIndicator):
+    __SOUND_SPOTTED = 'gui_abl_sp_spot'
+
+    def getIndicatorTogglesByType(self):
+        duration = GUI_SETTINGS.sightPointerLampDuration / float(MS_IN_SECOND)
+        return [(DIRECT_DETECTION_TYPE.SIGHT_POINTER_DETECTION,
+          self.__toggle,
+          duration,
+          self.__isEnabled)]
+
+    def _populate(self):
+        super(SightPointerSpottedIndicator, self)._populate()
+        bindSpottingIndicator(self)
+
+    def _dispose(self):
+        unbindSpottingIndicator(self)
+        super(SightPointerSpottedIndicator, self)._dispose()
+
+    def __toggle(self, isVisible, force):
+        if isVisible:
+            self.as_showS()
+            SoundGroups.g_instance.playSound2D(self.__SOUND_SPOTTED)
+        else:
+            self.as_hideS(force)
+
+    def __isEnabled(self):
+        return True
 
 
 class SiegeModeIndicator(SiegeModeIndicatorMeta):

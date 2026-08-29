@@ -30,8 +30,10 @@ from items import vehicles
 from math_common import round_py2_style_int
 from skeletons.gui.battle_session import IBattleSessionProvider
 from vehicles.mechanics.mechanic_constants import VehicleMechanic
-from vehicles.mechanics.mechanic_helpers import getVehicleDescrMechanicParams
+from vehicles.mechanics.mechanic_helpers import isMechanicInMechanicsParams, getMechanicFromMechanicsParams
 from helpers import dependency
+if typing.TYPE_CHECKING:
+    from typing import Tuple
 __all__ = ('AmmoController',
  'AmmoReplayPlayer',
  'AutoReloadingBoostStates',
@@ -48,12 +50,12 @@ if typing.TYPE_CHECKING:
     from gui.battle_control.components_states.ammo import IComponentAmmoState
     from gui.shared.gui_items.vehicle_modules import Shell
     from items.components.component_constants import Autoreload, AutoShoot
-    from items.components.shared_components import TemperatureGunParams
+    from items.components.shared_components import MechanicsParams
     from items.vehicle_items import Gun
 
 class _GunSettings(object):
 
-    def __init__(self, vehicleID, clip, burst, reloadEffect, shots, tags, autoReload, autoShoot, twinGunFactor, shellChangeFactor, extraReloadTime, temperatureParams):
+    def __init__(self, vehicleID, clip, burst, reloadEffect, shots, tags, autoReload, autoShoot, twinGunFactor, shellChangeFactor, extraReloadTime, mechanicsParams):
         self.vehicleID = vehicleID
         self.clip = clip
         self.burst = burst
@@ -65,7 +67,7 @@ class _GunSettings(object):
         self.twinGunFactor = twinGunFactor
         self.shellChangeFactor = shellChangeFactor
         self.extraReloadTime = extraReloadTime
-        self.temperatureParams = temperatureParams
+        self.mechanicsParams = mechanicsParams
 
     @classmethod
     def fromVehicle(cls, vehicleID, vehicleDescr):
@@ -91,12 +93,16 @@ class _GunSettings(object):
         twinGunFactor = gun.twinGun.twinGunReloadTime / gun.reloadTime if 'twinGun' in gun.tags else 0.0
         shellChangeFactor = gun.forcedReloadTime / (gun.autoreload.reloadTime[-1] if isAutoReload else gun.reloadTime)
         extraReloadTime = getExtraReloadTime(vehicleDescr)
-        temperatureParams = getVehicleDescrMechanicParams(vehicleDescr, VehicleMechanic.TEMPERATURE_GUN)
-        return cls(vehicleID, clip, burst, reloadEffect, shots, gun.tags, autoReload, autoShoot, twinGunFactor, shellChangeFactor, extraReloadTime, temperatureParams)
+        mechanicsParams = vehicleDescr.mechanicsParams
+        return cls(vehicleID, clip, burst, reloadEffect, shots, gun.tags, autoReload, autoShoot, twinGunFactor, shellChangeFactor, extraReloadTime, mechanicsParams)
 
     @cached_property
     def isControllableReload(self):
         return 'controllableReload' in self.tags
+
+    @cached_property
+    def isShellCalibration(self):
+        return isMechanicInMechanicsParams(self.mechanicsParams, VehicleMechanic.SHELL_CALIBRATION)
 
     @cached_property
     def isDualGun(self):
@@ -105,6 +111,10 @@ class _GunSettings(object):
     @cached_property
     def isTwinGun(self):
         return self.twinGunFactor > 0.0
+
+    @cached_property
+    def temperatureParams(self):
+        return getMechanicFromMechanicsParams(self.mechanicsParams, VehicleMechanic.TEMPERATURE_GUN)
 
     @cached_property
     def isUnlimitedClip(self):
@@ -191,7 +201,7 @@ class _GunSettings(object):
         return self.twinGunFactor if currShellsAmount < nextShellsAmount else 1.0
 
 
-_DEFAULT_GUN_SETTINGS = _GunSettings(0, _ClipSettings(1, 0.0), _BurstSettings(1, 0.0, False), None, {}, frozenset(), None, None, 0.0, 0.0, 0.0, None)
+_DEFAULT_GUN_SETTINGS = _GunSettings(0, _ClipSettings(1, 0.0), _BurstSettings(1, 0.0, False), None, {}, frozenset(), None, None, 0.0, 0.0, 0.0, {})
 
 class AutoReloadingBoostStates(CONST_CONTAINER):
     UNAVAILABLE = 'unavailable'
@@ -509,7 +519,6 @@ class _AutoReloadingBoostStateCtrl(object):
 
 
 class AmmoController(MethodsRules, ViewComponentsController):
-    __slots__ = ('__eManager', 'onShellsAdded', 'onShellsUpdated', 'onNextShellChanged', 'onCurrentShellChanged', 'onGunSettingsSet', 'onGunReloadTimeSet', 'onGunAutoReloadTimeSet', 'onGunAutoReloadBoostUpdated', '_autoReloadingBoostState', 'onShellsCleared', '__ammo', '_order', '__currShellCD', '__nextShellCD', '__gunSettings', '_reloadingState', '_partiallyReloadingClipState', '__autoShoots', '__weakref__', 'onDebuffStarted', '__quickChangerActive', 'onShellChangeTimeUpdated', '__shellChangeTime', '__quickChangerFactor', '__dualGunShellChangeTime', '__dualGunQuickChangeReady', '__quickChangerInProcess', '__infinity', '__ammoStatesInfo')
     __guiSessionProvider = dependency.descriptor(IBattleSessionProvider)
 
     def __init__(self, reloadingState=None):
@@ -528,6 +537,7 @@ class AmmoController(MethodsRules, ViewComponentsController):
         self.onGunAutoReloadBoostUpdated = Event.Event(self.__eManager)
         self.onShellChangeTimeUpdated = Event.Event(self.__eManager)
         self.onShellsCleared = Event.Event(self.__eManager)
+        self.onAmmoStatesUpdated = Event.Event(self.__eManager)
         self.onShotBlocked = Event.Event(self.__eManager)
         self.__ammo = {}
         self.__infinity = defaultdict(int)
@@ -888,8 +898,7 @@ class AmmoController(MethodsRules, ViewComponentsController):
                 clipSize = self.__gunSettings.clip.size
                 result = min(clipSize, quantity)
             return result
-        else:
-            return quantity
+        return quantity
 
     def getAllShellsQuantityLeft(self):
         quantity = self.getShellsQuantityLeft()
@@ -1026,24 +1035,26 @@ class AmmoController(MethodsRules, ViewComponentsController):
         self.__quickChangerFactor = factor
         self.updateShellChangeTime(forced=True)
 
-    def getQuickShellChangeTime(self):
+    def getQuickShellChangeTimes(self):
         minValue = 0.1
-        quickShellChangeTime = self.__shellChangeTime * self.__quickChangerFactor
-        shellChangeTime = self.__shellChangeTime
         if self.__gunSettings.isDualGun:
             activeIdx = self.__dualGunShellChangeTime.activeIdx
             if activeIdx == 0:
                 activeGunTime = self.__dualGunShellChangeTime.left
             else:
                 activeGunTime = self.__dualGunShellChangeTime.right
-            shellChangeTime = activeGunTime
-            quickShellChangeTime = activeGunTime * self.__quickChangerFactor
+            shellChangeTimes = [activeGunTime]
+            quickShellChangeTimes = [activeGunTime * self.__quickChangerFactor]
+        else:
+            shellsAvailableToSwitch = [ intCD for intCD in self._order if intCD != self.__currShellCD and self.getShells(intCD)[0] > 0 ]
+            shellChangeTimes = self.__ammoStatesInfo.getShellReloadTimes(self.__currShellCD, self.__shellChangeTime, shellsAvailableToSwitch)
+            shellChangeTimes = shellChangeTimes if shellChangeTimes else [self.__shellChangeTime]
+            quickShellChangeTimes = [ changeTime * self.__quickChangerFactor for changeTime in shellChangeTimes ]
         vehicle = self.__guiSessionProvider.shared.vehicleState.getControllingVehicle()
         if vehicle is not None:
             restrict = ReloadRestriction.getBy(vehicle.typeDescriptor)
-            if quickShellChangeTime < restrict:
-                quickShellChangeTime = min(restrict, shellChangeTime)
-        return max(quickShellChangeTime, minValue)
+            quickShellChangeTimes = [ (min(restrict, changeTime) if quickChangeTime < restrict else quickChangeTime) for changeTime, quickChangeTime in zip(shellChangeTimes, quickShellChangeTimes) ]
+        return [ max(quickChangeTime, minValue) for quickChangeTime in quickShellChangeTimes ]
 
     def canQuickShellChange(self):
         canChange = self.__canChangeShell()
@@ -1077,16 +1088,16 @@ class AmmoController(MethodsRules, ViewComponentsController):
                 component.handleAmmoKey(key)
 
     def updateShellChangeTime(self, forced=False):
-        isVisible, shellChangeTime = False, self.getShellChangeTime()
+        isVisible, shellChangeTimes = False, (self.getShellChangeTime(),)
         if self.__gunSettings.hasShellChangeFactor():
             isVisible = self.__canChangeShell() and not self._reloadingState.isReloading()
-            shellChangeTime = self.getQuickShellChangeTime() if self.canQuickShellChange() else shellChangeTime
+            shellChangeTimes = self.getQuickShellChangeTimes() if self.canQuickShellChange() else shellChangeTimes
         elif self.__quickChangerActive:
-            isVisible, shellChangeTime = self.canQuickShellChange(), self.getQuickShellChangeTime()
+            isVisible, shellChangeTimes = self.canQuickShellChange(), self.getQuickShellChangeTimes()
         isVisible = isVisible and self.__isBattlePeriod()
         if self.__quickChangerActive or self.__gunSettings.hasShellChangeFactor() or forced:
-            self.onShellChangeTimeUpdated(isVisible, shellChangeTime)
-        return (isVisible, shellChangeTime)
+            self.onShellChangeTimeUpdated(isVisible, shellChangeTimes)
+        return (isVisible, shellChangeTimes)
 
     def getPredictedState(self, shotsAmount=-1):
         isLastCurrShellInClip = self.getShellsQuantityLeft() <= self.__gunSettings.getLastAmmoCount(shotsAmount)
@@ -1185,8 +1196,10 @@ class AmmoController(MethodsRules, ViewComponentsController):
     def __updateAmmoStates(self, ammoStates):
         self.__ammoStatesInfo.setAmmoStates(ammoStates)
         self._reloadingState.setReloadingBlock(self.__ammoStatesInfo.isReloadingBlocked())
+        roInfo = self.__ammoStatesInfo.getReadOnlyCopy()
         if self.__gunSettings.reloadEffect is not None:
-            self.__gunSettings.reloadEffect.onAmmoStatesInfoUpdate(self.__ammoStatesInfo)
+            self.__gunSettings.reloadEffect.onAmmoStatesInfoUpdate(roInfo)
+        self.onAmmoStatesUpdated(roInfo)
         return
 
     def __updatePartiallyReloadingState(self, force=False):

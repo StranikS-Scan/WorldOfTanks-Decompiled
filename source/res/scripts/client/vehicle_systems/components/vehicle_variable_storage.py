@@ -41,19 +41,16 @@ def createForRoot(vehicle, queue=None):
     queue.createComponent(vehicleObject, VariableStorageComponent, vars)
 
 
-def createForGun(appearance, gunGO):
-    queue = CGF.CommandQueue(gunGO.spaceID)
+def getVariableValuesForGun(appearance):
     shellDescr = appearance.typeDescriptor.shot.shell
     gunDescr = appearance.typeDescriptor.gun
     gunBB = Math.Matrix(appearance.compoundModel.getBoundsForPart(TankPartIndexes.GUN))
     gunLength = gunBB.applyVector(Math.Vector3(0.0, 0.0, 1.0)).length
     timeBetweenShots = gunDescr.clip[1] if 'clip' in gunDescr.tags else gunDescr.reloadTime
-    vars = [(VehicleGunVars.MUZZLE_BRAKE.value, gunDescr.muzzleBrake.value),
+    return [(VehicleGunVars.MUZZLE_BRAKE.value, gunDescr.muzzleBrake.value),
      (VehicleGunVars.GUN_LENGTH.value, gunLength),
      (VehicleGunVars.GUN_CALIBER.value, shellDescr.caliber),
      (VehicleGunVars.TIME_BETWEEN_SHOTS.value, timeBetweenShots)]
-    queue.removeComponent(gunGO, VariableStorageComponent)
-    queue.createComponent(gunGO, VariableStorageComponent, vars)
 
 
 def update(go, varName, value):

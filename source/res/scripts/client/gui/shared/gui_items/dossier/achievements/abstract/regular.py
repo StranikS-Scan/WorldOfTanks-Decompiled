@@ -154,10 +154,7 @@ class RegularAchievement(GUIItem):
     def getBigIcon(self):
         iconName = self.getIconName()
         iconRes = dyn_or_num(R.images.gui.maps.icons.achievement.c_80x80, iconName)
-        if iconRes.exists():
-            return backport.image(iconRes())
-        else:
-            return self.getSmallIcon()
+        return backport.image(iconRes()) if iconRes.exists() else self.getSmallIcon()
 
     def getSmallIcon(self):
         return self.getIcons()[self.ICON_TYPE.IT_67X71]

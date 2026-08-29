@@ -7,6 +7,7 @@ from gui.Scaleform.daapi.view.lobby.header.helpers.fight_btn_tooltips import get
 from gui.impl.gen import R
 from gui.impl.lobby.page.lobby_footer import LobbyFooter
 from gui.impl.lobby.page.lobby_header import LobbyHeader
+from gui.shared.system_factory import collectDynamicLobbyHeaderTypes
 if typing.TYPE_CHECKING:
     from gui.prb_control.items import ValidationResult
     from gui.impl.pub.view_component import ViewComponent
@@ -73,6 +74,11 @@ class DefaultLobbyHeaderHelper(ILobbyHeaderControlsHelper):
 
     @classmethod
     def getHeaderType(cls):
+        headers = cls._getLobbyHeaderSuitableTypes()
+        for validator, headerType in headers:
+            if validator():
+                return headerType
+
         return LobbyHeader
 
     @classmethod
@@ -96,6 +102,10 @@ class DefaultLobbyHeaderHelper(ILobbyHeaderControlsHelper):
     def _getOutSquadTooltipData(cls, prbValidation):
         tooltip = R.strings.platoon.headerButton.tooltips.dyn(cls._OUT_SQUAD_TOOLTIP_KEY)
         return (tooltip.header(), tooltip.body(), {})
+
+    @classmethod
+    def _getLobbyHeaderSuitableTypes(cls):
+        return collectDynamicLobbyHeaderTypes()
 
 
 class RankedLobbyHeaderHelper(DefaultLobbyHeaderHelper):

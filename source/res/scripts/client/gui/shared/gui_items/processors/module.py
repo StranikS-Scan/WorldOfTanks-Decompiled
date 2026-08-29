@@ -449,8 +449,7 @@ class BuyAndInstallItemProcessor(ModuleBuyer):
             else:
                 auxData = self.__getAdditionalMessages(ctx)
             return makeI18nSuccess(sysMsgKey=self._formMessage('success'), auxData=auxData, type=self._getSysMsgType(), **self._getMsgCtx())
-        else:
-            return super(BuyAndInstallItemProcessor, self)._successHandler(code, ctx)
+        return super(BuyAndInstallItemProcessor, self)._successHandler(code, ctx)
 
     def __getAdditionalMessages(self, ctx):
         additionalMessages = []

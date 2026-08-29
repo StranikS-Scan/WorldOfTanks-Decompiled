@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: comp7_core/scripts/client/comp7_core/gui/__init__.py
+from __future__ import absolute_import
 from comp7_core.gui import comp7_core_constants
 from gui.battle_control import battle_constants
 from gui.prb_control.prb_utils import initBattleCtrlIDs

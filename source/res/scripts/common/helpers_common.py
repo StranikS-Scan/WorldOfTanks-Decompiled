@@ -4,7 +4,6 @@ from __future__ import absolute_import, division
 import math
 import typing
 from constants import VEHICLE_HIT_EFFECT
-from items.components import component_constants
 from soft_exception import SoftException
 from battle_modifiers_common import BattleModifiers
 from Math import Vector3
@@ -13,7 +12,6 @@ from debug_utils import LOG_WARNING
 from items import vehicles
 if typing.TYPE_CHECKING:
     from typing import Sequence, Optional, Tuple, List, Union, Dict
-    from items.readers.prefab_effects_readers import ShotEffectDesc
     from battle_modifiers_common import BATTLE_MODIFIERS_TYPE
     from items.components.gun_components import GunShot
     from items.tankmen import TankmanDescr
@@ -64,16 +62,12 @@ def computeMaxPiercingPowerDistance(piercingPower, modifiers=BattleModifiers()):
     if piercingPower[1] < piercingPower[0]:
         constants = modifiers.getConstantsModification()
         return interpolateLinearly(0.0, piercingPower[0], piercingPower[1], constants.PIERCING_POWER_INTERPOLATION_DIST_FIRST, constants.PIERCING_POWER_INTERPOLATION_DIST_LAST)
-    else:
-        return 1000000.0
 
 
 def computeMaxDamageDistance(damages, modifiers=BattleModifiers()):
     if damages[1] < damages[0]:
         constants = modifiers.getConstantsModification()
         return interpolateLinearly(0.0, damages[0], damages[1], constants.DAMAGE_INTERPOLATION_DIST_FIRST, constants.DAMAGE_INTERPOLATION_DIST_LAST)
-    else:
-        return 1000000.0
 
 
 def computeShotMaxDistance(shot, modifiers=BattleModifiers()):
@@ -265,44 +259,27 @@ class HitParamsEncoder(object):
     def getHitType(params):
         return params & 15
 
+    @staticmethod
+    def setPrefabEffIndex(params, prefabEffIndex):
+        return params & -4278190081L | (prefabEffIndex & 255) << 24
 
-def encodeStickerIdData(stickerId, isParametrized):
-    signalBit = 1 if isParametrized else 0
-    return stickerId | signalBit << 7
-
-
-def decodeStickerIdData(data):
-    return (data & 127, bool(data & 128))
+    @staticmethod
+    def getPrefabEffIndex(params):
+        return params >> 24 & 255
 
 
 def setDamageSticker(sticker, effectsIndex, prefabEffIndex, isPierced):
     cache = vehicles.g_cache
-    if prefabEffIndex != component_constants.INVALID_EFFECT_INDEX:
-        hitType = HitParamsEncoder.getHitType(sticker['params'])
-        if hitType == VEHICLE_HIT_EFFECT.INVALID:
-            return
-        if not isPierced and hitType in VEHICLE_HIT_EFFECT.PIERCED_HITS:
-            hitType = VEHICLE_HIT_EFFECT.ARMOR_NOT_PIERCED
-            sticker['params'] = HitParamsEncoder.setHitType(sticker['params'], hitType)
-        shotEffect = cache.prefabEffects.shot.effects[prefabEffIndex]
-        effectGroup = VEHICLE_HIT_EFFECT.getEffectGroup(hitType)
-        stickerID = component_constants.INVALID_EFFECT_INDEX
-        if effectGroup in shotEffect.groups:
-            stickerID = shotEffect.groups[effectGroup].decal
-        if stickerID == component_constants.INVALID_EFFECT_INDEX:
-            stickerID = shotEffect.defaultVehicleHit.decal
-        if stickerID == component_constants.INVALID_EFFECT_INDEX:
-            stickerID = shotEffect.defaultHit.decal
-        if stickerID == component_constants.INVALID_EFFECT_INDEX:
-            return
-        priority = cache.prefabEffects.decals.effects[stickerID].priority
-        data = encodeStickerIdData(stickerID, True)
+    hitType = HitParamsEncoder.getHitType(sticker['params'])
+    if not isPierced and hitType in VEHICLE_HIT_EFFECT.PIERCED_HITS:
+        hitType = VEHICLE_HIT_EFFECT.ARMOR_NOT_PIERCED
+        sticker['params'] = HitParamsEncoder.setHitType(sticker['params'], hitType)
+    stickerTypeName = 'armorPierced' if isPierced else 'armorResisted'
+    stickerID = cache.shotEffects[effectsIndex]['targetStickers'][stickerTypeName]
+    if stickerID is None:
+        return
     else:
-        stickerTypeName = 'armorPierced' if isPierced else 'armorResisted'
-        stickerID = cache.shotEffects[effectsIndex]['targetStickers'][stickerTypeName]
-        if stickerID is None:
-            return
         priority = cache.damageStickers['descrs'][stickerID]['priority']
-        data = encodeStickerIdData(stickerID, False)
-    sticker['segment'] = setEncodedSegmentContextData(sticker['segment'], data)
-    return priority
+        sticker['segment'] = setEncodedSegmentContextData(sticker['segment'], stickerID)
+        sticker['params'] = HitParamsEncoder.setPrefabEffIndex(sticker['params'], prefabEffIndex)
+        return priority

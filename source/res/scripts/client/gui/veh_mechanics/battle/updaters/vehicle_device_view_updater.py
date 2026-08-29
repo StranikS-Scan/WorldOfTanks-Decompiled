@@ -2,10 +2,17 @@
 # Embedded file name: scripts/client/gui/veh_mechanics/battle/updaters/vehicle_device_view_updater.py
 from __future__ import absolute_import
 import typing
-from gui.battle_control.battle_constants import VEHICLE_VIEW_STATE
+from gui.battle_control.battle_constants import VEHICLE_VIEW_STATE, VEHICLE_DEVICE_IN_COMPLEX_ITEM
 from gui.veh_mechanics.battle.updaters.updaters_common import ViewUpdater
 from helpers import dependency
 from skeletons.gui.battle_session import IBattleSessionProvider
+if typing.TYPE_CHECKING:
+    from typing import Dict, List
+
+def makeUIDeviceState(devicesStatuses):
+    return [ {'deviceName': VEHICLE_DEVICE_IN_COMPLEX_ITEM.get(deviceName, deviceName),
+     'deviceState': deviceState} for deviceName, deviceState in devicesStatuses.items() ]
+
 
 class IVehicleDeviceStatusView(object):
 

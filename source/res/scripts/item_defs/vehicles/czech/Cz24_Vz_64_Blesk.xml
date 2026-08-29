@@ -6,17 +6,17 @@
     <driver></driver>
   </crew>
   <supplySlots>	3 1 1 6 6 6 7 8 8 8	</supplySlots>
-  <postProgressionTree>	role_LT_universal	</postProgressionTree>
+  <postProgressionTree>	role_LT_support	</postProgressionTree>
   <customRoleSlotOptions>	2 4	</customRoleSlotOptions>
   <speedLimits>
     <forward>	60	</forward>
-    <backward>	21	</backward>
+    <backward>	23	</backward>
   </speedLimits>
   <invisibility>
-    <moving>	0.32	</moving>
-    <still>	0.32	</still>
+    <moving>	0.285	</moving>
+    <still>	0.285	</still>
     <camouflageBonus>	0.03	</camouflageBonus>
-    <firePenalty>	0.48	</firePenalty>
+    <firePenalty>	0.427	</firePenalty>
   </invisibility>
   <optDevsOverrides>
     <camouflageNet>
@@ -72,7 +72,7 @@
     </armor>
     <primaryArmor>	armor_9 armor_3 armor_4	</primaryArmor>
     <weight>	6274	</weight>
-    <maxHealth>	960	</maxHealth>
+    <maxHealth>	1120	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	220	</maxHealth>
       <maxRegenHealth>	150	</maxRegenHealth>
@@ -456,17 +456,17 @@
         </chassis>
       </unlocks>
       <armor>
-        <leftTrack>	10	</leftTrack>
-        <rightTrack>	10	</rightTrack>
+        <leftTrack>	5	</leftTrack>
+        <rightTrack>	5	</rightTrack>
       </armor>
       <weight>	4000	</weight>
       <terrainResistance>	0.5 0.6 1.1	</terrainResistance>
       <brakeForce>	15000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
-      <rotationSpeed>	38	</rotationSpeed>
+      <rotationSpeed>	45	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.16	</vehicleMovement>
-        <vehicleRotation>	0.16	</vehicleRotation>
+        <vehicleMovement>	0.14	</vehicleMovement>
+        <vehicleRotation>	0.14	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	180	</maxHealth>
@@ -1452,17 +1452,17 @@
       <level>	8	</level>
       <price>	33000	</price>
       <armor>
-        <leftTrack>	10	</leftTrack>
-        <rightTrack>	10	</rightTrack>
+        <leftTrack>	5	</leftTrack>
+        <rightTrack>	5	</rightTrack>
       </armor>
       <weight>	4000	</weight>
       <terrainResistance>	0.5 0.6 1.1	</terrainResistance>
       <brakeForce>	15000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
-      <rotationSpeed>	43	</rotationSpeed>
+      <rotationSpeed>	48	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.14	</vehicleMovement>
-        <vehicleRotation>	0.14	</vehicleRotation>
+        <vehicleMovement>	0.12	</vehicleMovement>
+        <vehicleRotation>	0.12	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	200	</maxHealth>
@@ -2459,10 +2459,16 @@
         <armor_11>	20	</armor_11>
         <armor_12>	20	</armor_12>
         <armor_13>	20	</armor_13>
+        <armor_14>	20	  <tags>	gunMask	</tags>
+        </armor_14>
+        <armor_15>	20	  <tags>	gunMask	</tags>
+        </armor_15>
+        <armor_16>	12	  <tags>	gunMask	</tags>
+        </armor_16>
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	3000	</weight>
-      <maxHealth>	180	</maxHealth>
+      <maxHealth>	230	</maxHealth>
       <rotationSpeed>	48	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	140	</maxHealth>
@@ -2557,6 +2563,7 @@
             <collisionModelServer>	vehicles/czech/Cz24_Vz_64_Blesk/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/czech/Cz24_Vz_64_Blesk/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <muzzleBrake>	HORIZONTAL	</muzzleBrake>
           <camouflage>
             <density>	124.997864 124.998413	</density>
             <aoTextureSize>	512 512	</aoTextureSize>
@@ -2644,6 +2651,7 @@
             <collisionModelClient>	vehicles/czech/Cz24_Vz_64_Blesk/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
           <animateEmblemSlots>	false	</animateEmblemSlots>
+          <muzzleBrake>	HORIZONTAL	</muzzleBrake>
           <camouflage>
             <density>	125.002296 125.000893	</density>
             <aoTextureSize>	512 512	</aoTextureSize>
@@ -3247,7 +3255,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	3500	</weight>
-      <maxHealth>	240	</maxHealth>
+      <maxHealth>	280	</maxHealth>
       <rotationSpeed>	50	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	140	</maxHealth>
@@ -3286,7 +3294,7 @@
           </pitchLimits>
           <invisibilityFactorAtShot>	0.126	</invisibilityFactorAtShot>
           <shotDispersionFactors>
-            <turretRotation>	0.1	</turretRotation>
+            <turretRotation>	0.08	</turretRotation>
             <afterShot>	3	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
@@ -3363,6 +3371,7 @@
             <collisionModelServer>	vehicles/czech/Cz24_Vz_64_Blesk/collision/Gun_03.model	</collisionModelServer>
             <collisionModelClient>	vehicles/czech/Cz24_Vz_64_Blesk/collision_client/Gun_03.model	</collisionModelClient>
           </hitTester>
+          <muzzleBrake>	HORIZONTAL	</muzzleBrake>
           <camouflage>
             <density>	137.712021 137.498352	</density>
             <aoTextureSize>	512 512	</aoTextureSize>
@@ -3393,7 +3402,7 @@
           </pitchLimits>
           <invisibilityFactorAtShot>	0.135	</invisibilityFactorAtShot>
           <shotDispersionFactors>
-            <turretRotation>	0.1	</turretRotation>
+            <turretRotation>	0.08	</turretRotation>
             <afterShot>	3	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
@@ -3471,6 +3480,7 @@
             <collisionModelClient>	vehicles/czech/Cz24_Vz_64_Blesk/collision_client/Gun_04.model	</collisionModelClient>
           </hitTester>
           <animateEmblemSlots>	false	</animateEmblemSlots>
+          <muzzleBrake>	HORIZONTAL	</muzzleBrake>
           <camouflage>
             <density>	151.872833 151.506775	</density>
             <aoTextureSize>	512 512	</aoTextureSize>
@@ -3952,16 +3962,17 @@
     <detailed>
       <engines>
         <UTD_20_64>
-          <smplEnginePower>	370	</smplEnginePower>
+          <smplEnginePower>	460	</smplEnginePower>
           <smplFwMaxSpeed>	60	</smplFwMaxSpeed>
         </UTD_20_64>
         <UTD_20_64B>
-          <smplEnginePower>	420	</smplEnginePower>
+          <smplEnginePower>	500	</smplEnginePower>
           <smplFwMaxSpeed>	60	</smplFwMaxSpeed>
         </UTD_20_64B>
       </engines>
       <chassis>
         <Chassis_Cz24_Vz_64_Blesk>
+          <axleCount>	5	</axleCount>
           <grounds>
             <soft>
               <rollingFriction>	0.08855	</rollingFriction>
@@ -3973,9 +3984,9 @@
               <rollingFriction>	0.04025	</rollingFriction>
             </firm>
           </grounds>
-          <axleCount>	5	</axleCount>
         </Chassis_Cz24_Vz_64_Blesk>
         <Chassis_Cz24_Vz_64_Blesk_2>
+          <axleCount>	5	</axleCount>
           <grounds>
             <soft>
               <rollingFriction>	0.08855	</rollingFriction>
@@ -3987,7 +3998,6 @@
               <rollingFriction>	0.04025	</rollingFriction>
             </firm>
           </grounds>
-          <axleCount>	5	</axleCount>
         </Chassis_Cz24_Vz_64_Blesk_2>
       </chassis>
     </detailed>

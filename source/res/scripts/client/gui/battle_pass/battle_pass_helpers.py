@@ -23,12 +23,12 @@ from gui.impl.gen.view_models.common.price_model import PriceModel
 from gui.impl.wrappers.user_compound_price_model import PriceModelBuilder
 from gui.impl.gen.view_models.views.lobby.vehicle_preview.top_panel.top_panel_tabs_model import TabID
 from gui.prb_control.dispatcher import g_prbLoader
-from gui.server_events.bonuses import VehiclesBonus
+from gui.server_events.bonuses import VehiclesBonus, parseAttachmentsSetToken, AttachmentsSetTokenBonus
 from gui.server_events.recruit_helper import getRecruitInfo
 from gui.shared.formatters import time_formatters
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.money import Currency
-from gui.shared.event_dispatcher import showBattlePassStyleProgressionPreview, showStylePreview, showVehicleHubOverview
+from gui.shared.event_dispatcher import showBattlePassStyleProgressionPreview, showStylePreview, showVehicleHubOverview, showAttachmentsSetPreview
 from helpers import dependency, time_utils
 from helpers.dependency import replace_none_kwargs
 from skeletons.gui.shared import IItemsCache
@@ -36,7 +36,7 @@ from skeletons.gui.customization import ICustomizationService
 from skeletons.gui.game_control import IBattlePassController
 from web.web_client_api.common import ItemPackEntry, ItemPackType
 if typing.TYPE_CHECKING:
-    from typing import Dict, List
+    from typing import Dict, List, Optional, Tuple
     from gui.impl.wrappers.user_compound_price_model import UserCompoundPriceModel
     from gui.server_events.bonuses import TmanTemplateTokensBonus
 _logger = logging.getLogger(__name__)
@@ -228,6 +228,23 @@ def getStyleInfoForChapter(chapter, battlePass=None):
 
 
 @replace_none_kwargs(battlePass=IBattlePassController)
+def getAttachmentsSetInfoForChapter(chapter, battlePass=None, awardSource=BattlePassConsts.REWARD_FREE):
+    tokenID = getAttachmentsSetTokenForChapter(chapter=chapter, battlePass=battlePass, awardSource=awardSource)
+    return ('', []) if tokenID is None else parseAttachmentsSetToken(tokenID)
+
+
+@replace_none_kwargs(battlePass=IBattlePassController)
+def getAttachmentsSetTokenForChapter(chapter, battlePass=None, awardSource=BattlePassConsts.REWARD_FREE):
+    rewards = battlePass.getSingleAward(chapter, battlePass.getMaxLevelInChapter(chapter), awardType=awardSource)
+    for bonus in rewards:
+        if bonus.getName() == AttachmentsSetTokenBonus.NAME:
+            return first(bonus.getTokens().keys())
+
+    _logger.warning('%s chapter does not have attachment set token at final level!', chapter)
+    return None
+
+
+@replace_none_kwargs(battlePass=IBattlePassController)
 def getTimeExpirations(chapterID, battlePass=None):
     if battlePass.isExtraChapter(chapterID):
         endTimestamp = battlePass.getChapterExpiration(chapterID)
@@ -416,16 +433,25 @@ def _updateServerSettings(data):
 @dependency.replace_none_kwargs(itemsCache=IItemsCache)
 def showFinalRewardPreviewBattlePassState(chapterID, bonusID=None, level=None, itemsCache=None):
     from gui.Scaleform.daapi.view.lobby.storage.storage_helpers import getVehicleCDForStyle
-    styleInfo = getStyleForChapter(chapterID) if bonusID is None else itemsCache.items.getItemByCD(bonusID)
-    vehicleCD = getVehicleCDForStyle(styleInfo) if styleInfo is not None else None
-    allRewardTypes = getAllFinalRewards(chapterID)
-    if FinalReward.PROGRESSIVE_STYLE in allRewardTypes:
-        level = level or styleInfo.getMaxProgressionLevel()
-        showBattlePassStyleProgressionPreview(vehicleCD, styleInfo, styleInfo.getDescription(), chapterId=chapterID, styleLevel=int(level))
+    if bonusID is not None:
+        styleInfo = itemsCache.items.getItemByCD(bonusID)
+        vehicleCD = getVehicleCDForStyle(styleInfo) if styleInfo is not None else None
+        showStylePreview(vehicleCD, style=styleInfo, itemsPack=(ItemPackEntry(type=ItemPackType.CREW_100, groupID=1),))
         return
     else:
+        allRewardTypes = getAllFinalRewards(chapterID)
+        if FinalReward.ATTACHMENTS_SET in allRewardTypes:
+            attachmentsSetToken = getAttachmentsSetTokenForChapter(chapterID)
+            showAttachmentsSetPreview(attachmentsSetToken)
+            return
+        styleInfo = getStyleForChapter(chapterID)
+        vehicleCD = getVehicleCDForStyle(styleInfo) if styleInfo is not None else None
+        if FinalReward.PROGRESSIVE_STYLE in allRewardTypes:
+            level = level or styleInfo.getMaxProgressionLevel()
+            showBattlePassStyleProgressionPreview(vehicleCD, styleInfo, styleInfo.getDescription(), chapterId=chapterID, styleLevel=int(level))
+            return
         previewItemPack = (ItemPackEntry(type=ItemPackType.CREW_100, groupID=1),)
-        if not bonusID and FinalReward.VEHICLE in allRewardTypes:
+        if FinalReward.VEHICLE in allRewardTypes:
             vehicle, style = getVehicleInfoForChapter(chapterID, awardSource=BattlePassConsts.REWARD_BOTH)
             if styleInfo is not None:
                 showStylePreview(vehicle.intCD, style=styleInfo, topPanelData={'linkage': VEHPREVIEW_CONSTANTS.TOP_PANEL_TABS_LINKAGE,

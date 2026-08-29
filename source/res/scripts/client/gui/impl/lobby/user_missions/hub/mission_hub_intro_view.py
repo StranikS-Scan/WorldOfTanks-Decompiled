@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/user_missions/hub/mission_hub_intro_view.py
+from __future__ import absolute_import
 from frameworks.wulf import ViewFlags, ViewSettings, WindowFlags, WindowLayer
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.user_missions.hub.mission_hub_intro_view_model import MissionHubIntroViewModel
@@ -48,7 +49,7 @@ class MissionHubIntroWindow(WindowImpl):
     __slots__ = ('__blur',)
 
     def __init__(self, header, icon, description, buttonText=None):
-        super(MissionHubIntroWindow, self).__init__(WindowFlags.WINDOW | WindowFlags.WINDOW_FULLSCREEN, content=MissionHubIntroView(header, icon, description, buttonText), layer=WindowLayer.FULLSCREEN_WINDOW)
+        super(MissionHubIntroWindow, self).__init__(WindowFlags.WINDOW | WindowFlags.WINDOW_FULLSCREEN, content=MissionHubIntroView(header, description, icon, buttonText), layer=WindowLayer.FULLSCREEN_WINDOW)
         self.__blur = CachedBlur(enabled=True, ownLayer=WindowLayer.TOP_SUB_VIEW)
 
     def _finalize(self):

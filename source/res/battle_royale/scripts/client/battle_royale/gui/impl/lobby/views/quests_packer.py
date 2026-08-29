@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: battle_royale/scripts/client/battle_royale/gui/impl/lobby/views/quests_packer.py
+from __future__ import absolute_import
 import logging
 from battle_royale.gui.impl.lobby.views.bonus_packer import getBonusPacker
 import constants
@@ -21,8 +22,8 @@ class BRDailyQuestUIDataPacker(BattleQuestUIDataPacker):
         packQuestBonusModelAndTooltipData(packer, model.getBonuses(), self._event, tooltipData=self._tooltipData)
 
     def pack(self, model=None):
-        if model is not None:
-            not isinstance(model, DailyQuestModel) and _logger.error('Provided model type is not matching quest type. Expected DailyQuestModel')
+        if model is not None and not isinstance(model, DailyQuestModel):
+            _logger.error('Provided model type is not matching quest type. Expected DailyQuestModel')
             return
         else:
             model = model if model is not None else DailyQuestModel()

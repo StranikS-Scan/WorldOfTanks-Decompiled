@@ -10,7 +10,7 @@ from constants import IS_CLIENT, ITEM_DEFS_PATH
 from extension_utils import ResMgr
 from items import _xml
 from soft_exception import SoftException
-from struct_helpers import unpackByte, packByte
+from struct_helpers import unpackByte
 if IS_CLIENT:
     from helpers import i18n
 _g_itemTypes = None

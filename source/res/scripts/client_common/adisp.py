@@ -73,7 +73,9 @@ def adisp_process(func, stepCallback=lambda stop: None):
         if not isinstance(generator, types.GeneratorType):
             LOG_ERROR('Method %s from %s marked as adisp_process is not a generator!' % (func.__name__, os.path.relpath(func.func_code.co_filename)))
             return generator
-        doCall(func, partial(CallbackDispatcher, generator, stepCallback))
+        else:
+            doCall(func, partial(CallbackDispatcher, generator, stepCallback))
+            return None
 
     return wrapper
 

@@ -14,8 +14,8 @@ _BADGES_XML_PATH = ITEM_DEFS_PATH + 'badges.xml'
 def _readBadges():
     result = {}
     ctx, section = resource_helper.getRoot(_BADGES_XML_PATH)
-    for ctx, subSection in resource_helper.getIterator(ctx, section['badges']):
-        item = resource_helper.readItem(ctx, subSection, name='badge')
+    for ctx_, subSection in resource_helper.getIterator(ctx, section['badges']):
+        item = resource_helper.readItem(ctx_, subSection, name='badge')
         if not item.name:
             raise SoftException('No name for badge is provided', item.name)
         if 'id' not in item.value:

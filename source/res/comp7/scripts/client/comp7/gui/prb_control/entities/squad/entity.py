@@ -26,7 +26,8 @@ class Comp7SquadEntryPoint(SquadEntryPoint):
 
     def __init__(self, accountsToInvite=None):
         super(Comp7SquadEntryPoint, self).__init__(FUNCTIONAL_FLAG.COMP7, accountsToInvite)
-        self.__squadSize = self.__comp7Ctrl.getModeSettings().squadSizes[1]
+        config = self.__comp7Ctrl.getModeSettings()
+        self.__squadSize = config.squadSizes[1 if self.__comp7Ctrl.isSuperSquadEnabled() else 0]
 
     def makeDefCtx(self):
         return SquadSettingsCtx(PREBATTLE_TYPE.COMP7, waitingID='prebattle/create', accountsToInvite=self._accountsToInvite)

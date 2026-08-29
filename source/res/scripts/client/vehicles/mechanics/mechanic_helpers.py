@@ -7,7 +7,7 @@ import BigWorld
 from vehicles.mechanics.common import IMechanicComponentLogic
 from vehicles.mechanics.mechanic_constants import VEHICLE_MECHANIC_DYN_COMPONENT_NAMES as _DYN_COMPONENTS_NAMES, VEHICLE_MECHANIC_TO_PARAMS, VEHICLE_MECHANIC_TAGS, TRACKABLE_VEHICLE_DESCR_MECHANICS
 if typing.TYPE_CHECKING:
-    from items.vehicles import VehicleDescriptor, VehicleDescr
+    from items.vehicles import VehicleDescriptor
     from Vehicle import Vehicle
     from vehicles.mechanics.common import IMechanicComponent
     from vehicles.mechanics.mechanic_constants import VehicleMechanic
@@ -54,3 +54,11 @@ def getVehicleDescrMechanics(vehicleDescriptor):
 
 def getVehicleDescrMechanicParams(vehicleDescriptor, mechanic):
     return vehicleDescriptor.mechanicsParams.get(VEHICLE_MECHANIC_TO_PARAMS[mechanic])
+
+
+def isMechanicInMechanicsParams(mechanicParams, mechanic):
+    return getMechanicFromMechanicsParams(mechanicParams, mechanic) is not None
+
+
+def getMechanicFromMechanicsParams(mechanicParams, mechanic):
+    return mechanicParams.get(VEHICLE_MECHANIC_TO_PARAMS[mechanic])

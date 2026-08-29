@@ -28,9 +28,6 @@ class CustomizationBottomPanelMeta(BaseDAAPIComponent):
     def switchMode(self, index):
         self._printOverrideError('switchMode')
 
-    def returnToStyledMode(self):
-        self._printOverrideError('returnToStyledMode')
-
     def onItemIsNewAnimationShown(self, intCD):
         self._printOverrideError('onItemIsNewAnimationShown')
 

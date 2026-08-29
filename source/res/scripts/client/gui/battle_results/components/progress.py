@@ -6,7 +6,7 @@ from collections import namedtuple
 from copy import deepcopy
 from itertools import chain
 import typing
-import personal_missions
+import personal_missions as pm
 from battle_pass_common import BattlePassConsts, isPostProgressionChapter
 from constants import EVENT_TYPE
 from gui.Scaleform.daapi.view.lobby.customization.progression_helpers import getC11nProgressionLinkBtnParams, parseEventID, getC11n2dProgressionLinkBtnParams, getProgressiveCustomizationProgress
@@ -341,10 +341,10 @@ class QuestsProgressBlock(base.StatsBlock):
                     data = packQuestProgressData(qID, allCommonQuests, qProgress, isCompleted)
                     if data:
                         commonQuests.append(data)
-                if personal_missions.g_cache.isPersonalMission(qID):
-                    pqID = personal_missions.g_cache.getPersonalMissionIDByUniqueID(qID)
+                if pm.g_cache.isPersonalMission(qID):
+                    pqID = pm.g_cache.getPersonalMissionIDByUniqueID(qID)
                     questsCache = self.__eventsCache.getPersonalMissions()
-                    quest = questsCache.getAllQuests(personal_missions.PM_BRANCH.ALL)[pqID]
+                    quest = questsCache.getAllQuests(pm.PM_BRANCH.ALL_NAMES)[pqID]
                     progress = personalMissions.setdefault(quest, {})
                     progress.update({qID: isCompleted})
 

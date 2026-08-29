@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: battle_royale/scripts/client/battle_royale/gui/sounds_constants.py
+from __future__ import absolute_import
 from shared_utils import CONST_CONTAINER
 from sound_gui_manager import CommonSoundSpaceSettings
 

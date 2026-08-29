@@ -1,11 +1,12 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: battle_royale/scripts/client/battle_royale/gui/impl/lobby/views/states.py
+from __future__ import absolute_import
 import typing
 from WeakMethod import WeakMethodProxy
 from battle_royale.gui.shared.event_dispatcher import showInfoPage
 from battle_royale.skeletons.game_controller import IBRProgressionOnTokensController
-from frameworks.state_machine import StateFlags
-from frameworks.state_machine.transitions import TransitionType
+from frameworks_common.state_machine import StateFlags
+from frameworks_common.state_machine.transitions import TransitionType
 from gui.Scaleform.framework.entities.View import ViewKey
 from gui.Scaleform.genConsts.BATTLEROYALE_ALIASES import BATTLEROYALE_ALIASES
 from gui.battle_results.service import PostBattleResultsStateMixin

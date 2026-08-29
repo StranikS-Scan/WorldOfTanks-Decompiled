@@ -8,9 +8,9 @@
     <loader></loader>
   </crew>
   <supplySlots>	3 1 1 6 6 6 7 8 8 8	</supplySlots>
-  <postProgressionTree>	role_LT_universal	</postProgressionTree>
+  <postProgressionTree>	role_LT_scout	</postProgressionTree>
   <speedLimits>
-    <forward>	62	</forward>
+    <forward>	67	</forward>
     <backward>	23	</backward>
   </speedLimits>
   <invisibility>
@@ -60,7 +60,7 @@
     </armor>
     <primaryArmor>	armor_2 armor_3 armor_4	</primaryArmor>
     <weight>	12400	</weight>
-    <maxHealth>	608	</maxHealth>
+    <maxHealth>	640	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	140	</maxHealth>
       <maxRegenHealth>	90	</maxRegenHealth>
@@ -1543,14 +1543,14 @@
       </armor>
       <primaryArmor>	armor_2 armor_3 armor_4	</primaryArmor>
       <weight>	3250	</weight>
-      <maxHealth>	152	</maxHealth>
+      <maxHealth>	160	</maxHealth>
       <rotationSpeed>	48	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	120	</maxHealth>
         <maxRegenHealth>	60	</maxRegenHealth>
         <repairCost>	1.0	</repairCost>
       </turretRotatorHealth>
-      <circularVisionRadius>	360	</circularVisionRadius>
+      <circularVisionRadius>	370	</circularVisionRadius>
       <surveyingDeviceHealth>
         <maxHealth>	80	</maxHealth>
         <maxRegenHealth>	40	</maxRegenHealth>
@@ -2223,12 +2223,12 @@
     <detailed>
       <engines>
         <V_2_10M>
-          <smplEnginePower>	650	</smplEnginePower>
-          <smplFwMaxSpeed>	62	</smplFwMaxSpeed>
+          <smplEnginePower>	750	</smplEnginePower>
+          <smplFwMaxSpeed>	67	</smplFwMaxSpeed>
         </V_2_10M>
         <V_16M>
-          <smplEnginePower>	740	</smplEnginePower>
-          <smplFwMaxSpeed>	62	</smplFwMaxSpeed>
+          <smplEnginePower>	800	</smplEnginePower>
+          <smplFwMaxSpeed>	67	</smplFwMaxSpeed>
         </V_16M>
       </engines>
       <chassis>

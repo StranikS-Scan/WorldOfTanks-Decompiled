@@ -435,7 +435,7 @@ class FittingItem(GUIItem):
     def getBigOverlayType(self, vehicle=None):
         return _BIG_HIGHLIGHT_TYPES_MAP[self.getOverlayType(vehicle)]
 
-    def getMechanics(self, vehDescr, withOverrides=False):
+    def getMechanics(self, vehDescr=None, withOverrides=False):
         return chain.from_iterable((factory.getMechanics(self, vehDescr, withOverrides=withOverrides) for factory in self._MECHANICS_FACTORY))
 
     def isInstalled(self, vehicle, slotIdx=None):

@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: battle_royale/scripts/client/battle_royale/gui/Scaleform/daapi/view/battle/battle_level_panel.py
+from __future__ import absolute_import
 import BigWorld
 import BattleReplay
 from helpers import int2roman

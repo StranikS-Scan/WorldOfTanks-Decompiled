@@ -331,6 +331,8 @@ class LSArtefactsController(ILSArtefactsController, IGlobalListener):
             if not self.isArtefactOpened(artefact.artefactID):
                 return artefact.artefactID
 
+        return None
+
     def _initArtefacts(self):
         quests = self.questsCache.getQuests(lambda q: isArtefactQuest(q.getID()))
         self._artefacts = dict(((artefactID, Artefact(artefactID, ArtefactPrice(*self._getArtefactPrice(artefactID)), ArtefactPrice(*self._getArtefactQuestSkipPrice(artefactID)), self._getArtefactBonuses(artefactID), self._getArtefactQuestConditions(artefactID, quests), self._getArtefactTypes(artefactID), self._getArtefactLimit(artefactID))) for artefactID in viewkeys(self._getArtefacts())))

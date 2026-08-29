@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/crew/container_vews/service_record/service_record_view.py
 import typing
+import BigWorld
 from frameworks.wulf import ViewSettings, ViewFlags
 from gui.impl import backport
 from gui.impl.backport.backport_tooltip import createBackportTooltipContent
@@ -58,7 +59,8 @@ class ServiceRecordView(ContainerBase, IPersonalTab, ViewImpl):
         return super(ServiceRecordView, self).createToolTipContent(event, contentID)
 
     def onStopAnimations(self):
-        pass
+        BigWorld.player().crewAccountController.setTankmanVeteranAnimanionPlayed(self.context.tankman.invID)
+        self.refresh()
 
     def _fillViewModel(self, vm):
         vm.setIsTankmanInVehicle(self.context.tankman.vehicleDescr is not None)
@@ -70,7 +72,7 @@ class ServiceRecordView(ContainerBase, IPersonalTab, ViewImpl):
             vm.setBattlesCount(self.context.dossier.getBattlesCount())
             vm.setAverageXP(self.context.dossier.getAvgXP())
             achieves = self.context.dossier.getTotalStats().getAchievements(isInDossier=True)
-            for _, section in enumerate(achieves):
+            for section in achieves:
                 for achievement in section:
                     achievementVM = AchievementModel()
                     achievementVM.setName(achievement.getName())

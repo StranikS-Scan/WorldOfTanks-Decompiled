@@ -9,9 +9,9 @@ from battle_royale.gui.battle_control.controllers.radar_ctrl import IRadarListen
 import CommandMapping
 from Event import EventsSubscriber
 from account_helpers import AccountSettings
-from account_helpers.AccountSettings import TRAJECTORY_VIEW_HINT_SECTION, PRE_BATTLE_HINT_SECTION, QUEST_PROGRESS_HINT_SECTION, HELP_SCREEN_HINT_SECTION, SIEGE_HINT_SECTION, WHEELED_MODE_HINT_SECTION, HINTS_LEFT, NUM_BATTLES, LAST_DISPLAY_DAY, IBC_HINT_SECTION, DEV_MAPS_HINT_SECTION, RADAR_HINT_SECTION, TURBO_SHAFT_ENGINE_MODE_HINT_SECTION, PRE_BATTLE_ROLE_HINT_SECTION, COMMANDER_CAM_HINT_SECTION, ROCKET_ACCELERATION_MODE_HINT_SECTION, RESERVES_HINT_SECTION, MAPBOX_HINT_SECTION, TWIN_GUN_HINT_SECTION, PILLBOX_HINT_SECTION, RECHARGEABLE_NITRO_MODE_HINT_SECTION, TARGET_DESIGNATOR_MODE_HINT_SECTION, STAGED_JET_BOOSTERS_MODE_HINT_SECTION, WHEELED_DASH_MODE_HINT_SECTION
+from account_helpers.AccountSettings import TRAJECTORY_VIEW_HINT_SECTION, PRE_BATTLE_HINT_SECTION, QUEST_PROGRESS_HINT_SECTION, HELP_SCREEN_HINT_SECTION, SIEGE_HINT_SECTION, WHEELED_MODE_HINT_SECTION, HINTS_LEFT, NUM_BATTLES, LAST_DISPLAY_DAY, IBC_HINT_SECTION, DEV_MAPS_HINT_SECTION, RADAR_HINT_SECTION, TURBO_SHAFT_ENGINE_MODE_HINT_SECTION, PRE_BATTLE_ROLE_HINT_SECTION, COMMANDER_CAM_HINT_SECTION, ROCKET_ACCELERATION_MODE_HINT_SECTION, RESERVES_HINT_SECTION, MAPBOX_HINT_SECTION, TWIN_GUN_HINT_SECTION, PILLBOX_HINT_SECTION, RECHARGEABLE_NITRO_MODE_HINT_SECTION, TARGET_DESIGNATOR_MODE_HINT_SECTION, STAGED_JET_BOOSTERS_MODE_HINT_SECTION, WHEELED_DASH_MODE_HINT_SECTION, SHELL_PARAMS_SWITCHER_HINT_SECTION, BUSTLE_FEED_HINT_SECTION
 from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS
-from constants import VEHICLE_SIEGE_STATE as _SIEGE_STATE, ARENA_PERIOD, ARENA_GUI_TYPE, ROLE_TYPE, ROCKET_ACCELERATION_STATE, RECHARGEABLE_NITRO_STATE, TARGET_DESIGNATOR_STATE, PHASED_MECHANIC_STATE
+from constants import VEHICLE_SIEGE_STATE as _SIEGE_STATE, ARENA_PERIOD, ARENA_GUI_TYPE, ROLE_TYPE, ROCKET_ACCELERATION_STATE, RECHARGEABLE_NITRO_STATE, TARGET_DESIGNATOR_STATE, PHASED_MECHANIC_STATE, BUSTLE_FEED_STATE
 from events_containers.common.containers import ContainersListener
 from debug_utils import LOG_DEBUG
 from events_handler import eventHandler
@@ -266,6 +266,8 @@ class SiegeIndicatorHintPlugin(HintPanelPlugin):
         self.__hasTwinGun = False
         self.__hasStagedJetBoosters = False
         self.__hasWheeledDash = False
+        self.__hasBustleFeed = False
+        self.__hasShellParamsSwitcher = False
         self.__isSuitableVehicle = False
         self.__period = None
         self.__isInDisplayPeriod = False
@@ -275,6 +277,7 @@ class SiegeIndicatorHintPlugin(HintPanelPlugin):
         self.__nitroCmp = None
         self.__stagedJetBoostersCmp = None
         self.__wheeledDashCmp = None
+        self.__bustleFeedCmp = None
         return
 
     @classmethod
@@ -296,7 +299,9 @@ class SiegeIndicatorHintPlugin(HintPanelPlugin):
          TWIN_GUN_HINT_SECTION,
          RECHARGEABLE_NITRO_MODE_HINT_SECTION,
          STAGED_JET_BOOSTERS_MODE_HINT_SECTION,
-         WHEELED_DASH_MODE_HINT_SECTION)}
+         WHEELED_DASH_MODE_HINT_SECTION,
+         SHELL_PARAMS_SWITCHER_HINT_SECTION,
+         BUSTLE_FEED_HINT_SECTION)}
         if vStateCtrl is not None:
             vStateCtrl.onVehicleStateUpdated += self.__onVehicleStateUpdated
             vStateCtrl.onVehicleControlling += self.__onVehicleControlling
@@ -320,6 +325,9 @@ class SiegeIndicatorHintPlugin(HintPanelPlugin):
         if self.__wheeledDashCmp:
             self.__wheeledDashCmp.commandsEvents.onMechanicCommand -= self.__onTryWheeledDashActivate
             self.__wheeledDashCmp = None
+        if self.__bustleFeedCmp:
+            self.__bustleFeedCmp.commandsEvents.onMechanicCommand -= self.__onTryBustleFeedSwitch
+            self.__bustleFeedCmp = None
         vStateCtrl = self.sessionProvider.shared.vehicleState
         if vStateCtrl is not None:
             vStateCtrl.onVehicleStateUpdated -= self.__onVehicleStateUpdated
@@ -371,6 +379,11 @@ class SiegeIndicatorHintPlugin(HintPanelPlugin):
             self.__isHintShown = False
             self.__callbackDelayer.destroy()
 
+    def __checkVehicleSuitability(self, vTypeDesc, isPillboxVehicle):
+        if isPillboxVehicle:
+            return False
+        return True if self.__hasBustleFeed else (vTypeDesc.hasSiegeMode or self.__hasRocketAcceleration or self.__hasRechargeableNitro or self.__hasStagedJetBoosters or self.__hasWheeledDash or self.__hasShellParamsSwitcher) and not (vTypeDesc.type.isDualgunVehicleType or vTypeDesc.hasAutoSiegeMode)
+
     def __onVehicleControlling(self, vehicle):
         vStateCtrl = self.sessionProvider.shared.vehicleState
         vTypeDesc = vehicle.typeDescriptor
@@ -381,10 +394,12 @@ class SiegeIndicatorHintPlugin(HintPanelPlugin):
         self.__hasStagedJetBoosters = VehicleMechanic.STAGED_JET_BOOSTERS in vehicleMechanicsComponents
         self.__hasWheeledDash = VehicleMechanic.WHEELED_DASH in vehicleMechanicsComponents
         self.__hasTwinGun = VehicleMechanic.TWIN_GUN in vehicleMechanicsComponents
+        self.__hasShellParamsSwitcher = VehicleMechanic.SHELL_PARAMS_SWITCHER in vehicleMechanicsComponents
+        self.__hasBustleFeed = VehicleMechanic.BUSTLE_FEED in vehicleMechanicsComponents
         self.__hasTurboshaftEngine = vTypeDesc.hasTurboshaftEngine
         self.__hasHydraulicChassis = vTypeDesc.hasHydraulicChassis
         self.__isWheeledTech = vTypeDesc.isWheeledVehicle and not self.__hasWheeledDash
-        self.__isSuitableVehicle = not isPillboxVehicle and (vTypeDesc.hasSiegeMode or self.__hasRocketAcceleration or self.__hasRechargeableNitro or self.__hasStagedJetBoosters or self.__hasWheeledDash) and not (vTypeDesc.type.isDualgunVehicleType or vTypeDesc.hasAutoSiegeMode)
+        self.__isSuitableVehicle = self.__checkVehicleSuitability(vTypeDesc, isPillboxVehicle)
         if self.__hasRocketAcceleration:
             if self.__rocketCmp:
                 self.__rocketCmp.unsubscribe(tryActivateCallback=self.__onTryRocketAccelerationActivate)
@@ -409,6 +424,12 @@ class SiegeIndicatorHintPlugin(HintPanelPlugin):
             self.__wheeledDashCmp = vehicleMechanicsComponents[VehicleMechanic.WHEELED_DASH]
             if self.__wheeledDashCmp:
                 self.__wheeledDashCmp.commandsEvents.onMechanicCommand += self.__onTryWheeledDashActivate
+        if self.__hasBustleFeed:
+            if self.__bustleFeedCmp:
+                self.__bustleFeedCmp.commandsEvents.onMechanicCommand -= self.__onTryBustleFeedSwitch
+            self.__bustleFeedCmp = vehicleMechanicsComponents[VehicleMechanic.BUSTLE_FEED]
+            if self.__bustleFeedCmp:
+                self.__bustleFeedCmp.commandsEvents.onMechanicCommand += self.__onTryBustleFeedSwitch
         if vehicle.isAlive() and self.__isSuitableVehicle:
             self.__isEnabled = True
             state = VEHICLE_VIEW_STATE.SIEGE_MODE
@@ -456,10 +477,21 @@ class SiegeIndicatorHintPlugin(HintPanelPlugin):
             if self.__wheeledDashCmp.getMechanicState().state == PHASED_MECHANIC_STATE.READY:
                 self.__onHintUsed()
 
+    def __onTryBustleFeedSwitch(self, command):
+        if command is not VehicleMechanicCommand.SWITCH:
+            return
+        if not self.__isObserver and not self.__isInPostmortem and self.__bustleFeedCmp:
+            if self.__bustleFeedCmp.getMechanicState().state in (BUSTLE_FEED_STATE.INACTIVE, BUSTLE_FEED_STATE.ACTIVE):
+                self.__onHintUsed()
+                if self.__isHintShown:
+                    self._parentObj.removeBtnHint(CommandMapping.CMD_CM_VEHICLE_SWITCH_AUTOROTATION)
+                    self.__isHintShown = False
+                    self.__callbackDelayer.stopCallback(self.__onHintTimeOut)
+
     def __onVehicleStateUpdated(self, state, value):
         if not self.__isEnabled:
             return
-        if state == VEHICLE_VIEW_STATE.SIEGE_MODE:
+        if state == VEHICLE_VIEW_STATE.SIEGE_MODE and not self.__hasBustleFeed:
             siegeState, _ = value
             if siegeState in _SIEGE_STATE.SWITCHING:
                 if not self.__isObserver and not self.__isInPostmortem:
@@ -511,6 +543,8 @@ class SiegeIndicatorHintPlugin(HintPanelPlugin):
             pressText = backport.text(R.strings.ingame_gui.siegeMode.hint.press())
             if self.__isWheeledTech:
                 hintText = backport.text(R.strings.ingame_gui.siegeMode.hint.wheeled())
+            elif self.__hasBustleFeed:
+                hintText = backport.text(R.strings.ingame_gui.siegeMode.hint.bustleFeed())
             elif self.__hasTurboshaftEngine:
                 hintText = backport.text(R.strings.ingame_gui.siegeMode.hint.turboshaftEngine())
             elif self.__hasRocketAcceleration:
@@ -521,6 +555,8 @@ class SiegeIndicatorHintPlugin(HintPanelPlugin):
                 hintText = backport.text(R.strings.ingame_gui.siegeMode.hint.stagedJetBoosters())
             elif self.__hasTwinGun:
                 hintText = backport.text(R.strings.ingame_gui.siegeMode.hint.twinGun())
+            elif self.__hasShellParamsSwitcher:
+                hintText = backport.text(R.strings.ingame_gui.siegeMode.hint.shellParamsSwitcher())
             elif self.__hasWheeledDash:
                 hintText = backport.text(R.strings.ingame_gui.siegeMode.hint.wheeledDash())
             else:
@@ -536,6 +572,8 @@ class SiegeIndicatorHintPlugin(HintPanelPlugin):
     def __getSuitableSetting(self):
         if self.__isWheeledTech:
             return self.__settings[WHEELED_MODE_HINT_SECTION]
+        if self.__hasBustleFeed:
+            return self.__settings[BUSTLE_FEED_HINT_SECTION]
         if self.__hasHydraulicChassis:
             return self.__settings[SIEGE_HINT_SECTION]
         if self.__hasTurboshaftEngine:
@@ -548,7 +586,9 @@ class SiegeIndicatorHintPlugin(HintPanelPlugin):
             return self.__settings[STAGED_JET_BOOSTERS_MODE_HINT_SECTION]
         if self.__hasWheeledDash:
             return self.__settings[WHEELED_DASH_MODE_HINT_SECTION]
-        return self.__settings[TWIN_GUN_HINT_SECTION] if self.__hasTwinGun else {}
+        if self.__hasTwinGun:
+            return self.__settings[TWIN_GUN_HINT_SECTION]
+        return self.__settings[SHELL_PARAMS_SWITCHER_HINT_SECTION] if self.__hasShellParamsSwitcher else {}
 
 
 class RadarHintPlugin(HintPanelPlugin, CallbackDelayer, IRadarListener):
@@ -794,13 +834,15 @@ class PreBattleHintPlugin(HintPanelPlugin):
         serverSettings = self.lobbyContext.getServerSettings()
         if self.__hintInQueue is CommandMapping.CMD_SHOW_HELP:
             return self._makeHintData(R.strings.ingame_gui.helpScreen, HintPriority.HELP, HelpHintContext.MECHANICS)
-        if self.__hintInQueue is CommandMapping.CMD_CHAT_SHORTCUT_CONTEXT_COMMAND:
+        elif self.__hintInQueue is CommandMapping.CMD_CHAT_SHORTCUT_CONTEXT_COMMAND:
             return self._makeHintData(R.strings.ingame_gui.battleCommunication, HintPriority.BATTLE_COMMUNICATION)
-        if self.__hintInQueue is CommandMapping.CMD_QUEST_PROGRESS_SHOW:
-            if serverSettings.isPersonalMissionsEnabled():
-                return self._makeHintData(R.strings.ingame_gui.battleProgress, HintPriority.QUESTS)
-        elif self.__hintInQueue is CommandMapping.CMD_SHOW_PERSONAL_RESERVES and serverSettings.personalReservesConfig.isReservesInBattleActivationEnabled:
-            return self._makeHintData(R.strings.ingame_gui.personal_reserves, HintPriority.RESERVES)
+        else:
+            if self.__hintInQueue is CommandMapping.CMD_QUEST_PROGRESS_SHOW:
+                if serverSettings.isPersonalMissionsEnabled():
+                    return self._makeHintData(R.strings.ingame_gui.battleProgress, HintPriority.QUESTS)
+            elif self.__hintInQueue is CommandMapping.CMD_SHOW_PERSONAL_RESERVES and serverSettings.personalReservesConfig.isReservesInBattleActivationEnabled:
+                return self._makeHintData(R.strings.ingame_gui.personal_reserves, HintPriority.RESERVES)
+            return None
 
     def _makeHintData(self, resourceRoot, priority, hintCtx=None):
         cmd = self.__hintInQueue
@@ -1493,7 +1535,7 @@ class SkillActivatedHintPlugin(HintPanelPlugin):
         self.__isHintShown = False
         self.__callbackDelayer = CallbackDelayer()
         self.__startCounterUpdated = False
-        self.__targetDesignatorCmp = None
+        self.__subscribedVehicleID = None
         return
 
     @classmethod
@@ -1517,9 +1559,10 @@ class SkillActivatedHintPlugin(HintPanelPlugin):
         return
 
     def stop(self):
-        if self.__targetDesignatorCmp:
-            self.__targetDesignatorCmp.commandsEvents.onMechanicCommand -= self.__onTryTargetDesignatorActivate
-            self.__targetDesignatorCmp = None
+        cmp = self.__getTargetDesignatorCmp()
+        if cmp is not None:
+            cmp.commandsEvents.onMechanicCommand -= self.__onTryTargetDesignatorActivate
+        self.__subscribedVehicleID = None
         vStateCtrl = self.sessionProvider.shared.vehicleState
         if vStateCtrl is not None:
             vStateCtrl.onVehicleStateUpdated -= self.__onVehicleStateUpdated
@@ -1572,12 +1615,13 @@ class SkillActivatedHintPlugin(HintPanelPlugin):
         vTypeDesc = vehicle.typeDescriptor
         self.__hasTargetDesignator = hasVehicleDescrMechanic(vTypeDesc, VehicleMechanic.TARGET_DESIGNATOR)
         self.__isSuitableVehicle = self.__hasTargetDesignator
+        prevCmp = self.__getTargetDesignatorCmp()
+        if prevCmp is not None:
+            prevCmp.commandsEvents.onMechanicCommand -= self.__onTryTargetDesignatorActivate
         if self.__hasTargetDesignator:
-            if self.__targetDesignatorCmp:
-                self.__targetDesignatorCmp.commandsEvents.onMechanicCommand -= self.__onTryTargetDesignatorActivate
-            self.__targetDesignatorCmp = vehicle.dynamicComponents.get('targetDesignatorController', None)
-            if self.__targetDesignatorCmp:
-                self.__targetDesignatorCmp.commandsEvents.onMechanicCommand += self.__onTryTargetDesignatorActivate
+            cmp = vehicle.dynamicComponents.get('targetDesignatorController', None)
+            if cmp is not None:
+                cmp.commandsEvents.onMechanicCommand += self.__onTryTargetDesignatorActivate
         if vehicle.isAlive() and self.__isSuitableVehicle:
             self.__isEnabled = True
             state = VEHICLE_VIEW_STATE.TARGET_DESIGNATOR
@@ -1591,15 +1635,26 @@ class SkillActivatedHintPlugin(HintPanelPlugin):
         if not self.__startCounterUpdated and self.__isSuitableVehicle:
             self._updateCounterOnStart(self.__getSuitableSetting(), self._HINT_DAY_COOLDOWN, self._HINT_BATTLES_COOLDOWN)
         self.__startCounterUpdated = True
+        self.__subscribedVehicleID = vehicle.id
         return
 
     def __onTryTargetDesignatorActivate(self, command):
         if command is not VehicleMechanicCommand.ACTIVATE:
             return
-        if not self.__isObserver and not self.__isInPostmortem and self.__targetDesignatorCmp:
-            if self.__targetDesignatorCmp.getMechanicState().state == TARGET_DESIGNATOR_STATE.READY:
-                self.__updateHint()
-                self.__onHintUsed()
+        else:
+            if not self.__isObserver and not self.__isInPostmortem:
+                cmp = self.__getTargetDesignatorCmp()
+                if cmp is not None and cmp.getMechanicState().state == TARGET_DESIGNATOR_STATE.READY:
+                    self.__updateHint()
+                    self.__onHintUsed()
+            return
+
+    def __getTargetDesignatorCmp(self):
+        if self.__subscribedVehicleID is None:
+            return
+        else:
+            vehicle = BigWorld.entities.get(self.__subscribedVehicleID)
+            return None if vehicle is None else vehicle.dynamicComponents.get('targetDesignatorController', None)
 
     def __onVehicleStateUpdated(self, state, value):
         if not self.__isEnabled:

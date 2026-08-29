@@ -7,6 +7,7 @@ from gui.battle_control.controllers.vehicles_tracking.tracking_wrappers import h
 from helpers import dependency
 from skeletons.gui.battle_session import IBattleSessionProvider
 if typing.TYPE_CHECKING:
+    from typing import Tuple
     from gui.battle_control.controllers.vehicles_tracking.tracking_interfaces import IVehiclesTrackingController
     from vehicles.mechanics.mechanic_constants import VehicleMechanic
     from vehicles.mechanics.mechanic_trackers import IVehicleMechanicsTrackerListener

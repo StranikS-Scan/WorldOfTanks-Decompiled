@@ -2,7 +2,7 @@
 # Embedded file name: fun_random/scripts/client/fun_random/gui/impl/lobby/hangar/states.py
 from __future__ import absolute_import
 import typing
-from frameworks.state_machine.transitions import TransitionType
+from frameworks_common.state_machine.transitions import TransitionType
 from fun_random.gui.feature.util.fun_mixins import FunSubModesWatcher
 from fun_random.gui.feature.util.fun_wrappers import hasDesiredSubMode
 from fun_random_common.fun_constants import FunSubModeImpl

@@ -16,6 +16,7 @@ from gui.impl.gen.view_models.views.loot_box_vehicle_compensation_tooltip_model 
 from gui.impl.lobby.crew.tooltips.mentoring_license_tooltip import MentoringLicenseTooltip
 from gui.impl.lobby.battle_pass.tooltips.battle_pass_coin_tooltip_view import BattlePassCoinTooltipView
 from gui.impl.lobby.battle_pass.tooltips.battle_pass_taler_tooltip import BattlePassTalerTooltip
+from gui.impl.lobby.lootbox_system.base.tooltips.box_reroll_tooltip import BoxRerollTooltip
 from gui.impl.lobby.lootbox_system.base.tooltips.box_tooltip import BoxTooltip, BoxCompensationTooltip
 from gui.impl.lobby.lootbox_system.base.tooltips.guaranteed_reward_info_tooltip import GuaranteedRewardInfoTooltip
 from gui.impl.lobby.lootbox_system.base.tooltips.random_national_bonus_tooltip_view import RandomNationalBonusTooltipView
@@ -77,6 +78,8 @@ def createTooltipContentDecorator():
                 return BattlePassCoinTooltipView()
             elif contentID == R.views.mono.battle_pass.tooltips.bptaler():
                 return BattlePassTalerTooltip()
+            elif contentID == R.views.mono.lootbox.tooltips.reroll():
+                return BoxRerollTooltip(event.getArgument('category'), event.getArgument('eventName'))
             tooltipData = getattr(self, 'getTooltipData', lambda _: None)(event)
             if tooltipData is not None:
                 if contentID == R.views.lobby.awards.tooltips.RewardCompensationTooltip():

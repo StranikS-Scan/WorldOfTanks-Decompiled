@@ -224,8 +224,7 @@ def preprocess_callback(callback, service):
                 response_code = exceptions.ResponseCodes.NO_ERRORS
                 if func:
                     data = func(data)
-                callback(data, response.responseCode, response_code)
-                return
+                return callback(data, response.responseCode, response_code)
 
         if not callable(something):
             return wrapped(something, func=None)

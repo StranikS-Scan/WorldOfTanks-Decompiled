@@ -1,4 +1,5 @@
 <radios.xml>
+  <xmlns:xmlref>	http://bwt/xmlref	</xmlns:xmlref>
   <ids>
     <FuG2>	1	</FuG2>
     <FuG5>	2	</FuG5>
@@ -44,6 +45,7 @@
     <Fu_8>	45	</Fu_8>
     <SEM_25H>	46	</SEM_25H>
     <_Type3_Otsu_G>	48	</_Type3_Otsu_G>
+    <_10WSc_7x7_0>	50	</_10WSc_7x7_0>
     <FuG5_T>	252	</FuG5_T>
     <Radio_PzIV>	254	</Radio_PzIV>
     <Radio_VK4502P>	255	</Radio_VK4502P>
@@ -65,6 +67,13 @@
     <SEM_25_funkgerat_RKW>	274	</SEM_25_funkgerat_RKW>
     <FuG_7_F>	278	</FuG_7_F>
     <_10WSc_CFE_T>	279	</_10WSc_CFE_T>
+    <SEM_25_funkgerat_VM_68>	280	</SEM_25_funkgerat_VM_68>
+    <SEL_Bordfunkanlage_Neu>	281	</SEL_Bordfunkanlage_Neu>
+    <SEL_Panzerfunkanlage_69A>	282	</SEL_Panzerfunkanlage_69A>
+    <SEL_Panzerfunkanlage_67>	283	</SEL_Panzerfunkanlage_67>
+    <Fu_55>	284	</Fu_55>
+    <Fu_57>	286	</Fu_57>
+    <FuG_7_45_01>	288	</FuG_7_45_01>
     <FuG5_SH>	314	</FuG5_SH>
     <FuG7_SH>	315	</FuG7_SH>
     <FuG12_SH>	316	</FuG12_SH>
@@ -506,6 +515,18 @@
       <maxRegenHealth>	75	</maxRegenHealth>
       <repairCost>	3.5	</repairCost>
     </_10WSc>
+    <_10WSc_7x7_0>
+      <userString>	#germany_vehicles:_10WSc_7x7_0	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <notInShop>	true	</notInShop>
+      <price>	51600	</price>
+      <weight>	160	</weight>
+      <distance>	720	</distance>
+      <maxHealth>	250	</maxHealth>
+      <maxRegenHealth>	75	</maxRegenHealth>
+      <repairCost>	3.5	</repairCost>
+    </_10WSc_7x7_0>
     <_10WSc_7x7>
       <userString>	#germany_vehicles:_10WSc	</userString>
       <tags></tags>
@@ -755,6 +776,18 @@
       <maxRegenHealth>	115	</maxRegenHealth>
       <repairCost>	3.5	</repairCost>
     </SEM_25_funkgerat_RKW>
+    <SEM_25_funkgerat_VM_68>
+      <userString>	#germany_vehicles:SEM_25_funkgerat_VM_68	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	55000	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	50	</weight>
+      <distance>	750	</distance>
+      <maxHealth>	230	</maxHealth>
+      <maxRegenHealth>	115	</maxRegenHealth>
+      <repairCost>	3.5	</repairCost>
+    </SEM_25_funkgerat_VM_68>
     <SEM_25E>
       <userString>	#germany_vehicles:SEM_25E	</userString>
       <tags></tags>
@@ -886,6 +919,66 @@
       <maxRegenHealth>	49	</maxRegenHealth>
       <repairCost>	0.5	</repairCost>
     </Kenttaradioasema_P_12_7>
+    <SEL_Bordfunkanlage_Neu>
+      <userString>	#germany_vehicles:SEL_Bordfunkanlage_Neu	</userString>
+      <tags></tags>
+      <level>	11	</level>
+      <price>	80000	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	100	</weight>
+      <distance>	104	</distance>
+      <maxHealth>	250	</maxHealth>
+      <maxRegenHealth>	125	</maxRegenHealth>
+      <repairCost>	4	</repairCost>
+    </SEL_Bordfunkanlage_Neu>
+    <SEL_Panzerfunkanlage_69A>
+      <userString>	#germany_vehicles:SEL_Panzerfunkanlage_69A	</userString>
+      <tags></tags>
+      <level>	9	</level>
+      <price>	40000	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	100	</weight>
+      <distance>	670	</distance>
+      <maxHealth>	210	</maxHealth>
+      <maxRegenHealth>	105	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+    </SEL_Panzerfunkanlage_69A>
+    <SEL_Panzerfunkanlage_67>
+      <userString>	#germany_vehicles:SEL_Panzerfunkanlage_67	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	55000	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	100	</weight>
+      <distance>	750	</distance>
+      <maxHealth>	230	</maxHealth>
+      <maxRegenHealth>	115	</maxRegenHealth>
+      <repairCost>	3.5	</repairCost>
+    </SEL_Panzerfunkanlage_67>
+    <Fu_55>
+      <userString>	#germany_vehicles:Fu_55	</userString>
+      <tags></tags>
+      <level>	8	</level>
+      <price>	30000	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	150	</weight>
+      <distance>	570	</distance>
+      <maxHealth>	190	</maxHealth>
+      <maxRegenHealth>	95	</maxRegenHealth>
+      <repairCost>	2.5	</repairCost>
+    </Fu_55>
+    <Fu_57>
+      <userString>	#germany_vehicles:Fu_57	</userString>
+      <tags></tags>
+      <level>	9	</level>
+      <price>	40000	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	100	</weight>
+      <distance>	670	</distance>
+      <maxHealth>	210	</maxHealth>
+      <maxRegenHealth>	105	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+    </Fu_57>
     <_Type3_Otsu_G>
       <userString>	#germany_vehicles:_Type3_Otsu_G	</userString>
       <tags></tags>
@@ -898,6 +991,18 @@
       <maxRegenHealth>	85	</maxRegenHealth>
       <repairCost>	2.5	</repairCost>
     </_Type3_Otsu_G>
+    <FuG_7_45_01>
+      <userString>	#germany_vehicles:FuG_7_45_01	</userString>
+      <tags></tags>
+      <level>	6	</level>
+      <price>	15000	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	100	</weight>
+      <distance>	410	</distance>
+      <maxHealth>	150	</maxHealth>
+      <maxRegenHealth>	75	</maxRegenHealth>
+      <repairCost>	2	</repairCost>
+    </FuG_7_45_01>
     <FuG7A_IGR>
       <userString>	#igr_vehicles:FuG7A_IGR	</userString>
       <tags></tags>

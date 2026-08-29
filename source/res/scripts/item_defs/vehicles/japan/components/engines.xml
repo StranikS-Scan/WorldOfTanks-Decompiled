@@ -1,4 +1,5 @@
 <engines.xml>
+  <xmlns:xmlref>	http://bwt/xmlref	</xmlns:xmlref>
   <ids>
     <_Type100_A_1>	0	</_Type100_A_1>
     <Mitsubishi>	2	</Mitsubishi>
@@ -62,6 +63,7 @@
     <HA_9_V_SAR>	62	</HA_9_V_SAR>
     <Continental_AOSI_1195_6>	63	</Continental_AOSI_1195_6>
     <Mitsubishi_MT_1200>	64	</Mitsubishi_MT_1200>
+    <Aichi_Ha_70S>	65	</Aichi_Ha_70S>
     <Mitsubishi_12HM20WT_61>	2000	</Mitsubishi_12HM20WT_61>
     <Type_100_Kakyuu_V_12_CT>	2001	</Type_100_Kakyuu_V_12_CT>
     <Mitsubishi_A6120VDe_95>	2002	</Mitsubishi_A6120VDe_95>
@@ -1214,6 +1216,23 @@
       <rpm_min>	213	</rpm_min>
       <rpm_max>	2560	</rpm_max>
     </Mitsubishi_MT_1200>
+    <Aichi_Ha_70S>
+      <userString>	#japan_vehicles:Aichi_Ha_70S	</userString>
+      <tags>	gasoline	</tags>
+      <level>	11	</level>
+      <price>	150000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_ContinentalR_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_ContinentalR_npc	</wwsoundNPC>
+      <power>	10	</power>
+      <weight>	100	</weight>
+      <maxHealth>	380	</maxHealth>
+      <maxRegenHealth>	190	</maxRegenHealth>
+      <repairCost>	11	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+      <rpm_min>	373	</rpm_min>
+      <rpm_max>	2404	</rpm_max>
+    </Aichi_Ha_70S>
     <_Daimler_Benz_MB_507>
       <userString>	#japan_vehicles:_Daimler_Benz_MB_507	</userString>
       <tags>	gasoline	</tags>

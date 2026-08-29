@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: battle_royale/scripts/client/battle_royale/abilities/corroding_shot_preparing.py
+from __future__ import absolute_import
 import CGF
 from typing import List
 import math_utils

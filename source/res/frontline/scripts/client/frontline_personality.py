@@ -1,8 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: frontline/scripts/client/frontline_personality.py
 from account_helpers.AccountSettings import AccountSettings, KEY_SETTINGS
+from aih_constants import CTRL_MODE_NAME, CTRL_TYPE
 from constants import ARENA_GUI_TYPE, PREBATTLE_TYPE, QUEUE_TYPE, ARENA_BONUS_TYPE, HAS_DEV_RESOURCES
 from constants_utils import AbstractBattleMode
+from fl_kill_cam_mode import FLLookAtKillerMode
 from frontline.gui import gui_constants
 from frontline.gui.Scaleform import registerFLScaleform
 from frontline.gui.Scaleform.daapi.view.lobby.hangar.hangar_quest_flags import registerQuestFlags
@@ -75,6 +77,10 @@ class ClientFrontlineBattleMode(AbstractBattleMode):
     def _client_hangarEventBannerType(self):
         return FrontlineEventBanner
 
+    @property
+    def _client_controlModes(self):
+        return {CTRL_MODE_NAME.LOOK_AT_KILLER: (FLLookAtKillerMode, 'killCamMode', CTRL_TYPE.USUAL)}
+
 
 class ClientFrontlineTrainingBattleMode(ClientFrontlineBattleMode):
     _PREBATTLE_TYPE = PREBATTLE_TYPE.EPIC_TRAINING
@@ -96,6 +102,7 @@ def preInit():
     battleMode.registerProviderBattleQueue()
     battleMode.registerScaleformRequiredLibraries()
     battleMode.registerHangarEventBanner()
+    battleMode.registerControlModes()
     trainingBattleMode = ClientFrontlineTrainingBattleMode(__name__)
     trainingBattleMode.registerScaleformRequiredLibraries()
     registerFLBattleRepositories()

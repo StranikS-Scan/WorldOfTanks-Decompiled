@@ -7,7 +7,7 @@ import Event
 import nations
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import NATIONS_VISITED
-from frameworks.state_machine import BaseStateObserver, visitor
+from frameworks_common.state_machine import BaseStateObserver, visitor
 from frameworks.wulf import ViewSettings, WindowFlags
 from frameworks.wulf.view.array import fillStringsArray
 from gui.Scaleform.daapi.view.lobby.store.browser.shop_helpers import getPremiumVehiclesUrl
@@ -44,7 +44,7 @@ if typing.TYPE_CHECKING:
     from gui.Scaleform.daapi.view.lobby.techtree.settings import UnlockProps
     from gui.Scaleform.daapi.view.lobby.techtree.nodes import RealNode
     from gui.lobby_state_machine.lobby_state_machine import LobbyStateMachine
-    from frameworks.state_machine import State
+    from frameworks_common.state_machine import State
     from gui.shared.events import NavigationEvent
 _logger = getLogger(__name__)
 _VEHICLE_URL_FILTER_PARAM = 1

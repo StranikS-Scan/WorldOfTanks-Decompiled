@@ -5789,7 +5789,56 @@
       <mirror>	false	</mirror>
       <tags>	styleOnly questsProgression	</tags>
     </decal>
-    <name>	Onslaught 2025	</name>
+    <decal>
+      <id>	1293	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_868.dds	</texture>
+      <userString>	#vehicle_customization:inscription/special/special_868	</userString>
+      <mirror>	false	</mirror>
+      <tags>	styleOnly questsProgression	</tags>
+    </decal>
+    <decal>
+      <id>	1294	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_869.dds	</texture>
+      <userString>	#vehicle_customization:inscription/special/special_869	</userString>
+      <mirror>	false	</mirror>
+      <tags>	styleOnly questsProgression	</tags>
+    </decal>
+    <decal>
+      <id>	1295	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_870.dds	</texture>
+      <userString>	#vehicle_customization:inscription/special/special_870	</userString>
+      <mirror>	false	</mirror>
+      <tags>	styleOnly questsProgression	</tags>
+    </decal>
+    <decal>
+      <id>	1296	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_871.dds	</texture>
+      <userString>	#vehicle_customization:inscription/special/special_871	</userString>
+      <mirror>	false	</mirror>
+      <tags>	styleOnly questsProgression	</tags>
+    </decal>
+    <decal>
+      <id>	1297	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_755.dds	</texture>
+      <userString>	#vehicle_customization:inscription/special/special_755	</userString>
+      <mirror>	false	</mirror>
+      <tags>	styleOnly questsProgression	</tags>
+    </decal>
+    <decal>
+      <id>	1298	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_872.dds	</texture>
+      <userString>	#vehicle_customization:inscription/special/special_872	</userString>
+      <mirror>	false	</mirror>
+      <tags>	styleOnly questsProgression	</tags>
+    </decal>
+    <decal>
+      <id>	1299	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_873.dds	</texture>
+      <userString>	#vehicle_customization:inscription/special/special_873	</userString>
+      <mirror>	false	</mirror>
+      <tags>	styleOnly questsProgression	</tags>
+    </decal>
+    <name>	Onslaught 2025 2026	</name>
     <type>	INSCRIPTION	</type>
   </itemGroup>
   <itemGroup>
@@ -6370,5 +6419,49 @@
     </decal>
     <name>	OLS	</name>
     <type>	INSCRIPTION	</type>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:inscription/special	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	inscriptions 50g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <tags>	excluded_from_customization	</tags>
+      </exclude>
+    </vehicleFilter>
+    <decal>
+      <id>	1319	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_878.dds	</texture>
+      <userString>	#vehicle_customization:inscription/special/special_878	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+    <name>	Personal Missions 3.0.1	</name>
+    <type>	INSCRIPTION	</type>
+  </itemGroup>
+  <itemGroup>
+    <name>	White tiger 2026 Inscriptions	</name>
+    <userString>	#vehicle_customization:inscription/special	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	inscriptions 285g notInShop	</priceGroup>
+    <type>	INSCRIPTION	</type>
+    <vehicleFilter>
+      <exclude>
+        <tags>	excluded_from_customization	</tags>
+      </exclude>
+    </vehicleFilter>
+    <decal>
+      <id>	1360	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_884.dds	</texture>
+      <userString>	#vehicle_customization:inscription/special/special_884	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+    <decal>
+      <id>	1361	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_885.dds	</texture>
+      <userString>	#vehicle_customization:inscription/special/special_885	</userString>
+      <mirror>	false	</mirror>
+    </decal>
   </itemGroup>
 </inscriptions_special.xml>

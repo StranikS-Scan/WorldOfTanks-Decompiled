@@ -17,7 +17,7 @@ class MainRewardTooltip(ViewImpl):
     __slots__ = ()
 
     def __init__(self, *args, **kwargs):
-        settings = ViewSettings(R.views.lobby.winback.tooltips.MainRewardTooltip(), model=MainRewardTooltipModel())
+        settings = ViewSettings(R.views.mono.winback.tooltips.main_reward_tooltip(), model=MainRewardTooltipModel())
         settings.args = args
         settings.kwargs = kwargs
         super(MainRewardTooltip, self).__init__(settings)

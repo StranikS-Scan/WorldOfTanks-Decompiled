@@ -82,6 +82,13 @@
       <undamaged>	vehicles/french/F141_Durendal/normal/lod0/Hull.model	</undamaged>
       <destroyed>	vehicles/french/F141_Durendal/crash/lod0/Hull.model	</destroyed>
       <exploded>	vehicles/french/F141_Durendal/crash/lod0/Hull.model	</exploded>
+      <sets>
+        <F141_Durendal_RW26_3Dst>
+          <undamaged>	vehicles/french/F141_Durendal/_skins/F141_Durendal_RW26_3Dst/normal/lod0/Hull.model	</undamaged>
+          <destroyed>	vehicles/french/F141_Durendal/_skins/F141_Durendal_RW26_3Dst/crash/lod0/Hull.model	</destroyed>
+          <exploded>	vehicles/french/F141_Durendal/_skins/F141_Durendal_RW26_3Dst/crash/lod0/Hull.model	</exploded>
+        </F141_Durendal_RW26_3Dst>
+      </sets>
     </models>
     <swinging>
       <lodDist>	FAR	</lodDist>
@@ -108,6 +115,16 @@
         <rayEnd>	0.667527 -0.027976 2.191734	</rayEnd>
         <rayUp>	-0.000002 0.224884 -0.974386	</rayUp>
         <size>	0.3	</size>
+        <hideIfDamaged>	true	</hideIfDamaged>
+      </slot>
+      <slot>
+        <slotType>	clan	</slotType>
+        <slotId>	10001	</slotId>
+        <compatibleModels>	F141_Durendal_RW26_3Dst	</compatibleModels>
+        <rayStart>	0.825136 0.259224 2.849295	</rayStart>
+        <rayEnd>	0.825791 -0.13064 2.759828	</rayEnd>
+        <rayUp>	-0.000001 0.223669 -0.974665	</rayUp>
+        <size>	0.21	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
       </slot>
       <slot>
@@ -649,6 +666,22 @@
         <applyType>	universal	</applyType>
         <size>	small	</size>
       </slot>
+      <slot>
+        <slotType>	attachment	</slotType>
+        <slotId>	18003	</slotId>
+        <position>	0 0 0	</position>
+        <rotation>	0 0 0	</rotation>
+        <scale>	1 1 1	</scale>
+        <hiddenForUser>	true	</hiddenForUser>
+      </slot>
+      <slot>
+        <slotType>	attachment	</slotType>
+        <slotId>	18004	</slotId>
+        <position>	0 0 0	</position>
+        <rotation>	0 0 0	</rotation>
+        <scale>	1 1 1	</scale>
+        <hiddenForUser>	true	</hiddenForUser>
+      </slot>
     </customizationSlots>
     <customization>
       <customizableVehicleAreas>
@@ -690,6 +723,13 @@
         <undamaged>	vehicles/french/F141_Durendal/normal/lod0/Chassis.model	</undamaged>
         <destroyed>	vehicles/french/F141_Durendal/crash/lod0/Chassis.model	</destroyed>
         <exploded>	vehicles/french/F141_Durendal/crash/lod0/Chassis.model	</exploded>
+        <sets>
+          <F141_Durendal_RW26_3Dst>
+            <undamaged>	vehicles/french/F141_Durendal/_skins/F141_Durendal_RW26_3Dst/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/french/F141_Durendal/_skins/F141_Durendal_RW26_3Dst/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/french/F141_Durendal/_skins/F141_Durendal_RW26_3Dst/crash/lod0/Chassis.model	</exploded>
+          </F141_Durendal_RW26_3Dst>
+        </sets>
       </models>
       <traces>
         <lodDist>	FAR	</lodDist>
@@ -774,30 +814,36 @@
                 </boxCollider>
               </hullCollider>
               <hullCollider>
-                <modelsSet>	F38_Bat_Chatillon155_58_MD22_III_3DSt	</modelsSet>
+                <modelsSet>	F141_Durendal_RW26_3Dst	</modelsSet>
                 <boxCollider>
                   <row0>	2.009088 0.000000 0.000000	</row0>
                   <row1>	0.000000 1.211507 0.000000	</row1>
-                  <row2>	0.000000 0.000000 6.039190	</row2>
-                  <row3>	0.000000 0.999349 -0.040215	</row3>
+                  <row2>	0.000000 0.000000 6.578000	</row2>
+                  <row3>	0.000069 1.001131 -0.202000	</row3>
                 </boxCollider>
                 <boxCollider>
                   <row0>	3.345397 0.000000 0.000000	</row0>
-                  <row1>	0.000000 0.299921 -0.006873	</row1>
-                  <row2>	0.000000 0.139852 6.102788	</row2>
-                  <row3>	0.000000 1.308099 -0.317574	</row3>
+                  <row1>	0.000000 0.420889 -0.009645	</row1>
+                  <row2>	0.000000 0.139852 6.102790	</row2>
+                  <row3>	0.000000 1.395753 -0.198769	</row3>
                 </boxCollider>
                 <boxCollider>
                   <row0>	3.345400 0.000001 -0.000001	</row0>
-                  <row1>	0.000000 0.188035 -0.233759	</row1>
-                  <row2>	0.000000 0.390646 0.314234	</row2>
-                  <row3>	0.000000 1.097172 -3.191020	</row3>
+                  <row1>	0.000000 0.215528 -0.208682	</row1>
+                  <row2>	0.000000 0.348738 0.360180	</row2>
+                  <row3>	0.000000 1.202967 -3.072771	</row3>
                 </boxCollider>
                 <boxCollider>
                   <row0>	0.300000 0.000000 0.000000	</row0>
                   <row1>	0.000000 0.819600 0.000000	</row1>
-                  <row2>	0.000000 0.000000 5.805436	</row2>
-                  <row3>	-1.799331 1.080492 -0.238898	</row3>
+                  <row2>	0.000000 0.000000 6.068000	</row2>
+                  <row3>	-1.791000 1.090000 -0.041000	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.353000 0.000001 0.000003	</row0>
+                  <row1>	0.000000 -0.228329 -0.194591	</row1>
+                  <row2>	0.000000 0.300735 -0.352876	</row2>
+                  <row3>	-0.000001 1.286034 3.022845	</row3>
                 </boxCollider>
               </hullCollider>
             </physicalParams>
@@ -872,42 +918,36 @@
                 </boxCollider>
               </hullCollider>
               <hullCollider>
-                <modelsSet>	F38_Bat_Chatillon155_58_MD22_III_3DSt	</modelsSet>
+                <modelsSet>	F141_Durendal_RW26_3Dst	</modelsSet>
                 <boxCollider>
-                  <row0>	2.009088 0.000000 0.000000	</row0>
-                  <row1>	0.000000 1.211507 0.000000	</row1>
-                  <row2>	0.000000 0.000000 6.039190	</row2>
-                  <row3>	0.000000 0.999349 -0.040215	</row3>
+                  <row0>	2.009090 0.000000 0.000000	</row0>
+                  <row1>	0.000000 1.211510 0.000000	</row1>
+                  <row2>	0.000000 0.000000 6.578000	</row2>
+                  <row3>	0.000069 1.001130 -0.202000	</row3>
                 </boxCollider>
                 <boxCollider>
-                  <row0>	3.345397 0.000000 0.000000	</row0>
-                  <row1>	0.000000 0.299921 -0.006873	</row1>
-                  <row2>	0.000000 0.139852 6.102788	</row2>
-                  <row3>	0.000000 1.308099 -0.317574	</row3>
+                  <row0>	3.345400 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.420889 -0.009645	</row1>
+                  <row2>	0.000000 0.139852 6.102790	</row2>
+                  <row3>	0.000000 1.395750 -0.198769	</row3>
                 </boxCollider>
                 <boxCollider>
                   <row0>	3.345400 0.000001 -0.000001	</row0>
-                  <row1>	0.000000 0.188035 -0.233759	</row1>
-                  <row2>	0.000000 0.390646 0.314234	</row2>
-                  <row3>	0.000000 1.097172 -3.191020	</row3>
+                  <row1>	0.000000 0.215528 -0.208682	</row1>
+                  <row2>	0.000000 0.348738 0.360180	</row2>
+                  <row3>	0.000000 1.202970 -3.072770	</row3>
                 </boxCollider>
                 <boxCollider>
                   <row0>	0.300000 0.000000 0.000000	</row0>
                   <row1>	0.000000 0.819600 0.000000	</row1>
-                  <row2>	0.000000 0.000000 5.805436	</row2>
-                  <row3>	1.799000 1.080492 -0.238898	</row3>
+                  <row2>	0.000000 0.000000 6.068000	</row2>
+                  <row3>	1.791000 1.090000 -0.041000	</row3>
                 </boxCollider>
                 <boxCollider>
-                  <row0>	0.656289 0.000000 0.000000	</row0>
-                  <row1>	0.000000 0.582324 -0.529416	</row1>
-                  <row2>	0.000000 0.201808 0.221976	</row2>
-                  <row3>	1.305615 1.304494 2.997238	</row3>
-                </boxCollider>
-                <boxCollider>
-                  <row0>	0.300000 0.000000 0.000000	</row0>
-                  <row1>	0.000000 0.504817 0.000000	</row1>
-                  <row2>	0.000000 0.000000 0.543546	</row2>
-                  <row3>	1.800968 1.104072 2.894484	</row3>
+                  <row0>	3.353000 0.000001 0.000003	</row0>
+                  <row1>	0.000000 -0.228329 -0.194591	</row1>
+                  <row2>	0.000000 0.300735 -0.352876	</row2>
+                  <row3>	-0.000001 1.286030 3.022840	</row3>
                 </boxCollider>
               </hullCollider>
             </physicalParams>
@@ -1850,7 +1890,7 @@
             <armor_13>	20	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_13>
           </armor>
-          <aimingTime>	3.2	</aimingTime>
+          <aimingTime>	2.9	</aimingTime>
           <shotDispersionFactors>
             <turretRotation>	0.1	</turretRotation>
             <afterShot>	2	</afterShot>
@@ -1860,7 +1900,7 @@
             <minPitch>	0 -15 1 -15	</minPitch>
             <maxPitch>	0.00000 9.00 0.40000 9.00 0.43333 5.00 0.56667 6.00 0.60000 9.00 1.00000 9.00	</maxPitch>
           </pitchLimits>
-          <shotDispersionRadius>	0.41	</shotDispersionRadius>
+          <shotDispersionRadius>	0.39	</shotDispersionRadius>
           <reloadTime>	28	</reloadTime>
           <invisibilityFactorAtShot>	0.18	</invisibilityFactorAtShot>
           <clip>
@@ -1875,6 +1915,13 @@
             <undamaged>	vehicles/french/F141_Durendal/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/french/F141_Durendal/crash/lod0/Gun_01.model	</destroyed>
             <exploded>	vehicles/french/F141_Durendal/crash/lod0/Gun_01.model	</exploded>
+            <sets>
+              <F141_Durendal_RW26_3Dst>
+                <undamaged>	vehicles/french/F141_Durendal/_skins/F141_Durendal_RW26_3Dst/normal/lod0/Gun_01.model	</undamaged>
+                <destroyed>	vehicles/french/F141_Durendal/_skins/F141_Durendal_RW26_3Dst/crash/lod0/Gun_01.model	</destroyed>
+                <exploded>	vehicles/french/F141_Durendal/_skins/F141_Durendal_RW26_3Dst/crash/lod0/Gun_01.model	</exploded>
+              </F141_Durendal_RW26_3Dst>
+            </sets>
           </models>
           <hitTester>
             <collisionModelServer>	vehicles/french/F141_Durendal/collision/Gun_01.model	</collisionModelServer>
@@ -1910,6 +1957,15 @@
               <rayUp>	0.12 0 0	</rayUp>
               <size>	0.55	</size>
             </slot>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	49001	</slotId>
+              <compatibleModels>	F141_Durendal_RW26_3Dst	</compatibleModels>
+              <rayStart>	0 0 4.5	</rayStart>
+              <rayEnd>	0 0 5.05	</rayEnd>
+              <rayUp>	0.14 0 0	</rayUp>
+              <size>	0.55	</size>
+            </slot>
           </customizationSlots>
           <customization>
             <customizableVehicleAreas>
@@ -1917,6 +1973,7 @@
               <camouflage>	GUN	</camouflage>
             </customizableVehicleAreas>
           </customization>
+          <muzzleBrake>	HORIZONTAL	</muzzleBrake>
           <camouflage>
             <density>	100.525429 103.80201	</density>
             <aoTextureSize>	512 256	</aoTextureSize>
@@ -1927,6 +1984,13 @@
         <undamaged>	vehicles/french/F141_Durendal/normal/lod0/Turret_01.model	</undamaged>
         <destroyed>	vehicles/french/F141_Durendal/crash/lod0/Turret_01.model	</destroyed>
         <exploded>	vehicles/french/F141_Durendal/crash/lod0/Turret_01.model	</exploded>
+        <sets>
+          <F141_Durendal_RW26_3Dst>
+            <undamaged>	vehicles/french/F141_Durendal/_skins/F141_Durendal_RW26_3Dst/normal/lod0/Turret_01.model	</undamaged>
+            <destroyed>	vehicles/french/F141_Durendal/_skins/F141_Durendal_RW26_3Dst/crash/lod0/Turret_01.model	</destroyed>
+            <exploded>	vehicles/french/F141_Durendal/_skins/F141_Durendal_RW26_3Dst/crash/lod0/Turret_01.model	</exploded>
+          </F141_Durendal_RW26_3Dst>
+        </sets>
       </models>
       <hitTester>
         <collisionModelServer>	vehicles/french/F141_Durendal/collision/Turret_01.model	</collisionModelServer>

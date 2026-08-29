@@ -174,6 +174,12 @@ class ChangeRosterItemGroupsTask(RosterItemTask):
             self._doNotify(USER_ACTION_ID.GROUPS_CHANGED, user)
         return self._result
 
+    def _doSync(self, name, groups=None, sub=None, clanInfo=None):
+        user = self._getUser()
+        if user is not None and user.getItemType() in XMPP_ITEM_TYPE.ROSTER_ITEMS:
+            sub = user.getSubscription()
+        return super(ChangeRosterItemGroupsTask, self)._doSync(name, groups, sub, clanInfo)
+
     def _doRun(self, client):
         client.setContactToRoster(self._jid, self._name, self._groups)
 

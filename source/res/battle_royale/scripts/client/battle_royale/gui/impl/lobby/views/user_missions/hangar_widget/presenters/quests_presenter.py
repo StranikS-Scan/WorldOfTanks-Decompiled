@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: battle_royale/scripts/client/battle_royale/gui/impl/lobby/views/user_missions/hangar_widget/presenters/quests_presenter.py
+from __future__ import absolute_import
 import typing
-from shared_utils import findFirst
 from battle_royale.gui.impl.lobby.br_helpers.account_settings import setLastSeenQuestData, getLastSeenQuestData
 from battle_royale.gui.impl.lobby.tooltips.progression_quest_tooltip import BattleRoyaleProgressionQuestTooltip
 from battle_royale.gui.impl.lobby.views.bonus_packer import getBonusPacker, packQuestBonuses, packMissionItem
@@ -15,6 +15,8 @@ from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.user_missions.widget.quests_list_model import QuestsListModel
 from gui.impl.gen.view_models.views.lobby.user_missions.widget.widget_quest_model import WidgetQuestModel
 from gui.impl.lobby.missions.missions_helpers import needToUpdateQuestsInModel
+from gui.impl.lobby.user_missions.hangar_widget.presenters.constants import UserMissionGroups
+from gui.impl.lobby.user_missions.hangar_widget.presenters.base_child_presenter import UserMissionChildPresenter
 from gui.impl.lobby.user_missions.hangar_widget.tooltip_positioner import TooltipPositionerMixin
 from gui.impl.lobby.user_missions.tooltips.all_quests_done_tooltip import AllQuestsDoneTooltip
 from gui.impl.pub.view_component import ViewComponent
@@ -25,11 +27,13 @@ from skeletons.gui.battle_results import IBattleResultsService
 from skeletons.gui.game_control import IBattleRoyaleController
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared.utils import IHangarSpace
+from shared_utils import findFirst
 if typing.TYPE_CHECKING:
     from frameworks.wulf import Array, ViewEvent
     from gui.server_events.event_items import Quest
 
-class BattleRoayaleQuestsPresenter(TooltipPositionerMixin, BattleRoyaleOverlapCtrlMixin, ViewComponent[QuestsListModel]):
+class BattleRoayaleQuestsPresenter(UserMissionChildPresenter, TooltipPositionerMixin, BattleRoyaleOverlapCtrlMixin, ViewComponent[QuestsListModel]):
+    GROUP = UserMissionGroups.MISSIONS
     __battleRoyale = dependency.descriptor(IBattleRoyaleController)
     __brProgression = dependency.descriptor(IBRProgressionOnTokensController)
     __eventsCache = dependency.descriptor(IEventsCache)
@@ -46,6 +50,9 @@ class BattleRoayaleQuestsPresenter(TooltipPositionerMixin, BattleRoyaleOverlapCt
     @property
     def viewModel(self):
         return super(BattleRoayaleQuestsPresenter, self).getViewModel()
+
+    def isVisible(self):
+        return self.__brProgression.isEnabled
 
     @property
     def hasDeferModelUpdate(self):
@@ -147,6 +154,7 @@ class BattleRoayaleQuestsPresenter(TooltipPositionerMixin, BattleRoyaleOverlapCt
         self.__refresh()
 
     def __refresh(self):
+        self._notifyVisibilityChanged()
         isAvailable = self.__getAvailability()
         self.setEnabled(isAvailable)
         if not isAvailable:

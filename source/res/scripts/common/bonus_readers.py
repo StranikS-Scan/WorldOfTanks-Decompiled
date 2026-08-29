@@ -26,7 +26,11 @@ from customization_quests_common import validateCustomizationQuestToken
 from py2to3.compat import base64compat
 if TYPE_CHECKING:
     from ResMgr import DataSection
-__all__ = ['readBonusSection', 'readUTC', 'SUPPORTED_BONUSES']
+__all__ = ['readBonusSection',
+ 'readUTC',
+ 'getSupportedBonuses',
+ '_BONUS_READERS',
+ 'getSupportedBonusesIdsNames']
 
 def bonusReaderLimitDecorator(invoiceLimit, readFunction):
 
@@ -39,7 +43,7 @@ def bonusReaderLimitDecorator(invoiceLimit, readFunction):
 
 
 def getBonusReaders(bonusTypes):
-    return dict(((k, __BONUS_READERS[k]) for k in bonusTypes))
+    return dict(((k, _BONUS_READERS[k]) for k in bonusTypes))
 
 
 def timeDataToUTC(timeData, default=None):
@@ -1096,7 +1100,7 @@ def __readBonus_group(config, bonusReaders, bonus, section, eventType):
     return limitIDs
 
 
-__BONUS_READERS = {'meta': __readMetaSection,
+_BONUS_READERS = {'meta': __readMetaSection,
  'buyAllVehicles': __readBonus_bool,
  'buySecretVehicles': __readBonus_bool,
  'buySpecialVehicles': __readBonus_bool,
@@ -1170,10 +1174,19 @@ _RESERVED_NAMES = frozenset(['config',
  'depthLevel',
  'dropInGroup',
  'trackedByNameLimit'])
-SUPPORTED_BONUSES = frozenset(__BONUS_READERS)
-__SORTED_BONUSES = sorted(SUPPORTED_BONUSES)
-SUPPORTED_BONUSES_IDS = dict(((n, i) for i, n in enumerate(__SORTED_BONUSES)))
-SUPPORTED_BONUSES_NAMES = dict(enumerate(__SORTED_BONUSES))
+_SUPPORTED_BONUSES = frozenset(_BONUS_READERS)
+
+def getSupportedBonuses():
+    return _SUPPORTED_BONUSES
+
+
+__SORTED_BONUSES = sorted(_SUPPORTED_BONUSES)
+_SUPPORTED_BONUSES_IDS = {n:i for i, n in enumerate(__SORTED_BONUSES)}
+_SUPPORTED_BONUSES_NAMES = dict(enumerate(__SORTED_BONUSES))
+
+def getSupportedBonusesIdsNames():
+    return (_SUPPORTED_BONUSES_IDS, _SUPPORTED_BONUSES_NAMES)
+
 
 def __readBonusLimit(section):
     properties = {}

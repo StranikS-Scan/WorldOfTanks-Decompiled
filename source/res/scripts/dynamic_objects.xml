@@ -500,7 +500,7 @@
     <effects>
       <decal>
         <startKey>	start	</startKey>
-        <groupName>	fast	</groupName>
+        <groupName>	slow_fl	</groupName>
         <texName>	Mine_1_no_ready_AM	</texName>
         <bumpTexName>	Mine_1_no_ready_NM	</bumpTexName>
         <smTexName>	Mine_1_no_ready_GMM	</smTexName>
@@ -517,7 +517,7 @@
     <effects>
       <decal>
         <startKey>	start	</startKey>
-        <groupName>	fast	</groupName>
+        <groupName>	slow_fl	</groupName>
         <texName>	Mine_1_AM Mine_2_AM	</texName>
         <bumpTexName>	Mine_1_NM Mine_2_NM	</bumpTexName>
         <smTexName>	Mine_1_GMM Mine_2_GMM	</smTexName>
@@ -534,7 +534,7 @@
     <effects>
       <decal>
         <startKey>	start	</startKey>
-        <groupName>	fast	</groupName>
+        <groupName>	slow_fl	</groupName>
         <texName>	Mine_1_AM Mine_2_AM	</texName>
         <bumpTexName>	Mine_1_NM Mine_2_NM	</bumpTexName>
         <smTexName>	Mine_1_GMM Mine_2_GMM	</smTexName>
@@ -831,6 +831,9 @@
   <aoeHeal>
     <prefab>	content/CGFPrefabs/Battle/comp7/heal_area.prefab	</prefab>
   </aoeHeal>
+  <illuminationFlare>
+    <prefab>	content/CGFPrefabs/Battle/Consumables/illumination_flare.prefab	</prefab>
+  </illuminationFlare>
   <spawnPointsConfig>
     <visualsPath>
       <position1>	content/CGFPrefabs/Battle/comp7/prebattle_area_01.visual	</position1>

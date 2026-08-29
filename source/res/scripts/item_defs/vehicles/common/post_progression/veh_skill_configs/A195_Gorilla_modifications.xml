@@ -114,12 +114,14 @@
     <categories>	mechanics	</categories>
     <modifiers>
       <add>
-        <name>	miscAttrs/lowChargeShot/shot0/damageValue	</name>
+        <name>	descrAttrs/shell0/armorDamage	</name>
         <value>	10	</value>
+        <filter>	siege	</filter>
       </add>
       <add>
-        <name>	miscAttrs/lowChargeShot/shot1/damageValue	</name>
+        <name>	descrAttrs/shell1/armorDamage	</name>
         <value>	10	</value>
+        <filter>	siege	</filter>
       </add>
     </modifiers>
     <kpi>
@@ -136,16 +138,19 @@
     <categories>	mechanics	</categories>
     <modifiers>
       <add>
-        <name>	miscAttrs/lowChargeShot/shot0/shotSpeedValue	</name>
+        <name>	descrAttrs/shot0/speed	</name>
         <value>	50	</value>
+        <filter>	siege	</filter>
       </add>
       <add>
-        <name>	miscAttrs/lowChargeShot/shot1/shotSpeedValue	</name>
+        <name>	descrAttrs/shot1/speed	</name>
         <value>	50	</value>
+        <filter>	siege	</filter>
       </add>
       <add>
-        <name>	miscAttrs/lowChargeShot/shot2/shotSpeedValue	</name>
+        <name>	descrAttrs/shot2/speed	</name>
         <value>	50	</value>
+        <filter>	siege	</filter>
       </add>
     </modifiers>
     <kpi>
@@ -290,7 +295,7 @@
       <mul>
         <name>	dynAttrs/multShotDispersionFactor	</name>
         <value>	0.95	</value>
-        <filter>	lowChargeShot	</filter>
+        <filter>	siege	</filter>
       </mul>
     </modifiers>
     <kpi>

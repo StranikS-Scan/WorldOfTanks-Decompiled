@@ -2,7 +2,7 @@
 # Embedded file name: fun_random/scripts/client/fun_random/gui/impl/lobby/feature/fun_random_event_banner_view.py
 from __future__ import absolute_import
 import typing
-from account_helpers.AccountSettings import AccountSettings, FUN_RANDOM_BANNER_INTRO_CLICK_TIMESTAMP, FUN_RANDOM_BANNER_LAST_VISIBLE_PROGRESSION_NAME
+from account_helpers.AccountSettings import AccountSettings, FUN_RANDOM_BANNER_LAST_VISITED_SEASON_BORDER, FUN_RANDOM_BANNER_LAST_VISIBLE_PROGRESSION_NAME
 from adisp import adisp_process
 from fun_random.gui.feature.fun_constants import FunSubModesState
 from fun_random.gui.feature.util.fun_mixins import FunAssetPacksMixin, FunSubModesWatcher, FunProgressionWatcher
@@ -93,8 +93,8 @@ class FunRandomEventBannerView(BaseEventBanner, FunProgressionWatcher, FunAssetP
         self.__eventStartDate = status.rightBorder
         self.__eventEndDate = status.endTime
         if self.__state == EventBannerState.IN_PROGRESS:
-            savedClickTime = AccountSettings.getSettings(FUN_RANDOM_BANNER_INTRO_CLICK_TIMESTAMP)
-            if savedClickTime < self.__eventStartDate:
+            lastVisitedSeasonBorder = AccountSettings.getSettings(FUN_RANDOM_BANNER_LAST_VISITED_SEASON_BORDER)
+            if lastVisitedSeasonBorder < self.__eventStartDate:
                 self.__state = EventBannerState.INTRO
         currentProgression = self.getActiveProgression()
         if currentProgression is not None:
@@ -111,8 +111,6 @@ class FunRandomEventBannerView(BaseEventBanner, FunProgressionWatcher, FunAssetP
 
     def onClick(self):
         self.__onSelectFunRandom()
-        if self.__state == EventBannerState.INTRO:
-            AccountSettings.setSettings(FUN_RANDOM_BANNER_INTRO_CLICK_TIMESTAMP, self.__eventStartDate)
 
     def onAppear(self):
         if self._isVisible:

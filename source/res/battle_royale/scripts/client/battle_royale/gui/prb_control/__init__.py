@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: battle_royale/scripts/client/battle_royale/gui/prb_control/__init__.py
+from __future__ import absolute_import
 from battle_royale.gui.impl.lobby.views.event_banner import BattleRoyaleEventBanner, isBattleRoyaleEntryPointAvailable
 from battle_royale.gui.impl.lobby.views.mode_selector.items.battle_royale_mode_selector_item import BattleRoyaleModeSelectorItem
 from battle_royale.gui.impl.lobby.views.st_patrick_banner import StPatrickEventBanner, isStPatrickEntryPointAvailable

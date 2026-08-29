@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: battle_royale/scripts/client/battle_royale/gui/Scaleform/daapi/view/battle/respawn_message_panel.py
+from __future__ import absolute_import
 import logging
 import weakref
 import BigWorld
@@ -75,10 +76,10 @@ class RespawnMessagePanel(BRRespawnMessagePanelMeta, ISpawnListener, IArenaPerio
                 message = formatRespawnActivatedMessage(timeLeft, self.RESPAWN_DELAY_BEFORE_SHOW)
                 self.__addMessage(message)
 
-    def updateTeammateRespawnTime(self, teammateTimeLeft):
-        if teammateTimeLeft > 0.0:
-            _logger.debug('formatStayInCoverMessage %s', teammateTimeLeft)
-            message = formatStayInCoverMessage(teammateTimeLeft, RESPAWNING_TIMER_DELAY)
+    def updateTeammateRespawnTime(self, timeLeft):
+        if timeLeft > 0.0:
+            _logger.debug('formatStayInCoverMessage %s', timeLeft)
+            message = formatStayInCoverMessage(timeLeft, RESPAWNING_TIMER_DELAY)
             self.__addMessage(message)
 
     def updateBlockToResurrectTime(self, blockTime):

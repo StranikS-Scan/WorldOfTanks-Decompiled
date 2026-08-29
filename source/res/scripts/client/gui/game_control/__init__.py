@@ -7,7 +7,6 @@ import constants
 import skeletons.gui.resource_well
 from gui.graphics_optimization_controller.optimization_controller import GraphicsOptimizationController
 from gui.shared.system_factory import collectGameControllers
-from skeletons.festivity_factory import IFestivityFactory
 from skeletons.gui.challenges import IChallengesController
 if TYPE_CHECKING:
     from helpers.dependency import DependencyManager
@@ -47,6 +46,7 @@ def getGameControllersConfig(manager):
     from gui.game_control.epic_meta_game_ctrl import EpicBattleMetaGameController as _EpicMeta
     from gui.game_control.manual_controller import ManualController as _ManualController
     from gui.marathon.marathon_event_controller import MarathonEventsController as _MarathonEventsController
+    from skeletons.festivity_factory import IFestivityFactory
     from skeletons.gui import game_control as _interface
     from gui.game_control.referral_program_controller import ReferralProgramController as _ReferralController
     from gui.game_control.badges_controller import BadgesController as _Badges
@@ -95,6 +95,7 @@ def getGameControllersConfig(manager):
     from gui.game_control.ingame_tournament_controller import IngameTournamentController
     from gui.game_control.w2gt_controller import W2GTGameController
     from gui.game_control.challenges_controller import ChallengesController
+    from gui.game_control.rest_bonus_controller import RestBonusController
     tracker = GameStateTracker()
     tracker.init()
     manager.addInstance(_interface.IGameStateTracker, tracker, finalizer='fini')
@@ -190,4 +191,5 @@ def getGameControllersConfig(manager):
     _config(skeletons.gui.pet_system.IPetSystemController, PetSystemController())
     _config(_interface.IW2GTGameController, W2GTGameController())
     _config(IChallengesController, ChallengesController())
+    _config(_interface.IRestBonusController, RestBonusController())
     collectGameControllers(_config)

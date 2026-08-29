@@ -8,8 +8,13 @@ from cgf_components.hover_component import SelectionComponent
 from cgf_script.registration import ComponentProperty, registerComponent
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE, event_bus
 if typing.TYPE_CHECKING:
-    from typing import Optional
-PERSONAL_MISSIONS_3_SUB_HANGAR_IS_READY = 'pm3SubHangarIsReady'
+    from typing import Callable, Optional
+PERSONAL_MISSIONS_SUB_HANGAR_IS_READY = 'pmSubHangarIsReady'
+OPERATION = 'operation{}'
+VEHICLE_FOR_OPERATION = 'vehicleForOperation{}'
+STAGES_COMPONENT_FOR_OPERATION = 'stagesComponentForOperation{}'
+OPERATION_IDS_RANGE = tuple(range(8, 12))
+STAGES_RANGE = tuple(range(0, 16))
 
 @registerComponent
 class HangarOperationsComponent(object):
@@ -19,6 +24,10 @@ class HangarOperationsComponent(object):
     operation8 = ComponentProperty(type=CGF.PropertyType.Link, editorName='operation 8', value=CGF.GameObject)
     operation9 = ComponentProperty(type=CGF.PropertyType.Link, editorName='operation 9', value=CGF.GameObject)
     operation10 = ComponentProperty(type=CGF.PropertyType.Link, editorName='operation 10', value=CGF.GameObject)
+    operation11 = ComponentProperty(type=CGF.PropertyType.Link, editorName='operation 11', value=CGF.GameObject)
+
+    def getOperationObject(self, operationID):
+        return getattr(self, OPERATION.format(operationID))
 
 
 @registerComponent
@@ -57,18 +66,12 @@ class HangarOperationsSystem(CGF.System):
         super(HangarOperationsSystem, self).__init__()
         self.onVehicleClick = Event.Event()
         self.gameObjectsAreRemoved = False
-        self.vehicleForOperation8 = None
-        self.vehicleForOperation9 = None
-        self.vehicleForOperation10 = None
-        self.stagesComponentForOperation8 = None
-        self.stagesComponentForOperation9 = None
-        self.stagesComponentForOperation10 = None
         self.timers = {}
-        return
 
     def update(self):
+        stagesAccess = self.reaction(self.StagesAccess)
         for _ in self.reaction(self.HangarOperationDeactivated):
-            self.onHangarOperationRemoved()
+            self.onHangarOperationRemoved(stagesAccess)
 
         for _, selection in self.reaction(self.MissionSelectionDeactivated):
             self.onSelectionRemoved(selection)
@@ -76,19 +79,16 @@ class HangarOperationsSystem(CGF.System):
         for _, selection in self.reaction(self.MissionSelectionActivated):
             self.onSelectionAdded(selection)
 
-        stagesAccess = self.reaction(self.StagesAccess)
         for hangarOperationsComponent in self.reaction(self.HangarOperationActivated):
             self.onHangarOperationAdded(hangarOperationsComponent, stagesAccess)
 
         self.tick()
 
-    def onHangarOperationRemoved(self):
-        self.vehicleForOperation8 = None
-        self.vehicleForOperation9 = None
-        self.vehicleForOperation10 = None
-        self.stagesComponentForOperation8 = None
-        self.stagesComponentForOperation9 = None
-        self.stagesComponentForOperation10 = None
+    def onHangarOperationRemoved(self, stagesAccess):
+        for operationID in OPERATION_IDS_RANGE:
+            self.setVehicleGOForOperation(operationID, None)
+            self.setStagesForOperation(stagesAccess, operationID, None)
+
         self.gameObjectsAreRemoved = True
         self.timers = {}
         self.onVehicleClick.clear()
@@ -96,17 +96,13 @@ class HangarOperationsSystem(CGF.System):
 
     def onHangarOperationAdded(self, hangarOperationsComponent, stagesAccess):
         self.gameObjectsAreRemoved = False
-        goManager = self.gom
-        self.vehicleForOperation8 = goManager.gameObject(hangarOperationsComponent.operation8)
-        self.vehicleForOperation9 = goManager.gameObject(hangarOperationsComponent.operation9)
-        self.vehicleForOperation10 = goManager.gameObject(hangarOperationsComponent.operation10)
-        if self.vehicleForOperation8 and self.vehicleForOperation8.valid:
-            self.stagesComponentForOperation8 = stagesAccess.find(self.vehicleForOperation8)
-        if self.vehicleForOperation9 and self.vehicleForOperation9.valid:
-            self.stagesComponentForOperation9 = stagesAccess.find(self.vehicleForOperation9)
-        if self.vehicleForOperation10 and self.vehicleForOperation10.valid:
-            self.stagesComponentForOperation10 = stagesAccess.find(self.vehicleForOperation10)
-        g_eventBus.handleEvent(event_bus.SharedEvent(PERSONAL_MISSIONS_3_SUB_HANGAR_IS_READY), scope=EVENT_BUS_SCOPE.LOBBY)
+        for operationID in OPERATION_IDS_RANGE:
+            self.setVehicleGOForOperation(operationID, hangarOperationsComponent.getOperationObject(operationID))
+            vehicleForOperation = self.getVehicleForOperation(operationID)
+            if vehicleForOperation and vehicleForOperation.valid:
+                self.setStagesForOperation(stagesAccess, operationID, vehicleForOperation)
+
+        g_eventBus.handleEvent(event_bus.SharedEvent(PERSONAL_MISSIONS_SUB_HANGAR_IS_READY), scope=EVENT_BUS_SCOPE.LOBBY)
 
     def onSelectionAdded(self, selectionComponent):
         selectionComponent.onClickAction += self.onVehicleClickAction
@@ -125,6 +121,20 @@ class HangarOperationsSystem(CGF.System):
     def addTimer(self, timerName, duration, callback):
         self.timers.update({timerName: {'duration': duration,
                      'callback': callback}})
+
+    def setVehicleGOForOperation(self, operationID, vehicleGO):
+        setattr(self, VEHICLE_FOR_OPERATION.format(operationID), self.gom.gameObject(vehicleGO) if vehicleGO else None)
+        return
+
+    def setStagesForOperation(self, stagesAccess, operationID, vehicleGO):
+        setattr(self, STAGES_COMPONENT_FOR_OPERATION.format(operationID), stagesAccess.find(vehicleGO) if vehicleGO else None)
+        return
+
+    def getVehicleForOperation(self, operationID):
+        return getattr(self, VEHICLE_FOR_OPERATION.format(operationID), None)
+
+    def getStagesForOperation(self, operationID):
+        return getattr(self, STAGES_COMPONENT_FOR_OPERATION.format(operationID), None)
 
     def onVehicleClickAction(self):
         self.onVehicleClick()

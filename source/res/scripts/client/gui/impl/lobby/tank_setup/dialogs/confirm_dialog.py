@@ -107,9 +107,8 @@ class TankSetupExitConfirmDialog(TankSetupConfirmDialog):
 
     def __init__(self, *args, **kwargs):
         super(TankSetupExitConfirmDialog, self).__init__(*args, **kwargs)
-        self._itemsType = _SECTION_TO_FITTING_TYPE.get(kwargs.pop('fromSection', ''), None)
+        self._itemsType = _SECTION_TO_FITTING_TYPE.get(kwargs.pop('fromSection', ''))
         self.__rollBack = False
-        return
 
     def _onLoading(self, *args, **kwargs):
         super(TankSetupExitConfirmDialog, self)._onLoading(*args, **kwargs)

@@ -140,7 +140,7 @@ class ModeSelectorView(ViewImpl):
             return tooltipClass() if tooltipClass else None
 
     def createPopOverContent(self, event):
-        if event.contentID == R.views.lobby.winback.popovers.WinbackLeaveModePopoverView():
+        if event.contentID == R.views.mono.winback.popovers.winback_leave_mode_popover_view():
             if self.__winbackController.isModeAvailable():
                 return WinbackLeaveModePopoverView()
             return None

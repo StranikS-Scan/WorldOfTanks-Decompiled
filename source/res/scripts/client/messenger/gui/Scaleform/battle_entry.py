@@ -16,9 +16,10 @@ from messenger.m_constants import BATTLE_CHANNEL, PROTO_TYPE, MESSENGER_COMMAND_
 from messenger.m_constants import MESSENGER_SCOPE
 from messenger.proto import proto_getter
 from messenger.proto.events import g_messengerEvents
-from messenger.storage import storage_getter
+from messenger.storage import MessengerStorageDescriptor, ChannelsStorage
 
 class BattleEntry(IGUIEntry):
+    channelsStorage = MessengerStorageDescriptor(ChannelsStorage)
 
     def __init__(self):
         self.__focused = False
@@ -26,10 +27,6 @@ class BattleEntry(IGUIEntry):
         self.__channelsCtrl = None
         self.__view = lambda : None
         return
-
-    @storage_getter('channels')
-    def channelsStorage(self):
-        return None
 
     @proto_getter(PROTO_TYPE.MIGRATION)
     def proto(self):

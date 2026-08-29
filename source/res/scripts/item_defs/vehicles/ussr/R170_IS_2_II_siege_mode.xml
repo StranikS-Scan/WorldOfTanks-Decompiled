@@ -1057,6 +1057,36 @@
         <clipAngle>	0.615578	</clipAngle>
         <anchorShift>	0.40965	</anchorShift>
       </slot>
+      <slot>
+        <slotType>	attachment	</slotType>
+        <slotId>	18000	</slotId>
+        <position>	-1.765085 0.331 -0.846538	</position>
+        <rotation>	-0 -0 1.570796	</rotation>
+        <scale>	1 1 1	</scale>
+        <applyType>	universal	</applyType>
+        <size>	medium	</size>
+        <hangerId>	9	</hangerId>
+      </slot>
+      <slot>
+        <slotType>	attachment	</slotType>
+        <slotId>	18001	</slotId>
+        <position>	1.765 0.328045 -1.003819	</position>
+        <rotation>	-0 -3.141593 1.570796	</rotation>
+        <scale>	1 1 1	</scale>
+        <applyType>	universal	</applyType>
+        <size>	medium	</size>
+        <hangerId>	9	</hangerId>
+      </slot>
+      <slot>
+        <slotType>	attachment	</slotType>
+        <slotId>	18002	</slotId>
+        <position>	0.000007 0.538221 -3.84311	</position>
+        <rotation>	0 -1.570796 1.570796	</rotation>
+        <scale>	1 1 1	</scale>
+        <applyType>	universal	</applyType>
+        <size>	medium	</size>
+        <hangerId>	14	</hangerId>
+      </slot>
     </customizationSlots>
     <customization>
       <customizableVehicleAreas>
@@ -2988,7 +3018,6 @@
             <maxPitch>	0 7 0.366894 7 0.430556 3 0.569444 3 0.633106 7 1 7	</maxPitch>
           </pitchLimits>
           <invisibilityFactorAtShot>	0.095	</invisibilityFactorAtShot>
-          <multiGunEffects>	shot_dualgun_main_L shot_dualgun_main_R	</multiGunEffects>
           <dualGun>
             <chargeTime>	2.5	</chargeTime>
             <shootImpulse>	200	</shootImpulse>
@@ -3005,6 +3034,9 @@
             <afterShot>	4.0	</afterShot>
           </shotDispersionFactors>
           <turretYawLimits>	-180 180	</turretYawLimits>
+          <prefabs>
+            <main>	content/CGFPrefabs/Vehicle/guns/ussr/gun_85mm_D_5TD.prefab	</main>
+          </prefabs>
           <models>
             <undamaged>	vehicles/russian/R170_IS_2_II/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/russian/R170_IS_2_II/crash/lod0/Gun_01.model	</destroyed>
@@ -3108,7 +3140,6 @@
           <reloadTime>	8.2	</reloadTime>
           <aimingTime>	2.4	</aimingTime>
           <invisibilityFactorAtShot>	0.095	</invisibilityFactorAtShot>
-          <multiGunEffects>	shot_dualgun_mainext_L shot_dualgun_mainext_R	</multiGunEffects>
           <dualGun>
             <chargeTime>	2.5	</chargeTime>
             <shootImpulse>	200	</shootImpulse>
@@ -3119,6 +3150,9 @@
             <afterShotDelay>	1	</afterShotDelay>
             <preChargeIndication>	0.25	</preChargeIndication>
           </dualGun>
+          <prefabs>
+            <main>	content/CGFPrefabs/Vehicle/guns/ussr/gun_100mm_S_34D_IS_2_II.prefab	</main>
+          </prefabs>
           <models>
             <undamaged>	vehicles/russian/R170_IS_2_II/normal/lod0/Gun_02.model	</undamaged>
             <destroyed>	vehicles/russian/R170_IS_2_II/crash/lod0/Gun_02.model	</destroyed>
@@ -3971,6 +4005,28 @@
           <clipAngle>	1.00503	</clipAngle>
           <anchorShift>	0.090032	</anchorShift>
         </slot>
+        <slot>
+          <slotType>	attachment	</slotType>
+          <slotId>	38000	</slotId>
+          <position>	-0.475558 1.086323 0.071277	</position>
+          <rotation>	-0 -0 0	</rotation>
+          <scale>	1 1 1	</scale>
+          <enableVisTunnel>	true	</enableVisTunnel>
+          <applyType>	turret	</applyType>
+          <size>	medium	</size>
+          <hangerId>	6	</hangerId>
+        </slot>
+        <slot>
+          <slotType>	attachment	</slotType>
+          <slotId>	38001	</slotId>
+          <position>	0.126621 0.879631 1.236183	</position>
+          <rotation>	-0 -0 0	</rotation>
+          <scale>	1 1 1	</scale>
+          <enableVisTunnel>	true	</enableVisTunnel>
+          <applyType>	gunMantlet	</applyType>
+          <size>	medium	</size>
+          <hangerId>	2	</hangerId>
+        </slot>
       </customizationSlots>
       <customization>
         <customizableVehicleAreas>
@@ -4084,7 +4140,6 @@
             <maxPitch>	0 7 0.366894 7 0.430556 3 0.569444 3 0.633106 7 1 7	</maxPitch>
           </pitchLimits>
           <invisibilityFactorAtShot>	0.095	</invisibilityFactorAtShot>
-          <multiGunEffects>	shot_dualgun_main_L shot_dualgun_main_R	</multiGunEffects>
           <dualGun>
             <chargeTime>	2	</chargeTime>
             <shootImpulse>	200	</shootImpulse>
@@ -4101,6 +4156,9 @@
             <afterShot>	4.0	</afterShot>
           </shotDispersionFactors>
           <turretYawLimits>	-180 180	</turretYawLimits>
+          <prefabs>
+            <main>	content/CGFPrefabs/Vehicle/guns/ussr/gun_85mm_D_5TD.prefab	</main>
+          </prefabs>
           <models>
             <undamaged>	vehicles/russian/R170_IS_2_II/normal/lod0/Gun_03.model	</undamaged>
             <destroyed>	vehicles/russian/R170_IS_2_II/crash/lod0/Gun_03.model	</destroyed>
@@ -4214,7 +4272,6 @@
           <reloadTime>	8	</reloadTime>
           <aimingTime>	2.3	</aimingTime>
           <invisibilityFactorAtShot>	0.095	</invisibilityFactorAtShot>
-          <multiGunEffects>	shot_dualgun_mainext_L shot_dualgun_mainext_R	</multiGunEffects>
           <dualGun>
             <chargeTime>	2	</chargeTime>
             <shootImpulse>	200	</shootImpulse>
@@ -4225,6 +4282,9 @@
             <afterShotDelay>	1	</afterShotDelay>
             <preChargeIndication>	0.25	</preChargeIndication>
           </dualGun>
+          <prefabs>
+            <main>	content/CGFPrefabs/Vehicle/guns/ussr/gun_100mm_S_34D_IS_2_II.prefab	</main>
+          </prefabs>
           <models>
             <undamaged>	vehicles/russian/R170_IS_2_II/normal/lod0/Gun_04.model	</undamaged>
             <destroyed>	vehicles/russian/R170_IS_2_II/crash/lod0/Gun_04.model	</destroyed>
@@ -5054,6 +5114,28 @@
           <showOn>	256	</showOn>
           <clipAngle>	0.288155	</clipAngle>
           <anchorShift>	0.140038	</anchorShift>
+        </slot>
+        <slot>
+          <slotType>	attachment	</slotType>
+          <slotId>	38000	</slotId>
+          <position>	0.623979 1.037174 0.211731	</position>
+          <rotation>	-0 -0 0	</rotation>
+          <scale>	1 1 1	</scale>
+          <enableVisTunnel>	true	</enableVisTunnel>
+          <applyType>	turret	</applyType>
+          <size>	medium	</size>
+          <hangerId>	6	</hangerId>
+        </slot>
+        <slot>
+          <slotType>	attachment	</slotType>
+          <slotId>	38001	</slotId>
+          <position>	0.000008 0.809629 1.248335	</position>
+          <rotation>	-0 -0 0	</rotation>
+          <scale>	1 1 1	</scale>
+          <enableVisTunnel>	true	</enableVisTunnel>
+          <applyType>	gunMantlet	</applyType>
+          <size>	medium	</size>
+          <hangerId>	2	</hangerId>
         </slot>
       </customizationSlots>
       <customization>

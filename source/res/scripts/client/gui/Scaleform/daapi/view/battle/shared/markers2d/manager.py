@@ -11,8 +11,7 @@ from gui.Scaleform.daapi.view.battle.shared.map_zones.markers2d import MapZonesP
 from gui.Scaleform.daapi.view.battle.shared.markers2d import plugins, vehicle_plugins
 from gui.Scaleform.daapi.view.battle.shared.markers2d.plugins import MarkerPlugin
 from gui.Scaleform.daapi.view.battle.shared.markers2d.settings import CommonMarkerType
-from gui.Scaleform.daapi.view.external_components import ExternalFlashComponent
-from gui.Scaleform.daapi.view.external_components import ExternalFlashSettings
+from gui.Scaleform.daapi.view.external_components import ExternalFlashComponent, ExternalFlashSettings
 from gui.Scaleform.daapi.view.meta.VehicleMarkersManagerMeta import VehicleMarkersManagerMeta
 from gui.Scaleform.flash_wrapper import InputKeyMode
 from gui.Scaleform.genConsts.BATTLE_VIEW_ALIASES import BATTLE_VIEW_ALIASES
@@ -23,16 +22,18 @@ from gui.shared import EVENT_BUS_SCOPE
 from gui.shared.events import MarkersManagerEvent
 from gui.shared.utils.plugins import PluginsCollection
 from helpers import dependency, isPlayerAvatar
+from helpers.CallbackDelayer import CallbackDelayer
 from skeletons.account_helpers.settings_core import IBattleCommunicationsSettings
+from skeletons.gameplay import IGameplayLogic
 from skeletons.gui.battle_session import IBattleSessionProvider
 from soft_exception import SoftException
-from helpers.CallbackDelayer import CallbackDelayer
 _logger = logging.getLogger(__name__)
 _STICKY_MARKER_RADIUS_SCALE = 0.7
 
 class MarkersManager(ExternalFlashComponent, VehicleMarkersManagerMeta, plugins.IMarkersManager, CallbackDelayer):
     MARKERS_MANAGER_SWF = 'battleVehicleMarkersApp.swf'
     battleCommunications = dependency.descriptor(IBattleCommunicationsSettings)
+    gameplayLogic = dependency.descriptor(IGameplayLogic)
     guiSessionProvider = dependency.descriptor(IBattleSessionProvider)
     setablePluginsDict = {'area': plugins.AreaStaticMarkerPlugin,
      'teamAndControlPoints': plugins.TeamsOrControlsPointsPlugin}

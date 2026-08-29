@@ -4,7 +4,7 @@ import typing
 import CGF
 from Event import Event
 from cgf_components.hangar_camera_manager import HangarCameraSystem
-from frameworks.state_machine import StateFlags, StateIdsObserver
+from frameworks_common.state_machine import StateFlags, StateIdsObserver
 from frameworks.wulf import WindowLayer
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.framework.entities.View import ViewKey

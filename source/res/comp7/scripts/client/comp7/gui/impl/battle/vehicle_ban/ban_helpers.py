@@ -6,7 +6,7 @@ import logging
 from comp7.gui.impl.gen.view_models.views.battle.constants import Constants
 from comp7.gui.impl.gen.view_models.views.battle.enums import BanState
 from comp7_core_constants import ArenaPrebattlePhase
-from constants import ROLE_TYPE, ROLE_TYPE_TO_LABEL, VEHICLE_SELECTION_BLOCK_DELAY
+from constants import VEHICLE_SELECTION_BLOCK_DELAY
 from gui.impl.lobby.common.vehicle_model_helpers import fillVehicleModel
 from helpers import dependency
 from skeletons.gui.battle_session import IBattleSessionProvider
@@ -30,17 +30,13 @@ def fillComp7VehicleModel(model, vehicleCD, itemsCache=None):
         return
     vehicleItem = itemsCache.items.getItemByCD(vehicleCD)
     fillVehicleModel(model, vehicleItem)
-    model.setRoleSkill(_getRoleSkillName(vehicleItem))
+    model.setRoleSkill(_getRoleEquipmentKey(vehicleItem))
     model.setOriginalVehicleCD(_getOriginalVehicleCD(vehicleCD))
 
 
 @dependency.replace_none_kwargs(comp7Controller=IComp7Controller)
-def _getRoleSkillName(vehicleItem, comp7Controller=None):
-    vehicleRole = vehicleItem.descriptor.role
-    if vehicleRole == ROLE_TYPE.NOT_DEFINED:
-        return ''
-    roleName = ROLE_TYPE_TO_LABEL.get(vehicleRole)
-    return comp7Controller.getRoleEquipment(roleName).name if roleName else ''
+def _getRoleEquipmentKey(vehicleItem, comp7Controller=None):
+    return comp7Controller.getRoleEquipmentKey(vehicleItem.descriptor.type)
 
 
 @dependency.replace_none_kwargs(comp7Controller=IComp7Controller)

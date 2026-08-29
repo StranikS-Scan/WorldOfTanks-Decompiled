@@ -1,14 +1,18 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/vehicle_compare/panel_blocks.py
 from frameworks.wulf import Array
+from frameworks.wulf.view.array import fillViewModelsArray
 from gui.Scaleform.daapi.view.lobby.vehicle_compare import cmp_helpers
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.tank_setup.common.compare_toggle_ammunition_slot import CompareToggleAmmunitionSlot
+from gui.impl.gen.view_models.views.lobby.tank_setup.common.compare_toggle_shell_ammunition_slot import CompareToggleShellAmmunitionSlot
 from gui.impl.gen.view_models.views.lobby.tank_setup.common.specialization_model import SpecializationModel
 from gui.impl.gen.view_models.views.lobby.tank_setup.tank_setup_constants import TankSetupConstants
 from gui.impl.common.ammunition_panel.ammunition_panel_blocks import OptDeviceBlock, BaseBlock, ConsumablesBlock, BattleBoostersBlock
+from gui.impl.lobby.tank_setup.tank_setup_helper import createShellMechanicsModels
 from helpers import dependency
 from skeletons.gui.shared import IItemsCache
+_MIN_MECHANIC_PRIORITY = 1
 
 class CompareOptDeviceBlock(OptDeviceBlock):
 
@@ -38,7 +42,7 @@ class CompareOptDeviceBlock(OptDeviceBlock):
 
 
 class CompareShellsBlock(BaseBlock):
-    _itemsCache = dependency.descriptor(IItemsCache)
+    __itemsCache = dependency.descriptor(IItemsCache)
 
     def __init__(self, vehicle, currentSection):
         super(CompareShellsBlock, self).__init__(vehicle, currentSection)
@@ -57,10 +61,10 @@ class CompareShellsBlock(BaseBlock):
         return TankSetupConstants.TOGGLE_SHELLS
 
     def _getAmmunitionSlotModel(self):
-        return CompareToggleAmmunitionSlot()
+        return CompareToggleShellAmmunitionSlot()
 
     def _getInstalled(self):
-        getter = self._itemsCache.items.getItemByCD
+        getter = self.__itemsCache.items.getItemByCD
         return [ getter(shot.shell.compactDescr) for shot in self._vehicle.descriptor.gun.shots ]
 
     def _getSetupLayout(self):
@@ -73,6 +77,9 @@ class CompareShellsBlock(BaseBlock):
         model.setImageSource(R.images.gui.maps.icons.shell.small.dyn(slotItem.descriptor.iconName)())
         model.setImageName(slotItem.descriptor.iconName)
         model.setIsSelected(self.__selectedIndex == idx)
+        vehicle = self._vehicle
+        mechanicsModels = createShellMechanicsModels(slotItem.getShellMechanicItems(vehicle), minPriority=_MIN_MECHANIC_PRIORITY)
+        fillViewModelsArray(mechanicsModels, model.getMechanics())
 
 
 class CompareConsumablesBlock(ConsumablesBlock):

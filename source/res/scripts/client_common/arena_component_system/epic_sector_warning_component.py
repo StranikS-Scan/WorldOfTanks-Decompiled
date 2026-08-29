@@ -327,7 +327,7 @@ class EpicSectorWarningComponent(ClientArenaComponent, CallbackDelayer):
 
     def __calcEdgeLine(self, nodeIdA, nodeIdB):
         if nodeIdA == nodeIdB:
-            pass
+            raise AssertionError('Cannot compute border to same sector')
         centerA, _, _, dimensionsA = self.__getNodeGeometry(nodeIdA)
         centerB, _, _, dimensionsB = self.__getNodeGeometry(nodeIdB)
         sectorA = sectorB = None

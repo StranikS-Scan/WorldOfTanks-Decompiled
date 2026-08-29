@@ -2593,7 +2593,6 @@
           </shotDispersionFactors>
           <aimingTime>	1.9	</aimingTime>
           <invisibilityFactorAtShot>	0.225	</invisibilityFactorAtShot>
-          <multiGunEffects>	shot_dualgun1_main_mb_L shot_dualgun1_main_mb_R	</multiGunEffects>
           <twinGun>
             <afterShotDelay>	1	</afterShotDelay>
             <twinGunReloadTime>	12.6	</twinGunReloadTime>
@@ -2667,6 +2666,7 @@
             <collisionModelClient>	vehicles/british/GB143_FV229_Contender/collision_client/Gun_03.model	</collisionModelClient>
           </hitTester>
           <edgeByVisualModel>	false	</edgeByVisualModel>
+          <muzzleBrake>	HORIZONTAL	</muzzleBrake>
           <camouflage>
             <density>	95.116791 98.276291	</density>
             <aoTextureSize>	1024 512	</aoTextureSize>
@@ -2711,7 +2711,6 @@
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <aimingTime>	2.3	</aimingTime>
-          <multiGunEffects>	shot_dualgun1_large_mb_L shot_dualgun1_large_mb_R	</multiGunEffects>
           <twinGun>
             <afterShotDelay>	1	</afterShotDelay>
             <twinGunReloadTime>	20.8	</twinGunReloadTime>
@@ -2785,6 +2784,7 @@
             <collisionModelClient>	vehicles/british/GB143_FV229_Contender/collision_client/Gun_04.model	</collisionModelClient>
           </hitTester>
           <edgeByVisualModel>	false	</edgeByVisualModel>
+          <muzzleBrake>	HORIZONTAL	</muzzleBrake>
           <camouflage>
             <density>	99.88208 99.878082	</density>
             <aoTextureSize>	1024 512	</aoTextureSize>
@@ -3357,7 +3357,6 @@
           </shotDispersionFactors>
           <aimingTime>	1.9	</aimingTime>
           <invisibilityFactorAtShot>	0.225	</invisibilityFactorAtShot>
-          <multiGunEffects>	shot_dualgun1_main_mb_L shot_dualgun1_main_mb_R	</multiGunEffects>
           <twinGun>
             <afterShotDelay>	1	</afterShotDelay>
             <twinGunReloadTime>	12.6	</twinGunReloadTime>
@@ -3431,6 +3430,7 @@
             <collisionModelClient>	vehicles/british/GB143_FV229_Contender/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
           <edgeByVisualModel>	false	</edgeByVisualModel>
+          <muzzleBrake>	HORIZONTAL	</muzzleBrake>
           <camouflage>
             <density>	106.586807 111.155388	</density>
             <aoTextureSize>	1024 512	</aoTextureSize>
@@ -3491,7 +3491,6 @@
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <aimingTime>	2.2	</aimingTime>
-          <multiGunEffects>	shot_dualgun1_large_mb_L shot_dualgun1_large_mb_R	</multiGunEffects>
           <twinGun>
             <afterShotDelay>	1	</afterShotDelay>
             <twinGunReloadTime>	20	</twinGunReloadTime>
@@ -3565,6 +3564,7 @@
             <collisionModelClient>	vehicles/british/GB143_FV229_Contender/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
           <edgeByVisualModel>	false	</edgeByVisualModel>
+          <muzzleBrake>	HORIZONTAL	</muzzleBrake>
           <camouflage>
             <density>	108.257813 109.608246	</density>
             <aoTextureSize>	1024 512	</aoTextureSize>

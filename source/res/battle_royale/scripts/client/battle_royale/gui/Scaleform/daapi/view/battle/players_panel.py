@@ -1,10 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: battle_royale/scripts/client/battle_royale/gui/Scaleform/daapi/view/battle/players_panel.py
+from __future__ import absolute_import
 import logging
-from functools import partial
-from sys import maxint
-import BigWorld
 import typing
+from functools import partial
+from sys import maxsize
+import BigWorld
 from battle_royale.gui.Scaleform.daapi.view.battle.respawn_message_panel import RESPAWNING_TIMER_DELAY
 from battle_royale.gui.Scaleform.daapi.view.battle.shared.utils import getVehicleLevel
 from battle_royale.gui.battle_control.controllers.spawn_ctrl import ISpawnListener
@@ -82,8 +83,8 @@ class PlayersPanel(IBattleFieldListener, IArenaVehiclesController, ISpawnListene
             self.__respawningDelayCallbackID = None
         return
 
-    def updateTeammateRespawnTime(self, teamtimeLeft):
-        self.updateRespawnTime(teamtimeLeft, selfVehicle=False)
+    def updateTeammateRespawnTime(self, timeLeft):
+        self.updateRespawnTime(timeLeft, selfVehicle=False)
 
     def updateRespawnTime(self, timeLeft, selfVehicle=True):
         if not self.__sessionProvider.arenaVisitor.bonus.isSquadSupported():
@@ -111,7 +112,7 @@ class PlayersPanel(IBattleFieldListener, IArenaVehiclesController, ISpawnListene
     def updateVehicleHealth(self, vehicleID, newHealth, maxHealth):
         if vehicleID in self.__vehicleIDs:
             index = self.__vehicleIDs.index(vehicleID)
-            self.as_setPlayerHPS(index, self._HEALTH_PERCENT * newHealth / maxHealth)
+            self.as_setPlayerHPS(index, self._HEALTH_PERCENT * newHealth // maxHealth)
 
     def _populate(self):
         super(PlayersPanel, self)._populate()
@@ -147,7 +148,7 @@ class PlayersPanel(IBattleFieldListener, IArenaVehiclesController, ISpawnListene
         arenaDP = self.__sessionProvider.getArenaDP()
         collection = vos_collections.AllyItemsCollection().ids(arenaDP)
         playerVehId = BigWorld.player().observedVehicleID or arenaDP.getPlayerVehicleID()
-        collection.sort(key=lambda vId: vId if playerVehId != vId else maxint)
+        collection.sort(key=lambda vId: vId if playerVehId != vId else maxsize)
         names = []
         clans = []
         for vId in collection:
@@ -173,7 +174,7 @@ class PlayersPanel(IBattleFieldListener, IArenaVehiclesController, ISpawnListene
                 healthInfo = self.__sessionProvider.dynamic.battleField.getVehicleHealthInfo(vId)
                 if healthInfo is not None:
                     health, maxHealth = healthInfo
-                    hpPercent = self._HEALTH_PERCENT * health / maxHealth
+                    hpPercent = self._HEALTH_PERCENT * health // maxHealth
                 else:
                     hpPercent = self._HEALTH_PERCENT
             self.as_setPlayerStateS(index, vInfoVO.player.accountDBID, vId, vInfoVO.team, vInfoVO.isAlive(), self.__isVehOpacityMax(vInfoVO), hpPercent, self.__getFrags(vStatsVO.frags), int2roman(level), getTypeVPanelIconPath(vInfoVO.vehicleType.classTag))

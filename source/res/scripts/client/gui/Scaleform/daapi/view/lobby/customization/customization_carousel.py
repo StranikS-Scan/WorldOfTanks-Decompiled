@@ -57,7 +57,7 @@ class ItemsData(object):
 
     @cached_property
     def hasUsedUpItems(self):
-        return any((isItemUsedUp(item) and not item.showDisabled for item in self.items))
+        return any((not item.showDisabled and isItemUsedUp(item) for item in self.items))
 
     @cached_property
     def hasProgressiveItems(self):
@@ -335,6 +335,7 @@ class CustomizationCarouselDataProvider(SortableDAAPIDataProvider):
         self.__carouselFilters = {}
         self.__appliedItems = set()
         self.__baseStyleItems = set()
+        self.__appliedInAnySeason = set()
         self.__dependentItems = tuple()
         self.__carouselData = CarouselData()
         self.__carouselCache = CarouselCache(createFilterCriteria=self.__createFilterCriteria, createSortCriteria=self.__createSortCriteria)
@@ -351,6 +352,7 @@ class CustomizationCarouselDataProvider(SortableDAAPIDataProvider):
         self.__selectedGroup = None
         self.__appliedItems = None
         self.__baseStyleItems = None
+        self.__appliedInAnySeason = None
         self.__dependentItems = None
         for carouselFilter in viewvalues(self.__carouselFilters):
             carouselFilter.fini()
@@ -365,6 +367,10 @@ class CustomizationCarouselDataProvider(SortableDAAPIDataProvider):
         return self.__carouselData.items
 
     @property
+    def sortedCollection(self):
+        return super(CustomizationCarouselDataProvider, self).sortedCollection if self._sort else self.collection
+
+    @property
     def itemCount(self):
         return len(self.__carouselData.items)
 
@@ -375,6 +381,13 @@ class CustomizationCarouselDataProvider(SortableDAAPIDataProvider):
 
     def pyGetSelectedIdx(self):
         return self.__selectedItem.idx
+
+    def getItemIndexHandler(self, fieldName, value):
+        if fieldName == 'intCD':
+            try:
+                return self.__carouselData.items.index(value)
+            except ValueError:
+                pass
 
     def emptyItem(self):
         return None
@@ -567,7 +580,7 @@ class CustomizationCarouselDataProvider(SortableDAAPIDataProvider):
          FilterAliases.FANTASTICAL: REQ_CRITERIA.CUSTOMIZATION.FANTASTICAL})
         self.__carouselFilters[FilterTypes.INVENTORY] = SimpleCarouselFilter(criteria=REQ_CRITERIA.CUSTOM(lambda item: self.__ctx.mode.getItemInventoryCount(item) > 0 and item.isUnlockedByToken()))
         self.__carouselFilters[FilterTypes.APPLIED] = SimpleCarouselFilter(criteria=REQ_CRITERIA.CUSTOM(lambda item: item.intCD in self.__ctx.mode.getAppliedItems(isOriginal=False)))
-        self.__carouselFilters[FilterTypes.USED_UP] = SimpleCarouselFilter(criteria=REQ_CRITERIA.CUSTOM(lambda item: not isItemUsedUp(item) or item.showDisabled), requirements=lambda : self.__ctx.isItemsOnAnotherVeh, inverse=True)
+        self.__carouselFilters[FilterTypes.USED_UP] = SimpleCarouselFilter(criteria=REQ_CRITERIA.CUSTOM(lambda item: item.showDisabled or not isItemUsedUp(item, self.__appliedInAnySeason)), requirements=lambda : self.__ctx.isItemsOnAnotherVeh, inverse=True)
         self.__carouselFilters[FilterTypes.EDITABLE_STYLES] = DisjunctionCarouselFilter(criteria={FilterAliases.EDITABLE_STYLES: REQ_CRITERIA.CUSTOM(lambda item: item.canBeEditedForVehicle(g_currentVehicle.item.intCD)),
          FilterAliases.NON_EDITABLE_STYLES: REQ_CRITERIA.CUSTOM(lambda item: not item.canBeEditedForVehicle(g_currentVehicle.item.intCD))}, requirements=lambda : self.__ctx.mode.tabId == CustomizationTabs.STYLES_2D)
         self.__carouselFilters[FilterTypes.PROGRESSION] = SimpleCarouselFilter(criteria=REQ_CRITERIA.CUSTOM(lambda item: item.isProgressive), requirements=lambda : self.__ctx.isProgressiveItemsExist)
@@ -588,6 +601,11 @@ class CustomizationCarouselDataProvider(SortableDAAPIDataProvider):
         return
 
     def __createFilterCriteria(self):
+        outfits = self.__ctx.mode.outfits
+        self.__appliedInAnySeason = set()
+        for season in SeasonType.REGULAR:
+            self.__appliedInAnySeason.update(outfits[season].items())
+
         requirement = REQ_CRITERIA.EMPTY
         groupIdx = self.__getSelectedGroupIdx()
         if groupIdx is not None and groupIdx != -1:

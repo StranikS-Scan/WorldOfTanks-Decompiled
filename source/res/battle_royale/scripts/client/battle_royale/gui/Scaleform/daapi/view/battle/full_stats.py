@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: battle_royale/scripts/client/battle_royale/gui/Scaleform/daapi/view/battle/full_stats.py
+from __future__ import absolute_import
 import BigWorld
 from battle_royale.gui.battle_control.controllers.vehicles_count_ctrl import IVehicleCountListener
 from constants import ARENA_BONUS_TYPE
@@ -29,7 +30,7 @@ class FullStatsComponent(BattleRoyaleFullStatsMeta, IVehicleCountListener):
     def onToggleVisibility(self, _):
         pass
 
-    def setVehicles(self, count, vehicles, teams):
+    def setVehicles(self, _, vehicles, __):
         vehiclesByType = []
         vehiclesSortedByType = sorted(vehicles.items(), key=lambda i: VEHICLE_TYPES_ORDER_INDICES_REVERSED[i[0]])
         self.__vehicleTeams = {}

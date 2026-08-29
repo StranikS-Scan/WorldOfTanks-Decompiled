@@ -18,7 +18,7 @@ if TYPE_CHECKING:
 _logger = logging.getLogger(__name__)
 CLAN_LOCK = 1
 GUI_ITEM_TYPE_NAMES = tuple(ITEM_TYPE_NAMES) + tuple(['reserved'] * (16 - len(ITEM_TYPE_NAMES)))
-GUI_ITEM_TYPE_NAMES += ('dossierAccount', 'dossierVehicle', 'dossierTankman', 'achievement', 'tankmanSkill', 'battleBooster', 'badge', 'battleAbility', 'lootBox', 'demountKit', 'vehPostProgression', 'recertificationForm', 'mentoringLicense', 'paint', 'camouflage', 'modification', 'outfit', 'style', 'decal', 'emblem', 'inscription', 'projectionDecal', 'insignia', 'personalNumber', 'sequence', 'attachment', 'statTracker', 'vehicleMechanic', 'moduleMechanic')
+GUI_ITEM_TYPE_NAMES += ('dossierAccount', 'dossierVehicle', 'dossierTankman', 'achievement', 'tankmanSkill', 'battleBooster', 'badge', 'battleAbility', 'lootBox', 'demountKit', 'vehPostProgression', 'recertificationForm', 'mentoringLicense', 'paint', 'camouflage', 'modification', 'outfit', 'style', 'decal', 'emblem', 'inscription', 'projectionDecal', 'insignia', 'personalNumber', 'sequence', 'attachment', 'statTracker', 'vehicleMechanic', 'moduleMechanic', 'shellMechanic')
 GUI_ITEM_TYPE_INDICES = {n:idx for idx, n in enumerate(GUI_ITEM_TYPE_NAMES)}
 
 class GUI_ITEM_TYPE(CONST_CONTAINER):
@@ -390,6 +390,7 @@ class KPI(object):
         HP_RECOVER = 'hpRecover'
         COOLING_PER_SEC = 'coolingPerSec'
         HE_SHELL_VELOCITY = 'HEshellVelocity'
+        MINIMUM_DAMAGE_AND_PIERCING_POWER = 'minimumDamageAndPiercingPower'
         VEHICLE_CAMOUFLAGE_GROUP = 'vehicleCamouflageGroup'
         VEHICLE_STILL_CAMOUFLAGE_GROUP = 'vehicleStillCamouflageGroup'
         VEHICLE_STILL_CAMOUFLAGE_GROUP_DELUXE = 'vehicleStillCamouflageGroupDeluxe'

@@ -1,6 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: battle_royale/scripts/common/BattleRoyaleTournament.py
+from __future__ import absolute_import
 import datetime
+from future.utils import viewitems
 from debug_utils import LOG_CURRENT_EXCEPTION
 CMD_BATTLE_ROYALE_TRN_JOIN = 20000
 CMD_BATTLE_ROYALE_TRN_LEAVE = 20001
@@ -24,7 +26,7 @@ class RESULT(object):
     ACCOUNT_LOCKED = 9
 
 
-RESULT_NAMES = dict([ (v, k) for k, v in RESULT.__dict__.iteritems() if isinstance(v, int) ])
+RESULT_NAMES = {v:k for k, v in viewitems(RESULT.__dict__) if isinstance(v, int)}
 
 class ROLE(object):
     OBSERVER = 1

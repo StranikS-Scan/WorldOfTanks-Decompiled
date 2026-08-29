@@ -248,7 +248,7 @@ class DetailedCardBattleConditionsFormatters(MissionBonusAndPostBattleCondFormat
 
     def __andFormat(self, result):
         components = []
-        for _, condList in enumerate(result):
+        for condList in result:
             size = CONDITION_SIZE.MINIMIZED if len(condList) > self.MAX_CONDITIONS_IN_ROW else CONDITION_SIZE.NORMAL
             components.append(self._packConditions(size, condList))
 
@@ -281,8 +281,7 @@ class CardTokenConditionFormatter(ConditionsFormatter):
                 preFormattedConditions = preFormattedConditions[:self.MAX_TOKENS_COUNT]
                 LOG_ERROR('Wrong quest xml. Tokens types limit exceeded in account requirement section. SSE bug.')
             return [self._packConditions(preFormattedConditions)]
-        else:
-            return [self._packConditionFromDescription(event)]
+        return [self._packConditionFromDescription(event)]
 
     def getPreformattedConditions(self, event):
         return self.tokensCondFormatter.format(event.accountReqs, event)

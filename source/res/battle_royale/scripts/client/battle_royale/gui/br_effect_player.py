@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: battle_royale/scripts/client/battle_royale/gui/br_effect_player.py
+from __future__ import absolute_import
 import logging
 import BigWorld
 import CGF

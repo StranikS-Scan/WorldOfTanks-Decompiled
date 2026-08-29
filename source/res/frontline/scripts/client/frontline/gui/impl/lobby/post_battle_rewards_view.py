@@ -129,7 +129,7 @@ class PostBattleRewardsView(ViewImpl, IGlobalListener):
 
     def __init__(self, layoutID=R.views.frontline.mono.lobby.post_battle_rewards_view(), ctx=None):
         settings = ViewSettings(layoutID)
-        settings.flags = ViewFlags.MAIN_VIEW
+        settings.flags = ViewFlags.VIEW
         settings.model = PostBattleRewardsViewModel()
         self.__ctx = _PostBattleRewardsCtx(ctx)
         self.__tooltipItems = {}

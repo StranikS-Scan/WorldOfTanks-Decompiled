@@ -267,6 +267,8 @@ class DestructiblesManager(object):
         self.__effectsResourceRefs = {}
         self.__structuresEffects = {}
         self.__lifetimeEffects = {}
+        self.forceNoAnimation = False
+        self.__isPaused = False
         self.__damagedModules = set()
         self.__destrInitialMatrices = {}
         self.__ctrls = {}

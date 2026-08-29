@@ -36,6 +36,7 @@ ZERO_INT = 0
 ZERO_TUPLE2 = (0.0, 0.0)
 ZERO_VECTOR3 = Vector3(0.0, 0.0, 0.0)
 ONE_INT = 1
+ONE_FLOAT = 1.0
 EMPTY_STRING = ''
 EMPTY_TUPLE = ()
 EMPTY_LIST = []
@@ -102,7 +103,10 @@ class ObjectSlotType(object):
 
 class MuzzleBrakeType(enum.IntEnum):
     NONE = 0
-    STANDARD = 1
+    HORIZONTAL = 1
+    VERTICAL = 2
+    RADIAL = 3
+    ANGLED = 4
 
 
 INVALID_EFFECT_INDEX = 255

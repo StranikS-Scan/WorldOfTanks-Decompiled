@@ -29,4 +29,4 @@ class Comp7VehicleProgressHelper(VehicleProgressHelper):
                 return xp / battlesCount
             return 0
         else:
-            return
+            return 0

@@ -17,11 +17,12 @@ from messenger.proto.xmpp.messages.chat_session import ChatSessionsProvider
 from messenger.proto.xmpp.messages.muc import MUCProvider, ACTION_RESULT
 from messenger.proto.xmpp.xmpp_constants import XMPP_MUC_CHANNEL_TYPE
 from messenger.proto.xmpp.xmpp_limits import MessageLimits
-from messenger.storage import storage_getter
+from messenger.storage import MessengerStorageDescriptor, ChannelsStorage
 _REQUIRED_USER_TAGS = {USER_TAG.FRIEND, USER_TAG.IGNORED}
 
 class MessagesManager(ClientEventsHandler):
     __slots__ = ('__msgFilters', '__limits', '__chatSessions', '__muc', '__receivedTags', '__pending', '__cooldown')
+    channelsStorage = MessengerStorageDescriptor(ChannelsStorage)
 
     def __init__(self):
         super(MessagesManager, self).__init__()
@@ -34,10 +35,6 @@ class MessagesManager(ClientEventsHandler):
         self.__cooldown = XmppCooldownManager(self.__limits.getBroadcastCoolDown())
         self.channelsStorage.onRestoredFromCache += self.__cs_onChannelsRestoredFromCache
         return
-
-    @storage_getter('channels')
-    def channelsStorage(self):
-        return None
 
     def clear(self):
         self.channelsStorage.onRestoredFromCache -= self.__cs_onChannelsRestoredFromCache

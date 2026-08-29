@@ -49,18 +49,10 @@
       <conditions>
         <preBattle>
           <account>
-            <not>
-              <or>
-                <token>
-                  <id>	token:pt:final:s3:t8:main	</id>
-                  <equal>	45	</equal>
-                </token>
-                <token>
-                  <id>	token:pt:s3:t8:finished:honor	</id>
-                  <equal>	1	</equal>
-                </token>
-              </or>
-            </not>
+            <token>
+              <id>	token:pt:s3:t8:finished:base	</id>
+              <equal>	0	</equal>
+            </token>
           </account>
         </preBattle>
         <postBattle>

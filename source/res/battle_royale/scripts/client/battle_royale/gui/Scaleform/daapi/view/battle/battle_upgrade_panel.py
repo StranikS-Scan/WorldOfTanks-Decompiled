@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: battle_royale/scripts/client/battle_royale/gui/Scaleform/daapi/view/battle/battle_upgrade_panel.py
+from __future__ import absolute_import
 import logging
 import weakref
 import BigWorld
@@ -112,11 +113,11 @@ class BattleUpgradePanel(BattleUpgradePanelMeta, IArenaVehiclesController, IProg
             self.as_showSelectAnimS(self.__upgrades.index(newModuleIntCD))
         self.__updateUpgrades()
 
-    def setVehicleChangeResponse(self, itemCD, success):
+    def setVehicleChangeResponse(self, intCD, success):
         if success:
             progressionCtrl = self.__getProgressionCtrl()
-            item = progressionCtrl.getModule(itemCD)
-            if isItemVehicleHull(itemCD, self._getVehicle()):
+            item = progressionCtrl.getModule(intCD)
+            if isItemVehicleHull(intCD, self._getVehicle()):
                 moduleKey = R.strings.battle_royale.player_messages.moduleType.hull
             else:
                 moduleKey = R.strings.battle_royale.player_messages.moduleType.dyn(item.itemTypeName, None)
@@ -209,23 +210,24 @@ class BattleUpgradePanel(BattleUpgradePanelMeta, IArenaVehiclesController, IProg
         battleVehicle = BigWorld.player().getVehicleAttached()
         guiVehicle = self._getVehicle()
         if not guiVehicle or not battleVehicle:
-            return
-        currentLevel = self.__getCurrentLvl()
-        nextVehicleLevel = currentLevel + 1
-        upgrades = []
-        upgradeCds = []
-        if battleVehicle.isAlive() and self.__level > currentLevel:
-            progressionCtrl = self.__getProgressionCtrl()
-            for _, _, intCD, unlocks in guiVehicle.getUnlocksDescrs():
-                if intCD not in upgradeCds:
-                    item = self.__getModuleItem(intCD)
-                    itemLvl = item.level
-                    if itemLvl == nextVehicleLevel and progressionCtrl.mayInstallModule(item):
-                        if not br_helpers.isAdditionalModule(itemLvl, unlocks, self.__getModuleItem):
-                            upgrades.append(item)
-                            upgradeCds.append(intCD)
+            return None
+        else:
+            currentLevel = self.__getCurrentLvl()
+            nextVehicleLevel = currentLevel + 1
+            upgrades = []
+            upgradeCds = []
+            if battleVehicle.isAlive() and self.__level > currentLevel:
+                progressionCtrl = self.__getProgressionCtrl()
+                for _, _, intCD, unlocks in guiVehicle.getUnlocksDescrs():
+                    if intCD not in upgradeCds:
+                        item = self.__getModuleItem(intCD)
+                        itemLvl = item.level
+                        if itemLvl == nextVehicleLevel and progressionCtrl.mayInstallModule(item):
+                            if not br_helpers.isAdditionalModule(itemLvl, unlocks, self.__getModuleItem):
+                                upgrades.append(item)
+                                upgradeCds.append(intCD)
 
-        return upgrades
+            return upgrades
 
     def __updateUpgrades(self, addToManager=True):
         upgrades = self.__getUpgradeItems()

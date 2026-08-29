@@ -279,7 +279,7 @@ class EventPostBattleInfo(EventInfoModel):
         progresses = []
         isQuestDailyQuest = isDailyQuest(str(self.event.getID()))
         for cond in self.event.bonusCond.getConditions().items:
-            if isinstance(cond, conditions._Cumulativable):
+            if isinstance(cond, conditions.Cumulativable):
                 for curProg, totalProg, diff, _ in viewvalues(cond.getProgressPerGroup(pCur, pPrev)):
                     if not isQuestDailyQuest:
                         label = cond.getUserString()
@@ -377,7 +377,7 @@ class QuestPostBattleInfo(EventPostBattleInfo, QuestInfoModel):
             countOfCumulatives = 0
             cumulatives = defaultdict(list)
             for cond in condsRoot.items:
-                if isinstance(cond, conditions._Cumulativable):
+                if isinstance(cond, conditions.Cumulativable):
                     countOfCumulatives += 1
                     for groupByKey, (cur, tot, _, isCompleted) in viewitems(cond.getProgressPerGroup(pCur, pPrev)):
                         if not isCompleted:
@@ -491,7 +491,7 @@ class _BattleMattersQuestInfo(QuestPostBattleInfo):
         index = 0
         progresses = []
         for cond in self.event.bonusCond.getConditions().items:
-            if isinstance(cond, conditions._Cumulativable):
+            if isinstance(cond, conditions.Cumulativable):
                 for curProg, totalProg, diff, _ in viewvalues(cond.getProgressPerGroup(pCur, pPrev)):
                     if not diff:
                         continue
@@ -533,7 +533,7 @@ class Progression2dStyleFormater(object):
     def getProgress(cls, event, pCur, pPrev, isCompleted):
         progresses = []
         for cond in event.bonusCond.getConditions().items:
-            if isinstance(cond, conditions._Cumulativable):
+            if isinstance(cond, conditions.Cumulativable):
                 for curProg, totalProg, diff, _ in viewvalues(cond.getProgressPerGroup(pCur, pPrev)):
                     label = cond.getUserString()
                     customDescription = cond.getCustomDescription()
@@ -600,7 +600,7 @@ class Progression2dStyleFormater(object):
         progress = 0
         count = 0
         for cond in event.bonusCond.getConditions().items:
-            if isinstance(cond, conditions._Cumulativable):
+            if isinstance(cond, conditions.Cumulativable):
                 for curProg, totalProg, __, ___ in viewvalues(cond.getProgressPerGroup(pCur, pPrev)):
                     progress += curProg / float(totalProg)
                     count += 1

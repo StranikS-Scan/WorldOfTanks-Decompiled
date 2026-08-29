@@ -1,14 +1,17 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/user_missions/hangar_widget/presenters/event_banners_presenter.py
+from __future__ import absolute_import
 import json
-import BigWorld
 from typing import TYPE_CHECKING
+import BigWorld
 from debug_utils import LOG_ERROR
 from gui.impl.gen.view_models.views.lobby.user_missions.widget.event_banner_model import EventBannerModel
 from gui.impl.gen.view_models.views.lobby.user_missions.widget.event_banners_list_model import EventBannersListModel
 from gui.impl.lobby.user_missions.hangar_widget.event_banners.event_banners_container import EventBannersContainer
 from gui.impl.lobby.user_missions.hangar_widget.overlap_ctrl import OverlapCtrlMixin
-from gui.impl.lobby.user_missions.hangar_widget.services import IEventsService, ICampaignService
+from gui.impl.lobby.user_missions.hangar_widget.presenters.constants import UserMissionGroups
+from gui.impl.lobby.user_missions.hangar_widget.presenters.base_child_presenter import UserMissionChildPresenter
+from gui.impl.lobby.user_missions.hangar_widget.services import IEventsService
 from gui.impl.lobby.user_missions.hangar_widget.tooltip_positioner import TooltipPositionerMixin
 from gui.impl.pub.view_component import ViewComponent
 from helpers import dependency
@@ -18,10 +21,10 @@ if TYPE_CHECKING:
 _MAX_BANNERS = 5
 _SPACE_CREATED_UPDATE_DELAY = 0.7
 
-class EventBannersPresenter(TooltipPositionerMixin, OverlapCtrlMixin, ViewComponent[EventBannersListModel]):
+class EventBannersPresenter(UserMissionChildPresenter, TooltipPositionerMixin, OverlapCtrlMixin, ViewComponent[EventBannersListModel]):
+    GROUP = UserMissionGroups.EVENTS
     __hangarSpace = dependency.descriptor(IHangarSpace)
-    __eventsService = dependency.descriptor(IEventsService)
-    __campaignService = dependency.descriptor(ICampaignService)
+    _eventsService = dependency.descriptor(IEventsService)
 
     def __init__(self):
         self.__bannersContainer = EventBannersContainer()
@@ -32,6 +35,9 @@ class EventBannersPresenter(TooltipPositionerMixin, OverlapCtrlMixin, ViewCompon
     @property
     def viewModel(self):
         return super(EventBannersPresenter, self).getViewModel()
+
+    def isVisible(self):
+        return len(self._getEventEntries()) > 0
 
     def createToolTipContent(self, event, contentID):
         banner = self.__bannersContainer.getEventBanner(event.getArgument('key'))
@@ -45,8 +51,7 @@ class EventBannersPresenter(TooltipPositionerMixin, OverlapCtrlMixin, ViewCompon
         return super(EventBannersPresenter, self)._getEvents() + ((self.viewModel.onEventClick, self._onEventClicked),
          (self.viewModel.onAppearAnimationPlayed, self._onAppearAnimationPlayed),
          (self.__bannersContainer.onBannerUpdate, self._onBannerUpdate),
-         (self.__eventsService.onEventsListChanged, self._onEventsUpdated),
-         (self.__campaignService.onEventsListChanged, self._onEventsUpdated),
+         (self._eventsService.onEventsListChanged, self._onEventsUpdated),
          (self.__hangarSpace.onSpaceCreate, self._onSpaceCreate))
 
     def _onLoading(self, *args, **kwargs):
@@ -62,6 +67,7 @@ class EventBannersPresenter(TooltipPositionerMixin, OverlapCtrlMixin, ViewCompon
 
     def _onEventsUpdated(self):
         self.queueUpdate()
+        self._notifyVisibilityChanged()
 
     def _onEventClicked(self, args):
         banner = self.__bannersContainer.getEventBanner(args.get('key'))
@@ -70,11 +76,19 @@ class EventBannersPresenter(TooltipPositionerMixin, OverlapCtrlMixin, ViewCompon
 
     def _onAppearAnimationPlayed(self, args):
         banners = json.loads(args.get('banners', ''))
-        for bannerName in banners:
-            banner = self.__bannersContainer.getEventBanner(bannerName)
-            if not banner:
-                continue
-            banner.onAppearAnimationPlayed()
+        with self.viewModel.transaction() as vm:
+            bannerModels = vm.getBanners()
+            for bannerName in banners:
+                banner = self.__bannersContainer.getEventBanner(bannerName)
+                if not banner:
+                    continue
+                banner.onAppearAnimationPlayed()
+                for bannerModel in bannerModels:
+                    if bannerModel.getName() == bannerName:
+                        bannerModel.setAppearAnimationState(EventBannerModel.APPEAR_NONE)
+                        break
+
+            bannerModels.invalidate()
 
     def _onSpaceCreate(self):
         BigWorld.callback(_SPACE_CREATED_UPDATE_DELAY, self._delayedUpdateAfterSpaceCreated)
@@ -85,7 +99,7 @@ class EventBannersPresenter(TooltipPositionerMixin, OverlapCtrlMixin, ViewCompon
             self.queueUpdate()
 
     def _getEventEntries(self):
-        return self.__eventsService.getEntries() + self.__campaignService.getEntries()
+        return self._eventsService.getEntries()
 
     def _rawUpdate(self):
         super(EventBannersPresenter, self)._rawUpdate()

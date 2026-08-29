@@ -1,0 +1,48 @@
+<WTBattleStateComponent.def>
+  <Properties>
+    <healthInfoList>
+      <Type>	HEALTH_INFO_LIST	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </healthInfoList>
+    <plasmaDamageDict>
+      <Type>	FIXED_DICT	  <Properties>
+          <targetID>
+            <Type>	OBJECT_ID	</Type>
+          </targetID>
+          <attackerID>
+            <Type>	OBJECT_ID	</Type>
+          </attackerID>
+          <plasmaDamage>
+            <Type>	INT32	</Type>
+          </plasmaDamage>
+        </Properties>
+      </Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </plasmaDamageDict>
+    <hyperionCharge>
+      <Type>	UINT8	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </hyperionCharge>
+    <isShieldDown>
+      <Type>	BOOL	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </isShieldDown>
+    <generatorsLeft>
+      <Type>	INT8	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </generatorsLeft>
+    <shieldDowntime>
+      <Type>	ARRAY	  <of>	FLOAT	</of>
+      </Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </shieldDowntime>
+    <isCaptureBlocked>
+      <Type>	BOOL	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </isCaptureBlocked>
+  </Properties>
+  <ofEntity>
+    <ArenaInfo></ArenaInfo>
+  </ofEntity>
+  <DefaultKeyName>	wtBattleStateComponent	</DefaultKeyName>
+</WTBattleStateComponent.def>

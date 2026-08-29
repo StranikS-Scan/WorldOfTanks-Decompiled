@@ -3,7 +3,7 @@
 from __future__ import absolute_import
 import typing
 import BigWorld
-from frameworks.state_machine import StringEventTransition, ConditionTransition, StateEvent
+from frameworks_common.state_machine import StringEventTransition, ConditionTransition, StateEvent
 from gui.Scaleform.daapi.view.battle.pve_base.base.state_machine.events import OneSecondEvent
 from math_common import round_py2_style
 if typing.TYPE_CHECKING:

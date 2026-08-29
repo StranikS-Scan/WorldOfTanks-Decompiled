@@ -4,7 +4,7 @@ from __future__ import absolute_import
 import logging
 import weakref
 import typing
-from frameworks.state_machine.observers import StateIdsObserver
+from frameworks_common.state_machine.observers import StateIdsObserver
 from frameworks.wulf import WindowLayer, WindowStatus
 from gui.impl.gen import R
 from gui.shared.system_factory import collectLowPriorityWindows, registerLowPriorityWulfWindows
@@ -58,7 +58,10 @@ class FullscreenManager(IFullscreenManager):
         windowsToClose = []
         for window in windows:
             if window != newWindow and (window.layer > layer or window.layer == layer) and not self.__isParent(window, newWindow) and self.__isAllowed(newWindow):
-                windowsToClose.append(window)
+                if window.canBeClosed():
+                    windowsToClose.append(window)
+                else:
+                    _logger.info("Window %r hasn't been destroyed by opening window %r", window, newWindow)
 
         if (not windows or windowsToClose) and not self.__notificationMgr.hasWindow(newWindow) and self.__isAllowed(newWindow) and not self.__notificationMgr.isExecuting():
             _logger.info('Notification queue postpones by opening window %r', newWindow)

@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/missions/personal/personal_missions_quest_award_screen.py
 from __future__ import absolute_import
-import personal_missions
+import personal_missions as pm
 from adisp import adisp_async
 from debug_utils import LOG_ERROR, LOG_CURRENT_EXCEPTION
 from gui import SystemMessages
@@ -34,10 +34,11 @@ _OPERATION_ID_TO_UI_BACKGROUND = {1: RES_ICONS.MAPS_ICONS_PERSONALMISSIONS_QUEST
 
 def _getNextMissionInOperationByID(questID):
     eventsCache = dependency.instance(IEventsCache)
-    for branch in personal_missions.PM_BRANCH.V1_BRANCHES:
+    for branchName in pm.PM_BRANCH.MUTUAL_EXCLUSION_BRANCHES[pm.PM_BRANCH.QUEST_GROUPS.GROUP_1]:
+        branch = pm.PM_BRANCH.NAME_TO_TYPE[branchName]
         quests = eventsCache.getPersonalMissions().getQuestsForBranch(branch)
         if questID in quests:
-            questsInOperation = sorted(personal_missions.g_cache.questListByOperationIDChainID(quests[questID].getOperationID(), quests[questID].getChainID()))
+            questsInOperation = sorted(pm.g_cache.questListByOperationIDChainID(quests[questID].getOperationID(), quests[questID].getChainID()))
             try:
                 questInd = questsInOperation.index(questID)
                 for nextID in questsInOperation[questInd + 1:]:
@@ -120,12 +121,18 @@ class PersonalMissionsQuestAwardScreen(PersonalMissionsQuestAwardScreenMeta):
             self.soundManager.playSound(SOUNDS.AWARD_WINDOW)
 
     def _dispose(self):
+        self.__fireNextQuestSelected()
         self.__fireOnClose()
         self._quest = None
         self._ctx = None
         self._proxyEvent = None
         self._operation = None
         super(PersonalMissionsQuestAwardScreen, self)._dispose()
+        return
+
+    def __fireNextQuestSelected(self):
+        nextQuestID = self._nextQuest.getID() if self._nextQuest else None
+        self.fireEvent(PersonalMissionsEvent(PersonalMissionsEvent.NEXT_QUEST_SELECTED, ctx={'questID': nextQuestID}), EVENT_BUS_SCOPE.LOBBY)
         return
 
     def __fireOnClose(self):
@@ -136,8 +143,11 @@ class PersonalMissionsQuestAwardScreen(PersonalMissionsQuestAwardScreenMeta):
     @adisp_process('updating')
     def _processMission(self, quest):
         result = yield quests_proc.PMQuestSelect(quest.getQuestBranch(), personalMission=quest).request()
-        if result and result.userMsg:
-            SystemMessages.pushMessage(result.userMsg, type=result.sysMsgType)
+        if result:
+            if result.userMsg:
+                SystemMessages.pushMessage(result.userMsg, type=result.sysMsgType)
+            if result.success:
+                self.__fireNextQuestSelected()
 
     def __setData(self):
         detailedData = getDetailedMissionData(self._quest)

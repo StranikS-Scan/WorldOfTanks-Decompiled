@@ -1,0 +1,15 @@
+<AutoreloaderSurgeController.def>
+  <DetailLevel>	MY_VEHICLE	</DetailLevel>
+  <Properties>
+    <abilityState>
+      <Type>	AUTORELOADER_SURGE_STATE	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </abilityState>
+  </Properties>
+  <CellMethods>
+    <activate>
+      <Exposed>	OWN_CLIENT	</Exposed>
+    </activate>
+  </CellMethods>
+  <DefaultKeyName>	autoreloaderSurgeController	</DefaultKeyName>
+</AutoreloaderSurgeController.def>

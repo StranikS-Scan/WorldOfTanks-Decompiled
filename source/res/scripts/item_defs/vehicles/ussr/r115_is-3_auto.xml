@@ -812,6 +812,36 @@
         <clipAngle>	0.341477	</clipAngle>
         <anchorShift>	-0.109996	</anchorShift>
       </slot>
+      <slot>
+        <slotType>	attachment	</slotType>
+        <slotId>	18000	</slotId>
+        <position>	-1.698714 0.34542 -1.136647	</position>
+        <rotation>	0 0 1.5691	</rotation>
+        <scale>	1 1 1	</scale>
+        <applyType>	universal	</applyType>
+        <size>	medium	</size>
+        <hangerId>	9	</hangerId>
+      </slot>
+      <slot>
+        <slotType>	attachment	</slotType>
+        <slotId>	18001	</slotId>
+        <position>	1.699 0.345476 -1.137	</position>
+        <rotation>	-0 3.141592 1.5691	</rotation>
+        <scale>	0.999999 0.999999 1	</scale>
+        <applyType>	universal	</applyType>
+        <size>	medium	</size>
+        <hangerId>	9	</hangerId>
+      </slot>
+      <slot>
+        <slotType>	attachment	</slotType>
+        <slotId>	18002	</slotId>
+        <position>	0.000001 0.231824 -3.601972	</position>
+        <rotation>	-0 -1.570796 1.5691	</rotation>
+        <scale>	1 1 1	</scale>
+        <applyType>	universal	</applyType>
+        <size>	medium	</size>
+        <hangerId>	7	</hangerId>
+      </slot>
     </customizationSlots>
     <customization>
       <customizableVehicleAreas>
@@ -1793,6 +1823,17 @@
               <anchorShift>	0.740452	</anchorShift>
             </slot>
             <slot>
+              <slotType>	attachment	</slotType>
+              <slotId>	48000	</slotId>
+              <size>	medium	</size>
+              <position>	-0.000001 0.297742 0.52197	</position>
+              <rotation>	-0 0 0	</rotation>
+              <scale>	1 1.000001 1.000001	</scale>
+              <enableVisTunnel>	true	</enableVisTunnel>
+              <applyType>	gunMantlet	</applyType>
+              <hangerId>	2	</hangerId>
+            </slot>
+            <slot>
               <slotType>	insigniaOnGun	</slotType>
               <slotId>	49000	</slotId>
               <rayStart>	-0.000442 -0.036061 1.1464	</rayStart>
@@ -1809,6 +1850,7 @@
           </customization>
           <reloadEffect>	autoloader_reload85_107	</reloadEffect>
           <effects>	shot_large_mb	</effects>
+          <muzzleBrake>	HORIZONTAL	</muzzleBrake>
           <camouflage>
             <tiling>	0.49 0.49 0.000000 0.000000	</tiling>
             <density>	104.497 106.832	</density>
@@ -2396,6 +2438,18 @@
           <showOn>	256	</showOn>
           <clipAngle>	1.12667	</clipAngle>
           <anchorShift>	-0.048561	</anchorShift>
+        </slot>
+        <slot>
+          <slotType>	attachment	</slotType>
+          <slotId>	38000	</slotId>
+          <position>	0.920047 0.821018 0.293181	</position>
+          <rotation>	-0 -0 0	</rotation>
+          <scale>	1 1 1	</scale>
+          <applyType>	turret	</applyType>
+          <size>	medium	</size>
+          <enableVisTunnel>	true	</enableVisTunnel>
+          <hangerId>	2	</hangerId>
+          <hangerRotation>	-0 1.570796 0	</hangerRotation>
         </slot>
       </customizationSlots>
       <customization>

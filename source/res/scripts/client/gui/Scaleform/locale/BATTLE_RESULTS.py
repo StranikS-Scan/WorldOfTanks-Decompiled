@@ -12,6 +12,7 @@ class BATTLE_RESULTS(object):
     STATUS_LOSE = '#battle_results:status/lose'
     STATUS_TIE = '#battle_results:status/tie'
     NODATA = '#battle_results:noData'
+    RIGGEDBATTLE = '#battle_results:riggedBattle'
     COMMON_ARENA_FULLNAME = '#battle_results:common/arena/fullName'
     COMMON_ARENA_NAMEANDMODE = '#battle_results:common/arena/nameAndMode'
     COMMON_STARTTIME = '#battle_results:common/startTime'

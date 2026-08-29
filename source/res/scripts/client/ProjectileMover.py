@@ -70,7 +70,8 @@ class ProjectileMover(object):
                     self.salvo.addProjectile(artID, gravity, refStartPoint, refVelocity)
                 return
             isOwnShoot = attackerID == BigWorld.player().playerVehicleID
-            projectileMotor, collisionTime, _ = self.__ballistics.addProjectile(shotID, gravity, refStartPoint, refVelocity, startPoint, maxDistance, isOwnShoot, attackerID, ownVehicleGunShotPositionGetter(), tracerCameraPos)
+            rotationSpeed = effectsDescr.get('projectileRotationSpeed', 0.0)
+            projectileMotor, collisionTime, _ = self.__ballistics.addProjectile(shotID, gravity, refStartPoint, refVelocity, startPoint, maxDistance, isOwnShoot, attackerID, ownVehicleGunShotPositionGetter(), tracerCameraPos, rotationSpeed)
             if self.__debugDrawer is not None:
                 self.__debugDrawer.addProjectile(shotID, attackerID, refStartPoint, refVelocity, Math.Vector3(0.0, -gravity, 0.0), maxDistance, isOwnShoot)
             if projectileMotor is None:

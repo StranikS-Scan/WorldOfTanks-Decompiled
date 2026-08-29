@@ -160,13 +160,14 @@ class Comp7BattlePage(Comp7BattlePageMeta):
         if self.app.containerManager.isModalViewsIsExists():
             return
         else:
-            if self.__visibilityManager is not None:
-                self.__visibilityManager.setFullStatsShown(isShown)
+            super(Comp7BattlePage, self)._toggleFullStats(isShown, permanent=permanent, tabAlias=tabAlias)
+            if self.__visibilityManager is not None and self._fullStatsAlias:
+                actuallyShown = self.as_isComponentVisibleS(self._fullStatsAlias)
+                self.__visibilityManager.setFullStatsShown(actuallyShown)
                 self.__updateComponentsVisibility()
-                if not isShown:
+                if not actuallyShown:
                     self._fsToggling.update(self.__visibilityManager.getVisible())
                     self._fsToggling.difference_update(self.__visibilityManager.getHidden())
-            super(Comp7BattlePage, self)._toggleFullStats(isShown, permanent=permanent, tabAlias=tabAlias)
             return
 
     def _onAvatarCtrlModeChanged(self, ctrlMode):

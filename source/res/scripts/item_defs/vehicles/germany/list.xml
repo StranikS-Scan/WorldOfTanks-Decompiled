@@ -512,7 +512,7 @@
     <price>	5700	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
-    <tags>	lightTank role_LT_universal HD beast scout improvedVentilation_class3_user tankRammer_class2_user aimingStabilizer_class2_user extraHealthReserve_class2_user antifragmentationLining_light_user	</tags>
+    <tags>	lightTank role_LT_support HD beast scout improvedVentilation_class3_user tankRammer_class2_user aimingStabilizer_class2_user extraHealthReserve_class2_user antifragmentationLining_light_user	</tags>
     <level>	7	</level>
   </G85_Auf_Panther>
   <G89_Leopard1>
@@ -724,7 +724,7 @@
     <price>	2900	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
-    <tags>	lightTank role_LT_universal HD special scout improvedVentilation_class3_user tankRammer_class2_user aimingStabilizer_class2_user extraHealthReserve_class2_user antifragmentationLining_light_user	</tags>
+    <tags>	lightTank role_LT_support HD special scout improvedVentilation_class3_user tankRammer_class2_user aimingStabilizer_class2_user extraHealthReserve_class2_user antifragmentationLining_light_user	</tags>
     <level>	6	</level>
   </G158_VK2801_105_SPXXI>
   <G159_KPZ_3_Project_07_HK>
@@ -2060,9 +2060,22 @@
     <price>	100	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
-    <tags>	mediumTank role_MT_sniper HD wheeledVehicle improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user special earn_crystals testTank secret	</tags>
+    <tags>	mediumTank role_MT_sniper HD wheeledVehicle improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user special earn_crystals secret private	</tags>
     <level>	10	</level>
   </G183_Radkampfwagen>
+  <G183_Fossa_VM_68>
+    <id>	260	</id>
+    <userString>	#germany_vehicles:G183_Fossa_VM_68	</userString>
+    <shortUserString>	#germany_vehicles:G183_Fossa_VM_68_short	</shortUserString>
+    <description>	#germany_vehicles:G183_Fossa_VM_68_descr	</description>
+    <shortDescriptionSpecial>	#germany_vehicles:G183_Fossa_VM_68_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#germany_vehicles:G183_Fossa_VM_68_long_special	</longDescriptionSpecial>
+    <price>	22500	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	mediumTank role_MT_sniper HD wheeledVehicle improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user special earn_crystals	</tags>
+    <level>	10	</level>
+  </G183_Fossa_VM_68>
   <Env_Artillery>
     <id>	254	</id>
     <userString>	#germany_vehicles:Env_Artillery	</userString>
@@ -2470,6 +2483,69 @@
     <tags>	AT-SPG role_ATSPG_support HD disabledInRoaming heavyAT-SPG AT-SPG2 extraHealthReserve_class1_user antifragmentationLining_superheavy_user earn_crystals special secret private	</tags>
     <level>	10	</level>
   </G98_Waffentrager_E100_CFE_T>
+  <G197_Pz_Kpfw_Neu>
+    <id>	127	</id>
+    <userString>	#germany_vehicles:G197_Pz_Kpfw_Neu	</userString>
+    <description>	#germany_vehicles:G197_Pz_Kpfw_Neu_descr	</description>
+    <shortUserString>	#germany_vehicles:G197_Pz_Kpfw_Neu_short	</shortUserString>
+    <longDescriptionSpecial>	#germany_vehicles:G197_Pz_Kpfw_Neu_long_special	</longDescriptionSpecial>
+    <price>	7400000	</price>
+    <tags>	heavyTank role_HT_universal HD siegeMode improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user earn_crystals	</tags>
+    <level>	11	</level>
+  </G197_Pz_Kpfw_Neu>
+  <G195_HWK_40>
+    <id>	264	</id>
+    <userString>	#germany_vehicles:G195_HWK_40	</userString>
+    <description>	#germany_vehicles:G195_HWK_40_descr	</description>
+    <shortUserString>	#germany_vehicles:G195_HWK_40_short	</shortUserString>
+    <shortDescriptionSpecial>	#germany_vehicles:G195_HWK_40_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#germany_vehicles:G195_HWK_40_long_special	</longDescriptionSpecial>
+    <price>	100	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	heavyTank role_HT_universal HD siegeMode heavyTank1 improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user earn_crystals secret testTank	</tags>
+    <level>	9	</level>
+  </G195_HWK_40>
+  <G198_Kampfpanzer_67>
+    <id>	125	</id>
+    <userString>	#germany_vehicles:G198_Kampfpanzer_67	</userString>
+    <description>	#germany_vehicles:G198_Kampfpanzer_67_descr	</description>
+    <shortUserString>	#germany_vehicles:G198_Kampfpanzer_67_short	</shortUserString>
+    <price>	6100000	</price>
+    <tags>	heavyTank role_HT_universal HD siegeMode improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user earn_crystals	</tags>
+    <level>	10	</level>
+  </G198_Kampfpanzer_67>
+  <G193_Pz_Kpfw_55>
+    <id>	126	</id>
+    <userString>	#germany_vehicles:G193_Pz_Kpfw_55	</userString>
+    <description>	#germany_vehicles:G193_Pz_Kpfw_55_descr	</description>
+    <shortUserString>	#germany_vehicles:G193_Pz_Kpfw_55_short	</shortUserString>
+    <price>	2600000	</price>
+    <tags>	heavyTank role_HT_universal HD siegeMode improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user	</tags>
+    <level>	8	</level>
+  </G193_Pz_Kpfw_55>
+  <G196_Versuchspanzer_57>
+    <id>	150	</id>
+    <userString>	#germany_vehicles:G196_Versuchspanzer_57	</userString>
+    <description>	#germany_vehicles:G196_Versuchspanzer_57_descr	</description>
+    <shortUserString>	#germany_vehicles:G196_Versuchspanzer_57_short	</shortUserString>
+    <price>	3600000	</price>
+    <tags>	heavyTank role_HT_universal HD siegeMode improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user	</tags>
+    <level>	9	</level>
+  </G196_Versuchspanzer_57>
+  <G204_PzVI_Tiger_P_CFE_A>
+    <id>	269	</id>
+    <userString>	#germany_vehicles:G204_PzVI_Tiger_P_CFE_A	</userString>
+    <shortUserString>	#germany_vehicles:G204_PzVI_Tiger_P_CFE_A_short	</shortUserString>
+    <description>	#germany_vehicles:G204_PzVI_Tiger_P_CFE_A_descr	</description>
+    <shortDescriptionSpecial>	#germany_vehicles:G204_PzVI_Tiger_P_CFE_A_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#germany_vehicles:G204_PzVI_Tiger_P_CFE_A_long_special	</longDescriptionSpecial>
+    <price>	100	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	heavyTank role_HT_assault HD beast improvedVentilation_class2_user tankRammer_class2_user extraHealthReserve_class2_user antifragmentationLining_medium_user rocketAcceleration secret testTank	</tags>
+    <level>	6	</level>
+  </G204_PzVI_Tiger_P_CFE_A>
   <G200_Chi_Go>
     <id>	265	</id>
     <userString>	#germany_vehicles:G200_Chi_Go	</userString>
@@ -2483,4 +2559,16 @@
     <tags>	mediumTank role_MT_universal HD mediumTank1 improvedVentilation_class2_user tankRammer_class2_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
     <level>	7	</level>
   </G200_Chi_Go>
+  <G56_E-100_7x7>
+    <id>	268	</id>
+    <userString>	#germany_vehicles:G56_E-100_7x7	</userString>
+    <shortUserString>	#germany_vehicles:G56_E-100_7x7_short	</shortUserString>
+    <description>	#germany_vehicles:G56_E-100_7x7_descr	</description>
+    <price>	100	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <cannotBeBought>	true	</cannotBeBought>
+    <tags>	heavyTank role_HT_assault HD heavyTank1 improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_superheavy_user earn_crystals private secret cannot_be_sold comp7 special lockCrew lockCrewSkills lockOptionalDevices	</tags>
+    <level>	10	</level>
+  </G56_E-100_7x7>
 </list.xml>

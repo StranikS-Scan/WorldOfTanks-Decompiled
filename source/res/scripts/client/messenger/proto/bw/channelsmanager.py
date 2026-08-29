@@ -16,9 +16,11 @@ from messenger.proto.bw import find_criteria, limits
 from messenger.proto.bw.wrappers import ChatActionWrapper
 from messenger.proto.events import g_messengerEvents
 from messenger.proto.xmpp.log_output import g_logOutput, CLIENT_LOG_AREA
-from messenger.storage import storage_getter
+from messenger.storage import MessengerStorageDescriptor, ChannelsStorage, UsersStorage
 
 class ChannelsManager(ChatActionsListener):
+    usersStorage = MessengerStorageDescriptor(UsersStorage)
+    channelsStorage = MessengerStorageDescriptor(ChannelsStorage)
 
     def __init__(self):
         ChatActionsListener.__init__(self, {CHAT_RESPONSES.channelNotExists: '_ChannelsManager__onChannelNotExists',
@@ -34,14 +36,6 @@ class ChannelsManager(ChatActionsListener):
         self.__messagesQueue = []
         self.__isMessageEnabled = False
         return
-
-    @storage_getter('channels')
-    def channelsStorage(self):
-        return None
-
-    @storage_getter('users')
-    def usersStorage(self):
-        return None
 
     def addListeners(self):
         self.addListener(self.__onRequestChannels, CHAT_ACTIONS.requestChannels)

@@ -17,9 +17,10 @@ from messenger.m_constants import PROTO_TYPE
 from messenger.proto import proto_getter
 from messenger.proto.bw import cooldown
 from messenger.proto.events import g_messengerEvents
-from messenger.storage import storage_getter
+from messenger.storage import MessengerStorageDescriptor, UsersStorage
 
 class _ChannelController(LobbyLayout):
+    usersStorage = MessengerStorageDescriptor(UsersStorage)
 
     def __init__(self, channel):
         super(_ChannelController, self).__init__(channel)
@@ -31,10 +32,6 @@ class _ChannelController(LobbyLayout):
 
     @proto_getter(PROTO_TYPE.BW_CHAT2)
     def proto_v2(self):
-        return None
-
-    @storage_getter('users')
-    def usersStorage(self):
         return None
 
     def join(self):

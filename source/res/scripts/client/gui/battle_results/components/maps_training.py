@@ -40,7 +40,7 @@ class StatsBlock(base.StatsBlock):
     def setRecord(self, result, reusable):
         info = reusable.getPersonalVehiclesInfo(result['personal'])
         for statType, statFieldName in BATTLE_STATS_RESULT_FIELDS.iteritems():
-            statVal = info.__getattribute__(statFieldName)
+            statVal = getattr(info, statFieldName)
             self.addNextComponent(base.DirectStatsItem('', {'id': statType,
              'value': statVal}))
 

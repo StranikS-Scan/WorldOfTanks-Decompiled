@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: battle_royale/scripts/client/battle_royale/gui/game_control/br_battle_messages.py
+from __future__ import absolute_import
 import BigWorld
 from helpers import dependency, int2roman
 from battle_royale.gui.battle_control.controllers.progression_ctrl import IProgressionListener

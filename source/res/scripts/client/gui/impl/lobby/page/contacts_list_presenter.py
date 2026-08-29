@@ -7,12 +7,12 @@ from gui.impl.pub.view_component import ViewComponent
 from messenger.m_constants import USER_TAG, USER_ACTION_ID
 from messenger.proto.events import g_messengerEvents
 from messenger.proto.shared_find_criteria import FriendsFindCriteria
-from messenger.storage import storage_getter
+from messenger.storage import MessengerStorageDescriptor, UsersStorage
 if typing.TYPE_CHECKING:
     from messenger.proto.bw.entities import BWUserEntity
-    from messenger.storage import UsersStorage
 
 class ContactsListPresenter(ViewComponent[ContactsListModel]):
+    __usersStorage = MessengerStorageDescriptor(UsersStorage)
 
     def __init__(self):
         super(ContactsListPresenter, self).__init__(model=ContactsListModel)
@@ -23,10 +23,6 @@ class ContactsListPresenter(ViewComponent[ContactsListModel]):
     def _onLoading(self, *args, **kwargs):
         super(ContactsListPresenter, self)._onLoading(*args, **kwargs)
         self.__updateContactsCount()
-
-    @storage_getter('users')
-    def __usersStorage(self):
-        return None
 
     def __onUsersListReceived(self, tags):
         if USER_TAG.FRIEND in tags:

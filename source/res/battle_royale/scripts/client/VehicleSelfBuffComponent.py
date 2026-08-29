@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: battle_royale/scripts/client/VehicleSelfBuffComponent.py
+from __future__ import absolute_import
 import BigWorld
 from gui.battle_control.battle_constants import VEHICLE_VIEW_STATE
 from battle_royale.gui.constants import BattleRoyaleEquipments

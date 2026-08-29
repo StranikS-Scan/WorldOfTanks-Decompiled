@@ -23,6 +23,7 @@ from gui.wgcg.mapbox.handlers import MapboxRequestHandlers
 from gui.wgcg.promo_screens.handlers import PromoScreensRequestHandlers
 from gui.wgcg.rank.handlers import RankRequestHandlers
 from gui.wgcg.settings import WebRequestDataType
+from gui.wgcg.friends_service.handlers import FriendServiceRequestHandlers
 from gui.wgcg.uilogging.handlers import UILoggingRequestHandlers
 from gui.wgcg.utils.handlers import UtilsRequestHandlers
 from gui.wgcg.wot_shop.handlers import WotShopRequestHandlers
@@ -117,6 +118,7 @@ class WgcgRequestsController(RequestsController):
         self.__handlers.update(CraftmachineRequestHandlers(requester).get())
         self.__handlers.update(MapboxRequestHandlers(requester).get())
         self.__handlers.update(GiftSystemRequestHandlers(requester).get())
+        self.__handlers.update(FriendServiceRequestHandlers(requester).get())
         self.__handlers.update(UILoggingRequestHandlers(requester).get())
         self.__handlers.update(AgateRequestHandlers(requester).get())
         self.__handlers.update(WotShopRequestHandlers(requester).get())

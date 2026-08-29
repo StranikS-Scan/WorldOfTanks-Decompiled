@@ -1,13 +1,14 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/gen/view_models/views/lobby/vehicle_hub/views/sub_models/stats_model.py
-from frameworks.wulf import Array, ViewModel
+from frameworks.wulf import Array, Map, ViewModel
 from gui.impl.gen.view_models.common.vehicle_mechanic_model import VehicleMechanicModel
+from gui.impl.gen.view_models.views.lobby.vehicle_hub.special_shell_param_model import SpecialShellParamModel
 from gui.impl.gen.view_models.views.lobby.vehicle_hub.special_vehicle_param_model import SpecialVehicleParamModel
 
 class StatsModel(ViewModel):
     __slots__ = ()
 
-    def __init__(self, properties=2, commands=0):
+    def __init__(self, properties=3, commands=0):
         super(StatsModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -28,7 +29,18 @@ class StatsModel(ViewModel):
     def getSpecialMechanicParamsType():
         return SpecialVehicleParamModel
 
+    def getShellParams(self):
+        return self._getMap(2)
+
+    def setShellParams(self, value):
+        self._setMap(2, value)
+
+    @staticmethod
+    def getShellParamsType():
+        return (unicode, SpecialShellParamModel)
+
     def _initialize(self):
         super(StatsModel, self)._initialize()
         self._addViewModelProperty('specialMechanic', VehicleMechanicModel())
         self._addArrayProperty('specialMechanicParams', Array())
+        self._addMapProperty('shellParams', Map(unicode, SpecialShellParamModel))

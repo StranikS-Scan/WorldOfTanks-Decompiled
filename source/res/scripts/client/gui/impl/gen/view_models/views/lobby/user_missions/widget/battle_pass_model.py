@@ -16,9 +16,9 @@ class AppearAnimationState(Enum):
 
 
 class BattlePassModel(BaseBattlePassModel):
-    __slots__ = ('onOpenBattlePass', 'onIntroAnimationPlayed')
+    __slots__ = ('onOpenBattlePass', 'onIntroAnimationPlayed', 'onWidgetUnmounted')
 
-    def __init__(self, properties=17, commands=2):
+    def __init__(self, properties=17, commands=3):
         super(BattlePassModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -125,3 +125,4 @@ class BattlePassModel(BaseBattlePassModel):
         self._addNumberProperty('timeLeft', 0)
         self.onOpenBattlePass = self._addCommand('onOpenBattlePass')
         self.onIntroAnimationPlayed = self._addCommand('onIntroAnimationPlayed')
+        self.onWidgetUnmounted = self._addCommand('onWidgetUnmounted')

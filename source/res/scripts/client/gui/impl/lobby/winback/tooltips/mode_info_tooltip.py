@@ -8,6 +8,6 @@ class ModeInfoTooltip(ViewImpl):
     __slots__ = ()
 
     def __init__(self):
-        settings = ViewSettings(R.views.lobby.winback.tooltips.ModeInfoTooltip())
+        settings = ViewSettings(R.views.mono.winback.tooltips.mode_info_tooltip())
         settings.model = ViewModel()
         super(ModeInfoTooltip, self).__init__(settings)

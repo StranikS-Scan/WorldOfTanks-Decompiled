@@ -570,10 +570,7 @@ class BaseQuestProgress(object):
         progress = self._progressStorage.getProgress(progressID)
         if isinstance(progress, ValueProgress):
             return bool(progress.getState() is QUEST_PROGRESS_STATE.IN_PROGRESS and progress.getValue() == 0)
-        elif isinstance(progress, BattlesSeries):
-            return bool(progress.getState() is QUEST_PROGRESS_STATE.IN_PROGRESS and progress.getBattles() == [])
-        else:
-            return bool(progress.getState() is QUEST_PROGRESS_STATE.IN_PROGRESS and progress.getCounter() == Counter())
+        return bool(progress.getState() is QUEST_PROGRESS_STATE.IN_PROGRESS and progress.getBattles() == []) if isinstance(progress, BattlesSeries) else bool(progress.getState() is QUEST_PROGRESS_STATE.IN_PROGRESS and progress.getCounter() == Counter())
 
     def setFailedIfNotCompleted(self, progressID):
         progress = self._progressStorage.getProgress(progressID)
@@ -730,10 +727,7 @@ class BaseQuestProgress(object):
 
     def wasFailed(self, progressID):
         progress = self._progressStorage.getProgress(progressID)
-        if progress.isAward():
-            return self._wasFailed
-        else:
-            return False
+        return self._wasFailed if progress.isAward() else False
 
     def getProgressBeforeFailed(self):
         return self._progressBeforeFailed
@@ -745,10 +739,7 @@ class BaseQuestProgress(object):
 
     def wasCompleted(self, progressID):
         progress = self._progressStorage.getProgress(progressID)
-        if progress.isAward() and progress.isMain():
-            return self._wasCompleted
-        else:
-            return False
+        return self._wasCompleted if progress.isAward() and progress.isMain() else False
 
 
 def hasCorrespondedCamouflage(vehDescr, outfit):

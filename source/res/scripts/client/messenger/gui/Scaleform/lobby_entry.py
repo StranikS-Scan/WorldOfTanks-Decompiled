@@ -16,9 +16,10 @@ from messenger.gui.Scaleform.view.lobby import antispam_message
 from messenger.gui.interfaces import IGUIEntry
 from messenger.m_constants import MESSENGER_SCOPE
 from messenger.proto.events import g_messengerEvents
-from messenger.storage import storage_getter
+from messenger.storage import MessengerStorageDescriptor, ChannelsStorage
 
 class LobbyEntry(IGUIEntry):
+    channelsStorage = MessengerStorageDescriptor(ChannelsStorage)
 
     def __init__(self):
         super(LobbyEntry, self).__init__()
@@ -26,10 +27,6 @@ class LobbyEntry(IGUIEntry):
         self.__carouselHandler = None
         self.__components = defaultdict(list)
         return
-
-    @storage_getter('channels')
-    def channelsStorage(self):
-        return None
 
     @property
     def channelsCtrl(self):

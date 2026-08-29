@@ -4,45 +4,36 @@ import logging
 import re
 from itertools import chain
 import typing
-from adisp import adisp_async, adisp_process
-from gui.server_events.awards_formatters import AWARDS_SIZES
-from gui.server_events.finders import PM3_PERSONAL_MISSION_HONOR_POSTFIX, PM3_CAMPAIGN_FINISHED_QUEST, PM_CAMPAIGNS_IDS, BRANCH_TO_OPERATION_IDS
-from gui.server_events.personal_progress.formatters import PMCardConditionsFormatter
-from shared_utils import findFirst, first
 import constants
-import personal_missions
-from helpers import i18n
+from adisp import adisp_async, adisp_process
+from shared_utils import first
+from helpers import dependency, time_utils
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import RANKED_YEAR_POSITION
 from chat_shared import SYS_MESSAGE_TYPE
 from dossiers2.custom.records import DB_ID_TO_RECORD, RECORD_DB_IDS
-from dossiers2.ui.achievements import BADGES_BLOCK, ACHIEVEMENT_BLOCK
+from dossiers2.ui.achievements import ACHIEVEMENT_BLOCK, BADGES_BLOCK
 from gui.Scaleform.genConsts.RANKEDBATTLES_CONSTS import RANKEDBATTLES_CONSTS
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.ranked_battles import ranked_helpers
-from gui.ranked_battles.constants import RankedDossierKeys, YEAR_POINTS_TOKEN
-from gui.ranked_battles.ranked_helpers.web_season_provider import UNDEFINED_LEAGUE_ID, TOP_LEAGUE_ID
-from gui.server_events.bonuses import getMergedBonusesFromDicts, getBonuses, PersonalMissionsPointsTokensBonus
+from gui.ranked_battles.constants import YEAR_POINTS_TOKEN, RankedDossierKeys
+from gui.ranked_battles.ranked_helpers.web_season_provider import TOP_LEAGUE_ID, UNDEFINED_LEAGUE_ID
+from gui.server_events.bonuses import getBonuses, getMergedBonusesFromDicts
 from gui.server_events.events_helpers import getIdxFromQuestID, isACEmailConfirmationQuest
-from gui.server_events.event_items import PM3_ROLE_TO_ICON_NAME
 from gui.server_events.recruit_helper import getSourceIdFromQuest
 from gui.shared.formatters import text_styles
 from gui.shared.notifications import NotificationPriorityLevel
 from gui.shared.money import Currency
-from helpers import dependency, int2roman
-from helpers import time_utils
 from messenger import g_settings
-from personal_missions import PM_BRANCH
 from messenger.formatters import TimeFormatter
-from messenger.formatters.service_channel import WaitItemsSyncFormatter, QuestAchievesFormatter, RankedQuestAchievesFormatter, ServiceChannelFormatter, PersonalMissionsQuestAchievesFormatter, BattlePassQuestAchievesFormatter, InvoiceReceivedFormatter, BattleMattersQuestAchievesFormatter, WinbackQuestAchievesFormatter, CollectionsFormatter, SeniorityAwardsQuestAchievesFormatter, PM3CompletionFormatter
-from messenger.formatters.service_channel_helpers import getRewardsForQuests, EOL, MessageData, getCustomizationItemData, getDefaultMessage, DEFAULT_MESSAGE, popCollectionEntitlements, getPMOperationAndQuest, getPotapovQuestPopUps
+from messenger.formatters.service_channel import BattleMattersQuestAchievesFormatter, BattlePassQuestAchievesFormatter, CollectionsFormatter, InvoiceReceivedFormatter, QuestAchievesFormatter, RankedQuestAchievesFormatter, SeniorityAwardsQuestAchievesFormatter, ServiceChannelFormatter, WaitItemsSyncFormatter, WinbackQuestAchievesFormatter
+from messenger.formatters.service_channel_helpers import EOL, MessageData, getCustomizationItemData, getRewardsForQuests, popCollectionEntitlements
 from messenger.proto.bw.wrappers import ServiceChannelMessage
 from skeletons.gui.battle_matters import IBattleMattersController
 from skeletons.gui.game_control import ICollectionsSystemController, IRankedBattlesController, ISeniorityAwardsController, IWinbackController, IWotPlusController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
-from skeletons.gui.shared import IItemsCache
 from skeletons.gui.system_messages import ISystemMessages
 _logger = logging.getLogger(__name__)
 
@@ -359,151 +350,6 @@ class RankedFinalTokenQuestFormatter(RankedTokenQuestFormatter):
         return '<br/>'.join(result)
 
 
-class PersonalMissionsTokenQuestsFormatter(AsyncTokenQuestsSubFormatter):
-    _DEFAULT_TEMPLATE = 'tokenQuests'
-    __eventsCache = dependency.descriptor(IEventsCache)
-    __PERSONAL_MISSIONS_CUSTOM_TEMPLATE = 'personalMissionsCustom'
-    __PM12_OPERATIONS_PATTERN = '|'.join(map(str, BRANCH_TO_OPERATION_IDS[PM_BRANCH.PERSONAL_MISSION_2] + BRANCH_TO_OPERATION_IDS[PM_BRANCH.REGULAR]))
-    __PM_TOKEN_QUEST_PATTERNS = 'pt_final_s(\\d)_t({})|pt_s(\\d)_t(\\d)_c(\\d)_add_reward|pt_final_badge_s(\\d)'.format(__PM12_OPERATIONS_PATTERN)
-    __REGEX_PATTERN_BADGE = 'pt_final_s(\\d)_t(\\d)_badge'
-    __TOKENS_NAME = (constants.PERSONAL_MISSION_FREE_TOKEN_NAME, constants.PERSONAL_MISSION_2_FREE_TOKEN_NAME)
-
-    def __init__(self):
-        super(PersonalMissionsTokenQuestsFormatter, self).__init__()
-        self._achievesFormatter = PersonalMissionsQuestAchievesFormatter()
-
-    @adisp_async
-    @adisp_process
-    def format(self, message, callback):
-        isSynced = yield self._waitForSyncItems()
-        messageDataList = []
-        templateName = self._DEFAULT_TEMPLATE
-        if isSynced:
-            data = message.data or {}
-            dataQuestIDs = data.get('completedQuestIDs', set())
-            dataQuestIDs.update(data.get('rewardsGottenQuestIDs', set()))
-            completedQuestIDs = self.getQuestOfThisGroup(dataQuestIDs)
-            pmQuestsIDs = set((qID for qID in completedQuestIDs if personal_missions.g_cache.isPersonalMission(qID)))
-            pmQuestsCache = self.__eventsCache.getPersonalMissions().getAllQuests(personal_missions.PM_BRANCH.ALL)
-            if not data.get('potapovQuestID') or data.get('potapovQuestID') in pmQuestsCache:
-                rewards = getRewardsForQuests(message, completedQuestIDs)
-                potapovQuestID = data.get('potapovQuestID', None)
-                if potapovQuestID is not None:
-                    rewards.update({'potapovQuestID': potapovQuestID})
-                rewards['popUpRecords'] = self.getPopUps(message)
-                specialMessage = self.__formatSpecialMissions(completedQuestIDs, pmQuestsIDs, message, rewards)
-                fmt = self._achievesFormatter.formatQuestAchieves(rewards, asBattleFormatter=False, processCustomizations=not specialMessage)
-                if fmt is not None:
-                    templateParams = {'achieves': fmt}
-                    campaigns = set()
-                    for qID in pmQuestsIDs:
-                        pmID = personal_missions.g_cache.getPersonalMissionIDByUniqueID(qID)
-                        mission = pmQuestsCache[pmID]
-                        campaigns.add(mission.getCampaignID())
-
-                    if campaigns:
-                        templateName = self.__PERSONAL_MISSIONS_CUSTOM_TEMPLATE
-                        campaignNameKey = 'both' if len(campaigns) == 2 else 'c_{}'.format(first(campaigns))
-                        templateParams['text'] = backport.text(R.strings.messenger.serviceChannelMessages.battleResults.personalMissions.dyn(campaignNameKey)())
-                    settings = self._getGuiSettings(message, templateName)
-                    formatted = g_settings.msgTemplates.format(templateName, templateParams)
-                    messageDataList.append(MessageData(formatted, settings))
-                messageDataList.extend(specialMessage)
-        if messageDataList:
-            callback(messageDataList)
-        else:
-            callback([MessageData(None, None)])
-        return
-
-    def __formatSpecialMissions(self, questIDs, pmQuestsIDs, message, rewards):
-        result = []
-        newAwardListCount = 0
-        retAwardListCount = 0
-        tankmenAward = False
-        camouflageGivenFor = set()
-        camouflageUnlockedFor = set()
-        for quest in self.__eventsCache.getHiddenQuests(lambda q: q.getID() in questIDs).values():
-            camouflageGivenFor.update(self.__getCamouflageGivenFor(quest))
-            camouflageUnlockedFor.update(self.__getCamouflageUnlockedFor(quest))
-
-        for qID in pmQuestsIDs:
-            pmType = personal_missions.g_cache.questByUniqueQuestID(qID)
-            quest = self.__eventsCache.getPersonalMissions().getAllQuests().get(pmType.id)
-            if quest and (qID.endswith('_main') or qID.endswith('_main_award_list')):
-                tmBonus = quest.getTankmanBonus()
-                if tmBonus.tankman:
-                    tankmenAward = True
-            if qID.endswith('add_award_list'):
-                addAwardListQI = pmType.addAwardListQuestInfo
-                tokensBonuses = addAwardListQI.get('bonus', {}).get('tokens', {})
-                retAwardListCount += sum([ tokensBonuses[token]['count'] for token in self.__TOKENS_NAME if token in tokensBonuses ])
-            if qID.endswith('add'):
-                addAwardListQI = pmType.addQuestInfo
-                tokensBonuses = addAwardListQI.get('bonus', {}).get('tokens', {})
-                newAwardListCount += sum([ tokensBonuses[token]['count'] for token in self.__TOKENS_NAME if token in tokensBonuses ])
-
-        if retAwardListCount > 0:
-            text = backport.text(R.strings.system_messages.personalMissions.freeAwardListReturn(), count=retAwardListCount)
-            result.append(text)
-        if newAwardListCount > 0:
-            text = backport.text(R.strings.system_messages.personalMissions.freeAwardListGain(), count=newAwardListCount)
-            result.append(text)
-        for vehIntCD in camouflageGivenFor:
-            vehicle = self._itemsCache.items.getItemByCD(vehIntCD)
-            text = backport.text(R.strings.system_messages.personalMissions.camouflageGiven(), vehicleName=vehicle.userName)
-            result.append(text)
-
-        for vehIntCD in camouflageUnlockedFor:
-            vehicle = self._itemsCache.items.getItemByCD(vehIntCD)
-            nationName = backport.text(R.strings.menu.nations.dyn(vehicle.nationName)())
-            text = backport.text(R.strings.system_messages.personalMissions.camouflageUnlocked(), vehicleName=vehicle.userName, nation=nationName)
-            result.append(text)
-
-        if tankmenAward:
-            result.append(backport.text(R.strings.system_messages.personalMissions.tankmenGain()))
-        if result:
-            if not rewards.get('tankmen', None):
-                return [MessageData(getDefaultMessage(normal=EOL.join(result)), self._getGuiSettings(message, DEFAULT_MESSAGE))]
-        return []
-
-    @classmethod
-    def _isQuestOfThisGroup(cls, questID):
-        searchResult = re.search(cls.__PM_TOKEN_QUEST_PATTERNS, questID)
-        return personal_missions.g_cache.isPersonalMission(questID) or searchResult
-
-    def __getCamouflageGivenFor(self, quest):
-        camouflageGivenFor = set()
-        if quest.getID().endswith('camouflage'):
-            for bonus in quest.getBonuses('customizations'):
-                camouflage = findFirst(lambda c: c.get('custType') == 'camouflage' and c.get('vehTypeCompDescr'), bonus.getCustomizations())
-                if camouflage:
-                    camouflageGivenFor.add(camouflage.get('vehTypeCompDescr'))
-
-        return camouflageGivenFor
-
-    def __getCamouflageUnlockedFor(self, quest):
-        camouflageUnlockedFor = set()
-        regex = re.search(self.__REGEX_PATTERN_BADGE, quest.getID())
-        if regex:
-            operationID = int(regex.group(2))
-            operations = self.__eventsCache.getPersonalMissions().getAllOperations()
-            if operationID in operations:
-                operation = operations[operationID]
-                camouflageUnlockedFor.add(operation.getVehicleBonus().intCD)
-        return camouflageUnlockedFor
-
-
-class PersonalMissionsFormatter(PersonalMissionsTokenQuestsFormatter):
-    _DEFAULT_TEMPLATE = 'personalMissions'
-
-    def getPopUps(self, message):
-        return getPotapovQuestPopUps(message, self._isQuestOfThisGroup)
-
-    @classmethod
-    def _isQuestOfThisGroup(cls, questID):
-        return personal_missions.g_cache.isPersonalMission(questID) and not questID.startswith('pm3')
-
-
 class SeniorityAwardsFormatter(AsyncTokenQuestsSubFormatter):
     _MESSAGE_TEMPLATE = 'SeniorityAwardsQuest'
     _MESSAGE_TEMPLATE_WITH_SELECTION = 'SeniorityAwardsQuestWithSelection'
@@ -607,7 +453,8 @@ class BattleMattersAwardsFormatterBase(ServiceChannelFormatter, TokenQuestsSubFo
         fmt = self._achievesFormatter.formatQuestAchieves(rewards, asBattleFormatter=False)
         if fmt is not None:
             questIdx = getIdxFromQuestID(questID)
-            if self.__battleMattersController.getFinalQuest().getID() == questID:
+            finalQuest = self.__battleMattersController.getFinalQuest()
+            if finalQuest and finalQuest.getID() == questID:
                 body = backport.text(R.strings.messenger.serviceChannelMessages.battleMatters.awards.done.body())
             elif self.__battleMattersController.isIntermediateBattleMattersQuestID(questID):
                 body = backport.text(R.strings.messenger.serviceChannelMessages.battleMatters.awards.medium.body(), count=text_styles.stats(str(questIdx)))
@@ -1059,211 +906,3 @@ class SkipNotificationFormatter(ServiceChannelFormatter, TokenQuestsSubFormatter
     @classmethod
     def _isQuestOfThisGroup(cls, questID):
         return questID.endswith(cls.__NOTIFICATION_QUEST_POSTFIX)
-
-
-class PersonalMission3QuestFormatter(AsyncTokenQuestsSubFormatter):
-    __TEMPLATE = 'PersonalMission3Quest'
-    __TEMPLATE_AFFIRMATIVE = 'PersonalMission3Quest15'
-    __PERSONAL_MISSIONS_ACHIEVES_CUSTOM_TEMPLATE = 'personalMissions3Custom'
-    __MAX_AWARDS = 4
-    __itemsCache = dependency.descriptor(IItemsCache)
-    __lobbyContext = dependency.descriptor(ILobbyContext)
-    __eventsCache = dependency.descriptor(IEventsCache)
-
-    def __init__(self):
-        super(PersonalMission3QuestFormatter, self).__init__()
-        self._achievesFormatter = PersonalMissionsQuestAchievesFormatter()
-
-    @adisp_async
-    @adisp_process
-    def format(self, message, callback):
-        isSynced = yield self._waitForSyncItems()
-        messageDataList = []
-        if isSynced:
-            data = message.data
-            if not data:
-                callback([MessageData(None, None)])
-            questID = data.get('potapovQuestID', 0)
-            quest = self.__eventsCache.getPersonalMissions().getAllQuests(personal_missions.PM_BRANCH.V2_BRANCHES).get(questID)
-            if not quest:
-                callback([MessageData(None, None)])
-            vehCDs = data.get('battlesUniqueVehicles', {})
-            operationID = quest.getOperationID()
-            chainID = quest.getChainID()
-            questFormatter = PMCardConditionsFormatter(quest)
-            allVehs = first([ config.get('progressData', {}).get('uniqueVehicles') for config in questFormatter.bodyFormat() if config.get('progressData', {}).get('uniqueVehicles') ], 1)
-            operation, quest = getPMOperationAndQuest(operationID, chainID, questID)
-            if allVehs <= 0 or quest is None or operation is None:
-                messageDataList = [MessageData(None, None)]
-            else:
-                messageDataList = self.__makeMessageData(message, vehCDs, allVehs, operation, quest)
-        if messageDataList:
-            callback(messageDataList)
-        else:
-            callback([MessageData(None, None)])
-        return
-
-    def __makeMessageData(self, message, vehCDs, allVehs, operation, quest):
-        vehicles = []
-        msg = []
-        for vehCD in vehCDs:
-            vehicle = self.__itemsCache.items.getItemByCD(vehCD)
-            vehicles.append({'userName': vehicle.userName,
-             'levelRoman': int2roman(vehicle.level),
-             'level': vehicle.level,
-             'type': vehicle.type,
-             'isPrem': vehicle.isPremium})
-
-        chainID = quest.getChainID()
-        chainName = i18n.makeString(operation.getChainName(chainID))
-        operationTitle = backport.text(R.strings.system_messages.personalMission.awardsNotification.operation(), operation=operation.getUserName())
-        classifier = operation.getChainClassifier(chainID).classificationAttr
-        category = PM3_ROLE_TO_ICON_NAME[classifier]
-        vehicles.sort(key=lambda veh: veh.get('level'))
-        completed = len(vehicles)
-        statusWrapped = ''
-        isCompleted = bool(not vehCDs)
-        awards = []
-        if isCompleted:
-            awards = self.__packBonuses(quest.getBonuses(), operation.isCompleted())
-        else:
-            allVehsStr = backport.text(R.strings.system_messages.personalMission.awardsNotification.status.all(), all=allVehs)
-            allVehsWrapped = g_settings.htmlTemplates.format('pm3Gray', ctx={'message': allVehsStr})
-            status = backport.text(R.strings.system_messages.personalMission.awardsNotification.status(), completed=str(completed), all=allVehsWrapped)
-            statusWrapped = g_settings.htmlTemplates.format('pm3Beige', ctx={'message': status})
-        formatted = g_settings.msgTemplates.format(self.__TEMPLATE if not quest.isFinal() else self.__TEMPLATE_AFFIRMATIVE, ctx={'header': operationTitle}, data={'buttonsStates': {'submitGhost': self.__getButtonState(quest)},
-         'savedData': {'operationID': quest.getOperationID(),
-                       'questID': quest.getID(),
-                       'chainID': chainID},
-         'linkageData': {'mission': chainName,
-                         'missionNumber': quest.getInternalID(),
-                         'category': category,
-                         'isCompleted': isCompleted,
-                         'allVehs': allVehs,
-                         'status': statusWrapped,
-                         'vehicles': vehicles,
-                         'awards': awards}})
-        msg.append(MessageData(formatted, self._getGuiSettings(message, self.__TEMPLATE, messageType=message.type)))
-        if isCompleted and message.data.get('popUpRecords'):
-            medalNotification = self.__getMedalNotification(message, chainName, quest)
-            if medalNotification:
-                msg.append(medalNotification)
-        return msg
-
-    def __getMedalNotification(self, message, chainName, quest):
-        questData = {}
-        questData['popUpRecords'] = getPotapovQuestPopUps(message, self._isQuestOfThisGroup)
-        if questData['popUpRecords']:
-            fmt = self._achievesFormatter.formatQuestAchieves({'popUpRecords': questData['popUpRecords']}, asBattleFormatter=False, processCustomizations=False, isPM3=True)
-            if fmt is not None:
-                templateParams = {}
-                campaignName = self.__eventsCache.getPersonalMissions().getAllCampaigns(personal_missions.PM_BRANCH.V2_BRANCHES)[quest.getCampaignID()].getUserName()
-                templateParams['title'] = backport.text(R.strings.messenger.serviceChannelMessages.battleResults.notification.personalMissions.dyn('c_{}'.format(quest.getCampaignID())).header())
-                achieveStage = list(questData['popUpRecords'])[0][-1]
-                if achieveStage is not True:
-                    text = backport.text(R.strings.messenger.serviceChannelMessages.battleResults.notification.personalMissions.dyn('c_{}'.format(quest.getCampaignID())).stage.dyn('c_{}'.format(str(achieveStage))).description(), categoryName=chainName, campaignName=campaignName, nameMedal=fmt)
-                else:
-                    text = backport.text(R.strings.messenger.serviceChannelMessages.battleResults.notification.personalMissions.dyn('c_{}'.format(quest.getCampaignID())).description(), campaignName=campaignName, nameMedal=fmt)
-                templateParams['text'] = text
-                settings = self._getGuiSettings(message, self.__PERSONAL_MISSIONS_ACHIEVES_CUSTOM_TEMPLATE)
-                formattedAchieves = g_settings.msgTemplates.format(self.__PERSONAL_MISSIONS_ACHIEVES_CUSTOM_TEMPLATE, templateParams)
-                return MessageData(formattedAchieves, settings)
-        return
-
-    def __packBonuses(self, bonuses, isOperationCompleted):
-        from gui.Scaleform.daapi.view.lobby.missions.awards_formatters import PersonalMissions3AwardComposer
-        composer = PersonalMissions3AwardComposer(displayedAwardsCount=self.__MAX_AWARDS)
-        if isOperationCompleted:
-            bonuses = [ bonus for bonus in bonuses if not isinstance(bonus, PersonalMissionsPointsTokensBonus) ]
-        awards = composer.getFormattedBonuses(bonuses, AWARDS_SIZES.SMALL)
-        return awards
-
-    def __getButtonState(self, quest):
-        from notification.settings import NOTIFICATION_BUTTON_STATE
-        if quest.isCompleted():
-            settings = self.__lobbyContext.getServerSettings()
-            isEnabled = settings.isPersonalMissionsEnabled(personal_missions.PM_BRANCH.PERSONAL_MISSION_3)
-            if isEnabled:
-                return NOTIFICATION_BUTTON_STATE.DEFAULT
-            return NOTIFICATION_BUTTON_STATE.VISIBLE
-        return NOTIFICATION_BUTTON_STATE.HIDDEN
-
-    @classmethod
-    def _isQuestOfThisGroup(cls, questID):
-        return personal_missions.g_cache.isPersonalMission(questID) and questID.startswith('pm3')
-
-
-class PersonalMission3CompletionFormatter(WaitItemsSyncFormatter, TokenQuestsSubFormatter):
-    __PM3_OPERATIONS_PATTERN = '|'.join(map(str, BRANCH_TO_OPERATION_IDS[PM_BRANCH.PERSONAL_MISSION_3]))
-    __PM3_TOKEN_QUEST_PATTERNS = 'pt_final_s(\\d)_t({op})_honor|pm3_campaign_finished_honor|pt_final_s(\\d)_t({op})'.format(op=__PM3_OPERATIONS_PATTERN)
-    __OPERATION_COMPLETE_PATTERN = 'token:pt:s3:t({op}):finished:base'.format(op=__PM3_OPERATIONS_PATTERN)
-    __PERSONAL_MISSIONS_HONOR_TEMPLATE = 'pm3CompletionHonor'
-    __PERSONAL_MISSIONS_OPERATION_TEMPLATE = 'pm3OperationCompletion'
-    __eventsCache = dependency.descriptor(IEventsCache)
-
-    def __init__(self):
-        super(PersonalMission3CompletionFormatter, self).__init__()
-        self._achievesFormatter = PM3CompletionFormatter()
-
-    @adisp_async
-    @adisp_process
-    def format(self, message, callback):
-        isSynced = yield self._waitForSyncItems()
-        messageDataList = []
-        if isSynced:
-            data = message.data or {}
-            dataQuestIDs = data.get('completedQuestIDs', set())
-            dataQuestIDs.update(data.get('rewardsGottenQuestIDs', set()))
-            for token in data.get('tokens', {}):
-                if re.search(self.__OPERATION_COMPLETE_PATTERN, token):
-                    bonuses = {}
-                    operationID = int(token.split(':')[3][1:])
-                    for bonus in self.__eventsCache.getPersonalMissions().getAllOperations(personal_missions.PM_BRANCH.ALL)[operationID].getPM3RewardQuest().getBonuses():
-                        if bonus.getName() != 'vehicles':
-                            bonuses[bonus.getName()] = bonus.getValue()
-                        bonuses[bonus.getName()] = [bonus.getValue()]
-
-                    fmt = self._achievesFormatter.formatQuestAchieves(bonuses, asBattleFormatter=False, processCustomizations=True)
-                    if fmt is not None:
-                        operationID = int(token.split(':')[3][1:])
-                        operationName = self.__getOperationName(operationID)
-                        templateParams = {'achieves': fmt}
-                        templateParams['title'] = backport.text(R.strings.system_messages.personalMission.operationComplete.title(), operationName=operationName)
-                        templateParams['text'] = backport.text(R.strings.system_messages.personalMission.CompletionNotification.body())
-                        settings = self._getGuiSettings(message, self.__PERSONAL_MISSIONS_OPERATION_TEMPLATE)
-                        formatted = g_settings.msgTemplates.format(self.__PERSONAL_MISSIONS_OPERATION_TEMPLATE, templateParams)
-                        messageDataList.append(MessageData(formatted, settings))
-
-            completedQuestIDs = self.getQuestOfThisGroup(dataQuestIDs)
-            for qID in completedQuestIDs:
-                rewards = getRewardsForQuests(message, {qID})
-                fmt = self._achievesFormatter.formatQuestAchieves(rewards, asBattleFormatter=False, processCustomizations=True)
-                templateParams = {'achieves': fmt}
-                if qID.endswith(PM3_PERSONAL_MISSION_HONOR_POSTFIX):
-                    if qID == PM3_CAMPAIGN_FINISHED_QUEST:
-                        campaignName = self.__getCampaignName()
-                        templateParams['title'] = backport.text(R.strings.system_messages.personalMission.campaignCompleteHonor.title(), campaignName=campaignName)
-                    else:
-                        operationID = int(qID.split('_')[-2][1:])
-                        operationName = self.__getOperationName(operationID)
-                        templateParams['title'] = backport.text(R.strings.system_messages.personalMission.operationCompleteHonor.title(), operationName=operationName)
-                    templateParams['text'] = backport.text(R.strings.system_messages.personalMission.CompletionNotification.body())
-                    settings = self._getGuiSettings(message, self.__PERSONAL_MISSIONS_HONOR_TEMPLATE)
-                    formatted = g_settings.msgTemplates.format(self.__PERSONAL_MISSIONS_HONOR_TEMPLATE, templateParams)
-                    messageDataList.append(MessageData(formatted, settings))
-
-        if messageDataList:
-            callback(messageDataList)
-        else:
-            callback([MessageData(None, None)])
-        return
-
-    @classmethod
-    def _isQuestOfThisGroup(cls, questID):
-        return re.search(cls.__PM3_TOKEN_QUEST_PATTERNS, questID)
-
-    def __getOperationName(self, operationID):
-        return self.__eventsCache.getPersonalMissions().getAllOperations(personal_missions.PM_BRANCH.V2_BRANCHES)[operationID].getUserName()
-
-    def __getCampaignName(self):
-        return self.__eventsCache.getPersonalMissions().getAllCampaigns(personal_missions.PM_BRANCH.V2_BRANCHES)[PM_CAMPAIGNS_IDS[personal_missions.PM_BRANCH.PERSONAL_MISSION_3]].getUserName()

@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: battle_royale/scripts/client/battle_royale/gui/battle_control/controllers/br_battle_sounds.py
+from __future__ import absolute_import
 import logging
 import BigWorld
 import SoundGroups
@@ -446,12 +447,12 @@ class InstallModuleSoundPlayer(IProgressionListener, IViewComponentsCtrlListener
     __sessionProvider = dependency.descriptor(IBattleSessionProvider)
     __PLAYER_MIDDLE_LEVEL = 4
 
-    def setVehicleChangeResponse(self, itemCD, success):
+    def setVehicleChangeResponse(self, intCD, success):
         if not success:
             return
         else:
             progressionCtrl = self.__sessionProvider.dynamic.progression
-            module = progressionCtrl.getModule(itemCD)
+            module = progressionCtrl.getModule(intCD)
             typeCD = module.descriptor.typeID
             moduleLevel = module.level
             if moduleLevel == self.__PLAYER_MIDDLE_LEVEL:
@@ -459,7 +460,7 @@ class InstallModuleSoundPlayer(IProgressionListener, IViewComponentsCtrlListener
             elif moduleLevel == progressionCtrl.maxLevel:
                 eventName = BREvents.LEVEL_UP_MAX
             elif typeCD == GUI_ITEM_TYPE.CHASSIS:
-                if isItemVehicleHull(itemCD, progressionCtrl.getCurrentVehicle()):
+                if isItemVehicleHull(intCD, progressionCtrl.getCurrentVehicle()):
                     eventName = BREvents.INSTALL_MODULE_HULL
                 else:
                     eventName = BREvents.INSTALL_MODULE_CHASSIS
@@ -508,7 +509,7 @@ class EnemiesAmountSoundPlayer(IVehicleCountListener):
         self.__frags = None
         return
 
-    def setVehicles(self, count, _, teams):
+    def setVehicles(self, count, _, __):
         if self.__enemiesCount is not None and count != self.__enemiesCount:
             bonusType = self.__sessionProvider.arenaVisitor.getArenaBonusType()
             isSquad = bonusType in ARENA_BONUS_TYPE.BATTLE_ROYALE_SQUAD_RANGE
@@ -541,8 +542,8 @@ class PhaseSoundPlayer(IProgressionListener, IVehicleCountListener):
         self.__updatePhase()
         return
 
-    def setVehicles(self, count, _, teams):
-        self.__enemyTeamsCount = teams
+    def setVehicles(self, _, __, teamsCount):
+        self.__enemyTeamsCount = teamsCount
         self.__updatePhase()
 
     def setAverageBattleLevel(self, level):
@@ -775,13 +776,13 @@ class BerserkerSoundPlayer(VehicleStateSoundPlayer, CallbackDelayer):
         CallbackDelayer.destroy(self)
         super(BerserkerSoundPlayer, self).destroy()
 
-    def _onVehicleStateUpdated(self, state, berserkerData):
+    def _onVehicleStateUpdated(self, state, value):
         if state == VEHICLE_VIEW_STATE.BERSERKER:
-            if berserkerData['duration'] <= 0:
+            if value['duration'] <= 0:
                 self.__stopEffect()
                 return
             self.__stopEffect()
-            self.__period = berserkerData['tickInterval']
+            self.__period = value['tickInterval']
             self.delayCallback(self.__period, self.__updateEffect)
 
     def __updateEffect(self):

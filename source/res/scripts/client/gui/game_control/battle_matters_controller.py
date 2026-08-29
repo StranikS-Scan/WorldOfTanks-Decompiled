@@ -160,7 +160,8 @@ class BattleMattersController(IBattleMattersController):
         return False
 
     def isFinalQuest(self, quest):
-        return quest.getID() == self.getFinalQuest().getID()
+        finalQuest = self.getFinalQuest()
+        return finalQuest and quest.getID() == finalQuest.getID()
 
     def getFinalQuest(self):
         quests = self.getIntermediateQuests()
@@ -200,6 +201,8 @@ class BattleMattersController(IBattleMattersController):
         return self.getBattleMattersQuests(filterFunc)
 
     def getBattleMattersQuests(self, filterFunc=None):
+        if not (self.__battleMattersQuests or self.__eventsCache.waitForSync):
+            self._updateBattleMattersQuests()
         if filterFunc:
             return [ quest for quest in self.__battleMattersQuests if filterFunc(quest) ]
         return self.__battleMattersQuests

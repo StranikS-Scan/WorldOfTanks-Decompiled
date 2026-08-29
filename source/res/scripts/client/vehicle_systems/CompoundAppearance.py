@@ -15,9 +15,11 @@ import items.vehicles
 import BattleReplay
 import SoundGroups
 import Vehicular
+import Compound
 from CustomEffect import EffectSettings
 from CustomEffectManager import CustomEffectManager
 from Event import Event
+from vehicle_hierarchy import ReparentToRootOnHierarchyDestroy
 from debug_utils import LOG_ERROR
 from aih_constants import ShakeReason
 from shared_utils import findFirst
@@ -29,9 +31,8 @@ from vehicle_systems.components.vehicle_shadow_manager import VehicleShadowManag
 from vehicle_systems.stricted_loading import makeCallbackWeak, loadingPriority
 from vehicle_systems.tankStructure import VehiclePartsTuple, TankNodeNames, TankPartIndexes, TankSoundObjectsIndexes
 from vehicle_systems.components.highlighter import Highlighter
-from vehicle_systems.vehicle_composition import getExtraSlotMap, getObjectSlots, createVehicleComposition, removeComposition
+from vehicle_systems.vehicle_composition import removeComposition
 from helpers.EffectsList import SpecialKeyPointNames
-from objects_hierarchy import PrefabsMapItem
 from vehicle_systems import camouflages
 from vehicle_systems import model_assembler
 from VehicleEffects import DamageFromShotDecoder
@@ -121,6 +122,7 @@ class CompoundAppearance(CommonTankAppearance):
         self.__inSpeedTreeCollision = False
         self.__tmpGameObjects = {}
         self.__engineStarted = False
+        self.__engineStartScheduled = False
         self.__turbochargerSoundPlaying = False
         self.partsGameObjects = PartsGameObjects()
         self.__resourceLoadID = None
@@ -146,8 +148,8 @@ class CompoundAppearance(CommonTankAppearance):
             self.__dirtLastUpdateTime = ctx.gameTime
 
     def __arenaPeriodChanged(self, period, *otherArgs):
-        if self.detailedEngineState:
-            engine_state.notifyEngineOnArenaPeriodChange(self.detailedEngineState, period)
+        if self.detailedEngineState and not self.__engineStartScheduled:
+            self.__engineStartScheduled = engine_state.notifyEngineOnArenaPeriodChange(self.detailedEngineState, period)
 
     @property
     def _vehicleColliderInfo(self):
@@ -186,8 +188,8 @@ class CompoundAppearance(CommonTankAppearance):
             arena.onPeriodChange += self.__arenaPeriodChanged
             arena.onVehicleUpdated += self.__vehicleUpdated
             player.inputHandler.onCameraChanged += self._onCameraChanged
-            if ctx.detailedEngineState:
-                engine_state.checkEngineStart(ctx.detailedEngineState, arena.period)
+            if self.detailedEngineState:
+                self.__engineStartScheduled = engine_state.checkEngineStart(self.detailedEngineState, arena.period)
             if self.isObserver:
                 self.disableCustomEffects()
             self.__activationState = _ActivationState.ACTIVATED
@@ -232,6 +234,7 @@ class CompoundAppearance(CommonTankAppearance):
             if self.__resourceLoadID is not None:
                 BigWorld.stopLoadResourceListBGTask(self.__resourceLoadID)
             self.__engineStarted = False
+            self.__engineStartScheduled = False
             self.__activationState = _ActivationState.DEACTIVATED
             super(CompoundAppearance, self).onDeactivate(ctx)
             if self.__inSpeedTreeCollision:
@@ -490,9 +493,9 @@ class CompoundAppearance(CommonTankAppearance):
             self.vehicleStickers.delDamageSticker(code)
         return
 
-    def addDamageSticker(self, code, stickerID, data, isActive=False):
+    def addDamageSticker(self, code, stickerID, prefabEffIndex, data, isActive=False):
         if self.vehicleStickers is not None:
-            self.vehicleStickers.addDamageSticker(code, stickerID, data, self.collisions, self.isCompositionReady, isActive)
+            self.vehicleStickers.addDamageSticker(code, stickerID, prefabEffIndex, data, self.collisions, self.isCompositionReady, isActive)
         return
 
     def receiveShotImpulse(self, direction, impulse):
@@ -596,6 +599,9 @@ class CompoundAppearance(CommonTankAppearance):
         assembler = model_assembler.prepareCompoundAssembler(self.typeDescriptor, modelsSetParams, self._spaceID, self.isTurretDetached)
         collisionAssembler = model_assembler.prepareCollisionAssembler(self.typeDescriptor, self.isTurretDetached, self._spaceID)
         self.__resourceLoadID = BigWorld.loadResourceListBG((assembler, collisionAssembler), makeCallbackWeak(self.__onModelsRefresh, modelsSetParams.state), loadingPriority(self._vehicle.id))
+        CGF.postEvent(self.spaceID, Compound.AppearanceRefreshRequestedEvent(self._entityGameObject))
+        self.__reparentEffects()
+        self.__deactivateShotEffect()
 
     def __onModelsRefresh(self, modelState, resourceList):
         _logger.debug('CompoundAppearance.__onModelsRefresh (%r)', self.id)
@@ -644,18 +650,39 @@ class CompoundAppearance(CommonTankAppearance):
             self.boundEffects.reattachTo(self.compoundModel)
             self.filter.syncGunAngles(prevTurretYaw, prevGunPitch)
             self._updateAttachments()
-            prefabMap = [ PrefabsMapItem(attachment.slotName, attachment.modelName) for attachment in self.attachments if not attachment.hidden ]
-            extraSlots = getExtraSlotMap(self.typeDescriptor, self) + getObjectSlots(self.typeDescriptor)
-            dynSlots = None
-            if self.typeDescriptor.type.isWheeledVehicle:
-                dynSlots = self.typeDescriptor.chassis.generalWheelsAnimatorConfig.getNonTrackWheelNodeNames()
             self.setCompositionReady(False)
-            removeComposition(self._gameObject)
-            createVehicleComposition(gameObject=self._gameObject, vehicleGameObject=self._entityGameObject, prefabMap=prefabMap, followNodes=True, extraSlots=extraSlots, dynSlotNodes=dynSlots)
+            removeComposition(self._gameObject, queue)
+            self.createVehicleComposition(queue)
             self.__activationState = _ActivationState.MODEL_UPDATING
             queue.deactivateGameObject(self._gameObject)
             queue.activateGameObject(self._gameObject)
             return
+
+    def __reparentEffects(self):
+        effectItems = CGF.findInHierarchyWithComponent(self._gameObject, ReparentToRootOnHierarchyDestroy, False)
+        if not effectItems:
+            return
+        entityTransformComponent = self._entityGameObject.findWrite(CGF.TransformComponent)
+        appWorldTransform = entityTransformComponent.worldTransform
+        appWorldTransform.invert()
+        for effect in effectItems:
+            transformComponent = effect.object.findWrite(CGF.TransformComponent)
+            hierarchyComponent = effect.object.findWrite(CGF.HierarchyComponent)
+            if not transformComponent or not hierarchyComponent:
+                _logger.error('Unable to find TransformComponent or HierarchyComponent')
+                continue
+            newLocal = transformComponent.worldTransform
+            newLocal.postMultiply(appWorldTransform)
+            transformComponent.transform = newLocal
+            hierarchyComponent.parent = self._entityGameObject.uuid
+
+    def __deactivateShotEffect(self):
+        if self.typeDescriptor.gun.prefabBased:
+            return
+        shotEffectGo = GenericComponents.findSlot(self._entityGameObject, self._getShotEffectSlotName())
+        if shotEffectGo.valid:
+            queue = CGF.CommandQueue(self._spaceID)
+            queue.deactivateGameObject(shotEffectGo)
 
     def __activateOnModelUpdate(self, ctx):
         self._calcWeaponEnergy(ctx.collisions)

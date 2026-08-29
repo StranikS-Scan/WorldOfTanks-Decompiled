@@ -10,7 +10,7 @@ from constants import VEHICLE_SIEGE_STATE as PILLBOX_STATES, VEHICLE_MISC_STATUS
 from events_containers.common.containers import ContainersListener
 from events_handler import eventHandler
 from helpers import dependency
-from gui.battle_control.battle_constants import DEVICE_STATE_CRITICAL, DEVICE_STATE_DESTROYED, VEHICLE_DEVICE_IN_COMPLEX_ITEM
+from gui.battle_control.battle_constants import DEVICE_STATE_CRITICAL, DEVICE_STATE_DESTROYED
 from gui.Scaleform.daapi.view.battle.shared.vehicle_mechanics.mechanic_widgets.vehicle_mechanic_widget import HotKeyData
 from gui.Scaleform.daapi.view.meta.PillboxSiegeWidgetMeta import PillboxSiegeWidgetMeta
 from gui.Scaleform.genConsts.PILLBOX_SIEGE_WIDGET_CONST import PILLBOX_SIEGE_WIDGET_CONST
@@ -18,7 +18,7 @@ from gui.veh_mechanics.battle.updaters.hotkey_updaters import HotKeysViewUpdater
 from gui.veh_mechanics.battle.updaters.mechanics.mechanic_commands_updater import VehicleMechanicCommandsUpdater
 from gui.veh_mechanics.battle.updaters.mechanics.mechanic_passenger_updater import VehicleMechanicPassengerUpdater
 from gui.veh_mechanics.battle.updaters.mechanics.mechanic_states_updater import VehicleMechanicStatesUpdater
-from gui.veh_mechanics.battle.updaters.vehicle_device_view_updater import IVehicleDeviceStatusView, VehicleDeviceStatusUpdater
+from gui.veh_mechanics.battle.updaters.vehicle_device_view_updater import IVehicleDeviceStatusView, VehicleDeviceStatusUpdater, makeUIDeviceState
 from gui.veh_mechanics.battle.updaters.vehicle_misc_status_view_updater import VehicleMiscStatusUpdater, IVehicleMiscStatusView, MISC_STATUS_LEVEL_CRITICAL, MISC_STATUS_LEVEL_WARNING
 from skeletons.gui.battle_session import IBattleSessionProvider
 from vehicles.mechanics.mechanic_commands import IMechanicCommandsListenerLogic
@@ -85,7 +85,7 @@ class PillboxSiegeMechanicWidget(PillboxSiegeWidgetMeta, ContainersListener, IMe
 
     def vehicleDeviceStatusChanged(self, devicesStatuses):
         self.__devicesStatuses = devicesStatuses
-        self.as_setDeviceStatesS([ self.__makeDeviceState(*deviceStatus) for deviceStatus in devicesStatuses.items() ])
+        self.as_setDeviceStatesS(makeUIDeviceState(devicesStatuses))
         self.__invalidateCondition()
 
     def _dispose(self):
@@ -112,10 +112,6 @@ class PillboxSiegeMechanicWidget(PillboxSiegeWidgetMeta, ContainersListener, IMe
             return PILLBOX_SIEGE_WIDGET_CONST.CONDITION_NORMAL
         else:
             return PILLBOX_SIEGE_WIDGET_CONST.CONDITION_CRITICAL if self.__miscStatuses and self.__miscStatuses.hasNegativeEffect else self._PILLBOX_CONDITIONS.get(self.__devicesStatuses.get('engine'), PILLBOX_SIEGE_WIDGET_CONST.CONDITION_NORMAL)
-
-    def __makeDeviceState(self, deviceName, deviceState):
-        return {'deviceName': VEHICLE_DEVICE_IN_COMPLEX_ITEM.get(deviceName, deviceName),
-         'deviceState': deviceState}
 
     def __invalidateState(self, state, isInstantly=False):
         self.__invalidateProgress(state)

@@ -13,9 +13,6 @@ from helpers.CallbackDelayer import CallbackDelayer
 _logger = logging.getLogger(__name__)
 
 class ConsistentMatrices(object):
-    attachedVehicleMatrix = property(lambda self: self.__attachedVehicleMatrix)
-    ownVehicleMatrix = property(lambda self: self.__ownVehicleMProv)
-    ownVehicleTurretMProv = property(lambda self: self.__ownVehicleTurretMProv)
 
     def __init__(self):
         self.__attachedVehicleMatrix = Math.WGAdaptiveMatrixProvider()
@@ -25,6 +22,18 @@ class ConsistentMatrices(object):
         self.__ownVehicleTurretMProv = Math.WGAdaptiveMatrixProvider()
         self.__ownVehicleTurretMProv.target = math_utils.createIdentityMatrix()
         self.onVehicleMatrixBindingChanged = Event()
+
+    @property
+    def attachedVehicleMatrix(self):
+        return self.__attachedVehicleMatrix
+
+    @property
+    def ownVehicleMatrix(self):
+        return self.__ownVehicleMProv
+
+    @property
+    def ownVehicleTurretMProv(self):
+        return self.__ownVehicleTurretMProv
 
     def notifyEnterWorld(self, avatar):
         self.notifyVehicleChanged(avatar)

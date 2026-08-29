@@ -1741,7 +1741,6 @@
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <invisibilityFactorAtShot>	0.18	</invisibilityFactorAtShot>
-          <multiGunEffects>	shot_dualgun1_large_mb_L shot_dualgun1_large_mb_R	</multiGunEffects>
           <dualGun>
             <chargeTime>	2	</chargeTime>
             <shootImpulse>	200	</shootImpulse>
@@ -1752,6 +1751,9 @@
             <afterShotDelay>	1	</afterShotDelay>
             <preChargeIndication>	0.25	</preChargeIndication>
           </dualGun>
+          <prefabs>
+            <main>	content/CGFPrefabs/Vehicle/guns/ussr/gun_122mm_BL_13C_dualgun.prefab	</main>
+          </prefabs>
           <customizationSlots>
             <slot>
               <slotType>	paint	</slotType>
@@ -1807,6 +1809,7 @@
             <collisionModelClient>	vehicles/russian/R204_ISU_122_2/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
           <edgeByVisualModel>	false	</edgeByVisualModel>
+          <muzzleBrake>	HORIZONTAL	</muzzleBrake>
           <camouflage>
             <density>	102.285858 103.163147	</density>
             <aoTextureSize>	512 512	</aoTextureSize>

@@ -7,9 +7,9 @@
     <radioman></radioman>
   </crew>
   <supplySlots>	3 1 1 6 6 6 7 8 8 8	</supplySlots>
-  <postProgressionTree>	role_LT_wheeled	</postProgressionTree>
+  <postProgressionTree>	role_LT_scout	</postProgressionTree>
   <speedLimits>
-    <forward>	65	</forward>
+    <forward>	70	</forward>
     <backward>	65	</backward>
   </speedLimits>
   <invisibility>
@@ -1566,7 +1566,7 @@
         <maxRegenHealth>	60	</maxRegenHealth>
         <repairCost>	1.0	</repairCost>
       </turretRotatorHealth>
-      <circularVisionRadius>	290	</circularVisionRadius>
+      <circularVisionRadius>	300	</circularVisionRadius>
       <surveyingDeviceHealth>
         <maxHealth>	80	</maxHealth>
         <maxRegenHealth>	40	</maxRegenHealth>
@@ -2077,7 +2077,7 @@
         <maxRegenHealth>	60	</maxRegenHealth>
         <repairCost>	1.0	</repairCost>
       </turretRotatorHealth>
-      <circularVisionRadius>	300	</circularVisionRadius>
+      <circularVisionRadius>	310	</circularVisionRadius>
       <surveyingDeviceHealth>
         <maxHealth>	80	</maxHealth>
         <maxRegenHealth>	40	</maxRegenHealth>
@@ -2241,6 +2241,7 @@
           </customization>
           <effects>	shot_medium_mb	</effects>
           <reloadEffect>	reload50_75	</reloadEffect>
+          <muzzleBrake>	HORIZONTAL	</muzzleBrake>
           <camouflage>
             <tiling>	2 1 0.000000 0.000000	</tiling>
             <density>	124.519 125.812	</density>
@@ -2683,11 +2684,11 @@
       <engines>
         <Panhard_I_S_K_4F_II_bis>
           <smplEnginePower>	285	</smplEnginePower>
-          <smplFwMaxSpeed>	65	</smplFwMaxSpeed>
+          <smplFwMaxSpeed>	70	</smplFwMaxSpeed>
         </Panhard_I_S_K_4F_II_bis>
         <Panhard_4E>
           <smplEnginePower>	315	</smplEnginePower>
-          <smplFwMaxSpeed>	65	</smplFwMaxSpeed>
+          <smplFwMaxSpeed>	70	</smplFwMaxSpeed>
         </Panhard_4E>
       </engines>
       <chassis>

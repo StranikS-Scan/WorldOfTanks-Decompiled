@@ -2,7 +2,7 @@
 # Embedded file name: comp7_light/scripts/client/comp7_light/gui/impl/lobby/battle_results/states.py
 from __future__ import absolute_import
 from functools import partial
-from frameworks.state_machine.transitions import TransitionType
+from frameworks_common.state_machine.transitions import TransitionType
 from gui.Scaleform.framework.entities.View import ViewKey
 from gui.battle_results.settings import PLAYER_TEAM_RESULT
 from gui.impl.lobby.battle_results.states import generatePostBattleStateClasses, PostBattleResultsEntryProto, LoadingProto, LoadingWithRetainedCameraProto, PostBattleResultsProto, OverviewTabProto, TeamScoreTabProto, MissionProgressTabProto, FinancialReportTabProto, PBSSceneSetup, shouldHijackPBSEntry

@@ -11,10 +11,11 @@ from messenger.proto.xmpp.gloox_constants import SUBSCRIPTION as _SUB
 from messenger.proto.xmpp.log_output import g_logOutput, CLIENT_LOG_AREA as _LOG
 from messenger.proto.xmpp.xmpp_constants import XMPP_ITEM_TYPE, CONTACT_ERROR_ID, LIMIT_ERROR_ID, CONTACT_LIMIT
 from messenger.proto.xmpp.xmpp_items import SubPendingItem
-from messenger.storage import storage_getter
+from messenger.storage import MessengerStorageDescriptor, UsersStorage
 _INBOUND_SUB_REMOVE_TAGS = {USER_TAG.SUB_IN_PROCESS, USER_TAG.SUB_CANCELED, USER_TAG.SUB_APPROVED}
 
 class InboundSubscriptionsBatch(object):
+    usersStorage = MessengerStorageDescriptor(UsersStorage)
     __slots__ = ('_subs', '_cancelTasks', '_approveTasks', '_newRqs', '_oldRqs')
 
     def __init__(self):
@@ -24,10 +25,6 @@ class InboundSubscriptionsBatch(object):
         self._approveTasks = {}
         self._newRqs = []
         self._oldRqs = []
-
-    @storage_getter('users')
-    def usersStorage(self):
-        return None
 
     def clear(self):
         self._subs = []
@@ -125,16 +122,13 @@ class InboundSubscriptionsBatch(object):
 
 
 class SubscriptionsRestrictions(object):
+    usersStorage = MessengerStorageDescriptor(UsersStorage)
     __slots__ = ('_useCachedCounts', '_cachedRosterCount')
 
     def __init__(self):
         super(SubscriptionsRestrictions, self).__init__()
         self._useCachedCounts = False
         self._cachedRosterCount = 0
-
-    @storage_getter('users')
-    def usersStorage(self):
-        return None
 
     def setToUseCachedCounts(self, flag):
         if self._useCachedCounts == flag:

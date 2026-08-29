@@ -21,7 +21,7 @@ from messenger.proto.xmpp.gloox_constants import IQ_TYPE, PRESENCE, MESSAGE_TYPE
 from messenger.proto.xmpp.gloox_wrapper import ClientHolder
 from messenger.proto.xmpp.messages.provider import ChatProvider
 from messenger.proto.xmpp.wrappers import ChatMessage
-from messenger.storage import storage_getter
+from messenger.storage import ChannelsStorage, MessengerStorageDescriptor
 from skeletons.gui.game_control import IGameSessionController
 _logger = logging.getLogger(__name__)
 
@@ -34,6 +34,7 @@ class _HISTORY_RQ_STATE(object):
 
 
 class ChatSessionHistoryRequester(ClientHolder):
+    channelsStorage = MessengerStorageDescriptor(ChannelsStorage)
 
     def __init__(self, limits):
         super(ChatSessionHistoryRequester, self).__init__()
@@ -46,10 +47,6 @@ class ChatSessionHistoryRequester(ClientHolder):
         self.__state = _HISTORY_RQ_STATE.FREE
         self.__isSuspend = True
         return
-
-    @storage_getter('channels')
-    def channelsStorage(self):
-        return None
 
     def release(self):
         if self.__isSuspend:

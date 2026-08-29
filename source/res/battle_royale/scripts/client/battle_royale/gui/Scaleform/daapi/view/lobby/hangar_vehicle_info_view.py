@@ -1,12 +1,13 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: battle_royale/scripts/client/battle_royale/gui/Scaleform/daapi/view/lobby/hangar_vehicle_info_view.py
+from __future__ import absolute_import
 import logging
 import CommandMapping
 from CurrentVehicle import g_currentVehicle
 from gui.Scaleform.daapi.view.common.battle_royale import br_helpers
 from gui.shared.gui_items.Vehicle import getTypeBigIconPath
 from battle_royale.gui.Scaleform.daapi.view.common.veh_modules_config_cmp import VehicleModulesConfiguratorCmp
-from battle_royale_sounds import BATTLE_ROYALE_VEHICLE_INFO_SOUND_SPACE
+from battle_royale.gui.Scaleform.daapi.view.lobby.battle_royale_sounds import BATTLE_ROYALE_VEHICLE_INFO_SOUND_SPACE
 from gui.Scaleform.daapi.view.meta.BattleRoyaleVehicleInfoMeta import BattleRoyaleVehicleInfoMeta
 from gui.impl import backport
 from gui.impl.gen import R

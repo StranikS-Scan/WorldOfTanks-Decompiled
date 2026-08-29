@@ -3,8 +3,8 @@
 from __future__ import absolute_import
 from future.utils import viewvalues
 from typing import TYPE_CHECKING
-from frameworks.state_machine import StateFlags
-from frameworks.state_machine.transitions import TransitionType
+from frameworks_common.state_machine import StateFlags
+from frameworks_common.state_machine.transitions import TransitionType
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.framework.entities.View import ViewKey
 from gui.Scaleform.lobby_entry import getLobbyStateMachine
@@ -22,7 +22,7 @@ from skeletons.gui.game_control import IBattlePassController
 from skeletons.gui.impl import IGuiLoader
 if TYPE_CHECKING:
     from typing import Union
-    from frameworks.state_machine import State
+    from frameworks_common.state_machine import State
 _BP = R.aliases.battle_pass
 
 def registerStates(machine):

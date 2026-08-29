@@ -1899,7 +1899,6 @@
           </shotDispersionFactors>
           <aimingTime>	2.3	</aimingTime>
           <invisibilityFactorAtShot>	0.123	</invisibilityFactorAtShot>
-          <multiGunEffects>	shot_dualgun_main_mb_L shot_dualgun_main_mb_R	</multiGunEffects>
           <dualGun>
             <chargeTime>	1.5	</chargeTime>
             <shootImpulse>	200	</shootImpulse>
@@ -1910,6 +1909,9 @@
             <afterShotDelay>	1	</afterShotDelay>
             <preChargeIndication>	0.25	</preChargeIndication>
           </dualGun>
+          <prefabs>
+            <main>	content/CGFPrefabs/Vehicle/guns/uk/gun_Twin_OQF_77mm_Gun_Mk_II.prefab	</main>
+          </prefabs>
           <models>
             <undamaged>	vehicles/british/GB156_Black_Prince_II/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/british/GB156_Black_Prince_II/crash/lod0/Gun_01.model	</destroyed>
@@ -1964,6 +1966,7 @@
               <camouflage>	GUN	</camouflage>
             </customizableVehicleAreas>
           </customization>
+          <muzzleBrake>	HORIZONTAL	</muzzleBrake>
           <camouflage>
             <density>	146.676208 147.051361	</density>
             <aoTextureSize>	512 256	</aoTextureSize>

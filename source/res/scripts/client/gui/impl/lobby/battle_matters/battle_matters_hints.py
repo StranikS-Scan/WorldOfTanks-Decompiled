@@ -327,9 +327,7 @@ class FightBtnMultiShowHint(_BMManualTriggeredHint, IGlobalListener):
                 items = battle_selector_items.getItems()
                 selected = items.update(prbDispatcher.getFunctionalState())
                 return prbEntity.canPlayerDoAction().isValid and not selected.isLocked()
-        else:
-            return False
-        return
+        return False
 
 
 class EntryPointHint(_BMManualTriggeredHint):

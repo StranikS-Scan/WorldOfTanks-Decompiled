@@ -1,21 +1,15 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/tank_setup/array_providers/shell.py
+from itertools import chain
 from gui.impl.gen.view_models.views.lobby.tank_setup.sub_views.shell_slot_model import ShellSlotModel
-from gui.impl.gen.view_models.views.lobby.tank_setup.sub_views.shell_specification_model import ShellSpecificationModel
 from gui.impl.lobby.tank_setup.array_providers.base import VehicleBaseArrayProvider
+from gui.impl.lobby.tank_setup.tank_setup_helper import createShellSpecificationModel
 from gui.impl.wrappers.user_compound_price_model import BuyPriceModelBuilder
-from gui.shared.items_parameters import params_helper
-from gui.shared.items_parameters.formatters import MEASURE_UNITS, formatParameter
-from gui.shared.utils import AVG_DAMAGE_PER_SECOND
+from gui.shared.items_parameters.shell_mechanics_helper import getShellParameters
+from gui.shared.items_parameters.shell_params import BASE_SHELL_PARAMETERS, getMechanicParameters
 from post_progression_common import TankSetupGroupsId
-from helpers import dependency, i18n
+from helpers import dependency
 from skeletons.gui.shared import IItemsCache
-_SHELLS_INFO_PARAMS = ('avgDamage',
- AVG_DAMAGE_PER_SECOND,
- 'avgPiercingPower',
- 'shotSpeed',
- 'explosionRadius',
- 'stunDurationList')
 
 class ShellProvider(VehicleBaseArrayProvider):
     __slots__ = ()
@@ -79,12 +73,10 @@ class ShellProvider(VehicleBaseArrayProvider):
     def _fillSpecification(self, model, item):
         specifications = model.getSpecifications()
         specifications.clear()
-        for paramName in _SHELLS_INFO_PARAMS:
-            specificationModel = ShellSpecificationModel()
-            specificationModel.setParamName(paramName)
-            specificationModel.setMetricValue(i18n.makeString(MEASURE_UNITS.get(paramName, '')))
-            shellParam = params_helper.getParameters(item, self._getVehicle().descriptor)
-            specificationModel.setValue(formatParameter(paramName, shellParam.get(paramName)) or '')
+        vehicle = self._getVehicle()
+        mechanic, parameters = getShellParameters(vehicle, item)
+        for paramName in chain(BASE_SHELL_PARAMETERS, getMechanicParameters(mechanic, parameters)):
+            specificationModel = createShellSpecificationModel(paramName, parameters, mechanic)
             specifications.addViewModel(specificationModel)
 
         specifications.invalidate()

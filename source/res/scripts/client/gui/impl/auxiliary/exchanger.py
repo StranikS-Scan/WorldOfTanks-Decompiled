@@ -64,7 +64,7 @@ class Exchanger(object):
     __slots__ = ('__submitter', '__fromItemType', '__toItemType', 'onUpdated')
 
     def __init__(self, fromItemType, toItemType):
-        submitter = _TYPE_TO_SUBMITTER_MAP.get((fromItemType, toItemType), None)
+        submitter = _TYPE_TO_SUBMITTER_MAP.get((fromItemType, toItemType))
         if submitter is None:
             _logger.error('not supported exchange type: from %s to %s', fromItemType, toItemType)
             submitter = ExchangeSubmitterBase()

@@ -18,7 +18,6 @@ from gui.shared.gui_items.Vehicle import getSmallIconPath, getIconPath
 from helpers import dependency, i18n
 from messenger.m_constants import USER_TAG
 from skeletons.account_helpers.settings_core import ISettingsCore
-from skeletons.gui.game_control import IRankedBattlesController
 from skeletons.gui.lobby_context import ILobbyContext
 _STAT_VALUES_VO_REPLACER = {'damageAssisted': 'damageAssistedSelf',
  'damageAssistedStun': 'damageAssistedStunSelf'}
@@ -144,37 +143,8 @@ class RegularVehicleStatsBlock(base.StatsBlock):
         self.isTeamKiller = result.isTeamKiller
 
 
-class RankedBattlesVehicleStatsBlock(RegularVehicleStatsBlock):
-    __slots__ = ('rank', 'rankIcon')
-    __rankedController = dependency.descriptor(IRankedBattlesController)
-
-    def __init__(self, meta=None, field='', *path):
-        super(RankedBattlesVehicleStatsBlock, self).__init__(meta, field, *path)
-        self.rankIcon = None
-        self.rank = 0
-        return
-
-    def setRecord(self, result, reusable):
-        super(RankedBattlesVehicleStatsBlock, self).setRecord(result, reusable)
-        player = result.player
-        avatar = reusable.avatars.getAvatarInfo(player.dbID)
-        prevRank = avatar.prevAccRank
-        self.rankIcon = self.__makeRankIcon(prevRank)
-        self.rank = prevRank
-
-    def _setTotalStats(self, result, noPenalties):
-        super(RankedBattlesVehicleStatsBlock, self)._setTotalStats(result, noPenalties)
-        if noPenalties:
-            self.xp = result.xp - result.xpPenalty
-            self.xpSort = result.xp - result.xpPenalty
-
-    def __makeRankIcon(self, rankID):
-        displayInfo = self.__rankedController.getRankDisplayInfoForBattle(rankID)
-        return backport.image(R.images.gui.maps.icons.rankedBattles.ranks.c_24x24.dyn('ranks_group{}_{}'.format(displayInfo.division, displayInfo.level))()) if displayInfo.isGroup else backport.image(R.images.gui.maps.icons.rankedBattles.ranks.c_24x24.dyn('rank{}_{}'.format(displayInfo.division, displayInfo.level))())
-
-
 class EpicVehicleStatsBlock(RegularVehicleStatsBlock):
-    __slots__ = ('playerRank', 'respawns', '__allAdded')
+    __slots__ = ('__allAdded',)
 
     def __init__(self, meta=None, field='', *path):
         super(EpicVehicleStatsBlock, self).__init__(meta, field, *path)
@@ -365,21 +335,6 @@ class AllRegularVehicleStatValuesBlock(base.StatsBlock):
             add(block)
 
 
-class AllRankedVehicleStatValuesBlock(base.StatsBlock):
-    __slots__ = ()
-
-    def setRecord(self, result, reusable):
-        isPersonal, iterator = result
-        add = self.addNextComponent
-        stunFilter = _getStunFilter()
-        for vehicle in iterator:
-            block = RankedVehicleStatValuesBlock()
-            block.setPersonal(isPersonal)
-            block.addFilters(stunFilter)
-            block.setRecord(vehicle, reusable)
-            add(block)
-
-
 class AllEpicVehicleStatValuesBlock(base.StatsBlock):
     __slots__ = ()
 
@@ -506,13 +461,6 @@ class RegularTeamStatsBlock(TeamStatsBlock):
 
     def __init__(self, meta=None, field='', *path):
         super(RegularTeamStatsBlock, self).__init__(RegularVehicleStatsBlock, meta, field, *path)
-
-
-class RankedBattlesTeamStatsBlock(TeamStatsBlock):
-    __slots__ = ()
-
-    def __init__(self, meta=None, field='', *path):
-        super(RankedBattlesTeamStatsBlock, self).__init__(RankedBattlesVehicleStatsBlock, meta, field, *path)
 
 
 class EpicTeamStatsBlock(TeamStatsBlock):

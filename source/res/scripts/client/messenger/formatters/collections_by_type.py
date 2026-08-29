@@ -2,17 +2,14 @@
 # Embedded file name: scripts/client/messenger/formatters/collections_by_type.py
 from chat_shared import SYS_MESSAGE_TYPE as _SM_TYPE
 from gui.gift_system.proxy import GiftSystemMessagesProxy
-from gui.shared.system_factory import registerMessengerClientFormatter, registerTokenQuestsSubFormatters, registerMessengerServerFormatter, registerLootBoxAutoOpenSubFormatters
-from messenger.formatters import auto_boxes_subformatters, token_quest_subformatters
+from gui.shared.system_factory import registerLootBoxAutoOpenSubFormatters, registerMessengerClientFormatter, registerMessengerServerFormatter, registerTokenQuestsSubFormatters
+from messenger.formatters import auto_boxes_subformatters, personal_missions_formatters
 from messenger.formatters import personal_reserves as _prFormatters
 from messenger.formatters import service_channel as _sc
+from messenger.formatters import token_quest_subformatters
 from messenger.formatters import wot_plus as _wotPlusFormatters
 from messenger.m_constants import SCH_CLIENT_MSG_TYPE
-registerLootBoxAutoOpenSubFormatters((auto_boxes_subformatters.EventBoxesFormatter(),
- auto_boxes_subformatters.NYPostEventBoxesFormatter(),
- auto_boxes_subformatters.NYGiftSystemSurpriseFormatter(),
- auto_boxes_subformatters.LunarNYEnvelopeAutoOpenFormatter(),
- auto_boxes_subformatters.LootBoxSystemAutoOpenFormatter()))
+registerLootBoxAutoOpenSubFormatters((auto_boxes_subformatters.EventBoxesFormatter(), auto_boxes_subformatters.LunarNYEnvelopeAutoOpenFormatter(), auto_boxes_subformatters.LootBoxSystemAutoOpenFormatter()))
 registerTokenQuestsSubFormatters((token_quest_subformatters.LootBoxTokenQuestFormatter(),
  token_quest_subformatters.RecruitQuestsFormatter(),
  token_quest_subformatters.RankedSeasonTokenQuestFormatter(),
@@ -20,8 +17,8 @@ registerTokenQuestsSubFormatters((token_quest_subformatters.LootBoxTokenQuestFor
  token_quest_subformatters.RankedYearLeaderFormatter(),
  token_quest_subformatters.SeniorityAwardsFormatter(),
  token_quest_subformatters.SeniorityAwardsVehicleSelectedFormatter(),
- token_quest_subformatters.PersonalMission3CompletionFormatter(),
- token_quest_subformatters.PersonalMissionsTokenQuestsFormatter(),
+ personal_missions_formatters.PMAdvancedCompletionFormatter(),
+ personal_missions_formatters.PMBasicTokenQuestsFormatter(),
  token_quest_subformatters.BattlePassDefaultAwardsFormatter(),
  token_quest_subformatters.BattlePassAutoSelectRewardsFormatter(),
  token_quest_subformatters.WotPlusAttendanceRewardsFormatter(),
@@ -32,7 +29,7 @@ registerTokenQuestsSubFormatters((token_quest_subformatters.LootBoxTokenQuestFor
  token_quest_subformatters.SteamCompletionFormatter(),
  token_quest_subformatters.SkipNotificationFormatter()))
 _HANGAR_QUESTS_SUB_FORMATTERS = (token_quest_subformatters.BattleMattersAwardsFormatter(),)
-_PERSONAL_MISSIONS_SUB_FORMATTERS = (token_quest_subformatters.PersonalMission3CompletionFormatter(), token_quest_subformatters.PersonalMissionsFormatter())
+_PERSONAL_MISSIONS_SUB_FORMATTERS = (personal_missions_formatters.PersonalMissionsBasicFormatter(),)
 
 def initRegistrationFormatters():
     registerMessengerServerFormatter(_SM_TYPE.serverReboot.index(), _sc.ServerRebootFormatter())
@@ -64,7 +61,8 @@ def initRegistrationFormatters():
     registerMessengerServerFormatter(_SM_TYPE.vehicleRented.index(), _sc.VehicleRentedFormatter())
     registerMessengerServerFormatter(_SM_TYPE.rentalsExpired.index(), _sc.RentalsExpiredFormatter())
     registerMessengerServerFormatter(_SM_TYPE.potapovQuestBonus.index(), _sc.TokenQuestsFormatter(subFormatters=_PERSONAL_MISSIONS_SUB_FORMATTERS))
-    registerMessengerServerFormatter(_SM_TYPE.personalMission3Quest.index(), token_quest_subformatters.PersonalMission3QuestFormatter())
+    registerMessengerServerFormatter(_SM_TYPE.personalMission3Quest.index(), personal_missions_formatters.PMAdvancedQuestFormatter())
+    registerMessengerServerFormatter(_SM_TYPE.personalMission4Quest.index(), personal_missions_formatters.PMAdvancedQuestFormatter())
     registerMessengerServerFormatter(_SM_TYPE.goodieRemoved.index(), _sc.GoodyRemovedFormatter())
     registerMessengerServerFormatter(_SM_TYPE.goodiesExpired.index(), _sc.GoodiesExpiredFormatter())
     registerMessengerServerFormatter(_SM_TYPE.goodieDisabled.index(), _sc.GoodyDisabledFormatter())

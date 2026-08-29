@@ -120,11 +120,7 @@ def _getDevicesIterator(fetcher, isYoh):
 
 
 def _getDevicesSnapshot(fetcher, isYoh):
-    snap = set()
-    for deviceID, stateID in _getDevicesIterator(fetcher, isYoh):
-        snap.add((deviceID, stateID))
-
-    return snap
+    return set(_getDevicesIterator(fetcher, isYoh))
 
 
 class DamageInfoPanel(DamageInfoPanelMeta):
@@ -210,8 +206,11 @@ class DamageInfoPanel(DamageInfoPanelMeta):
         newDevicesSnap = _getDevicesSnapshot(fetcher, self.__isTrackWithinTrack)
         toHide = self.__devicesSnap.difference(newDevicesSnap)
         toUpdate = dict(newDevicesSnap.difference(self.__devicesSnap))
+        newDeviceIDs = {devID for devID, _ in newDevicesSnap}
         for deviceID, _ in toHide:
             if deviceID in toUpdate:
+                continue
+            if deviceID in newDeviceIDs:
                 continue
             if deviceID in _DEVICE_HIDE_METHODS:
                 method = _DEVICE_HIDE_METHODS[deviceID]

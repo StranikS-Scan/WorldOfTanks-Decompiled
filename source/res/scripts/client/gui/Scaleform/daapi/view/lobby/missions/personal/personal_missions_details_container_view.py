@@ -6,16 +6,16 @@ from operator import methodcaller
 from future.utils import viewvalues
 from gui import SystemMessages
 from gui.Scaleform.daapi import LobbySubView
-from gui.Scaleform.daapi.view.lobby.missions.missions_helper import getDetailedMissionData, getMapRegionTooltipData
+from gui.Scaleform.daapi.view.lobby.missions.missions_helper import getDetailedMissionData, getMapRegionTooltipData, isBranchesStarted, switchCampaign, isSuitableBranchForPawn
 from gui.Scaleform.daapi.view.meta.PersonalMissionDetailsContainerViewMeta import PersonalMissionDetailsContainerViewMeta
-from gui.server_events.pm_constants import PM_SUIT_OP_PLUGIN_ERR_RESPONSE, DISABLED_PM_OPERATIONS, DISABLED_PM_MISSIONS, IS_PM2_QUEST_ENABLED, IS_REGULAR_QUEST_ENABLED
-from gui.shared import events, EVENT_BUS_SCOPE
+from gui.server_events.pm_constants import PM_SUIT_OP_PLUGIN_ERR_RESPONSE
+from gui.shared import EVENT_BUS_SCOPE, events
 from gui.shared.events import PersonalMissionsEvent
 from gui.shared.gui_items.processors import quests as quests_proc
 from gui.shared.tutorial_helper import getTutorialGlobalStorage
 from gui.shared.utils import decorators
 from helpers import dependency
-from personal_missions import PM_BRANCH
+from personal_missions import PM_BRANCH, PM_SWITCHES
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from tutorial.control.context import GLOBAL_FLAG
@@ -71,11 +71,21 @@ class PersonalMissionDetailsContainerView(LobbySubView, PersonalMissionDetailsCo
         self.__selectedQuestID = int(ctx.get('eventID', 0))
 
     @decorators.adisp_process('updating')
-    def _processMission(self, eventID):
-        quest = self.__quests[int(eventID)]
+    def _selectMission(self, quest):
         result = yield quests_proc.PMQuestSelect(self.__branch, personalMission=quest).request()
         if result and result.userMsg:
             SystemMessages.pushMessage(result.userMsg, type=result.sysMsgType)
+
+    @decorators.adisp_process('updating')
+    def _processMission(self, eventID):
+        branchName = PM_BRANCH.TYPE_TO_NAME[self.__branch]
+        isBranchActive = branchName in self._eventsCache.getPersonalMissions().getActiveCampaigns()
+        isBranchStarted = isBranchesStarted(*PM_BRANCH.MUTUAL_EXCLUSION_BRANCHES[PM_BRANCH.QUEST_GROUPS.GROUP_1])
+        if not (isBranchStarted or isBranchActive):
+            res = yield switchCampaign(self.__branch)
+            if res:
+                return
+        self._selectMission(self.__quests[int(eventID)])
 
     @decorators.adisp_process('updating')
     def _discardMission(self, eventID):
@@ -156,22 +166,24 @@ class PersonalMissionDetailsContainerView(LobbySubView, PersonalMissionDetailsCo
         self.as_setInitDataS({'pages': pages})
 
     def __setMayPawnForQuest(self, quest):
-        pawn = self._eventsCache.getPersonalMissions().getFreeTokensCount(self.__branch) >= quest.getPawnCost() and quest.canBePawned() and not quest.isDisabled()
+        pawn = self._eventsCache.getPersonalMissions().getFreeTokensCount(self.__branch) >= quest.getPawnCost() and quest.canBePawned() and not quest.isDisabled() and isSuitableBranchForPawn()
         if self.__storage:
             self.__storage.setValue(GLOBAL_FLAG.MAY_PAWN_PERSONAL_MISSION, pawn, showImmediately=False)
 
     def _onSettingsChanged(self, diff):
         disabledBranch = False
-        if self.__branch == PM_BRANCH.REGULAR and IS_REGULAR_QUEST_ENABLED in diff:
-            disabledBranch = not diff[IS_REGULAR_QUEST_ENABLED]
-        if self.__branch == PM_BRANCH.PERSONAL_MISSION_2 and IS_PM2_QUEST_ENABLED in diff:
-            disabledBranch = not diff[IS_PM2_QUEST_ENABLED]
+        if self.__branch == PM_BRANCH.REGULAR and PM_SWITCHES.IS_REGULAR_QUEST_ENABLED in diff:
+            disabledBranch = not diff[PM_SWITCHES.IS_REGULAR_QUEST_ENABLED]
+        if self.__branch == PM_BRANCH.PERSONAL_MISSION_2 and PM_SWITCHES.IS_PM2_QUEST_ENABLED in diff:
+            disabledBranch = not diff[PM_SWITCHES.IS_PM2_QUEST_ENABLED]
         disabledOp = False
-        if DISABLED_PM_OPERATIONS in diff and diff[DISABLED_PM_OPERATIONS]:
-            disabledOp = self.__operationID in diff[DISABLED_PM_OPERATIONS].keys()
+        disablePMOpKey = PM_SWITCHES.DISABLED_PM_OPERATIONS
+        if disablePMOpKey in diff and diff[disablePMOpKey]:
+            disabledOp = self.__operationID in diff[disablePMOpKey]
         disabledQuest = False
-        if DISABLED_PM_MISSIONS in diff and diff[DISABLED_PM_MISSIONS]:
-            disabledQuest = self.__selectedQuestID in diff[DISABLED_PM_MISSIONS]
+        disablePMMissionsKey = PM_SWITCHES.DISABLED_PM_MISSIONS
+        if disablePMMissionsKey in diff and diff[disablePMMissionsKey]:
+            disabledQuest = self.__selectedQuestID in diff[disablePMMissionsKey]
         if disabledBranch or disabledOp or disabledQuest:
             self.closeView()
         else:

@@ -225,6 +225,162 @@
     </mechanics>
   </vehicle>
   <vehicle>
+    <vehicleType>	germany:G193_Pz_Kpfw_55	</vehicleType>
+    <mechanics>
+      <shellParamsSwitcher>
+        <priority>	1	</priority>
+        <rank>	silver	</rank>
+        <params>
+          <param>	1.5	  <name>	shellParamsSwitchingTime	</name>
+          </param>
+        </params>
+        <mechanicSubtypes>
+          <shells>
+            <shell>
+              <name>	germany:_8_8_cm_Pzgr_55_fur_Zusatzkammerbetrieb	</name>
+              <basic>	straight_armor	</basic>
+              <modified>	angled_armor	</modified>
+            </shell>
+            <shell>
+              <name>	germany:_8_8_cm_Pzgr_55_Hartkern_fur_Zusatzkammerbetrieb	</name>
+              <basic>	straight_armor	</basic>
+              <modified>	angled_armor	</modified>
+            </shell>
+            <shell>
+              <name>	germany:_10_5_cm_Pzgr_55_fur_Zusatzkammerbetrieb	</name>
+              <basic>	straight_armor	</basic>
+              <modified>	angled_armor	</modified>
+            </shell>
+            <shell>
+              <name>	germany:_10_5_cm_Pzgr_55_Hartkern_fur_Zusatzkammerbetrieb	</name>
+              <basic>	straight_armor	</basic>
+              <modified>	angled_armor	</modified>
+            </shell>
+          </shells>
+        </mechanicSubtypes>
+      </shellParamsSwitcher>
+    </mechanics>
+  </vehicle>
+  <vehicle>
+    <vehicleType>	germany:G195_HWK_40	</vehicleType>
+    <mechanics>
+      <shellParamsSwitcher>
+        <priority>	1	</priority>
+        <rank>	silver	</rank>
+        <params>
+          <param>	1.5	  <name>	shellParamsSwitchingTime	</name>
+          </param>
+        </params>
+        <mechanicSubtypes>
+          <shells>
+            <shell>
+              <name>	germany:_11_cm_Pzgr_69_Hartkern_fur_Zusatzkammerbetrieb	</name>
+              <basic>	straight_armor	</basic>
+              <modified>	angled_armor	</modified>
+            </shell>
+            <shell>
+              <name>	germany:_11_cm_Hl_Gr_69_mit_mundungsgestelltem_Zunder	</name>
+              <basic>	noscreen	</basic>
+              <modified>	screen	</modified>
+            </shell>
+          </shells>
+        </mechanicSubtypes>
+      </shellParamsSwitcher>
+    </mechanics>
+  </vehicle>
+  <vehicle>
+    <vehicleType>	germany:G197_Pz_Kpfw_Neu	</vehicleType>
+    <mechanics>
+      <shellParamsSwitcher>
+        <priority>	1	</priority>
+        <rank>	gold	</rank>
+        <params>
+          <param>	100	  <name>	shellParamsSwitchingTime	</name>
+            <template>	vehicle_hub.characteristics.templates.upTo	</template>
+          </param>
+        </params>
+        <mechanicSubtypes>
+          <shells>
+            <shell>
+              <name>	germany:_120_mm_Hartkern_Wuchtgeschoss_70_fur_Zusatzkammerbetrieb	</name>
+              <basic>	straight_armor	</basic>
+              <modified>	angled_armor	</modified>
+            </shell>
+            <shell>
+              <name>	germany:_120_mm_Mehrzweck_Hl_Gr_70_mit_mundungsgestelltem_Zunder	</name>
+              <basic>	noscreen	</basic>
+              <modified>	screen	</modified>
+            </shell>
+          </shells>
+        </mechanicSubtypes>
+      </shellParamsSwitcher>
+    </mechanics>
+  </vehicle>
+  <vehicle>
+    <vehicleType>	germany:G198_Kampfpanzer_67	</vehicleType>
+    <mechanics>
+      <shellParamsSwitcher>
+        <priority>	1	</priority>
+        <rank>	silver	</rank>
+        <params>
+          <param>	1.5	  <name>	shellParamsSwitchingTime	</name>
+          </param>
+        </params>
+        <mechanicSubtypes>
+          <shells>
+            <shell>
+              <name>	germany:_11_cm_Pzgr_67_Hartkern_fur_Zusatzkammerbetrieb	</name>
+              <basic>	straight_armor	</basic>
+              <modified>	angled_armor	</modified>
+            </shell>
+            <shell>
+              <name>	germany:_11_cm_Hl_Gr_67_mit_mundungsgestelltem_Zunder	</name>
+              <basic>	noscreen	</basic>
+              <modified>	screen	</modified>
+            </shell>
+          </shells>
+        </mechanicSubtypes>
+      </shellParamsSwitcher>
+    </mechanics>
+  </vehicle>
+  <vehicle>
+    <vehicleType>	germany:G196_Versuchspanzer_57	</vehicleType>
+    <mechanics>
+      <shellParamsSwitcher>
+        <priority>	1	</priority>
+        <rank>	silver	</rank>
+        <params>
+          <param>	1.5	  <name>	shellParamsSwitchingTime	</name>
+          </param>
+        </params>
+        <mechanicSubtypes>
+          <shells>
+            <shell>
+              <name>	germany:_10_5_cm_Pzgr_56_fur_Zusatzkammerbetrieb	</name>
+              <basic>	straight_armor	</basic>
+              <modified>	angled_armor	</modified>
+            </shell>
+            <shell>
+              <name>	germany:_10_5_cm_Pzgr_56_Hartkern_fur_Zusatzkammerbetrieb	</name>
+              <basic>	straight_armor	</basic>
+              <modified>	angled_armor	</modified>
+            </shell>
+            <shell>
+              <name>	germany:_10_5_cm_Pzgr_57_fur_Zusatzkammerbetrieb	</name>
+              <basic>	straight_armor	</basic>
+              <modified>	angled_armor	</modified>
+            </shell>
+            <shell>
+              <name>	germany:_10_5_cm_Pzgr_57_Hartkern_fur_Zusatzkammerbetrieb	</name>
+              <basic>	straight_armor	</basic>
+              <modified>	angled_armor	</modified>
+            </shell>
+          </shells>
+        </mechanicSubtypes>
+      </shellParamsSwitcher>
+    </mechanics>
+  </vehicle>
+  <vehicle>
     <vehicleType>	japan:J52_STK_2	</vehicleType>
     <mechanics>
       <heatingZonesGun>
@@ -620,6 +776,34 @@
           <param>	2	  <name>	lowChargeShotBlockDuration	</name>
           </param>
         </params>
+        <mechanicSubtypes>
+          <shells>
+            <shell>
+              <name>	usa:_155mm_AP_MPCS	</name>
+              <basic>	basic	</basic>
+              <basicWithTextLabel>	true	</basicWithTextLabel>
+              <basicWithRichTooltip>	false	</basicWithRichTooltip>
+              <modified>	modified	</modified>
+              <modifiedWithRichTooltip>	false	</modifiedWithRichTooltip>
+            </shell>
+            <shell>
+              <name>	usa:_155mm_APCR_MPCS	</name>
+              <basic>	basic	</basic>
+              <basicWithTextLabel>	true	</basicWithTextLabel>
+              <basicWithRichTooltip>	false	</basicWithRichTooltip>
+              <modified>	modified	</modified>
+              <modifiedWithRichTooltip>	false	</modifiedWithRichTooltip>
+            </shell>
+            <shell>
+              <name>	usa:_155mm_HE_MPCS	</name>
+              <basic>	basic	</basic>
+              <basicWithTextLabel>	true	</basicWithTextLabel>
+              <basicWithRichTooltip>	false	</basicWithRichTooltip>
+              <modified>	modified	</modified>
+              <modifiedWithRichTooltip>	false	</modifiedWithRichTooltip>
+            </shell>
+          </shells>
+        </mechanicSubtypes>
       </lowChargeShot>
     </mechanics>
   </vehicle>
@@ -678,6 +862,134 @@
           </param>
         </params>
       </wheeledDash>
+    </mechanics>
+  </vehicle>
+  <vehicle>
+    <vehicleType>	japan:J53_Ho_Ri_Shugo	</vehicleType>
+    <mechanics>
+      <auxiliaryRocketLauncher>
+        <priority>	1	</priority>
+        <rank>	gold	</rank>
+        <params>
+          <param>	1	  <name>	auxiliaryRocketLauncherReloadTime	</name>
+            <template>	vehicle_hub.characteristics.templates.upTo	</template>
+          </param>
+          <param>	1	  <name>	auxiliaryRocketLauncherAvgDamage	</name>
+            <template>	vehicle_hub.characteristics.templates.upTo	</template>
+          </param>
+          <param>	1	  <name>	auxiliaryRocketLauncherPenetration	</name>
+          </param>
+          <param>	1	  <name>	auxiliaryRocketLauncherVelocity	</name>
+          </param>
+          <param>	1	  <name>	auxiliaryRocketLauncherDispersion	</name>
+          </param>
+        </params>
+      </auxiliaryRocketLauncher>
+    </mechanics>
+  </vehicle>
+  <vehicle>
+    <vehicleType>	china:Ch71_WZ_219	</vehicleType>
+    <mechanics>
+      <sightPointer>
+        <priority>	1	</priority>
+        <rank>	gold	</rank>
+        <params>
+          <param>	1	  <name>	sightPointerDeployTime	</name>
+            <template>	vehicle_hub.characteristics.templates.upTo	</template>
+          </param>
+          <param>	1	  <name>	sightPointerReloadTime	</name>
+            <template>	vehicle_hub.characteristics.templates.upTo	</template>
+          </param>
+          <param>	1	  <name>	sightPointerDuration	</name>
+            <template>	vehicle_hub.characteristics.templates.upTo	</template>
+          </param>
+          <param>	-1%	  <name>	sightPointerRotationSpeed	</name>
+          </param>
+          <param>	1	  <name>	sightPointerSectorAngleStart	</name>
+          </param>
+          <param>	1	  <name>	sightPointerSectorAngleEnd	</name>
+            <template>	vehicle_hub.characteristics.templates.upTo	</template>
+          </param>
+          <param>	1	  <name>	sightPointerSelfSpottingTime	</name>
+            <template>	vehicle_hub.characteristics.templates.upTo	</template>
+          </param>
+          <param>	+1%	  <name>	sightPointerViewRange	</name>
+            <template>	vehicle_hub.characteristics.templates.upTo	</template>
+          </param>
+          <param>	-1%	  <name>	sightPointerConsealmentFoliage	</name>
+            <template>	vehicle_hub.characteristics.templates.upTo	</template>
+          </param>
+          <param>	-1%	  <name>	sightPointerConsealmentMoving	</name>
+            <template>	vehicle_hub.characteristics.templates.upTo	</template>
+          </param>
+        </params>
+      </sightPointer>
+    </mechanics>
+  </vehicle>
+  <vehicle>
+    <vehicleType>	czech:Cz46_Vz_63P	</vehicleType>
+    <mechanics>
+      <shellCalibration>
+        <priority>	1	</priority>
+        <rank>	gold	</rank>
+        <params>
+          <param>	1%	  <name>	shellCalibrationAvgDamage	</name>
+            <template>	vehicle_hub.characteristics.templates.upTo	</template>
+          </param>
+          <param>	1%	  <name>	shellCalibrationAvgPenetration	</name>
+            <template>	vehicle_hub.characteristics.templates.upTo	</template>
+          </param>
+        </params>
+      </shellCalibration>
+    </mechanics>
+  </vehicle>
+  <vehicle>
+    <vehicleType>	italy:It43_CAV_mod_71	</vehicleType>
+    <mechanics>
+      <autoreloaderSurge>
+        <priority>	1	</priority>
+        <rank>	gold	</rank>
+        <params>
+          <param>	1	  <name>	autoreloaderSurgeMaxCharges	</name>
+          </param>
+          <param>	1	  <name>	autoreloaderSurgeInitCharges	</name>
+            <template>	vehicle_hub.characteristics.templates.upTo	</template>
+          </param>
+          <param>	1	  <name>	autoreloaderSurgeChargeTimeSlow	</name>
+            <template>	vehicle_hub.characteristics.templates.upTo	</template>
+          </param>
+          <param>	1	  <name>	autoreloaderSurgeChargeTimeFast	</name>
+            <template>	vehicle_hub.characteristics.templates.upTo	</template>
+          </param>
+          <param>	1	  <name>	autoreloaderSurgeBoostedReloadTime	</name>
+            <template>	vehicle_hub.characteristics.templates.upTo	</template>
+          </param>
+        </params>
+      </autoreloaderSurge>
+    </mechanics>
+  </vehicle>
+  <vehicle>
+    <vehicleType>	sweden:S41_BV_111	</vehicleType>
+    <mechanics>
+      <bustleFeed>
+        <priority>	1	</priority>
+        <rank>	gold	</rank>
+        <params>
+          <param>	1	  <name>	bustleFeedDamagePerShot	</name>
+            <template>	vehicle_hub.characteristics.templates.upTo	</template>
+          </param>
+          <param>	-1%	  <name>	bustleFeedRateOfFire	</name>
+            <template>	vehicle_hub.characteristics.templates.upTo	</template>
+          </param>
+          <param>	-1%	  <name>	bustleFeedMaxSpeed	</name>
+            <template>	vehicle_hub.characteristics.templates.upTo	</template>
+          </param>
+          <param>	1	  <name>	bustleFeedSwitchingToEASMMode	</name>
+          </param>
+          <param>	1	  <name>	bustleFeedSwitchingToStandardMode	</name>
+          </param>
+        </params>
+      </bustleFeed>
     </mechanics>
   </vehicle>
 </vehicle_mechanics.xml>

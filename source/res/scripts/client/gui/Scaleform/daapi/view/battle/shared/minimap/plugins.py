@@ -3,40 +3,55 @@
 from __future__ import absolute_import, division
 import logging
 import math
+import typing
 from collections import defaultdict
+from enum import Enum
 from functools import partial
 from future.utils import viewitems, viewvalues
-from enum import Enum
-import BattleReplay
 import BigWorld
 import Keys
 import Math
 import aih_constants
-from AvatarInputHandler import AvatarInputHandler
-from PlayerEvents import g_playerEvents
+import BattleReplay
 from account_helpers import AccountSettings
-from account_helpers.AccountSettings import MINIMAP_IBC_HINT_SECTION, HINTS_LEFT
+from account_helpers.AccountSettings import HINTS_LEFT, MINIMAP_IBC_HINT_SECTION
 from account_helpers.settings_core import settings_constants
 from account_helpers.settings_core.options import MinimapArtyHitSetting
 from account_helpers.settings_core.settings_constants import GAME
+from AvatarInputHandler import AvatarInputHandler
 from battleground.location_point_manager import g_locationPointManager
-from chat_commands_consts import BATTLE_CHAT_COMMAND_NAMES, ReplyState, MarkerType, LocationMarkerSubType, ONE_SHOT_COMMANDS_TO_REPLIES, INVALID_VEHICLE_POSITION
-from constants import VISIBILITY, AOI
-from debug_utils import LOG_WARNING, LOG_ERROR, LOG_DEBUG
+from chat_commands_consts import BATTLE_CHAT_COMMAND_NAMES, INVALID_VEHICLE_POSITION, ONE_SHOT_COMMANDS_TO_REPLIES, LocationMarkerSubType, MarkerType, ReplyState
+from constants import AOI, SIGHT_POINTER_STATE
+from debug_utils import LOG_DEBUG, LOG_ERROR, LOG_WARNING
+from events_containers.common.containers import ContainersListener
+from events_containers.components.life_cycle import IComponentLifeCycleListenerLogic
+from events_handler import eventHandler
 from gui import GUI_SETTINGS, InputHandler
-from gui.Scaleform.daapi.view.battle.shared.minimap import common
-from gui.Scaleform.daapi.view.battle.shared.minimap import entries
-from gui.Scaleform.daapi.view.battle.shared.minimap import settings
-from gui.Scaleform.daapi.view.battle.shared.minimap.settings import ENTRY_SYMBOL_NAME, SettingsTypes
-from gui.battle_control import avatar_getter, minimap_utils, matrix_factory
-from gui.battle_control.arena_info.interfaces import IVehiclesAndPositionsController, IArenaVehiclesController
+from gui.battle_control import avatar_getter, matrix_factory, minimap_utils
+from gui.battle_control.arena_info.interfaces import IArenaVehiclesController, IVehiclesAndPositionsController
 from gui.battle_control.arena_info.settings import INVALIDATE_OP
 from gui.battle_control.battle_constants import FEEDBACK_EVENT_ID, VEHICLE_LOCATION, VEHICLE_VIEW_STATE
-from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
+from gui.Scaleform.daapi.view.battle.shared.formatters import normalizeHealthPercent
+from gui.Scaleform.daapi.view.battle.shared.minimap import common, entries, settings
+from gui.Scaleform.daapi.view.battle.shared.minimap.settings import CONTAINER_NAME, ENTRY_SYMBOL_NAME, SettingsTypes
+from gui.shared import EVENT_BUS_SCOPE, events, g_eventBus
+from gui.veh_mechanics.battle.updaters.mechanics.mechanic_life_cycle_updater import VehicleMechanicLifeCycleUpdater
+from gui.veh_mechanics.battle.updaters.mechanics.mechanic_passenger_updater import IMechanicPassengerView, VehicleMechanicPassengerUpdater
+from gui.veh_mechanics.battle.updaters.mechanics.mechanic_states_updater import VehicleMechanicStatesUpdater
+from gui.veh_mechanics.battle.updaters.mechanics.tracked_mechanics_updater import IVehicleTrackedMechanicsView, VehicleTrackedMechanicsUpdater
+from gui.veh_mechanics.battle.updaters.updaters_common import ViewUpdatersCollection
 from helpers import dependency
 from ids_generators import SequenceIDGenerator
+from PlayerEvents import g_playerEvents
 from skeletons.gui.battle_session import IBattleSessionProvider
-from gui.Scaleform.daapi.view.battle.shared.formatters import normalizeHealthPercent
+from vehicles.mechanics.mechanic_constants import VehicleMechanic
+from vehicles.mechanics.mechanic_states import IMechanicStatesListenerLogic
+if typing.TYPE_CHECKING:
+    from gui.Scaleform.daapi.view.battle.shared.minimap.interfaces import IMinimapPlugin
+    from gui.Scaleform.daapi.view.meta.MinimapMeta import MinimapMeta
+    from gui.veh_mechanics.battle.updaters.updaters_common import IViewUpdater
+    from items.components.shared_components import SightPointerParams
+    from SightPointerComponent import SightPointerState
 _logger = logging.getLogger(__name__)
 _C_NAME = settings.CONTAINER_NAME
 _S_NAME = settings.ENTRY_SYMBOL_NAME
@@ -497,7 +512,7 @@ class PersonalEntriesPlugin(common.SimplePlugin, IArenaVehiclesController):
     def _calcCircularVisionRadius(self):
         visibilityMinRadius = self._arenaVisitor.getVisibilityMinRadius()
         vehAttrs = self.sessionProvider.shared.feedback.getVehicleAttrs()
-        return min(vehAttrs.get('circularVisionRadius', visibilityMinRadius), VISIBILITY.MAX_RADIUS)
+        return min(vehAttrs.get('circularVisionRadius', visibilityMinRadius), self._arenaVisitor.getVisibilityMaxRadius())
 
     def _getViewRangeRadius(self):
         return self._calcCircularVisionRadius()
@@ -523,7 +538,7 @@ class PersonalEntriesPlugin(common.SimplePlugin, IArenaVehiclesController):
         if self.__circlesVisibilityState & settings.CIRCLE_TYPE.MAX_VIEW_RANGE:
             return
         self.__circlesVisibilityState |= settings.CIRCLE_TYPE.MAX_VIEW_RANGE
-        self._invoke(self.__circlesID, settings.VIEW_RANGE_CIRCLES_AS3_DESCR.AS_ADD_MAX_VIEW_CIRCLE, settings.CIRCLE_STYLE.COLOR.MAX_VIEW_RANGE, settings.CIRCLE_STYLE.ALPHA, VISIBILITY.MAX_RADIUS)
+        self._invoke(self.__circlesID, settings.VIEW_RANGE_CIRCLES_AS3_DESCR.AS_ADD_MAX_VIEW_CIRCLE, settings.CIRCLE_STYLE.COLOR.MAX_VIEW_RANGE, settings.CIRCLE_STYLE.ALPHA, self._arenaVisitor.getVisibilityMaxRadius())
 
     def __removeMaxViewRangeCircle(self):
         self.__circlesVisibilityState &= ~settings.CIRCLE_TYPE.MAX_VIEW_RANGE
@@ -939,6 +954,7 @@ class ArenaVehiclesPlugin(common.EntriesPlugin, IVehiclesAndPositionsController)
             entry = self._entries[prevCtrlID]
             if entry.isAlive() and entry.getLocation() != VEHICLE_LOCATION.UNDEFINED:
                 self.__setActive(entry, True)
+                self.__showVehicleHp(prevCtrlID, entry.getID())
         if self._ctrlVehicleID and self._ctrlVehicleID != self.__playerVehicleID and self._ctrlVehicleID in self._entries and self._ctrlMode != _CTRL_MODE.VIDEO:
             self.__setActive(self._entries[self._ctrlVehicleID], False)
 
@@ -1551,3 +1567,163 @@ class EnemySPGShotPlugin(common.IntervalPlugin):
         if self.__currentTeam != teamID:
             self._clearAllCallbacks()
         self.__currentTeam = teamID
+
+
+class MinimapUpdatersPlugin(common.SimplePlugin):
+    __slots__ = ('__updatersCollection',)
+
+    def __init__(self, parentObj):
+        super(MinimapUpdatersPlugin, self).__init__(parentObj)
+        self.__updatersCollection = ViewUpdatersCollection()
+
+    def start(self):
+        super(MinimapUpdatersPlugin, self).start()
+        self.__updatersCollection.initialize(self._getViewUpdaters())
+
+    def stop(self):
+        self.__updatersCollection.finalize()
+        super(MinimapUpdatersPlugin, self).stop()
+
+    def fini(self):
+        self.__updatersCollection.destroy()
+        super(MinimapUpdatersPlugin, self).fini()
+
+    def _getViewUpdaters(self):
+        return []
+
+
+class VehicleMechanicMinimapPlugin(MinimapUpdatersPlugin, ContainersListener):
+    _VEHICLE_MECHANIC = None
+
+    def stop(self):
+        self._clearParentState()
+        super(VehicleMechanicMinimapPlugin, self).stop()
+
+    def _clearParentState(self):
+        pass
+
+
+class SightPointerPlugin(VehicleMechanicMinimapPlugin, IMechanicStatesListenerLogic, IComponentLifeCycleListenerLogic, IMechanicPassengerView):
+    _VEHICLE_MECHANIC = VehicleMechanic.SIGHT_POINTER
+
+    def __init__(self, parentObj):
+        super(SightPointerPlugin, self).__init__(parentObj)
+        self.__minAngle = 0.0
+        self.__angle = 0.0
+        self.__distance = 0.0
+        self.__active = False
+        self.__visibleForPassenger = False
+        self.__entryId = None
+        return
+
+    @eventHandler
+    def onComponentParamsCollected(self, params):
+        self.__minAngle = params.sightPointerStages[params.activeStages - 1].angle
+
+    @eventHandler
+    def onStatePrepared(self, state):
+        self.__active = state.state == SIGHT_POINTER_STATE.ACTIVE
+        self.__angle = state.angle
+        self.__distance = state.distance
+        self.__invalidateState(active=self.__active, visibleForPassenger=self.__visibleForPassenger)
+
+    @eventHandler
+    def onStateTransition(self, prevState, newState):
+        if newState.state == SIGHT_POINTER_STATE.ACTIVE:
+            self.__invalidateState(active=True, visibleForPassenger=self.__visibleForPassenger)
+        elif newState.state in {SIGHT_POINTER_STATE.COOLDOWN, SIGHT_POINTER_STATE.DISABLED}:
+            self.__invalidateState(active=False, visibleForPassenger=self.__visibleForPassenger)
+            self.__angle = 0.0
+            self.__distance = 0.0
+
+    @eventHandler
+    def onStateObservation(self, state):
+        if state.state != SIGHT_POINTER_STATE.ACTIVE:
+            return
+        else:
+            angleChanged = self.__angle != state.angle
+            distanceChanged = self.__distance != state.distance
+            self.__angle = state.angle
+            self.__distance = state.distance
+            if not self.__visibleForPassenger:
+                return
+            if self.__entryId is None:
+                _logger.error('no SightPointer cone entry present while in active mode')
+                return
+            if angleChanged:
+                self._invoke(self.__entryId, settings.SIGHT_POINTER_ENTRY_AS3_DESCR.AS_SET_VIEW_ANGLE, state.angle)
+            if distanceChanged:
+                self._invoke(self.__entryId, settings.SIGHT_POINTER_ENTRY_AS3_DESCR.AS_SET_VIEW_RANGE, state.distance)
+            return
+
+    def setVisibleForPassenger(self, visibleForPassenger):
+        self.__invalidateState(active=self.__active, visibleForPassenger=visibleForPassenger)
+
+    def _clearParentState(self):
+        self.__hideCone()
+
+    def _getViewUpdaters(self):
+        return [VehicleMechanicLifeCycleUpdater(self._VEHICLE_MECHANIC, self), VehicleMechanicStatesUpdater(self._VEHICLE_MECHANIC, self), VehicleMechanicPassengerUpdater(self._VEHICLE_MECHANIC, self)]
+
+    def __invalidateState(self, active, visibleForPassenger):
+        toShow = (not self.__active or not self.__visibleForPassenger) and active and visibleForPassenger
+        toHide = self.__active and self.__visibleForPassenger and (not active or not visibleForPassenger)
+        self.__active = active
+        self.__visibleForPassenger = visibleForPassenger
+        if toHide:
+            self.__hideCone()
+        elif toShow:
+            self.__showCone()
+
+    def __hideCone(self):
+        if self.__entryId is None:
+            return
+        else:
+            self._delEntry(self.__entryId)
+            self.__entryId = None
+            return
+
+    def __showCone(self):
+        self.__entryId = self._addEntry(ENTRY_SYMBOL_NAME.SIGHT_POINTER, CONTAINER_NAME.PERSONAL, matrix_factory.makeVehicleTurretMatrixMP(), active=True)
+        bottomLeft, upperRight = self._parentObj.getBoundingBox()
+        width = upperRight[0] - bottomLeft[0]
+        height = upperRight[1] - bottomLeft[1]
+        self._invoke(self.__entryId, settings.VIEW_RANGE_CIRCLES_AS3_DESCR.AS_INIT_ARENA_SIZE, width, height)
+        self._invoke(self.__entryId, settings.SIGHT_POINTER_ENTRY_AS3_DESCR.AS_SET_MIN_VIEW_ANGLE, self.__minAngle)
+        self._invoke(self.__entryId, settings.SIGHT_POINTER_ENTRY_AS3_DESCR.AS_SET_VIEW_ANGLE, self.__angle)
+        self._invoke(self.__entryId, settings.SIGHT_POINTER_ENTRY_AS3_DESCR.AS_SET_VIEW_RANGE, self.__distance)
+
+
+class VehicleMechanicsCollectionMinimapPlugin(common.MinimapPluginsCollection, IVehicleTrackedMechanicsView):
+    _VEHICLE_MECHANIC_PLUGINS_MAP = {VehicleMechanic.SIGHT_POINTER: SightPointerPlugin}
+
+    def __init__(self, parentObj):
+        super(VehicleMechanicsCollectionMinimapPlugin, self).__init__(parentObj)
+        self.__updatersCollection = ViewUpdatersCollection()
+        self.__trackedMechanics = set()
+
+    def fini(self):
+        self.__updatersCollection.destroy()
+        super(VehicleMechanicsCollectionMinimapPlugin, self).fini()
+
+    def start(self):
+        super(VehicleMechanicsCollectionMinimapPlugin, self).start()
+        self.__updatersCollection.initialize([VehicleTrackedMechanicsUpdater(self)])
+
+    def stop(self):
+        self.__updatersCollection.finalize()
+        self.__removeTrackedMechanics(self.__trackedMechanics)
+        self.__trackedMechanics.clear()
+        super(VehicleMechanicsCollectionMinimapPlugin, self).stop()
+
+    def onTrackedMechanicsUpdate(self, mechanics):
+        newMechanics = set(mechanics)
+        self.__removeTrackedMechanics(self.__trackedMechanics - newMechanics)
+        self.__addTrackedMechanics(newMechanics - self.__trackedMechanics)
+        self.__trackedMechanics = newMechanics
+
+    def __addTrackedMechanics(self, mechanics):
+        self.addPlugins({mechanic.value:self._VEHICLE_MECHANIC_PLUGINS_MAP[mechanic] for mechanic in mechanics if mechanic in self._VEHICLE_MECHANIC_PLUGINS_MAP}, autoStart=True)
+
+    def __removeTrackedMechanics(self, mechanics):
+        self.removePlugins(*[ mechanic.value for mechanic in mechanics ])

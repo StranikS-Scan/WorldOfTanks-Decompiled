@@ -11,6 +11,7 @@ from gui.battle_control.battle_constants import COUNTDOWN_STATE, BATTLE_CTRL_ID
 from gui.battle_control.view_components import ViewComponentsController
 from helpers import dependency
 from skeletons.connection_mgr import IConnectionManager
+from skeletons.gameplay import PlayerEventID, IGameplayLogic
 _COUNTDOWN_HIDE_SPEED = 1.5
 _START_NOTIFICATION_TIME = 5.0
 
@@ -73,6 +74,7 @@ class ITimersBar(object):
 
 class ArenaPeriodController(IArenaPeriodController, ViewComponentsController):
     __slots__ = ('_callbackID', '_period', '_endTime', '_length', '_cdState', '_ttState', '_isNotified', '_totalTime', '_countdown', '_playingTime', '_switcherState', '_battleCtx', '_arenaVisitor', '_timeNotifications')
+    _gameplay = dependency.descriptor(IGameplayLogic)
 
     def __init__(self):
         super(ArenaPeriodController, self).__init__()
@@ -164,6 +166,8 @@ class ArenaPeriodController(IArenaPeriodController, ViewComponentsController):
         self.__clearCallback()
         self.__setCallback()
         self._setArenaWinStatus(additionalInfo)
+        if period == _PERIOD.BATTLE:
+            self._gameplay.postStateEvent(PlayerEventID.BATTLE_START)
 
     def _getTickInterval(self, floatLength):
         return 1 if floatLength > 1 else 0

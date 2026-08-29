@@ -1,9 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: battle_royale/scripts/common/death_zones_helpers.py
+from __future__ import absolute_import, division
+from future.utils import lrange
 import ArenaType
 from Math import Vector2
 ZONES_SIZE = 10
-DEATH_ZONE_IDS = range(0, ZONES_SIZE * ZONES_SIZE)
+DEATH_ZONE_IDS = lrange(0, ZONES_SIZE * ZONES_SIZE)
 
 class ZONE_STATE(object):
     SAVE = 0
@@ -17,7 +19,7 @@ class DEATH_ZONES_STRATEGY(object):
 
 
 def idxFrom(zoneId, zoneSize=ZONES_SIZE):
-    return (zoneId % zoneSize, zoneId / zoneSize)
+    return (zoneId % zoneSize, zoneId // zoneSize)
 
 
 def zoneIdFrom(x, y, zoneSize=ZONES_SIZE):
@@ -26,7 +28,7 @@ def zoneIdFrom(x, y, zoneSize=ZONES_SIZE):
 
 def scale10To(zoneSize, zoneId):
     x, y = idxFrom(zoneId)
-    s = zoneSize / ZONES_SIZE
+    s = zoneSize // ZONES_SIZE
     return (zoneIdFrom(_x, _y, zoneSize) for _x in range(x * s, (x + 1) * s) for _y in range(y * s, (y + 1) * s))
 
 
@@ -53,7 +55,7 @@ def _getZoneBoundsFromId(arenaTypeID, zoneId, zoneSize, boundbox=None):
     lowerLeft = Vector2(*lowerLeft)
     upperRight = Vector2(*upperRight)
     x = zoneId % zoneSize
-    y = zoneId / zoneSize
+    y = zoneId // zoneSize
     stepX, stepY = (upperRight - lowerLeft).tuple()
     stepX = stepX / zoneSize
     stepY = stepY / zoneSize

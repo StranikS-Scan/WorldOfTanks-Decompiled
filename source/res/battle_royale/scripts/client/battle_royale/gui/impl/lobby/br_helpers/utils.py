@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: battle_royale/scripts/client/battle_royale/gui/impl/lobby/br_helpers/utils.py
+from __future__ import absolute_import
 from battle_royale.gui.impl.gen.view_models.views.lobby.enums import SubMode, CoinType
 from battle_royale.gui.impl.lobby.views.states import BattleRoyaleBattleResultsState
 from gui.Scaleform.lobby_entry import getLobbyStateMachine

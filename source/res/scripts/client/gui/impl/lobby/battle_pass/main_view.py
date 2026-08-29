@@ -4,7 +4,7 @@ from __future__ import absolute_import
 import logging
 from typing import TYPE_CHECKING
 import Event
-from frameworks.state_machine import BaseStateObserver, StateEvent, visitor
+from frameworks_common.state_machine import BaseStateObserver, StateEvent, visitor
 from frameworks.wulf import WindowFlags
 from gui.Scaleform.lobby_entry import getLobbyStateMachine
 from gui.battle_pass.battle_pass_decorators import createBackportTooltipDecorator, createTooltipContentDecorator

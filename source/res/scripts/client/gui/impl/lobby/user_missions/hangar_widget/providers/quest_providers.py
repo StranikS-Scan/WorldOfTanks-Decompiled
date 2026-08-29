@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/user_missions/hangar_widget/providers/quest_providers.py
+from __future__ import absolute_import
 from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS
 from config_schemas.umg import WeightsModel
 from config_schemas.umg_config import umgConfigSchema
@@ -7,7 +8,7 @@ from constants import PREMIUM_TYPE
 from gui.impl.lobby.user_missions.hangar_widget.providers import ConfigKeys
 from gui.impl.lobby.user_missions.hangar_widget.providers.user_mission_item import DailyQuestMissionItem, PremiumDailyQuestMissionItem, MissionItem, WeeklyQuestMissionItem
 from gui.server_events.event_items import Quest
-from gui.server_events.events_helpers import isDailyQuestsEnable, isPremiumQuestsEnable, premMissionsSortFunc, isWeeklyQuestsEnable
+from gui.server_events.events_helpers import isDailyQuestsEnable, isPremiumQuestsEnable, isWeeklyQuestsEnable, PremMissionsSortKey
 from skeletons.gui.game_control import IHangarGuiController
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
@@ -100,7 +101,7 @@ class PremiumQuestProvider(QuestProviderBase):
             if weightConfig is None:
                 _logger.error('Invalid weightConfig %s', ConfigKeys.PREMIUM_DAILY)
                 return []
-            rawQuests = sorted(self.storage.getPremiumQuests().values(), cmp=premMissionsSortFunc)
+            rawQuests = sorted(self.storage.getPremiumQuests().values(), key=PremMissionsSortKey)
             hasPremium = self._itemsCache.items.stats.isActivePremium(PREMIUM_TYPE.PLUS)
             quests = []
             if not hasPremium:

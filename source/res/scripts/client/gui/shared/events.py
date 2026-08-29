@@ -5,7 +5,7 @@ import logging
 from collections import namedtuple
 import typing
 from enum import Enum
-from frameworks.state_machine import StateEvent
+from frameworks_common.state_machine import StateEvent
 from gui.shared.event_bus import SharedEvent
 from shared_utils import CONST_CONTAINER
 if typing.TYPE_CHECKING:
@@ -69,9 +69,6 @@ class GameEvent(HasCtxEvent):
     SHOW_BTN_HINT = 'game/showBtnHint'
     HIDE_BTN_HINT = 'game/hideBtnHint'
     DESTROY_TIMERS_PANEL = 'game/destroyTimersPanel'
-    SHOW_LOOT_BOX_WINDOWS = 'game/showLootBoxWindows'
-    HIDE_LOOT_BOX_WINDOWS = 'game/hideLootBoxWindows'
-    CLOSE_LOOT_BOX_WINDOWS = 'game/closeLootBoxWindows'
     CHARGE_RELEASED = 'game/chargeReleased'
     PRE_CHARGE = 'game/preCharge'
     CONTROL_MODE_CHANGE = 'game/controlModeChange'
@@ -89,6 +86,8 @@ class GameEvent(HasCtxEvent):
     POINT_OF_INTEREST_ADDED = 'game/changeAmmunitionSetup'
     POINT_OF_INTEREST_REMOVED = 'game/changeAmmunitionSetup'
     PREBATTLE_INPUT_STATE_LOCKED = 'game/inputStateLocked'
+    GO_TO_PREBATTLE_HIGHLIGHTS = 'game/prebattleHighlights/start'
+    RETURN_FROM_PREBATTLE_HIGHLIGHTS = 'game/prebattleHighlights/end'
 
 
 class GUICommonEvent(SharedEvent):
@@ -336,6 +335,7 @@ class PersonalMissionsEvent(HasCtxEvent):
     ON_AWARD_SCEEN_OPEN = 'onAwardScreenOpen'
     ON_AWARD_SCEEN_CLOSE = 'onAwardScreenClose'
     UPDATE_AWARD_SCREEN = 'updateAwardScreen'
+    NEXT_QUEST_SELECTED = 'nextQuestSelected'
 
 
 class TrainingSettingsEvent(HasCtxEvent):
@@ -374,6 +374,10 @@ class LobbyHeaderControlsEvent(LobbySimpleEvent):
 
 class LobbyHeaderMenuEvent(LobbySimpleEvent):
     UPDATE_PREBATTLE_CONTROLS = 'updateControlsHeaderMenu'
+
+
+class LobbyHeaderEvent(LobbySimpleEvent):
+    TOGGLE_VISIBILITY = 'toggleVisibilityHeader'
 
 
 class CloseWindowEvent(SharedEvent):
@@ -857,6 +861,8 @@ class Achievements20Event(HasCtxEvent):
 class PrebattleEvent(HasCtxEvent):
     SWITCHED = 'PrebattleEvent/SWITCHED'
     NOT_SWITCHED = 'PrebattleEvent/NOT_SWITCHED'
+    ANIMATION_STARTED = 'PrebattleEvent/ANIMATION_STARTED'
+    ANIMATION_ENDED = 'PrebattleEvent/ANIMATION_ENDED'
 
 
 class HangarCrewWidgetViewEvent(HasCtxEvent):
@@ -930,3 +936,4 @@ class PetSystemEvent(HasCtxEvent):
     LAST_SEEN_SYNERGY_LEVEL_UPDATED = 'lastSeenSynergyLevelUpdated'
     PET_OBJECT_PRESENTER_LOADING = 'petObjectPresenterLoading'
     PET_OBJECT_PRESENTER_CLOSING = 'petObjectPresenterClosing'
+    PET_SEQUENCE = 'petSequence'

@@ -13,7 +13,8 @@ from helpers import dependency
 from skeletons.account_helpers.settings_core import ISettingsCore
 from points_of_interest_shared import PoiType
 _POI_TYPE_TO_STR = {PoiType.ARTILLERY: MINIMAPENTRIES_CONSTANTS.POI_TYPE_ARTY,
- PoiType.RECON: MINIMAPENTRIES_CONSTANTS.POI_TYPE_RECON}
+ PoiType.RECON: MINIMAPENTRIES_CONSTANTS.POI_TYPE_RECON,
+ PoiType.ILLUMINATION_FLARE: MINIMAPENTRIES_CONSTANTS.POI_TYPE_ILLUMINATION_FLARE}
 
 def _resilientMapIconPathGetter(gameplayName, geometryName):
     prefixedGeometryName = 'c_%s' % geometryName

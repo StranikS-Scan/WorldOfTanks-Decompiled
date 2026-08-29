@@ -6,7 +6,7 @@ from collections import defaultdict
 from future.utils import viewvalues
 from past.builtins import unicode
 import nations
-from constants import IS_DEVELOPMENT, HAS_DEV_RESOURCES
+from constants import IS_DEVELOPMENT, HAS_DEV_RESOURCES, ARENA_PERIOD
 from gui import promo
 from gui.GuiSettings import GuiSettings as _GuiSettings
 from helpers.html.templates import XMLCollection

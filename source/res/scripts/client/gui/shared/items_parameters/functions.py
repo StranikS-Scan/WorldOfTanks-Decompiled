@@ -15,15 +15,18 @@ from gui.shared.items_parameters import isTemperatureGun
 from gui.shared.items_parameters.params_constants import MODULES
 from helpers import dependency
 from items import utils, tankmen, getTypeOfCompactDescr
-from items.components.shared_components import LowChargeShotParams
+from items.attributes_helpers import AggregatedCollectorHelper
+from items.components.shared_components import LowChargeShotParams, ShellCalibrationParams
 from items.vehicles import vehicleAttributeFactors
 from items.params_utils import getHeatedShotDispersion, convertModifiersList, extractModifier
 from skeletons.gui.lobby_context import ILobbyContext
+from vehicles.mechanics.mechanic_constants import VehicleMechanic
+from vehicles.mechanics.mechanic_helpers import getVehicleDescrMechanicParams
 if typing.TYPE_CHECKING:
     from gui.shared.gui_items.Vehicle import Vehicle
-    from items.components.shared_components import LowChargeShotShot
+    from items.components.shared_components import ShellSwitcherParams, BustleFeedParams
     from items.vehicles import VehicleDescriptor, CompositeVehicleDescriptor
-    from items.vehicle_items import Gun, Shell
+    from items.vehicle_items import Shell
 
 class _KpiDict(object):
 
@@ -293,56 +296,92 @@ def getTurboshaftEnginePower(vehicleDescr, _):
     return vehicleDescr.siegeVehicleDescr.physics['enginePower'] if vehicleDescr.hasTurboshaftEngine else None
 
 
+def getShellParamsSwitcherModifiedShells(vehDescr):
+    mechanicParams = getVehicleDescrMechanicParams(vehDescr, VehicleMechanic.SHELL_PARAMS_SWITCHER)
+    return () if mechanicParams is None else mechanicParams.modifiedShells
+
+
+def getBustleFeedModifiedShells(vehDescr):
+    params = getVehicleDescrMechanicParams(vehDescr, VehicleMechanic.BUSTLE_FEED)
+    return tuple((shot.shell.compactDescr for idx, shot in enumerate(vehDescr.gun.shots) if idx in params.bustleShotsIndices)) if params else ()
+
+
+def getBustleFeedDamage(vehDescr, shellDescr, baseDamage):
+    params = getVehicleDescrMechanicParams(vehDescr, VehicleMechanic.BUSTLE_FEED)
+    if params:
+        shells = [ shot.shell.compactDescr for shot in vehDescr.gun.shots ]
+        if shellDescr.compactDescr in shells:
+            shellIdx = shells.index(shellDescr.compactDescr)
+            return baseDamage + params.getBustleShotDamageBonusShell(shellIdx)
+    return baseDamage
+
+
 def getLowChargeReloadTime(vehDescr, baseReloadSpeed):
     lowChargeParams = vehDescr.gun.mechanicsParams.get(LowChargeShotParams.MECHANICS_NAME)
     return None if lowChargeParams is None else baseReloadSpeed * lowChargeParams.reloadTimeCoefficient
 
 
-def getLowChargePiercingPower(vehDescr, shellDescr, basePiercingPower):
-    shotParams, shotIdx = _getLowChargeShotParams(vehDescr.gun, shellDescr)
+def getLowChargeShotDispersion(vehDescr, originalShotDisp):
+    lowChargeParams = vehDescr.gun.mechanicsParams.get(LowChargeShotParams.MECHANICS_NAME)
+    if lowChargeParams is None or lowChargeParams.modifiers is None:
+        return originalShotDisp
+    else:
+        modifiers = convertModifiersList(lowChargeParams.modifiers)
+        modifier = extractModifier(modifiers, 'multShotDispersionFactor')
+        return originalShotDisp if modifier is None else originalShotDisp * modifier.value
+
+
+def getShellCalibrationDamage(vehDescr, shellDescr):
+    shotParams, _ = _getShellCalibrationParams(vehDescr.gun, shellDescr)
+    damage = shellDescr.armorDamage[0]
     if shotParams is None:
+        return damage
+    else:
+        mechanicParams = getVehicleDescrMechanicParams(vehDescr, VehicleMechanic.SHELL_CALIBRATION)
+        isForbiddenShell = shotParams.shell.compactDescr in mechanicParams.forbiddenShells
+        if shotParams is None or isForbiddenShell:
+            return damage
+        damageCoefficient = 1 + mechanicParams.penBonuses.dmgBonus
+        return damage * damageCoefficient
+
+
+def getPiercingCoefficientFromModifiers(modifiers):
+    attr = 'gun/piercing'
+    sumBonus = {attr: 1.0}
+    AggregatedCollectorHelper.collect(sumBonus, modifiers, 'dynAttrs/')
+    return sumBonus[attr]
+
+
+def getShellCalibrationPiercingPower(vehDescr, shellDescr, basePiercingPower):
+    shotParams, _ = _getShellCalibrationParams(vehDescr.gun, shellDescr)
+    mechanicParams = getVehicleDescrMechanicParams(vehDescr, VehicleMechanic.SHELL_CALIBRATION)
+    isForbiddenShell = shotParams.shell.compactDescr in mechanicParams.forbiddenShells
+    if shotParams is None or isForbiddenShell:
         return basePiercingPower
     else:
-        attribute = 'piercingValue'
-        return basePiercingPower + shotParams[attribute] + _getLowChargeShotMiscAttr(vehDescr.miscAttrs, shotIdx, attribute)
+        modifiersList = [mechanicParams.nonPenBonuses.modifiers]
+        piercingCoefficient = getPiercingCoefficientFromModifiers(modifiersList)
+        return basePiercingPower * piercingCoefficient if piercingCoefficient is not None else basePiercingPower
 
 
-def getLowChargeDamage(vehDescr, shellDescr, baseDamage):
-    shotParams, shotIdx = _getLowChargeShotParams(vehDescr.gun, shellDescr)
-    if shotParams is None:
-        return baseDamage
+def getShellCalibrationShells(vehDescr):
+    mechanicParams = getVehicleDescrMechanicParams(vehDescr, VehicleMechanic.SHELL_CALIBRATION)
+    if mechanicParams is None:
+        return ()
     else:
-        attribute = 'damageValue'
-        return baseDamage + shotParams[attribute] + _getLowChargeShotMiscAttr(vehDescr.miscAttrs, shotIdx, attribute)
+        shots = vehDescr.gun.shots
+        return tuple((shot.shell.compactDescr for shot in shots if shot.shell.compactDescr not in mechanicParams.forbiddenShells))
 
 
-def getLowChargeShotSpeed(vehDescr, shellDescr, baseShotSpeed):
-    shotParams, shotIdx = _getLowChargeShotParams(vehDescr.gun, shellDescr)
-    if shotParams is None:
-        return baseShotSpeed
+def _getShellCalibrationParams(gunDescr, shellDescr):
+    shellCalibrationParams = gunDescr.mechanicsParams.get(ShellCalibrationParams.MECHANICS_NAME)
+    if shellCalibrationParams is None:
+        return
     else:
-        attribute = 'shotSpeedValue'
-        return baseShotSpeed + shotParams[attribute] + _getLowChargeShotMiscAttr(vehDescr.miscAttrs, shotIdx, attribute)
+        shotIdx = -1
+        for idx, shot in enumerate(gunDescr.shots):
+            if shellDescr.id == shot.shell.id:
+                shotIdx = idx
+                break
 
-
-def getLowChargeShotDispersion(vehDescr, originalShotDisp):
-    lowChargeShotParams = vehDescr.gun.mechanicsParams.get(LowChargeShotParams.MECHANICS_NAME)
-    modifiers = convertModifiersList(lowChargeShotParams.modifiers)
-    modifier = extractModifier(modifiers, 'multShotDispersionFactor')
-    return originalShotDisp * modifier.value
-
-
-def _getLowChargeShotParams(gunDescr, shellDescr):
-    lowChargeShotParams = gunDescr.mechanicsParams.get(LowChargeShotParams.MECHANICS_NAME)
-    shotIdx = -1
-    for idx, shot in enumerate(gunDescr.shots):
-        if shellDescr.id == shot.shell.id:
-            shotIdx = idx
-            break
-
-    return None if lowChargeShotParams is None or shotIdx + 1 > len(lowChargeShotParams.shots) else (lowChargeShotParams.shots[shotIdx], shotIdx)
-
-
-def _getLowChargeShotMiscAttr(miscAttrs, shotIdx, attribute):
-    attr = 'lowChargeShot/shot{}/{}'.format(shotIdx, attribute)
-    return miscAttrs[attr]
+        return None if shotIdx + 1 > len(gunDescr.shots) else (gunDescr.shots[shotIdx], shotIdx)

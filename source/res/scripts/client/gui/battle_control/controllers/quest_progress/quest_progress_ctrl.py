@@ -6,7 +6,7 @@ import typing
 from future.utils import iteritems, itervalues, viewvalues
 import BigWorld
 import personal_missions
-from Event import EventManager, Event
+from Event import Event, EventManager
 from gui.impl import backport
 from gui.impl.gen import R
 from account_helpers import AccountSettings
@@ -79,10 +79,10 @@ class QuestProgressController(IArenaPeriodController, IArenaVehiclesController):
             selectedMissionsIDs = self.__battleCtx.getSelectedQuestIDs()
             selectedMissionsInfo = self.__battleCtx.getSelectedQuestInfo() or {}
             if selectedMissionsIDs:
-                missions = personalMissions.getAllQuests(personal_missions.PM_BRANCH.ALL)
+                missions = personalMissions.getAllQuests(personal_missions.PM_BRANCH.ALL_NAMES)
                 for missionID in selectedMissionsIDs:
                     mission = missions.get(missionID)
-                    if mission and not mission.isDisabled() and isPersonalMissionsEnabled(mission.getQuestBranch()):
+                    if mission and not mission.isDisabled() and isPersonalMissionsEnabled(mission.getQuestBranchName()):
                         pqState = selectedMissionsInfo.get(missionID, (0, PM_STATE.NONE))[1]
                         mission.updatePqStateInBattle(pqState)
                         self.__inProgressQuests[missionID] = mission
@@ -131,12 +131,12 @@ class QuestProgressController(IArenaPeriodController, IArenaVehiclesController):
             formatter = self.__getFormatter(selectedQuest)
             hasAdditionalCondition = selectedQuest.hasAdditionalConditions()
             isMainQuest = True if not hasAdditionalCondition else None
-            isPM3Quest = selectedQuest.getPMType().isPM3
+            isBranchWithoutAwardListQuests = selectedQuest.getPMType().isBranchWithoutAwardListQuests
             return {'questName': selectedQuest.getUserName(),
              'questID': selectedQuest.getID(),
              'questIndexStr': str(selectedQuest.getInternalID()),
              'questIcon': RES_ICONS.getAllianceGoldIcon(selectedQuest.getMajorTag()),
-             'headerProgress': formatter.headerFormat(isMain=isMainQuest, isCompleted=False, isPM3Quest=isPM3Quest),
+             'headerProgress': formatter.headerFormat(isMain=isMainQuest, isCompleted=False, isBranchWithoutAwardListQuests=isBranchWithoutAwardListQuests),
              'bodyProgress': formatter.bodyFormat(isMain=isMainQuest)}
         else:
             return {}
@@ -151,7 +151,7 @@ class QuestProgressController(IArenaPeriodController, IArenaVehiclesController):
              'questIndexStr': str(selectedQuest.getInternalID()),
              'questIcon': RES_ICONS.getAllianceGoldIcon(selectedQuest.getMajorTag()),
              'isProgressAvailable': isUniqueVehicle,
-             'canBeDisabled': selectedQuest.getPMType().isPM3,
+             'canBeDisabled': selectedQuest.getPMType().isBranchWithoutAwardListQuests,
              'questStatus': questStatus}
         return {}
 
@@ -161,9 +161,9 @@ class QuestProgressController(IArenaPeriodController, IArenaVehiclesController):
             hasAdditionalCondition = selectedQuest.hasAdditionalConditions()
             isMainQuest = True if not hasAdditionalCondition else None
             isQuestCompleted = selectedQuest.hasCompletedAllMissionConditions(vehCmpDescr)
-            isPM3Quest = selectedQuest.getPMType().isPM3
+            isBranchWithoutAwardListQuests = selectedQuest.getPMType().isBranchWithoutAwardListQuests
             formatter = self.__getFormatter(selectedQuest)
-            return formatter.headerFormat(isMain=isMainQuest, isCompleted=isQuestCompleted, isPM3Quest=isPM3Quest)
+            return formatter.headerFormat(isMain=isMainQuest, isCompleted=isQuestCompleted, isBranchWithoutAwardListQuests=isBranchWithoutAwardListQuests)
         else:
             return []
 

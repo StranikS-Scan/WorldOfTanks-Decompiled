@@ -14,7 +14,7 @@ from visual_script.slot_types import SLOT_TYPE, arrayOf
 from visual_script.type import VScriptEnum
 from visual_script.tunable_event_block import TunableEventBlock
 from visual_script_client.vehicle_common import TunablePlayerVehicleEventBlock, getPartState, getPartNames, getPartName, TriggerListener
-import items.vehicles as vehicles
+from items import vehicles
 if typing.TYPE_CHECKING:
     from Vehicle import StunInfo
 helpers, TriggersManager, gun_marker_ctrl, equipment_ctrl, Avatar = dependencyImporter('helpers', 'TriggersManager', 'AvatarInputHandler.gun_marker_ctrl', 'gui.battle_control.controllers.consumables.equipment_ctrl', 'Avatar')

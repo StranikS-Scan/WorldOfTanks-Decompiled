@@ -8,6 +8,7 @@ import armor_flashlight_common.server_config
 from config_schemas.umg import umgMissionsConfigSchema, umgEventsConfigSchema
 from config_schemas.umg_config import umgConfigSchema
 from config_schemas.oit_availability import oitAvailabilitySchema
+from config_schemas.prefab_effects_availability import prefabEffectsAvailabilitySchema
 from player_satisfaction_schema import playerSatisfactionSchema
 from schema_manager import getSchemaManager
 import armor_inspector_common.schemas
@@ -39,3 +40,4 @@ def _registerSchemas(schemaManager):
     schemaManager.registerSchema(armor_inspector_common.schemas.armorInspectorConfigSchema)
     schemaManager.registerSchema(renewable_subscription_common.schema.renewableSubscriptionsConfigSchema)
     schemaManager.registerSchema(oitAvailabilitySchema)
+    schemaManager.registerSchema(prefabEffectsAvailabilitySchema)

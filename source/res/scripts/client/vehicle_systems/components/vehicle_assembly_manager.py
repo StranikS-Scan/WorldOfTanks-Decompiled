@@ -13,7 +13,7 @@ from cgf_modules.variable_components import VariableStorageComponent
 from constants import IS_UE_EDITOR
 from vehicle_systems import vehicle_composition as veh_comp
 from vehicle_systems.components import vehicle_variable_storage
-from vehicle_systems.tankStructure import TankPartNames, TankRenderMode, ModelStates
+from vehicle_systems.tankStructure import TankPartNames, TankRenderMode, ModelStates, TankNodeNames
 if typing.TYPE_CHECKING:
     from GenericComponents import SlotMarkerComponent
     from vehicle_appearance.common_tank_appearance import CommonTankAppearance
@@ -103,6 +103,27 @@ class TurretGunRotationAssembler(Assembler):
             if hasGunInclination and slotName == veh_comp.VehicleSlots.GUN_INCLINATION.value:
                 return appearance.gunMatrix
             return appearance.gunMatrix if not hasGunInclination and slotName == veh_comp.VehicleSlots.GUN.value else None
+
+
+class TurretJointRotationAssembler(Assembler):
+    _SLOTS = TankNodeNames.TURRET_JOINT
+    AccessReactions = tuple()
+
+    def checkSlotMarker(self, slotMarker):
+        return slotMarker.slotName in self._SLOTS
+
+    def assemble(self, gameObject, slotMarker, queue):
+        appearance = veh_comp.findParentVehicleAppearance(gameObject)
+        if appearance is None:
+            return
+        else:
+            matrixProvider = self.__getMatrixProvider(slotMarker.slotName, appearance)
+            if matrixProvider is not None:
+                queue.createComponent(gameObject, GenericComponents.MatrixProviderFollowerComponent, matrixProvider)
+            return
+
+    def __getMatrixProvider(self, slotName, appearance):
+        return appearance.turretRotator.turretMatrix if slotName == TankNodeNames.TURRET_JOINT else None
 
 
 class RecoilAssembler(Assembler):
@@ -231,21 +252,29 @@ class DecalsAssembler(Assembler):
 
 class GunInfoAssembler(Assembler):
     _SLOTS = (veh_comp.VehicleSlots.GUN.value,)
+    VariableStorageAccess = CGF.AccessReaction(CGF.Rw(VariableStorageComponent))
+    AccessReactions = (VariableStorageAccess,)
 
     def checkSlotMarker(self, slotMarker):
         return slotMarker.slotName in self._SLOTS
 
-    def assemble(self, gameObject, slotMarker, queue):
+    def assemble(self, gameObject, slotMarker, queue, varStorageAccess):
         appearance = veh_comp.findParentVehicleAppearance(gameObject)
         if appearance is not None:
             if appearance.compoundModel.node(TankPartNames.GUN) is None:
                 return
             typeDescr = appearance.typeDescriptor
             if typeDescr is None:
-                _logger.error('typeDescriptor of appearance is None')
+                _logger.error('GunInfoAssembler: typeDescriptor of appearance is None')
                 return
             if self._isStorageRequired(typeDescr):
-                vehicle_variable_storage.createForGun(appearance, gameObject)
+                varStorage = varStorageAccess.find(gameObject)
+                if not varStorage:
+                    _logger.error("GunInfoAssembler: Can't find variable storage for: %s", gameObject.name)
+                    return
+                for varName, varValue in vehicle_variable_storage.getVariableValuesForGun(appearance):
+                    varStorage.modify(gameObject, varName, varValue)
+
         return
 
     @staticmethod
@@ -256,12 +285,7 @@ class GunInfoAssembler(Assembler):
         else:
             gunGo = GenericComponents.findSlot(appearance.gameObject, veh_comp.VehicleSlots.GUN.value)
             if gunGo.valid:
-                if gunGo.hasComponent(VariableStorageComponent):
-                    vehicle_variable_storage.update(gunGo, varName, value)
-                else:
-                    queue = CGF.CommandQueue(gunGo.spaceID)
-                    vars = [(varName, value)]
-                    queue.createComponent(gunGo, VariableStorageComponent, vars)
+                vehicle_variable_storage.update(gunGo, varName, value)
             return
 
     @staticmethod
@@ -286,6 +310,7 @@ _AssemblerData = namedtuple('_AssemblerData', ('worldFlags', 'assembler'))
 class VehicleAssemblySystem(CGF.System):
     MarkerActivated = CGF.ActivateReaction(CGF.GameObject, CGF.ReactRo(GenericComponents.SlotMarkerComponent))
     _assemblers = (_AssemblerData(ClientWorld.BATTLE | ClientWorld.EDITOR, TurretGunRotationAssembler),
+     _AssemblerData(ClientWorld.HANGAR, TurretJointRotationAssembler),
      _AssemblerData(ClientWorld.BATTLE | ClientWorld.EDITOR, RecoilAssembler),
      _AssemblerData(ClientWorld.BATTLE | ClientWorld.EDITOR, MultiGunRecoilAssembler),
      _AssemblerData(ClientWorld.AllWorlds, DecalsAssembler),

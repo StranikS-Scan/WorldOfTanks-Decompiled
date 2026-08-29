@@ -1,17 +1,22 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/user_missions/hangar_widget/services/events_service.py
+from __future__ import absolute_import
+import Event
 import json
 import logging
 from itertools import chain
+from future.utils import viewvalues
 from typing import List
 from PlayerEvents import g_playerEvents
 from config_schemas.umg import umgEventsConfigSchema
 from constants import QUEUE_TYPE
 from gui.clans.clan_cache import g_clanCache
+from gui.impl.lobby.personal_missions_30.views_helpers import isPM4BannerAvailable
 from gui.impl.lobby.stronghold_event.stronghold_event_banner import StrongholdEventBanner
 from gui.impl.lobby.stronghold_event.stronghold_event_helpers import isStrongholdEventBannerAvailable
 from gui.impl.lobby.user_missions.hangar_widget.event_banners.challenges_event_banner import ChallengesEventBanner, isChallengesBannerAvailable
 from gui.impl.lobby.user_missions.hangar_widget.event_banners.event_banners_container import EventBannersContainer
+from gui.impl.lobby.user_missions.hangar_widget.event_banners.pm4_event_banner import PM4EventBunner
 from gui.impl.lobby.user_missions.hangar_widget.services import IEventsService
 from gui.integrated_auction.auction_event_banner import IntegratedAuctionEventBanner, isAuctionEventBannerAvailable
 from gui.shared.system_factory import registerBannerEntryPointValidator, collectBannerEntryPointValidator
@@ -28,9 +33,11 @@ _SECONDS_BEFORE_UPDATE = 2
 EventBannersContainer().registerEventBanner(StrongholdEventBanner)
 EventBannersContainer().registerEventBanner(IntegratedAuctionEventBanner)
 EventBannersContainer().registerEventBanner(ChallengesEventBanner)
+EventBannersContainer().registerEventBanner(PM4EventBunner)
 registerBannerEntryPointValidator(StrongholdEventBanner.NAME, isStrongholdEventBannerAvailable)
 registerBannerEntryPointValidator(IntegratedAuctionEventBanner.NAME, isAuctionEventBannerAvailable)
 registerBannerEntryPointValidator(ChallengesEventBanner.NAME, isChallengesBannerAvailable)
+registerBannerEntryPointValidator(PM4EventBunner.NAME, isPM4BannerAvailable)
 _logger = logging.getLogger(__name__)
 
 class _EntryPointData(object):
@@ -99,6 +106,7 @@ class EventsService(IEventsService, Notifiable, ServiceEvents):
 
     def __init__(self):
         super(EventsService, self).__init__()
+        self.onEventsListChanged = Event.Event()
         self.__entries = {}
         self.__visibleEntries = []
         self.__serverSettings = None
@@ -145,6 +153,7 @@ class EventsService(IEventsService, Notifiable, ServiceEvents):
 
     def finalize(self):
         self.stopServiceEvents()
+        self.onEventsListChanged.clear()
 
     def _isQueueEnabled(self):
         enabledQueues = (QUEUE_TYPE.RANDOMS, QUEUE_TYPE.WINBACK, QUEUE_TYPE.COMP7)
@@ -202,7 +211,7 @@ class EventsService(IEventsService, Notifiable, ServiceEvents):
     def __getCooldownForUpdate(self):
         currentTime = getServerUTCTime()
         nearestDate = currentTime + ONE_DAY
-        for entry in self.__entries.itervalues():
+        for entry in viewvalues(self.__entries):
             if entry.isEarlyDate():
                 nearestDate = min(nearestDate, entry.startDate)
             nearestDate = min(nearestDate, entry.endDate)
@@ -212,11 +221,11 @@ class EventsService(IEventsService, Notifiable, ServiceEvents):
     def __updateEntries(self):
         data = []
         if self._isQueueEnabled():
-            weights = [ item.weight for item in self.__entries.itervalues() ]
+            weights = [ item.weight for item in viewvalues(self.__entries) ]
             if len(weights) > len(set(weights)):
                 _logger.warning('You have entryPoints with same priorities. EntryPoints have been sorted by startDate')
             sortKeyFunc = lambda x: (-x.weight, x.startDate, x.id.lower())
-            sortedEntries = sorted(self.__entries.itervalues(), key=sortKeyFunc)
+            sortedEntries = sorted(viewvalues(self.__entries), key=sortKeyFunc)
             for entry in sortedEntries:
                 if entry.isValidDateForCreation() and entry.isEnabledByValidator() and entry.isValidData():
                     data.append(entry)

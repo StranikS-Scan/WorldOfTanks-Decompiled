@@ -174,7 +174,7 @@ class Comp7WeeklyMissionsProgressPresenter(ViewComponent[Comp7WeeklyQuestsProgre
 
     def __getEarnedPoints(self, data, pCur, pPrev):
         for cond in data.bonusCond.getConditions().items:
-            if isinstance(cond, conditions._Cumulativable):
+            if isinstance(cond, conditions.Cumulativable):
                 progressData = first(cond.getProgressPerGroup(pCur, pPrev, True).values())
                 if progressData:
                     current, _, diff, _ = progressData

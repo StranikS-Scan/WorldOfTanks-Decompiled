@@ -8,15 +8,17 @@ from CurrentVehicle import g_currentPreviewVehicle, g_currentVehicle
 from PlayerEvents import g_playerEvents
 from account_helpers.AccountSettings import HANGAR_VIEW_SETTINGS, HANGAR_KEY_BINDINGS
 from frameworks.wulf import WindowFlags
+from gui.Scaleform.lobby_entry import getLobbyStateMachine
 from gui.app_loader import app_getter
 from gui.filters.battle_pass_carousel_filter import BattlePassCarouselFilter
-from gui.Scaleform.lobby_entry import getLobbyStateMachine
 from gui.game_loading.resources.consts import Milestones
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.common.router_model import RouterModel
 from gui.impl.gen.view_models.views.lobby.hangar.hangar_settings_model import HangarSettingsModel
 from gui.impl.gen.view_models.views.lobby.hangar.key_bindings_model import KeyBindingsModel
+from gui.impl.lobby.common.presenters.manage_vehicle_playlists_presenter import ManageableVehiclePlaylistsPresenter
 from gui.impl.lobby.common.presenters.settings_presenter import SettingsPresenter
+from gui.impl.lobby.common.presenters.vehicles_info_presenter import VehiclesInfoPresenter
 from gui.impl.lobby.easy_tank_equip.easy_tank_equip_presenter import EasyTankEquipPresenter
 from gui.impl.lobby.hangar.base.account_styles import AccountStyles
 from gui.impl.lobby.hangar.base.blur import RandomHangarBlur
@@ -27,7 +29,6 @@ from gui.impl.lobby.hangar.presenters.hero_tank_presenter import HeroTankPresent
 from gui.impl.lobby.hangar.presenters.loadout_presenter import LoadoutPresenter
 from gui.impl.lobby.hangar.presenters.lootbox_entry_point_presenter import LootboxEntryPointPresenter
 from gui.impl.lobby.hangar.presenters.main_menu_presenter import MainMenuPresenter
-from gui.impl.lobby.common.presenters.manage_vehicle_playlists_presenter import ManageableVehiclePlaylistsPresenter
 from gui.impl.lobby.hangar.presenters.optional_devices_assistant_presenter import OptionalDevicesAssistantPresenter
 from gui.impl.lobby.hangar.presenters.pet_object_tooltip_presenter import PetObjectTooltipPresenter
 from gui.impl.lobby.hangar.presenters.space_interaction_presenter import SpaceInteractionPresenter
@@ -39,7 +40,7 @@ from gui.impl.lobby.hangar.presenters.vehicle_inventory_presenter import Vehicle
 from gui.impl.lobby.hangar.presenters.vehicle_menu_presenter import VehicleMenuPresenter
 from gui.impl.lobby.hangar.presenters.vehicle_playlists_presenter import VehiclePlaylistsPresenter
 from gui.impl.lobby.hangar.presenters.vehicle_statistics_presenter import VehiclesStatisticsPresenter
-from gui.impl.lobby.common.presenters.vehicles_info_presenter import VehiclesInfoPresenter
+from gui.impl.lobby.hangar.presenters.main_plugins_presenter import MainPluginsPresenter
 from gui.impl.lobby.hangar.random.sound_manager import RANDOM_HANGAR_SOUND_SPACE
 from gui.impl.pub import WindowImpl
 from gui.impl.pub.view_component import ViewComponent
@@ -48,13 +49,14 @@ from gui.lobby_state_machine.router import SubstateRouter
 from gui.shared import EVENT_BUS_SCOPE, events
 from gui.shared import g_eventBus
 from gui.shared.event_dispatcher import showLobbyMenu
+from gui.shared.system_factory import collectDynamicRandomHangarPresenters
 from gui.shared.utils.requesters import REQ_CRITERIA
 from hangar_selectable_objects import HangarSelectableLogic
 from helpers import dependency
 from helpers.statistics import HANGAR_LOADING_STATE
 from shared_utils import nextTick
-from skeletons.helpers.statistics import IStatisticsCollector
 from skeletons.gui.offers import IOffersBannerController
+from skeletons.helpers.statistics import IStatisticsCollector
 if typing.TYPE_CHECKING:
     from gui.impl.pub.view_impl import TViewModel
     from hangar_selectable_objects.interfaces import ISelectableLogic
@@ -97,7 +99,7 @@ class RandomHangar(ViewComponent[RouterModel], IRoutableView):
 
     def _getChildComponents(self):
         hangar = R.aliases.hangar.shared
-        return {hangar.VehiclesInfo(): lambda : VehiclesInfoPresenter(self.__randomVehicleFilter),
+        children = {hangar.VehiclesInfo(): lambda : VehiclesInfoPresenter(self.__randomVehicleFilter),
          hangar.VehiclesStatistics(): lambda : VehiclesStatisticsPresenter(self.__randomInvVehicleFilter, self.__accountStyles),
          hangar.Loadout(): LoadoutPresenter,
          hangar.Crew(): CrewPresenter,
@@ -117,7 +119,10 @@ class RandomHangar(ViewComponent[RouterModel], IRoutableView):
          hangar.PetObjectTooltip(): PetObjectTooltipPresenter,
          hangar.Settings(): partial(SettingsPresenter, HangarSettingsModel, HANGAR_VIEW_SETTINGS),
          hangar.KeyBindings(): partial(SettingsPresenter, KeyBindingsModel, HANGAR_KEY_BINDINGS, readOnly=True),
-         hangar.ManageableVehiclePlaylists(): ManageableVehiclePlaylistsPresenter}
+         hangar.ManageableVehiclePlaylists(): ManageableVehiclePlaylistsPresenter,
+         hangar.MainPlugins(): MainPluginsPresenter}
+        children.update(collectDynamicRandomHangarPresenters())
+        return children
 
     def _subscribe(self):
         super(RandomHangar, self)._subscribe()

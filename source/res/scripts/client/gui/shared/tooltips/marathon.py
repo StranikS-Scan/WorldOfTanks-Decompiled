@@ -60,7 +60,7 @@ class MarathonEventTooltipData(BlocksTooltipData):
             statusLabel = text_styles.bonusAppliedText(icons.makeImageTag(self.__iconsData.okIcon, width=32, height=32, vSpace=-10, hSpace=-10) + backport.text(self.__tooltipData.extraStateCompleted))
             return formatters.packTextBlockData(text=makeHtmlString('html_templates:lobby/textStyle', 'alignText', {'align': 'center',
              'message': statusLabel}), padding=formatters.packPadding(bottom=20))
-        if state == MarathonState.IN_PROGRESS:
+        elif state == MarathonState.IN_PROGRESS:
             warning = self._marathonEvent.checkForWarnings(vehicle)
             if warning == MarathonWarning.WRONG_BATTLE_TYPE:
                 return formatters.packTextBlockData(text=makeHtmlString('html_templates:lobby/textStyle', 'alignText', {'align': 'center',
@@ -72,6 +72,7 @@ class MarathonEventTooltipData(BlocksTooltipData):
             if allStep:
                 return formatters.packTextBlockData(text=makeHtmlString('html_templates:lobby/textStyle', 'alignText', {'align': 'center',
                  'message': text_styles.middleTitle(backport.text(self.__tooltipData.extraStateSteps, currentStep=currentStep, allStep=text_styles.main(allStep)))}), padding=formatters.packPadding(bottom=20))
+            return None
         else:
             discount = self._marathonEvent.getMarathonDiscount()
             return formatters.packTextBlockData(text=makeHtmlString('html_templates:lobby/textStyle', 'alignText', {'align': 'center',

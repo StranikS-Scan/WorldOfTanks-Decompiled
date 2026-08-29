@@ -1,0 +1,370 @@
+<Ch71_WZ_219_tree.xml>
+  <Ch71_WZ_219>
+    <id>	12900	</id>
+    <rootStep>	1	</rootStep>
+    <steps>
+      <step>
+        <id>	1	</id>
+        <price>	Modification10000xp	</price>
+        <action>
+          <type>	modification	</type>
+          <value>	ch71_node1	</value>
+        </action>
+        <position>	16 36	</position>
+        <unlocks>	26 4	</unlocks>
+        <directions>	hidden r2l	</directions>
+        <level>	1	</level>
+        <type>	common	</type>
+      </step>
+      <step>
+        <id>	2	</id>
+        <price>	Modification20000xp	</price>
+        <action>
+          <type>	modification	</type>
+          <value>	ch71_node2	</value>
+        </action>
+        <position>	30 5	</position>
+        <unlocks>	26 5 3	</unlocks>
+        <directions>	hidden r2l b2t	</directions>
+        <unlockStrategyAny></unlockStrategyAny>
+        <level>	2	</level>
+        <type>	major	</type>
+      </step>
+      <step>
+        <id>	3	</id>
+        <price>	Modification10000xp	</price>
+        <action>
+          <type>	modification	</type>
+          <value>	ch71_node3	</value>
+        </action>
+        <position>	30 21	</position>
+        <unlocks>	26 4 2	</unlocks>
+        <directions>	hidden b2t t2b	</directions>
+        <unlockStrategyAny></unlockStrategyAny>
+        <level>	2	</level>
+        <type>	common	</type>
+      </step>
+      <step>
+        <id>	4	</id>
+        <price>	Modification10000xp	</price>
+        <action>
+          <type>	modification	</type>
+          <value>	ch71_node4	</value>
+        </action>
+        <position>	30 36	</position>
+        <unlocks>	26 3 8	</unlocks>
+        <directions>	hidden t2b b2l	</directions>
+        <unlockStrategyAny></unlockStrategyAny>
+        <level>	2	</level>
+        <type>	common	</type>
+      </step>
+      <step>
+        <id>	5	</id>
+        <price>	Modification10000xp	</price>
+        <action>
+          <type>	modification	</type>
+          <value>	ch71_node5	</value>
+        </action>
+        <position>	48 5	</position>
+        <unlocks>	26 2 6 11	</unlocks>
+        <directions>	hidden l2r b2t r2l	</directions>
+        <unlockStrategyAny></unlockStrategyAny>
+        <level>	2	</level>
+        <type>	common	</type>
+      </step>
+      <step>
+        <id>	6	</id>
+        <price>	Modification10000xp	</price>
+        <action>
+          <type>	modification	</type>
+          <value>	ch71_node6	</value>
+        </action>
+        <position>	48 16	</position>
+        <unlocks>	26 5 7	</unlocks>
+        <directions>	hidden t2b b2t	</directions>
+        <unlockStrategyAny></unlockStrategyAny>
+        <level>	2	</level>
+        <type>	common	</type>
+      </step>
+      <step>
+        <id>	7	</id>
+        <price>	Modification20000xp	</price>
+        <action>
+          <type>	modification	</type>
+          <value>	ch71_node7	</value>
+        </action>
+        <position>	48 29	</position>
+        <unlocks>	26 6 8	</unlocks>
+        <directions>	hidden t2b b2t	</directions>
+        <unlockStrategyAny></unlockStrategyAny>
+        <level>	2	</level>
+        <type>	major	</type>
+      </step>
+      <step>
+        <id>	8	</id>
+        <price>	Modification10000xp	</price>
+        <action>
+          <type>	modification	</type>
+          <value>	ch71_node8	</value>
+        </action>
+        <position>	48 42	</position>
+        <unlocks>	26 4 7 9	</unlocks>
+        <directions>	hidden l2b t2b b2t	</directions>
+        <unlockStrategyAny></unlockStrategyAny>
+        <level>	2	</level>
+        <type>	common	</type>
+      </step>
+      <step>
+        <id>	9	</id>
+        <price>	Modification10000xp	</price>
+        <action>
+          <type>	modification	</type>
+          <value>	ch71_node9	</value>
+        </action>
+        <position>	48 54	</position>
+        <unlocks>	26 8 10	</unlocks>
+        <directions>	hidden t2b b2t	</directions>
+        <unlockStrategyAny></unlockStrategyAny>
+        <level>	2	</level>
+        <type>	common	</type>
+      </step>
+      <step>
+        <id>	10	</id>
+        <price>	Modification20000xp	</price>
+        <action>
+          <type>	modification	</type>
+          <value>	ch71_node10	</value>
+        </action>
+        <position>	48 66	</position>
+        <unlocks>	26 9 16	</unlocks>
+        <directions>	hidden t2b r2l	</directions>
+        <unlockStrategyAny></unlockStrategyAny>
+        <level>	2	</level>
+        <type>	major	</type>
+      </step>
+      <step>
+        <id>	11	</id>
+        <price>	Modification10000xp	</price>
+        <action>
+          <type>	modification	</type>
+          <value>	ch71_node11	</value>
+        </action>
+        <position>	66 5	</position>
+        <unlocks>	26 5 12 17	</unlocks>
+        <directions>	hidden l2r b2t r2l	</directions>
+        <unlockStrategyAny></unlockStrategyAny>
+        <level>	2	</level>
+        <type>	common	</type>
+      </step>
+      <step>
+        <id>	12	</id>
+        <price>	Modification10000xp	</price>
+        <action>
+          <type>	feature	</type>
+          <value>	shells_consumables_switch	</value>
+        </action>
+        <position>	66 16	</position>
+        <unlocks>	26 11 13	</unlocks>
+        <directions>	hidden t2b b2t	</directions>
+        <unlockStrategyAny></unlockStrategyAny>
+        <level>	2	</level>
+        <type>	special	</type>
+      </step>
+      <step>
+        <id>	13	</id>
+        <price>	Modification20000xp	</price>
+        <action>
+          <type>	modification	</type>
+          <value>	ch71_node13	</value>
+        </action>
+        <position>	66 29	</position>
+        <unlocks>	26 12 14	</unlocks>
+        <directions>	hidden t2b b2t	</directions>
+        <unlockStrategyAny></unlockStrategyAny>
+        <level>	2	</level>
+        <type>	major	</type>
+      </step>
+      <step>
+        <id>	14	</id>
+        <price>	Modification10000xp	</price>
+        <action>
+          <type>	modification	</type>
+          <value>	ch71_node14	</value>
+        </action>
+        <position>	66 42	</position>
+        <unlocks>	26 13 15	</unlocks>
+        <directions>	hidden t2b b2t	</directions>
+        <unlockStrategyAny></unlockStrategyAny>
+        <level>	2	</level>
+        <type>	common	</type>
+      </step>
+      <step>
+        <id>	15	</id>
+        <price>	Modification10000xp	</price>
+        <action>
+          <type>	modification	</type>
+          <value>	ch71_node15	</value>
+        </action>
+        <position>	66 54	</position>
+        <unlocks>	26 14 16	</unlocks>
+        <directions>	hidden t2b b2t	</directions>
+        <unlockStrategyAny></unlockStrategyAny>
+        <level>	2	</level>
+        <type>	common	</type>
+      </step>
+      <step>
+        <id>	16	</id>
+        <price>	Modification10000xp	</price>
+        <action>
+          <type>	modification	</type>
+          <value>	ch71_node16	</value>
+        </action>
+        <position>	66 66	</position>
+        <unlocks>	26 10 15 22	</unlocks>
+        <directions>	hidden l2r t2b r2l	</directions>
+        <unlockStrategyAny></unlockStrategyAny>
+        <level>	2	</level>
+        <type>	common	</type>
+      </step>
+      <step>
+        <id>	17	</id>
+        <price>	Modification10000xp	</price>
+        <action>
+          <type>	modification	</type>
+          <value>	ch71_node17	</value>
+        </action>
+        <position>	84 5	</position>
+        <unlocks>	26 11 18 23	</unlocks>
+        <directions>	hidden l2r b2t r2l	</directions>
+        <unlockStrategyAny></unlockStrategyAny>
+        <level>	2	</level>
+        <type>	common	</type>
+      </step>
+      <step>
+        <id>	18	</id>
+        <price>	Modification10000xp	</price>
+        <action>
+          <type>	feature	</type>
+          <value>	opt_dev_boosters_switch	</value>
+        </action>
+        <position>	84 16	</position>
+        <unlocks>	26 17 19	</unlocks>
+        <directions>	hidden t2b b2t	</directions>
+        <unlockStrategyAny></unlockStrategyAny>
+        <level>	2	</level>
+        <type>	special	</type>
+      </step>
+      <step>
+        <id>	19	</id>
+        <price>	Modification20000xp	</price>
+        <action>
+          <type>	modification	</type>
+          <value>	ch71_node19	</value>
+        </action>
+        <position>	84 29	</position>
+        <unlocks>	26 18 20	</unlocks>
+        <directions>	hidden t2b b2t	</directions>
+        <unlockStrategyAny></unlockStrategyAny>
+        <level>	2	</level>
+        <type>	major	</type>
+      </step>
+      <step>
+        <id>	20	</id>
+        <price>	Modification10000xp	</price>
+        <action>
+          <type>	modification	</type>
+          <value>	ch71_node20	</value>
+        </action>
+        <position>	84 42	</position>
+        <unlocks>	26 19 25 21	</unlocks>
+        <directions>	hidden t2b r2b b2t	</directions>
+        <unlockStrategyAny></unlockStrategyAny>
+        <level>	2	</level>
+        <type>	common	</type>
+      </step>
+      <step>
+        <id>	21	</id>
+        <price>	Modification10000xp	</price>
+        <action>
+          <type>	modification	</type>
+          <value>	ch71_node21	</value>
+        </action>
+        <position>	84 54	</position>
+        <unlocks>	26 20 22	</unlocks>
+        <directions>	hidden t2b b2t	</directions>
+        <unlockStrategyAny></unlockStrategyAny>
+        <level>	2	</level>
+        <type>	common	</type>
+      </step>
+      <step>
+        <id>	22	</id>
+        <price>	Modification10000xp	</price>
+        <action>
+          <type>	modification	</type>
+          <value>	ch71_node22	</value>
+        </action>
+        <position>	84 66	</position>
+        <unlocks>	26 16 21	</unlocks>
+        <directions>	hidden l2r t2b	</directions>
+        <unlockStrategyAny></unlockStrategyAny>
+        <level>	2	</level>
+        <type>	common	</type>
+      </step>
+      <step>
+        <id>	23	</id>
+        <price>	Modification10000xp	</price>
+        <action>
+          <type>	feature	</type>
+          <value>	roleSlot	</value>
+        </action>
+        <position>	102 5	</position>
+        <unlocks>	26 17 24	</unlocks>
+        <directions>	hidden l2r b2t	</directions>
+        <unlockStrategyAny></unlockStrategyAny>
+        <level>	2	</level>
+        <type>	special	</type>
+      </step>
+      <step>
+        <id>	24	</id>
+        <price>	Modification10000xp	</price>
+        <action>
+          <type>	modification	</type>
+          <value>	ch71_node24	</value>
+        </action>
+        <position>	102 21	</position>
+        <unlocks>	26 23 25	</unlocks>
+        <directions>	hidden t2b b2t	</directions>
+        <unlockStrategyAny></unlockStrategyAny>
+        <level>	2	</level>
+        <type>	common	</type>
+      </step>
+      <step>
+        <id>	25	</id>
+        <price>	Modification10000xp	</price>
+        <action>
+          <type>	modification	</type>
+          <value>	ch71_node25	</value>
+        </action>
+        <position>	102 36	</position>
+        <unlocks>	26 24 20	</unlocks>
+        <directions>	hidden t2b b2r	</directions>
+        <unlockStrategyAny></unlockStrategyAny>
+        <level>	2	</level>
+        <type>	common	</type>
+      </step>
+      <step>
+        <id>	26	</id>
+        <price>	Modification25000xp	</price>
+        <action>
+          <type>	modification	</type>
+          <value>	ch71_node26	</value>
+        </action>
+        <position>	118 36	</position>
+        <unlocks></unlocks>
+        <directions></directions>
+        <level>	2	</level>
+        <type>	final	</type>
+      </step>
+    </steps>
+  </Ch71_WZ_219>
+</Ch71_WZ_219_tree.xml>

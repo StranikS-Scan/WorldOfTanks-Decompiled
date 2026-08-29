@@ -35,6 +35,7 @@ class VehicleMechanic(Enum):
     OVERHEAT_STACKS = 'overheatStacks'
     TARGET_DESIGNATOR = 'targetDesignator'
     STANCE_DANCE = 'stanceDance'
+    AUTORELOADER_SURGE = 'autoreloaderSurge'
     STATIONARY_RELOAD = 'stationaryReload'
     TEMPERATURE_GUN = 'temperatureGun'
     OVERHEAT_GUN = 'overheatGun'
@@ -43,6 +44,12 @@ class VehicleMechanic(Enum):
     STAGED_JET_BOOSTERS = 'stagedJetBoosters'
     PROPELLANT_GUN = 'propellantAfterburnerGun'
     WHEELED_DASH = 'wheeledDash'
+    AUXILIARY_ROCKET_LAUNCHER = 'auxiliaryRocketLauncher'
+    SHELL_PARAMS_SWITCHER = 'shellParamsSwitcher'
+    SHELL_CALIBRATION = 'shellCalibration'
+    CREST_MOVING = 'crestMoving'
+    BUSTLE_FEED = 'bustleFeed'
+    SIGHT_POINTER = 'sightPointer'
 
 
 VEHICLE_MECHANIC_DYN_COMPONENT_NAMES = {VehicleMechanic.IMPROVED_RAMMING: 'improvedRammingController',
@@ -63,6 +70,7 @@ VEHICLE_MECHANIC_DYN_COMPONENT_NAMES = {VehicleMechanic.IMPROVED_RAMMING: 'impro
  VehicleMechanic.OVERHEAT_STACKS: 'overheatStacksController',
  VehicleMechanic.TARGET_DESIGNATOR: 'targetDesignatorController',
  VehicleMechanic.STANCE_DANCE: 'stanceDanceController',
+ VehicleMechanic.AUTORELOADER_SURGE: 'autoreloaderSurgeController',
  VehicleMechanic.STATIONARY_RELOAD: 'stationaryReloadController',
  VehicleMechanic.TEMPERATURE_GUN: 'temperatureGunController',
  VehicleMechanic.OVERHEAT_GUN: 'overheatGunComponent',
@@ -70,7 +78,13 @@ VEHICLE_MECHANIC_DYN_COMPONENT_NAMES = {VehicleMechanic.IMPROVED_RAMMING: 'impro
  VehicleMechanic.LOW_CHARGE_SHOT: 'lowChargeShotController',
  VehicleMechanic.STAGED_JET_BOOSTERS: 'stagedJetBoostersController',
  VehicleMechanic.PROPELLANT_GUN: 'propellantGunController',
- VehicleMechanic.WHEELED_DASH: 'wheeledDashController'}
+ VehicleMechanic.WHEELED_DASH: 'wheeledDashController',
+ VehicleMechanic.AUXILIARY_ROCKET_LAUNCHER: 'auxiliaryRocketLauncherComponent',
+ VehicleMechanic.SHELL_PARAMS_SWITCHER: 'shellParamsSwitcherController',
+ VehicleMechanic.SHELL_CALIBRATION: 'ShellCalibrationController',
+ VehicleMechanic.CREST_MOVING: 'CrestMovingController',
+ VehicleMechanic.BUSTLE_FEED: 'bustleFeedController',
+ VehicleMechanic.SIGHT_POINTER: 'sightPointerComponent'}
 TRACKABLE_VEHICLE_MECHANICS = set(VEHICLE_MECHANIC_DYN_COMPONENT_NAMES)
 VEHICLE_MECHANIC_TAGS = {VehicleMechanic.ROCKET_ACCELERATION: 'rocketAcceleration',
  VehicleMechanic.DUAL_ACCURACY: 'dualAccuracy',
@@ -90,6 +104,7 @@ VEHICLE_MECHANIC_TO_PARAMS = {VehicleMechanic.IMPROVED_RAMMING: shared_component
  VehicleMechanic.OVERHEAT_STACKS: shared_components.OverheatStacksParams.MECHANICS_NAME,
  VehicleMechanic.TARGET_DESIGNATOR: shared_components.TargetDesignatorParams.MECHANICS_NAME,
  VehicleMechanic.STANCE_DANCE: shared_components.StanceDanceParams.MECHANICS_NAME,
+ VehicleMechanic.AUTORELOADER_SURGE: shared_components.AutoreloaderSurgeParams.MECHANICS_NAME,
  VehicleMechanic.STATIONARY_RELOAD: shared_components.StationaryReloadParams.MECHANICS_NAME,
  VehicleMechanic.TEMPERATURE_GUN: shared_components.TemperatureGunParams.MECHANICS_NAME,
  VehicleMechanic.OVERHEAT_GUN: shared_components.OverheatGunParams.MECHANICS_NAME,
@@ -97,7 +112,13 @@ VEHICLE_MECHANIC_TO_PARAMS = {VehicleMechanic.IMPROVED_RAMMING: shared_component
  VehicleMechanic.LOW_CHARGE_SHOT: shared_components.LowChargeShotParams.MECHANICS_NAME,
  VehicleMechanic.STAGED_JET_BOOSTERS: shared_components.StagedJetBoostersParams.MECHANICS_NAME,
  VehicleMechanic.PROPELLANT_GUN: shared_components.PropellantGunParams.MECHANICS_NAME,
- VehicleMechanic.WHEELED_DASH: shared_components.WheeledDashParams.MECHANICS_NAME}
+ VehicleMechanic.WHEELED_DASH: shared_components.WheeledDashParams.MECHANICS_NAME,
+ VehicleMechanic.AUXILIARY_ROCKET_LAUNCHER: shared_components.AuxiliaryRocketLauncherParams.MECHANICS_NAME,
+ VehicleMechanic.SHELL_PARAMS_SWITCHER: shared_components.ShellSwitcherParams.MECHANICS_NAME,
+ VehicleMechanic.SHELL_CALIBRATION: shared_components.ShellCalibrationParams.MECHANICS_NAME,
+ VehicleMechanic.CREST_MOVING: shared_components.CrestMovingParams.MECHANICS_NAME,
+ VehicleMechanic.BUSTLE_FEED: shared_components.BustleFeedParams.MECHANICS_NAME,
+ VehicleMechanic.SIGHT_POINTER: shared_components.SightPointerParams.MECHANICS_NAME}
 VEHICLE_PARAMS_TO_MECHANIC = {v:k for k, v in viewitems(VEHICLE_MECHANIC_TO_PARAMS)}
 TRACKABLE_VEHICLE_DESCR_MECHANICS = set()
 TRACKABLE_VEHICLE_DESCR_MECHANICS |= set(VEHICLE_MECHANIC_TAGS)
@@ -123,7 +144,12 @@ VEHICLE_MECHANIC_USED_COMMANDS = {VehicleMechanic.CONCENTRATION_MODE: (VehicleMe
  VehicleMechanic.CHARGE_SHOT: (VehicleMechanicCommand.ACTIVATE,),
  VehicleMechanic.TARGET_DESIGNATOR: (VehicleMechanicCommand.ACTIVATE,),
  VehicleMechanic.STANCE_DANCE: (VehicleMechanicCommand.ACTIVATE, VehicleMechanicCommand.SWITCH),
+ VehicleMechanic.AUTORELOADER_SURGE: (VehicleMechanicCommand.ACTIVATE,),
  VehicleMechanic.STATIONARY_RELOAD: (VehicleMechanicCommand.MANUAL_RELOAD,),
  VehicleMechanic.STAGED_JET_BOOSTERS: (VehicleMechanicCommand.ACTIVATE,),
  VehicleMechanic.PROPELLANT_GUN: (VehicleMechanicCommand.ACTIVATE,),
- VehicleMechanic.WHEELED_DASH: (VehicleMechanicCommand.ACTIVATE,)}
+ VehicleMechanic.WHEELED_DASH: (VehicleMechanicCommand.ACTIVATE,),
+ VehicleMechanic.AUXILIARY_ROCKET_LAUNCHER: (VehicleMechanicCommand.ACTIVATE,),
+ VehicleMechanic.SHELL_PARAMS_SWITCHER: (VehicleMechanicCommand.ACTIVATE,),
+ VehicleMechanic.BUSTLE_FEED: (VehicleMechanicCommand.SWITCH,),
+ VehicleMechanic.SIGHT_POINTER: (VehicleMechanicCommand.ACTIVATE, VehicleMechanicCommand.DEACTIVATE)}

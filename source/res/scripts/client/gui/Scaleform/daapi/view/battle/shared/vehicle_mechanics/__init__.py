@@ -18,6 +18,7 @@ def getViewSettings():
      ComponentSettings(BATTLE_VIEW_ALIASES.CONCENTRATION_WIDGET, mechanic_widgets.ConcentrationMechanicWidget, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.CHARGE_SHOT_WIDGET, mechanic_widgets.ChargeShotMechanicWidget, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.SUPPORT_WEAPON, mechanic_widgets.SupportWeaponMechanicWidget, ScopeTemplates.DEFAULT_SCOPE),
+     ComponentSettings(BATTLE_VIEW_ALIASES.AUXILIARY_ROCKET_LAUNCHER_WIDGET, mechanic_widgets.AuxiliaryRocketLauncherWidget, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.PILLBOX_SIEGE_WIDGET, mechanic_widgets.PillboxSiegeMechanicWidget, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.CHARGEABLE_BURST_WIDGET, mechanic_widgets.ChargeableBurstMechanicWidget, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.POWER_WIDGET, mechanic_widgets.PowerModeMechanicWidget, ScopeTemplates.DEFAULT_SCOPE),
@@ -31,13 +32,18 @@ def getViewSettings():
      ComponentSettings(BATTLE_VIEW_ALIASES.STAGED_JET_BOOSTERS_WIDGET, mechanic_widgets.StagedJetBoostersMechanicWidget, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.PROPELLANT_GUN_WIDGET, mechanic_widgets.PropellantGunMechanicWidget, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.WHEELED_DASH_WIDGET, mechanic_widgets.WheeledDashMechanicWidget, ScopeTemplates.DEFAULT_SCOPE),
+     ComponentSettings(BATTLE_VIEW_ALIASES.SHELL_PARAMS_SWITCHER_WIDGET, mechanic_widgets.ShellParamsSwitcherWidget, ScopeTemplates.DEFAULT_SCOPE),
+     ComponentSettings(BATTLE_VIEW_ALIASES.SHELL_CALIBRATION_WIDGET, mechanic_widgets.ShellCalibrationMechanicWidget, ScopeTemplates.DEFAULT_SCOPE),
+     ComponentSettings(BATTLE_VIEW_ALIASES.AUTORELOADER_SURGE_WIDGET, mechanic_widgets.AutoreloaderSurgeMechanicWidget, ScopeTemplates.DEFAULT_SCOPE),
+     ComponentSettings(BATTLE_VIEW_ALIASES.BUSTLE_FEED_WIDGET, mechanic_widgets.BustleFeedMechanicWidget, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.DECORATIVE_CROSSHAIR_PANEL, panels.DecorativeCrosshairPanel, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.CONCENTRATION_DECORATIVE_CROSSHAIR, decorative_crosshairs.ConcentrationDecorativeCrosshair, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.ACCURACY_DECORATIVE_CROSSHAIR, decorative_crosshairs.AccuracyDecorativeCrosshair, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.PILLBOX_SIEGE_DECORATIVE_CROSSHAIR, decorative_crosshairs.PillboxSiegeDecorativeCrosshair, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.OVERHEAT_DECORATIVE_CROSSHAIR, decorative_crosshairs.OverheatDecorativeCrosshair, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.FURY_DECORATIVE_CROSSHAIR, decorative_crosshairs.FuryDecorativeCrosshair, ScopeTemplates.DEFAULT_SCOPE),
-     ComponentSettings(BATTLE_VIEW_ALIASES.TEMPERATURE_GUN_OVERHEAT_DECORATIVE_CROSSHAIR, decorative_crosshairs.TemperatureGunOverheatDecorativeCrosshair, ScopeTemplates.DEFAULT_SCOPE))
+     ComponentSettings(BATTLE_VIEW_ALIASES.TEMPERATURE_GUN_OVERHEAT_DECORATIVE_CROSSHAIR, decorative_crosshairs.TemperatureGunOverheatDecorativeCrosshair, ScopeTemplates.DEFAULT_SCOPE),
+     ComponentSettings(BATTLE_VIEW_ALIASES.SIGHT_POINTER_WIDGET, mechanic_widgets.SightPointerMechanicWidget, ScopeTemplates.DEFAULT_SCOPE))
 
 
 def getBusinessHandlers():

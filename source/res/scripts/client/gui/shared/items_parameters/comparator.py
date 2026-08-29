@@ -11,7 +11,7 @@ from gui.shared.gui_items import KPI
 from gui.shared.items_parameters import params_cache
 from math_common import decimal_round, round_py2_style
 from shared_utils import first
-from gui.shared.utils import WHEELED_SWITCH_ON_TIME, WHEELED_SWITCH_OFF_TIME, DUAL_GUN_CHARGE_TIME, SHOT_DISPERSION_ANGLE, TURBOSHAFT_INVISIBILITY_STILL_FACTOR, TURBOSHAFT_INVISIBILITY_MOVING_FACTOR, DISPERSION_RADIUS, CHASSIS_REPAIR_TIME, TURBOSHAFT_SWITCH_TIME, DUAL_GUN_RATE_TIME, DUAL_ACCURACY_COOLING_DELAY, BURST_FIRE_RATE, BURST_TIME_INTERVAL, AUTO_SHOOT_CLIP_FIRE_RATE, TWIN_GUN_RELOAD_ONE_GUN_TIME, TWIN_GUN_RELOAD_TWO_GUN_TIME, SHELL_LOADING_TIME_PROP_NAME
+from gui.shared.utils import WHEELED_SWITCH_ON_TIME, WHEELED_SWITCH_OFF_TIME, DUAL_GUN_CHARGE_TIME, SHOT_DISPERSION_ANGLE, TURBOSHAFT_INVISIBILITY_STILL_FACTOR, TURBOSHAFT_INVISIBILITY_MOVING_FACTOR, DISPERSION_RADIUS, CHASSIS_REPAIR_TIME, TURBOSHAFT_SWITCH_TIME, DUAL_GUN_RATE_TIME, DUAL_ACCURACY_COOLING_DELAY, BURST_FIRE_RATE, BURST_TIME_INTERVAL, AUTO_SHOOT_CLIP_FIRE_RATE, TWIN_GUN_RELOAD_ONE_GUN_TIME, TWIN_GUN_RELOAD_TWO_GUN_TIME, SHELL_LOADING_TIME_PROP_NAME, PENETRATION_LOSS
 if typing.TYPE_CHECKING:
     from gui.shared.items_parameters.params import _PenaltyInfo
 _logger = logging.getLogger(__name__)
@@ -33,6 +33,7 @@ BACKWARD_QUALITY_PARAMS = frozenset(['aimingTime',
  'vehicleWeight',
  CHASSIS_REPAIR_TIME,
  DUAL_GUN_CHARGE_TIME,
+ PENETRATION_LOSS,
  KPI.Name.CREW_REPEATED_STUN_DURATION,
  KPI.Name.CREW_STUN_DURATION,
  KPI.Name.DAMAGE_AND_PIERCING_DISTRIBUTION_UPPER_BOUND,
@@ -508,3 +509,14 @@ def addParameterValuesOfTheSameType(val1, val2):
 
         return result
     return val1 + val2
+
+
+def combineParameterInfos(paramInfos):
+    firstInfo = paramInfos[0]
+    combinedDiff = firstInfo.getParamDiff()
+    for pInfo in paramInfos[1:]:
+        combinedDiff = addParameterValuesOfTheSameType(combinedDiff, pInfo.getParamDiff())
+
+    baseline = [0] * len(combinedDiff) if isinstance(combinedDiff, (tuple, list)) else 0
+    state = rateParameterState(firstInfo.name, combinedDiff, baseline, isSituational=firstInfo.isSituational)
+    return firstInfo._replace(value=combinedDiff, state=state)

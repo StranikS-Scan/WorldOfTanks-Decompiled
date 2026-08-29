@@ -469,8 +469,7 @@ class VehicleSellDialog(VehicleSellDialogMeta):
         invVehs = self.__itemsCache.items.getVehicles(REQ_CRITERIA.INVENTORY)
         for invVeh in viewvalues(invVehs):
             if invVeh.invID != vehInvID:
-                for shot in invVeh.descriptor.gun.shots:
-                    result.add(shot.shell.compactDescr)
+                result.update((shot.shell.compactDescr for shot in invVeh.descriptor.gun.shots))
 
         return result
 

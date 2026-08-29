@@ -5,11 +5,13 @@ import functools
 import locale
 import sys
 import zlib
+import typing
 from future.moves import pickle
 import Account
 import AreaDestructibles
 import BigWorld
 import CommandMapping
+import Input
 import GUI
 import MusicControllerWWISE
 import Settings
@@ -33,6 +35,8 @@ from skeletons.connection_mgr import IConnectionManager
 from skeletons.gameplay import IGameplayLogic
 from system_events import g_systemEvents
 from wg_async import wg_async, wg_await
+if typing.TYPE_CHECKING:
+    from BigWorld import KeyEvent, MouseEvent, AxisEvent
 try:
     locale.setlocale(locale.LC_TIME, '')
 except locale.Error:
@@ -71,6 +75,7 @@ def init(scriptConfig, engineConfig, userPreferences):
         BigWorld.wg_initCustomSettings()
         Settings.g_instance = Settings.Settings(scriptConfig, engineConfig, userPreferences)
         CommandMapping.g_instance = CommandMapping.CommandMapping()
+        Input.loadProfiles()
         gameLoading.step()
         from helpers import DecalMap
         DecalMap.init(scriptConfig['decal'])
@@ -208,6 +213,7 @@ def fini():
     if TriggersManager.g_manager is not None:
         TriggersManager.g_manager.destroy()
         TriggersManager.g_manager = None
+    Input.unloadProfiles()
     if g_replayCtrl is not None:
         g_replayCtrl.unsubscribe()
     if dependency.isConfigured():
@@ -307,6 +313,10 @@ def onCameraChange(oldCamera):
 
 
 def handleAxisEvent(event):
+    inputHandler = getattr(BigWorld.player(), 'inputHandler', None)
+    if inputHandler is not None:
+        if inputHandler.handleAxisEvent(event):
+            return True
     return False
 
 
@@ -370,7 +380,7 @@ def handleMouseEvent(event):
                 return True
         inputHandler = getattr(BigWorld.player(), 'inputHandler', None)
         if inputHandler is not None:
-            if inputHandler.handleMouseEvent(dx, dy, dz):
+            if inputHandler.handleMouseEvent(event):
                 return True
         for handler in g_mouseEventHandlers:
             try:

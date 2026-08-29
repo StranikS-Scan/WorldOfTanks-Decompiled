@@ -1,6 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: battle_royale/scripts/client/battle_royale/gui/Scaleform/daapi/view/battle/status_notifications/sn_items.py
+from __future__ import absolute_import, division
 import BigWorld
+from battle_royale.gui.constants import BattleRoyaleEquipments
 from constants import LootAction, LOOT_TYPE
 from gui.Scaleform.daapi.view.battle.shared.status_notifications import sn_items
 from gui.Scaleform.daapi.view.common.battle_royale.br_helpers import getSmokeDataByPredicate, getEquipmentById
@@ -10,7 +12,7 @@ from gui.battle_control.battle_constants import VEHICLE_VIEW_STATE
 from gui.impl import backport
 from gui.impl.gen import R
 from items import vehicles
-from battle_royale.gui.constants import BattleRoyaleEquipments
+from math_common import round_py2_style_int
 
 class _BRLocalizationProvider(sn_items.LocalizationProvider):
 
@@ -105,7 +107,7 @@ class LootPickUpSN(_BRLocalizationProvider, sn_items.TimerSN):
         if count > 1:
             return backport.text(self._stringResource.loot.multiple(), count=count)
         if count > 0:
-            lootType, _ = self.__loots.values()[0]
+            lootType, _ = next(iter(self.__loots.values()))
             if lootType == LOOT_TYPE.BASIC:
                 return backport.text(self._stringResource.loot.basic())
             if lootType == LOOT_TYPE.ADVANCED:
@@ -131,7 +133,7 @@ class ShotPassionSN(BRBuffSN):
         super(ShotPassionSN, self).__init__(updateCallback)
         eqID = vehicles.g_cache.equipmentIDs().get(self._getEquipmentName())
         self.__eq = vehicles.g_cache.equipments()[eqID]
-        self.__maxStage = int(round(self.__eq.maxDamageIncreasePerShot / self.__eq.damageIncreasePerShot))
+        self.__maxStage = round_py2_style_int(self.__eq.maxDamageIncreasePerShot / self.__eq.damageIncreasePerShot)
 
     def start(self):
         super(ShotPassionSN, self).start()
@@ -251,10 +253,10 @@ class DamagingCorrodingShotSN(_BRLocalizationProvider, sn_items.SmokeSN):
     def _getTitle(self, value):
         return backport.text(self._stringResource.damagingCorrodingShot())
 
-    def _update(self, data):
-        duration = data.get('duration', 0)
+    def _update(self, value):
+        duration = value.get('duration', 0)
         if duration > 0.0:
-            endTime = data.get('endTime', 0.0)
+            endTime = value.get('endTime', 0.0)
             self._setVisible(True)
             self._updateTimeParams(duration, endTime)
             self._sendUpdate()

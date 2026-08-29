@@ -72,12 +72,12 @@ class ModelBoundEffects(object):
     def addNew(self, matProv, effectsList, keyPoints, waitForKeyOff=False, **args):
         return self.addNewToNode('', matProv, effectsList, keyPoints, waitForKeyOff, **args)
 
-    def addNewToNode(self, node, matProv, effectsList, keyPoints, waitForKeyOff=False, **args):
+    def addNewToNode(self, node, matProv, effectsList, keyPoints, waitForKeyOff=False, excludeTags=None, **args):
         if not node and matProv is None:
             position = None
         else:
             position = (node, matProv)
-        desc = EffectsListPlayer(effectsList, keyPoints, position=position, **args)
+        desc = EffectsListPlayer(effectsList, keyPoints, position=position, excludeTags=excludeTags, **args)
         desc.play(self.__model, None, partial(self._effects.remove, desc), waitForKeyOff)
         self._effects.append(desc)
         return desc

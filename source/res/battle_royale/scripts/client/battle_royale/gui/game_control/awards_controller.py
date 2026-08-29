@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: battle_royale/scripts/client/battle_royale/gui/game_control/awards_controller.py
+from __future__ import absolute_import
 from battle_royale.gui.shared.event_dispatcher import showAwardsView
 from chat_shared import SYS_MESSAGE_TYPE
 from gui.game_control.AwardController import ServiceChannelHandler

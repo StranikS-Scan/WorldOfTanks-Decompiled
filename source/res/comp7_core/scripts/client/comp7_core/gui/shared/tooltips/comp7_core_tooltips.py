@@ -3,7 +3,6 @@
 import logging
 from copy import copy
 import typing
-from constants import ROLE_TYPE_TO_LABEL
 from gui import g_htmlTemplates
 from gui.Scaleform.genConsts.BLOCKS_TOOLTIP_TYPES import BLOCKS_TOOLTIP_TYPES
 from gui.impl import backport
@@ -33,10 +32,10 @@ class RoleSkillBattleTooltipData(BlocksTooltipData):
     def _modeController(self):
         raise NotImplementedError
 
-    def _packBlocks(self, roleName):
-        equipment = self.context.buildItem(roleName)
+    def _packBlocks(self, roleName, equipmentName):
+        equipment = self.context.buildItem(equipmentName)
         if equipment is None:
-            _logger.error('Missing Role Skill for role = %s', roleName)
+            _logger.error('Missing Role Skill for role = %s, equipmentName = %s', roleName, equipmentName)
             return []
         else:
             startLevel = self.context.getStartLevel(roleName)
@@ -138,8 +137,11 @@ def getRoleSkillDescription(equipment, roleName, startLevel, modeController):
     params = {}
     tooltipParams = equipment.tooltipParams
     tooltipParams.update(modeController.getRoleEquipmentOverrides(roleName))
-    if roleName in ROLE_TOOLTIP_PREPROCESSORS:
-        tooltipParams = ROLE_TOOLTIP_PREPROCESSORS[roleName].processParams(copy(tooltipParams))
+    for eqPrefix, preprocessor in EQUIPMENT_TOOLTIP_PREPROCESSORS.items():
+        if equipment.name.endswith(eqPrefix):
+            tooltipParams = preprocessor.processParams(copy(tooltipParams))
+            break
+
     for k, v in tooltipParams.iteritems():
         if isinstance(v, tuple):
             for level, levelValue in enumerate(v):
@@ -166,7 +168,7 @@ def getPoIEquipmentDescription(equipment, modeController):
 
 
 def getRoleEquipmentTooltipParts(vehicle, modeController):
-    roleName = ROLE_TYPE_TO_LABEL.get(vehicle.descriptor.role, '')
+    roleName = modeController.getRoleEquipmentKey(vehicle.descriptor.type)
     roleSkill = modeController.getRoleEquipment(roleName)
     if not roleSkill:
         from gui.battle_control import avatar_getter
@@ -296,15 +298,15 @@ class Comp7MarchTooltipPreprocessor(TooltipPreprocessor):
         return params
 
 
-ROLE_TOOLTIP_PREPROCESSORS = {'role_HT_assault': Comp7AoeHealTooltipPreprocessor,
- 'role_HT_universal': Comp7AllyHunterTooltipPreprocessor,
- 'role_HT_support': Comp7ConcentrationTooltipPreprocessor,
- 'role_MT_assault': Comp7BerserkTooltipPreprocessor,
- 'role_MT_support': Comp7FastRechargeTooltipPreprocessor,
- 'role_ATSPG_assault': Comp7JuggernautTooltipPreprocessor,
- 'role_ATSPG_universal': Comp7SureShotTooltipPreprocessor,
- 'role_ATSPG_sniper': Comp7SniperTooltipPreprocessor,
- 'role_ATSPG_support': Comp7RiskyAttackTooltipPreprocessor,
- 'role_LT_universal': Comp7ReconTooltipPreprocessor,
- 'role_LT_wheeled': Comp7AggressiveDetectionTooltipPreprocessor,
- 'role_SPG': Comp7MarchTooltipPreprocessor}
+EQUIPMENT_TOOLTIP_PREPROCESSORS = {'aoe_heal': Comp7AoeHealTooltipPreprocessor,
+ 'hunter': Comp7AllyHunterTooltipPreprocessor,
+ 'concentration': Comp7ConcentrationTooltipPreprocessor,
+ 'berserk': Comp7BerserkTooltipPreprocessor,
+ 'fast_recharge': Comp7FastRechargeTooltipPreprocessor,
+ 'juggernaut': Comp7JuggernautTooltipPreprocessor,
+ 'sure_shot': Comp7SureShotTooltipPreprocessor,
+ 'sniper': Comp7SniperTooltipPreprocessor,
+ 'risky_attack': Comp7RiskyAttackTooltipPreprocessor,
+ 'recon': Comp7ReconTooltipPreprocessor,
+ 'march': Comp7MarchTooltipPreprocessor,
+ 'aggressive_detection': Comp7AggressiveDetectionTooltipPreprocessor}

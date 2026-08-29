@@ -42,12 +42,13 @@ class IPlugin(object):
 
 
 class PluginsCollection(IPlugin):
-    __slots__ = ('__parentObjRef', '__plugins')
+    __slots__ = ('__parentObjRef', '__plugins', '__initArgs')
 
     def __init__(self, parentObj):
         super(PluginsCollection, self).__init__(parentObj)
         self.__parentObjRef = weakref.ref(parentObj)
         self.__plugins = {}
+        self.__initArgs = ()
 
     def __iter__(self):
         return iter(self.__plugins)
@@ -60,7 +61,7 @@ class PluginsCollection(IPlugin):
             pluginObj = pluginClass(self.__parentObjRef())
             self.__plugins[pluginName] = pluginObj
             if autoStart:
-                pluginObj.init()
+                pluginObj.init(*self.__initArgs)
                 pluginObj.start()
 
     def removePlugins(self, *names):
@@ -76,12 +77,14 @@ class PluginsCollection(IPlugin):
         return self.__plugins[name] if name in self.__plugins else None
 
     def init(self, *args):
+        self.__initArgs = args
         self._invoke('init', *args)
 
     def fini(self):
         self._invoke('fini')
         self.__plugins.clear()
         self.__parentObjRef = None
+        self.__initArgs = ()
         super(PluginsCollection, self).fini()
         return
 

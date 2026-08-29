@@ -3,13 +3,16 @@
 import functools
 import logging
 import math
+import typing
 import BigWorld
 import CGF
 import Keys
 import Math
 import ResMgr
+import Input
 from AvatarInputHandler.AimingSystems import disableShotPointCache
 from AvatarInputHandler.commands.armor_flashlight_control import ArmorFlashlightControl
+from AvatarInputHandler.commands.prebattle_highlights_control import PrebattleHighlightsCommandsSetup
 from AvatarInputHandler.vehicles_selection_mode import VehiclesSelectionControlMode
 from AvatarInputHandler.commands.fl_random_reserves import FLRandomReserves
 from aih_constants import MAP_CASE_MODES
@@ -46,7 +49,7 @@ from AvatarInputHandler.commands.vehicle_upgrade_control import VehicleUpgradePa
 from AvatarInputHandler.commands.dev_commands_control import createDevCommandsControl
 from AvatarInputHandler.remote_camera_sender import RemoteCameraSender
 from Event import Event
-from Input import InputSingleton
+from Input import InputLayer
 from TriggersManager import TRIGGER_TYPE
 from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS
 from constants import ARENA_PERIOD, AIMING_MODE
@@ -63,6 +66,9 @@ from components_base.component_descriptor import ComponentDescriptor
 from components_base.component_controller import ComponentController
 from vehicles.mechanics.mechanic_helpers import hasVehicleDescrMechanic
 from vehicles.mechanics.mechanic_constants import VehicleMechanic
+from avatar_components.avatar_input_debug import AvatarInputDebug
+if typing.TYPE_CHECKING:
+    from BigWorld import KeyEvent, MouseEvent, AxisEvent
 INPUT_HANDLER_CFG = 'gui/avatar_input_handler.xml'
 _logger = logging.getLogger(__name__)
 _CTRL_TYPE = aih_constants.CTRL_TYPE
@@ -83,6 +89,7 @@ _CTRLS_DESC_MAP = {_CTRL_MODE.ARCADE: (control_modes.ArcadeControlMode, 'arcadeM
  _CTRL_MODE.TWIN_GUN: (control_modes.TwinGunControlMode, 'sniperMode', _CTRL_TYPE.USUAL),
  _CTRL_MODE.POSTMORTEM: (control_modes.PostMortemControlMode, 'postMortemMode', _CTRL_TYPE.USUAL),
  _CTRL_MODE.DEBUG: (control_modes.DebugControlMode, None, _CTRL_TYPE.DEVELOPMENT),
+ _CTRL_MODE.PREBATTLE_HIGHLIGHTS: (control_modes.PrebattleHighlightsControlMode, 'videoMode', _CTRL_TYPE.OPTIONAL),
  _CTRL_MODE.VIDEO: (control_modes.VideoCameraControlMode, 'videoMode', _CTRL_TYPE.OPTIONAL),
  _CTRL_MODE.MAP_CASE: (MapCaseMode.MapCaseControlMode, 'strategicMode', _CTRL_TYPE.USUAL),
  _CTRL_MODE.MAP_CASE_ARCADE: (MapCaseMode.ArcadeMapCaseControlMode, 'arcadeMode', _CTRL_TYPE.USUAL),
@@ -238,7 +245,6 @@ class AvatarInputHandler(CallbackDelayer, ComponentController):
         self.onPostmortemKillerVisionExit = Event()
         self.onReceivedKillerID = Event()
         self.OnVehicleCollided = Event()
-        self.OnVehicleShaked = Event()
         self.__isArenaStarted = False
         self.__isStarted = False
         self.__targeting = _Targeting()
@@ -261,11 +267,11 @@ class AvatarInputHandler(CallbackDelayer, ComponentController):
         self.__observerVehicle = None
         self.__commands = []
         self.__detachedCommands = []
-        self.__persistentCommands = [createDevCommandsControl(), PrebattleSetupsControl()]
+        self.__persistentCommands = [createDevCommandsControl(), PrebattleHighlightsCommandsSetup(), PrebattleSetupsControl()]
         self.__remoteCameraSender = None
         self.__isGUIVisible = False
         self.__lastSwitchTime = 0
-        self.__inputSingleton = None
+        self.__inputDebug = AvatarInputDebug() if constants.HAS_DEV_RESOURCES else None
         return
 
     def __constructComponents(self):
@@ -279,9 +285,6 @@ class AvatarInputHandler(CallbackDelayer, ComponentController):
             return
         else:
             typeDescr = vehicle.typeDescriptor
-            self.__inputSingleton = CGF.findSingleton(BigWorld.player().spaceID, InputSingleton)
-            if self.__inputSingleton is not None:
-                self.__inputSingleton.setCommandMappingImpl(CommandMapping.g_instance)
             if self.siegeModeNotifier is not None:
                 self.siegeModeNotifier.stop()
             if typeDescr.hasSiegeMode:
@@ -304,6 +307,8 @@ class AvatarInputHandler(CallbackDelayer, ComponentController):
             if player.hasBonusCap(ARENA_BONUS_TYPE_CAPS.EPIC):
                 self.__detachedCommands.append(FLRandomReserves())
             self.__persistentCommands.append(createDevCommandsControl())
+            if player.hasBonusCap(ARENA_BONUS_TYPE_CAPS.PRE_BATTLE_HIGHLIGHTS):
+                self.__persistentCommands.append(PrebattleHighlightsCommandsSetup())
             if player.hasBonusCap(ARENA_BONUS_TYPE_CAPS.SWITCH_SETUPS):
                 self.__persistentCommands.append(PrebattleSetupsControl())
             queue = CGF.CommandQueue(player.spaceID)
@@ -362,9 +367,8 @@ class AvatarInputHandler(CallbackDelayer, ComponentController):
                 if command.handleKeyEvent(isDown, key, mods, event):
                     return True
 
-            if self.__inputSingleton is not None:
-                if self.__inputSingleton.handleKeyEvent(event):
-                    return True
+            if Input.inputSystem().handleKeyEventForLayer(InputLayer.AVATAR_INPUT_LAYER, event):
+                return True
             if isDown and BigWorld.isKeyDown(Keys.KEY_CAPSLOCK):
                 if self.__alwaysShowAimKey is not None and key == self.__alwaysShowAimKey:
                     gui_event_dispatcher.toggleCrosshairVisibility()
@@ -381,8 +385,13 @@ class AvatarInputHandler(CallbackDelayer, ComponentController):
                     return True
             return True if not self.isObserverFPV and self.__curCtrl.handleKeyEvent(isDown, key, mods, event) else player.handleKey(isDown, key, mods)
 
-    def handleMouseEvent(self, dx, dy, dz):
-        return False if not self.__isStarted or self.__isDetached else self.__curCtrl.handleMouseEvent(dx, dy, dz)
+    def handleMouseEvent(self, event):
+        if not self.__isStarted or self.__isDetached:
+            return False
+        return True if Input.inputSystem().handleMouseEventForLayer(InputLayer.AVATAR_INPUT_LAYER, event) else self.__curCtrl.handleMouseEvent(event.dx, event.dy, event.dz)
+
+    def handleAxisEvent(self, event):
+        return True if Input.inputSystem().handleAxisEventForLayer(InputLayer.AVATAR_INPUT_LAYER, event) else False
 
     def setForcedGuiControlMode(self, flags):
         result = False
@@ -391,8 +400,7 @@ class AvatarInputHandler(CallbackDelayer, ComponentController):
             self.__isDetached = detached
             self.__targeting.detach(self.__isDetached)
             if detached:
-                if self.__inputSingleton is not None:
-                    self.__inputSingleton.detach()
+                Input.inputSystem().reset()
                 self.appLoader.attachCursor(settings.APP_NAME_SPACE.SF_BATTLE, flags=flags)
                 result = True
                 if flags & GUI_CTRL_MODE_FLAG.AIMING_ENABLED > 0:
@@ -544,6 +552,8 @@ class AvatarInputHandler(CallbackDelayer, ComponentController):
         if not avatar.isObserver() and arena.hasObservers:
             self.__remoteCameraSender = RemoteCameraSender(self)
         self.onCameraChanged('arcade')
+        if self.__inputDebug:
+            self.__inputDebug.start()
         return
 
     def stop(self):
@@ -576,9 +586,10 @@ class AvatarInputHandler(CallbackDelayer, ComponentController):
         BigWorld.player().arena.onPeriodChange -= self.__onArenaStarted
         self.settingsCore.onSettingsChanged -= self.__onSettingsChanged
         BigWorld.player().consistentMatrices.onVehicleMatrixBindingChanged -= self.__onVehicleMatrixBindingChanged
-        self.__inputSingleton = None
         ComponentController.destroy(self)
         CallbackDelayer.destroy(self)
+        if self.__inputDebug:
+            self.__inputDebug.stop()
         return
 
     def __onVehicleMatrixBindingChanged(self, isStatic):
@@ -600,6 +611,8 @@ class AvatarInputHandler(CallbackDelayer, ComponentController):
     def onControlModeChanged(self, eMode, **kwargs):
         _logger.debug('onControlModeChanged %s', eMode)
         if not self.__isArenaStarted and not self.__isModeSwitchInPrebattlePossible(eMode) or not self.isToControlModeSwitchEnabled(eMode):
+            return
+        elif BattleReplay.isPlaying() and eMode == _CTRL_MODE.PREBATTLE_HIGHLIGHTS:
             return
         else:
             player = BigWorld.player()
@@ -726,11 +739,9 @@ class AvatarInputHandler(CallbackDelayer, ComponentController):
     def onMinimapClicked(self, worldPos):
         return self.__curCtrl.onMinimapClicked(worldPos)
 
-    def onVehicleShaken(self, vehicle, shakeReason, impulsePosition, impulseDir, caliber, sensitivity=1.0, withEvents=True):
-        if withEvents:
-            self.OnVehicleShaked(vehicle.id, shakeReason)
+    def onVehicleShaken(self, vehicle, shakeReason, impulsePosition, impulseDir, caliber, sensitivity=1.0):
         if shakeReason == _ShakeReason.OWN_SHOT_DELAYED:
-            shakeFuncBound = functools.partial(self.onVehicleShaken, vehicle, _ShakeReason.OWN_SHOT, impulsePosition, impulseDir, caliber, sensitivity, withEvents)
+            shakeFuncBound = functools.partial(self.onVehicleShaken, vehicle, _ShakeReason.OWN_SHOT, impulsePosition, impulseDir, caliber, sensitivity)
             delayTime = self.__dynamicCameraSettings.settings['ownShotImpulseDelay']
             self.delayCallback(delayTime, shakeFuncBound)
             return
@@ -947,8 +958,14 @@ class AvatarInputHandler(CallbackDelayer, ComponentController):
     def __onArenaStarted(self, period, *args):
         self.__isArenaStarted = period == ARENA_PERIOD.BATTLE
         self.__curCtrl.setGunMarkerFlag(self.__isArenaStarted, _GUN_MARKER_FLAG.CONTROL_ENABLED)
-        self.showServerGunMarker(gun_marker_ctrl.useServerGunMarker())
+        gunRotator = BigWorld.player().gunRotator
+        if gunRotator is None or gunRotator.clientMode:
+            useServerMarker = gun_marker_ctrl.useServerGunMarker()
+        else:
+            useServerMarker = False
+        self.showServerGunMarker(useServerMarker)
         self.showClientGunMarkers(gun_marker_ctrl.useClientGunMarker())
+        return
 
     def __onRecreateDevice(self):
         self.__curCtrl.onRecreateDevice()
@@ -997,7 +1014,11 @@ class AvatarInputHandler(CallbackDelayer, ComponentController):
         self.__ctrlModeName = initialControlMode
 
     def __isModeSwitchInPrebattlePossible(self, eMode):
-        if eMode in (_CTRL_MODE.POSTMORTEM, _CTRL_MODE.KILL_CAM, _CTRL_MODE.LOOK_AT_KILLER):
+        if eMode in (_CTRL_MODE.POSTMORTEM,
+         _CTRL_MODE.KILL_CAM,
+         _CTRL_MODE.LOOK_AT_KILLER,
+         _CTRL_MODE.PREBATTLE_HIGHLIGHTS,
+         _CTRL_MODE.ARCADE):
             return True
         return True if self.__ctrlModeName == _CTRL_MODE.VEHICLES_SELECTION and eMode == _CTRL_MODE.ARCADE else False
 

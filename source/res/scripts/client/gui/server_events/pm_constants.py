@@ -3,11 +3,6 @@
 from sound_gui_manager import CommonSoundSpaceSettings
 from shared_utils import CONST_CONTAINER
 from personal_missions import PM_BRANCH
-IS_PM3_QUEST_ENABLED = 'isPM3QuestEnabled'
-IS_PM2_QUEST_ENABLED = 'isPM2QuestEnabled'
-IS_REGULAR_QUEST_ENABLED = 'isRegularQuestEnabled'
-DISABLED_PM_OPERATIONS = 'disabledPMOperations'
-DISABLED_PM_MISSIONS = 'disabledPersonalMissions'
 
 class SOUNDS(CONST_CONTAINER):
     COMMON_SOUND_SPACE = 'personalMissions'

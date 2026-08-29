@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/pve_base/base/state_machine/states.py
 from __future__ import absolute_import
 import typing
-from frameworks.state_machine import State
+from frameworks_common.state_machine import State
 if typing.TYPE_CHECKING:
     from enum import IntEnum
 

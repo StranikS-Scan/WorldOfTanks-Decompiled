@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: battle_royale/scripts/client/battle_royale/gui/battle_control/controllers/spawn_ctrl.py
+from __future__ import absolute_import
 import logging
 import weakref
 import BigWorld
@@ -91,7 +92,7 @@ class SpawnController(ViewComponentsController, ISpawnController):
         self.__updateCloseTime()
 
     def showSpawnPoints(self, points):
-        if self._app:
+        if self._app is not None:
             self._app.containerManager.onViewAddedToContainer += self.__onViewAddedToContainer
         else:
             _logger.warning('App reference is still None!')
@@ -99,6 +100,8 @@ class SpawnController(ViewComponentsController, ISpawnController):
         for viewComponent in self._viewComponents:
             viewComponent.setSpawnPoints(points)
             viewComponent.showSpawnPoints()
+
+        return
 
     def showRespawnPoints(self):
         if self.__isSpawnPointsVisible:
@@ -201,13 +204,15 @@ class SpawnController(ViewComponentsController, ISpawnController):
         return PeriodicNotifier(self._getDeltaTime, self.__updateCloseTime, (1,))
 
     def __closeSpawnPoints(self):
-        if self._app:
+        if self._app is not None:
             self._app.containerManager.onViewAddedToContainer -= self.__onViewAddedToContainer
         if self.__notifier:
             self.__notifier.stopNotification()
         self.__isSpawnPointsVisible = False
         for viewComponent in self._viewComponents:
             viewComponent.closeSpawnPoints()
+
+        return
 
     def __onViewAddedToContainer(self, _, pyEntity):
         if pyEntity.alias == VIEW_ALIAS.INGAME_MENU:

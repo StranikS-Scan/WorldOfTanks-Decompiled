@@ -9,7 +9,7 @@ from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.storage.storage_helpers import getVehicleCDForStyle
 from gui.battle_pass.battle_pass_award import BattlePassAwardsManager
 from gui.battle_pass.battle_pass_constants import ChapterState, MIN_LEVEL
-from gui.battle_pass.battle_pass_helpers import getAllFinalRewards, getDataByTankman, getFinalTankmen, getInfoPageURL, getStyleForChapter, getVehicleInfoForChapter, showFinalRewardPreviewBattlePassState, getTimeExpirations
+from gui.battle_pass.battle_pass_helpers import getAllFinalRewards, getDataByTankman, getFinalTankmen, getInfoPageURL, getStyleForChapter, getVehicleInfoForChapter, showFinalRewardPreviewBattlePassState, getTimeExpirations, getAttachmentsSetInfoForChapter
 from gui.impl.auxiliary.vehicle_helper import fillVehicleInfo
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.battle_pass.chapter_choice_view_model import ChapterChoiceViewModel
@@ -146,6 +146,8 @@ class ChapterChoicePresenter(ViewComponent[ChapterChoiceViewModel]):
                 self.__fillFinalStyle(chapterID, model)
             elif rewardType == FinalRewardTypes.TANKMAN:
                 self.__fillFinalTankmen(chapterID, model)
+            elif rewardType == FinalRewardTypes.ATTACHMENTSSET:
+                self.__fillFinalAttachmentsSet(chapterID, model)
             return
 
     def __fillFinalStyle(self, chapterID, model):
@@ -173,6 +175,10 @@ class ChapterChoicePresenter(ViewComponent[ChapterChoiceViewModel]):
                 tankmanNames.addString(characterName)
 
         model.setTankmanNames(tankmanNames)
+
+    def __fillFinalAttachmentsSet(self, chapterID, model):
+        attachmentsSetName, _ = getAttachmentsSetInfoForChapter(chapterID)
+        model.setAttachmentsSetName(attachmentsSetName)
 
     def __updateChaptersProgression(self, chapters):
         for chapter in chapters:
@@ -234,6 +240,8 @@ class ChapterChoicePresenter(ViewComponent[ChapterChoiceViewModel]):
                 return FinalRewardTypes.STYLE
             if FinalReward.TANKMAN in rewardTypes:
                 return FinalRewardTypes.TANKMAN
+            if FinalReward.ATTACHMENTS_SET in rewardTypes:
+                return FinalRewardTypes.ATTACHMENTSSET
             _logger.error('Final reward types for chapter <%s> do not contain any supported types', chapterID)
             return None
 

@@ -1,5 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: comp7/scripts/common/comp7_ranks_common.py
+from __future__ import absolute_import, division
+from functools import total_ordering
+from past.builtins import cmp
 from typing import Optional, FrozenSet, Tuple, Dict
 from cache import cached_property
 from intervals import Interval
@@ -9,6 +12,7 @@ COMP7_UNDEFINED_RANK_ID = 0
 COMP7_UNDEFINED_DIVISION_ID = 0
 COMP7_UNDEFINED_DIVISION_SERIAL_IDX = 0
 
+@total_ordering
 class Comp7Division(object):
     __slots__ = ('range', 'tags', 'rank', 'dvsnID', 'index', 'activityPointsPerBattle', 'hasRankInactivity', 'seasonPoints', 'serialIdx', 'ratingPointsPenalty')
 
@@ -25,7 +29,16 @@ class Comp7Division(object):
         self.seasonPoints = divisionInfo.get('seasonPoints', 0)
         self.serialIdx = serialIdx
 
-    def __cmp__(self, other):
+    def __eq__(self, other):
+        return self.__compare(other) == 0
+
+    def __lt__(self, other):
+        return self.__compare(other) < 0
+
+    def __hash__(self):
+        return hash((self.rank, self.range))
+
+    def __compare(self, other):
         if not isinstance(other, Comp7Division):
             raise TypeError
         return cmp(self.rank, other.rank) or cmp(self.range, other.range)
@@ -70,9 +83,9 @@ class Comp7RanksConfig(object):
         eliteDiv = self.eliteDivision
         if hasEliteEntitlement and points in eliteDiv.range:
             return eliteDiv
-        for division in self.divisions:
-            if points in division.range:
-                return division
+        for div in self.divisions:
+            if points in div.range:
+                return div
 
         raise SoftException('Comp7: No ranks configured for {}'.format(points))
 
@@ -87,6 +100,6 @@ class Comp7RanksConfig(object):
         return self.divisions[-1]
 
     def getActivityPointsForBattle(self, rank, divisionIdx):
-        for division in self.divisions:
-            if division.rank == rank and division.index == divisionIdx:
-                return division.activityPointsPerBattle
+        for div in self.divisions:
+            if div.rank == rank and div.index == divisionIdx:
+                return div.activityPointsPerBattle

@@ -73,15 +73,16 @@ class BattleMattersMainRewardView(ViewImpl):
 
     def __update(self):
         finalQuest = self.__battleMattersController.getFinalQuest()
-        bonuses = finalQuest.getBonuses()
         vehiclesBonus = None
-        for bonus in bonuses:
-            if bonus.getName() == VehiclesBonus.VEHICLES_BONUS:
-                vehiclesBonus = bonus
-                break
+        if finalQuest:
+            bonuses = finalQuest.getBonuses()
+            for bonus in bonuses:
+                if bonus.getName() == VehiclesBonus.VEHICLES_BONUS:
+                    vehiclesBonus = bonus
+                    break
 
         if vehiclesBonus is None:
-            _logger.error('Wrong bonus count for Battme Matters main reward view. Exiting.')
+            _logger.error('Wrong bonus count for Battle Matters main reward view. Exiting.')
             return
         else:
             vehicleVMs = sorted(BattleMattersVehiclesBonusUIPacker.pack(vehiclesBonus), key=_vehiclesSortKey)

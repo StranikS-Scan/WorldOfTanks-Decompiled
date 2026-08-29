@@ -20,8 +20,8 @@ def _convertHints(hintsList):
 def _readHintsLayouts():
     result = {}
     ctx, section = resource_helper.getRoot(_HINTS_LAYOUT_FILE_PATH)
-    for ctx, subSection in resource_helper.getIterator(ctx, section):
-        item = resource_helper.readItem(ctx, subSection, name='layout')
+    for ctx_, subSection in resource_helper.getIterator(ctx, section):
+        item = resource_helper.readItem(ctx_, subSection, name='layout')
         if item.name == 'hints':
             value = _convertHints(item.value)
         else:

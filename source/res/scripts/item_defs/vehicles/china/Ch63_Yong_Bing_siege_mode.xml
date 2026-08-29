@@ -1845,7 +1845,6 @@
           </armor>
           <shotDispersionRadius>	0.4	</shotDispersionRadius>
           <reloadTime>	12.5	</reloadTime>
-          <multiGunEffects>	shot_dualgun_large_mb_L shot_dualgun_large_mb_R	</multiGunEffects>
           <dualGun>
             <chargeTime>	3	</chargeTime>
             <shootImpulse>	200	</shootImpulse>
@@ -1868,6 +1867,9 @@
             <turretRotation>	0.1	</turretRotation>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
+          <prefabs>
+            <main>	content/CGFPrefabs/Vehicle/guns/china/gun_122mm_Type_61_DB.prefab	</main>
+          </prefabs>
           <customizationSlots>
             <slot>
               <slotType>	paint	</slotType>
@@ -1924,6 +1926,7 @@
             <collisionModelServer>	vehicles/chinese/Ch63_Yong_Bing/collision/Gun_03.model	</collisionModelServer>
             <collisionModelClient>	vehicles/chinese/Ch63_Yong_Bing/collision_client/Gun_03.model	</collisionModelClient>
           </hitTester>
+          <muzzleBrake>	RADIAL	</muzzleBrake>
           <camouflage>
             <density>	95.092499 96.50605	</density>
             <aoTextureSize>	512 256	</aoTextureSize>

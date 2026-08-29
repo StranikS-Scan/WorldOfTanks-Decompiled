@@ -14,15 +14,25 @@ from gui.impl import backport
 from gui.impl.gen import R
 from helpers import dependency
 from skeletons.gui.battle_session import IBattleSessionProvider
+from skeletons.gui.game_control import IComp7LightController
+from skeletons.gui.shared import IItemsCache
 
 class Comp7LightVehicleInfoComponent(vehicle.VehicleInfoComponent):
     __slots__ = ()
     __sessionProvider = dependency.descriptor(IBattleSessionProvider)
+    __comp7Controller = dependency.descriptor(IComp7LightController)
+    __itemsCache = dependency.descriptor(IItemsCache)
 
     def addVehicleInfo(self, vInfoVO, overrides):
         super(Comp7LightVehicleInfoComponent, self).addVehicleInfo(vInfoVO, overrides)
+        equipment = ''
+        if vInfoVO.vehicleType.compactDescr:
+            vehicleItem = self.__itemsCache.items.getItemByCD(vInfoVO.vehicleType.compactDescr)
+            roleEquipmentKey = self.__comp7Controller.getRoleEquipmentKey(vehicleItem.descriptor.type)
+            equipment = self.__comp7Controller.getRoleEquipment(roleEquipmentKey)
         return self._data.update({'role': ROLE_TYPE_TO_LABEL.get(vInfoVO.vehicleType.role, ''),
          'roleSkillTooltipId': TOOLTIPS_BATTLE_CONSTANTS.COMP7_LIGHT_ROLE_SKILL_BATTLE_TOOLTIP,
+         'skillName': equipment.name if equipment else '',
          'skillLevel': vInfoVO.gameModeSpecific.getValue(Comp7CoreKeys.ROLE_SKILL_LEVEL, default=0),
          'voiceChatConnected': self.__getVoiceChatConnected(vInfoVO),
          'isSuperSquad': self.__isSuperSquad(vInfoVO)})

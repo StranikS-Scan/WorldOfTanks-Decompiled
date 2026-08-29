@@ -132,11 +132,13 @@ class _RankedSeasonsManager(BaseSeasonManager):
     def getStats(self, dossierStats):
         if self._seasonKey == self.__RANKED_SEASONS_ARCHIVE:
             return dossierStats.getSeasonRankedStats(self.__RANKED_SEASONS_ARCHIVE_10x10, 0)
-        season = self.__rankedController.getSeason(int(self._seasonKey))
-        if season:
-            seasonKey = RankedDossierKeys.SEASON % season.getNumber()
-            seasonID = season.getSeasonID()
-            return dossierStats.getSeasonRankedStats(seasonKey, seasonID)
+        else:
+            season = self.__rankedController.getSeason(int(self._seasonKey))
+            if season:
+                seasonKey = RankedDossierKeys.SEASON % season.getNumber()
+                seasonID = season.getSeasonID()
+                return dossierStats.getSeasonRankedStats(seasonKey, seasonID)
+            return None
 
     def _showSeasonsDropDown(self):
         return self.__hasRankedSeasonsHistory() and not self.__rankedController.hasSpecialSeason()

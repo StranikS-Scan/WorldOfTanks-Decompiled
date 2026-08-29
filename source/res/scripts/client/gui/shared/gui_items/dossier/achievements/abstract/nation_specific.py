@@ -34,10 +34,7 @@ class NationSpecificAchievement(SimpleProgressAchievement):
 
     def _readLevelUpTotalValue(self, dossier):
         dossierCache = cache.getCache()
-        if self._nationID != -1:
-            return len(dossierCache[self._NATIONAL_VEHICLES].get(self._nationID, []))
-        else:
-            return len(self._getAllSuitableVehicles())
+        return len(dossierCache[self._NATIONAL_VEHICLES].get(self._nationID, [])) if self._nationID != -1 else len(self._getAllSuitableVehicles())
 
     @classmethod
     def _getAllSuitableVehicles(cls):

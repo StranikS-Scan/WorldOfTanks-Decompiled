@@ -699,6 +699,51 @@
       </value>
     </achievement>
     <achievement>
+      <name>	achievements:readyForBattleFossaAssault	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	class	  <name>	type	</name>
+        </item>
+        <item>	class	  <name>	section	</name>
+        </item>
+        <item>	1410.04	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	random	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	achievements:readyForBattleFossaSniper	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	class	  <name>	type	</name>
+        </item>
+        <item>	class	  <name>	section	</name>
+        </item>
+        <item>	1410.05	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	random	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	achievements:readyForBattleFossaSupport	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	class	  <name>	type	</name>
+        </item>
+        <item>	class	  <name>	section	</name>
+        </item>
+        <item>	1410.06	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	random	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
       <name>	achievementsRated7x7:strategicOperations	</name>
       <type>	dict	</type>
       <value>
@@ -5274,7 +5319,7 @@
       </value>
     </achievement>
     <achievement>
-      <name>	singleAchievements:BPReserveAchievement_1	</name>
+      <name>	singleAchievements:BattlePassCommonPr_21	</name>
       <type>	dict	</type>
       <value>
         <item>	single	  <name>	type	</name>
@@ -7906,7 +7951,7 @@
         </item>
         <item>	action	  <name>	section	</name>
         </item>
-        <item>	1447.9	  <name>	weight	</name>
+        <item>	1447.801	  <name>	weight	</name>
           <type>	float	</type>
         </item>
         <item>	random	  <name>	mode	</name>
@@ -7985,6 +8030,141 @@
           <type>	float	</type>
         </item>
         <item>	random	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	singleAchievements:wt2026progression	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	single	  <name>	type	</name>
+        </item>
+        <item>	action	  <name>	section	</name>
+        </item>
+        <item>	1447.802	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	random	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	singleAchievements:comp7_6_1	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	single	  <name>	type	</name>
+        </item>
+        <item>	action	  <name>	section	</name>
+        </item>
+        <item>	1467.2	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	random	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	singleAchievements:comp7_6_yearly_iron	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	single	  <name>	type	</name>
+        </item>
+        <item>	action	  <name>	section	</name>
+        </item>
+        <item>	1467.1	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	random	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	singleAchievements:comp7_6_yearly_bronze	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	single	  <name>	type	</name>
+        </item>
+        <item>	action	  <name>	section	</name>
+        </item>
+        <item>	1467.1	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	random	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	singleAchievements:comp7_6_yearly_silver	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	single	  <name>	type	</name>
+        </item>
+        <item>	action	  <name>	section	</name>
+        </item>
+        <item>	1467.1	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	random	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	singleAchievements:comp7_6_yearly_gold	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	single	  <name>	type	</name>
+        </item>
+        <item>	action	  <name>	section	</name>
+        </item>
+        <item>	1467.1	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	random	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	singleAchievements:comp7_6_yearly_champion	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	single	  <name>	type	</name>
+        </item>
+        <item>	action	  <name>	section	</name>
+        </item>
+        <item>	1467.1	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	random	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	singleAchievements:comp7_6_yearly_legend	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	single	  <name>	type	</name>
+        </item>
+        <item>	action	  <name>	section	</name>
+        </item>
+        <item>	1467.1	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	random	  <name>	mode	</name>
+        </item>
+      </value>
+    </achievement>
+    <achievement>
+      <name>	singleAchievements:wot16thAnniversary	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	single	  <name>	type	</name>
+        </item>
+        <item>	action	  <name>	section	</name>
+        </item>
+        <item>	1470.3	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	all	  <name>	mode	</name>
         </item>
       </value>
     </achievement>

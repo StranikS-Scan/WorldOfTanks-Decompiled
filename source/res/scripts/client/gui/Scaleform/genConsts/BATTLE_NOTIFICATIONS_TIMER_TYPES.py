@@ -61,6 +61,7 @@ class BATTLE_NOTIFICATIONS_TIMER_TYPES(object):
     COMP7_ARTYLLERY_SUPPORT = 'artillerySupport'
     COMP7_MARCH = 'march'
     COMP7_AGGRESSIVE_DETECTION = 'aggressiveDetection'
+    COMP7_ILLUMINATION_FLARE = 'illuminationFlare'
     COMP7_POINT_RECON = 'pointRecon'
     WARNING_VIEW = 'warningView'
     CRITICAL_VIEW = 'criticalView'

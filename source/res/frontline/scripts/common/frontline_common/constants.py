@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: frontline/scripts/common/frontline_common/constants.py
-
+from __future__ import absolute_import
 
 class AccountSettingsKeys(object):
     EVENT_KEY = 'frontline_keys'

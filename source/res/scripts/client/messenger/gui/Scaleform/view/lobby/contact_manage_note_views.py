@@ -6,12 +6,13 @@ from messenger.gui.Scaleform.meta.ContactNoteManageViewMeta import ContactNoteMa
 from messenger.m_constants import PROTO_TYPE
 from messenger.proto import proto_getter
 from messenger.proto.xmpp.xmpp_string_utils import validateContactNote
-from messenger.storage import storage_getter
+from messenger.storage import MessengerStorageDescriptor, UsersStorage
 from messenger.proto.xmpp.xmpp_constants import CONTACT_LIMIT
 from helpers import i18n
 from messenger import g_settings
 
 class ContactManageNoteView(ContactNoteManageViewMeta):
+    usersStorage = MessengerStorageDescriptor(UsersStorage)
 
     def __init__(self):
         super(ContactManageNoteView, self).__init__()
@@ -20,10 +21,6 @@ class ContactManageNoteView(ContactNoteManageViewMeta):
 
     @proto_getter(PROTO_TYPE.MIGRATION)
     def proto(self):
-        return None
-
-    @storage_getter('users')
-    def usersStorage(self):
         return None
 
     def sendData(self, data):

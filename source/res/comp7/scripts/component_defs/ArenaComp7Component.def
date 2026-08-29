@@ -16,6 +16,11 @@
     <updateVehicleBanList>
       <Arg>	PYTHON	</Arg>
     </updateVehicleBanList>
+    <updateTeamsDamageDealt>
+      <Arg>	ARRAY	  <of>	INT32	</of>
+        <size>	2	</size>
+      </Arg>
+    </updateTeamsDamageDealt>
   </BaseMethods>
   <CellMethods>
     <setupArena></setupArena>

@@ -5,14 +5,14 @@ from gui.impl.gen.view_models.views.lobby.user_missions.hub.tabs.basic_missions.
 class DailyBonusMissionModel(MissionBaseModel):
     __slots__ = ()
 
-    def __init__(self, properties=11, commands=0):
+    def __init__(self, properties=12, commands=0):
         super(DailyBonusMissionModel, self).__init__(properties=properties, commands=commands)
 
     def getIsAvailable(self):
-        return self._getBool(10)
+        return self._getBool(11)
 
     def setIsAvailable(self, value):
-        self._setBool(10, value)
+        self._setBool(11, value)
 
     def _initialize(self):
         super(DailyBonusMissionModel, self)._initialize()

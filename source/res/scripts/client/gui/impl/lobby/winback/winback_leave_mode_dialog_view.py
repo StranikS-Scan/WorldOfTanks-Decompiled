@@ -11,7 +11,7 @@ class WinbackLeaveModeDialogView(FullScreenDialogBaseView):
     __slots__ = ()
 
     def __init__(self):
-        settings = ViewSettings(R.views.lobby.winback.WinbackLeaveModeDialogView())
+        settings = ViewSettings(R.views.mono.winback.winback_leave_mode_dialog_view())
         settings.flags = ViewFlags.VIEW
         settings.model = WinbackLeaveModeDialogViewModel()
         super(WinbackLeaveModeDialogView, self).__init__(settings)

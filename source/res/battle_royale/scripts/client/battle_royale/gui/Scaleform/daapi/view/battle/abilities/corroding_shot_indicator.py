@@ -1,5 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: battle_royale/scripts/client/battle_royale/gui/Scaleform/daapi/view/battle/abilities/corroding_shot_indicator.py
+from __future__ import absolute_import
+from future.utils import viewvalues
 import BigWorld
 from helpers import dependency
 from gui.battle_control.controllers.period_ctrl import IAbstractPeriodView
@@ -45,10 +47,10 @@ class CorrodingShotIndicator(CorrodingShotIndicatorMeta, IAbstractPeriodView):
         else:
             self.__disable()
 
-    def __onVehicleChanged(self, vehicle):
+    def __onVehicleChanged(self, _):
         equipments = self.__sessionProvider.shared.equipments.getEquipments()
-        eq = [ eq for eq in equipments.itervalues() if eq.getDescriptor().name == BattleRoyaleEquipments.CORRODING_SHOT ]
-        if not eq and self.__isEnabled:
+        hasCorrodingShot = any((eq.getDescriptor().name == BattleRoyaleEquipments.CORRODING_SHOT for eq in viewvalues(equipments)))
+        if not hasCorrodingShot and self.__isEnabled:
             self.__disable()
 
     def __onCrosshairPositionChanged(self, *args):

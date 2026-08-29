@@ -42,7 +42,7 @@ from helpers.i18n import makeString as _ms
 from items.components.skills_constants import ORDERED_ROLES
 from renewable_subscription_common.settings_constants import WotPlusState
 from skeletons.account_helpers.settings_core import ISettingsCore
-from skeletons.gui.game_control import ITradeInController, IWotPlusController
+from skeletons.gui.game_control import ITradeInController, IWotPlusController, IRestBonusController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 from gui import makeHtmlString
@@ -79,6 +79,7 @@ _SHORTEN_TOOLTIP_CASES = ('shopVehicle',)
 
 class VehicleInfoTooltipData(BlocksTooltipData):
     __itemsCache = dependency.descriptor(IItemsCache)
+    __restBonusCtrl = dependency.descriptor(IRestBonusController)
     _LEFT_PADDING = 20
     _RIGHT_PADDING = 20
 
@@ -204,7 +205,8 @@ class VehicleInfoTooltipData(BlocksTooltipData):
         if statsConfig.dailyXP and not vehicle.isWotPlus:
             attrs = self.__itemsCache.items.stats.attributes
             if attrs & constants.ACCOUNT_ATTR.DAILY_MULTIPLIED_XP and vehicle.dailyXPFactor > 0:
-                dailyXPText = text_styles.main(text_styles.expText(''.join(('x', backport.getIntegralFormat(vehicle.dailyXPFactor)))))
+                xpFactor = backport.getIntegralFormat(self.__restBonusCtrl.getActualXPFactor(vehicle))
+                dailyXPText = text_styles.main(text_styles.expText(''.join(('x', xpFactor))))
                 items.append(formatters.packTextParameterWithIconBlockData(name=text_styles.main(TOOLTIPS.VEHICLE_DAILYXPFACTOR), value=dailyXPText, icon=ICON_TEXT_FRAMES.DOUBLE_XP_FACTOR, iconYOffset=2, valueWidth=valueWidth + 1, gap=0, padding=formatters.packPadding(left=2, top=-2, bottom=5)))
         if statsConfig.restorePrice:
             if vehicle.isRestorePossible() and vehicle.hasLimitedRestore():
@@ -482,6 +484,7 @@ class CrystalBlockConstructor(VehicleTooltipBlockConstructor):
 class WotPlusBlockConstructor(VehicleTooltipBlockConstructor):
     __itemsCache = dependency.descriptor(IItemsCache)
     __wotPlusController = dependency.descriptor(IWotPlusController)
+    __restBonusCtrl = dependency.descriptor(IRestBonusController)
 
     def construct(self):
         blocks = []
@@ -497,7 +500,8 @@ class WotPlusBlockConstructor(VehicleTooltipBlockConstructor):
         if state in [WotPlusState.CANCELLED, WotPlusState.ACTIVE]:
             attrs = self.__itemsCache.items.stats.attributes
             if attrs & constants.ACCOUNT_ATTR.DAILY_MULTIPLIED_XP and self.vehicle.dailyXPFactor > 0:
-                dailyXPText = text_styles.main(text_styles.expText('x{}'.format(backport.getIntegralFormat(self.vehicle.dailyXPFactor))))
+                xpFactor = backport.getIntegralFormat(self.__restBonusCtrl.getActualXPFactor(self.vehicle))
+                dailyXPText = text_styles.main(text_styles.expText('x{}'.format(xpFactor)))
                 blocks.append(formatters.packTextParameterWithIconBlockData(name=text_styles.main(TOOLTIPS.VEHICLE_DAILYXPFACTOR), value=dailyXPText, icon=ICON_TEXT_FRAMES.DOUBLE_XP_FACTOR, iconYOffset=2, valueWidth=60, gap=0, padding=formatters.packPadding(left=0, top=0, bottom=10)))
         else:
             blocks.append(formatters.packTextParameterWithIconBlockData(name=text_styles.main(TOOLTIPS.VEHICLE_WOTPLUSRENTING_INACTIVE), value='', icon=ICON_TEXT_FRAMES.RENTALS, iconYOffset=2, gap=0, valueWidth=60, padding=formatters.packPadding(left=0, top=0, bottom=-7)))

@@ -10,7 +10,7 @@ from gui.impl.gen.view_models.views.lobby.battle_results.progression.common_batt
 from gui.impl.gen.view_models.views.lobby.battle_results.progression.common_battle_quests_progress_model import CommonBattleQuestsProgressModel
 from gui.impl.gui_decorators import args2params
 from gui.impl.lobby.battle_results.missions_progress.progression_presenter_interface import IProgressionCategoryPresenter
-from gui.impl.lobby.battle_results.missions_progress.rewards_helper import packBonusesWithActualTokensConvertion
+from gui.impl.lobby.battle_results.missions_progress.rewards_helper import packBonusesWithTokensConvertionIfCompleted
 from gui.impl.lobby.common.tooltips.extended_text_tooltip import ExtendedTextTooltip
 from gui.impl.lobby.tooltips.additional_rewards_tooltip import AdditionalRewardsTooltip
 from gui.impl.pub.view_component import ViewComponent
@@ -126,7 +126,7 @@ class CommonBattleQuestsProgressPresenter(ViewComponent[CommonBattleQuestsProgre
         else:
             return None
         bonusPacker = getDefaultBonusPacker()
-        packBonusesWithActualTokensConvertion(pCur, model, event, questTokensConvertion, questTokensCount, self.__tooltipData[eventID], bonusPacker)
+        packBonusesWithTokensConvertionIfCompleted(pCur, model, event, questTokensConvertion, questTokensCount, self.__tooltipData[eventID], bonusPacker, isCompleted)
         self.__bonusesModel[eventID] = model.getBonuses()
         model.setGuiDisabled(event.isGuiDisabled())
         model.setHidden(event.isHidden())
@@ -149,7 +149,7 @@ class CommonBattleQuestsProgressPresenter(ViewComponent[CommonBattleQuestsProgre
             index = 0
             items = model.bonusCondition.getItems()
             for cond in condsRoot.items:
-                if isinstance(cond, conditions._Cumulativable):
+                if isinstance(cond, conditions.Cumulativable):
                     for curProg, totalProg, diff, _ in cond.getProgressPerGroup(pCur, pPrev, True).values():
                         item = items[index]
                         item.setEarned(diff)

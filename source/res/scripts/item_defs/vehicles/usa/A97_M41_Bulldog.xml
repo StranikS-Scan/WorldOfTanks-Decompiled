@@ -7,11 +7,11 @@
     <loader></loader>
   </crew>
   <supplySlots>	3 1 1 6 6 6 7 8 8 8	</supplySlots>
-  <postProgressionTree>	role_LT_universal	</postProgressionTree>
+  <postProgressionTree>	role_LT_support	</postProgressionTree>
   <customRoleSlotOptions>	2 4	</customRoleSlotOptions>
   <speedLimits>
-    <forward>	68	</forward>
-    <backward>	24	</backward>
+    <forward>	65	</forward>
+    <backward>	25	</backward>
   </speedLimits>
   <invisibility>
     <moving>	0.25	</moving>
@@ -63,10 +63,24 @@
       <armor_14>	19.1	</armor_14>
       <armor_15>	0	</armor_15>
       <armor_16>	25.4	</armor_16>
+      <armor_17>	12.7	</armor_17>
+      <armor_18>	12.7	</armor_18>
+      <armor_19>	25.4	</armor_19>
+      <armor_20>	38.1	</armor_20>
+      <armor_21>	38.1	</armor_21>
+      <armor_22>	19.1	</armor_22>
+      <armor_23>	25.4	</armor_23>
+      <armor_24>	25.4	</armor_24>
+      <armor_25>	25.4	</armor_25>
+      <armor_26>	25.4	</armor_26>
+      <armor_27>	25.4	</armor_27>
+      <armor_28>	25.4	</armor_28>
+      <armor_29>	25.4	</armor_29>
+      <armor_30>	19.1	</armor_30>
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_10	</primaryArmor>
     <weight>	10533	</weight>
-    <maxHealth>	960	</maxHealth>
+    <maxHealth>	1200	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	220	</maxHealth>
       <maxRegenHealth>	150	</maxRegenHealth>
@@ -799,6 +813,36 @@
         <clipAngle>	0.598997	</clipAngle>
         <anchorShift>	0.915967	</anchorShift>
       </slot>
+      <slot>
+        <slotType>	attachment	</slotType>
+        <slotId>	18000	</slotId>
+        <position>	-1.7289 0.408659 -0.07714	</position>
+        <rotation>	0 0 1.570796	</rotation>
+        <scale>	1 1 1	</scale>
+        <applyType>	universal	</applyType>
+        <size>	small	</size>
+        <hangerId>	9	</hangerId>
+      </slot>
+      <slot>
+        <slotType>	attachment	</slotType>
+        <slotId>	18001	</slotId>
+        <position>	1.729 0.408659 -0.077141	</position>
+        <rotation>	0 -3.139847 1.570796	</rotation>
+        <scale>	1 1 1	</scale>
+        <applyType>	universal	</applyType>
+        <size>	small	</size>
+        <hangerId>	9	</hangerId>
+      </slot>
+      <slot>
+        <slotType>	attachment	</slotType>
+        <slotId>	18002	</slotId>
+        <position>	0.000003 0.119544 -3.050707	</position>
+        <rotation>	0 -1.570796 1.570796	</rotation>
+        <scale>	1 1 1	</scale>
+        <applyType>	universal	</applyType>
+        <size>	small	</size>
+        <hangerId>	11	</hangerId>
+      </slot>
     </customizationSlots>
     <customization>
       <customizableVehicleAreas>
@@ -823,17 +867,17 @@
         </chassis>
       </unlocks>
       <armor>
-        <leftTrack>	20	</leftTrack>
-        <rightTrack>	20	</rightTrack>
+        <leftTrack>	10	</leftTrack>
+        <rightTrack>	10	</rightTrack>
       </armor>
       <weight>	6000	</weight>
       <terrainResistance>	0.5 0.6 1.1	</terrainResistance>
       <brakeForce>	24000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
-      <rotationSpeed>	62	</rotationSpeed>
+      <rotationSpeed>	64	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.14	</vehicleMovement>
-        <vehicleRotation>	0.14	</vehicleRotation>
+        <vehicleMovement>	0.11	</vehicleMovement>
+        <vehicleRotation>	0.11	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	180	</maxHealth>
@@ -1654,17 +1698,17 @@
       <level>	8	</level>
       <price>	33500	</price>
       <armor>
-        <leftTrack>	20	</leftTrack>
-        <rightTrack>	20	</rightTrack>
+        <leftTrack>	10	</leftTrack>
+        <rightTrack>	10	</rightTrack>
       </armor>
       <weight>	6000	</weight>
       <terrainResistance>	0.5 0.6 1.1	</terrainResistance>
       <brakeForce>	28000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
-      <rotationSpeed>	65	</rotationSpeed>
+      <rotationSpeed>	67	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.12	</vehicleMovement>
-        <vehicleRotation>	0.12	</vehicleRotation>
+        <vehicleMovement>	0.09	</vehicleMovement>
+        <vehicleRotation>	0.09	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	200	</maxHealth>
@@ -2505,7 +2549,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	4750	</weight>
-      <maxHealth>	180	</maxHealth>
+      <maxHealth>	200	</maxHealth>
       <rotationSpeed>	48	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	140	</maxHealth>
@@ -2519,7 +2563,7 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_76mm_Gun_M32>	shared	  <maxAmmo>	57	</maxAmmo>
+        <_76mm_Gun_M32>	shared	  <maxAmmo>	80	</maxAmmo>
           <unlocks>
             <turret>	Turret_2_A97_M41_Bulldog	  <cost>	15250	</cost>
             </turret>
@@ -2533,7 +2577,31 @@
             </armor_3>
             <armor_4>	0	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_4>
-            <gun>	20	</gun>
+            <gun>	15	</gun>
+            <armor_5>	25.4	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_5>
+            <armor_6>	25.4	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_6>
+            <armor_7>	25.4	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_7>
+            <armor_8>	25.4	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_8>
+            <armor_9>	25.4	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_9>
+            <armor_10>	31.8	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_10>
+            <armor_11>	31.8	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_11>
+            <armor_12>	31.8	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_12>
+            <armor_13>	31.8	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_13>
+            <armor_14>	31.8	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_14>
+            <armor_15>	25.4	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_15>
+            <armor_16>	25.4	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_16>
           </armor>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
@@ -2541,11 +2609,11 @@
           </pitchLimits>
           <turretYawLimits>	-180 180	</turretYawLimits>
           <invisibilityFactorAtShot>	0.234	</invisibilityFactorAtShot>
-          <shotDispersionRadius>	0.36	</shotDispersionRadius>
-          <reloadTime>	4.7	</reloadTime>
-          <aimingTime>	1.8	</aimingTime>
+          <shotDispersionRadius>	0.42	</shotDispersionRadius>
+          <reloadTime>	3.5	</reloadTime>
+          <aimingTime>	1.6	</aimingTime>
           <shotDispersionFactors>
-            <turretRotation>	0.08	</turretRotation>
+            <turretRotation>	0.07	</turretRotation>
             <whileGunDamaged>	2.0	</whileGunDamaged>
             <afterShot>	3.0	</afterShot>
           </shotDispersionFactors>
@@ -2620,6 +2688,8 @@
               <camouflage>	GUN	</camouflage>
             </customizableVehicleAreas>
           </customization>
+          <edgeByVisualModel>	false	</edgeByVisualModel>
+          <muzzleBrake>	HORIZONTAL	</muzzleBrake>
           <camouflage>
             <tiling>	0.655 0.655 0.000000 0.000000	</tiling>
             <density>	87.4905 87.03	</density>
@@ -3142,6 +3212,29 @@
           <clipAngle>	1.19325	</clipAngle>
           <anchorShift>	0.018687	</anchorShift>
         </slot>
+        <slot>
+          <slotType>	attachment	</slotType>
+          <slotId>	38000	</slotId>
+          <position>	0.824936 1.255727 -0.187968	</position>
+          <rotation>	0 0 -0	</rotation>
+          <scale>	1 1 1	</scale>
+          <enableVisTunnel>	true	</enableVisTunnel>
+          <applyType>	turret	</applyType>
+          <size>	small	</size>
+          <hangerId>	5	</hangerId>
+          <hangerRotation>	0 1.047198 -0	</hangerRotation>
+        </slot>
+        <slot>
+          <slotType>	attachment	</slotType>
+          <slotId>	38001	</slotId>
+          <size>	small	</size>
+          <position>	0 0.910836 1.192779	</position>
+          <rotation>	0 0 -0	</rotation>
+          <scale>	1 1 1	</scale>
+          <enableVisTunnel>	true	</enableVisTunnel>
+          <applyType>	gunMantlet	</applyType>
+          <hangerId>	2	</hangerId>
+        </slot>
       </customizationSlots>
       <customization>
         <customizableVehicleAreas>
@@ -3183,7 +3276,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	5022	</weight>
-      <maxHealth>	240	</maxHealth>
+      <maxHealth>	300	</maxHealth>
       <rotationSpeed>	50	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	140	</maxHealth>
@@ -3197,7 +3290,7 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_76mm_Gun_M32>	shared	  <maxAmmo>	65	</maxAmmo>
+        <_76mm_Gun_M32>	shared	  <maxAmmo>	80	</maxAmmo>
           <armor>
             <armor_1>	31.8	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_1>
@@ -3207,7 +3300,31 @@
             </armor_3>
             <armor_4>	0	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_4>
-            <gun>	20	</gun>
+            <gun>	15	</gun>
+            <armor_5>	25.4	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_5>
+            <armor_6>	25.4	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_6>
+            <armor_7>	25.4	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_7>
+            <armor_8>	25.4	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_8>
+            <armor_9>	25.4	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_9>
+            <armor_10>	31.8	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_10>
+            <armor_11>	31.8	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_11>
+            <armor_12>	31.8	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_12>
+            <armor_13>	31.8	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_13>
+            <armor_14>	31.8	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_14>
+            <armor_15>	25.4	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_15>
+            <armor_16>	25.4	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_16>
           </armor>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
@@ -3215,9 +3332,9 @@
           </pitchLimits>
           <turretYawLimits>	-180 180	</turretYawLimits>
           <invisibilityFactorAtShot>	0.234	</invisibilityFactorAtShot>
-          <shotDispersionRadius>	0.36	</shotDispersionRadius>
-          <reloadTime>	4.6	</reloadTime>
-          <aimingTime>	1.8	</aimingTime>
+          <shotDispersionRadius>	0.4	</shotDispersionRadius>
+          <reloadTime>	3.4	</reloadTime>
+          <aimingTime>	1.6	</aimingTime>
           <shotDispersionFactors>
             <turretRotation>	0.07	</turretRotation>
             <whileGunDamaged>	2.0	</whileGunDamaged>
@@ -3294,13 +3411,15 @@
               <camouflage>	GUN	</camouflage>
             </customizableVehicleAreas>
           </customization>
+          <edgeByVisualModel>	false	</edgeByVisualModel>
+          <muzzleBrake>	HORIZONTAL	</muzzleBrake>
           <camouflage>
             <tiling>	0.7 0.7 0.000000 0.000000	</tiling>
             <density>	87.4905 87.03	</density>
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_76mm_Gun_M32>
-        <_76mm_Gun_M32_late>	shared	  <maxAmmo>	65	</maxAmmo>
+        <_76mm_Gun_M32_late>	shared	  <maxAmmo>	80	</maxAmmo>
           <unlocks>
             <vehicle>	A100_T49	  <cost>	177000	</cost>
             </vehicle>
@@ -3314,7 +3433,31 @@
             </armor_3>
             <armor_4>	0	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_4>
-            <gun>	20	</gun>
+            <gun>	15	</gun>
+            <armor_5>	25.4	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_5>
+            <armor_6>	25.4	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_6>
+            <armor_7>	25.4	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_7>
+            <armor_8>	25.4	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_8>
+            <armor_9>	25.4	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_9>
+            <armor_10>	31.8	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_10>
+            <armor_11>	31.8	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_11>
+            <armor_12>	31.8	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_12>
+            <armor_13>	31.8	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_13>
+            <armor_14>	31.8	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_14>
+            <armor_15>	25.4	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_15>
+            <armor_16>	25.4	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_16>
           </armor>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
@@ -3322,9 +3465,9 @@
           </pitchLimits>
           <turretYawLimits>	-180 180	</turretYawLimits>
           <invisibilityFactorAtShot>	0.234	</invisibilityFactorAtShot>
-          <shotDispersionRadius>	0.35	</shotDispersionRadius>
-          <reloadTime>	4.5	</reloadTime>
-          <aimingTime>	1.7	</aimingTime>
+          <shotDispersionRadius>	0.4	</shotDispersionRadius>
+          <reloadTime>	3.6	</reloadTime>
+          <aimingTime>	1.5	</aimingTime>
           <shotDispersionFactors>
             <turretRotation>	0.06	</turretRotation>
             <whileGunDamaged>	2.0	</whileGunDamaged>
@@ -3401,6 +3544,8 @@
               <camouflage>	GUN	</camouflage>
             </customizableVehicleAreas>
           </customization>
+          <edgeByVisualModel>	false	</edgeByVisualModel>
+          <muzzleBrake>	HORIZONTAL	</muzzleBrake>
           <camouflage>
             <tiling>	0.85 0.85 0.000000 0.000000	</tiling>
             <density>	88.8983 85.3732	</density>
@@ -3922,6 +4067,29 @@
           <clipAngle>	1.19325	</clipAngle>
           <anchorShift>	0.018686	</anchorShift>
         </slot>
+        <slot>
+          <slotType>	attachment	</slotType>
+          <slotId>	38000	</slotId>
+          <position>	0.824936 1.255727 -0.187968	</position>
+          <rotation>	0 0 -0	</rotation>
+          <scale>	1 1 1	</scale>
+          <enableVisTunnel>	true	</enableVisTunnel>
+          <applyType>	turret	</applyType>
+          <size>	small	</size>
+          <hangerId>	5	</hangerId>
+          <hangerRotation>	0 1.047198 -0	</hangerRotation>
+        </slot>
+        <slot>
+          <slotType>	attachment	</slotType>
+          <slotId>	38001	</slotId>
+          <size>	small	</size>
+          <position>	0 0.911 1.193	</position>
+          <rotation>	0 0 -0	</rotation>
+          <scale>	1 1 1	</scale>
+          <enableVisTunnel>	true	</enableVisTunnel>
+          <applyType>	gunMantlet	</applyType>
+          <hangerId>	2	</hangerId>
+        </slot>
       </customizationSlots>
       <customization>
         <customizableVehicleAreas>
@@ -3954,16 +4122,17 @@
     <detailed>
       <engines>
         <Continental_AOS_895_3A>
-          <smplEnginePower>	730	</smplEnginePower>
-          <smplFwMaxSpeed>	68	</smplFwMaxSpeed>
+          <smplEnginePower>	830	</smplEnginePower>
+          <smplFwMaxSpeed>	65	</smplFwMaxSpeed>
         </Continental_AOS_895_3A>
         <Continental_AOSI_895_5A_M41>
-          <smplEnginePower>	800	</smplEnginePower>
-          <smplFwMaxSpeed>	68	</smplFwMaxSpeed>
+          <smplEnginePower>	900	</smplEnginePower>
+          <smplFwMaxSpeed>	65	</smplFwMaxSpeed>
         </Continental_AOSI_895_5A_M41>
       </engines>
       <chassis>
         <Chassis_A97_M41_Bulldog>
+          <axleCount>	5	</axleCount>
           <grounds>
             <soft>
               <rollingFriction>	0.08855	</rollingFriction>
@@ -3977,6 +4146,7 @@
           </grounds>
         </Chassis_A97_M41_Bulldog>
         <Chassis_A97_M41_Bulldog_2>
+          <axleCount>	5	</axleCount>
           <grounds>
             <soft>
               <rollingFriction>	0.08855	</rollingFriction>

@@ -3,11 +3,12 @@
 from frameworks.wulf import ViewModel
 from gui.impl.wrappers.user_list_model import UserListModel
 from gui.impl.gen.view_models.views.lobby.lootbox_system.bonus_model import BonusModel
+from gui.impl.gen.view_models.views.lobby.lootbox_system.box_reroll_model import BoxRerollModel
 
 class SingleBoxRewardsViewModel(ViewModel):
-    __slots__ = ('onOpen', 'onGoBack', 'onPreview', 'onBuyBoxes', 'onAnimationStateChanged', 'onVideoPlaying', 'onClose')
+    __slots__ = ('onOpen', 'onGoBack', 'onPreview', 'onBuyBoxes', 'onAnimationStateChanged', 'onVideoPlaying', 'onClose', 'onReroll', 'onRerollDialogOpen')
 
-    def __init__(self, properties=11, commands=7):
+    def __init__(self, properties=14, commands=9):
         super(SingleBoxRewardsViewModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -26,64 +27,85 @@ class SingleBoxRewardsViewModel(ViewModel):
     def getExtraBonusesType():
         return BonusModel
 
+    @property
+    def reroll(self):
+        return self._getViewModel(2)
+
+    @staticmethod
+    def getRerollType():
+        return BoxRerollModel
+
     def getEventName(self):
-        return self._getString(2)
-
-    def setEventName(self, value):
-        self._setString(2, value)
-
-    def getBoxCategory(self):
         return self._getString(3)
 
-    def setBoxCategory(self, value):
+    def setEventName(self, value):
         self._setString(3, value)
 
+    def getBoxCategory(self):
+        return self._getString(4)
+
+    def setBoxCategory(self, value):
+        self._setString(4, value)
+
     def getIsReopen(self):
-        return self._getBool(4)
+        return self._getBool(5)
 
     def setIsReopen(self, value):
-        self._setBool(4, value)
+        self._setBool(5, value)
 
     def getBoxesCount(self):
-        return self._getNumber(5)
-
-    def setBoxesCount(self, value):
-        self._setNumber(5, value)
-
-    def getBoxesCountToGuaranteed(self):
         return self._getNumber(6)
 
-    def setBoxesCountToGuaranteed(self, value):
+    def setBoxesCount(self, value):
         self._setNumber(6, value)
 
+    def getBoxesCountToGuaranteed(self):
+        return self._getNumber(7)
+
+    def setBoxesCountToGuaranteed(self, value):
+        self._setNumber(7, value)
+
     def getIsAnimationActive(self):
-        return self._getBool(7)
-
-    def setIsAnimationActive(self, value):
-        self._setBool(7, value)
-
-    def getIsAwaitingResponse(self):
         return self._getBool(8)
 
-    def setIsAwaitingResponse(self, value):
+    def setIsAnimationActive(self, value):
         self._setBool(8, value)
 
-    def getIsWindowAccessible(self):
+    def getIsAwaitingResponse(self):
         return self._getBool(9)
 
-    def setIsWindowAccessible(self, value):
+    def setIsAwaitingResponse(self, value):
         self._setBool(9, value)
 
-    def getIsShopVisible(self):
+    def getIsRerollConfirmed(self):
         return self._getBool(10)
 
-    def setIsShopVisible(self, value):
+    def setIsRerollConfirmed(self, value):
         self._setBool(10, value)
+
+    def getRerollDialogRequired(self):
+        return self._getBool(11)
+
+    def setRerollDialogRequired(self, value):
+        self._setBool(11, value)
+
+    def getIsWindowAccessible(self):
+        return self._getBool(12)
+
+    def setIsWindowAccessible(self, value):
+        self._setBool(12, value)
+
+    def getIsShopVisible(self):
+        return self._getBool(13)
+
+    def setIsShopVisible(self, value):
+        self._setBool(13, value)
 
     def _initialize(self):
         super(SingleBoxRewardsViewModel, self)._initialize()
         self._addViewModelProperty('bonuses', UserListModel())
         self._addViewModelProperty('extraBonuses', UserListModel())
+        self._addViewModelProperty('reroll', BoxRerollModel())
         self._addStringProperty('eventName', '')
         self._addStringProperty('boxCategory', '')
         self._addBoolProperty('isReopen', False)
@@ -91,6 +113,8 @@ class SingleBoxRewardsViewModel(ViewModel):
         self._addNumberProperty('boxesCountToGuaranteed', 0)
         self._addBoolProperty('isAnimationActive', False)
         self._addBoolProperty('isAwaitingResponse', False)
+        self._addBoolProperty('isRerollConfirmed', False)
+        self._addBoolProperty('rerollDialogRequired', False)
         self._addBoolProperty('isWindowAccessible', False)
         self._addBoolProperty('isShopVisible', False)
         self.onOpen = self._addCommand('onOpen')
@@ -100,3 +124,5 @@ class SingleBoxRewardsViewModel(ViewModel):
         self.onAnimationStateChanged = self._addCommand('onAnimationStateChanged')
         self.onVideoPlaying = self._addCommand('onVideoPlaying')
         self.onClose = self._addCommand('onClose')
+        self.onReroll = self._addCommand('onReroll')
+        self.onRerollDialogOpen = self._addCommand('onRerollDialogOpen')

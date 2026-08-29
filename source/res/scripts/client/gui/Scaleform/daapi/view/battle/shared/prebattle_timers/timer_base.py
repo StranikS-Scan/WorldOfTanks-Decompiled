@@ -7,6 +7,7 @@ from gui.Scaleform.daapi.view.meta.PrebattleTimerBaseMeta import PrebattleTimerB
 from gui.battle_control.arena_info.interfaces import IArenaVehiclesController
 from gui.battle_control.battle_constants import COUNTDOWN_STATE, BATTLE_CTRL_ID
 from gui.battle_control.controllers.period_ctrl import IAbstractPeriodView
+from gui.shared import events, EVENT_BUS_SCOPE
 from helpers import dependency
 from gui.impl import backport
 from gui.impl.gen import R
@@ -78,11 +79,21 @@ class PreBattleTimerBase(PrebattleTimerBaseMeta, IAbstractPeriodView, IArenaVehi
     def _populate(self):
         super(PreBattleTimerBase, self)._populate()
         self.sessionProvider.addArenaCtrl(self)
+        self.addListener(events.GameEvent.GO_TO_PREBATTLE_HIGHLIGHTS, self._onPrebattleHighlightsStart, scope=EVENT_BUS_SCOPE.BATTLE)
+        self.addListener(events.GameEvent.RETURN_FROM_PREBATTLE_HIGHLIGHTS, self._onPrebattleHighlightsClose, scope=EVENT_BUS_SCOPE.BATTLE)
 
     def _dispose(self):
         self.sessionProvider.removeArenaCtrl(self)
         self._clearTimeShiftCallback()
+        self.removeListener(events.GameEvent.GO_TO_PREBATTLE_HIGHLIGHTS, self._onPrebattleHighlightsStart, scope=EVENT_BUS_SCOPE.BATTLE)
+        self.removeListener(events.GameEvent.RETURN_FROM_PREBATTLE_HIGHLIGHTS, self._onPrebattleHighlightsClose, scope=EVENT_BUS_SCOPE.BATTLE)
         super(PreBattleTimerBase, self)._dispose()
+
+    def _onPrebattleHighlightsStart(self, _=None):
+        self.as_togglePreBattleHighlightsVisibilityS(True)
+
+    def _onPrebattleHighlightsClose(self, _=None):
+        self.as_togglePreBattleHighlightsVisibilityS(False)
 
     def __setTimeShiftCallback(self):
         self.__callbackID = BigWorld.callback(_TIMER_ANIMATION_SHIFT, self.__updateTimer)

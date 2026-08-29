@@ -4,7 +4,6 @@ from __future__ import absolute_import, division
 import logging
 import typing
 import BigWorld
-import CGF
 from CommandMapping import CMD_CM_SPECIAL_ABILITY, CMD_CM_VEHICLE_SWITCH_AUTOROTATION
 from cgf_components_common.vehicle_mechanics.staged_jet_boosters import StagedJetBoostersControllerDescriptor
 from cgf_script.registration import registerReplicableComponent
@@ -22,7 +21,8 @@ from vehicles.mechanics.mechanic_logging import createMechanicInputLogger, IMech
 from vehicles.mechanics.mechanic_states import IMechanicStatesComponent, createMechanicStatesEvents, IMechanicStatesEvents, IMechanicState
 from wotdecorators import noexcept
 if IS_CLIENT:
-    from Input import InputAction, InputSingleton, InputTriggerPressed, TriggerEvent
+    import Input
+    from Input import TriggerEvent
 _logger = logging.getLogger(__name__)
 
 @ReprInjector.simple('state', 'endTime', 'duration', 'count', 'acceleratorStatus', 'params')
@@ -58,7 +58,8 @@ class StagedJetBoostersState(typing.NamedTuple('StagedJetBoostersState', (('stat
 
 @registerReplicableComponent
 class StagedJetBoostersController(VehicleDynamicComponent, StagedJetBoostersControllerDescriptor, IMechanicComponent, IMechanicCommandsComponent, IMechanicStatesComponent, IMechanicInputLoggingComponent):
-    _IA_NAME = 'staged_jet_boosters_input'
+    _INPUT_ACTION_NAME = 'ABILITY_0_INPUT_ACTION'
+    _INPUT_PROFILE_NAME = 'ABILITY_0_INPUT_PROFILE'
 
     @skipInEditor
     def __init__(self):
@@ -69,7 +70,6 @@ class StagedJetBoostersController(VehicleDynamicComponent, StagedJetBoostersCont
         self.__commandsEvents = createMechanicCommandsEvents(self)
         self.__statesEvents = createMechanicStatesEvents(self)
         self.__mechanicInputLogger = None
-        self.__inputAction = None
         self._initComponent()
         return
 
@@ -92,30 +92,24 @@ class StagedJetBoostersController(VehicleDynamicComponent, StagedJetBoostersCont
         return self.__statesEvents
 
     @ifPlayerVehicle
-    def attachInput(self, _):
-        if self.__inputAction is not None:
+    def attachInput(self, *_, **__):
+        if not Input.inputSystem().hasProfile(self._INPUT_PROFILE_NAME):
+            _logger.error('[INPUT] InputProfile %s is not loaded', self._INPUT_PROFILE_NAME)
             return
+        inputAction = Input.inputSystem().findAction(self._INPUT_PROFILE_NAME, self._INPUT_ACTION_NAME)
+        if inputAction:
+            inputAction.bindEventReaction(TriggerEvent.Triggered, self.tryActivate)
         else:
-            self.__inputAction = InputAction(CMD_CM_SPECIAL_ABILITY, [InputTriggerPressed()])
-            self.__inputAction.bindEventReaction(TriggerEvent.Triggered, self.tryActivate)
-            inputSingleton = CGF.findSingleton(self.entity.spaceID, InputSingleton)
-            if inputSingleton is not None:
-                inputSingleton.addAction(self._IA_NAME, self.__inputAction)
-            return
+            _logger.error("[INPUT] Can't find InputAction %s/%s", self._INPUT_PROFILE_NAME, self._INPUT_ACTION_NAME)
+        Input.inputSystem().activateProfile(self._INPUT_PROFILE_NAME)
 
     @ifPlayerVehicle
-    def detachInput(self, _=None):
-        if self.__inputAction is None:
-            return
-        else:
-            inputSingleton = CGF.findSingleton(self.entity.spaceID, InputSingleton)
-            if inputSingleton is not None:
-                inputSingleton.removeAction(self._IA_NAME)
-            self.__inputAction = None
-            return
+    def detachInput(self, *_, **__):
+        if Input.inputSystem().hasProfile(self._INPUT_PROFILE_NAME):
+            Input.inputSystem().deactivateProfile(self._INPUT_PROFILE_NAME, unbindAllReactions=True)
 
     @ifPlayerVehicle
-    def createInputLogger(self, _):
+    def createInputLogger(self, *_, **__):
         if self.__mechanicInputLogger is not None:
             self.__mechanicInputLogger.destroy()
         self.__mechanicInputLogger = createMechanicInputLogger(self, CMD_CM_SPECIAL_ABILITY, CMD_CM_VEHICLE_SWITCH_AUTOROTATION)

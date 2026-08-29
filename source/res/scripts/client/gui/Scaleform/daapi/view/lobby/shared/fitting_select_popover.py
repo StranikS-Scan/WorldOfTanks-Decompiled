@@ -22,11 +22,9 @@ from gui.shared.utils.requesters.ItemsRequester import REQ_CRITERIA
 from helpers import dependency, i18n
 from helpers.i18n import makeString as _ms
 from items import getTypeInfoByName
-from items.utils import getVehicleDescriptorWithoutMechanics
 from items.vehicles import VehicleDescriptor
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.shared import IItemsCache
-from vehicles.mechanics.mechanic_constants import VehicleMechanic
 if typing.TYPE_CHECKING:
     from gui.shared.gui_items.vehicle_modules import VehicleGun, VehicleRadio, VehicleEngine, VehicleTurret, VehicleChassis
     from gui.Scaleform.daapi.view.lobby.shared.fitting_select.module_extenders import ModuleParamsExtender
@@ -52,7 +50,7 @@ def _extendByModuleData(targetData, vehicleModule, vehDescr, extenders):
         if vehicleModule.isDamageMutable():
             paramsList = ('maxAvgMutableDamageList', 'minAvgMutableDamageList', 'avgPiercingPower', 'reloadTime')
         if vehicleModule.isLowChargeShotGun():
-            vehDescr = getVehicleDescriptorWithoutMechanics(vehDescr, VehicleMechanic.LOW_CHARGE_SHOT.value)
+            vehDescr = vehDescr.defaultVehicleDescr
     values, names = [], []
     paramsData = params_helper.getParameters(vehicleModule, vehDescr)
     serverSettings = dependency.instance(ISettingsCore).serverSettings
@@ -104,13 +102,14 @@ def _formatValuesString(valuesStr):
 def _convertTarget(target, reason):
     if target == FittingItem.TARGETS.OTHER:
         return FITTING_TYPES.TARGET_OTHER
-    if target == FittingItem.TARGETS.IN_INVENTORY:
+    elif target == FittingItem.TARGETS.IN_INVENTORY:
         if reason in (GUI_ITEM_ECONOMY_CODE.UNDEFINED, GUI_ITEM_ECONOMY_CODE.NOT_ENOUGH_CREDITS):
             return FITTING_TYPES.TARGET_HANGAR
         if reason == GUI_ITEM_ECONOMY_CODE.ITEM_IS_DUPLICATED:
             return FITTING_TYPES.TARGET_HANGAR_DUPLICATE
         return FITTING_TYPES.TARGET_HANGAR_CANT_INSTALL
-    return FITTING_TYPES.TARGET_VEHICLE if target == FittingItem.TARGETS.CURRENT else None
+    else:
+        return FITTING_TYPES.TARGET_VEHICLE if target == FittingItem.TARGETS.CURRENT else None
 
 
 class CommonFittingSelectPopover(FittingSelectPopoverMeta):

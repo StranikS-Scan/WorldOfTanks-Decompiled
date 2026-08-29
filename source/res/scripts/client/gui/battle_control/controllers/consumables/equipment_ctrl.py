@@ -1055,7 +1055,7 @@ def _triggerItemFactory(descriptor, quantity, stage, timeRemaining, totalTime, t
 
 
 def _poiItemFactory(descriptor, quantity, stage, timeRemaining, totalTime, tag=None):
-    if descriptor.name.startswith('poi_artillery_aoe'):
+    if descriptor.name.startswith('poi_artillery_aoe') or descriptor.name.startswith('poi_illumination_flare'):
         itemClass = _PoiArtilleryItem
     else:
         itemClass = _PoiEquipmentItemVS

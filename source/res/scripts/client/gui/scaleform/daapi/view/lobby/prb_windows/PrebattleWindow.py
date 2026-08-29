@@ -29,7 +29,7 @@ from messenger.gui.Scaleform.view.lobby import MESSENGER_VIEW_ALIAS
 from messenger.m_constants import USER_GUI_TYPE, PROTO_TYPE
 from messenger.proto import proto_getter
 from messenger.proto.events import g_messengerEvents
-from messenger.storage import storage_getter
+from messenger.storage import MessengerStorageDescriptor, UsersStorage
 from prebattle_shared import decodeRoster
 from skeletons.gui.lobby_context import ILobbyContext
 
@@ -37,6 +37,7 @@ from skeletons.gui.lobby_context import ILobbyContext
 class PrebattleWindow(PrebattleWindowMeta, ILegacyListener):
     lobbyContext = dependency.descriptor(ILobbyContext)
     __craftmacineConrtoller = dependency.descriptor(ICraftmachineController)
+    usersStorage = MessengerStorageDescriptor(UsersStorage)
 
     def __init__(self, prbName='prebattle'):
         super(PrebattleWindow, self).__init__()
@@ -58,10 +59,6 @@ class PrebattleWindow(PrebattleWindowMeta, ILegacyListener):
     def onSourceLoaded(self):
         if not self._isInLegacyPreBattle():
             self.destroy()
-
-    @storage_getter('users')
-    def usersStorage(self):
-        return None
 
     @proto_getter(PROTO_TYPE.BW_CHAT2)
     def bwProto(self):

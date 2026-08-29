@@ -12,7 +12,7 @@ from account_helpers import AccountSettings
 from account_helpers.AccountSettings import VIEWED_MODULES_SECTION
 from armor_inspector_common.schemas import armorInspectorConfigSchema
 from frameworks.wulf import WindowFlags
-from frameworks.state_machine import StateIdsObserver
+from frameworks_common.state_machine import StateIdsObserver
 from Event import Event
 from collector_vehicle import CollectorVehicleConsts
 from gui import g_tankActiveCamouflage

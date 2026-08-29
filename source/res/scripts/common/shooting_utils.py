@@ -31,9 +31,6 @@ def getMaxShotDistance(height, vehicleDescr):
 
 
 def getPyShootingTest(spaceID, vehicleDescr):
-    global __STEEP_AIMING_TAGS
-    global __MIXED_AIMING_TAGS
-    global __DIST_LIMIT_TAGS
     shotDescr = vehicleDescr.shot
     gunDescr = vehicleDescr.gun
     vehicleTags = vehicleDescr.type.tags

@@ -10,10 +10,10 @@ from gui.Scaleform.locale.QUESTS import QUESTS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.impl.lobby.missions.missions_helpers import formatCompleteCount
 from gui.server_events import finders
-from gui.server_events.awards_formatters import QuestsBonusComposer, AWARDS_SIZES, PreformattedBonus, getPersonalMissionAwardPacker, getOperationPacker, getBattlePassAwardsPacker, formatCountLabel, LABEL_ALIGN, PACK_RENT_VEHICLES_BONUS, PostProcessTags
+from gui.server_events.awards_formatters import AWARDS_SIZES, LABEL_ALIGN, PACK_RENT_VEHICLES_BONUS, PostProcessTags, PreformattedBonus, QuestsBonusComposer, formatCountLabel, getBattlePassAwardsPacker, getOperationPacker, getPersonalMissionAwardPacker
 from gui.server_events.bonuses import FreeTokensBonus
 from gui.shared.formatters import text_styles
-from helpers import i18n, dependency
+from helpers import dependency, i18n
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
 _OPERATION_AWARDS_COUNT = 3
@@ -259,13 +259,13 @@ class NewStyleBonusComposer(LootBoxBonusComposer):
     pass
 
 
-def _getBonusesWithModifyTokens(bonuses, freeTokenName, addTokensCount, hasPawned):
+def getBonusesWithModifyTokens(bonuses, freeTokenName, addTokensCount, hasPawned, additionalCtx=None):
     if addTokensCount > 0:
         newBonuses = []
         hasFreeTokens = False
-        ctx = {}
+        ctx = additionalCtx if additionalCtx else {}
         for bonus in bonuses:
-            ctx = bonus.getContext()
+            ctx.update(bonus.getContext())
             if bonus.getName() == 'freeTokens':
                 value = {freeTokenName: {'count': bonus.getCount() + addTokensCount}}
                 newBonuses.append(FreeTokensBonus(value, ctx=ctx, hasPawned=hasPawned))
@@ -290,12 +290,12 @@ class PersonalMissionsAwardComposer(CurtailingAwardsComposer):
         return self._packBonuses(preformattedBonuses, size, gap, isObtained, obtainedImage, obtainedImageOffset)
 
     def getPawnedQuestBonuses(self, bonuses, size=AWARDS_SIZES.SMALL, gap=0, isObtained=False, pawnedTokensCount=0, obtainedImage='', obtainedImageOffset=0, freeTokenName=''):
-        bonuses = _getBonusesWithModifyTokens(bonuses, freeTokenName, pawnedTokensCount, True)
+        bonuses = getBonusesWithModifyTokens(bonuses, freeTokenName, pawnedTokensCount, True)
         preformattedBonuses = self.getPreformattedBonuses(bonuses)
         return self._packBonuses(preformattedBonuses, size, gap, isObtained, obtainedImage, obtainedImageOffset)
 
     def getReturnTokensQuestBonuses(self, bonuses, size=AWARDS_SIZES.SMALL, gap=0, isObtained=False, returnedTokensCount=0, obtainedImage='', obtainedImageOffset=0, freeTokenName=''):
-        bonuses = _getBonusesWithModifyTokens(bonuses, freeTokenName, returnedTokensCount, False)
+        bonuses = getBonusesWithModifyTokens(bonuses, freeTokenName, returnedTokensCount, False)
         preformattedBonuses = self.getPreformattedBonuses(bonuses)
         return self._packBonuses(preformattedBonuses, size, gap, isObtained, obtainedImage, obtainedImageOffset)
 
@@ -403,7 +403,7 @@ class TooltipOperationAwardComposer(MainOperationAwardComposer):
     def _getBonuses(self, operation):
         bonusList = []
         if not operation.isAwardAchieved():
-            rewardQuest = operation.getPM3RewardQuest()
+            rewardQuest = operation.getRewardQuest()
             if rewardQuest is not None:
                 bonusList.extend(rewardQuest.getBonuses())
             else:
@@ -411,7 +411,7 @@ class TooltipOperationAwardComposer(MainOperationAwardComposer):
                     bonusList.extend(bonuses)
 
         elif not operation.isFullCompleted():
-            extrasQuest = operation.getPM3RewardHonorQuest()
+            extrasQuest = operation.getAwardListRewardHonorQuest()
             if extrasQuest is None:
                 hiddenQuests = self._eventsCache.getHiddenQuests()
                 finder = finders.getQuestByTokenAndBonus
@@ -485,14 +485,6 @@ class AnniversaryAwardComposer(CurtailingAwardsComposer):
                 break
 
         return bonuses
-
-
-class PersonalMissions3AwardComposer(CurtailingAwardsComposer):
-
-    def getFormattedBonuses(self, bonuses, size=AWARDS_SIZES.SMALL):
-        from gui.impl.lobby.personal_missions_30.bonus_sorter import getNotificationBonusOrder
-        preformattedBonuses = self.getPreformattedBonuses(sorted(bonuses, key=getNotificationBonusOrder))
-        return self._packBonuses(preformattedBonuses, size)
 
 
 class EpicCurtailingAwardsComposer(CurtailingAwardsComposer):

@@ -1,4 +1,5 @@
 <advanced_achievements.xml>
+  <xmlns:xmlref>	http://bwt/xmlref	</xmlns:xmlref>
   <achievements>
     <vehicleAchievements>
       <achievement>
@@ -42,6 +43,7 @@
         <UI>
           <stringKey>	germany	</stringKey>
           <background>	germany	</background>
+          <order>	14 20 26 32 38 42 492 48 54 59 373 384	</order>
         </UI>
         <stages>
           <stage>
@@ -50,7 +52,7 @@
           </stage>
         </stages>
         <conditions>
-          <requiredAchievementIDs>	14 20 26 32 38 42 48 54 59 373 384	</requiredAchievementIDs>
+          <requiredAchievementIDs>	14 20 26 32 38 42 492 48 54 59 373 384	</requiredAchievementIDs>
         </conditions>
       </achievement>
       <achievement>
@@ -4901,8 +4903,8 @@
       <achievement>
         <id>	273	</id>
         <UI>
-          <stringKey>	branch_china_Ch29_Type_62C_prot	</stringKey>
-          <vehicle>	china:Ch29_Type_62C_prot	</vehicle>
+          <stringKey>	branch_china_Ch71_WZ_219	</stringKey>
+          <vehicle>	china:Ch71_WZ_219	</vehicle>
           <background>	china_branch	</background>
           <iconPosition>	bottom	</iconPosition>
         </UI>
@@ -4913,7 +4915,7 @@
           </stage>
         </stages>
         <conditions>
-          <requiredAchievementIDs>	274 275 276 277 278	</requiredAchievementIDs>
+          <requiredAchievementIDs>	274 275 276 277 278 493	</requiredAchievementIDs>
         </conditions>
       </achievement>
       <achievement>
@@ -5009,8 +5011,8 @@
       <achievement>
         <id>	279	</id>
         <UI>
-          <stringKey>	branch_japan_J35_Ho_Ri_3	</stringKey>
-          <vehicle>	japan:J35_Ho_Ri_3	</vehicle>
+          <stringKey>	branch_japan_J53_Ho_Ri_Shugo	</stringKey>
+          <vehicle>	japan:J53_Ho_Ri_Shugo	</vehicle>
           <background>	japan_branch	</background>
           <iconPosition>	bottom	</iconPosition>
         </UI>
@@ -5021,7 +5023,7 @@
           </stage>
         </stages>
         <conditions>
-          <requiredAchievementIDs>	280 281 282 283 284	</requiredAchievementIDs>
+          <requiredAchievementIDs>	280 281 282 283 284 488	</requiredAchievementIDs>
         </conditions>
       </achievement>
       <achievement>
@@ -5441,8 +5443,8 @@
       <achievement>
         <id>	303	</id>
         <UI>
-          <stringKey>	branch_czech_Cz17_Vz_55	</stringKey>
-          <vehicle>	czech:Cz17_Vz_55	</vehicle>
+          <stringKey>	branch_czech_Cz46_Vz_63P	</stringKey>
+          <vehicle>	czech:Cz46_Vz_63P	</vehicle>
           <background>	czech_branch	</background>
           <iconPosition>	bottom	</iconPosition>
         </UI>
@@ -5453,7 +5455,7 @@
           </stage>
         </stages>
         <conditions>
-          <requiredAchievementIDs>	304 305 306 307 308	</requiredAchievementIDs>
+          <requiredAchievementIDs>	304 305 306 307 308 485	</requiredAchievementIDs>
         </conditions>
       </achievement>
       <achievement>
@@ -6071,8 +6073,8 @@
       <achievement>
         <id>	338	</id>
         <UI>
-          <stringKey>	branch_sweden_S28_UDES_15_16	</stringKey>
-          <vehicle>	sweden:S28_UDES_15_16	</vehicle>
+          <stringKey>	branch_sweden_S41_BV_111	</stringKey>
+          <vehicle>	sweden:S41_BV_111	</vehicle>
           <background>	sweden_branch	</background>
           <iconPosition>	bottom	</iconPosition>
         </UI>
@@ -6083,7 +6085,7 @@
           </stage>
         </stages>
         <conditions>
-          <requiredAchievementIDs>	333 334 339 340 341	</requiredAchievementIDs>
+          <requiredAchievementIDs>	333 334 339 340 341 486	</requiredAchievementIDs>
         </conditions>
       </achievement>
       <achievement>
@@ -6359,8 +6361,8 @@
       <achievement>
         <id>	354	</id>
         <UI>
-          <stringKey>	branch_italy_It08_Progetto_M40_mod_65	</stringKey>
-          <vehicle>	italy:It08_Progetto_M40_mod_65	</vehicle>
+          <stringKey>	branch_italy_It43_CAV_mod_71	</stringKey>
+          <vehicle>	italy:It43_CAV_mod_71	</vehicle>
           <background>	italy_branch	</background>
           <iconPosition>	bottom	</iconPosition>
         </UI>
@@ -6371,7 +6373,7 @@
           </stage>
         </stages>
         <conditions>
-          <requiredAchievementIDs>	349 355 356 357 358	</requiredAchievementIDs>
+          <requiredAchievementIDs>	349 355 356 357 358 487	</requiredAchievementIDs>
         </conditions>
       </achievement>
       <achievement>
@@ -7616,118 +7618,6 @@
         </conditions>
       </achievement>
       <achievement>
-        <id>	419	</id>
-        <deprecated>	true	</deprecated>
-        <UI>
-          <stringKey>	G36_PzII_J	</stringKey>
-          <background>	vehicles	</background>
-        </UI>
-        <stages>
-          <stage>
-            <value>	1	</value>
-          </stage>
-        </stages>
-        <conditions>
-          <vehicle>	germany:G36_PzII_J	</vehicle>
-        </conditions>
-      </achievement>
-      <achievement>
-        <id>	420	</id>
-        <deprecated>	true	</deprecated>
-        <UI>
-          <stringKey>	R34_BT_SV	</stringKey>
-          <background>	vehicles	</background>
-        </UI>
-        <stages>
-          <stage>
-            <value>	1	</value>
-          </stage>
-        </stages>
-        <conditions>
-          <vehicle>	ussr:R34_BT-SV	</vehicle>
-        </conditions>
-      </achievement>
-      <achievement>
-        <id>	421	</id>
-        <deprecated>	true	</deprecated>
-        <UI>
-          <stringKey>	R38_KV_220_beta	</stringKey>
-          <background>	vehicles	</background>
-        </UI>
-        <stages>
-          <stage>
-            <value>	1	</value>
-          </stage>
-        </stages>
-        <conditions>
-          <vehicle>	ussr:R38_KV-220_beta	</vehicle>
-        </conditions>
-      </achievement>
-      <achievement>
-        <id>	422	</id>
-        <deprecated>	true	</deprecated>
-        <UI>
-          <stringKey>	G32_PzV_PzIV_ausf_Alfa	</stringKey>
-          <background>	vehicles	</background>
-        </UI>
-        <stages>
-          <stage>
-            <value>	1	</value>
-          </stage>
-        </stages>
-        <conditions>
-          <vehicle>	germany:G32_PzV_PzIV_ausf_Alfa	</vehicle>
-        </conditions>
-      </achievement>
-      <achievement>
-        <id>	423	</id>
-        <deprecated>	true	</deprecated>
-        <UI>
-          <stringKey>	R99_T44_122	</stringKey>
-          <background>	vehicles	</background>
-        </UI>
-        <stages>
-          <stage>
-            <value>	1	</value>
-          </stage>
-        </stages>
-        <conditions>
-          <vehicle>	ussr:R99_T44_122	</vehicle>
-        </conditions>
-      </achievement>
-      <achievement>
-        <id>	424	</id>
-        <deprecated>	true	</deprecated>
-        <UI>
-          <stringKey>	R75_SU122_54	</stringKey>
-          <background>	vehicles	</background>
-        </UI>
-        <stages>
-          <stage>
-            <value>	1	</value>
-          </stage>
-        </stages>
-        <conditions>
-          <vehicle>	ussr:R75_SU122_54	</vehicle>
-        </conditions>
-      </achievement>
-      <achievement>
-        <id>	425	</id>
-        <deprecated>	true	</deprecated>
-        <UI>
-          <stringKey>	A44_M4A2E4	</stringKey>
-          <background>	vehicles	</background>
-        </UI>
-        <stages>
-          <stage>
-            <value>	1	</value>
-          </stage>
-        </stages>
-        <conditions>
-          <vehicle>	usa:A44_M4A2E4	</vehicle>
-        </conditions>
-      </achievement>
-      <achievement>
         <id>	426	</id>
         <UI>
           <stringKey>	Pl32_SDP_Wz_44	</stringKey>
@@ -8241,7 +8131,7 @@
           </stage>
         </stages>
         <conditions>
-          <requiredAchievementIDs>	452 453 454	</requiredAchievementIDs>
+          <requiredAchievementIDs>	452 453 454 495	</requiredAchievementIDs>
         </conditions>
       </achievement>
       <achievement>
@@ -8739,6 +8629,347 @@
         <openByUnlock></openByUnlock>
         <conditions>
           <vehicle>	uk:GB158_Executor	</vehicle>
+        </conditions>
+      </achievement>
+      <achievement>
+        <id>	485	</id>
+        <UI>
+          <stringKey>	Cz46_Vz_63P	</stringKey>
+          <background>	czech	</background>
+          <iconPosition>	bottom	</iconPosition>
+        </UI>
+        <stages>
+          <stage>
+            <value>	1	</value>
+            <points>	10	</points>
+          </stage>
+        </stages>
+        <openByUnlock></openByUnlock>
+        <conditions>
+          <vehicle>	czech:Cz46_Vz_63P	</vehicle>
+        </conditions>
+      </achievement>
+      <achievement>
+        <id>	486	</id>
+        <UI>
+          <stringKey>	S41_BV_111	</stringKey>
+          <background>	sweden	</background>
+          <iconPosition>	bottom	</iconPosition>
+        </UI>
+        <stages>
+          <stage>
+            <value>	1	</value>
+            <points>	10	</points>
+          </stage>
+        </stages>
+        <openByUnlock></openByUnlock>
+        <conditions>
+          <vehicle>	sweden:S41_BV_111	</vehicle>
+        </conditions>
+      </achievement>
+      <achievement>
+        <id>	487	</id>
+        <UI>
+          <stringKey>	It43_CAV_mod_71	</stringKey>
+          <background>	italy	</background>
+          <iconPosition>	bottom	</iconPosition>
+        </UI>
+        <stages>
+          <stage>
+            <value>	1	</value>
+            <points>	10	</points>
+          </stage>
+        </stages>
+        <openByUnlock></openByUnlock>
+        <conditions>
+          <vehicle>	italy:It43_CAV_mod_71	</vehicle>
+        </conditions>
+      </achievement>
+      <achievement>
+        <id>	488	</id>
+        <UI>
+          <stringKey>	J53_Ho_Ri_Shugo	</stringKey>
+          <background>	japan	</background>
+          <iconPosition>	bottom	</iconPosition>
+        </UI>
+        <stages>
+          <stage>
+            <value>	1	</value>
+            <points>	10	</points>
+          </stage>
+        </stages>
+        <openByUnlock></openByUnlock>
+        <conditions>
+          <vehicle>	japan:J53_Ho_Ri_Shugo	</vehicle>
+        </conditions>
+      </achievement>
+      <achievement>
+        <id>	489	</id>
+        <UI>
+          <stringKey>	G196_Versuchspanzer_57	</stringKey>
+          <background>	germany	</background>
+          <iconPosition>	bottom	</iconPosition>
+        </UI>
+        <stages>
+          <stage>
+            <value>	1	</value>
+            <points>	10	</points>
+          </stage>
+        </stages>
+        <openByUnlock></openByUnlock>
+        <conditions>
+          <vehicle>	germany:G196_Versuchspanzer_57	</vehicle>
+        </conditions>
+      </achievement>
+      <achievement>
+        <id>	490	</id>
+        <UI>
+          <stringKey>	G198_Kampfpanzer_67	</stringKey>
+          <background>	germany	</background>
+          <iconPosition>	bottom	</iconPosition>
+        </UI>
+        <stages>
+          <stage>
+            <value>	1	</value>
+            <points>	10	</points>
+          </stage>
+        </stages>
+        <openByUnlock></openByUnlock>
+        <conditions>
+          <vehicle>	germany:G198_Kampfpanzer_67	</vehicle>
+        </conditions>
+      </achievement>
+      <achievement>
+        <id>	491	</id>
+        <UI>
+          <stringKey>	G197_Pz_Kpfw_Neu	</stringKey>
+          <background>	germany	</background>
+          <iconPosition>	bottom	</iconPosition>
+        </UI>
+        <stages>
+          <stage>
+            <value>	1	</value>
+            <points>	10	</points>
+          </stage>
+        </stages>
+        <openByUnlock></openByUnlock>
+        <conditions>
+          <vehicle>	germany:G197_Pz_Kpfw_Neu	</vehicle>
+        </conditions>
+      </achievement>
+      <achievement>
+        <id>	492	</id>
+        <UI>
+          <stringKey>	branch_germany_G197_Pz_Kpfw_Neu	</stringKey>
+          <vehicle>	germany:G197_Pz_Kpfw_Neu	</vehicle>
+          <background>	germany_branch	</background>
+          <iconPosition>	bottom	</iconPosition>
+          <order>	43 44 494 489 490 491	</order>
+        </UI>
+        <stages>
+          <stage>
+            <value>	1	</value>
+            <points>	50	</points>
+          </stage>
+        </stages>
+        <conditions>
+          <requiredAchievementIDs>	43 44 494 489 490 491	</requiredAchievementIDs>
+        </conditions>
+      </achievement>
+      <achievement>
+        <id>	493	</id>
+        <UI>
+          <stringKey>	Ch71_WZ_219	</stringKey>
+          <background>	china	</background>
+          <iconPosition>	bottom	</iconPosition>
+        </UI>
+        <stages>
+          <stage>
+            <value>	1	</value>
+            <points>	10	</points>
+          </stage>
+        </stages>
+        <openByUnlock></openByUnlock>
+        <conditions>
+          <vehicle>	china:Ch71_WZ_219	</vehicle>
+        </conditions>
+      </achievement>
+      <achievement>
+        <id>	494	</id>
+        <UI>
+          <stringKey>	G193_Pz_Kpfw_55	</stringKey>
+          <background>	germany	</background>
+          <iconPosition>	bottom	</iconPosition>
+        </UI>
+        <stages>
+          <stage>
+            <value>	1	</value>
+            <points>	10	</points>
+          </stage>
+        </stages>
+        <openByUnlock></openByUnlock>
+        <conditions>
+          <vehicle>	germany:G193_Pz_Kpfw_55	</vehicle>
+        </conditions>
+      </achievement>
+      <achievement>
+        <id>	495	</id>
+        <UI>
+          <stringKey>	third_campaign_fourth_operation	</stringKey>
+          <background>	third_campaign	</background>
+        </UI>
+        <stages>
+          <stage>
+            <value>	1	</value>
+            <points>	10	</points>
+          </stage>
+        </stages>
+        <conditions>
+          <vehicle>	germany:G183_Fossa_VM_68	</vehicle>
+        </conditions>
+      </achievement>
+      <achievement>
+        <id>	496	</id>
+        <deprecated>	true	</deprecated>
+        <UI>
+          <stringKey>	F141_Durendal	</stringKey>
+          <background>	vehicles	</background>
+        </UI>
+        <stages>
+          <stage>
+            <value>	1	</value>
+          </stage>
+        </stages>
+        <conditions>
+          <vehicle>	france:F141_Durendal	</vehicle>
+        </conditions>
+      </achievement>
+      <achievement>
+        <id>	497	</id>
+        <deprecated>	true	</deprecated>
+        <UI>
+          <stringKey>	G200_Chi_Go	</stringKey>
+          <background>	vehicles	</background>
+        </UI>
+        <stages>
+          <stage>
+            <value>	1	</value>
+          </stage>
+        </stages>
+        <conditions>
+          <vehicle>	germany:G200_Chi_Go	</vehicle>
+        </conditions>
+      </achievement>
+      <achievement>
+        <id>	419	</id>
+        <deprecated>	true	</deprecated>
+        <UI>
+          <stringKey>	G36_PzII_J	</stringKey>
+          <background>	vehicles	</background>
+        </UI>
+        <stages>
+          <stage>
+            <value>	1	</value>
+          </stage>
+        </stages>
+        <conditions>
+          <vehicle>	germany:G36_PzII_J	</vehicle>
+        </conditions>
+      </achievement>
+      <achievement>
+        <id>	420	</id>
+        <deprecated>	true	</deprecated>
+        <UI>
+          <stringKey>	R34_BT_SV	</stringKey>
+          <background>	vehicles	</background>
+        </UI>
+        <stages>
+          <stage>
+            <value>	1	</value>
+          </stage>
+        </stages>
+        <conditions>
+          <vehicle>	ussr:R34_BT-SV	</vehicle>
+        </conditions>
+      </achievement>
+      <achievement>
+        <id>	421	</id>
+        <deprecated>	true	</deprecated>
+        <UI>
+          <stringKey>	R38_KV_220_beta	</stringKey>
+          <background>	vehicles	</background>
+        </UI>
+        <stages>
+          <stage>
+            <value>	1	</value>
+          </stage>
+        </stages>
+        <conditions>
+          <vehicle>	ussr:R38_KV-220_beta	</vehicle>
+        </conditions>
+      </achievement>
+      <achievement>
+        <id>	422	</id>
+        <deprecated>	true	</deprecated>
+        <UI>
+          <stringKey>	G32_PzV_PzIV_ausf_Alfa	</stringKey>
+          <background>	vehicles	</background>
+        </UI>
+        <stages>
+          <stage>
+            <value>	1	</value>
+          </stage>
+        </stages>
+        <conditions>
+          <vehicle>	germany:G32_PzV_PzIV_ausf_Alfa	</vehicle>
+        </conditions>
+      </achievement>
+      <achievement>
+        <id>	423	</id>
+        <deprecated>	true	</deprecated>
+        <UI>
+          <stringKey>	R99_T44_122	</stringKey>
+          <background>	vehicles	</background>
+        </UI>
+        <stages>
+          <stage>
+            <value>	1	</value>
+          </stage>
+        </stages>
+        <conditions>
+          <vehicle>	ussr:R99_T44_122	</vehicle>
+        </conditions>
+      </achievement>
+      <achievement>
+        <id>	424	</id>
+        <deprecated>	true	</deprecated>
+        <UI>
+          <stringKey>	R75_SU122_54	</stringKey>
+          <background>	vehicles	</background>
+        </UI>
+        <stages>
+          <stage>
+            <value>	1	</value>
+          </stage>
+        </stages>
+        <conditions>
+          <vehicle>	ussr:R75_SU122_54	</vehicle>
+        </conditions>
+      </achievement>
+      <achievement>
+        <id>	425	</id>
+        <deprecated>	true	</deprecated>
+        <UI>
+          <stringKey>	A44_M4A2E4	</stringKey>
+          <background>	vehicles	</background>
+        </UI>
+        <stages>
+          <stage>
+            <value>	1	</value>
+          </stage>
+        </stages>
+        <conditions>
+          <vehicle>	usa:A44_M4A2E4	</vehicle>
         </conditions>
       </achievement>
     </vehicleAchievements>

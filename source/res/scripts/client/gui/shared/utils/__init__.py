@@ -46,6 +46,9 @@ UNICHARGED_VEHICLES_PROP_NAME = 'uniChargedVehicles'
 VEHICLES_PROP_NAME = 'vehicles'
 CLIP_VEHICLES_CD_PROP_NAME = 'clipVehiclesCD'
 MAX_STEERING_LOCK_ANGLE = 'maxSteeringLockAngle'
+NORMALIZATION_ANGLE = 'normalizationAngle'
+RICOCHET_ANGLE = 'ricochetAngle'
+PENETRATION_LOSS = 'penetrationLoss'
 BURST_FIRE_RATE = 'burstFireRate'
 BURST_TIME_INTERVAL = 'burstTimeInterval'
 BURST_COUNT = 'burstCount'
@@ -81,6 +84,7 @@ TWIN_GUN_RELOAD_TWO_GUN_TIME = 'reloadTimeTwinGun'
 TWIN_GUN_RELOAD_TIME = 'twinGunReloadTime'
 CHASSIS_REPAIR_TIME = 'chassisRepairTime'
 CHASSIS_REPAIR_TIME_YOH = 'chassisRepairTimeYoh'
+CRITICAL_HIT_CHANCE = 'criticalHitChance'
 GUN_CAN_BE_CLIP = 1
 GUN_CLIP = 2
 GUN_NORMAL = 4
@@ -331,6 +335,9 @@ def makeSearchableString(inputString):
         return inputString.decode('utf-8').lower()
     except ValueError:
         LOG_ERROR('Given string cannot be decoded from UTF-8', inputString)
+        return None
+
+    return None
 
 
 def isPopupsWindowsOpenDisabled():

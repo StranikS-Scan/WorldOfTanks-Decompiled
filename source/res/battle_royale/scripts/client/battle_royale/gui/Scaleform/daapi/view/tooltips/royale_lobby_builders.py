@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: battle_royale/scripts/client/battle_royale/gui/Scaleform/daapi/view/tooltips/royale_lobby_builders.py
+from __future__ import absolute_import
 from frameworks.wulf import WindowLayer
 from battle_royale.gui.Scaleform.daapi.view.lobby.tooltips import BattleProgressionTooltipData, BattleRoyaleCalendarExtendedTooltip
 from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA

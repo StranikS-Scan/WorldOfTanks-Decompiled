@@ -58,7 +58,6 @@ def lsSquadOptionBuilder(cm, options, userCMInfo, ctrl=None):
 class LSAppealCMHandler(AppealCMHandler):
 
     def onOptionSelect(self, optionId):
-        res = super(LSAppealCMHandler, self).onOptionSelect(optionId)
+        super(LSAppealCMHandler, self).onOptionSelect(optionId)
         if optionId in (USER.CREATE_PRIVATE_CHANNEL, USER.INFO):
             showHangar()
-        return res

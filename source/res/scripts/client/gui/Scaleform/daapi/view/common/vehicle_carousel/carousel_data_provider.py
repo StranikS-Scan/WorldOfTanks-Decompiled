@@ -23,7 +23,7 @@ from gui.shared.utils.requesters import REQ_CRITERIA
 from helpers.i18n import makeString as ms
 from helpers import dependency
 from math_common import round_py2_style_int
-from skeletons.gui.game_control import IBattleRoyaleController
+from skeletons.gui.game_control import IBattleRoyaleController, IRestBonusController
 if typing.TYPE_CHECKING:
     from skeletons.gui.shared import IItemsCache
 
@@ -67,11 +67,12 @@ def getStatusStrings(vState, vStateLvl=Vehicle.VEHICLE_STATE_LEVEL.INFO, substit
         return (text_styles.middleTitle(substitute), status) if substitute else (status, status)
 
 
-def getVehicleDataVO(vehicle):
-    return _getVehicleDataVO(vehicle)
+@dependency.replace_none_kwargs(restBonusCtrl=IRestBonusController)
+def getVehicleDataVO(vehicle, restBonusCtrl=None):
+    return _getVehicleDataVO(vehicle, restBonusCtrl)
 
 
-def _getVehicleDataVO(vehicle):
+def _getVehicleDataVO(vehicle, restBonusCtrl):
     rentInfoText = ''
     if not vehicle.isTelecomRent:
         rentInfoText = RentLeftFormatter(vehicle.rentInfo, vehicle.isPremiumIGR).getRentLeftStr()
@@ -92,8 +93,9 @@ def _getVehicleDataVO(vehicle):
     if vState == Vehicle.VEHICLE_STATE.RENTABLE:
         smallHoverStatus, largeHoverStatus = getStatusStrings(vState + '/hover', vStateLvl, substitute=rentInfoText, ctx={'icon': icons.premiumIgrSmall(),
          'battlesLeft': getBattlesLeft(vehicle)})
-    if vehicle.dailyXPFactor > 1:
-        bonusImage = getButtonsAssetPath('bonus_x{}'.format(vehicle.dailyXPFactor))
+    dailyXPFactor = vehicle.dailyXPFactor
+    if dailyXPFactor > 1:
+        bonusImage = getButtonsAssetPath('bonus_x{}'.format(restBonusCtrl.getActualXPFactor(vehicle)))
     else:
         bonusImage = ''
     label = vehicle.shortUserName if vehicle.isPremiumIGR else vehicle.userName

@@ -401,7 +401,7 @@ class Hull(with_metaclass(ReflectionMetaclass, BasicItem)):
 
 
 class Shell(BasicItem):
-    __slots__ = ('caliber', 'isTracer', 'isForceTracer', 'armorDamage', 'deviceDamage', 'damageRandomization', 'damageRandomizationType', 'piercingPowerRandomization', 'piercingPowerRandomizationType', 'icon', 'iconName', 'isGold', 'type', 'stun', 'effectsCaliber', 'effectsIndex', 'prefabEffectsIndex', 'secondaryAttackReason', 'isDamageMutable', 'maxDistance', 'dynamicEffectsIndexes', 'obstaclesDamage', 'obstaclesPowerReduction')
+    __slots__ = ('caliber', 'isTracer', 'isForceTracer', 'armorDamage', 'deviceDamage', 'damageRandomization', 'damageRandomizationType', 'piercingPowerRandomization', 'piercingPowerRandomizationType', 'icon', 'iconName', 'isGold', 'type', 'stun', 'effectsCaliber', 'effectsIndex', 'prefabEffectsIndex', 'secondaryAttackReason', 'isDamageMutable', 'maxDistance', 'dynamicEffectsIndexes', 'obstaclesDamage', 'obstaclesPowerReduction', 'chanceToHitByProjectileModifier')
 
     def __init__(self, typeID, componentID, componentName, compactDescr):
         super(Shell, self).__init__(typeID, componentID, componentName, compactDescr)
@@ -427,6 +427,7 @@ class Shell(BasicItem):
         self.isDamageMutable = False
         self.obstaclesDamage = None
         self.obstaclesPowerReduction = None
+        self.chanceToHitByProjectileModifier = component_constants.ONE_FLOAT
         return
 
     def __repr__(self):

@@ -26,7 +26,10 @@ class Comp7LobbyHeaderHelper(DefaultLobbyHeaderHelper):
     @classmethod
     def _getOutSquadTooltipData(cls, prbValidation):
         header = R.strings.platoon.headerButton.tooltips.comp7Squad.header()
-        body = R.strings.platoon.headerButton.tooltips.comp7Squad.body()
+        if cls.__comp7Controller.isSuperSquadEnabled():
+            body = R.strings.platoon.headerButton.tooltips.comp7Squad.body()
+        else:
+            body = R.strings.platoon.headerButton.tooltips.comp7Squad.superSquadDisabled.body()
         params = {}
         if cls.__platoonController.getPermissions().canCreateSquad():
             return (header, body, params)
@@ -38,7 +41,10 @@ class Comp7LobbyHeaderHelper(DefaultLobbyHeaderHelper):
             level = int2roman(cls.__comp7Controller.getModeSettings().levels[0])
             params = {'level': level}
         elif not cls.__comp7Controller.isQualificationSquadAllowed():
-            body = R.strings.platoon.headerButton.tooltips.comp7QualificationSquad.body()
+            if cls.__comp7Controller.isSuperSquadEnabled():
+                body = R.strings.platoon.headerButton.tooltips.comp7QualificationSquad.body()
+            else:
+                body = R.strings.platoon.headerButton.tooltips.comp7QualificationSquad.superSquadDisabled.body()
         else:
             body = R.strings.platoon.headerButton.tooltips.comp7Restriction.body()
         return (header, body, params)

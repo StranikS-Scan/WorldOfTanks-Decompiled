@@ -1,0 +1,28 @@
+<BustleFeedController.def>
+  <Properties>
+    <status>
+      <Type>	BUSTLE_FEED_STATUS	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <DetailLevel>	MY_VEHICLE	</DetailLevel>
+    </status>
+    <reloadStatus>
+      <Type>	BUSTLE_FEED_RELOAD_STATUS	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <DetailLevel>	MY_VEHICLE	</DetailLevel>
+    </reloadStatus>
+  </Properties>
+  <CellMethods>
+    <tryActivate>
+      <Exposed>	OWN_CLIENT	</Exposed>
+    </tryActivate>
+  </CellMethods>
+  <ClientMethods>
+    <startBustleReload>
+      <Args>
+        <shell>	UINT8	</shell>
+        <side>	UINT8	</side>
+      </Args>
+    </startBustleReload>
+  </ClientMethods>
+  <DefaultKeyName>	bustleFeedController	</DefaultKeyName>
+</BustleFeedController.def>

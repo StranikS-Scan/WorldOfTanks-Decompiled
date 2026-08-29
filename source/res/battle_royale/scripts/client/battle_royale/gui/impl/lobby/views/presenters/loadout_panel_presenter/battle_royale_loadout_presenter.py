@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: battle_royale/scripts/client/battle_royale/gui/impl/lobby/views/presenters/loadout_panel_presenter/battle_royale_loadout_presenter.py
+from __future__ import absolute_import
 from helpers import dependency, time_utils
 from items import EQUIPMENT_TYPES
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
@@ -85,8 +86,8 @@ class BattleRoyaleLoadoutPresenter(ViewComponent[LoadoutViewModel]):
     @staticmethod
     def __setRespawnAbility(respawn):
         respawn.setPlatoonTimeToResurrect(RespawnAbility.getPlatoonTimeToResurrect())
-        respawn.setPlatoonRespawnPeriod(RespawnAbility.getPlatoonRespawnPeriod() / time_utils.ONE_MINUTE)
-        respawn.setSoloRespawnPeriod(RespawnAbility.getSoloRespawnPeriod() / time_utils.ONE_MINUTE)
+        respawn.setPlatoonRespawnPeriod(RespawnAbility.getPlatoonRespawnPeriod() // time_utils.ONE_MINUTE)
+        respawn.setSoloRespawnPeriod(RespawnAbility.getSoloRespawnPeriod() // time_utils.ONE_MINUTE)
 
     @staticmethod
     def __showUpgrades():

@@ -137,7 +137,7 @@ class HangarShellAdvanced(AdvancedTooltipWithMechanics):
     _TRAY = '_TRAY'
 
     def _getBlocksList(self, *args, **kwargs):
-        movie = SHELL_MOVIES.get(self._item.getAdvancedTooltipKey(), None)
+        movie = SHELL_MOVIES.get(self._item.getAdvancedTooltipKey())
         header = backport.text(R.strings.tooltips.advanced.header.shellType.dyn(self._item.type, default=R.invalid)())
         description = self._item.type + self._getDescriptionSuffix()
         return self._packAdvancedBlocks(movie, header, description)

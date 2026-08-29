@@ -1,0 +1,58 @@
+<pm4_11_2_15.xml>
+  <quests>
+    <potapovQuest>
+      <enabled>	true	</enabled>
+      <id>	pm4_11_2_15_main	</id>
+      <serverOnly>	true	</serverOnly>
+      <conditions>
+        <postBattle>
+          <results>
+            <key>	damageDealt	</key>
+            <greaterOrEqual>	5	</greaterOrEqual>
+            <compareWithMaxHealth></compareWithMaxHealth>
+          </results>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <credits>	175000	</credits>
+        <freeXP>	1750	</freeXP>
+        <equipCoin>	200	</equipCoin>
+        <token>
+          <id>	token:pt:final:s4:t11:main	</id>
+          <expires>	01.01.2050 00:01	</expires>
+          <count>	1	</count>
+          <limit>	63	</limit>
+        </token>
+      </bonus>
+    </potapovQuest>
+    <potapovQuest>
+      <enabled>	true	</enabled>
+      <id>	pm4_11_2_15_add	</id>
+      <serverOnly>	true	</serverOnly>
+      <conditions>
+        <preBattle>
+          <account>
+            <token>
+              <id>	token:pt:s4:t11:finished:base	</id>
+              <equal>	0	</equal>
+            </token>
+          </account>
+        </preBattle>
+        <postBattle>
+          <results>
+            <key>	damageDealt	</key>
+            <greaterOrEqual>	5	</greaterOrEqual>
+            <compareWithMaxHealth></compareWithMaxHealth>
+          </results>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <token>
+          <id>	pm4:11:points	</id>
+          <expires>	01.01.2050 00:01	</expires>
+          <count>	450	</count>
+        </token>
+      </bonus>
+    </potapovQuest>
+  </quests>
+</pm4_11_2_15.xml>

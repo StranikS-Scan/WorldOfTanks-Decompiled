@@ -1626,7 +1626,6 @@
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <aimingTime>	2.2	</aimingTime>
-          <multiGunEffects>	shot_dualgun_large_mb_L shot_dualgun_large_mb_R	</multiGunEffects>
           <dualGun>
             <chargeTime>	3	</chargeTime>
             <shootImpulse>	200	</shootImpulse>
@@ -1637,6 +1636,9 @@
             <afterShotDelay>	1	</afterShotDelay>
             <preChargeIndication>	0.25	</preChargeIndication>
           </dualGun>
+          <prefabs>
+            <main>	content/CGFPrefabs/Vehicle/guns/czech/gun_105mm_dvojkanon_vz_40N.prefab	</main>
+          </prefabs>
           <customizationSlots>
             <slot>
               <slotType>	paint	</slotType>
@@ -1711,6 +1713,7 @@
               </slaves>
             </master>
           </drivenJoints>
+          <muzzleBrake>	RADIAL	</muzzleBrake>
           <camouflage>
             <density>	109.385353 108.028374	</density>
             <aoTextureSize>	512 512	</aoTextureSize>

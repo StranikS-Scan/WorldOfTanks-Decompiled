@@ -1,11 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/game_loading/state_machine/states/init_client/transitions.py
 import typing
-from frameworks.state_machine.transitions import StringEventTransition
+from frameworks_common.state_machine.transitions import StringEventTransition
 from gui.game_loading.state_machine.const import GameLoadingStatesEvents
 from gui.game_loading.state_machine.states.transitions import SourceToSingleTargetTransition
 if typing.TYPE_CHECKING:
-    from frameworks.state_machine.events import StringEvent
+    from frameworks_common.state_machine.events import StringEvent
     from gui.game_loading.state_machine.machine import GameLoadingStateMachine
     from gui.game_loading.state_machine.states.init_client.logos_loading import LogosLoadingState
     from gui.game_loading.state_machine.states.init_client.client_loading_stub import ClientLoadingStubState

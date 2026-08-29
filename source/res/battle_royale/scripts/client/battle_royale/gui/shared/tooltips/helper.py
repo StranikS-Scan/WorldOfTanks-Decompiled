@@ -1,5 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: battle_royale/scripts/client/battle_royale/gui/shared/tooltips/helper.py
+from __future__ import absolute_import
+from future.utils import lmap
 from functools import partial
 from battle_royale.gui.impl.gen.view_models.views.lobby.tooltips.reward_points_place_model import RewardPointsPlaceModel
 from frameworks.wulf import Array
@@ -10,11 +12,11 @@ _string = R.strings.battle_royale.tooltip.progression.leaderboardReward
 
 def fillProgressionPointsTableModel(viewModel, progressionPointsList, headerResource=_string):
     gameModes, gameModeLists = progressionPointsList
-    fillStringsArray(map(partial(_getGameModeName, headerResource), gameModes), viewModel.getBattleTypes())
-    gameModeColLists = list()
+    fillStringsArray(lmap(partial(_getGameModeName, headerResource), gameModes), viewModel.getBattleTypes())
+    gameModeColLists = []
     for points in gameModeLists:
         prevLevel = 1
-        gameModeCellList = list()
+        gameModeCellList = []
         for point in points:
             gameModeCellList.append(_getRowPointsCell(point, prevLevel, headerResource))
             prevLevel = point.lastInRange + 1

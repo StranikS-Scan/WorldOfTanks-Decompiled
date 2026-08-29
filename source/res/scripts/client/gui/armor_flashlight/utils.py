@@ -31,3 +31,8 @@ def getAllMatInfos(typeDescriptor):
     commonMaterials = [ _convertMatInfo(matInfo) for matInfo in vehicles.g_cache.commonConfig['materials'].itervalues() ]
     materialsAll['common'] = commonMaterials
     return materialsAll
+
+
+class ArmorFlashlightHideReason(object):
+    USER_HIDDEN = 1
+    HE_ROCKET_AIMING_MODE = 2

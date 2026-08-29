@@ -383,12 +383,16 @@ class UseCrewBookProcessor(GroupedRequestProcessor):
 
     def _makeSuccessData(self, *args, **kwargs):
         itemsCache = dependency.instance(IItemsCache)
+        items = kwargs.get('ctx', [])
         auxData = []
-        for item in iter(kwargs.get('ctx', [])):
+        for idx, item in enumerate(items):
+            name = itemsCache.items.getItemByCD(item.itemID).userName
             if item.itemCount == 1:
-                auxData.append(makeI18nSuccess(sysMsgKey='crewBooksNotification/bookUsed', name=itemsCache.items.getItemByCD(item.itemID).userName))
-                continue
-            auxData.append(makeI18nSuccess(sysMsgKey='crewBooksNotification/booksUsed', name=itemsCache.items.getItemByCD(item.itemID).userName, count=item.itemCount))
+                sysMsgKey = 'crewBooksNotification/bookUsed'
+                if idx != len(items) - 1:
+                    sysMsgKey = 'crewBooksNotification/bookUsedOneOf'
+                auxData.append(makeI18nSuccess(sysMsgKey=sysMsgKey, name=name))
+            auxData.append(makeI18nSuccess(sysMsgKey='crewBooksNotification/booksUsed', name=name, count=item.itemCount))
 
         return auxData
 

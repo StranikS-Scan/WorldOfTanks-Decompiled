@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: comp7_core/scripts/common/comp7_core_common/battle_results/comp7_core.py
+from __future__ import absolute_import
 from battle_results.battle_results_constants import BATTLE_RESULT_ENTRY_TYPE as ENTRY_TYPE
 BATTLE_RESULTS = [('comp7PrestigePoints',
   int,

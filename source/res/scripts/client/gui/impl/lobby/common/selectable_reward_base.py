@@ -249,9 +249,8 @@ class SelectableRewardBase(ViewImpl):
             for reward in vm:
                 if reward.getType() == rewardName:
                     reward.setCount(count)
-                    resultSize = packSize * count or packSize
-                    if (resultSize > 1 or resultSize <= 1 and packSize == 1) and reward.getState() != SelectableRewardItemModel.STATE_RECEIVED:
-                        reward.setPackSize(resultSize)
+                    if packSize > 1 and reward.getState() != SelectableRewardItemModel.STATE_RECEIVED:
+                        reward.setPackSize(packSize)
 
     def __selectTab(self, tabName, initial=False):
         if self.__selectedTab != tabName:

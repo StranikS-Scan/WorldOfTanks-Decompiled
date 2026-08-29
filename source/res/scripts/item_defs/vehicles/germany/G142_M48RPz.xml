@@ -559,6 +559,36 @@
         <attachNode>	V	</attachNode>
         <hiddenForUser>	true	</hiddenForUser>
       </slot>
+      <slot>
+        <slotType>	attachment	</slotType>
+        <slotId>	18001	</slotId>
+        <position>	0.000003 -0.072262 -3.44418	</position>
+        <rotation>	0 -1.570797 1.570797	</rotation>
+        <applyType>	universal	</applyType>
+        <scale>	1 0.999999 0.999999	</scale>
+        <size>	medium	</size>
+        <hangerId>	12	</hangerId>
+      </slot>
+      <slot>
+        <slotType>	attachment	</slotType>
+        <slotId>	18002	</slotId>
+        <position>	-1.908335 0.321616 -0.048814	</position>
+        <rotation>	0 -0 1.570796	</rotation>
+        <scale>	1 1 1	</scale>
+        <applyType>	universal	</applyType>
+        <size>	medium	</size>
+        <hangerId>	9	</hangerId>
+      </slot>
+      <slot>
+        <slotType>	attachment	</slotType>
+        <slotId>	18003	</slotId>
+        <position>	1.908 0.321616 -0.048815	</position>
+        <rotation>	-0 -3.141418 1.570796	</rotation>
+        <scale>	1 1 1	</scale>
+        <applyType>	universal	</applyType>
+        <size>	medium	</size>
+        <hangerId>	9	</hangerId>
+      </slot>
     </customizationSlots>
     <customization>
       <customizableVehicleAreas>
@@ -1659,6 +1689,7 @@
             </customizableVehicleAreas>
           </customization>
           <edgeByVisualModel>	false	</edgeByVisualModel>
+          <muzzleBrake>	HORIZONTAL	</muzzleBrake>
           <camouflage>
             <density>	151.608 151.617	</density>
             <aoTextureSize>	512 512	</aoTextureSize>
@@ -2153,6 +2184,29 @@
           <scale>	0.408094 0.174035 0.408096	</scale>
           <showOn>	256	</showOn>
           <clipAngle>	1.07496	</clipAngle>
+        </slot>
+        <slot>
+          <slotType>	attachment	</slotType>
+          <slotId>	38000	</slotId>
+          <position>	-1.302915 1.072836 -0.678712	</position>
+          <rotation>	0 0 -0	</rotation>
+          <scale>	1 1 1	</scale>
+          <enableVisTunnel>	true	</enableVisTunnel>
+          <applyType>	turret	</applyType>
+          <size>	small	</size>
+          <hangerId>	6	</hangerId>
+          <hangerRotation>	0 -1.569051 0	</hangerRotation>
+        </slot>
+        <slot>
+          <slotType>	attachment	</slotType>
+          <slotId>	38001	</slotId>
+          <position>	-0.313502 1.17271 0.485906	</position>
+          <rotation>	0 0 -0	</rotation>
+          <scale>	1 1 1	</scale>
+          <enableVisTunnel>	true	</enableVisTunnel>
+          <applyType>	gunMantlet	</applyType>
+          <size>	small	</size>
+          <hangerId>	2	</hangerId>
         </slot>
       </customizationSlots>
       <customization>

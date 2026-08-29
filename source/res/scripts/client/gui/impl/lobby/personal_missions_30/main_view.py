@@ -1,22 +1,25 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/personal_missions_30/main_view.py
-from functools import partial
+from __future__ import absolute_import
 import SoundGroups
-from account_helpers.settings_core.settings_constants import PersonalMission3
+import typing
+from functools import partial
+from future.utils import listvalues
+from account_helpers.settings_core.settings_constants import PersonalMission3, PersonalMission4
 from constants import DAILY_QUESTS_CONFIG, Configs
 from frameworks.wulf import ViewFlags, ViewSettings, WindowFlags
 from gui import SystemMessages
-from gui.Scaleform.daapi.view.lobby.missions.missions_helper import getCurrentOperationLastInstalledDetail
+from gui.Scaleform.daapi.view.lobby.storage.storage_helpers import getVehicleCDForStyle
 from gui.Scaleform.lobby_entry import getLobbyStateMachine
 from gui.impl import backport
 from gui.impl.auxiliary.vehicle_helper import fillVehicleInfo
 from gui.impl.gen import R
-from gui.impl.gen.view_models.views.lobby.personal_missions_30.additional_mission_model import AdditionalMissionType, AdditionalMissionModel
+from gui.impl.gen.view_models.views.lobby.personal_missions_30.additional_mission_model import AdditionalMissionModel, AdditionalMissionType
 from gui.impl.gen.view_models.views.lobby.personal_missions_30.common.enums import MissionCategory, OperationState
-from gui.impl.gen.view_models.views.lobby.personal_missions_30.detail_model import DetailStatus, DetailModel
-from gui.impl.gen.view_models.views.lobby.personal_missions_30.main_view_model import MainViewModel, MainScreenState, AnimationState
-from gui.impl.gen.view_models.views.lobby.personal_missions_30.main_view_reward_model import RewardsType, MainViewRewardModel
-from gui.impl.gen.view_models.views.lobby.personal_missions_30.mission_model import MissionStatus, MissionModel
+from gui.impl.gen.view_models.views.lobby.personal_missions_30.detail_model import DetailModel, DetailStatus
+from gui.impl.gen.view_models.views.lobby.personal_missions_30.main_view_model import AnimationState, MainScreenState, MainViewModel
+from gui.impl.gen.view_models.views.lobby.personal_missions_30.main_view_reward_model import MainViewRewardModel, RewardsType
+from gui.impl.gen.view_models.views.lobby.personal_missions_30.mission_model import MissionModel, MissionStatus
 from gui.impl.gen.view_models.views.lobby.personal_missions_30.missions_model import MissionsModel
 from gui.impl.gen.view_models.views.lobby.personal_missions_30.operation_model import OperationModel
 from gui.impl.gen.view_models.views.lobby.personal_missions_30.operation_status_model import OperationStatus
@@ -24,36 +27,44 @@ from gui.impl.gen.view_models.views.lobby.personal_missions_30.quest_model impor
 from gui.impl.gen.view_models.views.lobby.personal_missions_30.select_operation_model import SelectOperationModel
 from gui.impl.gui_decorators import args2params
 from gui.impl.lobby.common.view_wrappers import createBackportTooltipDecorator
-from gui.impl.lobby.personal_missions_30.bonus_sorter import getBonusPacker, packMissionsBonusModelAndTooltipData
+from gui.impl.lobby.personal_missions_30.bonus_packers import getBonusPacker, packMissionsBonusModelAndTooltipData
 from gui.impl.lobby.personal_missions_30.hangar_helpers import AssemblingManager
-from gui.impl.lobby.personal_missions_30.personal_mission_constants import IntroKeys, REWARDS_VIEW_TYPES, MISSIONS_ROLES_TO_CATEGORIES, MAX_DETAIL_ID, PM3_CAMPAIGN_ID, SoundsKeys, PERSONAL_MISSIONS_CAMPAIGN_3_SPACE
-from gui.impl.lobby.personal_missions_30.state import MissionsState, AssemblingState, ProgressionState
+from gui.impl.lobby.personal_missions_30.personal_mission_constants import MAX_DETAIL_ID, MISSIONS_ROLES_TO_CATEGORIES, PERSONAL_MISSIONS_CAMPAIGN_3_SPACE, REWARDS_VIEW_TYPES, IntroKeys, SoundsKeys
+from gui.impl.lobby.personal_missions_30.state import AssemblingState, MissionsState, ProgressionState
 from gui.impl.lobby.personal_missions_30.tooltips.mission_progress_tooltip import MissionProgressTooltip
 from gui.impl.lobby.personal_missions_30.tooltips.missions_category_tooltip import MissionsCategoryTooltip
-from gui.impl.lobby.personal_missions_30.views_helpers import isIntroShown, getQuestsByOperationsChains, getMissionConfigData, getDetailNameByToken, isVehDetailInstalled, getMainRewardInfo, showRewardVehicleInHangar, getOperationStatus, getStageNumberByDetailId, hasAssemblingVideo, getRegularQuestsPMPoints, getVehicleDetails, getDetailedOperationStatus, getSortedPm3Operations, showStageAssemblingVideo
+from gui.impl.lobby.personal_missions_30.views_helpers import getDetailedOperationStatus, getDetailNameByToken, getMainRewardInfo, getMissionConfigData, getOperationStatus, getQuestsByOperationsChains, getRegularQuestsPMPoints, getBranchSortedPmOperations, getStageNumberByDetailId, getVehicleDetails, hasAssemblingVideo, isIntroShown, isVehDetailInstalled, showRewardVehicleInHangar, showStageAssemblingVideo, getOperationBannerState, setPMInstalledVehDetails, getPMInstalledVehDetails, getPersonalMissionData, getCheckedPMPointsKey, setPersonalMissionData, getCurrentOperationLastInstalledDetail, getBranchesSortedPmOperations, checkPM4FirstEntrance
 from gui.impl.pub import ViewImpl, WindowImpl
 from gui.server_events.events_dispatcher import showMissions
 from gui.server_events.events_helpers import isDailyQuestsEnable, isWeeklyQuestsEnable
-from gui.server_events.pm_constants import IS_PM3_QUEST_ENABLED, DISABLED_PM_OPERATIONS, DISABLED_PM_MISSIONS
-from gui.shared.event_dispatcher import showPM30OperationIntroWindow, showPM30RewardsWindow, showVehicleHubOverview, showHangar
+from gui.server_events.finders import PM_OPERATION_POINTS_TOKEN
+from gui.shared.event_dispatcher import showHangar, showPMAdvancedRewardsWindow, showVehicleHubOverview, showWithoutAwardListOperationIntroWindow, showStylePreview
+from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.processors import quests as quests_proc
-from gui.shared.gui_items.processors.quests import PMActivateSeason, PM3GetQuestRewards
+from gui.shared.gui_items.processors.quests import PMActivateSeason, PMGetQuestRewards
 from gui.shared.notifications import NotificationPriorityLevel
 from gui.shared.utils import decorators
 from gui.shared.view_helpers.blur_manager import CachedBlur
 from helpers import dependency
-from personal_missions import PM_BRANCH, g_cache as pm_cache
+from personal_missions import PM_BRANCH, PM_SWITCHES
+from personal_missions import g_cache as pm_cache
 from shared_utils import first
 from skeletons.account_helpers.settings_core import ISettingsCore
+from skeletons.gui.customization import ICustomizationService
 from skeletons.gui.game_control import IAchievements20EarningController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
+if typing.TYPE_CHECKING:
+    from typing import Tuple, Set
+    from gui.server_events.event_items import PMOperation, PersonalMission
+    from gui.shared.missions.packers.bonus import BonusUIPacker
 
 class MainView(ViewImpl):
     _COMMON_SOUND_SPACE = PERSONAL_MISSIONS_CAMPAIGN_3_SPACE
     __eventsCache = dependency.descriptor(IEventsCache)
     __settingsCore = dependency.descriptor(ISettingsCore)
+    __customization = dependency.descriptor(ICustomizationService)
     __lobbyContext = dependency.descriptor(ILobbyContext)
     __itemsCache = dependency.descriptor(IItemsCache)
     __achievementsController = dependency.descriptor(IAchievements20EarningController)
@@ -68,14 +79,14 @@ class MainView(ViewImpl):
         self.__assemblingManager = assemblingManager
         self.__tooltipData = {}
         self.__quests = {}
-        self.__viewWasShown = False
         self.__needQuestsUpdate = True
-        self.__pm3Campaign = self.__eventsCache.getPersonalMissions().getCampaignsForBranch(PM_BRANCH.PERSONAL_MISSION_3).get(PM3_CAMPAIGN_ID)
-        self.__pm3Operations = getSortedPm3Operations()
-        self.__operationsToUpdate = {operationID:False for operationID in self.__pm3Operations.keys()}
-        self.__operation = self.__eventsCache.getPersonalMissions().getAllOperations(PM_BRANCH.V2_BRANCHES).get(operationID)
-        self.__lastInstalledDetail = self.__settingsCore.serverSettings.getPM3InstalledVehDetails()
-        self.__operationStatus = getOperationStatus(self.__operation, self.__pm3Operations)
+        branchID = PM_BRANCH.OPERATION_ID_TO_BRANCH[operationID]
+        self.__campaign = self.__eventsCache.getPersonalMissions().getCampaignsForBranch(branchID).get(PM_BRANCH.PM_CAMPAIGNS_IDS[branchID])
+        self.__campaignOperations = getBranchSortedPmOperations(branchID)
+        self.__operation = self.__campaignOperations.get(operationID)
+        self.__operationsToUpdate = {operationID:False for operationID in self.__campaignOperations}
+        self.__lastInstalledDetail = getPMInstalledVehDetails(self.getBranchID())
+        self.__operationStatus = getOperationStatus(self.__operation, self.__campaignOperations)
         return
 
     @property
@@ -92,13 +103,19 @@ class MainView(ViewImpl):
     def getOperationID(self):
         return self.__operation.getID()
 
+    def getBranchID(self):
+        return self.__operation.getBranch()
+
+    def getBranchName(self):
+        return self.__operation.getBranchName()
+
     def isCurrentOperationFullCompleted(self):
         return self.__operation.isFullCompleted()
 
     def createToolTipContent(self, event, contentID):
         if contentID == R.views.mono.personal_missions_30.tooltips.mission_progress_tooltip():
             if self.viewModel.getMainScreenState() == MainScreenState.PROGRESSION:
-                missions = self.__eventsCache.getPersonalMissions().getActualQuests(PM_BRANCH.PERSONAL_MISSION_3, self.__operation.getID())
+                missions = self.__eventsCache.getPersonalMissions().getActualQuests(self.getBranchID(), self.__operation.getID())
             else:
                 category = self.viewModel.missionsModel.getMissionsCategory()
                 missions = self.__quests.get(self.__operation.getID(), {}).get(category.value, {}).values()
@@ -120,7 +137,6 @@ class MainView(ViewImpl):
     def setMissionsState(self):
         self.viewModel.setMainScreenState(MainScreenState.MISSIONS)
         self.__blur.enable()
-        self.__setCheckedPM3PointsData()
         if self.__needQuestsUpdate:
             self.__updateAllMissions()
             self.__needQuestsUpdate = False
@@ -136,6 +152,10 @@ class MainView(ViewImpl):
 
     def getMainScreenState(self):
         return self.viewModel.getMainScreenState()
+
+    def _onFocus(self, focused):
+        super(MainView, self)._onFocus(focused)
+        self.__assemblingManager.onFocus(focused)
 
     def _getEvents(self):
         cameraEvents = self.__assemblingManager.getCameraEvents(self.viewModel)
@@ -154,6 +174,7 @@ class MainView(ViewImpl):
          (self.viewModel.setFreeCamera, self.__setFreeCamera),
          (self.viewModel.updateAnimationState, self.__updateAnimationState),
          (self.viewModel.showVehicleInHangar, self.__showVehicleInHangar),
+         (self.viewModel.showStylePreview, self.__showStylePreview),
          (self.viewModel.missionsModel.changeCategory, self.__changeMissionsCategory),
          (self.__lobbyContext.getServerSettings().onServerSettingsChange, self.__onServerSettingsChanged),
          (self.__settingsCore.onSettingsChanged, self.__onSettingsChanged),
@@ -167,14 +188,14 @@ class MainView(ViewImpl):
         super(MainView, self)._onLoading(*args, **kwargs)
         self.viewModel.setMainScreenState(self.__initState)
         self.__updateViewModel()
+        checkPM4FirstEntrance(self.__operation)
 
     def _onShown(self):
-        self.__viewWasShown = True
+        super(MainView, self)._onShown()
+        self.__setCheckedPMPointsData()
 
     def _finalize(self):
         self.__tooltipData = {}
-        if self.__viewWasShown:
-            self.__setCheckedPM3PointsData()
         super(MainView, self)._finalize()
         self.__blur.fini()
 
@@ -182,28 +203,44 @@ class MainView(ViewImpl):
         self.__fillRewardTankModel(self.viewModel)
         with self.viewModel.transaction() as tx:
             for operationModel in tx.getOperations():
-                operation = self.__pm3Operations.get(operationModel.getOperationId())
+                operation = self.__campaignOperations.get(operationModel.getOperationId())
                 self.__fillAdditionalMissionsModel(operationModel, operation)
                 self.__fillDetails(operationModel, operation)
 
-    def __onPmEventsSync(self, diff):
+    def __onPmEventsSync(self, diff=None):
         self.__setAllOperationsUpdateStatus(needUpdate=True)
         if self.viewModel.getMainScreenState() != MainScreenState.MISSIONS:
             self.__updateViewModel(operationToUpdate=self.__operation)
             self.__needQuestsUpdate = True
-        pm3Quests = {}
-        if diff:
-            pm3Quests = diff.get('potapovQuests', {}).get('pm3', {}).get(('selected', '_r'), set())
-            if diff.get('pm3_progress', {}):
-                for questName in diff.get('pm3_progress', {}):
-                    questID = pm_cache.getPersonalMissionIDByName(questName)
-                    pm3Quests.add(questID)
+        campaignID = self.__campaign.getID()
+        campaignKey = 'pm{}'.format(campaignID)
+        campaignProgressKey = '{}_progress'.format(campaignKey)
+        diff = diff or {}
+        pmQuests = diff.get('potapovQuests', {}).get(campaignKey, {}).get(('selected', '_r'), set())
+        if diff.get(campaignProgressKey, {}):
+            for questName in diff.get(campaignProgressKey, {}):
+                questID = pm_cache.getPersonalMissionIDByName(questName)
+                pmQuests.add(questID)
 
-        if pm3Quests:
-            self.__updateMissions(pm3Quests)
+        if pmQuests:
+            self.__updateMissions(pmQuests)
+        tokens = diff.get('tokens', {})
+        if tokens:
+            for operation in self.__campaignOperations.values():
+                if operation.isInProgress():
+                    operationPmPointsToken = PM_OPERATION_POINTS_TOKEN % (campaignID, operation.getID())
+                    if tokens.get(operationPmPointsToken) is not None:
+                        self.__setCheckedPMPointsData()
+                        break
 
-    def __onItemsSyncCompleted(self, _, __):
-        self.__updateViewModel(operationToUpdate=self.__operation)
+        return
+
+    def __onItemsSyncCompleted(self, _, diff):
+        if diff is not None and not diff:
+            return
+        else:
+            self.__updateViewModel(operationToUpdate=self.__operation)
+            return
 
     def __onPmItemsSync(self, *_):
         self.__setAllOperationsUpdateStatus(needUpdate=True)
@@ -211,30 +248,45 @@ class MainView(ViewImpl):
             self.__updateViewModel(operationToUpdate=self.__operation)
 
     def __onSelectOperation(self, data):
-        self.__setCheckedPM3PointsData()
         operationID = int(data.get(self.viewModel.OPERATION_ID, self.__operation.getID()))
-        self.__operation = self.__eventsCache.getPersonalMissions().getAllOperations(PM_BRANCH.V2_BRANCHES).get(operationID)
-        self.__operationStatus = getOperationStatus(self.__operation, self.__pm3Operations)
-        if self.__operationStatus == OperationState.AVAILABLE and not isIntroShown(IntroKeys.OPERATION_INTRO_VIEW.value % operationID):
-            showPM30OperationIntroWindow(operationID)
-        if self.__operationsToUpdate[self.__operation.getID()]:
+        isAnotherCampaign = operationID not in PM_BRANCH.BRANCH_TO_OPERATION_IDS[self.getBranchID()]
+        if isAnotherCampaign:
+            branchID = PM_BRANCH.OPERATION_ID_TO_BRANCH[operationID]
+            self.__campaign = self.__eventsCache.getPersonalMissions().getCampaignsForBranch(branchID).get(PM_BRANCH.PM_CAMPAIGNS_IDS[branchID])
+            self.__campaignOperations = getBranchSortedPmOperations(branchID)
+            self.__operation = self.__campaignOperations.get(operationID)
+            self.__operationStatus = getOperationStatus(self.__operation, self.__campaignOperations)
+            self.__lastInstalledDetail = getPMInstalledVehDetails(self.getBranchID())
+            self.__operationsToUpdate = {operationID:False for operationID in self.__campaignOperations}
+            self.__needQuestsUpdate = True
+            checkPM4FirstEntrance(self.__operation)
+            self.__updateViewModel()
+        else:
+            self.__operation = self.__campaignOperations.get(operationID)
+            self.__operationStatus = getOperationStatus(self.__operation, self.__campaignOperations)
+        if self.__operationStatus != OperationState.UNAVAILABLE and not isIntroShown(IntroKeys.OPERATION_INTRO_VIEW.value % operationID, self.getBranchID()):
+            showWithoutAwardListOperationIntroWindow(operationID)
+        if self.__operationsToUpdate.get(self.__operation.getID()):
             self.__updateViewModel(operationToUpdate=self.__operation)
         else:
             with self.viewModel.transaction() as tx:
+                operationModel = self.__getOperationFromModel(self.__operation.getID())
                 tx.setActiveOperationId(self.__operation.getID())
+                self.__fillOperationPoints(operationModel, self.__operation)
                 self.__fillRewardTankModel(tx)
                 self.__fillOperationStatusModel(tx)
+        self.__setCheckedPMPointsData()
         self.__assemblingManager.changeVehicleGO(self.__operation.getID(), getCurrentOperationLastInstalledDetail(self.__operation))
         self.__assemblingManager.switchCameraToMainPosition(isOperationFullCompleted=self.isCurrentOperationFullCompleted())
         ProgressionState.goTo(operationID=self.__operation.getID())
 
     def __onOperationStatusButtonClick(self):
         if self.viewModel.status.getStatus().value in (OperationStatus.COMPLETED.value, OperationStatus.PAUSED.value, OperationStatus.AVAILABLE.value):
-            if PM_BRANCH.TYPE_TO_NAME[PM_BRANCH.PERSONAL_MISSION_3] not in self.__eventsCache.getPersonalMissions().getActiveCampaigns():
+            if self.getBranchName() not in self.__eventsCache.getPersonalMissions().getActiveCampaigns():
                 self.__switchCampaign()
             self.__processOperation(self.__operation.getBranch(), self.__operation.getID())
             if not self.__operation.isStarted():
-                self.__settingsCore.serverSettings.setPM3VehDetailInstalled()
+                setPMInstalledVehDetails(self.__operation.getBranch())
 
     @args2params(str)
     def __onDetailInfo(self, detailId):
@@ -258,7 +310,7 @@ class MainView(ViewImpl):
             self.__claimReward(detailName)
         else:
             self.__assemblingManager.assembleStage(stageNumber)
-            self.__settingsCore.serverSettings.setPM3VehDetailInstalled(stageNumber)
+            setPMInstalledVehDetails(self.__operation.getBranch(), stageNumber)
             self.__pushDetailMessage(detailName=detailName)
         operationModel = self.__getOperationFromModel(self.__operation.getID())
         with operationModel.transaction() as tx:
@@ -279,29 +331,30 @@ class MainView(ViewImpl):
         showMissions()
 
     def __onVehiclePreview(self):
-        self.__showVehiclePreview()
+        vehicleBonus = self.__operation.getPMAwardListVehicleBonus()
+        if vehicleBonus is not None:
+            vehicle = self.__itemsCache.items.getItemByCD(vehicleBonus.compactDescr)
+            if vehicle.isPreviewAllowed():
+                showVehicleHubOverview(vehicle.intCD)
+        return
 
     def __showVehicleInHangar(self):
         self.__showRewardVehicle()
+
+    @args2params(int)
+    def __showStylePreview(self, styleId):
+        style = self.__customization.getItemByID(GUI_ITEM_TYPE.STYLE, styleId)
+        showStylePreview(getVehicleCDForStyle(style), style)
 
     @args2params(AnimationState)
     def __updateAnimationState(self, animationState):
         self.viewModel.setAnimationState(animationState)
 
-    def __showVehiclePreview(self):
-        vehicleBonus = self.__operation.getPM3VehicleBonus()
-        if vehicleBonus is not None:
-            itemCD = vehicleBonus.compactDescr
-            vehicle = self.__itemsCache.items.getItemByCD(itemCD)
-            if vehicle.isPreviewAllowed():
-                showVehicleHubOverview(itemCD)
-        return
-
     def __showRewardVehicle(self):
         showRewardVehicleInHangar(self.__operation)
 
     def __setAllOperationsUpdateStatus(self, needUpdate=False):
-        self.__operationsToUpdate = {operationID:needUpdate for operationID in self.__pm3Operations.keys()}
+        self.__operationsToUpdate = {operationID:needUpdate for operationID in self.__campaignOperations}
 
     @args2params(MissionCategory)
     def __changeMissionsCategory(self, category):
@@ -313,7 +366,7 @@ class MainView(ViewImpl):
             state.goBack()
 
     def __showOperationVehicleVideo(self):
-        showPM30OperationIntroWindow(self.__operation.getID(), force=True)
+        showWithoutAwardListOperationIntroWindow(self.__operation.getID(), force=True)
 
     @args2params(str)
     def __showDetailVideo(self, detailId):
@@ -321,14 +374,16 @@ class MainView(ViewImpl):
 
     def __onServerSettingsChanged(self, diff=None):
         diff = diff or {}
+        campaignSwitcher = PM_SWITCHES.MAP_BRANCH_NAME_TO_SWITCH_NAME.get(self.getBranchName())
+        switchers = PM_SWITCHES.WITHOUT_AWARD_LIST_SWITCHERS
+        if any((not diff.get(switcher, True) and campaignSwitcher == switcher for switcher in switchers)) or self.__operation.getID() in diff.get(PM_SWITCHES.DISABLED_PM_OPERATIONS, {}):
+            showHangar()
+            return
         if DAILY_QUESTS_CONFIG in diff or Configs.WEEKLY_QUESTS_CONFIG in diff:
             operationModel = self.__getOperationFromModel(self.__operation.getID())
             with operationModel.transaction() as tx:
                 self.__fillAdditionalMissionsModel(tx, self.__operation)
-        if IS_PM3_QUEST_ENABLED in diff and not diff[IS_PM3_QUEST_ENABLED] or DISABLED_PM_OPERATIONS in diff or DISABLED_PM_MISSIONS in diff:
-            if not diff.get(IS_PM3_QUEST_ENABLED, True) or self.__operation.getID() in diff.get(DISABLED_PM_OPERATIONS, {}):
-                showHangar()
-                return
+        elif PM_SWITCHES.DISABLED_PM_MISSIONS in diff or PM_SWITCHES.DISABLED_PM_OPERATIONS in diff:
             self.__setAllOperationsUpdateStatus(True)
             if self.viewModel.getMainScreenState() != MainScreenState.MISSIONS:
                 self.__updateViewModel(operationToUpdate=self.__operation)
@@ -338,42 +393,44 @@ class MainView(ViewImpl):
 
     def __onSettingsChanged(self, diff):
         if PersonalMission3.PART_NO in diff:
-            self.__lastInstalledDetail = self.__settingsCore.serverSettings.getPM3InstalledVehDetails()
+            self.__lastInstalledDetail = getPMInstalledVehDetails(self.getBranchID())
 
     @decorators.adisp_process('updating')
     def __processOperation(self, branch, operation, questIDS=None):
         quests = []
-        pm3Operations = self.__eventsCache.getPersonalMissions().getAllQuests(PM_BRANCH.V2_BRANCHES)
         if questIDS is not None:
-            quests = [ pm3Operations.get(questID, None) for questID in questIDS ]
-        res = yield quests_proc.PM3OperationSelect(branch, operation, quests).request()
+            allQuests = self.__eventsCache.getPersonalMissions().getQuestsForBranch(self.getBranchID())
+            quests = [ allQuests.get(questID, None) for questID in questIDS ]
+        res = yield quests_proc.PMOperationSelect(branch, operation, quests).request()
         if res and res.userMsg:
             SystemMessages.pushMessage(res.userMsg, type=res.sysMsgType)
         return
 
     @decorators.adisp_process('updating')
     def __switchCampaign(self):
-        res = yield PMActivateSeason(self.__eventsCache.getPersonalMissions(), PM_BRANCH.PERSONAL_MISSION_3).request()
+        res = yield PMActivateSeason(self.getBranchID()).request()
         if res and res.userMsg:
             SystemMessages.pushMessage(res.userMsg, type=res.sysMsgType)
 
     @decorators.adisp_process('updating')
     def __claimReward(self, detailName):
         self.__achievementsController.pause()
-        quest = self.__operation.getPM3RewardQuest()
-        res = yield PM3GetQuestRewards(quest).request()
+        quest = self.__operation.getRewardQuest()
+        res = yield PMGetQuestRewards(quest, branchName=self.getBranchName()).request()
         if res and res.success:
 
             def onFinalRewardWindowClosed(doStateChange=True):
                 if doStateChange:
+                    self.__assemblingManager.setRewardAssemblingInProgress(False)
                     self.__assemblingManager.onAssemblingVideoFinished(MAX_DETAIL_ID)
                 self.__achievementsController.resume()
 
-            showPM30RewardsWindow(ctx={'questID': quest.getID(),
+            self.__assemblingManager.setRewardAssemblingInProgress(True)
+            showPMAdvancedRewardsWindow(ctx={'questID': quest.getID(),
              'rewards': {quest.getID(): quest.getBonuses()},
              'type': REWARDS_VIEW_TYPES['operation'],
              'closingCallback': onFinalRewardWindowClosed})
-            self.__settingsCore.serverSettings.setPM3VehDetailInstalled(MAX_DETAIL_ID)
+            setPMInstalledVehDetails(self.getBranchID(), MAX_DETAIL_ID)
             self.__pushDetailMessage(detailName=detailName)
             self.__setAllOperationsUpdateStatus(needUpdate=True)
             self.__updateViewModel(operationToUpdate=self.__operation)
@@ -387,15 +444,14 @@ class MainView(ViewImpl):
         return first([ operationModel for operationModel in self.viewModel.getOperations() if operationModel.getOperationId() == operationID ], None)
 
     def __updateViewModel(self, operationToUpdate=None):
-        self.__pm3Operations = getSortedPm3Operations()
-        self.__operation = self.__pm3Operations.get(self.__operation.getID())
-        self.__operationStatus = getOperationStatus(self.__operation, self.__pm3Operations)
+        self.__operationStatus = getOperationStatus(self.__operation, self.__campaignOperations)
         with self.viewModel.transaction() as tx:
-            tx.setActiveOperationId(self.__operation.getID())
-            tx.setCampaignName(self.__pm3Campaign.getUserName())
+            tx.setActiveOperationId(self.getOperationID())
+            tx.setCampaignName(self.__campaign.getUserName())
             self.__fillRewardTankModel(tx)
             self.__fillMenuItems(tx)
             self.__fillOperationStatusModel(tx)
+            self.__fillBannerModel(tx.banner)
             operationsArray = tx.getOperations()
             if operationToUpdate is not None:
                 for operationModel in self.viewModel.getOperations():
@@ -405,7 +461,7 @@ class MainView(ViewImpl):
 
             else:
                 operationsArray.clear()
-                for operation in self.__pm3Operations.values():
+                for operation in self.__campaignOperations.values():
                     operationEmptyModel = tx.getOperationsType()()
                     operationModel = self.__fillOperationModel(operationEmptyModel, operation)
                     operationsArray.addViewModel(operationModel)
@@ -415,25 +471,40 @@ class MainView(ViewImpl):
         return
 
     def __fillOperationModel(self, operationModel, operation):
-        pmPointsTotal, pmPointsMax = self.__eventsCache.getPersonalMissions().getOperationPmPointsData(PM_BRANCH.PERSONAL_MISSION_3, operation.getID())
-        operationModel.setOperationId(operation.getID())
-        operationModel.setValue(pmPointsTotal)
-        operationModel.setMaxValue(pmPointsMax)
-        operationModel.setOperationState(getOperationStatus(operation, self.__pm3Operations))
-        operationModel.setDeltaFrom(self.__getCheckedPm3PointsData(pmPointsTotal, pmPointsMax))
-        operationModel.setVehicleInHangar(operation.getPM3VehicleBonus().isInInventory)
+        operationModel.setOperationState(getOperationStatus(operation, self.__campaignOperations))
+        operationModel.setVehicleInHangar(operation.getPMAwardListVehicleBonus().isInInventory)
+        self.__fillOperationPoints(operationModel, operation)
         self.__fillMainRewards(operationModel, operation)
         self.__fillDetails(operationModel, operation)
         self.__fillAdditionalMissionsModel(operationModel, operation)
         self.__fillActualMissionsModel(operationModel, operation)
         return operationModel
 
+    def __fillOperationPoints(self, operationModel, operation):
+        pmPointsTotal, pmPointsMax = self.__eventsCache.getPersonalMissions().getOperationPmPointsData(self.getBranchID(), operation.getID())
+        operationModel.setOperationId(operation.getID())
+        operationModel.setValue(pmPointsTotal)
+        operationModel.setMaxValue(pmPointsMax)
+        operationModel.setDeltaFrom(self.__getCheckedPmPointsData(pmPointsTotal, pmPointsMax))
+
+    def __fillBannerModel(self, bannerModel):
+        isFirstEntrance = not getPersonalMissionData(PM_BRANCH.PERSONAL_MISSION_4).get(PersonalMission4.OPERATION_SHOWN, True)
+        operation = first(listvalues(getBranchesSortedPmOperations(PM_BRANCH.MUTUAL_EXCLUSION_BRANCHES[PM_BRANCH.QUEST_GROUPS.GROUP_3])))
+        bannerState = getOperationBannerState(operation)
+        bannerModel.setEnabled(not operation.isDisabled())
+        bannerModel.setFirstTimeEntrance(isFirstEntrance)
+        bannerModel.setOperationId(operation.getID())
+        bannerModel.setBannerState(bannerState)
+
     def __fillMainRewards(self, operationModel, operation):
         rewardsArray = operationModel.getRewards()
         rewardsArray.clear()
-        rewards = ((RewardsType.MAIN, operation.getPM3RewardQuest()), (RewardsType.OPERATION, operation.getPM3RewardHonorQuest()), (RewardsType.CAMPAIGN, self.__pm3Campaign.getPM3CampaignFinishedQuest()))
+        rewards = ((RewardsType.MAIN, operation.getRewardQuest()), (RewardsType.OPERATION, operation.getAwardListRewardHonorQuest()), (RewardsType.CAMPAIGN, self.__campaign.getCampaignFinishedQuest()))
+        bunusPacker = getBonusPacker()
         for rewardType, quest in rewards:
-            completedTasks, tasksNumber = getMainRewardInfo(operation, self.__pm3Operations, rewardType)
+            if rewardType == RewardsType.CAMPAIGN and self.getBranchID() == PM_BRANCH.PERSONAL_MISSION_4:
+                continue
+            completedTasks, tasksNumber = getMainRewardInfo(operation, self.__campaignOperations, rewardType)
             if rewardType:
                 rewardModel = operationModel.getRewardsType()()
                 rewardModel.setRewardsType(rewardType)
@@ -441,7 +512,7 @@ class MainView(ViewImpl):
                 rewardModel.setTasksNumber(tasksNumber)
                 rawBonuses = quest.getRawBonuses()
                 rawBonuses.pop('slots', None)
-                self.__fillRewards(rewardModel.getItems(), quest.getBonuses(bonusData=rawBonuses), getBonusPacker())
+                self.__fillRewards(rewardModel.getItems(), quest.getBonuses(bonusData=rawBonuses), bunusPacker)
                 rewardsArray.addViewModel(rewardModel)
             rewardsArray.invalidate()
 
@@ -451,37 +522,37 @@ class MainView(ViewImpl):
         detailsArray = operationModel.getDetails()
         detailsArray.clear()
         vehDetails = getVehicleDetails(operation)
-        for detailIndex in range(0, len(vehDetails)):
+        for detailIndex, detail in enumerate(vehDetails):
             if detailIndex == 0:
                 minDetailPoints = 0
-                maxDetailPoints = vehDetails[detailIndex][1]
+                maxDetailPoints = detail[1]
             else:
                 minDetailPoints = vehDetails[detailIndex - 1][1]
-                maxDetailPoints = vehDetails[detailIndex][1] - vehDetails[detailIndex - 1][1]
-            maxDetailPointRelativeProgression = vehDetails[detailIndex][1]
-            isInstalled = isVehDetailInstalled(self.__lastInstalledDetail, vehDetails[detailIndex][0])
+                maxDetailPoints = detail[1] - minDetailPoints
+            maxDetailPointRelativeProgression = detail[1]
+            isInstalled = isVehDetailInstalled(self.__lastInstalledDetail, detail[0])
             detailModel = operationModel.getDetailsType()()
             totalPoints = operationModel.getValue()
             status, earnedPoints = self.__getDetailStatus(minDetailPoints, maxDetailPointRelativeProgression, totalPoints, isInstalled, operation, detailIndex)
             detailModel.setMaxPoint(maxDetailPoints)
             detailModel.setStatus(status)
             detailModel.setEarnedPoint(earnedPoints)
-            detailModel.setId(getDetailNameByToken(vehDetails[detailIndex][0]))
+            detailModel.setId(getDetailNameByToken(detail[0]))
             detailModel.setHasAssemblingVideo(hasAssemblingVideo(operation.getID(), detailIndex + 1))
             detailsArray.addViewModel(detailModel)
 
         detailsArray.invalidate()
 
     def __fillRewardTankModel(self, mainViewModel):
-        fillVehicleInfo(mainViewModel.vehicle, self.__operation.getPM3VehicleBonus())
+        fillVehicleInfo(mainViewModel.vehicle, self.__operation.getPMAwardListVehicleBonus())
 
     def __fillMenuItems(self, mainViewModel):
         operationsArray = mainViewModel.getMenuItems()
         operationsArray.clear()
-        for operation in self.__pm3Operations.values():
+        for operation in self.__campaignOperations.values():
             operationModel = mainViewModel.getMenuItemsType()()
             operationModel.setOperationId(operation.getID())
-            operationModel.setState(getOperationStatus(operation, self.__pm3Operations))
+            operationModel.setState(getOperationStatus(operation, self.__campaignOperations))
             operationModel.setOperationName(operation.getShortUserName())
             operationModel.setOperationIcon(operation.getIconID())
             operationsArray.addViewModel(operationModel)
@@ -491,10 +562,15 @@ class MainView(ViewImpl):
     def __fillAdditionalMissionsModel(self, operationModel, operation):
         additionalMissionsArray = operationModel.getAdditionalMissions()
         additionalMissionsArray.clear()
-        pmPointsTotal, _ = self.__eventsCache.getPersonalMissions().getOperationPmPointsData(PM_BRANCH.PERSONAL_MISSION_3, operation.getID())
+        pmPointsTotal, _ = self.__eventsCache.getPersonalMissions().getOperationPmPointsData(self.getBranchID(), operation.getID())
         for additionalMissionsType in AdditionalMissionType:
-            earnedPoints, totalPoints = getRegularQuestsPMPoints(missionType=additionalMissionsType)
             additionalMissionModel = operationModel.getAdditionalMissionsType()()
+            if operation.hasCollectedAllPoints() or operation.isCompleted():
+                additionalMissionModel.setIsEnabled(False)
+                additionalMissionModel.setType(additionalMissionsType)
+                additionalMissionsArray.addViewModel(additionalMissionModel)
+                continue
+            earnedPoints, totalPoints = getRegularQuestsPMPoints(missionType=additionalMissionsType)
             isEnabled = isDailyQuestsEnable() if additionalMissionsType == AdditionalMissionType.DAILY else isWeeklyQuestsEnable()
             additionalMissionModel.setIsEnabled(isEnabled)
             additionalMissionModel.setType(additionalMissionsType)
@@ -508,37 +584,39 @@ class MainView(ViewImpl):
     def __fillActualMissionsModel(self, operationModel, operation):
         missionsArray = operationModel.getMissions()
         missionsArray.clear()
-        actualMissions = self.__eventsCache.getPersonalMissions().getActualQuests(PM_BRANCH.PERSONAL_MISSION_3, operation.getID())
+        actualMissions = self.__eventsCache.getPersonalMissions().getActualQuests(self.getBranchID(), operation.getID())
+        bonusPacker = getBonusPacker(isOperationCompleted=operation.isCompleted() or operation.hasCollectedAllPoints())
         for mission in actualMissions:
             missionModel = operationModel.getMissionsType()()
             chain = sorted(operation.getChainByClassifierAttr(mission.getMajorTag())[1])
             missionIndex = chain.index(mission.getID())
-            self.__fillMissionModel(missionModel, mission, missionIndex + 1, len(chain))
+            self.__fillMissionModel(missionModel, mission, missionIndex + 1, len(chain), bonusPacker)
             missionsArray.addViewModel(missionModel)
 
         missionsArray.invalidate()
 
     def __updateAllMissions(self):
         with self.viewModel.missionsModel.transaction() as tx:
-            self.__quests = getQuestsByOperationsChains()
+            self.__quests = getQuestsByOperationsChains((self.getBranchName(),))
             allMissionsArray = tx.getAllMissions()
             allMissionsArray.clear()
-            for operation, chainTree in self.__quests.items():
-                minLevel, maxLevel = self.__eventsCache.getPersonalMissions().getVehicleLevelRestrictions(operation)
-                operationName = self.__eventsCache.getPersonalMissions().getAllOperations(PM_BRANCH.V2_BRANCHES).get(operation).getUserName()
+            for operationID, chainTree in self.__quests.items():
+                _, maxLevel = self.__eventsCache.getPersonalMissions().getVehicleLevelRestrictions(operationID)
+                operation = self.__eventsCache.getPersonalMissions().getOperationsForBranch(self.getBranchID()).get(operationID)
                 allMissionModel = tx.getAllMissionsType()()
-                allMissionModel.setOperationId(operation)
-                allMissionModel.setOperationName(operationName)
-                allMissionModel.setMinRequiredVehicle(minLevel)
+                allMissionModel.setOperationId(operationID)
+                allMissionModel.setOperationName(operation.getUserName())
+                allMissionModel.setMinRequiredVehicle(self.__operation.getRequiredVehicleLevel())
                 allMissionModel.setMaxRequiredVehicle(maxLevel)
                 missionsCategorizationsArray = allMissionModel.getMissionsCategorizations()
+                bonusPacker = getBonusPacker(isOperationCompleted=operation.isCompleted() or operation.hasCollectedAllPoints())
                 for chainType, chain in chainTree.items():
                     missionCategorizationModel = allMissionModel.getMissionsCategorizationsType()()
                     missionCategorizationModel.setMissionsCategory(MissionCategory(chainType))
                     missionsArray = missionCategorizationModel.getMissions()
                     for missionIndex, missionData in enumerate(chain.values()):
                         missionModel = missionCategorizationModel.getMissionsType()()
-                        self.__fillMissionModel(missionModel, missionData, missionIndex + 1, len(chain))
+                        self.__fillMissionModel(missionModel, missionData, missionIndex + 1, len(chain), bonusPacker)
                         missionsArray.addViewModel(missionModel)
 
                     missionsCategorizationsArray.addViewModel(missionCategorizationModel)
@@ -552,21 +630,23 @@ class MainView(ViewImpl):
         if not self.__quests:
             return
         for missionIDToUpdate in missions:
-            newQuest = self.__eventsCache.getPersonalMissions().getQuestsForBranch(PM_BRANCH.PERSONAL_MISSION_3).get(missionIDToUpdate)
+            newQuest = self.__eventsCache.getPersonalMissions().getQuestsForBranch(self.getBranchID()).get(missionIDToUpdate)
             questCategory = MISSIONS_ROLES_TO_CATEGORIES[newQuest.getQuestClassifier().classificationAttr].value
             self.__quests[newQuest.getOperationID()][questCategory][missionIDToUpdate] = newQuest
             missionsByOperationModel = first([ model for model in self.viewModel.missionsModel.getAllMissions() if model.getOperationId() == newQuest.getOperationID() ])
             missionsByChainModel = first([ model for model in missionsByOperationModel.getMissionsCategorizations() if model.getMissionsCategory().value == questCategory ])
             chainQuests = self.__quests[newQuest.getOperationID()][questCategory].values()
+            operation = self.__eventsCache.getPersonalMissions().getOperationsForBranch(newQuest.getQuestBranch()).get(newQuest.getOperationID())
             chainQuestsModels = missionsByChainModel.getMissions()
+            bonusPacker = getBonusPacker(isOperationCompleted=operation.isCompleted() or operation.hasCollectedAllPoints())
             with chainQuestsModels.transaction() as tx:
                 for index, quest in enumerate(chainQuests):
                     if quest.getID() == missionIDToUpdate:
                         if not quest.isInitial():
-                            self.__fillMissionModel(tx[index - 1], chainQuests[index - 1], index, len(chainQuestsModels))
-                        self.__fillMissionModel(tx[index], quest, index + 1, len(chainQuestsModels))
+                            self.__fillMissionModel(tx[index - 1], chainQuests[index - 1], index, len(chainQuestsModels), bonusPacker)
+                        self.__fillMissionModel(tx[index], quest, index + 1, len(chainQuestsModels), bonusPacker)
 
-    def __fillMissionModel(self, missionModel, mission, missionIndex, maxMissionNumber):
+    def __fillMissionModel(self, missionModel, mission, missionIndex, maxMissionNumber, bonusPacker):
         questConfig = getMissionConfigData(mission)
         maxProgressValue = questConfig.maxProgressValue
         battlesUniqueVehiclesCount = len(mission.getConditionsProgress().get('battlesUniqueVehicles', {}))
@@ -587,7 +667,7 @@ class MainView(ViewImpl):
         missionModel.setCurrentProgressValue(currentProgressValue)
         missionModel.setMaxProgressValue(maxProgressValue)
         missionModel.setAllQuestsRequired(questConfig.allQuestsRequired)
-        self.__fillRewards(missionModel.getRewards(), mission.getBonuses(), getBonusPacker())
+        self.__fillRewards(missionModel.getRewards(), mission.getBonuses(), bonusPacker)
         questsArray = missionModel.getQuests()
         questsArray.clear()
         for questID, questDetails in questConfig.questsDetails.items():
@@ -606,23 +686,23 @@ class MainView(ViewImpl):
         rewardsModel.invalidate()
 
     def __fillOperationStatusModel(self, mainModel):
-        status, nextOperationID = getDetailedOperationStatus(self.__operation)
+        status, nextOperation = getDetailedOperationStatus(self.__operation, getBranchesSortedPmOperations(PM_BRANCH.WITHOUT_AWARD_LIST_BRANCHES))
         mainModel.status.setStatus(status)
-        if nextOperationID:
-            nextOperationName = self.__eventsCache.getPersonalMissions().getAllOperations(PM_BRANCH.V2_BRANCHES).get(nextOperationID).getUserName()
-            mainModel.status.setNextOperationName(nextOperationName)
-        mainModel.status.setRequiredVehicleLevel(self.__operation.getRequiredVehicleLevel())
+        if nextOperation:
+            mainModel.status.setNextOperationName(nextOperation.getUserName())
+            mainModel.status.setOperationIdToPerform(nextOperation.getID())
+        minLevel, _ = self.__eventsCache.getPersonalMissions().getVehicleLevelRestrictions(self.__operation.getID())
+        mainModel.status.setRequiredVehicleLevel(minLevel)
         mainModel.status.setCurrentOperationId(self.__operation.getID())
         mainModel.status.setCurrentOperationName(self.__operation.getUserName())
-        mainModel.status.setOperationIdToPerform(nextOperationID)
 
     def __getDetailStatus(self, minDetailPoints, maxDetailPoints, totalPoints, isInstalled, operation, detailIndex):
         status = DetailStatus.DEFAULT
         earnedPoints = 0
         if totalPoints >= maxDetailPoints or operation.isCompleted():
-            if detailIndex == MAX_DETAIL_ID - 1 and not operation.getPM3RewardQuest().isCompleted():
+            if detailIndex == MAX_DETAIL_ID - 1 and not operation.getRewardQuest().isCompleted():
                 status = DetailStatus.IN_PROGRESS
-            elif (isInstalled or operation.isCompleted()) and not (detailIndex == MAX_DETAIL_ID - 1 and not operation.isCompleted() and isInstalled):
+            elif operation.isCompleted() or isInstalled and detailIndex != MAX_DETAIL_ID - 1:
                 status = DetailStatus.DONE
             else:
                 status = DetailStatus.NOT_RECEIVED
@@ -632,24 +712,23 @@ class MainView(ViewImpl):
             earnedPoints = totalPoints - minDetailPoints
         return (status, earnedPoints)
 
-    def __getCheckedPm3PointsData(self, pmPointsTotal, pmPointsMax):
-        lastCheckedData = self.__settingsCore.serverSettings.getPersonalMission3Data().get(PersonalMission3.CHECKED_PM3_POINTS, 0)
+    def __getCheckedPmPointsData(self, pmPointsTotal, pmPointsMax):
+        lastCheckedData = getPersonalMissionData(self.getBranchID()).get(getCheckedPMPointsKey(self.getBranchID()), 0)
         if self.__operationStatus == OperationState.UNAVAILABLE.value or lastCheckedData > pmPointsTotal:
             lastCheckedData = 0
         if self.__operationStatus in (OperationState.COMPLETED_WITH_HONORS.value, OperationState.COMPLETED.value):
             lastCheckedData = pmPointsMax
         return lastCheckedData
 
-    def __setCheckedPM3PointsData(self):
+    def __setCheckedPMPointsData(self):
         if self.__operationStatus != OperationState.ACTIVE:
             return
         operationModel = self.__getOperationFromModel(self.__operation.getID())
         pmPointsTotal = operationModel.getValue()
         maxPoints = operationModel.getMaxValue()
-        if pmPointsTotal == self.__getCheckedPm3PointsData(pmPointsTotal, maxPoints):
+        if pmPointsTotal == self.__getCheckedPmPointsData(pmPointsTotal, maxPoints):
             return
-        self.__settingsCore.serverSettings.setPersonalMission3Data({PersonalMission3.CHECKED_PM3_POINTS: pmPointsTotal})
-        operationModel.setDeltaFrom(pmPointsTotal)
+        setPersonalMissionData(self.getBranchID(), {getCheckedPMPointsKey(self.getBranchID()): pmPointsTotal})
 
 
 class PersonalMissions3Window(WindowImpl):

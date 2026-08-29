@@ -50,8 +50,8 @@ class TweenManager(TweenManagerMeta):
         if ResMgr.isFile(TWEEN_CONSTRAINTS_FILE_PATH):
             ctx, section = resource_helper.getRoot(TWEEN_CONSTRAINTS_FILE_PATH)
             settings = {}
-            for ctx, subSection in resource_helper.getIterator(ctx, section):
-                item = resource_helper.readItem(ctx, subSection, name='setting')
+            for ctx_, subSection in resource_helper.getIterator(ctx, section):
+                item = resource_helper.readItem(ctx_, subSection, name='setting')
                 settings[item.name] = item.value
 
             self.__settings.update(settings)

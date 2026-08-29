@@ -107,7 +107,7 @@ class SettingsCore(ISettingsCore):
          'contour': CONTOUR_SETTINGS_STORAGE}
         self.isDeviseRecreated = False
         self.isChangesConfirmed = True
-        graphicSettings = tuple(((settingName, options.GraphicSetting(settingName)) for settingName in BigWorld.generateGfxSettings() if settingName != GRAPHICS.COLOR_GRADING_TECHNIQUE))
+        graphicSettings = tuple(((settingName, options.GraphicSetting(settingName)) for settingName in BigWorld.generateGfxSettings() if settingName != GRAPHICS.COLOR_GRADING_TECHNIQUE and settingName != GRAPHICS.INCREASE_EFFECTS_CONTRAST_ENABLED))
         self.__options = options.SettingsContainer(graphicSettings + ((GAME.REPLAY_ENABLED, options.ReplaySetting(GAME.REPLAY_ENABLED, storage=GAME_SETTINGS_STORAGE)),
          (GAME.SNIPER_ZOOM, options.SniperZoomSetting(GAME.SNIPER_ZOOM, storage=EXTENDED_GAME_SETTINGS_STORAGE)),
          (GAME.HULLLOCK_ENABLED, options.HullLockSetting(GAME.HULLLOCK_ENABLED, storage=EXTENDED_GAME_SETTINGS_STORAGE)),
@@ -201,6 +201,7 @@ class SettingsCore(ISettingsCore):
          (GRAPHICS.COLOR_FILTER_SETTING, options.ReadOnlySetting(lambda : SETTINGS.COLORCORRECTIONBTN_LABEL)),
          (GRAPHICS.COLOR_FILTER_IMAGES, options.ReadOnlySetting(lambda : graphics.getGraphicSettingImages('COLOR_GRADING_TECHNIQUE'))),
          (GRAPHICS.FOV, options.FOVSetting(GRAPHICS.FOV, storage=FOV_SETTINGS_STORAGE)),
+         (GRAPHICS.INCREASE_EFFECTS_CONTRAST_ENABLED, options.IncreaseEffectsContrastEnabledSetting(GRAPHICS.INCREASE_EFFECTS_CONTRAST_ENABLED)),
          (GRAPHICS.GRAPHICS_SETTINGS_LIST, options.ReadOnlySetting(graphics.GRAPHICS_SETTINGS.ALL)),
          (GRAPHICS.INTERFACE_SCALE, options.InterfaceScaleSetting(GRAPHICS.INTERFACE_SCALE)),
          (GRAPHICS.DYNAMIC_RENDERER, options.DynamicRendererSetting()),
@@ -209,6 +210,7 @@ class SettingsCore(ISettingsCore):
          (GRAPHICS.COLOR_BLIND, options.AccountDumpSetting(GRAPHICS.COLOR_BLIND, GRAPHICS.COLOR_BLIND)),
          (GRAPHICS.TESSELLATION_SUPPORTED, options.ReadOnlySetting(BigWorld.isTesselationSupported)),
          (GRAPHICS.IS_SD_QUALITY, options.GraphicsQuality()),
+         (GRAPHICS.SHOW_PREBATTLE_HIGHLIGHTS, options.PBHSetting()),
          (SOUND.MASTER_TOGGLE, options.SoundEnableSetting()),
          (SOUND.SOUND_QUALITY, options.SoundQualitySetting()),
          (SOUND.SOUND_QUALITY_VISIBLE, options.ReadOnlySetting(options.SoundQualitySetting.isAvailable)),

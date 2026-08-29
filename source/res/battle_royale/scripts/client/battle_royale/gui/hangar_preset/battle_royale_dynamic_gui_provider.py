@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: battle_royale/scripts/client/battle_royale/gui/hangar_preset/battle_royale_dynamic_gui_provider.py
+from __future__ import absolute_import
 from constants import QUEUE_TYPE, ARENA_BONUS_TYPE
 from gui.hangar_presets.providers import DefaultHangarDynamicGuiProvider
 from helpers import dependency

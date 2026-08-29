@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_control/controllers/kill_cam_ctrl.py
 from __future__ import absolute_import
+import typing
 from collections import namedtuple
 from decimal import ROUND_HALF_EVEN
 from enum import Enum
@@ -14,9 +15,11 @@ from helpers import dependency
 from math_common import decimal_round
 from skeletons.gui.battle_session import IBattleSessionProvider
 _logger = logging.getLogger(__name__)
-DistanceMarkerData = namedtuple('DistanceMarkerData', 'projectile phaseDuration impactPoint isAttackerSpotted')
-GunMarkerData = namedtuple('GunMarkerData', 'projectile phaseDuration simulatedKillerGunInfo projectileOrigin')
+DistanceMarkerData = namedtuple('DistanceMarkerData', 'projectile phaseDuration impactPoint isAttackerSpotted, mechanicsInfo')
+GunMarkerData = namedtuple('GunMarkerData', 'projectile phaseDuration simulatedKillerGunInfo projectileOrigin mechanicsInfo')
 ImpactMarkerData = namedtuple('ImpactMarkerData', 'projectile phaseDuration impactType victimIsNotSpotted relativeArmor causeOfDeath')
+if typing.TYPE_CHECKING:
+    from typing import Optional
 
 class KillCamInfoMarkerType(Enum):
     GUN = 'gunMarker'
@@ -53,11 +56,11 @@ class KillCameraController(IBattleController):
     def startControl(self, *args):
         pass
 
-    def killCamModeActive(self, unspottedOrigin, simulatedKillerGunInfo, projectile, phaseDurations, hasSpottedData, hasAttackerVehicle, playerRelativeArmor, playerIsSpotted, totalSceneDuration, causeOfDeath):
+    def killCamModeActive(self, unspottedOrigin, simulatedKillerGunInfo, projectile, phaseDurations, hasSpottedData, hasAttackerVehicle, playerRelativeArmor, playerIsSpotted, totalSceneDuration, causeOfDeath, mechanicsInfo):
         phase1Duration, phase2Duration, phase3Duration = phaseDurations
-        self.__distanceMarkerData = self.__buildDistanceMarkerData(projectile=projectile, phaseDuration=phase2Duration, hasSpottedData=hasSpottedData)
+        self.__distanceMarkerData = self.__buildDistanceMarkerData(projectile=projectile, phaseDuration=phase2Duration, hasSpottedData=hasSpottedData, mechanicsInfo=mechanicsInfo)
         self.__impactMarkerData = self.__buildImpactMarkerData(projectile=projectile, phaseDuration=phase3Duration, playerRelativeArmor=playerRelativeArmor, playerIsSpotted=playerIsSpotted, causeOfDeath=causeOfDeath)
-        self.__gunMarkerData = self.__buildGunMarkerData(projectile=projectile, phaseDuration=phase1Duration, simulatedKillerGunInfo=simulatedKillerGunInfo, hasSpottedData=hasSpottedData, hasAttackerVehicle=hasAttackerVehicle, unspottedOrigin=unspottedOrigin)
+        self.__gunMarkerData = self.__buildGunMarkerData(projectile=projectile, phaseDuration=phase1Duration, simulatedKillerGunInfo=simulatedKillerGunInfo, hasSpottedData=hasSpottedData, hasAttackerVehicle=hasAttackerVehicle, unspottedOrigin=unspottedOrigin, mechanicsInfo=mechanicsInfo)
         self.__totalSceneDuration = decimal_round(totalSceneDuration, 1, ROUND_HALF_EVEN)
         self.__isKillCamActive = True
 
@@ -110,12 +113,12 @@ class KillCameraController(IBattleController):
         markerData = ImpactMarkerData(projectile=projectile, phaseDuration=phaseDuration * 1000, impactType=projectile['impactType'], victimIsNotSpotted=playerIsSpotted, relativeArmor=playerRelativeArmor, causeOfDeath=causeOfDeath)
         return (KillCamInfoMarkerType.IMPACT, markerData)
 
-    def __buildGunMarkerData(self, projectile, phaseDuration, simulatedKillerGunInfo, hasSpottedData, hasAttackerVehicle, unspottedOrigin):
+    def __buildGunMarkerData(self, projectile, phaseDuration, simulatedKillerGunInfo, hasSpottedData, hasAttackerVehicle, unspottedOrigin, mechanicsInfo):
         phaseDuration *= 1000
         useProjectileOrigin = hasAttackerVehicle and hasSpottedData
-        markerData = GunMarkerData(projectile=projectile, phaseDuration=phaseDuration, simulatedKillerGunInfo=simulatedKillerGunInfo if hasSpottedData else None, projectileOrigin=projectile['trajectoryData'][0][0] if useProjectileOrigin else unspottedOrigin)
+        markerData = GunMarkerData(projectile=projectile, phaseDuration=phaseDuration, simulatedKillerGunInfo=simulatedKillerGunInfo if hasSpottedData else None, projectileOrigin=projectile['trajectoryData'][0][0] if useProjectileOrigin else unspottedOrigin, mechanicsInfo=mechanicsInfo)
         return (KillCamInfoMarkerType.GUN, markerData)
 
-    def __buildDistanceMarkerData(self, projectile, phaseDuration, hasSpottedData):
-        markerData = DistanceMarkerData(projectile=projectile, phaseDuration=phaseDuration * 1000, impactPoint=projectile['impactPoint'], isAttackerSpotted=hasSpottedData)
+    def __buildDistanceMarkerData(self, projectile, phaseDuration, hasSpottedData, mechanicsInfo):
+        markerData = DistanceMarkerData(projectile=projectile, phaseDuration=phaseDuration * 1000, impactPoint=projectile['impactPoint'], isAttackerSpotted=hasSpottedData, mechanicsInfo=mechanicsInfo)
         return (KillCamInfoMarkerType.DISTANCE, markerData)

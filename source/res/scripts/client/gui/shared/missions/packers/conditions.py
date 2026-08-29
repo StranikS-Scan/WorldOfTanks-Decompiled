@@ -181,17 +181,15 @@ class BonusConditionPacker(UIConditionPacker):
         isItemAddedToBonusCondModel = False
         if not bonusCondsModelList:
             _logger.debug('BonusConditions were not received for event %s.', event.getID())
-            return None
-        else:
-            for bonusCondModel in bonusCondsModelList:
-                if not bonusCondModel:
-                    continue
-                model.getItems().addViewModel(bonusCondModel)
-                isItemAddedToBonusCondModel = True
+            return
+        for bonusCondModel in bonusCondsModelList:
+            if not bonusCondModel:
+                continue
+            model.getItems().addViewModel(bonusCondModel)
+            isItemAddedToBonusCondModel = True
 
-            if isItemAddedToBonusCondModel:
-                model.setConditionType(typeOfBonusConditionGroup)
-            return None
+        if isItemAddedToBonusCondModel:
+            model.setConditionType(typeOfBonusConditionGroup)
 
 
 class PostBattleConditionPacker(UIConditionPacker):
@@ -214,15 +212,13 @@ class PostBattleConditionPacker(UIConditionPacker):
         postBattleCondsModelList, typeOfPostBattleConditionGroup = self._packConditions(postBattleConditions, event)
         if not postBattleCondsModelList:
             _logger.debug('PostBattleConditions were not received for event %s.', event.getID())
-            return None
-        else:
-            for postBattleCondModel in postBattleCondsModelList:
-                if not postBattleCondModel:
-                    continue
-                model.getItems().addViewModel(postBattleCondModel)
+            return
+        for postBattleCondModel in postBattleCondsModelList:
+            if not postBattleCondModel:
+                continue
+            model.getItems().addViewModel(postBattleCondModel)
 
-            model.setConditionType(typeOfPostBattleConditionGroup)
-            return None
+        model.setConditionType(typeOfPostBattleConditionGroup)
 
     @classmethod
     def packDefaultCondition(cls, event, model):

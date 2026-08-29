@@ -10,6 +10,7 @@ POI_EQUIPMENT_TAG = 'poiEquipment'
 class PoiType(enum.IntEnum):
     ARTILLERY = 1
     RECON = 2
+    ILLUMINATION_FLARE = 3
 
 
 @enum.unique
@@ -29,5 +30,6 @@ class PoiBlockReasons(enum.IntEnum):
 
 
 PoiEquipmentNamesByPoiType = {PoiType.ARTILLERY: 'poi_artillery_aoe',
- PoiType.RECON: 'poi_radar'}
+ PoiType.RECON: 'poi_radar',
+ PoiType.ILLUMINATION_FLARE: 'poi_illumination_flare'}
 PoiTypesByPoiEquipmentName = {name:poiType for poiType, name in PoiEquipmentNamesByPoiType.items()}

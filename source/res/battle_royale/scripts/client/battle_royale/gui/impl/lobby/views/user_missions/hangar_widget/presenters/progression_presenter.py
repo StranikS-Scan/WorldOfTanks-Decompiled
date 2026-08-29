@@ -1,17 +1,20 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: battle_royale/scripts/client/battle_royale/gui/impl/lobby/views/user_missions/hangar_widget/presenters/progression_presenter.py
+from __future__ import absolute_import
 from battle_royale.gui.impl.gen.view_models.views.lobby.views.widget.progression_model import ProgressionModel, ProgressionStatus
 from battle_royale.gui.impl.lobby.tooltips.progression_widget_tooltip import ProgressionWidgetTooltipView
 from battle_royale.gui.impl.lobby.views.user_missions.hangar_widget.overlap_ctrl import BattleRoyaleOverlapCtrlMixin
 from battle_royale.gui.shared.event_dispatcher import showProgressionView
 from battle_royale.skeletons.game_controller import IBRProgressionOnTokensController
+from gui.impl.lobby.user_missions.hangar_widget.presenters.base_child_presenter import UserMissionChildPresenter
 from gui.impl.lobby.user_missions.hangar_widget.tooltip_positioner import TooltipPositionerMixin
 from battle_royale.gui.impl.lobby.br_helpers.utils import setEventInfo
 from gui.impl.gen import R
 from gui.impl.pub.view_component import ViewComponent
 from helpers import dependency
 
-class BattleRoyaleProgressionPresenter(TooltipPositionerMixin, BattleRoyaleOverlapCtrlMixin, ViewComponent[ProgressionModel]):
+class BattleRoyaleProgressionPresenter(UserMissionChildPresenter, TooltipPositionerMixin, BattleRoyaleOverlapCtrlMixin, ViewComponent[ProgressionModel]):
+    GROUP = 'progressionEntryPoint'
     __brProgression = dependency.descriptor(IBRProgressionOnTokensController)
 
     def __init__(self):

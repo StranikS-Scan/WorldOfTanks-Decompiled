@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/personal_missions_30/tooltips/mission_progress_tooltip.py
+from __future__ import absolute_import
 import typing
 from frameworks.wulf import ViewSettings
 from frameworks.wulf.view.array import fillStringsArray

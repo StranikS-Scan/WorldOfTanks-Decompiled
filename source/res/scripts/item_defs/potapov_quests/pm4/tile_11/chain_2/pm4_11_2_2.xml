@@ -1,0 +1,84 @@
+<pm4_11_2_2.xml>
+  <quests>
+    <potapovQuest>
+      <enabled>	true	</enabled>
+      <id>	pm4_11_2_2_main	</id>
+      <serverOnly>	true	</serverOnly>
+      <conditions>
+        <postBattle>
+          <or>
+            <vehicleKills>
+              <classesDiversity>	3	</classesDiversity>
+              <greaterOrEqual>	4	</greaterOrEqual>
+            </vehicleKills>
+            <vehicleDamage>
+              <limittedTime>	240	</limittedTime>
+              <greaterOrEqual>	4000	</greaterOrEqual>
+            </vehicleDamage>
+          </or>
+        </postBattle>
+        <common>
+          <battles>
+            <uniqueVehicles></uniqueVehicles>
+            <count>	3	</count>
+          </battles>
+        </common>
+      </conditions>
+      <bonus>
+        <credits>	75000	</credits>
+        <goodie>
+          <id>	121001	</id>
+          <count>	2	</count>
+        </goodie>
+        <item>	16158	  <count>	1	</count>
+        </item>
+        <token>
+          <id>	token:pt:final:s4:t11:main	</id>
+          <expires>	01.01.2050 00:01	</expires>
+          <count>	1	</count>
+          <limit>	63	</limit>
+        </token>
+      </bonus>
+    </potapovQuest>
+    <potapovQuest>
+      <enabled>	true	</enabled>
+      <id>	pm4_11_2_2_add	</id>
+      <serverOnly>	true	</serverOnly>
+      <conditions>
+        <preBattle>
+          <account>
+            <token>
+              <id>	token:pt:s4:t11:finished:base	</id>
+              <equal>	0	</equal>
+            </token>
+          </account>
+        </preBattle>
+        <postBattle>
+          <or>
+            <vehicleKills>
+              <classesDiversity>	3	</classesDiversity>
+              <greaterOrEqual>	4	</greaterOrEqual>
+            </vehicleKills>
+            <vehicleDamage>
+              <limittedTime>	240	</limittedTime>
+              <greaterOrEqual>	4000	</greaterOrEqual>
+            </vehicleDamage>
+          </or>
+        </postBattle>
+        <common>
+          <battles>
+            <uniqueVehicles></uniqueVehicles>
+            <count>	3	</count>
+          </battles>
+        </common>
+      </conditions>
+      <bonus>
+        <token>
+          <id>	pm4:11:points	</id>
+          <expires>	01.01.2050 00:01	</expires>
+          <count>	125	</count>
+        </token>
+      </bonus>
+    </potapovQuest>
+  </quests>
+</pm4_11_2_2.xml>

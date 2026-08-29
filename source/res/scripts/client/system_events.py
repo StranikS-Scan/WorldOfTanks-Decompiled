@@ -9,6 +9,7 @@ class SystemEvents(EventsContainer):
         super(SystemEvents, self).__init__()
         self.onBeforeSend = self._createEvent()
         self.onDependencyConfigReady = self._createEvent()
+        self.onFestivityConfigReady = self._createEvent()
 
 
 g_systemEvents = SystemEvents()

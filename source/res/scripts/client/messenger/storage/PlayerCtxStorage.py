@@ -4,7 +4,7 @@ import types
 import Event
 from constants import ACCOUNT_ATTR, WG_GAMES
 from debug_utils import LOG_WARNING
-from messenger.storage import SimpleCachedStorage
+from messenger.storage.local_cache import SimpleCachedStorage
 
 class PlayerCtxStorage(SimpleCachedStorage):
     __slots__ = ('__accAttrs', '__clanInfo', '__banInfo', '__cachedItems', '__eManager', '__denunciations', 'onAccountAttrsChanged', 'onClanInfoChanged', 'onDenunciationsChanged')

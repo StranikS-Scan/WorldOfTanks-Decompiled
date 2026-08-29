@@ -51,7 +51,7 @@
       <armor_4>	14.5	</armor_4>
       <armor_5>	8	</armor_5>
       <armor_6>	8	</armor_6>
-      <armor_7>	20	</armor_7>
+      <armor_7>	8	</armor_7>
       <armor_8>	0	</armor_8>
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
@@ -1007,8 +1007,8 @@
       <price>	32000	</price>
       <notInShop>	true	</notInShop>
       <armor>
-        <leftTrack>	10	</leftTrack>
-        <rightTrack>	10	</rightTrack>
+        <leftTrack>	5	</leftTrack>
+        <rightTrack>	5	</rightTrack>
       </armor>
       <weight>	3000	</weight>
       <maxLoad>	15000	</maxLoad>
@@ -2075,11 +2075,29 @@
             </armor_3>
             <armor_4>	0	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_4>
-            <armor_5>	10	</armor_5>
-            <armor_6>	8	</armor_6>
-            <armor_7>	10	</armor_7>
-            <armor_8>	10	</armor_8>
+            <armor_5>	8	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_5>
+            <armor_6>	8	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_6>
+            <armor_7>	10	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_7>
+            <armor_8>	10	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_8>
             <gun>	10	</gun>
+            <armor_9>	15	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_9>
+            <armor_10>	15	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_10>
+            <armor_11>	15	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_11>
+            <armor_12>	10	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_12>
+            <armor_13>	8	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_13>
+            <armor_14>	8	</armor_14>
+            <armor_15>	10	</armor_15>
+            <armor_16>	10	</armor_16>
+            <armor_17>	10	</armor_17>
           </armor>
           <turretYawLimits>	-180 180	</turretYawLimits>
           <pitchLimits>

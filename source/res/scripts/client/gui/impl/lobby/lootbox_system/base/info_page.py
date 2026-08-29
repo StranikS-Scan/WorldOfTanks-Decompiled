@@ -1,8 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/lootbox_system/base/info_page.py
+from __future__ import absolute_import
+import typing
 from enum import Enum
 from account_helpers.AccountSettings import LOOT_BOXES_SELECTED_BOX
 from frameworks.wulf import WindowFlags
+from frameworks.wulf.view.array import fillIntsArray
 from gui.Scaleform.Waiting import Waiting
 from gui.impl.gen import R
 from gui.impl.pub.view_component import ViewComponent
@@ -21,6 +24,8 @@ from helpers import dependency
 from helpers.time_utils import getServerUTCTime
 from shared_utils import first
 from skeletons.gui.game_control import ILootBoxSystemController
+if typing.TYPE_CHECKING:
+    from gui.shared.gui_items.loot_box import LootBox
 
 class _InfoPageSetting(str, Enum):
     VIDEO = 'isVideoVisible'
@@ -51,6 +56,9 @@ class InfoPage(ViewComponent):
 
     def getTooltipData(self, event):
         return self.__tooltipData.get(event.getArgument('tooltipId', 0))
+
+    def _getBonusPacker(self):
+        return None
 
     def _onLoading(self, *args, **kwargs):
         super(InfoPage, self)._onLoading(*args, **kwargs)
@@ -118,33 +126,36 @@ class InfoPage(ViewComponent):
         boxes = model.getBoxes()
         boxes.clear()
         for box in self.__lootBoxes.getActiveBoxes(self.__eventName):
-            boxInfo = self.__lootBoxes.getBoxInfo(box.getID())
-            filledBoxModel = self.__setLootBox(box.getCategory(), boxInfo.get('limit', 0), box.getInventoryCount(), boxInfo.get('boxCountToGuaranteedBonus', 0), boxInfo.get('slots', {}))
-            boxes.addViewModel(filledBoxModel)
+            boxes.addViewModel(self._setLootBox(box))
 
         boxes.invalidate()
 
-    def __setLootBox(self, category, guaranteed, count, countToGuaranteed, slotsInfo):
+    def _setLootBox(self, box):
+        boxInfo = self.__lootBoxes.getBoxInfo(box.getID())
         boxModel = BoxModel()
-        boxModel.setCategory(category)
-        boxModel.setGuaranteedLimit(guaranteed)
-        boxModel.setCount(count)
-        boxModel.setCountToGuaranteed(countToGuaranteed)
+        boxModel.setCategory(box.getCategory())
+        boxModel.setGuaranteedLimit(boxInfo.get('limit', 0))
+        boxModel.setCount(box.getInventoryCount())
+        boxModel.setCountToGuaranteed(boxInfo.get('boxCountToGuaranteedBonus', 0))
+        if box.isRerollable():
+            boxModel.setRerollCurrency(box.getRerollCurrency())
+            fillIntsArray(box.getRerollPrices(), boxModel.getRerollPrices())
         slotsModel = boxModel.getSlots()
         slotsModel.clear()
+        slotsInfo = boxInfo.get('slots', {})
         for slotID in self.__sortedSlotsIDs(slotsInfo):
             slot = slotsInfo.get(slotID, {})
-            lbSlot = self.__setLootBoxSlot(slot.get('probability', [0])[0], slot.get('bonuses', []))
+            lbSlot = self._setLootBoxSlot(slot.get('probability', [0])[0], slot.get('bonuses', []))
             slotsModel.addViewModel(lbSlot)
 
         slotsModel.invalidate()
         return boxModel
 
-    def __setLootBoxSlot(self, probability, bonuses):
+    def _setLootBoxSlot(self, probability, bonuses):
         slotModel = SlotModel()
         slotModel.setProbability(int(probability * 10000 + 1e-06) / 100.0)
         slotModel.bonuses.clearItems()
-        packBonusModelAndTooltipData(bonuses, slotModel.bonuses, tooltipData=self.__tooltipData, merge=True, eventName=self.__eventName)
+        packBonusModelAndTooltipData(bonuses, slotModel.bonuses, tooltipData=self.__tooltipData, merge=True, eventName=self.__eventName, packer=self._getBonusPacker())
         return slotModel
 
     def __showPreview(self, ctx):

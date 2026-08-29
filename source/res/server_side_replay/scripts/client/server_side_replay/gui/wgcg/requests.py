@@ -40,7 +40,7 @@ class ServerSideReplayRequester(ClientRequestsByIDProcessor):
         return super(ServerSideReplayRequester, self)._getSenderMethod(sender, methodName)
 
     def _doCall(self, method, *args, **kwargs):
-        requestID = self._idsGenerator.next()
+        requestID = next(self._idsGenerator)
 
         def _callback(data, statusCode, responseCode, headers):
             ctx = self._requests[requestID]

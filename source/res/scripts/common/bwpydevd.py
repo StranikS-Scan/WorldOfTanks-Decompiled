@@ -81,41 +81,69 @@ def startDebug(isStartUp=False, host=None, port=None, ide=None):
     suspend = BWConfig.readBool('pydevd/suspend', False)
     traceOnlyCurrentThread = BWConfig.readBool('pydevd/traceOnlyCurrentThread', False)
     inspectDoubleUnderscore = BWConfig.readBool('pydevd/inspectDoubleUnderscore', True)
+    bwdebug.INFO_MSG('bwdebug start: %s - %s:%d for VS Code' % (ide, host, port))
     startPyDevD(ide, host, port, suspend, traceOnlyCurrentThread, inspectDoubleUnderscore)
 
 
 bwPyDevDStarted = False
+bwActiveIde = None
 
-def startPyDevD(ide, host='127.0.0.1', port=5678, suspend=False, traceOnlyCurrentThread=False, inspectDoubleUnderscore=False):
+def startPyDevD(ide, host='127.0.0.1', port=5678, suspend=False, traceOnlyCurrentThread=False, inspectDoubleUnderscore=False, pathMappings=None):
     global bwPyDevDStarted
+    global bwActiveIde
     if not bwPyDevDStarted:
         bwPyDevDStarted = True
-        pydevDir = 'scripts/common/pydev/%s/pydev' % ide
-        absPydevDir = ResMgr.resolveToAbsolutePath(pydevDir)
-        if not os.path.isdir(absPydevDir):
-            bwdebug.ERROR_MSG('Unable to find pydevd directory for IDE %s (at %s)' % (ide, absPydevDir))
-        sys.path.append(pydevDir)
+        bwActiveIde = ide
+        if ide == 'vscode':
+            pydevDir = 'scripts/common/pydev/vscode'
+            sys.path.append(pydevDir)
+            sys.path.append(pydevDir + '/pydev')
+        else:
+            pydevDir = 'scripts/common/pydev/%s/pydev' % ide
+            sys.path.append(pydevDir)
         try:
-            import pydevd
-            bwdebug.INFO_MSG('PyDevD connecting to %s:%d' % (host, port))
-            pydevd.settrace(host=host, port=port, suspend=suspend, stdoutToServer=True, stderrToServer=True, trace_only_current_thread=traceOnlyCurrentThread, inspect_double_underscore=inspectDoubleUnderscore)
+            if ide == 'vscode':
+                import ptvsd
+                activeMappings = pathMappings if pathMappings is not None else REPLACE_PATHS
+                if activeMappings:
+                    import pydevd_file_utils
+                    pydevd_file_utils.setup_client_server_paths(activeMappings)
+                    bwdebug.INFO_MSG('ptvsd path mappings: %s' % repr(activeMappings))
+                bwdebug.INFO_MSG('ptvsd listening on %s:%d for VS Code' % (host, port))
+                ptvsd.enable_attach(address=(host, port), redirect_output=True)
+                if suspend:
+                    ptvsd.wait_for_attach()
+            else:
+                import pydevd
+                bwdebug.INFO_MSG('PyDevD connecting to %s:%d' % (host, port))
+                pydevd.settrace(host=host, port=port, suspend=suspend, stdoutToServer=True, stderrToServer=True, trace_only_current_thread=traceOnlyCurrentThread, inspect_double_underscore=inspectDoubleUnderscore)
             threading.currentThread().__pydevd_id__ = BigWorld.component
         except Exception as e:
             from traceback import print_exc
             print_exc()
             bwdebug.ERROR_MSG('Failed to load pydevd: %s' % repr(e))
 
+    return
+
 
 def stopPyDevD():
     global bwPyDevDStarted
+    global bwActiveIde
     if bwPyDevDStarted:
         bwPyDevDStarted = False
         try:
-            import pydevd
-            pydevd.stoptrace()
+            if bwActiveIde == 'vscode':
+                import ptvsd
+                ptvsd.tracing(False)
+            else:
+                import pydevd
+                pydevd.stoptrace()
             del threading.currentThread().__pydevd_id__
             bwdebug.INFO_MSG('PyDevD debug has stopped')
         except Exception as e:
             from traceback import print_exc
             print_exc()
             bwdebug.ERROR_MSG('Failed to stop pydevd: %s' % repr(e))
+
+        bwActiveIde = None
+    return

@@ -8,7 +8,8 @@ from future.utils import itervalues, viewitems
 from challenges_common import isChallengeQuest
 from gui.battle_results.progress.progress_helpers import packQuestProgressData, isQuestCompleted, getPrestigeProgress, isPMOperationAndMissionEnabled
 from gui.server_events.events_helpers import isPremium, isDailyQuest, isWeeklyQuest, isBattleMattersQuestID, isCommonBattleQuest
-from potapov_quests import isPM3Quest
+from gui.server_events.finders import getBranchByOperationId
+from potapov_quests import isWithoutAwardListBranchQuest
 from skeletons.gui.server_events import IEventsCache
 from helpers import dependency
 from personal_missions import PM_BRANCH
@@ -82,21 +83,21 @@ def prestigeProgressFilter(reusable):
 def personalMissionProgressFilter(reusable, eventsCache=None):
     personalMissions = eventsCache.getPersonalMissions()
     commonQuestsProgress = reusable.personal.getQuestsProgress()
-    if not (personalMissions.isEnabled(PM_BRANCH.PERSONAL_MISSION_3) and commonQuestsProgress):
+    if not commonQuestsProgress:
         return []
-    pm3Quests = personalMissions.getQuestsForBranch(PM_BRANCH.PERSONAL_MISSION_3)
+    pmQuests = personalMissions.getAllQuests(PM_BRANCH.WITHOUT_AWARD_LIST_BRANCHES)
     personalMissionWithProgress = []
     for qID, qProgress in commonQuestsProgress.items():
-        if isPM3Quest(qID) and personal_missions.g_cache.isPersonalMission(qID):
+        if isWithoutAwardListBranchQuest(qID) and personal_missions.g_cache.isPersonalMission(qID):
             pmID = personal_missions.g_cache.getPersonalMissionIDByUniqueID(qID)
-            currentPM3Quest = pm3Quests[pmID]
-            if isPMOperationAndMissionEnabled(currentPM3Quest):
+            currentPMQuest = pmQuests[pmID]
+            if personalMissions.isEnabled(getBranchByOperationId(currentPMQuest.getOperationID())) and isPMOperationAndMissionEnabled(currentPMQuest):
                 _, pPrev, pCur = qProgress
                 if pPrev or max(itervalues(pCur)) != 0:
-                    updatedPM3Quest = copy.deepcopy(currentPM3Quest)
+                    updatedPMQuest = copy.deepcopy(currentPMQuest)
                     currentBattlesUniqueVehicles = pCur.get('battlesUniqueVehicles', {})
-                    updatedPM3Quest.getConditionsProgress().update({'battlesUniqueVehicles': currentBattlesUniqueVehicles})
-                    data = (updatedPM3Quest, isQuestCompleted(*qProgress))
+                    updatedPMQuest.getConditionsProgress().update({'battlesUniqueVehicles': currentBattlesUniqueVehicles})
+                    data = (updatedPMQuest, isQuestCompleted(*qProgress))
                     personalMissionWithProgress.append(data)
 
     return personalMissionWithProgress

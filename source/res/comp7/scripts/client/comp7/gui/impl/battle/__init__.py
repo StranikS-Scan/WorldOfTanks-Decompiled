@@ -35,18 +35,21 @@ def registerComp7Battle():
 
 
 def _extendEquipmentProperties():
-    from ApplicationPoint import _Comp7ReconApplicationPointEffect, _Comp7RedLineApplicationPointEffect, _EQUIPMENT_APPLICATION_POINTS
+    from ApplicationPoint import _Comp7ReconApplicationPointEffect, _Comp7RedLineApplicationPointEffect, _EQUIPMENT_APPLICATION_POINTS, _Comp7IlluminationFlareApplicationPointEffect
     from AvatarInputHandler.MapCaseMode import _STRIKE_SELECTORS
-    from comp7_core.avatar_input_handler.map_case_mode import Comp7ArenaBoundArtilleryStrikeSelector, Comp7ArenaBoundPlaneStrikeSelector, Comp7PoiArtilleryStrikeSelector
+    from comp7_core.avatar_input_handler.map_case_mode import Comp7ArenaBoundArtilleryStrikeSelector, Comp7ArenaBoundPlaneStrikeSelector, Comp7PoiArtilleryStrikeSelector, Comp7PoiIlluminationFlareStrikeSelector
     from comp7_core.gui.battle_control.controllers.consumables.comp7_equipment_items import _ROLE_SKILL_ITEM_CLASS_BY_NAME, _REPLAY_ROLE_SKILL_ITEM_CLASS_BY_NAME, _RoleSkillArtyVSItem, _RoleSkillReconVSItem, _ReplayRoleSkillArtyVSItem
     from comp7_common.items.comp7_artefacts import Comp7ReconEquipment, Comp7RedlineEquipment
     from items.artefacts import PoiArtilleryEquipment
+    from items.artefacts import PoiIlluminationFlareEquipment
     _ROLE_SKILL_ITEM_CLASS_BY_NAME.update({'comp7_recon': _RoleSkillReconVSItem,
      'comp7_redline': _RoleSkillArtyVSItem})
     _REPLAY_ROLE_SKILL_ITEM_CLASS_BY_NAME.update({'comp7_redline': _ReplayRoleSkillArtyVSItem})
     _EQUIPMENT_APPLICATION_POINTS.update({'comp7_recon': _Comp7ReconApplicationPointEffect,
+     'poi_illumination_flare': _Comp7IlluminationFlareApplicationPointEffect,
      'comp7_redline': _Comp7RedLineApplicationPointEffect})
     _STRIKE_SELECTORS.update({Comp7ReconEquipment: Comp7ArenaBoundPlaneStrikeSelector,
+     PoiIlluminationFlareEquipment: Comp7PoiIlluminationFlareStrikeSelector,
      Comp7RedlineEquipment: Comp7ArenaBoundArtilleryStrikeSelector,
      PoiArtilleryEquipment: Comp7PoiArtilleryStrikeSelector})
 

@@ -5,7 +5,7 @@ from functools import partial
 import typing
 from future.utils import viewitems
 from battle_pass_common import BattlePassRewardReason, get3DStyleProgressToken
-from frameworks.state_machine import ConditionTransition, State, StateEvent, StateFlags
+from frameworks_common.state_machine import ConditionTransition, State, StateEvent, StateFlags
 from gui.battle_pass.battle_pass_helpers import asBPVideoName, getStyleForChapter, getStyleInfoForChapter, makeChapterMediaName, makeProgressionStyleMediaName, showBPFullscreenVideo
 from gui.battle_pass.state_machine import lockNotificationManager
 from gui.battle_pass.state_machine.state_machine_helpers import isProgressionComplete, packToken, processRewardsToChoose

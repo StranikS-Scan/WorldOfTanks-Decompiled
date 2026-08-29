@@ -24,7 +24,7 @@ from comp7.gui.selectable_reward.common import Comp7SelectableRewardManager
 from comp7.gui.shared.event_dispatcher import showComp7AllRewardsSelectionWindow, showComp7MetaRootTab
 from comp7.skeletons.gui.game_control import IComp7ShopController
 from comp7_core.gui.impl.lobby.comp7_core_helpers import comp7_core_model_helpers
-from frameworks.state_machine import BaseStateObserver, visitor
+from frameworks_common.state_machine import BaseStateObserver, visitor
 from frameworks.wulf import ViewFlags, ViewSettings, ViewStatus
 from gui.Scaleform.lobby_entry import getLobbyStateMachine
 from gui.impl.backport import BackportTooltipWindow
@@ -43,7 +43,7 @@ if typing.TYPE_CHECKING:
     from comp7.gui.impl.lobby.hangar.meta_tab_state import IMetaTabState
     from gui.offers import OffersDataProvider
     from gui.shared.events import NavigationEvent
-    from frameworks.state_machine import State
+    from frameworks_common.state_machine import State
 _logger = logging.getLogger(__name__)
 
 class MetaRootView(ViewImpl, BaseStateObserver):

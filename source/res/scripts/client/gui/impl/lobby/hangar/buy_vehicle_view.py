@@ -310,7 +310,8 @@ class BuyVehicleView(ViewImpl, EventSystemEntity, IPrbListener):
 
     @adisp.adisp_process
     def __showVehicleInHangar(self, *_):
-        event_dispatcher.selectVehicleInHangar(self.__vehicle.intCD)
+        if self.prbEntity.getPermissions().canChangeVehicle():
+            event_dispatcher.selectVehicleInHangar(self.__vehicle.intCD)
         self.__startTutorial()
         self.__destroyWindow()
         g_eventBus.handleEvent(events.CloseWindowEvent(events.CloseWindowEvent.BUY_VEHICLE_VIEW_CLOSED, isAgree=True))

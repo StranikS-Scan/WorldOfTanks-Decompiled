@@ -1,7 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: battle_royale/scripts/client/battle_royale/gui/game_control/progression_controller.py
+from __future__ import absolute_import
 import logging
 import typing
+from future.utils import lzip
 import Event
 from PlayerEvents import g_playerEvents
 from account_helpers import AccountSettings
@@ -108,7 +110,7 @@ class ProgressionOnConfig(ProgressionOnTokensController):
         prevStagePoints = 0
         prevStageMaxPoints = 0
         maxPoints = 0
-        for stage, maxPoints in enumerate(zip(*self._getStages())[0], 1):
+        for stage, maxPoints in enumerate(lzip(*self._getStages())[0], 1):
             if curPoints < maxPoints and curStage == 0:
                 curStage = stage
                 stageProgress = curPoints - prevStageMaxPoints
@@ -131,7 +133,7 @@ class ProgressionOnConfig(ProgressionOnTokensController):
 
     def _getProgressionLevels(self):
         progressionLevels = []
-        for stageAwards in zip(*self._getStages())[1]:
+        for stageAwards in lzip(*self._getStages())[1]:
             bonuses = []
             for key, value in stageAwards:
                 bonuses.extend(getNonQuestBonuses(key, value))

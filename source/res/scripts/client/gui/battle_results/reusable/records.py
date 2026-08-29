@@ -3,6 +3,7 @@
 import operator
 from ValueReplay import ValueReplay
 from debug_utils import LOG_ERROR
+from gui.shared.system_factory import collectReplayRecordMap
 
 def convertFactorToPercent(factor):
     return factor * 100
@@ -140,7 +141,8 @@ class ReplayRecords(ResultRecord):
     def _addRecord(self, op, name, value, diff):
         if op in _SUPPORTED_OPS:
             clazz = _SUPPORTED_OPS[op]
-            self._records[name] = clazz(name, value, diff)
+            recordName = collectReplayRecordMap().get(name, name)
+            self._records[recordName] = clazz(recordName, value, diff)
 
 
 class RecordsIterator(ResultRecord):

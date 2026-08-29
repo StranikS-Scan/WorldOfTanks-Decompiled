@@ -508,7 +508,7 @@ class PersonalMissionOperationContext(ToolTipContext):
         super(PersonalMissionOperationContext, self).__init__(TOOLTIP_COMPONENT.HANGAR, fieldsToExclude)
 
     def buildItem(self, tileID):
-        return self._eventsCache.getPersonalMissions().getAllOperations(branches=PM_BRANCH.ALL).get(tileID)
+        return self._eventsCache.getPersonalMissions().getAllOperations(branches=PM_BRANCH.ALL_NAMES).get(tileID)
 
 
 class PersonalMissionCampaignContext(ToolTipContext):
@@ -995,10 +995,12 @@ class TechMainContext(HangarContext):
         super(TechMainContext, self).__init__(fieldsToExclude)
         self._eqs = tuple()
 
-    def buildItem(self, compact, slotIdx=0, eqs=None):
+    def buildItem(self, compact, slotIdx=0, eqs=None, vehicle=None, parentCD=None):
         if eqs is not None:
             self._eqs = eqs
-        return super(TechMainContext, self).buildItem(compact, slotIdx=slotIdx)
+        if parentCD is not None:
+            vehicle = self.itemsCache.items.getItemByCD(parentCD)
+        return super(TechMainContext, self).buildItem(compact, slotIdx=slotIdx, vehicle=vehicle)
 
     def getStatusConfiguration(self, item):
         value = super(TechMainContext, self).getStatusConfiguration(item)

@@ -7,7 +7,7 @@ from AvatarInputHandler.cameras import getViewProjectionMatrix
 from ClientSelectableCameraObject import ClientSelectableCameraObject
 from CurrentVehicle import g_currentPreviewVehicle
 from Event import Event
-from frameworks.state_machine import StateIdsObserver
+from frameworks_common.state_machine import StateIdsObserver
 from gui import GUI_SETTINGS
 from gui.Scaleform.Waiting import Waiting
 from gui.Scaleform.lobby_entry import getLobbyStateMachine

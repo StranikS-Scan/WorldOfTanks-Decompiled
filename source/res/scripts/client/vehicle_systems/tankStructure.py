@@ -1,7 +1,15 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/vehicle_systems/tankStructure.py
+import typing
+import logging
+import Math
 from collections import namedtuple
 from constants import VehiclePartName
+if typing.TYPE_CHECKING:
+    from BigWorld import CollisionComponent
+    from typing import Union, Iterable, Sized, Optional
+    AABB = typing.Tuple[Math.Vector3, Math.Vector3]
+_logger = logging.getLogger(__name__)
 
 class CgfTankNodes(object):
     TANK_ROOT = 'Tank.Root'
@@ -202,3 +210,40 @@ def getCollisionModelsFromDesc(vehicleDesc, state):
                 paths.append(part.hitTesterManager.edClientBspModel)
 
     return VehiclePartsTuple(*paths)
+
+
+def getVehicleAABB(collisions):
+    enclosingAABB = (Math.Vector3(0.0, 0.0, 0.0), Math.Vector3(0.0, 0.0, 0.0))
+    for index in TankPartIndexes.ALL:
+        aabb = collisions.getBoundingBox(index)
+        enclosingAABB[0].x = min(enclosingAABB[0].x, aabb[0].x)
+        enclosingAABB[0].y = min(enclosingAABB[0].y, aabb[0].y)
+        enclosingAABB[0].z = min(enclosingAABB[0].z, aabb[0].z)
+        enclosingAABB[1].x = max(enclosingAABB[1].x, aabb[1].x)
+        enclosingAABB[1].y = max(enclosingAABB[1].y, aabb[1].y)
+        enclosingAABB[1].z = max(enclosingAABB[1].z, aabb[1].z)
+
+    return enclosingAABB
+
+
+def selectItemByTankSize(tankSizeLowerBounds, items, default=None, aabb=None):
+    if not tankSizeLowerBounds:
+        _logger.error('tankSizeLowerBounds cannot be empty or None.')
+    if not items:
+        _logger.error('items cannot be empty or None.')
+    if not aabb:
+        if default:
+            return default
+        return items[-1]
+    maxDimension = max(abs(aabb[1].x - aabb[0].x), abs(aabb[1].y - aabb[0].y), abs(aabb[1].z - aabb[0].z))
+    if len(tankSizeLowerBounds) != len(items):
+        _logger.error('tankSizeLowerBounds (%r) and items (%r) have to be equally sized.', tankSizeLowerBounds, items)
+    sizesWithItems = list(zip(tankSizeLowerBounds, items))
+    sizesWithItems.sort(key=lambda sizeWithItem: sizeWithItem[0])
+    largestPassingItem = sizesWithItems[0][1]
+    for tankSizeLowerBound, item in sizesWithItems:
+        if maxDimension < tankSizeLowerBound:
+            break
+        largestPassingItem = item
+
+    return largestPassingItem

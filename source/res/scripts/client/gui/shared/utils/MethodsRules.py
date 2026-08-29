@@ -19,10 +19,11 @@ class MethodsRules(object):
             def wrapper(*args, **kwargs):
                 instance = args[0]
                 if instance.delay(self.__delayerName, listener, *args, **kwargs):
-                    return
-                result = listener(*args, **kwargs)
-                instance.processDelayer(listener.__name__)
-                return result
+                    return None
+                else:
+                    result = listener(*args, **kwargs)
+                    instance.processDelayer(listener.__name__)
+                    return result
 
             copy(wrapper, listener)
             return wrapper

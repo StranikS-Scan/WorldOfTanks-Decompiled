@@ -104,7 +104,7 @@ class WinbackSelectableRewardView(ViewImpl):
     _packer = getBonusPacker()
 
     def __init__(self, selectableTokens=None):
-        settings = ViewSettings(R.views.lobby.winback.WinbackSelectableRewardView())
+        settings = ViewSettings(R.views.mono.winback.winback_selectable_reward_view())
         settings.flags = ViewFlags.VIEW
         settings.model = WinbackSelectableRewardViewModel()
         self.__bonuses = OrderedDict()
@@ -139,9 +139,9 @@ class WinbackSelectableRewardView(ViewImpl):
         return window
 
     def createToolTipContent(self, event, contentID):
-        if contentID == R.views.lobby.winback.tooltips.SelectedRewardsTooltip():
+        if contentID == R.views.mono.winback.tooltips.selected_rewards_tooltip():
             return SelectedRewardsTooltip(self.__getSelectedRewards())
-        if contentID == R.views.lobby.winback.tooltips.SelectableRewardTooltip():
+        if contentID == R.views.mono.winback.tooltips.selectable_reward_tooltip():
             level = int(event.getArgument(WinbackSelectableRewardViewModel.VEHICLE_LEVEL))
             return SelectableRewardTooltip(**self.__bonuses[level]['tooltipData'])
         return super(WinbackSelectableRewardView, self).createToolTipContent(event, contentID)

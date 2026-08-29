@@ -1,16 +1,17 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/personal_missions_30/state.py
+from __future__ import absolute_import
 import logging
 from functools import partial
 import typing
 import SoundGroups
-from cgf_components.pm30_hangar_components import PERSONAL_MISSIONS_3_SUB_HANGAR_IS_READY
-from frameworks.state_machine import StateFlags
-from frameworks.state_machine.transitions import TransitionType
+from cgf_components.pm30_hangar_components import PERSONAL_MISSIONS_SUB_HANGAR_IS_READY
+from frameworks_common.state_machine import StateFlags
+from frameworks_common.state_machine.transitions import TransitionType
 from frameworks.wulf import ViewStatus
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
-from gui.Scaleform.daapi.view.lobby.missions.missions_helper import getCurrentOperationLastInstalledDetail
 from gui.Scaleform.daapi.view.lobby.user_missions.states import UserMissionsState
+from gui.Scaleform.daapi.view.lobby.vehicle_preview.states import StylePreviewState
 from gui.Scaleform.framework.entities.View import ViewKey
 from gui.impl import backport
 from gui.impl.gen import R
@@ -19,12 +20,13 @@ from gui.impl.gen.view_models.views.lobby.personal_missions_30.main_view_model i
 from gui.impl.lobby.hangar.states import HangarState
 from gui.impl.lobby.personal_missions_30.hangar_helpers import AssemblingManager
 from gui.impl.lobby.personal_missions_30.personal_mission_constants import SoundsKeys, IntroKeys
-from gui.impl.lobby.personal_missions_30.views_helpers import openInfoPageScreen, isIntroShown, getOperationStatus, getSortedPm3Operations
+from gui.impl.lobby.personal_missions_30.views_helpers import openInfoPageScreen, isIntroShown, getOperationStatus, getBranchSortedPmOperations, getCurrentOperationLastInstalledDetail, canOpenOperationPage
 from gui.impl.lobby.vehicle_hub.states import OverviewState
 from gui.lobby_state_machine.states import SubScopeSubLayerState, LobbyStateDescription, LobbyState, ViewLobbyState
 from gui.lobby_state_machine.transitions import HijackTransition, NavigationTransition
+from gui.server_events.finders import getBranchByOperationId
 from gui.shared import EVENT_BUS_SCOPE
-from gui.shared.event_dispatcher import showHangar, showPM30IntroWindow, showPM30OperationIntroWindow
+from gui.shared.event_dispatcher import showHangar, showPM30IntroWindow, showWithoutAwardListOperationIntroWindow
 from gui.subhangar.subhangar_state_groups import SubhangarStateGroupConfigProvider, SubhangarStateGroupConfig, SubhangarStateGroups
 from helpers import dependency
 from helpers.events_handler import EventsHandler
@@ -95,8 +97,9 @@ class PersonalMissions3EntryState(LobbyState, EventsHandler, SubhangarStateGroup
 
     def _onExited(self):
         self._unsubscribe()
-        self.assemblingManager.deactivate()
-        self.assemblingManager.destroy()
+        if self.assemblingManager.inited:
+            self.assemblingManager.deactivate()
+            self.assemblingManager.destroy()
         self.assemblingManager = None
         super(PersonalMissions3EntryState, self)._onExited()
         return
@@ -121,6 +124,7 @@ class PersonalMissions3State(ViewLobbyState, EventsHandler):
         super(PersonalMissions3State, self).__init__(flags=flags)
         self.__cachedParams = None
         self.__isForcedLeave = False
+        self.__canOpenOperationPage = True
         return
 
     def _getViewLoadCtx(self, event):
@@ -171,20 +175,25 @@ class PersonalMissions3State(ViewLobbyState, EventsHandler):
          (assemblingManager.onCameraFlightFinished, self.__onCameraFlightFinished))
 
     def _onEntered(self, event):
+        self.__cachedParams = dict(event.params)
+        operationID = self.__cachedParams.get('operationID')
+        self.__canOpenOperationPage = operationID and canOpenOperationPage(operationID)
+        if not self.__canOpenOperationPage:
+            return
         super(PersonalMissions3State, self)._onEntered(event)
         self.__isForcedLeave = False
-        self.__cachedParams = event.params
-        operationID = event.params.get('operationID')
-        pm3Operations = getSortedPm3Operations()
-        operation = pm3Operations[operationID]
-        if not isIntroShown(IntroKeys.OPERATION_INTRO_VIEW.value % operation.getID()) and getOperationStatus(operation, pm3Operations) != OperationState.UNAVAILABLE:
-            showPM30OperationIntroWindow(operation.getID())
+        branchID = getBranchByOperationId(operationID)
+        pmOperations = getBranchSortedPmOperations(branchID)
+        operation = pmOperations[operationID]
+        if not isIntroShown(IntroKeys.OPERATION_INTRO_VIEW.value % operation.getID(), operation.getBranch()) and getOperationStatus(operation, pmOperations) != OperationState.UNAVAILABLE:
+            showWithoutAwardListOperationIntroWindow(operation.getID())
         self._subscribe()
 
     def _onExited(self):
-        app = self.__appLoader.getApp()
-        app.setBackgroundAlpha(_OPAQUE_BACKGROUND_ALPHA)
-        self._unsubscribe()
+        if self.__canOpenOperationPage:
+            app = self.__appLoader.getApp()
+            app.setBackgroundAlpha(_OPAQUE_BACKGROUND_ALPHA)
+            self._unsubscribe()
         super(PersonalMissions3State, self)._onExited()
 
     def isAnimationPlayed(self, *_):
@@ -213,7 +222,7 @@ class PersonalMissions3State(ViewLobbyState, EventsHandler):
     def __onEventsCacheSync(self, *_):
         mainView = self.getMachine().getRelatedView(self)
         assemblingManager = self.getParent().assemblingManager
-        if mainView is not None and mainView.isCurrentOperationFullCompleted() and assemblingManager.isSwitchingToFreeFarCameraNeeded():
+        if mainView is not None and mainView.isCurrentOperationFullCompleted() and assemblingManager.isSwitchingToFreeFarCameraNeeded() and not assemblingManager.isRewardAssemblingInProgress():
             assemblingManager.switchCameraToMainPosition(isOperationFullCompleted=True, callback=partial(mainView.setAnimationState, AnimationState.CONTINUE_BACK))
         return
 
@@ -235,6 +244,7 @@ class _PersonalMissionsChildState(LobbyState):
     def __init__(self, flags=StateFlags.UNDEFINED):
         super(_PersonalMissionsChildState, self).__init__(flags=flags)
         self._cachedParams = {}
+        self._canOpenOperationPage = True
 
     @property
     def assemblingManager(self):
@@ -247,6 +257,7 @@ class _PersonalMissionsChildState(LobbyState):
         from gui.Scaleform.daapi.view.lobby.store.browser.states import ShopState
         lsm = self.getMachine()
         self.addNavigationTransition(lsm.getStateByCls(OverviewState), record=True)
+        self.addNavigationTransition(lsm.getStateByCls(StylePreviewState), record=True)
         if not isinstance(self, _LoadingState):
             self.addNavigationTransition(lsm.getStateByCls(_LoadingState), record=True)
             lsm.getStateByCls(SubScopeSubLayerState).addNavigationTransition(self)
@@ -255,6 +266,8 @@ class _PersonalMissionsChildState(LobbyState):
     def _onEntered(self, event):
         super(_PersonalMissionsChildState, self)._onEntered(event)
         self._cachedParams = dict(event.params)
+        operationID = self._cachedParams.get('operationID')
+        self._canOpenOperationPage = operationID and canOpenOperationPage(operationID)
 
     def readyToEnter(self):
         mainView = self.getMachine().getRelatedView(self)
@@ -285,9 +298,6 @@ class _LoadingState(_PersonalMissionsChildState, EventsHandler):
     __uiLoader = dependency.instance(IGuiLoader)
     __eventsCache = dependency.descriptor(IEventsCache)
 
-    def __init__(self, flags=StateFlags.UNDEFINED):
-        super(_LoadingState, self).__init__(flags=flags)
-
     def getNavigationDescription(self):
         return LobbyStateDescription()
 
@@ -299,7 +309,7 @@ class _LoadingState(_PersonalMissionsChildState, EventsHandler):
         return eventsTuple + ((self.__uiLoader.windowsManager.onWindowStatusChanged, self.__onWindowStatusChanged),)
 
     def _getListeners(self):
-        return ((PERSONAL_MISSIONS_3_SUB_HANGAR_IS_READY, self.__onSubHangarReady, EVENT_BUS_SCOPE.LOBBY),)
+        return ((PERSONAL_MISSIONS_SUB_HANGAR_IS_READY, self.__onSubHangarReady, EVENT_BUS_SCOPE.LOBBY),)
 
     def _onEntered(self, event):
         super(_LoadingState, self)._onEntered(event)
@@ -333,7 +343,7 @@ class _LoadingState(_PersonalMissionsChildState, EventsHandler):
         if self._cachedParams:
             operationID = self._cachedParams.get('operationID')
             state = self._cachedParams.get('state')
-            operation = self.__eventsCache.getPersonalMissions().getAllOperations(PM_BRANCH.V2_BRANCHES).get(operationID)
+            operation = self.__eventsCache.getPersonalMissions().getAllOperations(PM_BRANCH.WITHOUT_AWARD_LIST_BRANCHES).get(operationID)
             if state == MainScreenState.ASSEMBLING.value:
                 self.assemblingManager.switchCameraToFreePosition(instantly=True)
             elif operation.isFullCompleted():
@@ -341,12 +351,12 @@ class _LoadingState(_PersonalMissionsChildState, EventsHandler):
             elif self.assemblingManager.isSwitchingToTopCameraNeeded():
                 self.assemblingManager.startTopCameraAnimation()
         else:
-            _logger.error('PersonalMissions3LoadingState cachedParams is empty')
+            _logger.error('PersonalMissions3EntryState cachedParams is empty')
 
     def __initAssemblingManager(self):
         mainView = self.getMachine().getRelatedView(self)
         operationID = mainView.getOperationID()
-        operation = self.__eventsCache.getPersonalMissions().getAllOperations(PM_BRANCH.V2_BRANCHES).get(operationID)
+        operation = self.__eventsCache.getPersonalMissions().getAllOperations(PM_BRANCH.WITHOUT_AWARD_LIST_BRANCHES).get(operationID)
         self.assemblingManager.init()
         self.assemblingManager.setHangarProgressionStateOn()
         self.assemblingManager.changeVehicleGO(operationID, getCurrentOperationLastInstalledDetail(operation))
@@ -369,11 +379,14 @@ class ProgressionState(_PersonalMissionsChildState):
 
     def _getNavigationDescriptionTitle(self):
         operationID = self._cachedParams.get('operationID')
-        operation = self.__eventsCache.getPersonalMissions().getAllOperations(PM_BRANCH.V2_BRANCHES).get(operationID)
+        operation = self.__eventsCache.getPersonalMissions().getAllOperations(PM_BRANCH.WITHOUT_AWARD_LIST_BRANCHES).get(operationID)
         return backport.text(R.strings.pages.titles.operation(), operationName=operation.getUserName())
 
     def _onEntered(self, event):
         super(ProgressionState, self)._onEntered(event)
+        if not self._canOpenOperationPage:
+            showHangar()
+            return
         if not self.readyToEnter():
             _LoadingState.goTo(**self._cachedParams)
             return
@@ -385,7 +398,8 @@ class ProgressionState(_PersonalMissionsChildState):
         mainView.setProgressionState()
 
     def _onExited(self):
-        self.assemblingManager.deactivateSelectableLogic()
+        if self._canOpenOperationPage:
+            self.assemblingManager.deactivateSelectableLogic()
         super(ProgressionState, self)._onExited()
 
 
@@ -440,6 +454,9 @@ class AssemblingState(_PersonalMissionsChildState):
 
     def _onEntered(self, event):
         super(AssemblingState, self)._onEntered(event)
+        if not self._canOpenOperationPage:
+            showHangar()
+            return
         SoundGroups.g_instance.playSound2D(SoundsKeys.TO_ASSEMBLING)
         if not self.readyToEnter():
             _LoadingState.goTo(**self._cachedParams)
@@ -448,8 +465,9 @@ class AssemblingState(_PersonalMissionsChildState):
         mainView.setAssemblingState()
 
     def _onExited(self):
-        super(AssemblingState, self)._onExited()
         self._cachedParams.clear()
         self._cachedParams = None
-        SoundGroups.g_instance.playSound2D(SoundsKeys.FROM_ASSEMBLING)
+        if self._canOpenOperationPage:
+            SoundGroups.g_instance.playSound2D(SoundsKeys.FROM_ASSEMBLING)
+        super(AssemblingState, self)._onExited()
         return

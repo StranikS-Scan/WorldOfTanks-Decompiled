@@ -4,7 +4,7 @@ import logging
 import weakref
 import typing
 from enum import Enum
-from frameworks.state_machine import State, StateFlags, StateMachine, StringEventTransition, StringEvent, StateIdsObserver
+from frameworks_common.state_machine import State, StateFlags, StateMachine, StringEventTransition, StringEvent, StateIdsObserver
 _logger = logging.getLogger(__name__)
 
 class BuyAndExchangeStateEnum(Enum):

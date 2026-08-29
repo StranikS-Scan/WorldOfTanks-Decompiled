@@ -8,11 +8,13 @@ from future.utils import viewitems, viewvalues
 import arena_bonus_type_caps
 import constants
 from UnitBase import CMD_NAMES, ROSTER_TYPE, PREBATTLE_TYPE_BY_UNIT_MGR_ROSTER, PREBATTLE_TYPE_BY_UNIT_MGR_ROSTER_EXT, ROSTER_TYPE_TO_CLASS, UNIT_MGR_FLAGS_TO_PREBATTLE_TYPE, UNIT_MGR_FLAGS_TO_UNIT_MGR_ENTITY_NAME, UNIT_MGR_FLAGS_TO_INVITATION_TYPE, QUEUE_TYPE_BY_UNIT_MGR_ROSTER, UNIT_ERROR, VEHICLE_TAGS_GROUP_BY_UNIT_MGR_FLAGS, UNIT_ASSEMBLER_IMPL_TO_CONFIG, PREBATTLE_TYPE_TO_UNIT_ASSEMBLER, UNIT_ASSEMBLER_IMPL_NAMES, UNIT_ASSEMBLER_IMPL_IDS
-from constants import ARENA_GUI_TYPE, ARENA_GUI_TYPE_LABEL, ARENA_BONUS_TYPE, ARENA_BONUS_TYPE_NAMES, ARENA_BONUS_TYPE_IDS, ARENA_BONUS_MASK, QUEUE_TYPE, QUEUE_TYPE_NAMES, PREBATTLE_TYPE, PREBATTLE_TYPE_NAMES, INVITATION_TYPE, BATTLE_MODE_VEHICLE_TAGS, SEASON_TYPE_BY_NAME, SEASON_NAME_BY_TYPE, QUEUE_TYPE_IDS, ARENA_BONUS_TYPE_TO_QUEUE_TYPE, ATTACK_REASONS, ATTACK_REASON_INDICES, DAMAGE_INFO_CODES, DAMAGE_INFO_INDICES, DAMAGE_INFO_CODES_PER_ATTACK_REASON, IS_CLIENT, INBATTLE_CONFIGS
+from constants import ARENA_GUI_TYPE, ARENA_GUI_TYPE_LABEL, ARENA_BONUS_TYPE, ARENA_BONUS_TYPE_NAMES, ARENA_BONUS_TYPE_IDS, ARENA_BONUS_MASK, QUEUE_TYPE, QUEUE_TYPE_NAMES, PREBATTLE_TYPE, PREBATTLE_TYPE_NAMES, INVITATION_TYPE, BATTLE_MODE_VEHICLE_TAGS, SEASON_TYPE_BY_NAME, SEASON_NAME_BY_TYPE, QUEUE_TYPE_IDS, ARENA_BONUS_TYPE_TO_QUEUE_TYPE, ATTACK_REASONS, ATTACK_REASON_INDICES, DAMAGE_INFO_CODES, DAMAGE_INFO_INDICES, DAMAGE_INFO_CODES_PER_ATTACK_REASON, IS_CLIENT, INBATTLE_CONFIGS, IS_DEVELOPMENT, IS_CELLAPP
 from BattleFeedbackCommon import BATTLE_EVENT_TYPE
 from debug_utils import LOG_DEBUG
 from py2to3.patched_future import with_metaclass
 from soft_exception import SoftException
+if typing.TYPE_CHECKING:
+    from typing import Dict, Callable
 
 class ConstInjectorMeta(type):
 
@@ -254,6 +256,50 @@ def addBattleChatCommands(commands):
     if constants.IS_BASEAPP:
         from messenger_helpers_chat2 import ArenaChat
         ArenaChat.addExtendedBattleChatCommands(commands)
+
+
+def addBonusReaders(bonusReaders, personality):
+    import bonus_readers
+    bonusNames = bonusReaders.keys()
+    for bonusName in bonusNames:
+        if bonusName in bonus_readers._BONUS_READERS:
+            raise SoftException('_BONUS_READERS already has bonusName:{bonusName}. Personality: {p}'.format(bonusName=bonusName, p=personality))
+
+    bonus_readers._BONUS_READERS.update(bonusReaders)
+    bonus_readers._SUPPORTED_BONUSES |= frozenset(bonusNames)
+    sortedBonuses = sorted(bonus_readers._SUPPORTED_BONUSES)
+    bonus_readers._SUPPORTED_BONUSES_IDS.update({n:i for i, n in enumerate(sortedBonuses)})
+    bonus_readers._SUPPORTED_BONUSES_NAMES.update(dict(enumerate(sortedBonuses)))
+    LOG_DEBUG('bonusNames:{bonusNames} was added to SUPPORTED_BONUSES. Personality: {p}'.format(bonusNames=bonusNames, p=personality))
+
+
+def addBonusMerger(bonusMergers, personality):
+    from optional_bonuses import BONUS_MERGERS
+    bonusNames = bonusMergers
+    for bonusName in bonusNames:
+        if bonusName in BONUS_MERGERS:
+            raise SoftException('BONUS_MERGERS already has bonusName:{bonusName}. Personality: {p}'.format(bonusName=bonusName, p=personality))
+
+    BONUS_MERGERS.update(bonusMergers)
+    LOG_DEBUG('bonusNames:{bonusNames} was added to BONUS_MERGERS. Personality: {p}'.format(bonusNames=bonusNames, p=personality))
+
+
+def addItemInventoryCheckers(itemName, checker, personality):
+    from optional_bonuses import ITEM_INVENTORY_CHECKERS
+    if itemName in ITEM_INVENTORY_CHECKERS:
+        raise SoftException('ITEM_INVENTORY_CHECKERS already has itemName:{itemName}. Personality: {p}'.format(itemName=itemName, p=personality))
+    ITEM_INVENTORY_CHECKERS.update({itemName: checker})
+    LOG_DEBUG('itemName:{itemName} was added to ITEM_INVENTORY_CHECKERS. Personality: {p}'.format(itemName=itemName, p=personality))
+
+
+def addQuestBonusTypes(bonusNames, personality):
+    from constants import QUEST_BONUS_TYPES
+    for bonusName in bonusNames:
+        if bonusName in QUEST_BONUS_TYPES:
+            raise SoftException('QUEST_BONUS_TYPES already has bonusName:{bonusName}. Personality: {p}'.format(bonusName=bonusName, p=personality))
+
+    QUEST_BONUS_TYPES.update(bonusNames)
+    LOG_DEBUG('bonusNames:{bonusNames} was added to QUEST_BONUS_TYPES. Personality: {p}'.format(bonusNames=bonusNames, p=personality))
 
 
 def initCommonTypes(extConstants, personality):
@@ -631,6 +677,10 @@ class AbstractBattleMode(object):
     def _client_modeHiddenVehiclesCriteria(self):
         return None
 
+    @property
+    def _client_userMissionPlugins(self):
+        return []
+
     def registerHangarEventBanner(self):
         if IS_CLIENT:
             if self._client_hangarEventBannerType is not None:
@@ -662,7 +712,7 @@ class AbstractBattleMode(object):
         self.registerBattleResultsConfig()
 
     def registerVseBattleResultsParser(self):
-        if constants.IS_CELLAPP:
+        if IS_CELLAPP:
             import helpers.VseBattleResultParser
             helpers.VseBattleResultParser.registerVseBattleResultsParser(self._ARENA_BONUS_TYPE, self._VSE_BATTLE_RESULTS_PARSER)
 
@@ -994,7 +1044,7 @@ class AbstractBattleMode(object):
         ARENA_GUI_TYPE.REPLAY_DISABLE_RANGE.append(self._ARENA_GUI_TYPE)
 
     def registerDevReplayMode(self):
-        if not constants.IS_DEVELOPMENT:
+        if not IS_DEVELOPMENT:
             self.registerNonReplayMode()
 
     def registerControlModes(self):
@@ -1027,3 +1077,7 @@ class AbstractBattleMode(object):
     def registerSettingsWindow(self):
         from gui.Scaleform.daapi.view.lobby.lobby_constants import registerSettingsWindow
         registerSettingsWindow(self._PREBATTLE_TYPE, self._CLIENT_SETTINGS_VIEW_ALIAS)
+
+    def registerClientUserMissionPlugins(self):
+        from gui.shared.system_factory import registerUserMissionPlugins
+        registerUserMissionPlugins(self._client_userMissionPlugins)

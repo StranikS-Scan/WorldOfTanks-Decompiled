@@ -5,6 +5,8 @@ import typing
 from account_helpers.settings_core.options import KeyboardSetting
 from constants import PLAYER_RANK
 from frameworks.wulf import Array
+from frameworks.wulf.view.array import fillViewModelsArray
+from frontline_common.frontline_constants import FLBattleReservesModifier
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.impl.gen.view_models.constants.item_highlight_types import ItemHighlightTypes
@@ -14,15 +16,15 @@ from gui.impl.gen.view_models.views.lobby.tank_setup.common.opt_device_ammunitio
 from gui.impl.gen.view_models.views.lobby.tank_setup.common.shell_ammunition_slot import ShellAmmunitionSlot
 from gui.impl.gen.view_models.views.lobby.tank_setup.common.specialization_model import SpecializationModel
 from gui.impl.gen.view_models.views.lobby.tank_setup.tank_setup_constants import TankSetupConstants
-from gui.impl.lobby.tank_setup.tank_setup_helper import getCategoriesMask, NONE_ID
+from gui.impl.lobby.tank_setup.tank_setup_helper import getCategoriesMask, NONE_ID, createShellMechanicsModels
 from helpers import dependency
 from helpers.epic_game import searchRankForSlot
 from items.components.supply_slot_categories import SlotCategories
 from skeletons.gui.battle_session import IBattleSessionProvider
 from skeletons.gui.game_control import IEpicBattleMetaGameController
-from frontline_common.frontline_constants import FLBattleReservesModifier
 if typing.TYPE_CHECKING:
     from gui.shared.gui_items import Vehicle
+_MIN_MECHANIC_PRIORITY = 1
 EMPTY_NAME = 'empty'
 
 class BaseBlock(object):
@@ -246,6 +248,8 @@ class ShellsBlock(BaseBlock):
         model.setImageName(slotItem.descriptor.iconName)
         model.setCount(slotItem.count)
         model.setIntCD(slotItem.intCD)
+        mechanicsModels = createShellMechanicsModels(slotItem.getShellMechanicItems(self._vehicle), minPriority=_MIN_MECHANIC_PRIORITY)
+        fillViewModelsArray(mechanicsModels, model.getMechanics())
 
     def __isAmmoNotFull(self):
         layoutIndex = self._vehicle.shells.setupLayouts.layoutIndex

@@ -11,12 +11,12 @@ from gui.impl.lobby.vehicle_hub.sub_presenters.sub_presenter_base import SubPres
 from gui.shared import events, g_eventBus
 from gui.shared.events import VehicleBuyEvent
 from gui.shared.event_bus import EVENT_BUS_SCOPE
-from gui.shared.event_dispatcher import showBlueprintView, selectVehicleInHangar, showShop
+from gui.shared.event_dispatcher import showBlueprintView, selectVehicleInHangar, showShop, showLootBoxEntry, showLootBoxBuyWindow
 from gui.shared.gui_items.gui_item_economics import getPriceTypeAndValue, ActualPrice
 from gui.shared.gui_items.items_actions import factory
 from gui.shared.money import Currency
 from helpers import dependency
-from skeletons.gui.game_control import ITradeInController, IHeroTankController, IWalletController, IRestoreController
+from skeletons.gui.game_control import ITradeInController, IHeroTankController, IWalletController, IRestoreController, ILootBoxSystemController
 from skeletons.gui.server_events import IEventsCache
 if typing.TYPE_CHECKING:
     from gui.shared.gui_items.Vehicle import Vehicle
@@ -28,6 +28,7 @@ class ResearchPurchaseSubPresenter(SubPresenterBase):
     _heroTanks = dependency.descriptor(IHeroTankController)
     _wallet = dependency.descriptor(IWalletController)
     _eventsCache = dependency.descriptor(IEventsCache)
+    _lootBoxesCtrl = dependency.descriptor(ILootBoxSystemController)
 
     @property
     def viewModel(self):
@@ -47,7 +48,9 @@ class ResearchPurchaseSubPresenter(SubPresenterBase):
          (self.viewModel.onBlueprint, self.__onShowBlueprint),
          (self._itemsCache.onSyncCompleted, self.__onSyncCompleted),
          (self._wallet.onWalletStatusChanged, self.__onWalletStatusChanged),
-         (self._restores.onRestoreChangeNotify, self.__onRestoreChanged))
+         (self._restores.onRestoreChangeNotify, self.__onRestoreChanged),
+         (self._lootBoxesCtrl.onStatusChanged, self.__onLBStatusChanged),
+         (self._lootBoxesCtrl.onBoxesAvailabilityChanged, self.__onLBStatusChanged))
 
     def _getListeners(self):
         return ((VehicleBuyEvent.VEHICLE_SELECTED, self.__onTradeInVehicleToSellSelected, EVENT_BUS_SCOPE.DEFAULT),)
@@ -61,6 +64,7 @@ class ResearchPurchaseSubPresenter(SubPresenterBase):
         stats = self._itemsCache.items.stats
         actionState = ResearchPurchaseModel.ACTION_STATE_ENABLED
         actionStateReason = ''
+        isVehicleInLootbox = False
         currency = ''
         vehPrice = 0
         oldPrice = 0
@@ -85,7 +89,12 @@ class ResearchPurchaseSubPresenter(SubPresenterBase):
             else:
                 action = ResearchPurchaseModel.ACTION_IN_GARAGE
         elif self.__isHeroTank:
-            action = ResearchPurchaseModel.ACTION_PURCHASE_SHOP
+            eventName = self._lootBoxesCtrl.mainEntryPoint
+            if self._heroTanks.getCurrentFromBoxes() and self._lootBoxesCtrl.isAvailable(eventName):
+                action = ResearchPurchaseModel.ACTION_TO_LOOTBOX if self._lootBoxesCtrl.getBoxesCount(eventName) else ResearchPurchaseModel.ACTION_PURCHASE_LOOTBOX
+                isVehicleInLootbox = True
+            else:
+                action = ResearchPurchaseModel.ACTION_PURCHASE_SHOP
             if not (self._heroTanks.getCurrentShopUrl() or self._heroTanks.getCurrentRelatedURL()):
                 actionState = ResearchPurchaseModel.ACTION_STATE_DISABLED
         elif self.currentVehicle.canTradeIn and tradeInVehicleToSell is not None and tradeInVehicleToSell.canTradeOff:
@@ -145,7 +154,7 @@ class ResearchPurchaseSubPresenter(SubPresenterBase):
         model.setPriceDiscount(priceDiscount)
         model.setCurrency(currency)
         model.setTimeLeft(timeLeft)
-        model.setNotInShopVehicle(veh.isDisabledForBuy or veh.isHidden)
+        model.setNotInShopVehicle((veh.isDisabledForBuy or veh.isHidden) and not isVehicleInLootbox)
         model.setElite(veh.isElite)
         model.setPremium(veh.isPremium)
         blueprintData = self._itemsCache.items.blueprints.getBlueprintData(veh.intCD, veh.level)
@@ -213,6 +222,10 @@ class ResearchPurchaseSubPresenter(SubPresenterBase):
             self.__purchaseHeroTank()
         elif action == ResearchPurchaseModel.ACTION_IN_GARAGE:
             selectVehicleInHangar(veh.intCD)
+        elif action == ResearchPurchaseModel.ACTION_PURCHASE_LOOTBOX:
+            showLootBoxBuyWindow(self._lootBoxesCtrl.mainEntryPoint)
+        elif action == ResearchPurchaseModel.ACTION_TO_LOOTBOX:
+            showLootBoxEntry()
 
     @adisp_process
     def __purchaseHeroTank(self):
@@ -239,3 +252,6 @@ class ResearchPurchaseSubPresenter(SubPresenterBase):
     def __onRestoreChanged(self, vehicles):
         if self.currentVehicle.intCD in vehicles:
             self.__fillViewModel()
+
+    def __onLBStatusChanged(self):
+        self.__fillViewModel()

@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: comp7/scripts/client/comp7/gui/training_room_external_handlers.py
+from __future__ import absolute_import
 from account_helpers import isDemonstrator, isDemonstratorExpert
 from comp7.gui.prb_control.entities.limits import Comp7TrainingLimits
 from comp7.gui.prb_control.entities.pre_queue.vehicles_watcher import Comp7VehiclesWatcher

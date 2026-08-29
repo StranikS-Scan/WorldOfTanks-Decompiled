@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: battle_royale/scripts/client/battle_royale/gui/Scaleform/daapi/view/battle/frag_panel.py
+from __future__ import absolute_import
 from gui.Scaleform.daapi.view.meta.FragPanelMeta import FragPanelMeta
 from battle_royale.gui.battle_control.controllers.vehicles_count_ctrl import IVehicleCountListener
 from gui.battle_control.avatar_getter import getArena

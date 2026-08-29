@@ -6,7 +6,7 @@
     <driver></driver>
   </crew>
   <supplySlots>	3 1 1 6 6 6 7 8 8 8	</supplySlots>
-  <postProgressionTree>	role_LT_wheeled	</postProgressionTree>
+  <postProgressionTree>	role_LT_universal	</postProgressionTree>
   <customRoleSlotOptions>	2 4	</customRoleSlotOptions>
   <speedLimits>
     <forward>	80	</forward>
@@ -1186,6 +1186,7 @@
             <collisionModelClient>	vehicles/french/F122_VCS_6x6_TS90/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
           <edgeByVisualModel>	false	</edgeByVisualModel>
+          <muzzleBrake>	HORIZONTAL	</muzzleBrake>
           <camouflage>
             <density>	121.036743 120.891289	</density>
             <aoTextureSize>	512 256	</aoTextureSize>

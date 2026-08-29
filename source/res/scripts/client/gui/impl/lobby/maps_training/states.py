@@ -3,8 +3,8 @@
 import typing
 import WWISE
 from WeakMethod import WeakMethodProxy
-from frameworks.state_machine import StateFlags
-from frameworks.state_machine.transitions import TransitionType
+from frameworks_common.state_machine import StateFlags
+from frameworks_common.state_machine.transitions import TransitionType
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.battle_queue.states import BattleQueueContainerState
 from gui.Scaleform.framework import ScopeTemplates

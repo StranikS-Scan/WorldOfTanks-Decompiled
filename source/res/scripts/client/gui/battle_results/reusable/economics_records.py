@@ -10,9 +10,10 @@ from gui.battle_results.reusable import records
 from gui.battle_results.settings import FACTOR_VALUE
 from gui.shared.money import Currency
 from helpers import dependency
+from helpers.rest_bonus import getRestBonusData
 from renewable_subscription_common.settings_constants import WotPlusTier
 from renewable_subscription_common.settings_helpers import SubscriptionSettingsStorage
-from skeletons.gui.game_control import IWotPlusController
+from skeletons.gui.game_control import IWotPlusController, IRestBonusController
 from skeletons.gui.lobby_context import ILobbyContext
 _DEFAULT_FACTORS = {_CAPS.PREM_CREDITS: FACTOR_VALUE.BASE_CREDITS_FACTOR,
  _CAPS.PREM_XP: FACTOR_VALUE.BASE_XP_FACTOR,
@@ -20,6 +21,19 @@ _DEFAULT_FACTORS = {_CAPS.PREM_CREDITS: FACTOR_VALUE.BASE_CREDITS_FACTOR,
 
 def _getPremiumBonusFactor(factor, bonusCaps, isPremBonusEnabled):
     return factor if isPremBonusEnabled else _DEFAULT_FACTORS[bonusCaps]
+
+
+@dependency.replace_none_kwargs(restBonusCtrl=IRestBonusController)
+def _applyRestBonusToDaily(replay, results, restBonusCtrl=None):
+    if 'dailyXPFactor10' not in replay:
+        return
+    restBonusQuests = restBonusCtrl.restBonusQuests if restBonusCtrl else {}
+    restBonusFactor, restBonusQuestIDs = getRestBonusData(results.get('questsProgress', {}), restBonusQuests)
+    if restBonusFactor:
+        replay['dailyXPFactor10'] = results['dailyXPFactor10'] + int(restBonusFactor * 10)
+        keysToZero = [ appliedName for _, (appliedName, _), _ in replay for questID in restBonusQuestIDs if appliedName.startswith('eventXPFactor100List_' + questID) or appliedName.startswith('eventFreeXPFactor100List_' + questID) ]
+        for key in keysToZero:
+            replay[key] = 0
 
 
 def _updateAdditionalFactorFromReplay(replay, results, setDefault=False):
@@ -151,6 +165,7 @@ class _TmenXPRecordsChains(object):
         hasPremiumPlus = bool(premiumType & PREMIUM_TYPE.PLUS)
         if 'tmenXPReplay' in results and results['tmenXPReplay'] is not None:
             replay = ValueReplay(connector, recordName='tmenXP', replay=results['tmenXPReplay'])
+            _applyRestBonusToDaily(replay, results)
             _updateAdditionalFactorFromReplay(replay, results, setDefault=True)
             self.__updatePremiumXPFactor(replay, results, premType=PREMIUM_TYPE.NONE)
             self.__baseTmenXP.addRecords(records.ReplayRecords(replay))
@@ -343,6 +358,7 @@ class EconomicsRecordsChains(object):
         hasPremiumPlus = bool(premiumType & PREMIUM_TYPE.PLUS)
         if 'xpReplay' in results and results['xpReplay'] is not None:
             replay = ValueReplay(connector, recordName='xp', replay=results['xpReplay'])
+            _applyRestBonusToDaily(replay, results)
             _updateAdditionalFactorFromReplay(replay, results, setDefault=True)
             isHighScope = RECORD_DB_IDS[('max15x15', 'maxXP')] in [ recordID for recordID, _ in results.get('dossierPopUps', []) ]
             self.__updatePremiumXPFactor(replay, results, premType=PREMIUM_TYPE.NONE)
@@ -369,6 +385,7 @@ class EconomicsRecordsChains(object):
             LOG_ERROR('XP replay is not found', results)
         if 'freeXPReplay' in results and results['freeXPReplay'] is not None:
             replay = ValueReplay(connector, recordName='freeXP', replay=results['freeXPReplay'])
+            _applyRestBonusToDaily(replay, results)
             _updateAdditionalFactorFromReplay(replay, results, setDefault=True)
             self.__updatePremiumXPFactor(replay, results, premType=PREMIUM_TYPE.NONE)
             self._baseFreeXP.addRecords(_FreeXPReplayRecords(replay, results['achievementFreeXP']))

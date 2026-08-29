@@ -66,6 +66,14 @@ def isLowChargeShotGun(descr):
     return descr is not None and hasVehicleDescrMechanic(descr, VehicleMechanic.LOW_CHARGE_SHOT)
 
 
+def isShellCalibration(descr):
+    return descr is not None and hasVehicleDescrMechanic(descr, VehicleMechanic.SHELL_CALIBRATION)
+
+
+def isBustleFeedShotGun(descr):
+    return descr is not None and hasVehicleDescrMechanic(descr, VehicleMechanic.BUSTLE_FEED)
+
+
 def isBurstGun(gun):
     return gun.burst != component_constants.DEFAULT_GUN_BURST if gun is not None else False
 

@@ -3,9 +3,9 @@
 from operator import methodcaller
 import WWISE
 from gui.Scaleform.framework.entities.EventSystemEntity import EventSystemEntity
-from gui.server_events.pm_constants import SOUNDS, IS_PM2_QUEST_ENABLED, DISABLED_PM_OPERATIONS, IS_REGULAR_QUEST_ENABLED
+from gui.server_events.pm_constants import SOUNDS
 from helpers import dependency
-from personal_missions import PM_BRANCH
+from personal_missions import PM_BRANCH, PM_SWITCHES
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 
@@ -15,7 +15,7 @@ class _PMNavigationInfo(object):
 
     def __init__(self):
         self.__operationIDs = self._DEFAULT_OPERATIONS.copy()
-        self.__chainIDs = {q:1 for q in PM_BRANCH.V1_BRANCHES}
+        self.__chainIDs = {PM_BRANCH.NAME_TO_TYPE[q]:1 for q in PM_BRANCH.MUTUAL_EXCLUSION_BRANCHES[PM_BRANCH.QUEST_GROUPS.GROUP_1]}
         self.__branch = PM_BRANCH.REGULAR
 
     def getOperationID(self, branchID=None):
@@ -83,9 +83,9 @@ class PersonalMissionsNavigation(EventSystemEntity):
 
     def _onSettingsChanged(self, diff):
         disabledOp = False
-        if DISABLED_PM_OPERATIONS in diff and diff[DISABLED_PM_OPERATIONS]:
-            disabledOp = self.getOperationID() in diff[DISABLED_PM_OPERATIONS].keys()
-        if IS_REGULAR_QUEST_ENABLED in diff and not diff[IS_REGULAR_QUEST_ENABLED] or IS_PM2_QUEST_ENABLED in diff and not diff[IS_PM2_QUEST_ENABLED] or disabledOp:
+        if PM_SWITCHES.DISABLED_PM_OPERATIONS in diff and diff[PM_SWITCHES.DISABLED_PM_OPERATIONS]:
+            disabledOp = self.getOperationID() in diff[PM_SWITCHES.DISABLED_PM_OPERATIONS]
+        if not diff.get(PM_SWITCHES.IS_REGULAR_QUEST_ENABLED, True) or not diff.get(PM_SWITCHES.IS_PM2_QUEST_ENABLED, True) or disabledOp:
             from gui.shared.event_dispatcher import showHangar
             showHangar()
 

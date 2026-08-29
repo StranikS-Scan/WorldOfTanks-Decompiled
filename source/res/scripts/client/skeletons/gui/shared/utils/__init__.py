@@ -104,6 +104,10 @@ class IItemsRequester(requesters.IRequester):
     def tankmenStatsCache(self):
         raise NotImplementedError
 
+    @property
+    def festivity(self):
+        raise NotImplementedError
+
     def requestUserDossier(self, databaseID, callback):
         raise NotImplementedError
 
@@ -320,7 +324,7 @@ class IHangarSpace(object):
     def updateVehicleDescriptor(self, descr):
         raise NotImplementedError
 
-    def updatePreviewVehicle(self, vehicle, outfit=None):
+    def updatePreviewVehicle(self, vehicle, outfit=None, showWaitingBg=True):
         raise NotImplementedError
 
     def removeVehicle(self):
@@ -351,6 +355,12 @@ class IHangarSpace(object):
         raise NotImplementedError
 
     def unlockVehicleSelectable(self, consumer):
+        raise NotImplementedError
+
+    def resetLastUpdatedVehicle(self):
+        raise NotImplementedError
+
+    def setSelectionEnabled(self, enabled):
         raise NotImplementedError
 
 

@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: comp7/scripts/common/comp7_common/comp7_battle_results/comp7.py
+from __future__ import absolute_import
 from battle_results.battle_results_constants import BATTLE_RESULT_ENTRY_TYPE as ENTRY_TYPE
 from comp7_core_common.battle_results.comp7_core import BATTLE_RESULTS as COMP7_BATTLE_RESULTS
 BATTLE_RESULTS = COMP7_BATTLE_RESULTS + [('comp7Rating',

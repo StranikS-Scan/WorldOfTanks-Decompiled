@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: battle_royale/scripts/client/battle_royale/gui/impl/lobby/views/mode_selector/items/battle_royale_mode_selector_item.py
+from __future__ import absolute_import
 from battle_royale.gui.impl.gen.view_models.views.lobby.mode_selector.mode_selector_battle_royale_model import ModeSelectorBattleRoyaleModel
 from battle_royale.gui.impl.gen.view_models.views.lobby.mode_selector.mode_selector_battle_royale_widget_model import BattleRoyaleProgressionStatus
 from battle_royale.gui.impl.lobby.br_helpers.utils import setEventInfo

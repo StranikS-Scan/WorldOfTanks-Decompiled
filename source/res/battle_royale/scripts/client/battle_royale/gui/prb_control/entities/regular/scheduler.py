@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: battle_royale/scripts/client/battle_royale/gui/prb_control/entities/regular/scheduler.py
+from __future__ import absolute_import
 from gui.impl import backport
 from gui.impl.gen import R
 from gui import SystemMessages

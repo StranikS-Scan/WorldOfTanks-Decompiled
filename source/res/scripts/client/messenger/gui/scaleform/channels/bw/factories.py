@@ -4,13 +4,10 @@ from messenger.gui.Scaleform.channels.bw import lobby_controllers
 from messenger.gui.interfaces import IControllerFactory
 from messenger.m_constants import LAZY_CHANNEL
 from messenger.proto.bw import find_criteria
-from messenger.storage import storage_getter
+from messenger.storage import MessengerStorageDescriptor, ChannelsStorage
 
 class LobbyControllersFactory(IControllerFactory):
-
-    @storage_getter('channels')
-    def channelsStorage(self):
-        return None
+    channelsStorage = MessengerStorageDescriptor(ChannelsStorage)
 
     def init(self):
         controllers = []

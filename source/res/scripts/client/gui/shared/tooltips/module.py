@@ -28,7 +28,6 @@ from gui.shared.utils.requesters import REQ_CRITERIA
 from helpers import dependency
 from helpers.i18n import makeString as _ms
 from items.components.supply_slot_categories import SlotCategories
-from items.utils import getVehicleDescriptorWithoutMechanics
 from shared_utils import first
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.game_control import IWotPlusController, ILoadoutController
@@ -744,13 +743,13 @@ class TwoColumnsStatsBlockConstructor(CommonStatsBlockConstructor):
 
     def _packParamBlock(self, paramName, value, highlight):
         vDescr = self.configuration.vehicle.descriptor
-        return formatters.packTextParameterTwoColBlockData(name=params_formatters.formatModuleParamName(paramName, vDescr), value=value[0], value2=value[1], valueWidth=self._valueWidth, padding=formatters.packPadding(left=-3), gap=20, value2Gap=17, highlight=highlight)
+        return formatters.packTextParameterTwoColBlockData(name=params_formatters.formatModuleParamName(paramName, vDescr), leftValue=value[0], rightValue=value[1], valueWidth=self._valueWidth, padding=formatters.packPadding(left=-3), gap=20, valueGap=17, highlight=highlight)
 
     def _getValueComparator(self, vDescr, dropMechanic=True):
-        return super(TwoColumnsStatsBlockConstructor, self)._getValueComparator(getVehicleDescriptorWithoutMechanics(vDescr, VehicleMechanic.LOW_CHARGE_SHOT.value) if dropMechanic else vDescr)
+        return super(TwoColumnsStatsBlockConstructor, self)._getValueComparator(vDescr.defaultVehicleDescr if dropMechanic else vDescr.siegeVehicleDescr)
 
     def _getHeaderBlock(self):
-        return formatters.packTextParameterTwoColWithIconBlockData(leftText=text_styles.middleTitle(backport.text(_MECHANICS_TEXT_ROOT.lowChargeShot.paramsHeader.basic())), rightText=text_styles.middleTitle(backport.text(_MECHANICS_TEXT_ROOT.lowChargeShot.paramsHeader.specific())), icon=backport.image(_MECHANICS_IMAGE_ROOT.lowChargeShot.ability_20x20()), valueWidth=self._valueWidth + 2, padding=formatters.packPadding(left=-4, bottom=8), value2Gap=15, iconPadding=formatters.packPadding(top=2, right=7))
+        return formatters.packTextParameterTwoColWithIconsBlockData(name='', leftValue=text_styles.middleTitle(backport.text(_MECHANICS_TEXT_ROOT.lowChargeShot.paramsHeader.basic())), leftIcon='', rightValue=text_styles.middleTitle(backport.text(_MECHANICS_TEXT_ROOT.lowChargeShot.paramsHeader.specific())), rightIcon=backport.image(_MECHANICS_IMAGE_ROOT.lowChargeShot.modified()), valueWidth=self._valueWidth + 2, valueGap=15, iconPadding=formatters.packPadding(top=2, right=7), padding=formatters.packPadding(left=-4, bottom=8))
 
 
 class ModuleReplaceBlockConstructor(ModuleTooltipBlockConstructor):

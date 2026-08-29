@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: battle_royale/scripts/client/battle_royale/gui/impl/lobby/tooltips/shop_button_tooltip_view.py
+from __future__ import absolute_import
 from battle_royale.gui.impl.gen.view_models.views.lobby.tooltips.shop_button_tooltip_view_model import ShopButtonTooltipViewModel
 from frameworks.wulf import ViewFlags, ViewSettings
 from battle_royale.gui.impl.lobby.br_helpers.utils import setEventInfo

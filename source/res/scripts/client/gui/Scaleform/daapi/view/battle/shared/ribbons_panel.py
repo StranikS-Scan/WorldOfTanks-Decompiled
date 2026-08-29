@@ -40,7 +40,8 @@ _BATTLE_EVENTS_SETTINGS_TO_BATTLE_EFFICIENCY_TYPES = {BATTLE_EVENTS.ENEMY_HP_DAM
                                  _BET.DEALT_DMG_BY_FIRE_CIRCLE,
                                  _BET.DEALT_DMG_BY_CLING_BRANDER,
                                  _BET.DAMAGE_BY_AIRSTRIKE,
-                                 _BET.DAMAGE_BY_ARTILLERY),
+                                 _BET.DAMAGE_BY_ARTILLERY,
+                                 _BET.HE_ROCKET),
  BATTLE_EVENTS.BLOCKED_DAMAGE: (_BET.ARMOR,),
  BATTLE_EVENTS.ENEMY_RAM_ATTACK: (_BET.RAM,),
  BATTLE_EVENTS.ENEMY_BURNING: (_BET.BURN,),
@@ -69,7 +70,8 @@ _BATTLE_EVENTS_SETTINGS_TO_BATTLE_EFFICIENCY_TYPES = {BATTLE_EVENTS.ENEMY_HP_DAM
                                  _BET.MINEFIELD_ZONE,
                                  _BET.DEATH_ZONE,
                                  _BET.STATIC_DEATH_ZONE,
-                                 _BET.FIRE_DAMAGE_ZONE),
+                                 _BET.FIRE_DAMAGE_ZONE,
+                                 _BET.RECEIVED_HE_ROCKET),
  BATTLE_EVENTS.RECEIVED_CRITS: (_BET.RECEIVED_CRITS,),
  BATTLE_EVENTS.ENEMIES_STUN: (_BET.STUN,),
  BATTLE_EVENTS.ENEMY_ASSIST_STUN: (_BET.ASSIST_STUN,),
@@ -233,7 +235,9 @@ _RIBBONS_FMTS = {_BET.CAPTURE: _baseRibbonFormatter,
  _BET.DAMAGE_BY_BATTLESHIP: _singleVehRibbonFormatter,
  _BET.DAMAGE_BY_DESTROYER: _singleVehRibbonFormatter,
  _BET.WEATHER_ZONE: _weatherZoneRibbonFormatter,
- _BET.FIRE_DAMAGE_ZONE: _singleVehRibbonFormatter}
+ _BET.FIRE_DAMAGE_ZONE: _singleVehRibbonFormatter,
+ _BET.HE_ROCKET: _singleVehRibbonFormatter,
+ _BET.RECEIVED_HE_ROCKET: _singleVehRibbonFormatter}
 _DISPLAY_PRECONDITIONS = {_BET.DETECTION: lambda dp, ribbon: dp.getVehicleInfo(ribbon.getVehIDs()[0]).vehicleType.compactDescr > 0}
 
 class BattleRibbonsPanel(RibbonsPanelMeta, IArenaVehiclesController):
@@ -468,7 +472,9 @@ class BattleRibbonsPanel(RibbonsPanelMeta, IArenaVehiclesController):
          [_BET.DAMAGE_BY_DESTROYER, backport.text(R.strings.ingame_gui.efficiencyRibbons.damageByDestroyer())],
          [_BET.PERK, ''],
          [_BET.WEATHER_ZONE, ''],
-         [_BET.FIRE_DAMAGE_ZONE, backport.text(R.strings.ingame_gui.efficiencyRibbons.fireDamageZone())]]
+         [_BET.FIRE_DAMAGE_ZONE, backport.text(R.strings.ingame_gui.efficiencyRibbons.fireDamageZone())],
+         [_BET.HE_ROCKET, backport.text(R.strings.ingame_gui.efficiencyRibbons.heRocket())],
+         [_BET.RECEIVED_HE_ROCKET, backport.text(R.strings.ingame_gui.efficiencyRibbons.receivedHERocket())]]
 
     def __setupView(self):
         ribbonsCfg = self._getRibbonsConfig()

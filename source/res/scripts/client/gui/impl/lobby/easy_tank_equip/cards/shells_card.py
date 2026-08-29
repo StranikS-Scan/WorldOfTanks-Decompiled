@@ -1,8 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/easy_tank_equip/cards/shells_card.py
 import typing
+from frameworks.wulf.view.array import fillViewModelsArray
+from gui.impl.gen.view_models.common.vehicle_mechanic_model import VehicleMechanicModel
 from gui.impl.gen.view_models.views.lobby.easy_tank_equip.shells_preset_slot_model import ShellsPresetSlotModel
 from gui.impl.gen.view_models.views.lobby.easy_tank_equip.shells_preset_model import ShellsPresetModel
+from gui.impl.lobby.common.vehicle_model_helpers import fillVehicleMechanicModel
 from gui.impl.lobby.easy_tank_equip.cards.base_card import BasePreset, BaseCard
 if typing.TYPE_CHECKING:
     from gui.impl.lobby.easy_tank_equip.data_providers.shells_data_provider import ShellsPresetInfo, ShellsPresetSlotInfo
@@ -45,3 +48,10 @@ class ShellsPreset(BasePreset):
         model.setCount(presetSlotInfo.shell.count)
         model.setIconName(presetSlotInfo.shell.descriptor.iconName)
         cls.fillSlotInfoModel(model.info, presetSlotInfo.info)
+        mechanics = []
+        for mechanic in presetSlotInfo.mechanics:
+            mechanicModel = VehicleMechanicModel()
+            fillVehicleMechanicModel(mechanicModel, mechanic)
+            mechanics.append(mechanicModel)
+
+        fillViewModelsArray(mechanics, model.getMechanics())

@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: battle_royale/scripts/client/battle_royale/gui/Scaleform/daapi/view/battle/spawned_bot_msg.py
+from __future__ import absolute_import
 import logging
 import BigWorld
 from gui.Scaleform.daapi.view.common.battle_royale.br_helpers import canVehicleSpawnBot
@@ -18,7 +19,7 @@ class SpawnedBotMsgPlayerMsgs(IProgressionListener, IViewComponentsCtrlListener)
         self.__initialized = False
         self.__started = False
 
-    def setVehicleChanged(self, guiVehicle, newModuleIntCD, vehicleRecreated):
+    def setVehicleChanged(self, _, newModuleIntCD, vehicleRecreated):
         vehicle = BigWorld.player().vehicle
         if not self.__initialized and vehicle and 'observer' not in vehicle.typeDescriptor.type.tags:
             self.__initialized = True

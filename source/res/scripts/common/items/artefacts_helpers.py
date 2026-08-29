@@ -280,7 +280,7 @@ def readKpi(xmlCtx, section):
     for kpiType, subsec in section.items():
         if kpiType not in KPI.Type.ALL():
             _xml.raiseWrongXml(xmlCtx, kpiType, 'unsupported KPI type')
-            return
+            return None
         if kpiType == KPI.Type.ONE_OF:
             kpi.append(KPI(KPI.Name.COMPOUND_KPI, readKpi(xmlCtx, subsec), KPI.Type.ONE_OF))
         if kpiType == KPI.Type.AGGREGATE_MUL:

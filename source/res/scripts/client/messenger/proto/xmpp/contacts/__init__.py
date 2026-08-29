@@ -22,7 +22,7 @@ from messenger.proto.xmpp.gloox_wrapper import ClientEventsHandler, ClientHolder
 from messenger.proto.xmpp.jid import makeContactJID, ContactJID
 from messenger.proto.xmpp.log_output import g_logOutput, CLIENT_LOG_AREA as _LOG
 from messenger.proto.xmpp.xmpp_constants import XMPP_ITEM_TYPE, CONTACT_LIMIT, CONTACT_ERROR_ID, LIMIT_ERROR_ID
-from messenger.storage import storage_getter
+from messenger.storage import MessengerStorageDescriptor, PlayerCtxStorage, UsersStorage
 from predefined_hosts import g_preDefinedHosts
 from skeletons.connection_mgr import IConnectionManager
 from skeletons.gui.battle_session import IBattleSessionProvider
@@ -99,14 +99,8 @@ class _UserPresence(ClientHolder):
 
 
 class VoipHandler(object):
-
-    @storage_getter('users')
-    def usersStorage(self):
-        return None
-
-    @storage_getter('playerCtx')
-    def playerCtx(self):
-        return None
+    usersStorage = MessengerStorageDescriptor(UsersStorage)
+    playerCtx = MessengerStorageDescriptor(PlayerCtxStorage)
 
     def addListeners(self):
         events = g_messengerEvents.voip
@@ -134,6 +128,8 @@ class VoipHandler(object):
 
 
 class ContactsManager(ClientEventsHandler):
+    usersStorage = MessengerStorageDescriptor(UsersStorage)
+    playerCtx = MessengerStorageDescriptor(PlayerCtxStorage)
     __slots__ = ('__seq', '__tasks', '__cooldown', '__presence', '__voip', '__rqRestrictions', '__subsBatch', '__subsRestrictions')
 
     def __init__(self):
@@ -151,14 +147,6 @@ class ContactsManager(ClientEventsHandler):
         g_messengerEvents.onPluginConnectFailed += self.__me_onPluginConnectFailed
         self.usersStorage.onRestoredFromCache += self.__us_onRestoredFromCache
         g_settings.onUserPreferencesUpdated += self.__ms_onUserPreferencesUpdated
-
-    @storage_getter('users')
-    def usersStorage(self):
-        return None
-
-    @storage_getter('playerCtx')
-    def playerCtx(self):
-        return None
 
     def isInited(self):
         return self.__seq.isInited()

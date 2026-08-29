@@ -176,6 +176,14 @@ class ARENAS(object):
     C_120_GRAF_ZEPPELIN_SCC_DESCRIPTION = '#arenas:120_graf_zeppelin_scc/description'
     C_120_GRAF_ZEPPELIN_NAME = '#arenas:120_graf_zeppelin/name'
     C_120_GRAF_ZEPPELIN_DESCRIPTION = '#arenas:120_graf_zeppelin/description'
+    C_28_DESERT_COMP7_NB_NAME = '#arenas:28_desert_comp7_nb/name'
+    C_28_DESERT_COMP7_NB_DESCRIPTION = '#arenas:28_desert_comp7_nb/description'
+    C_115_SWEDEN_COMP7_NB_NAME = '#arenas:115_sweden_comp7_nb/name'
+    C_115_SWEDEN_COMP7_NB_DESCRIPTION = '#arenas:115_sweden_comp7_nb/description'
+    C_35_STEPPES_COMP7_NB_NAME = '#arenas:35_steppes_comp7_nb/name'
+    C_35_STEPPES_COMP7_NB_DESCRIPTION = '#arenas:35_steppes_comp7_nb/description'
+    C_128_LAST_FRONTIER_V_COMP7_NB_NAME = '#arenas:128_last_frontier_v_comp7_nb/name'
+    C_128_LAST_FRONTIER_V_COMP7_NB_DESCRIPTION = '#arenas:128_last_frontier_v_comp7_nb/description'
     ALL_ENUM = (TYPE_CTF_NAME,
      TYPE_CTF_DESCRIPTION,
      TYPE_DOMINATION_NAME,
@@ -348,7 +356,15 @@ class ARENAS(object):
      C_120_GRAF_ZEPPELIN_SCC_NAME,
      C_120_GRAF_ZEPPELIN_SCC_DESCRIPTION,
      C_120_GRAF_ZEPPELIN_NAME,
-     C_120_GRAF_ZEPPELIN_DESCRIPTION)
+     C_120_GRAF_ZEPPELIN_DESCRIPTION,
+     C_28_DESERT_COMP7_NB_NAME,
+     C_28_DESERT_COMP7_NB_DESCRIPTION,
+     C_115_SWEDEN_COMP7_NB_NAME,
+     C_115_SWEDEN_COMP7_NB_DESCRIPTION,
+     C_35_STEPPES_COMP7_NB_NAME,
+     C_35_STEPPES_COMP7_NB_DESCRIPTION,
+     C_128_LAST_FRONTIER_V_COMP7_NB_NAME,
+     C_128_LAST_FRONTIER_V_COMP7_NB_DESCRIPTION)
 
     @classmethod
     def all(cls, key0):

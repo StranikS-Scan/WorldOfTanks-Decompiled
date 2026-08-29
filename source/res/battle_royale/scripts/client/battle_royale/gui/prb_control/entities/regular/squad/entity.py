@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: battle_royale/scripts/client/battle_royale/gui/prb_control/entities/regular/squad/entity.py
+from __future__ import absolute_import
 from constants import PREBATTLE_TYPE, QUEUE_TYPE
 from battle_royale.gui.constants import BattleRoyaleSubMode
 from battle_royale.gui.impl.lobby.br_helpers.utils import isBattleResultsStateEntered

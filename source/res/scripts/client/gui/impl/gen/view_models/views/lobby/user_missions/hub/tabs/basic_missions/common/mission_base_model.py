@@ -7,14 +7,14 @@ from gui.impl.gen.view_models.views.lobby.user_missions.common.base_quest_model 
 class MissionBaseModel(BaseQuestModel):
     __slots__ = ()
 
-    def __init__(self, properties=10, commands=0):
+    def __init__(self, properties=11, commands=0):
         super(MissionBaseModel, self).__init__(properties=properties, commands=commands)
 
     def getBonuses(self):
-        return self._getArray(9)
+        return self._getArray(10)
 
     def setBonuses(self, value):
-        self._setArray(9, value)
+        self._setArray(10, value)
 
     @staticmethod
     def getBonusesType():

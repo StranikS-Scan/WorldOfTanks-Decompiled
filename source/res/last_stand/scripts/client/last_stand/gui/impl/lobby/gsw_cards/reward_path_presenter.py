@@ -3,6 +3,7 @@
 from __future__ import absolute_import
 import typing
 from gui.impl.gen import R
+from gui.impl.lobby.user_missions.hangar_widget.presenters.base_child_presenter import UserMissionChildPresenter
 from gui.impl.lobby.user_missions.hangar_widget.tooltip_positioner import TooltipPositionerMixin
 from gui.impl.pub.view_component import ViewComponent
 from helpers import dependency
@@ -15,7 +16,7 @@ from last_stand.skeletons.ls_artefacts_controller import ILSArtefactsController
 if typing.TYPE_CHECKING:
     from frameworks.wulf import ViewEvent, View
 
-class RewardPathCardPresenter(TooltipPositionerMixin, LastStandOverlapCtrlMixin, ViewComponent[RewardPathViewModel]):
+class RewardPathCardPresenter(UserMissionChildPresenter, TooltipPositionerMixin, LastStandOverlapCtrlMixin, ViewComponent[RewardPathViewModel]):
     lsArtefactsCtrl = dependency.descriptor(ILSArtefactsController)
 
     def __init__(self):

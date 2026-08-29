@@ -2184,7 +2184,6 @@
           </pitchLimits>
           <invisibilityFactorAtShot>	0.18	</invisibilityFactorAtShot>
           <turretYawLimits>	-180 180	</turretYawLimits>
-          <multiGunEffects>	shot_dualgun1_large_mb_L shot_dualgun1_large_mb_R	</multiGunEffects>
           <dualGun>
             <chargeTime>	2.5	</chargeTime>
             <shootImpulse>	200	</shootImpulse>
@@ -2195,6 +2194,9 @@
             <afterShotDelay>	1	</afterShotDelay>
             <preChargeIndication>	0.25	</preChargeIndication>
           </dualGun>
+          <prefabs>
+            <main>	content/CGFPrefabs/Vehicle/guns/ussr/gun_122mm_M62_T2D.prefab	</main>
+          </prefabs>
           <models>
             <undamaged>	vehicles/russian/R169_ST_II/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/russian/R169_ST_II/crash/lod0/Gun_01.model	</destroyed>
@@ -2304,6 +2306,7 @@
               </R169_ST_II_BXI_3DSt>
             </sets>
           </drivenJoints>
+          <muzzleBrake>	HORIZONTAL	</muzzleBrake>
           <camouflage>
             <density>	94.4695 94.478	</density>
             <aoTextureSize>	512 256	</aoTextureSize>

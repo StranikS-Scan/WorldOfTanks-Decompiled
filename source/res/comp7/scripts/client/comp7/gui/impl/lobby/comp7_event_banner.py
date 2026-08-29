@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: comp7/scripts/client/comp7/gui/impl/lobby/comp7_event_banner.py
+from __future__ import absolute_import
 import weakref
 from account_helpers.AccountSettings import COMP7_BANNER_FIRST_APPEARANCE_TIMESTAMP
 from comp7_core.gui.impl.lobby.event_banner import Comp7CoreEventBanner

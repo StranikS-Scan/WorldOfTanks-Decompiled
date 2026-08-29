@@ -9,7 +9,7 @@ from Math import Vector3, Vector4, Matrix
 from constants import VEHICLE_HIT_EFFECT
 from debug_utils import LOG_CODEPOINT_WARNING, LOG_DEBUG_DEV
 from items import vehicles
-from helpers_common import decodeSegment, getComponentIndexFromEncodedSegment, HitParamsEncoder, decodeStickerIdData
+from helpers_common import decodeSegment, getComponentIndexFromEncodedSegment, HitParamsEncoder
 from vehicle_systems.tankStructure import TankPartIndexes, TankPartNames
 if typing.TYPE_CHECKING:
     from Entity import PyFixedDictDataInstance
@@ -70,21 +70,27 @@ class DamageFromShotDecoder(object):
                 startPoint = endPoint - hitRay
         if distance < 0.0:
             LOG_DEBUG_DEV('No hit collision found')
-            return
+            return None
         else:
             minDist = distance
             hitDir = endPoint - startPoint
             hitDir.normalise()
             hitPoint = startPoint + hitDir * minDist
-            isDynCollision = compIdx > collisionComponent.maxStaticPartIndex
-            if isDynCollision:
-                parentCompIdx = collisionComponent.getParentPartIndex(compIdx)
-                if parentCompIdx is not None:
-                    childTransform = collisionComponent.getPartTransform(compIdx)
-                    invParentTransform = collisionComponent.getPartTransform(parentCompIdx)
-                    invParentTransform.invertOrthonormal()
-                    hitPoint = invParentTransform.applyPoint(childTransform.applyPoint(hitPoint))
-                    hitDir = invParentTransform.applyVector(childTransform.applyVector(hitDir))
+            return (hitPoint, hitDir, normal)
+
+    @classmethod
+    def convertDynCollisionToParentCtx(cls, collisionRes, compIdx, collisionComponent):
+        if compIdx <= collisionComponent.maxStaticPartIndex:
+            return collisionRes
+        else:
+            hitPoint, hitDir, normal = collisionRes
+            parentCompIdx = collisionComponent.getParentPartIndex(compIdx)
+            if parentCompIdx is not None:
+                childTransform = collisionComponent.getPartTransform(compIdx)
+                invParentTransform = collisionComponent.getPartTransform(parentCompIdx)
+                invParentTransform.invertOrthonormal()
+                hitPoint = invParentTransform.applyPoint(childTransform.applyPoint(hitPoint))
+                hitDir = invParentTransform.applyVector(childTransform.applyVector(hitDir))
             return (hitPoint, hitDir, normal)
 
     @classmethod
@@ -100,7 +106,7 @@ class DamageFromShotDecoder(object):
             collisionResult = DamageFromShotDecoder.collideHitPoint(compIdx, startPoint, endPoint, collisionComponent)
             if collisionResult is None:
                 continue
-            hitPoint, hitDir, normal = collisionResult
+            hitPoint, hitDir, normal = DamageFromShotDecoder.convertDynCollisionToParentCtx(collisionResult, compIdx, collisionComponent)
             componentName = cls.getPartName(compIdx, collisionComponent)
             isDynCollision = compIdx > collisionComponent.maxStaticPartIndex
             if isDynCollision:
@@ -164,11 +170,12 @@ class DamageFromShotDecoder(object):
         if parsedHitPoint is None:
             return
         else:
-            componentIdx, data, segStart, segEnd, hitType, shellType, caliber = parsedHitPoint
+            componentIdx, contextData, segStart, segEnd, hitType, shellType, caliber = parsedHitPoint
             segStart, segEnd = resizeSegment(segStart, segEnd, segLength)
-            stickerID, isParametrized = decodeStickerIdData(data)
-            data = DamageStickerData(componentIdx, segStart, segEnd, isParametrized, caliber, hitType, shellType)
-            return (stickerID, data)
+            stickerID = contextData
+            prefabEffIndex = HitParamsEncoder.getPrefabEffIndex(hitPoint['params'])
+            data = DamageStickerData(componentIdx, segStart, segEnd, caliber, hitType, shellType)
+            return (stickerID, prefabEffIndex, data)
 
 
 class RepaintParams(object):

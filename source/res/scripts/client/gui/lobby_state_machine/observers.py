@@ -5,8 +5,8 @@ import logging
 import weakref
 from functools import partial
 import typing
-from frameworks.state_machine import BaseStateObserver, State
-from frameworks.state_machine.visitor import isDescendantOf
+from frameworks_common.state_machine import BaseStateObserver, State
+from frameworks_common.state_machine.visitor import isDescendantOf
 from frameworks.wulf import WindowStatus
 from gui.lobby_state_machine.events import _BackNavigationGeneratedNavigationEvent
 from gui.lobby_state_machine.recorded_states import _RecordedStates
@@ -128,7 +128,7 @@ class _ViewKillingObserver(BaseStateObserver):
                 self.__subTopsToKill = set()
             else:
                 for subTop in set(self.__subTopsToKill):
-                    viewInStateHistory = self.__recordedStates.contains(lambda s, _: s.getViewKey() == subTop)
+                    viewInStateHistory = self.__recordedStates.contains(lambda s, _, _subTop=subTop: s.getViewKey() == _subTop)
                     if not viewInStateHistory:
                         self.__viewKeysToKill.add(subTop)
                         self.__subTopsToKill.remove(subTop)

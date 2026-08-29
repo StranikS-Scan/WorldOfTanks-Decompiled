@@ -6,9 +6,10 @@ def parseAllOfSection(data):
     slots = {}
     if data:
         for idx, slotsData in enumerate(data):
-            probability, bonuses = parseSlotSection(slotsData)
+            probability, bonuses, name = parseSlotSection(slotsData)
             slot = slots.setdefault(idx, {})
             slot.setdefault('probability', probability)
+            slot.setdefault('name', name)
             slot.setdefault('bonuses', bonuses)
 
     return slots
@@ -17,8 +18,9 @@ def parseAllOfSection(data):
 def parseSlotSection(data):
     if isinstance(data, tuple) and len(data) == 4:
         probability, _, _, rawData = data
-        return (probability, parseGroupsSection(rawData))
-    return (0, [])
+        name = (rawData.get('properties') or {}).get('name') or ''
+        return (probability, parseGroupsSection(rawData), name)
+    return (0, [], '')
 
 
 def parseGroupsSection(data):

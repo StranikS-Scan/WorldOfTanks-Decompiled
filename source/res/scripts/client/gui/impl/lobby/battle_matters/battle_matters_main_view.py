@@ -252,9 +252,10 @@ class BattleMattersMainView(ViewImpl):
     def __updateQuestProgress(self, questProgressModel, regularQuests):
         totalQuests = len(regularQuests)
         countCompletedQuests = self.__battleMattersController.getCompletedBattleMattersQuestsCount()
+        finalQuest = self.__battleMattersController.getFinalQuest()
         questProgressModel.setTotalQuests(totalQuests)
         questProgressModel.setCountCompleted(countCompletedQuests)
-        questProgressModel.setMainRewardReceived(self.__battleMattersController.getFinalQuest().isCompleted())
+        questProgressModel.setMainRewardReceived(finalQuest and finalQuest.isCompleted())
         questProgressModel.setLastSeenProgress(self.__settingsCore.serverSettings.getBattleMattersQuestWasShowed())
         quests = self.__battleMattersController.getIntermediateQuests()[:-1]
         intermediateQuests = questProgressModel.getIntermediateQuests()

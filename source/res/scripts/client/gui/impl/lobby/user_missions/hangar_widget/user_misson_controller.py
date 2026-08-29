@@ -1,15 +1,18 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/user_missions/hangar_widget/user_misson_controller.py
+from __future__ import absolute_import
+import typing
 import Event
 from PlayerEvents import g_playerEvents
 from config_schemas.umg import WeightsModel
 from config_schemas.umg import umgMissionsConfigSchema
 from config_schemas.umg_config import umgConfigSchema
-from gui.impl.lobby.user_missions.hangar_widget.providers.quest_providers import DailyQuestProvider, PremiumQuestProvider, WeeklyQuestProvider, QuestProviderBase
+from gui.impl.lobby.user_missions.hangar_widget.providers.quest_providers import DailyQuestProvider, PremiumQuestProvider, WeeklyQuestProvider
 from helpers import dependency
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.game_control import IGameSessionController
-import typing
+if typing.TYPE_CHECKING:
+    from gui.impl.lobby.user_missions.hangar_widget.providers.quest_providers import QuestProviderBase
 
 class MissionLoader(object):
     __slots__ = ('providers',)

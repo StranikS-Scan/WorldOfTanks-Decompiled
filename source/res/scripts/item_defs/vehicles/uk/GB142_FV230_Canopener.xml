@@ -1708,7 +1708,6 @@
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <aimingTime>	2	</aimingTime>
-          <multiGunEffects>	shot_dualgun1_large_mb_L shot_dualgun1_large_mb_R	</multiGunEffects>
           <twinGun>
             <afterShotDelay>	1	</afterShotDelay>
             <twinGunReloadTime>	20	</twinGunReloadTime>
@@ -1828,6 +1827,7 @@
             <collisionModelServer>	vehicles/british/GB142_FV230_Canopener/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/british/GB142_FV230_Canopener/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <muzzleBrake>	VERTICAL	</muzzleBrake>
           <camouflage>
             <density>	128.730453 128.994751	</density>
             <aoTextureSize>	1024 512	</aoTextureSize>

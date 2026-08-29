@@ -290,7 +290,7 @@ class BombersWing(CallbackDelayer):
         prevSpeed = defaultSpeed
         prevSpeedSq = prevSpeed * prevSpeed
         prevPointTime = bombingEndTime
-        for _, position in enumerate(positions):
+        for position in positions:
             distDelta = (position - prevPosition).length
             velocityDir = position - prevPosition
             velocityDir /= distDelta

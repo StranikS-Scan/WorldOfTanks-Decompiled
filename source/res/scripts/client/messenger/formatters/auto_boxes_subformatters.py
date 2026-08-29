@@ -10,8 +10,8 @@ from gui.lootbox_system.base.awards import preformatRewardsInfo
 from gui.lootbox_system.base.common import TEXT_RESOURCE_PREFIX, NotificationPathPart, getTextResource, DEFAULT_EVENT_NAME
 from gui.server_events.bonuses import getMergedBonusesFromDicts
 from gui.shared.gui_items.dossier import getAchievementFactory
-from gui.shared.gui_items.loot_box import ALL_LUNAR_NY_LOOT_BOX_TYPES, WTLootBoxes, NewYearLootBoxes
-from gui.shared.notifications import NotificationGroup, NotificationPriorityLevel
+from gui.shared.gui_items.loot_box import ALL_LUNAR_NY_LOOT_BOX_TYPES, WTLootBoxes
+from gui.shared.notifications import NotificationPriorityLevel
 from helpers import dependency
 from messenger import g_settings
 from messenger.formatters.service_channel import LootBoxAchievesFormatter, QuestAchievesFormatter, ServiceChannelFormatter, WaitItemsSyncFormatter
@@ -100,71 +100,6 @@ class EventBoxesFormatter(AsyncAutoLootBoxSubFormatter):
             boxes.append(backport.text(self._getTextResPath().counter(), boxName=box.getUserName(), count=message.data[boxID]['count']))
 
         return ', '.join(boxes)
-
-
-class NYPostEventBoxesFormatter(AsyncAutoLootBoxSubFormatter):
-    __MESSAGE_TEMPLATE = 'LootBoxesAutoOpenMessage'
-    __REWARDS_TEMPLATE = 'LootBoxRewardsSysMessage'
-    __REQUIERED_BOX_TYPES = {NewYearLootBoxes.COMMON, NewYearLootBoxes.PREMIUM, NewYearLootBoxes.SPECIAL}
-
-    @adisp_async
-    @adisp_process
-    def format(self, message, callback):
-        isSynced = yield self._waitForSyncItems()
-        if isSynced:
-            openedBoxesIDs = self.getBoxesOfThisGroup(message.data)
-            callback([self.__getMainMessage(message, openedBoxesIDs), self.__getRewardsMessage(message, openedBoxesIDs)])
-        else:
-            callback([MessageData(None, None)])
-        return
-
-    @classmethod
-    def _isBoxOfThisGroup(cls, boxID):
-        return cls._isBoxOfRequiredTypes(boxID, cls.__REQUIERED_BOX_TYPES)
-
-    def __getMainMessage(self, message, openedBoxesIDs):
-        count = backport.text(R.strings.messenger.serviceChannelMessages.lootBoxesAutoOpen.counter(), count=sum((message.data[boxId]['count'] for boxId in openedBoxesIDs)))
-        oldStyleCount = {bID:message.data[bID]['count'] for bID in openedBoxesIDs}
-        rewards = getRewardsForBoxes(message, openedBoxesIDs)
-        formatted = g_settings.msgTemplates.format(self.__MESSAGE_TEMPLATE, ctx={'count': count}, data={'savedData': {'rewards': rewards,
-                       'boxIDs': oldStyleCount}})
-        settings = self._getGuiSettings(message, self.__MESSAGE_TEMPLATE)
-        settings.groupID = NotificationGroup.OFFER
-        settings.showAt = BigWorld.time()
-        return MessageData(formatted, settings)
-
-    def __getRewardsMessage(self, message, openedBoxesIDs):
-        allRewards = getRewardsForBoxes(message, openedBoxesIDs)
-        fmt = self._achievesFormatter.formatQuestAchieves(allRewards, asBattleFormatter=False, processTokens=False)
-        formattedRewards = g_settings.msgTemplates.format(self.__REWARDS_TEMPLATE, ctx={'text': fmt})
-        settingsRewards = self._getGuiSettings(message, self.__REWARDS_TEMPLATE)
-        settingsRewards.showAt = BigWorld.time()
-        return MessageData(formattedRewards, settingsRewards)
-
-
-class NYGiftSystemSurpriseFormatter(AsyncAutoLootBoxSubFormatter):
-    __MESSAGE_TEMPLATE = 'NYSpecialLootBoxesAutoOpenMessage'
-    __REQUIERED_BOX_TYPES = {NewYearLootBoxes.SPECIAL_AUTO}
-
-    @adisp_async
-    @adisp_process
-    def format(self, message, callback):
-        isSynced = yield self._waitForSyncItems()
-        if isSynced:
-            openedBoxesIDs = self.getBoxesOfThisGroup(message.data)
-            rewards = getRewardsForBoxes(message, openedBoxesIDs)
-            fmt = self._achievesFormatter.formatQuestAchieves(rewards, asBattleFormatter=False, processTokens=False)
-            formattedData = g_settings.msgTemplates.format(self.__MESSAGE_TEMPLATE, ctx={'achieves': fmt})
-            settings = self._getGuiSettings(message, self.__MESSAGE_TEMPLATE)
-            settings.showAt = BigWorld.time()
-            callback([MessageData(formattedData, settings)])
-        else:
-            callback([MessageData(None, None)])
-        return
-
-    @classmethod
-    def _isBoxOfThisGroup(cls, boxID):
-        return cls._isBoxOfRequiredTypes(boxID, cls.__REQUIERED_BOX_TYPES)
 
 
 class LunarNYEnvelopeAutoOpenFormatter(AsyncAutoLootBoxSubFormatter):

@@ -28,7 +28,7 @@ from gui.shared.utils.scheduled_notifications import Notifiable, PeriodicNotifie
 from live_tags_constants import LIVE_TAG_TYPES
 from messenger.proto.events import g_messengerEvents
 from messenger.proto.shared_find_criteria import MutedFindCriteria, IgnoredFindCriteria
-from messenger.storage import storage_getter
+from messenger.storage import MessengerStorageDescriptor, PlayerCtxStorage, UsersStorage
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.game_control import IPlatoonController, ICommendationsController, IAnonymizerController
 from skeletons.gui.goodies import IBoostersStateProvider
@@ -53,8 +53,6 @@ if typing.TYPE_CHECKING:
     from gui.battle_control.arena_info.arena_dp import ArenaDataProvider
     from frameworks.wulf import Array
     from gui.battle_control.controllers.battle_field_ctrl import BattleFieldCtrl
-    from messenger.storage.UsersStorage import UsersStorage
-    from messenger.storage.PlayerCtxStorage import PlayerCtxStorage
     from gui.prb_control.invites import InvitesManager
     from gui.goodies.booster_state_provider import BoosterStateProvider
     from gui.game_control.platoon_controller import PlatoonController
@@ -87,6 +85,9 @@ def checkArenaDataProvider(func):
             return func(*args, **kwargs)
         except AttributeError:
             _logger.debug('[TabView] Trying to load tab view without arena data provider')
+            return None
+
+        return None
 
     return wrapper
 
@@ -112,6 +113,8 @@ class TabView(ViewImpl):
     sessionProvider = dependency.descriptor(IBattleSessionProvider)
     commendationsCtrl = dependency.descriptor(ICommendationsController)
     anonymizerController = dependency.descriptor(IAnonymizerController)
+    usersStorage = MessengerStorageDescriptor(UsersStorage)
+    playerCtx = MessengerStorageDescriptor(PlayerCtxStorage)
 
     def __init__(self, layoutID):
         viewSettings = ViewSettings(layoutID)
@@ -131,14 +134,6 @@ class TabView(ViewImpl):
     @property
     def battleField(self):
         return self.sessionProvider.dynamic.battleField
-
-    @storage_getter('users')
-    def usersStorage(self):
-        return None
-
-    @storage_getter('playerCtx')
-    def playerCtx(self):
-        return None
 
     @prbInvitesProperty
     def prbInvites(self):

@@ -316,6 +316,8 @@ def _set_EPIC_BATTLE_STATS_DEPENDENCIES():
     pass
 
 
+PLAYER_BADGES_DEPENDENCIES = {}
+
 def _updateMedalCarius(dossierDescr, dossierBlockDescr, key, value, prevValue):
     frags = 0
     for block in ('a15x15', 'a7x7', 'historical', 'fortBattles', 'fortSorties', 'globalMapCommon', 'globalMapMiddle', 'globalMapChampion', 'globalMapAbsolute', 'a30x30'):

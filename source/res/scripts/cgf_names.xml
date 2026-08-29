@@ -14,7 +14,14 @@
     <name>	vehicle/gun/lowChargeShot/fullShotChangeTime	</name>
     <name>	vehicle/gun/lastSingleShotTimeServer	</name>
     <name>	vehicle/gun/lastShotPropellantProgress	</name>
+    <name>	vehicle/secondaryGun/isReloaded	</name>
+    <name>	vehicle/secondaryGun/reloadStartTime	</name>
     <name>	vehicle/gun/lastShotEvent	</name>
+    <name>	vehicle/gun/groupIndex	</name>
+    <name>	vehicle/gun/shellParamsSwitcher/isActive	</name>
+    <name>	vehicle/gun/shellParamsSwitcher/lastActiveShotTimestamp	</name>
+    <name>	vehicle/bustleFeed/side	</name>
+    <name>	vehicle/bustleFeed/shell	</name>
     <name>	hit/projectile/caliber	</name>
     <name>	hit/projectile/speed	</name>
     <name>	hit/projectile/shellType	</name>
@@ -24,11 +31,15 @@
     <name>	hit/armorPlacement	</name>
     <name>	hit/matKind	</name>
     <name>	hit/obstacleType	</name>
+    <name>	system/particleQuality	</name>
+    <name>	system/smokeRateParticleQuality	</name>
+    <name>	system/sparksRateParticleQuality	</name>
     <name>	groundwave/distanceToTerrain	</name>
     <name>	groundwave/terrainMatKind	</name>
     <name>	damageSticker/isActive	</name>
     <name>	damageSticker/rotation	</name>
     <name>	damageSticker/angled	</name>
+    <name>	damageSticker/halfVecHN	</name>
     <name>	aux/energy	</name>
     <name>	aux/energyCoef	</name>
     <name>	aux/emissionSize	</name>
@@ -37,6 +48,24 @@
     <name>	aux/hitSmokeScale	</name>
     <name>	aux/hitSparksEmissionRateScale	</name>
     <name>	aux/hitSparksStartSpeedScale	</name>
+    <name>	aux/hitNormalDOT	</name>
+    <name>	armorHit/VFXPenetrationScaleHC	</name>
+    <name>	armorHit/approxAvarageDamageByCaliber	</name>
     <name>	system/particleQuality	</name>
+    <name>	sectorVision/length	</name>
+    <name>	sectorVision/width	</name>
+    <name>	sectorVision/opacity	</name>
+    <name>	sectorVision/duration	</name>
+    <name>	sectorVision/minsize	</name>
+    <name>	aux/hitDamageScaleHE	</name>
   </variables>
+  <sequenceEvents>
+    <name>	sequenceEvents/onAnimation	</name>
+    <name>	sequenceEvents/onStartPbhStage	</name>
+    <name>	sequenceEvents/onPbhEnds	</name>
+    <name>	sequenceEvents/onFocusCamera0	</name>
+    <name>	sequenceEvents/onFocusCamera1	</name>
+    <name>	sequenceEvents/onFocusCamera2	</name>
+    <name>	sequenceEvents/onPetHighlightAnim	</name>
+  </sequenceEvents>
 </cgf_names.xml>

@@ -4,7 +4,7 @@ from __future__ import absolute_import
 import logging
 from functools import partial
 import typing
-from frameworks.state_machine import StateFlags
+from frameworks_common.state_machine import StateFlags
 from gui import SystemMessages
 from gui.Scaleform.framework.entities.View import ViewKey
 from gui.impl import backport

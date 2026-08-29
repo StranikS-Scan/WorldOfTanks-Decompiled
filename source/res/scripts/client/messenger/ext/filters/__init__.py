@@ -3,10 +3,11 @@
 from gui import GUI_SETTINGS
 from messenger import g_settings
 from messenger.ext.filters import chain, collection
-from messenger.storage import storage_getter
+from messenger.storage import MessengerStorageDescriptor, PlayerCtxStorage
 __all__ = ('MessageFiltersChain',)
 
 class MessageFiltersChain(chain.FiltersChain):
+    playerCtx = MessengerStorageDescriptor(PlayerCtxStorage)
 
     def __init__(self):
         inFilters = [{'name': 'htmlEscape',
@@ -18,10 +19,6 @@ class MessageFiltersChain(chain.FiltersChain):
           'order': 0,
           'lock': False}]
         super(MessageFiltersChain, self).__init__(inFilters, outFilters)
-
-    @storage_getter('playerCtx')
-    def playerCtx(self):
-        return None
 
     def init(self):
         g_settings.onUserPreferencesUpdated += self.__ms_onUserPreferencesUpdated

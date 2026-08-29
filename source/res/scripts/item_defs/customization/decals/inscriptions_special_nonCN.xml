@@ -885,4 +885,27 @@
       </exclude>
     </vehicleFilter>
   </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:inscription/special	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	inscriptions 50g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <nations>	germany	</nations>
+      </include>
+      <exclude>
+        <tags>	excluded_from_customization	</tags>
+      </exclude>
+    </vehicleFilter>
+    <decal>
+      <id>	1355	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_879.dds	</texture>
+      <userString>	#vehicle_customization:special_style/german_tanks_event	</userString>
+      <tags>	styleOnly	</tags>
+      <mirror>	false	</mirror>
+    </decal>
+    <name>	German Tanks Event	</name>
+    <type>	INSCRIPTION	</type>
+  </itemGroup>
 </inscriptions_special_nonCN.xml>

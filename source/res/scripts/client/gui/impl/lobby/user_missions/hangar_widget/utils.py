@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/user_missions/hangar_widget/utils.py
+from __future__ import absolute_import
 import typing
-from abc import ABCMeta
 from gui.Scaleform.genConsts.MISSIONS_STATES import MISSIONS_STATES
 from gui.impl.gen.view_models.views.lobby.user_missions.hub.tabs.basic_missions.daily.daily_mission_model import DailyMissionModel
 from gui.impl import backport
@@ -20,13 +20,12 @@ if typing.TYPE_CHECKING:
     from gui.impl.lobby.user_missions.hangar_widget.providers.user_mission_item import WeeklyQuestMissionItem
 
 class MissionItemPacker(object):
-    __metaclass__ = ABCMeta
 
     def _getFirstConditionModelFromQuestModel(self, dailyQuestModel):
         raise NotImplementedError
 
     @dependency.replace_none_kwargs(eventsCache=IEventsCache)
-    def packMissionItem(self, model, raw, eventsCache=None):
+    def packMissionItem(self, model, raw, readyForAnimation=True, eventsCache=None):
 
         def setDescription(viewModel, questModel):
             condinionalModel = questModel.postBattleCondition if questModel.postBattleCondition.getItems() else questModel.bonusCondition
@@ -42,14 +41,19 @@ class MissionItemPacker(object):
         questUIPacker = getEventUIDataPacker(raw)
         fullQuestModel = questUIPacker.pack()
         isCompleted = fullQuestModel.getStatus().value == MISSIONS_STATES.COMPLETED
-        model.setIsCompleted(isCompleted)
-        model.setAnimateCompletion(eventsCache.questsProgress.getQuestCompletionChanged(raw.getID()))
+        hasPendingAmimateCompletion = eventsCache.questsProgress.getQuestCompletionChanged(raw.getID())
+        if hasPendingAmimateCompletion:
+            model.setIsCompleted(isCompleted and readyForAnimation)
+        else:
+            model.setIsCompleted(isCompleted)
+        model.setIsLocked(raw.getData().get('meta', {}).get('locked', False))
+        model.setAnimateCompletion(hasPendingAmimateCompletion and readyForAnimation)
         model.setIcon(fullQuestModel.getIcon())
         preFormattedConditionModel = self._getFirstConditionModelFromQuestModel(fullQuestModel)
         if preFormattedConditionModel:
             model.setCurrentProgress(preFormattedConditionModel.getCurrent())
             model.setTotalProgress(preFormattedConditionModel.getTotal())
-            model.setEarned(preFormattedConditionModel.getEarned())
+            model.setEarned(preFormattedConditionModel.getEarned() if readyForAnimation else 0)
             model.setDescription(preFormattedConditionModel.getDescrData())
             setDescription(model, fullQuestModel)
         return isCompleted

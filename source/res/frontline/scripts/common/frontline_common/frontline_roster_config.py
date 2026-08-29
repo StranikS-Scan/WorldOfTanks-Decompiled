@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: frontline/scripts/common/frontline_common/frontline_roster_config.py
+from __future__ import absolute_import
 from UnitRoster import BaseUnitRoster, BaseUnitRosterLimits, BaseUnitRosterSlot
 
 class EpicSlot(BaseUnitRosterSlot):

@@ -31,10 +31,7 @@ class ClassProgressAchievement(SimpleProgressAchievement):
     def getProgressValue(self):
         if self._progressValue == 1:
             return 1.0
-        elif self._lvlUpTotalValue == 0:
-            return 1.0
-        else:
-            return 1 - float(self._lvlUpValue) / float(self._lvlUpTotalValue)
+        return 1.0 if self._lvlUpTotalValue == 0 else 1 - float(self._lvlUpValue) / float(self._lvlUpTotalValue)
 
     def isInNear(self):
         return self.getProgressValue() >= 0.95 or self._lvlUpValue == 1
@@ -59,16 +56,10 @@ class ClassProgressAchievement(SimpleProgressAchievement):
         nextMedalClassIndex = maxMedalClass - nextMedalClass
         if nextMedalClass <= 0:
             return 0.0
-        elif nextMedalClass <= maxMedalClass:
-            return medalCfg[nextMedalClassIndex]
-        else:
-            return 1.0
+        return medalCfg[nextMedalClassIndex] if nextMedalClass <= maxMedalClass else 1.0
 
     def _readLevelUpValue(self, dossier):
-        if self._progressValue == 1:
-            return 0.0
-        else:
-            return max(float(self._lvlUpTotalValue) - float(self._currentProgressValue), 0.0)
+        return 0.0 if self._progressValue == 1 else max(float(self._lvlUpTotalValue) - float(self._currentProgressValue), 0.0)
 
     def _readCurrentProgressValue(self, dossier):
         pass

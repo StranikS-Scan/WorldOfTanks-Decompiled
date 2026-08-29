@@ -158,11 +158,15 @@ def getMaterialsAtCursor(vehicleEntity, collisions=None, shellParams=None):
     typeDescriptor = vehicleEntity.typeDescriptor
     collisions = vehicleEntity.appearance.collisions
     for _, hitAngleCos, matInfo, partID in parts:
-        if matInfo is not None:
-            isSpacedArmor = matInfo.vehicleDamageFactor == SPACED_ARMOR_DAMAGE_FACTOR
-            if (partID, matInfo.kind) not in ignoredMaterials:
-                if partID > vehicleEntity.appearance.collisions.maxStaticPartIndex:
-                    partName = VehicleArmorTags.SCREEN if isSpacedArmor else VehicleArmorTags.HULL
+        isSpacedArmor = matInfo is not None and matInfo.vehicleDamageFactor == SPACED_ARMOR_DAMAGE_FACTOR
+        if (partID, matInfo.kind) not in ignoredMaterials:
+            if partID > vehicleEntity.appearance.collisions.maxStaticPartIndex:
+                parentPartID = collisions.getParentPartIndex(partID)
+                if parentPartID is not None:
+                    if 0 <= parentPartID < len(TankPartIndexes.ALL):
+                        partName = VehicleArmorTags(TankPartIndexes.getName(parentPartID))
+                    else:
+                        partName = VehicleArmorTags.SCREEN if isSpacedArmor else VehicleArmorTags.HULL
                 elif partID >= len(TankPartIndexes.ALL):
                     partName = VehicleArmorTags.CHASSIS
                 elif partID > -1:
@@ -243,9 +247,14 @@ def applyNormalizationForArmor(hitAngleCos, armorValue, matInfo, normalizationAn
 def getModuleForTurretRotation(vehicleEntity):
     parts = getCollisionsAtCursor(vehicleEntity)
     for distance, _, matInfo, partID in parts:
-        if matInfo is not None:
-            if partID > vehicleEntity.appearance.collisions.maxStaticPartIndex:
-                partName = VehicleArmorTags.HULL
+        if matInfo is not None and partID > vehicleEntity.appearance.collisions.maxStaticPartIndex:
+            collisions = vehicleEntity.appearance.collisions
+            parentPartID = collisions.getParentPartIndex(partID)
+            if parentPartID is not None:
+                if 0 <= parentPartID < len(TankPartIndexes.ALL):
+                    partName = VehicleArmorTags(TankPartIndexes.getName(parentPartID))
+                else:
+                    partName = VehicleArmorTags.HULL
             elif partID >= len(TankPartIndexes.ALL):
                 partName = VehicleArmorTags.CHASSIS
             elif partID > -1:

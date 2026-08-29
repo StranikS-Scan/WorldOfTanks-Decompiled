@@ -4,7 +4,7 @@ from __future__ import absolute_import
 from functools import partial
 from comp7.gui.Scaleform.genConsts.COMP7_HANGAR_ALIASES import COMP7_HANGAR_ALIASES
 from constants import ARENA_BONUS_TYPE
-from frameworks.state_machine.transitions import TransitionType
+from frameworks_common.state_machine.transitions import TransitionType
 from gui.Scaleform.framework.entities.View import ViewKey
 from gui.battle_results.settings import PLAYER_TEAM_RESULT
 from gui.impl.lobby.battle_results.states import generatePostBattleStateClasses, PostBattleResultsEntryProto, LoadingProto, LoadingWithRetainedCameraProto, PostBattleResultsProto, OverviewTabProto, TeamScoreTabProto, MissionProgressTabProto, FinancialReportTabProto, PBSSceneSetup, shouldHijackPBSEntry

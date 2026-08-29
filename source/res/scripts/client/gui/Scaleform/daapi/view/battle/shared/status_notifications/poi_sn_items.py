@@ -68,7 +68,9 @@ class PoICapturingSN(PointOfInterestSN):
         poiType = self._getPoiType(value)
         if poiType == PoiType.ARTILLERY:
             return (_LINKS.POI_GREEN_ARTILLERY_ICON, _LINKS.POI_GREEN_ARTILLERY_SMALL_ICON)
-        return (_LINKS.POI_GREEN_RECON_ICON, _LINKS.POI_GREEN_RECON_SMALL_ICON) if poiType == PoiType.RECON else (self.NOT_CHANGE_DEFAULT_ICON, self.NOT_CHANGE_DEFAULT_ICON)
+        if poiType == PoiType.RECON:
+            return (_LINKS.POI_GREEN_RECON_ICON, _LINKS.POI_GREEN_RECON_SMALL_ICON)
+        return (_LINKS.POI_GREEN_ILLUMINATION_FLARE_ICON, _LINKS.POI_GREEN_ILLUMINATION_FLARE_SMALL_ICON) if poiType == PoiType.ILLUMINATION_FLARE else (self.NOT_CHANGE_DEFAULT_ICON, self.NOT_CHANGE_DEFAULT_ICON)
 
     def _isActive(self, value):
         return value.invader == self._sessionProvider.shared.vehicleState.getControllingVehicleID() and value.status.statusID is PoiStatus.CAPTURING
@@ -86,7 +88,9 @@ class PoICooldownSN(PointOfInterestSN):
         poiType = self._getPoiType(value)
         if poiType == PoiType.ARTILLERY:
             return (_LINKS.POI_ORANGE_ARTILLERY_ICON, _LINKS.POI_ORANGE_ARTILLERY_SMALL_ICON)
-        return (_LINKS.POI_ORANGE_RECON_ICON, _LINKS.POI_ORANGE_RECON_SMALL_ICON) if poiType == PoiType.RECON else (self.NOT_CHANGE_DEFAULT_ICON, self.NOT_CHANGE_DEFAULT_ICON)
+        if poiType == PoiType.RECON:
+            return (_LINKS.POI_ORANGE_RECON_ICON, _LINKS.POI_ORANGE_RECON_SMALL_ICON)
+        return (_LINKS.POI_ORANGE_ILLUMINATION_FLARE_ICON, _LINKS.POI_ORANGE_ILLUMINATION_FLARE_SMALL_ICON) if poiType == PoiType.ILLUMINATION_FLARE else (self.NOT_CHANGE_DEFAULT_ICON, self.NOT_CHANGE_DEFAULT_ICON)
 
     def _isActive(self, value):
         return value.status.statusID is PoiStatus.COOLDOWN
@@ -110,7 +114,9 @@ class PoIBlockedNotUsedAbilitySN(PointOfInterestSN):
         poiType = self._getPoiType(value)
         if poiType == PoiType.ARTILLERY:
             return (_LINKS.POI_ORANGE_ARTILLERY_ICON, _LINKS.POI_ORANGE_ARTILLERY_SMALL_ICON)
-        return (_LINKS.POI_ORANGE_RECON_ICON, _LINKS.POI_ORANGE_RECON_SMALL_ICON) if poiType == PoiType.RECON else (self.NOT_CHANGE_DEFAULT_ICON, self.NOT_CHANGE_DEFAULT_ICON)
+        if poiType == PoiType.RECON:
+            return (_LINKS.POI_ORANGE_RECON_ICON, _LINKS.POI_ORANGE_RECON_SMALL_ICON)
+        return (_LINKS.POI_ORANGE_ILLUMINATION_FLARE_ICON, _LINKS.POI_ORANGE_ILLUMINATION_FLARE_SMALL_ICON) if poiType == PoiType.ILLUMINATION_FLARE else (self.NOT_CHANGE_DEFAULT_ICON, self.NOT_CHANGE_DEFAULT_ICON)
 
     def _isActive(self, value):
         return any((reason for reason in value.blockReasons if reason.statusID is PoiBlockReasons.EQUIPMENT))
@@ -157,7 +163,9 @@ class PoIBlockedNotInvaderSN(PointOfInterestSN):
         poiType = self._getPoiType(value)
         if poiType == PoiType.ARTILLERY:
             return (_LINKS.POI_ORANGE_ARTILLERY_ICON, _LINKS.POI_ORANGE_ARTILLERY_SMALL_ICON)
-        return (_LINKS.POI_ORANGE_RECON_ICON, _LINKS.POI_ORANGE_RECON_SMALL_ICON) if poiType == PoiType.RECON else (self.NOT_CHANGE_DEFAULT_ICON, self.NOT_CHANGE_DEFAULT_ICON)
+        if poiType == PoiType.RECON:
+            return (_LINKS.POI_ORANGE_RECON_ICON, _LINKS.POI_ORANGE_RECON_SMALL_ICON)
+        return (_LINKS.POI_ORANGE_ILLUMINATION_FLARE_ICON, _LINKS.POI_ORANGE_ILLUMINATION_FLARE_SMALL_ICON) if poiType == PoiType.ILLUMINATION_FLARE else (self.NOT_CHANGE_DEFAULT_ICON, self.NOT_CHANGE_DEFAULT_ICON)
 
     def _isActive(self, value):
         return value.invader != self._sessionProvider.shared.vehicleState.getControllingVehicleID() and value.status.statusID is PoiStatus.CAPTURING
@@ -181,7 +189,9 @@ class PoIBlockedOverturnedSN(PointOfInterestSN):
         poiType = self._getPoiType(value)
         if poiType == PoiType.ARTILLERY:
             return (_LINKS.POI_ORANGE_ARTILLERY_ICON, _LINKS.POI_ORANGE_ARTILLERY_SMALL_ICON)
-        return (_LINKS.POI_ORANGE_RECON_ICON, _LINKS.POI_ORANGE_RECON_SMALL_ICON) if poiType == PoiType.RECON else (self.NOT_CHANGE_DEFAULT_ICON, self.NOT_CHANGE_DEFAULT_ICON)
+        if poiType == PoiType.RECON:
+            return (_LINKS.POI_ORANGE_RECON_ICON, _LINKS.POI_ORANGE_RECON_SMALL_ICON)
+        return (_LINKS.POI_ORANGE_ILLUMINATION_FLARE_ICON, _LINKS.POI_ORANGE_ILLUMINATION_FLARE_SMALL_ICON) if poiType == PoiType.ILLUMINATION_FLARE else (self.NOT_CHANGE_DEFAULT_ICON, self.NOT_CHANGE_DEFAULT_ICON)
 
     def _isActive(self, value):
         return any((reason for reason in value.blockReasons if reason.statusID is PoiBlockReasons.OVERTURNED))

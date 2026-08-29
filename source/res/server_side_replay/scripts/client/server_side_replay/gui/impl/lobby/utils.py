@@ -22,11 +22,13 @@ def getRentCriteria():
 def buildPopoverTankKeySortCriteria(field):
     if field == VehicleSortColumn.TIER.value:
         return REQ_CRITERIA.CUSTOM(lambda item: item.level)
-    if field == VehicleSortColumn.NAME.value:
+    elif field == VehicleSortColumn.NAME.value:
         return REQ_CRITERIA.CUSTOM(lambda item: item.searchableUserName)
-    if field == VehicleSortColumn.TYPE.value:
+    elif field == VehicleSortColumn.TYPE.value:
         criteria = REQ_CRITERIA.CUSTOM(lambda item: VEHICLE_TYPES_ORDER_INDICES[item.type])
         return criteria | REQ_CRITERIA.CUSTOM(lambda item: item.isPremium)
+    else:
+        return None
 
 
 def buildPopoverTankFilterCriteria(filters):

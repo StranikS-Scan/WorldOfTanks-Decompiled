@@ -81,11 +81,13 @@ class EffectsList(object):
 
         return out
 
-    def attachTo(self, model, data, key, **args):
+    def attachTo(self, model, data, key, excludeTags=None, **args):
         if not data.has_key('_EffectsList_effects'):
             data['_EffectsList_effects'] = []
         for eff in self.__effectDescList:
             if eff.startKey == key:
+                if excludeTags and _effectDescTypeToKey[eff.TYPE] in excludeTags:
+                    continue
                 if args.has_key('keyPoints'):
                     startTime = endTime = 0
                     for keyPoint in args['keyPoints']:
@@ -169,9 +171,10 @@ class EffectsListPlayer(object):
             EffectsListPlayer.clearInProgress = False
             return
 
-    def __init__(self, effectsList, keyPoints, **args):
+    def __init__(self, effectsList, keyPoints, excludeTags=None, **args):
         self.__keyPoints = keyPoints
         self.__effectsList = effectsList
+        self.__excludeTags = excludeTags
         self.__args = args
         self.__args['keyPoints'] = self.__keyPoints
         self.__curKeyPoint = None
@@ -202,7 +205,7 @@ class EffectsListPlayer(object):
             keyPoint = self.__getKeyPointIdx(startKeyPoint)
             self.__keyPointIdx = keyPoint if startKeyPoint is not None and keyPoint is not None else 0
             self.__keyPointIdx -= 1
-            self.__effectsList.attachTo(self.__model, self.__data, None, **self.__args)
+            self.__effectsList.attachTo(self.__model, self.__data, None, self.__excludeTags, **self.__args)
             firstTimePoint = self.__keyPoints[self.__keyPointIdx + 1].time
             if self.__keyPointIdx < 0 and startKeyPoint is None and firstTimePoint > 0.0:
                 self.__callbackID = BigWorld.callback(firstTimePoint, self.__playKeyPoint)
@@ -283,7 +286,7 @@ class EffectsListPlayer(object):
             self.__curKeyPoint = self.__keyPoints[self.__keyPointIdx]
             nextKeyPoint = self.__keyPoints[self.__keyPointIdx + 1]
             self.__effectsList.detachFrom(self.__data, self.__curKeyPoint.name)
-            self.__effectsList.attachTo(self.__model, self.__data, self.__curKeyPoint.name, **self.__args)
+            self.__effectsList.attachTo(self.__model, self.__data, self.__curKeyPoint.name, self.__excludeTags, **self.__args)
             deltaTime = nextKeyPoint.time - self.__curKeyPoint.time
             if deltaTime == 0.0:
                 self.__playKeyPoint(waitForKeyOff)
@@ -739,13 +742,12 @@ class _TracerSoundEffectDesc(_NodeSoundEffectDesc):
         state = elem.get('tracerDelaySoundState')
         if state is not None and self.__tracerDelaySound is not None:
             self.__tracerDelaySound.delete(state)
-        if reason != EFFECT_DELETE_REASON.LIST_DESTRUCTION:
-            soundObject = elem.get('sound', None)
-            if soundObject is not None:
-                if self._dopplerEffect is not None:
-                    soundObject.stopDopplerEffect()
-                isPlayer = elem.get('isPlayer', True)
-                soundObject.play('psb_pc_stop' if isPlayer else 'psb_npc_stop')
+        soundObject = elem.get('sound', None)
+        if soundObject is not None:
+            if self._dopplerEffect:
+                soundObject.stopDopplerEffect()
+            isPlayer = elem.get('isPlayer', True)
+            soundObject.play('psb_pc_stop' if isPlayer else 'psb_npc_stop')
         super(_TracerSoundEffectDesc, self).delete(elem, EFFECT_DELETE_REASON.LIST_DESTRUCTION)
         return
 
@@ -842,6 +844,7 @@ class _CollisionSoundEffectDesc(_BaseSoundEvent):
 
 
 class _CollisionDamageSoundEffectDesc(_BaseSoundEvent):
+    TYPE = '_CollisionDamageSoundEffectDesc'
 
     def __init__(self, dataSection):
         super(_CollisionDamageSoundEffectDesc, self).__init__(dataSection)
@@ -895,6 +898,10 @@ class _DestructionSoundEffectDesc(_BaseSoundEvent):
                     self._parameters.append(SoundStartParam(name, value))
 
             return
+
+
+class _LifetimeSoundEffectDesc(_DestructionSoundEffectDesc):
+    TYPE = '_LifetimeSoundEffectDesc'
 
 
 ImpactNames = namedtuple('ImpactNames', ('impactNPC_PC', 'impactPC_NPC', 'impactNPC_NPC', 'impactFNPC_PC'))
@@ -1397,8 +1404,9 @@ _effectDescFactory = {'pixie': _PixieEffectDesc,
  'posteffect': _PostProcessEffectDesc,
  'light': _LightEffectDesc,
  'destructionSound': _DestructionSoundEffectDesc,
- 'lifetimeSound': _DestructionSoundEffectDesc,
+ 'lifetimeSound': _LifetimeSoundEffectDesc,
  'autoShootTracerSound': _AutoShootTracerSoundEffectDesc}
+_effectDescTypeToKey = {cls.TYPE:key for key, cls in _effectDescFactory.iteritems()}
 
 def _createEffectDesc(eType, dataSection):
     if not dataSection.values():

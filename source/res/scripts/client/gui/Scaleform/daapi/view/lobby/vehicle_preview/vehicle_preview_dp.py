@@ -10,6 +10,7 @@ from gui.Scaleform.daapi.view.lobby.vehicle_preview.items_kit_helper import coll
 from gui.Scaleform.genConsts.STORE_CONSTANTS import STORE_CONSTANTS
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
+from gui import makeHtmlString
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.shared.formatters import text_styles, moneyWithIcon, icons
@@ -110,6 +111,7 @@ class DefaultVehPreviewDataProvider(IVehPreviewDataProvider):
             uniqueVehicleTitle = text_styles.tutorial(backport.text(R.strings.vehicle_preview.buyingPanel.availableForWotPlus()))
         elif not (isBuyingAvailable or isHeroTank):
             uniqueVehicleTitle = text_styles.tutorial(backport.text(R.strings.vehicle_preview.buyingPanel.uniqueVehicleLabel()))
+        fromBoxesText = makeHtmlString('html_templates:lobby/vehicle_preview', 'fromBoxes')
         compensationData = self.__getCompensationData(itemsPack)
         resultVO = {'setTitle': data.title,
          'uniqueVehicleTitle': uniqueVehicleTitle,
@@ -122,13 +124,15 @@ class DefaultVehPreviewDataProvider(IVehPreviewDataProvider):
          'buyButtonIconAlign': data.iconAlign,
          'buyButtonTooltip': data.tooltip,
          'isShowSpecialTooltip': data.isShowSpecial,
+         'isHeroTankFromBoxes': data.isHeroTankFromBoxes,
          'itemPrice': data.itemPrice,
          'isUnlock': data.isUnlock,
          'couponDiscount': 0,
          'showAction': data.isAction,
          'hasCompensation': compensationData is not None,
          'compensation': compensationData if compensationData is not None else {},
-         'warning': self.__getWarningInfo(data, item)}
+         'warning': self.__getWarningInfo(data, item),
+         'fromBoxesText': fromBoxesText}
         customOffer = self.__getCustomOfferData(data)
         if customOffer is not None:
             resultVO.update({'customOffer': customOffer})
@@ -136,6 +140,7 @@ class DefaultVehPreviewDataProvider(IVehPreviewDataProvider):
 
     def getItemPackBuyingPanelData(self, data, itemsPack, couponSelected, price):
         compensationData = self.__getCompensationData(itemsPack)
+        fromBoxesText = makeHtmlString('html_templates:lobby/vehicle_preview', 'fromBoxes')
         resultVO = {'setTitle': data.title,
          'uniqueVehicleTitle': '',
          'vehicleId': 0,
@@ -148,17 +153,20 @@ class DefaultVehPreviewDataProvider(IVehPreviewDataProvider):
          'buyButtonIconAlign': data.iconAlign,
          'buyButtonTooltip': data.tooltip,
          'isShowSpecialTooltip': data.isShowSpecial,
+         'isHeroTankFromBoxes': data.isHeroTankFromBoxes,
          'itemPrice': data.itemPrice,
          'isUnlock': False,
          'showAction': data.isAction,
          'hasCompensation': compensationData is not None,
          'compensation': compensationData if compensationData is not None else {},
-         'warning': ''}
+         'warning': '',
+         'fromBoxesText': fromBoxesText}
         if data.customOffer is not None:
             resultVO.update({'customOffer': data.customOffer})
         return resultVO
 
     def getOffersBuyingPanelData(self, data):
+        fromBoxesText = makeHtmlString('html_templates:lobby/vehicle_preview', 'fromBoxes')
         return {'setTitle': data.title,
          'uniqueVehicleTitle': '',
          'vehicleId': 0,
@@ -171,12 +179,14 @@ class DefaultVehPreviewDataProvider(IVehPreviewDataProvider):
          'buyButtonIconAlign': data.iconAlign,
          'buyButtonTooltip': data.tooltip,
          'isShowSpecialTooltip': data.isShowSpecial,
+         'isHeroTankFromBoxes': data.isHeroTankFromBoxes,
          'itemPrice': data.itemPrice,
          'showAction': data.isAction,
          'actionTooltip': data.actionTooltip,
          'hasCompensation': False,
          'compensation': {},
-         'warning': ''}
+         'warning': '',
+         'fromBoxesText': fromBoxesText}
 
     def getOffersData(self, offers, activeID):
         return [ _createOfferVO(offer, offer.id == activeID) for offer in offers ]

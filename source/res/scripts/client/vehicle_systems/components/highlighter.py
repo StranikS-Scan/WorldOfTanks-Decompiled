@@ -22,6 +22,7 @@ class Highlighter(object):
     HIGHLIGHT_SIMPLE = 1
     HIGHLIGHT_ON = 2
     HIGHLIGHT_DISABLED = 4
+    HIGHLIGHT_SUSPENDED = 8
     status = property(lambda self: self.__highlightStatus)
     sessionProvider = dependency.descriptor(IBattleSessionProvider)
 
@@ -41,6 +42,8 @@ class Highlighter(object):
         self.__vehicleRef = None
         self.__highlightStatus = self.HIGHLIGHT_OFF if enabled else self.HIGHLIGHT_DISABLED
         self.__isPlayersVehicle = False
+        self.__suspendedHighlightArgs = None
+        self.__forceSimpleEdge = False
         return
 
     def setVehicle(self, vehicle):
@@ -77,6 +80,24 @@ class Highlighter(object):
             BigWorld.wgDelIgnoredCollisionEntity(vehicle)
         return
 
+    def suspendHighlight(self):
+        self.__highlightStatus |= self.HIGHLIGHT_SUSPENDED
+        vehicle = self.__getVehicle()
+        if self.isOn and vehicle is not None and not self.isDisabled:
+            BigWorld.wgDelEdgeDetectEntity(vehicle)
+        return
+
+    def resumeHighlight(self):
+        if self.__highlightStatus & self.HIGHLIGHT_SUSPENDED:
+            self.__highlightStatus &= ~self.HIGHLIGHT_SUSPENDED
+            if self.__suspendedHighlightArgs is not None:
+                enable, forceSimpleEdge = self.__suspendedHighlightArgs
+                self.highlight(enable, forceSimpleEdge)
+                self.__suspendedHighlightArgs = None
+            else:
+                self.highlight(self.isOn, self.__forceSimpleEdge, afterSuspend=True)
+        return
+
     def destroy(self):
         self.deactivate()
         self.__highlightStatus = self.HIGHLIGHT_DISABLED
@@ -85,13 +106,20 @@ class Highlighter(object):
 
     def removeHighlight(self):
         vehicle = self.__getVehicle()
-        if self.isOn and vehicle is not None and not self.isDisabled:
-            self.__highlightStatus &= ~self.HIGHLIGHT_ON
-            BigWorld.wgDelEdgeDetectEntity(vehicle)
+        if vehicle is not None:
+            if self.isOn and not self.isDisabled:
+                self.__highlightStatus &= ~self.HIGHLIGHT_ON
+            if not vehicle.isDestroyed:
+                self.__removeHighlightComponent(vehicle)
+                if vehicle.model is not None:
+                    BigWorld.wgDelEdgeDetectEntity(vehicle)
         return
 
-    def highlight(self, enable, forceSimpleEdge=False):
-        if bool(enable) == bool(self.isOn):
+    def highlight(self, enable, forceSimpleEdge=False, afterSuspend=False):
+        if self.__highlightStatus & self.HIGHLIGHT_SUSPENDED:
+            self.__suspendedHighlightArgs = (enable, forceSimpleEdge)
+            return
+        elif bool(enable) == bool(self.isOn) and not afterSuspend:
             return
         else:
             vehicle = self.__getVehicle()
@@ -100,6 +128,7 @@ class Highlighter(object):
             if self.isOn:
                 BigWorld.wgDelEdgeDetectEntity(vehicle)
             args = EdgeHighlightComponentArgs(0, 1, False, True)
+            self.__forceSimpleEdge = forceSimpleEdge
             if enable:
                 self.__highlightStatus |= self.HIGHLIGHT_ON
                 if self.__isPlayersVehicle:
@@ -139,10 +168,24 @@ class Highlighter(object):
             root = appearance.gameObject
             if root is None or not root.valid:
                 return
-            highlight = root.findRead(EdgeHighlightComponent)
-            if highlight is not None:
-                root.removeComponent(highlight)
+            root.removeComponent(EdgeHighlightComponent)
             if isOn:
                 queue = CGF.CommandQueue(root.spaceID)
                 queue.createComponent(root, EdgeHighlightComponent, *args)
         return
+
+    def __removeHighlightComponent(self, vehicle):
+        appearance = vehicle.appearance
+        if appearance is not None:
+            appearance.gameObject.removeComponent(EdgeHighlightComponent)
+        return
+
+
+class HighlighterSystem(CGF.System):
+    Activate = CGF.ActivateReaction(CGF.GameObject, CGF.Ro(Highlighter), CGF.ReactRw(EdgeHighlightComponent))
+    Reactions = CGF.Reactions(Activate)
+
+    def update(self):
+        for go, highlighter, edgeHighlight in self.reaction(self.Activate):
+            if not highlighter.isOn:
+                go.removeComponent(edgeHighlight)

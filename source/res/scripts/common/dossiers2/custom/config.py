@@ -105,4 +105,7 @@ RECORD_CONFIGS = {'medalKay': (1, 10, 100, 1000),
  'steamTopLeagueMedal': 5,
  'readyForBattleAssault': (15, 30, 45),
  'readyForBattleSniper': (15, 30, 45),
- 'readyForBattleSupport': (15, 30, 45)}
+ 'readyForBattleSupport': (15, 30, 45),
+ 'readyForBattleFossaAssault': (7, 14, 21),
+ 'readyForBattleFossaSniper': (7, 14, 21),
+ 'readyForBattleFossaSupport': (7, 14, 21)}

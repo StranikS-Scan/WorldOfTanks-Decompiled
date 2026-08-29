@@ -41,7 +41,7 @@ from messenger.ext import passCensor
 from messenger.m_constants import PROTO_TYPE
 from messenger.proto import proto_getter
 from messenger.proto.events import g_messengerEvents
-from messenger.storage import storage_getter
+from messenger.storage import MessengerStorageDescriptor, UsersStorage
 from prebattle_shared import decodeRoster
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
@@ -55,6 +55,7 @@ class TrainingRoomBase(LobbySubView, TrainingRoomBaseMeta, ILegacyListener):
     itemsCache = dependency.descriptor(IItemsCache)
     lobbyContext = dependency.descriptor(ILobbyContext)
     statsCollector = dependency.descriptor(IStatisticsCollector)
+    usersStorage = MessengerStorageDescriptor(UsersStorage)
 
     def __init__(self, _=None):
         super(TrainingRoomBase, self).__init__()
@@ -229,10 +230,6 @@ class TrainingRoomBase(LobbySubView, TrainingRoomBaseMeta, ILegacyListener):
             self.as_setArenaVoipChannelsS(prbSettings[PREBATTLE_SETTING_NAME.ARENA_VOIP_CHANNELS])
             self._showActionErrorMessage()
 
-    @storage_getter('users')
-    def usersStorage(self):
-        return None
-
     @proto_getter(PROTO_TYPE.BW_CHAT2)
     def bwProto(self):
         return None
@@ -278,7 +275,7 @@ class TrainingRoomBase(LobbySubView, TrainingRoomBaseMeta, ILegacyListener):
         self._updateStartButton(entity)
 
     def _updateStartButton(self, entity):
-        if entity.getPermissions().canStartBattle():
+        if entity.getPermissions().canStartBattle() and self.__isActorAssigned(entity):
             validationResult = entity.getLimits().isTeamsValid()
             if validationResult is None or validationResult.isValid:
                 self.as_enabledCloseButtonS(True)
@@ -460,6 +457,10 @@ class TrainingRoomBase(LobbySubView, TrainingRoomBaseMeta, ILegacyListener):
     def __swapTeamsInMinimap(self, team):
         if VIEW_ALIAS.MINIMAP_LOBBY in self.components:
             self.components[VIEW_ALIAS.MINIMAP_LOBBY].swapTeams(team)
+
+    def __isActorAssigned(self, entity):
+        _, assigned = decodeRoster(entity.getRosterKey())
+        return assigned
 
     def __me_onUserActionReceived(self, _, user, shadowMode):
         dbID = user.getID()

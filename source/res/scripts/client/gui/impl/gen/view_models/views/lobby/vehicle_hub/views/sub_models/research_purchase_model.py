@@ -10,6 +10,8 @@ class ResearchPurchaseModel(ViewModel):
     ACTION_PURCHASE_SHOP = 'action_purchase_shop'
     ACTION_RESTORE = 'action_restore'
     ACTION_IN_GARAGE = 'action_in_garage'
+    ACTION_TO_LOOTBOX = 'action_in_lootbox'
+    ACTION_PURCHASE_LOOTBOX = 'action_purchase_lootbox'
     ACTION_STATE_ENABLED = 'action_state_enabled'
     ACTION_STATE_DISABLED = 'action_state_disabled'
     ACTION_DESC_NOT_ENOUGH_CREDITS = 'notEnoughCredits'

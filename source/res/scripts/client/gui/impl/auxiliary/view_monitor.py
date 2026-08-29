@@ -41,9 +41,9 @@ class ViewMonitor(object):
         if not newWindow:
             return
         if newView.layoutID in self._ignoreViewLayoutIds:
-            _logger.info('View %r remains alive, new view is being opened over it %r', self._view.__repr__(), newView)
+            _logger.info('View %r remains alive, new view is being opened over it %r', repr(self._view), newView)
             return
         window = self._view.getWindow()
         if newWindow.layer == window.layer:
             window.destroy()
-            _logger.info('View %r has been destroyed by opening new view %r', self._view.__repr__(), newView)
+            _logger.info('View %r has been destroyed by opening new view %r', repr(self._view), newView)

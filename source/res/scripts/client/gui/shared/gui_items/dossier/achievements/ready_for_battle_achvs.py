@@ -125,3 +125,24 @@ class ReadyForBattleSupport(ReadyForBattleAchievement3Steps):
 
     def __init__(self, dossier, value=None):
         super(ReadyForBattleSupport, self).__init__(name='readyForBattleSupport', classifier=PM3QType.SUPPORT, branch=PM_BRANCH.PERSONAL_MISSION_3, dossier=dossier, value=value)
+
+
+class ReadyForBattleFossaAssault(ReadyForBattleAchievement3Steps):
+    __slots__ = ()
+
+    def __init__(self, dossier, value=None):
+        super(ReadyForBattleFossaAssault, self).__init__(name='readyForBattleFossaAssault', classifier=PM3QType.ASSAULT, branch=PM_BRANCH.PERSONAL_MISSION_4, dossier=dossier, value=value)
+
+
+class ReadyForBattleFossaSniper(ReadyForBattleAchievement3Steps):
+    __slots__ = ()
+
+    def __init__(self, dossier, value=None):
+        super(ReadyForBattleFossaSniper, self).__init__(name='readyForBattleFossaSniper', classifier=PM3QType.SNIPER, branch=PM_BRANCH.PERSONAL_MISSION_4, dossier=dossier, value=value)
+
+
+class ReadyForBattleFossaSupport(ReadyForBattleAchievement3Steps):
+    __slots__ = ()
+
+    def __init__(self, dossier, value=None):
+        super(ReadyForBattleFossaSupport, self).__init__(name='readyForBattleFossaSupport', classifier=PM3QType.SUPPORT, branch=PM_BRANCH.PERSONAL_MISSION_4, dossier=dossier, value=value)

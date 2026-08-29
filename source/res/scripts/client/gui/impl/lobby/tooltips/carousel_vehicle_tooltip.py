@@ -21,7 +21,7 @@ from gui.shared.formatters.ranges import toRomanRangeString
 from gui.shared.gui_items.Vehicle import getTypeUserName
 from gui.shared.gui_items.dossier.achievements import isMarkOfMasteryAchieved
 from helpers import dependency, time_utils
-from skeletons.gui.game_control import IBattlePassController, IWotPlusController
+from skeletons.gui.game_control import IBattlePassController, IWotPlusController, IRestBonusController
 from skeletons.gui.shared import IItemsCache
 if typing.TYPE_CHECKING:
     from gui.shared.gui_items.Vehicle import Vehicle
@@ -35,6 +35,7 @@ class CarouselVehicleTooltipView(ViewComponent[CarouselVehicleTooltipModel]):
     _itemsCache = dependency.descriptor(IItemsCache)
     _battlePass = dependency.descriptor(IBattlePassController)
     _wotPlusCtrl = dependency.descriptor(IWotPlusController)
+    _restBonusCtrl = dependency.descriptor(IRestBonusController)
 
     def __init__(self, inventoryId):
         self._inventoryId = inventoryId
@@ -72,7 +73,7 @@ class CarouselVehicleTooltipView(ViewComponent[CarouselVehicleTooltipModel]):
         return (vState, vStateLevel)
 
     def _getDailyXPFactor(self, vehicle):
-        return vehicle.dailyXPFactor
+        return self._restBonusCtrl.getActualXPFactor(vehicle)
 
     def _getBpProgression(self, vehicleIntCD):
         return self._battlePass.getVehicleProgression(vehicleIntCD)

@@ -3,12 +3,13 @@
 from __future__ import absolute_import, division
 import typing
 import BigWorld
-from constants import CHARGE_SHOT_FLAGS as FLAGS, HALF_SERVER_TICK as HALF_TICK, SHOT_PREDICTION_BUFFER as BUFFER
+from constants import CHARGE_SHOT_FLAGS as FLAGS
 from constants import VEHICLE_SETTING
 from events_handler import eventHandler
 from gui.battle_control.battle_constants import CANT_SHOOT_ERROR
 from gui.battle_control.components_states.ammo import DefaultComponentAmmoState
 from gui.shared.utils.decorators import ReprInjector
+from physics_shared import getShotPredictionWindow
 from vehicles.components.component_wrappers import ifPlayerVehicle
 from vehicles.components.vehicle_component import VehicleDynamicComponent
 from vehicles.components.vehicle_prefabs import createMechanicPrefabSpawner
@@ -110,7 +111,7 @@ class ChargeShotComponent(VehicleDynamicComponent, IMechanicComponent, IMechanic
 
     @eventHandler
     def onCollectShotParams(self, shotParamsList):
-        if self.__state.level >= self.__params.maxLevel and self.__state.timeLeft() <= max(BUFFER, BigWorld.LatencyInfo().value[3] + HALF_TICK):
+        if self.__state.level >= self.__params.maxLevel and self.__state.timeLeft() <= getShotPredictionWindow(BigWorld.LatencyInfo().value[3]):
             shotParamsList.append(ShotParams(self.vehicleMechanic, 0, 0, False))
 
     @eventHandler

@@ -7,6 +7,7 @@ from constants import QUEST_PROGRESS_STATE
 from gui.Scaleform.genConsts.QUEST_PROGRESS_BASE import QUEST_PROGRESS_BASE
 from gui.Scaleform.locale.PERSONAL_MISSIONS import PERSONAL_MISSIONS
 from gui.impl import backport
+from gui.impl.gen import R
 from gui.shared.formatters import text_styles
 from helpers import i18n
 from helpers.time_utils import ONE_MINUTE
@@ -303,15 +304,18 @@ class BodyProgress(ClientProgress):
     def isCumulative(self):
         return self._commonProgress.isCumulative()
 
-    def getDescription(self):
+    def getDescription(self, isForNewTooltip=False):
         if self.getProgressID() in self.COMMON_PROGRESS_IDS:
             description = self.__getCommonDescription()
         else:
             description = i18n.makeString(('#personal_missions_details:%s_description_%s' % (self._generalQuestID, self.getProgressID())), **self.getLocalizationValues())
         if self.__limiter:
-            warningText = i18n.makeString(PERSONAL_MISSIONS.CONDITIONS_LIMITER_LABEL)
+            if isForNewTooltip:
+                warningText = backport.text(R.strings.personal_missions.conditions.limiter.new_label())
+            else:
+                warningText = text_styles.alert(backport.text(R.strings.personal_missions.conditions.limiter.label()))
             limiterDescription = i18n.makeString(('#personal_missions_details:%s_description_%s' % (self._generalQuestID, self.__limiter.getProgressID())), **self.__limiter.getLocalizationValues())
-            description = '%s\n%s %s' % (description, text_styles.alert(warningText), limiterDescription)
+            description = '%s\n%s %s' % (description, warningText, limiterDescription)
         return description
 
     def _getStaticData(self):

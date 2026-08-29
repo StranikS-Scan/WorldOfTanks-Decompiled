@@ -11,19 +11,22 @@ from account_helpers.AccountSettings import AccountSettings, LOOTBOX_SYSTEM, LOO
 from adisp import adisp_process
 from constants import LOOTBOX_TOKEN_PREFIX
 from gui import SystemMessages
+from gui.customization.shared import getPurchaseGoldForCredits
+from gui.lootbox_system.base.awards import addCompensation
 from gui.lootbox_system.base.awards_manager import AwardsManager
 from gui.lootbox_system.base.config_parsing import parseAllOfSection
 from gui.lootbox_system.base.utils import getLootboxStatisticsKey
 from gui.lootbox_system.base.views_loaders import registerViewsLoaders, unregisterViewsLoaders
 from gui.shared import EVENT_BUS_SCOPE, events, g_eventBus
 from gui.shared.gui_items.processors.loot_boxes import ResetLootBoxSystemStatisticsProcessor
+from gui.shared.money import Money, Currency
 from gui.shared.notifications import NotificationPriorityLevel
 from gui.shared.utils.scheduled_notifications import SimpleNotifier
 from helpers import dependency
 from helpers.events_handler import EventsHandler
 from helpers.server_settings import LOOTBOX_SYSTEM_CONFIG, LootBoxSystemEventConfig
 from helpers.time_utils import getServerUTCTime
-from shared_utils import findFirst
+from shared_utils import findFirst, first
 from skeletons.gui.game_control import ILootBoxSystemController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
@@ -90,6 +93,7 @@ class LootBoxSystemController(ILootBoxSystemController, EventsHandler):
         self.onBoxesCountChanged = Event.Event(self.__em)
         self.onBoxesUpdated = Event.Event(self.__em)
         self.onBoxesInfoUpdated = Event.Event(self.__em)
+        self.onBoxesConfigUpdated = Event.Event(self.__em)
 
     @property
     def eventNames(self):
@@ -203,11 +207,45 @@ class LootBoxSystemController(ILootBoxSystemController, EventsHandler):
     def getBoxInfo(self, boxID):
         return self.__boxesInfo.get(boxID, {})
 
+    def getBox(self, eventName, category):
+        return first(self.getActiveBoxes(eventName, lambda b: b.getCategory() == category))
+
     def getBoxInfoByCategory(self, boxCategory):
         return findFirst(lambda i: i.get('category') == boxCategory, viewvalues(self.__boxesInfo))
 
     def getBoxesInfo(self):
         return deepcopy(self.__boxesInfo)
+
+    def isEnoughMoneyForReroll(self, box):
+        boxInfo = self.getBoxInfo(box.getID())
+        rerollAttempts = boxInfo['rerollAttempts']
+        prices = box.getRerollPrices()
+        if rerollAttempts >= len(prices):
+            return (False, None, None)
+        else:
+            currency = box.getRerollCurrency()
+            price = Money(**{currency: prices[rerollAttempts]})
+            isEnough = not self.__itemsCache.items.stats.money.getShortage(price).isDefined()
+            if not isEnough:
+                priceValue = prices[rerollAttempts]
+                if currency == Currency.GOLD:
+                    return (isEnough, Currency.GOLD, priceValue)
+                if currency == Currency.CREDITS:
+                    money = Money(**{currency: priceValue})
+                    gold = getPurchaseGoldForCredits(money)
+                    return (isEnough, Currency.CREDITS, gold)
+            return (isEnough, None, None)
+
+    def getPendingRerollRewards(self, eventName, category):
+        box = self.getBox(eventName, category)
+        if box is None or not box.isRerollable():
+            return
+        else:
+            rewards = self.getBoxInfo(box.getID()).get('rerollRewards')
+            if rewards is not None:
+                rewards = deepcopy(rewards)
+                addCompensation(rewards)
+            return rewards
 
     def _getCallbacks(self):
         return (('tokens', self.__onTokensUpdated), ('lootBoxes', self.__onBoxesUpdate))
@@ -253,6 +291,7 @@ class LootBoxSystemController(ILootBoxSystemController, EventsHandler):
             self.__updateBoxesInfo()
             self.onStatusChanged()
             self.__startNotifiers()
+            self.onBoxesConfigUpdated()
 
     def __updateAwardsManager(self):
         newEvents = set(self.eventNames)
@@ -275,6 +314,18 @@ class LootBoxSystemController(ILootBoxSystemController, EventsHandler):
     def __updateBoxesCount(self):
         self.__boxesCount = self.__getBoxesCount()
 
+    def __updateBoxesCountAndNotify(self):
+        newBoxesCount = self.__getBoxesCount()
+        for boxType, boxTypeInfo in viewitems(self.__boxesCount):
+            for boxCategory, oldCount in viewitems(boxTypeInfo):
+                newCount = newBoxesCount.get(boxType, {}).get(boxCategory, 0)
+                if newCount != oldCount:
+                    self.__boxesCount.update(newBoxesCount)
+                    if newCount > oldCount:
+                        self.setSetting(boxType, LOOT_BOXES_HAS_NEW, True)
+                    self.onBoxesCountChanged()
+                    return
+
     def __getBoxesCount(self):
         result = {}
         for box in viewvalues(self.__itemsCache.items.tokens.getLootBoxes()):
@@ -289,16 +340,7 @@ class LootBoxSystemController(ILootBoxSystemController, EventsHandler):
 
     def __onTokensUpdated(self, diff):
         if any((token.startswith(LOOTBOX_TOKEN_PREFIX) for token in diff)):
-            newBoxesCount = self.__getBoxesCount()
-            for boxType, boxTypeInfo in viewitems(self.__boxesCount):
-                for boxCategory, oldCount in viewitems(boxTypeInfo):
-                    newCount = newBoxesCount.get(boxType, {}).get(boxCategory, 0)
-                    if newCount != oldCount:
-                        self.__boxesCount.update(newBoxesCount)
-                        if newCount > oldCount:
-                            self.setSetting(boxType, LOOT_BOXES_HAS_NEW, True)
-                        self.onBoxesCountChanged()
-                        break
+            self.__updateBoxesCountAndNotify()
 
     def __onBoxesUpdate(self, diff):
         for historyName in diff.get('history', {}):
@@ -309,7 +351,16 @@ class LootBoxSystemController(ILootBoxSystemController, EventsHandler):
                     opened = self.__itemsCache.items.tokens.getAttemptsAfterGuaranteedRewards(lootBox)
                     boxInfo['boxCountToGuaranteedBonus'] = max(guaranteedBonusLimit - opened, 0)
 
+        if 'rerollHistory' in diff:
+            for boxID in diff['rerollHistory']:
+                boxInfo = self.__boxesInfo.get(boxID)
+                if boxInfo is not None:
+                    rerollState = self.__itemsCache.items.tokens.getRerollState(boxID)
+                    boxInfo['rerollAttempts'], boxInfo['rerollRewards'] = rerollState
+
+            self.__updateBoxesCountAndNotify()
         self.onBoxesUpdated()
+        return
 
     def __updateBoxesInfo(self):
         boxes = listvalues(self.__itemsCache.items.tokens.getLootBoxes())
@@ -333,6 +384,7 @@ class LootBoxSystemController(ILootBoxSystemController, EventsHandler):
         boxData['limit'] = limit
         boxData['slots'] = parseAllOfSection(bonusesData.get('allof', {}))
         boxData['boxCountToGuaranteedBonus'] = max(limit - opened, 0) if opened is not None else limit
+        boxData['rerollAttempts'], boxData['rerollRewards'] = self.__itemsCache.items.tokens.getRerollState(lootBox.getID())
         return boxData
 
     def __startNotifiers(self):

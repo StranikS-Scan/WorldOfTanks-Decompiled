@@ -19,7 +19,7 @@ from gui.impl.gen.view_models.constants.item_highlight_types import ItemHighligh
 from gui.impl.gen.view_models.views.lobby.battle_pass.reward_item_model import RewardItemModel
 from gui.impl.gen.view_models.views.lobby.battle_pass.vehicle_bonus_model import VehicleBonusModel
 from gui.server_events.awards_formatters import BATTLE_BONUS_X5_TOKEN, CREW_BONUS_X3_TOKEN
-from gui.server_events.bonuses import BlueprintsBonusSubtypes, GoldBonus, CreditsBonus, CustomizationsBonus, VehiclesBonus
+from gui.server_events.bonuses import BlueprintsBonusSubtypes, GoldBonus, CreditsBonus, CustomizationsBonus, VehiclesBonus, processAttachmentsSetTokens
 from gui.server_events.recruit_helper import getRecruitInfo
 from gui.shared.gui_items import GUI_ITEM_TYPE, GUI_ITEM_TYPE_NAMES
 from gui.shared.gui_items.customization import CustomizationTooltipContext
@@ -67,12 +67,13 @@ def getBattlePassBonusPacker():
     return BonusUIPacker(mapping)
 
 
-def packBonusModelAndTooltipData(bonuses, bonusModelsList, tooltipData=None, packer=None):
+def packBonusModelAndTooltipData(bonuses, bonusModelsList, tooltipData=None, packer=None, showAttachmentsSets=False):
     if packer is None:
         packer = getBattlePassBonusPacker()
     bonusIndexTotal = 0
     if tooltipData is not None:
         bonusIndexTotal = len(tooltipData)
+    bonuses = processAttachmentsSetTokens(bonuses, showAttachmentsSets=showAttachmentsSets)
     for bonus in bonuses:
         if bonus.isShowInGUI():
             bonusList = packer.pack(bonus)

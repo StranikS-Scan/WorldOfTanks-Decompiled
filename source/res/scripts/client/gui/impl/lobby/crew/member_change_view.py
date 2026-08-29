@@ -118,13 +118,19 @@ class MemberChangeView(BaseCrewView, BaseTankmanListView):
 
     def _fillTankmen(self, cardsList, limit, offset):
         selectedTankman = self.itemsCache.items.getTankman(self.__tankmanId)
+        isSelectedVisible = False
         if selectedTankman:
-            self._fillTankmanCard(cardsList, selectedTankman)
-            limit -= 1
+            if not offset:
+                self._fillTankmanCard(cardsList, selectedTankman)
+                limit -= 1
+                isSelectedVisible = True
+            else:
+                offset -= 1
         recruitsAmount, visibleAmount = super(MemberChangeView, self)._fillTankmen(cardsList, limit, offset)
         if selectedTankman:
             recruitsAmount += 1
-            visibleAmount += 1
+            if isSelectedVisible:
+                visibleAmount += 1
         return (recruitsAmount, visibleAmount)
 
     def _fillViewModel(self, vm):

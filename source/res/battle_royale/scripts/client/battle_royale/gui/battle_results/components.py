@@ -1,7 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: battle_royale/scripts/client/battle_royale/gui/battle_results/components.py
+from __future__ import absolute_import
 import logging
 from collections import defaultdict
+from future.utils import lfilter, viewitems
+from past.builtins import long
 from constants import ARENA_BONUS_TYPE, DEATH_REASON_ALIVE
 from gui.battle_control.battle_constants import WinStatus
 from gui.battle_results.components import base
@@ -33,7 +36,7 @@ def _isSquadMode(reusable):
 class BattleRoyaleArenaNameBlock(base.StatsItem):
     __slots__ = ()
 
-    def _convert(self, record, reusable):
+    def _convert(self, value, reusable):
         geometryName = replaceHyphenToUnderscore(reusable.common.arenaType.getGeometryName())
         return backport.text(R.strings.arenas.num(geometryName).name())
 
@@ -41,7 +44,7 @@ class BattleRoyaleArenaNameBlock(base.StatsItem):
 class ArenaBonusTypeNameBlock(base.StatsItem):
     __slots__ = ()
 
-    def _convert(self, record, reusable):
+    def _convert(self, value, reusable):
         arenaBonusType = reusable.common.arenaVisitor.getArenaBonusType()
         return arenaBonusType
 
@@ -208,7 +211,7 @@ class BattleRoyaleFinancialBlock(base.StatsBlock):
         questBonus = self.__getCoinsQuestBonus(reusable.personal.getQuestsProgress(), Currency.BRCOIN)
         vehicleCD = [ key for key in result['personal'].keys() if isinstance(key, (int, long, float)) ][0]
         info = result['personal'][vehicleCD]
-        for code, data in info['currencies'].iteritems():
+        for code, data in viewitems(info['currencies']):
             if code == Currency.BRCOIN and data:
                 meta = battleResultsConfig['allResults'].meta('currencies').meta('brcoin')
                 replayConnector = ValueReplayConnector(data, meta)
@@ -225,7 +228,7 @@ class BattleRoyaleFinancialBlock(base.StatsBlock):
         questBonus = self.__getCoinsQuestBonus(reusable.personal.getQuestsProgress(), Currency.STPCOIN)
         vehicleCD = [ key for key in result['personal'].keys() if isinstance(key, (int, long, float)) ][0]
         info = result['personal'][vehicleCD]
-        for code, data in info['currencies'].iteritems():
+        for code, data in viewitems(info['currencies']):
             if code == Currency.STPCOIN and data:
                 meta = battleResultsConfig['allResults'].meta('currencies').meta(code)
                 replayConnector = ValueReplayConnector(data, meta)
@@ -237,7 +240,7 @@ class BattleRoyaleFinancialBlock(base.StatsBlock):
     def __getCoinsQuestBonus(self, questProgress, currencyCode):
         questBonus = 0
         allQuests = self.__eventsCache.getAllQuests()
-        for qID, qProgress in questProgress.iteritems():
+        for qID, qProgress in viewitems(questProgress):
             if isQuestCompleted(*qProgress):
                 quest = allQuests.get(qID)
                 if quest is None:
@@ -329,7 +332,7 @@ class PlaceParameter(BattleRoyaleStatsItemBlock):
         def playerFilter(player):
             return not player.vehicle.isObserver and player.player.dbID != 0
 
-        allPlayers = filter(playerFilter, list(reusable.getAllPlayersIterator(result['vehicles'])))
+        allPlayers = lfilter(playerFilter, reusable.getAllPlayersIterator(result['vehicles']))
         return len(set((item.player.team for item in allPlayers))) if _isSquadMode(reusable) else len(allPlayers)
 
     def _getWreathImage(self, result, reusable):
@@ -416,7 +419,7 @@ class BattleRoyaleRewardsBlock(base.StatsBlock):
 
     @staticmethod
     def __getCompletedQuests(questProgress, condition, allQuests):
-        return {qID:qProgress for qID, qProgress in questProgress.iteritems() if condition(qID, allQuests) and isQuestCompleted(*qProgress)}
+        return {qID:qProgress for qID, qProgress in viewitems(questProgress) if condition(qID, allQuests) and isQuestCompleted(*qProgress)}
 
     @staticmethod
     def __getBonuses(allQuests, completedQuests):
@@ -459,8 +462,8 @@ class BattleRoyalePlayerBlock(base.StatsBlock):
         self.databaseID = 0
         self.prebattleID = 0
 
-    def setRecord(self, vehicleSummarizeInfo, reusable):
-        player = vehicleSummarizeInfo.player
+    def setRecord(self, result, reusable):
+        player = result.player
         dbID = player.dbID
         if player.realName == player.fakeName:
             self.userName = player.realName

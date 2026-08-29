@@ -333,7 +333,8 @@ class SeniorityAwardsController(ISeniorityAwardsController):
         eligibilityToken = self.config.rewardEligibilityToken
         if eligibilityToken and eligibilityToken in diff:
             self.__update()
-        return self.__onVehicleSelectionStateChanged() if self.vehicleSelectionToken in diff else None
+        if self.vehicleSelectionToken in diff:
+            self.__onVehicleSelectionStateChanged()
 
     def __onSettingsChanged(self, diff):
         if Configs.SENIORITY_AWARDS_CONFIG.value in diff:

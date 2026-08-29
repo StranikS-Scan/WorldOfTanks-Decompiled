@@ -9,7 +9,7 @@ class SelectableRewardTooltip(ViewImpl):
     __slots__ = ()
 
     def __init__(self, *args, **kwargs):
-        settings = ViewSettings(R.views.lobby.winback.tooltips.SelectableRewardTooltip(), model=SelectableRewardTooltipModel())
+        settings = ViewSettings(R.views.mono.winback.tooltips.selectable_reward_tooltip(), model=SelectableRewardTooltipModel())
         settings.args = args
         settings.kwargs = kwargs
         super(SelectableRewardTooltip, self).__init__(settings)

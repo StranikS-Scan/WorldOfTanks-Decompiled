@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/game_loading/state_machine/states/init_client/__init__.py
 import typing
-from frameworks.state_machine import StateFlags
+from frameworks_common.state_machine import StateFlags
 from gui.game_loading import loggers
 from gui.game_loading.state_machine.const import GameLoadingStates
 from gui.game_loading.state_machine.states.base import BaseGroupTickingStates
@@ -10,7 +10,7 @@ from gui.game_loading.state_machine.states.init_client.client_loading_stub impor
 from gui.game_loading.state_machine.states.init_client.logos_loading import LogosLoadingState
 from gui.game_loading.state_machine.states.init_client.transitions import LogosShownToClientLoadingStubTransition, LogosShownToClientLoadingTransition, ClientLoadingTransition
 if typing.TYPE_CHECKING:
-    from frameworks.state_machine.transitions import BaseTransition
+    from frameworks_common.state_machine.transitions import BaseTransition
     from gui.game_loading.resources.cdn.images import CdnImagesResources
     from gui.game_loading.preferences import GameLoadingPreferences
     from gui.game_loading.resources.local.base import LocalResources

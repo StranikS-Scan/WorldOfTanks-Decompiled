@@ -2,8 +2,8 @@
 # Embedded file name: frontline/scripts/client/frontline/gui/impl/lobby/states.py
 import typing
 from WeakMethod import WeakMethodProxy
-from frameworks.state_machine import StateFlags
-from frameworks.state_machine.transitions import TransitionType
+from frameworks_common.state_machine import StateFlags
+from frameworks_common.state_machine.transitions import TransitionType
 from frontline.constants.aliases import FrontlineHangarAliases
 from frontline.gui.impl.gen.view_models.views.lobby.views.frontline_const import FrontlineConst
 from frontline.gui.impl.gen.view_models.views.lobby.views.info_page_scroll_to_section import InfoPageScrollToSection

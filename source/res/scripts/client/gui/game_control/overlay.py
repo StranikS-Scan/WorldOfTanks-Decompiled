@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/game_control/overlay.py
 from __future__ import absolute_import
 import typing
+from Event import Event
 import GUI
 from wg_async import wg_async, wg_await, AsyncEvent
 from frameworks.wulf import WindowLayer
@@ -41,6 +42,7 @@ class OverlayController(IOverlayController):
         self._showEvent = AsyncEvent()
         self._cameraState = CameraMovementStates.ON_OBJECT
         self.__previouslyVisibleLayers = []
+        self.onStateChanged = Event()
         super(OverlayController, self).__init__()
 
     def init(self):
@@ -50,10 +52,12 @@ class OverlayController(IOverlayController):
         g_eventBus.removeListener(CameraRelatedEvents.CAMERA_ENTITY_UPDATED, self._onCameraEntityUpdated)
         self._showEvent.set()
         self._showEvent.destroy()
+        self.onStateChanged.clear()
 
     @wg_async
     def waitShow(self):
         self._stateInProgess = True
+        self.onStateChanged()
         if self._canShow():
             return
         yield wg_await(self._showEvent.wait())
@@ -67,6 +71,7 @@ class OverlayController(IOverlayController):
         if self._stateOn != state:
             self._stateOn = state
             self._changeGUIVisibility()
+        self.onStateChanged()
 
     @property
     def _guiState(self):

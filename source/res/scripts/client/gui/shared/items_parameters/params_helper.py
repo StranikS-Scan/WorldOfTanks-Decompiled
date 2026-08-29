@@ -10,7 +10,7 @@ from debug_utils import LOG_CURRENT_EXCEPTION, LOG_ERROR, LOG_WARNING
 from gui import GUI_SETTINGS
 from gui.Scaleform.genConsts.HANGAR_ALIASES import HANGAR_ALIASES
 from gui.shared.gui_items import GUI_ITEM_TYPE, KPI
-from gui.shared.items_parameters import params, RELATIVE_PARAMS, MAX_RELATIVE_VALUE
+from gui.shared.items_parameters import params, shell_params, RELATIVE_PARAMS, MAX_RELATIVE_VALUE
 from gui.shared.items_parameters.bonus_helper import CREW_MASTERY_BONUSES, isSituationalBonus, isAppropriateVehicle
 from gui.shared.items_parameters.comparator import CONDITIONAL_BONUSES
 from gui.shared.items_parameters.comparator import VehiclesComparator, ItemsComparator, PARAM_STATE
@@ -18,7 +18,7 @@ from gui.shared.items_parameters.functions import getBasicShell
 from gui.shared.items_parameters.params_constants import HIDDEN_PARAM_DEFAULTS
 from gui.shared.items_parameters import module_params
 from gui.shared.items_parameters.params_cache import g_paramsCache
-from gui.shared.utils import AUTO_RELOAD_PROP_NAME, MAX_STEERING_LOCK_ANGLE, TURBOSHAFT_SPEED_MODE_SPEED, WHEELED_SPEED_MODE_SPEED, DUAL_GUN_CHARGE_TIME, TURBOSHAFT_ENGINE_POWER, TURBOSHAFT_INVISIBILITY_STILL_FACTOR, SHOT_DISPERSION_ANGLE, TURBOSHAFT_INVISIBILITY_MOVING_FACTOR, TURBOSHAFT_SWITCH_TIME, CHASSIS_REPAIR_TIME, CONTINUOUS_SHOTS_PER_MINUTE, ROCKET_ACCELERATION_ENGINE_POWER, ROCKET_ACCELERATION_SPEED_LIMITS, ROCKET_ACCELERATION_REUSE_AND_DURATION, DUAL_ACCURACY_COOLING_DELAY, BURST_FIRE_RATE, AUTO_SHOOT_CLIP_FIRE_RATE, AVG_DAMAGE_PER_SECOND, TWIN_GUN_SWITCH_FIRE_MODE_TIME, TWIN_GUN_TOP_SPEED, SHELL_LOADING_TIME_PROP_NAME, TEMPERATURE_RELOAD_TIME, TEMPERATURE_AVG_DAMAGE_PER_MINUTE
+from gui.shared.utils import AUTO_RELOAD_PROP_NAME, MAX_STEERING_LOCK_ANGLE, TURBOSHAFT_SPEED_MODE_SPEED, WHEELED_SPEED_MODE_SPEED, DUAL_GUN_CHARGE_TIME, TURBOSHAFT_ENGINE_POWER, TURBOSHAFT_INVISIBILITY_STILL_FACTOR, SHOT_DISPERSION_ANGLE, TURBOSHAFT_INVISIBILITY_MOVING_FACTOR, TURBOSHAFT_SWITCH_TIME, CHASSIS_REPAIR_TIME, CONTINUOUS_SHOTS_PER_MINUTE, ROCKET_ACCELERATION_ENGINE_POWER, ROCKET_ACCELERATION_SPEED_LIMITS, ROCKET_ACCELERATION_REUSE_AND_DURATION, DUAL_ACCURACY_COOLING_DELAY, BURST_FIRE_RATE, AUTO_SHOOT_CLIP_FIRE_RATE, AVG_DAMAGE_PER_SECOND, TWIN_GUN_SWITCH_FIRE_MODE_TIME, TWIN_GUN_TOP_SPEED, SHELL_LOADING_TIME_PROP_NAME, TEMPERATURE_RELOAD_TIME, TEMPERATURE_AVG_DAMAGE_PER_MINUTE, NORMALIZATION_ANGLE
 from helpers import dependency
 from items import vehicles, ITEM_TYPES
 from shared_utils import findFirst, first
@@ -138,7 +138,7 @@ _ITEM_TYPE_HANDLERS = {ITEM_TYPES.vehicleRadio: module_params.RadioParams,
  ITEM_TYPES.vehicleChassis: module_params.ChassisParams,
  ITEM_TYPES.vehicleTurret: module_params.TurretParams,
  ITEM_TYPES.vehicleGun: module_params.GunParams,
- ITEM_TYPES.shell: params.ShellParams,
+ ITEM_TYPES.shell: shell_params.ShellParams,
  ITEM_TYPES.equipment: params.EquipmentParams,
  ITEM_TYPES.optionalDevice: params.OptionalDeviceParams,
  ITEM_TYPES.vehicle: params.VehicleParams}
@@ -146,7 +146,8 @@ _STATE_TO_HIGHLIGHT = {PARAM_STATE.WORSE: HANGAR_ALIASES.VEH_PARAM_RENDERER_HIGH
  PARAM_STATE.BETTER: HANGAR_ALIASES.VEH_PARAM_RENDERER_HIGHLIGHT_POSITIVE,
  PARAM_STATE.NOT_APPLICABLE: HANGAR_ALIASES.VEH_PARAM_RENDERER_HIGHLIGHT_NONE,
  PARAM_STATE.NORMAL: HANGAR_ALIASES.VEH_PARAM_RENDERER_HIGHLIGHT_NONE}
-_PARAMS_WITH_AVAILABLE_ZERO_VALUES = {DUAL_ACCURACY_COOLING_DELAY: lambda v: v is not None}
+_PARAMS_WITH_AVAILABLE_ZERO_VALUES = {DUAL_ACCURACY_COOLING_DELAY: lambda v: v is not None,
+ NORMALIZATION_ANGLE: lambda v: v is not None}
 
 def isValidEmptyValue(paramName, paramValue):
     func = _PARAMS_WITH_AVAILABLE_ZERO_VALUES.get(paramName)
@@ -158,6 +159,12 @@ def lackVehicleSteeringAngles(currentVehicle):
     chassis = vehicleDesc.type.xphysics['chassis'][vehicleDesc.chassis.name]
     axleSteeringAngles = chassis.get('axleSteeringAngles', None)
     return axleSteeringAngles is not None and all((v == 0 for v in axleSteeringAngles))
+
+
+def getSiegeDescrShot(vDescr, shell):
+    shots = vDescr.siegeVehicleDescr.gun.shots
+    shellCD = shell.descriptor.compactDescr
+    return findFirst(lambda shotDescr: shotDescr.shell.compactDescr == shellCD, shots)
 
 
 def _getParamsProvider(item, vehicleDescr=None):
@@ -207,14 +214,17 @@ def getCompatibles(item, vehicleDescr=None):
 
 
 def similarCrewComparator(vehicle):
-    vehicleParamsObject = params.VehicleParams(vehicle)
-    vehicleParams = vehicleParamsObject.getParamsDict()
-    bonuses = vehicleParamsObject.getBonuses(vehicle)
-    compatibleArtefacts = g_paramsCache.getCompatibleArtefacts(vehicle)
-    similarCrewVehicle = copy.copy(vehicle)
-    similarCrewVehicle.crew = vehicle.getSimilarCrew()
-    perfectVehicleParams = params.VehicleParams(similarCrewVehicle).getParamsDict()
-    return VehiclesComparator(vehicleParams, perfectVehicleParams, compatibleArtefacts, bonuses)
+    if vehicle is None:
+        return
+    else:
+        vehicleParamsObject = params.VehicleParams(vehicle)
+        vehicleParams = vehicleParamsObject.getParamsDict()
+        bonuses = vehicleParamsObject.getBonuses(vehicle)
+        compatibleArtefacts = g_paramsCache.getCompatibleArtefacts(vehicle)
+        similarCrewVehicle = copy.copy(vehicle)
+        similarCrewVehicle.crew = vehicle.getSimilarCrew()
+        perfectVehicleParams = params.VehicleParams(similarCrewVehicle).getParamsDict()
+        return VehiclesComparator(vehicleParams, perfectVehicleParams, compatibleArtefacts, bonuses)
 
 
 def itemOnVehicleComparator(vehicle, item):
@@ -354,7 +364,7 @@ def artifactRemovedComparator(vehicle, item, slotIdx):
 
 
 def vehiclesComparator(comparableVehicle, vehicle):
-    return VehiclesComparator(params.VehicleParams(comparableVehicle).getParamsDict(), params.VehicleParams(vehicle).getParamsDict(), suitableArtefacts=g_paramsCache.getCompatibleArtefacts(vehicle))
+    return None if comparableVehicle is None or vehicle is None else VehiclesComparator(params.VehicleParams(comparableVehicle).getParamsDict(), params.VehicleParams(vehicle).getParamsDict(), suitableArtefacts=g_paramsCache.getCompatibleArtefacts(vehicle))
 
 
 def previewVehiclesComparator(comparableVehicle, vehicle, withSituational=False):
@@ -413,8 +423,11 @@ def tankSetupVehiclesComparator(comparableVehicle, vehicle):
 
 
 def postProgressionVehiclesComparator(comparableVehicle, vehicle):
-    vehicleParamsObject = params.VehicleParams(comparableVehicle)
-    return VehiclesComparator(vehicleParamsObject.getParamsDict(), params.VehicleParams(_getIdealCrewVehicle(vehicle)).getParamsDict(), suitableArtefacts=g_paramsCache.getCompatibleArtefacts(comparableVehicle), bonuses=vehicleParamsObject.getBonuses(comparableVehicle, False), penalties=vehicleParamsObject.getPenalties(comparableVehicle) if vehicle.isInInventory else None)
+    if vehicle is None:
+        return
+    else:
+        vehicleParamsObject = params.VehicleParams(comparableVehicle)
+        return VehiclesComparator(vehicleParamsObject.getParamsDict(), params.VehicleParams(_getIdealCrewVehicle(vehicle)).getParamsDict(), suitableArtefacts=g_paramsCache.getCompatibleArtefacts(comparableVehicle), bonuses=vehicleParamsObject.getBonuses(comparableVehicle, False), penalties=vehicleParamsObject.getPenalties(comparableVehicle) if vehicle.isInInventory else None)
 
 
 def itemsComparator(currentItem, otherItem, vehicleDescr=None):
@@ -435,9 +448,21 @@ def shellOnVehicleComparator(shell, vehicle):
 def shellComparator(shell, vDescriptor):
     if vDescriptor is not None:
         basicShellDescr = getBasicShell(vDescriptor)
-        return ItemsComparator(params.ShellParams(shell.descriptor, vDescriptor).getParamsDict(), params.ShellParams(basicShellDescr, vDescriptor).getParamsDict())
+        return ItemsComparator(shell_params.ShellParams(shell.descriptor, vDescriptor).getParamsDict(), shell_params.ShellParams(basicShellDescr, vDescriptor).getParamsDict())
     else:
         return
+
+
+def shellModesComparator(shell, descrs, itemDescr=None, isBase=False):
+    if any((d is None for d in descrs)):
+        return None
+    else:
+        _, basicDescr, modifiedDescr = descrs
+        normalParams = shell_params.ShellParams(shell.descriptor, basicDescr).getParamsDict()
+        if isBase:
+            return ItemsComparator(normalParams, normalParams)
+        modifiedParams = shell_params.ShellParams(itemDescr or shell.descriptor, modifiedDescr).getParamsDict()
+        return ItemsComparator(modifiedParams, normalParams)
 
 
 def getGroupBonuses(groupName, comparator):

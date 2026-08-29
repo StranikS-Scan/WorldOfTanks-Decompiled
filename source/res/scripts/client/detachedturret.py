@@ -3,6 +3,9 @@
 from __future__ import absolute_import, division
 import typing
 import GenericComponents
+from cgf_modules import game_events
+from cgf_modules.game_events import ArmorHitPlacement
+from helpers.prefab_effects import resolveShotPrefabEffect
 from soft_exception import SoftException
 import math_utils
 import BigWorld
@@ -19,7 +22,7 @@ from helpers.EffectMaterialCalculation import calcSurfaceMaterialNearPoint
 from helpers.EffectsList import EffectsListPlayer, SoundStartParam, SpecialKeyPointNames
 from helpers.bound_effects import ModelBoundEffects
 from items import vehicles
-from constants import SERVER_TICK_LENGTH
+from constants import SERVER_TICK_LENGTH, VEHICLE_HIT_EFFECT
 from debug_utils import LOG_DEBUG
 _logger = logging.getLogger(__name__)
 _MIN_COLLISION_SPEED = 3.5
@@ -167,7 +170,7 @@ class DetachedTurret(BigWorld.Entity):
                 effectIdx = material_kinds.EFFECT_MATERIAL_INDEXES_BY_NAMES['water']
             self.__detachmentEffects.notifyAboutCollision(energy, point, effectIdx, groundEffect, self.isUnderWater)
 
-    def showDamageFromShot(self, points, effectsIndex):
+    def showDamageFromShot(self, points, effectsIndex, prefabEffectsIndex, shellVelocity):
         collisions = self.entityGameObject.findRead(BigWorld.CollisionComponent)
         if not collisions:
             _logger.error('Collision component is missing')
@@ -175,11 +178,20 @@ class DetachedTurret(BigWorld.Entity):
         parsedPoints = DamageFromShotDecoder.parseHitPoints(points, collisions)
         for shotPoint in parsedPoints:
             if shotPoint.componentName == TankPartNames.TURRET or shotPoint.componentName == TankPartNames.GUN:
+                hitEffectCode = shotPoint.hitEffectCode
+                prefabEffectsIndex, prefabHitEffectCode, excludeTags = resolveShotPrefabEffect(prefabEffectsIndex, hitEffectCode)
                 hitEffects = self.entityGameObject.findWrite(_HitEffects)
                 if hitEffects:
-                    hitEffects.showHit(shotPoint, effectsIndex, shotPoint.componentName)
+                    hitEffects.showHit(shotPoint, effectsIndex, shotPoint.componentName, excludeTags)
                 else:
                     _logger.error('Unable to find _HitEffects component')
+                nodeName = TankPartNames.getActualNodeNameByPartName(shotPoint.componentName, False)
+                hitGo = GenericComponents.findSlot(self.entityGameObject, nodeName)
+                if hitGo.valid:
+                    location = shotPoint.matrix.translation
+                    effGroup = VEHICLE_HIT_EFFECT.getEffectGroup(prefabHitEffectCode)
+                    armorHitPlaceMent = ArmorHitPlacement.REGULAR
+                    CGF.postEvent(self.spaceID, game_events.VehicleHitEvent(self.entityGameObject, hitGo, location, shotPoint.normal, game_events.GunShellInfo(shotPoint.caliber, shotPoint.shellType), shellVelocity, 0, shotPoint.matrix.applyToAxis(2), prefabEffectsIndex, effGroup, prefabHitEffectCode, armorHitPlaceMent))
             _logger.error("Detached turret got hit into %s component, but it's impossible", shotPoint.componentName)
 
     def set_isUnderWater(self, prev):
@@ -312,10 +324,10 @@ class _HitEffects(ModelBoundEffects):
     def __init__(self, model):
         ModelBoundEffects.__init__(self, model)
 
-    def showHit(self, shotPoint, effectsIndex, nodeName):
+    def showHit(self, shotPoint, effectsIndex, nodeName, excludeTags=None):
         effectsDescr = vehicles.g_cache.shotEffects[effectsIndex]
         effectsTimeLine = effectsDescr[shotPoint.hitEffectGroup]
-        self.addNewToNode(nodeName, shotPoint.matrix, effectsTimeLine.effectsList, effectsTimeLine.keyPoints)
+        self.addNewToNode(nodeName, shotPoint.matrix, effectsTimeLine.effectsList, effectsTimeLine.keyPoints, excludeTags=excludeTags)
 
 
 class VehicleEnterTimer(object):

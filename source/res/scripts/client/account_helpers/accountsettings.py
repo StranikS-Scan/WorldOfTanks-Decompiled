@@ -16,7 +16,7 @@ import WWISE
 import constants
 import nations
 from account_helpers import gameplay_ctx
-from account_helpers.settings_core.settings_constants import AIM, BATTLE_EVENTS, CONTOUR, GAME, SOUND, ArmorFlashlight, BattleCommStorageKeys, GuiSettingsBehavior, PersonalMission3, ScorePanelStorageKeys, SPGAim, SITUATIONAL_PERKS, ArmorInspector
+from account_helpers.settings_core.settings_constants import AIM, BATTLE_EVENTS, CONTOUR, GAME, SITUATIONAL_PERKS, SOUND, ArmorFlashlight, ArmorInspector, BattleCommStorageKeys, GuiSettingsBehavior, PersonalMission3, PersonalMission4, ScorePanelStorageKeys, SPGAim, GRAPHICS
 from aih_constants import CTRL_MODE_NAME
 from constants import MAX_VEHICLE_LEVEL, VEHICLE_CLASSES
 from debug_utils import LOG_CURRENT_EXCEPTION
@@ -74,6 +74,7 @@ MAPBOX_CAROUSEL_FILTER_1 = 'MAPBOX_CAROUSEL_FILTER_1'
 MAPBOX_CAROUSEL_FILTER_2 = 'MAPBOX_CAROUSEL_FILTER_2'
 MAPBOX_CAROUSEL_FILTER_3 = 'MAPBOX_CAROUSEL_FILTER_3'
 MAPBOX_CAROUSEL_FILTER_CLIENT_1 = 'MAPBOX_CAROUSEL_FILTER_CLIENT_1'
+HOLIDAY_OPS = 'HOLIDAY_OPS'
 FUN_RANDOM_CAROUSEL_FILTER_1 = 'FUN_RANDOM_CAROUSEL_FILTER_1'
 FUN_RANDOM_CAROUSEL_FILTER_2 = 'FUN_RANDOM_CAROUSEL_FILTER_2'
 FUN_RANDOM_CAROUSEL_FILTER_3 = 'FUN_RANDOM_CAROUSEL_FILTER_3'
@@ -106,6 +107,7 @@ FALLOUT_VEHICLES = 'FALLOUT_VEHICLES'
 BOOSTERS_FILTER = 'boostersFilter'
 LAST_PROMO_PATCH_VERSION = 'lastPromoPatchVersion'
 LAST_STORAGE_VISITED_TIMESTAMP = 'lastStorageVisitedTimestamp'
+LAST_LOGGED_SERVER_DAY = 'lastLoggedServerDay'
 LAST_RESTORE_NOTIFICATION = 'lastRestoreNotification'
 PREVIEW_INFO_PANEL_IDX = 'previewInfoPanelIdx'
 NEW_SETTINGS_COUNTER = 'newSettingsCounter'
@@ -205,6 +207,7 @@ TARGET_DESIGNATOR_MODE_HINT_SECTION = 'targetDesignatorModeHint'
 DYN_SQUAD_HINT_SECTION = 'dynSquadHint'
 PILLBOX_HINT_SECTION = 'pillboxModeHint'
 WHEELED_DASH_MODE_HINT_SECTION = 'wheeledDashModeHint'
+BUSTLE_FEED_HINT_SECTION = 'bustleFeedHint'
 RADAR_HINT_SECTION = 'radarHint'
 PRE_BATTLE_HINT_SECTION = 'preBattleHintSection'
 PRE_BATTLE_ROLE_HINT_SECTION = 'preBattleRoleHintSection'
@@ -215,6 +218,7 @@ HELP_SCREEN_HINT_SECTION = 'helpScreenHint'
 IBC_HINT_SECTION = 'battleCommunicationHint'
 RESERVES_HINT_SECTION = 'reservesHintSection'
 TWIN_GUN_HINT_SECTION = 'twinGunHintSection'
+SHELL_PARAMS_SWITCHER_HINT_SECTION = 'shellParamsSwitcherHintSection'
 COMMANDER_CAM_HINT_SECTION = 'commanderCamHintSection'
 MINIMAP_IBC_HINT_SECTION = 'minimapHintSection'
 DEV_MAPS_HINT_SECTION = 'devMapsHintSection'
@@ -359,6 +363,7 @@ VEH_SKILL_TREE_RECORDED_NOFITICATION_NODE = 'vehSkillTreeRecordedNotificationNod
 VEH_SKILL_TREE_PRESTIGE_GLARE_SHOWN = 'vehSkillTreePrestigeGlareShown'
 VEH_SKILL_TREE_INTRO_SHOWN = 'vehSkillTreeIntroShown'
 PERSONAL_MISSION_3 = 'PERSONAL_MISSION_3'
+PERSONAL_MISSION_4 = 'PERSONAL_MISSION_4'
 CHALLENGES_START_SEEN_NOTIFICATION = 'challengesStartSeenNotification'
 CHALLENGES_REMINDER_SEEN_NOTIFICATION = 'challengesReminderSeenNotification'
 HANGAR_VIEW_SETTINGS = 'hangarView'
@@ -393,6 +398,32 @@ class AdventCalendar(object):
     LAST_HIGHLIGHTED_DOOR = 'adventCalendarLastHighlightedDoor'
     FIRST_ENTRY_NOTIFICATION_SHOWING_DAY = 'adventCalendarFirstEntryNotificationShowingDay'
     LAST_DAY_POPUP_SEEN = 'adventCalendarLastDayPopupSeen'
+
+
+class HolidayOps(object):
+    SETTINGS = 'holidayOpsSettings'
+    HO_DAILY_QUESTS_VISITED = 'HODailyQuestsVisited'
+    HO_GIFT_MACHINE_BUY_TOKEN_VISITED = 'HOGiftMachineBuyTokenVisited'
+    HO_SACK_INFO_VISITED = 'HOSackInfoVisited'
+    HO_SACK_INFO_LAST_SELECTED = 'HOSackInfoLastSelected'
+    HO_RESOURCE_COLLECTING_AVAILABLE = 'HOResourceCollectingAvailable'
+    HO_RESOURCE_FRIENDS_COLLECTING_AVAILABLE = 'HOResourceFriendsCollectingAvailable'
+    HO_CELEBRITY_ADV_QUESTS_VISITED_MASK = 'HOCelebrityAdvQuestsVisitedMask'
+    HO_CELEBRITY_DAY_QUESTS_VISITED_MASK = 'HOCelebrityDayQuestsVisitedMask'
+    HO_CELEBRITY_DAY_QUESTS_COMPLETED_MASK = 'HOCelebrityDayQuestsCompletedMask'
+    HO_GUEST_ACTIVITY_SHOWN = 'HOGuestActivityShown'
+    HO_MAX_LEVEL_MESSAGE_CLOSE = 'HOMaxLevelMessageClose'
+    HO_DOG_PAGE_VISITED = 'HODogPageVisited'
+    HO_MARKET_PLACE_PAGE_VISITED = 'HOMarketPlaceVisited'
+    HO_CAT_PAGE_VISITED = 'HOCatPageVisited'
+    HO_FRIENDS_BANNER_SHOWN = 'HOFriendsBannerShown'
+    HO_NO_FRIENDS_PAGE_RESET_TIME = 'HONoFriendsPageResetTime'
+    HO_REWARD_KIT_OPEN = 'HORewardKitOpen'
+    HO_GIFT_MACHINE_HINT_VISIBLE = 'HOGiftMachineHintVisible'
+    HO_CHALLENGE_LAST_QUEST_COMPLETION_COUNT = 'HOChallengeLastQuestCompletionCount'
+    HO_LAST_SEEN_COLLECTING_NOTIFY_TIME = 'lastSeenCollectingNotifyTime'
+    HO_LAST_SEEN_FRIENDS_NOTIFY_TIME = 'lastSeenFriendsNotifyTime'
+    HO_LAST_SEEN_NO_FRIENDS_NOTIFY_TIME = 'lastSeenNoFriendsNotifyTime'
 
 
 class StrongholdEvent(object):
@@ -440,7 +471,7 @@ FRONTLINE_BANNER_INTRO_CLICK_TIMESTAMP = 'frontlineBannerIntroClickTimestamp'
 COMP7_BANNER_FIRST_APPEARANCE_TIMESTAMP = 'comp7BannerFirstAppearanceTimestamp'
 COMP7_LIGHT_BANNER_FIRST_APPEARANCE_TIMESTAMP = 'comp7LightBannerFirstAppearanceTimestamp'
 BATTLE_ROYALE_BANNER_FIRST_APPEARANCE_TIMESTAMP = 'battleRoyaleBannerFirstAppearanceTimestamp'
-FUN_RANDOM_BANNER_INTRO_CLICK_TIMESTAMP = 'funRandomBannerIntroClickTimestamp'
+FUN_RANDOM_BANNER_LAST_VISITED_SEASON_BORDER = 'funRandomBannerLastVisitedSeasonBorder'
 FUN_RANDOM_BANNER_LAST_VISIBLE_PROGRESSION_NAME = 'funRandomBannerLastVisibleProgressionName'
 FUN_RANDOM_LAST_PRESET = 'funRandomLastPreset'
 FUN_RANDOM_PROGRESSION_OPENED = 'funRandomProgressionOpened'
@@ -549,7 +580,8 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                    'role_ATSPG_sniper': False,
                                    'role_ATSPG_support': False,
                                    'role_LT_universal': False,
-                                   'role_LT_wheeled': False,
+                                   'role_LT_scout': False,
+                                   'role_LT_support': False,
                                    'role_SPG': False},
                CAROUSEL_FILTER_3: {'own3DStyle': False,
                                    'canInstallAttachments': False},
@@ -606,7 +638,8 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                           'role_ATSPG_sniper': False,
                                           'role_ATSPG_support': False,
                                           'role_LT_universal': False,
-                                          'role_LT_wheeled': False,
+                                          'role_LT_scout': False,
+                                          'role_LT_support': False,
                                           'role_SPG': False},
                RANKED_CAROUSEL_FILTER_3: {'own3DStyle': False,
                                           'canInstallAttachments': False},
@@ -700,7 +733,8 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                               'role_ATSPG_sniper': False,
                                               'role_ATSPG_support': False,
                                               'role_LT_universal': False,
-                                              'role_LT_wheeled': False,
+                                              'role_LT_scout': False,
+                                              'role_LT_support': False,
                                               'role_SPG': False},
                EPICBATTLE_CAROUSEL_FILTER_3: {'own3DStyle': False,
                                               'canInstallAttachments': False},
@@ -749,6 +783,7 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                           'favorite': False,
                                           'bonus': False,
                                           'crystals': False,
+                                          'newYear': False,
                                           'role_HT_assault': False,
                                           'role_HT_break': False,
                                           'role_HT_support': False,
@@ -762,7 +797,8 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                           'role_ATSPG_sniper': False,
                                           'role_ATSPG_support': False,
                                           'role_LT_universal': False,
-                                          'role_LT_wheeled': False,
+                                          'role_LT_scout': False,
+                                          'role_LT_support': False,
                                           'role_SPG': False},
                MAPBOX_CAROUSEL_FILTER_3: {'own3DStyle': False,
                                           'canInstallAttachments': False},
@@ -818,7 +854,8 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                               'role_ATSPG_sniper': False,
                                               'role_ATSPG_support': False,
                                               'role_LT_universal': False,
-                                              'role_LT_wheeled': False,
+                                              'role_LT_scout': False,
+                                              'role_LT_support': False,
                                               'role_SPG': False},
                FUN_RANDOM_CAROUSEL_FILTER_3: {'own3DStyle': False,
                                               'canInstallAttachments': False},
@@ -873,7 +910,8 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                          'role_ATSPG_sniper': False,
                                          'role_ATSPG_support': False,
                                          'role_LT_universal': False,
-                                         'role_LT_wheeled': False,
+                                         'role_LT_scout': False,
+                                         'role_LT_support': False,
                                          'role_SPG': False},
                COMP7_CAROUSEL_FILTER_3: {'own3DStyle': False,
                                          'canInstallAttachments': False},
@@ -928,7 +966,8 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                                'role_ATSPG_sniper': False,
                                                'role_ATSPG_support': False,
                                                'role_LT_universal': False,
-                                               'role_LT_wheeled': False,
+                                               'role_LT_scout': False,
+                                               'role_LT_support': False,
                                                'role_SPG': False},
                COMP7_LIGHT_CAROUSEL_FILTER_3: {'own3DStyle': False,
                                                'canInstallAttachments': False},
@@ -1257,7 +1296,8 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                                                                        'TERRAIN_TESSELLATION_ENABLED': True,
                                                                                        'SNIPER_MODE_TERRAIN_TESSELLATION_ENABLED': True,
                                                                                        'TRACK_PHYSICS_QUALITY': True,
-                                                                                       'VISIBILITY_TUNNEL_ENABLED': True}},
+                                                                                       'VISIBILITY_TUNNEL': True,
+                                                                                       GRAPHICS.SHOW_PREBATTLE_HIGHLIGHTS: True}},
                                        'FeedbackSettings': {'feedbackBattleBorderMap': {'battleBorderMapType': True,
                                                                                         'battleBorderMapMode': True},
                                                             'feedbackQuestsProgress': {ScorePanelStorageKeys.SHOW_HP_VALUES: True,
@@ -1355,6 +1395,9 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                 TWIN_GUN_HINT_SECTION: {HINTS_LEFT: 3,
                                         LAST_DISPLAY_DAY: 0,
                                         NUM_BATTLES: 0},
+                SHELL_PARAMS_SWITCHER_HINT_SECTION: {HINTS_LEFT: 3,
+                                                     LAST_DISPLAY_DAY: 0,
+                                                     NUM_BATTLES: 0},
                 ROCKET_ACCELERATION_MODE_HINT_SECTION: {HINTS_LEFT: 3,
                                                         LAST_DISPLAY_DAY: 0,
                                                         NUM_BATTLES: 0},
@@ -1376,6 +1419,9 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                 PILLBOX_HINT_SECTION: {HINTS_LEFT: 3,
                                        LAST_DISPLAY_DAY: 0,
                                        NUM_BATTLES: 0},
+                BUSTLE_FEED_HINT_SECTION: {HINTS_LEFT: 3,
+                                           LAST_DISPLAY_DAY: 0,
+                                           NUM_BATTLES: 0},
                 CREW_SKINS_VIEWED: {},
                 CREW_BOOKS_VIEWED: {CREW_BOOK_RARITY.CREW_COMMON: {},
                                     CREW_BOOK_RARITY.CREW_EPIC: {},
@@ -1425,7 +1471,7 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                 COMP7_BANNER_FIRST_APPEARANCE_TIMESTAMP: 0,
                 COMP7_LIGHT_BANNER_FIRST_APPEARANCE_TIMESTAMP: 0,
                 BATTLE_ROYALE_BANNER_FIRST_APPEARANCE_TIMESTAMP: 0,
-                FUN_RANDOM_BANNER_INTRO_CLICK_TIMESTAMP: 0,
+                FUN_RANDOM_BANNER_LAST_VISITED_SEASON_BORDER: 0,
                 FUN_RANDOM_BANNER_LAST_VISIBLE_PROGRESSION_NAME: '',
                 FUN_RANDOM_LAST_PRESET: 'undefined',
                 FUN_RANDOM_PROGRESSION_OPENED: False,
@@ -1455,6 +1501,7 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                 Winback.WINBACK_SETTINGS: {Winback.COMPLETED_STARTING_QUEST_COUNT: 0,
                                            Winback.INTRO_SHOWN: False,
                                            Winback.BATTLE_SELECTOR_SETTINGS_BULLET_SHOWN: False},
+                LAST_LOGGED_SERVER_DAY: 0,
                 ACHIEVEMENTS_INFO: {ACHIEVEMENTS_WTR_RANKS: {},
                                     ACHIEVEMENTS_INITIAL_BATTLE_COUNT: -1,
                                     ACHIEVEMENTS_MAX_WTR_POINTS: 0,
@@ -1484,15 +1531,41 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                           AdventCalendar.LAST_HIGHLIGHTED_DOOR: -1,
                                           AdventCalendar.FIRST_ENTRY_NOTIFICATION_SHOWING_DAY: -1,
                                           AdventCalendar.LAST_DAY_POPUP_SEEN: 0},
+                HolidayOps.SETTINGS: {HolidayOps.HO_DAILY_QUESTS_VISITED: False,
+                                      HolidayOps.HO_CELEBRITY_DAY_QUESTS_VISITED_MASK: 0,
+                                      HolidayOps.HO_CELEBRITY_DAY_QUESTS_COMPLETED_MASK: 0,
+                                      HolidayOps.HO_CELEBRITY_ADV_QUESTS_VISITED_MASK: 0,
+                                      HolidayOps.HO_GUEST_ACTIVITY_SHOWN: False,
+                                      HolidayOps.HO_GIFT_MACHINE_BUY_TOKEN_VISITED: False,
+                                      HolidayOps.HO_MAX_LEVEL_MESSAGE_CLOSE: False,
+                                      HolidayOps.HO_DOG_PAGE_VISITED: False,
+                                      HolidayOps.HO_MARKET_PLACE_PAGE_VISITED: None,
+                                      HolidayOps.HO_CAT_PAGE_VISITED: False,
+                                      HolidayOps.HO_FRIENDS_BANNER_SHOWN: False,
+                                      HolidayOps.HO_NO_FRIENDS_PAGE_RESET_TIME: 0,
+                                      HolidayOps.HO_SACK_INFO_VISITED: False,
+                                      HolidayOps.HO_SACK_INFO_LAST_SELECTED: 1,
+                                      HolidayOps.HO_RESOURCE_COLLECTING_AVAILABLE: False,
+                                      HolidayOps.HO_RESOURCE_FRIENDS_COLLECTING_AVAILABLE: False,
+                                      HolidayOps.HO_REWARD_KIT_OPEN: False,
+                                      HolidayOps.HO_GIFT_MACHINE_HINT_VISIBLE: True,
+                                      HolidayOps.HO_CHALLENGE_LAST_QUEST_COMPLETION_COUNT: 0,
+                                      HolidayOps.HO_LAST_SEEN_COLLECTING_NOTIFY_TIME: -1,
+                                      HolidayOps.HO_LAST_SEEN_FRIENDS_NOTIFY_TIME: -1,
+                                      HolidayOps.HO_LAST_SEEN_NO_FRIENDS_NOTIFY_TIME: -1},
                 ResourceWell.SETTINGS: {ResourceWell.FIRST_BANNER_ENTERING_MADE: set(),
                                         ResourceWell.IS_BANNER_FIRST_APPEARANCE_SEEN: set()},
                 PERSONAL_MISSION_3: {PersonalMission3.INTRO: False,
                                      PersonalMission3.INTRO_OP_8: False,
                                      PersonalMission3.INTRO_OP_9: False,
                                      PersonalMission3.INTRO_OP_10: False,
-                                     PersonalMission3.PM_BANNER_ANIMATION_KEY: False,
                                      PersonalMission3.CHECKED_PM3_POINTS: 0,
                                      PersonalMission3.PART_NO: 0},
+                PERSONAL_MISSION_4: {PersonalMission4.INTRO_OP_11: False,
+                                     PersonalMission4.PM_BANNER_ANIMATION_KEY: False,
+                                     PersonalMission4.CHECKED_PM4_POINTS: 0,
+                                     PersonalMission4.OPERATION_SHOWN: False,
+                                     PersonalMission4.PART_NO: 0},
                 NATIONS_VISITED: set(),
                 OPEN_BUNDLE_ENTRY_POINT_SHOWN: set(),
                 OPEN_BUNDLE_ENTRY_POINT_ANIMATION_SHOWN: set(),
@@ -1779,7 +1852,7 @@ def _recursiveStep(defaultDict, savedDict, finalDict):
 
 class AccountSettings(object):
     onSettingsChanging = Event.Event()
-    version = 101
+    version = 103
     settingsCore = dependency.descriptor(ISettingsCore)
     __cache = {'login': None,
      'section': None}
@@ -2694,6 +2767,30 @@ class AccountSettings(object):
                     uiSettings = AccountSettings._readSection(section, KEY_UI_FLAGS)
                     if uiSettings.has_key(COMP7_LIGHT_UI_SECTION):
                         uiSettings.deleteSection(COMP7_LIGHT_UI_SECTION)
+
+            if currVersion < 102:
+                carouselFilters = (CAROUSEL_FILTER_2,
+                 RANKED_CAROUSEL_FILTER_2,
+                 EPICBATTLE_CAROUSEL_FILTER_2,
+                 MAPBOX_CAROUSEL_FILTER_2,
+                 FUN_RANDOM_CAROUSEL_FILTER_2,
+                 COMP7_CAROUSEL_FILTER_2,
+                 COMP7_LIGHT_CAROUSEL_FILTER_2)
+                for key, section in _filterAccountSection(ads):
+                    filtersSection = AccountSettings._readSection(section, KEY_FILTERS)
+                    for filterKey in filtersSection.keys():
+                        if filterKey in carouselFilters:
+                            data = _unpack(filtersSection[filterKey].asString)
+                            data.pop('role_LT_wheeled', None)
+                            data['role_LT_universal'] = False
+                            data['role_LT_scout'] = False
+                            data['role_LT_support'] = False
+                            filtersSection.write(filterKey, _pack(data))
+
+            if currVersion < 103:
+                for key, section in _filterAccountSection(ads):
+                    accSettings = AccountSettings._readSection(section, KEY_SETTINGS)
+                    accSettings.deleteSection('wt_keys')
 
             ads.writeInt('version', AccountSettings.version)
         return

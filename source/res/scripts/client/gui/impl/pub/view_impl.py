@@ -70,7 +70,7 @@ class ViewImpl(View, EventsHandler, patched_typing.Generic[TViewModel]):
         window = None
         directionOverride = None
         if event.contentID in (R.views.common.pop_over_window.backport_pop_over.BackportPopOverContent(), R.aliases.common.popOver.Backport()):
-            directionOverride = _BACKPORT_POPOVER_DIRECTION_OVERRIDE.get(event.direction, None)
+            directionOverride = _BACKPORT_POPOVER_DIRECTION_OVERRIDE.get(event.direction)
         if event.contentID == R.aliases.common.popOver.Backport():
             content = self.__createBackportPopOverContent(event)
         else:

@@ -1,4 +1,5 @@
 <shells.xml>
+  <xmlns:xmlref>	http://bwt/xmlref	</xmlns:xmlref>
   <icons>
     <ap>	ARMOR_PIERCING.png 0 0	</ap>
     <ap_premium>	ARMOR_PIERCING_PREMIUM.png 0 0	</ap_premium>
@@ -20,6 +21,7 @@
     <he_spg>	HIGH_EXPLOSIVE_SPG.png 0 0	</he_spg>
     <he_spg_stun>	HIGH_EXPLOSIVE_SPG_STUN.png 0 0	</he_spg_stun>
     <he_zero_splash>	HIGH_EXPLOSIVE_ZERO_SPLASH.png 0 0	</he_zero_splash>
+    <he_rocket>	HIGH_EXPLOSIVE_ROCKET.png 0 0	</he_rocket>
   </icons>
   <_13.2mm_AP>
     <id>	4	</id>
@@ -4695,6 +4697,89 @@
       </damage>
     </armorSpalls>
   </_149mm_Type_1_HE_7x7>
+  <_15_5_cm_AP_Shin>
+    <id>	202	</id>
+    <userString>	#japan_vehicles:_15_5_cm_AP_Shin	</userString>
+    <icon>	ap	</icon>
+    <price>	2516	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	155	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	hugeArmorPiercing	</effects>
+    <damage>
+      <armor>	100	</armor>
+      <devices>	210	</devices>
+    </damage>
+    <normalizationAngle>	5	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
+  </_15_5_cm_AP_Shin>
+  <_15_5_cm_AP_Shin_Toku_Kou>
+    <id>	203	</id>
+    <userString>	#japan_vehicles:_15_5_cm_AP_Shin_Toku_Kou	</userString>
+    <icon>	ap_premium	</icon>
+    <price>	6800	</price>
+    <improved>	true	</improved>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	155	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	hugeArmorPiercing	</effects>
+    <damage>
+      <armor>	100	</armor>
+      <devices>	210	</devices>
+    </damage>
+    <normalizationAngle>	5	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
+  </_15_5_cm_AP_Shin_Toku_Kou>
+  <_15_5_cm_HE_Shin>
+    <id>	204	</id>
+    <userString>	#japan_vehicles:_15_5_cm_HE_Shin	</userString>
+    <icon>	he_modern	</icon>
+    <price>	1953	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	155	</caliber>
+    <explosionRadius>	3.78	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	hugeHighExplosive	</effects>
+    <damage>
+      <armor>	100	</armor>
+      <devices>	210	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	3.78	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	50	</armor>
+        <devices>	100	</devices>
+      </damage>
+    </armorSpalls>
+  </_15_5_cm_HE_Shin>
+  <_12_cm_Shisei_HE_Funshindan>
+    <id>	205	</id>
+    <userString>	#japan_vehicles:_12_cm_Shisei_HE_Funshindan	</userString>
+    <icon>	he_rocket	</icon>
+    <secondaryAttackReason>	he_rocket	</secondaryAttackReason>
+    <price>	0	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	120	</caliber>
+    <explosionRadius>	2.42	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <isForceTracer>	true	</isForceTracer>
+    <effects>	rocket	</effects>
+    <damage>
+      <armor>	100	</armor>
+      <devices>	165	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	2.42	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	50	</armor>
+        <devices>	85	</devices>
+      </damage>
+    </armorSpalls>
+  </_12_cm_Shisei_HE_Funshindan>
   <Development_Shell>
     <id>	65000	</id>
     <userString>	Development_Shell	</userString>

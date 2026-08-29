@@ -21,7 +21,7 @@ class WinbackTurnOffBattlesProcessor(Processor):
     def __init__(self, reason, dialog=None, parent=None):
         confirmators = None
         if dialog is not None:
-            layoutID = R.views.lobby.winback.WinbackLeaveModeDialogView()
+            layoutID = R.views.mono.winback.winback_leave_mode_dialog_view()
             confirmators = [plugins.AsyncDialogConfirmator(showSingleDialogWithResultData, dialog, layoutID, parent)]
         super(WinbackTurnOffBattlesProcessor, self).__init__(confirmators)
         self.__reason = reason

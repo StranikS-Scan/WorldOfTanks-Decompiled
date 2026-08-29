@@ -2,8 +2,8 @@
 # Embedded file name: scripts/client/gui/impl/gen/view_models/views/lobby/personal_missions_30/rewards_view_model.py
 from enum import Enum
 from frameworks.wulf import Array, ViewModel
-from gui.impl.gen.view_models.common.missions.bonuses.icon_bonus_model import IconBonusModel
 from gui.impl.gen.view_models.common.vehicle_info_model import VehicleInfoModel
+from gui.impl.gen.view_models.views.lobby.personal_missions_30.style_bonus_model import StyleBonusModel
 
 class RewardsViewType(Enum):
     VEHICLE_PART = 'vehiclePart'
@@ -16,7 +16,7 @@ class RewardsViewModel(ViewModel):
     __slots__ = ('close', 'goToOperation', 'goToVehicle', 'disableVideoOverlaySound')
     ARG_REWARD_INDEX = 'tooltipId'
 
-    def __init__(self, properties=8, commands=4):
+    def __init__(self, properties=10, commands=4):
         super(RewardsViewModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -41,7 +41,7 @@ class RewardsViewModel(ViewModel):
 
     @staticmethod
     def getRewardsType():
-        return IconBonusModel
+        return StyleBonusModel
 
     def getVehicleDetailName(self):
         return self._getString(3)
@@ -73,6 +73,18 @@ class RewardsViewModel(ViewModel):
     def setOperationId(self, value):
         self._setNumber(7, value)
 
+    def getButtonDisabled(self):
+        return self._getBool(8)
+
+    def setButtonDisabled(self, value):
+        self._setBool(8, value)
+
+    def getButtonVisible(self):
+        return self._getBool(9)
+
+    def setButtonVisible(self, value):
+        self._setBool(9, value)
+
     def _initialize(self):
         super(RewardsViewModel, self)._initialize()
         self._addViewModelProperty('vehicle', VehicleInfoModel())
@@ -83,6 +95,8 @@ class RewardsViewModel(ViewModel):
         self._addStringProperty('operationName', '')
         self._addStringProperty('nextOperationName', '')
         self._addNumberProperty('operationId', 0)
+        self._addBoolProperty('buttonDisabled', False)
+        self._addBoolProperty('buttonVisible', False)
         self.close = self._addCommand('close')
         self.goToOperation = self._addCommand('goToOperation')
         self.goToVehicle = self._addCommand('goToVehicle')

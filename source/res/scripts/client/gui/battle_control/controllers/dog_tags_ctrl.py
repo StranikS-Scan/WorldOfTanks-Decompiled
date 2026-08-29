@@ -7,7 +7,6 @@ import BigWorld
 import CGF
 import Math
 import Event
-import PlayerEvents
 from UIComponents import GamefaceMarkerComponent
 from AvatarInputHandler import cameras
 from constants import ARENA_PERIOD
@@ -20,6 +19,7 @@ from dog_tags_common.config.common import ComponentViewType
 from helpers import dependency
 from helpers.CallbackDelayer import CallbackDelayer
 from skeletons.account_helpers.settings_core import ISettingsCore
+from skeletons.gameplay import IGameplayLogic
 from skeletons.gui.battle_session import IBattleSessionProvider
 from skeletons.gui.lobby_context import ILobbyContext
 _logger = logging.getLogger(__name__)
@@ -95,7 +95,9 @@ class DogTagsController(IBattleController):
         avatar = BigWorld.player()
         avatar.onVehicleEnterWorld += self.__onVehicleEnterWorld
         avatar.onVehicleLeaveWorld += self.__onVehicleLeaveWorld
-        PlayerEvents.g_playerEvents.onAvatarReady += self.__onAvatarReady
+        from skeletons.gameplay import GameplayStateID
+        gameplayLogic = dependency.instance(IGameplayLogic)
+        gameplayLogic.addOneshotObserver([GameplayStateID.PREBATTLE], self, enterFn=DogTagsController._onPrebattleStateReached)
         if avatar.vehicle is not None:
             self._initDogTagsInfo(avatar.vehicle)
         return
@@ -107,7 +109,6 @@ class DogTagsController(IBattleController):
         avatar = BigWorld.player()
         avatar.onVehicleEnterWorld -= self.__onVehicleEnterWorld
         avatar.onVehicleLeaveWorld -= self.__onVehicleLeaveWorld
-        PlayerEvents.g_playerEvents.onAvatarReady -= self.__onAvatarReady
         self.__clearMarkers()
         self.__eManager.clear()
         self.__eManager = None
@@ -128,10 +129,14 @@ class DogTagsController(IBattleController):
     def __onVehicleLeaveWorld(self, vehicle):
         self.__removeDogTagMarker(vehicle)
 
-    def __onAvatarReady(self):
+    def _onPrebattleStateReached(self, _=None, __=None):
         self.__isAvatarReady = True
         if self.__canShowMarkers():
-            self.__delayer.delayCallback(_MARKER_INITIAL_DELAY_, self.__processVehicles)
+            pbhCtrl = self.guiSessionProvider.dynamic.prebattleHighlightsController
+            if pbhCtrl and pbhCtrl.pbhWasShown:
+                self.__delayer.delayCallback(0, self.__processVehicles)
+            else:
+                self.__delayer.delayCallback(_MARKER_INITIAL_DELAY_, self.__processVehicles)
 
     def _extendDogTagInfo(self, dogTagsInfo):
         result = []

@@ -8,10 +8,13 @@ from debug_utils import LOG_ERROR
 from items import _xml
 from items.components import component_constants
 EffectDesc = typing.NamedTuple('EffectDesc', (('prefab', str),))
-ShotEffectItemDesc = typing.NamedTuple('ShotEffectItemDesc', (('prefab', str), ('decal', int)))
+ShotEffectItemDesc = typing.NamedTuple('ShotEffectItemDesc', (('prefab', str), ('decal', int), ('replaces', frozenset)))
 EffectDescMap = typing.Dict[str, EffectDesc]
 ShotEffectGroups = typing.Dict[str, ShotEffectItemDesc]
-GunEffectDesc = typing.NamedTuple('GunEffectDesc', (('idx', int), ('explosion', EffectDesc), ('groundwave', EffectDesc)))
+GunEffectDesc = typing.NamedTuple('GunEffectDesc', (('idx', int),
+ ('explosion', EffectDesc),
+ ('groundwave', EffectDesc),
+ ('replaces', frozenset)))
 GunEffectDescMap = typing.Dict[str, GunEffectDesc]
 ShotEffectDesc = typing.NamedTuple('ShotEffectDesc', (('idx', int),
  ('defaultHit', ShotEffectItemDesc),
@@ -23,6 +26,8 @@ DecalDesc = typing.NamedTuple('DecalDesc', (('idx', int), ('priority', int), ('p
 Decals = typing.NamedTuple('Decals', (('effects', typing.Sequence[DecalDesc]), ('indexes', typing.Dict[str, int])))
 ShotDefaults = typing.NamedTuple('ShotDefaults', (('default', str), ('shellTypeEffects', typing.Dict[str, str])))
 Defaults = typing.NamedTuple('Defaults', (('gun', str), ('shot', ShotDefaults)))
+_EMPTY_EFFECT = EffectDesc('')
+_EMPTY_SHOT_EFFECT_ITEM = ShotEffectItemDesc('', component_constants.INVALID_EFFECT_INDEX, frozenset())
 
 def readDefaultPrefabEffects(xmlCtx, section, subsectionName):
     section = _xml.getSubsection(xmlCtx, section, subsectionName)
@@ -93,25 +98,24 @@ def _readEffect(xmlCtx, section):
 
 def _readGunEffect(xmlCtx, section, idx):
     explosionEffect = _readEffect(xmlCtx, section['explosion'])
-    if section.has_key('groundwave'):
-        groundWaveEffect = _readEffect(xmlCtx, section['groundwave'])
-    else:
-        groundWaveEffect = EffectDesc('')
-    return GunEffectDesc(idx, explosionEffect, groundWaveEffect)
+    groundWaveEffect = _readEffect(xmlCtx, section['groundwave']) if section.has_key('groundwave') else _EMPTY_EFFECT
+    replaces = frozenset(section['replaces'].keys()) if section.has_key('replaces') else frozenset()
+    return GunEffectDesc(idx, explosionEffect, groundWaveEffect, replaces)
 
 
 def _readShotEffectItem(xmlCtx, section, decals):
     prefabPath = _xml.readString(xmlCtx, section, 'prefab')
     decal = _xml.readStringOrEmpty(xmlCtx, section, 'decal')
     decalId = decals.indexes[decal] if decal else component_constants.INVALID_EFFECT_INDEX
-    return ShotEffectItemDesc(prefabPath, decalId)
+    replaces = frozenset(section['replaces'].keys()) if section.has_key('replaces') else frozenset()
+    return ShotEffectItemDesc(prefabPath, decalId, replaces)
 
 
 def _readShotEffect(xmlCtx, section, decals, idx):
     res = {}
-    defaultHit = ShotEffectItemDesc('', component_constants.INVALID_EFFECT_INDEX)
-    defaultVehicleHit = ShotEffectItemDesc('', component_constants.INVALID_EFFECT_INDEX)
-    defaultSceneHit = ShotEffectItemDesc('', component_constants.INVALID_EFFECT_INDEX)
+    defaultHit = _EMPTY_SHOT_EFFECT_ITEM
+    defaultVehicleHit = _EMPTY_SHOT_EFFECT_ITEM
+    defaultSceneHit = _EMPTY_SHOT_EFFECT_ITEM
     for sname, subsection in section.items():
         xmlCtx = (xmlCtx, sname)
         shotEffectItem = _readShotEffectItem(xmlCtx, subsection, decals)

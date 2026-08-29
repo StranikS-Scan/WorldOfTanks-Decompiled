@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: comp7_light/scripts/common/comp7_light_constants.py
+from __future__ import absolute_import
 import constants
 import enum
 from constants_utils import ConstInjector

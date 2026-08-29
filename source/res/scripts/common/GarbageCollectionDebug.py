@@ -210,6 +210,8 @@ def getGarbageGraph(depth=0):
         del gc_refs[:]
         del gc_dump[:]
         return result % '; '.join(itertools.chain(node_items, edge_items))
+    else:
+        return
 
 
 class TestLeak:

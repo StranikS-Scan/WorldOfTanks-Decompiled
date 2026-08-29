@@ -5,20 +5,19 @@ from functools import partial
 import typing
 from past.builtins import xrange
 from future.moves import pickle
-from future.utils import lmap, lzip
+from future.utils import lmap, lzip, viewitems
+from math import radians
 from collections import namedtuple
-from constants import IS_CLIENT, IS_WEB, IS_EDITOR, IS_BOT, HEATING_ZONES_GUN_STATE, DEBUFFS_TYPES
+from constants import IS_CLIENT, IS_WEB, IS_EDITOR, IS_BOT, HEATING_ZONES_GUN_STATE, DEBUFFS_TYPES, SIGHT_POINTER_COMMON_CONSTANTS
 from debug_utils import LOG_WARNING
-from items.components import component_constants, c11n_constants
-from items.components import path_builder
+from items import ITEM_TYPES, _xml
+from items.components import component_constants, c11n_constants, path_builder
 from items.components.component_constants import KMH_TO_MS
 from items.components.c11n_constants import AttachmentSize
 from items.attributes_helpers import ALLOWED_STATIC_ATTRS, isclose
 from py2to3.patched_future import with_metaclass
 from soft_exception import SoftException
 from wrapped_reflection_framework import ReflectionMetaclass, reflectedNamedTuple
-from items import _xml, ITEM_TYPES
-from math import radians
 if IS_CLIENT:
     from helpers import i18n
 elif IS_WEB or IS_BOT:
@@ -33,10 +32,10 @@ else:
 
 
 if typing.TYPE_CHECKING:
-    from typing import Any, Dict, Tuple, List, Set, Optional, Sequence
+    from typing import Any, Dict, List, Optional, Sequence, Set
     from constants import VEHICLE_TTC_ASPECTS
     from items.vehicles import VehicleDescriptor
-__all__ = ('MaterialInfo', 'DEFAULT_MATERIAL_INFO', 'EmblemSlot', 'LodSettings', 'NodesAndGroups', 'Camouflage', 'DEFAULT_CAMOUFLAGE', 'SwingingSettings', 'I18nComponent', 'DeviceHealth', 'ModelStatesPaths', 'RocketAccelerationParams', 'ImpulseData', 'MechanicsParams', 'RechargeableNitroParams', 'ConcentrationModeParams', 'ImprovedRammingParams', 'PowerModeParams', 'BattleFuryParams', 'PillboxSiegeModeParams', 'StationaryReloadParams', 'ExtraShotClipParams', 'AccuracyStacksParams', 'SecondaryGunParams', 'SupportWeaponParams', 'ChargeableBurstParams', 'ChargeShotParams', 'OverheatStacksParams', 'TargetDesignatorParams', 'StanceDanceParams', 'TemperatureGunThermalState', 'TemperatureGunThermalStates', 'TemperatureGunParams', 'OverheatGunParams', 'HeatingZonesGunParams', 'TargetDesignatorParams', 'StagedJetBoostersParams', 'LowChargeShotParams', 'PropellantGunParams', 'WheeledDashParams')
+__all__ = ('MaterialInfo', 'DEFAULT_MATERIAL_INFO', 'EmblemSlot', 'LodSettings', 'NodesAndGroups', 'Camouflage', 'DEFAULT_CAMOUFLAGE', 'SwingingSettings', 'I18nComponent', 'DeviceHealth', 'ModelStatesPaths', 'RocketAccelerationParams', 'ImpulseData', 'MechanicsParams', 'RechargeableNitroParams', 'ConcentrationModeParams', 'ImprovedRammingParams', 'PowerModeParams', 'BattleFuryParams', 'PillboxSiegeModeParams', 'StationaryReloadParams', 'ExtraShotClipParams', 'AccuracyStacksParams', 'SecondaryGunParams', 'SupportWeaponParams', 'ChargeableBurstParams', 'ChargeShotParams', 'OverheatStacksParams', 'TargetDesignatorParams', 'StanceDanceParams', 'TemperatureGunThermalState', 'TemperatureGunThermalStates', 'TemperatureGunParams', 'OverheatGunParams', 'HeatingZonesGunParams', 'StagedJetBoostersParams', 'LowChargeShotParams', 'PropellantGunParams', 'WheeledDashParams', 'AuxiliaryRocketLauncherParams', 'ShellSwitcherParams', 'ShellCalibrationParams', 'AutoreloaderSurgeParams', 'BustleFeedParams', 'SightPointerParams')
 MaterialInfo = reflectedNamedTuple('MaterialInfo', ('kind', 'armor', 'extra', 'multipleExtra', 'vehicleDamageFactor', 'useArmorHomogenization', 'useHitAngle', 'useAntifragmentationLining', 'mayRicochet', 'collideOnceOnly', 'checkCaliberForRicochet', 'checkCaliberForHitAngleNorm', 'damageKind', 'chanceToHitByProjectile', 'chanceToHitByExplosion', 'continueTraceIfNoHit', 'tags'))
 DEFAULT_MATERIAL_INFO = MaterialInfo(0, 0, None, False, 0.0, False, False, False, False, False, False, False, 0, 0.0, 0.0, False, frozenset())
 EmblemSlot = reflectedNamedTuple('EmblemSlot', ('rayStart', 'rayEnd', 'rayUp', 'size', 'hideIfDamaged', 'type', 'isMirrored', 'isUVProportional', 'emblemId', 'slotId', 'applyToFabric', 'compatibleModels'))
@@ -333,6 +332,20 @@ def readTickedImpulseData(ctx, section, subsection='tickedImpulse'):
     return tickedImpulse
 
 
+def readShellCDsByName(ctx, section, subsection='shells'):
+    from items.vehicles import getShellByName
+    shellsCDs = set()
+    shellsList = _xml.readStringOrEmpty(ctx, section, subsection).strip().split()
+    for shellData in shellsList:
+        shellNation, shellName = shellData.split(':')
+        shellDescr = getShellByName(shellName, shellNation)
+        if shellDescr is None:
+            _xml.raiseWrongXml(ctx, '', "Unknown shell's name: {}!".format(shellData))
+        shellsCDs.add(shellDescr.compactDescr)
+
+    return shellsCDs
+
+
 class RocketAccelerationParams(object):
     __slots__ = ('deployTime', 'reloadTime', 'reuseCount', 'duration', 'impulse', 'modifiers', 'kpi')
 
@@ -391,7 +404,6 @@ class MechanicsParams(object):
             params.__origin = origin
             return params
         else:
-            return None
             return None
 
     def getMechanicsMiscAttributes(self):
@@ -945,15 +957,13 @@ class ChargeableBurstParams(GunMechanicsParams):
 
 
 class LowChargeShotParams(GunMechanicsParams):
-    __slots__ = ('almostFinishedTime', 'reloadTimeCoefficient', 'modifiers', 'shots')
+    __slots__ = ('almostFinishedTime', 'reloadTimeCoefficient')
     MECHANICS_NAME = 'lowChargeShot'
 
-    def __init__(self, almostFinishedTime, reloadTimeCoefficient, modifiers, shots):
-        super(LowChargeShotParams, self).__init__()
+    def __init__(self, almostFinishedTime, reloadTimeCoefficient, modifiers):
+        super(LowChargeShotParams, self).__init__(modifiers)
         self.almostFinishedTime = almostFinishedTime
         self.reloadTimeCoefficient = reloadTimeCoefficient
-        self.modifiers = modifiers
-        self.shots = shots
         self._saveOrigin()
 
     @classmethod
@@ -961,53 +971,15 @@ class LowChargeShotParams(GunMechanicsParams):
         almostFinishedTime = _xml.readNonNegativeFloat(ctx, section, 'almostFinishedTime')
         reloadTimeCoefficient = _xml.readNonNegativeFloat(ctx, section, 'reloadTimeCoefficient')
         modifiers = readModifiers(ctx, _xml.getSubsection(ctx, section, 'modifiers'))
-        shots = [ cls._readShot(ctx, shotSubsection) for _, shotSubsection in section['shots'].items() ]
-        return cls(almostFinishedTime=almostFinishedTime, reloadTimeCoefficient=reloadTimeCoefficient, modifiers=modifiers, shots=shots)
-
-    @classmethod
-    def _readShot(cls, ctx, section):
-        from items.vehicles import g_cache
-        effectName = _xml.readNonEmptyString(ctx, section, 'effects')
-        effectsIndex = g_cache.shotEffectsIndexes[effectName]
-        return {'damageValue': _xml.readInt(ctx, section, 'damageValue'),
-         'piercingValue': _xml.readInt(ctx, section, 'piercingValue'),
-         'shotSpeedValue': _xml.readInt(ctx, section, 'shotSpeedValue'),
-         'effectsIndex': effectsIndex}
+        return cls(almostFinishedTime=almostFinishedTime, reloadTimeCoefficient=reloadTimeCoefficient, modifiers=modifiers)
 
     @classmethod
     def getDefaultMechanicsMiscAttributes(cls):
-        return {'lowChargeShot/reloadTimeCoefficient': 1.0,
-         'lowChargeShot/shot0/damageValue': 0,
-         'lowChargeShot/shot0/piercingValue': 0,
-         'lowChargeShot/shot0/shotSpeedValue': 0,
-         'lowChargeShot/shot1/damageValue': 0,
-         'lowChargeShot/shot1/piercingValue': 0,
-         'lowChargeShot/shot1/shotSpeedValue': 0,
-         'lowChargeShot/shot2/damageValue': 0,
-         'lowChargeShot/shot2/piercingValue': 0,
-         'lowChargeShot/shot2/shotSpeedValue': 0}
+        return {'lowChargeShot/reloadTimeCoefficient': 1.0}
 
     def _applyMechanicsAttrs(self, attr, value):
         if attr == 'lowChargeShot/reloadTimeCoefficient':
             self.reloadTimeCoefficient *= value
-            return
-        attrParts = attr.split('/')
-        if attrParts[0] != 'lowChargeShot':
-            return
-        shotName = attrParts[1][-1]
-        if not shotName.isdigit():
-            return
-        shotIdx = int(shotName)
-        if shotIdx + 1 > len(self.shots):
-            return
-        attribute = attrParts[2]
-        shot = self.shots[shotIdx]
-        if attribute == 'damageValue':
-            shot['damageValue'] += value
-        elif attribute == 'piercingValue':
-            shot['piercingValue'] += value
-        elif attribute == 'shotSpeedValue':
-            shot['shotSpeedValue'] += value
 
 
 class ChargeShotParams(MechanicsParams):
@@ -1147,6 +1119,54 @@ class TargetDesignatorParams(MechanicsParams):
             self.deployTime = max(0.0, self.deployTime + value)
         elif attr == 'targetDesignator/damageIncome':
             self.damageIncomeFactor = max(1.0, self.damageIncomeFactor + value)
+
+
+class AutoreloaderSurgeParams(MechanicsParams):
+    __slots__ = ('maxCharges', 'startCharges', 'chargeTimeSRegular', 'chargeTimeSFullClip', 'reloadTime')
+    MECHANICS_NAME = 'autoreloaderSurge'
+
+    def __init__(self, maxCharges, startCharges, chargeTimeSRegular, chargeTimeSFullClip, reloadTime):
+        super(AutoreloaderSurgeParams, self).__init__()
+        self.maxCharges = maxCharges
+        self.startCharges = startCharges
+        self.chargeTimeSRegular = chargeTimeSRegular
+        self.chargeTimeSFullClip = chargeTimeSFullClip
+        self.reloadTime = reloadTime
+        self._saveOrigin()
+
+    _MIN_CHARGES = 2
+    _MAX_CHARGES = 4
+
+    @classmethod
+    def _readMechanicsParams(cls, ctx, section, readModifiers):
+        maxCharges = _xml.readNonNegativeInt(ctx, section, 'maxCharges')
+        if not cls._MIN_CHARGES <= maxCharges <= cls._MAX_CHARGES:
+            _xml.raiseWrongXml(ctx, '', '[{}] maxCharges must be in range [{}, {}], got {}'.format(cls.MECHANICS_NAME, cls._MIN_CHARGES, cls._MAX_CHARGES, maxCharges))
+        startCharges = _xml.readNonNegativeInt(ctx, section, 'startCharges')
+        chargeTimeSRegular = _xml.readNonNegativeFloat(ctx, section, 'chargeTimeSRegular')
+        chargeTimeSFullClip = _xml.readNonNegativeFloat(ctx, section, 'chargeTimeSFullClip')
+        reloadTime = _xml.readNonNegativeFloat(ctx, section, 'reloadTime')
+        return cls(maxCharges=maxCharges, startCharges=startCharges, chargeTimeSRegular=chargeTimeSRegular, chargeTimeSFullClip=chargeTimeSFullClip, reloadTime=reloadTime)
+
+    @classmethod
+    def getDefaultMechanicsMiscAttributes(cls):
+        return {'autoreloaderSurge/maxCharges': 0,
+         'autoreloaderSurge/startCharges': 0,
+         'autoreloaderSurge/chargeTimeSRegular': 0.0,
+         'autoreloaderSurge/chargeTimeSFullClip': 0.0,
+         'autoreloaderSurge/reloadTime': 0.0}
+
+    def _applyMechanicsAttrs(self, attr, value):
+        if attr == 'autoreloaderSurge/maxCharges':
+            self.maxCharges += value
+        elif attr == 'autoreloaderSurge/startCharges':
+            self.startCharges += value
+        elif attr == 'autoreloaderSurge/chargeTimeSRegular':
+            self.chargeTimeSRegular += value
+        elif attr == 'autoreloaderSurge/chargeTimeSFullClip':
+            self.chargeTimeSFullClip += value
+        elif attr == 'autoreloaderSurge/reloadTime':
+            self.reloadTime += value
 
 
 class StanceDanceParams(MechanicsParams):
@@ -1574,7 +1594,7 @@ class PropellantGunParams(GunMechanicsParams):
         shouldPauseOnReload = _xml.readBool(ctx, section, 'shouldPauseOnReload', True)
         chargeDelay = _xml.readNonNegativeFloat(ctx, section, 'chargeDelay')
         overchargeSwitchCooldown = _xml.readNonNegativeFloat(ctx, section, 'overchargeSwitchCooldown')
-        forbiddenShells = cls._readForbiddenShells(ctx, section)
+        forbiddenShells = readShellCDsByName(ctx, section, 'forbiddenShells')
         chargeStages = cls._readChargeStages(ctx, section, readModifiers)
         return cls(chargeStages=chargeStages, chargingPerSec=chargingPerSec, chargeSpendingAfterShot=chargeSpendingAfterShot, forbiddenShells=forbiddenShells, shouldPauseOnReload=shouldPauseOnReload, chargeDelay=chargeDelay, dischargingPerSec=dischargingPerSec, overchargeSwitchCooldown=overchargeSwitchCooldown)
 
@@ -1609,20 +1629,6 @@ class PropellantGunParams(GunMechanicsParams):
         if any((state.isOvercharge for state in stages[:len(stages) - overchargeStagesCount])):
             _xml.raiseWrongXml(ctx, '', '[{}] Overcharge stages should be continuous: {}'.format(cls.MECHANICS_NAME, stages))
         return stages
-
-    @classmethod
-    def _readForbiddenShells(cls, ctx, section):
-        from items.vehicles import getShellByName
-        forbiddenShellCDs = set()
-        shellsList = _xml.readStringOrEmpty(ctx, section, 'forbiddenShells').strip().split()
-        for shellData in shellsList:
-            shellNation, shellName = shellData.split(':')
-            shellDescr = getShellByName(shellName, shellNation)
-            if shellDescr is None:
-                _xml.raiseWrongXml(ctx, '', "[{}] Unknown shell's name: {}!".format(cls.MECHANICS_NAME, shellData))
-            forbiddenShellCDs.add(shellDescr.compactDescr)
-
-        return forbiddenShellCDs
 
     def _applyMechanicsAttrs(self, attr, value):
         if attr == 'propellantGun/chargingPerSec':
@@ -1688,6 +1694,251 @@ class WheeledDashParams(MechanicsParams):
             self.reloadTime += value
         elif attr == 'wheeledDash/duration':
             self.duration += value
+
+
+class AuxiliaryRocketLauncherParams(GunMechanicsParams):
+    MECHANICS_NAME = 'auxiliaryRocketLauncher'
+
+    def __init__(self):
+        super(AuxiliaryRocketLauncherParams, self).__init__()
+        self._saveOrigin()
+
+    def isActiveMechanics(self, vehicleDescriptor):
+        mechanicsParams = vehicleDescriptor.mechanicsParams
+        return SecondaryGunParams.MECHANICS_NAME in mechanicsParams and mechanicsParams[SecondaryGunParams.MECHANICS_NAME].isActiveMechanics(vehicleDescriptor)
+
+    @classmethod
+    def _readMechanicsParams(cls, ctx, section, readModifiers):
+        return cls()
+
+
+class ShellSwitcherParams(GunMechanicsParams):
+    __slots__ = ('modifiedShells',)
+    MECHANICS_NAME = 'shellParamsSwitcher'
+
+    def __init__(self, modifiedShells):
+        super(ShellSwitcherParams, self).__init__()
+        self.modifiedShells = modifiedShells
+        self._saveOrigin()
+
+    def isActiveMechanics(self, vehicleDescriptor):
+        return vehicleDescriptor.hasSiegeMode
+
+    @classmethod
+    def _readMechanicsParams(cls, ctx, section, readModifiers):
+        modifiedShells = readShellCDsByName(ctx, section, 'modifiedShells')
+        if not modifiedShells:
+            raise SoftException('[{}] Empty modifiedShells!'.format(cls.MECHANICS_NAME))
+        return cls(modifiedShells=tuple(modifiedShells))
+
+
+class ShellCalibrationBonus(object):
+    __slots__ = ('dmgBonus', 'modifiers')
+
+    def __init__(self, damageCoefficient, modifiers):
+        self.dmgBonus = damageCoefficient
+        self.modifiers = modifiers
+
+    def __eq__(self, other):
+        return self.modifiers == other.modifiers and isclose(self.dmgBonus, other.dmgBonus) if isinstance(other, ShellCalibrationBonus) else False
+
+    def __ne__(self, other):
+        return not self == other
+
+    __hash__ = None
+
+
+class ShellCalibrationParams(GunMechanicsParams):
+    __slots__ = ('penBonuses', 'nonPenBonuses', 'forbiddenShells')
+    MECHANICS_NAME = 'shellCalibration'
+
+    def __init__(self, penBonuses, nonPenBonuses, forbiddenShells):
+        super(ShellCalibrationParams, self).__init__()
+        self.penBonuses = penBonuses
+        self.nonPenBonuses = nonPenBonuses
+        self.forbiddenShells = forbiddenShells
+        self._saveOrigin()
+
+    def isActiveMechanics(self, vehicleDescriptor):
+        return 'clip' in vehicleDescriptor.gun.tags and vehicleDescriptor.gun.clip[0] > 1
+
+    @classmethod
+    def _readMechanicsParams(cls, ctx, section, readModifiers):
+        params = {}
+        for condition in ('penetration', 'nonPenetration'):
+            condCtx, condSection = _xml.getSubSectionWithContext(ctx, section, condition)
+            dmgFactor = _xml.readNonNegativeFloat(condCtx, condSection, 'damageCoefficient', 0.0)
+            condMods = None
+            if condSection['modifiers'] is not None:
+                condMods = readModifiers(condCtx, _xml.getSubsection(condCtx, condSection, 'modifiers'))
+            params[condition] = ShellCalibrationBonus(dmgFactor, condMods)
+
+        forbiddenShells = readShellCDsByName(ctx, section, 'forbiddenShells')
+        return cls(penBonuses=params['penetration'], nonPenBonuses=params['nonPenetration'], forbiddenShells=forbiddenShells)
+
+    def applyDynModifiersToMechanics(self, dynModifiers):
+        if not dynModifiers:
+            return
+        penFilter = self.MECHANICS_NAME + 'Penetration'
+        nonPenFilter = self.MECHANICS_NAME + 'NonPenetration'
+        penModifiers = self.penBonuses.modifiers
+        nonPenModifiers = self.nonPenBonuses.modifiers
+        for modifier in dynModifiers:
+            modifierFilter = modifier[4]
+            if modifierFilter == penFilter:
+                penModifiers.append(modifier)
+            if modifierFilter == nonPenFilter:
+                nonPenModifiers.append(modifier)
+
+    @classmethod
+    def getDefaultMechanicsMiscAttributes(cls):
+        return {'shellCalibration/penetrationDamageCoefficient': 0.0,
+         'shellCalibration/nonPenetrationDamageCoefficient': 0.0}
+
+    def _applyMechanicsAttrs(self, attr, value):
+        if attr == 'shellCalibration/penetrationDamageCoefficient':
+            self.penBonuses.dmgBonus += value
+        elif attr == 'shellCalibration/nonPenetrationDamageCoefficient':
+            self.nonPenBonuses.dmgBonus += value
+
+
+class CrestMovingParams(MechanicsParams):
+    MECHANICS_NAME = 'crestMoving'
+
+
+class BustleFeedParams(MechanicsParams):
+    __slots__ = ('activationTime', 'deactivationTime', 'modifiers', 'bustleShotReloadFactor', 'bustleShotDamageBonusShell0', 'bustleShotDamageBonusShell1', 'bustleShotsIndices', 'animationTime')
+    MECHANICS_NAME = 'bustleFeed'
+
+    def __init__(self, activationTime, deactivationTime, modifiers, bustleShotReloadFactor, bustleShotDamageBonusShell0, bustleShotDamageBonusShell1):
+        super(BustleFeedParams, self).__init__(modifiers)
+        self.activationTime = activationTime
+        self.deactivationTime = deactivationTime
+        self.animationTime = 2.5
+        self.bustleShotReloadFactor = bustleShotReloadFactor
+        self.bustleShotDamageBonusShell0 = bustleShotDamageBonusShell0
+        self.bustleShotDamageBonusShell1 = bustleShotDamageBonusShell1
+        self.bustleShotsIndices = {0, 1}
+        self._saveOrigin()
+
+    @classmethod
+    def _readMechanicsParams(cls, ctx, section, readModifiers):
+        modifiers = readModifiers(ctx, _xml.getSubsection(ctx, section, 'modifiers'))
+        return cls(activationTime=_xml.readNonNegativeFloat(ctx, section, 'activationTime'), deactivationTime=_xml.readNonNegativeFloat(ctx, section, 'deactivationTime'), modifiers=modifiers, bustleShotReloadFactor=_xml.readPositiveFloat(ctx, section, 'bustleShotReloadFactor'), bustleShotDamageBonusShell0=_xml.readPositiveFloat(ctx, section, 'bustleShotDamageBonusShell0'), bustleShotDamageBonusShell1=_xml.readPositiveFloat(ctx, section, 'bustleShotDamageBonusShell1'))
+
+    def getBustleShotDamageBonusShell(self, idx):
+        if idx == 0:
+            return self.bustleShotDamageBonusShell0
+        return self.bustleShotDamageBonusShell1 if idx == 1 else 0
+
+    @classmethod
+    def getDefaultMechanicsMiscAttributes(cls):
+        return {'bustleFeed/bustleShotDamageBonusShell0': 0.0,
+         'bustleFeed/bustleShotDamageBonusShell1': 0.0,
+         'bustleFeed/bustleShotReloadFactor': 1.0}
+
+    def _applyMechanicsAttrs(self, attr, value):
+        if attr == 'bustleFeed/bustleShotDamageBonusShell0':
+            self.bustleShotDamageBonusShell0 += value
+        if attr == 'bustleFeed/bustleShotDamageBonusShell1':
+            self.bustleShotDamageBonusShell1 += value
+        if attr == 'bustleFeed/bustleShotReloadFactor':
+            self.bustleShotReloadFactor *= value
+
+
+SightPointerAbilityStage = typing.NamedTuple('SightPointerAbilityStage', (('id', int),
+ ('duration', float),
+ ('angle', float),
+ ('visionModifiers', typing.List[typing.Tuple[str, str, str, float, str]]),
+ ('vehicleModifiers', typing.List[typing.Tuple[str, str, str, float, str]])))
+
+class SightPointerParams(MechanicsParams):
+    __slots__ = ('initialDeployTime', 'reloadTime', 'activeStages', 'selfReveal', 'selfRevealVisionTime', 'sightPointerStages')
+    MECHANICS_NAME = 'sightPointer'
+    _MAX_STAGES = 10
+    _MIN_DURATION = 1
+
+    def __init__(self, initialDeployTime, reloadTime, activeStages, selfReveal, selfRevealVisionTime, sightPointerStages):
+        super(SightPointerParams, self).__init__()
+        self.initialDeployTime = initialDeployTime
+        self.reloadTime = reloadTime
+        self.activeStages = activeStages
+        self.selfReveal = selfReveal
+        self.selfRevealVisionTime = selfRevealVisionTime
+        self.sightPointerStages = sightPointerStages
+        self._saveOrigin()
+
+    @property
+    def duration(self):
+        duration = 0.0
+        for stage in self.sightPointerStages:
+            if stage.id < self.activeStages:
+                duration += stage.duration
+
+        return duration
+
+    @classmethod
+    def getDefaultMechanicsMiscAttributes(cls):
+        return {'sightPointer/initialDeployTime': 0.0,
+         'sightPointer/reloadTime': 0.0,
+         'sightPointer/activeStages': 0.0,
+         'sightPointer/selfRevealVisionTime': 0.0}
+
+    def _applyMechanicsAttrs(self, attr, value):
+        if attr == 'sightPointer/initialDeployTime':
+            self.initialDeployTime += value
+        elif attr == 'sightPointer/reloadTime':
+            self.reloadTime += value
+        elif attr == 'sightPointer/activeStages':
+            self.activeStages += int(value)
+        elif attr == 'sightPointer/selfRevealVisionTime':
+            self.selfRevealVisionTime += value
+
+    @classmethod
+    def _readMechanicsParams(cls, ctx, section, readModifiers):
+        initialDeployTime = _xml.readNonNegativeFloat(ctx, section, 'initialDeployTime')
+        reloadTime = _xml.readPositiveFloat(ctx, section, 'reloadTime')
+        activeStages = _xml.readPositiveInt(ctx, section, 'activeStages')
+        selfReveal = _xml.readBool(ctx, section, 'selfReveal')
+        selfRevealVisionTime = _xml.readNonNegativeFloat(ctx, section, 'selfRevealVisionTime')
+        sightPointerStages = cls._readStages(ctx, section, readModifiers)
+        if initialDeployTime < SIGHT_POINTER_COMMON_CONSTANTS.ANIMATION_DELAY:
+            _xml.raiseWrongXml(ctx, '', '[{}] <initialDeployTime> should be more or equal than animation time'.format(cls.MECHANICS_NAME))
+        initialDeployTime -= SIGHT_POINTER_COMMON_CONSTANTS.ANIMATION_DELAY
+        if reloadTime < SIGHT_POINTER_COMMON_CONSTANTS.ANIMATION_DELAY:
+            _xml.raiseWrongXml(ctx, '', '[{}] <reloadTime> should be more or equal than animation time'.format(cls.MECHANICS_NAME))
+        reloadTime -= SIGHT_POINTER_COMMON_CONSTANTS.ANIMATION_DELAY
+        if activeStages > len(sightPointerStages):
+            _xml.raiseWrongXml(ctx, '', '[{}] Section <sightPointerStages> stages is less than current activeStages!'.format(cls.MECHANICS_NAME))
+        return cls(initialDeployTime=initialDeployTime, reloadTime=reloadTime, activeStages=activeStages, selfReveal=selfReveal, selfRevealVisionTime=selfRevealVisionTime, sightPointerStages=sightPointerStages)
+
+    @classmethod
+    def _readStages(cls, ctx, section, readModifiers):
+        if not section.has_key('sightPointerStages'):
+            _xml.raiseWrongXml(ctx, '', '[{}] Section <sightPointerStages> is missing!'.format(cls.MECHANICS_NAME))
+        stages = []
+        stagesIDs = set()
+        for tag, subsection in viewitems(section['sightPointerStages']):
+            if tag != 'stage':
+                _xml.raiseWrongXml(ctx, '', '[{}] Unexpected section <{}>!'.format(cls.MECHANICS_NAME, tag))
+            stageIdx = _xml.readInt(ctx, subsection, 'id')
+            if stageIdx in stagesIDs:
+                _xml.raiseWrongXml(ctx, '', '[{}] duplicated id:{} in <sightPointerStages>,!'.format(cls.MECHANICS_NAME, stageIdx))
+            stagesIDs.add(stageIdx)
+            duration = _xml.readNonNegativeFloat(ctx, subsection, 'duration')
+            if duration < cls._MIN_DURATION:
+                _xml.raiseWrongXml(ctx, '', '[{}] section <duration> should be >= {}!'.format(cls.MECHANICS_NAME, cls._MIN_DURATION))
+            angle = _xml.readNonNegativeFloat(ctx, subsection, 'angle')
+            visionModifiers = readModifiers(ctx, _xml.getSubsection(ctx, subsection, 'vision_modifiers'))
+            vehicleModifiers = readModifiers(ctx, _xml.getSubsection(ctx, subsection, 'vehicle_modifiers'))
+            stages.append(SightPointerAbilityStage(id=stageIdx, duration=duration, angle=angle, visionModifiers=visionModifiers, vehicleModifiers=vehicleModifiers))
+
+        if not stages:
+            _xml.raiseWrongXml(ctx, '', '[{}] Section sightPointerStages should not be empty!'.format(cls.MECHANICS_NAME))
+        if len(stages) > cls._MAX_STAGES:
+            _xml.raiseWrongXml(ctx, '', '[{}] Section sightPointerStages should not have number of stages > {}!'.format(cls.MECHANICS_NAME, cls._MAX_STAGES))
+        stages.sort(key=lambda stage: stage.id)
+        return stages
 
 
 def addMechanicsParamsAttrs(attrsSet):

@@ -586,6 +586,9 @@
       <team>
         <Type>	UINT8	</Type>
       </team>
+      <activePetID>
+        <Type>	OBJECT_ID	</Type>
+      </activePetID>
       <tkillRating>
         <Type>	FLOAT	</Type>
       </tkillRating>
@@ -656,6 +659,9 @@
       <componentsData>
         <Type>	PYTHON	</Type>
       </componentsData>
+      <accountsAdditionalInfo>
+        <Type>	PYTHON	</Type>
+      </accountsAdditionalInfo>
     </Properties>
   </ARENA_ADDPLAYER_INFO>
   <AVATAR_VEHICLE_ROSTER>	FIXED_DICT	  <Properties>
@@ -743,6 +749,9 @@
       <attackerDualAccuracyState>
         <Type>	INT8	</Type>
       </attackerDualAccuracyState>
+      <attackerMechanicShotMode>
+        <Type>	UINT8	</Type>
+      </attackerMechanicShotMode>
     </Properties>
   </ATTACKER_INFO>
   <DESTRUCTIBLE_ATTACK_INFO>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
@@ -1428,6 +1437,9 @@
       <isAvatarReady>
         <Type>	INT8	</Type>
       </isAvatarReady>
+      <activePetID>
+        <Type>	OBJECT_ID	</Type>
+      </activePetID>
       <isTeamKiller>
         <Type>	INT8	</Type>
       </isTeamKiller>
@@ -2558,6 +2570,25 @@
       </lockedLives>
     </Properties>
   </TEAM_LIVES>
+  <PBH_CHOSEN_STAT>	FIXED_DICT	  <Properties>
+      <name>
+        <Type>	STRING	</Type>
+      </name>
+      <value>
+        <Type>	INT32	</Type>
+      </value>
+    </Properties>
+  </PBH_CHOSEN_STAT>
+  <PBH_WINNER>	FIXED_DICT	  <Properties>
+      <id>
+        <Type>	OBJECT_ID	</Type>
+      </id>
+      <stats>
+        <Type>	ARRAY	  <of>	PBH_CHOSEN_STAT	</of>
+        </Type>
+      </stats>
+    </Properties>
+  </PBH_WINNER>
   <DEATH_INFO>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
     <Properties>
       <victimID>
@@ -2683,6 +2714,9 @@
       <frags>
         <Type>	INT16	</Type>
       </frags>
+      <activePetID>
+        <Type>	OBJECT_ID	</Type>
+      </activePetID>
       <tkills>
         <Type>	INT16	</Type>
       </tkills>
@@ -3130,6 +3164,28 @@
       </gunInstallationIndex>
     </Properties>
   </SUPPORT_WEAPON_STATUS>
+  <AUXILIARY_ROCKET_LAUNCHER_STATUS>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
+    <Properties>
+      <state>
+        <Type>	UINT8	</Type>
+      </state>
+      <baseTime>
+        <Type>	FLOAT32	</Type>
+      </baseTime>
+      <endTime>
+        <Type>	FLOAT32	</Type>
+      </endTime>
+    </Properties>
+  </AUXILIARY_ROCKET_LAUNCHER_STATUS>
+  <AUXILIARY_ROCKET_LAUNCHER_VISUAL_STATUS>	FIXED_DICT	  <Properties>
+      <isReloaded>
+        <Type>	BOOL	</Type>
+      </isReloaded>
+      <reloadStartTime>
+        <Type>	FLOAT32	</Type>
+      </reloadStartTime>
+    </Properties>
+  </AUXILIARY_ROCKET_LAUNCHER_VISUAL_STATUS>
   <CLIENT_SHOT_RESULT_DATA>	FIXED_DICT	  <Properties>
       <vehicleID>
         <Type>	UINT32	</Type>
@@ -3237,6 +3293,21 @@
       </timeActiveFight>
     </Properties>
   </STANCE_DANCE_STATE>
+  <AUTORELOADER_SURGE_STATE>	FIXED_DICT	  <Properties>
+      <state>
+        <Type>	UINT8	</Type>
+      </state>
+      <charges>
+        <Type>	UINT8	</Type>
+      </charges>
+      <restrictions>
+        <Type>	UINT16	</Type>
+      </restrictions>
+      <chargeTimeInterval>
+        <Type>	TIME_INTERVAL	</Type>
+      </chargeTimeInterval>
+    </Properties>
+  </AUTORELOADER_SURGE_STATE>
   <TARGET_DESIGNATOR_STATE>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
     <Properties>
       <state>
@@ -3263,6 +3334,22 @@
       </endTime>
     </Properties>
   </TARGET_DESIGNATOR_SPOTTED_MARKER>
+  <ILLUMINATION_FLARE_SPOTTED_MARKER>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
+    <Properties>
+      <creatorID>
+        <Type>	OBJECT_ID	</Type>
+      </creatorID>
+      <startTime>
+        <Type>	FLOAT32	</Type>
+      </startTime>
+      <endTime>
+        <Type>	FLOAT32	</Type>
+      </endTime>
+      <inZone>
+        <Type>	BOOL	</Type>
+      </inZone>
+    </Properties>
+  </ILLUMINATION_FLARE_SPOTTED_MARKER>
   <TARGET_DESIGNATOR_UNSPOTTED_MARKER>	FIXED_DICT	  <AllowNone>	false	</AllowNone>
     <Properties>
       <creatorID>
@@ -3363,4 +3450,83 @@
       </lastShotCharge>
     </Properties>
   </PROPELLANT_GUN_STATUS>
+  <SHELL_PARAMS_SWITCHER_STATUS>	FIXED_DICT	  <AllowNone>	false	</AllowNone>
+    <Properties>
+      <state>
+        <Type>	UINT8	</Type>
+      </state>
+      <endTime>
+        <Type>	FLOAT32	</Type>
+      </endTime>
+    </Properties>
+  </SHELL_PARAMS_SWITCHER_STATUS>
+  <SHELL_PARAMS_SWITCHER_PUBLIC_STATUS>	FIXED_DICT	  <AllowNone>	false	</AllowNone>
+    <Properties>
+      <isActive>
+        <Type>	BOOL	</Type>
+      </isActive>
+      <lastActiveShotTimestamp>
+        <Type>	FLOAT32	</Type>
+      </lastActiveShotTimestamp>
+    </Properties>
+  </SHELL_PARAMS_SWITCHER_PUBLIC_STATUS>
+  <BUSTLE_FEED_STATUS>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
+    <Properties>
+      <state>
+        <Type>	UINT8	</Type>
+      </state>
+      <baseTime>
+        <Type>	FLOAT32	</Type>
+      </baseTime>
+      <endTime>
+        <Type>	FLOAT32	</Type>
+      </endTime>
+      <switchAccessState>
+        <Type>	UINT8	</Type>
+      </switchAccessState>
+    </Properties>
+  </BUSTLE_FEED_STATUS>
+  <BUSTLE_FEED_RELOAD_STATUS>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
+    <Properties>
+      <timeLeft>
+        <Type>	FLOAT32	</Type>
+      </timeLeft>
+      <baseTime>
+        <Type>	FLOAT32	</Type>
+      </baseTime>
+      <endTime>
+        <Type>	FLOAT32	</Type>
+      </endTime>
+    </Properties>
+  </BUSTLE_FEED_RELOAD_STATUS>
+  <SIGHT_POINTER_STATUS>	FIXED_DICT	  <Properties>
+      <state>
+        <Type>	UINT8	</Type>
+      </state>
+      <nextState>
+        <Type>	UINT8	</Type>
+      </nextState>
+      <baseTime>
+        <Type>	FLOAT32	</Type>
+      </baseTime>
+      <endTime>
+        <Type>	FLOAT32	</Type>
+      </endTime>
+    </Properties>
+  </SIGHT_POINTER_STATUS>
+  <SIGHT_POINTER_ABILITY_INFO>	FIXED_DICT	  <Properties>
+      <vehiclesUnderScan>
+        <Type>	BOOL	</Type>
+      </vehiclesUnderScan>
+      <angle>
+        <Type>	FLOAT32	</Type>
+      </angle>
+      <distance>
+        <Type>	FLOAT32	</Type>
+      </distance>
+      <stage>
+        <Type>	UINT8	</Type>
+      </stage>
+    </Properties>
+  </SIGHT_POINTER_ABILITY_INFO>
 </alias.xml>

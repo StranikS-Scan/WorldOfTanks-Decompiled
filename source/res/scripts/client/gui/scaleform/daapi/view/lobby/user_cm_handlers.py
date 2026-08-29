@@ -34,7 +34,7 @@ from messenger.m_constants import PROTO_TYPE, USER_TAG, UserEntityScope
 from messenger.proto import proto_getter
 from messenger.proto.entities import ClanInfo as UserClanInfo
 from messenger.proto.entities import SharedUserEntity
-from messenger.storage import storage_getter
+from messenger.storage import MessengerStorageDescriptor, UsersStorage
 from nation_change_helpers.client_nation_change_helper import getValidVehicleCDForNationChange
 from shared_utils import findFirst
 from skeletons.gui.game_control import IVehicleComparisonBasket, IBattleRoyaleController, IMapboxController, IEventBattlesController, IPlatoonController, IEpicBattleMetaGameController, IWinbackController
@@ -173,13 +173,10 @@ class BaseUserCMHandler(AbstractContextMenuCollectEventsHandler, EventSystemEnti
     __eventBattlesCtrl = dependency.descriptor(IEventBattlesController)
     __epicCtrl = dependency.descriptor(IEpicBattleMetaGameController)
     __winbackController = dependency.descriptor(IWinbackController)
+    usersStorage = MessengerStorageDescriptor(UsersStorage)
 
     @prbDispatcherProperty
     def prbDispatcher(self):
-        return None
-
-    @storage_getter('users')
-    def usersStorage(self):
         return None
 
     @prbEntityProperty
@@ -541,6 +538,7 @@ class CustomUserCMHandler(BaseUserCMHandler):
 
 class UserContextMenuInfo(object):
     lobbyContext = dependency.descriptor(ILobbyContext)
+    usersStorage = MessengerStorageDescriptor(UsersStorage)
 
     def __init__(self, databaseID, userName, clanAbbrev):
         self.user = self.__getUser(databaseID, userName, clanAbbrev)
@@ -568,10 +566,6 @@ class UserContextMenuInfo(object):
             self.hasClan = self.user.getClanInfo().isInClan()
         super(UserContextMenuInfo, self).__init__()
         return
-
-    @storage_getter('users')
-    def usersStorage(self):
-        return None
 
     @property
     def isSameRealm(self):

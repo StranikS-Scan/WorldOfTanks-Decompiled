@@ -4,6 +4,7 @@ from gui.battle_results.pbs_helpers.economics import getDirectXpRecords, getDire
 from gui.battle_results.presenters.packers.economics import free_xp_records, xp_records, common_records, credits_records, gold_records
 from gui.battle_results.presenters.packers.economics.crystals_records import ORIGINAL_CRYSTALS, AUTO_EQUIP_CRYSTALS, TOTAL_CRYSTALS, EVENT_CRYSTALS
 from gui.battle_results.presenters.packers.economics.currency_packers import DetailedCurrencyPacker
+from gui.shared.system_factory import collectEarnedXpDetailsPacker, collectFreeXpDetailsPacker, collectCreditsStatisticsPacker
 
 class CrystalsDetailsPacker(DetailedCurrencyPacker):
     _EARNED = (ORIGINAL_CRYSTALS, EVENT_CRYSTALS)
@@ -42,6 +43,10 @@ class XpDetailsPacker(DetailedCurrencyPacker):
     def _getExtractors(cls, battleResults):
         return ((getDirectXpRecords,), zip)
 
+    @classmethod
+    def _getEarnedConfig(cls):
+        return super(XpDetailsPacker, cls)._getEarnedConfig() + collectEarnedXpDetailsPacker()
+
 
 class FreeXpDetailsPacker(DetailedCurrencyPacker):
     _EARNED = (free_xp_records.ORIGINAL_FREE_XP,
@@ -65,6 +70,10 @@ class FreeXpDetailsPacker(DetailedCurrencyPacker):
     @classmethod
     def _getExtractors(cls, battleResults):
         return ((getDirectFreeXpRecords,), zip)
+
+    @classmethod
+    def _getEarnedConfig(cls):
+        return super(FreeXpDetailsPacker, cls)._getEarnedConfig() + collectFreeXpDetailsPacker()
 
 
 class CreditsStatisticsPacker(DetailedCurrencyPacker):
@@ -91,6 +100,10 @@ class CreditsStatisticsPacker(DetailedCurrencyPacker):
     @classmethod
     def _getExtractors(cls, battleResults):
         return ((getDirectMoneyRecords,), zip)
+
+    @classmethod
+    def _getEarnedConfig(cls):
+        return super(CreditsStatisticsPacker, cls)._getEarnedConfig() + collectCreditsStatisticsPacker()
 
 
 class GoldStatisticsPacker(DetailedCurrencyPacker):

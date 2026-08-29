@@ -7,42 +7,42 @@ from gui.impl.gen.view_models.views.lobby.user_missions.widget.bonus_model impor
 class WidgetQuestModel(BaseQuestModel):
     __slots__ = ()
 
-    def __init__(self, properties=14, commands=0):
+    def __init__(self, properties=15, commands=0):
         super(WidgetQuestModel, self).__init__(properties=properties, commands=commands)
 
     def getCountdown(self):
-        return self._getNumber(9)
+        return self._getNumber(10)
 
     def setCountdown(self, value):
-        self._setNumber(9, value)
+        self._setNumber(10, value)
 
     def getMissionType(self):
-        return self._getString(10)
+        return self._getString(11)
 
     def setMissionType(self, value):
-        self._setString(10, value)
+        self._setString(11, value)
 
     def getBonuses(self):
-        return self._getArray(11)
+        return self._getArray(12)
 
     def setBonuses(self, value):
-        self._setArray(11, value)
+        self._setArray(12, value)
 
     @staticmethod
     def getBonusesType():
         return BonusModel
 
     def getCommonConditionId(self):
-        return self._getNumber(12)
+        return self._getNumber(13)
 
     def setCommonConditionId(self, value):
-        self._setNumber(12, value)
+        self._setNumber(13, value)
 
     def getSpecialConditionIds(self):
-        return self._getArray(13)
+        return self._getArray(14)
 
     def setSpecialConditionIds(self, value):
-        self._setArray(13, value)
+        self._setArray(14, value)
 
     @staticmethod
     def getSpecialConditionIdsType():

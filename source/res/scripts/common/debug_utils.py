@@ -49,10 +49,7 @@ class _LogWrapper(object):
         self.__lvl = logLevel
 
     def __call__(self, func):
-        if self.__lvl >= _logLevel:
-            return func
-        else:
-            return lambda *args, **kwargs: None
+        return func if self.__lvl >= _logLevel else (lambda *args, **kwargs: None)
 
 
 class CriticalError(BaseException):
@@ -111,7 +108,6 @@ def init():
     _g_logMapping = {'TRACE': BigWorld.logTrace,
      'DEBUG': BigWorld.logDebug,
      'INFO': BigWorld.logInfo,
-     'NOTE': BigWorld.logNotice,
      'NOTICE': BigWorld.logNotice,
      'WARNING': BigWorld.logWarning,
      'ERROR': BigWorld.logError,
@@ -124,7 +120,7 @@ def init():
 @_LogWrapper(LOG_LEVEL.RELEASE)
 def CRITICAL_ERROR(msg, *kargs):
     msg = '{0}:{1}:{2}'.format(_makeMsgHeader(sys._getframe(1)), msg, kargs)
-    BigWorld.logCritical('CRITICAL', msg, None)
+    BigWorld.logCritical('', msg, None)
     if IS_CLIENT:
         BigWorld.quit()
     elif IS_CELLAPP or IS_BASEAPP:
@@ -203,7 +199,7 @@ def LOG_OBSOLETE(msg, *kargs):
 
 @_LogWrapper(LOG_LEVEL.RELEASE)
 def LOG_NOTE(msg, *kargs, **kwargs):
-    _doLog('NOTE', msg, kargs, kwargs)
+    _doLog('NOTICE', msg, kargs, kwargs)
 
 
 @_LogWrapper(LOG_LEVEL.SVR_RELEASE)
@@ -235,7 +231,11 @@ def LOG_WRONG_CLIENT(entity, *kargs):
     return
 
 
-def _doLog(category, msg, args=None, kwargs={}, frameDepth=2):
+_PLAIN_LEVEL_CATEGORIES = frozenset(('TRACE', 'DEBUG', 'INFO', 'NOTICE', 'WARNING', 'ERROR', 'CRITICAL', 'HACK'))
+
+def _doLog(category, msg, args=None, kwargs=None, frameDepth=2):
+    if kwargs is None:
+        kwargs = {}
     header = _makeMsgHeader(sys._getframe(frameDepth))
     logFunc = _g_logMapping.get(category, None)
     if not logFunc:
@@ -250,7 +250,8 @@ def _doLog(category, msg, args=None, kwargs={}, frameDepth=2):
     else:
         output = u' '.join(map(unicode, [header, msg]))
     tags = kwargs.pop('tags', None)
-    logFunc(category, _addTagsToMsg(tags, output), None)
+    engineCategory = '' if category in _PLAIN_LEVEL_CATEGORIES else category
+    logFunc(engineCategory, _addTagsToMsg(tags, output), None)
     if kwargs.get('stack', False):
         traceback.print_stack(file=sys.stdout)
     return
@@ -263,7 +264,7 @@ def _makeMsgHeader(frame):
         trim_path = trim_match[0]
         idx = filename.find(trim_path)
         filename = filename[idx + len(trim_path):]
-    return '(%s, %d):' % (filename, frame.f_lineno)
+    return '[%s, %d]' % (filename, frame.f_lineno)
 
 
 def _doLogFmt(prefix, fmt, *args):

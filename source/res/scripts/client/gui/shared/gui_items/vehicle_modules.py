@@ -13,8 +13,9 @@ from gui.impl.gen import R
 from gui.shared.items_parameters import isDualAccuracy
 from gui.shared.items_parameters.params_cache import g_paramsCache
 from gui.shared.utils.functions import replaceHyphenToUnderscore
+from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.fitting_item import FittingItem, ICONS_MASK
-from gui.shared.gui_items.vehicle_mechanics.factories import GunMechanicFactory, ChassisMechanicFactory, EngineMechanicFactory
+from gui.shared.gui_items.vehicle_mechanics.factories import GunMechanicFactory, ChassisMechanicFactory, EngineMechanicFactory, ShellMechanicFactory
 from gui.shared.utils import GUN_CLIP, GUN_CAN_BE_CLIP, GUN_AUTO_RELOAD, GUN_CAN_BE_AUTO_RELOAD, GUN_DUAL_GUN, GUN_CAN_BE_DUAL_GUN, GUN_AUTO_SHOOT, GUN_CAN_BE_AUTO_SHOOT, GUN_CAN_BE_TWIN_GUN, GUN_TWIN_GUN, GUN_CAN_BE_LOW_CHARGE_SHOT, LOW_CHARGE_SHOT
 from gui.shared.money import Currency
 from items import vehicles as veh_core
@@ -375,6 +376,7 @@ class VehicleRadio(VehicleModule):
 
 class Shell(FittingItem):
     __slots__ = ('_count',)
+    _MECHANICS_FACTORY = (ShellMechanicFactory,)
 
     def __init__(self, intCompactDescr, count=0, proxy=None, isBoughtForCredits=False):
         FittingItem.__init__(self, intCompactDescr, proxy, isBoughtForCredits)
@@ -444,6 +446,10 @@ class Shell(FittingItem):
 
     def getGUIEmblemID(self):
         return self.descriptor.iconName
+
+    def getShellMechanicItems(self, vehicle):
+        mechanics = self.getMechanics(vehicle.descriptor, withOverrides=True)
+        return [ self.itemsFactory.createModuleMechanicItem(mechanic, GUI_ITEM_TYPE.SHELL, vehIntCD=vehicle.intCD, shellCD=self.intCD) for mechanic in mechanics ]
 
     def getShopIcon(self, size=STORE_CONSTANTS.ICON_SIZE_MEDIUM):
         resID = R.images.gui.maps.shop.shells.num(size).dyn(replaceHyphenToUnderscore(self.descriptor.iconName))()

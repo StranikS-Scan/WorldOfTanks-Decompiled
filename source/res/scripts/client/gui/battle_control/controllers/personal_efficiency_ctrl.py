@@ -22,6 +22,9 @@ class _EfficiencyInfo(object):
     def getType(self):
         return self.__type
 
+    def getAttackerMechanicShotMode(self):
+        pass
+
 
 class _FeedbackEventEfficiencyInfo(_EfficiencyInfo):
     __slots__ = ('__battleEventType', '__arenaVehID')
@@ -141,6 +144,12 @@ class _DamageEfficiencyInfo(_FeedbackEventEfficiencyInfo):
     def isClingBranderRam(self):
         return self.__damage.isClingBranderRam()
 
+    def isHERocket(self):
+        return self.__damage.isHERocket()
+
+    def getAttackerMechanicShotMode(self):
+        return self.__damage.getAttackerMechanicShotMode()
+
 
 class _CriticalHitsEfficiencyInfo(_FeedbackEventEfficiencyInfo):
     __slots__ = ('__critsExtra',)
@@ -227,6 +236,9 @@ class _CriticalHitsEfficiencyInfo(_FeedbackEventEfficiencyInfo):
     def getShellType(self):
         return self.__critsExtra.getShellType()
 
+    def getAttackerMechanicShotMode(self):
+        return self.__critsExtra.getAttackerMechanicShotMode()
+
 
 class _DestructibleDamagedEfficiencyInfo(_FeedbackEventEfficiencyInfo):
     __slots__ = ('__damage',)
@@ -273,6 +285,12 @@ class _DestructibleDamagedEfficiencyInfo(_FeedbackEventEfficiencyInfo):
 
     def isDestroyerStrike(self, primary=True):
         return self.__damage.isDestroyerStrike(primary=primary)
+
+    def isHERocket(self):
+        return False
+
+    def getAttackerMechanicShotMode(self):
+        return self.__damage.getAttackerMechanicShotMode()
 
 
 _AGGREGATED_DAMAGE_EFFICIENCY_TYPES = (_ETYPE.DAMAGE,

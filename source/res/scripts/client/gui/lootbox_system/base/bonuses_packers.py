@@ -36,13 +36,15 @@ if TYPE_CHECKING:
 _logger = logging.getLogger(__name__)
 VEH_COMP_R_ID = R.views.lobby.awards.tooltips.RewardCompensationTooltip()
 _LOOTBOX_BONUS_NAME = 'lootBox'
+_EXTRA_BONUSES_NAMES = ('slots',)
+_MAIN_REWARD_COUNT_RARE_OR_EPIC = 3
+_MAIN_REWARD_COUNT = 4
 
-def getLootBoxesBonusPacker(eventName):
-    mapping = getDefaultBonusPackersMap()
+def getLootBoxesBonusPackerMap():
     simplePacker = LootBoxSimpleBonusUIPacker()
     blueprintPacker = LootBoxBlueprintBonusUIPacker()
     specialRandomPacker = LootBoxSpecialRandomBonusUIPacker()
-    lootBoxPackersMap = {'battleToken': LootBoxTokenBonusUIPacker,
+    return {'battleToken': LootBoxTokenBonusUIPacker,
      'blueprints': blueprintPacker,
      'blueprintsAny': blueprintPacker,
      'crewBooks': LootBoxCrewBookBonusUIPacker(),
@@ -69,6 +71,11 @@ def getLootBoxesBonusPacker(eventName):
      LOOTBOX_RANDOM_NATIONAL_CREW_BOOK: specialRandomPacker,
      _LOOTBOX_BONUS_NAME: LootBoxesLootBoxBonusUIPacker(),
      LOOTBOX_COMPENSATION_BONUS: LootBoxCompensationPacker()}
+
+
+def getLootBoxesBonusPacker(eventName):
+    mapping = getDefaultBonusPackersMap()
+    lootBoxPackersMap = getLootBoxesBonusPackerMap()
     for packer in lootBoxPackersMap.itervalues():
         packer.init(eventName)
 
@@ -113,154 +120,154 @@ def packBonusModelAndTooltipData(bonuses, bonusModelsList, eventName, tooltipDat
 
 def mergeNeededBonuses--- This code section failed: ---
 
- 149       0	BUILD_LIST_0      ''
+ 157       0	BUILD_LIST_0      ''
            3	STORE_FAST        'finalBonuses'
 
- 150       6	LOAD_CONST        ('blueprints', 'brochure', 'guide', 'crewBook')
+ 158       6	LOAD_CONST        ('blueprints', 'brochure', 'guide', 'crewBook')
            9	STORE_FAST        'mergeBonusNames'
 
- 151      12	LOAD_DICTCOMP     '<code_object <dictcomp>>'
+ 159      12	LOAD_DICTCOMP     '<code_object <dictcomp>>'
           15	MAKE_FUNCTION_0   ''
           18	LOAD_FAST         'mergeBonusNames'
           21	GET_ITER          ''
           22	CALL_FUNCTION_1   ''
           25	STORE_FAST        'bonusesForMerge'
 
- 152      28	LOAD_DICTCOMP     '<code_object <dictcomp>>'
+ 160      28	LOAD_DICTCOMP     '<code_object <dictcomp>>'
           31	MAKE_FUNCTION_0   ''
           34	LOAD_FAST         'mergeBonusNames'
           37	GET_ITER          ''
           38	CALL_FUNCTION_1   ''
           41	STORE_FAST        'usedNations'
 
- 153      44	LOAD_DICTCOMP     '<code_object <dictcomp>>'
+ 161      44	LOAD_DICTCOMP     '<code_object <dictcomp>>'
           47	MAKE_FUNCTION_0   ''
           50	LOAD_FAST         'mergeBonusNames'
           53	GET_ITER          ''
           54	CALL_FUNCTION_1   ''
           57	STORE_FAST        'value'
 
- 154      60	BUILD_MAP         ''
+ 162      60	BUILD_MAP         ''
 
- 155      63	LOAD_LAMBDA       '<code_object <lambda>>'
+ 163      63	LOAD_LAMBDA       '<code_object <lambda>>'
           66	MAKE_FUNCTION_0   ''
           69	LOAD_CONST        'blueprints'
           72	STORE_MAP         ''
 
- 156      73	LOAD_LAMBDA       '<code_object <lambda>>'
+ 164      73	LOAD_LAMBDA       '<code_object <lambda>>'
           76	MAKE_FUNCTION_0   ''
           79	LOAD_CONST        'brochure'
           82	STORE_MAP         ''
 
- 157      83	LOAD_LAMBDA       '<code_object <lambda>>'
+ 165      83	LOAD_LAMBDA       '<code_object <lambda>>'
           86	MAKE_FUNCTION_0   ''
           89	LOAD_CONST        'guide'
           92	STORE_MAP         ''
 
- 158      93	LOAD_LAMBDA       '<code_object <lambda>>'
+ 166      93	LOAD_LAMBDA       '<code_object <lambda>>'
           96	MAKE_FUNCTION_0   ''
           99	LOAD_CONST        'crewBook'
          102	STORE_MAP         ''
          103	STORE_FAST        'getValue'
 
- 160     106	BUILD_MAP         ''
+ 168     106	BUILD_MAP         ''
 
- 161     109	LOAD_LAMBDA       '<code_object <lambda>>'
+ 169     109	LOAD_LAMBDA       '<code_object <lambda>>'
          112	MAKE_FUNCTION_0   ''
          115	LOAD_CONST        'blueprints'
          118	STORE_MAP         ''
 
- 162     119	LOAD_LAMBDA       '<code_object <lambda>>'
+ 170     119	LOAD_LAMBDA       '<code_object <lambda>>'
          122	MAKE_FUNCTION_0   ''
          125	LOAD_CONST        'brochure'
          128	STORE_MAP         ''
 
- 163     129	LOAD_LAMBDA       '<code_object <lambda>>'
+ 171     129	LOAD_LAMBDA       '<code_object <lambda>>'
          132	MAKE_FUNCTION_0   ''
          135	LOAD_CONST        'guide'
          138	STORE_MAP         ''
 
- 164     139	LOAD_LAMBDA       '<code_object <lambda>>'
+ 172     139	LOAD_LAMBDA       '<code_object <lambda>>'
          142	MAKE_FUNCTION_0   ''
          145	LOAD_CONST        'crewBook'
          148	STORE_MAP         ''
          149	STORE_FAST        'getNation'
 
- 166     152	BUILD_MAP         ''
+ 174     152	BUILD_MAP         ''
 
- 167     155	LOAD_LAMBDA       '<code_object <lambda>>'
+ 175     155	LOAD_LAMBDA       '<code_object <lambda>>'
          158	MAKE_FUNCTION_0   ''
          161	LOAD_CONST        'blueprints'
          164	STORE_MAP         ''
 
- 169     165	LOAD_LAMBDA       '<code_object <lambda>>'
+ 177     165	LOAD_LAMBDA       '<code_object <lambda>>'
          168	MAKE_FUNCTION_0   ''
          171	LOAD_CONST        'brochure'
          174	STORE_MAP         ''
 
- 171     175	LOAD_LAMBDA       '<code_object <lambda>>'
+ 179     175	LOAD_LAMBDA       '<code_object <lambda>>'
          178	MAKE_FUNCTION_0   ''
          181	LOAD_CONST        'guide'
          184	STORE_MAP         ''
 
- 173     185	LOAD_LAMBDA       '<code_object <lambda>>'
+ 181     185	LOAD_LAMBDA       '<code_object <lambda>>'
          188	MAKE_FUNCTION_0   ''
          191	LOAD_CONST        'crewBook'
          194	STORE_MAP         ''
          195	STORE_FAST        'checkBonus'
 
- 176     198	BUILD_MAP         ''
+ 184     198	BUILD_MAP         ''
 
- 177     201	LOAD_GLOBAL       'LOOTBOX_RANDOM_NATIONAL_BLUEPRINT'
+ 185     201	LOAD_GLOBAL       'LOOTBOX_RANDOM_NATIONAL_BLUEPRINT'
          204	LOAD_CONST        'blueprints'
          207	STORE_MAP         ''
 
- 178     208	LOAD_GLOBAL       'LOOTBOX_RANDOM_NATIONAL_BROCHURE'
+ 186     208	LOAD_GLOBAL       'LOOTBOX_RANDOM_NATIONAL_BROCHURE'
          211	LOAD_CONST        'brochure'
          214	STORE_MAP         ''
 
- 179     215	LOAD_GLOBAL       'LOOTBOX_RANDOM_NATIONAL_GUIDE'
+ 187     215	LOAD_GLOBAL       'LOOTBOX_RANDOM_NATIONAL_GUIDE'
          218	LOAD_CONST        'guide'
          221	STORE_MAP         ''
 
- 180     222	LOAD_GLOBAL       'LOOTBOX_RANDOM_NATIONAL_CREW_BOOK'
+ 188     222	LOAD_GLOBAL       'LOOTBOX_RANDOM_NATIONAL_CREW_BOOK'
          225	LOAD_CONST        'crewBook'
          228	STORE_MAP         ''
          229	STORE_FAST        'bonusName'
 
- 183     232	LOAD_CONST        0
+ 191     232	LOAD_CONST        0
          235	STORE_FAST        'totalVehicleBonus'
 
- 184     238	BUILD_LIST_0      ''
+ 192     238	BUILD_LIST_0      ''
          241	STORE_FAST        'vehicleSlotBonuses'
 
- 185     244	LOAD_GLOBAL       'set'
+ 193     244	LOAD_GLOBAL       'set'
          247	CALL_FUNCTION_0   ''
          250	STORE_FAST        'vehicleNames'
 
- 186     253	SETUP_LOOP        '535'
+ 194     253	SETUP_LOOP        '535'
          256	LOAD_FAST         'bonuses'
          259	GET_ITER          ''
          260	FOR_ITER          '534'
          263	STORE_FAST        'bonus'
 
- 187     266	LOAD_GLOBAL       'False'
+ 195     266	LOAD_GLOBAL       'False'
          269	STORE_FAST        'wasMergedBonus'
 
- 188     272	SETUP_LOOP        '386'
+ 196     272	SETUP_LOOP        '386'
          275	LOAD_FAST         'mergeBonusNames'
          278	GET_ITER          ''
          279	FOR_ITER          '385'
          282	STORE_FAST        'name'
 
- 189     285	LOAD_FAST         'checkBonus'
+ 197     285	LOAD_FAST         'checkBonus'
          288	LOAD_FAST         'name'
          291	BINARY_SUBSCR     ''
          292	LOAD_FAST         'bonus'
          295	CALL_FUNCTION_1   ''
          298	POP_JUMP_IF_FALSE '279'
 
- 190     301	LOAD_FAST         'bonusesForMerge'
+ 198     301	LOAD_FAST         'bonusesForMerge'
          304	LOAD_FAST         'name'
          307	BINARY_SUBSCR     ''
          308	LOAD_ATTR         'append'
@@ -268,7 +275,7 @@ def mergeNeededBonuses--- This code section failed: ---
          314	CALL_FUNCTION_1   ''
          317	POP_TOP           ''
 
- 191     318	LOAD_FAST         'usedNations'
+ 199     318	LOAD_FAST         'usedNations'
          321	LOAD_FAST         'name'
          324	BINARY_SUBSCR     ''
          325	LOAD_ATTR         'update'
@@ -280,7 +287,7 @@ def mergeNeededBonuses--- This code section failed: ---
          341	CALL_FUNCTION_1   ''
          344	POP_TOP           ''
 
- 192     345	LOAD_FAST         'value'
+ 200     345	LOAD_FAST         'value'
          348	LOAD_FAST         'name'
          351	BINARY_SUBSCR     ''
          352	LOAD_ATTR         'append'
@@ -292,25 +299,25 @@ def mergeNeededBonuses--- This code section failed: ---
          368	CALL_FUNCTION_1   ''
          371	POP_TOP           ''
 
- 193     372	LOAD_GLOBAL       'True'
+ 201     372	LOAD_GLOBAL       'True'
          375	STORE_FAST        'wasMergedBonus'
 
- 194     378	BREAK_LOOP        ''
+ 202     378	BREAK_LOOP        ''
          379	JUMP_BACK         '279'
          382	JUMP_BACK         '279'
          385	POP_BLOCK         ''
        386_0	COME_FROM         '272'
 
- 195     386	LOAD_FAST         'wasMergedBonus'
+ 203     386	LOAD_FAST         'wasMergedBonus'
          389	POP_JUMP_IF_TRUE  '260'
 
- 196     392	LOAD_GLOBAL       'isinstance'
+ 204     392	LOAD_GLOBAL       'isinstance'
          395	LOAD_FAST         'bonus'
          398	LOAD_GLOBAL       'VehiclesBonus'
          401	CALL_FUNCTION_2   ''
          404	POP_JUMP_IF_FALSE '463'
 
- 197     407	LOAD_FAST         'bonus'
+ 205     407	LOAD_FAST         'bonus'
          410	LOAD_ATTR         'formatValue'
          413	CALL_FUNCTION_0   ''
          416	LOAD_FAST         'vehicleNames'
@@ -318,16 +325,16 @@ def mergeNeededBonuses--- This code section failed: ---
        422_0	COME_FROM         '389'
          422	POP_JUMP_IF_FALSE '431'
 
- 198     425	CONTINUE          '260'
+ 206     425	CONTINUE          '260'
          428	JUMP_FORWARD      '431'
        431_0	COME_FROM         '428'
 
- 199     431	LOAD_FAST         'totalVehicleBonus'
+ 207     431	LOAD_FAST         'totalVehicleBonus'
          434	LOAD_CONST        1
          437	INPLACE_ADD       ''
          438	STORE_FAST        'totalVehicleBonus'
 
- 200     441	LOAD_FAST         'vehicleNames'
+ 208     441	LOAD_FAST         'vehicleNames'
          444	LOAD_ATTR         'add'
          447	LOAD_FAST         'bonus'
          450	LOAD_ATTR         'formatValue'
@@ -337,7 +344,7 @@ def mergeNeededBonuses--- This code section failed: ---
          460	JUMP_FORWARD      '463'
        463_0	COME_FROM         '460'
 
- 201     463	LOAD_FAST         'bonus'
+ 209     463	LOAD_FAST         'bonus'
          466	LOAD_ATTR         'getName'
          469	CALL_FUNCTION_0   ''
          472	LOAD_CONST        'slots'
@@ -351,14 +358,14 @@ def mergeNeededBonuses--- This code section failed: ---
        496_0	COME_FROM         '478'
          496	POP_JUMP_IF_FALSE '515'
 
- 202     499	LOAD_FAST         'vehicleSlotBonuses'
+ 210     499	LOAD_FAST         'vehicleSlotBonuses'
          502	LOAD_ATTR         'append'
          505	LOAD_FAST         'bonus'
          508	CALL_FUNCTION_1   ''
          511	POP_TOP           ''
          512	JUMP_ABSOLUTE     '531'
 
- 204     515	LOAD_FAST         'finalBonuses'
+ 212     515	LOAD_FAST         'finalBonuses'
          518	LOAD_ATTR         'append'
          521	LOAD_FAST         'bonus'
          524	CALL_FUNCTION_1   ''
@@ -368,20 +375,20 @@ def mergeNeededBonuses--- This code section failed: ---
          534	POP_BLOCK         ''
        535_0	COME_FROM         '253'
 
- 206     535	LOAD_FAST         'finalBonuses'
+ 214     535	LOAD_FAST         'finalBonuses'
          538	LOAD_FAST         'vehicleSlotBonuses'
          541	LOAD_FAST         'totalVehicleBonus'
          544	SLICE+1           ''
          545	INPLACE_ADD       ''
          546	STORE_FAST        'finalBonuses'
 
- 208     549	SETUP_LOOP        '696'
+ 216     549	SETUP_LOOP        '696'
          552	LOAD_FAST         'mergeBonusNames'
          555	GET_ITER          ''
          556	FOR_ITER          '695'
          559	STORE_FAST        'name'
 
- 209     562	BUILD_LIST_0      ''
+ 217     562	BUILD_LIST_0      ''
          565	LOAD_GLOBAL       'GUI_NATIONS'
          568	GET_ITER          ''
          569	FOR_ITER          '600'
@@ -397,15 +404,15 @@ def mergeNeededBonuses--- This code section failed: ---
          597	JUMP_BACK         '569'
          600	STORE_FAST        'nations'
 
- 210     603	LOAD_CONST        (1, None)
+ 218     603	LOAD_CONST        (1, None)
          606	STORE_FAST        'countAndValue'
 
- 211     609	LOAD_FAST         'value'
+ 219     609	LOAD_FAST         'value'
          612	LOAD_FAST         'name'
          615	BINARY_SUBSCR     ''
          616	POP_JUMP_IF_FALSE '638'
 
- 212     619	LOAD_GLOBAL       'max'
+ 220     619	LOAD_GLOBAL       'max'
          622	LOAD_FAST         'value'
          625	LOAD_FAST         'name'
          628	BINARY_SUBSCR     ''
@@ -414,7 +421,7 @@ def mergeNeededBonuses--- This code section failed: ---
          635	JUMP_FORWARD      '638'
        638_0	COME_FROM         '635'
 
- 213     638	LOAD_FAST         'finalBonuses'
+ 221     638	LOAD_FAST         'finalBonuses'
          641	LOAD_GLOBAL       'len'
          644	LOAD_FAST         'nations'
          647	CALL_FUNCTION_1   ''
@@ -430,7 +437,7 @@ def mergeNeededBonuses--- This code section failed: ---
          675	BUILD_LIST_1      ''
          678	JUMP_FORWARD      '688'
 
- 214     681	LOAD_FAST         'bonusesForMerge'
+ 222     681	LOAD_FAST         'bonusesForMerge'
          684	LOAD_FAST         'name'
          687	BINARY_SUBSCR     ''
        688_0	COME_FROM         '678'
@@ -440,7 +447,7 @@ def mergeNeededBonuses--- This code section failed: ---
          695	POP_BLOCK         ''
        696_0	COME_FROM         '549'
 
- 216     696	LOAD_GLOBAL       'AwardsManager'
+ 224     696	LOAD_GLOBAL       'AwardsManager'
          699	LOAD_ATTR         'sortBonuses'
          702	LOAD_FAST         'eventName'
          705	LOAD_FAST         'finalBonuses'
@@ -484,6 +491,22 @@ def processCompensationsWithLootbox(bonuses, eventName, showLootboxCompensation)
         return AwardsManager.sortBonuses(eventName, finalBonuses)
 
 
+def splitBonusesToExtra(bonuses, eventName):
+    extraBonuses = []
+    regularBonuses = []
+    for bonus in bonuses:
+        if bonus.getName() in _EXTRA_BONUSES_NAMES:
+            extraBonuses.append(bonus)
+        regularBonuses.append(bonus)
+
+    sortedBonuses = AwardsManager.sortBonuses(eventName, regularBonuses)
+    hasRareOrEpic = any((AwardsManager.getRarity(eventName, bonus) in (BonusRarity.RARE, BonusRarity.EPIC) for bonus in sortedBonuses))
+    splitIndex = _MAIN_REWARD_COUNT_RARE_OR_EPIC if hasRareOrEpic else _MAIN_REWARD_COUNT
+    mainRewards = sortedBonuses[-splitIndex:]
+    additionalRewards = AwardsManager.sortBonuses(eventName, sortedBonuses[:-splitIndex] + extraBonuses)
+    return (mainRewards, additionalRewards)
+
+
 def _getBonusCount(bonusModel):
     bonusName = bonusModel.getName()
     if bonusName in Currency.ALL or bonusName in ('vehicles',
@@ -503,7 +526,7 @@ def _getVehicleUIData(vehicle):
      'vehicleLvlNum': vehicle.level}
 
 
-def _getPreparedBonusModel(bonus, eventName):
+def getPreparedBonusModel(bonus, eventName):
     model = BonusModel()
     model.setName(bonus.getName())
     model.setIsCompensation(bonus.isCompensation())
@@ -525,7 +548,7 @@ class LootBoxSimpleBonusUIPacker(SimpleBonusUIPacker):
 
     @classmethod
     def _packSingleBonus(cls, bonus, label):
-        model = _getPreparedBonusModel(bonus, cls.__eventName)
+        model = getPreparedBonusModel(bonus, cls.__eventName)
         model.setValue(str(bonus.getValue()))
         model.setIcon(bonus.getName())
         model.setLabel(label)
@@ -550,7 +573,7 @@ class LootBoxSpecialRandomBonusUIPacker(SimpleBonusUIPacker):
 
     @classmethod
     def _packSingleBonus(cls, bonus, label):
-        model = _getPreparedBonusModel(bonus, cls.__eventName)
+        model = getPreparedBonusModel(bonus, cls.__eventName)
         model.setCount(bonus.getCount())
         model.setIcon(bonus.getIconName())
         model.setLabel(label)
@@ -574,7 +597,7 @@ class LootBoxSlotsBonusUIPacker(SimpleBonusUIPacker):
 
     @classmethod
     def _packSingleBonus(cls, bonus, label):
-        model = _getPreparedBonusModel(bonus, cls.__eventName)
+        model = getPreparedBonusModel(bonus, cls.__eventName)
         model.setCount(bonus.getCount())
         model.setIcon(bonus.getName())
         model.setLabel(backport.text(R.strings.tooltips.awardItem.slots.header()))
@@ -608,7 +631,7 @@ class LootBoxTmanTemplateBonusUIPacker(SimpleBonusUIPacker):
         if recruit is None:
             return
         else:
-            model = _getPreparedBonusModel(bonus, cls.__eventName)
+            model = getPreparedBonusModel(bonus, cls.__eventName)
             model.setCount(count)
             model.setIcon(cls.__getBonusImageName(recruit))
             model.setLabel(recruit.getFullUserName())
@@ -662,7 +685,7 @@ class LootBoxCustomizationsBonusUIPacker(BaseBonusUIPacker):
 
     @classmethod
     def _packSingleBonus(cls, bonus, item, data):
-        model = _getPreparedBonusModel(bonus, cls.__eventName)
+        model = getPreparedBonusModel(bonus, cls.__eventName)
         custItem = bonus.getC11nItem(item)
         itemName = custItem.itemTypeName
         description = custItem.userType
@@ -742,7 +765,7 @@ class LootBoxGoodiesBonusUIPacker(GoodiesBonusUIPacker):
 
     @classmethod
     def _packIconBonusModel(cls, bonus, icon, count, label, description=''):
-        model = _getPreparedBonusModel(bonus, cls.__eventName)
+        model = getPreparedBonusModel(bonus, cls.__eventName)
         model.setCount(count)
         model.setIcon(icon)
         model.setLabel(label)
@@ -793,7 +816,7 @@ class LootBoxBlueprintBonusUIPacker(BlueprintBonusUIPacker):
 
     @classmethod
     def _pack(cls, bonus):
-        model = _getPreparedBonusModel(bonus, cls.__eventName)
+        model = getPreparedBonusModel(bonus, cls.__eventName)
         label = bonus.getBlueprintTooltipName()
         blueprintName = bonus.getBlueprintName()
         if blueprintName == BlueprintsBonusSubtypes.NATION_FRAGMENT:
@@ -821,7 +844,7 @@ class LootBoxItemBonusUIPacker(ItemBonusUIPacker):
 
     @classmethod
     def _packSingleBonus(cls, bonus, item, count):
-        model = _getPreparedBonusModel(bonus, cls.__eventName)
+        model = getPreparedBonusModel(bonus, cls.__eventName)
         model.setCount(count)
         icon, overlay = (item.name, '') if item.itemTypeID == GUI_ITEM_TYPE.BATTLE_BOOSTER else (item.getGUIEmblemID(), item.getOverlayType())
         model.setIcon(icon)
@@ -843,7 +866,7 @@ class LootBoxCrewBookBonusUIPacker(CrewBookBonusUIPacker):
 
     @classmethod
     def _packSingleBonus(cls, bonus, book, count):
-        model = _getPreparedBonusModel(bonus, cls.__eventName)
+        model = getPreparedBonusModel(bonus, cls.__eventName)
         model.setCount(count)
         model.setLabel(book.userName)
         model.setIcon(book.getBonusIconName())
@@ -859,7 +882,7 @@ class LootBoxCrewSkinBonusUIPacker(CrewSkinBonusUIPacker):
 
     @classmethod
     def _packSingleBonus(cls, bonus, crewSkin, count, label):
-        model = _getPreparedBonusModel(bonus, cls.__eventName)
+        model = getPreparedBonusModel(bonus, cls.__eventName)
         model.setCount(count)
         model.setIcon(str(crewSkin.itemTypeName + str(crewSkin.getRarity())))
         model.setLabel(label)
@@ -880,7 +903,7 @@ class LootBoxesLootBoxBonusUIPacker(SimpleBonusUIPacker):
 
     @classmethod
     def _packSingleBonus(cls, bonus):
-        model = _getPreparedBonusModel(bonus, cls.__eventName)
+        model = getPreparedBonusModel(bonus, cls.__eventName)
         box = bonus.getBox()
         model.setId(bonus.lootBoxID)
         model.setIcon(box.getCategory() if box else bonus.getName())
@@ -903,7 +926,7 @@ class LootBoxTokenBonusUIPacker(TokenBonusUIPacker):
 
     @classmethod
     def _packToken(cls, bonusPacker, bonus, *args):
-        model = _getPreparedBonusModel(bonus, cls.__eventName)
+        model = getPreparedBonusModel(bonus, cls.__eventName)
         return bonusPacker(model, bonus, *args)
 
     @classmethod
@@ -946,7 +969,7 @@ class LootBoxPremiumBonusUIPacker(BaseBonusUIPacker):
 
     @classmethod
     def _packSingleBonus(cls, bonus):
-        model = _getPreparedBonusModel(bonus, cls.__eventName)
+        model = getPreparedBonusModel(bonus, cls.__eventName)
         icon = 'premium_plus_universal'
         days = bonus.getValue()
         if days in cls._ICONS_AVAILABLE:
@@ -972,7 +995,7 @@ class LootBoxVehiclesBonusUIPacker(VehiclesBonusUIPacker):
 
     @classmethod
     def _packVehicleBonusModel(cls, bonus, vehInfo, isRent, vehicle):
-        model = _getPreparedBonusModel(bonus, cls.__eventName)
+        model = getPreparedBonusModel(bonus, cls.__eventName)
         styleID = vehInfo.get('customization', {}).get('styleId')
         if styleID is not None and vehicle.isOutfitLocked:
             model.setStyleID(styleID)
@@ -1083,7 +1106,7 @@ class LootBoxCurrenciesBonusUIPacker(CurrenciesBonusUIPacker):
 
     @classmethod
     def _packSingleBonus(cls, bonus, label):
-        model = _getPreparedBonusModel(bonus, cls.__eventName)
+        model = getPreparedBonusModel(bonus, cls.__eventName)
         model.setName(bonus.getCode())
         model.setValue(str(bonus.getValue()))
         model.setIcon(bonus.getCode())
@@ -1104,7 +1127,7 @@ class LootBoxBPCoinBonusUIPacker(SimpleBonusUIPacker):
 
     @classmethod
     def _packSingleBonus(cls, bonus, label):
-        model = _getPreparedBonusModel(bonus, cls.__eventName)
+        model = getPreparedBonusModel(bonus, cls.__eventName)
         model.setValue(str(bonus.getValue()))
         model.setIcon(bonus.getName())
         model.setLabel(backport.text(R.strings.lootbox_system.bonuses.label.bpcoin()))
@@ -1129,7 +1152,7 @@ class LootBoxCompensationPacker(SimpleBonusUIPacker):
 
     @classmethod
     def _packSingleBonus(cls, bonus, label):
-        model = _getPreparedBonusModel(bonus, cls.__eventName)
+        model = getPreparedBonusModel(bonus, cls.__eventName)
         model.setIcon(cls.__VEHICLE_BONUS_NAME)
         model.setLabel('')
         model.compensation.setName(_LOOTBOX_BONUS_NAME)

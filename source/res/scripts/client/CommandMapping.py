@@ -2,13 +2,19 @@
 # Embedded file name: scripts/client/CommandMapping.py
 from __future__ import absolute_import
 from future.utils import viewitems
+import typing
 import BigWorld
+import Input
+import logging
 import ResMgr
 import Keys
 import Event
 import Settings
 from shared_utils import findFirst
 from debug_utils import LOG_DEBUG
+if typing.TYPE_CHECKING:
+    from ResMgr import DataSection
+_logger = logging.getLogger(__name__)
 g_instance = None
 CMD_MOVE_FORWARD = 1
 CMD_MOVE_FORWARD_SPEC = 2
@@ -202,26 +208,11 @@ class CommandMapping(object):
         self.__loadDefault()
         self.__loadUserConfig()
         self.__loadDevelopment()
+        Input.setCommandMappingNames(self.__dictCommand2CommandName)
+        Input.setCommandMapping(self.__mapping)
 
     def isActive(self, command):
-        for fireKey, listKeyInfo in viewitems(self.__mapping):
-            if not BigWorld.isKeyDown(fireKey):
-                continue
-            for keyInfo in listKeyInfo:
-                if keyInfo[0] != command:
-                    continue
-                bContinue = False
-                satelliteKeys = keyInfo[1]
-                for key in satelliteKeys:
-                    if not BigWorld.isKeyDown(key):
-                        bContinue = True
-                        break
-
-                if bContinue:
-                    continue
-                return True
-
-        return False
+        return Input.isActive(command)
 
     def isActiveList(self, listCommands, bAndNor=False):
         if bAndNor:
@@ -237,25 +228,7 @@ class CommandMapping(object):
         return bool(bAndNor)
 
     def isFired(self, command, key):
-        listKeyInfo = self.__mapping.get(key)
-        if listKeyInfo is None or key == Keys.KEY_NONE:
-            return False
-        else:
-            for keyInfo in listKeyInfo:
-                if keyInfo[0] != command:
-                    continue
-                bContinue = False
-                satelliteKeys = keyInfo[1]
-                for satelliteKey in satelliteKeys:
-                    if not BigWorld.isKeyDown(satelliteKey):
-                        bContinue = True
-                        break
-
-                if bContinue:
-                    continue
-                return True
-
-            return False
+        return Input.isFired(command, key)
 
     def isFiredList(self, listCommands, key, bAndNor=False):
         if bAndNor:
@@ -275,6 +248,24 @@ class CommandMapping(object):
 
     def getCommand(self, name):
         return globals().get(name)
+
+    def _setCommand(self, name, command):
+        existingCommand = self.getCommand(name)
+        if existingCommand is not None:
+            if existingCommand == command:
+                return True
+            _logger.error('_setCommand: command already exists %s', name)
+            return False
+        elif self.getName(command) is not None:
+            _logger.error('_setCommand: command with id already exists %i', command)
+            return False
+        else:
+            globals()[name] = command
+            return True
+
+    def _removeCommand(self, name):
+        globals().pop(name, None)
+        return
 
     def save(self):
         tmpList = []
@@ -307,6 +298,7 @@ class CommandMapping(object):
                 subsec.writeString('satelliteKeys', strSatelliteKeyNames)
 
             Settings.g_instance.save()
+        Input.setCommandMapping(self.__mapping)
 
     def __checkUserKey(self, key):
         return True
@@ -320,24 +312,36 @@ class CommandMapping(object):
             satelliteKeyNames = []
             if subsec.has_key('satelliteKeys'):
                 satelliteKeyNames = subsec.readString('satelliteKeys').split()
+            commandID = None
+            if subsec.has_key('id'):
+                commandID = subsec.readInt('id')
             if bDelOldCmds:
                 self.remove(commandName)
             if commandName.find('_SHORTCAT_') != -1:
                 commandName = commandName.replace('_SHORTCAT_', '_SHORTCUT_')
                 needsResave = True
-            tempList.append((commandName, fireKeyName, satelliteKeyNames))
+            tempList.append((commandName,
+             fireKeyName,
+             satelliteKeyNames,
+             commandID))
 
         if asDefault is False:
             for commandNameTarget, commandNameSrc in viewitems(CO_DEPENDENT_KEYS):
-                if findFirst(lambda a: a[0] == commandNameTarget, tempList, None) is None:
-                    src = findFirst(lambda a: a[0] == commandNameSrc, tempList, None)
+                if findFirst(lambda a, cnt=commandNameTarget: a[0] == cnt, tempList, None) is None:
+                    src = findFirst(lambda a, cns=commandNameSrc: a[0] == cns, tempList, None)
                     if src is not None:
                         self.remove(commandNameTarget)
-                        tempList.append((commandNameTarget, src[1], src[2]))
+                        tempList.append((commandNameTarget,
+                         src[1],
+                         src[2],
+                         None))
 
-        for commandName, fireKeyName, satelliteKeyNames in tempList:
-            if not self.add(commandName, fireKeyName, satelliteKeyNames, asDefault):
-                LOG_DEBUG('<__loadFromSection>: ' + ('default' if asDefault else 'user') + ' command ' + str(commandName) + ' was not loaded')
+        for commandName, fireKeyName, satelliteKeyNames, commandID in tempList:
+            if commandID is None or self._setCommand(commandName, commandID):
+                if not self.add(commandName, fireKeyName, satelliteKeyNames, asDefault):
+                    LOG_DEBUG('<__loadFromSection>: ' + ('default' if asDefault else 'user') + ' command ' + str(commandName) + ' was not loaded')
+                    if commandID is not None:
+                        self._removeCommand(commandName)
 
         if needsResave:
             self.save()

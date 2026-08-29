@@ -21,7 +21,7 @@ class Comp7Controller(IComp7Controller):
         self.onQualificationStateUpdated = Event.Event(em)
         self.onSeasonPointsUpdated = Event.Event(em)
         self.onComp7RewardsConfigChanged = Event.Event(em)
-        self.onHighestRankAchieved = Event.Event(em)
+        self.onNewMaxRank = Event.Event(em)
         self.onEntitlementsUpdated = Event.Event(em)
         self.onEntitlementsUpdateFailed = Event.Event(em)
 
@@ -60,6 +60,10 @@ class Comp7Controller(IComp7Controller):
     @property
     def battleModifiers(self):
         pass
+
+    @property
+    def subModes(self):
+        return {}
 
     @property
     def qualificationBattlesNumber(self):
@@ -190,10 +194,13 @@ class Comp7Controller(IComp7Controller):
     def isVehicleBanEnabled(self):
         return False
 
+    def isSuperSquadEnabled(self):
+        return True
+
     def hasActiveSeason(self, includePreannounced=False):
         return False
 
-    def getActualSeasonNumber(self):
+    def getActualSeasonNumber(self, includePreannounced=False):
         return None
 
     def getCurrentSeason(self, now=None, includePreannounced=False):
@@ -219,6 +226,9 @@ class Comp7Controller(IComp7Controller):
 
     def getPreannouncedSeason(self):
         return None
+
+    def getRoleEquipmentKey(self, vehType):
+        pass
 
     def getRoleEquipment(self, roleName):
         return None
@@ -261,9 +271,6 @@ class Comp7Controller(IComp7Controller):
 
     def getAlertBlock(self):
         return (False, None, None)
-
-    def getPlatoonRatingRestriction(self):
-        return None
 
     def getPlatoonMaxRankRestriction(self):
         pass

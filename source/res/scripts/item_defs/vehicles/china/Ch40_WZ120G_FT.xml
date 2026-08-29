@@ -1591,6 +1591,57 @@
         <clipAngle>	0.514936	</clipAngle>
         <anchorShift>	0.370902	</anchorShift>
       </slot>
+      <slot>
+        <slotType>	attachment	</slotType>
+        <slotId>	18000	</slotId>
+        <position>	-1.60223 0.284722 -0.158784	</position>
+        <rotation>	0 -0 1.570796	</rotation>
+        <scale>	0.999994 0.999994 1	</scale>
+        <applyType>	universal	</applyType>
+        <size>	medium	</size>
+      </slot>
+      <slot>
+        <slotType>	attachment	</slotType>
+        <slotId>	18001	</slotId>
+        <position>	1.60904 0.285 -0.159205	</position>
+        <rotation>	0 -3.141593 1.570796	</rotation>
+        <scale>	0.999996 0.999996 1	</scale>
+        <applyType>	universal	</applyType>
+        <size>	medium	</size>
+      </slot>
+      <slot>
+        <slotType>	attachment	</slotType>
+        <slotId>	18002	</slotId>
+        <position>	0.002667 0.284881 -3.475803	</position>
+        <rotation>	0.000524 -1.569051 1.570796	</rotation>
+        <scale>	0.999999 0.999998 0.999999	</scale>
+        <applyType>	universal	</applyType>
+        <size>	medium	</size>
+        <hangerId>	10	</hangerId>
+      </slot>
+      <slot>
+        <slotType>	attachment	</slotType>
+        <slotId>	18003	</slotId>
+        <position>	0.20832 1.62633 1.59571	</position>
+        <rotation>	0 0 -0	</rotation>
+        <scale>	1 1 1	</scale>
+        <applyType>	gunMantlet	</applyType>
+        <size>	medium	</size>
+        <enableVisTunnel>	true	</enableVisTunnel>
+        <hangerId>	6	</hangerId>
+      </slot>
+      <slot>
+        <slotType>	attachment	</slotType>
+        <slotId>	18004	</slotId>
+        <position>	1.333818 1.55172 0.3585	</position>
+        <rotation>	0 0 -0	</rotation>
+        <scale>	1 1 1	</scale>
+        <applyType>	turret	</applyType>
+        <size>	medium	</size>
+        <enableVisTunnel>	true	</enableVisTunnel>
+        <hangerId>	6	</hangerId>
+        <hangerRotation>	0 1.570796 0	</hangerRotation>
+      </slot>
     </customizationSlots>
     <customization>
       <customizableVehicleAreas>
@@ -2727,6 +2778,7 @@
               <camouflage>	GUN	</camouflage>
             </customizableVehicleAreas>
           </customization>
+          <muzzleBrake>	HORIZONTAL	</muzzleBrake>
           <camouflage>
             <tiling>	0.5 0.5 0.000000 0.000000	</tiling>
             <density>	103.468 105.719	</density>

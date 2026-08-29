@@ -29,7 +29,8 @@ class adisp_process(object):
 
     def __stepCallback(self, isStop):
         if not isStop:
-            return self.__nextWaiting()
+            self.__nextWaiting()
+            return
         self.__hideWaiting()
         self.__messages2Show = list(self.__messages)
 

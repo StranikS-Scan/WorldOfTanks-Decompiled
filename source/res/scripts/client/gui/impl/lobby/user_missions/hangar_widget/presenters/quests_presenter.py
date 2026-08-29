@@ -8,7 +8,10 @@ from gui.impl.gen.view_models.views.lobby.user_missions.widget.widget_quest_mode
 from gui.impl.gui_decorators import args2params
 from gui.impl.lobby.common.tooltips.extended_text_tooltip import ExtendedTextTooltip
 from gui.impl.lobby.user_missions.hangar_widget.overlap_ctrl import OverlapCtrlMixin
+from gui.impl.lobby.user_missions.hangar_widget.presenters.constants import UserMissionGroups
 from gui.impl.lobby.user_missions.hangar_widget.providers.user_mission_item import MissionItem
+from gui.impl.lobby.user_missions.hangar_widget.presenters.base_child_presenter import UserMissionChildPresenter
+from gui.impl.lobby.user_missions.hangar_widget.services import IMissionsService
 from gui.impl.lobby.user_missions.hangar_widget.tooltip_positioner import TooltipPositionerMixin
 from gui.impl.lobby.user_missions.hangar_widget.user_misson_controller import MissionController
 from gui.impl.lobby.user_missions.hangar_widget.utils import getCountdown
@@ -22,8 +25,10 @@ from helpers import dependency
 from shared_utils import findFirst
 from skeletons.gui.server_events import IEventsCache
 
-class QuestsPresenter(TooltipPositionerMixin, OverlapCtrlMixin, ViewComponent[QuestsListModel], IGlobalListener):
+class QuestsPresenter(UserMissionChildPresenter, TooltipPositionerMixin, OverlapCtrlMixin, ViewComponent[QuestsListModel], IGlobalListener):
+    GROUP = UserMissionGroups.MISSIONS
     eventsCache = dependency.descriptor(IEventsCache)
+    missionsService = dependency.descriptor(IMissionsService)
 
     def __init__(self):
         self._missionController = MissionController()
@@ -32,6 +37,9 @@ class QuestsPresenter(TooltipPositionerMixin, OverlapCtrlMixin, ViewComponent[Qu
     @property
     def viewModel(self):
         return super(QuestsPresenter, self).getViewModel()
+
+    def isVisible(self):
+        return self.missionsService.isVisible()
 
     def createToolTipContent(self, event, contentID):
         if contentID == R.views.mono.user_missions.tooltips.daily_quest_tooltip():
@@ -55,7 +63,7 @@ class QuestsPresenter(TooltipPositionerMixin, OverlapCtrlMixin, ViewComponent[Qu
         return quest
 
     def onPrbEntitySwitched(self):
-        if self._isFinalized:
+        if self._isFinalized or not self.isVisible():
             return
         self._missionController.refresh()
 
@@ -67,8 +75,14 @@ class QuestsPresenter(TooltipPositionerMixin, OverlapCtrlMixin, ViewComponent[Qu
         super(QuestsPresenter, self)._unsubscribe()
         self.stopGlobalListening()
 
+    def _onMissionsChanged(self):
+        self._notifyVisibilityChanged()
+
     def _getEvents(self):
-        return super(QuestsPresenter, self)._getEvents() + ((self.viewModel.onMissionClick, self.__onMissionClick), (self.viewModel.onMarkAsViewed, self.__onMarkAsViewed), (self._missionController.onChanged, self._onChanged))
+        return super(QuestsPresenter, self)._getEvents() + ((self.viewModel.onMissionClick, self.__onMissionClick),
+         (self.viewModel.onMarkAsViewed, self.__onMarkAsViewed),
+         (self._missionController.onChanged, self._onChanged),
+         (self.missionsService.onMissionsChanged, self._onMissionsChanged))
 
     def _onLoading(self, *args, **kwargs):
         self.initOverlapCtrl()
@@ -115,7 +129,7 @@ class QuestsPresenter(TooltipPositionerMixin, OverlapCtrlMixin, ViewComponent[Qu
         model.setMissionType(str(data.itemType))
         model.setCountdown(int(data.countdown))
         missionPacker = data.getMissionPacker()
-        missionPacker.packMissionItem(model, data.rawData)
+        missionPacker.packMissionItem(model, data.rawData, self.readyForAnimations)
         missionPacker.packSpecificMissionItem(model, data)
         self._packBonuses(model, data.rawData, data.getBonusPacker(), data.getRewardsSortKey())
         return model
@@ -130,5 +144,9 @@ class QuestsPresenter(TooltipPositionerMixin, OverlapCtrlMixin, ViewComponent[Qu
         showDailyQuests(questId=questId)
 
     def __onMarkAsViewed(self):
+        if not self.readyForAnimations:
+            return
         for quest in self._missionController.getSortedQuests():
             self.eventsCache.questsProgress.markQuestProgressAsViewed(quest.itemId)
+
+        self._rawUpdate()

@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/pve_base/base/state_machine/events.py
 from __future__ import absolute_import
 import typing
-from frameworks.state_machine import StateEvent, StringEvent
+from frameworks_common.state_machine import StateEvent, StringEvent
 
 class ToStateEvent(StringEvent):
 

@@ -3,9 +3,10 @@
 from gui.Scaleform.framework.entities.DAAPIDataProvider import DAAPIDataProvider
 from messenger import g_settings
 from messenger.m_constants import USER_GUI_TYPE
-from messenger.storage import storage_getter
+from messenger.storage import MessengerStorageDescriptor, UsersStorage
 
 class MembersDataProvider(DAAPIDataProvider):
+    usersStorage = MessengerStorageDescriptor(UsersStorage)
 
     def __init__(self):
         super(MembersDataProvider, self).__init__()
@@ -14,10 +15,6 @@ class MembersDataProvider(DAAPIDataProvider):
     @property
     def collection(self):
         return self.__list
-
-    @storage_getter('users')
-    def usersStorage(self):
-        return None
 
     def buildList(self, members):
         self.__list = []

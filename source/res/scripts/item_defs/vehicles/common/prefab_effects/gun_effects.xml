@@ -1,4 +1,13 @@
 <gun_effects.xml>
+  <defaultShot>
+    <explosion>
+      <prefab>	content/EffectPrefabs/regular/shot/simple_shot.prefab	</prefab>
+    </explosion>
+    <replaces>
+      <pixie></pixie>
+      <light></light>
+    </replaces>
+  </defaultShot>
   <shot_custom>
     <explosion>
       <prefab>	content/EffectPrefabs/simple_shot.prefab	</prefab>
@@ -6,5 +15,18 @@
     <groundwave>
       <prefab>	content/EffectPrefabs/groundwave.prefab	</prefab>
     </groundwave>
+    <replaces>
+      <pixie></pixie>
+      <light></light>
+    </replaces>
   </shot_custom>
+  <shot_ch41>
+    <explosion>
+      <prefab>	content/EffectPrefabs/regular/shot/simple_shot_Ch41_WZ_111_QL.prefab	</prefab>
+    </explosion>
+    <replaces>
+      <pixie></pixie>
+      <light></light>
+    </replaces>
+  </shot_ch41>
 </gun_effects.xml>

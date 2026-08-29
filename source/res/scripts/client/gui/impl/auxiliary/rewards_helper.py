@@ -8,6 +8,7 @@ from collections import namedtuple
 from builtins import range
 from future.utils import iteritems, itervalues
 from blueprints.BlueprintTypes import BlueprintTypes
+from constants import PREMIUM_ENTITLEMENTS
 from frameworks.wulf import ViewFlags
 from battle_royale.gui.constants import ROYALE_POSTBATTLE_REWARDS_COUNT
 from gui.Scaleform.genConsts.STORE_CONSTANTS import STORE_CONSTANTS
@@ -37,7 +38,7 @@ from gui.impl.gen.view_models.views.loot_box_view.loot_conversion_renderer_model
 from gui.impl.gen.view_models.views.loot_box_view.loot_renderer_types import LootRendererTypes
 from gui.impl.gen.view_models.views.loot_box_view.loot_vehicle_renderer_model import LootVehicleRendererModel
 from gui.impl.lobby.seniority_awards.seniority_awards_bonuses_packers import getSeniorityAwardsBonusPacker
-from gui.server_events.awards_formatters import getPackRentVehiclesAwardPacker, getLootboxesAwardsPacker, getRoyaleAwardsPacker
+from gui.server_events.awards_formatters import getPackRentVehiclesAwardPacker, getLootboxesAwardsPacker, getRoyaleAwardsPacker, AWARDS_SIZES
 from gui.server_events.bonuses import getNonQuestBonuses, BlueprintsBonusSubtypes
 from gui.server_events.recruit_helper import getRecruitInfo
 from gui.shared.formatters import text_styles
@@ -73,7 +74,8 @@ class CrewBonusTypes(object):
 
 NEW_STYLE_FORMATTED_BONUSES = tuple(itertools.chain((TMAN_TOKENS,)))
 _BONUSES_ORDER = (Currency.CREDITS,
- 'premium',
+ PREMIUM_ENTITLEMENTS.BASIC,
+ PREMIUM_ENTITLEMENTS.PLUS,
  Currency.GOLD,
  Currency.CRYSTAL,
  'vehicles',
@@ -513,7 +515,7 @@ DEF_MODEL_PRESENTERS = {CrewBonusTypes.CREW_BOOK_BONUSES: CrewBookModelPresenter
  BlueprintsBonusSubtypes.VEHICLE_FRAGMENT: BlueprintFragmentRewardPresenter()}
 RANKED_MODEL_PRESENTERS = {'vehicles': LootVehicleRewardPresenter()}
 
-def getRewardsBonuses(rewards, size='big', awardsCount=_DEFAULT_DISPLAYED_AWARDS_COUNT):
+def getRewardsBonuses(rewards, size=AWARDS_SIZES.BIG, awardsCount=_DEFAULT_DISPLAYED_AWARDS_COUNT):
     formatter = BonusNameQuestsBonusComposer(awardsCount, getPackRentVehiclesAwardPacker())
     bonuses = []
     if rewards:
@@ -641,7 +643,7 @@ def getProgressiveRewardBonuses(rewards, size='big', maxAwardCount=_DEFAULT_DISP
                 alwaysVisibleBonuses.extend(getNonQuestBonuses(bonusType, bonusValue))
             if bonusType == 'items':
                 bonus = getNonQuestBonuses(bonusType, bonusValue)
-                _checkAndFillItems(bonus, alwaysVisibleBonuses, bonuses)
+                checkAndFillItems(bonus, alwaysVisibleBonuses, bonuses)
             bonus = getNonQuestBonuses(bonusType, bonusValue, ctx)
             bonuses.extend(bonus)
 
@@ -798,7 +800,7 @@ def _checkAndFillBlueprints(blueprintsList, alwaysVisibleBonuses, bonuses):
     return congratsType
 
 
-def _checkAndFillItems(itemsList, alwaysVisibleBonuses, bonuses):
+def checkAndFillItems(itemsList, alwaysVisibleBonuses, bonuses):
     for itemsBonus in itemsList:
         itemName = itemsBonus.getName()
         if itemName == CrewBonusTypes.CREW_BOOK_BONUSES:

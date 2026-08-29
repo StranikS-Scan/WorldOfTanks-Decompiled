@@ -8,7 +8,7 @@ from gui.impl.gen import R
 from gui.impl.gen.view_models.common.missions.event_model import EventStatus
 from gui.impl.gen.view_models.views.lobby.battle_results.progression.daily_quest_progress_model import DailyQuestProgressModel, DailyQuestTypes
 from gui.impl.gen.view_models.views.lobby.battle_results.progression.daily_quests_progress_model import DailyQuestsProgressModel
-from gui.impl.lobby.battle_results.missions_progress.rewards_helper import packBonusesWithActualTokensConvertion
+from gui.impl.lobby.battle_results.missions_progress.rewards_helper import packBonusesWithTokensConvertionIfCompleted
 from gui.impl.lobby.battle_results.missions_progress.progression_presenter_interface import IProgressionCategoryPresenter
 from gui.impl.lobby.common.tooltips.extended_text_tooltip import ExtendedTextTooltip
 from gui.impl.lobby.user_missions.hub.hub_view import DailyTabs
@@ -133,7 +133,7 @@ class DailyMissionsProgressPresenter(ViewComponent[DailyQuestsProgressModel], IP
         else:
             model.setLevel(DailyQuestTypes(event.getLevel()))
         bonusPacker = getDailyMissionsBonusPacker()
-        packBonusesWithActualTokensConvertion(pCur, model, event, questTokensConvertion, questTokensCount, self.__tooltipData[eventID], bonusPacker)
+        packBonusesWithTokensConvertionIfCompleted(pCur, model, event, questTokensConvertion, questTokensCount, self.__tooltipData[eventID], bonusPacker, complete)
         self.__bonusesModel[eventID] = model.getBonuses()
         condsRoot = event.bonusCond.getConditions()
         if condsRoot.isEmpty():
@@ -142,7 +142,7 @@ class DailyMissionsProgressPresenter(ViewComponent[DailyQuestsProgressModel], IP
             index = 0
             items = model.bonusCondition.getItems()
             for cond in event.bonusCond.getConditions().items:
-                if isinstance(cond, conditions._Cumulativable):
+                if isinstance(cond, conditions.Cumulativable):
                     for curProg, totalProg, diff, _ in cond.getProgressPerGroup(pCur, pPrev).values():
                         if not diff:
                             continue

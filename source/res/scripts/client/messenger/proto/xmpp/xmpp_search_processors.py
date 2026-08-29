@@ -15,7 +15,7 @@ from messenger.proto.xmpp.gloox_wrapper import ClientEventsHandler
 from messenger.proto.xmpp.XmppCooldownManager import XmppCooldownManager
 from messenger.proto.xmpp.extensions.search import ChannelSearchQuery, ChannelsListHandler, NicknamePrefixSearchQuery, NicknamePrefixSearchHandler
 from messenger.ext import checkAccountName
-from messenger.storage import storage_getter
+from messenger.storage import MessengerStorageDescriptor, UsersStorage
 from soft_exception import SoftException
 
 class SearchChannelsProcessor(SearchProcessor, ClientEventsHandler):
@@ -79,6 +79,7 @@ class SearchUserRoomsProcessor(SearchChannelsProcessor):
 
 
 class SearchUsersProcessor(SearchProcessor, ClientEventsHandler):
+    usersStorage = MessengerStorageDescriptor(UsersStorage)
 
     def __init__(self):
         super(SearchUsersProcessor, self).__init__()
@@ -94,10 +95,6 @@ class SearchUsersProcessor(SearchProcessor, ClientEventsHandler):
 
     @proto_getter(PROTO_TYPE.XMPP)
     def proto(self):
-        return None
-
-    @storage_getter('users')
-    def usersStorage(self):
         return None
 
     def find(self, token, **kwargs):

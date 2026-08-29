@@ -487,7 +487,7 @@ class EpicMissionsController(IViewComponentsController):
             destructibleEntityComp = getattr(componentSystem, 'destructibleEntityComponent', None)
             if destructibleEntityComp is None:
                 LOG_ERROR('Expected DestructibleEntityComponent not present!')
-                return
+                return (None, None)
             mission.missionType = EPIC_CONSTS.PRIMARY_HQ_MISSION
             destroyed = destructibleEntityComp.getNumDestroyedEntities()
             toDestroy = self.__numDestructiblesToDestroy
@@ -779,14 +779,14 @@ class EpicMissionsController(IViewComponentsController):
         sectorBaseComp = getattr(componentSystem, 'sectorBaseComponent', None)
         if sectorBaseComp is None:
             LOG_ERROR('Expected SectorBaseComponent not present!')
-            return
+            return False
         else:
             baseID = next(iter(sectorBaseComp.getCapturedSectorBaseIdsByLane(self.__currentLane)[-1:]), None)
             if baseID:
                 sectorComp = getattr(componentSystem, 'sectorComponent', None)
                 if sectorComp is None:
                     LOG_ERROR('Expected SectorComponent not present!')
-                    return
+                    return False
                 lastCapturedBaseSector = sectorBaseComp.getSectorForSectorBase(baseID)
                 currentIDInPlayerGroup = sectorComp.getSectorById(sectorComp.currentPlayerSectorId).IDInPlayerGroup
                 return currentIDInPlayerGroup <= lastCapturedBaseSector.IDInPlayerGroup

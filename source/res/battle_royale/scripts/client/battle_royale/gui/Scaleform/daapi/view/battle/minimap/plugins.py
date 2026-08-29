@@ -1,8 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: battle_royale/scripts/client/battle_royale/gui/Scaleform/daapi/view/battle/minimap/plugins.py
+from __future__ import absolute_import, division
 import logging
 import heapq
 import time
+from future.utils import viewvalues
 import BigWorld
 import Math
 import typing
@@ -232,7 +234,7 @@ class DeathZonesPlugin(SimplePlugin):
 
     def __initDeathZones(self, bottomLeft, upperRight):
         mapWidthPx, _ = minimap_utils.metersToMinimapPixels(bottomLeft, upperRight)
-        self._invoke(self.__deathZonesEntryID, DeathZonesAs3Descr.AS_INIT_DEATH_ZONE_SIZE, mapWidthPx / ZONES_SIZE)
+        self._invoke(self.__deathZonesEntryID, DeathZonesAs3Descr.AS_INIT_DEATH_ZONE_SIZE, mapWidthPx // ZONES_SIZE)
         g_eventBus.addListener(DeathZoneEvent.UPDATE_DEATH_ZONE, self.__onDeathZoneUpdated, scope=EVENT_BUS_SCOPE.BATTLE)
 
     def __clearDeathZones(self):
@@ -507,9 +509,9 @@ class RadarPlugin(BaseBattleRoyaleEntriesPlugin, IRadarListener):
     def removeVisibilitySysSpottedVeh(self, vehicleID):
         self.__visibilitySystemSpottedVehicles.remove(vehicleID)
 
-    def radarInfoReceived(self, data):
-        self.__processEntries(data[1], self.__addVehicleEntry)
-        self.__processEntries(data[2], self.__addLootEntry)
+    def radarInfoReceived(self, radarInfo):
+        self.__processEntries(radarInfo[1], self.__addVehicleEntry)
+        self.__processEntries(radarInfo[2], self.__addLootEntry)
 
     def _showEntry(self, uniqueID):
         entry = self._entries.get(uniqueID)
@@ -633,7 +635,7 @@ class AirDropPlugin(EntriesPlugin):
         self._invoke(entryId, MarkersAs3Descr.AS_ADD_MARKER, self.__getMarkerType())
 
     def __updateMarkers(self):
-        for entry in self._entries.itervalues():
+        for entry in viewvalues(self._entries):
             self._invoke(entry.getID(), MarkersAs3Descr.AS_ADD_MARKER, self.__getMarkerType())
 
     def __getMarkerType(self):
@@ -662,9 +664,8 @@ class BattleRoyalStaticMarkerPlugin(IntervalPlugin):
 
     def __checkMarkers(self):
         _logger.debug('minimap __checkMarkers')
-        for key in g_locationPointManager.markedAreas:
+        for locationPoint in viewvalues(g_locationPointManager.markedAreas):
             _logger.debug('minimap marker created')
-            locationPoint = g_locationPointManager.markedAreas[key]
             if locationPoint.markerSubType != LocationMarkerSubType.ATTENTION_TO_MARKER_SUBTYPE:
                 continue
             self.__addStaticMarker(locationPoint.targetID, locationPoint.creatorID, locationPoint.position, locationPoint.markerSubType, locationPoint.markerText, locationPoint.replyCount, False)
@@ -738,8 +739,8 @@ class BattleRoyaleVehiclePlugin(ArenaVehiclesPlugin):
         super(BattleRoyaleVehiclePlugin, self).applyNewSize(sizeIndex)
         newValue = sizeIndex < _MARKER_SIZE_INDEX_BREAKPOINT
         curScale = self.__calculateMarkerScale(sizeIndex)
-        for entryID in self._entries:
-            self.parentObj.invoke(self._entries[entryID].getID(), 'setTopAnimationScale', curScale)
+        for entry in viewvalues(self._entries):
+            self.parentObj.invoke(entry.getID(), 'setTopAnimationScale', curScale)
 
         if self.__isMinimapSmall is None or newValue != self.__isMinimapSmall:
             self.__isMinimapSmall = newValue

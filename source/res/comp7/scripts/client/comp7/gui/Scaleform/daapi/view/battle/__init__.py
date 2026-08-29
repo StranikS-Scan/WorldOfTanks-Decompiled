@@ -23,7 +23,6 @@ def getViewSettings():
     from gui.Scaleform.daapi.view.battle.shared import battle_timers
     from gui.Scaleform.daapi.view.battle.shared import situation_indicators
     from gui.Scaleform.daapi.view.battle.shared import ribbons_panel
-    from gui.Scaleform.daapi.view.battle.shared import game_messages_panel
     from gui.Scaleform.daapi.view.battle.shared import postmortem_panel
     from gui.Scaleform.daapi.view.battle.classic import battle_end_warning_panel
     from gui.Scaleform.daapi.view.battle.shared.points_of_interest import poi_notification_panel
@@ -45,6 +44,7 @@ def getViewSettings():
     from comp7_core.gui.Scaleform.daapi.view.battle import hint_panel
     from comp7_core.gui.Scaleform.daapi.view.battle.filter_popover import Comp7TankCarouselFilterPopover
     from comp7_core.gui.Scaleform.daapi.view.battle import indicators
+    from comp7_core.gui.Scaleform.daapi.view.battle import game_messages_panel
     SETTINGS_WINDOW_SCOPE = ScopeTemplates.SimpleScope(VIEW_ALIAS.SETTINGS_WINDOW, ScopeTemplates.DEFAULT_SCOPE)
     return (ViewSettings(VIEW_ALIAS.COMP7_BATTLE_PAGE, Comp7BattlePage, getSwfExtensionUrl('comp7', 'comp7BattlePage.swf'), WindowLayer.VIEW, None, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.BATTLE_LOADING, battle_loading.Comp7BattleLoading, ScopeTemplates.DEFAULT_SCOPE),
@@ -63,7 +63,7 @@ def getViewSettings():
      ComponentSettings(BATTLE_VIEW_ALIASES.COMP7_BANS_PROGRESS_WIDGET, comp7_bans_progress_widget.Comp7BansProgressWidget, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.SITUATION_INDICATORS, situation_indicators.SituationIndicators, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.RIBBONS_PANEL, ribbons_panel.BattleRibbonsPanel, ScopeTemplates.DEFAULT_SCOPE),
-     ComponentSettings(BATTLE_VIEW_ALIASES.GAME_MESSAGES_PANEL, game_messages_panel.GameMessagesPanel, ScopeTemplates.DEFAULT_SCOPE),
+     ComponentSettings(BATTLE_VIEW_ALIASES.GAME_MESSAGES_PANEL, game_messages_panel.Comp7GameMessagesPanel, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.QUEST_PROGRESS_TOP_VIEW, quest_progress_top_view.QuestProgressTopView, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.HINT_PANEL, hint_panel.Comp7BattleHintPanel, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.PLAYER_MESSAGES, messages.Comp7PlayerMessages, ScopeTemplates.DEFAULT_SCOPE),
@@ -73,7 +73,7 @@ def getViewSettings():
      ComponentSettings(BATTLE_VIEW_ALIASES.COMP7_TANK_CAROUSEL, comp7_battle_carousel.Comp7PrebattleTankCarousel, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.POSTMORTEM_PANEL, postmortem_panel.PostmortemPanel, ScopeTemplates.DEFAULT_SCOPE),
      GroupedViewSettings(BATTLE_VIEW_ALIASES.COMP7_TANK_CAROUSEL_FILTER_POPOVER, Comp7TankCarouselFilterPopover, 'filtersPopoverView.swf', WindowLayer.TOP_WINDOW, BATTLE_VIEW_ALIASES.COMP7_TANK_CAROUSEL_FILTER_POPOVER, BATTLE_VIEW_ALIASES.COMP7_TANK_CAROUSEL_FILTER_POPOVER, SETTINGS_WINDOW_SCOPE),
-     ComponentSettings(BATTLE_VIEW_ALIASES.COMP7_RECON_FLIGHT, indicators.ReconFlightIndicator, ScopeTemplates.DEFAULT_SCOPE))
+     ComponentSettings(BATTLE_VIEW_ALIASES.COMP7_SIXTH_SENSE_INDICATOR, indicators.Comp7SixthSenseIndicator, ScopeTemplates.DEFAULT_SCOPE))
 
 
 def getBusinessHandlers():

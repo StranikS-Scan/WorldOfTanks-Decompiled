@@ -18,7 +18,7 @@ from gui.prb_control.entities.listener import IGlobalListener
 from helpers import dependency
 from skeletons.gui.battle_matters import IBattleMattersController
 from skeletons.gui.event_boards_controllers import IEventBoardController
-from skeletons.gui.game_control import IHangarGuiController, IMarathonEventsController, IFestivityController, IRankedBattlesController, IBattleRoyaleController, IMapboxController, ILimitedUIController, ILiveOpsWebEventsController
+from skeletons.gui.game_control import IHangarGuiController, IMarathonEventsController, IRankedBattlesController, IBattleRoyaleController, IMapboxController, ILimitedUIController, ILiveOpsWebEventsController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 if typing.TYPE_CHECKING:
@@ -52,7 +52,6 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
     __battleRoyaleController = dependency.descriptor(IBattleRoyaleController)
     _eventsCache = dependency.descriptor(IEventsCache)
     _eventsController = dependency.descriptor(IEventBoardController)
-    _festivityController = dependency.descriptor(IFestivityController)
     __hangarGuiCtrl = dependency.descriptor(IHangarGuiController)
     __limitedUIController = dependency.descriptor(ILimitedUIController)
     __liveOpsWebEventsController = dependency.descriptor(ILiveOpsWebEventsController)
@@ -96,7 +95,6 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
         self.__activeWidgets = ActiveWidgets()
         self._eventsCache.onSyncCompleted += self.update
         self._eventsCache.onProgressUpdated += self.update
-        self._festivityController.onStateChanged += self.update
         self.__battleRoyaleController.onPrimeTimeStatusUpdated += self.update
         self.__rankedController.onGameModeStatusUpdated += self.update
         self.__mapboxCtrl.onPrimeTimeStatusUpdated += self.update
@@ -125,7 +123,6 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
         self.__mapboxCtrl.onPrimeTimeStatusUpdated -= self.update
         self._eventsCache.onSyncCompleted -= self.update
         self._eventsCache.onProgressUpdated -= self.update
-        self._festivityController.onStateChanged -= self.update
         self.__battleRoyaleController.onPrimeTimeStatusUpdated -= self.update
         self.__rankedController.onGameModeStatusUpdated -= self.update
         self.__liveOpsWebEventsController.onEventStateChanged -= self.__updateRightWidget

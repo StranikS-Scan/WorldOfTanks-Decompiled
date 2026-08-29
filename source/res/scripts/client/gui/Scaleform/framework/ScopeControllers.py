@@ -159,7 +159,6 @@ class ScopeController(DisposableEntity):
             return
         else:
             return self
-            return
 
     @classmethod
     def extractScopeFromView(cls, pyView):
@@ -192,7 +191,6 @@ class ScopeController(DisposableEntity):
             return outcome
         else:
             return existingScopeController
-            return
 
     def __getLoadingViews(self):
         views = set()

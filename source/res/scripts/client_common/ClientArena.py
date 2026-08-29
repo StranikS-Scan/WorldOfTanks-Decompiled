@@ -116,6 +116,8 @@ class ClientArena(object):
         self.onVehicleStatisticsUpdate = Event.SafeEvent(em)
         self.onVehicleKilled = Event.SafeEvent(em)
         self.onVehicleHealthChanged = Event.SafeEvent(em)
+        self.onVehicleShot = Event.SafeEvent(em)
+        self.onVehicleHit = Event.SafeEvent(em)
         self.onVehicleRecovered = Event.SafeEvent(em)
         self.onAvatarReady = Event.SafeEvent(em)
         self.onTeamBasePointsUpdate = Event.SafeEvent(em)

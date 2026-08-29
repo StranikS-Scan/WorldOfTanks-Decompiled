@@ -9,8 +9,8 @@ import Math
 from ClientSelectableCameraObject import ClientSelectableCameraObject
 from CurrentVehicle import g_currentPreviewVehicle
 from cgf_components.pbs_components import PostBattleSystem
-from frameworks.state_machine import StateFlags
-from frameworks.state_machine.transitions import TransitionType
+from frameworks_common.state_machine import StateFlags
+from frameworks_common.state_machine.transitions import TransitionType
 from gui import SystemMessages
 from gui.ClientHangarSpace import customizationHangarCFG
 from gui.Scaleform.Waiting import Waiting
@@ -510,7 +510,7 @@ def generatePostBattleStateClasses(parentStateCls, entryStateProto=PostBattleRes
      GeneratedFinancialReportTab)
 
 
-PostBattleResultsEntryState, _LoadingState, _LoadingStateWithRetainedCamera, PostBattleResultsState, _OverviewTab, _TeamScoreTab, _MissionProgressTab, _FinancialReportTab = generatePostBattleStateClasses(SubScopeSubLayerState)
+PostBattleResultsEntryState, _LoadingState, _LoadingStateWithRetainedCamera, PostBattleResultsState, _OverviewTab, _TeamScoreTab, MissionProgressTab, _FinancialReportTab = generatePostBattleStateClasses(SubScopeSubLayerState)
 
 class PBSSceneSetup(CameraMover):
     __hangarSpace = dependency.descriptor(IHangarSpace)

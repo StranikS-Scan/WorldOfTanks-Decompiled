@@ -1,0 +1,292 @@
+<142_road_to_dash.xml>
+  <name>	#arenas:142_road_to_dash/name	</name>
+  <description>	#arenas:142_road_to_dash/description	</description>
+  <estimatedLoad>	0.55	</estimatedLoad>
+  <geometry>	spaces/142_road_to_dash	</geometry>
+  <explicitRequestOnly>	true	</explicitRequestOnly>
+  <boundingBox>
+    <bottomLeft>	-850.000000 -1150.000000	</bottomLeft>
+    <upperRight>	1350.000000 1050.000000	</upperRight>
+  </boundingBox>
+  <roundLength>	600	</roundLength>
+  <minimap>	spaces/142_road_to_dash/mmap.dds	</minimap>
+  <runDelayDev>	10	</runDelayDev>
+  <vehicleCamouflageKind>	summer	</vehicleCamouflageKind>
+  <maxPlayersInTeam>	1	</maxPlayersInTeam>
+  <wwmusicSetup>
+    <wwmusicEndbattleStop>	ev_fep_fall_music_race_end	</wwmusicEndbattleStop>
+    <wwmusicResultWin>	ev_fep_fall_post_1_3	</wwmusicResultWin>
+    <wwmusicResultDrawn>	ev_fep_fall_post_draw	</wwmusicResultDrawn>
+    <wwmusicResultDefeat>	ev_fep_fall_post_defeat	</wwmusicResultDefeat>
+  </wwmusicSetup>
+  <wwmusicDroneSetup></wwmusicDroneSetup>
+  <wwambientSound>	ev_fep_fall_map_amb	</wwambientSound>
+  <umbraEnabled>	1	</umbraEnabled>
+  <batchingEnabled>	0	</batchingEnabled>
+  <water>
+    <texScale>	0	</texScale>
+    <freqX>	0	</freqX>
+    <freqZ>	0	</freqZ>
+  </water>
+  <gameplayTypes>
+    <ctf>
+      <visualScript>
+        <server>
+          <plan>	fall_tanks/common/fall_tanks_respawns	</plan>
+        </server>
+        <client>
+          <plan>	fall_tanks/common/fall_tanks_hud_client	</plan>
+        </client>
+      </visualScript>
+      <maxTeamsInArena>	30	</maxTeamsInArena>
+      <squadTeamNumbers>	1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30	</squadTeamNumbers>
+      <battleEndWarningAppearTime>	60	</battleEndWarningAppearTime>
+      <battleEndWarningDuration>	60	</battleEndWarningDuration>
+      <battleEndingSoonTime>	60	</battleEndingSoonTime>
+      <notificationsRemapping>
+        <notification>
+          <name>	ibc_ping_thanks	</name>
+        </notification>
+        <notification>
+          <name>	ibc_ping_thanks_npc	</name>
+        </notification>
+        <notification>
+          <name>	ibc_ping_affirmative	</name>
+        </notification>
+        <notification>
+          <name>	ibc_ping_affirmative_npc	</name>
+        </notification>
+        <notification>
+          <name>	ibc_ping_help_me_ex	</name>
+        </notification>
+        <notification>
+          <name>	ibc_ping_help_me_ex_npc	</name>
+        </notification>
+        <notification>
+          <name>	ibc_ping_retreat	</name>
+        </notification>
+        <notification>
+          <name>	ibc_ping_retreat_npc	</name>
+        </notification>
+        <notification>
+          <name>	ibc_ping_help_me_ex_reply	</name>
+        </notification>
+        <notification>
+          <name>	ibc_ping_help_me_ex_reply_npc	</name>
+        </notification>
+        <notification>
+          <name>	start_battle	</name>
+        </notification>
+        <notification>
+          <name>	respawn	</name>
+        </notification>
+        <notification>
+          <name>	vehicle_destroyed	</name>
+        </notification>
+        <notification>
+          <name>	enemy_hp_damaged_by_projectile_by_player	</name>
+        </notification>
+        <notification>
+          <name>	enemy_hp_damaged_by_projectile_and_chassis_damaged_by_player	</name>
+        </notification>
+        <notification>
+          <name>	enemy_hp_damaged_by_projectile_and_gun_damaged_by_player	</name>
+        </notification>
+        <notification>
+          <name>	enemy_hp_damaged_by_explosion_at_direct_hit_by_player	</name>
+        </notification>
+        <notification>
+          <name>	enemy_no_piercing_by_player	</name>
+        </notification>
+        <notification>
+          <name>	enemy_no_hp_damage_at_attempt_and_chassis_damaged_by_player	</name>
+        </notification>
+        <notification>
+          <name>	enemy_no_hp_damage_at_attempt_and_gun_damaged_by_player	</name>
+        </notification>
+        <notification>
+          <name>	enemy_no_hp_damage_at_no_attempt_by_player	</name>
+        </notification>
+        <notification>
+          <name>	enemy_no_hp_damage_at_attempt_by_player	</name>
+        </notification>
+        <notification>
+          <name>	enemy_no_hp_damage_at_no_attempt_and_chassis_damaged_by_player	</name>
+        </notification>
+        <notification>
+          <name>	enemy_no_hp_damage_at_no_attempt_and_gun_damaged_by_player	</name>
+        </notification>
+        <notification>
+          <name>	enemy_ricochet_by_player	</name>
+        </notification>
+        <notification>
+          <name>	enemy_no_hp_damage_by_near_explosion_by_player	</name>
+        </notification>
+        <notification>
+          <name>	enemy_hp_damaged_by_near_explosion_by_player	</name>
+        </notification>
+        <notification>
+          <name>	enemy_fire_started_by_player	</name>
+        </notification>
+        <notification>
+          <name>	damage_by_near_explosion_by_enemy	</name>
+        </notification>
+        <notification>
+          <name>	target_captured	</name>
+        </notification>
+        <notification>
+          <name>	target_lost	</name>
+        </notification>
+        <notification>
+          <name>	target_unlocked	</name>
+        </notification>
+        <notification>
+          <name>	crew_deactivated	</name>
+        </notification>
+        <notification>
+          <name>	engine_damaged	</name>
+        </notification>
+        <notification>
+          <name>	engine_destroyed	</name>
+        </notification>
+        <notification>
+          <name>	engine_functional	</name>
+        </notification>
+        <notification>
+          <name>	ammo_bay_damaged	</name>
+        </notification>
+        <notification>
+          <name>	fuel_tank_damaged	</name>
+        </notification>
+        <notification>
+          <name>	radio_damaged	</name>
+        </notification>
+        <notification>
+          <name>	track_damaged	</name>
+        </notification>
+        <notification>
+          <name>	track_destroyed	</name>
+        </notification>
+        <notification>
+          <name>	track_functional	</name>
+        </notification>
+        <notification>
+          <name>	track_functional_can_move	</name>
+        </notification>
+        <notification>
+          <name>	gun_damaged	</name>
+        </notification>
+        <notification>
+          <name>	gun_destroyed	</name>
+        </notification>
+        <notification>
+          <name>	gun_functional	</name>
+        </notification>
+        <notification>
+          <name>	turret_rotator_damaged	</name>
+        </notification>
+        <notification>
+          <name>	turret_rotator_destroyed	</name>
+        </notification>
+        <notification>
+          <name>	turret_rotator_functional	</name>
+        </notification>
+        <notification>
+          <name>	surveying_devices_damaged	</name>
+        </notification>
+        <notification>
+          <name>	surveying_devices_destroyed	</name>
+        </notification>
+        <notification>
+          <name>	surveying_devices_functional	</name>
+        </notification>
+        <notification>
+          <name>	commander_killed	</name>
+        </notification>
+        <notification>
+          <name>	driver_killed	</name>
+        </notification>
+        <notification>
+          <name>	radioman_killed	</name>
+        </notification>
+        <notification>
+          <name>	gunner_killed	</name>
+        </notification>
+        <notification>
+          <name>	loader_killed	</name>
+        </notification>
+        <notification>
+          <name>	fire_started	</name>
+        </notification>
+        <notification>
+          <name>	fire_stopped	</name>
+        </notification>
+        <notification>
+          <name>	enemy_killed_by_player	</name>
+        </notification>
+      </notificationsRemapping>
+    </ctf>
+  </gameplayTypes>
+  <mapActivities></mapActivities>
+  <modules>
+    <common>
+      <module>	BW::CgfCameraModule	</module>
+      <module>	BW::CollisionSceneModule	</module>
+      <module>	cgf::network::ClientNetworkModule	</module>
+      <module>	BW::CompoundModule	</module>
+      <module>	cgf::network::NetworkModule	</module>
+      <module>	vehicle::hierarchy::EntityHelpersModule	</module>
+      <module>	vehicle::hierarchy::VehicleHierarchyModule	</module>
+      <module>	BW::EffectsDebugModule	</module>
+      <module>	BW::ControlPointModule	</module>
+      <module>	BW::EntityFiltersModule	</module>
+      <module>	BW::EffectHandlersModule	</module>
+      <module>	BW::EffectsModule	</module>
+      <module>	BW::ArmorFlashlight::ArmorFlashlightModule	</module>
+      <module>	BW::VisibilityTunnelModule	</module>
+      <module>	BW::input::InputModule	</module>
+      <module>	BW::RompModule	</module>
+      <module>	cgf::events::EventsModule	</module>
+      <module>	cgf::FoundationModule	</module>
+      <module>	cgf::TriggersModule	</module>
+      <module>	BW::ConstraintsModule	</module>
+      <module>	BW::CGF::GenericComponentsModule	</module>
+      <module>	BW::tags::TagsModule	</module>
+      <module>	BW::variables::VariablesModule	</module>
+      <module>	vehicle::hierarchy::HierarchyModule	</module>
+      <module>	BW::DebugSoundRenderModule	</module>
+      <module>	cgf_debug_render::Module	</module>
+      <module>	BW::VisualScriptModule	</module>
+      <module>	BW::GameLogicModule	</module>
+      <module>	BW::SoundModule	</module>
+      <module>	BW::SoundSpatialModule	</module>
+      <module>	wot_physics::Module	</module>
+      <module>	BW::GpuDecalsModule	</module>
+      <module>	BW::WotRenderModule	</module>
+      <module>	BW::WULF::Module	</module>
+      <module>	BW::VehicleBasicModule	</module>
+      <module>	BW::VehicleCommonModule	</module>
+      <module>	BW::VehicleDrivetrainModule	</module>
+      <module>	BW::VehicleAudioModule	</module>
+      <module>	BW::VehicleTracksModule	</module>
+      <module>	BW::VehicleGunModule	</module>
+      <module>	script::AfterburningModule	</module>
+      <module>	script::ClientCommonModule	</module>
+      <module>	script::ClientUiModule	</module>
+      <module>	script::VehicleAppearanceModule	</module>
+      <module>	BW::SpaceZonesModule	</module>
+      <module>	script::AfterburningModule	</module>
+      <module>	script::CommonServerModule	</module>
+      <module>	script::VehicleRuleModule	</module>
+      <module>	script::ClientKillCamModule	</module>
+      <module>	script::ClientAbilitiesModule	</module>
+      <module>	script::RamDebugModule	</module>
+      <module>	script::VehicleSystemsModule	</module>
+      <module>	script::CommonScriptsModule	</module>
+      <module>	script::VehicleAsPolylineTargetModule	</module>
+      <module>	BW::ServerModule	</module>
+      <module>	BW::VehicleStatusesModule	</module>
+      <module>	BW::VehicleTriggersModule	</module>
+    </common>
+  </modules>
+</142_road_to_dash.xml>

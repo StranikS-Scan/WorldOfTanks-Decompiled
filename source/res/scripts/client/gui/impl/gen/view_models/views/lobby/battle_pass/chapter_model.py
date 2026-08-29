@@ -16,13 +16,14 @@ class FinalRewardTypes(Enum):
     VEHICLESTYLE = 'vehicleStyle'
     STYLE = 'style'
     TANKMAN = 'tankman'
+    ATTACHMENTSSET = 'attachmentsSet'
     POSTPROGRESSION = 'postProgression'
 
 
 class ChapterModel(ViewModel):
     __slots__ = ()
 
-    def __init__(self, properties=18, commands=0):
+    def __init__(self, properties=19, commands=0):
         super(ChapterModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -121,23 +122,29 @@ class ChapterModel(ViewModel):
     def getTankmanNamesType():
         return unicode
 
+    def getAttachmentsSetName(self):
+        return self._getString(15)
+
+    def setAttachmentsSetName(self, value):
+        self._setString(15, value)
+
     def getExpireTime(self):
-        return self._getNumber(15)
-
-    def setExpireTime(self, value):
-        self._setNumber(15, value)
-
-    def getTimeLeft(self):
         return self._getNumber(16)
 
-    def setTimeLeft(self, value):
+    def setExpireTime(self, value):
         self._setNumber(16, value)
 
-    def getChapterRewardsCount(self):
+    def getTimeLeft(self):
         return self._getNumber(17)
 
-    def setChapterRewardsCount(self, value):
+    def setTimeLeft(self, value):
         self._setNumber(17, value)
+
+    def getChapterRewardsCount(self):
+        return self._getNumber(18)
+
+    def setChapterRewardsCount(self, value):
+        self._setNumber(18, value)
 
     def _initialize(self):
         super(ChapterModel, self)._initialize()
@@ -156,6 +163,7 @@ class ChapterModel(ViewModel):
         self._addStringProperty('finalRewardType')
         self._addStringProperty('styleName', '')
         self._addArrayProperty('tankmanNames', Array())
+        self._addStringProperty('attachmentsSetName', '')
         self._addNumberProperty('expireTime', 0)
         self._addNumberProperty('timeLeft', 0)
         self._addNumberProperty('chapterRewardsCount', 0)

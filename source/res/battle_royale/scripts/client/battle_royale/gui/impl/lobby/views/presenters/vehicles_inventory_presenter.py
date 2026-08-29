@@ -3,7 +3,7 @@
 from __future__ import absolute_import
 import json
 import typing
-from future.utils import itervalues
+from future.utils import viewvalues
 from CurrentVehicle import g_currentVehicle
 from battle_royale.gui.impl.gen.view_models.views.lobby.views.vehicles_inventory_model import VehiclesInventoryModel
 from battle_royale.gui.impl.lobby.tooltips.vehicle_tooltip_view import VehicleTooltipView
@@ -98,7 +98,7 @@ class BattleRoyaleVehiclesInventoryPresenter(ViewComponent[VehiclesInventoryMode
         model.getVehicles().set(str(item['id']), json.dumps(item))
 
     def __setupVehicles(self, model, vehicles):
-        for vehicle in itervalues(vehicles):
+        for vehicle in viewvalues(vehicles):
             self.__setItem(model, vehicle)
 
     def __onUpdateVehicles(self, diff):

@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: comp7/scripts/common/comp7_common/items/comp7_artefacts.py
+from __future__ import absolute_import
 from comp7_core_common.items.comp7_core_artefacts import Comp7CoreAoeHealEquipment, Comp7CoreAllySupportEquipment, Comp7CoreAllyHunterEquipment, Comp7CoreConcentrationEquipment, Comp7CoreBerserkEquipment, Comp7CoreAoeInspireEquipment, Comp7CoreRedlineEquipment, Comp7CoreFastRechargeEquipment, Comp7CoreJuggernautEquipment, Comp7CoreSureShotEquipment, Comp7CoreSniperEquipment, Comp7CoreRiskyAttackEquipment, Comp7CoreReconEquipment, Comp7CoreAggressiveDetectionEquipment, Comp7CoreMarchEquipment
 
 class Comp7AoeHealEquipment(Comp7CoreAoeHealEquipment):

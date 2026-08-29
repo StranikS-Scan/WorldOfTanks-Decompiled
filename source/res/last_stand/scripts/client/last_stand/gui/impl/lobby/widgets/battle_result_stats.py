@@ -23,7 +23,7 @@ from messenger.m_constants import UserEntityScope, USER_TAG, PROTO_TYPE
 from messenger.proto import proto_getter
 from messenger.proto.entities import SharedUserEntity
 from messenger.proto.events import g_messengerEvents
-from messenger.storage import storage_getter
+from messenger.storage import UsersStorage, MessengerStorageDescriptor
 from skeletons.gui.battle_results import IBattleResultsService
 from skeletons.gui.game_control import IPlatoonController
 from messenger.proto.entities import ClanInfo as UserClanInfo
@@ -41,6 +41,7 @@ class BattleResultStats(ViewImpl, IGlobalListener, CallbackDelayer):
     platoonCtrl = dependency.descriptor(IPlatoonController)
     lsCtrl = dependency.descriptor(ILSController)
     lobbyContext = dependency.descriptor(ILobbyContext)
+    usersStorage = MessengerStorageDescriptor(UsersStorage)
 
     def __init__(self, arenaUniqueID, flags=ViewFlags.VIEW, *args, **kwargs):
         settings = ViewSettings(layoutID=R.aliases.last_stand.shared.TeamStats(), flags=flags, model=EventStatsViewModel())
@@ -73,10 +74,6 @@ class BattleResultStats(ViewImpl, IGlobalListener, CallbackDelayer):
     @property
     def viewModel(self):
         return super(BattleResultStats, self).getViewModel()
-
-    @storage_getter('users')
-    def usersStorage(self):
-        return None
 
     @proto_getter(PROTO_TYPE.MIGRATION)
     def proto(self):

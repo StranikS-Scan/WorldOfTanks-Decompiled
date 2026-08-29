@@ -6,10 +6,10 @@
     <gunner>	loader	</gunner>
   </crew>
   <supplySlots>	3 1 1 6 6 6 7 8 8 8	</supplySlots>
-  <postProgressionTree>	role_LT_universal	</postProgressionTree>
+  <postProgressionTree>	role_LT_scout	</postProgressionTree>
   <customRoleSlotOptions>	2 4	</customRoleSlotOptions>
   <speedLimits>
-    <forward>	63	</forward>
+    <forward>	66	</forward>
     <backward>	23	</backward>
   </speedLimits>
   <invisibility>
@@ -60,7 +60,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	1200	</weight>
-    <maxHealth>	960	</maxHealth>
+    <maxHealth>	1000	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	220	</maxHealth>
       <maxRegenHealth>	150	</maxRegenHealth>
@@ -1038,8 +1038,8 @@
         </chassis>
       </unlocks>
       <armor>
-        <leftTrack>	15	</leftTrack>
-        <rightTrack>	15	</rightTrack>
+        <leftTrack>	10	</leftTrack>
+        <rightTrack>	10	</rightTrack>
       </armor>
       <weight>	800	</weight>
       <terrainResistance>	0.7 0.8 1.4	</terrainResistance>
@@ -1924,8 +1924,8 @@
       <level>	8	</level>
       <price>	31600	</price>
       <armor>
-        <leftTrack>	15	</leftTrack>
-        <rightTrack>	15	</rightTrack>
+        <leftTrack>	10	</leftTrack>
+        <rightTrack>	10	</rightTrack>
       </armor>
       <weight>	800	</weight>
       <terrainResistance>	0.7 0.8 1.4	</terrainResistance>
@@ -2825,7 +2825,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	700	</weight>
-      <maxHealth>	180	</maxHealth>
+      <maxHealth>	200	</maxHealth>
       <rotationSpeed>	40	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	130	</maxHealth>
@@ -2856,7 +2856,7 @@
             <armor_13>	7	</armor_13>
             <armor_14>	8	</armor_14>
             <armor_15>	15	</armor_15>
-            <gun>	10	</gun>
+            <gun>	20	</gun>
           </armor>
           <shotDispersionRadius>	0.35	</shotDispersionRadius>
           <reloadTime>	4.8	</reloadTime>
@@ -3367,6 +3367,7 @@
             </customizableVehicleAreas>
           </customization>
           <edgeByVisualModel>	false	</edgeByVisualModel>
+          <muzzleBrake>	RADIAL	</muzzleBrake>
           <camouflage>
             <tiling>	1.3 1.3 0.000000 0.000000	</tiling>
             <density>	106.09 108.407	</density>
@@ -3464,7 +3465,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	900	</weight>
-      <maxHealth>	240	</maxHealth>
+      <maxHealth>	250	</maxHealth>
       <rotationSpeed>	43	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	140	</maxHealth>
@@ -3496,7 +3497,7 @@
             <armor_14>	17	</armor_14>
             <armor_15>	10	</armor_15>
             <armor_16>	15	</armor_16>
-            <gun>	10	</gun>
+            <gun>	20	</gun>
           </armor>
           <shotDispersionRadius>	0.34	</shotDispersionRadius>
           <reloadTime>	4.7	</reloadTime>
@@ -4007,6 +4008,7 @@
             </customizableVehicleAreas>
           </customization>
           <edgeByVisualModel>	false	</edgeByVisualModel>
+          <muzzleBrake>	RADIAL	</muzzleBrake>
           <camouflage>
             <tiling>	1.3 1.3 0.000000 0.000000	</tiling>
             <density>	106.09 108.407	</density>
@@ -4035,7 +4037,7 @@
             <armor_14>	17	</armor_14>
             <armor_15>	10	</armor_15>
             <armor_16>	15	</armor_16>
-            <gun>	10	</gun>
+            <gun>	30	</gun>
           </armor>
           <shotDispersionRadius>	0.37	</shotDispersionRadius>
           <reloadTime>	10	</reloadTime>
@@ -4546,6 +4548,7 @@
             </customizableVehicleAreas>
           </customization>
           <edgeByVisualModel>	false	</edgeByVisualModel>
+          <muzzleBrake>	HORIZONTAL	</muzzleBrake>
           <camouflage>
             <density>	104.052 104.622	</density>
             <aoTextureSize>	512 512	</aoTextureSize>
@@ -4643,12 +4646,12 @@
     <detailed>
       <engines>
         <Jaguar_J_60>
-          <smplEnginePower>	140	</smplEnginePower>
-          <smplFwMaxSpeed>	63	</smplFwMaxSpeed>
+          <smplEnginePower>	155	</smplEnginePower>
+          <smplFwMaxSpeed>	66	</smplFwMaxSpeed>
         </Jaguar_J_60>
         <Rolls_Royce_FB60_LHMTV>
-          <smplEnginePower>	160.	</smplEnginePower>
-          <smplFwMaxSpeed>	63	</smplFwMaxSpeed>
+          <smplEnginePower>	175	</smplEnginePower>
+          <smplFwMaxSpeed>	66	</smplFwMaxSpeed>
         </Rolls_Royce_FB60_LHMTV>
       </engines>
       <chassis>

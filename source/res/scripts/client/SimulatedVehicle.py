@@ -332,11 +332,11 @@ class SimulatedVehicle(BigWorld.Entity, VehicleBase):
             parsedHitPoint = DamageFromShotDecoder.parseDamageStickerHitPoint(hitPoint, self.appearance.collisions)
             if parsedHitPoint is None:
                 return
-            stickerID, data = parsedHitPoint
+            stickerID, prefabEffIndex, data = parsedHitPoint
             if data.componentIdx <= TankPartIndexes.CHASSIS or None in (data.segStart, data.segEnd, stickerID):
                 return
             code = DamageFromShotDecoder.encodeHitPoint(hitPoint)
-            self.appearance.addDamageSticker(code, stickerID, data)
+            self.appearance.addDamageSticker(code, stickerID, prefabEffIndex, data)
             return
 
     def updateBrokenTracks(self, trackStates):

@@ -193,7 +193,7 @@ class TankChangeView(BaseCrewView):
         self._filterPanelWidget.updateAmountInfo(self.__dataProvider.itemsCount, self.__dataProvider.initialItemsCount)
         vehicleList = tx.getVehicleList()
         vehicleList.clear()
-        for _, vehicle in enumerate(filteredVehicles):
+        for vehicle in filteredVehicles:
             vm = TankChangeVehicleModel()
             fillVehicleModel(vm, vehicle, VEHICLE_TAGS_FILTER)
             vm.setIsPremium(vehicle.isPremium)

@@ -49,7 +49,7 @@ class ImpactMode(Enum):
 class DeathCamHudViewModel(ViewModel):
     __slots__ = ()
 
-    def __init__(self, properties=34, commands=0):
+    def __init__(self, properties=35, commands=0):
         super(DeathCamHudViewModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -128,137 +128,143 @@ class DeathCamHudViewModel(ViewModel):
     def setShellIcon(self, value):
         self._setString(11, value)
 
+    def getModeShellIcon(self):
+        return self._getString(12)
+
+    def setModeShellIcon(self, value):
+        self._setString(12, value)
+
     def getShellCaliber(self):
-        return self._getNumber(12)
+        return self._getNumber(13)
 
     def setShellCaliber(self, value):
-        self._setNumber(12, value)
+        self._setNumber(13, value)
 
     def getCaliberRule(self):
-        return CaliberRule(self._getString(13))
+        return CaliberRule(self._getString(14))
 
     def setCaliberRule(self, value):
-        self._setString(13, value.value)
+        self._setString(14, value.value)
 
     def getShellDamageBasic(self):
-        return self._getReal(14)
+        return self._getReal(15)
 
     def setShellDamageBasic(self, value):
-        self._setReal(14, value)
+        self._setReal(15, value)
 
     def getShellVelocityBasic(self):
-        return self._getNumber(15)
-
-    def setShellVelocityBasic(self, value):
-        self._setNumber(15, value)
-
-    def getShootDistance(self):
         return self._getNumber(16)
 
-    def setShootDistance(self, value):
+    def setShellVelocityBasic(self, value):
         self._setNumber(16, value)
 
-    def getShellPenetrationEffective(self):
+    def getShootDistance(self):
         return self._getNumber(17)
 
-    def setShellPenetrationEffective(self, value):
+    def setShootDistance(self, value):
         self._setNumber(17, value)
 
-    def getShellPenetrationBasic(self):
+    def getShellPenetrationEffective(self):
         return self._getNumber(18)
 
-    def setShellPenetrationBasic(self, value):
+    def setShellPenetrationEffective(self, value):
         self._setNumber(18, value)
 
-    def getArmorRelative(self):
+    def getShellPenetrationBasic(self):
         return self._getNumber(19)
 
-    def setArmorRelative(self, value):
+    def setShellPenetrationBasic(self, value):
         self._setNumber(19, value)
 
-    def getArmorNominal(self):
+    def getArmorRelative(self):
         return self._getNumber(20)
 
-    def setArmorNominal(self, value):
+    def setArmorRelative(self, value):
         self._setNumber(20, value)
 
-    def getShellArmorAngleGain(self):
+    def getArmorNominal(self):
         return self._getNumber(21)
 
-    def setShellArmorAngleGain(self, value):
+    def setArmorNominal(self, value):
         self._setNumber(21, value)
 
-    def getAngleRicochet(self):
+    def getShellArmorAngleGain(self):
         return self._getNumber(22)
 
-    def setAngleRicochet(self, value):
+    def setShellArmorAngleGain(self, value):
         self._setNumber(22, value)
 
-    def getAngleFailure(self):
+    def getAngleRicochet(self):
         return self._getNumber(23)
 
-    def setAngleFailure(self, value):
+    def setAngleRicochet(self, value):
         self._setNumber(23, value)
 
-    def getAngleImpact(self):
+    def getAngleFailure(self):
         return self._getNumber(24)
 
-    def setAngleImpact(self, value):
+    def setAngleFailure(self, value):
         self._setNumber(24, value)
 
+    def getAngleImpact(self):
+        return self._getNumber(25)
+
+    def setAngleImpact(self, value):
+        self._setNumber(25, value)
+
     def getShellDamageEffective(self):
-        return self._getReal(25)
-
-    def setShellDamageEffective(self, value):
-        self._setReal(25, value)
-
-    def getShellDamageRandomizationFactor(self):
         return self._getReal(26)
 
-    def setShellDamageRandomizationFactor(self, value):
+    def setShellDamageEffective(self, value):
         self._setReal(26, value)
 
-    def getDamageDistanceModifier(self):
+    def getShellDamageRandomizationFactor(self):
         return self._getReal(27)
 
-    def setDamageDistanceModifier(self, value):
+    def setShellDamageRandomizationFactor(self, value):
         self._setReal(27, value)
 
+    def getDamageDistanceModifier(self):
+        return self._getReal(28)
+
+    def setDamageDistanceModifier(self, value):
+        self._setReal(28, value)
+
     def getHasDistanceFalloff(self):
-        return self._getBool(28)
+        return self._getBool(29)
 
     def setHasDistanceFalloff(self, value):
-        self._setBool(28, value)
+        self._setBool(29, value)
 
     def getShellDamageBurst(self):
-        return self._getNumber(29)
-
-    def setShellDamageBurst(self, value):
-        self._setNumber(29, value)
-
-    def getShellDamageLossDistance(self):
         return self._getNumber(30)
 
-    def setShellDamageLossDistance(self, value):
+    def setShellDamageBurst(self, value):
         self._setNumber(30, value)
 
-    def getShellDamageLossProtectionHe(self):
+    def getShellDamageLossDistance(self):
         return self._getNumber(31)
 
-    def setShellDamageLossProtectionHe(self, value):
+    def setShellDamageLossDistance(self, value):
         self._setNumber(31, value)
 
-    def getShellDamageLossProtectionSpallLiner(self):
+    def getShellDamageLossProtectionHe(self):
         return self._getNumber(32)
 
-    def setShellDamageLossProtectionSpallLiner(self, value):
+    def setShellDamageLossProtectionHe(self, value):
         self._setNumber(32, value)
 
+    def getShellDamageLossProtectionSpallLiner(self):
+        return self._getNumber(33)
+
+    def setShellDamageLossProtectionSpallLiner(self, value):
+        self._setNumber(33, value)
+
     def getDeathReason(self):
-        return DeathReason(self._getString(33))
+        return DeathReason(self._getString(34))
 
     def setDeathReason(self, value):
-        self._setString(33, value.value)
+        self._setString(34, value.value)
 
     def _initialize(self):
         super(DeathCamHudViewModel, self)._initialize()
@@ -274,6 +280,7 @@ class DeathCamHudViewModel(ViewModel):
         self._addBoolProperty('isSimplified', False)
         self._addStringProperty('shellType')
         self._addStringProperty('shellIcon', '')
+        self._addStringProperty('modeShellIcon', '')
         self._addNumberProperty('shellCaliber', 0)
         self._addStringProperty('caliberRule')
         self._addRealProperty('shellDamageBasic', 0.0)

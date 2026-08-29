@@ -157,7 +157,7 @@ class AdvancedAchievementsView(SubModelPresenter):
             if achievement.getType() == AchievementType.REGULAR:
                 conditionID = achievement.getConditionID()
                 isResearchable = bool(achievement.getOpenByUnlock())
-                if conditionID is not None and isResearchable:
+                if conditionID is not None:
                     item = self.__itemsCache.items.getItemByCD(conditionID)
                     model.setIsResearchable(isResearchable)
                     model.setSpecificItemName(item.shortUserName)

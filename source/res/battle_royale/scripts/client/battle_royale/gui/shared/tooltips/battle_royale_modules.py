@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: battle_royale/scripts/client/battle_royale/gui/shared/tooltips/battle_royale_modules.py
+from __future__ import absolute_import
 from gui.Scaleform.daapi.view.common.battle_royale.params import getModuleParameters, getVehicleParameters
 from gui.Scaleform.genConsts.ATLAS_CONSTANTS import ATLAS_CONSTANTS
 from gui.doc_loaders.battle_royale_settings_loader import getTreeModuleIcon, getTreeModuleHeader

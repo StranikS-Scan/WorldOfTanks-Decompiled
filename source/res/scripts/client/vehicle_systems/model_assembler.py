@@ -729,10 +729,7 @@ def __assembleAnimationFlagComponent(appearance, attachment, attachments, modelA
 def loadAppearancePrefab(prefab, appearance, postLoadCallback=None, removeOnDeath=True):
     _logger.debug('loadAppearancePrefab: %s', prefab)
     onLoadedCallback = partial(__onAppearancePrefabLoaded, weakref.proxy(appearance), postLoadCallback, removeOnDeath)
-    if appearance.compoundModel:
-        CGF.loadAndCreatePrefabWithParent(prefab, appearance.gameObject, Math.Vector3(0, 0, 0), onLoadedCallback)
-    else:
-        appearance.pushToLoadingQueue(prefab, appearance.gameObject, Math.Vector3(0, 0, 0), onLoadedCallback)
+    appearance.loadPrefab(prefab, appearance.gameObject, Math.Vector3(0, 0, 0), onLoadedCallback)
 
 
 def __onAppearancePrefabLoaded(appearance, postLoadCallback, removeOnDeath, objects, queue):
@@ -742,7 +739,10 @@ def __onAppearancePrefabLoaded(appearance, postLoadCallback, removeOnDeath, obje
     if IS_UE_EDITOR:
         queue.removeComponent(root, GenericComponents.DynamicModelComponent)
     queue.createComponent(root, GenericComponents.RedirectorComponent, appearance.gameObject)
-    queue.createComponent(root, GenericComponents.DynamicModelComponent, appearance.compoundModel)
+    if appearance.compoundModel is not None:
+        queue.createComponent(root, GenericComponents.DynamicModelComponent, appearance.compoundModel)
+    else:
+        _logger.warning('Appearance prefab %s loaded when no compoundModel, skip DynamicModelComponent creation', queue.gameObjectName(root))
     return postLoadCallback(root, objects, queue) if postLoadCallback else True
 
 

@@ -327,7 +327,6 @@ class BaseRallyRoomView(BaseRallyRoomViewMeta):
             elif len(item.vLevelRange) == 1:
                 levels = int(item.vLevelRange[0])
             return RosterSlotCtx(nationNames=item.nationIDRange, levels=levels, vehClassNames=item.vTypeRange)
-            return
 
     def __setMemberStatus(self, pInfo):
         if pInfo.isInSlot:

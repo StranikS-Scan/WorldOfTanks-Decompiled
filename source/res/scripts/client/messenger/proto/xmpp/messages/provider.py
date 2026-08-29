@@ -6,22 +6,13 @@ from messenger.proto.xmpp.errors import createChatBanError
 from messenger.proto.xmpp.extensions import chat as chat_ext
 from messenger.proto.xmpp.find_criteria import XMPPChannelByJIDFindCriteria, XMPPChannelByNameFindCriteria
 from messenger.proto.xmpp.gloox_wrapper import ClientHolder
-from messenger.storage import storage_getter
+from messenger.storage import MessengerStorageDescriptor, ChannelsStorage, PlayerCtxStorage, UsersStorage
 
 class ChatProvider(ClientHolder):
     __slots__ = ()
-
-    @storage_getter('channels')
-    def channelsStorage(self):
-        return None
-
-    @storage_getter('users')
-    def usersStorage(self):
-        return None
-
-    @storage_getter('playerCtx')
-    def playerCtx(self):
-        return None
+    channelsStorage = MessengerStorageDescriptor(ChannelsStorage)
+    usersStorage = MessengerStorageDescriptor(UsersStorage)
+    playerCtx = MessengerStorageDescriptor(PlayerCtxStorage)
 
     def clear(self):
         pass

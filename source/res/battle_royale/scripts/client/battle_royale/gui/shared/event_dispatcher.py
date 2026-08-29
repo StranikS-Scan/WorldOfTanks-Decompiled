@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: battle_royale/scripts/client/battle_royale/gui/shared/event_dispatcher.py
+from __future__ import absolute_import
 from skeletons.gui.impl import IGuiLoader
 from gui.impl.pub.notification_commands import WindowNotificationCommand
 from helpers import dependency

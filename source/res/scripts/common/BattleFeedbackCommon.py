@@ -8,6 +8,12 @@ CAPTURE_BLOCKED_SESSION_TIMEOUT = 3
 CAPTURE_BLOCKED_POINTS_TO_REPORT = 10
 NONE_SHELL_TYPE = 127
 
+def _toSignedInt(value, mask):
+    value &= mask
+    signBit = mask + 1 >> 1
+    return ~(~value & mask) if value & signBit else value
+
+
 class BATTLE_EVENT_TYPE:
     SPOTTED = 0
     RADIO_ASSIST = 1
@@ -93,14 +99,11 @@ class BATTLE_EVENT_TYPE:
      VEHICLE_HEALTH_ADDED])
 
     @staticmethod
-    def packDamage(damage, attackReasonID, isBurst=False, shellTypeID=NONE_SHELL_TYPE, shellIsGold=False, secondaryAttackReasonID=ATTACK_REASON_INDICES[ATTACK_REASON.NONE], isRoleAction=False, isAutoShoot=False, attackReasonExtID=-1):
-        return (int(damage) & 65535) << 25 | (int(attackReasonID) & 255) << 17 | (1 if isBurst else 0) << 16 | (int(shellTypeID) & 127) << 9 | (1 if shellIsGold else 0) << 8 | int(secondaryAttackReasonID) & 255 | (1 if isRoleAction else 0) << 41 | (1 if isAutoShoot else 0) << 42 | (int(attackReasonExtID) & 255) << 43
+    def packDamage(damage, attackReasonID, isBurst=False, shellTypeID=NONE_SHELL_TYPE, shellIsGold=False, secondaryAttackReasonID=ATTACK_REASON_INDICES[ATTACK_REASON.NONE], isRoleAction=False, isAutoShoot=False, attackReasonExtID=-1, attackerMechanicShotMode=0):
+        return (int(damage) & 65535) << 25 | (int(attackReasonID) & 255) << 17 | (1 if isBurst else 0) << 16 | (int(shellTypeID) & 127) << 9 | (1 if shellIsGold else 0) << 8 | int(secondaryAttackReasonID) & 255 | (1 if isRoleAction else 0) << 41 | (1 if isAutoShoot else 0) << 42 | (int(attackReasonExtID) & 255) << 43 | (int(attackerMechanicShotMode) & 31) << 51
 
     @staticmethod
     def unpackDamage(packedDamage):
-        attackReasonExtID = packedDamage >> 43 & 255
-        if attackReasonExtID & 128:
-            attackReasonExtID = ~(~attackReasonExtID & 255)
         return (packedDamage >> 25 & 65535,
          packedDamage >> 17 & 255,
          packedDamage >> 16 & 1,
@@ -109,28 +112,31 @@ class BATTLE_EVENT_TYPE:
          packedDamage & 255,
          packedDamage >> 41 & 1,
          packedDamage >> 42 & 1,
-         attackReasonExtID)
+         _toSignedInt(packedDamage >> 43, 255),
+         _toSignedInt(packedDamage >> 51, 31))
+
+    @staticmethod
+    def unpackEntityDamage(packedDamage):
+        return packedDamage >> 25 & 65535
 
     @staticmethod
     def unpackAttackReason(packedDamage):
         return packedDamage >> 17 & 255
 
     @staticmethod
-    def packCrits(critsCount, attackReasonID, shellTypeID=NONE_SHELL_TYPE, shellIsGold=False, secondaryAttackReasonID=ATTACK_REASON_INDICES[ATTACK_REASON.NONE], isAutoShoot=False, attackReasonExtID=-1):
-        return (int(critsCount) & 65535) << 24 | (int(attackReasonID) & 255) << 16 | (int(shellTypeID) & 127) << 9 | (1 if shellIsGold else 0) << 8 | int(secondaryAttackReasonID) & 255 | (1 if isAutoShoot else 0) << 40 | (int(attackReasonExtID) & 255) << 41
+    def packCrits(critsCount, attackReasonID, shellTypeID=NONE_SHELL_TYPE, shellIsGold=False, secondaryAttackReasonID=ATTACK_REASON_INDICES[ATTACK_REASON.NONE], isAutoShoot=False, attackReasonExtID=-1, attackerMechanicShotMode=0):
+        return (int(critsCount) & 65535) << 24 | (int(attackReasonID) & 255) << 16 | (int(shellTypeID) & 127) << 9 | (1 if shellIsGold else 0) << 8 | int(secondaryAttackReasonID) & 255 | (1 if isAutoShoot else 0) << 40 | (int(attackReasonExtID) & 255) << 41 | (int(attackerMechanicShotMode) & 31) << 49
 
     @staticmethod
     def unpackCrits(packedCrits):
-        attackReasonExtID = packedCrits >> 41 & 255
-        if attackReasonExtID & 128:
-            attackReasonExtID = ~(~attackReasonExtID & 255)
         return (packedCrits >> 24 & 65535,
          packedCrits >> 16 & 255,
          packedCrits >> 9 & 127,
          packedCrits >> 8 & 1,
          packedCrits & 255,
          packedCrits >> 40 & 1,
-         attackReasonExtID)
+         _toSignedInt(packedCrits >> 41, 255),
+         _toSignedInt(packedCrits >> 49, 31))
 
     @staticmethod
     def packVisibility(isVisible, isDirect, isRoleAction):

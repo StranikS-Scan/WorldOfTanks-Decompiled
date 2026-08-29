@@ -9,7 +9,7 @@ import adisp
 from PlayerEvents import g_playerEvents
 from CurrentVehicle import g_currentVehicle
 from constants import LoadoutParams
-from frameworks.state_machine import BaseStateObserver, visitor
+from frameworks_common.state_machine import BaseStateObserver, visitor
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.Scaleform.lobby_entry import getLobbyStateMachine
 from gui.game_control.loadout_controller import updateInteractor
@@ -39,7 +39,7 @@ from wg_async import wg_async
 if typing.TYPE_CHECKING:
     from gui.impl.common.ammunition_panel.ammunition_groups_controller import AmmunitionGroupsController
     from gui.lobby_state_machine.lobby_state_machine import LobbyStateMachine
-    from frameworks.state_machine import StateEvent, State
+    from frameworks_common.state_machine import StateEvent, State
     from gui.shared.events import NavigationEvent
 _logger = logging.getLogger(__name__)
 

@@ -166,10 +166,7 @@ def getNativeResolutionIndex():
     nativeResolution = BigWorld.wg_getNativeScreenResoulution(g_monitorSettings.currentMonitor)
     result = []
     for modes in getSuitableVideoModes():
-        resolutions = set()
-        for mode in modes:
-            resolutions.add((mode.width, mode.height))
-
+        resolutions = {(mode.width, mode.height) for mode in modes}
         result.append(sorted(tuple(resolutions)))
 
     idx = -1
@@ -193,7 +190,6 @@ def isGammaSupported():
         return isNativeSelected
     else:
         return isRendererPipelineDeferred()
-        return
 
 
 def isRendererPipelineDeferred():

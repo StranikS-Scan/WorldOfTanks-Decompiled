@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: comp7_core/scripts/client/comp7_core/gui/impl/lobby/no_vehicles_screen.py
+from __future__ import absolute_import
 from comp7_core.gui.impl.lobby.comp7_core_helpers import comp7_core_model_helpers
 from frameworks.wulf import ViewFlags, ViewSettings
 from gui.impl.backport import BackportTooltipWindow, createTooltipData

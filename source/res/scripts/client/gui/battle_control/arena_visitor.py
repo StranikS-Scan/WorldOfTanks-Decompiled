@@ -656,6 +656,9 @@ class _ClientArenaVisitor(IClientArenaVisitor):
     def getVisibilityMinRadius(self):
         return self.getArenaModifiers()(BattleParams.VISION_MIN_RADIUS, VISIBILITY.MIN_RADIUS)
 
+    def getVisibilityMaxRadius(self):
+        return self.getArenaModifiers()(BattleParams.VISION_MAX_RADIUS, VISIBILITY.MAX_RADIUS)
+
     @catch_attribute_exception(default=_ClientArenaSkeleton.isFogOfWarEnabled)
     def isArenaFogOfWarEnabled(self):
         return self._arena.isFogOfWarEnabled

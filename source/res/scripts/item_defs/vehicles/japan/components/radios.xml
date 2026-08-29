@@ -1,4 +1,5 @@
 <radios.xml>
+  <xmlns:xmlref>	http://bwt/xmlref	</xmlns:xmlref>
   <ids>
     <_Type94_Hei_1>	0	</_Type94_Hei_1>
     <_Type94_Otsu>	2	</_Type94_Otsu>
@@ -25,6 +26,7 @@
     <Type3_Ko_SAR>	26	</Type3_Ko_SAR>
     <JAN_GRC_3Z_A>	27	</JAN_GRC_3Z_A>
     <Type_67_DK>	28	</Type_67_DK>
+    <Type_Tokushu_Ko>	29	</Type_Tokushu_Ko>
     <_Type67_7x7>	502	</_Type67_7x7>
     <_Type3_Ko_B_7x7>	503	</_Type3_Ko_B_7x7>
     <JAN-GRC-4Z_IGR>	60001	</JAN-GRC-4Z_IGR>
@@ -350,6 +352,18 @@
       <maxRegenHealth>	125	</maxRegenHealth>
       <repairCost>	4	</repairCost>
     </Type_67_DK>
+    <Type_Tokushu_Ko>
+      <userString>	#japan_vehicles:Type_Tokushu_Ko	</userString>
+      <tags></tags>
+      <level>	11	</level>
+      <price>	80000	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	100	</weight>
+      <distance>	104	</distance>
+      <maxHealth>	250	</maxHealth>
+      <maxRegenHealth>	125	</maxRegenHealth>
+      <repairCost>	4	</repairCost>
+    </Type_Tokushu_Ko>
     <JAN-GRC-4Z_IGR>
       <userString>	#igr_vehicles:JAN-GRC-4Z_IGR	</userString>
       <tags></tags>

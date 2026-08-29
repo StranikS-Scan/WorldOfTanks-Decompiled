@@ -150,4 +150,63 @@
       </itemFilters>
     </style>
   </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	styles 1500g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <nations>	germany	</nations>
+      </include>
+      <exclude>
+        <vehicles>	germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF	</vehicles>
+      </exclude>
+      <exclude>
+        <tags>	excluded_from_customization	</tags>
+      </exclude>
+    </vehicleFilter>
+    <style>
+      <id>	1374	</id>
+      <texture>	gui/maps/vehicles/styles/german_tanks_event.png	</texture>
+      <description>	#vehicle_customization:special_style/german_tanks_event_desc	</description>
+      <longDescriptionSpecial>	#vehicle_customization:special_style/german_tanks_event_desc/long	</longDescriptionSpecial>
+      <userString>	#vehicle_customization:special_style/german_tanks_event	</userString>
+      <tags>	c11n2D	</tags>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	1159	</id>
+              <patternSize>	1	</patternSize>
+              <appliedTo>	4368	</appliedTo>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <modifications>
+            <item>	8	</item>
+          </modifications>
+          <paints>
+            <item>
+              <id>	683	</id>
+              <appliedTo>	30583	</appliedTo>
+            </item>
+          </paints>
+        </outfit>
+      </outfits>
+      <alternateItems>
+        <decal>
+          <id>	1355	</id>
+        </decal>
+      </alternateItems>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+    </style>
+  </itemGroup>
 </germany_nonCN.xml>

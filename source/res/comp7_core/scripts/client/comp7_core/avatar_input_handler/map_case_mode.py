@@ -68,3 +68,13 @@ class Comp7PoiArtilleryStrikeSelector(_ArenaBoundArtilleryStrikeSelector):
 
     def _getRadius(self):
         return self.equipment.radius
+
+
+class Comp7PoiIlluminationFlareStrikeSelector(_ArenaBoundArtilleryStrikeSelector):
+
+    def _getAreaSize(self):
+        radius = self._getRadius()
+        return Vector2(radius * 2, radius * 2)
+
+    def _getRadius(self):
+        return self.equipment.startRadius

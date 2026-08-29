@@ -1,4 +1,5 @@
 <guns.xml>
+  <xmlns:xmlref>	http://bwt/xmlref	</xmlns:xmlref>
   <ids>
     <_75mm_kan_strv_74>	0	</_75mm_kan_strv_74>
     <_20mm_akan_m_Madsen_A>	1	</_20mm_akan_m_Madsen_A>
@@ -49,6 +50,7 @@
     <_105mm_kan_strv_107_L_62>	57	</_105mm_kan_strv_107_L_62>
     <_105mm_strvkan_L_50_S>	58	</_105mm_strvkan_L_50_S>
     <_37_mm_kan_fm_32>	60	</_37_mm_kan_fm_32>
+    <_12_cm_hogtrycksstrvkan_L_40>	62	</_12_cm_hogtrycksstrvkan_L_40>
     <_120mm_akan_L_40B>	300	</_120mm_akan_L_40B>
     <_120mm_Bofors_strvkan_L_40>	301	</_120mm_Bofors_strvkan_L_40>
     <_105mm_L_7_Gun_Ambassador>	302	</_105mm_L_7_Gun_Ambassador>
@@ -3542,6 +3544,64 @@
         </_120mm_sgr_m_ny>
       </shots>
     </_120mm_strvkan_L_40_7x7>
+    <_12_cm_hogtrycksstrvkan_L_40>
+      <userString>	#sweden_vehicles:_12_cm_hogtrycksstrvkan_L_40	</userString>
+      <tags></tags>
+      <level>	11	</level>
+      <price>	500000	</price>
+      <notInShop>	true	</notInShop>
+      <impulse>	0.64	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.36	</amplitude>
+        <recoilEffect>	large	</recoilEffect>
+      </recoil>
+      <effects>	shot_large_mb	</effects>
+      <reloadEffect>	reload115_152	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -10 1.0 -10	</minPitch>
+        <maxPitch>	0.0 10 1.0 10	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	0.96	</rotationSpeed>
+      <reloadTime>	60	</reloadTime>
+      <maxAmmo>	36	</maxAmmo>
+      <aimingTime>	10.43	</aimingTime>
+      <weight>	100	</weight>
+      <maxHealth>	240	</maxHealth>
+      <maxRegenHealth>	120	</maxRegenHealth>
+      <repairCost>	11	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	1.04	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.08	</turretRotation>
+        <afterShot>	3.0	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_120mm_slpprj_m_ny_hog_laddning>
+          <defaultPortion>	0.95	</defaultPortion>
+          <speed>	1050	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	100	</piercingPower>
+        </_120mm_slpprj_m_ny_hog_laddning>
+        <_120mm_psgr_m_ny_hog_laddning>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	850	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	100	</piercingPower>
+        </_120mm_psgr_m_ny_hog_laddning>
+        <_120mm_sgr_m_ny_ord>
+          <defaultPortion>	0.05	</defaultPortion>
+          <speed>	700	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	100	</piercingPower>
+        </_120mm_sgr_m_ny_ord>
+      </shots>
+    </_12_cm_hogtrycksstrvkan_L_40>
     <_120mm_Bofors>
       <userString>	#sweden_vehicles:_120mm_Bofors	</userString>
       <tags></tags>

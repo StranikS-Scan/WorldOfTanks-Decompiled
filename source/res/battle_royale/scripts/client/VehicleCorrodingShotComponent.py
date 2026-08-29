@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: battle_royale/scripts/client/VehicleCorrodingShotComponent.py
+from __future__ import absolute_import
 from gui.battle_control.battle_constants import VEHICLE_VIEW_STATE
 from VehicleAbilityBaseComponent import VehicleAbilityBaseComponent
 

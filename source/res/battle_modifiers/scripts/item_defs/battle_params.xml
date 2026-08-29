@@ -417,7 +417,8 @@
     <domain>	vehType	</domain>
     <client>
       <domain>	concealment	</domain>
-      <useTypes>	mul	</useTypes>
+      <useTypes>	mul add	</useTypes>
+      <physicalType>	probability	</physicalType>
     </client>
     <restrictions>
       <min>	0.0	</min>
@@ -430,7 +431,8 @@
     <domain>	vehType	</domain>
     <client>
       <domain>	concealment	</domain>
-      <useTypes>	mul	</useTypes>
+      <useTypes>	mul add	</useTypes>
+      <physicalType>	probability	</physicalType>
     </client>
     <restrictions>
       <min>	0.0	</min>
@@ -730,7 +732,7 @@
     <dataType>	float	</dataType>
     <domain>	shellType	</domain>
     <restrictions>
-      <min>	0.01	</min>
+      <min>	0.0	</min>
     </restrictions>
   </armorSpallsImpactRadius>
   <armorSpallsConeAngle>

@@ -17,7 +17,9 @@ class MECHANIC_WIDGET_HOTKEY_CONST(object):
     ALTERNATIVE_ACTIVATE = 'altActivate'
     PREPARING = 'preparing'
     CANCELLED = 'cancelled'
+    SWITCH = 'switch'
     COMMANDS = [COMMAND_ACTIVATE,
      ALTERNATIVE_ACTIVATE,
      PREPARING,
-     CANCELLED]
+     CANCELLED,
+     SWITCH]

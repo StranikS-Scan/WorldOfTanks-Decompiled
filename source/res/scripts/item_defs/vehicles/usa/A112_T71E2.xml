@@ -7,7 +7,7 @@
     <loader></loader>
   </crew>
   <supplySlots>	3 1 1 6 6 6 7 8 8 8	</supplySlots>
-  <postProgressionTree>	role_LT_universal	</postProgressionTree>
+  <postProgressionTree>	role_LT_support	</postProgressionTree>
   <speedLimits>
     <forward>	64	</forward>
     <backward>	25	</backward>
@@ -1851,6 +1851,7 @@
               <camouflage>	GUN	</camouflage>
             </customizableVehicleAreas>
           </customization>
+          <muzzleBrake>	HORIZONTAL	</muzzleBrake>
           <camouflage>
             <tiling>	1.8 0.3 0.000000 0.000000	</tiling>
             <density>	149.562 150.121	</density>

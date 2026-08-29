@@ -9,7 +9,6 @@ import CGF
 import Math
 import math_utils
 from arena_component_system.client_arena_component_system import ClientArenaComponent
-from constants import ROLE_TYPE_TO_LABEL
 from gui.battle_control import avatar_getter
 from gui.battle_control.battle_constants import FEEDBACK_EVENT_ID
 from helpers import dependency
@@ -92,8 +91,8 @@ class _Effect(object):
             _logger.error('Missing typeDescriptor component at vehicle: %s', self._vehicle.id)
             return
         else:
-            roleType = ROLE_TYPE_TO_LABEL.get(self._vehicle.typeDescriptor.role)
-            equipment = self._modeController.getRoleEquipment(roleType)
+            roleName = self._modeController.getRoleEquipmentKey(self._vehicle.typeDescriptor.type)
+            equipment = self._modeController.getRoleEquipment(roleName)
             return equipment.radius
 
     def start(self):

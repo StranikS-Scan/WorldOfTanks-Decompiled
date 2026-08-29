@@ -480,7 +480,6 @@ class VehPriceActionInfo(ActionInfo):
                     newPrice = Money(credits=price)
                 return formatters.packActionTextParameterBlockData(name=text_styles.main(_ms(TOOLTIPS.ACTIONPRICE_BUYPRICE_ACTIONPRICE, value=text_styles.expText(percent))), value=valueFormatted, icon=_getCurrencySetting(currencySetting).frame, padding=formatters.packPadding(left=20, bottom=-20), currency=newPrice.getCurrency(), valueWidth=valueWidth)
             return formatters.packTextParameterWithIconBlockData(name=text_styles.main(self._getDefaultPriceLabelConst()), value=valueFormatted, icon=settings.frame, valueWidth=valueWidth)
-            return
 
     def _getDefaultPriceLabelConst(self):
         return TOOLTIPS.ACTIONPRICE_BUYPRICE_DEFAULTPRICE

@@ -1,6 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/user_missions/hub/tabs/basic/daily_section/presenters/daily_missions_block_presenter.py
+from __future__ import absolute_import
 import typing
+from future.utils import viewvalues
 import BigWorld
 from constants import DAILY_QUESTS_CONFIG, PremiumConfigs
 from gui import SystemMessages
@@ -202,13 +204,7 @@ class DailyMissionsBlockPresenter(BaseMissionsBlockPresenter[DailyMissionsBlockM
         return
 
     def _arePremiumDailyMissionsCompleted(self):
-        if not self._hasPremiumMissions:
-            return True
-        for quest in self.eventsCache.getPremiumQuests().itervalues():
-            if not quest.isCompleted():
-                return False
-
-        return True
+        return True if not self._hasPremiumMissions else all((quest.isCompleted() for quest in viewvalues(self.eventsCache.getPremiumQuests())))
 
     def _onPremiumTypeChanged(self, *_):
         with self.viewModel.transaction() as tx:

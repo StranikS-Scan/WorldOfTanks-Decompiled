@@ -27,11 +27,8 @@ class Comp7VehiclesWatcher(LimitedLevelVehiclesWatcher, RestrictedVehiclesWatche
     def _getUnsuitableVehicles(self, onClear=False):
         return chain.from_iterable((LimitedLevelVehiclesWatcher._getUnsuitableVehicles(self, onClear), RestrictedVehiclesWatcher._getUnsuitableVehicles(self, onClear), self._getUnsuitableVehiclesBase()))
 
-    def _getForbiddenVehicleClasses(self):
-        return self.__comp7Ctrl.getModeSettings().forbiddenClassTags
-
-    def _getForbiddenVehicleTypes(self):
-        return self.__comp7Ctrl.getModeSettings().forbiddenVehTypes
+    def _getAllowedVehicleTypes(self):
+        return self.__comp7Ctrl.getModeSettings().allowedVehTypes
 
     def _getValidLevels(self):
         return self.__comp7Ctrl.getModeSettings().levels

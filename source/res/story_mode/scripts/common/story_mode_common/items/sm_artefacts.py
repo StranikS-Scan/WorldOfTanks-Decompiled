@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: story_mode/scripts/common/story_mode_common/items/sm_artefacts.py
+from __future__ import absolute_import
 import typing
 from items.artefacts import Equipment, AreaOfEffectEquipment, TooltipConfigReader, ArcadeEquipmentConfigReader, AreaMarkerConfigReader
 from items.components import component_constants
@@ -12,10 +13,10 @@ if typing.TYPE_CHECKING:
 class SPGZoneEquipment(AreaOfEffectEquipment):
     __slots__ = ('yawHitPrediction', 'hitPredictionDuration')
 
-    def _readConfig(self, xmlCtx, section):
-        super(SPGZoneEquipment, self)._readConfig(xmlCtx, section)
-        self.yawHitPrediction = section.readInt('yawHitPrediction', 0)
-        self.hitPredictionDuration = section.readFloat('hitPredictionDuration', 0)
+    def _readConfig(self, xmlCtx, scriptSection):
+        super(SPGZoneEquipment, self)._readConfig(xmlCtx, scriptSection)
+        self.yawHitPrediction = scriptSection.readInt('yawHitPrediction', 0)
+        self.hitPredictionDuration = scriptSection.readFloat('hitPredictionDuration', 0)
 
 
 class NavmeshSettingsReader(object):
@@ -39,9 +40,9 @@ class AOENavmeshEquipment(AreaOfEffectEquipment, NavmeshSettingsReader):
         super(AOENavmeshEquipment, self).__init__()
         self.initNavmeshConfig()
 
-    def _readConfig(self, xmlCtx, section):
-        super(AOENavmeshEquipment, self)._readConfig(xmlCtx, section)
-        self.readNavmeshConfig(xmlCtx, section)
+    def _readConfig(self, xmlCtx, scriptSection):
+        super(AOENavmeshEquipment, self)._readConfig(xmlCtx, scriptSection)
+        self.readNavmeshConfig(xmlCtx, scriptSection)
 
 
 class BaseAbilityEquipment(Equipment, TooltipConfigReader, ArcadeEquipmentConfigReader, AreaMarkerConfigReader, NavmeshSettingsReader):
@@ -54,20 +55,20 @@ class BaseAbilityEquipment(Equipment, TooltipConfigReader, ArcadeEquipmentConfig
         self.initMarkerInformation()
         self.initNavmeshConfig()
 
-    def _readConfig(self, xmlCtx, section):
-        super(BaseAbilityEquipment, self)._readConfig(xmlCtx, section)
-        self.readTooltipInformation(xmlCtx, section)
-        self.readArcadeInformation(xmlCtx, section)
-        self.readMarkerConfig(xmlCtx, section)
-        self.readNavmeshConfig(xmlCtx, section)
-        self.prepareTime = section.readFloat('prepareTime')
-        self.respawnTime = section.readFloat('respawnTime')
-        self.cooldownTime = section.readFloat('cooldownTime')
-        self.unspotDelay = section.readFloat('unspotDelay')
-        self.directVisionRadius = section.readFloat('directVisionRadius')
-        self.visionMinRadius = section.readFloat('visionMinRadius')
-        self.detectFromVehicle = section.readBool('detectFromVehicle')
-        self.observationPoints = self._readPointList(*_xml.getSubSectionWithContext(xmlCtx, section, 'observationPoints'))
+    def _readConfig(self, xmlCtx, scriptSection):
+        super(BaseAbilityEquipment, self)._readConfig(xmlCtx, scriptSection)
+        self.readTooltipInformation(xmlCtx, scriptSection)
+        self.readArcadeInformation(xmlCtx, scriptSection)
+        self.readMarkerConfig(xmlCtx, scriptSection)
+        self.readNavmeshConfig(xmlCtx, scriptSection)
+        self.prepareTime = scriptSection.readFloat('prepareTime')
+        self.respawnTime = scriptSection.readFloat('respawnTime')
+        self.cooldownTime = scriptSection.readFloat('cooldownTime')
+        self.unspotDelay = scriptSection.readFloat('unspotDelay')
+        self.directVisionRadius = scriptSection.readFloat('directVisionRadius')
+        self.visionMinRadius = scriptSection.readFloat('visionMinRadius')
+        self.detectFromVehicle = scriptSection.readBool('detectFromVehicle')
+        self.observationPoints = self._readPointList(*_xml.getSubSectionWithContext(xmlCtx, scriptSection, 'observationPoints'))
 
     @staticmethod
     def _readPointList(xmlCtx, section):
@@ -80,20 +81,20 @@ class BaseAbilityEquipment(Equipment, TooltipConfigReader, ArcadeEquipmentConfig
 
 class ReconAbilityEquipment(BaseAbilityEquipment):
 
-    def _readConfig(self, xmlCtx, section):
-        super(ReconAbilityEquipment, self)._readConfig(xmlCtx, section)
-        self.activatingTime = section.readFloat('activatingTime')
-        self.deactivatingTime = section.readFloat('deactivatingTime')
+    def _readConfig(self, xmlCtx, scriptSection):
+        super(ReconAbilityEquipment, self)._readConfig(xmlCtx, scriptSection)
+        self.activatingTime = scriptSection.readFloat('activatingTime')
+        self.deactivatingTime = scriptSection.readFloat('deactivatingTime')
 
 
 class DistractionAbilityEquipment(BaseAbilityEquipment):
 
-    def _readConfig(self, xmlCtx, section):
-        super(DistractionAbilityEquipment, self)._readConfig(xmlCtx, section)
-        self.pointRadius = section.readFloat('pointRadius')
-        self.detectTime = _xml.readPositiveFloat(xmlCtx, section, 'detectTime', 0.5)
-        self.autoDestroyTime = section.readFloat('autoDestroyTime')
-        self.changeBrainDelay = section.readFloat('changeBrainDelay')
-        self.investigateTime = section.readFloat('investigateTime')
-        self.showXrayMarker = section.readBool('showXrayMarker')
-        self.detectSequence = section.readString('detectSequence')
+    def _readConfig(self, xmlCtx, scriptSection):
+        super(DistractionAbilityEquipment, self)._readConfig(xmlCtx, scriptSection)
+        self.pointRadius = scriptSection.readFloat('pointRadius')
+        self.detectTime = _xml.readPositiveFloat(xmlCtx, scriptSection, 'detectTime', 0.5)
+        self.autoDestroyTime = scriptSection.readFloat('autoDestroyTime')
+        self.changeBrainDelay = scriptSection.readFloat('changeBrainDelay')
+        self.investigateTime = scriptSection.readFloat('investigateTime')
+        self.showXrayMarker = scriptSection.readBool('showXrayMarker')
+        self.detectSequence = scriptSection.readString('detectSequence')

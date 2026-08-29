@@ -19,7 +19,7 @@ from comp7.gui.shared import event_dispatcher as comp7_events
 from comp7.helpers.comp7_server_settings import Comp7ServerSettings
 from comp7_common.comp7_constants import Configs
 from comp7_common_const import Comp7QualificationState, SEASON_POINTS_ENTITLEMENTS, qualificationTokenBySeasonNumber, ratingEntNameBySeasonNumber, eliteRankEntNameBySeasonNumber, activityPointsEntNameBySeasonNumber, maxRankEntNameBySeasonNumber
-from constants import RESTRICTION_TYPE, COMP7_SCENE, ARENA_BONUS_TYPE, QUEUE_TYPE, ARENA_GUI_TYPE
+from constants import RESTRICTION_TYPE, COMP7_SCENE, ARENA_BONUS_TYPE, QUEUE_TYPE, ARENA_GUI_TYPE, ROLE_TYPE_TO_LABEL
 from disjoint_set import DisjointSet
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.game_control.season_provider import SeasonProvider
@@ -47,6 +47,7 @@ if typing.TYPE_CHECKING:
     from typing import Optional, Any
     from comp7.helpers.comp7_server_settings import Comp7Config, Comp7RanksConfig
     from items.artefacts import Equipment
+    from items.vehicles import VehicleType
 
 class Comp7Controller(Notifiable, SeasonProvider, IComp7Controller, IGlobalListener):
     __SEASON_ENTITLEMENT_NAME_FACTORIES = {ratingEntNameBySeasonNumber, eliteRankEntNameBySeasonNumber, activityPointsEntNameBySeasonNumber}
@@ -99,7 +100,7 @@ class Comp7Controller(Notifiable, SeasonProvider, IComp7Controller, IGlobalListe
         if not self.__roleEquipmentsCache:
             self.__roleEquipmentsCache = {}
             equipmentsCache = vehicles.g_cache.equipments()
-            roleEquipmentsConfig = self.getModeSettings().roleEquipments
+            roleEquipmentsConfig = dict(self.getModeSettings().roleEquipments, **self.getModeSettings().roleEquipmentsByVehicle)
             for role, equipmentConfig in roleEquipmentsConfig.iteritems():
                 if equipmentConfig['equipmentID'] is not None:
                     startCharge = equipmentConfig['startCharge']
@@ -145,6 +146,10 @@ class Comp7Controller(Notifiable, SeasonProvider, IComp7Controller, IGlobalListe
     @property
     def battleModifiers(self):
         return self.getModeSettings().battleModifiersDescr
+
+    @property
+    def subModes(self):
+        return self.getModeSettings().subModes
 
     @property
     def qualificationBattlesNumber(self):
@@ -292,6 +297,9 @@ class Comp7Controller(Notifiable, SeasonProvider, IComp7Controller, IGlobalListe
     def isVehicleBanEnabled(self):
         return self.__comp7Config is not None and self.__comp7Config.isVehicleBanEnabled
 
+    def isSuperSquadEnabled(self):
+        return self.__comp7Config is not None and len(self.__comp7Config.squadSizes) == 2
+
     def hasActiveSeason(self, includePreannounced=False):
         return self.isAvailable() and bool(self.getCurrentSeason(includePreannounced=includePreannounced))
 
@@ -344,6 +352,11 @@ class Comp7Controller(Notifiable, SeasonProvider, IComp7Controller, IGlobalListe
              cycleID)
             return self._createSeason(cycleInfo, season)
 
+    def getRoleEquipmentKey(self, vehType):
+        roleEquipmentsByVehicle = self.getModeSettings().roleEquipmentsByVehicle
+        vehName = vehType.name.split(':')[-1]
+        return vehName if vehName in roleEquipmentsByVehicle else ROLE_TYPE_TO_LABEL[vehType.role]
+
     def getRoleEquipment(self, roleName):
         return self.__roleEquipments.get(roleName, {}).get('item')
 
@@ -360,12 +373,9 @@ class Comp7Controller(Notifiable, SeasonProvider, IComp7Controller, IGlobalListe
         ctx = {}
         restriction = None
         config = self.__comp7Config
-        if vehicle.compactDescr in config.forbiddenVehTypes:
+        if vehicle.compactDescr not in config.allowedVehTypes:
             restriction = PRE_QUEUE_RESTRICTION.LIMIT_VEHICLE_TYPE
             ctx = {'forbiddenType': vehicle.shortUserName}
-        if vehicle.type in config.forbiddenClassTags:
-            restriction = PRE_QUEUE_RESTRICTION.LIMIT_VEHICLE_CLASS
-            ctx = {'forbiddenClass': vehicle.type}
         if vehicle.level not in config.levels:
             restriction = PRE_QUEUE_RESTRICTION.LIMIT_LEVEL
             ctx = {'levels': config.levels}

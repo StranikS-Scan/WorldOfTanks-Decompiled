@@ -15,7 +15,8 @@ class ComponentViewType(Enum):
     def getTabIdx(self):
         if self == self.ENGRAVING:
             return 0
-        return 1 if self == self.BACKGROUND else None
+        else:
+            return 1 if self == self.BACKGROUND else None
 
 
 TRIUMPH_GRADES = 4

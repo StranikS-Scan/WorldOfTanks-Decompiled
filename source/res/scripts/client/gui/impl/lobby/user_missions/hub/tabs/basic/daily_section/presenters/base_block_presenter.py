@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/user_missions/hub/tabs/basic/daily_section/presenters/base_block_presenter.py
+from __future__ import absolute_import
 from gui.impl.backport import BackportTooltipWindow, TooltipData
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.user_missions.hub.tabs.tab_id import TabId

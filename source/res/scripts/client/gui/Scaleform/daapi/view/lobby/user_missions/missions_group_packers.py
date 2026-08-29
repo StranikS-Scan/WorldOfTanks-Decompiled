@@ -1,10 +1,12 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/user_missions/missions_group_packers.py
+from __future__ import absolute_import
 import locale
 import logging
 import time
 import weakref
 from collections import namedtuple, defaultdict, OrderedDict
+from future.utils import viewvalues, lfilter
 from CurrentVehicle import g_currentVehicle
 from Event import EventManager, Event
 from constants import EVENT_TYPE, PREMIUM_TYPE
@@ -27,11 +29,12 @@ from gui.server_events.awards_formatters import AWARDS_SIZES
 from gui.server_events.cond_formatters.tokens import TokensMarathonFormatter
 from gui.server_events.event_items import DEFAULTS_GROUPS
 from gui.server_events.events_constants import RANKED_DAILY_GROUP_ID, RANKED_PLATFORM_GROUP_ID, BATTLE_ROYALE_GROUPS_ID, EPIC_BATTLE_GROUPS_ID, MAPS_TRAINING_GROUPS_ID
-from gui.server_events.events_helpers import isBattleMattersQuestID, isPremium, premMissionsSortFunc, isPremiumQuestsEnable, getPremiumGroup, getDailyEpicGroup, getRankedDailyGroup, getRankedPlatformGroup, getDailyBattleRoyaleGroup
+from gui.server_events.events_helpers import isBattleMattersQuestID, isPremium, isPremiumQuestsEnable, getPremiumGroup, getDailyEpicGroup, getRankedDailyGroup, getRankedPlatformGroup, getDailyBattleRoyaleGroup, PremMissionsSortKey
 from gui.server_events.events_helpers import missionsSortFunc
 from gui.server_events.formatters import DECORATION_SIZES
 from gui.shared.formatters import text_styles
 from gui.shared.formatters.icons import makeImageTag
+from gui.shared.system_factory import collectSpecialQuestsCheckers
 from helpers import dependency, time_utils, getLanguageCode
 from helpers.i18n import makeString as _ms
 from skeletons.gui.game_control import IRankedBattlesController, IBattleRoyaleController, IEpicBattleMetaGameController
@@ -146,7 +149,7 @@ class _EventsBlockBuilder(object):
 
     def __clearDefaultBlocks(self):
         defaults = self._cache['defaults']
-        for gInfo in defaults.itervalues():
+        for gInfo in viewvalues(defaults):
             gInfo.clear()
 
         defaults.clear()
@@ -154,7 +157,7 @@ class _EventsBlockBuilder(object):
     def __getBlocksInfos(self):
         result = []
         resultExtend = result.extend
-        for group in self._cache.itervalues():
+        for group in viewvalues(self._cache):
             resultExtend(group.values())
 
         return sorted(result, key=lambda blockInfo: blockInfo.getSortPriority(), reverse=True)
@@ -188,7 +191,7 @@ class GroupedEventsBlocksBuilder(_EventsBlockBuilder):
 
     def clear(self):
         cachedGroups = self._cache['groupedEvents']
-        for blockInfo in cachedGroups.itervalues():
+        for blockInfo in viewvalues(cachedGroups):
             blockInfo.clear()
 
         cachedGroups.clear()
@@ -263,7 +266,7 @@ class QuestsGroupsBuilder(GroupedEventsBlocksBuilder):
             if rankedPlatform and RANKED_PLATFORM_GROUP_ID not in self._cache['groupedEvents']:
                 self._cache['groupedEvents'][RANKED_PLATFORM_GROUP_ID] = self._createGroupedEventsBlock(rankedPlatform)
         group = getPremiumGroup()
-        if isPremiumQuestsEnable() and 'premium' not in self._cache['groupedEvents'].iterkeys() and group:
+        if isPremiumQuestsEnable() and 'premium' not in self._cache['groupedEvents'] and group:
             self._cache['groupedEvents']['premium'] = _PremiumGroupedQuestsBlockInfo()
         return
 
@@ -274,7 +277,8 @@ class QuestsGroupsBuilder(GroupedEventsBlocksBuilder):
         return _MapsTrainingGroupedQuestsBlockInfo(group) if events_helpers.isMapsTraining(group.getID()) else _GroupedQuestsBlockInfo(group)
 
     def _getEventsGroups(self):
-        return self.eventsCache.getGroups(filterFunc=lambda g: g.isRegularQuest())
+        extendedCheckers = collectSpecialQuestsCheckers()
+        return self.eventsCache.getGroups(filterFunc=lambda g: g.isRegularQuest(extendedCheckers.values()))
 
 
 class ElenGroupsBuilder(_EventsBlockBuilder):
@@ -330,7 +334,7 @@ class _EventsBlockInfo(object):
 
     def buildEventsBlockData(self, srvEvents, filterFunc):
         self._suitableEvents = self.findEvents(srvEvents)
-        self._events = filter(filterFunc, self._suitableEvents)
+        self._events = lfilter(filterFunc, self._suitableEvents)
         return _EventsBlockData(len(self._events), len(self._suitableEvents), self._getVO())
 
     def getBlockAdvisableEvents(self, srvEvents):
@@ -418,7 +422,7 @@ class _GroupedEventsBlockInfo(_CollapsableEventsBlockInfo):
 
     def buildEventsBlockData(self, srvEvents, filterFunc):
         self._suitableEvents = self.findEvents(srvEvents)
-        self._events = filter(filterFunc, self._suitableEvents) if self._filterEnable else self._suitableEvents
+        self._events = lfilter(filterFunc, self._suitableEvents) if self._filterEnable else self._suitableEvents
         if self.getEventsBlockID() == BATTLE_ROYALE_GROUPS_ID:
             self._events = sortQuestsByProgressionPointBonus(self._events)
         return None if not self._suitableEvents else _EventsBlockData(len(self._events), len(self._suitableEvents), self._getVO())
@@ -560,7 +564,7 @@ class _UngroupedQuestsBlockInfo(_CollapsableEventsBlockInfo):
 
     def buildEventsBlockData(self, srvEvents, filterFunc):
         self._suitableEvents = self.findEvents(srvEvents)
-        self._events = filter(filterFunc, self._suitableEvents)
+        self._events = lfilter(filterFunc, self._suitableEvents)
         return None if not self._suitableEvents else _EventsBlockData(len(self._events), len(self._suitableEvents), self._getVO())
 
     def getEventsBlockID(self):
@@ -576,7 +580,7 @@ class _UngroupedQuestsBlockInfo(_CollapsableEventsBlockInfo):
         raise SoftException('This method should not be reached in this context')
 
     def _findEvents(self, srvEvents):
-        suitabaleQuests = [ q for q in srvEvents.itervalues() if q.getGroupID() == DEFAULTS_GROUPS.UNGROUPED_QUESTS and q.getType() != EVENT_TYPE.MOTIVE_QUEST ]
+        suitabaleQuests = [ q for q in viewvalues(srvEvents) if q.getGroupID() == DEFAULTS_GROUPS.UNGROUPED_QUESTS and q.getType() != EVENT_TYPE.MOTIVE_QUEST ]
         self.__totalQuestsCount = len(suitabaleQuests)
         self.__completedQuestsCount = len([ q for q in suitabaleQuests if q.isCompleted() ])
         return suitabaleQuests
@@ -600,7 +604,7 @@ class _MotiveQuestsBlockInfo(_CollapsableEventsBlockInfo):
 
     def buildEventsBlockData(self, srvEvents, filterFunc):
         self._suitableEvents = self.findEvents(srvEvents)
-        self._events = filter(filterFunc, self._suitableEvents)
+        self._events = lfilter(filterFunc, self._suitableEvents)
         return None if not self._suitableEvents else _EventsBlockData(len(self._events), len(self._suitableEvents), self._getVO())
 
     def getEventsBlockID(self):
@@ -613,7 +617,7 @@ class _MotiveQuestsBlockInfo(_CollapsableEventsBlockInfo):
         return {'title': self.getTitle()}
 
     def _findEvents(self, srvEvents):
-        suitabaleQuests = [ q for q in srvEvents.itervalues() if q.getType() == EVENT_TYPE.MOTIVE_QUEST and not q.isCompleted() and q.isAvailable()[0] ]
+        suitabaleQuests = [ q for q in viewvalues(srvEvents) if q.getType() == EVENT_TYPE.MOTIVE_QUEST and not q.isCompleted() and q.isAvailable()[0] ]
         return suitabaleQuests
 
     def _getHeaderData(self):
@@ -647,7 +651,7 @@ class _VehicleQuestsBlockInfo(_EventsBlockInfo):
          'tankInfo': tankInfo}
 
     def _findEvents(self, srvEvents):
-        return filter(self.__applyFilter, srvEvents.itervalues())
+        return lfilter(self.__applyFilter, viewvalues(srvEvents))
 
     def getTitle(self):
         return text_styles.promoTitle(QUESTS.QUESTS_TITLE_CURRENTLYAVAILABLE)
@@ -733,7 +737,7 @@ class _PremiumGroupedQuestsBlockInfo(_GroupedQuestsBlockInfo):
         self._filterEnable = False
 
     def findEvents(self, srvEvents):
-        return sorted(self._findEvents(srvEvents), cmp=premMissionsSortFunc, reverse=False)
+        return sorted(self._findEvents(srvEvents), key=PremMissionsSortKey, reverse=False)
 
     def getTitle(self):
         title = backport.text(R.strings.quests.premiumQuests.header.default())

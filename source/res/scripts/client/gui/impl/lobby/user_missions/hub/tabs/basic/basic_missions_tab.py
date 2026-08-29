@@ -1,12 +1,14 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/user_missions/hub/tabs/basic/basic_missions_tab.py
+from __future__ import absolute_import
+import typing
+from future.utils import listvalues
 from PlayerEvents import g_playerEvents
 from config_schemas.umg_config import umgConfigSchema
 from gui.Scaleform.daapi.view.lobby.missions.missions_helper import getSuitableVehicles
-from gui.server_events.pm_constants import IS_PM3_QUEST_ENABLED, DISABLED_PM_OPERATIONS
 from helpers import dependency
 from gui.impl.gen import R
-from personal_missions import PM_BRANCH
+from personal_missions import PM_BRANCH, PM_SWITCHES
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
@@ -18,6 +20,8 @@ from gui.impl.lobby.user_missions.hub.tabs.basic.weekly_missions import WeeklyMi
 from gui.impl.lobby.user_missions.hub.update_children_mixin import UpdateChildrenMixin
 from gui.impl.pub.view_component import ViewComponent
 from gui.impl.lobby.user_missions.hub.tabs.basic.personal_missions_widget import PersonalMissionsWindgetPresenter
+if typing.TYPE_CHECKING:
+    from typing import Callable, Dict, List
 
 class BasicMissionsTab(UpdateChildrenMixin, ViewComponent[BasicMissionsTabModel]):
     LAYOUT_ID = R.aliases.user_missions.hub.basicMissions.MainView()
@@ -29,12 +33,20 @@ class BasicMissionsTab(UpdateChildrenMixin, ViewComponent[BasicMissionsTabModel]
         self._targetQuestId = targetQuestId
         self._hasSuitableVehicles = False
         self.__personalMissions = self.eventsCache.getPersonalMissions()
-        self.__pm3Operations = self.__personalMissions.getAllOperations(PM_BRANCH.V2_BRANCHES)
+        self.__pmOperations = self.__personalMissions.getAllOperations(PM_BRANCH.WITHOUT_AWARD_LIST_BRANCHES)
+        self.__activeCampaigns = set(self.__personalMissions.getActiveCampaigns())
         super(BasicMissionsTab, self).__init__(model=BasicMissionsTabModel)
 
     @property
     def viewModel(self):
         return super(BasicMissionsTab, self).getViewModel()
+
+    def _finalize(self):
+        self.__personalMissions = None
+        self.__pmOperations = {}
+        self.__activeCampaigns = {}
+        super(BasicMissionsTab, self)._finalize()
+        return
 
     def _getChildComponents(self):
         return {DailyMissionsSectionPresenter.LAYOUT_ID: lambda : DailyMissionsSectionPresenter(self._targetQuestId),
@@ -62,10 +74,11 @@ class BasicMissionsTab(UpdateChildrenMixin, ViewComponent[BasicMissionsTabModel]
 
     def __onServerSettingsChanged(self, diff=None):
         diff = diff or {}
-        if IS_PM3_QUEST_ENABLED in diff or DISABLED_PM_OPERATIONS in diff:
-            inProgressOperations = self.eventsCache.getPersonalMissions().getActiveOperations(PM_BRANCH.V2_BRANCHES)
-            inProgressOperationsIDs = [ operation.getID() for operation in inProgressOperations ]
-            if not diff.get(IS_PM3_QUEST_ENABLED, True) or inProgressOperationsIDs & diff.get(DISABLED_PM_OPERATIONS, {}).keys():
+        pm3SwitcherIndex = len(PM_BRANCH.WITH_AWARD_LIST_BRANCHES)
+        campaignSwitchers = PM_SWITCHES.ALL[pm3SwitcherIndex:]
+        allSwitchers = campaignSwitchers + (PM_SWITCHES.DISABLED_PM_OPERATIONS,)
+        if any((switcher in diff for switcher in allSwitchers)):
+            if not all((diff.get(switcher, True) for switcher in campaignSwitchers)) or list(self.__pmOperations) & diff.get(PM_SWITCHES.DISABLED_PM_OPERATIONS, {}).keys():
                 self.viewModel.setIsPMSectionAvailable(False)
             else:
                 self.__updatePersonalMissionSection()
@@ -75,7 +88,7 @@ class BasicMissionsTab(UpdateChildrenMixin, ViewComponent[BasicMissionsTabModel]
             self._updateDailyBlockStatus()
 
     def __updatePersonalMissionSection(self):
-        self.viewModel.setIsPMSectionAvailable(self.__isPM3Enabled() and not self.__isPMOperationDisabled() and not self.__isCampaignCompleted() and (self.__isPM3Active() or (self._hasSuitableVehicles or self.__isPM12Active()) and not self.__isCampaignStarted()))
+        self.viewModel.setIsPMSectionAvailable(self.__isCampaignEnabled() and not self.__isPMOperationDisabled() and not self.__isCampaignCompleted() and (self.__isCampaignActive(PM_BRANCH.WITHOUT_AWARD_LIST_BRANCHES) or (self._hasSuitableVehicles or self.__isCampaignActive(PM_BRANCH.WITH_AWARD_LIST_BRANCHES)) and not self.__isCampaignStarted()))
 
     def __onCacheSyncCompleted(self, *_):
         self.__updatePersonalMissionSection()
@@ -89,19 +102,17 @@ class BasicMissionsTab(UpdateChildrenMixin, ViewComponent[BasicMissionsTabModel]
         self.__updatePersonalMissionSection()
 
     def __isCampaignCompleted(self):
-        return all([ operation.isFullCompleted() for operation in self.__pm3Operations.values() ])
+        return all((operation.isFullCompleted() for operation in listvalues(self.__pmOperations)))
+
+    def __isCampaignEnabled(self):
+        settings = self.lobbyContext.getServerSettings()
+        return any((settings.isPersonalMissionsEnabled(campaign) for campaign in PM_BRANCH.WITHOUT_AWARD_LIST_BRANCHES))
 
     def __isCampaignStarted(self):
-        return self.__personalMissions.isPM3Activated()
+        return self.__personalMissions.isWithoutAwardListBranchActivated()
 
-    def __isPM3Enabled(self):
-        return self.lobbyContext.getServerSettings().isPersonalMissionsEnabled(PM_BRANCH.PERSONAL_MISSION_3)
+    def __isCampaignActive(self, branchNames):
+        return bool(self.__activeCampaigns.intersection(branchNames))
 
     def __isPMOperationDisabled(self):
-        return self.__personalMissions.isActiveOperationDisabled(PM_BRANCH.V2_BRANCHES)
-
-    def __isPM12Active(self):
-        return self.__personalMissions.isCampaignActive(PM_BRANCH.TYPE_TO_NAME[PM_BRANCH.REGULAR]) or self.__personalMissions.isCampaignActive(PM_BRANCH.TYPE_TO_NAME[PM_BRANCH.PERSONAL_MISSION_2])
-
-    def __isPM3Active(self):
-        return self.__personalMissions.isCampaignActive(PM_BRANCH.TYPE_TO_NAME[PM_BRANCH.PERSONAL_MISSION_3])
+        return any((operation.isDisabled() for operation in listvalues(self.__pmOperations)))

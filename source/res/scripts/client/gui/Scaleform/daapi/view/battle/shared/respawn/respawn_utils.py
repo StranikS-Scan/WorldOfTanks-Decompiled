@@ -22,7 +22,9 @@ def getVehicleName(vehicle):
     return vehicleName
 
 
-def getSlotsStatesData(vehs, cooldowns, disabled, limits={}):
+def getSlotsStatesData(vehs, cooldowns, disabled, limits=None):
+    if limits is None:
+        limits = {}
     result = []
     for v in viewvalues(vehs):
         compactDescr = v.intCD

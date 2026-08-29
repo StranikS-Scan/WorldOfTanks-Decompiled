@@ -532,11 +532,7 @@ def _long_typename(obj):
     objtype = _get_obj_type(obj)
     name = objtype.__name__
     module = getattr(objtype, '__module__', None)
-    if module:
-        return '%s.%s' % (module, name)
-    else:
-        return name
-        return
+    return '%s.%s' % (module, name) if module else name
 
 
 def _safe_repr(obj):
@@ -552,10 +548,7 @@ def _name_or_repr(value):
     except AttributeError:
         result = repr(value)[:40]
 
-    if _isinstance(result, basestring):
-        return result
-    else:
-        return repr(value)[:40]
+    return result if _isinstance(result, basestring) else repr(value)[:40]
 
 
 def _short_repr(obj):
@@ -568,8 +561,7 @@ def _short_repr(obj):
         name = _name_or_repr(obj.__func__)
         if obj.__self__:
             return name + ' (bound)'
-        else:
-            return name
+        return name
     if _isinstance(obj, types.LambdaType) and obj.__name__ == '<lambda>':
         return 'lambda: %s:%s' % (os.path.basename(obj.__code__.co_filename), obj.__code__.co_firstlineno)
     if _isinstance(obj, types.FrameType):
@@ -623,12 +615,11 @@ def _edge_label(source, target, shortnames=True):
                 if v is target:
                     if _isinstance(k, basestring) and _is_identifier(k):
                         return ' [label="%s",weight=2]' % _quote(k)
+                    if shortnames:
+                        tn = _short_typename(k)
                     else:
-                        if shortnames:
-                            tn = _short_typename(k)
-                        else:
-                            tn = _long_typename(k)
-                        return ' [label="%s"]' % _quote(tn + '\n' + _safe_repr(k))
+                        tn = _long_typename(k)
+                    return ' [label="%s"]' % _quote(tn + '\n' + _safe_repr(k))
 
         return ''
 

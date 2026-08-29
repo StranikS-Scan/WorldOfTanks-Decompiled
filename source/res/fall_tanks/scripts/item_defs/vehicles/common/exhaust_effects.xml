@@ -1,0 +1,206 @@
+<exhaust_effects.xml>
+  <effects>
+    <fall_tanks>
+      <selector>
+        <type>	union	</type>
+        <constantsGroup>	fall_tanks	</constantsGroup>
+        <selector>
+          <type>	discrete	</type>
+          <variable>	Nitro	</variable>
+          <selector>
+            <key>	0	</key>
+            <type>	range	</type>
+            <variable>	engineLoad	</variable>
+            <selector>
+              <key>	1	</key>
+              <type>	effect	</type>
+              <name>	particles/Environment/fall_tanks/140_fall_tanks_exhaust.eff	</name>
+            </selector>
+            <selector>
+              <type>	range	</type>
+              <variable>	physicLoad	</variable>
+              <key>	2	</key>
+              <selector>
+                <key>	0	</key>
+                <type>	range	</type>
+                <variable>	RPM	</variable>
+                <selector>
+                  <key>	0.00	</key>
+                  <type>	effect	</type>
+                  <name>	particles/Environment/fall_tanks/140_fall_tanks_exhaust.eff	</name>
+                </selector>
+                <selector>
+                  <key>	0.5	</key>
+                  <type>	effect	</type>
+                  <name>	particles/Environment/fall_tanks/140_fall_tanks_exhaust.eff	</name>
+                </selector>
+                <selector>
+                  <key>	0.9	</key>
+                  <type>	effect	</type>
+                  <name>	particles/Environment/fall_tanks/140_fall_tanks_exhaust.eff	</name>
+                </selector>
+              </selector>
+              <selector>
+                <key>	0.5	</key>
+                <type>	range	</type>
+                <variable>	RPM	</variable>
+                <selector>
+                  <key>	0.00	</key>
+                  <type>	effect	</type>
+                  <name>	particles/Environment/fall_tanks/140_fall_tanks_exhaust.eff	</name>
+                </selector>
+                <selector>
+                  <key>	0.5	</key>
+                  <type>	effect	</type>
+                  <name>	particles/Environment/fall_tanks/140_fall_tanks_exhaust.eff	</name>
+                </selector>
+                <selector>
+                  <key>	0.9	</key>
+                  <type>	effect	</type>
+                  <name>	particles/Environment/fall_tanks/140_fall_tanks_exhaust.eff	</name>
+                </selector>
+              </selector>
+              <selector>
+                <key>	0.9	</key>
+                <type>	range	</type>
+                <variable>	RPM	</variable>
+                <selector>
+                  <key>	0.00	</key>
+                  <type>	effect	</type>
+                  <name>	particles/Environment/fall_tanks/140_fall_tanks_exhaust.eff	</name>
+                </selector>
+                <selector>
+                  <key>	0.5	</key>
+                  <type>	effect	</type>
+                  <name>	particles/Environment/fall_tanks/140_fall_tanks_exhaust.eff	</name>
+                </selector>
+                <selector>
+                  <key>	0.9	</key>
+                  <type>	effect	</type>
+                  <name>	particles/Environment/fall_tanks/140_fall_tanks_exhaust.eff	</name>
+                </selector>
+              </selector>
+              <selector>
+                <key>	0.98	</key>
+                <type>	range	</type>
+                <variable>	RPM	</variable>
+                <selector>
+                  <key>	0.00	</key>
+                  <type>	effect	</type>
+                  <name>	particles/Environment/fall_tanks/140_fall_tanks_exhaust.eff	</name>
+                </selector>
+                <selector>
+                  <key>	0.5	</key>
+                  <type>	effect	</type>
+                  <name>	particles/Environment/fall_tanks/140_fall_tanks_exhaust.eff	</name>
+                </selector>
+                <selector>
+                  <key>	0.9	</key>
+                  <type>	effect	</type>
+                  <name>	particles/Environment/fall_tanks/140_fall_tanks_exhaust.eff	</name>
+                </selector>
+              </selector>
+            </selector>
+          </selector>
+          <selector>
+            <key>	1	</key>
+            <type>	range	</type>
+            <variable>	engineLoad	</variable>
+            <selector>
+              <key>	1	</key>
+              <type>	effect	</type>
+              <name>	particles/Environment/Battle_Royal/Afterburning/br_nitro_idle.eff	</name>
+            </selector>
+            <selector>
+              <key>	2	</key>
+              <type>	effect	</type>
+              <name>	particles/Environment/Battle_Royal/Afterburning/br_nitro_load.eff	</name>
+            </selector>
+          </selector>
+          <selector>
+            <key>	2	</key>
+            <type>	range	</type>
+            <variable>	engineLoad	</variable>
+            <selector>
+              <key>	1	</key>
+              <type>	effect	</type>
+              <name>	particles/Tank/exhaust/forsage_gas/forsage_idle.eff	</name>
+            </selector>
+            <selector>
+              <key>	2	</key>
+              <type>	effect	</type>
+              <name>	particles/Tank/exhaust/forsage_gas/forsage_work_load.eff	</name>
+            </selector>
+          </selector>
+          <selector>
+            <key>	3	</key>
+            <type>	range	</type>
+            <variable>	engineLoad	</variable>
+            <selector>
+              <key>	1	</key>
+              <type>	effect	</type>
+              <name>	particles/Tank/exhaust/forsage_diesel/forsage_idle.eff	</name>
+            </selector>
+            <selector>
+              <key>	2	</key>
+              <type>	effect	</type>
+              <name>	particles/Tank/exhaust/forsage_diesel/forsage_work_load.eff	</name>
+            </selector>
+          </selector>
+        </selector>
+        <selector>
+          <type>	discrete	</type>
+          <variable>	Nitro	</variable>
+          <selector>
+            <key>	0	</key>
+            <type>	discrete	</type>
+            <variable>	gearUp	</variable>
+            <selector>
+              <key>	1	</key>
+              <type>	effect	</type>
+              <ttl>	0.05	</ttl>
+              <name>	particles/Environment/fall_tanks/140_fall_tanks_exhaust.eff	</name>
+            </selector>
+          </selector>
+          <selector>
+            <key>	1	</key>
+            <type>	discrete	</type>
+            <variable>	gearUp	</variable>
+            <selector>
+              <key>	1	</key>
+              <type>	effect	</type>
+              <ttl>	0.05	</ttl>
+              <name>	particles/Environment/Battle_Royal/Afterburning/br_nitro_gearup.eff	</name>
+            </selector>
+          </selector>
+        </selector>
+        <selector>
+          <type>	discrete	</type>
+          <variable>	Nitro	</variable>
+          <selector>
+            <key>	0	</key>
+            <type>	discrete	</type>
+            <variable>	engineStart	</variable>
+            <selector>
+              <key>	1	</key>
+              <type>	effect	</type>
+              <ttl>	5.2	</ttl>
+              <name>	particles/Environment/fall_tanks/140_fall_tanks_exhaust.eff	</name>
+            </selector>
+          </selector>
+          <selector>
+            <key>	1	</key>
+            <type>	discrete	</type>
+            <variable>	engineStart	</variable>
+            <selector>
+              <key>	1	</key>
+              <type>	effect	</type>
+              <ttl>	5.2	</ttl>
+              <name>	particles/Environment/fall_tanks/140_fall_tanks_exhaust.eff	</name>
+            </selector>
+          </selector>
+        </selector>
+      </selector>
+    </fall_tanks>
+  </effects>
+</exhaust_effects.xml>

@@ -8,10 +8,10 @@ from future.utils import itervalues
 from Event import Event, EventManager
 from WeakMethod import WeakMethodProxy
 from debug_utils import deprecated
-from frameworks.state_machine import State, StateFlags, StateMachine
-from frameworks.state_machine.exceptions import NodeError, StateMachineError, TransitionError
-from frameworks.state_machine.transitions import TransitionType
-from frameworks.state_machine.visitor import isDescendantOf
+from frameworks_common.state_machine import State, StateFlags, StateMachine
+from frameworks_common.state_machine.exceptions import NodeError, StateMachineError, TransitionError
+from frameworks_common.state_machine.transitions import TransitionType
+from frameworks_common.state_machine.visitor import isDescendantOf
 from frameworks.wulf import WindowLayer
 from gui.Scaleform.framework import ScopeTemplates
 from gui.Scaleform.framework.ScopeTemplates import SimpleScope
@@ -80,6 +80,8 @@ class LobbyStateMachine(StateMachine, EventsHandler):
         for subtreePrefix in self.__subtreePriorities:
             if stateID.startswith(subtreePrefix):
                 return stateID[len(subtreePrefix):]
+
+        return None
 
     @deprecated
     def getStateByViewKey(self, viewKey):

@@ -225,9 +225,7 @@ class TradeInController(ITradeInController):
         possibleVehiclesToSell = set()
         if intCD in self.getVehiclesToBuy(False):
             buyToSellConversionCache = self.__cache.get('buyToSellConversionCache', {})
-            for _, vehToSell in buyToSellConversionCache.get(intCD, []):
-                possibleVehiclesToSell.add(vehToSell.intCD)
-
+            possibleVehiclesToSell.update((vehToSell.intCD for _, vehToSell in buyToSellConversionCache.get(intCD, [])))
         self._vehicleToBuyInfo = _TradeInVehicleToBuy(intCD, possibleVehiclesToSell)
         if intCD != oldCD:
             self._eventBus.call(VehicleBuyEvent(VehicleBuyEvent.VEHICLE_SELECTED))

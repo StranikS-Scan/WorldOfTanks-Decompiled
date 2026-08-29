@@ -1,15 +1,16 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/server_events/parsers.py
 import weakref
-from typing import Union, TYPE_CHECKING
+import typing
 from gui.server_events import formatters, conditions
 from gui.server_events.conditions import CumulativeResult, CLASS_TYPE
 from gui.shared.utils.requesters import REQ_CRITERIA
 from helpers import dependency
 from skeletons.gui.shared import IItemsCache
 from soft_exception import SoftException
-if TYPE_CHECKING:
-    from gui.server_events.conditions import _ConditionsGroup, _Cumulativable
+if typing.TYPE_CHECKING:
+    from typing import Union, List
+    from gui.server_events.conditions import _ConditionsGroup, Cumulativable
 
 class ConditionsParser(object):
     LOGICAL_OPS = {'and': conditions.AndGroup,
@@ -114,7 +115,9 @@ class AccountRequirements(ConditionsParser):
             return conditions.AccountDossierValue(uniqueName, data)
         if name == 'vehiclesUnlocked':
             return conditions.VehiclesUnlocked(uniqueName, data)
-        return conditions.VehiclesOwned(uniqueName, data) if name == 'vehiclesOwned' else None
+        if name == 'vehiclesOwned':
+            return conditions.VehiclesOwned(uniqueName, data)
+        return conditions.DailyXPFactor(uniqueName, data) if name == 'dailyXPFactor' else None
 
     def isAvailable(self):
         conds = self.getConditions()

@@ -134,14 +134,11 @@ class FunRandomLootboxAutoOpenFormatter(AsyncAutoLootBoxSubFormatter, FunAssetPa
             mainRewards.extend(otherRewards)
             rawBonuses = self.__getRawBonuses(mainRewards)
             mainFormatted = composer.getFormattedBonuses(rawBonuses, AWARDS_SIZES.S232X174)
-            if len(mainFormatted) == 1:
-                return {'mainReward': first(mainFormatted),
-                 'rewards': [],
-                 'bgIcon': bgIcon}
-            return {'mainReward': None,
+            return {'mainReward': first(mainFormatted),
+             'rewards': [],
+             'bgIcon': bgIcon} if len(mainFormatted) == 1 else {'mainReward': None,
              'rewards': composer.getFormattedBonuses(rawBonuses, AWARDS_SIZES.SMALL),
              'bgIcon': bgIcon}
-            return None
 
     def __getRawBonuses(self, rewards):
         mergedRewards = getMergedCompensatedBonuses(rewards)

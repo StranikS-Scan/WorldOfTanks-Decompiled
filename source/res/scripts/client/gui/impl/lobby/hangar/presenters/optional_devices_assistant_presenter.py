@@ -6,7 +6,7 @@ import typing
 import Event
 from CurrentVehicle import g_currentVehicle
 from constants import QUEUE_TYPE
-from frameworks.state_machine import BaseStateObserver, visitor
+from frameworks_common.state_machine import BaseStateObserver, visitor
 from gui.Scaleform.lobby_entry import getLobbyStateMachine
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.tank_setup.sub_views.optional_devices_assistant_model import OptionalDevicesAssistantModel
@@ -18,7 +18,7 @@ from helpers import dependency
 from skeletons.gui.game_control import IWotPlusController
 if typing.TYPE_CHECKING:
     from gui.lobby_state_machine.lobby_state_machine import LobbyStateMachine
-    from frameworks.state_machine import State, StateEvent
+    from frameworks_common.state_machine import State, StateEvent
     from typing import Optional
 _logger = logging.getLogger(__name__)
 

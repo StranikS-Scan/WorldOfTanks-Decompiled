@@ -16,12 +16,13 @@ from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS
 from constants import SHELL_TYPES_INDICES
 from gui.armor_flashlight.config import getConfig, isFeatureEnabled
 from gui.armor_flashlight.interfaces import IArmorFlashlightBattleController
-from gui.armor_flashlight.utils import getAllMatInfos
+from gui.armor_flashlight.utils import getAllMatInfos, ArmorFlashlightHideReason
 from gui.battle_control import avatar_getter
 from gui.battle_control.arena_info.interfaces import IArenaLoadController
 from gui.battle_control.battle_constants import BATTLE_CTRL_ID, CROSSHAIR_VIEW_ID
 from gui.shared.utils.functions import getShellImpactParams
 from helpers import dependency, isPlayerAvatar
+from shared_utils import BitmaskHelper
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.battle_session import IBattleSessionProvider
 if typing.TYPE_CHECKING:
@@ -48,7 +49,6 @@ def _collisionIsBad(collision, myTeam):
 
 
 class ArmorFlashlightBattleController(IArenaLoadController, IArmorFlashlightBattleController):
-    __slots__ = ('_myTeam', '_cachedVehicleData', '_targetTankID', '_isVisible', '_armorFlashlightSingleton')
     sessionProvider = dependency.descriptor(IBattleSessionProvider)
     settingsCore = dependency.descriptor(ISettingsCore)
     gunMarkersFlags = aih_global_binding.bindRO(BINDING_ID.GUN_MARKERS_FLAGS)
@@ -61,7 +61,7 @@ class ArmorFlashlightBattleController(IArenaLoadController, IArmorFlashlightBatt
         self._myTeam = None
         self._cachedVehicleData = dict()
         self._targetTankID = None
-        self._isVisible = False
+        self._hideReasons = ArmorFlashlightHideReason.USER_HIDDEN
         self._armorFlashlightSingleton = None
         return
 
@@ -79,21 +79,20 @@ class ArmorFlashlightBattleController(IArenaLoadController, IArmorFlashlightBatt
     def spaceLoadCompleted(self):
         if not isFeatureEnabled():
             return
-        elif not BigWorld.player().hasBonusCap(ARENA_BONUS_TYPE_CAPS.AFL_ENABLED):
+        if not BigWorld.player().hasBonusCap(ARENA_BONUS_TYPE_CAPS.AFL_ENABLED):
             return
+        self.sessionProvider.onBattleSessionStop += self._unsubscribeFromBattleSessionEvents
+        if not self._subscribeToBattleSessionEvents():
+            self.sessionProvider.onBattleSessionStart += self._subscribeToBattleSessionEvents
+        self.settingsCore.onSettingsChanged += self._onSettingsChanged
+        BigWorld.player().arena.onVehicleKilled += self._onArenaVehicleKilled
+        self._armorFlashlightSingleton = CGF.findSingleton(avatar_getter.getSpaceID(), armor_flashlight.ArmorFlashlightSingleton)
+        if self.settingsCore.getSetting(ArmorFlashlight.ENABLED):
+            self.removeHideReason(ArmorFlashlightHideReason.USER_HIDDEN)
         else:
-            self._isVisible = self.settingsCore.getSetting(ArmorFlashlight.ENABLED)
-            self.sessionProvider.onBattleSessionStop += self._unsubscribeFromBattleSessionEvents
-            if not self._subscribeToBattleSessionEvents():
-                self.sessionProvider.onBattleSessionStart += self._subscribeToBattleSessionEvents
-            self.settingsCore.onSettingsChanged += self._onSettingsChanged
-            BigWorld.player().arena.onVehicleKilled += self._onArenaVehicleKilled
-            self._armorFlashlightSingleton = CGF.findSingleton(avatar_getter.getSpaceID(), armor_flashlight.ArmorFlashlightSingleton)
-            if self._armorFlashlightSingleton is not None:
-                self._armorFlashlightSingleton.setVisible(self._isVisible)
-            self._myTeam = avatar_getter.getPlayerTeam()
-            self._setSettings()
-            return
+            self.addHideReason(ArmorFlashlightHideReason.USER_HIDDEN)
+        self._myTeam = avatar_getter.getPlayerTeam()
+        self._setSettings()
 
     def getControllerID(self):
         return BATTLE_CTRL_ID.ARMOR_FLASHLIGHT
@@ -101,13 +100,21 @@ class ArmorFlashlightBattleController(IArenaLoadController, IArmorFlashlightBatt
     def toggle(self):
         if self._armorFlashlightSingleton is None:
             return False
-        self._isVisible = not self._isVisible
-        self._armorFlashlightSingleton.setVisible(self._isVisible)
+        self._hideReasons ^= ArmorFlashlightHideReason.USER_HIDDEN
+        self.__updateArmorFlashlightSingletonVisibility()
         if self._targetTankID is not None:
             self._resolveTargetTank(True)
             return True
         else:
             return False
+
+    def addHideReason(self, reason):
+        self._hideReasons = BitmaskHelper.addIfNot(self._hideReasons, reason)
+        self.__updateArmorFlashlightSingletonVisibility()
+
+    def removeHideReason(self, reason):
+        self._hideReasons = BitmaskHelper.removeIfHas(self._hideReasons, reason)
+        self.__updateArmorFlashlightSingletonVisibility()
 
     def _subscribeToBattleSessionEvents(self, *_, **__):
         crosshair = self.sessionProvider.shared.crosshair
@@ -155,7 +162,7 @@ class ArmorFlashlightBattleController(IArenaLoadController, IArmorFlashlightBatt
             if _inputIsBad(player.inputHandler) or _collisionIsBad(collision, self._myTeam):
                 self._stopFlashlight()
                 return
-            elif not self._isVisible:
+            elif self._hideReasons != 0:
                 return
             self._startFlashlight(collision.entity)
             self._setShootingParams(gunMarkerState.position, gunMarkerState.direction, gunMarkerState.size)
@@ -208,7 +215,7 @@ class ArmorFlashlightBattleController(IArenaLoadController, IArmorFlashlightBatt
         self._resolveTargetTank(appearing)
 
     def _resolveTargetTank(self, appearing):
-        if self._targetTankID is not None and self._isVisible:
+        if self._targetTankID is not None and self._hideReasons == 0:
             vehicle = BigWorld.entities.get(self._targetTankID)
             if vehicle:
                 self._armorFlashlightSingleton.setTargetTank(self._targetTankID, vehicle.appearance.compoundModel, vehicle.entityGameObject, appearing)
@@ -232,3 +239,8 @@ class ArmorFlashlightBattleController(IArenaLoadController, IArmorFlashlightBatt
     def _onArenaVehicleKilled(self, targetID, attackerID, equipmentID, reason, numVehiclesAffected):
         if targetID == self._targetTankID:
             self._stopFlashlight()
+
+    def __updateArmorFlashlightSingletonVisibility(self):
+        if self._armorFlashlightSingleton is not None:
+            self._armorFlashlightSingleton.setVisible(self._hideReasons == 0)
+        return

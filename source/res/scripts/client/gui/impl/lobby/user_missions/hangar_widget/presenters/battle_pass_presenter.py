@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/user_missions/hangar_widget/presenters/battle_pass_presenter.py
+from __future__ import absolute_import
 import typing
 from typing import Optional, Set
 import BigWorld
@@ -14,6 +15,9 @@ from gui.impl.lobby.battle_pass.tooltips.battle_pass_completed_tooltip_view impo
 from gui.impl.lobby.battle_pass.tooltips.battle_pass_in_progress_tooltip_view import BattlePassInProgressTooltipView
 from gui.impl.lobby.battle_pass.tooltips.battle_pass_no_chapter_tooltip_view import BattlePassNoChapterTooltipView
 from gui.impl.lobby.user_missions.hangar_widget.overlap_ctrl import OverlapCtrlMixin
+from gui.impl.lobby.user_missions.hangar_widget.presenters.base_child_presenter import UserMissionChildPresenter
+from gui.impl.lobby.user_missions.hangar_widget.presenters.constants import UserMissionGroups
+from gui.impl.lobby.user_missions.hangar_widget.services import IBattlePassService
 from gui.impl.lobby.user_missions.hangar_widget.tooltip_positioner import TooltipPositionerMixin
 from gui.impl.pub.view_component import ViewComponent
 from gui.shared.event_dispatcher import showBattlePass
@@ -54,9 +58,11 @@ class _LastEntryState(object):
 _SPACE_CREATED_UPDATE_DELAY = 0.7
 _g_entryLastState = _LastEntryState()
 
-class BattlePassPresenter(TooltipPositionerMixin, OverlapCtrlMixin, ViewComponent[BattlePassModel], BaseBattlePassEntryPointView):
+class BattlePassPresenter(UserMissionChildPresenter, TooltipPositionerMixin, OverlapCtrlMixin, ViewComponent[BattlePassModel], BaseBattlePassEntryPointView):
+    GROUP = UserMissionGroups.BATTLE_PASS
     __hangarSpace = dependency.descriptor(IHangarSpace)
     __battlePass = dependency.descriptor(IBattlePassController)
+    battlePassService = dependency.descriptor(IBattlePassService)
 
     def __init__(self):
         self._firstUpdatePerformed = False
@@ -67,6 +73,9 @@ class BattlePassPresenter(TooltipPositionerMixin, OverlapCtrlMixin, ViewComponen
     @property
     def viewModel(self):
         return super(BattlePassPresenter, self).getViewModel()
+
+    def isVisible(self):
+        return self.battlePassService.isVisible()
 
     def createToolTipContent(self, event, contentID):
         if not self.isHoliday and contentID == R.views.mono.battle_pass.tooltips.no_chapter():
@@ -91,12 +100,19 @@ class BattlePassPresenter(TooltipPositionerMixin, OverlapCtrlMixin, ViewComponen
         return AccountSettings.getSettings(IS_BATTLE_PASS_START_ANIMATION_SEEN)
 
     def _getEvents(self):
-        return super(BattlePassPresenter, self)._getEvents() + ((self.viewModel.onOpenBattlePass, self._onClick), (self.viewModel.onIntroAnimationPlayed, self._onIntroAnimationPlayed), (self.__hangarSpace.onSpaceCreate, self._onSpaceCreate))
+        return super(BattlePassPresenter, self)._getEvents() + ((self.viewModel.onOpenBattlePass, self._onClick),
+         (self.viewModel.onIntroAnimationPlayed, self._onIntroAnimationPlayed),
+         (self.viewModel.onWidgetUnmounted, self._onWidgetUnmounted),
+         (self.__hangarSpace.onSpaceCreate, self._onSpaceCreate),
+         (self.battlePassService.onBattlePassChanged, self._onBattlePassChanged))
 
     def _onLoading(self, *args, **kwargs):
         self.initOverlapCtrl()
         super(BattlePassPresenter, self)._onLoading(*args, **kwargs)
         self._start()
+
+    def _onBattlePassChanged(self):
+        self._notifyVisibilityChanged()
 
     def _onClick(self):
         showBattlePass()
@@ -104,6 +120,14 @@ class BattlePassPresenter(TooltipPositionerMixin, OverlapCtrlMixin, ViewComponen
             setUmgExtraChapterSeen()
         elif self.__battlePass.isHoliday() and not isHolidayChapterSeen():
             setHolidayChapterSeen()
+
+    def _onWidgetUnmounted(self):
+        if self._firstUpdatePerformed:
+            self._savePresenterLastState()
+            with self.viewModel.transaction() as tx:
+                points, _ = self.__battlePass.getLevelProgression(self.chapterID)
+                rewards = set(self.__battlePass.getNotChosenRewardsIter())
+                self._fillLastSeen(tx, self.chapterID, points, getPresentLevel(self.level), set(self.__battlePass.getNotChosenRewardsIter()), _g_entryLastState.getRewardsHash(rewards))
 
     def _onPointsUpdated(self, *_):
         self._updateOptional()
@@ -128,8 +152,6 @@ class BattlePassPresenter(TooltipPositionerMixin, OverlapCtrlMixin, ViewComponen
 
     def _finalize(self):
         self._stop()
-        if self._firstUpdatePerformed:
-            self._savePresenterLastState()
         super(BattlePassPresenter, self)._finalize()
 
     def _updateOptional(self):
@@ -139,6 +161,8 @@ class BattlePassPresenter(TooltipPositionerMixin, OverlapCtrlMixin, ViewComponen
                 self._updateData()
 
     def _updateData(self, *_):
+        if not self.isVisible():
+            return
         if not self.isUpdateQueued:
             self.deferUpdate(self._updateViewModel)
         self._updateViewModelIfNeeded()

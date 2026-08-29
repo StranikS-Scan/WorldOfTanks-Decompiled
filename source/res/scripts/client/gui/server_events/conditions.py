@@ -655,6 +655,20 @@ class InClan(_Requirement):
             return bool(clanDBID) != self._isNegative
 
 
+class DailyXPFactor(_Requirement):
+
+    def __init__(self, path, data):
+        super(DailyXPFactor, self).__init__('dailyXPFactor', dict(data), path)
+        self._relation = _findRelation(self._data.keys())
+        self._relationValue = float(_getNodeValue(self._data, self._relation))
+
+    def negate(self):
+        self._relation = _RELATIONS.getOppositeRelation(self._relation)
+
+    def _isAvailable(self):
+        return False if self._relationValue is None else _handleRelation(self._relation, self.itemsCache.items.shop.dailyXPFactor, self._relationValue)
+
+
 class Token(_Requirement):
     eventsCache = dependency.descriptor(IEventsCache)
 
@@ -1147,7 +1161,7 @@ class Customization(_Requirement):
         return self._isInstalled
 
 
-class _Cumulativable(_Condition):
+class Cumulativable(_Condition):
     __metaclass__ = ABCMeta
 
     def getProgressPerGroup(self, curProgData=None, prevProgData=None, isCurrentProgress=False):
@@ -1237,7 +1251,7 @@ class _Cumulativable(_Condition):
         return progress.get('bonusCount', 0) >= bonusLimit if bonusLimit is not None else False
 
 
-class BattlesCount(_Cumulativable):
+class BattlesCount(Cumulativable):
 
     def __init__(self, path, data, bonusCond, preBattleCond=None):
         super(BattlesCount, self).__init__('battles', dict(data), path)
@@ -1469,7 +1483,7 @@ class UnitResults(_Condition, _Negatable):
         return self._isAllAlive
 
 
-class CumulativeResult(_Cumulativable):
+class CumulativeResult(Cumulativable):
 
     def __init__(self, path, data, bonusCond, isUnit=False, preBattleCond=None):
         super(CumulativeResult, self).__init__('cumulative', dict(data), path)
@@ -1538,7 +1552,7 @@ class VehicleKills(_VehsListCondition):
             self._isNegative = True
 
 
-class VehicleKillsCumulative(VehicleKills, _Cumulativable):
+class VehicleKillsCumulative(VehicleKills, Cumulativable):
 
     def __init__(self, path, data, bonusCond):
         super(VehicleKillsCumulative, self).__init__(path, dict(data))
@@ -1601,7 +1615,7 @@ class VehicleDamage(_CountOrTotalEventsCondition):
         return key
 
 
-class VehicleDamageCumulative(VehicleDamage, _Cumulativable):
+class VehicleDamageCumulative(VehicleDamage, Cumulativable):
 
     def __init__(self, path, data, bonusCond):
         super(VehicleDamageCumulative, self).__init__(path, dict(data))
@@ -1642,7 +1656,7 @@ class VehicleStun(_CountOrTotalEventsCondition):
         return QUESTS.DETAILS_CONDITIONS_VEHICLESTUNEVENTCOUNT if self.isEventCount() else QUESTS.DETAILS_CONDITIONS_VEHICLESTUN
 
 
-class VehicleStunCumulative(VehicleStun, _Cumulativable):
+class VehicleStunCumulative(VehicleStun, Cumulativable):
 
     def __init__(self, path, data, bonusCond):
         super(VehicleStunCumulative, self).__init__(path, dict(data))
@@ -1733,7 +1747,7 @@ class VehicleBlockedByArmor(_CountOrTotalEventsCondition):
         return R.strings.quests.details.conditions.vehicleBlockedByArmor.whileStill
 
 
-class CumulativeSum(_Cumulativable):
+class CumulativeSum(Cumulativable):
 
     def __init__(self, path, data, bonusCond):
         super(CumulativeSum, self).__init__('cumulativeSum', dict(data), path)
@@ -1759,7 +1773,7 @@ def getProgressFromQuestWithSingleAccumulative(quest):
     conditions = quest.bonusCond.getConditions()
     if conditions and len(conditions.items) == 1:
         item = conditions.items[0]
-        if isinstance(item, _Cumulativable):
+        if isinstance(item, Cumulativable):
             currentProgress, totalProgress = item.getProgressPerGroup().get(None, [])[:2]
             return (currentProgress, totalProgress)
     return (None, None)

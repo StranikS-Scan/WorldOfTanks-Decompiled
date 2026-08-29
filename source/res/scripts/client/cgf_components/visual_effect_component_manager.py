@@ -10,6 +10,7 @@ from account_helpers.settings_core.settings_constants import CONTOUR
 from cgf_components.highlight_component import HighlightComponent
 from helpers import dependency
 from items import vehicles
+from items.components.component_constants import INVALID_EFFECT_INDEX
 from skeletons.account_helpers.settings_core import ISettingsCore
 from vehicle_systems.tankStructure import TankPartIndexes
 
@@ -49,12 +50,12 @@ class KillCamVisualEffectComponentSystem(CGF.System):
                 parsedData = DamageFromShotDecoder.parseDamageStickerHitPoint(segment, impact.vehicleAppearance.collisions, segLength=0.5)
                 if parsedData is None:
                     continue
-                stickerID, data = parsedData
+                stickerID, _, data = parsedData
                 stickerID = vehicles.g_cache.damageStickers['ids'][impact.modelName]
                 if data.componentIdx == TankPartIndexes.CHASSIS:
                     go.removeComponent(ImpactZoneComponent)
                     continue
-                impact.vehicleAppearance.addDamageSticker(segment, stickerID, data)
+                impact.vehicleAppearance.addDamageSticker(segment, stickerID, INVALID_EFFECT_INDEX, data)
 
         return
 

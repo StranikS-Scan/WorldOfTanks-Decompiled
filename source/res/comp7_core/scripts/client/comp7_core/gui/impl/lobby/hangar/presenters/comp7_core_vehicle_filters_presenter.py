@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: comp7_core/scripts/client/comp7_core/gui/impl/lobby/hangar/presenters/comp7_core_vehicle_filters_presenter.py
+from __future__ import absolute_import
 import typing
 from gui.filters.carousel_filter import FILTER_KEYS
 from gui.impl.lobby.hangar.presenters.vehicle_filters_presenter import VehicleFiltersDataProvider

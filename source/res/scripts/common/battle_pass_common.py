@@ -91,6 +91,7 @@ class FinalReward(str, Enum):
     STYLE = 'style'
     TANKMAN = 'tankman'
     VEHICLE = 'vehicle'
+    ATTACHMENTS_SET = 'attachments_set'
 
 
 @unique

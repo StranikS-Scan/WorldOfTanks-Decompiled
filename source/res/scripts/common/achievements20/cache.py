@@ -8,7 +8,7 @@ from future.utils import viewitems, viewvalues
 from past.builtins import xrange
 from typing import TYPE_CHECKING, Union, Set, List, Dict, Optional, Any, Iterable
 from account_shared import getCustomizationItem
-from bonus_readers import readBonusSection, SUPPORTED_BONUSES
+from bonus_readers import readBonusSection, getSupportedBonuses
 from constants import IS_CLIENT, IS_WEB, MIN_VEHICLE_LEVEL, MAX_VEHICLE_LEVEL
 from dossiers2.custom.cache import getCache as getHelperCache
 from dossiers2.custom.dependencies import VEHICLE_ACHIEVEMENTS_DEPENDENCIES, CUSTOMIZATION_ACHIEVEMENTS_DEPENDENCIES, VEHICLE_ACHIEVEMENTS_POP_UPS, CUSTOMIZATION_ACHIEVEMENTS_POP_UPS, _processAchievementDependency
@@ -31,7 +31,6 @@ DEPRECATED_BONUSES = {'xp',
  'freeXPFactor',
  'tankmenXPFactor',
  'vehicleXPFactor'}
-ACHIEVEMENTS20_SUPPORTED_BONUSES = SUPPORTED_BONUSES - DEPRECATED_BONUSES
 ALLOWED_CUSTOMIZATION_TAGS = frozenset(('c11n2D', 'c11n3D'))
 ITEM_CONDITION_KEYS = frozenset(('vehicle', 'customizationItem'))
 ITEM_FILTER_CONDITION_KEYS = frozenset(('vehicleFilter', 'customizationItemFilter'))
@@ -206,6 +205,7 @@ def __readStages(stagesSection, conditions):
     if stagesSection is None:
         return []
     else:
+        ACHIEVEMENTS20_SUPPORTED_BONUSES = getSupportedBonuses() - DEPRECATED_BONUSES
         stages = []
         for name, value in stagesSection.items():
             if name != 'stage':
@@ -424,6 +424,28 @@ class g_cache(object):
     def getTotalVehicleAchievement(self):
         return self.__totalVehicleAchievement
 
+    def getScore(self, achievement, dossier, excludeList=None):
+        score = achievement.getOwnScore(dossier)
+        if excludeList is None:
+            excludeList = []
+        if achievement.conditions.get('requiredAchievementIDs'):
+            for childID in achievement.conditions.get('requiredAchievementIDs'):
+                child = self.getAchievementByID(achievement.getType(), childID)
+                if childID not in excludeList:
+                    score += self.getScore(child, dossier, excludeList)
+                    excludeList.append(childID)
+
+        return score
+
+    def getAchievementsScore(self, accountDossierDescr):
+        totalScore = 0
+        for achievementCategory, achievementID in ROOT_ACHIEVEMENT_IDS:
+            achievement = self.getAchievementByID(achievementCategory, achievementID)
+            score = self.getScore(achievement, accountDossierDescr)
+            totalScore += score
+
+        return totalScore
+
 
 class Achievement(object):
 
@@ -468,6 +490,21 @@ class Achievement(object):
     @staticmethod
     def isAnyStageCompleted(currentStage):
         return currentStage > 0
+
+    def getOwnScore(self, dossier):
+        achievedValue, _, _ = self.getCurrentDataFromDossier(dossier)
+        currentValue = 0
+        for stage in self.stages:
+            if achievedValue >= stage.get('value'):
+                currentValue += stage.get('points', 0)
+
+        return currentValue
+
+    def getID(self):
+        return self.__data.get('id')
+
+    def getType(self):
+        return self.__data.get('type')
 
     def getCurrentDataFromDossier(self, dossierDescr):
         achievementType = self.__data.get('type', None)
@@ -526,9 +563,6 @@ class Achievement(object):
     def getStageValue(self, stage):
         stages = self.__data.get('stages')
         return 0 if stages is None or stage > len(stages) or stage <= 0 else stages[stage - 1]['value']
-
-    def getID(self):
-        return self.__data.get('id')
 
 
 def init():

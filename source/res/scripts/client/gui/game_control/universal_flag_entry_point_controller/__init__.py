@@ -19,6 +19,7 @@ from gui.ClientUpdateManager import g_clientUpdateManager
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.game_control import IMarathonEventsController
 from helpers import i18n
+from uilogging.marathon.loggers import MarathonLogger, MarathonEvents
 _logger = logging.getLogger(__name__)
 
 class UniversalFlagEntryPointController(IUniversalFlagEntryPointController, EventsHandler):
@@ -26,6 +27,7 @@ class UniversalFlagEntryPointController(IUniversalFlagEntryPointController, Even
     __itemsCache = dependency.descriptor(IItemsCache)
     __marathonController = dependency.descriptor(IMarathonEventsController)
     __lobbyCdn = dependency.descriptor(ILobbyCdnController)
+    __slots__ = ('__marathonLogger',)
 
     def __init__(self):
         super(UniversalFlagEntryPointController, self).__init__()
@@ -33,6 +35,7 @@ class UniversalFlagEntryPointController(IUniversalFlagEntryPointController, Even
         self.__eventsManager = EventManager()
         self.onDataUpdated = Event(self.__eventsManager)
         self.__notifier = SimpleNotifier(self.__getNextPhaseTimeDelta, self.__onNextPhaseTime)
+        self.__marathonLogger = MarathonLogger()
         self.__tokenProviders = []
         self.__expirationTokenProviders = []
         self.__eventCaption = ''
@@ -65,6 +68,7 @@ class UniversalFlagEntryPointController(IUniversalFlagEntryPointController, Even
         else:
             if isinstance(target, MissionsMarathonTarget):
                 if self.__marathonController.getMarathon(target.marathonPrefix) is not None:
+                    self.__marathonLogger.logEnter(MarathonEvents.FLAG_CLICKED)
                     showMissionsMarathon(target.marathonPrefix)
                 else:
                     _logger.error("Marathon %s isn't found. Check universal flag config", target.marathonPrefix)

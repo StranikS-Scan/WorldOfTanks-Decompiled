@@ -1,0 +1,86 @@
+<CS_Decal_145.xml>
+  <xmlns:czech1>	ussr	</xmlns:czech1>
+  <xmlns:germany>	germany	</xmlns:germany>
+  <xmlns:czech0>	usa	</xmlns:czech0>
+  <xmlns:china>	china	</xmlns:china>
+  <xmlns:france>	france	</xmlns:france>
+  <xmlns:uk>	uk	</xmlns:uk>
+  <xmlns:japan>	japan	</xmlns:japan>
+  <xmlns:czech>	czech	</xmlns:czech>
+  <xmlns:sweden>	sweden	</xmlns:sweden>
+  <xmlns:poland>	poland	</xmlns:poland>
+  <xmlns:italy>	italy	</xmlns:italy>
+  <xmlns:intunion>	intunion	</xmlns:intunion>
+  <itemGroup>
+    <name>	CS_Decal_145	</name>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <tags>	formfactor_square styleOnly hiddenInUI disableVerticalMirror direction_right_to_left	</tags>
+    <priceGroup>	MT projection_decals 100g notInShop	</priceGroup>
+    <userString>	#vehicle_customization:projection_decals/special	</userString>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF usa:A104_M4A3E8A usa:A126_PzVI_Tiger_II_capt ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <projection_decal>
+      <id>	31480	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/CS_01_Decal_145.dds	</texture>
+      <userString>	#vehicle_customization:CS_01_Decal_145/name	</userString>
+      <description>	#vehicle_customization:CS_01_Decal_145/description	</description>
+      <mirror>	false	</mirror>
+      <scaleFactorId>	3	</scaleFactorId>
+      <glossTexture></glossTexture>
+    </projection_decal>
+    <projection_decal>
+      <id>	31481	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/CS_02_Decal_145.dds	</texture>
+      <userString>	#vehicle_customization:CS_02_Decal_145/name	</userString>
+      <description>	#vehicle_customization:CS_02_Decal_145/description	</description>
+      <mirror>	false	</mirror>
+      <scaleFactorId>	3	</scaleFactorId>
+      <glossTexture></glossTexture>
+    </projection_decal>
+    <projection_decal>
+      <id>	31482	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/CS_03_Decal_145.dds	</texture>
+      <userString>	#vehicle_customization:CS_03_Decal_145/name	</userString>
+      <description>	#vehicle_customization:CS_03_Decal_145/description	</description>
+      <mirror>	false	</mirror>
+      <scaleFactorId>	3	</scaleFactorId>
+      <glossTexture></glossTexture>
+    </projection_decal>
+    <projection_decal>
+      <id>	31483	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/CS_04_Decal_145.dds	</texture>
+      <userString>	#vehicle_customization:CS_04_Decal_145/name	</userString>
+      <description>	#vehicle_customization:CS_04_Decal_145/description	</description>
+      <mirror>	false	</mirror>
+      <scaleFactorId>	3	</scaleFactorId>
+      <glossTexture></glossTexture>
+    </projection_decal>
+    <projection_decal>
+      <id>	31484	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/CS_05_Decal_145.dds	</texture>
+      <userString>	#vehicle_customization:CS_05_Decal_145/name	</userString>
+      <description>	#vehicle_customization:CS_05_Decal_145/description	</description>
+      <mirror>	false	</mirror>
+      <scaleFactorId>	3	</scaleFactorId>
+      <glossTexture></glossTexture>
+    </projection_decal>
+    <projection_decal>
+      <id>	31485	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/CS_06_Decal_145.dds	</texture>
+      <userString>	#vehicle_customization:CS_06_Decal_145/name	</userString>
+      <description>	#vehicle_customization:CS_06_Decal_145/description	</description>
+      <mirror>	false	</mirror>
+      <scaleFactorId>	3	</scaleFactorId>
+      <glossTexture></glossTexture>
+      <emissionMap>	gui/maps/vehicles/decals/projection_decals/special/CS_06_Decal_145_Emission.dds	</emissionMap>
+      <emissionPatternMap>	gui/maps/vehicles/decals/projection_decals/special/CS_06_Decal_145_Pattern.dds	</emissionPatternMap>
+      <forwardEmissionBrightness>	5	</forwardEmissionBrightness>
+      <deferredEmissionBrightness>	5	</deferredEmissionBrightness>
+      <emissionAnimationSpeed>	0.3	</emissionAnimationSpeed>
+    </projection_decal>
+  </itemGroup>
+</CS_Decal_145.xml>

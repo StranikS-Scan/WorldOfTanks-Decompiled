@@ -1,0 +1,14 @@
+<WTMissile.def>
+  <Properties>
+    <isAbilityActive>
+      <Type>	UINT8	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <Default>	0	</Default>
+      <DetailLevel>	MY_VEHICLE	</DetailLevel>
+    </isAbilityActive>
+  </Properties>
+  <ofEntity>
+    <Vehicle></Vehicle>
+  </ofEntity>
+  <DefaultKeyName>	wt_missile	</DefaultKeyName>
+</WTMissile.def>

@@ -417,6 +417,7 @@ class Research(ResearchMeta):
                            'compareBtnEnabled': comparisonState,
                            'compareBtnLabel': backport.text(R.strings.menu.research.labels.button.addToCompare()),
                            'compareBtnTooltip': comparisonTooltip,
+                           'goToVehicleViewBtnVisible': not (root.isTelecom and root.rentalIsOver),
                            'previewBtnEnabled': root.isPreviewAllowed(),
                            'previewBtnLabel': backport.text(R.strings.menu.research.labels.button.vehiclePreview()),
                            'isPremium': isPremium,

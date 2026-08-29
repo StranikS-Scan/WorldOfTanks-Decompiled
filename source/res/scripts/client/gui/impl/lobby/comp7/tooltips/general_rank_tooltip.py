@@ -25,3 +25,4 @@ class GeneralRankTooltip(ViewImpl):
             vm.setDivisions(self.__params['divisions'])
             vm.setFrom(self.__params['from'])
             vm.setTo(self.__params['to'])
+            vm.setElitePercent(self.__params['elitePercent'])

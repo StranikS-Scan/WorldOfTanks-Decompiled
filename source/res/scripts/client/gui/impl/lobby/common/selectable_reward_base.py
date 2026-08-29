@@ -195,7 +195,7 @@ class SelectableRewardBase(ViewImpl):
 
     def __updateRewardsState(self):
         with self.viewModel.selectableRewardModel.getRewards().transaction() as vm:
-            for rewardName, _, state in self.__prepareRewardsData(self.__selectedTab):
+            for rewardName, _, state in self._prepareRewardsData(self.__selectedTab):
                 for rewardModel in vm:
                     if rewardModel.getType() != rewardName:
                         continue
@@ -236,17 +236,17 @@ class SelectableRewardBase(ViewImpl):
         if self.__selectedTab != tabName:
             self.__selectedTab = tabName
             self.viewModel.selectableRewardModel.setSelectedTab(tabName)
-            self.__fillRewards(self.__selectedTab, initial=initial)
+            self._fillRewards(self.__selectedTab, initial=initial)
 
     @staticmethod
     def __getName(event):
         return event.get('type', '')
 
-    def __fillRewards(self, tabName, initial=False):
+    def _fillRewards(self, tabName, initial=False):
         rewards = self.viewModel.selectableRewardModel.getRewards()
         with rewards.transaction() as vm:
             vm.clear()
-            for rewardName, reward, state in self.__prepareRewardsData(tabName):
+            for rewardName, reward, state in self._prepareRewardsData(tabName):
                 newReward = SelectableRewardItemModel()
                 newReward.setType(rewardName)
                 newReward.setCount(0 if initial else self._getRewardsInCartCount(rewardName))
@@ -256,7 +256,7 @@ class SelectableRewardBase(ViewImpl):
                 newReward.setState(state)
                 vm.addViewModel(newReward)
 
-    def __prepareRewardsData(self, tabName):
+    def _prepareRewardsData(self, tabName):
         for rewardName, reward in self.__tabs[tabName]['rewards'].iteritems():
             count = self._getRewardsInCartCount(rewardName) + reward['receivedRewards']
             if reward['receivedRewards'] >= reward['limit'] > 0:
@@ -307,7 +307,7 @@ class SelectableRewardBase(ViewImpl):
                 if gift['option'] is None:
                     continue
                 rewardName = gift['option'].getLightViewModelData()[0]
-                rewardOp = self.__createReward if currentTab['rewards'].get(rewardName) is None else self.__updateReward
+                rewardOp = self._createReward if currentTab['rewards'].get(rewardName) is None else self.__updateReward
                 rewardOp(currentTab['rewards'], rewardName, gift, giftID, selectableReward)
 
             receivedRewards = self._helper.getBonusReceivedOptions(selectableReward)
@@ -317,7 +317,7 @@ class SelectableRewardBase(ViewImpl):
 
         return
 
-    def __createReward(self, rewards, rewardName, gift, giftID, selectableReward):
+    def _createReward(self, rewards, rewardName, gift, giftID, selectableReward):
         rewards[rewardName] = {'packSize': gift['count'],
          'limit': gift['limit'],
          'storageCount': gift['option'].getInventoryCount(),

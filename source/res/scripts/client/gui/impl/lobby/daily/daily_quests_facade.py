@@ -8,7 +8,7 @@ from gui.impl.lobby.daily.daily_quests_subview import DailyQuestsSubview
 from gui.impl.lobby.daily.daily_quests_tab_view import DailyQuestTabView, DailyQuestPremTabView
 from gui.impl.lobby.daily.tooltips.mode_selector_tooltip import ModeSelectorTooltip
 from gui.server_events.events_helpers import isDailyRegularQuestsEnabled
-from skeletons.gui.game_control import IFunRandomController, IBRProgressionOnTokensController
+from skeletons.gui.game_control import IFunRandomController
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
 from helpers import dependency
@@ -20,7 +20,6 @@ class DailyQuestsFacade(object):
     eventsCache = dependency.descriptor(IEventsCache)
     itemsCache = dependency.descriptor(IItemsCache)
     __funRandomController = dependency.descriptor(IFunRandomController)
-    __brProgression = dependency.descriptor(IBRProgressionOnTokensController)
     __slots__ = ('__dailySubView', '__tabs', '__tabsToSubview', '__battleTypes')
 
     def __init__(self, parentView, *args, **kwargs):
@@ -63,16 +62,7 @@ class DailyQuestsFacade(object):
         battleModes.invalidate()
 
     def __extendBonusTypes(self, bonusTypes):
-
-        def replaceBattleType(oldValue, overrideValue, bonusTypesList):
-            if oldValue in bonusTypesList:
-                oldIDx = bonusTypesList.index(oldValue)
-                bonusTypesList[oldIDx] = overrideValue
-
         if ARENA_BONUS_TYPE.FUN_RANDOM in bonusTypes:
-            newValue = int(str(ARENA_BONUS_TYPE.FUN_RANDOM) + str(self.__funRandomController.getCurrentFunType()))
-            replaceBattleType(ARENA_BONUS_TYPE.FUN_RANDOM, newValue, bonusTypes)
-        if ARENA_BONUS_TYPE.BATTLE_ROYALE_SOLO in bonusTypes:
-            newBattleType = self.__brProgression.checkBRBattleTypeForIcon(ARENA_BONUS_TYPE.BATTLE_ROYALE_SOLO)
-            if ARENA_BONUS_TYPE.BATTLE_ROYALE_SOLO != newBattleType:
-                replaceBattleType(ARENA_BONUS_TYPE.BATTLE_ROYALE_SOLO, newBattleType, bonusTypes)
+            oldIDx = bonusTypes.index(ARENA_BONUS_TYPE.FUN_RANDOM)
+            bonusTypes.pop(oldIDx)
+            bonusTypes.insert(oldIDx, int(str(ARENA_BONUS_TYPE.FUN_RANDOM) + str(self.__funRandomController.getCurrentFunType())))

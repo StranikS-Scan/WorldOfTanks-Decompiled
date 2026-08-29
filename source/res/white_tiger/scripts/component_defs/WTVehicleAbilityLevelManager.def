@@ -1,0 +1,28 @@
+<WTVehicleAbilityLevelManager.def>
+  <Properties>
+    <equipmentID>
+      <Type>	UINT16	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <Default>	0	</Default>
+    </equipmentID>
+    <isComponentActive>
+      <Type>	BOOL	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <Default>	0	</Default>
+    </isComponentActive>
+    <isFail>
+      <Type>	BOOL	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <Default>	0	</Default>
+    </isFail>
+    <currentAbilityLevel>
+      <Type>	UINT8	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <Default>	0	</Default>
+    </currentAbilityLevel>
+  </Properties>
+  <ofEntity>
+    <Vehicle></Vehicle>
+  </ofEntity>
+  <DefaultKeyName>	wtAbilityLevelManager	</DefaultKeyName>
+</WTVehicleAbilityLevelManager.def>

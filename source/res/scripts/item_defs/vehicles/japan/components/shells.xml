@@ -2646,6 +2646,35 @@
       <devices>	119	</devices>
     </damage>
   </_88mm_Pzgr39_3_L56_test>
+  <_88mm_Pzgr39_J51>
+    <id>	31013	</id>
+    <userString>	#japan_vehicles:_88mm_Pzgr39_J51	</userString>
+    <icon>	ap	</icon>
+    <price>	370	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	88	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainArmorPiercing	</effects>
+    <damage>
+      <armor>	220	</armor>
+      <devices>	119	</devices>
+    </damage>
+  </_88mm_Pzgr39_J51>
+  <_88mm_Pzgr40_J51>
+    <id>	31014	</id>
+    <userString>	#japan_vehicles:_88mm_Pzgr40_J51	</userString>
+    <icon>	ap_cr_premium	</icon>
+    <price>	4400	</price>
+    <improved>	true	</improved>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	88	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainAPCR	</effects>
+    <damage>
+      <armor>	220	</armor>
+      <devices>	119	</devices>
+    </damage>
+  </_88mm_Pzgr40_J51>
   <_88mm_Pzgr.40>
     <id>	47	</id>
     <userString>	#japan_vehicles:_88mm_Pzgr.40	</userString>
@@ -2724,6 +2753,30 @@
       </damage>
     </armorSpalls>
   </_88mm_Sprg.18_3_L56_test>
+  <_88mm_Sprgr43_J51>
+    <id>	31015	</id>
+    <userString>	#japan_vehicles:_88mm_Sprgr43_J51	</userString>
+    <icon>	he_modern	</icon>
+    <price>	230	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	88	</caliber>
+    <explosionRadius>	1.4	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	mainHighExplosive	</effects>
+    <damage>
+      <armor>	300	</armor>
+      <devices>	119	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	1.4	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	150	</armor>
+        <devices>	60	</devices>
+      </damage>
+    </armorSpalls>
+  </_88mm_Sprgr43_J51>
   <_90mm_AP_M318A1>
     <id>	40	</id>
     <userString>	#japan_vehicles:_90mm_AP_M318A1	</userString>

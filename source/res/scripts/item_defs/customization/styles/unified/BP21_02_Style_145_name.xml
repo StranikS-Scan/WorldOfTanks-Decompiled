@@ -1,0 +1,56 @@
+<BP21_02_Style_145_name.xml>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/historical_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	0	</historical>
+    <priceGroup>	MT 2D styles universal 1000g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <style>
+      <id>	31588	</id>
+      <outfits>
+        <outfit>
+          <season>	all	</season>
+          <paints>
+            <item>
+              <id>	31541	</id>
+              <appliedTo>	20753	</appliedTo>
+            </item>
+          </paints>
+          <camouflages>
+            <item>
+              <id>	31556	</id>
+              <patternSize>	1	</patternSize>
+              <appliedTo>	4368	</appliedTo>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <projection_decals>
+            <item>
+              <id>	31493	</id>
+              <scaleFactorId>	2	</scaleFactorId>
+              <tags>	safe formfactor_square right	</tags>
+            </item>
+            <item>
+              <id>	31494	</id>
+              <scaleFactorId>	2	</scaleFactorId>
+              <tags>	formfactor_rect1x2 mimic front	</tags>
+            </item>
+            <item>
+              <id>	31495	</id>
+              <scaleFactorId>	2	</scaleFactorId>
+              <tags>	safe formfactor_square left	</tags>
+            </item>
+          </projection_decals>
+        </outfit>
+      </outfits>
+      <texture>	gui/maps/vehicles/styles/BP21_02_Style_145.png	</texture>
+      <userString>	#vehicle_customization:BP21_02_Style_145/name	</userString>
+      <description>	#vehicle_customization:BP21_02_Style_145/description	</description>
+      <longDescriptionSpecial>	#vehicle_customization:BP21_02_Style_145/longDescription	</longDescriptionSpecial>
+    </style>
+  </itemGroup>
+</BP21_02_Style_145_name.xml>

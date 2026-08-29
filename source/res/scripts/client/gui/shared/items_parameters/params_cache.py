@@ -2,12 +2,12 @@
 # Embedded file name: scripts/client/gui/shared/items_parameters/params_cache.py
 import itertools
 import typing
+import nations
 from collections import namedtuple
 from constants import BonusTypes
 from gui.shared.items_parameters import calcGunParams, calcShellParams, getEquipmentParameters, isAutoReloadGun, isDualGun, isDualAccuracy, isAutoShootFlameGun, isAutoShootGun
 from gui.shared.items_parameters import xml_reader
 from gui.shared.utils.decorators import debugTime
-import nations
 from debug_utils import LOG_CURRENT_EXCEPTION
 from items import vehicles, ITEM_TYPES, EQUIPMENT_TYPES
 from items.vehicles import getVehicleType
@@ -54,7 +54,13 @@ class _PrecachedChassisTypes(object):
 
 
 def isHydraulicChassis(vDescr):
-    return vDescr.hasHydraulicChassis or vDescr.isWheeledVehicle or vDescr.hasAutoSiegeMode if vDescr.hasSiegeMode else False
+    result = vDescr.isPitchHullAimingEnabled
+    result |= vDescr.hasSiegeMode and (vDescr.hasHydraulicChassis or vDescr.isWheeledVehicle or vDescr.hasAutoSiegeMode)
+    return result
+
+
+def hasAutoSiegeChassis(vDescr):
+    return True if vDescr.hasAutoSiegeMode else vDescr.isPitchHullAimingEnabled and not vDescr.hasHydraulicChassis and not vDescr.isWheeledVehicle
 
 
 def isTrackWithinTrackChassis(vChassis):
@@ -424,7 +430,7 @@ class _ParamsCache(object):
                     chassisCD = vChs.compactDescr
                     chassisDescription = (isHydraulicChassis(vDescr),
                      vDescr.isWheeledVehicle,
-                     vDescr.hasAutoSiegeMode,
+                     hasAutoSiegeChassis(vDescr),
                      isTrackWithinTrackChassis(vChs),
                      vDescr.isWheeledOnSpotRotation,
                      isMultiTrackChassis(vChs))

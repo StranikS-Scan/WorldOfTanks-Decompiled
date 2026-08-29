@@ -104,6 +104,9 @@ class UnitClientAPI(object):
     def createRankedSquad(self, squadSize=2):
         return self._doCreate(PREBATTLE_TYPE.RANKED)
 
+    def createWhiteTigerSquad(self):
+        return self._doCreate(PREBATTLE_TYPE.WHITE_TIGER)
+
     def createSquadByPrbType(self, prbType):
         return self._doCreate(prbType)
 

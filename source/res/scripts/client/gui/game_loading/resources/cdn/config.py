@@ -5,10 +5,11 @@ from dict2model import fields
 from dict2model import schemas
 from dict2model import validate
 from dict2model import exceptions
+from constants import MIN_VEHICLE_LEVEL, MAX_VEHICLE_LEVEL
 from gui.game_loading import loggers
-from gui.game_loading.resources.cdn.consts import SequenceOrders, SequenceCohorts, MAX_CONFIG_SEQUENCE_SLIDES_COUNT, MAX_CONFIG_SEQUENCES_COUNT
+from gui.game_loading.resources.cdn.consts import SequenceOrders, SequenceCohorts, MAX_CONFIG_SEQUENCE_SLIDES_COUNT, MAX_CONFIG_SEQUENCES_COUNT, NEWBIES_BATTLES_LIMIT, NEWBIES_VEHICLE_LEVEL
 from gui.game_loading.resources.consts import ImageVfxs
-from gui.game_loading.resources.cdn.models import ConfigSequenceModel, ConfigModel, ConfigSlideModel, AdditionalImageModel
+from gui.game_loading.resources.cdn.models import ConfigSequenceModel, ConfigModel, ConfigSlideModel, AdditionalImageModel, NewbiesCohortSettingsModel
 _logger = loggers.getCdnConfigLogger()
 
 def _validateSequenceLifeTime(model):
@@ -47,8 +48,11 @@ sequenceSchema = schemas.Schema(fields={'name': fields.String(required=True, ser
  'views': fields.Integer(required=False, default=0),
  'enabled': fields.Boolean(required=False, default=True),
  'cohorts': fields.List(fields.Enum(SequenceCohorts), required=False, default=SequenceCohorts.getDefaults, serializedValidators=validate.Length(minValue=1), deserializedValidators=validate.Length(minValue=1))}, modelClass=ConfigSequenceModel, checkUnknown=True, deserializedValidators=_validateSequenceLifeTime)
+newbiesCohortSchema = schemas.Schema(fields={'battlesCount': fields.Integer(required=False, default=NEWBIES_BATTLES_LIMIT, serializedValidators=validate.Range(minValue=0), deserializedValidators=validate.Range(minValue=0)),
+ 'vehicleLevel': fields.Integer(required=False, default=NEWBIES_VEHICLE_LEVEL, serializedValidators=validate.Range(minValue=MIN_VEHICLE_LEVEL, maxValue=MAX_VEHICLE_LEVEL), deserializedValidators=validate.Range(minValue=MIN_VEHICLE_LEVEL, maxValue=MAX_VEHICLE_LEVEL))}, modelClass=NewbiesCohortSettingsModel, checkUnknown=True)
 configSchema = schemas.Schema(fields={'enabled': fields.Boolean(required=True),
- 'sequences': fields.List(fieldOrSchema=sequenceSchema, required=True, deserializedValidators=validate.Length(minValue=1, maxValue=MAX_CONFIG_SEQUENCES_COUNT))}, modelClass=ConfigModel, checkUnknown=True, deserializedValidators=_validateSequencesNames)
+ 'sequences': fields.List(fieldOrSchema=sequenceSchema, required=True, deserializedValidators=validate.Length(minValue=1, maxValue=MAX_CONFIG_SEQUENCES_COUNT)),
+ 'newbiesCohort': fields.Nested(schema=newbiesCohortSchema, required=False, default=NewbiesCohortSettingsModel)}, modelClass=ConfigModel, checkUnknown=True, deserializedValidators=_validateSequencesNames)
 
 def dumpSequenceModel(model):
     return sequenceSchema.serialize(model, silent=True)

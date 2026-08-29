@@ -23,6 +23,12 @@ class ValueTracker(CallbackDelayer):
             ValueTracker.__instance = ValueTracker()
         return ValueTracker.__instance
 
+    @staticmethod
+    def fini():
+        if ValueTracker.__instance is not None:
+            ValueTracker.__instance.destroy()
+        return
+
     def __init__(self):
         if not constants.IS_DEVELOPMENT:
             return
@@ -57,6 +63,14 @@ class ValueTracker(CallbackDelayer):
             return
         self.__items[name] = math.floor(value * 1000) / 1000
         self.__updateText()
+
+    def removeValue(self, name):
+        if not ValueTracker._ENABLED:
+            return
+        else:
+            self.__items.pop(name, None)
+            self.__updateText()
+            return
 
     def addValueAverage(self, name, value, maxAmount=100):
         curSum, curAm = self.__avgInfo.get(name, (None, 0))

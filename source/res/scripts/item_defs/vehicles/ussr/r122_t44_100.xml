@@ -66,6 +66,13 @@
       <undamaged>	vehicles/russian/R122_T44_100/normal/lod0/Hull.model	</undamaged>
       <destroyed>	vehicles/russian/R122_T44_100/crash/lod0/Hull.model	</destroyed>
       <exploded>	vehicles/russian/R122_T44_100/crash/lod0/Hull.model	</exploded>
+      <sets>
+        <FULL3D>
+          <undamaged>	vehicles/russian/R127_T44_100_P/_skins/FULL3D/normal/lod0/Hull.model	</undamaged>
+          <destroyed>	vehicles/russian/R127_T44_100_P/_skins/FULL3D/crash/lod0/Hull.model	</destroyed>
+          <exploded>	vehicles/russian/R127_T44_100_P/_skins/FULL3D/crash/lod0/Hull.model	</exploded>
+        </FULL3D>
+      </sets>
     </models>
     <swinging>
       <lodDist>	FAR	</lodDist>
@@ -910,6 +917,27 @@
         <clipAngle>	0.355801	</clipAngle>
         <anchorShift>	0.431671	</anchorShift>
       </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15072	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	FULL3D	</compatibleModels>
+        <position>	-1.263667 1.154044 2.825736	</position>
+        <rotation>	0.637307 0.017529 3.131038	</rotation>
+        <scale>	0.54863 0.54863 0.548631	</scale>
+        <showOn>	16	</showOn>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15073	</slotId>
+        <tags>	formfactor_square	</tags>
+        <compatibleModels>	FULL3D	</compatibleModels>
+        <position>	-0.528543 0.959061 1.950331	</position>
+        <rotation>	0.51673 -0.016069 3.131836	</rotation>
+        <scale>	0.625854 0.625854 0.625856	</scale>
+        <showOn>	16	</showOn>
+        <anchorShift>	0.35	</anchorShift>
+      </slot>
     </customizationSlots>
     <customization>
       <customizableVehicleAreas>
@@ -951,12 +979,25 @@
         <undamaged>	vehicles/russian/R122_T44_100/normal/lod0/Chassis.model	</undamaged>
         <destroyed>	vehicles/russian/R122_T44_100/crash/lod0/Chassis.model	</destroyed>
         <exploded>	vehicles/russian/R122_T44_100/crash/lod0/Chassis.model	</exploded>
+        <sets>
+          <FULL3D>
+            <undamaged>	vehicles/russian/R127_T44_100_P/_skins/FULL3D/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/russian/R127_T44_100_P/_skins/FULL3D/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/russian/R127_T44_100_P/_skins/FULL3D/crash/lod0/Chassis.model	</exploded>
+          </FULL3D>
+        </sets>
       </models>
       <traces>
         <lodDist>	FAR	</lodDist>
-        <bufferPrefs>	mediumTank	</bufferPrefs>
-        <textureSet>	ussr_02	</textureSet>
-        <size>	0.42 0.52	</size>
+        <activePostmortem>	false	</activePostmortem>
+        <tracesParams>
+          <trackPairIdx>	0	</trackPairIdx>
+          <bufferPrefs>	mediumTank	</bufferPrefs>
+          <textureSet>	ussr_02	</textureSet>
+          <size>	0.42 0.52	</size>
+          <offset>	0 0	</offset>
+          <centerOffsetFactor>	1 1	</centerOffsetFactor>
+        </tracesParams>
       </traces>
       <tracks>
         <lodDist>	MEDIUM_TRACK	</lodDist>
@@ -1184,188 +1225,275 @@
         </decal>
       </AODecals>
       <groundNodes>
-        <group>
-          <template>	Track_L	</template>
-          <startIndex>	0	</startIndex>
-          <count>	5	</count>
+        <node>
+          <name>	Track_L0	</name>
+          <collisionSamplesCount>	1	</collisionSamplesCount>
           <isLeft>	true	</isLeft>
           <minOffset>	-0.093429	</minOffset>
           <maxOffset>	0.089322	</maxOffset>
-        </group>
-        <group>
-          <template>	Track_R	</template>
-          <startIndex>	0	</startIndex>
-          <count>	5	</count>
+          <trackPairIdx>	0	</trackPairIdx>
+        </node>
+        <node>
+          <name>	Track_L1	</name>
+          <collisionSamplesCount>	1	</collisionSamplesCount>
+          <isLeft>	true	</isLeft>
+          <minOffset>	-0.093429	</minOffset>
+          <maxOffset>	0.089322	</maxOffset>
+          <trackPairIdx>	0	</trackPairIdx>
+        </node>
+        <node>
+          <name>	Track_L2	</name>
+          <collisionSamplesCount>	1	</collisionSamplesCount>
+          <isLeft>	true	</isLeft>
+          <minOffset>	-0.093429	</minOffset>
+          <maxOffset>	0.089322	</maxOffset>
+          <trackPairIdx>	0	</trackPairIdx>
+        </node>
+        <node>
+          <name>	Track_L3	</name>
+          <collisionSamplesCount>	1	</collisionSamplesCount>
+          <isLeft>	true	</isLeft>
+          <minOffset>	-0.093429	</minOffset>
+          <maxOffset>	0.089322	</maxOffset>
+          <trackPairIdx>	0	</trackPairIdx>
+        </node>
+        <node>
+          <name>	Track_L4	</name>
+          <collisionSamplesCount>	1	</collisionSamplesCount>
+          <isLeft>	true	</isLeft>
+          <minOffset>	-0.093429	</minOffset>
+          <maxOffset>	0.089322	</maxOffset>
+          <trackPairIdx>	0	</trackPairIdx>
+        </node>
+        <node>
+          <name>	Track_R0	</name>
+          <collisionSamplesCount>	1	</collisionSamplesCount>
           <isLeft>	false	</isLeft>
           <minOffset>	-0.091376	</minOffset>
           <maxOffset>	0.089322	</maxOffset>
-        </group>
+          <trackPairIdx>	0	</trackPairIdx>
+        </node>
+        <node>
+          <name>	Track_R1	</name>
+          <collisionSamplesCount>	1	</collisionSamplesCount>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.091376	</minOffset>
+          <maxOffset>	0.089322	</maxOffset>
+          <trackPairIdx>	0	</trackPairIdx>
+        </node>
+        <node>
+          <name>	Track_R2	</name>
+          <collisionSamplesCount>	1	</collisionSamplesCount>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.091376	</minOffset>
+          <maxOffset>	0.089322	</maxOffset>
+          <trackPairIdx>	0	</trackPairIdx>
+        </node>
+        <node>
+          <name>	Track_R3	</name>
+          <collisionSamplesCount>	1	</collisionSamplesCount>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.091376	</minOffset>
+          <maxOffset>	0.089322	</maxOffset>
+          <trackPairIdx>	0	</trackPairIdx>
+        </node>
+        <node>
+          <name>	Track_R4	</name>
+          <collisionSamplesCount>	1	</collisionSamplesCount>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.091376	</minOffset>
+          <maxOffset>	0.089322	</maxOffset>
+          <trackPairIdx>	0	</trackPairIdx>
+        </node>
       </groundNodes>
-      <trackThickness>	-0.0172	</trackThickness>
       <trackNodes>
-        <enable>	true	</enable>
-        <linkBones>	true	</linkBones>
-        <maxAmplitude>	0.2	</maxAmplitude>
-        <maxOffset>	0.2	</maxOffset>
-        <gravity>	-9.8	</gravity>
-        <elasticity>	1051	</elasticity>
-        <damping>	2	</damping>
-        <node>
-          <isLeft>	true	</isLeft>
-          <name>	Track_VT_L0	</name>
-          <forwardElastK>	1.27052	</forwardElastK>
-          <backwardElastK>	1.80317	</backwardElastK>
-          <offset>	-0.07	</offset>
-          <rightSibling>	Track_VT_L1	</rightSibling>
-        </node>
-        <node>
-          <isLeft>	true	</isLeft>
-          <name>	Track_VT_L1	</name>
-          <forwardElastK>	0.81	</forwardElastK>
-          <backwardElastK>	1.4	</backwardElastK>
-          <offset>	-0.109	</offset>
-          <leftSibling>	Track_VT_L0	</leftSibling>
-          <rightSibling>	Track_VT_L2	</rightSibling>
-        </node>
-        <node>
-          <isLeft>	true	</isLeft>
-          <name>	Track_VT_L2	</name>
-          <forwardElastK>	2.14512	</forwardElastK>
-          <backwardElastK>	1.86893	</backwardElastK>
-          <offset>	-0.109	</offset>
-          <leftSibling>	Track_VT_L1	</leftSibling>
-          <rightSibling>	Track_VT_L3	</rightSibling>
-        </node>
-        <node>
-          <isLeft>	true	</isLeft>
-          <name>	Track_VT_L3	</name>
-          <forwardElastK>	1.23764	</forwardElastK>
-          <backwardElastK>	2.58571	</backwardElastK>
-          <offset>	-0.109	</offset>
-          <leftSibling>	Track_VT_L2	</leftSibling>
-          <rightSibling>	Track_VT_L4	</rightSibling>
-        </node>
-        <node>
-          <isLeft>	true	</isLeft>
-          <name>	Track_VT_L4	</name>
-          <forwardElastK>	1.28367	</forwardElastK>
-          <backwardElastK>	1.29683	</backwardElastK>
-          <offset>	-0.109	</offset>
-          <leftSibling>	Track_VT_L3	</leftSibling>
-          <rightSibling>	Track_VT_L5	</rightSibling>
-        </node>
-        <node>
-          <isLeft>	true	</isLeft>
-          <name>	Track_VT_L5	</name>
-          <forwardElastK>	2.53311	</forwardElastK>
-          <backwardElastK>	2.53311	</backwardElastK>
-          <offset>	-0.109	</offset>
-          <leftSibling>	Track_VT_L4	</leftSibling>
-          <rightSibling>	Track_VT_L6	</rightSibling>
-        </node>
-        <node>
-          <isLeft>	true	</isLeft>
-          <name>	Track_VT_L6	</name>
-          <forwardElastK>	1.52698	</forwardElastK>
-          <backwardElastK>	2.6712	</backwardElastK>
-          <offset>	-0.109	</offset>
-          <leftSibling>	Track_VT_L5	</leftSibling>
-          <rightSibling>	Track_VT_L7	</rightSibling>
-        </node>
-        <node>
-          <isLeft>	true	</isLeft>
-          <name>	Track_VT_L7	</name>
-          <forwardElastK>	2.21746	</forwardElastK>
-          <backwardElastK>	2.4542	</backwardElastK>
-          <offset>	-0.07	</offset>
-          <leftSibling>	Track_VT_L6	</leftSibling>
-        </node>
-        <node>
-          <isLeft>	true	</isLeft>
-          <name>	Track_VD_L0	</name>
-        </node>
-        <node>
-          <isLeft>	true	</isLeft>
-          <name>	Track_VD_L1	</name>
-        </node>
-        <node>
-          <isLeft>	false	</isLeft>
-          <name>	Track_VT_R0	</name>
-          <forwardElastK>	1.27052	</forwardElastK>
-          <backwardElastK>	1.80317	</backwardElastK>
-          <offset>	-0.07	</offset>
-          <rightSibling>	Track_VT_R1	</rightSibling>
-        </node>
-        <node>
-          <isLeft>	false	</isLeft>
-          <name>	Track_VT_R1	</name>
-          <forwardElastK>	0.81	</forwardElastK>
-          <backwardElastK>	1.4	</backwardElastK>
-          <offset>	-0.109	</offset>
-          <leftSibling>	Track_VT_R0	</leftSibling>
-          <rightSibling>	Track_VT_R2	</rightSibling>
-        </node>
-        <node>
-          <isLeft>	false	</isLeft>
-          <name>	Track_VT_R2	</name>
-          <forwardElastK>	2.14512	</forwardElastK>
-          <backwardElastK>	1.86893	</backwardElastK>
-          <offset>	-0.109	</offset>
-          <leftSibling>	Track_VT_R1	</leftSibling>
-          <rightSibling>	Track_VT_R3	</rightSibling>
-        </node>
-        <node>
-          <isLeft>	false	</isLeft>
-          <name>	Track_VT_R3	</name>
-          <forwardElastK>	1.23764	</forwardElastK>
-          <backwardElastK>	2.58571	</backwardElastK>
-          <offset>	-0.109	</offset>
-          <leftSibling>	Track_VT_R2	</leftSibling>
-          <rightSibling>	Track_VT_R4	</rightSibling>
-        </node>
-        <node>
-          <isLeft>	false	</isLeft>
-          <name>	Track_VT_R4	</name>
-          <forwardElastK>	1.28367	</forwardElastK>
-          <backwardElastK>	1.29683	</backwardElastK>
-          <offset>	-0.109	</offset>
-          <leftSibling>	Track_VT_R3	</leftSibling>
-          <rightSibling>	Track_VT_R5	</rightSibling>
-        </node>
-        <node>
-          <isLeft>	false	</isLeft>
-          <name>	Track_VT_R5	</name>
-          <forwardElastK>	2.53311	</forwardElastK>
-          <backwardElastK>	2.53311	</backwardElastK>
-          <offset>	-0.109	</offset>
-          <leftSibling>	Track_VT_R4	</leftSibling>
-          <rightSibling>	Track_VT_R6	</rightSibling>
-        </node>
-        <node>
-          <isLeft>	false	</isLeft>
-          <name>	Track_VT_R6	</name>
-          <forwardElastK>	1.52698	</forwardElastK>
-          <backwardElastK>	2.6712	</backwardElastK>
-          <offset>	-0.109	</offset>
-          <leftSibling>	Track_VT_R5	</leftSibling>
-          <rightSibling>	Track_VT_R7	</rightSibling>
-        </node>
-        <node>
-          <isLeft>	false	</isLeft>
-          <name>	Track_VT_R7	</name>
-          <forwardElastK>	2.21746	</forwardElastK>
-          <backwardElastK>	2.4542	</backwardElastK>
-          <offset>	-0.07	</offset>
-          <leftSibling>	Track_VT_R6	</leftSibling>
-        </node>
-        <node>
-          <isLeft>	false	</isLeft>
-          <name>	Track_VD_R0	</name>
-        </node>
-        <node>
-          <isLeft>	false	</isLeft>
-          <name>	Track_VD_R1	</name>
-        </node>
+        <trackPair>
+          <trackPairIdx>	0	</trackPairIdx>
+          <trackThickness>	-0.0172	</trackThickness>
+          <maxAmplitude>	0.2	</maxAmplitude>
+          <maxOffset>	0.2	</maxOffset>
+          <gravity>	-9.8	</gravity>
+          <damping>	2	</damping>
+          <enable>	true	</enable>
+          <linkBones>	true	</linkBones>
+          <elasticity>	1051	</elasticity>
+          <node>
+            <isLeft>	true	</isLeft>
+            <name>	Track_VT_L0	</name>
+            <forwardElastK>	1.27052	</forwardElastK>
+            <backwardElastK>	1.80317	</backwardElastK>
+            <offset>	-0.07	</offset>
+            <trackPairIdx>	0	</trackPairIdx>
+            <rightSibling>	Track_VT_L1	</rightSibling>
+          </node>
+          <node>
+            <isLeft>	true	</isLeft>
+            <name>	Track_VT_L1	</name>
+            <forwardElastK>	0.81	</forwardElastK>
+            <backwardElastK>	1.4	</backwardElastK>
+            <offset>	-0.109	</offset>
+            <trackPairIdx>	0	</trackPairIdx>
+            <leftSibling>	Track_VT_L0	</leftSibling>
+            <rightSibling>	Track_VT_L2	</rightSibling>
+          </node>
+          <node>
+            <isLeft>	true	</isLeft>
+            <name>	Track_VT_L2	</name>
+            <forwardElastK>	2.14512	</forwardElastK>
+            <backwardElastK>	1.86893	</backwardElastK>
+            <offset>	-0.109	</offset>
+            <trackPairIdx>	0	</trackPairIdx>
+            <leftSibling>	Track_VT_L1	</leftSibling>
+            <rightSibling>	Track_VT_L3	</rightSibling>
+          </node>
+          <node>
+            <isLeft>	true	</isLeft>
+            <name>	Track_VT_L3	</name>
+            <forwardElastK>	1.23764	</forwardElastK>
+            <backwardElastK>	2.58571	</backwardElastK>
+            <offset>	-0.109	</offset>
+            <trackPairIdx>	0	</trackPairIdx>
+            <leftSibling>	Track_VT_L2	</leftSibling>
+            <rightSibling>	Track_VT_L4	</rightSibling>
+          </node>
+          <node>
+            <isLeft>	true	</isLeft>
+            <name>	Track_VT_L4	</name>
+            <forwardElastK>	1.28367	</forwardElastK>
+            <backwardElastK>	1.29683	</backwardElastK>
+            <offset>	-0.109	</offset>
+            <trackPairIdx>	0	</trackPairIdx>
+            <leftSibling>	Track_VT_L3	</leftSibling>
+            <rightSibling>	Track_VT_L5	</rightSibling>
+          </node>
+          <node>
+            <isLeft>	true	</isLeft>
+            <name>	Track_VT_L5	</name>
+            <forwardElastK>	2.53311	</forwardElastK>
+            <backwardElastK>	2.53311	</backwardElastK>
+            <offset>	-0.109	</offset>
+            <trackPairIdx>	0	</trackPairIdx>
+            <leftSibling>	Track_VT_L4	</leftSibling>
+            <rightSibling>	Track_VT_L6	</rightSibling>
+          </node>
+          <node>
+            <isLeft>	true	</isLeft>
+            <name>	Track_VT_L6	</name>
+            <forwardElastK>	1.52698	</forwardElastK>
+            <backwardElastK>	2.6712	</backwardElastK>
+            <offset>	-0.109	</offset>
+            <trackPairIdx>	0	</trackPairIdx>
+            <leftSibling>	Track_VT_L5	</leftSibling>
+            <rightSibling>	Track_VT_L7	</rightSibling>
+          </node>
+          <node>
+            <isLeft>	true	</isLeft>
+            <name>	Track_VT_L7	</name>
+            <forwardElastK>	2.21746	</forwardElastK>
+            <backwardElastK>	2.4542	</backwardElastK>
+            <offset>	-0.07	</offset>
+            <trackPairIdx>	0	</trackPairIdx>
+            <leftSibling>	Track_VT_L6	</leftSibling>
+          </node>
+          <node>
+            <isLeft>	true	</isLeft>
+            <name>	Track_VD_L0	</name>
+            <trackPairIdx>	0	</trackPairIdx>
+          </node>
+          <node>
+            <isLeft>	true	</isLeft>
+            <name>	Track_VD_L1	</name>
+            <trackPairIdx>	0	</trackPairIdx>
+          </node>
+          <node>
+            <isLeft>	false	</isLeft>
+            <name>	Track_VT_R0	</name>
+            <forwardElastK>	1.27052	</forwardElastK>
+            <backwardElastK>	1.80317	</backwardElastK>
+            <offset>	-0.07	</offset>
+            <trackPairIdx>	0	</trackPairIdx>
+            <rightSibling>	Track_VT_R1	</rightSibling>
+          </node>
+          <node>
+            <isLeft>	false	</isLeft>
+            <name>	Track_VT_R1	</name>
+            <forwardElastK>	0.81	</forwardElastK>
+            <backwardElastK>	1.4	</backwardElastK>
+            <offset>	-0.109	</offset>
+            <trackPairIdx>	0	</trackPairIdx>
+            <leftSibling>	Track_VT_R0	</leftSibling>
+            <rightSibling>	Track_VT_R2	</rightSibling>
+          </node>
+          <node>
+            <isLeft>	false	</isLeft>
+            <name>	Track_VT_R2	</name>
+            <forwardElastK>	2.14512	</forwardElastK>
+            <backwardElastK>	1.86893	</backwardElastK>
+            <offset>	-0.109	</offset>
+            <trackPairIdx>	0	</trackPairIdx>
+            <leftSibling>	Track_VT_R1	</leftSibling>
+            <rightSibling>	Track_VT_R3	</rightSibling>
+          </node>
+          <node>
+            <isLeft>	false	</isLeft>
+            <name>	Track_VT_R3	</name>
+            <forwardElastK>	1.23764	</forwardElastK>
+            <backwardElastK>	2.58571	</backwardElastK>
+            <offset>	-0.109	</offset>
+            <trackPairIdx>	0	</trackPairIdx>
+            <leftSibling>	Track_VT_R2	</leftSibling>
+            <rightSibling>	Track_VT_R4	</rightSibling>
+          </node>
+          <node>
+            <isLeft>	false	</isLeft>
+            <name>	Track_VT_R4	</name>
+            <forwardElastK>	1.28367	</forwardElastK>
+            <backwardElastK>	1.29683	</backwardElastK>
+            <offset>	-0.109	</offset>
+            <trackPairIdx>	0	</trackPairIdx>
+            <leftSibling>	Track_VT_R3	</leftSibling>
+            <rightSibling>	Track_VT_R5	</rightSibling>
+          </node>
+          <node>
+            <isLeft>	false	</isLeft>
+            <name>	Track_VT_R5	</name>
+            <forwardElastK>	2.53311	</forwardElastK>
+            <backwardElastK>	2.53311	</backwardElastK>
+            <offset>	-0.109	</offset>
+            <trackPairIdx>	0	</trackPairIdx>
+            <leftSibling>	Track_VT_R4	</leftSibling>
+            <rightSibling>	Track_VT_R6	</rightSibling>
+          </node>
+          <node>
+            <isLeft>	false	</isLeft>
+            <name>	Track_VT_R6	</name>
+            <forwardElastK>	1.52698	</forwardElastK>
+            <backwardElastK>	2.6712	</backwardElastK>
+            <offset>	-0.109	</offset>
+            <trackPairIdx>	0	</trackPairIdx>
+            <leftSibling>	Track_VT_R5	</leftSibling>
+            <rightSibling>	Track_VT_R7	</rightSibling>
+          </node>
+          <node>
+            <isLeft>	false	</isLeft>
+            <name>	Track_VT_R7	</name>
+            <forwardElastK>	2.21746	</forwardElastK>
+            <backwardElastK>	2.4542	</backwardElastK>
+            <offset>	-0.07	</offset>
+            <trackPairIdx>	0	</trackPairIdx>
+            <leftSibling>	Track_VT_R6	</leftSibling>
+          </node>
+          <node>
+            <isLeft>	false	</isLeft>
+            <name>	Track_VD_R0	</name>
+            <trackPairIdx>	0	</trackPairIdx>
+          </node>
+          <node>
+            <isLeft>	false	</isLeft>
+            <name>	Track_VD_R1	</name>
+            <trackPairIdx>	0	</trackPairIdx>
+          </node>
+        </trackPair>
       </trackNodes>
       <splineDesc>
         <trackPair>
@@ -1383,6 +1511,14 @@
             <UTiles>	1	</UTiles>
             <VTiles>	1	</VTiles>
           </atlas>
+          <modelSets>
+            <FULL3D>
+              <segmentModelLeft>	vehicles/russian/R122_T44_100/track/segment1.model	</segmentModelLeft>
+              <segmentModelRight>	vehicles/russian/R122_T44_100/track/segment1.model	</segmentModelRight>
+              <segment2ModelLeft>	vehicles/russian/R122_T44_100/track/segment2.model	</segment2ModelLeft>
+              <segment2ModelRight>	vehicles/russian/R122_T44_100/track/segment2.model	</segment2ModelRight>
+            </FULL3D>
+          </modelSets>
         </trackPair>
         <lodDist>	SPLINE_TRACK	</lodDist>
       </splineDesc>
@@ -1875,6 +2011,13 @@
             <undamaged>	vehicles/russian/R122_T44_100/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/russian/R122_T44_100/crash/lod0/Gun_01.model	</destroyed>
             <exploded>	vehicles/russian/R122_T44_100/crash/lod0/Gun_01.model	</exploded>
+            <sets>
+              <FULL3D>
+                <undamaged>	vehicles/russian/R127_T44_100_P/_skins/FULL3D/normal/lod0/Gun_01.model	</undamaged>
+                <destroyed>	vehicles/russian/R127_T44_100_P/_skins/FULL3D/crash/lod0/Gun_01.model	</destroyed>
+                <exploded>	vehicles/russian/R127_T44_100_P/_skins/FULL3D/crash/lod0/Gun_01.model	</exploded>
+              </FULL3D>
+            </sets>
           </models>
           <hitTester>
             <collisionModelServer>	vehicles/russian/R122_T44_100/collision/Gun_01.model	</collisionModelServer>
@@ -1930,6 +2073,13 @@
         <undamaged>	vehicles/russian/R122_T44_100/normal/lod0/Turret_01.model	</undamaged>
         <destroyed>	vehicles/russian/R122_T44_100/crash/lod0/Turret_01.model	</destroyed>
         <exploded>	vehicles/russian/R122_T44_100/crash/lod0/Turret_01.model	</exploded>
+        <sets>
+          <FULL3D>
+            <undamaged>	vehicles/russian/R127_T44_100_P/_skins/FULL3D/normal/lod0/Turret_01.model	</undamaged>
+            <destroyed>	vehicles/russian/R127_T44_100_P/_skins/FULL3D/crash/lod0/Turret_01.model	</destroyed>
+            <exploded>	vehicles/russian/R127_T44_100_P/_skins/FULL3D/crash/lod0/Turret_01.model	</exploded>
+          </FULL3D>
+        </sets>
       </models>
       <hitTester>
         <collisionModelServer>	vehicles/russian/R122_T44_100/collision/Turret_01.model	</collisionModelServer>
@@ -2334,6 +2484,48 @@
           <showOn>	256	</showOn>
           <clipAngle>	1.28448	</clipAngle>
           <anchorShift>	0.063826	</anchorShift>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35031	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	FULL3D	</compatibleModels>
+          <position>	-0 2.154238 0.724361	</position>
+          <rotation>	-0 0 3.133041	</rotation>
+          <scale>	0.69537 0.695371 0.695373	</scale>
+          <showOn>	256	</showOn>
+          <verticalMirror>	true	</verticalMirror>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35032	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	FULL3D	</compatibleModels>
+          <position>	-0.655704 1.916481 0.98869	</position>
+          <rotation>	1.245755 -0.884736 -2.952784	</rotation>
+          <scale>	0.370885 0.370885 0.370886	</scale>
+          <showOn>	256	</showOn>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35033	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	FULL3D	</compatibleModels>
+          <position>	0.880411 1.774383 0.457972	</position>
+          <rotation>	1.273097 0.846668 2.869712	</rotation>
+          <scale>	0.537313 0.537314 0.537315	</scale>
+          <showOn>	256	</showOn>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35034	</slotId>
+          <tags>	formfactor_square	</tags>
+          <compatibleModels>	FULL3D	</compatibleModels>
+          <position>	-0.364542 2.156022 0.419016	</position>
+          <rotation>	-0 0 3.133041	</rotation>
+          <scale>	0.484951 0.484952 0.484953	</scale>
+          <showOn>	256	</showOn>
+          <verticalMirror>	true	</verticalMirror>
         </slot>
       </customizationSlots>
       <customization>

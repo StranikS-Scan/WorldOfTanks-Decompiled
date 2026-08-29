@@ -115,7 +115,7 @@ class Comp7RankBlock(base.StatsBlock):
         prevRank, prevDivisionIdx = avatarResults.get('comp7Rank', (0, 0))
         prevDivision = comp7_shared.getPlayerDivisionByRankAndIndex(prevRank, prevDivisionIdx)
         currentRating = max(prevRating + achievedRating, 0)
-        currentDivision = comp7_shared.getPlayerDivisionByRating(currentRating)
+        currentDivision = comp7_shared.getPlayerDivision(currentRating)
         currentRankValue = comp7_shared.getRankEnumValue(currentDivision).value
         rankName = comp7_i18n_helpers.RANK_MAP[currentRankValue]
         self.linkage = COMP7_CONSTS.COMP7_RANK_SUB_TASK_UI

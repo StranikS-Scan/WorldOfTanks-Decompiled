@@ -174,6 +174,9 @@ class IVOIPChatController(object):
     def isYY(self):
         raise NotImplementedError
 
+    def isWebRTC(self):
+        raise NotImplementedError
+
     def invalidateInitialization(self):
         raise NotImplementedError
 

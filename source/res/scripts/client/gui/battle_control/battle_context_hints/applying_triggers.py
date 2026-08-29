@@ -1,7 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_control/battle_context_hints/applying_triggers.py
+from typing import Optional, TYPE_CHECKING
+from gui.battle_control.battle_context_hints.common import getBestPiercingShellCD
 from helpers import dependency
 from skeletons.gui.battle_session import IBattleSessionProvider
+if TYPE_CHECKING:
+    from gui.battle_control.controllers.consumables.ammo_ctrl import AmmoController
 
 class HintApplyingTrigger(object):
 
@@ -57,3 +61,32 @@ class MedKitApplyingTrigger(HintApplyingTrigger):
     def __onEquipmentUpdated(self, intCD, item):
         if 'medkit' in item.getTags():
             self._applyingCallback(self._hintId, self._logger)
+
+
+class AmmoTypeSwitchApplyingTrigger(HintApplyingTrigger):
+    __sessionProvider = dependency.descriptor(IBattleSessionProvider)
+
+    def __init__(self, hintId, logger, applyingCallback, *args, **kwargs):
+        super(AmmoTypeSwitchApplyingTrigger, self).__init__(hintId, logger, applyingCallback, *args, **kwargs)
+        self.__ammoCtrl = None
+        self.__targetShellCD = None
+        return
+
+    def start(self):
+        self.__ammoCtrl = self.__sessionProvider.shared.ammo
+        if self.__ammoCtrl is not None:
+            self.__targetShellCD = getBestPiercingShellCD(self.__ammoCtrl)
+            self.__ammoCtrl.onCurrentShellChanged += self.__onShellChanged
+        return
+
+    def stop(self):
+        if self.__ammoCtrl is not None:
+            self.__ammoCtrl.onCurrentShellChanged -= self.__onShellChanged
+            self.__ammoCtrl = None
+        self.__targetShellCD = None
+        return
+
+    def __onShellChanged(self, intCD):
+        if self.__targetShellCD is not None and intCD == self.__targetShellCD:
+            self._applyingCallback(self._hintId, self._logger)
+        return

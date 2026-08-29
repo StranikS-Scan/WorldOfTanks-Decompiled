@@ -24,7 +24,7 @@ from helpers.dependency import replace_none_kwargs
 from nations import INDICES
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.customization import ICustomizationService
-from skeletons.gui.game_control import IBattlePassController, IBRProgressionOnTokensController
+from skeletons.gui.game_control import IBattlePassController
 from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
 if typing.TYPE_CHECKING:
     from typing import Dict, List
@@ -302,14 +302,11 @@ def _isChapterShown(shownChapters, chapter):
     return shownChapters & chapter == 0
 
 
-@dependency.replace_none_kwargs(battlePass=IBattlePassController, brProgression=IBRProgressionOnTokensController)
-def fillBattleTypes(model, battlePass=None, brProgression=None):
+@dependency.replace_none_kwargs(battlePass=IBattlePassController)
+def fillBattleTypes(model, battlePass=None):
     array = model.getAvailableBattleTypes()
     for battleType in SUPPORTED_ARENA_BONUS_TYPES:
         if battlePass.isGameModeEnabled(battleType):
-            newBattleType = brProgression.checkBRBattleTypeForIcon(battleType)
-            if battleType != newBattleType:
-                battleType = newBattleType
             array.addNumber(battleType)
 
     array.invalidate()

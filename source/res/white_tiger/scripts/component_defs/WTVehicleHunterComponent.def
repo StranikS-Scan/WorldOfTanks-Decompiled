@@ -1,0 +1,49 @@
+<WTVehicleHunterComponent.def>
+  <Properties>
+    <plasmaCounter>
+      <Type>	UINT8	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <Default>	0	</Default>
+      <DetailLevel>	MY_VEHICLE	</DetailLevel>
+    </plasmaCounter>
+    <damageMultiplier>
+      <Type>	FLOAT	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <Default>	1.0	</Default>
+      <DetailLevel>	MY_VEHICLE	</DetailLevel>
+    </damageMultiplier>
+    <plasmaDamage>
+      <Type>	FIXED_DICT	  <Properties>
+          <additionalPlasmaDamage>
+            <Type>	INT16	</Type>
+          </additionalPlasmaDamage>
+          <victimId>
+            <Type>	OBJECT_ID	</Type>
+          </victimId>
+        </Properties>
+      </Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <DetailLevel>	MY_VEHICLE	</DetailLevel>
+    </plasmaDamage>
+    <plasmaToSaveOnDeath>
+      <Type>	UINT8	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <Default>	0	</Default>
+      <DetailLevel>	MY_VEHICLE	</DetailLevel>
+    </plasmaToSaveOnDeath>
+    <capturePrefab>
+      <Type>	STRING	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </capturePrefab>
+    <plasmaPrefabPerLevel>
+      <Type>	ARRAY	  <of>	STRING	</of>
+      </Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <DetailLevel>	MY_VEHICLE	</DetailLevel>
+    </plasmaPrefabPerLevel>
+  </Properties>
+  <ofEntity>
+    <Vehicle></Vehicle>
+  </ofEntity>
+  <DefaultKeyName>	hunterComponent	</DefaultKeyName>
+</WTVehicleHunterComponent.def>

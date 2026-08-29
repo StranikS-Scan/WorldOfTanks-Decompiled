@@ -176,6 +176,11 @@
       <module>	client.cgf_components.hangar_camera_manager	</module>
       <module>	client.cgf_components.c11n_logic_manager	</module>
       <module>	client.cgf_components.hangar_rules	</module>
+      <module>	client.cgf_components.registrars	</module>
+      <module>	client.cgf_components.sequence_components	</module>
+      <module>	client.cgf_components.sound_components	</module>
+      <module>	client.cgf_components.afterburning_ability	</module>
+      <module>	client.cgf_components.entity_model	</module>
       <module>	client.cgf_components.armory_yard_components	</module>
       <module>	client.cgf_components.tooltip_component	</module>
       <module>	client.cgf_components.token_component	</module>
@@ -214,6 +219,13 @@
       <module>	client.events_core_client.events_core_cgf.entry_point.manager	</module>
       <module>	common.events_core_common.events_core_cgf.vehicle_buffs.components	</module>
       <module>	cell.events_core_cell.events_core_cgf.vehicle_buffs.managers	</module>
+      <module>	common.events_core_common.events_core_cgf.missile_system.components	</module>
+      <module>	common.events_core_common.events_core_cgf.missile_system.managers	</module>
+      <module>	common.events_core_common.events_core_cgf.missile_system.rules	</module>
+      <module>	cell.events_core_cell.events_core_cgf.missile_system.components	</module>
+      <module>	cell.events_core_cell.events_core_cgf.missile_system.managers	</module>
+      <module>	client.events_core_client.events_core_cgf.missile_system.components	</module>
+      <module>	client.events_core_client.events_core_cgf.missile_system.managers	</module>
     </script>
     <testScript>
       <module>	client.cgf_demo_client.test_client_component	</module>
@@ -235,6 +247,92 @@
     </testScript>
     <testPrefabs></testPrefabs>
     <prefabs>
+      <path>	content/WtPrefabs/BossShieldSphere.prefab	</path>
+      <path>	content/WtPrefabs/BotAppear.prefab	</path>
+      <path>	content/WtPrefabs/Escape.prefab	</path>
+      <path>	content/WtPrefabs/EventManagers.prefab	</path>
+      <path>	content/WtPrefabs/Generator.prefab	</path>
+      <path>	content/WtPrefabs/GeneratorModel.prefab	</path>
+      <path>	content/WtPrefabs/Impulse.prefab	</path>
+      <path>	content/WtPrefabs/PlasmaHit.prefab	</path>
+      <path>	content/WtPrefabs/TeleportDeparture.prefab	</path>
+      <path>	content/WtPrefabs/TeleportDestination.prefab	</path>
+      <path>	content/WtPrefabs/Afterburning.prefab	</path>
+      <path>	content/WtPrefabs/BossIdle.prefab	</path>
+      <path>	content/WtPrefabs/BossGeneratorCapture.prefab	</path>
+      <path>	content/WtPrefabs/Bat_Chatillon25t_Idle.prefab	</path>
+      <path>	content/WtPrefabs/M48A5_Idle.prefab	</path>
+      <path>	content/WtPrefabs/Object_140_Idle.prefab	</path>
+      <path>	content/WtPrefabs/Cz04_T50_51_Waf_Idle.prefab	</path>
+      <path>	content/WtPrefabs/AntennaTeleportSpawner.prefab	</path>
+      <path>	content/WtPrefabs/abilities/ChargedShot.prefab	</path>
+      <path>	content/WtPrefabs/abilities/ExplosiveShot.prefab	</path>
+      <path>	content/WtPrefabs/abilities/ExplosiveShotBarrelFlash.prefab	</path>
+      <path>	content/WtPrefabs/abilities/DomeHoundInside.prefab	</path>
+      <path>	content/WtPrefabs/abilities/Shield.prefab	</path>
+      <path>	content/WtPrefabs/abilities/Stronghold.prefab	</path>
+      <path>	content/WtPrefabs/abilities/StrongholdEnd.prefab	</path>
+      <path>	content/WtPrefabs/Boss2025GeneratorCapture.prefab	</path>
+      <path>	content/WtPrefabs/Boss2025Idle.prefab	</path>
+      <path>	content/WtPrefabs/abilities/Procedure_effects.prefab	</path>
+      <path>	content/WtPrefabs/heal/WT_fullRepairComplete.prefab	</path>
+      <path>	content/WtPrefabs/heal/WT_fullRepairInterrupted.prefab	</path>
+      <path>	content/WtPrefabs/heal/WT_fullRepairActive.prefab	</path>
+      <path>	content/WtPrefabs/A120_M48A5_hound_TLXXL.prefab	</path>
+      <path>	content/WtPrefabs/F18_Bat_Chatillon25t_hound_TLXXL.prefab	</path>
+      <path>	content/WtPrefabs/R97_Object_140_hound_TLXXL.prefab	</path>
+      <path>	content/WtPrefabs/Cz04_T50_51_Waf_Hound_3DSt.prefab	</path>
+      <path>	content/WtPrefabs/plasma/A120_M48A5_hound_TLXXL0.prefab	</path>
+      <path>	content/WtPrefabs/plasma/A120_M48A5_hound_TLXXL1.prefab	</path>
+      <path>	content/WtPrefabs/plasma/A120_M48A5_hound_TLXXL2.prefab	</path>
+      <path>	content/WtPrefabs/plasma/A120_M48A5_hound_TLXXL3.prefab	</path>
+      <path>	content/WtPrefabs/plasma/A120_M48A5_hound_TLXXL4.prefab	</path>
+      <path>	content/WtPrefabs/plasma/Cz04_T50_51_Waf_Hound_3DSt0.prefab	</path>
+      <path>	content/WtPrefabs/plasma/Cz04_T50_51_Waf_Hound_3DSt1.prefab	</path>
+      <path>	content/WtPrefabs/plasma/Cz04_T50_51_Waf_Hound_3DSt2.prefab	</path>
+      <path>	content/WtPrefabs/plasma/Cz04_T50_51_Waf_Hound_3DSt3.prefab	</path>
+      <path>	content/WtPrefabs/plasma/Cz04_T50_51_Waf_Hound_3DSt4.prefab	</path>
+      <path>	content/WtPrefabs/plasma/F18_Bat_Chatillon25t_hound_TLXXL0.prefab	</path>
+      <path>	content/WtPrefabs/plasma/F18_Bat_Chatillon25t_hound_TLXXL1.prefab	</path>
+      <path>	content/WtPrefabs/plasma/F18_Bat_Chatillon25t_hound_TLXXL2.prefab	</path>
+      <path>	content/WtPrefabs/plasma/F18_Bat_Chatillon25t_hound_TLXXL3.prefab	</path>
+      <path>	content/WtPrefabs/plasma/F18_Bat_Chatillon25t_hound_TLXXL4.prefab	</path>
+      <path>	content/WtPrefabs/plasma/R97_Object_140_hound_TLXXL0.prefab	</path>
+      <path>	content/WtPrefabs/plasma/R97_Object_140_hound_TLXXL1.prefab	</path>
+      <path>	content/WtPrefabs/plasma/R97_Object_140_hound_TLXXL2.prefab	</path>
+      <path>	content/WtPrefabs/plasma/R97_Object_140_hound_TLXXL3.prefab	</path>
+      <path>	content/WtPrefabs/plasma/R97_Object_140_hound_TLXXL4.prefab	</path>
+      <path>	content/WtPrefabs/abilities/BarrierStatic.prefab	</path>
+      <path>	content/WtPrefabs/abilities/BarrierHit.prefab	</path>
+      <path>	content/WtPrefabs/abilities/UnionStrength_A120.prefab	</path>
+      <path>	content/WtPrefabs/abilities/UnionStrength_Cz04.prefab	</path>
+      <path>	content/WtPrefabs/abilities/UnionStrength_F18.prefab	</path>
+      <path>	content/WtPrefabs/abilities/UnionStrength_R97.prefab	</path>
+      <path>	content/WtPrefabs/abilities/Vampirism_F18.prefab	</path>
+      <path>	content/WtPrefabs/abilities/PassiveHealing_Cz04.prefab	</path>
+      <path>	content/WtPrefabs/abilities/GroupRepair_A120.prefab	</path>
+      <path>	content/WtPrefabs/abilities/GroupRepair_F18.prefab	</path>
+      <path>	content/WtPrefabs/abilities/GroupRepair_R97.prefab	</path>
+      <path>	content/WtPrefabs/abilities/GroupRepair_Cz04.prefab	</path>
+      <path>	content/WtPrefabs/abilities/GroupRepairArea.prefab	</path>
+      <path>	content/WtPrefabs/abilities/CloneSpawn.prefab	</path>
+      <path>	content/WtPrefabs/abilities/Azart_F18.prefab	</path>
+      <path>	content/WtPrefabs/abilities/MissileExplosion.prefab	</path>
+      <path>	content/WtPrefabs/abilities/MissileProjectile.prefab	</path>
+      <path>	content/WtPrefabs/abilities/MissileProjection.prefab	</path>
+      <path>	content/WtPrefabs/abilities/MissileSpawner.prefab	</path>
+      <path>	content/WtPrefabs/abilities/ExplosiveShield_A120.prefab	</path>
+      <path>	content/WtPrefabs/abilities/InvisibilityEntranceModA.prefab	</path>
+      <path>	content/WtPrefabs/abilities/InvisibilityEntranceModB.prefab	</path>
+      <path>	content/WtPrefabs/abilities/InvisibilityEscapeModA.prefab	</path>
+      <path>	content/WtPrefabs/abilities/InvisibilityEscapeModB.prefab	</path>
+      <path>	content/WtPrefabs/abilities/HyperionChargingModA.prefab	</path>
+      <path>	content/WtPrefabs/abilities/HyperionChargingModB.prefab	</path>
+      <path>	content/WtPrefabs/abilities/HyperionShotModA.prefab	</path>
+      <path>	content/WtPrefabs/abilities/HyperionShotModB.prefab	</path>
+      <path>	content/WtPrefabs/abilities/HyperionReadyModA.prefab	</path>
+      <path>	content/WtPrefabs/abilities/HyperionReadyModB.prefab	</path>
+      <path>	content/WtPrefabs/abilities/HyperionNotification.prefab	</path>
       <path>	particles/content_deferred/GFX_models/tank_customization/A120_M48A5_3DSt_TLXXL/A120_M48A5_3DSt_TLXXL.prefab	</path>
       <path>	particles/content_deferred/GFX_models/tank_customization/F18_Bat_Chatillon25t_3DSt_TLXXL/F18_Bat_Chatillon25t_3DSt_TLXXL.prefab	</path>
       <path>	particles/content_deferred/GFX_models/tank_customization/R97_Object_140_3Dst_TLXXL/R97_Object_140_3Dst_TLXXL.prefab	</path>
@@ -252,6 +350,7 @@
       <path>	particles/Tank/rocket_accelerator/Ch63_STT_617Q_Rocket.prefab	</path>
       <path>	particles/Tank/rocket_accelerator/G189_E100_02_Rocket.prefab	</path>
       <path>	particles/Tank/rocket_accelerator/Ch76_HSD_1_Rocket.prefab	</path>
+      <path>	particles/Tank/rocket_accelerator/R232_IS_7W_Rocket.prefab	</path>
       <path>	content/CGFPrefabs/Onboarding/108_bridge_bombing.prefab	</path>
       <path>	content/CGFPrefabs/Onboarding/108_city_firing.prefab	</path>
       <path>	content/CGFPrefabs/Onboarding/108_facades_bombardment.prefab	</path>
@@ -266,14 +365,16 @@
       <path>	content/CGFPrefabs/Onboarding/14_plane_crash.prefab	</path>
       <path>	content/CGFPrefabs/Onboarding/14_09a_Planes_out_crash.prefab	</path>
       <path>	content/CGFPrefabs/Onboarding/108_walls_ruins.prefab	</path>
-      <path>	particles/Tank/rocket_accelerator/R253_Object_277_S_Rocket.prefab	</path>
+      <path>	particles/Tank/rocket_accelerator/empty.prefab	</path>
       <path>	content/TestPrefabs/1003_cgf_test/TestStateSwitcher.prefab	</path>
+      <path>	particles/Tank/rocket_accelerator/Ch75_ZTQ_56.prefab	</path>
       <path>	content/CGFPrefabs/Frontline/Pillbox.prefab	</path>
       <path>	content/CGFPrefabs/Frontline/Mortar.prefab	</path>
       <path>	content/CGFPrefabs/Frontline/Flamer.prefab	</path>
     </prefabs>
     <prefabFolders>
       <path>	content/CGFPrefabs/cosmic_event	</path>
+      <path>	content/WtPrefabs/anomaly	</path>
     </prefabFolders>
   </cgf>
 </resources.xml>

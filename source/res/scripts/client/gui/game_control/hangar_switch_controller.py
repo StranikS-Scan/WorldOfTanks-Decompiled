@@ -201,6 +201,12 @@ class HangarSpaceSwitchController(IHangarSpaceSwitchController, IGlobalListener)
         self._clear()
         super(HangarSpaceSwitchController, self).onAvatarBecomePlayer()
 
+    def getSpacePath(self, spaceName):
+        if spaceName not in self._sceneSpaceParams:
+            return ''
+        currentSceneConfig = self._sceneSpaceParams[spaceName]
+        return self.hangarSpaceReloader.buildHangarSpacePath(currentSceneConfig.getHangarSpaceId()).lower()
+
     def _clear(self):
         self.stopGlobalListening()
 
@@ -421,9 +427,8 @@ class HangarSpaceSwitchController(IHangarSpaceSwitchController, IGlobalListener)
         else:
             Waiting.show('loadHangarSpace')
             BigWorld.callback(5.0, lambda : Waiting.hide('loadHangarSpace'))
-            environmentSwitcher = BigWorld.EnvironmentSwitcher.instance()
-            if environmentSwitcher is not None and environment is not None:
-                environmentSwitcher.setMainEnvironment(environment, tryActivate=True)
+            if environment is not None:
+                BigWorld.EnvironmentSwitcher.instance().setMainEnvironment(environment, tryActivate=True)
             return
 
     def __getSceneChanges(self, diff):

@@ -259,10 +259,10 @@ class Radio(InstallableItem):
         self.radarCooldown = component_constants.ZERO_FLOAT
 
 
-@add_shallow_copy()
+@add_shallow_copy('__weakref__')
 class Turret(InstallableItem):
     __metaclass__ = ReflectionMetaclass
-    __slots__ = ('gunPosition', 'gunJointPitch', 'rotationSpeed', 'turretRotatorHealth', 'surveyingDeviceHealth', 'invisibilityFactor', 'primaryArmor', 'ceilless', 'showEmblemsOnGun', 'guns', 'turretRotatorSoundManual', 'turretRotatorSoundGear', 'AODecals', 'turretDetachmentEffects', 'physicsShape', 'circularVisionRadius', 'customizableVehicleAreas', 'multiGun', 'prefabs', 'multiGunState', 'thermalVision', 'distanceBetweenMultiGuns')
+    __slots__ = ('gunPosition', 'gunJointPitch', 'rotationSpeed', 'turretRotatorHealth', 'surveyingDeviceHealth', 'invisibilityFactor', 'primaryArmor', 'ceilless', 'showEmblemsOnGun', 'guns', 'turretRotatorSoundManual', 'turretRotatorSoundGear', 'AODecals', 'turretDetachmentEffects', 'physicsShape', 'circularVisionRadius', 'customizableVehicleAreas', 'multiGun', 'prefabs', 'multiGunState', 'thermalVision', 'distanceBetweenMultiGuns', 'drivenJoints', '__weakref__')
 
     def __init__(self, typeID, componentID, componentName, compactDescr, level=1):
         super(Turret, self).__init__(typeID, componentID, componentName, compactDescr, level)
@@ -288,6 +288,7 @@ class Turret(InstallableItem):
         self.prefabs = component_constants.EMPTY_TUPLE
         self.multiGunState = None
         self.thermalVision = None
+        self.drivenJoints = None
         return
 
     @property
@@ -340,10 +341,10 @@ class Gun(InstallableItem):
         return
 
 
-@add_shallow_copy('variantName')
+@add_shallow_copy('variantName', 'drivenJoints', '__weakref__')
 class Hull(BasicItem):
     __metaclass__ = ReflectionMetaclass
-    __slots__ = ('variantName', 'hitTesterManager', 'materials', 'weight', 'maxHealth', 'ammoBayHealth', 'armorHomogenization', 'turretPositions', 'turretPitches', 'turretHardPoints', 'variantMatch', 'fakeTurrets', 'emblemSlots', 'slotsAnchors', 'modelsSets', 'models', 'swinging', 'customEffects', 'AODecals', 'camouflage', 'hangarShadowTexture', 'primaryArmor', 'customizableVehicleAreas', 'burnoutAnimation', 'prefabs')
+    __slots__ = ('variantName', 'hitTesterManager', 'materials', 'weight', 'maxHealth', 'ammoBayHealth', 'armorHomogenization', 'turretPositions', 'turretPitches', 'turretHardPoints', 'variantMatch', 'fakeTurrets', 'emblemSlots', 'slotsAnchors', 'modelsSets', 'models', 'swinging', 'customEffects', 'AODecals', 'camouflage', 'hangarShadowTexture', 'primaryArmor', 'customizableVehicleAreas', 'burnoutAnimation', 'prefabs', 'drivenJoints', '__weakref__')
 
     def __init__(self):
         super(Hull, self).__init__(component_constants.UNDEFINED_ITEM_TYPE_ID, component_constants.ZERO_INT, component_constants.EMPTY_STRING, component_constants.ZERO_INT)
@@ -372,6 +373,7 @@ class Hull(BasicItem):
         self.customizableVehicleAreas = None
         self.burnoutAnimation = None
         self.prefabs = component_constants.EMPTY_TUPLE
+        self.drivenJoints = None
         return
 
     @property
@@ -383,7 +385,7 @@ class Hull(BasicItem):
 
 
 class Shell(BasicItem):
-    __slots__ = ('caliber', 'isTracer', 'isForceTracer', 'damage', 'damageRandomization', 'piercingPowerRandomization', 'icon', 'iconName', 'isGold', 'type', 'stun', 'effectsIndex', 'tags', 'secondaryAttackReason', 'useAltDamageRandomization', 'dynamicEffectsIndexes', 'hitDeviceChanceMultiplier', 'hitCrewChanceMultiplier', 'maxDistanceInsideVehicle', 'damagedDevicesLimit', 'engineFireFactor', 'distanceDmg', 'distanceFactor')
+    __slots__ = ('caliber', 'isTracer', 'isForceTracer', 'damage', 'damageRandomization', 'piercingPowerRandomization', 'icon', 'iconName', 'isGold', 'type', 'stun', 'effectsIndex', 'tags', 'secondaryAttackReason', 'useAltDamageRandomization', 'dynamicEffectsIndexes', 'hitDeviceChanceMultiplier', 'hitCrewChanceMultiplier', 'maxDistanceInsideVehicle', 'damagedDevicesLimit', 'engineFireFactor', 'distanceDmg', 'distanceFactor', 'skipSelfDamage')
 
     def __init__(self, typeID, componentID, componentName, compactDescr):
         super(Shell, self).__init__(typeID, componentID, componentName, compactDescr)
@@ -397,6 +399,7 @@ class Shell(BasicItem):
         self.type = None
         self.effectsIndex = component_constants.ZERO_INT
         self.dynamicEffectsIndexes = component_constants.EMPTY_TUPLE
+        self.skipSelfDamage = False
         self.isGold = False
         self.icon = None
         self.iconName = None

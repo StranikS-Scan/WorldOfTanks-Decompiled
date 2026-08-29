@@ -1618,7 +1618,7 @@ class PersonalReservesWidgetTooltipContent(BlocksTooltipData):
     def __init__(self, ctx):
         super(PersonalReservesWidgetTooltipContent, self).__init__(ctx, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI)
 
-    def getDisplayableData(self, *args):
+    def getDisplayableData(self, *args, **kwargs):
         content = PersonalReservesTooltipView()
         window = ToolTipWindow(None, content, content.getParentWindow())
         return window

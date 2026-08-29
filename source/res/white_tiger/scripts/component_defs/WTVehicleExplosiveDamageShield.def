@@ -1,0 +1,29 @@
+<WTVehicleExplosiveDamageShield.def>
+  <Properties>
+    <isExplosiveDamageShieldActive>
+      <Type>	BOOL	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <Default>	0	</Default>
+    </isExplosiveDamageShieldActive>
+    <finishTime>
+      <Type>	FLOAT32	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <Default>	0	</Default>
+      <DetailLevel>	MY_VEHICLE	</DetailLevel>
+    </finishTime>
+    <totalInComeDamage>
+      <Type>	INT32	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <Default>	0	</Default>
+    </totalInComeDamage>
+    <equipmentID>
+      <Type>	UINT16	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <Default>	0	</Default>
+    </equipmentID>
+  </Properties>
+  <ofEntity>
+    <Vehicle></Vehicle>
+  </ofEntity>
+  <DefaultKeyName>	wtExplosiveDamageShield	</DefaultKeyName>
+</WTVehicleExplosiveDamageShield.def>

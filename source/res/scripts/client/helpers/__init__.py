@@ -7,7 +7,7 @@ import i18n
 import constants
 from debug_utils import LOG_CURRENT_EXCEPTION, LOG_WARNING
 from soft_exception import SoftException
-VERSION_FILE_PATH = '../version.xml'
+VERSION_FILE_PATH = ResMgr.mainAppDirectory() + 'version.xml'
 _CLIENT_VERSION = None
 
 def gEffectsDisabled():

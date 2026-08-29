@@ -12,7 +12,7 @@ from gui.Scaleform.daapi.view.common.battle_royale.br_helpers import isIncorrect
 from gui.Scaleform.framework.entities.inject_component_adaptor import InjectComponentAdaptor
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from helpers import dependency
-from skeletons.gui.game_control import IBattleRoyaleController, IBRProgressionOnTokensController
+from skeletons.gui.game_control import IBattleRoyaleController
 from skeletons.gui.app_loader import IAppLoader
 _R_SKILLS_ICONS = R.images.gui.maps.icons.tankmen.skills.big
 _IGNORED_SKILL_NAMES = ('commander_sixthSense',)
@@ -26,7 +26,6 @@ class CommanderComponent(InjectComponentAdaptor):
 class CommanderView(ViewImpl):
     _RU_REALM_TAG = 'cis'
     __brControl = dependency.descriptor(IBattleRoyaleController)
-    __brProgression = dependency.descriptor(IBRProgressionOnTokensController)
     __appLoader = dependency.descriptor(IAppLoader)
 
     def __init__(self, viewKey, viewModelClazz=CommanderCmpViewModel):
@@ -88,7 +87,6 @@ class CommanderView(ViewImpl):
             return
         with self.viewModel.transaction() as model:
             model.setNation(vehicle.nationName)
-            model.setIconPostfix(self.__brProgression.getBirthdayIconPostfix())
             perkList = model.getPerkList()
             perkList.clear()
             commanderSkills = self.__brControl.getBrCommanderSkills()

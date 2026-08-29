@@ -12,6 +12,8 @@ from constants import ARENA_BONUS_TYPE, ARENA_GUI_TYPE
 from dossiers2.custom.records import DB_ID_TO_RECORD
 from dossiers2.ui.achievements import ACHIEVEMENT_BLOCK
 from gui.Scaleform.daapi.view.lobby.tank_setup.ammunition_setup_vehicle import g_tankSetupVehicle
+from gui.impl import backport
+from gui.impl.gen import R
 from gui.impl.lobby.hangar.modified_vehicle import g_modifiedVehicle
 from gui.impl.lobby.hangar.modified_vehicle_parameters import modifiedVehiclesComparator
 from gui.techtree.techtree_dp import g_techTreeDP
@@ -41,6 +43,8 @@ if typing.TYPE_CHECKING:
     from account_helpers.offers.events_data import OfferGift, OfferEventData
     from gui.shared.gui_items.dossier.stats import AccountTotalStatsBlock
 RestoreInfo = namedtuple('RestoreInfo', ('reason', 'price'))
+_DECORATOR_3D = R.strings.selectable_reward.decorator.style3D
+_DECORATOR_2D = R.strings.selectable_reward.decorator.style2D
 
 def _getCmpVehicle():
     return cmp_helpers.getCmpConfiguratorMainView().getCurrentVehicle()
@@ -80,7 +84,7 @@ class StatsConfiguration(object):
 
 
 class StatusConfiguration(object):
-    __slots__ = ('vehicle', 'slotIdx', 'eqs', 'checkBuying', 'node', 'isAwardWindow', 'isResearchPage', 'checkNotSuitable', 'showCustomStates', 'useWhiteBg', 'withSlots', 'isCompare', 'eqSetupIDx', 'battleRoyale')
+    __slots__ = ('vehicle', 'slotIdx', 'eqs', 'checkBuying', 'node', 'isAwardWindow', 'isSpecialWindow', 'isResearchPage', 'checkNotSuitable', 'showCustomStates', 'useWhiteBg', 'withSlots', 'isCompare', 'eqSetupIDx', 'battleRoyale')
 
     def __init__(self):
         self.vehicle = None
@@ -97,6 +101,7 @@ class StatusConfiguration(object):
         self.isCompare = False
         self.eqSetupIDx = None
         self.battleRoyale = None
+        self.isSpecialWindow = False
         return
 
 
@@ -339,6 +344,24 @@ class ShopContext(AwardContext):
         value = super(ShopContext, self).getStatsConfiguration(item)
         value.inventoryCount = True
         value.vehiclesCount = True
+        return value
+
+
+class WtEventPortalContext(DefaultContext):
+
+    def buildItem(self, *args, **kwargs):
+        return super(WtEventPortalContext, self).buildItem(args[0])
+
+    def getStatsConfiguration(self, item):
+        value = super(WtEventPortalContext, self).getStatsConfiguration(item)
+        value.sellPrice = False
+        value.buyPrice = False
+        value.unlockPrice = False
+        return value
+
+    def getStatusConfiguration(self, item):
+        value = super(WtEventPortalContext, self).getStatusConfiguration(item)
+        value.isSpecialWindow = True
         return value
 
 
@@ -1375,6 +1398,11 @@ class SelectableBonusesGiftTokenContext(ToolTipContext):
                 gift = first(offer.getAllGifts())
                 if gift is not None:
                     result.append(gift.bonus.displayedItem.getXP())
+            elif shortName == 'style_gift':
+                for gift in offer.getAllGifts():
+                    decorator = _DECORATOR_3D if gift.bonus.custItem.is3D else _DECORATOR_2D
+                    result.append(backport.text(decorator(), value=gift.bonus.getStyleName()))
+
             else:
                 for gift in offer.getAllGifts():
                     result.append(gift.title)

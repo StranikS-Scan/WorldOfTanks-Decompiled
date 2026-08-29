@@ -1,0 +1,101 @@
+<extension.xml>
+  <FeatureName>	white_tiger	</FeatureName>
+  <IsEnabled>	true	</IsEnabled>
+  <Personality>	WhiteTigerPersonality	</Personality>
+  <EditorPersonality>	editor_white_tiger_personality	</EditorPersonality>
+  <Entities>
+    <ClientServerEntities>
+      <WTHyperionModA></WTHyperionModA>
+      <WTHyperionModB></WTHyperionModB>
+    </ClientServerEntities>
+    <ServerOnlyEntities>
+      <WhiteTigerUnitMgr></WhiteTigerUnitMgr>
+      <WhiteTigerBattlesMgr></WhiteTigerBattlesMgr>
+    </ServerOnlyEntities>
+  </Entities>
+  <Components>
+    <StaticComponents>
+      <AccountWhiteTigerComponent></AccountWhiteTigerComponent>
+      <ArenaWTComponent></ArenaWTComponent>
+      <ArenaWTBattleResultComponent></ArenaWTBattleResultComponent>
+    </StaticComponents>
+    <DynamicComponents>
+      <ArenaWTVehiclesManager></ArenaWTVehiclesManager>
+      <ArenaWTLoggingComponent></ArenaWTLoggingComponent>
+      <WTBattleSystemsManager></WTBattleSystemsManager>
+      <WTCaptureProgressComponent></WTCaptureProgressComponent>
+      <WTPlayersPanelComponent></WTPlayersPanelComponent>
+      <WTGeneratorIndexComponent></WTGeneratorIndexComponent>
+      <WTGeneratorUDOComponent></WTGeneratorUDOComponent>
+      <WTGeneratorBSPComponent></WTGeneratorBSPComponent>
+      <WTArenaPublicInfo></WTArenaPublicInfo>
+      <WTArenaPlasmaInfo></WTArenaPlasmaInfo>
+      <WTVehicleCapturerComponent></WTVehicleCapturerComponent>
+      <WTVehicleAfkController></WTVehicleAfkController>
+      <VehicleWTAbilitiesManagerComponent></VehicleWTAbilitiesManagerComponent>
+      <WTVisualEffect></WTVisualEffect>
+      <WTVehiclePassiveHealing></WTVehiclePassiveHealing>
+      <WTVehicleUnionStrength></WTVehicleUnionStrength>
+      <WTVehicleUnionStrengthMark></WTVehicleUnionStrengthMark>
+      <WTVehicleInvisibilityModA></WTVehicleInvisibilityModA>
+      <WTVehicleInvisibilityModB></WTVehicleInvisibilityModB>
+      <WTVehicleInvisibilityDebuff></WTVehicleInvisibilityDebuff>
+      <WTVehicleHyperionDebuff></WTVehicleHyperionDebuff>
+      <WTVehicleTeleport></WTVehicleTeleport>
+      <WTVehicleFactorAppliers></WTVehicleFactorAppliers>
+      <WTVehicleStunArea></WTVehicleStunArea>
+      <WTVehicleChargedShot></WTVehicleChargedShot>
+      <WTVehicleCircuitOverload></WTVehicleCircuitOverload>
+      <WTVehicleAlwaysVisible></WTVehicleAlwaysVisible>
+      <WTVehicleHunterComponent></WTVehicleHunterComponent>
+      <WTVehicleBarrier></WTVehicleBarrier>
+      <WTBarrierComponent></WTBarrierComponent>
+      <WTVehicleNitro></WTVehicleNitro>
+      <WTVehicleDamageShield></WTVehicleDamageShield>
+      <WTVehicleExplosiveShot></WTVehicleExplosiveShot>
+      <WTVehicleImpulseModA></WTVehicleImpulseModA>
+      <WTVehicleAbilityLock></WTVehicleAbilityLock>
+      <WTVehicleVampirism></WTVehicleVampirism>
+      <WTVehicleAbilityLevelManager></WTVehicleAbilityLevelManager>
+      <WTVehicleDynamicFactors></WTVehicleDynamicFactors>
+      <WTVehicleGroupRepair></WTVehicleGroupRepair>
+      <WTCloneComponent></WTCloneComponent>
+      <WTVehicleEventsProxyComponent></WTVehicleEventsProxyComponent>
+      <WTMissile></WTMissile>
+      <WTVehicleStunAreaModA></WTVehicleStunAreaModA>
+      <WTVehicleExtractorShot></WTVehicleExtractorShot>
+      <WTTeamInfoComponent></WTTeamInfoComponent>
+      <WTVehicleExplosiveDamageShield></WTVehicleExplosiveDamageShield>
+      <WTVehicleDome></WTVehicleDome>
+      <WTDomeComponent></WTDomeComponent>
+      <WTVehicleDotEffect></WTVehicleDotEffect>
+      <PrefabComponent></PrefabComponent>
+    </DynamicComponents>
+  </Components>
+  <ExternalComponents></ExternalComponents>
+  <cgf>
+    <script>
+      <module>	client.cgf_components.wt_collision_component	</module>
+      <module>	common.white_tiger_common.common_cgf.missile_system.components	</module>
+      <module>	common.white_tiger_common.common_cgf.missile_system.managers	</module>
+      <module>	client.white_tiger.client_cgf.missile_system.components	</module>
+      <module>	client.white_tiger.client_cgf.missile_system.managers	</module>
+      <module>	common.white_tiger_common.common_cgf.dome.components	</module>
+      <module>	cell.white_tiger_cell.cell_cgf.dome.managers	</module>
+      <module>	client.white_tiger.client_cgf.dome.components	</module>
+      <module>	client.white_tiger.client_cgf.dome.managers	</module>
+      <module>	client.white_tiger.client_cgf.effects.components	</module>
+      <module>	common.white_tiger_common.common_cgf.barrier.components	</module>
+      <module>	common.white_tiger_common.common_cgf.barrier.managers	</module>
+      <module>	client.white_tiger.client_cgf.barrier.components	</module>
+      <module>	client.white_tiger.client_cgf.barrier.managers	</module>
+      <module>	common.white_tiger_common.common_cgf.anomaly.components	</module>
+      <module>	cell.white_tiger_cell.cell_cgf.anomaly.managers	</module>
+      <module>	client.white_tiger.client_cgf.anomaly.managers	</module>
+      <module>	client.white_tiger.client_cgf.group_repair.components	</module>
+      <module>	client.white_tiger.client_cgf.group_repair.managers	</module>
+      <module>	client.white_tiger.client_cgf.hyperion.components	</module>
+      <module>	client.white_tiger.client_cgf.hyperion.managers	</module>
+    </script>
+  </cgf>
+</extension.xml>

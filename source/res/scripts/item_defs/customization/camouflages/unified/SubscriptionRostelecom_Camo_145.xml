@@ -1,0 +1,92 @@
+<SubscriptionRostelecom_Camo_145.xml>
+  <xmlns:czech1>	ussr	</xmlns:czech1>
+  <xmlns:germany>	germany	</xmlns:germany>
+  <xmlns:czech0>	usa	</xmlns:czech0>
+  <xmlns:china>	china	</xmlns:china>
+  <xmlns:france>	france	</xmlns:france>
+  <xmlns:uk>	uk	</xmlns:uk>
+  <xmlns:japan>	japan	</xmlns:japan>
+  <xmlns:czech>	czech	</xmlns:czech>
+  <xmlns:sweden>	sweden	</xmlns:sweden>
+  <xmlns:poland>	poland	</xmlns:poland>
+  <xmlns:italy>	italy	</xmlns:italy>
+  <xmlns:intunion>	intunion	</xmlns:intunion>
+  <itemGroup>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <tags>	hiddenInUI fullRGB	</tags>
+    <priceGroup>	MT camouflages 50g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	ussr:R171_IS_3_II_02	</vehicles>
+      </include>
+    </vehicleFilter>
+    <camouflage>
+      <id>	31575	</id>
+      <scales>	1.2 1 0.7	</scales>
+      <palettes>
+        <palette>
+          <c0>	255 0 0 255	</c0>
+          <c1>	0 255 0 255	</c1>
+          <c2>	0 0 255 255	</c2>
+          <c3>	0 0 0 255	</c3>
+        </palette>
+      </palettes>
+      <texture>	vehicles/russian/Camouflage/SubscriptionRostelecom_Camo_Turret_145.dds	</texture>
+      <userString>	#vehicle_customization:SubscriptionRostelecom_Camo_Turret_145/name	</userString>
+      <description>	#vehicle_customization:SubscriptionRostelecom_Camo_Turret_145/description	</description>
+      <exclusionImpact>	0.4	</exclusionImpact>
+      <rotation>
+        <HULL>	1.570796	</HULL>
+        <TURRET>	1.570796	</TURRET>
+        <GUN>	1.570796	</GUN>
+      </rotation>
+      <tilingSettings>
+        <type>	relative	</type>
+        <factor>	1.2 1.2	</factor>
+        <offset>	1.15 -2.09	</offset>
+      </tilingSettings>
+      <glossMetallicMap>	vehicles/russian/Camouflage/SubscriptionRostelecom_Camo_Turret_145_GMM.dds	</glossMetallicMap>
+    </camouflage>
+    <userString>	#vehicle_customization:camouflage/opaque	</userString>
+  </itemGroup>
+  <itemGroup>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <tags>	hiddenInUI fullRGB	</tags>
+    <priceGroup>	MT camouflages 50g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	ussr:R171_IS_3_II_02	</vehicles>
+      </include>
+    </vehicleFilter>
+    <camouflage>
+      <id>	31576	</id>
+      <scales>	1.2 1 0.7	</scales>
+      <palettes>
+        <palette>
+          <c0>	255 0 0 255	</c0>
+          <c1>	0 255 0 255	</c1>
+          <c2>	0 0 255 255	</c2>
+          <c3>	0 0 0 255	</c3>
+        </palette>
+      </palettes>
+      <texture>	vehicles/russian/Camouflage/SubscriptionRostelecom_Camo_Hull_145.dds	</texture>
+      <userString>	#vehicle_customization:SubscriptionRostelecom_Camo_Hull_145/name	</userString>
+      <description>	#vehicle_customization:SubscriptionRostelecom_Camo_Hull_145/description	</description>
+      <exclusionImpact>	0.4	</exclusionImpact>
+      <rotation>
+        <HULL>	1.570796	</HULL>
+        <TURRET>	1.570796	</TURRET>
+        <GUN>	1.570796	</GUN>
+      </rotation>
+      <tilingSettings>
+        <type>	relative	</type>
+        <factor>	1.1 1.1	</factor>
+        <offset>	-15.17 -15.02	</offset>
+      </tilingSettings>
+      <glossMetallicMap>	vehicles/russian/Camouflage/SubscriptionRostelecom_Camo_Hull_145_GMM.dds	</glossMetallicMap>
+    </camouflage>
+    <userString>	#vehicle_customization:camouflage/opaque	</userString>
+  </itemGroup>
+</SubscriptionRostelecom_Camo_145.xml>

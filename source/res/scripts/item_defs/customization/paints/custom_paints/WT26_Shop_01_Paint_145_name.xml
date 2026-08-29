@@ -1,0 +1,33 @@
+<WT26_Shop_01_Paint_145_name.xml>
+  <itemGroup>
+    <name>	WT26_Shop_01_Paint_145	</name>
+    <userString>	#vehicle_customization:repaint/color_group_04	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <tags>	hiddenInUI	</tags>
+    <priceGroup>	paints 20g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <paint>
+      <id>	31558	</id>
+      <texture>	gui/maps/vehicles/repaints/custom_color_DEV.png	</texture>
+      <userString>	#vehicle_customization:WT26_Shop_01_Paint_01_145/name	</userString>
+      <description>	#vehicle_customization:WT26_Shop_01_Paint_01_145/description	</description>
+      <color>	19 24 38 255	</color>
+      <gloss>	0.5	</gloss>
+      <metallic>	0.2	</metallic>
+    </paint>
+    <paint>
+      <id>	31559	</id>
+      <texture>	gui/maps/vehicles/repaints/custom_color_DEV.png	</texture>
+      <userString>	#vehicle_customization:WT26_Shop_01_Paint_02_145/name	</userString>
+      <description>	#vehicle_customization:WT26_Shop_01_Paint_02_145/description	</description>
+      <color>	61 104 153 255	</color>
+      <gloss>	0.8	</gloss>
+      <metallic>	0.8	</metallic>
+    </paint>
+  </itemGroup>
+</WT26_Shop_01_Paint_145_name.xml>

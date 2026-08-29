@@ -5550,4 +5550,23 @@
       <description>	#vehicle_customization:DRMT2026_Emblem_Fixed_144/description	</description>
     </decal>
   </itemGroup>
+  <itemGroup>
+    <name>	WT26_Emblem_Other_145	</name>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	MT emblems 25g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF usa:A104_M4A3E8A usa:A126_PzVI_Tiger_II_capt ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <type>	emblem	</type>
+    <userString>	#vehicle_customization:emblem/special	</userString>
+    <decal>
+      <id>	31480	</id>
+      <texture>	gui/maps/vehicles/decals/player_stickers/special/WT26_Emblem_TAPOK_145.dds	</texture>
+      <userString>	#vehicle_customization:WT26_Emblem_TAPOK_145/name	</userString>
+      <description>	#vehicle_customization:WT26_Emblem_TAPOK_145/description	</description>
+    </decal>
+  </itemGroup>
 </emblems_special.xml>

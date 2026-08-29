@@ -865,6 +865,60 @@
       </damage>
     </armorSpalls>
   </_130mm_HE_Mark_80>
+  <_149mm_GEF32_It37>
+    <id>	31015	</id>
+    <userString>	#italy_vehicles:_149mm_GEF32_It37	</userString>
+    <icon>	he_modern	</icon>
+    <price>	1070	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	150	</caliber>
+    <explosionRadius>	3.57	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	largeHighExplosive	</effects>
+    <damage>
+      <armor>	800	</armor>
+      <devices>	203	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	3.53	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	400	</armor>
+        <devices>	100	</devices>
+      </damage>
+    </armorSpalls>
+  </_149mm_GEF32_It37>
+  <_149mm_GEP39A_It37>
+    <id>	31014	</id>
+    <userString>	#italy_vehicles:_149mm_GEP39A_It37	</userString>
+    <icon>	hc_premium	</icon>
+    <price>	5600	</price>
+    <improved>	true	</improved>
+    <kind>	HOLLOW_CHARGE	</kind>
+    <caliber>	150	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	largeHollowCharge	</effects>
+    <damage>
+      <armor>	600	</armor>
+      <devices>	203	</devices>
+    </damage>
+    <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
+  </_149mm_GEP39A_It37>
+  <_149mm_GP35_It37>
+    <id>	31013	</id>
+    <userString>	#italy_vehicles:_149mm_GP35_It37	</userString>
+    <icon>	ap	</icon>
+    <price>	1190	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	150	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	largeArmorPiercing	</effects>
+    <damage>
+      <armor>	600	</armor>
+      <devices>	203	</devices>
+    </damage>
+  </_149mm_GP35_It37>
   <_20mm_c_p_20_138_B>
     <id>	7	</id>
     <userString>	#italy_vehicles:_20mm_c_p_20_138_B	</userString>

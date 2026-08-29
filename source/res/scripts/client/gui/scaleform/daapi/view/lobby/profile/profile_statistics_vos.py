@@ -18,7 +18,8 @@ from helpers import dependency
 from helpers import i18n
 from skeletons.gui.lobby_context import ILobbyContext
 from gui.Scaleform.daapi.view.common.battle_royale.br_helpers import getAvailableNationsNames
-from gui.Scaleform.daapi.view.lobby.comp7.comp7_profile_helper import COMP7_ARCHIVE_NAMES, COMP7_SEASON_NUMBERS, getDropdownKeyByArchiveName, getDropdownKeyBySeason
+from comp7_common import COMP7_ARCHIVE_NAMES, COMP7_SEASON_NUMBERS
+from gui.Scaleform.daapi.view.lobby.comp7.comp7_profile_helper import getDropdownKeyByArchiveName, getDropdownKeyBySeason
 from soft_exception import SoftException
 
 def _packAvgDmgLditItemData(avgDmg):

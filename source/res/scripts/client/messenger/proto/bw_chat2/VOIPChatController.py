@@ -20,6 +20,7 @@ from messenger.proto.interfaces import IVOIPChatController
 from account_helpers.settings_core.settings_constants import SOUND
 from messenger.proto.shared_messages import ACTION_MESSAGE_TYPE, ClientActionMessage
 from skeletons.account_helpers.settings_core import ISettingsCore
+MEDIA_ENGINE_DELAY = 2.8
 
 class VOIPChatController(IVOIPChatController):
     __slots__ = ('__callbacks', '__captureDevicesCallbacks')
@@ -28,27 +29,22 @@ class VOIPChatController(IVOIPChatController):
     def __init__(self):
         self.__callbacks = []
         self.__captureDevicesCallbacks = []
+        self.__warningShown = False
+        self.__buttonPressed = False
+        self.__isMediaEngineReady = False
+        self.__mediaEngineWarningTimer = None
+        return
+
+    @staticmethod
+    def noiseCancellationDelay():
+        return MEDIA_ENGINE_DELAY
 
     def start(self):
-        voipMgr = VOIP.getVOIPManager()
-        voipMgr.onInitialized += self.__initResponse
-        voipMgr.onFailedToConnect += self.__failedResponse
-        voipMgr.onCaptureDevicesUpdated += self.__captureDevicesResponse
-        voipMgr.onPlayerSpeaking += self.__onPlayerSpeaking
-        voipMgr.onJoinedChannel += self.__onJoinedChannel
-        voipMgr.onLeftChannel += self.__onLeftChannel
-        g_eventBus.addListener(GameEvent.TOGGLE_VOIP_CHANNEL_ENABLED, self.__onToggleChannelEnabled, scope=EVENT_BUS_SCOPE.BATTLE)
+        self.__subscribeToVoipCallbacks()
         self.__initialize()
 
     def stop(self):
-        voipMgr = VOIP.getVOIPManager()
-        voipMgr.onInitialized -= self.__initResponse
-        voipMgr.onFailedToConnect -= self.__failedResponse
-        voipMgr.onCaptureDevicesUpdated -= self.__captureDevicesResponse
-        voipMgr.onPlayerSpeaking -= self.__onPlayerSpeaking
-        voipMgr.onJoinedChannel -= self.__onJoinedChannel
-        voipMgr.onLeftChannel -= self.__onLeftChannel
-        g_eventBus.removeListener(GameEvent.TOGGLE_VOIP_CHANNEL_ENABLED, self.__onToggleChannelEnabled, scope=EVENT_BUS_SCOPE.BATTLE)
+        self.__unsubscribeFromVoipCallbacks()
         self.__callbacks = []
         self.__captureDevicesCallbacks = []
 
@@ -67,16 +63,20 @@ class VOIPChatController(IVOIPChatController):
     def isYY(self):
         return VOIP.getVOIPManager().getAPI() == VOIP_SUPPORTED_API.YY
 
+    def isWebRTC(self):
+        return VOIP.getVOIPManager().getAPI() == VOIP_SUPPORTED_API.WebRTC
+
     def invalidateInitialization(self):
         if self.isVOIPEnabled() and not BattleReplay.isPlaying() and not self.isReady():
             g_messengerEvents.voip.onVoiceChatInitFailed()
 
     def setMicrophoneMute(self, isMuted, force=False):
         voipMgr = VOIP.getVOIPManager()
-        if voipMgr is not None:
-            if force or voipMgr.getCurrentChannel() and not voipMgr.isInTesting():
-                voipMgr.setMicMute(muted=isMuted)
-        return
+        if force or voipMgr.getCurrentChannel() and not voipMgr.isInTesting():
+            voipMgr.setMicMute(muted=isMuted)
+            if not self.__warningShown and not self.__isMediaEngineReady and not isMuted:
+                self.__warningShown = True
+                self.__showInitMessage()
 
     def invalidateMicrophoneMute(self):
         keyCode = CommandMapping.g_instance.get('CMD_VOICECHAT_MUTE')
@@ -86,12 +86,8 @@ class VOIPChatController(IVOIPChatController):
     @adisp_async
     def requestCaptureDevices(self, firstTime=False, callback=None):
         voipMgr = VOIP.getVOIPManager()
-        if voipMgr.getVOIPDomain() == '':
-            LOG_WARNING('RequestCaptureDevices. Vivox is not supported')
-            callback([])
-            return
         if not self.isReady():
-            LOG_WARNING('RequestCaptureDevices. Vivox has not been initialized')
+            LOG_WARNING('RequestCaptureDevices. Voip has not been initialized')
             callback([])
             return
         options = self.settingsCore.options
@@ -111,31 +107,48 @@ class VOIPChatController(IVOIPChatController):
     def enableCurrentChannel(self, isEnableChannel):
         VOIP.getVOIPManager().enableCurrentChannel(isEnableChannel)
 
+    def __subscribeToVoipCallbacks(self):
+        voipMgr = VOIP.getVOIPManager()
+        voipMgr.onInitialized += self.__initResponse
+        voipMgr.onFailedToConnect += self.__failedResponse
+        voipMgr.onCaptureDevicesUpdated += self.__captureDevicesResponse
+        voipMgr.onPlayerSpeaking += self.__onPlayerSpeaking
+        voipMgr.onJoinedChannel += self.__onJoinedChannel
+        voipMgr.onLeftChannel += self.__onLeftChannel
+        g_eventBus.addListener(GameEvent.TOGGLE_VOIP_CHANNEL_ENABLED, self.__onToggleChannelEnabled, scope=EVENT_BUS_SCOPE.BATTLE)
+
+    def __unsubscribeFromVoipCallbacks(self):
+        voipMgr = VOIP.getVOIPManager()
+        voipMgr.onInitialized -= self.__initResponse
+        voipMgr.onFailedToConnect -= self.__failedResponse
+        voipMgr.onCaptureDevicesUpdated -= self.__captureDevicesResponse
+        voipMgr.onPlayerSpeaking -= self.__onPlayerSpeaking
+        voipMgr.onJoinedChannel -= self.__onJoinedChannel
+        voipMgr.onLeftChannel -= self.__onLeftChannel
+        g_eventBus.removeListener(GameEvent.TOGGLE_VOIP_CHANNEL_ENABLED, self.__onToggleChannelEnabled, scope=EVENT_BUS_SCOPE.BATTLE)
+
     @adisp_process
     def __initialize(self):
         serverSettings = getattr(BigWorld.player(), 'serverSettings', {})
-        if serverSettings and 'voipDomain' in serverSettings:
-            domain = serverSettings['voipUserDomain']
-            server = serverSettings['voipDomain']
-        else:
-            domain = ''
-            server = ''
-        yield self.__initializeSettings(domain, server)
-        yield self.requestCaptureDevices(True)
+        voipSettings = serverSettings.get('voipSettings', {})
+        if not voipSettings or 'profile' not in voipSettings:
+            LOG_WARNING('Initialize. Voice chat not supported')
+            return
+        yield self.__initializeSettings(serverSettings['voipSettings'])
 
     @adisp_async
-    def __initializeSettings(self, domain, server, callback):
-        if self.isReady():
+    def __initializeSettings(self, voipSettings, callback):
+        activeProfile = voipSettings['profile']
+        if self.isReady() and activeProfile == VOIP.getVOIPManager().getAPI():
             self.__applyUserSettings()
             callback(True)
             return
-        if domain == '':
-            LOG_WARNING('Initialize. Vivox is not supported')
+        if activeProfile == '':
+            VOIP.getVOIPManager().destroy()
+            LOG_WARNING('Initialize. Voice chat not supported')
             return
         self.__callbacks.append(callback)
-        voipMgr = VOIP.getVOIPManager()
-        if voipMgr.isNotInitialized():
-            voipMgr.initialize(domain, server)
+        VOIP.getVOIPManager().initialize(voipSettings)
         self.__applyUserSettings()
 
     def __applyUserSettings(self):
@@ -165,6 +178,20 @@ class VOIPChatController(IVOIPChatController):
 
     def __onJoinedChannel(self, channel, isTestChannel, isRejoin):
         if self.isVOIPEnabled():
+            self.__isMediaEngineReady = False
+            self.__warningShown = False
+
+            def setMediaEngineReady():
+                if self.__mediaEngineWarningTimer is None:
+                    return
+                else:
+                    self.__mediaEngineWarningTimer = None
+                    self.__isMediaEngineReady = True
+                    if self.__warningShown:
+                        self.__showVoipReadyMessage()
+                    return
+
+            self.__mediaEngineWarningTimer = BigWorld.callback(MEDIA_ENGINE_DELAY, setMediaEngineReady)
             keyCode = CommandMapping.g_instance.get('CMD_VOICECHAT_MUTE')
             if BigWorld.isKeyDown(keyCode):
                 VOIP.getVOIPManager().setMicMute(False)
@@ -172,7 +199,9 @@ class VOIPChatController(IVOIPChatController):
 
     def __onLeftChannel(self, channel, wasTestChannel):
         if self.isVOIPEnabled():
+            self.__mediaEngineWarningTimer = None
             g_messengerEvents.voip.onChannelLeft(channel, wasTestChannel)
+        return
 
     def __onToggleChannelEnabled(self, event):
         voipMgr = VOIP.getVOIPManager()
@@ -198,6 +227,16 @@ class VOIPChatController(IVOIPChatController):
                 messageRId = R.strings.messenger.client.dynSquad.disableVOIP()
             msg = backport.text(messageRId, keyName=getReadableKey(CommandMapping.CMD_VOICECHAT_ENABLE))
         g_messengerEvents.onWarningReceived(ClientActionMessage(msg=msg, type_=ACTION_MESSAGE_TYPE.ERROR))
+
+    @staticmethod
+    def __showInitMessage():
+        msg = backport.text(R.strings.messenger.voip.initInProgress())
+        g_messengerEvents.onWarningReceived(ClientActionMessage(msg=msg, type_=ACTION_MESSAGE_TYPE.ERROR))
+
+    @staticmethod
+    def __showVoipReadyMessage():
+        msg = backport.text(R.strings.messenger.voip.ready())
+        g_messengerEvents.onRankedVOIPNotificationReceived(ClientActionMessage(msg=msg, type_=ACTION_MESSAGE_TYPE.PLAYER))
 
     @staticmethod
     def __showComp7Message(enable):

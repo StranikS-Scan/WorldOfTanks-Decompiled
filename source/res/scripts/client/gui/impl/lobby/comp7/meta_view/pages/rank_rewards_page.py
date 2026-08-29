@@ -15,14 +15,12 @@ from gui.impl.gen.view_models.views.lobby.comp7.meta_view.pages.rank_rewards_mod
 from gui.impl.gen.view_models.views.lobby.comp7.meta_view.pages.rank_rewards_item_model import RankRewardsItemModel
 from gui.impl.gen.view_models.views.lobby.comp7.meta_view.progression_item_base_model import Rank
 from gui.impl.gui_decorators import args2params
-from gui.impl.lobby.comp7.meta_view.meta_view_helper import setRankData, setDivisionData, getRankDivisions
+from gui.impl.lobby.comp7.meta_view.meta_view_helper import setRankData, setDivisionsData, getRankDivisions
 from gui.impl.lobby.comp7.meta_view.pages import PageSubModelPresenter
-from gui.impl.lobby.comp7 import comp7_model_helpers, comp7_shared
+from gui.impl.lobby.comp7 import comp7_shared
 from gui.impl.lobby.comp7.comp7_bonus_packer import packRanksRewardsQuestBonuses
 from gui.impl.lobby.comp7.comp7_quest_helpers import parseComp7RanksQuestID, parseComp7PeriodicQuestID, isComp7VisibleQuest, getComp7QuestType
 from gui.impl.lobby.comp7.tooltips.general_rank_tooltip import GeneralRankTooltip
-from gui.impl.lobby.comp7.tooltips.sixth_rank_tooltip import SixthRankTooltip
-from gui.impl.lobby.comp7.tooltips.fifth_rank_tooltip import FifthRankTooltip
 from gui.impl.lobby.tooltips.additional_rewards_tooltip import AdditionalRewardsTooltip
 from gui.shared import event_dispatcher as shared_events
 from gui.shared.event_dispatcher import showStylePreview
@@ -36,7 +34,7 @@ from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared.gui_items import IGuiItemsFactory
-from gui.Scaleform.daapi.view.lobby.comp7.comp7_profile_helper import COMP7_SEASON_NUMBERS
+from comp7_common import COMP7_SEASON_NUMBERS
 from gui.Scaleform.daapi.view.lobby.store.browser.shop_helpers import getComp7ProductsUrl
 from gui.shared.event_dispatcher import showShop
 if typing.TYPE_CHECKING:
@@ -100,12 +98,11 @@ class RankRewardsPage(PageSubModelPresenter):
             params = {'rank': Rank(event.getArgument('rank')),
              'divisions': event.getArgument('divisions'),
              'from': event.getArgument('from'),
-             'to': event.getArgument('to')}
+             'to': event.getArgument('to'),
+             'elitePercent': event.getArgument('elitePercent')}
             return GeneralRankTooltip(params=params)
-        elif contentID == R.views.lobby.comp7.tooltips.FifthRankTooltip():
-            return FifthRankTooltip()
         else:
-            return SixthRankTooltip() if contentID == R.views.lobby.comp7.tooltips.SixthRankTooltip() else None
+            return None
 
     def initialize(self, index=None, *args, **kwargs):
         super(RankRewardsPage, self).initialize()
@@ -113,7 +110,6 @@ class RankRewardsPage(PageSubModelPresenter):
             index = RankRewardsModel.DEFAULT_ITEM_INDEX
         with self.viewModel.transaction() as tx:
             tx.setInitialItemIndex(index)
-            comp7_model_helpers.setElitePercentage(tx)
             self.__updateQuests()
             self.__setRanksData(tx)
             self.__setQualificationState(tx.qualificationModel)
@@ -152,7 +148,7 @@ class RankRewardsPage(PageSubModelPresenter):
         divisions = getRankDivisions(rank, self.ranksConfig)
         division = first(divisions)
         setRankData(itemModel, self.viewModel, rank, self.ranksConfig)
-        setDivisionData(itemModel, divisions)
+        setDivisionsData(itemModel, divisions)
         self.__setRankRewards(itemModel, division)
 
     def __setRankRewards(self, itemModel, division):
@@ -179,7 +175,6 @@ class RankRewardsPage(PageSubModelPresenter):
 
     def __onRanksConfigChanged(self):
         with self.viewModel.transaction() as tx:
-            comp7_model_helpers.setElitePercentage(tx)
             self.__setRanksData(tx)
 
     def __onRankUpdated(self, *_, **__):

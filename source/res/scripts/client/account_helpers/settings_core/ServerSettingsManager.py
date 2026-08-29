@@ -4,7 +4,7 @@ import weakref
 from collections import namedtuple
 from account_helpers.settings_core import settings_constants, longToInt32
 from account_helpers.settings_core.migrations import migrateToVersion
-from account_helpers.settings_core.settings_constants import VERSION, GuiSettingsBehavior, OnceOnlyHints, SPGAim, CONTOUR, NewYearStorageKeys
+from account_helpers.settings_core.settings_constants import VERSION, GuiSettingsBehavior, OnceOnlyHints, SPGAim, CONTOUR, NewYearStorageKeys, WTLootBoxesViewedKeys
 from adisp import adisp_process, adisp_async
 from debug_utils import LOG_ERROR, LOG_DEBUG
 from gui.battle_pass.battle_pass_helpers import updateBattlePassSettings
@@ -82,6 +82,7 @@ class SETTINGS_SECTIONS(CONST_CONTAINER):
     BATTLE_CONTEXT_HINTS_GROUP = (BATTLE_CONTEXT_HINTS, BATTLE_CONTEXT_HINTS_2, BATTLE_CONTEXT_HINTS_3)
     ONCE_ONLY_HINTS_GROUP = (ONCE_ONLY_HINTS, ONCE_ONLY_HINTS_2, ONCE_ONLY_HINTS_3)
     LIMITED_UI_GROUP = (LIMITED_UI_1, LIMITED_UI_2)
+    LOOT_BOX_VIEWED = 'LOOT_BOX_VIEWED'
 
 
 class UI_STORAGE_KEYS(CONST_CONTAINER):
@@ -148,6 +149,8 @@ class BATTLE_CONTEXT_HINTS(CONST_CONTAINER):
     GUNNER_DAMAGE_MED_KIT = 'GunnerDamageMedKit'
     LOADER_DAMAGE_MED_KIT = 'LoaderDamageMedKit'
     RADIOMAN_DAMAGE_MED_KIT = 'RadiomanDamageMedKit'
+    AMMO_TYPE_AVAILABLE = 'AmmoTypeAvailable'
+    AMMO_TYPE_SWITCH = 'AmmoTypeSwitch'
 
 
 class ServerSettingsManager(object):
@@ -218,7 +221,8 @@ class ServerSettingsManager(object):
                                          GAME.SHOW_THERMAL_VISION_SECTOR_ON_MAP: 6,
                                          GAME.ENABLE_THERMAL_VISION_EFFECT: 7,
                                          GAME.ENABLE_THERMAL_VISION_SECTOR_EFFECT: 8,
-                                         GAME.HANGAR_CREW_WIDGET: 9}, offsets={GAME.CUSTOMIZATION_DISPLAY_TYPE: Offset(2, 3 << 2)}),
+                                         GAME.HANGAR_CREW_WIDGET: 9,
+                                         GAME.ENABLE_BATTLE_CONTEXT_HINTS: 10}, offsets={GAME.CUSTOMIZATION_DISPLAY_TYPE: Offset(2, 3 << 2)}),
      SETTINGS_SECTIONS.GAMEPLAY: Section(masks={}, offsets={GAME.GAMEPLAY_MASK: Offset(0, 65535)}),
      SETTINGS_SECTIONS.GRAPHICS: Section(masks={GAME.LENS_EFFECT: 1}, offsets={}),
      SETTINGS_SECTIONS.SOUND: Section(masks={}, offsets={SOUND.ALT_VOICES: Offset(0, 255)}),
@@ -612,7 +616,8 @@ class ServerSettingsManager(object):
                                        BATTLE_EVENTS.RECEIVED_DAMAGE: 15,
                                        BATTLE_EVENTS.RECEIVED_CRITS: 16,
                                        BATTLE_EVENTS.ENEMY_ASSIST_STUN: 17,
-                                       BATTLE_EVENTS.ENEMIES_STUN: 18}, offsets={}),
+                                       BATTLE_EVENTS.ENEMIES_STUN: 18,
+                                       BATTLE_EVENTS.HEALTH_ADDED: 20}, offsets={}),
      SETTINGS_SECTIONS.BATTLE_BORDER_MAP: Section(masks={}, offsets={BATTLE_BORDER_MAP.MODE_SHOW_BORDER: Offset(0, 3),
                                            BATTLE_BORDER_MAP.TYPE_BORDER: Offset(2, 3 << 2)}),
      SETTINGS_SECTIONS.SIXTH_SENSE: Section(masks={}, offsets={SIXTH_SENSE.INDICATOR_SIZE: Offset(0, 3),
@@ -989,7 +994,11 @@ class ServerSettingsManager(object):
                                                 BATTLE_CONTEXT_HINTS.DRIVER_DAMAGE_MED_KIT: Offset(23, 7 << 23),
                                                 BATTLE_CONTEXT_HINTS.GUNNER_DAMAGE_MED_KIT: Offset(26, 7 << 26),
                                                 BATTLE_CONTEXT_HINTS.LOADER_DAMAGE_MED_KIT: Offset(29, 7 << 29)}),
-     SETTINGS_SECTIONS.BATTLE_CONTEXT_HINTS_3: Section(masks={}, offsets={BATTLE_CONTEXT_HINTS.RADIOMAN_DAMAGE_MED_KIT: Offset(0, 7)})}
+     SETTINGS_SECTIONS.BATTLE_CONTEXT_HINTS_3: Section(masks={}, offsets={BATTLE_CONTEXT_HINTS.RADIOMAN_DAMAGE_MED_KIT: Offset(0, 7),
+                                                BATTLE_CONTEXT_HINTS.AMMO_TYPE_AVAILABLE: Offset(3, 7 << 3),
+                                                BATTLE_CONTEXT_HINTS.AMMO_TYPE_SWITCH: Offset(6, 127 << 6)}),
+     SETTINGS_SECTIONS.LOOT_BOX_VIEWED: Section(masks={}, offsets={WTLootBoxesViewedKeys.HUNTER_LAST_VIEWED: Offset(0, 65535),
+                                         WTLootBoxesViewedKeys.BOSS_LAST_VIEWED: Offset(16, 4294901760L)})}
     AIM_MAPPING = {'net': 1,
      'netType': 1,
      'centralTag': 1,
@@ -1454,6 +1463,7 @@ class ServerSettingsManager(object):
          SETTINGS_SECTIONS.CONTOUR: {},
          SETTINGS_SECTIONS.ROYALE_CAROUSEL_FILTER_1: {},
          SETTINGS_SECTIONS.ROYALE_CAROUSEL_FILTER_2: {},
+         'lootboxViewed': {},
          'clear': {},
          'delete': [],
          SETTINGS_SECTIONS.LIMITED_UI_1: {},
@@ -1599,6 +1609,9 @@ class ServerSettingsManager(object):
         clearBPStorage = clear.get('battlePassStorage', 0)
         if BPStorage or clearBPStorage:
             settings[SETTINGS_SECTIONS.BATTLE_PASS_STORAGE] = self._buildSectionSettings(SETTINGS_SECTIONS.BATTLE_PASS_STORAGE, BPStorage) ^ clearBPStorage
+        lootboxesViewedStorage = data.get('lootboxViewed', {})
+        if lootboxesViewedStorage:
+            settings[SETTINGS_SECTIONS.LOOT_BOX_VIEWED] = self._buildSectionSettings(SETTINGS_SECTIONS.LOOT_BOX_VIEWED, lootboxesViewedStorage)
         spgAimData = data.get('spgAim', {})
         clearSpgAimData = clear.get(SETTINGS_SECTIONS.SPG_AIM, 0)
         if spgAimData or clearSpgAimData:

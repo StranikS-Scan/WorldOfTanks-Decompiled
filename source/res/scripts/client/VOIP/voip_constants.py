@@ -3,5 +3,6 @@
 
 
 class VOIP_SUPPORTED_API(object):
-    VIVOX = 'VIVOX'
+    VIVOX = 'vivox'
     YY = 'YY'
+    WebRTC = 'webrtc'

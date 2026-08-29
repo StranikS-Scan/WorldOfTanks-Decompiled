@@ -1,0 +1,54 @@
+<Rush_BlackEdition_Legend_Style_145_name.xml>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	MT 2D styles universal 1000g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <style>
+      <id>	31600	</id>
+      <texture>	gui/maps/vehicles/styles/Rush_BlackEdition_Legend_Style_145.png	</texture>
+      <outfits>
+        <outfit>
+          <season>	all	</season>
+          <modifications>
+            <item>	4	</item>
+          </modifications>
+          <paints>
+            <item>
+              <id>	31553	</id>
+              <appliedTo>	20753	</appliedTo>
+            </item>
+          </paints>
+          <camouflages>
+            <item>
+              <id>	31568	</id>
+              <patternSize>	1	</patternSize>
+              <appliedTo>	4368	</appliedTo>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <insignias>
+            <item>
+              <id>	31063	</id>
+              <appliedTo>	4096	</appliedTo>
+            </item>
+          </insignias>
+          <projection_decals>
+            <item>
+              <id>	31516	</id>
+              <tags>	safe front formfactor_square	</tags>
+            </item>
+          </projection_decals>
+        </outfit>
+      </outfits>
+      <userString>	#vehicle_customization:Rush_BlackEdition_Legend_Style_145/name	</userString>
+      <description>	#vehicle_customization:Rush_BlackEdition_Legend_Style_145/description	</description>
+      <longDescriptionSpecial>	#vehicle_customization:Rush_BlackEdition_Legend_Style_145/longDescription	</longDescriptionSpecial>
+    </style>
+  </itemGroup>
+</Rush_BlackEdition_Legend_Style_145_name.xml>

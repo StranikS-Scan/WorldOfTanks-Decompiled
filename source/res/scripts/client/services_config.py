@@ -26,10 +26,13 @@ def getClientServicesConfig(manager):
     from skeletons.map_activities import IMapActivities
     from skeletons.dynamic_objects_cache import IBattleDynamicObjectsCache
     from skeletons.vehicle_appearance_cache import IAppearanceCache
+    import prebattle_vehicle
+    from skeletons.prebattle_vehicle import IPrebattleVehicle
     manager.addInstance(IConnectionManager, connection_mgr.ConnectionManager(), finalizer='fini')
     manager.addInstance(IMapActivities, MapActivities.MapActivities(), finalizer='destroy')
     manager.addInstance(IBattleDynamicObjectsCache, dyn_objects_cache.BattleDynamicObjectsCache(), finalizer='destroy')
     manager.addInstance(IAppearanceCache, AppearanceCache(), finalizer='clear')
+    manager.addInstance(IPrebattleVehicle, prebattle_vehicle.PrebattleVehicle(), finalizer='fini')
     manager.addConfig(account_helpers.getAccountHelpersConfig)
     manager.addConfig(gameplay.getGameplayConfig)
     manager.addConfig(festivity.getFestivityConfig)

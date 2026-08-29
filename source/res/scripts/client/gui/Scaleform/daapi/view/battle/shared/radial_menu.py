@@ -20,6 +20,7 @@ from gui.shared.utils.key_mapping import getScaleformKey, BW_TO_SCALEFORM
 from helpers import dependency
 from helpers.CallbackDelayer import CallbackDelayer
 from skeletons.gui.battle_session import IBattleSessionProvider
+from uilogging.chat_hotkey.loggers import ChatHotkeyLogger
 _logger = logging.getLogger(__name__)
 _SHORTCUTS_IN_GROUP = 6
 Shortcut = namedtuple('Shortcut', ('title', 'action', 'icon', 'groups', 'bState', 'indexInGroup'))
@@ -126,6 +127,7 @@ class RadialMenu(RadialMenuMeta, BattleGUIKeyHandler, CallbackDelayer):
         self._crosshairData = None
         self.__stateData = None
         self.__isVisible = False
+        self.__logger = ChatHotkeyLogger()
         return
 
     def handleEscKey(self, isDown):
@@ -139,6 +141,7 @@ class RadialMenu(RadialMenuMeta, BattleGUIKeyHandler, CallbackDelayer):
             self.__setVisibility(False)
             return
         else:
+            self.__logger.logCommandSelected(action, self._crosshairData.targetMarkerType)
             if action == BATTLE_CHAT_COMMAND_NAMES.REPLY:
                 if self._crosshairData.replyState == ReplyState.CAN_CONFIRM and self._crosshairData.replyToAction in ONE_SHOT_COMMANDS_TO_REPLIES.keys():
                     chatCommands.handleChatCommand(ONE_SHOT_COMMANDS_TO_REPLIES[self._crosshairData.replyToAction], targetID=self._crosshairData.targetID)

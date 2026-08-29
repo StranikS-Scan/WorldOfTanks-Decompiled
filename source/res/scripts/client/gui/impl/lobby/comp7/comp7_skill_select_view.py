@@ -20,6 +20,7 @@ from gui.impl.lobby.comp7.tooltips.comp7_charge_tooltip import Comp7ChargeToolti
 from gui.impl.lobby.comp7.tooltips.comp7_skill_tooltip import Comp7SkillTooltip
 from gui.impl.pub import ViewImpl, WindowImpl
 from gui.impl.wrappers.function_helpers import replaceNoneKwargsModel
+from gui.prb_control.entities.listener import IGlobalListener
 from gui.shared import EVENT_BUS_SCOPE, events
 from gui.shared.gui_items.processors.comp7 import SetSkillProcessor
 from gui.shared.utils.scheduled_notifications import PeriodicNotifier
@@ -37,7 +38,7 @@ _R_ICON = R.images.gui.maps.icons.roleSkills.c_128x128
 _SUBMIT_ID = 'submit'
 _CANCEL_ID = 'cancel'
 
-class Comp7SkillSelectView(ViewImpl):
+class Comp7SkillSelectView(ViewImpl, IGlobalListener):
     __slots__ = ('__periodicNotifier', '__equippedSkill', '__selectedSkill')
     __itemsCache = dependency.descriptor(IItemsCache)
     __comp7Controller = dependency.descriptor(IComp7Controller)
@@ -61,8 +62,13 @@ class Comp7SkillSelectView(ViewImpl):
             return Comp7SkillTooltip(intCD)
         return Comp7ChargeTooltip() if contentID == R.views.lobby.comp7.tooltips.Comp7ChargeTooltip() else super(Comp7SkillSelectView, self).createToolTipContent(event=event, contentID=contentID)
 
+    def onPrbEntitySwitched(self):
+        if not self.__comp7Controller.isComp7PrbActive():
+            self.destroyWindow()
+
     def _onLoading(self, *args, **kwargs):
         super(Comp7SkillSelectView, self)._onLoading(*args, **kwargs)
+        self.startGlobalListening()
         self.__setViewData()
 
     def _onLoaded(self, *args, **kwargs):
@@ -72,6 +78,7 @@ class Comp7SkillSelectView(ViewImpl):
     def _finalize(self):
         self.__periodicNotifier.stopNotification()
         self.__periodicNotifier.clear()
+        self.stopGlobalListening()
         super(Comp7SkillSelectView, self)._finalize()
 
     def _getEvents(self):

@@ -1,0 +1,18 @@
+<WTVehicleNitro.def>
+  <Properties>
+    <equipmentID>
+      <Type>	UINT16	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <Default>	0	</Default>
+    </equipmentID>
+    <isNitroActive>
+      <Type>	BOOL	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <Default>	0	</Default>
+    </isNitroActive>
+  </Properties>
+  <ofEntity>
+    <Vehicle></Vehicle>
+  </ofEntity>
+  <DefaultKeyName>	wtNitro	</DefaultKeyName>
+</WTVehicleNitro.def>

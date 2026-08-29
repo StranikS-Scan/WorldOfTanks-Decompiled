@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/tooltips/advanced.py
 import typing
-from constants import SHELL_TYPES
+from constants import SHELL_TYPES, QUEUE_TYPE
 from gui.Scaleform.genConsts.BLOCKS_TOOLTIP_TYPES import BLOCKS_TOOLTIP_TYPES
 from gui.Scaleform.genConsts.FITTING_TYPES import FITTING_TYPES
 from gui.Scaleform.genConsts.STORE_CONSTANTS import STORE_CONSTANTS
@@ -13,13 +13,15 @@ from gui.impl import backport
 from gui.impl.backport.backport_tooltip import DecoratedTooltipWindow
 from gui.impl.gen import R
 from gui.prb_control.settings import PREBATTLE_ACTION_NAME
+from gui.prb_control.dispatcher import g_prbLoader
 from gui.shared.formatters import text_styles
-from gui.shared.gui_items.artefacts import OptionalDevice
+from gui.shared.gui_items.artefacts import OptionalDevice, Equipment
 from gui.shared.tooltips import formatters, ToolTipBaseData
 from gui.shared.tooltips.common import BlocksTooltipData
 from helpers import dependency
 from helpers import i18n
 from skeletons.account_helpers.settings_core import ISettingsCore
+from fun_random.gui.fun_gui_constants import DISABLED_ADVANCED_TOOLTIPS_ITEMS_CD
 if typing.TYPE_CHECKING:
     from gui.shared.gui_items.vehicle_modules import Shell
 DISABLED_ITEMS_ID = 12793
@@ -77,15 +79,13 @@ class BaseAdvancedTooltip(BlocksTooltipData):
         LOG_DEBUG('packBlocks::', args, kwargs, self.context)
         self._item = self.context.buildItem(*args, **kwargs)
         items = super(BaseAdvancedTooltip, self)._packBlocks()
-        disabledForWheeled = False
-        if self._item is not None:
-            if isinstance(self._item, OptionalDevice):
-                disabledForWheeled = self._item.intCD == DISABLED_ITEMS_ID
-        if disabledForWheeled:
+        entity = g_prbLoader.getDispatcher().getEntity()
+        disableForWheeled = isinstance(self._item, OptionalDevice) and self._item.intCD == DISABLED_ITEMS_ID
+        disableAdvAnim = isinstance(self._item, Equipment) and entity.getEntityType() == QUEUE_TYPE.FUN_RANDOM and self._item.intCD in DISABLED_ADVANCED_TOOLTIPS_ITEMS_CD
+        if disableForWheeled or disableAdvAnim:
             return []
-        else:
-            items.extend(self._getBlocksList(*args, **kwargs))
-            return items
+        items.extend(self._getBlocksList(*args, **kwargs))
+        return items
 
     def _getBlocksList(self, *args, **kwargs):
         pass
@@ -340,6 +340,8 @@ MODULE_MOVIES = {'largeRepairkit': 'consumablesRepairKitBig',
  THERMAL_VISION: 'thermalVision',
  'modernizedDamageVentilation': 'equipmentExperimentalDamageVentilation',
  'modernizedTankRammerSights': 'equipmentExperimentalTankRammerSights',
+ 'wt_largeMedkit': 'consumablesFirstAidWt',
+ 'wt_largeRepairkit': 'consumablesRepairKitBig',
  'xpDirectivesBattleBooster1': 'xpDirectivesBattleBooster',
  'xpDirectivesBattleBooster2': 'xpDirectivesBattleBooster',
  'xpDirectivesBattleBooster3': 'xpDirectivesBattleBooster',

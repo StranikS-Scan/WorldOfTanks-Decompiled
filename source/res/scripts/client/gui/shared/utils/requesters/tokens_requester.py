@@ -101,6 +101,13 @@ class TokensRequester(AbstractSyncDataRequester, ITokensRequester):
     def getLootBoxByTokenID(self, tokenID):
         return self.__lootBoxCache.get(tokenID)
 
+    def getLootBoxByType(self, typeName):
+        for box in self.__lootBoxCache.itervalues():
+            if box.getType() == typeName:
+                return box
+
+        return None
+
     def getLootBoxByID(self, boxID):
         return self.__lootBoxCache.get(LOOTBOX_TOKEN_PREFIX + str(boxID))
 

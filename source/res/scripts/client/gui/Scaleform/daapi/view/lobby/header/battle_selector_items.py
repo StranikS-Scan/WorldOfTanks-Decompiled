@@ -34,7 +34,7 @@ from gui.shared.formatters import text_styles, icons
 from gui.shared.utils import SelectorBattleTypesUtils as selectorUtils
 from gui.shared.utils.functions import makeTooltip
 from helpers import time_utils, dependency, int2roman
-from skeletons.gui.game_control import IRankedBattlesController, IBattleRoyaleController, IBattleRoyaleTournamentController, IMapboxController, IMapsTrainingController, IEpicBattleMetaGameController, IEventBattlesController, IComp7Controller, IBootcampController, ILimitedUIController, IBRProgressionOnTokensController
+from skeletons.gui.game_control import IRankedBattlesController, IBattleRoyaleController, IBattleRoyaleTournamentController, IMapboxController, IMapsTrainingController, IEpicBattleMetaGameController, IEventBattlesController, IComp7Controller, IBootcampController, ILimitedUIController
 from skeletons.gui.lobby_context import ILobbyContext
 if typing.TYPE_CHECKING:
     from skeletons.gui.game_control import ISeasonProvider
@@ -708,20 +708,11 @@ class _RankedItem(_SelectorItem):
 class _BattleRoyaleItem(SelectorItem):
     __battleRoyaleController = dependency.descriptor(IBattleRoyaleController)
     __bootcampController = dependency.descriptor(IBootcampController)
-    __brProgression = dependency.descriptor(IBRProgressionOnTokensController)
 
     def __init__(self, label, data, order, selectorType=None, isVisible=True):
         super(_BattleRoyaleItem, self).__init__(label, data, order, selectorType, isVisible)
         self._isVisible = self.__getIsVisible()
         self.__isFrozen = False
-
-    def getSmallIcon(self):
-        birthdayPostfix = self.__brProgression.getBirthdayIconPostfix()
-        return backport.image(_R_ICONS.battleTypes.c_40x40.dyn(self._data + birthdayPostfix)())
-
-    def getLargerIcon(self):
-        birthdayPostfix = self.__brProgression.getBirthdayIconPostfix()
-        return backport.image(_R_ICONS.battleTypes.c_64x64.dyn(self._data + birthdayPostfix)())
 
     def isRandomBattle(self):
         return True

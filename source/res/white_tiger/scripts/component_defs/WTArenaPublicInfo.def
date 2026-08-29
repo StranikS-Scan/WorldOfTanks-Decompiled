@@ -1,0 +1,31 @@
+<WTArenaPublicInfo.def>
+  <Properties>
+    <generatorCounter>
+      <Type>	UINT8	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <Default>	0	</Default>
+    </generatorCounter>
+    <generatorMax>
+      <Type>	UINT8	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </generatorMax>
+    <generatorIsBattleStage>
+      <Type>	BOOL	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </generatorIsBattleStage>
+    <bossDebuffFinishTime>
+      <Type>	FLOAT32	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <Default>	0	</Default>
+    </bossDebuffFinishTime>
+    <hyperionCharge>
+      <Type>	UINT16	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <Default>	0	</Default>
+    </hyperionCharge>
+  </Properties>
+  <ofEntity>
+    <ArenaInfo></ArenaInfo>
+  </ofEntity>
+  <DefaultKeyName>	wtArenaPublicInfo	</DefaultKeyName>
+</WTArenaPublicInfo.def>

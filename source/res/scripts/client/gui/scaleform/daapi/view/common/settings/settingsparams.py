@@ -91,7 +91,7 @@ class SettingsParams(object):
             logPlayerSettingsBeforeChange()
         applyMethod = self.getApplyMethod(diff)
         self.settingsCore.applySettings(diff)
-        confirmators = self.settingsCore.applyStorages(restartApproved)
+        confirmators = self.settingsCore.applyStorages(restartApproved, force=False)
         self.settingsCore.confirmChanges(confirmators)
         if set(graphics.GRAPHICS_SETTINGS.ALL()) & set(diff.keys()):
             BigWorld.commitPendingGraphicsSettings()

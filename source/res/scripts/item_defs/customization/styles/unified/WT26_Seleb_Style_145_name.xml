@@ -1,0 +1,62 @@
+<WT26_Seleb_Style_145_name.xml>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <style>
+      <id>	31591	</id>
+      <texture>	gui/maps/vehicles/styles/WT26_Seleb_Style_145.png	</texture>
+      <outfits>
+        <outfit>
+          <season>	all	</season>
+          <modifications>
+            <item>	4	</item>
+          </modifications>
+          <paints>
+            <item>
+              <id>	31545	</id>
+              <appliedTo>	20753	</appliedTo>
+            </item>
+          </paints>
+          <camouflages>
+            <item>
+              <id>	31559	</id>
+              <patternSize>	1	</patternSize>
+              <appliedTo>	272	</appliedTo>
+              <palette>	0	</palette>
+            </item>
+            <item>
+              <id>	31560	</id>
+              <patternSize>	1	</patternSize>
+              <appliedTo>	4096	</appliedTo>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <projection_decals>
+            <item>
+              <id>	31502	</id>
+              <tags>	left safe formfactor_square	</tags>
+            </item>
+            <item>
+              <id>	31503	</id>
+              <tags>	safe right formfactor_square	</tags>
+            </item>
+            <item>
+              <id>	31504	</id>
+              <tags>	formfactor_rect1x2 front cover	</tags>
+            </item>
+          </projection_decals>
+        </outfit>
+      </outfits>
+      <userString>	#vehicle_customization:WT26_Seleb_Style_145/name	</userString>
+      <description>	#vehicle_customization:WT26_Seleb_Style_145/description	</description>
+      <longDescriptionSpecial>	#vehicle_customization:WT26_Seleb_Style_145/longDescription	</longDescriptionSpecial>
+    </style>
+    <priceGroup>	MT 2D styles universal 1000g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+  </itemGroup>
+</WT26_Seleb_Style_145_name.xml>

@@ -3,6 +3,8 @@
 import logging
 import typing
 from battle_modifiers_common import BattleParams
+from constants import QUEUE_TYPE
+from fun_random.gui.fun_gui_constants import MEDKIT_DURATION
 from gui.Scaleform import MENU
 from gui.Scaleform.genConsts.BLOCKS_TOOLTIP_TYPES import BLOCKS_TOOLTIP_TYPES
 from gui.Scaleform.genConsts.SLOT_HIGHLIGHT_TYPES import SLOT_HIGHLIGHT_TYPES
@@ -31,6 +33,7 @@ from skeletons.gui.game_control import IBootcampController, IWotPlusController, 
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.shared.gui_items import IGuiItemsFactory
+from gui.prb_control.dispatcher import g_prbLoader
 if typing.TYPE_CHECKING:
     from gui.shared.gui_items.Vehicle import Vehicle
 _logger = logging.getLogger(__name__)
@@ -970,20 +973,26 @@ class EffectsBlockConstructor(ModuleTooltipBlockConstructor):
         attribs = R.strings.artefacts.dyn(name)
         if not attribs:
             return block
-        kpiArgs = {kpi.name:text_styles.bonusAppliedText(getKpiValueString(kpi, kpi.value)) for kpi in module.getKpi(self.configuration.vehicle)}
-        onUseStr = backport.text((attribs.removingStun.onUse() if isRemovingStun else attribs.onUse()), **kpiArgs)
-        restrictionStr = backport.text(attribs.restriction())
-        alwaysStr = backport.text(attribs.always(), **kpiArgs)
-        if hasString(alwaysStr):
-            block.append(formatters.packTitleDescBlock(title=text_styles.middleTitle(backport.text(R.strings.tooltips.equipment.always())), desc=text_styles.main(alwaysStr), padding=formatters.packPadding(top=5)))
-        if hasString(onUseStr):
-            block.append(formatters.packTitleDescBlock(title=text_styles.middleTitle(backport.text(R.strings.tooltips.equipment.onUse())), desc=text_styles.main(onUseStr), padding=formatters.packPadding(top=5)))
-        if hasString(restrictionStr):
-            block.append(formatters.packTitleDescBlock(title=text_styles.middleTitle(backport.text(R.strings.tooltips.equipment.restriction())), desc=text_styles.main(restrictionStr), padding=formatters.packPadding(top=5)))
-        if block:
-            block[0]['padding']['top'] = -1
-            block[-1]['padding']['bottom'] = -5
-        return block
+        else:
+            kpiArgs = {kpi.name:text_styles.bonusAppliedText(getKpiValueString(kpi, kpi.value)) for kpi in module.getKpi(self.configuration.vehicle)}
+            onUseStr = backport.text((attribs.removingStun.onUse() if isRemovingStun else attribs.onUse()), **kpiArgs)
+            restrictionStr = backport.text(attribs.restriction())
+            alwaysStr = backport.text(attribs.always(), **kpiArgs)
+            if hasString(alwaysStr):
+                block.append(formatters.packTitleDescBlock(title=text_styles.middleTitle(backport.text(R.strings.tooltips.equipment.always())), desc=text_styles.main(alwaysStr), padding=formatters.packPadding(top=5)))
+            if hasString(onUseStr):
+                block.append(formatters.packTitleDescBlock(title=text_styles.middleTitle(backport.text(R.strings.tooltips.equipment.onUse())), desc=text_styles.main(onUseStr), padding=formatters.packPadding(top=5)))
+            if hasString(restrictionStr):
+                block.append(formatters.packTitleDescBlock(title=text_styles.middleTitle(backport.text(R.strings.tooltips.equipment.restriction())), desc=text_styles.main(restrictionStr), padding=formatters.packPadding(top=5)))
+            entity = g_prbLoader.getDispatcher().getEntity()
+            if entity.getEntityType() == QUEUE_TYPE.FUN_RANDOM:
+                duration = MEDKIT_DURATION.get(module.name, None)
+                if duration:
+                    block.append(formatters.packTextBlockData(text=backport.text(R.strings.fun_random.consumables.dyn(module.name)(), healDuration=duration), padding=formatters.packPadding(top=5)))
+            if block:
+                block[0]['padding']['top'] = -1
+                block[-1]['padding']['bottom'] = -5
+            return block
 
 
 class OptDeviceEffectsBlockConstructor(ModuleTooltipBlockConstructor):

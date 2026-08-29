@@ -12,10 +12,18 @@ class Rank(IntEnum):
     SIXTH = 1
 
 
+class Division(IntEnum):
+    A = 1
+    B = 2
+    C = 3
+    D = 4
+    E = 5
+
+
 class TableRecordModel(ViewModel):
     __slots__ = ()
 
-    def __init__(self, properties=8, commands=0):
+    def __init__(self, properties=9, commands=0):
         super(TableRecordModel, self).__init__(properties=properties, commands=commands)
 
     def getPosition(self):
@@ -66,6 +74,12 @@ class TableRecordModel(ViewModel):
     def setSpaID(self, value):
         self._setNumber(7, value)
 
+    def getDivision(self):
+        return Division(self._getNumber(8))
+
+    def setDivision(self, value):
+        self._setNumber(8, value.value)
+
     def _initialize(self):
         super(TableRecordModel, self)._initialize()
         self._addNumberProperty('position', 0)
@@ -76,3 +90,4 @@ class TableRecordModel(ViewModel):
         self._addStringProperty('clanTagColor', '')
         self._addNumberProperty('score', 0)
         self._addNumberProperty('spaID', 0)
+        self._addNumberProperty('division')

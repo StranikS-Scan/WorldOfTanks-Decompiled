@@ -76,6 +76,11 @@
           <destroyed>	vehicles/british/GB134_FV242B_Condor/_skins/GB134_FV242B_Condor_3Dst_01/crash/lod0/Hull.model	</destroyed>
           <exploded>	vehicles/british/GB134_FV242B_Condor/_skins/GB134_FV242B_Condor_3Dst_01/crash/lod0/Hull.model	</exploded>
         </GB134_FV242B_Condor_3Dst_01>
+        <GB134_FV242B_Condor_3Dst_02>
+          <undamaged>	vehicles/british/GB134_FV242B_Condor/_skins/GB134_FV242B_Condor_3Dst_02/normal/lod0/Hull.model	</undamaged>
+          <destroyed>	vehicles/british/GB134_FV242B_Condor/_skins/GB134_FV242B_Condor_3Dst_02/crash/lod0/Hull.model	</destroyed>
+          <exploded>	vehicles/british/GB134_FV242B_Condor/_skins/GB134_FV242B_Condor_3Dst_02/crash/lod0/Hull.model	</exploded>
+        </GB134_FV242B_Condor_3Dst_02>
       </sets>
     </models>
     <swinging>
@@ -99,9 +104,9 @@
       <slot>
         <slotType>	clan	</slotType>
         <slotId>	10000	</slotId>
-        <rayStart>	-0.699936 0.66634 2.613062	</rayStart>
-        <rayEnd>	-0.65623 0.483329 2.545261	</rayEnd>
-        <rayUp>	0.009135 0.349303 -0.936965	</rayUp>
+        <rayStart>	-0.641529 0.719618 2.47958	</rayStart>
+        <rayEnd>	-0.683905 0.536606 2.41094	</rayEnd>
+        <rayUp>	0.009135 0.349304 -0.936965	</rayUp>
         <size>	0.32	</size>
         <isUVProportional>	false	</isUVProportional>
       </slot>
@@ -906,6 +911,72 @@
         <showOn>	16	</showOn>
         <verticalMirror>	true	</verticalMirror>
       </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15079	</slotId>
+        <tags>	formfactor_square direction_left_to_right	</tags>
+        <compatibleModels>	GB134_FV242B_Condor_3Dst_02	</compatibleModels>
+        <position>	0.557621 1.715357 2.464301	</position>
+        <rotation>	0.236992 0.016072 2.869594	</rotation>
+        <scale>	0.3 0.3 0.3	</scale>
+        <showOn>	16	</showOn>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15080	</slotId>
+        <tags>	formfactor_square direction_left_to_right	</tags>
+        <compatibleModels>	GB134_FV242B_Condor_3Dst_02	</compatibleModels>
+        <position>	-1.509548 1.255858 4.247459	</position>
+        <rotation>	0.663779 -0 3.141593	</rotation>
+        <scale>	0.3 0.3 0.3	</scale>
+        <showOn>	16	</showOn>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15081	</slotId>
+        <tags>	formfactor_square direction_left_to_right	</tags>
+        <compatibleModels>	GB134_FV242B_Condor_3Dst_02	</compatibleModels>
+        <position>	-1.966641 1.116135 -2.78322	</position>
+        <rotation>	1.570796 0.970031 -0.709765	</rotation>
+        <scale>	0.3 0.3 0.3	</scale>
+        <showOn>	16	</showOn>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15082	</slotId>
+        <tags>	formfactor_square direction_left_to_right	</tags>
+        <compatibleModels>	GB134_FV242B_Condor_3Dst_02	</compatibleModels>
+        <position>	1.967 1.116135 -2.78322	</position>
+        <rotation>	1.570796 -0.833534 0.829501	</rotation>
+        <scale>	0.3 0.3 0.3	</scale>
+        <showOn>	16	</showOn>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15083	</slotId>
+        <tags>	formfactor_square direction_left_to_right	</tags>
+        <compatibleModels>	GB134_FV242B_Condor_3Dst_02	</compatibleModels>
+        <position>	-1.462829 1.274846 -4.150631	</position>
+        <rotation>	2.472526 -0.000005 -0.049283	</rotation>
+        <scale>	0.3 0.3 0.3	</scale>
+        <showOn>	16	</showOn>
+      </slot>
+      <slot>
+        <slotType>	projectionDecal	</slotType>
+        <slotId>	15084	</slotId>
+        <tags>	formfactor_square direction_left_to_right	</tags>
+        <compatibleModels>	GB134_FV242B_Condor_3Dst_02	</compatibleModels>
+        <position>	1.465121 1.274846 -4.150631	</position>
+        <rotation>	2.472526 -0.000005 -0.049283	</rotation>
+        <scale>	0.3 0.3 0.3	</scale>
+        <showOn>	16	</showOn>
+      </slot>
+      <slot>
+        <slotType>	attachment	</slotType>
+        <slotId>	18000	</slotId>
+        <position>	0 0 0	</position>
+        <rotation>	0 0 0	</rotation>
+      </slot>
     </customizationSlots>
     <customization>
       <customizableVehicleAreas>
@@ -953,6 +1024,11 @@
             <destroyed>	vehicles/british/GB134_FV242B_Condor/_skins/GB134_FV242B_Condor_3Dst_01/crash/lod0/Chassis.model	</destroyed>
             <exploded>	vehicles/british/GB134_FV242B_Condor/_skins/GB134_FV242B_Condor_3Dst_01/crash/lod0/Chassis.model	</exploded>
           </GB134_FV242B_Condor_3Dst_01>
+          <GB134_FV242B_Condor_3Dst_02>
+            <undamaged>	vehicles/british/GB134_FV242B_Condor/_skins/GB134_FV242B_Condor_3Dst_02/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/british/GB134_FV242B_Condor/_skins/GB134_FV242B_Condor_3Dst_02/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/british/GB134_FV242B_Condor/_skins/GB134_FV242B_Condor_3Dst_02/crash/lod0/Chassis.model	</exploded>
+          </GB134_FV242B_Condor_3Dst_02>
         </sets>
       </models>
       <traces>
@@ -2247,6 +2323,28 @@
               <size>	0.6	</size>
               <isUVProportional>	false	</isUVProportional>
             </slot>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	49004	</slotId>
+              <rayStart>	-0.22 0 3.79	</rayStart>
+              <rayEnd>	-0.22 0 4.17	</rayEnd>
+              <rayUp>	0.15 0 0	</rayUp>
+              <applyToFabric>	false	</applyToFabric>
+              <compatibleModels>	GB134_FV242B_Condor_3Dst_02	</compatibleModels>
+              <size>	0.38	</size>
+              <isUVProportional>	false	</isUVProportional>
+            </slot>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	49005	</slotId>
+              <rayStart>	0.22 0 3.79	</rayStart>
+              <rayEnd>	0.22 0 4.17	</rayEnd>
+              <rayUp>	0.15 0 0	</rayUp>
+              <applyToFabric>	false	</applyToFabric>
+              <compatibleModels>	GB134_FV242B_Condor_3Dst_02	</compatibleModels>
+              <size>	0.38	</size>
+              <isUVProportional>	false	</isUVProportional>
+            </slot>
           </customizationSlots>
           <customization>
             <customizableVehicleAreas>
@@ -2264,6 +2362,11 @@
                 <destroyed>	vehicles/british/GB134_FV242B_Condor/_skins/GB134_FV242B_Condor_3Dst_01/crash/lod0/Gun_01.model	</destroyed>
                 <exploded>	vehicles/british/GB134_FV242B_Condor/_skins/GB134_FV242B_Condor_3Dst_01/crash/lod0/Gun_01.model	</exploded>
               </GB134_FV242B_Condor_3Dst_01>
+              <GB134_FV242B_Condor_3Dst_02>
+                <undamaged>	vehicles/british/GB134_FV242B_Condor/_skins/GB134_FV242B_Condor_3Dst_02/normal/lod0/Gun_01.model	</undamaged>
+                <destroyed>	vehicles/british/GB134_FV242B_Condor/_skins/GB134_FV242B_Condor_3Dst_02/crash/lod0/Gun_01.model	</destroyed>
+                <exploded>	vehicles/british/GB134_FV242B_Condor/_skins/GB134_FV242B_Condor_3Dst_02/crash/lod0/Gun_01.model	</exploded>
+              </GB134_FV242B_Condor_3Dst_02>
             </sets>
           </models>
           <hitTester>
@@ -2306,6 +2409,11 @@
             <destroyed>	vehicles/british/GB134_FV242B_Condor/_skins/GB134_FV242B_Condor_3Dst_01/crash/lod0/Turret_01.model	</destroyed>
             <exploded>	vehicles/british/GB134_FV242B_Condor/_skins/GB134_FV242B_Condor_3Dst_01/crash/lod0/Turret_01.model	</exploded>
           </GB134_FV242B_Condor_3Dst_01>
+          <GB134_FV242B_Condor_3Dst_02>
+            <undamaged>	vehicles/british/GB134_FV242B_Condor/_skins/GB134_FV242B_Condor_3Dst_02/normal/lod0/Turret_01.model	</undamaged>
+            <destroyed>	vehicles/british/GB134_FV242B_Condor/_skins/GB134_FV242B_Condor_3Dst_02/crash/lod0/Turret_01.model	</destroyed>
+            <exploded>	vehicles/british/GB134_FV242B_Condor/_skins/GB134_FV242B_Condor_3Dst_02/crash/lod0/Turret_01.model	</exploded>
+          </GB134_FV242B_Condor_3Dst_02>
         </sets>
       </models>
       <hitTester>
@@ -2329,9 +2437,9 @@
         <slot>
           <slotType>	player	</slotType>
           <slotId>	33000	</slotId>
-          <rayStart>	-1.38794 0.970933 -0.825232	</rayStart>
-          <rayEnd>	-1.19586 0.915207 -0.825229	</rayEnd>
-          <rayUp>	0.27863 0.960399 -0.000037	</rayUp>
+          <rayStart>	-1.33992 0.957001 -0.825217	</rayStart>
+          <rayEnd>	-1.24388 0.929139 -0.825244	</rayEnd>
+          <rayUp>	0.278628 0.960399 -0.000037	</rayUp>
           <size>	0.32	</size>
           <isUVProportional>	false	</isUVProportional>
         </slot>
@@ -2339,9 +2447,9 @@
           <slotType>	player	</slotType>
           <slotId>	33001	</slotId>
           <isMirrored>	true	</isMirrored>
-          <rayStart>	1.38794 0.970933 -0.825233	</rayStart>
-          <rayEnd>	1.19586 0.915207 -0.82523	</rayEnd>
-          <rayUp>	-0.27863 0.960399 -0.000037	</rayUp>
+          <rayStart>	1.31591 0.950036 -0.825232	</rayStart>
+          <rayEnd>	1.26789 0.936104 -0.825231	</rayEnd>
+          <rayUp>	-0.278628 0.960399 -0.000037	</rayUp>
           <size>	0.32	</size>
           <isUVProportional>	false	</isUVProportional>
         </slot>
@@ -2816,6 +2924,46 @@
           <scale>	2.706658 2.56778 2.706655	</scale>
           <showOn>	256	</showOn>
           <verticalMirror>	true	</verticalMirror>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35047	</slotId>
+          <tags>	direction_left_to_right formfactor_square	</tags>
+          <compatibleModels>	GB134_FV242B_Condor_3Dst_02	</compatibleModels>
+          <position>	1.327868 2.422816 -1.799145	</position>
+          <rotation>	1.570796 -0.944352 0.397248	</rotation>
+          <scale>	0.3 0.3 0.3	</scale>
+          <showOn>	256	</showOn>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35048	</slotId>
+          <tags>	direction_left_to_right formfactor_square	</tags>
+          <compatibleModels>	GB134_FV242B_Condor_3Dst_02	</compatibleModels>
+          <position>	1.080746 2.014171 1.44129	</position>
+          <rotation>	1.570796 3.109956 -0.893438	</rotation>
+          <scale>	0.3 0.3 0.3	</scale>
+          <showOn>	256	</showOn>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35049	</slotId>
+          <tags>	direction_left_to_right formfactor_square	</tags>
+          <compatibleModels>	GB134_FV242B_Condor_3Dst_02	</compatibleModels>
+          <position>	-1.332086 2.383507 -1.801833	</position>
+          <rotation>	1.570796 1.351796 0.068565	</rotation>
+          <scale>	0.3 0.3 0.3	</scale>
+          <showOn>	256	</showOn>
+        </slot>
+        <slot>
+          <slotType>	projectionDecal	</slotType>
+          <slotId>	35050	</slotId>
+          <tags>	formfactor_square direction_left_to_right	</tags>
+          <compatibleModels>	GB134_FV242B_Condor_3Dst_02	</compatibleModels>
+          <position>	-0.559742 2.883343 0.855964	</position>
+          <rotation>	0.399603 0 3.141593	</rotation>
+          <scale>	0.254179 0.254179 0.254179	</scale>
+          <showOn>	256	</showOn>
         </slot>
         <slot>
           <slotType>	attachment	</slotType>

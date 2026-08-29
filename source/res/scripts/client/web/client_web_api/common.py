@@ -14,6 +14,7 @@ from web.client_web_api.stronghold import StrongholdEventHandler
 from web.client_web_api.util.vehicle import VehicleCompareEventHandler, VehicleStateEventHandler
 from web.client_web_api.referral_program import ReferralProgramEventHandler
 from web.client_web_api.trading_caravan import TradingCaravanEventHandler
+from web.client_web_api.challenge import ChallengeEventHandler
 _logger = logging.getLogger(__name__)
 
 class WebEventSender(object):
@@ -51,4 +52,5 @@ class WebEventSender(object):
          ReferralProgramEventHandler(self),
          Comp7BattleResultEventHandler(self),
          StrongholdEventHandler(self),
-         TradingCaravanEventHandler(self))
+         TradingCaravanEventHandler(self),
+         ChallengeEventHandler(self))

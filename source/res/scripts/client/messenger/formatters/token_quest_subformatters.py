@@ -5,7 +5,7 @@ import re
 from itertools import chain
 import typing
 from adisp import adisp_async, adisp_process
-from gui.impl.lobby.stronghold.stronghold_helpers import isClanSeasonProgressQuest, isClanSeasonQuest
+from gui.impl.lobby.stronghold.stronghold_helpers import isClanSeasonProgressQuest, isClanSeasonQuest, CLAN_SEASON_PROGRESS_PREFIX
 from personal_missions_constants import PM3_PREFIX_NAME
 from shared_utils import findFirst, first
 import constants
@@ -43,6 +43,7 @@ from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.system_messages import ISystemMessages
+from gui.wt_event.wt_event_helpers import isWTEventProgressionQuest
 _logger = logging.getLogger(__name__)
 
 class ITokenQuestsSubFormatter(object):
@@ -150,7 +151,6 @@ class RankedTokenQuestFormatter(AsyncTokenQuestsSubFormatter):
 
 class ClanSeasonProgressionFormatter(AsyncTokenQuestsSubFormatter):
     __MESSAGE_TEMPLATE = 'ClanSeasonProgressReward'
-    __CLAN_SEASON_PROGRESS_TOKEN = 'clan_season_progress'
     __itemsCache = dependency.descriptor(IItemsCache)
 
     def __init__(self):
@@ -176,7 +176,7 @@ class ClanSeasonProgressionFormatter(AsyncTokenQuestsSubFormatter):
             if popUps:
                 questsData.update({'popUpRecords': popUps})
             formattedRewards = self._achievesFormatter.formatQuestAchieves(questsData, asBattleFormatter=False, processCustomizations=True, processTokens=True)
-            tokenCount = self.__itemsCache.items.tokens.getTokenCount(self.__CLAN_SEASON_PROGRESS_TOKEN)
+            tokenCount = self.__itemsCache.items.tokens.getTokenCount(CLAN_SEASON_PROGRESS_PREFIX)
             title = backport.text(R.strings.system_messages.stronghold.clanSeason.progression.title(), level=tokenCount)
             formattedMessage = g_settings.msgTemplates.format(self.__MESSAGE_TEMPLATE, {'title': title,
              'body': formattedRewards})
@@ -297,7 +297,7 @@ class RankedSeasonTokenQuestFormatter(RankedTokenQuestFormatter):
         customizations = data.get('customizations', [])
         for customizationItem in customizations:
             customizationType = customizationItem['custType']
-            _, itemUserName = getCustomizationItemData(customizationItem['id'], customizationType)
+            _, itemUserName, _ = getCustomizationItemData(customizationItem['id'], customizationType)
             if customizationType == 'style':
                 result.append(itemUserName)
 
@@ -1094,3 +1094,10 @@ class ParagonsTokenQuestsSubformatter(SyncTokenQuestsSubFormatter):
     @classmethod
     def _isQuestOfThisGroup(cls, questID):
         return isParagonsQuestID(questID)
+
+
+class WtEventProgressionQuestFormatter(WaitItemsSyncFormatter, TokenQuestsSubFormatter):
+
+    @classmethod
+    def _isQuestOfThisGroup(cls, questID):
+        return isWTEventProgressionQuest(questID)

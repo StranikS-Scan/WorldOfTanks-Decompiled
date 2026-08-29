@@ -1,8 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/comp7/tooltips/main_widget_tooltip.py
+from adisp import adisp_process
 from frameworks.wulf import ViewSettings
 from gui.impl.gen import R
-from gui.impl.gen.view_models.views.lobby.comp7.tooltips.main_widget_tooltip_model import MainWidgetTooltipModel
+from gui.impl.gen.view_models.views.lobby.comp7.tooltips.main_widget_tooltip_model import MainWidgetTooltipModel, State
 from gui.impl.lobby.comp7 import comp7_model_helpers, comp7_shared, comp7_qualification_helpers
 from gui.impl.pub import ViewImpl
 from helpers import dependency
@@ -29,11 +30,13 @@ class MainWidgetTooltip(ViewImpl):
         with self.viewModel.transaction() as vm:
             isQualification = self.__comp7Controller.isQualificationActive()
             if isQualification:
-                self.__updateQualificationdata(vm)
+                self.__updateQualificationData(vm)
             else:
+                self.__updateLeaderboardData(vm)
                 self.__updateProgressionData(vm)
 
-    def __updateQualificationdata(self, model):
+    @staticmethod
+    def __updateQualificationData(model):
         comp7_qualification_helpers.setQualificationInfo(model.qualificationModel)
 
     def __updateProgressionData(self, model):
@@ -41,4 +44,14 @@ class MainWidgetTooltip(ViewImpl):
         model.setRank(comp7_shared.getRankEnumValue(division))
         model.setCurrentScore(self.__comp7Controller.rating)
         comp7_model_helpers.setDivisionInfo(model=model.divisionInfo, division=division)
-        comp7_model_helpers.setElitePercentage(model)
+
+    @adisp_process
+    def __updateLeaderboardData(self, model):
+        model.setExternalDataState(State.LOADING)
+        lbUpdateTime, isSuccessLastUpdateTime = yield self.__comp7Controller.leaderboard.getLastUpdateTime()
+        if isSuccessLastUpdateTime:
+            model.setLeaderboardUpdateTimestamp(lbUpdateTime or 0)
+        isSuccessOwnData, myPosition, _, _ = yield self.__comp7Controller.leaderboard.getOwnData()
+        if isSuccessOwnData:
+            model.setMyPosition(myPosition or 0)
+        model.setExternalDataState(State.SUCCESS if all((isSuccessLastUpdateTime, isSuccessOwnData)) else State.ERROR)

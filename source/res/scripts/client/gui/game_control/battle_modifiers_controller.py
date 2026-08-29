@@ -57,6 +57,9 @@ class BattleModifiersController(IBattleModifiersController, IGlobalListener):
     def isBattleModifiersAvailable(self):
         return bool(self.getCurrentDomain())
 
+    def modifiersInStrongholdBrowser(self):
+        return isinstance(self.prbEntity, StrongholdBrowserEntity) and self.getBattleModifiersQueues()
+
     def getBattleModifiersObject(self):
         modifiers = self.battleModifiers
         return bmClazz(modifiers) if modifiers is not None else None

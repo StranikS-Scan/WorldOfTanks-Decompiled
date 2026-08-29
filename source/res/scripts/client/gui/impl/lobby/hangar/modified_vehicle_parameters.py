@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/hangar/modified_vehicle_parameters.py
+import collections
 import copy
 from battle_modifiers_common import ModifiersContext
 from constants import BonusTypes, PenaltyTypes
@@ -20,18 +21,25 @@ def _simpleValueDiff(value, originalValue):
     return value - originalValue
 
 
+def _simpleArrayDiff(value, originalValue):
+    return [ left - right for left, right in zip(value, originalValue) ]
+
+
 def _visionRadiusCalcDiff(value, originalValue):
     if isinstance(value, tuple):
         return tuple([ val - original for val, original in zip(value, originalValue) ])
     return value - originalValue
 
 
-_SUPPORTED_MODIFIERS = {'visionRadius': ('circularVisionRadius', _visionRadiusCalcDiff),
- 'radioDistance': ('radioDistance', _simpleValueDiff),
- 'vehicleHealth': ('maxHealth', _simpleValueDiff),
- 'thermalVisionDistance': ('thermalVisionDistance', _simpleValueDiff),
- 'reloadTime': ('reloadTime', _simpleValueDiff),
- 'autoreloadTime': ('autoreloadTime', _simpleValueDiff)}
+_SUPPORTED_MODIFIERS = {'visionRadius': [('circularVisionRadius', _visionRadiusCalcDiff)],
+ 'radioDistance': [('radioDistance', _simpleValueDiff)],
+ 'vehicleHealth': [('maxHealth', _simpleValueDiff)],
+ 'thermalVisionDistance': [('thermalVisionDistance', _simpleValueDiff)],
+ 'reloadTime': [('reloadTime', _simpleValueDiff)],
+ 'autoreloadTime': [('autoreloadTime', _simpleValueDiff)],
+ 'enginePower': [('enginePower', _simpleValueDiff), ('enginePowerPerTon', _simpleArrayDiff)],
+ 'fwMaxSpeed': [('speedLimits', _simpleArrayDiff)],
+ 'bkMaxSpeed': [('speedLimits', _simpleArrayDiff)]}
 
 @dependency.replace_none_kwargs(battleModifiersController=IBattleModifiersController)
 def appendBattleModifiersPenalties(penalties, modifiedParams, originalParams, battleModifiersController=None):
@@ -39,15 +47,17 @@ def appendBattleModifiersPenalties(penalties, modifiedParams, originalParams, ba
     if modifiers is not None:
         for _, modifier in modifiers:
             if modifier.gameplayImpact == 2 and modifier.param.name in _SUPPORTED_MODIFIERS:
-                paramName, calcDiff = _SUPPORTED_MODIFIERS.get(modifier.param.name)
-                if paramName not in modifiedParams or paramName not in originalParams:
-                    continue
-                section = penalties.get(paramName, [])
-                value = modifiedParams[paramName]
-                originalValue = originalParams[paramName]
-                diff = calcDiff(value, originalValue)
-                section.append(_PenaltyInfo(battleModifiersController.getCurrentDomain(), diff, False, PenaltyTypes.BATTLE_MODIFIERS))
-                penalties[paramName] = section
+                for paramName, calcDiff in _SUPPORTED_MODIFIERS[modifier.param.name]:
+                    if paramName not in modifiedParams or paramName not in originalParams:
+                        continue
+                    section = penalties.get(paramName, [])
+                    value = modifiedParams[paramName]
+                    originalValue = originalParams[paramName]
+                    diff = calcDiff(value, originalValue)
+                    if isinstance(diff, collections.Iterable) and not any(diff) or diff == 0:
+                        continue
+                    section.append(_PenaltyInfo(battleModifiersController.getCurrentDomain(), diff, False, PenaltyTypes.BATTLE_MODIFIERS))
+                    penalties[paramName] = section
 
     return
 

@@ -1,0 +1,46 @@
+<BP21_01_Camo_145_name.xml>
+  <xmlns:czech1>	ussr	</xmlns:czech1>
+  <xmlns:germany>	germany	</xmlns:germany>
+  <xmlns:czech0>	usa	</xmlns:czech0>
+  <xmlns:china>	china	</xmlns:china>
+  <xmlns:france>	france	</xmlns:france>
+  <xmlns:uk>	uk	</xmlns:uk>
+  <xmlns:japan>	japan	</xmlns:japan>
+  <xmlns:czech>	czech	</xmlns:czech>
+  <xmlns:sweden>	sweden	</xmlns:sweden>
+  <xmlns:poland>	poland	</xmlns:poland>
+  <xmlns:italy>	italy	</xmlns:italy>
+  <xmlns:intunion>	intunion	</xmlns:intunion>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/transparent	</userString>
+    <season>	ALL	</season>
+    <historical>	0	</historical>
+    <priceGroup>	MT camouflages 50g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <camouflage>
+      <id>	31555	</id>
+      <texture>	vehicles/russian/Camouflage/BP21_01_Camo_145.dds	</texture>
+      <userString>	#vehicle_customization:BP21_01_Camo_145/name	</userString>
+      <description>	#vehicle_customization:BP21_01_Camo_145/description	</description>
+      <scales>	1.2 1 0.7	</scales>
+      <palettes>
+        <palette>
+          <c0>	71 51 37 255	</c0>
+          <c1>	115 95 67 255	</c1>
+          <c2>	77 77 57 255	</c2>
+          <c3>	0 0 0 0	</c3>
+        </palette>
+      </palettes>
+      <tilingSettings>
+        <type>	relativewithfactor	</type>
+        <factor>	2.71 2.71	</factor>
+        <offset>	0.07 -0.21	</offset>
+      </tilingSettings>
+    </camouflage>
+    <tags>	hiddenInUI	</tags>
+  </itemGroup>
+</BP21_01_Camo_145_name.xml>

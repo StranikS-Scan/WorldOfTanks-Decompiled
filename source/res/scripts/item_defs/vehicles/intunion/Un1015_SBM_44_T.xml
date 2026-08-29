@@ -1,8 +1,7 @@
 <Un1015_SBM_44_T.xml>
   <xmlns:xmlref>	http://bwt/xmlref	</xmlns:xmlref>
   <crew>
-    <commander>	radioman
-			loader	</commander>
+    <commander>	radioman	</commander>
     <gunner>	loader	</gunner>
     <driver></driver>
   </crew>
@@ -10,7 +9,7 @@
   <postProgressionTree>	role_MT_support	</postProgressionTree>
   <customRoleSlotOptions>	3 5	</customRoleSlotOptions>
   <speedLimits>
-    <forward>	55	</forward>
+    <forward>	51	</forward>
     <backward>	18	</backward>
   </speedLimits>
   <invisibility>
@@ -1358,7 +1357,7 @@
       <primaryArmor>	armor_10 armor_11 armor_4	</primaryArmor>
       <weight>	4500	</weight>
       <maxHealth>	360	</maxHealth>
-      <rotationSpeed>	52	</rotationSpeed>
+      <rotationSpeed>	46	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	140	</maxHealth>
         <maxRegenHealth>	70	</maxRegenHealth>
@@ -1372,7 +1371,7 @@
       </surveyingDeviceHealth>
       <invisibilityFactor>	1.004	</invisibilityFactor>
       <guns>
-        <_37mm_N_37D_T>	shared	  <maxAmmo>	672	</maxAmmo>
+        <_37mm_N_37D_T>	shared	  <maxAmmo>	680	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 8 0.38 8 0.42 4 0.58 4 0.62 8 1 8	</maxPitch>
@@ -1386,25 +1385,33 @@
             </armor_3>
             <armor_4>	0	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_4>
+            <armor_5>	60	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_5>
+            <armor_6>	50	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_6>
+            <armor_7>	115	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_7>
+            <armor_8>	110	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_8>
             <gun>	10	</gun>
           </armor>
-          <shotDispersionRadius>	0.2	</shotDispersionRadius>
-          <reloadTime>	12	</reloadTime>
+          <shotDispersionRadius>	0.3	</shotDispersionRadius>
+          <reloadTime>	13	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.12	</turretRotation>
             <afterShot>	3.5	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <invisibilityFactorAtShot>	0.285	</invisibilityFactorAtShot>
-          <aimingTime>	1.5	</aimingTime>
+          <aimingTime>	2.4	</aimingTime>
           <clip>
-            <count>	20	</count>
-            <rate>	240	</rate>
+            <count>	10	</count>
+            <rate>	180	</rate>
           </clip>
           <autoShoot>
             <shotDispersionPerSec>	1.5	</shotDispersionPerSec>
-            <maxShotDispersion>	8	</maxShotDispersion>
-            <rate>	4	</rate>
+            <maxShotDispersion>	2	</maxShotDispersion>
+            <rate>	3	</rate>
             <rebuildShotDispersionDelay>	0.3	</rebuildShotDispersionDelay>
           </autoShoot>
           <customizationSlots>
@@ -1944,7 +1951,7 @@
       <engines>
         <V_44_T>
           <smplEnginePower>	710	</smplEnginePower>
-          <smplFwMaxSpeed>	55	</smplFwMaxSpeed>
+          <smplFwMaxSpeed>	51	</smplFwMaxSpeed>
         </V_44_T>
       </engines>
       <chassis>
@@ -1974,4 +1981,5 @@
     <lodDist>	MEDIUM	</lodDist>
     <alpha>	1.0	</alpha>
   </emblems>
+  <baseColorID>	1	</baseColorID>
 </Un1015_SBM_44_T.xml>

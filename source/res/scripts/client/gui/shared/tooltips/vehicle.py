@@ -118,6 +118,10 @@ class VehicleInfoTooltipData(BlocksTooltipData):
             wotPlusBlock, linkage = WotPlusBlockConstructor(vehicle, statsConfig, leftPadding, rightPadding).construct()
             if wotPlusBlock:
                 items.append(formatters.packBuildUpBlockData(wotPlusBlock, linkage=linkage, padding=formatters.packPadding(left=leftPadding, right=rightPadding, top=0, bottom=0)))
+        if vehicle.isTelecom:
+            telecomBlock, linkage = TelecomBlockConstructor(vehicle, statsConfig, leftPadding, rightPadding).construct()
+            if telecomBlock:
+                items.append(formatters.packBuildUpBlockData(telecomBlock, linkage=linkage, padding=formatters.packPadding(left=leftPadding, right=rightPadding, top=0, bottom=0)))
         simplifiedStatsBlock = SimplifiedStatsBlockConstructor(vehicle, paramsConfig, leftPadding, rightPadding).construct()
         if simplifiedStatsBlock:
             items.append(formatters.packBuildUpBlockData(simplifiedStatsBlock, gap=-4, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_WHITE_BG_LINKAGE, padding=formatters.packPadding(left=leftPadding, right=rightPadding, top=-8, bottom=-5)))
@@ -199,16 +203,20 @@ class VehicleInfoTooltipData(BlocksTooltipData):
                 leftStr = str(rentInfo.battlesLeft)
             elif rentInfo.winsLeft > 0:
                 leftStr = str(rentInfo.winsLeft)
+            isSpecialWindow = self.context.getStatusConfiguration(self.item).isSpecialWindow
+            if vehicle.isWtBossMainVehicle and isSpecialWindow:
+                leftStr = ''
+                descrStr = ''
             if descrStr or leftStr:
                 items.append(formatters.packTextParameterWithIconBlockData(name=text_styles.main(descrStr), value=text_styles.expText(leftStr), icon=ICON_TEXT_FRAMES.RENTALS, iconYOffset=2, gap=0, valueWidth=valueWidth, padding=formatters.packPadding(left=0, bottom=-10)))
         if statsConfig.showRankedBonusBattle:
             items.append(formatters.packTextParameterWithIconBlockData(name=text_styles.main(backport.text(R.strings.tooltips.vehicle.rankedBonusBattle())), value='', icon=ICON_TEXT_FRAMES.BONUS_BATTLE, iconYOffset=2, valueWidth=valueWidth, gap=0, padding=formatters.packPadding(left=0, top=-2, bottom=5)))
-        if statsConfig.dailyXP and not vehicle.isWotPlus:
+        if statsConfig.dailyXP and not vehicle.isWotPlus and not vehicle.isTelecom:
             attrs = self.__itemsCache.items.stats.attributes
             if attrs & constants.ACCOUNT_ATTR.DAILY_MULTIPLIED_XP and vehicle.dailyXPFactor > 0:
                 dailyXPText = text_styles.main(text_styles.expText(''.join(('x', backport.getIntegralFormat(vehicle.dailyXPFactor)))))
                 items.append(formatters.packTextParameterWithIconBlockData(name=text_styles.main(TOOLTIPS.VEHICLE_DAILYXPFACTOR), value=dailyXPText, icon=ICON_TEXT_FRAMES.DOUBLE_XP_FACTOR, iconYOffset=2, valueWidth=valueWidth + 1, gap=0, padding=formatters.packPadding(left=0, top=-2, bottom=5)))
-        if statsConfig.showDebutBoxes and self.__debutBoxController.isEnabled() and Vehicle.VEHICLE_STATE.UNSUITABLE_TO_QUEUE not in self.item.getState() and self.__debutBoxController.isQuestsAvailableOnVehicle(self.item) and not vehicle.isWotPlus:
+        if statsConfig.showDebutBoxes and self.__debutBoxController.isEnabled() and Vehicle.VEHICLE_STATE.UNSUITABLE_TO_QUEUE not in self.item.getState() and self.__debutBoxController.isQuestsAvailableOnVehicle(self.item) and not vehicle.isWotPlus and not vehicle.isTelecom:
             items.append(formatters.packTitleDescParameterWithIconBlockData(title=text_styles.main(backport.text(R.strings.tooltips.vehicle.debut_box_available())), icon=backport.image(R.images.gui.maps.icons.library.debut_boxes_16x16()), padding=formatters.packPadding(left=79, top=-2, bottom=5), iconPadding=formatters.packPadding(top=2), titlePadding=formatters.packPadding(left=3)))
         paragonsBlock = self.__getParagonsBlock(vehicle)
         if paragonsBlock:
@@ -524,6 +532,23 @@ class WotPlusBlockConstructor(VehicleTooltipBlockConstructor):
         return (blocks, linkage)
 
 
+class TelecomBlockConstructor(VehicleTooltipBlockConstructor):
+    __itemsCache = dependency.descriptor(IItemsCache)
+    __debutBoxController = dependency.descriptor(IDebutBoxesController)
+
+    def construct(self):
+        blocks = []
+        linkage = BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILD_BLOCK_YELLOW_LINKAGE
+        blocks.append(formatters.packTitleDescParameterWithIconBlockData(title=text_styles.main(backport.text(R.strings.tooltips.vehicle.telecomRenting())), icon=backport.image(R.images.gui.maps.icons.library.telecom_16x16()), padding=formatters.packPadding(left=60, top=0, bottom=0), iconPadding=formatters.packPadding(top=2), titlePadding=formatters.packPadding(left=3)))
+        attrs = self.__itemsCache.items.stats.attributes
+        if attrs & constants.ACCOUNT_ATTR.DAILY_MULTIPLIED_XP and self.vehicle.dailyXPFactor > 0:
+            dailyXPText = text_styles.main(text_styles.expText('x{}'.format(backport.getIntegralFormat(self.vehicle.dailyXPFactor))))
+            blocks.append(formatters.packTextParameterWithIconBlockData(name=text_styles.main(TOOLTIPS.VEHICLE_DAILYXPFACTOR), value=dailyXPText, icon=ICON_TEXT_FRAMES.DOUBLE_XP_FACTOR, iconYOffset=2, valueWidth=60, gap=0, padding=formatters.packPadding(left=-2, top=0, bottom=2)))
+        if self.configuration.showDebutBoxes and self.__debutBoxController.isEnabled() and Vehicle.VEHICLE_STATE.UNSUITABLE_TO_QUEUE not in self.vehicle.getState() and self.__debutBoxController.isQuestsAvailableOnVehicle(self.vehicle):
+            blocks.append(formatters.packTitleDescParameterWithIconBlockData(title=text_styles.main(backport.text(R.strings.tooltips.vehicle.debut_box_available())), icon=backport.image(R.images.gui.maps.icons.library.debut_boxes_16x16()), padding=formatters.packPadding(left=60, top=0, bottom=-5), iconPadding=formatters.packPadding(top=2), titlePadding=formatters.packPadding(left=3)))
+        return (blocks, linkage)
+
+
 class PriceBlockConstructor(VehicleTooltipBlockConstructor):
     bootcamp = dependency.descriptor(IBootcampController)
 
@@ -582,7 +607,7 @@ class PriceBlockConstructor(VehicleTooltipBlockConstructor):
                 sellPrice = vehicle.sellPrices.itemPrice.price
                 sellCurrency = sellPrice.getCurrency(byWeight=True)
                 block.append(makeCompoundPriceBlock(CURRENCY_SETTINGS.SELL_PRICE, getItemSellPricesVO(sellCurrency, sellPrice)))
-        if buyPrice and not vehicle.isWotPlus:
+        if buyPrice and not vehicle.isWotPlus and not vehicle.isTelecom:
             if vehicle.isRestorePossible():
                 price = vehicle.restorePrice
                 currency = price.getCurrency()

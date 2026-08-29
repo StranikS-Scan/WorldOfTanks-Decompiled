@@ -324,6 +324,24 @@
       <devices>	150	</devices>
     </damage>
   </_105mm_APCR_OFL_E1>
+  <_105mm_APCR_OFL_E1_WT>
+    <id>	1001	</id>
+    <userString>	#white_tiger.france_vehicles.extend:_105mm_APCR_OFL_E1_WT	</userString>
+    <description>	#white_tiger.france_vehicles.extend:_105mm_APCR_OFL_E1_WT_descr	</description>
+    <shortDescriptionSpecial>	#white_tiger.france_vehicles.extend:_105mm_APCR_OFL_E1_WT_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#white_tiger.france_vehicles.extend:_105mm_APCR_OFL_E1_WT_long_special	</longDescriptionSpecial>
+    <icon>	ap_wt	</icon>
+    <price>	1200	</price>
+    <notInShop>	true	</notInShop>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	105	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	hunterAP_wt	</effects>
+    <damage>
+      <armor>	350	</armor>
+      <devices>	150	</devices>
+    </damage>
+  </_105mm_APCR_OFL_E1_WT>
   <_105mm_APCR_OFL_SH>
     <id>	254	</id>
     <userString>	#france_vehicles:_105mm_APCR_OFL_SH	</userString>
@@ -1647,6 +1665,30 @@
       </damage>
     </armorSpalls>
   </_138mm_OE_Mle1891>
+  <_138mm_OE_Mle1932_F144>
+    <id>	31039	</id>
+    <userString>	#france_vehicles:_138mm_OE_Mle1932_F144	</userString>
+    <icon>	he_modern	</icon>
+    <price>	1035	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	138.6	</caliber>
+    <explosionRadius>	3.11	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	largeHighExplosive	</effects>
+    <damage>
+      <armor>	760	</armor>
+      <devices>	180	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	3.11	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	380	</armor>
+        <devices>	90	</devices>
+      </damage>
+    </armorSpalls>
+  </_138mm_OE_Mle1932_F144>
   <_138mm_OFL_Mle1944>
     <id>	31023	</id>
     <userString>	#france_vehicles:_138mm_OFL_Mle1944	</userString>
@@ -1678,6 +1720,36 @@
     <hitDeviceChanceMultiplier>	0.3	</hitDeviceChanceMultiplier>
     <hitCrewChanceMultiplier>	0.3	</hitCrewChanceMultiplier>
   </_138mm_OFL_Mle1944>
+  <_138mm_OFL_Mle1944_02>
+    <id>	31046	</id>
+    <userString>	#france_vehicles:_138mm_OFL_Mle1944	</userString>
+    <icon>	ap_cr_premium	</icon>
+    <price>	4800	</price>
+    <improved>	true	</improved>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	138.6	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	largeAPCR	</effects>
+    <damage>
+      <armor>	560	</armor>
+      <devices>	180	</devices>
+    </damage>
+  </_138mm_OFL_Mle1944_02>
+  <_138mm_OPS_Mle1952_F144>
+    <id>	31038	</id>
+    <userString>	#france_vehicles:_138mm_OPS_Mle1952_F144	</userString>
+    <icon>	ap_cr_premium	</icon>
+    <price>	5600	</price>
+    <improved>	true	</improved>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	138.6	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	largeAPCR	</effects>
+    <damage>
+      <armor>	630	</armor>
+      <devices>	180	</devices>
+    </damage>
+  </_138mm_OPS_Mle1952_F144>
   <_138mm_OP_Mle1891>
     <id>	31022	</id>
     <userString>	#france_vehicles:_138mm_OP_Mle1891	</userString>
@@ -1692,6 +1764,20 @@
       <devices>	180	</devices>
     </damage>
   </_138mm_OP_Mle1891>
+  <_138mm_OP_Mle1924_F144>
+    <id>	31037	</id>
+    <userString>	#france_vehicles:_138mm_OP_Mle1924_F144	</userString>
+    <icon>	ap	</icon>
+    <price>	1250	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	138.6	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	largeArmorPiercing	</effects>
+    <damage>
+      <armor>	630	</armor>
+      <devices>	180	</devices>
+    </damage>
+  </_138mm_OP_Mle1924_F144>
   <_13.2mm_Balle_P.>
     <id>	15	</id>
     <userString>	#france_vehicles:_13.2mm_Balle_P.	</userString>
@@ -3622,5 +3708,6 @@
     <hc_premium>	HOLLOW_CHARGE_PREMIUM.png 0 0	</hc_premium>
     <he_spg>	HIGH_EXPLOSIVE_SPG.png 0 0	</he_spg>
     <he_spg_stun>	HIGH_EXPLOSIVE_SPG_STUN.png 0 0	</he_spg_stun>
+    <ap_wt>	WT_ARMOR_PIERCING.png 0 0	</ap_wt>
   </icons>
 </shells.xml>

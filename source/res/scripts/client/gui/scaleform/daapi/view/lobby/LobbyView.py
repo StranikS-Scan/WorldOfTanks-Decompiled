@@ -58,6 +58,7 @@ class _LobbySubViewsLifecycleHandler(IViewLifecycleHandler):
      VIEW_ALIAS.LOBBY_RESEARCH,
      VIEW_ALIAS.BATTLE_QUEUE,
      VIEW_ALIAS.BATTLE_STRONGHOLDS_QUEUE,
+     VIEW_ALIAS.EVENT_BATTLE_QUEUE,
      RANKEDBATTLES_ALIASES.RANKED_BATTLES_VIEW_ALIAS)
     __WULF_SUB_VIEWS = (R.views.lobby.techtree.VehicleTechTree(),)
 
@@ -154,7 +155,7 @@ class LobbyView(LobbyPageMeta, IWaitingWidget):
         self.addListener(events.GameEvent.SCREEN_SHOT_MADE, self.__handleScreenShotMade, EVENT_BUS_SCOPE.GLOBAL)
         self.addListener(events.GameEvent.HIDE_LOBBY_SUB_CONTAINER_ITEMS, self.__hideSubContainerItems, EVENT_BUS_SCOPE.GLOBAL)
         self.addListener(events.GameEvent.REVEAL_LOBBY_SUB_CONTAINER_ITEMS, self.__revealSubContainerItems, EVENT_BUS_SCOPE.GLOBAL)
-        self.addListener(events.LobbyHeaderEvent.TOGGLE_VISIBILITY, self.__onToggleVisibilityHeader, scope=EVENT_BUS_SCOPE.LOBBY)
+        self.addListener(events.LobbyInterfaceEvent.TOGGLE_VISIBILITY, self.__onToggleVisibility, scope=EVENT_BUS_SCOPE.LOBBY)
         g_playerEvents.onEntityCheckOutEnqueued += self._onEntityCheckoutEnqueued
         g_playerEvents.onAccountBecomeNonPlayer += self._onAccountBecomeNonPlayer
         viewLifecycleHandler = _LobbySubViewsLifecycleHandler()
@@ -187,7 +188,7 @@ class LobbyView(LobbyPageMeta, IWaitingWidget):
         self.removeListener(events.GameEvent.HIDE_LOBBY_SUB_CONTAINER_ITEMS, self.__hideSubContainerItems, EVENT_BUS_SCOPE.GLOBAL)
         self.removeListener(events.GameEvent.REVEAL_LOBBY_SUB_CONTAINER_ITEMS, self.__revealSubContainerItems, EVENT_BUS_SCOPE.GLOBAL)
         self._UiEffectsManager.dispose()
-        self.removeListener(events.LobbyHeaderEvent.TOGGLE_VISIBILITY, self.__onToggleVisibilityHeader, scope=EVENT_BUS_SCOPE.LOBBY)
+        self.removeListener(events.LobbyInterfaceEvent.TOGGLE_VISIBILITY, self.__onToggleVisibility, scope=EVENT_BUS_SCOPE.LOBBY)
         View._dispose(self)
         return
 
@@ -234,5 +235,10 @@ class LobbyView(LobbyPageMeta, IWaitingWidget):
             SystemMessages.pushMessage(i18n.makeString(SYSTEM_MESSAGES.IGR_CUSTOMIZATION_END, igrIcon=icon), type=SystemMessages.SM_TYPE.Information)
         self.__currIgrType = roomType
 
-    def __onToggleVisibilityHeader(self, event):
-        self.as_setHeaderVisibleS(event.ctx.get('visible', False), event.ctx.get('ignoreTopOffset', False))
+    def __onToggleVisibility(self, event):
+        headerIsVisible = event.ctx.get('headerIsVisible', True)
+        messengerBarVisible = event.ctx.get('messengerBarVisible', True)
+        ignoreTopOffset = event.ctx.get('ignoreTopOffset', False)
+        self.as_setInterfaceVisibleS({'headerIsVisible': headerIsVisible,
+         'messengerBarVisible': messengerBarVisible,
+         'ignoreTopOffset': ignoreTopOffset})

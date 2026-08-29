@@ -585,14 +585,14 @@
     <id>	31082	</id>
     <userString>	#intunion_vehicles:_30mm_JFSv_53	</userString>
     <icon>	ap_cr_premium	</icon>
-    <price>	200	</price>
+    <price>	168	</price>
     <improved>	true	</improved>
     <kind>	ARMOR_PIERCING_CR	</kind>
     <caliber>	30	</caliber>
     <isTracer>	true	</isTracer>
     <effects>	smallAPCR_autoshoot	</effects>
     <damage>
-      <armor>	12	</armor>
+      <armor>	21	</armor>
       <devices>	15	</devices>
     </damage>
     <hitDeviceChanceMultiplier>	0.3	</hitDeviceChanceMultiplier>
@@ -603,13 +603,13 @@
     <id>	31081	</id>
     <userString>	#intunion_vehicles:_30mm_JPZSw_53	</userString>
     <icon>	ap_cr	</icon>
-    <price>	140	</price>
+    <price>	144	</price>
     <kind>	ARMOR_PIERCING_CR	</kind>
     <caliber>	30	</caliber>
     <isTracer>	true	</isTracer>
     <effects>	smallAPCR_autoshoot	</effects>
     <damage>
-      <armor>	20	</armor>
+      <armor>	36	</armor>
       <devices>	20	</devices>
     </damage>
     <hitDeviceChanceMultiplier>	0.3	</hitDeviceChanceMultiplier>
@@ -649,13 +649,13 @@
     <id>	31083	</id>
     <userString>	#intunion_vehicles:_37mm_BR_169	</userString>
     <icon>	ap_cr	</icon>
-    <price>	170	</price>
+    <price>	184	</price>
     <kind>	ARMOR_PIERCING_CR	</kind>
     <caliber>	37	</caliber>
     <isTracer>	true	</isTracer>
     <effects>	smallAPCR_autoshoot	</effects>
     <damage>
-      <armor>	24	</armor>
+      <armor>	46	</armor>
       <devices>	20	</devices>
     </damage>
     <hitDeviceChanceMultiplier>	0.3	</hitDeviceChanceMultiplier>
@@ -666,13 +666,13 @@
     <id>	35003	</id>
     <userString>	#intunion_vehicles:_37mm_BR_169_T	</userString>
     <icon>	ap_cr	</icon>
-    <price>	326	</price>
+    <price>	200	</price>
     <kind>	ARMOR_PIERCING_CR	</kind>
     <caliber>	37	</caliber>
     <isTracer>	true	</isTracer>
     <effects>	smallAPCR_autoshoot	</effects>
     <damage>
-      <armor>	46	</armor>
+      <armor>	50	</armor>
       <devices>	25	</devices>
     </damage>
     <hitDeviceChanceMultiplier>	0.3	</hitDeviceChanceMultiplier>
@@ -755,14 +755,14 @@
     <id>	31084	</id>
     <userString>	#intunion_vehicles:_37mm_OF_169	</userString>
     <icon>	ap_cr_premium	</icon>
-    <price>	240	</price>
+    <price>	192	</price>
     <improved>	true	</improved>
     <kind>	ARMOR_PIERCING_CR	</kind>
     <caliber>	37	</caliber>
     <isTracer>	true	</isTracer>
     <effects>	smallAPCR_autoshoot	</effects>
     <damage>
-      <armor>	16	</armor>
+      <armor>	24	</armor>
       <devices>	15	</devices>
     </damage>
     <hitDeviceChanceMultiplier>	0.3	</hitDeviceChanceMultiplier>
@@ -773,15 +773,15 @@
     <id>	35004	</id>
     <userString>	#intunion_vehicles:_37mm_OF_169_T	</userString>
     <icon>	ap_cr_premium	</icon>
-    <price>	364	</price>
+    <price>	4400	</price>
     <improved>	true	</improved>
     <kind>	ARMOR_PIERCING_CR	</kind>
     <caliber>	37	</caliber>
     <isTracer>	true	</isTracer>
     <effects>	smallAPCR_autoshoot	</effects>
     <damage>
-      <armor>	24	</armor>
-      <devices>	19	</devices>
+      <armor>	40	</armor>
+      <devices>	25	</devices>
     </damage>
     <hitDeviceChanceMultiplier>	0.3	</hitDeviceChanceMultiplier>
     <hitCrewChanceMultiplier>	0.3	</hitCrewChanceMultiplier>
@@ -845,6 +845,41 @@
       <devices>	50	</devices>
     </damage>
   </_37mm_OP_mle_1938>
+  <_50mm_50_JOSv>
+    <id>	31099	</id>
+    <userString>	#intunion_vehicles:_50mm_50_JOSv	</userString>
+    <icon>	ap_cr	</icon>
+    <price>	270	</price>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	50	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mediumAPCR_autoshoot	</effects>
+    <damage>
+      <armor>	60	</armor>
+      <devices>	35	</devices>
+    </damage>
+    <hitDeviceChanceMultiplier>	0.3	</hitDeviceChanceMultiplier>
+    <hitCrewChanceMultiplier>	0.3	</hitCrewChanceMultiplier>
+    <secondaryAttackReason>	autoshoot	</secondaryAttackReason>
+  </_50mm_50_JOSv>
+  <_50mm_50_JOSvP>
+    <id>	31100	</id>
+    <userString>	#intunion_vehicles:_50mm_50_JOSvP	</userString>
+    <icon>	ap_cr_premium	</icon>
+    <price>	306	</price>
+    <improved>	true	</improved>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	50	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mediumAPCR_autoshoot	</effects>
+    <damage>
+      <armor>	34	</armor>
+      <devices>	35	</devices>
+    </damage>
+    <hitDeviceChanceMultiplier>	0.3	</hitDeviceChanceMultiplier>
+    <hitCrewChanceMultiplier>	0.3	</hitCrewChanceMultiplier>
+    <secondaryAttackReason>	autoshoot	</secondaryAttackReason>
+  </_50mm_50_JOSvP>
   <_50mm_JOSv>
     <id>	31094	</id>
     <userString>	#intunion_vehicles:_50mm_JOSv	</userString>
@@ -884,13 +919,13 @@
     <id>	31078	</id>
     <userString>	#intunion_vehicles:_57mm_53_BR_279	</userString>
     <icon>	ap_cr	</icon>
-    <price>	152	</price>
+    <price>	350	</price>
     <kind>	ARMOR_PIERCING_CR	</kind>
     <caliber>	57	</caliber>
     <isTracer>	true	</isTracer>
     <effects>	mediumAPCR_autoshoot	</effects>
     <damage>
-      <armor>	55	</armor>
+      <armor>	70	</armor>
       <devices>	35	</devices>
     </damage>
     <hitDeviceChanceMultiplier>	0.3	</hitDeviceChanceMultiplier>
@@ -901,14 +936,14 @@
     <id>	31079	</id>
     <userString>	#intunion_vehicles:_57mm_53_BR_279P	</userString>
     <icon>	ap_cr_premium	</icon>
-    <price>	203	</price>
+    <price>	430	</price>
     <improved>	true	</improved>
     <kind>	ARMOR_PIERCING_CR	</kind>
     <caliber>	57	</caliber>
     <isTracer>	true	</isTracer>
     <effects>	mediumAPCR_autoshoot	</effects>
     <damage>
-      <armor>	33	</armor>
+      <armor>	43	</armor>
       <devices>	35	</devices>
     </damage>
     <hitDeviceChanceMultiplier>	0.3	</hitDeviceChanceMultiplier>
@@ -926,7 +961,7 @@
     <isTracer>	true	</isTracer>
     <effects>	mediumAPCR_autoshoot	</effects>
     <damage>
-      <armor>	43	</armor>
+      <armor>	70	</armor>
       <devices>	35	</devices>
     </damage>
     <hitDeviceChanceMultiplier>	0.3	</hitDeviceChanceMultiplier>
@@ -943,13 +978,101 @@
     <isTracer>	true	</isTracer>
     <effects>	mediumAPCR_autoshoot	</effects>
     <damage>
-      <armor>	70	</armor>
+      <armor>	85	</armor>
       <devices>	35	</devices>
     </damage>
     <hitDeviceChanceMultiplier>	0.3	</hitDeviceChanceMultiplier>
     <hitCrewChanceMultiplier>	0.3	</hitCrewChanceMultiplier>
     <secondaryAttackReason>	autoshoot	</secondaryAttackReason>
   </_57mm_53_BR_279_T>
+  <_57mm_57_JOSv>
+    <id>	31097	</id>
+    <userString>	#intunion_vehicles:_57mm_57_JOSv	</userString>
+    <icon>	ap_cr	</icon>
+    <price>	315	</price>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	57	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mediumAPCR_autoshoot	</effects>
+    <damage>
+      <armor>	70	</armor>
+      <devices>	35	</devices>
+    </damage>
+    <hitDeviceChanceMultiplier>	0.3	</hitDeviceChanceMultiplier>
+    <hitCrewChanceMultiplier>	0.3	</hitCrewChanceMultiplier>
+    <secondaryAttackReason>	autoshoot	</secondaryAttackReason>
+  </_57mm_57_JOSv>
+  <_57mm_57_JOSvP>
+    <id>	31098	</id>
+    <userString>	#intunion_vehicles:_57mm_57_JOSvP	</userString>
+    <icon>	ap_cr_premium	</icon>
+    <price>	387	</price>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <improved>	true	</improved>
+    <caliber>	57	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mediumAPCR_autoshoot	</effects>
+    <damage>
+      <armor>	43	</armor>
+      <devices>	35	</devices>
+    </damage>
+    <hitDeviceChanceMultiplier>	0.3	</hitDeviceChanceMultiplier>
+    <hitCrewChanceMultiplier>	0.3	</hitCrewChanceMultiplier>
+    <secondaryAttackReason>	autoshoot	</secondaryAttackReason>
+  </_57mm_57_JOSvP>
+  <_66mm_PzGr_vz36>
+    <id>	31085	</id>
+    <userString>	#intunion_vehicles:_66mm_PzGr_vz36	</userString>
+    <icon>	ap	</icon>
+    <price>	75	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	66	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mediumArmorPiercing	</effects>
+    <damage>
+      <armor>	95	</armor>
+      <devices>	88	</devices>
+    </damage>
+  </_66mm_PzGr_vz36>
+  <_66mm_PzGr_vz40>
+    <id>	31086	</id>
+    <userString>	#intunion_vehicles:_66mm_PzGr_vz40	</userString>
+    <icon>	ap_cr_premium	</icon>
+    <price>	2800	</price>
+    <improved>	true	</improved>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	66	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mediumAPCR	</effects>
+    <damage>
+      <armor>	95	</armor>
+      <devices>	88	</devices>
+    </damage>
+  </_66mm_PzGr_vz40>
+  <_66mm_SprGr_vz36>
+    <id>	31087	</id>
+    <userString>	#intunion_vehicles:_66mm_SprGr_vz36	</userString>
+    <icon>	he_modern	</icon>
+    <price>	62	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	66	</caliber>
+    <explosionRadius>	0.85	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	mediumHighExplosive	</effects>
+    <damage>
+      <armor>	130	</armor>
+      <devices>	88	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	0.85	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	65	</armor>
+        <devices>	44	</devices>
+      </damage>
+    </armorSpalls>
+  </_66mm_SprGr_vz36>
   <_6pdr_APCR_MK_1T>
     <id>	31002	</id>
     <userString>	#intunion_vehicles:_6pdr_APCR_MK_1T	</userString>
@@ -1245,6 +1368,59 @@
       <devices>	100	</devices>
     </damage>
   </_75mm_M72M3>
+  <_75mm_PzGr_vz36>
+    <id>	31091	</id>
+    <userString>	#intunion_vehicles:_75mm_PzGr_vz36	</userString>
+    <icon>	ap	</icon>
+    <price>	155	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	75	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mediumArmorPiercing	</effects>
+    <damage>
+      <armor>	115	</armor>
+      <devices>	100	</devices>
+    </damage>
+  </_75mm_PzGr_vz36>
+  <_75mm_PzGr_vz40>
+    <id>	31092	</id>
+    <userString>	#intunion_vehicles:_75mm_PzGr_vz40	</userString>
+    <icon>	ap_premium	</icon>
+    <price>	2800	</price>
+    <improved>	true	</improved>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	75	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mediumArmorPiercing	</effects>
+    <damage>
+      <armor>	115	</armor>
+      <devices>	100	</devices>
+    </damage>
+  </_75mm_PzGr_vz40>
+  <_75mm_SprGr_vz36>
+    <id>	31093	</id>
+    <userString>	#intunion_vehicles:_75mm_SprGr_vz36	</userString>
+    <icon>	he_modern	</icon>
+    <price>	105	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	75	</caliber>
+    <explosionRadius>	1.06	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	mediumHighExplosive	</effects>
+    <damage>
+      <armor>	175	</armor>
+      <devices>	100	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	1.06	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	90	</armor>
+        <devices>	50	</devices>
+      </damage>
+    </armorSpalls>
+  </_75mm_SprGr_vz36>
   <_75mm_Sprg_18>
     <id>	31050	</id>
     <userString>	#intunion_vehicles:_75mm_Sprg_18	</userString>

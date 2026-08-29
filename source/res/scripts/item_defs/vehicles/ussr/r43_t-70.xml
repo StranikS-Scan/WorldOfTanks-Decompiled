@@ -1818,7 +1818,11 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_37mm_ZiS-19>	shared	  <pitchLimits>
+        <_37mm_ZiS-19>	shared	  <unlocks>
+            <gun>	_45mm_20K	  <cost>	50	</cost>
+            </gun>
+          </unlocks>
+          <pitchLimits>
             <minPitch>	0 -25 1 -25	</minPitch>
             <maxPitch>	0 6 1 6	</maxPitch>
           </pitchLimits>
@@ -1905,6 +1909,93 @@
             <aoTextureSize>	256 256	</aoTextureSize>
           </camouflage>
         </_37mm_ZiS-19>
+        <_45mm_20K>	shared	  <pitchLimits>
+            <minPitch>	0 -25 1 -25	</minPitch>
+            <maxPitch>	0 6 1 6	</maxPitch>
+          </pitchLimits>
+          <maxAmmo>	180	</maxAmmo>
+          <armor>
+            <armor_1>	50	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	50	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	16	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_3>
+            <gun>	10	</gun>
+          </armor>
+          <shotDispersionRadius>	0.38	</shotDispersionRadius>
+          <reloadTime>	2.4	</reloadTime>
+          <aimingTime>	1.7	</aimingTime>
+          <invisibilityFactorAtShot>	0.29	</invisibilityFactorAtShot>
+          <models>
+            <undamaged>	vehicles/russian/R43_T70/normal/lod0/Gun_01.model	</undamaged>
+            <destroyed>	vehicles/russian/R43_T70/crash/lod0/Gun_01.model	</destroyed>
+            <exploded>	vehicles/russian/R43_T70/crash/lod0/Gun_01.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModelServer>	vehicles/russian/R43_T70/collision/Gun_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/russian/R43_T70/collision_client/Gun_01.model	</collisionModelClient>
+          </hitTester>
+          <effects>	shot_small	</effects>
+          <reloadEffect>	reload20_45	</reloadEffect>
+          <customizationSlots>
+            <slot>
+              <slotType>	paint	</slotType>
+              <slotId>	41000	</slotId>
+              <anchorPosition>	-0.171947 0.032893 0.916303	</anchorPosition>
+              <anchorDirection>	-0 0 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+            <slot>
+              <slotType>	paint	</slotType>
+              <slotId>	41001	</slotId>
+              <anchorPosition>	-0.320598 0.174779 0.164681	</anchorPosition>
+              <anchorDirection>	-0 0.707107 0.707107	</anchorDirection>
+              <applyTo>	16384	</applyTo>
+            </slot>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	42000	</slotId>
+              <anchorPosition>	-0.171947 0.032893 0.9163	</anchorPosition>
+              <anchorDirection>	-0 0 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+            <slot>
+              <slotType>	projectionDecal	</slotType>
+              <slotId>	45000	</slotId>
+              <tags>	formfactor_rect1x2	</tags>
+              <position>	-0.302827 1.76572 0.669572	</position>
+              <rotation>	1.03173 -0.001754 3.14157	</rotation>
+              <scale>	0.780732 0.393448 0.78073	</scale>
+              <showOn>	4096	</showOn>
+              <clipAngle>	0.949469	</clipAngle>
+              <anchorShift>	0.070711	</anchorShift>
+            </slot>
+            <slot>
+              <slotType>	projectionDecal	</slotType>
+              <slotId>	45001	</slotId>
+              <tags>	formfactor_rect1x3	</tags>
+              <position>	-0.302752 1.83168 0.627139	</position>
+              <rotation>	0.835495 -0.001748 3.14158	</rotation>
+              <scale>	0.780732 0.393448 0.78073	</scale>
+              <showOn>	4096	</showOn>
+              <clipAngle>	0.949469	</clipAngle>
+              <anchorShift>	0.060711	</anchorShift>
+            </slot>
+          </customizationSlots>
+          <customization>
+            <customizableVehicleAreas>
+              <paint>	GUN GUN_2	</paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <shotOffset>	-0.171707 0.034379 0.000000	</shotOffset>
+          <camouflage>
+            <tiling>	0.9 0.9 0.000000 0.000000	</tiling>
+            <density>	102.121 104.787	</density>
+            <aoTextureSize>	256 256	</aoTextureSize>
+          </camouflage>
+        </_45mm_20K>
       </guns>
       <models>
         <undamaged>	vehicles/russian/R43_T70/normal/lod0/Turret_01.model	</undamaged>
@@ -2526,6 +2617,87 @@
             <aoTextureSize>	256 256	</aoTextureSize>
           </camouflage>
         </_37mm_ZiS-19>
+        <_45mm_20K>	shared	  <pitchLimits>
+            <minPitch>	0 -25 1 -25	</minPitch>
+            <maxPitch>	0 6 1 6	</maxPitch>
+          </pitchLimits>
+          <maxAmmo>	180	</maxAmmo>
+          <armor>
+            <armor_1>	50	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	50	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	16	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_3>
+            <gun>	10	</gun>
+          </armor>
+          <shotDispersionRadius>	0.38	</shotDispersionRadius>
+          <reloadTime>	2.3	</reloadTime>
+          <aimingTime>	1.7	</aimingTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.12	</turretRotation>
+            <afterShot>	1.0	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <invisibilityFactorAtShot>	0.29	</invisibilityFactorAtShot>
+          <models>
+            <undamaged>	vehicles/russian/R43_T70/normal/lod0/Gun_03.model	</undamaged>
+            <destroyed>	vehicles/russian/R43_T70/crash/lod0/Gun_03.model	</destroyed>
+            <exploded>	vehicles/russian/R43_T70/crash/lod0/Gun_03.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModelServer>	vehicles/russian/R43_T70/collision/Gun_03.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/russian/R43_T70/collision_client/Gun_03.model	</collisionModelClient>
+          </hitTester>
+          <effects>	shot_small	</effects>
+          <reloadEffect>	reload20_45	</reloadEffect>
+          <customizationSlots>
+            <slot>
+              <slotType>	paint	</slotType>
+              <slotId>	41000	</slotId>
+              <anchorPosition>	-0.320514 0.013595 0.748375	</anchorPosition>
+              <anchorDirection>	0 0 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+            <slot>
+              <slotType>	paint	</slotType>
+              <slotId>	41001	</slotId>
+              <anchorPosition>	-0.335402 0.174342 0.174265	</anchorPosition>
+              <anchorDirection>	0 0.707107 0.707107	</anchorDirection>
+              <applyTo>	16384	</applyTo>
+            </slot>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	42000	</slotId>
+              <anchorPosition>	-0.164146 0.013558 0.748373	</anchorPosition>
+              <anchorDirection>	0 0 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+            <slot>
+              <slotType>	projectionDecal	</slotType>
+              <slotId>	45000	</slotId>
+              <tags>	formfactor_rect1x2	</tags>
+              <position>	-0.263634 1.71305 0.797198	</position>
+              <rotation>	1.31912 -0.002362 3.14094	</rotation>
+              <scale>	0.812235 0.409324 0.812237	</scale>
+              <showOn>	4096	</showOn>
+              <clipAngle>	0.621325	</clipAngle>
+              <anchorShift>	0.17583	</anchorShift>
+            </slot>
+          </customizationSlots>
+          <customization>
+            <customizableVehicleAreas>
+              <paint>	GUN GUN_2	</paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <shotOffset>	-0.328291 0.027116 0.000000	</shotOffset>
+          <camouflage>
+            <tiling>	0.9 0.9 0.000000 0.000000	</tiling>
+            <density>	102.121 104.787	</density>
+            <aoTextureSize>	256 256	</aoTextureSize>
+          </camouflage>
+        </_45mm_20K>
         <_45mm_VT-42>	shared	  <unlocks>
             <vehicle>	R24_SU-76	  <cost>	3900	</cost>
             </vehicle>

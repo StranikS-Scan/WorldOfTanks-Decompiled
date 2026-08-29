@@ -80,6 +80,7 @@ def getGameControllersConfig(manager):
     from gui.game_control.universal_flag_entry_point_controller import UniversalFlagEntryPointController
     from gui.game_control.extension_stubs.fun_random_controller import FunRandomController
     from gui.game_control.extension_stubs.tank_academy_controller import TankAcademyController
+    from gui.game_control.extension_stubs.museum_of_glory_controller import MuseumOfGloryController
     from gui.game_control.hangar_switch_controller import HangarSpaceSwitchController
     from gui.entitlements.entitlements_controller import EntitlementsController
     from gui.game_control.daily_quests_intro_presenter import DailyQuestsIntroPresenter
@@ -103,6 +104,8 @@ def getGameControllersConfig(manager):
     from gui.game_control.newbie_entry_point_controller import NewbieEntryPointController
     from gui.game_control.summer_sale_controller import SummerSaleController
     from gui.game_control.control_point_override_controller import ControlPointOverrideController
+    from white_tiger.gui.wt_event_notifications import WTEventNotifications
+    from skeletons.gui.wt_event import IWTEventNotifications
     tracker = GameStateTracker()
     tracker.init()
     manager.addInstance(_interface.IGameStateTracker, tracker, finalizer='fini')
@@ -202,4 +205,6 @@ def getGameControllersConfig(manager):
     _config(_interface.ISummerSaleController, SummerSaleController())
     _config(_interface.IControlPointOverrideController, ControlPointOverrideController())
     _config(_interface.ITankAcademyController, TankAcademyController())
+    _config(_interface.IMuseumOfGloryController, MuseumOfGloryController())
+    _config(IWTEventNotifications, WTEventNotifications())
     collectGameControllers(_config)

@@ -948,16 +948,16 @@
         <tracesParams>
           <trackPairIdx>	0	</trackPairIdx>
           <bufferPrefs>	largeTank	</bufferPrefs>
-          <textureSet>	usa_04	</textureSet>
-          <size>	0.8 0.9	</size>
+          <textureSet>	usa_a23	</textureSet>
+          <size>	0.6 0.75	</size>
           <offset>	0 0	</offset>
           <centerOffsetFactor>	1 1	</centerOffsetFactor>
         </tracesParams>
         <tracesParams>
           <trackPairIdx>	1	</trackPairIdx>
           <bufferPrefs>	largeTank	</bufferPrefs>
-          <textureSet>	usa_04	</textureSet>
-          <size>	0.8 0.9	</size>
+          <textureSet>	usa_a23	</textureSet>
+          <size>	0.6 0.75	</size>
           <offset>	0 0	</offset>
           <centerOffsetFactor>	1 1	</centerOffsetFactor>
         </tracesParams>
@@ -1338,6 +1338,16 @@
           <trackPairIdx>	0	</trackPairIdx>
         </group>
         <generalWheels>	true	</generalWheels>
+        <traces>
+          <trackTrace>
+            <backmostGroundWheelName>	W_L5	</backmostGroundWheelName>
+            <frontmostGroundWheelName>	W_L0	</frontmostGroundWheelName>
+          </trackTrace>
+          <trackTrace>
+            <backmostGroundWheelName>	W_R5	</backmostGroundWheelName>
+            <frontmostGroundWheelName>	W_R0	</frontmostGroundWheelName>
+          </trackTrace>
+        </traces>
       </wheels>
       <drivingWheels>	WD_L0 WD_L1	</drivingWheels>
       <effects>
@@ -2292,16 +2302,16 @@
         <tracesParams>
           <trackPairIdx>	0	</trackPairIdx>
           <bufferPrefs>	largeTank	</bufferPrefs>
-          <textureSet>	usa_04	</textureSet>
-          <size>	0.8 0.9	</size>
+          <textureSet>	usa_a23	</textureSet>
+          <size>	0.6 0.75	</size>
           <offset>	0 0	</offset>
           <centerOffsetFactor>	1 1	</centerOffsetFactor>
         </tracesParams>
         <tracesParams>
           <trackPairIdx>	1	</trackPairIdx>
           <bufferPrefs>	largeTank	</bufferPrefs>
-          <textureSet>	usa_04	</textureSet>
-          <size>	0.8 0.9	</size>
+          <textureSet>	usa_a23	</textureSet>
+          <size>	0.6 0.75	</size>
           <offset>	0 0	</offset>
           <centerOffsetFactor>	1 1	</centerOffsetFactor>
         </tracesParams>
@@ -2682,6 +2692,16 @@
           <trackPairIdx>	0	</trackPairIdx>
         </group>
         <generalWheels>	true	</generalWheels>
+        <traces>
+          <trackTrace>
+            <backmostGroundWheelName>	W_L5	</backmostGroundWheelName>
+            <frontmostGroundWheelName>	W_L0	</frontmostGroundWheelName>
+          </trackTrace>
+          <trackTrace>
+            <backmostGroundWheelName>	W_R5	</backmostGroundWheelName>
+            <frontmostGroundWheelName>	W_R0	</frontmostGroundWheelName>
+          </trackTrace>
+        </traces>
       </wheels>
       <drivingWheels>	WD_L0 WD_L1	</drivingWheels>
       <effects>

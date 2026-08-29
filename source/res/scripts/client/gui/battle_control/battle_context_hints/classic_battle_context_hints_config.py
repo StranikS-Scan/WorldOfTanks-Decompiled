@@ -2,20 +2,20 @@
 # Embedded file name: scripts/client/gui/battle_control/battle_context_hints/classic_battle_context_hints_config.py
 import typing
 from gui.Scaleform.genConsts.BATTLE_VIEW_ALIASES import BATTLE_VIEW_ALIASES
-from gui.battle_control.battle_context_hints.activation_triggers import KilledWhileObservedHintTrigger, AmmunitionCritHintTrigger, FueltankCritHintTrigger, ModuleDamageHintTrigger, InSafetyWhileNotObservedHintTrigger
-from gui.battle_control.battle_context_hints.applying_triggers import RepairKitApplyingTrigger, MedKitApplyingTrigger
+from gui.battle_control.battle_context_hints.activation_triggers import KilledWhileObservedHintTrigger, AmmunitionCritHintTrigger, FueltankCritHintTrigger, ModuleDamageHintTrigger, InSafetyWhileNotObservedHintTrigger, AmmoAvailableHintTrigger, AmmoTypeSwitchHintTrigger
+from gui.battle_control.battle_context_hints.applying_triggers import RepairKitApplyingTrigger, MedKitApplyingTrigger, AmmoTypeSwitchApplyingTrigger
 from gui.battle_control.battle_context_hints.battle_context_hints_ctrl import BattleContextHintsController
 from gui.battle_control.battle_context_hints.common import HintId, ContextHintsSoundEvents
 from gui.battle_control.battle_context_hints.hint_descriptor import HintDescriptor
-from gui.battle_control.battle_context_hints.hint_lifecycle_managers import KitHintLifecycleMgr, InfoHintLifecycleMgr
-from gui.battle_control.battle_context_hints.settings_data_block import HintDataCntrBlock, HintDataLongBattleCntrBlock, HintDataShortBattleCntrBlock, HintDataFullBlock
+from gui.battle_control.battle_context_hints.hint_lifecycle_managers import KitHintLifecycleMgr, InfoHintLifecycleMgr, AmmoTypeSwitchHintLifecycleMgr
+from gui.battle_control.battle_context_hints.settings_data_block import HintData, HintDataCntrBlock, HintDataPlayerObservedBlock, HintDataShortBattleCntrBlock, HintDataFullBlock
 from gui.impl.battle.battle_page.battle_context_hints.battle_context_hints_presenters import InfoHintPresenter
 from gui.impl.battle.battle_page.battle_context_hints.info_battle_context_hint_view import InfoBattleContextHintView
 from gui.impl.battle.battle_page.battle_context_hints.sixth_sense_context_hint_view import SixthSenseContextHintView
 
 def getConfig():
     from account_helpers.settings_core.ServerSettingsManager import SETTINGS_SECTIONS, BATTLE_CONTEXT_HINTS
-    config = [HintDescriptor(priority=1002, hintId=HintId.PLAYER_VEHICLE_OBSERVED, injectComponentAlias=BATTLE_VIEW_ALIASES.SIXTH_SENSE_CONTEXT_HINT, hintView=SixthSenseContextHintView, hintPresenter=None, activationTrigger=None, applyingTrigger=None, hintLifecycleMgr=InfoHintLifecycleMgr, dataBlock=HintDataLongBattleCntrBlock(SETTINGS_SECTIONS.BATTLE_CONTEXT_HINTS, BATTLE_CONTEXT_HINTS.PLAYER_VEHICLE_OBSERVED), soundEvent=ContextHintsSoundEvents.PLAYER_VEHICLE_OBSERVED, delay=0, duration=10, maxWatchingQty=10, maxWatchingQtyPerBattle=1, battlesCooldown=0),
+    config = [HintDescriptor(priority=1002, hintId=HintId.PLAYER_VEHICLE_OBSERVED, injectComponentAlias=BATTLE_VIEW_ALIASES.SIXTH_SENSE_CONTEXT_HINT, hintView=SixthSenseContextHintView, hintPresenter=None, activationTrigger=None, applyingTrigger=None, hintLifecycleMgr=InfoHintLifecycleMgr, dataBlock=HintDataPlayerObservedBlock(SETTINGS_SECTIONS.BATTLE_CONTEXT_HINTS, BATTLE_CONTEXT_HINTS.PLAYER_VEHICLE_OBSERVED), soundEvent=ContextHintsSoundEvents.PLAYER_VEHICLE_OBSERVED, delay=0, duration=10, maxWatchingQty=3, maxWatchingQtyPerBattle=1, battlesCooldown=1),
      HintDescriptor(priority=1001, hintId=HintId.KILLED_WHILE_OBSERVED, injectComponentAlias=BATTLE_VIEW_ALIASES.INFO_BATTLE_CONTEXT_HINT, hintView=InfoBattleContextHintView, hintPresenter=InfoHintPresenter, activationTrigger=KilledWhileObservedHintTrigger, applyingTrigger=None, hintLifecycleMgr=InfoHintLifecycleMgr, dataBlock=HintDataFullBlock(SETTINGS_SECTIONS.BATTLE_CONTEXT_HINTS, BATTLE_CONTEXT_HINTS.KILLED_WHILE_OBSERVED), soundEvent=ContextHintsSoundEvents.KILLED_WHILE_OBSERVED, delay=2, duration=10, maxWatchingQty=2, maxWatchingQtyPerBattle=1, battlesCooldown=1),
      HintDescriptor(priority=1000, hintId=HintId.IN_SAFETY_WHILE_NOT_OBSERVED, injectComponentAlias=BATTLE_VIEW_ALIASES.INFO_BATTLE_CONTEXT_HINT, hintView=InfoBattleContextHintView, hintPresenter=InfoHintPresenter, activationTrigger=InSafetyWhileNotObservedHintTrigger, applyingTrigger=None, hintLifecycleMgr=InfoHintLifecycleMgr, dataBlock=HintDataShortBattleCntrBlock(SETTINGS_SECTIONS.BATTLE_CONTEXT_HINTS, BATTLE_CONTEXT_HINTS.IN_SAFETY_WHILE_NOT_OBSERVED), soundEvent=ContextHintsSoundEvents.IN_SAFETY_WHILE_NOT_OBSERVED, delay=3, duration=10, maxWatchingQty=2, maxWatchingQtyPerBattle=1, battlesCooldown=0),
      HintDescriptor(priority=609, hintId=HintId.ENGINE_DAMAGE_REPAIR_KIT, injectComponentAlias=BATTLE_VIEW_ALIASES.CONSUMABLES_PANEL, hintView=None, hintPresenter=None, activationTrigger=None, applyingTrigger=RepairKitApplyingTrigger, hintLifecycleMgr=KitHintLifecycleMgr, dataBlock=HintDataCntrBlock(SETTINGS_SECTIONS.BATTLE_CONTEXT_HINTS, BATTLE_CONTEXT_HINTS.ENGINE_DAMAGE_REPAIR_KIT), soundEvent=ContextHintsSoundEvents.MODULE_REPAIR_KIT, delay=2, duration=5, maxWatchingQty=1, maxWatchingQtyPerBattle=-1, battlesCooldown=0),
@@ -34,9 +34,28 @@ def getConfig():
      HintDescriptor(priority=596, hintId=HintId.DRIVER_DAMAGE_MED_KIT, injectComponentAlias=BATTLE_VIEW_ALIASES.CONSUMABLES_PANEL, hintView=None, hintPresenter=None, activationTrigger=None, applyingTrigger=MedKitApplyingTrigger, hintLifecycleMgr=KitHintLifecycleMgr, dataBlock=HintDataCntrBlock(SETTINGS_SECTIONS.BATTLE_CONTEXT_HINTS_2, BATTLE_CONTEXT_HINTS.DRIVER_DAMAGE_MED_KIT), soundEvent=ContextHintsSoundEvents.TANKMAN_DAMAGE, delay=2, duration=5, maxWatchingQty=1, maxWatchingQtyPerBattle=-1, battlesCooldown=0),
      HintDescriptor(priority=597, hintId=HintId.GUNNER_DAMAGE_MED_KIT, injectComponentAlias=BATTLE_VIEW_ALIASES.CONSUMABLES_PANEL, hintView=None, hintPresenter=None, activationTrigger=None, applyingTrigger=MedKitApplyingTrigger, hintLifecycleMgr=KitHintLifecycleMgr, dataBlock=HintDataCntrBlock(SETTINGS_SECTIONS.BATTLE_CONTEXT_HINTS_2, BATTLE_CONTEXT_HINTS.GUNNER_DAMAGE_MED_KIT), soundEvent=ContextHintsSoundEvents.TANKMAN_DAMAGE, delay=2, duration=5, maxWatchingQty=1, maxWatchingQtyPerBattle=-1, battlesCooldown=0),
      HintDescriptor(priority=598, hintId=HintId.LOADER_DAMAGE_MED_KIT, injectComponentAlias=BATTLE_VIEW_ALIASES.CONSUMABLES_PANEL, hintView=None, hintPresenter=None, activationTrigger=None, applyingTrigger=MedKitApplyingTrigger, hintLifecycleMgr=KitHintLifecycleMgr, dataBlock=HintDataCntrBlock(SETTINGS_SECTIONS.BATTLE_CONTEXT_HINTS_2, BATTLE_CONTEXT_HINTS.LOADER_DAMAGE_MED_KIT), soundEvent=ContextHintsSoundEvents.TANKMAN_DAMAGE, delay=2, duration=5, maxWatchingQty=1, maxWatchingQtyPerBattle=-1, battlesCooldown=0),
-     HintDescriptor(priority=595, hintId=HintId.RADIOMAN_DAMAGE_MED_KIT, injectComponentAlias=BATTLE_VIEW_ALIASES.CONSUMABLES_PANEL, hintView=None, hintPresenter=None, activationTrigger=None, applyingTrigger=MedKitApplyingTrigger, hintLifecycleMgr=KitHintLifecycleMgr, dataBlock=HintDataCntrBlock(SETTINGS_SECTIONS.BATTLE_CONTEXT_HINTS_3, BATTLE_CONTEXT_HINTS.RADIOMAN_DAMAGE_MED_KIT), soundEvent=ContextHintsSoundEvents.TANKMAN_DAMAGE, delay=2, duration=5, maxWatchingQty=1, maxWatchingQtyPerBattle=-1, battlesCooldown=0)]
+     HintDescriptor(priority=595, hintId=HintId.RADIOMAN_DAMAGE_MED_KIT, injectComponentAlias=BATTLE_VIEW_ALIASES.CONSUMABLES_PANEL, hintView=None, hintPresenter=None, activationTrigger=None, applyingTrigger=MedKitApplyingTrigger, hintLifecycleMgr=KitHintLifecycleMgr, dataBlock=HintDataCntrBlock(SETTINGS_SECTIONS.BATTLE_CONTEXT_HINTS_3, BATTLE_CONTEXT_HINTS.RADIOMAN_DAMAGE_MED_KIT), soundEvent=ContextHintsSoundEvents.TANKMAN_DAMAGE, delay=2, duration=5, maxWatchingQty=1, maxWatchingQtyPerBattle=-1, battlesCooldown=0),
+     HintDescriptor(priority=999, hintId=HintId.AMMO_TYPE_AVAILABLE, injectComponentAlias=BATTLE_VIEW_ALIASES.INFO_BATTLE_CONTEXT_HINT, hintView=InfoBattleContextHintView, hintPresenter=InfoHintPresenter, activationTrigger=AmmoAvailableHintTrigger, applyingTrigger=None, hintLifecycleMgr=InfoHintLifecycleMgr, dataBlock=HintDataCntrBlock(SETTINGS_SECTIONS.BATTLE_CONTEXT_HINTS_3, BATTLE_CONTEXT_HINTS.AMMO_TYPE_AVAILABLE), soundEvent=ContextHintsSoundEvents.AMMO_TYPE_AVAILABLE, delay=3, duration=10, maxWatchingQty=1, maxWatchingQtyPerBattle=1, battlesCooldown=0),
+     HintDescriptor(priority=998, hintId=HintId.AMMO_TYPE_SWITCH, injectComponentAlias=BATTLE_VIEW_ALIASES.CONSUMABLES_PANEL, hintView=None, hintPresenter=None, activationTrigger=AmmoTypeSwitchHintTrigger, applyingTrigger=AmmoTypeSwitchApplyingTrigger, hintLifecycleMgr=AmmoTypeSwitchHintLifecycleMgr, dataBlock=HintDataFullBlock(SETTINGS_SECTIONS.BATTLE_CONTEXT_HINTS_3, BATTLE_CONTEXT_HINTS.AMMO_TYPE_SWITCH), soundEvent=ContextHintsSoundEvents.AMMO_TYPE_SWITCH, delay=2, duration=10, maxWatchingQty=2, maxWatchingQtyPerBattle=1, battlesCooldown=2)]
     return config
 
 
 def createClassicBattleContextHintsController():
     return BattleContextHintsController(getConfig())
+
+
+def isBattleContextHintsResetAvailable():
+    return any((conf.maxWatchingQty >= 0 and conf.dataBlock.getValue().watchingCounter < conf.maxWatchingQty for conf in getConfig()))
+
+
+def resetBattleContextHintsCounters(hintId=None, watchingCounter=None):
+    for conf in getConfig():
+        if hintId is not None and conf.hintId != hintId:
+            continue
+        cntr = watchingCounter if watchingCounter is not None else conf.maxWatchingQty
+        if cntr < 0:
+            continue
+        hintData = HintData(cntr, conf.maxWatchingQtyPerBattle, 0, False)
+        conf.dataBlock.setValue(hintData)
+
+    return

@@ -24,6 +24,7 @@ from vehicle_outfit.packers import ProjectionDecalPacker
 from vehicle_systems.tankStructure import TankPartNames, TankPartIndexes, VehiclePartsTuple
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.utils.graphics import isRendererPipelineDeferred
+from items.components.c11n_components import getVehicleProjectionDecalSlotParams
 from items.components.c11n_constants import ModificationType, C11N_MASK_REGION, DEFAULT_DECAL_SCALE_FACTORS, SeasonType, CustomizationType, EMPTY_ITEM_ID, DEFAULT_DECAL_CLIP_ANGLE, ApplyArea, MAX_PROJECTION_DECALS_PER_AREA, CamouflageTilingType, CustomizationTypeNames, SLOT_TYPE_NAMES, DEFAULT_DECAL_TINT_COLOR, Options, SLOT_DEFAULT_ALLOWED_MODEL, ItemTags, DEFAULT_GLOSS, DEFAULT_METALLIC, DEFAULT_FORWARD_EMISSION, DEFAULT_DEFERRED_EMISSION, DEFAULT_EMISSION_ANIMATION_SPEED, DEFAULT_NORMAL_MAP_FACTOR, DEFAULT_NORMAL_MAX_LOD, ProjectionDecalMatchingTags, ProjectionDecalDirectionTags
 from gui.shared.gui_items.customization.c11n_items import Customization
 import math_utils
@@ -207,9 +208,31 @@ def getOutfitComponent(outfitCD, vehicleDescriptor=None, seasonType=None):
         return CustomizationOutfit()
 
 
+def _sanitizeProjectionDecalsForVehicle(outfitComponent, vehicleDescriptor):
+    validProjectionDecals = []
+    vehicleCD = vehicleDescriptor.makeCompactDescr()
+    for component in outfitComponent.projection_decals:
+        if component.slotId == ProjectionDecalPacker.STYLED_SLOT_ID:
+            validProjectionDecals.append(component)
+            continue
+        if getVehicleProjectionDecalSlotParams(vehicleDescriptor, component.slotId) is not None:
+            validProjectionDecals.append(component)
+            continue
+        intCD = makeIntCompactDescrByID('customizationItem', CustomizationType.PROJECTION_DECAL, component.id)
+        _logger.warning('Skipping projection decal incompatible with vehicle: vehicle=%(vehicle)s; vehicleCD=%(vehicleCD)r; slotId=%(slotId)s; decalId=%(decalId)s; intCD=%(intCD)s', {'vehicle': vehicleDescriptor.type.name,
+         'vehicleCD': vehicleCD,
+         'slotId': component.slotId,
+         'decalId': component.id,
+         'intCD': intCD})
+
+    outfitComponent.projection_decals = validProjectionDecals
+    return outfitComponent
+
+
 def prepareBattleOutfit(outfitCD, vehicleDescriptor, vehicleId):
     vehicleCD = vehicleDescriptor.makeCompactDescr()
     outfitComponent = getOutfitComponent(outfitCD, vehicleDescriptor)
+    outfitComponent = _sanitizeProjectionDecalsForVehicle(outfitComponent, vehicleDescriptor)
     outfit = Outfit(component=outfitComponent, vehicleCD=vehicleCD)
     player = BigWorld.player()
     if player is not None and hasattr(player, 'customizationDisplayType'):

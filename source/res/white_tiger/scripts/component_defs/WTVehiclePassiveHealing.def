@@ -1,0 +1,17 @@
+<WTVehiclePassiveHealing.def>
+  <Properties>
+    <isHealActive>
+      <Type>	BOOL	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <Default>	0	</Default>
+    </isHealActive>
+    <usagePrefab>
+      <Type>	STRING	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </usagePrefab>
+  </Properties>
+  <ofEntity>
+    <Vehicle></Vehicle>
+  </ofEntity>
+  <DefaultKeyName>	wtPassiveHealing	</DefaultKeyName>
+</WTVehiclePassiveHealing.def>

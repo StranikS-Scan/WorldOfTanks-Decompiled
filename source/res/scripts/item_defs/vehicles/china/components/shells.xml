@@ -78,6 +78,20 @@
       <devices>	135	</devices>
     </damage>
   </_100mm_CB_412D>
+  <_100mm_CB_412D_Ch75>
+    <id>	31034	</id>
+    <userString>	#china_vehicles:_100mm_CB_412D_Ch75	</userString>
+    <icon>	ap	</icon>
+    <price>	930	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	100	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainArmorPiercing	</effects>
+    <damage>
+      <armor>	300	</armor>
+      <devices>	135	</devices>
+    </damage>
+  </_100mm_CB_412D_Ch75>
   <_100mm_CB_472D>
     <id>	31028	</id>
     <userString>	#china_vehicles:_100mm_CB_472D	</userString>
@@ -107,6 +121,21 @@
       <devices>	135	</devices>
     </damage>
   </_100mm_CC_412P>
+  <_100mm_CC_412P_Ch75>
+    <id>	31035	</id>
+    <userString>	#china_vehicles:_100mm_CC_412P_Ch75	</userString>
+    <icon>	ap_cr_premium	</icon>
+    <price>	4000	</price>
+    <improved>	true	</improved>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	100	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainAPCR	</effects>
+    <damage>
+      <armor>	300	</armor>
+      <devices>	135	</devices>
+    </damage>
+  </_100mm_CC_412P_Ch75>
   <_100mm_CJ-412G>
     <id>	18	</id>
     <userString>	#china_vehicles:_100mm_CJ-412G	</userString>
@@ -276,6 +305,30 @@
       </damage>
     </armorSpalls>
   </_100mm_SB_472>
+  <_100mm_SB_472_Ch75>
+    <id>	31036	</id>
+    <userString>	#china_vehicles:_100mm_SB_472_Ch75	</userString>
+    <icon>	he_modern	</icon>
+    <price>	720	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	100	</caliber>
+    <explosionRadius>	1.76	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	mainHighExplosive	</effects>
+    <damage>
+      <armor>	390	</armor>
+      <devices>	135	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	1.76	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	195	</armor>
+        <devices>	70	</devices>
+      </damage>
+    </armorSpalls>
+  </_100mm_SB_472_Ch75>
   <_100mm_SB_Type_59_2>
     <id>	148	</id>
     <userString>	#china_vehicles:_100mm_SB_Type_59_2	</userString>
@@ -2015,6 +2068,22 @@
     <hitDeviceChanceMultiplier>	0.3	</hitDeviceChanceMultiplier>
     <hitCrewChanceMultiplier>	0.3	</hitCrewChanceMultiplier>
   </_180mm_HEAT_F-572CH_70>
+  <_180mm_HEAT_F-572CH_70_02>
+    <id>	31040	</id>
+    <userString>	#china_vehicles:_180mm_HEAT_F-572CH_70	</userString>
+    <icon>	hc_premium	</icon>
+    <price>	7200	</price>
+    <improved>	true	</improved>
+    <kind>	HOLLOW_CHARGE	</kind>
+    <caliber>	180	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	hugeHollowCharge	</effects>
+    <damage>
+      <armor>	1050	</armor>
+      <devices>	240	</devices>
+    </damage>
+    <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
+  </_180mm_HEAT_F-572CH_70_02>
   <_180mm_HEAT_F-572CH_70_T>
     <id>	31026	</id>
     <userString>	#china_vehicles:_180mm_HEAT_F-572CH_70_T	</userString>

@@ -8,10 +8,12 @@ import BigWorld
 from constants import DISTRIBUTION_PLATFORM
 from debug_utils import LOG_CURRENT_EXCEPTION
 from gui.Scaleform.daapi.view.lobby.store.browser import shop_helpers
-from gui.shared.event_dispatcher import showShop
+from gui.shared.event_dispatcher import showShop, showHangar
+from white_tiger.gui.shared.event_dispatcher import showEventProgressionWindow
 from helpers import dependency
 from helpers.http.url_formatters import addParamsToUrlQuery
 from skeletons.gui.login_manager import ILoginManager
+from skeletons.gui.game_control import IWhiteTigerController
 _PLATFORM_PARAM = 'platform'
 _WOT_PLATFORM_PARAM = 'wot_platform'
 _INGAME_SHOP_PARAM = 'ingame_shop'
@@ -144,4 +146,35 @@ class PremShopLinksForArgsUrlHandler(PremShopLinksHandler):
             if super(PremShopLinksForArgsUrlHandler, self).handle(argUrl):
                 return True
 
+        return False
+
+
+class WtGoToLinksHandler(ILinksHandler):
+    _PARAM_KEY = 'wot_client_param'
+    _GO_TO_EVENT = 'go_to_event'
+    _GO_TO_META = 'go_to_event_meta'
+    gameEventCtrl = dependency.descriptor(IWhiteTigerController)
+
+    def checkHandle(self, url):
+        return CheckHandleResult(False, False)
+
+    def handle(self, url):
+        query = urlparse.urlparse(url).query
+        if not query:
+            return False
+        params = urlparse.parse_qs(query)
+        if self._PARAM_KEY not in params:
+            return False
+        param = params[self._PARAM_KEY]
+        if self._GO_TO_META in param:
+            showHangar()
+            if self.gameEventCtrl.isWelcomeScreenShown():
+                self.gameEventCtrl.doSelectEventPrbAndCallback(showEventProgressionWindow)
+            else:
+                self.gameEventCtrl.doSelectEventPrb()
+            return True
+        if self._GO_TO_EVENT in param:
+            showHangar()
+            self.gameEventCtrl.doSelectEventPrb()
+            return True
         return False

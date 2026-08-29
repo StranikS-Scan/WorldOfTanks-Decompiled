@@ -1,0 +1,18 @@
+<WTVehicleImpulseModA.def>
+  <Properties>
+    <isImpulseActive>
+      <Type>	BOOL	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <Default>	0	</Default>
+    </isImpulseActive>
+    <isSomeoneStuned>
+      <Type>	BOOL	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <Default>	0	</Default>
+    </isSomeoneStuned>
+  </Properties>
+  <ofEntity>
+    <Vehicle></Vehicle>
+  </ofEntity>
+  <DefaultKeyName>	wtImpulseModA	</DefaultKeyName>
+</WTVehicleImpulseModA.def>

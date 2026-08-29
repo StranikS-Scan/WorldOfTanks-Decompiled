@@ -1,0 +1,29 @@
+<WTArenaPlasmaInfo.def>
+  <CellMethods></CellMethods>
+  <ClientMethods></ClientMethods>
+  <Properties>
+    <plasmaInfoList>
+      <Type>	ARRAY	  <of>	FIXED_DICT	  <Properties>
+            <vehicleId>
+              <Type>	OBJECT_ID	</Type>
+            </vehicleId>
+            <plasmaCounter>
+              <Type>	UINT8	</Type>
+            </plasmaCounter>
+          </Properties>
+        </of>
+      </Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <AllowUnsafeData>	true	</AllowUnsafeData>
+    </plasmaInfoList>
+    <bossPlasmaCounter>
+      <Type>	INT8	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <Default>	0	</Default>
+    </bossPlasmaCounter>
+  </Properties>
+  <ofEntity>
+    <ArenaInfo></ArenaInfo>
+  </ofEntity>
+  <DefaultKeyName>	plasmaInfo	</DefaultKeyName>
+</WTArenaPlasmaInfo.def>

@@ -377,6 +377,20 @@
     <tags>	AT-SPG role_ATSPG_sniper HD heavyAT-SPG improvedVentilation_class1_user tankRammer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user earn_crystals private secret cannot_be_sold comp7 special	</tags>
     <level>	10	</level>
   </J35_Ho_Ri_3_7x7>
+  <J35_Ho_Ri_3_cl>
+    <id>	31007	</id>
+    <userString>	#japan_vehicles:J35_Ho_Ri_3_cl	</userString>
+    <shortUserString>	#japan_vehicles:J35_Ho_Ri_3_cl_short	</shortUserString>
+    <description>	#japan_vehicles:J35_Ho_Ri_3_descr	</description>
+    <shortDescriptionSpecial>	#japan_vehicles:J35_Ho_Ri_3_cl_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#japan_vehicles:J35_Ho_Ri_3_cl_long_special	</longDescriptionSpecial>
+    <price>	1	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <cannotBeBought>	true	</cannotBeBought>
+    <tags>	AT-SPG role_ATSPG_sniper HD heavyAT-SPG improvedVentilation_class1_user tankRammer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user clanWarsBattles special cannot_be_sold private	</tags>
+    <level>	10	</level>
+  </J35_Ho_Ri_3_cl>
   <J36_Type_63_HT>
     <id>	209	</id>
     <userString>	#japan_vehicles:J36_Type_63_HT	</userString>
@@ -400,7 +414,7 @@
     <price>	11000	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
-    <tags>	heavyTank role_HT_support HD siegeMode autoSiege improvedVentilation_class1_user extraHealthReserve_class1_user aimingStabilizer_class1_user antifragmentationLining_heavy_user secret testTank lockOutfit	</tags>
+    <tags>	heavyTank role_HT_support HD siegeMode autoSiege improvedVentilation_class1_user extraHealthReserve_class1_user aimingStabilizer_class1_user antifragmentationLining_heavy_user lockOutfit restoreWithStyle builtinStyle	</tags>
     <level>	8	</level>
   </J36_Type_63_HT_02>
   <J37_Type_3_Ho_Ni_III>
@@ -532,4 +546,17 @@
     <tags>	lightTank role_LT_universal siegeMode dualgun charger HD scout aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_light_user lockOutfit	</tags>
     <level>	8	</level>
   </J49_Type_60_Proto_4>
+  <J51_Naginata>
+    <id>	31004	</id>
+    <userString>	#japan_vehicles:J51_Naginata	</userString>
+    <description>	#japan_vehicles:J51_Naginata_descr	</description>
+    <shortUserString>	#japan_vehicles:J51_Naginata_short	</shortUserString>
+    <shortDescriptionSpecial>	#japan_vehicles:J51_Naginata_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#japan_vehicles:J51_Naginata_long_special	</longDescriptionSpecial>
+    <price>	11000	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	heavyTank role_HT_break HD siegeMode dualgun charger improvedVentilation_class1_user extraHealthReserve_class1_user aimingStabilizer_class1_user antifragmentationLining_heavy_user secret testTank lockOutfit	</tags>
+    <level>	8	</level>
+  </J51_Naginata>
 </list.xml>

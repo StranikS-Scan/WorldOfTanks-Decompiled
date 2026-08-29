@@ -337,7 +337,8 @@ class AvatarChatKeyHandling(object):
             if replierID != self.playerVehicleID and targetID != self.playerVehicleID:
                 enableVoice = False
             sentByPlayer = True if replierID == self.playerVehicleID else False
-            self.__playSoundNotification(soundNotificationReply, matrixProvider.translation, enableVoice, sentByPlayer)
+            if matrixProvider is not None:
+                self.__playSoundNotification(soundNotificationReply, matrixProvider.translation, enableVoice, sentByPlayer)
             return
 
     def __onCommandReceived(self, cmd):

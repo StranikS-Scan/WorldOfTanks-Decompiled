@@ -17,7 +17,8 @@ from skeletons.gui.lobby_context import ILobbyContext
 from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.shared.events import ProfileStatisticEvent
 from gui.shared import g_eventBus
-from gui.Scaleform.daapi.view.lobby.comp7.comp7_profile_helper import COMP7_ARCHIVE_NAMES, COMP7_SEASON_NUMBERS, isComp7Archive, isComp7Season, getDropdownKeyByArchiveName, getDropdownKeyBySeason
+from comp7_common import COMP7_ARCHIVE_NAMES, COMP7_SEASON_NUMBERS
+from gui.Scaleform.daapi.view.lobby.comp7.comp7_profile_helper import isComp7Archive, isComp7Season, getDropdownKeyByArchiveName, getDropdownKeyBySeason
 _RankedSeasonsKeys = namedtuple('_RankedSeasonsKeys', ['all', 'current', 'previous'])
 _RANKED_SEASONS_ARCHIVE = 'archive'
 RANKED_SEASONS_ARCHIVE_10x10 = '_10x10'

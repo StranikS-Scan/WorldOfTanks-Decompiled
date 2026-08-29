@@ -43,8 +43,8 @@ class ConsumablesPanelMeta(BaseDAAPIComponent):
     def as_setCurrentShellS(self, idx):
         return self.flashObject.as_setCurrentShell(idx) if self._isDAAPIInited() else None
 
-    def as_addEquipmentSlotS(self, idx, keyCode, sfKeyCode, quantity, timeRemaining, reloadingTime, iconPath, tooltipText, animation):
-        return self.flashObject.as_addEquipmentSlot(idx, keyCode, sfKeyCode, quantity, timeRemaining, reloadingTime, iconPath, tooltipText, animation) if self._isDAAPIInited() else None
+    def as_addEquipmentSlotS(self, idx, keyCode, sfKeyCode, quantity, timeRemaining, reloadingTime, iconPath, tooltipText, animation, tag):
+        return self.flashObject.as_addEquipmentSlot(idx, keyCode, sfKeyCode, quantity, timeRemaining, reloadingTime, iconPath, tooltipText, animation, tag) if self._isDAAPIInited() else None
 
     def as_showEquipmentSlotsS(self, show):
         return self.flashObject.as_showEquipmentSlots(show) if self._isDAAPIInited() else None
@@ -126,6 +126,9 @@ class ConsumablesPanelMeta(BaseDAAPIComponent):
 
     def as_showContextHintS(self, idx, label):
         return self.flashObject.as_showContextHint(idx, label) if self._isDAAPIInited() else None
+
+    def as_setContextHintStateS(self, idx, label, state):
+        return self.flashObject.as_setContextHintState(idx, label, state) if self._isDAAPIInited() else None
 
     def as_hideContextHintS(self, animID):
         return self.flashObject.as_hideContextHint(animID) if self._isDAAPIInited() else None

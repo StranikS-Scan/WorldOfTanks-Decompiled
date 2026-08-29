@@ -435,17 +435,23 @@ def assembleMultiGunRecoil(appearance, lodLink):
     return
 
 
-def assembleGunLinkedNodesAnimator(appearance):
+def assembleLinkedNodesAnimator(appearance):
     skin = appearance.modelsSetParams.skin
-    drivingJoints = appearance.typeDescriptor.gun.drivenJoints or {}
-    drivingJoints = drivingJoints.get(skin, drivingJoints.get('default', None))
-    if drivingJoints is not None:
-        appearance.gunLinkedNodesAnimator = appearance.createComponent(Vehicular.LinkedNodesPitchAnimator, appearance.compoundModel, drivingJoints)
+    joints = []
+    typeDescriptor = appearance.typeDescriptor
+    for part in (typeDescriptor.gun, typeDescriptor.turret, typeDescriptor.hull):
+        drivenJoints = part.drivenJoints or {}
+        partJoints = drivenJoints.get(skin, drivenJoints.get('default', None))
+        if partJoints is not None:
+            joints.extend(partJoints)
+
+    if joints:
+        appearance.linkedNodesAnimator = appearance.createComponent(Vehicular.LinkedNodesAnimator, appearance.compoundModel, joints)
     return
 
 
 def assembleHullAimingController(appearance):
-    if not (appearance.typeDescriptor.hasSiegeMode and appearance.typeDescriptor.isPitchHullAimingAvailable):
+    if not appearance.typeDescriptor.changesPitchHullAimingOnSiege:
         return
     appearance.hullAimingController = HullAimingController()
 
@@ -453,13 +459,11 @@ def assembleHullAimingController(appearance):
 def assembleSuspensionSound(appearance, lodLink, isPlayer):
     if not WWISE.WW_isInitialised():
         return
-    elif not appearance.typeDescriptor.hasSiegeMode:
-        return
     else:
-        siegeVehicleDescr = appearance.typeDescriptor.siegeVehicleDescr
-        if siegeVehicleDescr is None:
+        descr = appearance.typeDescriptor
+        if not descr.changesPitchHullAimingOnSiege and not descr.isPitchHullAimingEnabled:
             return
-        suspensionSoundParams = siegeVehicleDescr.chassis.hullAimingSound
+        suspensionSoundParams = descr.chassis.hullAimingSound
         if suspensionSoundParams is None:
             return
         model = appearance.compoundModel
@@ -481,6 +485,7 @@ def assembleSuspensionSound(appearance, lodLink, isPlayer):
         suspensionSound.lodSetting = suspensionSoundParams.lodDist
         suspensionSound.vehicleMatrix = appearance.filter.groundPlacingMatrix
         suspensionSound.bodyMatrix = appearance.filter.bodyMatrix
+        suspensionSound.setState(descr.isPitchHullAimingEnabled)
         appearance.suspensionSound = suspensionSound
         return
 

@@ -65,7 +65,7 @@ from gui.server_events.events_helpers import isACEmailConfirmationQuest, isDaily
 from gui.server_events.finders import CHAMPION_BADGES_BY_BRANCH, CHAMPION_BADGE_AT_OPERATION_ID, PM_FINAL_TOKEN_QUEST_IDS_BY_OPERATION_ID, getBranchByOperationId, BRANCH_TO_OPERATION_IDS
 from gui.shared import EVENT_BUS_SCOPE, events, g_eventBus
 from gui.shared import event_dispatcher
-from gui.shared.event_dispatcher import showBadgeInvoiceAwardWindow, showBattlePassAwardsWindow, showBattlePassVehicleAwardWindow, showDedicationRewardWindow, showEliteWindow, showMultiAwardWindow, showProgressionRequiredStyleUnlockedWindow, showProgressiveItemsRewardWindow, showProgressiveRewardAwardWindow, showRankedSeasonCompleteView, showRankedSelectableReward, showRankedYearAwardWindow, showRankedYearLBAwardWindow, showResourceWellAwardWindow, showSeniorityRewardAwardWindow, showBlankGiftWindow, showCollectionAwardsWindow, showParagonsRewardsWindow, showDailyEpicQuestRewardWindow, showPromoCodeRewardScreen
+from gui.shared.event_dispatcher import showBadgeInvoiceAwardWindow, showBattlePassAwardsWindow, showBattlePassVehicleAwardWindow, showDedicationRewardWindow, showEliteWindow, showMultiAwardWindow, showProgressionRequiredStyleUnlockedWindow, showProgressiveItemsRewardWindow, showProgressiveRewardAwardWindow, showRankedSeasonCompleteView, showRankedSelectableReward, showRankedYearAwardWindow, showRankedYearLBAwardWindow, showResourceWellAwardWindow, showSeniorityRewardAwardWindow, showBlankGiftWindow, showCollectionAwardsWindow, showParagonsRewardsWindow, showDailyEpicQuestRewardWindow, showPromoCodeRewardScreen, showTelecomRewardsPage
 from gui.impl.lobby.paragons.paragons_window_events import showVideoRewardView
 from gui.shared.events import PersonalMissionsEvent
 from gui.shared.gui_items.dossier.factories import getAchievementFactory
@@ -78,7 +78,6 @@ from gui.summer_sale.video_reward_handler import tryShowWithVideoReward
 from helpers import dependency, i18n
 from items import ITEM_TYPE_INDICES, vehicles as vehicles_core
 from items.components.crew_books_constants import CREW_BOOK_DISPLAYED_AWARDS_COUNT
-from messenger.formatters.service_channel import TelecomReceivedInvoiceFormatter
 from messenger.m_constants import SCH_CLIENT_MSG_TYPE
 from messenger.proto.events import g_messengerEvents
 from nations import NAMES
@@ -1188,11 +1187,9 @@ class TelecomHandler(ServiceChannelHandler):
 
     def _showAward(self, ctx):
         data = ctx[1].data
-        hasCrew = TelecomReceivedInvoiceFormatter.invoiceHasCrew(data)
-        hasBrotherhood = TelecomReceivedInvoiceFormatter.invoiceHasBrotherhood(data)
         vehicleDesrs = self.__getVehileDesrs(data)
         if vehicleDesrs:
-            award_events.showTelecomAward(vehicleDesrs, data['bundleID'], hasCrew, hasBrotherhood)
+            showTelecomRewardsPage()
         else:
             _logger.debug('There is no vehicle in the award. Telecom award window not needed!')
 

@@ -28,6 +28,7 @@ from messenger.proto import proto_getter
 from messenger.proto.bw_chat2.battle_chat_cmd import EPIC_GLOBAL_CMD_NAMES, LOCATION_CMD_NAMES, TARGETED_VEHICLE_CMD_NAMES
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.battle_session import IBattleSessionProvider
+from uilogging.chat_hotkey.loggers import ChatHotkeyLogger
 _logger = logging.getLogger(__name__)
 CONTEXTCOMMAND = 'CONTEXTCOMMAND'
 CONTEXTCOMMAND2 = 'CONTEXTCOMMAND2'
@@ -142,7 +143,7 @@ def createChatCommandsController(setup, feedback, ammo):
 
 
 class ChatCommandsController(IBattleController):
-    __slots__ = ('__isEnabled', '_arenaDP', '__feedback', '__ammo', '__markersManager', '__chatCommandsEnabled')
+    __slots__ = ('__isEnabled', '_arenaDP', '__feedback', '__ammo', '__markersManager', '__chatCommandsEnabled', '__logger')
     sessionProvider = dependency.descriptor(IBattleSessionProvider)
     settingsCore = dependency.descriptor(ISettingsCore)
     _aimOffset = aih_global_binding.bindRW(aih_global_binding.BINDING_ID.AIM_OFFSET)
@@ -154,6 +155,7 @@ class ChatCommandsController(IBattleController):
         self.__ammo = weakref.proxy(ammo)
         self.__markersManager = None
         self.__isEnabled = False
+        self.__logger = None
         return
 
     @proto_getter(PROTO_TYPE.BW_CHAT2)
@@ -166,12 +168,14 @@ class ChatCommandsController(IBattleController):
     def startControl(self):
         self.settingsCore.onSettingsChanged += self.__onSettingsChanged
         g_eventBus.addListener(events.MarkersManagerEvent.MARKERS_CREATED, self.__onMarkersManagerMarkersCreated, EVENT_BUS_SCOPE.BATTLE)
+        self.__logger = ChatHotkeyLogger()
 
     def stopControl(self):
         self._arenaDP = None
         self.__feedback = None
         self.__ammo = None
         self.__markersManager = None
+        self.__logger = None
         self.settingsCore.onSettingsChanged -= self.__onSettingsChanged
         g_eventBus.removeListener(events.MarkersManagerEvent.MARKERS_CREATED, self.__onMarkersManagerMarkersCreated, EVENT_BUS_SCOPE.BATTLE)
         return
@@ -284,6 +288,8 @@ class ChatCommandsController(IBattleController):
     def handleChatCommand(self, action, targetID=None, isInRadialMenu=False):
         player = BigWorld.player()
         targetType = _COMMAND_NAME_TRANSFORM_MARKER_TYPE[action]
+        if not isInRadialMenu:
+            self.__logger.logHotkeyClicked(action, targetType)
         if targetType == MarkerType.HEADQUARTER_MARKER_TYPE:
             self.sendAttentionToObjective(targetID, player.team == EPIC_BATTLE_TEAM_ID.TEAM_ATTACKER, action)
         elif targetType == MarkerType.BASE_MARKER_TYPE:
@@ -325,7 +331,7 @@ class ChatCommandsController(IBattleController):
     def sendCommandToBase(self, baseIdx, cmdName, baseName=''):
         if self.__isProhibitedToSendIfDeadOrObserver(cmdName) or self.__isEnabled is False:
             return
-        if self.sessionProvider.arenaVisitor.gui.isInEpicRange():
+        if self.sessionProvider.arenaVisitor.gui.isInEpicRange() or self.sessionProvider.arenaVisitor.gui.isWhiteTigerBattle():
             baseName = ID_TO_BASENAME[baseIdx]
         command = self.proto.battleCmd.createByBaseIndexAndName(baseIdx, cmdName, baseName)
         self._sendChatCommand(command, cmdName)

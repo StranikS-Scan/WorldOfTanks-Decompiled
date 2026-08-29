@@ -14,7 +14,6 @@ from gui.shared.utils import backoff
 from messenger.m_constants import PROTO_TYPE
 from messenger.m_constants import USER_ACTION_ID, USER_TAG
 from messenger.proto import proto_getter
-from messenger.proto.events import g_messengerEvents
 from messenger.proto.shared_find_criteria import MutedFindCriteria
 from messenger.storage import storage_getter
 from helpers import dependency
@@ -144,27 +143,6 @@ class VOIPManager(VOIPHandler):
     def isLoggedIn(self):
         return self.__loggedIn
 
-    def onConnected(self):
-        _logger.info('Subscribe')
-        self.__loginAttemptsRemained = 2
-        voipEvents = g_messengerEvents.voip
-        voipEvents.onChannelAvailable += self.__me_onChannelAvailable
-        voipEvents.onChannelLost += self.__me_onChannelLost
-        voipEvents.onCredentialReceived += self.__me_onCredentialReceived
-        usersEvents = g_messengerEvents.users
-        usersEvents.onUsersListReceived += self.__me_onUsersListReceived
-        usersEvents.onUserActionReceived += self.__me_onUserActionReceived
-
-    def onDisconnected(self):
-        _logger.info('Unsubscribe')
-        voipEvents = g_messengerEvents.voip
-        voipEvents.onChannelAvailable -= self.__me_onChannelAvailable
-        voipEvents.onChannelLost -= self.__me_onChannelLost
-        voipEvents.onCredentialReceived -= self.__me_onCredentialReceived
-        usersEvents = g_messengerEvents.users
-        usersEvents.onUsersListReceived -= self.__me_onUsersListReceived
-        usersEvents.onUserActionReceived -= self.__me_onUserActionReceived
-
     def enable(self, enabled, isInitFromPrefs=False):
         if enabled:
             self.__enable(isInitFromPrefs)
@@ -216,13 +194,14 @@ class VOIPManager(VOIPHandler):
         _logger.info('Disable')
         self.__enabled = False
 
-    def initialize(self, domain, server):
+    def initialize(self, voipSettings):
         if self.__initialized:
             _logger.warning('VOIPManager is already initialized')
             return
         _logger.info('Initialize')
-        self.__voipServer = server
-        self.__voipDomain = domain
+        settings = voipSettings['vivox']
+        self.__voipServer = settings['domain']
+        self.__voipDomain = settings['userDomain']
         self.__testDomain = 'sip:confctl-2@' + self.__voipDomain
         _logger.debug("voip_server: '%s'", self.__voipServer)
         _logger.debug("voip_domain: '%s'", self.__voipDomain)
@@ -285,7 +264,9 @@ class VOIPManager(VOIPHandler):
 
     def __setAvailableChannel(self, channel, password):
         if not self.__initialized and self.__fsm.inNoneState():
-            self.initialize(self.__voipDomain, self.__voipServer)
+            settings = {'vivox': {'userDomain': self.__voipDomain,
+                       'domain': self.__voipServer}}
+            self.initialize(settings)
         if not self.__user[0] and self.isEnabled():
             self.__requestCredentials()
         _logger.info('ReceivedAvailableChannel: %s', channel)
@@ -637,23 +618,23 @@ class VOIPManager(VOIPHandler):
         else:
             return True
 
-    def __me_onChannelAvailable(self, uri, pwd, isRejoin):
+    def channelAvailable(self, uri, pwd, isRejoin, _):
         self.__isChannelRejoin = isRejoin
         if not self.__inTesting:
             self.__setAvailableChannel(uri, pwd)
             self.onChannelAvailable()
 
-    def __me_onChannelLost(self):
+    def channelLost(self):
         if not self.__inTesting:
             self.__leaveChannel()
             self.settingsCore.applySetting(SOUND.VOIP_ENABLE_CHANNEL, (False, 0))
             self.onChannelLost()
 
-    def __me_onCredentialReceived(self, name, pwd):
+    def credentialReceived(self, name, pwd):
         _logger.debug('OnUserCredentials: %s', name)
         self.__login(name, pwd)
 
-    def __me_onUsersListReceived(self, tags):
+    def usersListReceived(self, tags):
         if USER_TAG.MUTED not in tags:
             return
         for user in self.usersStorage.getList(MutedFindCriteria()):
@@ -661,6 +642,6 @@ class VOIPManager(VOIPHandler):
             if dbID in self.__channelUsers:
                 self.__muteParticipantForMe(dbID, True)
 
-    def __me_onUserActionReceived(self, actionID, user, shadowMode):
+    def userActionReceived(self, actionID, user, shadowMode):
         if actionID in (USER_ACTION_ID.MUTE_SET, USER_ACTION_ID.MUTE_UNSET):
             self.__onChatActionMute(user.getID(), user.isMuted())

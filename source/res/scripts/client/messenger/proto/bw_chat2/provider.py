@@ -66,7 +66,7 @@ class BWChatProvider(object):
         if self.__isCooldownInProcess(actionID, args):
             shouldShowCooldownError = not skipCoolDown and self.__shouldShowErrorMessage(actionID, args)
             if shouldShowCooldownError:
-                g_messengerEvents.onErrorReceived(createCoolDownError(actionID, self.__getCooldownTime(actionID, args)))
+                g_messengerEvents.onErrorReceived(createCoolDownError(actionID, self.getCooldownTime(actionID, args)))
         else:
             if response:
                 reqID = self.__idGen.next()
@@ -191,7 +191,7 @@ class BWChatProvider(object):
         else:
             return self.__coolDown.isInProcess(actionID)
 
-    def __getCooldownTime(self, actionID, args=None):
+    def getCooldownTime(self, actionID, args=None):
         command = _ACTIONS.battleChatCommandFromActionID(actionID)
         if command:
             currTime = BigWorld.time()
@@ -200,8 +200,7 @@ class BWChatProvider(object):
             cdTime = round(sndrBlockReason.cooldownEnd - currTime, 1) if sndrBlockReason is not None else 0
             return cdTime
         else:
-            self.__coolDown.getTime(actionID)
-            return
+            return self.__coolDown.getTime(actionID)
 
     def __shouldShowErrorMessage(self, actionID, args=None):
         command = _ACTIONS.battleChatCommandFromActionID(actionID)

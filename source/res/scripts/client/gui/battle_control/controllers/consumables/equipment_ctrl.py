@@ -8,16 +8,19 @@ from typing import TYPE_CHECKING
 import BigWorld
 import Event
 import SoundGroups
+from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS as BONUS_CAPS
 from AvatarInputHandler.AimingSystems import getShotTargetInfo
 from PlayerEvents import g_playerEvents
 from aih_constants import CTRL_MODE_NAME
 from comp7_common import ROLE_EQUIPMENT_TAG
 from constants import VEHICLE_SETTING, EQUIPMENT_STAGES, ARENA_BONUS_TYPE
+from fun_random.gui.fun_gui_constants import MEDKIT_DURATION
 from gui.shared.system_factory import collectEquipmentItem
 from gui.Scaleform.genConsts.ANIMATION_TYPES import ANIMATION_TYPES
 from gui.Scaleform.genConsts.BATTLE_MARKERS_CONSTS import BATTLE_MARKERS_CONSTS
 from gui.battle_control import avatar_getter, vehicle_getter
-from gui.battle_control.battle_constants import makeExtraName, VEHICLE_COMPLEX_ITEMS, BATTLE_CTRL_ID
+from gui.battle_control.battle_constants import makeExtraName, VEHICLE_COMPLEX_ITEMS, BATTLE_CTRL_ID, DestroyTimerViewState, VEHICLE_VIEW_STATE
+from gui.Scaleform.genConsts.BATTLE_NOTIFICATIONS_TIMER_TYPES import BATTLE_NOTIFICATIONS_TIMER_TYPES as _TIMER_STATES
 from gui.battle_control.controllers.interfaces import IBattleController
 from gui.shared.utils.MethodsRules import MethodsRules
 from gui.shared.utils.decorators import ReprInjector
@@ -177,6 +180,9 @@ class _EquipmentItem(object):
 
     def getAnimationType(self):
         return self._animationType
+
+    def setAnimationType(self, animationType):
+        self._animationType = animationType
 
     def setServerPrevStage(self, prevStage):
         self._serverPrevStage = prevStage
@@ -340,6 +346,12 @@ class _EquipmentItem(object):
     def canDeactivate(self):
         return True
 
+    def setLocked(self, isLocked):
+        pass
+
+    def isLocked(self):
+        return False
+
 
 class _RefillEquipmentItem(object):
     _sessionProvider = dependency.descriptor(IBattleSessionProvider)
@@ -479,6 +491,7 @@ class _ExtinguisherItem(_ActivatableEquipment):
 
 
 class _MedKitItem(_ActivatableEquipment, _ExpandedItem):
+    __sessionProvider = dependency.descriptor(IBattleSessionProvider)
 
     def getActivationCode(self, entityName=None, avatar=None):
         activationCode = super(_MedKitItem, self).getActivationCode(entityName, avatar)
@@ -496,6 +509,16 @@ class _MedKitItem(_ActivatableEquipment, _ExpandedItem):
 
     def _canActivate(self, entityName=None, avatar=None):
         result, error = super(_MedKitItem, self)._canActivate(entityName, avatar)
+        if avatar:
+            vehicle = BigWorld.entities.get(avatar.playerVehicleID)
+            if self.__isFunRandom() and vehicle.health < vehicle.maxHealth:
+                invalidateState = self.__sessionProvider.invalidateVehicleState
+                itemName = self.getDescriptor().name
+                totalTime = int(MEDKIT_DURATION.get(itemName)) - 1
+                sType = VEHICLE_VIEW_STATE.HEALING_LARGE if itemName == 'largeMedkit' else VEHICLE_VIEW_STATE.HEALING_SMALL
+                invalidateState(sType, DestroyTimerViewState(sType, totalTime, _TIMER_STATES.WARNING_VIEW))
+                BigWorld.callback(totalTime, lambda : invalidateState(sType, DestroyTimerViewState(sType, None, None)))
+                return (True, None)
         return (True, IgnoreEntitySelection('', None)) if not result and type(error) not in (NeedEntitySelection, NotApplyingError) and avatar_getter.isVehicleStunned() and self.isReusable else (result, error)
 
     def _canApplyForEntity(self, entityName, deviceStates):
@@ -507,10 +530,13 @@ class _MedKitItem(_ActivatableEquipment, _ExpandedItem):
             return (True, None)
 
     def _getEntitiesAreSafeKey(self):
-        pass
+        return 'FEPmedkitAllTankmenAreSafe' if self.__isFunRandom() else 'medkitAllTankmenAreSafe'
 
     def _getEntityIsSafeKey(self):
         pass
+
+    def __isFunRandom(self):
+        return BONUS_CAPS.checkAny(self.__sessionProvider.arenaVisitor.getArenaBonusType(), 'HEALING_KIT')
 
 
 class _RepairKitItem(_ActivatableEquipment, _ExpandedItem):
@@ -1300,6 +1326,8 @@ class EquipmentsController(MethodsRules, IBattleController):
         super(EquipmentsController, self).__init__()
         self._eManager = Event.EventManager()
         self.onEquipmentAdded = Event.Event(self._eManager)
+        self.onSlotWaited = Event.Event(self._eManager)
+        self.onSlotBlocked = Event.Event(self._eManager)
         self.onEquipmentUpdated = Event.Event(self._eManager)
         self.onEquipmentReset = Event.Event(self._eManager)
         self.onEquipmentsCleared = Event.Event(self._eManager)
@@ -1416,6 +1444,8 @@ class EquipmentsController(MethodsRules, IBattleController):
             self.onEquipmentUpdated(intCD, item)
         else:
             descriptor = vehicles.getItemByCompactDescr(intCD)
+            if 'hidden' in descriptor.tags:
+                return
             if descriptor.equipmentType in (EQUIPMENT_TYPES.regular, EQUIPMENT_TYPES.battleAbilities):
                 item = self.createItem(descriptor, quantity, stage, timeRemaining, totalTime)
                 self._equipments[intCD] = item
@@ -1535,6 +1565,9 @@ class _ReplayItem(_EquipmentItem):
     def __init__(self, descriptor, quantity, stage, timeRemaining, totalTime, tags=None):
         super(_ReplayItem, self).__init__(descriptor, quantity, stage, timeRemaining, totalTime, tags)
         self.__cooldownTime = BigWorld.serverTime() + timeRemaining
+
+    def init(self, *args, **kwargs):
+        pass
 
     def update(self, quantity, stage, timeRemaining, totalTime):
         super(_ReplayItem, self).update(quantity, stage, timeRemaining, totalTime)

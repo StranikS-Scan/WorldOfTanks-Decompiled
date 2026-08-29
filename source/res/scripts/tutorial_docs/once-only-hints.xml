@@ -74,6 +74,7 @@
             <value>	False	</value>
           </condition-hint-showed>
           <global-active>	_HaveNewBadge	</global-active>
+          <global-inactive>	wtActive	</global-inactive>
         </condition-and>
       </condition>
     </hint>
@@ -98,6 +99,7 @@
             <value>	False	</value>
           </condition-hint-showed>
           <global-active>	_HaveNewSuffixBadge	</global-active>
+          <global-inactive>	wtActive	</global-inactive>
         </condition-and>
       </condition>
     </hint>
@@ -263,6 +265,7 @@
             <hint-id>	DogTagProfileHint	</hint-id>
             <value>	False	</value>
           </condition-hint-showed>
+          <global-inactive>	wtActive	</global-inactive>
         </condition-and>
       </condition>
       <update-runtime>	True	</update-runtime>
@@ -292,6 +295,7 @@
             <arguments>	DogTagHangarHint	</arguments>
           </class-condition>
           <global-active>	_DogTagsEnabled	</global-active>
+          <global-inactive>	wtActive	</global-inactive>
         </condition-and>
       </condition>
     </hint>
@@ -350,6 +354,7 @@
             <hint-id>	DogTagHangarHint	</hint-id>
             <value>	True	</value>
           </condition-hint-showed>
+          <global-inactive>	wtActive	</global-inactive>
         </condition-and>
       </condition>
       <checked-ui-state>
@@ -917,6 +922,7 @@
       <condition>
         <global-active>	_isPM3Enabled	</global-active>
         <global-inactive>	cosmicActive	</global-inactive>
+        <global-inactive>	wtActive	</global-inactive>
         <class-condition>	LimitedUIHintChecker	  <path>	gui.limited_ui.lui_tutorial_hints	</path>
           <arguments>	NewCampaignHint	</arguments>
         </class-condition>
@@ -993,6 +999,7 @@
           <service>	IParagonsController	  <path>	skeletons.gui.game_control	</path>
           </service>
           <global-inactive>	cosmicActive	</global-inactive>
+          <global-inactive>	wtActive	</global-inactive>
         </condition-and>
       </condition>
       <update-runtime>	True	</update-runtime>

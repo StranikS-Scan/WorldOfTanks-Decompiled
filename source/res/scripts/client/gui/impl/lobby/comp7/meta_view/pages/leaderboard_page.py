@@ -4,18 +4,20 @@ import logging
 import typing
 import BigWorld
 import adisp
-from gui.Scaleform.genConsts.CONTEXT_MENU_HANDLER_TYPE import CONTEXT_MENU_HANDLER_TYPE
 from gui.impl.backport import BackportContextMenuWindow, createContextMenuData
 from gui.impl.gen import R
+from gui.impl.gen.view_models.views.lobby.comp7.division_info_model import Division
+from gui.impl.gen.view_models.views.lobby.comp7.leaderboard_navigation_division_info import LeaderboardNavigationDivisionInfo
 from gui.impl.gen.view_models.views.lobby.comp7.meta_view.pages.leaderboard_model import LeaderboardModel, State
 from gui.impl.gen.view_models.views.lobby.comp7.meta_view.pages.table_record_model import TableRecordModel, Rank
 from gui.impl.gen.view_models.views.lobby.comp7.meta_view.root_view_model import MetaRootViews
 from gui.impl.gui_decorators import args2params
+from gui.impl.lobby.comp7 import comp7_shared
+from gui.impl.lobby.comp7.meta_view.meta_view_helper import setDivisionData
 from gui.impl.lobby.comp7.meta_view.pages import PageSubModelPresenter
-from gui.impl.lobby.comp7.tooltips.last_update_tooltip import LastUpdateTooltip
+from gui.impl.lobby.comp7.tooltips.division_tooltip import DivisionTooltip
 from gui.impl.lobby.comp7.tooltips.leaderboard_reward_tooltip import LeaderboardRewardTooltip
-from gui.impl.lobby.comp7.tooltips.sixth_rank_tooltip import SixthRankTooltip
-from gui.impl.lobby.comp7.tooltips.fifth_rank_tooltip import FifthRankTooltip
+from gui.Scaleform.genConsts.CONTEXT_MENU_HANDLER_TYPE import CONTEXT_MENU_HANDLER_TYPE
 from helpers import dependency
 from skeletons.connection_mgr import IConnectionManager
 from skeletons.gui.game_control import IComp7Controller
@@ -51,13 +53,14 @@ class LeaderboardPage(PageSubModelPresenter):
         return super(LeaderboardPage, self).getViewModel()
 
     def createToolTipContent(self, event, contentID):
-        if contentID == R.views.lobby.comp7.tooltips.FifthRankTooltip():
-            return FifthRankTooltip()
-        if contentID == R.views.lobby.comp7.tooltips.SixthRankTooltip():
-            return SixthRankTooltip()
-        if contentID == R.views.lobby.comp7.tooltips.LastUpdateTooltip():
-            description = event.getArgument('description')
-            return LastUpdateTooltip(description, updateTime=self.__lastUpdateTime)
+        if contentID == R.views.lobby.comp7.tooltips.DivisionTooltip():
+            params = {'rank': Rank(event.getArgument('rank')),
+             'division': Division(event.getArgument('division')),
+             'from': event.getArgument('from'),
+             'to': event.getArgument('to'),
+             'type': event.getArgument('type'),
+             'elitePercent': event.getArgument('elitePercent')}
+            return DivisionTooltip(params=params)
         if contentID == R.views.lobby.comp7.tooltips.LeaderboardRewardTooltip():
             place = event.getArgument('place', 0)
             return LeaderboardRewardTooltip(place)
@@ -130,13 +133,13 @@ class LeaderboardPage(PageSubModelPresenter):
 
     def __updateRecords(self, records):
         with self.viewModel.transaction() as vm:
-            itemsArray = vm.getItems()
-            itemsArray.clear()
+            tableRecords = vm.getItems()
+            tableRecords.clear()
             for record in records:
                 itemModel = self.__getRecordModel(record)
-                itemsArray.addViewModel(itemModel)
+                tableRecords.addViewModel(itemModel)
 
-            itemsArray.invalidate()
+            tableRecords.invalidate()
             vm.setState(State.SUCCESS)
 
     @adisp.adisp_process
@@ -157,6 +160,11 @@ class LeaderboardPage(PageSubModelPresenter):
                 return
             self.__elitePosition = elitePosition - 1 if elitePosition is not None else -1
             self.viewModel.setLastBestUserPosition(self.__elitePosition)
+            divisionsFirstPositions, isSuccess = yield self.__comp7Controller.leaderboard.getDivisionsFirstPositions()
+            if not self.__isResultExpected(managerGeneration):
+                return
+            if isSuccess:
+                self.__buildNavigation(divisionsFirstPositions)
             self.__loadingStateManager.finishRequest(loadingChainMark, isSuccess)
             return
 
@@ -182,7 +190,8 @@ class LeaderboardPage(PageSubModelPresenter):
     def __getRecordModel(self, record):
         position = record.getRank()
         model = TableRecordModel()
-        model.setRank(Rank.SIXTH if position <= self.__elitePosition else Rank.FIFTH)
+        rank = comp7_shared.getRankByDivisionId(record.getP1())
+        model.setRank(rank if rank else Rank.FIRST)
         model.setScore(record.getP2())
         model.setBattlesCount(record.getP3())
         model.setPosition(position - 1)
@@ -190,7 +199,24 @@ class LeaderboardPage(PageSubModelPresenter):
         model.setClanTag(record.getClanTag() or '')
         model.setClanTagColor(record.getClanColor() or '')
         model.setUserName(record.getName())
+        model.setDivision(comp7_shared.getDivisionNameById(record.getP1()))
         return model
+
+    def __buildNavigation(self, positions):
+        items = self.viewModel.getDivisions()
+        items.clear()
+        divisions = self.__comp7Controller.leaderboard.getLeaderboardDivisions()
+        for division in divisions:
+            divisionModel = LeaderboardNavigationDivisionInfo()
+            divisionModel.setRankId(division.rank)
+            setDivisionData(divisionModel, division)
+            firstMemberPosition = positions.get(str(division.dvsnID))
+            if firstMemberPosition is not None:
+                divisionModel.setFirstMemberPosition(firstMemberPosition)
+            items.addViewModel(divisionModel)
+
+        items.invalidate()
+        return
 
 
 class _LoadingStateManager(object):

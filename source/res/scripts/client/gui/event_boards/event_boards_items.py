@@ -1284,6 +1284,7 @@ class Comp7LeaderBoard(LeaderBoard):
         self.__lastEliteUserPosition = None
         self.__lastEliteUserRating = None
         self.__lastMasterRankPositionThreshold = None
+        self.__divisionsFirstPositions = {}
         return
 
     def setData(self, rawData, leaderboardID, infoType, leaderboardType):
@@ -1292,6 +1293,7 @@ class Comp7LeaderBoard(LeaderBoard):
         self.__lastEliteUserPosition = meta['elite_rank_position_threshold']
         self.__lastEliteUserRating = meta['elite_rank_points_threshold']
         self.__lastMasterRankPositionThreshold = meta['master_rank_position_threshold'] or 0
+        self.__divisionsFirstPositions = meta.get('divisions_first_positions', {})
         return result
 
     def getRecordsCount(self):
@@ -1302,6 +1304,9 @@ class Comp7LeaderBoard(LeaderBoard):
 
     def getLastEliteUserRating(self):
         return self.__lastEliteUserRating
+
+    def getDivisionsFirstPositions(self):
+        return self.__divisionsFirstPositions
 
 
 class InfoItem(object):

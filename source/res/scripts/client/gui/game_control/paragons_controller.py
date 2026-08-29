@@ -346,6 +346,15 @@ class ParagonsController(IParagonsController):
     def getChapterCloseoutTimeStamp(self, chapterID):
         return self.config.getChapterCloseoutTimeStamp(chapterID)
 
+    def getClosestChapterCloseoutTimeStamp(self):
+        timers = []
+        for chapterID in self.availableChapters:
+            chapterCloseoutTimeStamp = self.getChapterCloseoutTimeStamp(chapterID)
+            if chapterCloseoutTimeStamp:
+                timers.append(chapterCloseoutTimeStamp)
+
+        return min(timers) if timers else 0
+
     def __addListeners(self):
         paragons = self.paragons
         paragons.onParagonsStateChanged += self.__onParagonsStateChange

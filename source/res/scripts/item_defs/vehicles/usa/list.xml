@@ -108,6 +108,19 @@
     <tags>	lightTank role_LT_universal HD scout improvedVentilation_class3_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_light_user	</tags>
     <level>	9	</level>
   </A100_T49>
+  <A100_T49_02>
+    <id>	31027	</id>
+    <userString>	#usa_vehicles:A100_T49_02	</userString>
+    <description>	#usa_vehicles:A100_T49_02_descr	</description>
+    <shortUserString>	#usa_vehicles:A100_T49_02_short	</shortUserString>
+    <shortDescriptionSpecial>	#usa_vehicles:A100_T49_02_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#usa_vehicles:A100_T49_02_long_special	</longDescriptionSpecial>
+    <price>	25000	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	lightTank role_LT_universal HD scout special improvedVentilation_class3_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_light_user earn_crystals secret testTank lockOutfit	</tags>
+    <level>	10	</level>
+  </A100_T49_02>
   <A101_M56>
     <id>	220	</id>
     <userString>	#usa_vehicles:A101_M56	</userString>
@@ -375,6 +388,17 @@
     <tags>	mediumTank role_MT_universal private HD secret premiumIGR patton improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_medium_user earn_crystals	</tags>
     <level>	10	</level>
   </A120_M48A5_IGR>
+  <A120_M48A5_hound_TLXXL>
+    <id>	254	</id>
+    <userString>	#white_tiger.usa_vehicles.extend:A120_M48A5_hound_TLXXL	</userString>
+    <description>	#white_tiger.usa_vehicles.extend:A120_M48A5_hound_TLXXL_descr	</description>
+    <shortUserString>	#white_tiger.usa_vehicles.extend:A120_M48A5_hound_TLXXL_short	</shortUserString>
+    <shortDescriptionSpecial>	#white_tiger.usa_vehicles.extend:A120_M48A5_hound_TLXXL_short_special	</shortDescriptionSpecial>
+    <price>	6100000	</price>
+    <notInShop>	true	</notInShop>
+    <tags>	mediumTank role_MT_universal event_battles special secret HD lockCrew lockCrewSkills lockOutfit lockShells lockDevices cannot_be_sold unrecoverable earn_crystals mode_hidden hideStorage hideCrew	</tags>
+    <level>	10	</level>
+  </A120_M48A5_hound_TLXXL>
   <A121_M26_Cologne>
     <id>	234	</id>
     <userString>	#usa_vehicles:A121_M26_Cologne	</userString>
@@ -845,11 +869,11 @@
     <shortUserString>	#usa_vehicles:A151_TS_60_short	</shortUserString>
     <shortDescriptionSpecial>	#usa_vehicles:A151_TS_60_short_special	</shortDescriptionSpecial>
     <longDescriptionSpecial>	#usa_vehicles:A151_TS_60_long_special	</longDescriptionSpecial>
-    <price>	17500	  <gold></gold>
+    <price>	25000	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
-    <tags>	AT-SPG role_ATSPG_assault HD heavyAT-SPG improvedVentilation_class1_user tankRammer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user secret testTank earn_crystals lockOutfit	</tags>
-    <level>	9	</level>
+    <tags>	AT-SPG role_ATSPG_assault HD heavyAT-SPG improvedVentilation_class1_user tankRammer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user special secret testTank earn_crystals lockOutfit	</tags>
+    <level>	10	</level>
   </A151_TS_60>
   <A152_M_Project_2>
     <id>	128	</id>
@@ -871,7 +895,7 @@
     <description>	#usa_vehicles:A153_XM66F_descr	</description>
     <shortDescriptionSpecial>	#usa_vehicles:A153_XM66F_short_special	</shortDescriptionSpecial>
     <longDescriptionSpecial>	#usa_vehicles:A153_XM66F_long_special	</longDescriptionSpecial>
-    <price>	17750	  <gold></gold>
+    <price>	17500	  <gold></gold>
     </price>
     <notInShop>	True	</notInShop>
     <tags>	AT-SPG role_ATSPG_assault HD heavyAT-SPG improvedVentilation_class1_user tankRammer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user private secretExtended secret testTank earn_crystals lockOutfit	</tags>
@@ -1183,6 +1207,19 @@
     <tags>	SPG HD collectorVehicle mediumSPG	</tags>
     <level>	4	</level>
   </A17_M37>
+  <A180_ACIT_40t_Concept>
+    <id>	31021	</id>
+    <userString>	#usa_vehicles:A180_ACIT_40t_Concept	</userString>
+    <description>	#usa_vehicles:A180_ACIT_40t_Concept_descr	</description>
+    <shortUserString>	#usa_vehicles:A180_ACIT_40t_Concept_short	</shortUserString>
+    <shortDescriptionSpecial>	#usa_vehicles:A180_ACIT_40t_Concept_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#usa_vehicles:A180_ACIT_40t_Concept_long_special	</longDescriptionSpecial>
+    <price>	17500	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	mediumTank role_MT_support HD improvedVentilation_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user earn_crystals secret testTank lockOutfit	</tags>
+    <level>	9	</level>
+  </A180_ACIT_40t_Concept>
   <A182_ALRS_M6>
     <id>	31023	</id>
     <userString>	#usa_vehicles:A182_ALRS_M6	</userString>
@@ -1640,8 +1677,22 @@
     </price>
     <notInShop>	true	</notInShop>
     <tags>	heavyTank role_HT_support HD improvedVentilation_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user earn_crystals special lockOutfit secret testTank cannot_be_sold	</tags>
-    <level>	11	</level>
+    <level>	10	</level>
   </A67_T57_58_T>
+  <A67_T57_58_cl>
+    <id>	31030	</id>
+    <userString>	#usa_vehicles:T57_58_cl	</userString>
+    <description>	#usa_vehicles:T57_58_descr	</description>
+    <shortUserString>	#usa_vehicles:T57_58_cl_short	</shortUserString>
+    <shortDescriptionSpecial>	#usa_vehicles:T57_58_cl_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#usa_vehicles:T57_58_cl_long_special	</longDescriptionSpecial>
+    <price>	1	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <cannotBeBought>	true	</cannotBeBought>
+    <tags>	heavyTank role_HT_support HD heavyTank2 improvedVentilation_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user clanWarsBattles special cannot_be_sold private	</tags>
+    <level>	10	</level>
+  </A67_T57_58_cl>
   <A68_T28_Prototype>
     <id>	44	</id>
     <userString>	#usa_vehicles:T28_Prototype	</userString>

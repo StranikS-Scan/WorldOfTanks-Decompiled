@@ -3,13 +3,15 @@
 from constants import NOVICE_RESTRICTIONS_BAN_TYPE
 from gui.Scaleform.locale.MESSENGER import MESSENGER as I18N_MESSENGER
 from gui.Scaleform.locale.INGAME_GUI import INGAME_GUI as I18N_INGAME_GUI
-from helpers import i18n, html
+from helpers import i18n, html, time_utils
 from helpers.time_utils import makeLocalServerTime
 from messenger.proto.interfaces import IChatError
 from messenger.proto.shared_errors import ChatCoolDownError, ClientActionError, I18nActionID, I18nErrorID, makeNoviceChatBanErrorShort, makeChatBanError, ChatBanError
 from messenger_common_chat2 import MESSENGER_ACTION_IDS as _ACTIONS
 from messenger_common_chat2 import MESSENGER_ERRORS as _ERRORS
 from messenger_common_chat2 import MESSENGER_LIMITS as _LIMITS
+from gui.impl import backport
+import BigWorld
 
 def getChatActionName(actionID):
     actionName = _ACTIONS.getActionName(actionID)
@@ -216,6 +218,10 @@ def createVOIPError(args, actionID):
         elif errorID == _ERRORS.GENERIC_ERROR:
             logOnly = True
             error = 'The player has received the error to the request for getting of voip credential. Perhaps voip connection to the server is lost, the server is reconnecting to voip.'
+    elif actionID == _ACTIONS.REQUEST_ECHO_CHANNEL:
+        if errorID == _ERRORS.IN_COOLDOWN:
+            cooldown = args['floatArg1']
+            error = _ActionCoolDownError(_ACTIONS.REQUEST_ECHO_CHANNEL, backport.getNiceNumberFormat(time_utils.makeLocalServerTime(cooldown) - BigWorld.serverTime()))
     return (error, logOnly)
 
 

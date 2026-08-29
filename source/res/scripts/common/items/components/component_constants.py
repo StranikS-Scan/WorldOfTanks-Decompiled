@@ -49,6 +49,7 @@ class _ReadOnlyDict(dict):
 
 EMPTY_DICT = _ReadOnlyDict()
 EMPTY_TAGS = frozenset()
+EMPTY_RAW_TAGS = []
 LEVEL = 1
 DEFAULT_ARMOR_HOMOGENIZATION = 1.0
 DEFAULT_GUN_AUTORELOAD = Autoreload(reloadTime=(0.0,), boostStartTime=0.0, boostResidueTime=0.0, boostFraction=1.0)

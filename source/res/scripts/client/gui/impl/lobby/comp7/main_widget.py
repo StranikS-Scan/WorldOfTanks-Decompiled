@@ -89,7 +89,6 @@ class Comp7MainWidget(ViewImpl):
         model.setCurrentScore(rating)
         model.setPrevScore(prevRating)
         comp7_model_helpers.setDivisionInfo(model=model.divisionInfo, division=division)
-        comp7_model_helpers.setElitePercentage(model)
         if self.__comp7Controller.isAvailable():
             comp7_model_helpers.setRanksInactivityInfo(model)
 

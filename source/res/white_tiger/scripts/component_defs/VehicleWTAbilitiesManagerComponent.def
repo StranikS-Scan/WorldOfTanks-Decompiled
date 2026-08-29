@@ -1,0 +1,16 @@
+<VehicleWTAbilitiesManagerComponent.def>
+  <Properties>
+    <chargeEquipmentValues>
+      <Type>	ARRAY	  <of>	TUPLE	  <of>	INT32	</of>
+          <size>	2	</size>
+        </of>
+      </Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <DetailLevel>	MY_VEHICLE	</DetailLevel>
+    </chargeEquipmentValues>
+  </Properties>
+  <ofEntity>
+    <Vehicle></Vehicle>
+  </ofEntity>
+  <DefaultKeyName>	wtAbilitiesManager	</DefaultKeyName>
+</VehicleWTAbilitiesManagerComponent.def>

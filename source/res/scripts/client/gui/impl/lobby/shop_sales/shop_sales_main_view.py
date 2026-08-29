@@ -24,6 +24,8 @@ from web.web_client_api.ui import CloseWindowWebApi, NotificationWebApi, OpenWin
 from web.web_client_api import webApiCollection
 from web.web_client_api.vehicles import VehiclesWebApi
 from web.web_client_api.quests import QuestsWebApi
+from web.web_client_api.trading_caravan import TradingCaravanWebApi
+from web.web_client_api.uilogging import UILoggingWebApi
 from gui.impl.lobby.common.browser_view import makeSettings
 
 class ShopSalesOpenTabWebApi(OpenTabWebApi):
@@ -66,7 +68,7 @@ class ShopSalesMainWindow(LobbyWindow):
     __slots__ = ()
 
     def __init__(self, url):
-        webHandlers = webApiCollection(CloseWindowWebApi, OpenWindowWebApi, NotificationWebApi, ShopSalesOpenTabWebApi, RequestWebApi, ShopWebApi, SoundWebApi, SoundStateWebApi, HangarSoundWebApi, UtilWebApi, QuestsWebApi, VehiclesWebApi, ReactiveCommunicationWebApi, RewardsWebApi, SocialWebApi, BlueprintsConvertSaleWebApi, PlatformWebApi)
+        webHandlers = webApiCollection(CloseWindowWebApi, OpenWindowWebApi, NotificationWebApi, ShopSalesOpenTabWebApi, RequestWebApi, ShopWebApi, SoundWebApi, SoundStateWebApi, HangarSoundWebApi, UtilWebApi, QuestsWebApi, VehiclesWebApi, ReactiveCommunicationWebApi, RewardsWebApi, SocialWebApi, BlueprintsConvertSaleWebApi, PlatformWebApi, TradingCaravanWebApi, UILoggingWebApi)
         settings = makeSettings(url=url, isClosable=False, webHandlers=webHandlers, viewFlags=ViewFlags.VIEW, restoreBackground=True)
         shopSalesMainView = ShopSalesMainView(R.views.lobby.common.BrowserView(), settings)
         shopSalesMainView.browser.skipEscape = False

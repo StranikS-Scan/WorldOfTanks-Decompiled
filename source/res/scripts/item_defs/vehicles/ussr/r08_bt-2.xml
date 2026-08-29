@@ -1578,7 +1578,11 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_20mm_TNSH>	shared	  <maxAmmo>	840	</maxAmmo>
+        <_20mm_TNSH>	shared	  <unlocks>
+            <gun>	_37mm_B-3	  <cost>	50	</cost>
+            </gun>
+          </unlocks>
+          <maxAmmo>	840	</maxAmmo>
           <reloadTime>	9.4	</reloadTime>
           <aimingTime>	1.2	</aimingTime>
           <shotDispersionFactors>
@@ -1646,6 +1650,72 @@
             <aoTextureSize>	512 256	</aoTextureSize>
           </camouflage>
         </_20mm_TNSH>
+        <_37mm_B-3>	shared	  <maxAmmo>	185	</maxAmmo>
+          <reloadTime>	2.0	</reloadTime>
+          <aimingTime>	1.7	</aimingTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.10	</turretRotation>
+            <afterShot>	1.0	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <armor>
+            <armor_1>	13	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_1>
+            <gun>	10	</gun>
+          </armor>
+          <shotDispersionRadius>	0.40	</shotDispersionRadius>
+          <pitchLimits>
+            <minPitch>	0 -25 1 -25	</minPitch>
+            <maxPitch>	0 8 0.380783 8 0.444444 2 0.555556 2 0.619218 8 1 8	</maxPitch>
+          </pitchLimits>
+          <invisibilityFactorAtShot>	0.255	</invisibilityFactorAtShot>
+          <models>
+            <undamaged>	vehicles/russian/R08_BT-2/normal/lod0/Gun_04.model	</undamaged>
+            <destroyed>	vehicles/russian/R08_BT-2/crash/lod0/Gun_04.model	</destroyed>
+            <exploded>	vehicles/russian/R08_BT-2/crash/lod0/Gun_04.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModelServer>	vehicles/russian/R08_BT-2/collision/Gun_04.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/russian/R08_BT-2/collision_client/Gun_04.model	</collisionModelClient>
+          </hitTester>
+          <effects>	shot_small	</effects>
+          <reloadEffect>	reload20_45	</reloadEffect>
+          <customizationSlots>
+            <slot>
+              <slotType>	paint	</slotType>
+              <slotId>	41000	</slotId>
+              <anchorPosition>	-0.002016 0.000031 0.807239	</anchorPosition>
+              <anchorDirection>	0 0 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+            <slot>
+              <slotType>	paint	</slotType>
+              <slotId>	41001	</slotId>
+              <anchorPosition>	-0 0.140213 0.313053	</anchorPosition>
+              <anchorDirection>	-0 0.707107 0.707107	</anchorDirection>
+              <applyTo>	16384	</applyTo>
+            </slot>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	42000	</slotId>
+              <anchorPosition>	-0.002016 0.000031 0.807243	</anchorPosition>
+              <anchorDirection>	-0 0 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
+          <customization>
+            <customizableVehicleAreas>
+              <paint>	GUN GUN_2	</paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <shotOffset>	-0.004019 0.000169 0.000000	</shotOffset>
+          <camouflage>
+            <tiling>	1.5 2.5 0.000000 0.000000	</tiling>
+            <density>	99.918 118.001	</density>
+            <aoTextureSize>	512 256	</aoTextureSize>
+          </camouflage>
+        </_37mm_B-3>
       </guns>
       <models>
         <undamaged>	vehicles/russian/R08_BT-2/normal/lod0/Turret_01.model	</undamaged>
@@ -2222,6 +2292,92 @@
             <aoTextureSize>	512 256	</aoTextureSize>
           </camouflage>
         </_20mm_TNSH>
+        <_37mm_B-3>	shared	  <maxAmmo>	185	</maxAmmo>
+          <shotDispersionFactors>
+            <turretRotation>	0.10	</turretRotation>
+            <afterShot>	1.0	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <armor>
+            <gun>	10	</gun>
+          </armor>
+          <shotDispersionRadius>	0.40	</shotDispersionRadius>
+          <reloadTime>	1.8	</reloadTime>
+          <aimingTime>	1.6	</aimingTime>
+          <pitchLimits>
+            <minPitch>	0 -25 1 -25	</minPitch>
+            <maxPitch>	0 8 0.380783 8 0.444444 0 0.555556 0 0.619218 8 1 8	</maxPitch>
+          </pitchLimits>
+          <invisibilityFactorAtShot>	0.255	</invisibilityFactorAtShot>
+          <models>
+            <undamaged>	vehicles/russian/R08_BT-2/normal/lod0/Gun_08.model	</undamaged>
+            <destroyed>	vehicles/russian/R08_BT-2/crash/lod0/Gun_08.model	</destroyed>
+            <exploded>	vehicles/russian/R08_BT-2/crash/lod0/Gun_08.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModelServer>	vehicles/russian/R08_BT-2/collision/Gun_08.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/russian/R08_BT-2/collision_client/Gun_08.model	</collisionModelClient>
+          </hitTester>
+          <effects>	shot_small	</effects>
+          <reloadEffect>	reload20_45	</reloadEffect>
+          <customizationSlots>
+            <slot>
+              <slotType>	paint	</slotType>
+              <slotId>	41000	</slotId>
+              <anchorPosition>	-0.04196 0.004334 0.613256	</anchorPosition>
+              <anchorDirection>	0 0 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+            <slot>
+              <slotType>	paint	</slotType>
+              <slotId>	41001	</slotId>
+              <anchorPosition>	0 0.137391 0.137391	</anchorPosition>
+              <anchorDirection>	0 0.707107 0.707107	</anchorDirection>
+              <applyTo>	16384	</applyTo>
+            </slot>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	42000	</slotId>
+              <anchorPosition>	-0.04196 0.004334 0.613252	</anchorPosition>
+              <anchorDirection>	-0 0 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+            <slot>
+              <slotType>	projectionDecal	</slotType>
+              <slotId>	45000	</slotId>
+              <tags>	formfactor_rect1x2	</tags>
+              <position>	0.017293 1.91522 1.23767	</position>
+              <rotation>	1.05948 -0.000901 3.14043	</rotation>
+              <scale>	0.655938 0.122808 0.655948	</scale>
+              <showOn>	4352	</showOn>
+              <clipAngle>	0.954074	</clipAngle>
+              <anchorShift>	0.084122	</anchorShift>
+            </slot>
+            <slot>
+              <slotType>	projectionDecal	</slotType>
+              <slotId>	45001	</slotId>
+              <tags>	formfactor_rect1x3	</tags>
+              <position>	0.01731 1.93892 1.26872	</position>
+              <rotation>	0.94565 -0.000672 3.14062	</rotation>
+              <scale>	0.655937 0.122808 0.655946	</scale>
+              <showOn>	4352	</showOn>
+              <clipAngle>	0.954074	</clipAngle>
+              <anchorShift>	0.034126	</anchorShift>
+            </slot>
+          </customizationSlots>
+          <customization>
+            <customizableVehicleAreas>
+              <paint>	GUN GUN_2	</paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <shotOffset>	-0.083913 0.008730 0.000000	</shotOffset>
+          <camouflage>
+            <tiling>	1.5 2.5 0.000000 0.000000	</tiling>
+            <density>	99.918 118.001	</density>
+            <aoTextureSize>	512 256	</aoTextureSize>
+          </camouflage>
+        </_37mm_B-3>
         <_45mm_20K>	shared	  <maxAmmo>	160	</maxAmmo>
           <shotDispersionFactors>
             <turretRotation>	0.1	</turretRotation>

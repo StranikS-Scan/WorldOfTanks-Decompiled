@@ -85,6 +85,9 @@ class TankAcademyController(ITankAcademyController):
     def getCurrentQuest(self):
         return None
 
+    def getCurrentQuestOrder(self):
+        return None
+
     def getQuestProgress(self, quest):
         pass
 

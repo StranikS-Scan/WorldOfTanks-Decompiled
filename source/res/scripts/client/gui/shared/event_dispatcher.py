@@ -76,6 +76,7 @@ from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 from soft_exception import SoftException
 from th_async import th_async, th_await
+from skeletons.gui.game_control import IWhiteTigerController
 if typing.TYPE_CHECKING:
     from typing import Callable, Dict, Generator, Iterable, List, Union, Tuple, Optional
     from gui.marathon.marathon_event import MarathonEvent
@@ -136,6 +137,11 @@ def showEpicBattlesPrimeTimeWindow():
     g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(EPICBATTLES_ALIASES.EPIC_BATTLES_PRIME_TIME_ALIAS), ctx={}), EVENT_BUS_SCOPE.LOBBY)
 
 
+def showEventBattlesPrimeTimeWindow():
+    from white_tiger.gui.Scaleform.genConsts.WHITE_TIGER_ALIASES import WHITE_TIGER_ALIASES
+    g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(WHITE_TIGER_ALIASES.WT_PRIME_TIME_VIEW), ctx={}), EVENT_BUS_SCOPE.LOBBY)
+
+
 def showEpicBattlesAfterBattleWindow(levelUpInfo, parent=None):
     g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(EPICBATTLES_ALIASES.EPIC_BATTLES_AFTER_BATTLE_ALIAS, parent=parent), ctx={'levelUpInfo': levelUpInfo}), EVENT_BUS_SCOPE.LOBBY)
 
@@ -184,7 +190,7 @@ def showBattleRoyaleResultsInfo(ctx):
             return
         battleResultView.destroyWindow()
     view = BrBattleResultsViewInLobby(ctx=ctx)
-    window = LobbyNotificationWindow(content=view)
+    window = LobbyNotificationWindow(WindowFlags.WINDOW_FULLSCREEN, content=view, layer=view.layer)
     window.load()
     return
 
@@ -598,15 +604,18 @@ def showVehiclePreview(vehTypeCompDescr, previewAlias=VIEW_ALIAS.LOBBY_HANGAR, v
 
 def showVehiclePreviewWithoutBottomPanel(vehCD, backCallback=None, **kwargs):
     from gui.Scaleform.daapi.view.lobby.vehicle_preview.configurable_vehicle_preview import OptionalBlocks
+    h = kwargs.get('hiddenBlocks')
+    hiddenBlocks = (OptionalBlocks.CLOSE_BUTTON, OptionalBlocks.BUYING_PANEL) if h is None else h
     g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.CONFIGURABLE_VEHICLE_PREVIEW), ctx={'itemCD': vehCD,
      'previewBackCb': backCallback,
      'style': kwargs.get('style'),
      'topPanelData': kwargs.get('topPanelData'),
-     'hiddenBlocks': (OptionalBlocks.CLOSE_BUTTON, OptionalBlocks.BUYING_PANEL),
+     'hiddenBlocks': hiddenBlocks,
      'previewAlias': VIEW_ALIAS.CONFIGURABLE_VEHICLE_PREVIEW,
      'itemsPack': kwargs.get('itemsPack'),
      'backBtnLabel': kwargs.get('backBtnLabel'),
      'subscriptions': kwargs.get('subscriptions')}), EVENT_BUS_SCOPE.LOBBY)
+    return
 
 
 def showDelayedReward(delayedRewardToken=None, forceCreate=False):
@@ -740,14 +749,17 @@ def showClanSendInviteWindow(clanDbID):
 def selectVehicleInHangar(itemCD, loadHangar=True):
     from CurrentVehicle import g_currentVehicle
     itemsCache = dependency.instance(IItemsCache)
+    wtController = dependency.instance(IWhiteTigerController)
     veh = itemsCache.items.getItemByCD(int(itemCD))
     if not veh.isInInventory:
         raise SoftException('Vehicle (itemCD={}) must be in inventory.'.format(itemCD))
     g_eventBus.handleEvent(events.HangarVehicleEvent(events.HangarVehicleEvent.SELECT_VEHICLE_IN_HANGAR, ctx={'vehicleInvID': veh.invID,
      'prevVehicleInvID': g_currentVehicle.invID}), scope=EVENT_BUS_SCOPE.LOBBY)
-    g_currentVehicle.selectVehicle(veh.invID)
     if loadHangar:
+        if wtController.isEventPrbActive():
+            wtController.doLeaveEventPrb()
         showHangar()
+    g_currentVehicle.selectVehicle(veh.invID)
 
 
 def showCrewAboutView(navigateFrom=None):
@@ -944,6 +956,7 @@ def showBrowserOverlayView(url, alias=VIEW_ALIAS.BROWSER_LOBBY_TOP_SUB, params=N
     if url:
         if browserParams is None:
             browserParams = {}
+        url = GUI_SETTINGS.checkAndReplaceWebBridgeMacros(url)
         url = yield URLMacros().parse(url, params=params)
         g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(alias, parent=parent), ctx={'url': url,
          'allowRightClick': False,
@@ -1037,6 +1050,25 @@ def showStylePreview(vehCD, style, descr='', backCallback=None, backBtnDescrLabe
      'topPanelData': kwargs.get('topPanelData'),
      'itemsPack': kwargs.get('itemsPack'),
      'outfit': kwargs.get('outfit')}), scope=EVENT_BUS_SCOPE.LOBBY)
+
+
+def showEventStorageWindow(parent=None):
+    from white_tiger.gui.impl.lobby.wt_event_storage import WtEventStorageWindow
+    uiLoader = dependency.instance(IGuiLoader)
+    contentResId = R.views.white_tiger.lobby.WtStorageView()
+    if uiLoader.windowsManager.getViewByLayoutID(contentResId) is None:
+        window = WtEventStorageWindow(parent=parent)
+        window.load()
+    return
+
+
+def isViewLoaded(layoutID):
+    uiLoader = dependency.instance(IGuiLoader)
+    if not uiLoader or not uiLoader.windowsManager:
+        return False
+    else:
+        view = uiLoader.windowsManager.getViewByLayoutID(layoutID)
+        return view is not None
 
 
 def showStyleProgressionPreview(vehCD, style, descr, backCallback, backBtnDescrLabel='', *args, **kwargs):
@@ -1162,6 +1194,7 @@ def showDynamicButtonInfoDialogBuilder(resources, icon, formattedMessage, parent
     builder.setIcon(icon)
     builder.setFormattedMessage(formattedMessage)
     result = yield th_await(dialogs.showSimple(builder.build(parent)))
+    g_eventBus.handleEvent(events.LobbySimpleEvent(events.HangarSimpleEvent.CLOSE_CONFIRM_DIALOG), scope=EVENT_BUS_SCOPE.LOBBY)
     raise AsyncReturn(result)
 
 
@@ -1885,6 +1918,19 @@ def showTelecomRentalPage():
     showBrowserOverlayView(url, VIEW_ALIAS.TELECOM_RENTAL_VIEW)
 
 
+def showTelecomAboutPage():
+    from gui.impl.lobby.telecom.telecom_view import TelecomViewWindow
+    window = TelecomViewWindow()
+    window.load()
+
+
+@dependency.replace_none_kwargs(notificationMgr=INotificationWindowController)
+def showTelecomRewardsPage(notificationMgr=None):
+    from gui.impl.lobby.telecom.telecom_rewards_view import TelecomRewardsViewWindow
+    window = TelecomRewardsViewWindow()
+    notificationMgr.append(WindowNotificationCommand(window))
+
+
 @dependency.replace_none_kwargs(notificationMgr=INotificationWindowController)
 def showEliteWindow(vehicleCD, notificationMgr=None):
     from gui.impl.lobby.elite_window.elite_view import EliteWindow
@@ -1947,6 +1993,17 @@ def showRankedSelectableReward(rankID=None):
     from gui.impl.lobby.ranked.ranked_selectable_reward_view import RankedSelectableRewardWindow
     window = RankedSelectableRewardWindow(rankID)
     window.load()
+
+
+def showStrongholdSelectableReward():
+    from gui.impl.lobby.stronghold.stronghold_selectable_reward_view import StrongholdSelectableRewardWindow
+    window = StrongholdSelectableRewardWindow()
+    window.load()
+
+
+def showStrongholdSelectedRewardWindow(rawAwards, useQueue=False):
+    from gui.impl.lobby.stronghold.stronghold_selected_reward_view import StrongholdSelectedRewardWindow
+    findAndLoadWindow(useQueue, StrongholdSelectedRewardWindow, rawAwards)
 
 
 def showSubscriptionsPage():

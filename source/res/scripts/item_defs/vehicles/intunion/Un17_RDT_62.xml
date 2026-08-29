@@ -956,7 +956,7 @@
       <userString>	#intunion_vehicles:Chassis_Un17_RDT_62	</userString>
       <tags></tags>
       <level>	10	</level>
-      <price>	68200	</price>
+      <price>	82500	</price>
       <armor>
         <leftTrack>	15	</leftTrack>
         <rightTrack>	15	</rightTrack>
@@ -967,8 +967,8 @@
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
       <rotationSpeed>	42	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.12	</vehicleMovement>
-        <vehicleRotation>	0.12	</vehicleRotation>
+        <vehicleMovement>	0.18	</vehicleMovement>
+        <vehicleRotation>	0.18	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	250	</maxHealth>
@@ -1923,7 +1923,7 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_57mm_RShR_57>	shared	  <maxAmmo>	792	</maxAmmo>
+        <_57mm_RShR_57>	shared	  <maxAmmo>	560	</maxAmmo>
           <armor>
             <armor_1>	200	</armor_1>
             <armor_2>	80	</armor_2>
@@ -1937,26 +1937,26 @@
           </armor>
           <pitchLimits>
             <minPitch>	0 -30 1 -30	</minPitch>
-            <maxPitch>	0 12 0.05 12 0.0556 8 0.1 8 0.117 12 0.36 12 0.42 7 0.58 7 0.64 12 0.85 12 0.92 8 0.944 8 0.95 12 1 12	</maxPitch>
+            <maxPitch>	0 9 0.05 9 0.0556 8 0.1 8 0.117 9 0.36 9 0.42 7 0.58 7 0.64 9 0.85 9 0.92 8 0.944 8 0.95 9 1 9	</maxPitch>
           </pitchLimits>
-          <shotDispersionRadius>	0.15	</shotDispersionRadius>
-          <reloadTime>	10	</reloadTime>
+          <shotDispersionRadius>	0.2	</shotDispersionRadius>
+          <reloadTime>	15	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.05	</turretRotation>
             <afterShot>	0.01	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <invisibilityFactorAtShot>	0.266	</invisibilityFactorAtShot>
-          <aimingTime>	1.0	</aimingTime>
+          <aimingTime>	0.8	</aimingTime>
           <clip>
-            <count>	24	</count>
-            <rate>	240	</rate>
+            <count>	20	</count>
+            <rate>	260	</rate>
           </clip>
           <autoShoot>
-            <shotDispersionPerSec>	1.0	</shotDispersionPerSec>
+            <shotDispersionPerSec>	1.7	</shotDispersionPerSec>
             <maxShotDispersion>	7	</maxShotDispersion>
-            <rate>	4	</rate>
-            <rebuildShotDispersionDelay>	1.0	</rebuildShotDispersionDelay>
+            <rate>	4.333	</rate>
+            <rebuildShotDispersionDelay>	0.3	</rebuildShotDispersionDelay>
           </autoShoot>
           <customizationSlots>
             <slot>
@@ -2461,12 +2461,6 @@
       </chassis>
     </detailed>
   </physics>
-  <siege_mode>
-    <switchOnTime>	0	</switchOnTime>
-    <switchOffTime>	0	</switchOffTime>
-    <engineDamageCoeff>	1	</engineDamageCoeff>
-    <switchCancelEnabled>	true	</switchCancelEnabled>
-  </siege_mode>
   <clientAdjustmentFactors>
     <guns>
       <_57mm_RShR_57>
@@ -2488,4 +2482,5 @@
       <attachmentId>	31106	</attachmentId>
     </newAttachment0>
   </prefabAttachments>
+  <baseColorID>	1	</baseColorID>
 </Un17_RDT_62.xml>

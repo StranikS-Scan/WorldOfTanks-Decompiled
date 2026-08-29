@@ -2719,42 +2719,14 @@
             <heatingPerShot>	2	</heatingPerShot>
             <heatingPerSec>	20	</heatingPerSec>
             <coolingDelay>	2.0	</coolingDelay>
-            <coolingPerSec>	12	</coolingPerSec>
-            <coolingOverheatPerSec>	16	</coolingOverheatPerSec>
+            <coolingPerSec>	20	</coolingPerSec>
+            <coolingOverheatPerSec>	10	</coolingOverheatPerSec>
             <thermalStateHysteresis>	1	</thermalStateHysteresis>
             <thermalStates>
               <state>
-                <maxTemperature>	60	</maxTemperature>
+                <maxTemperature>	120	</maxTemperature>
                 <isOverheated>	True	</isOverheated>
                 <modifiers></modifiers>
-              </state>
-              <state>
-                <maxTemperature>	110	</maxTemperature>
-                <isOverheated>	True	</isOverheated>
-                <modifiers>
-                  <mul>
-                    <name>	dynAttrs/armorSpallsDamageFactor	</name>
-                    <value>	0.70	</value>
-                  </mul>
-                  <mul>
-                    <name>	dynAttrs/damageFactor	</name>
-                    <value>	0.70	</value>
-                  </mul>
-                </modifiers>
-              </state>
-              <state>
-                <maxTemperature>	160	</maxTemperature>
-                <isOverheated>	True	</isOverheated>
-                <modifiers>
-                  <mul>
-                    <name>	dynAttrs/armorSpallsDamageFactor	</name>
-                    <value>	0.40	</value>
-                  </mul>
-                  <mul>
-                    <name>	dynAttrs/damageFactor	</name>
-                    <value>	0.40	</value>
-                  </mul>
-                </modifiers>
               </state>
             </thermalStates>
           </temperatureMechanics>

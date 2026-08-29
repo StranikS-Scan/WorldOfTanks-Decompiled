@@ -1,0 +1,23 @@
+<WTHyperionModB.def>
+  <AppealRadius>	3000	</AppealRadius>
+  <Properties>
+    <equipmentID>
+      <Type>	UINT16	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </equipmentID>
+    <attackerID>
+      <Type>	OBJECT_ID	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </attackerID>
+    <isFiring>
+      <Type>	BOOL	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <Default>	0	</Default>
+    </isFiring>
+    <startTime>
+      <Type>	FLOAT32	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <Default>	0	</Default>
+    </startTime>
+  </Properties>
+</WTHyperionModB.def>

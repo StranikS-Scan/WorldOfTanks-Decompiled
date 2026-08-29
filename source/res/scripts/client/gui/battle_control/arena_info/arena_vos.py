@@ -14,6 +14,7 @@ from gui.battle_control.dog_tag_composer import layoutComposer
 from gui.doc_loaders.badges_loader import getSelectedByLayout
 from gui.shared.gui_items import Vehicle
 from gui.shared.gui_items.Vehicle import VEHICLE_TAGS, VEHICLE_CLASS_NAME
+from gui.Scaleform.locale.EVENT import EVENT
 from helpers import dependency, i18n
 from skeletons.gui.server_events import IEventsCache
 _INVALIDATE_OP = settings.INVALIDATE_OP
@@ -50,6 +51,28 @@ class BattleRoyaleKeys(Enum):
     @staticmethod
     def getSortingKeys(static=True):
         return [BattleRoyaleKeys.RANK.value] if not static else []
+
+
+class EventKeys(Enum):
+    LIVES_COUNT = 'livesCount'
+    CAMP = 'camp'
+    RESURRECT_TIME_LEFT = 'resurrectTimeLeft'
+    RESURRECT_TIME_TOTAL = 'resurrectTimeTotal'
+    SPEED = 'replaySpeed'
+    PLASMA_COUNT = 'plasmaCount'
+
+    @staticmethod
+    def getKeys(static=True):
+        return [] if static else [(EventKeys.LIVES_COUNT.value, 0),
+         (EventKeys.CAMP.value, ''),
+         (EventKeys.RESURRECT_TIME_LEFT.value, 0.0),
+         (EventKeys.RESURRECT_TIME_TOTAL.value, 0.0),
+         (EventKeys.SPEED.value, 1.0),
+         (EventKeys.PLASMA_COUNT.value, 0)]
+
+    @staticmethod
+    def getSortingKeys(static=True):
+        return [EventKeys.LIVES_COUNT.value] if not static else []
 
 
 class EPIC_BATTLE_KEYS(object):
@@ -167,11 +190,15 @@ def isBattleRoyaleTank(tags):
     return VEHICLE_TAGS.BATTLE_ROYALE in tags
 
 
+def isEventBotVeh(tags):
+    return 'wt_bot' in tags
+
+
 class PlayerInfoVO(object):
-    __slots__ = ('accountDBID', 'avatarSessionID', 'name', 'fakeName', 'clanAbbrev', 'igrType', 'personaMissionIDs', 'personalMissionInfo', 'isPrebattleCreator', 'forbidInBattleInvitations', 'isTeamKiller')
+    __slots__ = ('accountDBID', 'avatarSessionID', 'name', 'fakeName', 'clanAbbrev', 'igrType', 'personaMissionIDs', 'personalMissionInfo', 'isPrebattleCreator', 'forbidInBattleInvitations', 'isTeamKiller', 'isEventBot')
     eventsCache = dependency.descriptor(IEventsCache)
 
-    def __init__(self, accountDBID=0, avatarSessionID='', name=None, clanAbbrev='', igrType=IGR_TYPE.NONE, personalMissionIDs=None, personalMissionInfo=None, isPrebattleCreator=False, forbidInBattleInvitations=False, fakeName='', **kwargs):
+    def __init__(self, accountDBID=0, avatarSessionID='', name=None, clanAbbrev='', igrType=IGR_TYPE.NONE, personalMissionIDs=None, personalMissionInfo=None, isPrebattleCreator=False, forbidInBattleInvitations=False, fakeName='', isEventBot=False, **kwargs):
         super(PlayerInfoVO, self).__init__()
         self.accountDBID = accountDBID
         self.avatarSessionID = avatarSessionID
@@ -184,6 +211,7 @@ class PlayerInfoVO(object):
         self.isPrebattleCreator = isPrebattleCreator
         self.forbidInBattleInvitations = forbidInBattleInvitations
         self.isTeamKiller = False
+        self.isEventBot = isEventBot
 
     def __cmp__(self, other):
         return cmp(self.name, other.name)
@@ -203,6 +231,8 @@ class PlayerInfoVO(object):
         return invalidate
 
     def getPlayerLabel(self):
+        if self.isEventBot:
+            return i18n.makeString(EVENT.PLAYERSPANEL_BOTNAME)
         return self.name if self.name else i18n.makeString(settings.UNKNOWN_PLAYER_NAME)
 
     def getPlayerFakeLabel(self):
@@ -221,7 +251,7 @@ class PlayerInfoVO(object):
 
 
 class VehicleTypeInfoVO(object):
-    __slots__ = ('compactDescr', 'shortName', 'name', 'level', 'iconName', 'iconPath', 'isObserver', 'isPremiumIGR', 'isDualGunVehicle', 'isFlamethrowerVehicle', 'isAssaultVehicle', 'hasDualAccuracy', 'isAutoShootFlamethrowerVehicle', 'guiName', 'shortNameWithPrefix', 'classTag', 'nationID', 'turretYawLimits', 'maxHealth', 'strCompactDescr', 'isOnlyForBattleRoyaleBattles', 'tags', 'chassisType', 'role', 'isMultiTrack', 'hasThermalVision', 'hasDistanceFactorShells', 'isAutoShootGunVehicle')
+    __slots__ = ('compactDescr', 'shortName', 'name', 'level', 'iconName', 'iconPath', 'isObserver', 'isPremiumIGR', 'isDualGunVehicle', 'isFlamethrowerVehicle', 'isAssaultVehicle', 'hasDualAccuracy', 'isAutoShootFlamethrowerVehicle', 'guiName', 'shortNameWithPrefix', 'classTag', 'nationID', 'turretYawLimits', 'maxHealth', 'strCompactDescr', 'isOnlyForBattleRoyaleBattles', 'tags', 'chassisType', 'role', 'isMultiTrack', 'hasThermalVision', 'hasDistanceFactorShells', 'isAutoShootGunVehicle', 'isEventBot')
 
     def __init__(self, vehicleType=None, maxHealth=None, **kwargs):
         super(VehicleTypeInfoVO, self).__init__()
@@ -277,6 +307,7 @@ class VehicleTypeInfoVO(object):
             self.level = vehicleType.level
             self.maxHealth = maxHealth
             self.isOnlyForBattleRoyaleBattles = isBattleRoyaleTank(tags)
+            self.isEventBot = isEventBotVeh(tags)
             vName = vehicleType.name
             self.iconName = settings.makeVehicleIconName(vName)
             self.iconPath = settings.makeContourIconSFPath(vName)
@@ -313,6 +344,7 @@ class VehicleTypeInfoVO(object):
             self.isOnlyForBattleRoyaleBattles = False
             self.role = ROLE_TYPE.NOT_DEFINED
             self.hasDistanceFactorShells = False
+            self.isEventBot = False
         return
 
     def getClassName(self):
@@ -346,6 +378,9 @@ class VehicleArenaInfoVO(object):
         self.badges = badges or ((), ())
         self.__prefixBadge, self.__suffixBadge = getSelectedByLayout(self.badges[0])
         self.dogTag = None
+        if self.vehicleType.isEventBot:
+            self.player.isEventBot = True
+            self.gameModeSpecific.update({EventKeys.CAMP.value: self.player.name})
         return
 
     def __repr__(self):
@@ -517,7 +552,7 @@ class VehicleArenaInfoVO(object):
 
     def isChatCommandsDisabled(self, isAlly):
         arena = avatar_getter.getArena()
-        isEvent = arena.guiType == ARENA_GUI_TYPE.EVENT_BATTLES if arena else False
+        isEvent = arena.guiType in (ARENA_GUI_TYPE.EVENT_BATTLES, ARENA_GUI_TYPE.WHITE_TIGER) if arena else False
         if not (self.player.avatarSessionID or isEvent):
             if isAlly:
                 return True

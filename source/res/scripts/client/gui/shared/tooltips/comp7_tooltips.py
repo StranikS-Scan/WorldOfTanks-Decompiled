@@ -196,7 +196,8 @@ class BattleResultsTournamentPrestigePointsTooltip(BlocksTooltipData):
 
 
 def getRoleEquipmentTooltipParts(equipment):
+    paramsTemplate = g_htmlTemplates['html_templates:comp7/tooltips/']['roleSkill']
     active, passive = getRoleSkillDescription(equipment)
     cooldown = getCooldown(equipment)
-    body = '\n\n'.join(filter(None, (passive, active, cooldown)))
+    body = '\n\n'.join(filter(None, (passive, active, cooldown))).format(**paramsTemplate.source)
     return (equipment.userString, stripColorTagDescrTags(body))

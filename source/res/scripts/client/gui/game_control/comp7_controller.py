@@ -9,13 +9,15 @@ import Event
 import adisp
 from Event import EventManager
 from comp7_common import Comp7QualificationState, SEASON_POINTS_ENTITLEMENTS
-from comp7_ranks_common import COMP7_RATING_ENTITLEMENT, COMP7_ELITE_ENTITLEMENT, COMP7_ACTIVITY_ENTITLEMENT
+from comp7_ranks_common import COMP7_RATING_ENTITLEMENT, COMP7_ELITE_ENTITLEMENTS, COMP7_ACTIVITY_ENTITLEMENT, COMP7_ELITE_ENT_TO_DIV_IDX
+from comp7_ranks_common import Comp7Division
 from constants import Configs, RESTRICTION_TYPE, ARENA_BONUS_TYPE, COMP7_SCENE, ROLE_TYPE_TO_LABEL
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.daapi.view.lobby.comp7.shared import Comp7AlertData
 from gui.comp7.comp7_helpers import updateComp7Settings
 from gui.comp7.entitlements_cache import EntitlementsCache
 from gui.event_boards.event_boards_items import Comp7LeaderBoard
+from gui.impl.gen.view_models.views.lobby.comp7.main_widget_model import Rank
 from gui.limited_ui.lui_rules_storage import LuiRules
 from gui.prb_control import prb_getters
 from gui.prb_control.entities.listener import IGlobalListener
@@ -45,7 +47,8 @@ if typing.TYPE_CHECKING:
 
 class Comp7Controller(Notifiable, SeasonProvider, IComp7Controller, IGlobalListener):
     _ALERT_DATA_CLASS = Comp7AlertData
-    __ENTITLEMENTS = {COMP7_RATING_ENTITLEMENT, COMP7_ELITE_ENTITLEMENT, COMP7_ACTIVITY_ENTITLEMENT}
+    __ENTITLEMENTS = {COMP7_RATING_ENTITLEMENT, COMP7_ACTIVITY_ENTITLEMENT}
+    __ENTITLEMENTS.update(COMP7_ELITE_ENTITLEMENTS)
     __STATS_SEASONS_KEYS = ('1', '2', '3', '4')
     __lobbyContext = dependency.descriptor(ILobbyContext)
     __itemsCache = dependency.descriptor(IItemsCache)
@@ -67,6 +70,7 @@ class Comp7Controller(Notifiable, SeasonProvider, IComp7Controller, IGlobalListe
         self.__rating = 0
         self.__isElite = False
         self.__activityPoints = 0
+        self.__eliteDivisionIdx = 0
         self.__banTimer = CallbackDelayer()
         self.__banExpiryTime = None
         self.__leaderboardDataProvider = _LeaderboardDataProvider()
@@ -85,6 +89,8 @@ class Comp7Controller(Notifiable, SeasonProvider, IComp7Controller, IGlobalListe
         self.onComp7RewardsConfigChanged = Event.Event(em)
         self.onComp7BattleFinished = Event.Event(em)
         self.onComp7SkillsConfigChanged = Event.Event(em)
+        self.onLeaderboardDataRequested = Event.Event(em)
+        self.onLeaderboardDataProvided = Event.Event(em)
         return
 
     @property
@@ -134,6 +140,8 @@ class Comp7Controller(Notifiable, SeasonProvider, IComp7Controller, IGlobalListe
 
     @property
     def leaderboard(self):
+        if not self.__leaderboardDataProvider:
+            self.__leaderboardDataProvider = _LeaderboardDataProvider()
         return self.__leaderboardDataProvider
 
     @property
@@ -194,6 +202,7 @@ class Comp7Controller(Notifiable, SeasonProvider, IComp7Controller, IGlobalListe
     def onConnected(self):
         self.__itemsCache.onSyncCompleted += self.__onItemsSyncCompleted
         self.__spaceSwitchController.onCheckSceneChange += self.__onCheckSceneChange
+        self.onLeaderboardDataRequested += self.__requestLeaderboardData
         if self.isEnabled():
             self.__entitlementsCache.makePreload()
 
@@ -202,6 +211,7 @@ class Comp7Controller(Notifiable, SeasonProvider, IComp7Controller, IGlobalListe
         self.__itemsCache.onSyncCompleted -= self.__onItemsSyncCompleted
         self.__lobbyContext.onServerSettingsChanged -= self.__onServerSettingsChanged
         self.__spaceSwitchController.onCheckSceneChange -= self.__onCheckSceneChange
+        self.onLeaderboardDataRequested -= self.__requestLeaderboardData
         self.__entitlementsCache.reset()
         if self.__serverSettings is not None:
             self.__serverSettings.onServerSettingsChange -= self.__onUpdateComp7Settings
@@ -213,6 +223,8 @@ class Comp7Controller(Notifiable, SeasonProvider, IComp7Controller, IGlobalListe
         self.__viewData = {}
         self.__rating = 0
         self.__isElite = False
+        self.__eliteDivisionIdx = 0
+        self.__leaderboardDataProvider = None
         self.__banTimer.clearCallbacks()
         self.__banExpiryTime = None
         self.stopGlobalListening()
@@ -367,6 +379,11 @@ class Comp7Controller(Notifiable, SeasonProvider, IComp7Controller, IGlobalListe
     def getYearlyRewards(self):
         return self.__lobbyContext.getServerSettings().comp7RewardsConfig
 
+    def getEliteDivisionIdx(self):
+        if not self.__eliteDivisionIdx:
+            self.__updateEliteDivisionIdx()
+        return self.__eliteDivisionIdx
+
     def _getAlertBlockData(self):
         if self.isOffline:
             return self._ALERT_DATA_CLASS.constructForOffline()
@@ -477,8 +494,10 @@ class Comp7Controller(Notifiable, SeasonProvider, IComp7Controller, IGlobalListe
     def __updateRank(self):
         entitlements = self.__itemsCache.items.stats.entitlements
         self.__rating = entitlements.get(COMP7_RATING_ENTITLEMENT, 0)
-        self.__isElite = bool(entitlements.get(COMP7_ELITE_ENTITLEMENT))
+        self.__isElite = any((entitlements.get(key) for key in COMP7_ELITE_ENTITLEMENTS))
         self.__activityPoints = entitlements.get(COMP7_ACTIVITY_ENTITLEMENT, 0)
+        if self.__isElite:
+            self.__updateEliteDivisionIdx()
         self.onRankUpdated(self.__rating, self.__isElite)
 
     def __onOfflineStatusChanged(self, _):
@@ -507,6 +526,19 @@ class Comp7Controller(Notifiable, SeasonProvider, IComp7Controller, IGlobalListe
         if lastQualificationState != self.__qualificationState:
             self.onQualificationStateUpdated()
 
+    def __updateEliteDivisionIdx(self):
+        entitlements = self.__itemsCache.items.stats.entitlements
+        eliteDivisionEnt = next((k for k in COMP7_ELITE_ENTITLEMENTS if entitlements.get(k, 0) > 0), None)
+        self.__eliteDivisionIdx = COMP7_ELITE_ENT_TO_DIV_IDX.get(eliteDivisionEnt, None)
+        return
+
+    @adisp.adisp_process
+    def __requestLeaderboardData(self):
+        isSuccessOwnData, myPosition, _, _ = yield self.leaderboard.getOwnData()
+        if isSuccessOwnData and myPosition is not None:
+            self.onLeaderboardDataProvided(myPosition)
+        return
+
     def isLocked(self):
         return not self.__limitedUIController.isRuleCompleted(LuiRules.COMP7_CONTENT)
 
@@ -528,6 +560,8 @@ class _LeaderboardDataProvider(object):
         self.__eliteRankPositionThreshold = None
         self.__eliteRankPointsThreshold = None
         self.__cachedPages = {}
+        self.__cachedOwnData = None
+        self.__divisionsFirstPositions = {}
         return
 
     def getEliteRankPercent(self):
@@ -536,6 +570,10 @@ class _LeaderboardDataProvider(object):
     def getMinimumPointsNeeded(self):
         divisions = [ d for d in self.__getRanksConfig().divisions if d.rank == self.__MASTER_RANK_ID ]
         return min((division.range.begin for division in divisions))
+
+    def getLeaderboardDivisions(self):
+        ranksConfig = self.__getRanksConfig()
+        return tuple((d for d in ranksConfig.divisions if d.rank in (Rank.FIFTH, Rank.SIXTH)))
 
     @adisp.adisp_async
     @adisp.adisp_process
@@ -551,6 +589,12 @@ class _LeaderboardDataProvider(object):
 
     @adisp.adisp_async
     @adisp.adisp_process
+    def getDivisionsFirstPositions(self, callback):
+        isSuccess = yield self.__invalidateMetaData()
+        callback((self.__divisionsFirstPositions, isSuccess))
+
+    @adisp.adisp_async
+    @adisp.adisp_process
     def getLastEliteRating(self, callback):
         isSuccess = yield self.__invalidateMetaData()
         callback((self.__eliteRankPointsThreshold, isSuccess))
@@ -558,16 +602,21 @@ class _LeaderboardDataProvider(object):
     @adisp.adisp_async
     @adisp.adisp_process
     def getOwnData(self, callback):
-        myInfo = yield self.__eventsController.getMyLeaderboardInfo(self.__EVENT_ID, self.__LEADERBOARD_ID, showNotification=False)
-        if myInfo is not None:
-            position = myInfo.getRank()
-            if position is not None:
-                yield self.__invalidateMetaData()
-                if position > self.__recordsCount:
-                    position = None
-            callback(self._OwnData(True, position, myInfo.getP2(), myInfo.getBattlesCount()))
+        if self.__nextUpdateTimestamp and self.__nextUpdateTimestamp >= getServerUTCTime() and self.__cachedOwnData:
+            print 'HERE CACHED OWN DATA', self.__cachedOwnData
+            callback(self.__cachedOwnData)
         else:
-            callback(self._OwnData(False, None, None, None))
+            myInfo = yield self.__eventsController.getMyLeaderboardInfo(self.__EVENT_ID, self.__LEADERBOARD_ID, showNotification=False)
+            if myInfo is not None:
+                position = myInfo.getRank()
+                if position is not None:
+                    yield self.__invalidateMetaData()
+                    if position > self.__recordsCount:
+                        position = None
+                self.__cachedOwnData = self._OwnData(True, position, myInfo.getP2(), myInfo.getBattlesCount())
+                callback(self.__cachedOwnData)
+            else:
+                callback(self._OwnData(False, None, None, None))
         return
 
     @adisp.adisp_async
@@ -629,6 +678,7 @@ class _LeaderboardDataProvider(object):
                 self.__eliteRankPositionThreshold = page.getLastEliteUserPosition()
                 self.__eliteRankPointsThreshold = page.getLastEliteUserRating()
                 self.__recordsCount = page.getRecordsCount()
+                self.__divisionsFirstPositions = page.getDivisionsFirstPositions()
             self.__cachedPages[pageID] = page.getExcelItems()
         else:
             result = True
@@ -660,6 +710,8 @@ class _LeaderboardDataProvider(object):
         self.__eliteRankPointsThreshold = None
         self.__masterRankPositionThreshold = None
         self.__cachedPages.clear()
+        self.__divisionsFirstPositions.clear()
+        self.__cachedOwnData = None
         return
 
     def __getRanksConfig(self):

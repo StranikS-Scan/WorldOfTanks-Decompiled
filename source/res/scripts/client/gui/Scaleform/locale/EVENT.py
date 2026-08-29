@@ -3,6 +3,25 @@
 from debug_utils import LOG_WARNING
 
 class EVENT(object):
+    HUNTERRESPAWN_TIMERTEXT = '#event:hunterRespawn/timerText'
+    HUNTERRESPAWN_HINTTEXT = '#event:hunterRespawn/hintText'
+    MINIMAP_RESPAWNENTRY_HINTTEXT = '#event:minimap/respawnEntry/hintText'
+    PLAYERSPANEL_CAMPLABEL = '#event:playersPanel/campLabel'
+    PLAYERSPANEL_BOMBLABEL = '#event:playersPanel/bombLabel'
+    PLAYERSPANEL_BOTNAME = '#event:playersPanel/botName'
+    WTEVENTSCAROUSELVIEW_INBATTLETEXT = '#event:WTEventsCarouselView/inBattleText'
+    WTEVENTSCAROUSELVIEW_INPLATOONTEXT = '#event:WTEventsCarouselView/inPlatoonText'
+    WTEVENTSCAROUSELVIEW_UNSUITABLETEXT = '#event:WTEventsCarouselView/unsuitableText'
+    WTEVENTSCAROUSELVIEW_TICKETNEEDEDTEXT = '#event:WTEventsCarouselView/ticketNeededText'
+    WTEVENTSCAROUSELVIEW_NOBATTLESLEFT = '#event:WTEventsCarouselView/noBattlesLeft'
+    WTEVENTSCAROUSELVIEW_SPECIALBATTLESLEFT = '#event:WTEventsCarouselView/specialBattlesLeft'
+    BATTLEQUEUE_WIDGET_BTNLABEL = '#event:battleQueue/widget/btnLabel'
+    BATTLEQUEUE_WIDGET_CALCULATEDTEXT = '#event:battleQueue/widget/calculatedText'
+    BATTLEQUEUE_WIDGET_CHANGETITLE = '#event:battleQueue/widget/changeTitle'
+    BATTLEQUEUE_WIDGET_OFFERHUNTERTITLE = '#event:battleQueue/widget/offerHunterTitle'
+    BATTLEQUEUE_WIDGET_TICKETTEXT = '#event:battleQueue/widget/ticketText'
+    BATTLEQUEUE_WIDGET_BONUS = '#event:battleQueue/widget/bonus'
+    BATTLEQUEUE_WIDGET_BONUSDESCR = '#event:battleQueue/widget/bonusDescr'
     PUNISHMENTWINDOW_REASON_EVENT_DESERTER = '#event:punishmentWindow/reason/event_deserter'
     PUNISHMENTWINDOW_REASON_EVENT_AFK = '#event:punishmentWindow/reason/event_afk'
     BATTLEHINTS_TESTMESSAGE = '#event:battleHints/testMessage'
@@ -90,7 +109,38 @@ class EVENT(object):
     SUMMERSALES_CONFIRM_TITLE_PLACEHOLDER = '#event:summerSales/confirm/title/placeHolder'
     SUMMERSALES_CONFIRM_CONTENT_PLACEHOLDER = '#event:summerSales/confirm/content/placeHolder'
     SUMMERSALES_CONFIRM_FOOTER_PLACEHOLDER = '#event:summerSales/confirm/footer/placeHolder'
-    ALL_ENUM = (PUNISHMENTWINDOW_REASON_EVENT_DESERTER,
+    SUBTITLE_WT_INTRO_PHRASE_1 = '#event:subtitle/wt_intro/phrase_1'
+    SUBTITLE_WT_INTRO_PHRASE_2 = '#event:subtitle/wt_intro/phrase_2'
+    SUBTITLE_WT_INTRO_PHRASE_3 = '#event:subtitle/wt_intro/phrase_3'
+    SUBTITLE_WT_INTRO_PHRASE_4 = '#event:subtitle/wt_intro/phrase_4'
+    SUBTITLE_WT_INTRO_PHRASE_5 = '#event:subtitle/wt_intro/phrase_5'
+    SUBTITLE_WT_INTRO_PHRASE_6 = '#event:subtitle/wt_intro/phrase_6'
+    SUBTITLE_WT_INTRO_PHRASE_7 = '#event:subtitle/wt_intro/phrase_7'
+    SUBTITLE_WT_OUTRO_PHRASE_1 = '#event:subtitle/wt_outro/phrase_1'
+    SUBTITLE_WT_OUTRO_PHRASE_2 = '#event:subtitle/wt_outro/phrase_2'
+    SUBTITLE_WT_OUTRO_PHRASE_3 = '#event:subtitle/wt_outro/phrase_3'
+    SUBTITLE_WT_OUTRO_PHRASE_4 = '#event:subtitle/wt_outro/phrase_4'
+    SUBTITLE_WT_OUTRO_PHRASE_5 = '#event:subtitle/wt_outro/phrase_5'
+    ALL_ENUM = (HUNTERRESPAWN_TIMERTEXT,
+     HUNTERRESPAWN_HINTTEXT,
+     MINIMAP_RESPAWNENTRY_HINTTEXT,
+     PLAYERSPANEL_CAMPLABEL,
+     PLAYERSPANEL_BOMBLABEL,
+     PLAYERSPANEL_BOTNAME,
+     WTEVENTSCAROUSELVIEW_INBATTLETEXT,
+     WTEVENTSCAROUSELVIEW_INPLATOONTEXT,
+     WTEVENTSCAROUSELVIEW_UNSUITABLETEXT,
+     WTEVENTSCAROUSELVIEW_TICKETNEEDEDTEXT,
+     WTEVENTSCAROUSELVIEW_NOBATTLESLEFT,
+     WTEVENTSCAROUSELVIEW_SPECIALBATTLESLEFT,
+     BATTLEQUEUE_WIDGET_BTNLABEL,
+     BATTLEQUEUE_WIDGET_CALCULATEDTEXT,
+     BATTLEQUEUE_WIDGET_CHANGETITLE,
+     BATTLEQUEUE_WIDGET_OFFERHUNTERTITLE,
+     BATTLEQUEUE_WIDGET_TICKETTEXT,
+     BATTLEQUEUE_WIDGET_BONUS,
+     BATTLEQUEUE_WIDGET_BONUSDESCR,
+     PUNISHMENTWINDOW_REASON_EVENT_DESERTER,
      PUNISHMENTWINDOW_REASON_EVENT_AFK,
      BATTLEHINTS_TESTMESSAGE,
      BATTLEHINTS_TESTMESSAGEWITHPARAMS,
@@ -176,7 +226,19 @@ class EVENT(object):
      SUMMERSALES_MARKETSCALES_BUTTON_JUSTSHOWME,
      SUMMERSALES_CONFIRM_TITLE_PLACEHOLDER,
      SUMMERSALES_CONFIRM_CONTENT_PLACEHOLDER,
-     SUMMERSALES_CONFIRM_FOOTER_PLACEHOLDER)
+     SUMMERSALES_CONFIRM_FOOTER_PLACEHOLDER,
+     SUBTITLE_WT_INTRO_PHRASE_1,
+     SUBTITLE_WT_INTRO_PHRASE_2,
+     SUBTITLE_WT_INTRO_PHRASE_3,
+     SUBTITLE_WT_INTRO_PHRASE_4,
+     SUBTITLE_WT_INTRO_PHRASE_5,
+     SUBTITLE_WT_INTRO_PHRASE_6,
+     SUBTITLE_WT_INTRO_PHRASE_7,
+     SUBTITLE_WT_OUTRO_PHRASE_1,
+     SUBTITLE_WT_OUTRO_PHRASE_2,
+     SUBTITLE_WT_OUTRO_PHRASE_3,
+     SUBTITLE_WT_OUTRO_PHRASE_4,
+     SUBTITLE_WT_OUTRO_PHRASE_5)
 
     @classmethod
     def all(cls, key0):

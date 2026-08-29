@@ -43,7 +43,8 @@ def _initializeDefaultSettings(core, data, initialized):
      GAME.INCREASED_ZOOM: core.getSetting(GAME.INCREASED_ZOOM),
      GAME.CAROUSEL_TYPE: core.getSetting(GAME.CAROUSEL_TYPE),
      GAME.MINIMAP_MIN_SPOTTING_RANGE: core.getSetting(GAME.MINIMAP_MIN_SPOTTING_RANGE)}
-    data['gameExtData2'] = {GAME.CUSTOMIZATION_DISPLAY_TYPE: core.getSetting(GAME.CUSTOMIZATION_DISPLAY_TYPE)}
+    data['gameExtData2'] = {GAME.CUSTOMIZATION_DISPLAY_TYPE: core.getSetting(GAME.CUSTOMIZATION_DISPLAY_TYPE),
+     GAME.ENABLE_BATTLE_CONTEXT_HINTS: core.getSetting(GAME.ENABLE_BATTLE_CONTEXT_HINTS)}
     gameplayData = data['gameplayData'] = {GAME.GAMEPLAY_MASK: AccountSettings.getSettingsDefault('gameplayMask')}
     aimData = data['aimData'] = {'arcade': core.getSetting('arcade'),
      'sniper': core.getSetting('sniper')}
@@ -1566,6 +1567,33 @@ def _migrateTo147(core, data, initialized):
     onceOnlyHintsData[OnceOnlyHints.BIRTHDAY_POSTBATTLE_TEAM_STATS_TAB_HINT] = False
 
 
+def _migrateTo148(core, data, initialized):
+    from account_helpers.settings_core.ServerSettingsManager import SETTINGS_SECTIONS, BATTLE_CONTEXT_HINTS
+    from gui.battle_control.battle_context_hints.classic_battle_context_hints_config import getConfig
+    from gui.battle_control.battle_context_hints.common import HintId
+    from gui.battle_control.battle_context_hints.settings_data_block import HintData, HintDataLongBattleCntrBlock, HintDataPlayerObservedBlock
+    data['gameExtData2'][GAME.ENABLE_BATTLE_CONTEXT_HINTS] = True
+    config = getConfig()
+    hintConf = {conf.hintId:conf for conf in config}
+    hints = [HintId.AMMO_TYPE_AVAILABLE, HintId.AMMO_TYPE_SWITCH]
+    for hint in hints:
+        conf = hintConf[hint]
+        hintData = HintData(conf.maxWatchingQty, conf.maxWatchingQtyPerBattle, 0, False)
+        data[conf.dataBlock.section()][conf.dataBlock.key()] = conf.dataBlock.pack(hintData)
+
+    storedValue = _getSettingsCache().getSectionSettings(SETTINGS_SECTIONS.BATTLE_CONTEXT_HINTS, None)
+    if storedValue is None:
+        return
+    else:
+        rawHintValue = storedValue & 31
+        oldBlock = HintDataLongBattleCntrBlock(SETTINGS_SECTIONS.BATTLE_CONTEXT_HINTS, BATTLE_CONTEXT_HINTS.PLAYER_VEHICLE_OBSERVED)
+        newBlock = HintDataPlayerObservedBlock(SETTINGS_SECTIONS.BATTLE_CONTEXT_HINTS, BATTLE_CONTEXT_HINTS.PLAYER_VEHICLE_OBSERVED)
+        oldHintData = oldBlock.unpack(rawHintValue)
+        migratedHintData = HintData(min(oldHintData.watchingCounter, 3), oldHintData.watchingCounterPerBattle, 0, False)
+        data[SETTINGS_SECTIONS.BATTLE_CONTEXT_HINTS][BATTLE_CONTEXT_HINTS.PLAYER_VEHICLE_OBSERVED] = newBlock.pack(migratedHintData)
+        return
+
+
 _versions = ((1,
   _initializeDefaultSettings,
   True,
@@ -2295,7 +2323,12 @@ _versions = ((1,
   _migrateTo147,
   False,
   False,
-  False))
+  False),
+ (148,
+  _migrateTo148,
+  False,
+  False,
+  True))
 
 @adisp_async
 @adisp_process

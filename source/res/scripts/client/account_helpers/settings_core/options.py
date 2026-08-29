@@ -378,21 +378,47 @@ class SoundEnableSetting(SettingAbstract):
 class VOIPMasterSoundSetting(SoundSetting):
 
     def __init__(self, isPreview=False):
-        super(VOIPMasterSoundSetting, self).__init__('masterVivox', isPreview)
+        voip = VOIP.getVOIPManager()
+        activeProfile = voip.profile
+        voip.onInitialized += self.__changeGroup
+        soundGroup = 'master{}'.format(activeProfile.capitalize())
+        super(VOIPMasterSoundSetting, self).__init__(soundGroup, isPreview)
+
+    def fini(self):
+        voip = VOIP.getVOIPManager()
+        voip.onInitialized -= self.__changeGroup
 
     def _set(self, value):
         super(VOIPMasterSoundSetting, self)._set(value)
         VOIP.getVOIPManager().setMasterVolume(value)
 
+    def __changeGroup(self, _):
+        voip = VOIP.getVOIPManager()
+        activeProfile = voip.profile
+        self.group = 'master{}'.format(activeProfile.capitalize())
+
 
 class VOIPMicSoundSetting(SoundSetting):
 
     def __init__(self, isPreview=False):
-        super(VOIPMicSoundSetting, self).__init__('micVivox', isPreview)
+        voip = VOIP.getVOIPManager()
+        activeProfile = voip.profile
+        voip.onInitialized += self.__changeGroup
+        soundGroup = 'mic{}'.format(activeProfile.capitalize())
+        super(VOIPMicSoundSetting, self).__init__(soundGroup, isPreview)
+
+    def fini(self):
+        voip = VOIP.getVOIPManager()
+        voip.onInitialized -= self.__changeGroup
 
     def _set(self, value):
         super(VOIPMicSoundSetting, self)._set(value)
         VOIP.getVOIPManager().setMicrophoneVolume(value)
+
+    def __changeGroup(self, _):
+        voip = VOIP.getVOIPManager()
+        activeProfile = voip.profile
+        self.group = 'mic{}'.format(activeProfile.capitalize())
 
 
 class RegularSetting(SettingAbstract):
@@ -721,7 +747,9 @@ class VOIPCaptureDevicesSetting(UserPrefsStringSetting):
         return deviceIdx
 
     def _getOptions(self):
-        return [ i18n.encodeUtf8(device.split('|', 1)[1].decode(sys.getfilesystemencoding())) for device in self._getRawOptions() ]
+        if VOIP.getVOIPManager().getAPI() == 'vivox':
+            return [ i18n.encodeUtf8(device.split('|', 1)[1].decode(sys.getfilesystemencoding())) for device in self._getRawOptions() ]
+        return self._getRawOptions()
 
     def _getRawOptions(self):
         return VOIP.getVOIPManager().getCaptureDevices()
@@ -763,7 +791,7 @@ class VOIPSupportSetting(HardwareReadOnlySetting):
         return self.bwProto.voipController.isReady()
 
     def __isSupported(self):
-        return VOIP.getVOIPManager().getVOIPDomain() != '' and self.__isVoiceChatReady()
+        return self.__isVoiceChatReady()
 
 
 class MessengerSetting(StorageDumpSetting):

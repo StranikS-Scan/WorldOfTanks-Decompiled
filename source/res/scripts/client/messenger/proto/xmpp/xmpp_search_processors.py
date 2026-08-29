@@ -152,7 +152,7 @@ class SearchUsersProcessor(SearchProcessor, ClientEventsHandler):
         for userInfo in result:
             user = self.usersStorage.getUser(userInfo.dbId)
             if user:
-                if not user.hasValidName():
+                if not user.hasValidName() or userInfo.clanInfo != user.getClanInfo():
                     user.update(name=userInfo.nickname, clanInfo=userInfo.clanInfo)
                 userInfo = user
             else:

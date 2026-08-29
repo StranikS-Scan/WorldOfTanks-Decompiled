@@ -1,7 +1,8 @@
 <engine_config.xml>
+  <xmlns:xmlref>	http://bwt/xmlref	</xmlns:xmlref>
   <personality>	game	</personality>
   <appTitle>	Мир танков	</appTitle>
-  <preferences>	preferences.xml	</preferences>
+  <preferences>	preferences_ct.xml	</preferences>
   <enableBalanceCPU>	true	</enableBalanceCPU>
   <enableServerTimeSync>	true	</enableServerTimeSync>
   <lod>
@@ -637,7 +638,13 @@
           <name>	style_3D_F108_Panhard_EBR_105_3Dst_Reef_Rush.bnk	</name>
         </bank>
         <bank>
-          <name>	hangar_event_mt_bday_2026.bnk	</name>
+          <name>	style_3D_G194_E_50_GT_Alkett_Prod_02_3Dst_Hertz.bnk	</name>
+        </bank>
+        <bank>
+          <name>	ev_white_tiger_2021_lootboxes.bnk	</name>
+        </bank>
+        <bank>
+          <name>	ev_white_tiger_2021_lootboxes.pck	</name>
         </bank>
       </SFX_soundbanks_hangar>
       <SFX_soundbanks_login>
@@ -841,7 +848,20 @@
         <bank>
           <name>	style_3D_F108_Panhard_EBR_105_3Dst_Reef_Rush.bnk	</name>
         </bank>
+        <bank>
+          <name>	style_3D_G194_E_50_GT_Alkett_Prod_02_3Dst_Hertz.bnk	</name>
+        </bank>
       </SFX_soundbanks_arena>
+      <SFX_soundbanks_custom>
+        <white_tiger_2022>
+          <bank>
+            <name>	ev_white_tiger_2021_voiceover.bnk	</name>
+          </bank>
+          <bank>
+            <name>	ev_white_tiger_2021_voiceover.pck	</name>
+          </bank>
+        </white_tiger_2022>
+      </SFX_soundbanks_custom>
       <SFX_soundbanks_editor>
         <bank>
           <name>	fort_area.bnk	</name>

@@ -1,0 +1,30 @@
+<WTVehicleAbilityLock.def>
+  <Properties>
+    <equipmentID>
+      <Type>	UINT16	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </equipmentID>
+    <lockedEquipmentCDs>
+      <Type>	FIXED_DICT	  <Properties>
+          <isLocked>
+            <Type>	BOOL	</Type>
+          </isLocked>
+          <cds>
+            <Type>	ARRAY	  <of>	INT32	</of>
+            </Type>
+          </cds>
+        </Properties>
+      </Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <DetailLevel>	MY_VEHICLE	</DetailLevel>
+    </lockedEquipmentCDs>
+    <finishTime>
+      <Type>	FLOAT32	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </finishTime>
+  </Properties>
+  <ofEntity>
+    <Vehicle></Vehicle>
+  </ofEntity>
+  <DefaultKeyName>	wtAbilityLock	</DefaultKeyName>
+</WTVehicleAbilityLock.def>

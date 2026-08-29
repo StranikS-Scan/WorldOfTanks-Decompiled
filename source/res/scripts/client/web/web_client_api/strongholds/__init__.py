@@ -10,7 +10,7 @@ from constants import JOIN_FAILURE, PREBATTLE_TYPE
 from debug_utils import LOG_CURRENT_EXCEPTION
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.clans.clan_helpers import getStrongholdEventProgressionUrl
-from gui.server_events.bonuses import BattleTokensBonus
+from gui.server_events.bonuses import BattleTokensBonus, SelectableBonus
 from helpers import dependency
 from gui import DialogsInterface
 from gui.impl.lobby.stronghold.stronghold_helpers import getClanSeasonProgressLevel, CLAN_SEASON_PROGRESS_PREFIX, CLAN_SEASON_QUEST_PREFIX, STYLE_PROGRESS_PREFIX
@@ -20,6 +20,7 @@ from gui.prb_control.entities.base.ctx import PrbAction, LeavePrbAction
 from gui.prb_control.entities.base.external_battle_unit.base_external_battle_ctx import CreateBaseExternalUnitCtx, JoinBaseExternalUnitCtx
 from gui.prb_control.formatters import messages
 from gui.prb_control.settings import PREBATTLE_ACTION_NAME
+from gui.selectable_reward.common import StrongholdSelectableRewardManager
 from gui.shared import actions
 from gui.shared.event_dispatcher import showStylePreview, showStrongholds
 from gui.shared.gui_items import GUI_ITEM_TYPE
@@ -150,6 +151,23 @@ class StrongholdsWebApi(VehiclePreviewWebApiMixin):
     def requestStrongholdProgressBonusesInfo(self, _):
         return self.__getBonusesInfoByQuestsBaseToken(CLAN_SEASON_PROGRESS_PREFIX)
 
+    @w2c(W2CSchema, 'get_selectable_styles_info')
+    def requestSelectableStylesInfo(self, _):
+        styles = []
+        selectableBonus = first(StrongholdSelectableRewardManager.getSelectableBonuses())
+        if not selectableBonus:
+            return []
+        offer = StrongholdSelectableRewardManager._getBonusOffer(selectableBonus)
+        if not offer:
+            return []
+        gifts = StrongholdSelectableRewardManager._makeCustomGifts(offer)
+        for gift in gifts:
+            item = first(gift.bonuses).custItem
+            styles.append({'name': item.userName,
+             'is3D': item.is3D})
+
+        return styles
+
     @w2c(_VehicleProgressionStylePreviewSchema, 'vehicle_progression_style_preview')
     def openVehicleProgressionStylePreview(self, cmd):
         style = self.__c11n.getItemByID(GUI_ITEM_TYPE.STYLE, cmd.style_id)
@@ -182,7 +200,18 @@ class StrongholdsWebApi(VehiclePreviewWebApiMixin):
                             rewards.append([{'type': 'token',
                               'name': tokenName}])
 
-                    continue
+                if isinstance(bonus, SelectableBonus):
+                    offer = StrongholdSelectableRewardManager._getBonusOffer(bonus)
+                    if offer is None:
+                        continue
+                    selectedGiftID = first(offer._receivedGifts)
+                    if selectedGiftID is not None:
+                        bonus = first(offer.getGift(selectedGiftID).bonuses)
+                        selectableBonus = first(bonus.getWrappedEpicBonusList())
+                    else:
+                        selectableBonus = first(bonus.getWrappedEpicBonusList())
+                        selectableBonus['isAvailable'] = offer.isOfferAvailable
+                    rewards.append([selectableBonus])
                 rewards.extend([bonus.getWrappedEpicBonusList()])
 
             awardsData[questKey] = list(itertools.chain.from_iterable(rewards))

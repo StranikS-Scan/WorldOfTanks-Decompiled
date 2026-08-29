@@ -279,10 +279,14 @@ class SoundGroups(object):
          'ambient': ('outside/ambient', 'hangar_v2', 'ambientUR'),
          'masterVivox': (),
          'micVivox': (),
+         'micWebrtc': (),
+         'masterWebrtc': (),
          'masterFadeVivox': ()}
         defCategoryVolumes = {'music': 0.5,
          'masterVivox': 0.7,
-         'micVivox': 0.4}
+         'micVivox': 0.4,
+         'micWebrtc': 0.8,
+         'masterWebrtc': 1.0}
         userPrefs = Settings.g_instance.userPrefs
         soundModeName = SoundModes.DEFAULT_MODE_NAME
         nationalMapping = None

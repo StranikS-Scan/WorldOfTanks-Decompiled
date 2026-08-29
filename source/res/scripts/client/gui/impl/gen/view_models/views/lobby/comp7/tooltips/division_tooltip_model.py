@@ -23,7 +23,7 @@ class Division(IntEnum):
 class DivisionTooltipModel(ViewModel):
     __slots__ = ()
 
-    def __init__(self, properties=4, commands=0):
+    def __init__(self, properties=6, commands=0):
         super(DivisionTooltipModel, self).__init__(properties=properties, commands=commands)
 
     def getRank(self):
@@ -50,9 +50,23 @@ class DivisionTooltipModel(ViewModel):
     def setTo(self, value):
         self._setNumber(3, value)
 
+    def getElitePercent(self):
+        return self._getNumber(4)
+
+    def setElitePercent(self, value):
+        self._setNumber(4, value)
+
+    def getType(self):
+        return self._getNumber(5)
+
+    def setType(self, value):
+        self._setNumber(5, value)
+
     def _initialize(self):
         super(DivisionTooltipModel, self)._initialize()
         self._addNumberProperty('rank')
         self._addNumberProperty('division')
         self._addNumberProperty('from', 800)
         self._addNumberProperty('to', 900)
+        self._addNumberProperty('elitePercent', 0)
+        self._addNumberProperty('type', 0)

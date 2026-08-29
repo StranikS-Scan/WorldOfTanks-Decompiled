@@ -4,11 +4,12 @@ import sys
 import weakref
 import typing
 from debug_utils import LOG_CURRENT_EXCEPTION
-from gui.techtree.settings import UNKNOWN_VEHICLE_LEVEL
+from frameworks.wulf import WindowFlags, WindowLayer
+from gui.techtree.settings import UNKNOWN_VEHICLE_LEVEL, UnlockProps
 from gui.techtree.techtree_dp import g_techTreeDP
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.app_loader import sf_lobby
-from gui.techtree.settings import UnlockProps
+from gui.impl.pub import WindowImpl
 from gui.shared.formatters import icons
 from helpers import dependency
 from helpers.i18n import makeString
@@ -17,6 +18,7 @@ from shared_utils import CONST_CONTAINER
 from skeletons.gui.shared import IItemsCache
 from gui.impl import backport
 from gui.impl.gen import R
+from soft_exception import SoftException
 
 class TOOLTIP_TYPE(CONST_CONTAINER):
     VEHICLE = 'vehicle'
@@ -87,6 +89,8 @@ class TOOLTIP_TYPE(CONST_CONTAINER):
     COMP7_CALENDAR_DAY_INFO = 'comp7CalendarDayInfo'
     COMP7_CALENDAR_DAY_EXTENDED_INFO = 'comp7CalendarDayExtendedInfo'
     PM3_GIFT_TOKEN = 'pm3GiftToken'
+    EVENT_BATTLES_SELECTOR_INFO = 'eventBattlesSelectorInfo'
+    EVENT_BATTLES_CALENDAR = 'eventBattlesCalendar'
 
 
 class TOOLTIP_COMPONENT(CONST_CONTAINER):
@@ -190,6 +194,19 @@ class ToolTipData(ToolTipBaseData):
                 result[key] = value
 
         return result
+
+
+class WulfTooltipData(ToolTipData):
+
+    def getDisplayableData(self, *args, **kwargs):
+        parent = kwargs.get('parent', None)
+        return WindowImpl(wndFlags=WindowFlags.WINDOW, content=self.getTooltipContent(*args, **kwargs), parent=parent, areaID=R.areas.specific(), layer=WindowLayer.TOOLTIP)
+
+    def buildToolTip(self, *args, **kwargs):
+        return None
+
+    def getTooltipContent(self, *args, **kwargs):
+        raise SoftException('getTooltipContent should be overriden in {}'.format(self))
 
 
 class ToolTipDataField(object):

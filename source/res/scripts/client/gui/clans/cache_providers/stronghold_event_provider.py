@@ -62,7 +62,7 @@ class StrongholdEventProvider(IBaseProvider):
 
     def isSeasonRunning(self):
         settings = self.getSettings()
-        if settings is None:
+        if settings is None or settings.event_config is None:
             return False
         else:
             seasonStartDate = settings.event_config.get('visible_start_date', 0)

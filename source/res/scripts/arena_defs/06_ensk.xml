@@ -57,12 +57,15 @@
       </teamBasePositions>
     </maps_training>
     <comp7>
+      <minimap>	spaces/06_ensk/mmap_comp7.dds	</minimap>
+      <winnerIfTimeout>	1	</winnerIfTimeout>
+      <winnerIfExtermination>	1	</winnerIfExtermination>
       <teamSpawnPoints>
         <team1>
-          <position>	38.167999 270.420990	</position>
+          <position>	246.395813 -253.606964	</position>
         </team1>
         <team2>
-          <position>	77.943001 -265.811005	</position>
+          <position>	-105.595253 259.958099	</position>
         </team2>
       </teamSpawnPoints>
       <visualScript>
@@ -82,22 +85,35 @@
           </flyDirection>
         </flyDirections>
       </recon>
-      <minimap>	spaces/06_ensk/mmap_comp7.dds	</minimap>
       <pointsOfInterestUDO>
         <point>
-          <position>	-186.742996 -37.199001	</position>
-          <type>	1	</type>
+          <position>	129.188568 -217.371765	</position>
+          <type>	4	</type>
         </point>
         <point>
-          <position>	140.024994 9.983000	</position>
-          <type>	1	</type>
+          <position>	277.721161 -84.092178	</position>
+          <type>	3	</type>
         </point>
         <point>
-          <position>	-83.446182 0.616430	</position>
-          <type>	2	</type>
+          <position>	40.830990 12.988732	</position>
+          <type>	3	</type>
+        </point>
+        <point>
+          <position>	-0.324537 210.145905	</position>
+          <type>	3	</type>
+        </point>
+        <point>
+          <position>	-201.283386 -34.769623	</position>
+          <type>	4	</type>
         </point>
       </pointsOfInterestUDO>
-      <controlPoint>	5.873001 10.181000	</controlPoint>
+      <teamBasePositions>
+        <team1>
+          <position1>	-223.987885 -250.300903	</position1>
+          <position2>	219.131714 11.614003	</position2>
+        </team1>
+        <team2></team2>
+      </teamBasePositions>
     </comp7>
     <bob>
       <teamSpawnPoints>
@@ -123,6 +139,26 @@
       <minimap>	spaces/06_ensk/mmap_comp7.dds	</minimap>
       <controlPoint>	5.873001 10.181000	</controlPoint>
     </bob>
+    <assault2>
+      <minimap>	spaces/06_ensk/mmap_assault2.dds	</minimap>
+      <winnerIfTimeout>	1	</winnerIfTimeout>
+      <winnerIfExtermination>	1	</winnerIfExtermination>
+      <teamSpawnPoints>
+        <team1>
+          <position>	256.733429 -257.913696	</position>
+        </team1>
+        <team2>
+          <position>	-107.590576 260.036285	</position>
+        </team2>
+      </teamSpawnPoints>
+      <teamBasePositions>
+        <team1>
+          <position1>	-223.987915 -250.300888	</position1>
+          <position2>	219.131729 11.614003	</position2>
+        </team1>
+        <team2></team2>
+      </teamBasePositions>
+    </assault2>
   </gameplayTypes>
   <mapActivities>
     <scenario>

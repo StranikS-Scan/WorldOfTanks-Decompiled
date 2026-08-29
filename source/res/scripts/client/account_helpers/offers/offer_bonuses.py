@@ -245,6 +245,28 @@ class CustomizationsOfferBonus(OfferBonusMixin, CustomizationsBonus):
         return False
 
 
+class ClansCustomizationsOfferBonus(CustomizationsOfferBonus):
+    CAN_BE_SHOWN = True
+
+    @property
+    def custItem(self):
+        itemData = self.getCustomizations()[0]
+        return self.getC11nItem(itemData)
+
+    def getLightViewModelData(self):
+        return [self.getNamePath()]
+
+    def getInventoryCount(self):
+        return self.custItem.fullCount()
+
+    def getStyleName(self):
+        return self.custItem.descriptor.userString
+
+    def getNamePath(self):
+        path = self.custItem.descriptor.userKey
+        return path.split(':')[-1]
+
+
 class CrewSkinsOfferBonus(OfferBonusMixin, CrewSkinsBonus):
     CAN_BE_SHOWN = False
 
@@ -313,5 +335,6 @@ OFFER_BONUSES = {Currency.CREDITS: CreditsOfferBonus,
  'vehicles': VehiclesOfferBonus,
  'items': ItemsOfferBonusFactory(),
  'customizations': CustomizationsOfferBonus,
+ 'clans_customizations': ClansCustomizationsOfferBonus,
  'crewSkins': CrewSkinsOfferBonusFactory(),
  'blueprints': blueprintsOfferBonusFactory}

@@ -58,7 +58,8 @@ _NOTIFY_CENTER_ICON_TO_LOCAL = {'information': NOTIFY_CENTER_DEFAULT_ICON,
  'ClanQuestNotification': 'ClanQuestNotification',
  'rankedYearLb': 'RankedYearLB',
  'error': 'ErrorIcon',
- 'sprintEvent': 'SprintEventIcon'}
+ 'sprintEvent': 'SprintEventIcon',
+ 'warningIcon': 'WarningIcon'}
 
 def convertToLocalIcon(icon):
     result = NOTIFY_CENTER_DEFAULT_ICON

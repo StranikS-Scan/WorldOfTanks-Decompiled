@@ -99,6 +99,9 @@ class EventDispatcher(object):
     def loadBattleQueue(self):
         self.__fireLoadEvent(VIEW_ALIAS.BATTLE_QUEUE)
 
+    def loadWhiteTigerBattleQueue(self):
+        self.__fireLoadEvent(VIEW_ALIAS.EVENT_BATTLE_QUEUE)
+
     def loadTrainingList(self):
         self.addTrainingToCarousel()
         self.__showTrainingList()

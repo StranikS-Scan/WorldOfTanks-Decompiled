@@ -4,6 +4,7 @@ import ResMgr
 from constants import IS_CLIENT, IS_WEB, TTC_TOOLTIP_SECTIONS
 from items import _xml
 from items.attributes_helpers import readModifiers
+from items.attributes_static import attributes_static_factory
 from items.artefacts_helpers import VehicleFilter, readKpi
 from typing import Dict, Optional, Tuple, List, Union, Set
 from post_progression_common import ACTION_TYPES, FEATURES_NAMES, PAIR_TYPES, parseActionCompDescr, ID_THRESHOLD, POST_PROGRESSION_UNLOCK_MODIFICATIONS_PRICES, POST_PROGRESSION_BUY_MODIFICATIONS_PRICES, POST_PROGRESSION_UNLOCK_AND_BUY_MODIFICATIONS_PRICES, ALLOWED_CURRENCIES_FOR_TREE_STEP, ALLOWED_CURRENCIES_FOR_BUY_MODIFICATION_STEP
@@ -82,7 +83,7 @@ class Modification(ActionItem):
     def readFromXML(self, xmlCtx, section, *args):
         super(Modification, self).readFromXML(xmlCtx, section, *args)
         xmlCtx = (xmlCtx, section.name)
-        self.modifiers = readModifiers(xmlCtx, section['modifiers'])
+        self.modifiers = readModifiers(xmlCtx, section['modifiers'], (attributes_static_factory,), False)
         if IS_CLIENT and section.has_key('kpi'):
             self.kpi = readKpi(xmlCtx, section['kpi'])
 

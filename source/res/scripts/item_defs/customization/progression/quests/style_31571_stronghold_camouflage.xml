@@ -1,0 +1,184 @@
+<style_31571_stronghold_camouflage.xml>
+  <quests>
+    <tokenQuest>
+      <enabled>	true	</enabled>
+      <delayed>	true	</delayed>
+      <hidden>	true	</hidden>
+      <id>	clan_season_26_2_progression:2	</id>
+      <description>
+        <key>	#vehicle_customization:customization/tooltip/quests/clan_season_26_2_1_2/condition	</key>
+      </description>
+      <conditions>
+        <preBattle>
+          <account>
+            <and>
+              <token>
+                <id>	clan_season_progress_26_2	</id>
+                <greaterOrEqual>	2	</greaterOrEqual>
+              </token>
+              <token>
+                <id>	cust_progress_31571_1	</id>
+                <less>	2	</less>
+              </token>
+            </and>
+          </account>
+        </preBattle>
+        <common>
+          <bonusLimit>	1	</bonusLimit>
+        </common>
+      </conditions>
+      <bonus>
+        <token>
+          <id>	cust_progress_31571_1	</id>
+          <expires>	01.01.2050 00:00	</expires>
+          <count>	2	</count>
+          <limit>	2	</limit>
+        </token>
+      </bonus>
+    </tokenQuest>
+    <tokenQuest>
+      <enabled>	true	</enabled>
+      <delayed>	true	</delayed>
+      <hidden>	true	</hidden>
+      <id>	clan_season_26_2_progression:3	</id>
+      <description>
+        <key>	#vehicle_customization:customization/tooltip/quests/clan_season_26_2_1_3/condition	</key>
+      </description>
+      <conditions>
+        <preBattle>
+          <account>
+            <and>
+              <token>
+                <id>	clan_season_progress_26_2	</id>
+                <greaterOrEqual>	3	</greaterOrEqual>
+              </token>
+              <token>
+                <id>	cust_progress_31571_1	</id>
+                <less>	3	</less>
+              </token>
+            </and>
+          </account>
+        </preBattle>
+        <common>
+          <bonusLimit>	1	</bonusLimit>
+        </common>
+      </conditions>
+      <bonus>
+        <token>
+          <id>	cust_progress_31571_1	</id>
+          <expires>	01.01.2050 00:00	</expires>
+          <count>	3	</count>
+          <limit>	3	</limit>
+        </token>
+      </bonus>
+    </tokenQuest>
+    <tokenQuest>
+      <enabled>	true	</enabled>
+      <delayed>	true	</delayed>
+      <hidden>	true	</hidden>
+      <id>	clan_season_26_2_progression:4	</id>
+      <description>
+        <key>	#vehicle_customization:customization/tooltip/quests/clan_season_26_2_1_4/condition	</key>
+      </description>
+      <conditions>
+        <preBattle>
+          <account>
+            <and>
+              <token>
+                <id>	clan_season_progress_26_2	</id>
+                <greaterOrEqual>	4	</greaterOrEqual>
+              </token>
+              <token>
+                <id>	cust_progress_31571_1	</id>
+                <less>	4	</less>
+              </token>
+            </and>
+          </account>
+        </preBattle>
+        <common>
+          <bonusLimit>	1	</bonusLimit>
+        </common>
+      </conditions>
+      <bonus>
+        <token>
+          <id>	cust_progress_31571_1	</id>
+          <expires>	01.01.2050 00:00	</expires>
+          <count>	4	</count>
+          <limit>	4	</limit>
+        </token>
+      </bonus>
+    </tokenQuest>
+    <tokenQuest>
+      <enabled>	true	</enabled>
+      <delayed>	true	</delayed>
+      <hidden>	true	</hidden>
+      <id>	clan_season_26_2_progression:5	</id>
+      <description>
+        <key>	#vehicle_customization:customization/tooltip/quests/clan_season_26_2_1_5/condition	</key>
+      </description>
+      <conditions>
+        <preBattle>
+          <account>
+            <and>
+              <token>
+                <id>	clan_season_progress_26_2	</id>
+                <greaterOrEqual>	5	</greaterOrEqual>
+              </token>
+              <token>
+                <id>	cust_progress_31571_1	</id>
+                <less>	5	</less>
+              </token>
+            </and>
+          </account>
+        </preBattle>
+        <common>
+          <bonusLimit>	1	</bonusLimit>
+        </common>
+      </conditions>
+      <bonus>
+        <token>
+          <id>	cust_progress_31571_1	</id>
+          <expires>	01.01.2050 00:00	</expires>
+          <count>	5	</count>
+          <limit>	5	</limit>
+        </token>
+      </bonus>
+    </tokenQuest>
+    <tokenQuest>
+      <enabled>	true	</enabled>
+      <delayed>	true	</delayed>
+      <hidden>	true	</hidden>
+      <id>	clan_season_26_2_progression:6	</id>
+      <description>
+        <key>	#vehicle_customization:customization/tooltip/quests/clan_season_26_2_1_6/condition	</key>
+      </description>
+      <conditions>
+        <preBattle>
+          <account>
+            <and>
+              <token>
+                <id>	clan_season_progress_26_2	</id>
+                <greaterOrEqual>	6	</greaterOrEqual>
+              </token>
+              <token>
+                <id>	cust_progress_31571_1	</id>
+                <less>	6	</less>
+              </token>
+            </and>
+          </account>
+        </preBattle>
+        <common>
+          <bonusLimit>	1	</bonusLimit>
+        </common>
+      </conditions>
+      <bonus>
+        <token>
+          <id>	cust_progress_31571_1	</id>
+          <expires>	01.01.2050 00:00	</expires>
+          <count>	6	</count>
+          <limit>	6	</limit>
+        </token>
+      </bonus>
+    </tokenQuest>
+  </quests>
+</style_31571_stronghold_camouflage.xml>

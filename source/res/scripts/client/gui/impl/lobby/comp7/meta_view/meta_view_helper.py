@@ -2,8 +2,8 @@
 # Embedded file name: scripts/client/gui/impl/lobby/comp7/meta_view/meta_view_helper.py
 import logging
 import typing
-from gui.impl.gen.view_models.views.lobby.comp7.meta_view.progression_division import Division, State
-from gui.impl.gen.view_models.views.lobby.comp7.meta_view.progression_division import ProgressionDivision
+from gui.impl.gen.view_models.views.lobby.comp7.division_info_model import DivisionInfoModel, Division, State
+from gui.impl.gen.view_models.views.lobby.comp7.leaderboard_navigation_division_info import LeaderboardNavigationDivisionInfo
 from gui.impl.gen.view_models.views.lobby.comp7.meta_view.progression_item_base_model import Rank
 from helpers import dependency
 from intervals import Interval
@@ -19,7 +19,7 @@ _logger = logging.getLogger(__name__)
 
 def setProgressionItemData(itemModel, parentModel, rankIdx, ranksConfig):
     setRankData(itemModel, parentModel, rankIdx, ranksConfig)
-    setDivisionData(itemModel, getRankDivisions(rankIdx, ranksConfig))
+    setDivisionsData(itemModel, getRankDivisions(rankIdx, ranksConfig))
 
 
 @dependency.replace_none_kwargs(comp7Controller=IComp7Controller)
@@ -45,16 +45,24 @@ def getRankDivisions(rank, ranksConfig):
     return sortedDivisions
 
 
-def setDivisionData(itemModel, divisions):
+def setDivisionsData(itemModel, divisions):
     divisionsArray = itemModel.getDivisions()
     divisionsArray.clear()
     for division in divisions:
-        divisionModel = ProgressionDivision()
-        divisionModel.setName(comp7_shared.getDivisionEnumValue(division))
-        divisionModel.setState(getDivisionState(division))
+        divisionModel = DivisionInfoModel()
+        setDivisionData(divisionModel, division)
         divisionsArray.addViewModel(divisionModel)
 
     divisionsArray.invalidate()
+
+
+def setDivisionData(divisionModel, division):
+    divisionModel.setName(comp7_shared.getDivisionEnumValue(division))
+    divisionModel.setState(getDivisionState(division))
+    divisionModel.setFrom(division.range.begin)
+    divisionModel.setTo(division.range.end)
+    divisionModel.setType(division.type)
+    divisionModel.setElitePercent(division.elitePercent)
 
 
 @dependency.replace_none_kwargs(comp7Controller=IComp7Controller)
@@ -62,12 +70,19 @@ def getDivisionState(division, comp7Controller=None):
     eliteRank = _getEliteRank()
     if division.rank == eliteRank and not comp7Controller.isElite:
         return State.INACTIVE
+    if comp7Controller.isElite:
+        if division.rank != eliteRank:
+            return State.ACHIEVED
+        eliteDivisionIdx = comp7Controller.getEliteDivisionIdx()
+        if division.index > eliteDivisionIdx:
+            return State.INACTIVE
+        if division.index < eliteDivisionIdx:
+            return State.ACHIEVED
+        return State.CURRENT
     currentRating = comp7Controller.rating
-    if division.range.begin <= currentRating:
-        if currentRating <= division.range.end:
-            return State.CURRENT
-        return State.ACHIEVED
-    return State.INACTIVE
+    if currentRating < division.range.begin:
+        return State.INACTIVE
+    return State.CURRENT if currentRating <= division.range.end else State.ACHIEVED
 
 
 @dependency.replace_none_kwargs(lobbyCtx=ILobbyContext)

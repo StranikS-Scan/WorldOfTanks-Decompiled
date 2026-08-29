@@ -1,0 +1,22 @@
+<WTVehicleExplosiveShot.def>
+  <Properties>
+    <isExplosiveShotActive>
+      <Type>	BOOL	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </isExplosiveShotActive>
+    <equipmentID>
+      <Type>	UINT16	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <Default>	0	</Default>
+    </equipmentID>
+    <firedShotID>
+      <Type>	UINT64	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <Default>	0	</Default>
+    </firedShotID>
+  </Properties>
+  <ofEntity>
+    <Vehicle></Vehicle>
+  </ofEntity>
+  <DefaultKeyName>	wtExplosiveShot	</DefaultKeyName>
+</WTVehicleExplosiveShot.def>

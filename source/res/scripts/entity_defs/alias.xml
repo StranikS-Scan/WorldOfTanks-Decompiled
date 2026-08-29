@@ -1132,6 +1132,9 @@
       <gunPiercing>
         <Type>	FLOAT	</Type>
       </gunPiercing>
+      <gunCanShoot>
+        <Type>	BOOL	</Type>
+      </gunCanShoot>
     </Properties>
   </VEHICLE_SYNC_ATTRS>
   <IS_OBSERVED_BY_ENEMY>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
@@ -1409,6 +1412,17 @@
       </compDescrs>
     </Properties>
   </AVATAR_AMMO_VIEWS>
+  <AVATAR_AMMO_FOR_CELL>	FIXED_DICT	  <Properties>
+      <abilitiesIDs>
+        <Type>	ARRAY	  <of>	INT8	</of>
+        </Type>
+      </abilitiesIDs>
+      <purchasedAbilities>
+        <Type>	ARRAY	  <of>	INT8	</of>
+        </Type>
+      </purchasedAbilities>
+    </Properties>
+  </AVATAR_AMMO_FOR_CELL>
   <POST_PROGRESSION_SETUPS>	FIXED_DICT	  <Properties>
       <devicesSetups>
         <Type>	ARRAY	  <of>	ARRAY	  <of>	UINT32	</of>
@@ -2336,6 +2350,29 @@
   </DEBUFF_INFO>
   <DEBUFF_INFO_LIST>	ARRAY	  <of>	DEBUFF_INFO	</of>
   </DEBUFF_INFO_LIST>
+  <TIMER_INFO>	FIXED_DICT	  <Properties>
+      <factor>
+        <Type>	FLOAT32	</Type>
+      </factor>
+      <left>
+        <Type>	FLOAT32	</Type>
+      </left>
+      <endTime>
+        <Type>	FLOAT32	</Type>
+      </endTime>
+    </Properties>
+  </TIMER_INFO>
+  <HEALTH_INFO>	FIXED_DICT	  <Properties>
+      <vehicleID>
+        <Type>	OBJECT_ID	</Type>
+      </vehicleID>
+      <health>
+        <Type>	UINT16	</Type>
+      </health>
+    </Properties>
+  </HEALTH_INFO>
+  <HEALTH_INFO_LIST>	ARRAY	  <of>	HEALTH_INFO	</of>
+  </HEALTH_INFO_LIST>
   <ROCKET_ACCELERATION_STATE_STATUS>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
     <Properties>
       <status>
@@ -2628,4 +2665,29 @@
       </lockedLives>
     </Properties>
   </TEAM_LIVES>
+  <RESPAWN_TIME_INFO>	FIXED_DICT	  <Properties>
+      <vehicleID>
+        <Type>	OBJECT_ID	</Type>
+      </vehicleID>
+      <spawnTime>
+        <Type>	FLOAT32	</Type>
+      </spawnTime>
+      <delay>
+        <Type>	FLOAT32	</Type>
+      </delay>
+    </Properties>
+  </RESPAWN_TIME_INFO>
+  <IMPACT_AREA_INFO>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
+    <Properties>
+      <timeBeforeDamage>
+        <Type>	FLOAT	</Type>
+      </timeBeforeDamage>
+      <isVisible>
+        <Type>	BOOL	</Type>
+      </isVisible>
+      <bossType>
+        <Type>	STRING	</Type>
+      </bossType>
+    </Properties>
+  </IMPACT_AREA_INFO>
 </alias.xml>

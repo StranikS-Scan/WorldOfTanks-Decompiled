@@ -47,6 +47,7 @@ class INGAME_GUI(object):
     PLAYER_ERRORS_EQUIPMENT_ISINCOOLDOWN = '#ingame_gui:player_errors/equipment/isInCooldown'
     PLAYER_ERRORS_EQUIPMENT_MEDKIT_TANKMANISSAFE = '#ingame_gui:player_errors/equipment/medkit/tankmanIsSafe'
     PLAYER_ERRORS_EQUIPMENT_MEDKIT_ALLTANKMENARESAFE = '#ingame_gui:player_errors/equipment/medkit/allTankmenAreSafe'
+    PLAYER_ERRORS_EQUIPMENT_FEPMEDKIT_ALLTANKMENARESAFE = '#ingame_gui:player_errors/equipment/FEPmedkit/allTankmenAreSafe'
     PLAYER_ERRORS_EQUIPMENT_REPAIRKIT_DEVICEISNOTDAMAGED = '#ingame_gui:player_errors/equipment/repairkit/deviceIsNotDamaged'
     PLAYER_ERRORS_EQUIPMENT_REPAIRKIT_ALLDEVICESARENOTDAMAGED = '#ingame_gui:player_errors/equipment/repairkit/allDevicesAreNotDamaged'
     PLAYER_ERRORS_EQUIPMENT_REPAIREVERYTHING_CREWANDDEVICESAREOK = '#ingame_gui:player_errors/equipment/repairEverything/crewAndDevicesAreOk'
@@ -963,9 +964,6 @@ class INGAME_GUI(object):
     HELPSCREEN_HINT_DESCRIPTION = '#ingame_gui:helpScreen/hint/description'
     HELPSCREEN_MAPBOX_PRESS = '#ingame_gui:helpScreen/mapbox/press'
     HELPSCREEN_MAPBOX_DESCRIPTION = '#ingame_gui:helpScreen/mapbox/description'
-    COMMANDERCAM_HINT_DESCRIPTION = '#ingame_gui:commanderCam/hint/description'
-    BATTLECOMMUNICATION_HINT_PRESS = '#ingame_gui:battleCommunication/hint/press'
-    BATTLECOMMUNICATION_HINT_DESCRIPTION = '#ingame_gui:battleCommunication/hint/description'
     BURNOUT_HINT_ENGINEDAMAGEWARNING = '#ingame_gui:burnout/hint/engineDamageWarning'
     BURNOUT_HINT_ENGINEDAMAGED = '#ingame_gui:burnout/hint/engineDamaged'
     REWARDWINDOW_ANNIVERSARY_GA_WINHEADERTEXT = '#ingame_gui:rewardWindow/anniversary_ga/winHeaderText'
@@ -1053,8 +1051,6 @@ class INGAME_GUI(object):
     PREBATTLEAMMUNITIONPANEL_WAITINFORPLAYERS = '#ingame_gui:prebattleAmmunitionPanel/waitinForPlayers'
     PREBATTLEAMMUNITIONPANEL_LOADINGTIMER = '#ingame_gui:prebattleAmmunitionPanel/loadingTimer'
     PREBATTLEAMMUNITIONPANEL_CURRENTSETUP = '#ingame_gui:prebattleAmmunitionPanel/currentSetup'
-    PERSONAL_RESERVES_HINT_PRESS = '#ingame_gui:personal_reserves/hint/press'
-    PERSONAL_RESERVES_HINT_DESCRIPTION = '#ingame_gui:personal_reserves/hint/description'
     HINT_NOBINDINGKEY = '#ingame_gui:hint/noBindingKey'
     DESTROYTIMER_LIFTOVER = '#ingame_gui:destroyTimer/liftOver'
     DANGER_ZONE_INDICATOR = '#ingame_gui:danger_zone/indicator'
@@ -1071,6 +1067,8 @@ class INGAME_GUI(object):
     PLAYER_ERRORS_THERMALVISION_COOLDOWN = '#ingame_gui:player_errors/thermalVision/cooldown'
     PLAYER_ERRORS_THERMALVISION_ALREADYACTIVATED = '#ingame_gui:player_errors/thermalVision/alreadyActivated'
     PLAYER_ERRORS_THERMALVISION_OVERTURNED = '#ingame_gui:player_errors/thermalVision/overturned'
+    DESTROYTIMER_MEDKITINUSE = '#ingame_gui:destroyTimer/medkitInUse'
+    CROSSHAIR_HINT_WTBARRIER = '#ingame_gui:crosshair/hint/wtBarrier'
     CHAT_SHORTCUTS_ENUM = (CHAT_SHORTCUTS_ATTENTION_TO_POSITION_GRIDINFO,
      CHAT_SHORTCUTS_ATTENTION_TO_POSITION,
      CHAT_SHORTCUTS_GOING_THERE_GRIDINFO,

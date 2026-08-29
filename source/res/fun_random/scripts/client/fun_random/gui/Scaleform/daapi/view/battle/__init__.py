@@ -28,13 +28,15 @@ def getViewSettings():
     from gui.Scaleform.daapi.view.battle.shared import quest_progress_top_view
     from gui.Scaleform.daapi.view.battle.shared import battle_timers
     from gui.Scaleform.daapi.view.battle.shared import timers_panel
-    from gui.Scaleform.daapi.view.battle.shared import consumables_panel
+    from fun_random.gui.Scaleform.daapi.view.battle.shared import consumables_panel
     from gui.Scaleform.daapi.view.battle.shared import perks_panel
     from gui.Scaleform.daapi.view.battle.shared import ribbons_panel
     from gui.Scaleform.daapi.view.battle.shared import game_messages_panel
     from gui.Scaleform.daapi.view.battle.shared import postmortem_panel
     from gui.Scaleform.daapi.view.battle.shared import damage_panel
     from gui.Scaleform.daapi.view.battle.shared import messages
+    from gui.impl.battle.battle_page.battle_context_hints import info_hint_inject_component
+    from gui.impl.battle.battle_page.battle_context_hints import sixth_sense_hint_inject_component
     return (ViewSettings(VIEW_ALIAS.CLASSIC_BATTLE_PAGE, ClassicPage, 'battlePage.swf', WindowLayer.VIEW, None, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.BATTLE_LOADING, FepBattleLoading, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.BATTLE_STATISTIC_DATA_CONTROLLER, stats_exchange.ClassicStatisticsDataController, ScopeTemplates.DEFAULT_SCOPE),
@@ -46,7 +48,7 @@ def getViewSettings():
      ComponentSettings(BATTLE_VIEW_ALIASES.TIMERS_PANEL, timers_panel.TimersPanel, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.BATTLE_TIMER, battle_timers.BattleTimer, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.BATTLE_END_WARNING_PANEL, battle_end_warning_panel.BattleEndWarningPanel, ScopeTemplates.DEFAULT_SCOPE),
-     ComponentSettings(BATTLE_VIEW_ALIASES.CONSUMABLES_PANEL, consumables_panel.ConsumablesPanel, ScopeTemplates.DEFAULT_SCOPE),
+     ComponentSettings(BATTLE_VIEW_ALIASES.CONSUMABLES_PANEL, consumables_panel.FunRandomConsumablePanel, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.PERKS_PANEL, perks_panel.PerksPanel, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.RIBBONS_PANEL, ribbons_panel.BattleRibbonsPanel, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.GAME_MESSAGES_PANEL, game_messages_panel.GameMessagesPanel, ScopeTemplates.DEFAULT_SCOPE),
@@ -57,7 +59,9 @@ def getViewSettings():
      ComponentSettings(BATTLE_VIEW_ALIASES.PREBATTLE_TIMER, battle_timers.PreBattleTimer, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.DAMAGE_PANEL, damage_panel.DamagePanel, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.PLAYER_MESSAGES, messages.PlayerMessages, ScopeTemplates.DEFAULT_SCOPE),
-     ComponentSettings(BATTLE_VIEW_ALIASES.MAP_INFO_TIP, map_info_tip.MapInfoTip, ScopeTemplates.DEFAULT_SCOPE))
+     ComponentSettings(BATTLE_VIEW_ALIASES.MAP_INFO_TIP, map_info_tip.MapInfoTip, ScopeTemplates.DEFAULT_SCOPE),
+     ComponentSettings(BATTLE_VIEW_ALIASES.INFO_BATTLE_CONTEXT_HINT, info_hint_inject_component.InfoHintInjectComponent, ScopeTemplates.DEFAULT_SCOPE),
+     ComponentSettings(BATTLE_VIEW_ALIASES.SIXTH_SENSE_CONTEXT_HINT, sixth_sense_hint_inject_component.SixthSenseHintInjectComponent, ScopeTemplates.DEFAULT_SCOPE))
 
 
 def getBusinessHandlers():

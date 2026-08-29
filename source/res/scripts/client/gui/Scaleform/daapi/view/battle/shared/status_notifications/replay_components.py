@@ -82,7 +82,8 @@ class _ReplaySnapshotHandler(TimeSnapshotHandler):
 
     def __restartTicker(self):
         if self.__totalTime > 0:
-            startTime = self.__totalTime - self.__ticker.getTimeLeft() if self.__ticker else None
+            timeLeft = self.__ticker.getTimeLeft() if self.__ticker else None
+            startTime = self.__totalTime - timeLeft if timeLeft is not None else None
             self.__destroyTicker()
             self.__ticker = CallbackTruePythonTimer(viewObject=CallbackPrecisePythonTimer(self.__onTickerTick, self.__onTickerFinished), typeID=0, viewID=0, totalTime=self.__totalTime, finishTime=self.__finishTime, interval=BattleReplay.g_replayCtrl.playbackSpeed, startTime=startTime)
             self.__ticker.show()

@@ -1,0 +1,19 @@
+<WTVehicleBarrier.def>
+  <Properties>
+    <abilityMode>
+      <Type>	UINT8	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <Default>	0	</Default>
+    </abilityMode>
+    <gunLockFlag>
+      <Type>	UINT8	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <Default>	0	</Default>
+      <DetailLevel>	MY_VEHICLE	</DetailLevel>
+    </gunLockFlag>
+  </Properties>
+  <ofEntity>
+    <Vehicle></Vehicle>
+  </ofEntity>
+  <DefaultKeyName>	wt_barrier	</DefaultKeyName>
+</WTVehicleBarrier.def>

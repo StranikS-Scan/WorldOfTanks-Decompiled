@@ -52,12 +52,19 @@
       <controlPoint>	-83.412254 -3.482437	</controlPoint>
     </domination>
     <comp7>
+      <boundingBox>
+        <bottomLeft>	-400.000000 -350.000000	</bottomLeft>
+        <upperRight>	450.000000 500.000000	</upperRight>
+      </boundingBox>
+      <minimap>	spaces/114_czech/mmap_comp7.dds	</minimap>
+      <winnerIfTimeout>	1	</winnerIfTimeout>
+      <winnerIfExtermination>	1	</winnerIfExtermination>
       <teamSpawnPoints>
         <team1>
-          <position>	-47.346001 374.540009	</position>
+          <position>	-216.675781 327.847137	</position>
         </team1>
         <team2>
-          <position>	-67.586998 -363.131989	</position>
+          <position>	321.956604 -314.424347	</position>
         </team2>
       </teamSpawnPoints>
       <visualScript>
@@ -77,26 +84,43 @@
           </flyDirection>
         </flyDirections>
       </recon>
-      <minimap>	spaces/114_czech/mmap_comp7.dds	</minimap>
       <pointsOfInterestUDO>
         <point>
-          <position>	227.985001 -160.921997	</position>
-          <type>	2	</type>
+          <position>	-346.998352 -212.926834	</position>
+          <type>	4	</type>
         </point>
         <point>
-          <position>	225.328995 132.875000	</position>
-          <type>	2	</type>
+          <position>	-265.687134 9.465311	</position>
+          <type>	3	</type>
         </point>
         <point>
-          <position>	-389.058990 19.809000	</position>
-          <type>	1	</type>
+          <position>	37.314522 -96.163170	</position>
+          <type>	4	</type>
         </point>
         <point>
-          <position>	-19.398001 -8.463000	</position>
-          <type>	1	</type>
+          <position>	17.711399 101.699379	</position>
+          <type>	4	</type>
+        </point>
+        <point>
+          <position>	333.236115 -7.989429	</position>
+          <type>	3	</type>
+        </point>
+        <point>
+          <position>	324.400482 319.182892	</position>
+          <type>	3	</type>
+        </point>
+        <point>
+          <position>	37.497540 452.444702	</position>
+          <type>	3	</type>
         </point>
       </pointsOfInterestUDO>
-      <controlPoint>	-140.511002 -6.513000	</controlPoint>
+      <teamBasePositions>
+        <team1>
+          <position1>	186.002457 236.660477	</position1>
+          <position2>	-166.624390 -140.830902	</position2>
+        </team1>
+        <team2></team2>
+      </teamBasePositions>
     </comp7>
     <bob>
       <teamSpawnPoints>
@@ -138,6 +162,30 @@
       <minimap>	spaces/114_czech/mmap_domination3.dds	</minimap>
       <controlPoint>	-92.002998 -9.436996	</controlPoint>
     </domination3>
+    <assault2>
+      <boundingBox>
+        <bottomLeft>	-400.000000 -350.000000	</bottomLeft>
+        <upperRight>	450.000000 500.000000	</upperRight>
+      </boundingBox>
+      <minimap>	spaces/114_czech/mmap_assault2.dds	</minimap>
+      <winnerIfTimeout>	1	</winnerIfTimeout>
+      <winnerIfExtermination>	1	</winnerIfExtermination>
+      <teamSpawnPoints>
+        <team1>
+          <position>	-222.432236 328.880890	</position>
+        </team1>
+        <team2>
+          <position>	317.138519 -282.270996	</position>
+        </team2>
+      </teamSpawnPoints>
+      <teamBasePositions>
+        <team1>
+          <position1>	186.002487 236.660477	</position1>
+          <position2>	-166.624374 -140.830917	</position2>
+        </team1>
+        <team2></team2>
+      </teamBasePositions>
+    </assault2>
   </gameplayTypes>
   <roadMap></roadMap>
   <mapActivities>

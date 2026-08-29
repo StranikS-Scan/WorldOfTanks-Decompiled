@@ -9,7 +9,7 @@
   <postProgressionTree>	role_MT_support	</postProgressionTree>
   <customRoleSlotOptions>	3 5	</customRoleSlotOptions>
   <speedLimits>
-    <forward>	65	</forward>
+    <forward>	57	</forward>
     <backward>	20	</backward>
   </speedLimits>
   <invisibility>
@@ -1890,8 +1890,8 @@
       <price>	66000	</price>
       <notInShop>	true	</notInShop>
       <armor>
-        <armor_1>	260	</armor_1>
-        <armor_2>	230	</armor_2>
+        <armor_1>	200	</armor_1>
+        <armor_2>	155	</armor_2>
         <armor_3>	100	</armor_3>
         <armor_4>	80	</armor_4>
         <armor_5>	40	</armor_5>
@@ -1903,20 +1903,20 @@
         <armor_11>	20	</armor_11>
         <armor_12>	20	</armor_12>
         <armor_13>	120	</armor_13>
-        <armor_14>	140	</armor_14>
+        <armor_14>	120	</armor_14>
         <armor_15>	15	</armor_15>
         <armor_17>	80	</armor_17>
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	3000	</weight>
       <maxHealth>	460	</maxHealth>
-      <rotationSpeed>	60	</rotationSpeed>
+      <rotationSpeed>	48	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	150	</maxHealth>
         <maxRegenHealth>	75	</maxRegenHealth>
         <repairCost>	1.0	</repairCost>
       </turretRotatorHealth>
-      <circularVisionRadius>	400	</circularVisionRadius>
+      <circularVisionRadius>	390	</circularVisionRadius>
       <surveyingDeviceHealth>
         <maxHealth>	110	</maxHealth>
         <maxRegenHealth>	55	</maxRegenHealth>
@@ -1939,23 +1939,23 @@
             <minPitch>	0 -30 1 -30	</minPitch>
             <maxPitch>	0 9 0.05 9 0.0556 8 0.1 8 0.117 9 0.36 9 0.42 7 0.58 7 0.64 9 0.85 9 0.92 8 0.944 8 0.95 9 1 9	</maxPitch>
           </pitchLimits>
-          <shotDispersionRadius>	0.18	</shotDispersionRadius>
-          <reloadTime>	14	</reloadTime>
+          <shotDispersionRadius>	0.3	</shotDispersionRadius>
+          <reloadTime>	15	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.05	</turretRotation>
             <afterShot>	0.01	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <invisibilityFactorAtShot>	0.266	</invisibilityFactorAtShot>
-          <aimingTime>	1.0	</aimingTime>
+          <aimingTime>	2.2	</aimingTime>
           <clip>
-            <count>	18	</count>
-            <rate>	240	</rate>
+            <count>	10	</count>
+            <rate>	180	</rate>
           </clip>
           <autoShoot>
             <shotDispersionPerSec>	1.7	</shotDispersionPerSec>
-            <maxShotDispersion>	7	</maxShotDispersion>
-            <rate>	4	</rate>
+            <maxShotDispersion>	2	</maxShotDispersion>
+            <rate>	3	</rate>
             <rebuildShotDispersionDelay>	0.3	</rebuildShotDispersionDelay>
           </autoShoot>
           <customizationSlots>
@@ -2441,8 +2441,8 @@
     <detailed>
       <engines>
         <V_55_T>
-          <smplEnginePower>	750	</smplEnginePower>
-          <smplFwMaxSpeed>	65	</smplFwMaxSpeed>
+          <smplEnginePower>	700	</smplEnginePower>
+          <smplFwMaxSpeed>	57	</smplFwMaxSpeed>
         </V_55_T>
       </engines>
       <chassis>
@@ -2490,4 +2490,5 @@
       <attachmentId>	31106	</attachmentId>
     </newAttachment0>
   </prefabAttachments>
+  <baseColorID>	1	</baseColorID>
 </Un1017_RDT_62_T.xml>

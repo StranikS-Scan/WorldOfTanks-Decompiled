@@ -8,3 +8,7 @@ class BattleContextHintsLogActions(Enum):
     HINT_SHOWED = 'hint_showed'
     HINT_APPLIED = 'hint_applied'
     HINT_MAX_VIEWS_REACHED = 'hint_max_views_reached'
+
+
+class BattleContextHintsLogItems(Enum):
+    RESET_HINTS_COUNTERS_BUTTON = 'reset_hints_counters'

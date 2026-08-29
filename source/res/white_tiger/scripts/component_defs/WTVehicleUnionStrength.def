@@ -1,0 +1,18 @@
+<WTVehicleUnionStrength.def>
+  <Properties>
+    <isHealActive>
+      <Type>	BOOL	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <Default>	0	</Default>
+    </isHealActive>
+    <equipmentID>
+      <Type>	UINT16	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <Default>	0	</Default>
+    </equipmentID>
+  </Properties>
+  <ofEntity>
+    <Vehicle></Vehicle>
+  </ofEntity>
+  <DefaultKeyName>	wtUnionStrength	</DefaultKeyName>
+</WTVehicleUnionStrength.def>

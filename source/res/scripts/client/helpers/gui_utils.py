@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/helpers/gui_utils.py
+import BigWorld
 import GUI
 import Math
 
@@ -40,3 +41,15 @@ def getMouseScreenPosition():
     res = GUI.screenResolution()
     scale = settingsCore.interfaceScale.get()
     return ((clipPos[0] + 1.0) / 2.0 * res[0] / scale, (-clipPos[1] + 1.0) / 2.0 * res[1] / scale)
+
+
+def getMousePosition():
+    from helpers import dependency
+    from skeletons.account_helpers.settings_core import ISettingsCore
+    mousePos = GUI.mcursor().position
+    clipX = (mousePos.x + 1) / 2
+    clipY = (1 - mousePos.y) / 2
+    scale = dependency.instance(ISettingsCore).interfaceScale.get()
+    mouseX = clipX * BigWorld.screenWidth() / scale
+    mouseY = clipY * BigWorld.screenHeight() / scale
+    return (mouseX, mouseY)

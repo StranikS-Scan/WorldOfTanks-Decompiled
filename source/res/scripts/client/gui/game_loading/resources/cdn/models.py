@@ -6,7 +6,7 @@ from typing import Optional, Union
 import ResMgr
 from dict2model.models import Model as BaseConfigModel
 from gui.game_loading import loggers
-from gui.game_loading.resources.cdn.consts import MIN_SLIDES_COUNT_TO_VIEW, SequenceCohorts
+from gui.game_loading.resources.cdn.consts import MIN_SLIDES_COUNT_TO_VIEW, SequenceCohorts, NEWBIES_BATTLES_LIMIT, NEWBIES_VEHICLE_LEVEL
 from gui.game_loading.resources.consts import ImageVfxs
 from gui.game_loading.resources.models import LocalImageModel
 from helpers import getClientLanguage, time_utils
@@ -161,16 +161,29 @@ class ConfigSequenceModel(BaseConfigModel):
         return '<ConfigSequenceModel(name={}, active={}, priority={}, slides={})>'.format(self.name, self.isActive, self.priority, len(self.slides))
 
 
-class ConfigModel(BaseConfigModel):
-    __slots__ = ('enabled', 'sequences')
+class NewbiesCohortSettingsModel(BaseConfigModel):
+    __slots__ = ('battlesCount', 'vehicleLevel')
 
-    def __init__(self, enabled, sequences):
+    def __init__(self, battlesCount=NEWBIES_BATTLES_LIMIT, vehicleLevel=NEWBIES_VEHICLE_LEVEL):
+        super(NewbiesCohortSettingsModel, self).__init__()
+        self.battlesCount = battlesCount
+        self.vehicleLevel = vehicleLevel
+
+    def __repr__(self):
+        return '<NewbiesCohortSettingsModel(battlesCount={}, vehicleLevel={})>'.format(self.battlesCount, self.vehicleLevel)
+
+
+class ConfigModel(BaseConfigModel):
+    __slots__ = ('enabled', 'sequences', 'newbiesCohort')
+
+    def __init__(self, enabled, sequences, newbiesCohort=None):
         super(ConfigModel, self).__init__()
         self.sequences = sequences
         self.enabled = enabled
+        self.newbiesCohort = newbiesCohort or NewbiesCohortSettingsModel()
 
     def __repr__(self):
-        return '<ConfigModel(enabled={}, sequences={})>'.format(self.enabled, len(self.sequences))
+        return '<ConfigModel(enabled={}, sequences={}, newbiesCohort={})>'.format(self.enabled, len(self.sequences), self.newbiesCohort)
 
 
 class CdnCacheDefaultsModel(object):
@@ -186,16 +199,16 @@ class CdnCacheDefaultsModel(object):
 
 
 class CdnCacheParams(object):
-    __slots__ = ('configUrl', 'cohort')
+    __slots__ = ('configUrl', 'itemsCacheSynced')
 
     def __init__(self):
         self.configUrl = None
-        self.cohort = None
+        self.itemsCacheSynced = False
         return
 
     @property
     def isItemsCacheParamsReady(self):
-        return bool(self.cohort)
+        return self.itemsCacheSynced
 
     @property
     def isServerSettingsParamsReady(self):
@@ -207,8 +220,8 @@ class CdnCacheParams(object):
 
     def reset(self):
         self.configUrl = None
-        self.cohort = None
+        self.itemsCacheSynced = False
         return
 
     def __repr__(self):
-        return '<CdnCacheParamsModel(configUrl={}, cohort={})>'.format(self.configUrl, self.cohort)
+        return '<CdnCacheParamsModel(configUrl={}, itemsCacheSynced={})>'.format(self.configUrl, self.itemsCacheSynced)

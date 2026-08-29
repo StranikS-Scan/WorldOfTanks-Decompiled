@@ -6,8 +6,8 @@ import GUI
 import SCALEFORM
 import SoundGroups
 from AvatarInputHandler import aih_global_binding
+from AvatarInputHandler.control_modes import VideoCameraControlMode
 from account_helpers.settings_core.settings_constants import SOUND, DAMAGE_INDICATOR, GRAPHICS, SIXTH_SENSE
-from aih_constants import CTRL_MODE_NAME
 from constants import VEHICLE_SIEGE_STATE as _SIEGE_STATE, ROCKET_ACCELERATION_STATE
 from debug_utils import LOG_DEBUG, LOG_DEBUG_DEV, LOG_WARNING
 from gui import DEPTH_OF_Aim, GUI_SETTINGS
@@ -444,7 +444,6 @@ class SixthSenseIndicator(SixthSenseMeta):
         self.__lossSoundEvent = None
         self.__enabled = True
         self.__alphaValue = SIXTHSENSEINDICATOR_CONSTS.MAX_VALUE
-        self.__isFreeCamMode = False
         return
 
     @property
@@ -454,6 +453,12 @@ class SixthSenseIndicator(SixthSenseMeta):
     @enabled.setter
     def enabled(self, enabled):
         self.__enabled = enabled
+
+    @staticmethod
+    def __isVideoCameraActive():
+        player = BigWorld.player()
+        aih = player.inputHandler if player is not None else None
+        return aih is not None and isinstance(aih.ctrl, VideoCameraControlMode)
 
     def _populate(self):
         super(SixthSenseIndicator, self)._populate()
@@ -465,19 +470,17 @@ class SixthSenseIndicator(SixthSenseMeta):
         self.settingsCore.onSettingsChanged += self.__onSettingsChanged
         ctrl = self.sessionProvider.shared.vehicleState
         if ctrl is not None:
-            ctrl.onVehicleStateUpdated += self.__onVehicleStateUpdated
+            ctrl.onVehicleStateUpdated += self._onVehicleStateUpdated
             ctrl.onVehicleControlling += self.__onVehicleChanged
         aih_global_binding.subscribe(aih_global_binding.BINDING_ID.CTRL_MODE_NAME, self.__onControlModeChanged)
-        crosshairCtrl = self.sessionProvider.shared.crosshair
-        if crosshairCtrl is not None:
-            self.__onControlModeChanged(crosshairCtrl.getCtrlMode())
+        self.__onControlModeChanged()
         return
 
     def _dispose(self):
         self.__cancelCallback()
         ctrl = self.sessionProvider.shared.vehicleState
         if ctrl is not None:
-            ctrl.onVehicleStateUpdated -= self.__onVehicleStateUpdated
+            ctrl.onVehicleStateUpdated -= self._onVehicleStateUpdated
             ctrl.onVehicleControlling -= self.__onVehicleChanged
         aih_global_binding.unsubscribe(aih_global_binding.BINDING_ID.CTRL_MODE_NAME, self.__onControlModeChanged)
         self.settingsCore.onSettingsChanged -= self.__onSettingsChanged
@@ -501,14 +504,14 @@ class SixthSenseIndicator(SixthSenseMeta):
                     if activated:
                         timeout = 0.1
             yield th_await(delay(timeout))
-            if not self.__enabled or self.__isFreeCamMode:
+            if not self.__enabled or self.__isVideoCameraActive():
                 return
             self.as_showS(immidiate)
             return
 
     def __showPermanent(self):
         self.__callbackID = None
-        if not self.__enabled:
+        if not self.__enabled or self.__isVideoCameraActive():
             return
         else:
             self.as_showIndicatorS()
@@ -530,44 +533,49 @@ class SixthSenseIndicator(SixthSenseMeta):
             self.__callbackID = None
         return
 
-    def __hideAndSetEnabled(self, finalEnabled, immidiate=False):
+    def __hideAndDisable(self, immidiate=False):
         wasEnabled = self.__enabled
         self.enabled = True
         self.__hide(immidiate or not wasEnabled)
-        self.enabled = finalEnabled
+        self.enabled = False
 
-    def __applyIndicatorState(self, finalEnabled, shouldShow, showImmediate=False, hideImmediate=False):
+    def __resetIndicator(self):
+        self.__cancelCallback()
+        self.__applyIndicatorState(False, hideImmediate=True)
+
+    def __applyIndicatorState(self, shouldShow, showImmediate=False, hideImmediate=False):
         if shouldShow:
-            self.enabled = finalEnabled
+            self.enabled = True
             self.__show(showImmediate)
             return
-        self.__hideAndSetEnabled(finalEnabled, hideImmediate)
+        self.__hideAndDisable(hideImmediate)
 
     def __onVehicleChanged(self, vehicle):
-        sixthSenseState = bool(vehicle.sixthSenseState)
-        shouldShow = sixthSenseState and vehicle.isAlive() and not self.__isFreeCamMode
+        shouldShow = bool(vehicle.sixthSenseState) and vehicle.isAlive() and not self.__isVideoCameraActive()
         self.__cancelCallback()
-        self.__applyIndicatorState(finalEnabled=sixthSenseState, shouldShow=shouldShow, showImmediate=True, hideImmediate=True)
+        self.__applyIndicatorState(shouldShow, showImmediate=True, hideImmediate=True)
 
-    def __onVehicleStateUpdated(self, state, value):
+    def _onVehicleStateUpdated(self, state, value):
+        if state == VEHICLE_VIEW_STATE.SWITCHING:
+            self.__resetIndicator()
+            return
         if state != VEHICLE_VIEW_STATE.OBSERVED_BY_ENEMY:
             return
-        observedByEnemy = bool(value)
-        shouldShow = observedByEnemy and not self.__isFreeCamMode
+        shouldShow = bool(value) and not self.__isVideoCameraActive()
         self.__cancelCallback()
-        self.__applyIndicatorState(finalEnabled=observedByEnemy, shouldShow=shouldShow, hideImmediate=self.__isFreeCamMode)
+        self.__applyIndicatorState(shouldShow, hideImmediate=self.__isVideoCameraActive())
 
-    def __onControlModeChanged(self, ctrlMode):
-        isFreeCamMode = ctrlMode == CTRL_MODE_NAME.VIDEO
-        if self.__isFreeCamMode == isFreeCamMode:
+    def __onControlModeChanged(self, *_):
+        if self.__isVideoCameraActive():
+            self.__resetIndicator()
             return
-        self.__isFreeCamMode = isFreeCamMode
-        self.__cancelCallback()
-        ctrl = self.sessionProvider.shared.vehicleState
-        value = ctrl and ctrl.getStateValue(VEHICLE_VIEW_STATE.OBSERVED_BY_ENEMY)
-        observedByEnemy = bool(value)
-        shouldShow = observedByEnemy and not self.__isFreeCamMode
-        self.__applyIndicatorState(finalEnabled=observedByEnemy, shouldShow=shouldShow, showImmediate=True, hideImmediate=True)
+        else:
+            ctrl = self.sessionProvider.shared.vehicleState
+            vehicle = ctrl.getControllingVehicle() if ctrl is not None else None
+            shouldShow = vehicle is not None and bool(vehicle.sixthSenseState) and vehicle.isAlive()
+            self.__cancelCallback()
+            self.__applyIndicatorState(shouldShow, showImmediate=True, hideImmediate=True)
+            return
 
     def __onSettingsChanged(self, diff):
         key = SOUND.DETECTION_ALERT_SOUND
@@ -625,6 +633,8 @@ def _isTrackSideDestroyed(side, devices):
 
 
 class SiegeModeIndicator(SiegeModeIndicatorMeta):
+    _TURBOSHAFT_ENGINE_INDICATOR_OFFSET_Y = {CROSSHAIR_VIEW_ID.ARCADE: -10,
+     CROSSHAIR_VIEW_ID.SNIPER: -5}
     sessionProvider = dependency.descriptor(IBattleSessionProvider)
     settingsCore = dependency.descriptor(ISettingsCore)
 
@@ -707,12 +717,12 @@ class SiegeModeIndicator(SiegeModeIndicatorMeta):
         self.__resetDevices()
         self.__updateDevicesView()
         hasSiegeMode = vTypeDesc.hasSiegeMode and (vTypeDesc.hasTurboshaftEngine or vTypeDesc.hasHydraulicChassis or vTypeDesc.hasAutoSiegeMode)
-        if vehicle.isAlive() and (hasSiegeMode or vTypeDesc.isTrackWithinTrack or vTypeDesc.isMultiTrack):
+        self.__isEnabled = vehicle.isAlive() and (hasSiegeMode or vTypeDesc.isTrackWithinTrack or vTypeDesc.isMultiTrack)
+        if self.__isEnabled:
             uiType = self.__getUIType(vTypeDesc)
             self.as_setSiegeModeTypeS(uiType)
             self._devices = self.__createDevicesMap(vTypeDesc)
             self._deviceStateConverter = self.__getDeviceStateConverter(vTypeDesc)
-            self.__isEnabled = True
             states = [VEHICLE_VIEW_STATE.DEVICES]
             if hasSiegeMode:
                 siegeModeParams = vType.siegeModeParams
@@ -736,7 +746,6 @@ class SiegeModeIndicator(SiegeModeIndicatorMeta):
             self.__updateDevicesView()
         else:
             self._siegeState = _SIEGE_STATE.DISABLED
-            self.__isEnabled = False
         self.as_setVisibleS(self.__isEnabled and self.__isAllowedByContext)
         return
 
@@ -762,8 +771,20 @@ class SiegeModeIndicator(SiegeModeIndicatorMeta):
         if not self.__isEnabled:
             return
         crosshairCtrl = self.sessionProvider.shared.crosshair
-        scaledPosition = crosshairCtrl.getScaledPosition()
-        self.as_updateLayoutS(*scaledPosition)
+        posX, posY = crosshairCtrl.getScaledPosition()
+        self.as_updateLayoutS(posX, posY + self.__getOffsetY())
+
+    def __getOffsetY(self):
+        offsetY = 0
+        vStateCtrl = self.sessionProvider.shared.vehicleState
+        crosshairCtrl = self.sessionProvider.shared.crosshair
+        if vStateCtrl is not None and crosshairCtrl is not None:
+            vehicle = vStateCtrl.getControllingVehicle()
+            if vehicle:
+                vTypeDesc = vehicle.typeDescriptor
+                if vTypeDesc and vTypeDesc.hasTurboshaftEngine and vTypeDesc.isAutoReloadGun:
+                    offsetY = self._TURBOSHAFT_ENGINE_INDICATOR_OFFSET_Y.get(crosshairCtrl.getViewID(), 0)
+        return offsetY
 
     def __onCrosshairViewChanged(self, viewID):
         if viewID == CROSSHAIR_VIEW_ID.UNDEFINED:
@@ -811,12 +832,12 @@ class SiegeModeIndicator(SiegeModeIndicatorMeta):
     @classmethod
     def __getDeviceStateConverter(cls, vTypeDesc):
         converter = None
-        if vTypeDesc.hasHydraulicChassis or vTypeDesc.hasAutoSiegeMode:
-            converter = cls.__hydraulicDeviceStateConverter
-        elif vTypeDesc.hasTurboshaftEngine:
+        if vTypeDesc.hasTurboshaftEngine:
             converter = cls.__turboshaftDeviceStateConverter
         elif vTypeDesc.isTrackWithinTrack:
             converter = cls.__trackWithinTrackDeviceStateConverter
+        elif vTypeDesc.hasHydraulicChassis or vTypeDesc.hasAutoSiegeMode:
+            converter = cls.__hydraulicDeviceStateConverter
         elif vTypeDesc.isMultiTrack:
             converter = cls.__multiTrackDeviceStateConverter
         if converter is None:
@@ -855,24 +876,24 @@ class SiegeModeIndicator(SiegeModeIndicatorMeta):
     @staticmethod
     def __getUIType(vTypeDesc):
         uiType = None
-        if vTypeDesc.hasHydraulicChassis or vTypeDesc.hasAutoSiegeMode:
-            uiType = SIEGE_MODE_CONSTS.HYDRAULIC_CHASSIS_TYPE
-        elif vTypeDesc.hasTurboshaftEngine:
+        if vTypeDesc.hasTurboshaftEngine:
             uiType = SIEGE_MODE_CONSTS.TURBOSHAFT_ENGINE_TYPE
         elif vTypeDesc.isTrackWithinTrack or vTypeDesc.isMultiTrack:
             uiType = SIEGE_MODE_CONSTS.TRACK_WITHIN_TRACK_TYPE
+        elif vTypeDesc.hasHydraulicChassis or vTypeDesc.hasAutoSiegeMode:
+            uiType = SIEGE_MODE_CONSTS.HYDRAULIC_CHASSIS_TYPE
         if uiType is None:
             raise SoftException("Can't get UI siege mode type")
         return uiType
 
     @staticmethod
     def __createDevicesMap(vTypeDesc):
-        if vTypeDesc.hasHydraulicChassis or vTypeDesc.hasAutoSiegeMode:
-            deviceNames = ('engine', 'leftTrack0', 'rightTrack0')
-        elif vTypeDesc.hasTurboshaftEngine:
+        if vTypeDesc.hasTurboshaftEngine:
             deviceNames = ('engine',)
         elif vTypeDesc.isTrackWithinTrack:
             deviceNames = ('leftTrack0', 'rightTrack0', 'leftTrack1', 'rightTrack1')
+        elif vTypeDesc.hasHydraulicChassis or vTypeDesc.hasAutoSiegeMode:
+            deviceNames = ('engine', 'leftTrack0', 'rightTrack0')
         elif vTypeDesc.isMultiTrack:
             deviceNames = []
             for trackIdx in range(vTypeDesc.trackPairsCount):

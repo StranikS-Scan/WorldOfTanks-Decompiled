@@ -156,6 +156,11 @@ def killRibbonFormatter(ribbon, arenaDP, updater, ribbonType=None):
     updater(ribbonID=ribbon.getID(), ribbonType=ribbonType, vehName=vehicleName, vehType=vehicleClassTag, leftFieldStr=leftFieldStr, bonusRibbonLabelID=bonusRibbonLabelID, role=ribbon.role())
 
 
+def _healthAddedFormatter(ribbon, arenaDP, updater):
+    vehicleName, vehicleClassTag = _getVehicleData(arenaDP, ribbon.getVehicleID())
+    updater(ribbonID=ribbon.getID(), ribbonType=ribbon.getType(), vehName=vehicleName, vehType=vehicleClassTag, leftFieldStr=backport.getIntegralFormat(ribbon.getExtraValue()))
+
+
 _RIBBONS_FMTS = {_BET.CAPTURE: _baseRibbonFormatter,
  _BET.DEFENCE: _baseRibbonFormatter,
  _BET.DETECTION: _enemyDetectionRibbonFormatter,
@@ -198,7 +203,17 @@ _RIBBONS_FMTS = {_BET.CAPTURE: _baseRibbonFormatter,
  _BET.RECEIVED_BY_CLING_BRANDER: _singleVehRibbonFormatter,
  _BET.DEALT_DMG_BY_THUNDER_STRIKE: _singleVehRibbonFormatter,
  _BET.RECEIVED_BY_THUNDER_STRIKE: _singleVehRibbonFormatter,
- _BET.PERK: _perkRibbonFormatter}
+ _BET.VEHICLE_HEALTH_ADDED: _healthAddedFormatter,
+ _BET.RECEIVED_BY_CIRCUIT_OVERLOAD: _singleVehRibbonFormatter,
+ _BET.DEALT_BY_MISSILE: _singleVehRibbonFormatter,
+ _BET.RECEIVED_BY_MISSILE: _singleVehRibbonFormatter,
+ _BET.PERK: _perkRibbonFormatter,
+ _BET.DEALT_BY_ANOMALY: _singleVehRibbonFormatter,
+ _BET.RECEIVED_BY_ANOMALY: _singleVehRibbonFormatter,
+ _BET.DEALT_BY_ENERGY_SHIELD: _singleVehRibbonFormatter,
+ _BET.RECEIVED_BY_ENERGY_SHIELD: _singleVehRibbonFormatter,
+ _BET.DEALT_BY_STUN_AREA_MOD_A: _singleVehRibbonFormatter,
+ _BET.RECEIVED_BY_STUN_AREA_MOD_A: _singleVehRibbonFormatter}
 _SHOT_PASSION_INT_CD = 2817787
 _ABILITY_MODIFIERS_BY_CDS = {_SHOT_PASSION_INT_CD: _BET.DAMAGE_MODIFIER_ABILITY}
 _DISPLAY_PRECONDITIONS = {_BET.DETECTION: lambda dp, ribbon: dp.getVehicleInfo(ribbon.getVehIDs()[0]).vehicleType.compactDescr > 0}
@@ -331,6 +346,16 @@ class BattleRibbonsPanel(RibbonsPanelMeta, IArenaVehiclesController):
          [_BET.RECEIVED_BY_CLING_BRANDER, backport.text(R.strings.ingame_gui.efficiencyRibbons.receivedByClingBrander())],
          [_BET.DEALT_DMG_BY_THUNDER_STRIKE, backport.text(R.strings.ingame_gui.efficiencyRibbons.dealtDamageByThunderStrike())],
          [_BET.RECEIVED_BY_THUNDER_STRIKE, backport.text(R.strings.ingame_gui.efficiencyRibbons.receivedByThunderStrike())],
+         [_BET.VEHICLE_HEALTH_ADDED, backport.text(R.strings.ingame_gui.efficiencyRibbons.healthAdded())],
+         [_BET.RECEIVED_BY_CIRCUIT_OVERLOAD, backport.text(R.strings.ingame_gui.efficiencyRibbons.wtReceivedCircuitOverload())],
+         [_BET.RECEIVED_BY_ENERGY_SHIELD, backport.text(R.strings.ingame_gui.efficiencyRibbons.wtReceivedByEnergyShield())],
+         [_BET.DEALT_BY_ENERGY_SHIELD, backport.text(R.strings.ingame_gui.efficiencyRibbons.wtDealtByEnergyShield())],
+         [_BET.RECEIVED_BY_MISSILE, backport.text(R.strings.ingame_gui.efficiencyRibbons.wtReceivedByMissile())],
+         [_BET.DEALT_BY_MISSILE, backport.text(R.strings.ingame_gui.efficiencyRibbons.wtDealtDamageByMissile())],
+         [_BET.RECEIVED_BY_ANOMALY, backport.text(R.strings.ingame_gui.efficiencyRibbons.wtReceivedByAnomaly())],
+         [_BET.DEALT_BY_ANOMALY, backport.text(R.strings.ingame_gui.efficiencyRibbons.wtDealtByAnomaly())],
+         [_BET.RECEIVED_BY_STUN_AREA_MOD_A, backport.text(R.strings.ingame_gui.efficiencyRibbons.wtReceivedByStunAreaModA())],
+         [_BET.DEALT_BY_STUN_AREA_MOD_A, backport.text(R.strings.ingame_gui.efficiencyRibbons.wtDealtByStunAreaModA())],
          [_BET.PERK, '']]
 
     def __processDelayedRibbons(self):

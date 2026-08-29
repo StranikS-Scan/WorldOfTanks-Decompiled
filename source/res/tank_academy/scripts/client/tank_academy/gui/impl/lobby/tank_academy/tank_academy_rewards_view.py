@@ -15,6 +15,7 @@ from skeletons.gui.game_control import ITankAcademyController
 from tank_academy.gui.shared.bonus_packers import packRewardsModelAndTooltipData
 from tank_academy.gui.shared.event_dispatcher import showTankAcademy, showTankAcademyVehicleSelection
 from tank_academy.gui.impl.gen.view_models.views.lobby.tank_academy.tank_academy_rewards_view_model import TankAcademyRewardsViewModel, State
+from tank_academy.gui.impl.lobby.tank_academy.tooltips.additional_rewards_tooltip import AdditionalRewardsTooltip
 _logger = logging.getLogger(__name__)
 
 class TankAcademyRewardsView(ViewImpl):
@@ -44,6 +45,12 @@ class TankAcademyRewardsView(ViewImpl):
             return window
         else:
             return super(TankAcademyRewardsView, self).createToolTip(event)
+
+    def createToolTipContent(self, event, contentID):
+        if contentID == R.views.lobby.tooltips.AdditionalRewardsTooltip():
+            showCount = int(event.getArgument(TankAcademyRewardsViewModel.BOX_TOOLTIP_ARG_SHOW_COUNT, 0))
+            return AdditionalRewardsTooltip(self.viewModel.getRewards()[showCount:])
+        return super(TankAcademyRewardsView, self).createToolTipContent(event, contentID)
 
     def onClose(self):
         self.soundManager.setState(SOUNDS.STATE_OVERLAY_HANGAR_GENERAL_GROUP, SOUNDS.STATE_OVERLAY_HANGAR_GENERAL_OFF)

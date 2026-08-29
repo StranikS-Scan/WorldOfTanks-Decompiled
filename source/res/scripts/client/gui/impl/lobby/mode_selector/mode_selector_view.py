@@ -48,6 +48,7 @@ from uilogging.deprecated.bootcamp.constants import BC_LOG_KEYS, BC_LOG_ACTIONS
 from uilogging.deprecated.bootcamp.loggers import BootcampLogger
 from uilogging.rename_testing.loggers import RenameTestingUILogger
 from th_async import th_await, await_callback, th_async, BrokenPromiseError, forwardAsFuture
+from white_tiger.gui.impl.lobby.tooltips.wt_event_ticket_tooltip_view import WtEventTicketTooltipView
 if typing.TYPE_CHECKING:
     from typing import Optional, Callable
     from gui.Scaleform.framework.application import AppEntry
@@ -142,6 +143,8 @@ class ModeSelectorView(ViewImpl):
                 return createAndLoadBackportTooltipWindow(self.getParentWindow(), tooltipId=tooltipId, isSpecial=True, specialArgs=(rankID,))
             if tooltipId == ModeSelectorTooltipsConstants.EPIC_BATTLE_WIDGET_INFO:
                 return createAndLoadBackportTooltipWindow(self.getParentWindow(), tooltipId=tooltipId, isSpecial=True, specialArgs=[])
+            if tooltipId == ModeSelectorTooltipsConstants.EVENT_BATTLES_CALENDAR_TOOLTIP:
+                return createAndLoadBackportTooltipWindow(self.getParentWindow(), tooltipId=tooltipId, isSpecial=True)
         return super(ModeSelectorView, self).createToolTip(event)
 
     def createToolTipContent(self, event, contentID):
@@ -167,6 +170,8 @@ class ModeSelectorView(ViewImpl):
                     luiRule = modeSelectorItem.getLimitedUIRule()
                     if luiRule:
                         return NewbieRestrictionsTooltip(LimitedUINewbieRestrictionsTooltipAdapter(luiRule))
+            elif contentID == R.views.white_tiger.lobby.tooltips.TicketTooltipView():
+                return WtEventTicketTooltipView()
             tooltipClass = self.__tooltipConstants.get(_CONTENT_TOOLTIPS_KEY, {}).get(contentID)
             return tooltipClass() if tooltipClass else None
 

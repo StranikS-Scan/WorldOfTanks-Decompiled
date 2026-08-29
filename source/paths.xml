@@ -1,7 +1,7 @@
 <root>
   <Paths>
-    <Path cacheSubdirs="true">./res_mods/1.44.0.0</Path>
-    <Path mask="*.mtmod" mode="recursive" root="res">./mods/1.44.0.0</Path>
+    <Path cacheSubdirs="true">./res_mods/1.45.0.0</Path>
+    <Path mask="*.mtmod" mode="recursive" root="res">./mods/1.45.0.0</Path>
     <Packages>
       <Package type="sd,hd">./res/packages/shared_content-part2.pkg</Package>
       <Package type="sd,hd">./res/packages/shared_content-part1.pkg</Package>
@@ -61,6 +61,9 @@
       <Package type="sd,hd">./res/packages/11_murovanka.pkg</Package>
       <Package type="hd">./res/packages/11_murovanka_hd.pkg</Package>
       <Package type="sd,hd">./res/packages/11_murovanka_bin.pkg</Package>
+      <Package type="sd,hd">./res/packages/11_murovanka_wt.pkg</Package>
+      <Package type="hd">./res/packages/11_murovanka_wt_hd.pkg</Package>
+      <Package type="sd,hd">./res/packages/11_murovanka_wt_bin.pkg</Package>
       <Package type="sd,hd">./res/packages/121_lost_paradise_v.pkg</Package>
       <Package type="hd">./res/packages/121_lost_paradise_v_hd.pkg</Package>
       <Package type="sd,hd">./res/packages/121_lost_paradise_v_bin.pkg</Package>
@@ -103,6 +106,8 @@
       <Package type="sd,hd">./res/packages/217_er_alaska.pkg</Package>
       <Package type="hd">./res/packages/217_er_alaska_hd.pkg</Package>
       <Package type="sd,hd">./res/packages/217_er_alaska_bin.pkg</Package>
+      <Package type="sd,hd">./res/packages/217_er_alaska_wt.pkg</Package>
+      <Package type="sd,hd">./res/packages/217_er_alaska_wt_bin.pkg</Package>
       <Package type="sd,hd">./res/packages/222_er_clime.pkg</Package>
       <Package type="hd">./res/packages/222_er_clime_hd.pkg</Package>
       <Package type="sd,hd">./res/packages/222_er_clime_bin.pkg</Package>
@@ -124,6 +129,9 @@
       <Package type="sd,hd">./res/packages/28_desert.pkg</Package>
       <Package type="hd">./res/packages/28_desert_hd.pkg</Package>
       <Package type="sd,hd">./res/packages/28_desert_bin.pkg</Package>
+      <Package type="sd,hd">./res/packages/28_desert_wt.pkg</Package>
+      <Package type="hd">./res/packages/28_desert_wt_hd.pkg</Package>
+      <Package type="sd,hd">./res/packages/28_desert_wt_bin.pkg</Package>
       <Package type="sd,hd">./res/packages/29_el_hallouf.pkg</Package>
       <Package type="hd">./res/packages/29_el_hallouf_hd.pkg</Package>
       <Package type="sd,hd">./res/packages/29_el_hallouf_bin.pkg</Package>
@@ -136,9 +144,15 @@
       <Package type="sd,hd">./res/packages/34_redshire.pkg</Package>
       <Package type="hd">./res/packages/34_redshire_hd.pkg</Package>
       <Package type="sd,hd">./res/packages/34_redshire_bin.pkg</Package>
+      <Package type="sd,hd">./res/packages/34_redshire_wt.pkg</Package>
+      <Package type="hd">./res/packages/34_redshire_wt_hd.pkg</Package>
+      <Package type="sd,hd">./res/packages/34_redshire_wt_bin.pkg</Package>
       <Package type="sd,hd">./res/packages/35_steppes.pkg</Package>
       <Package type="hd">./res/packages/35_steppes_hd.pkg</Package>
       <Package type="sd,hd">./res/packages/35_steppes_bin.pkg</Package>
+      <Package type="sd,hd">./res/packages/35_steppes_wt.pkg</Package>
+      <Package type="hd">./res/packages/35_steppes_wt_hd.pkg</Package>
+      <Package type="sd,hd">./res/packages/35_steppes_wt_bin.pkg</Package>
       <Package type="sd,hd">./res/packages/36_fishing_bay.pkg</Package>
       <Package type="hd">./res/packages/36_fishing_bay_hd.pkg</Package>
       <Package type="sd,hd">./res/packages/36_fishing_bay_bin.pkg</Package>
@@ -201,9 +215,15 @@
       <Package type="sd,hd">./res/packages/h08_mt_hangar.pkg</Package>
       <Package type="hd">./res/packages/h08_mt_hangar_hd.pkg</Package>
       <Package type="sd,hd">./res/packages/h08_mt_hangar_bin.pkg</Package>
-      <Package type="sd,hd">./res/packages/h17_mt_bday_2026.pkg</Package>
-      <Package type="hd">./res/packages/h17_mt_bday_2026_hd.pkg</Package>
-      <Package type="sd,hd">./res/packages/h17_mt_bday_2026_bin.pkg</Package>
+      <Package type="sd,hd">./res/packages/h08_mt_hangar_wt.pkg</Package>
+      <Package type="hd">./res/packages/h08_mt_hangar_wt_hd.pkg</Package>
+      <Package type="sd,hd">./res/packages/h08_mt_hangar_wt_bin.pkg</Package>
+      <Package type="sd,hd">./res/packages/h14_mt_wt_2025.pkg</Package>
+      <Package type="hd">./res/packages/h14_mt_wt_2025_hd.pkg</Package>
+      <Package type="sd,hd">./res/packages/h14_mt_wt_2025_bin.pkg</Package>
+      <Package type="sd,hd">./res/packages/h16_mt_museum.pkg</Package>
+      <Package type="hd">./res/packages/h16_mt_museum_hd.pkg</Package>
+      <Package type="sd,hd">./res/packages/h16_mt_museum_bin.pkg</Package>
       <Package type="sd,hd">./res/packages/h33_battle_royale_2021.pkg</Package>
       <Package type="hd">./res/packages/h33_battle_royale_2021_hd.pkg</Package>
       <Package type="sd,hd">./res/packages/h33_battle_royale_2021_bin.pkg</Package>
@@ -230,7 +250,7 @@
       <Package type="sandbox,sd,hd">./res/packages/in_battle_achievements.pkg</Package>
       <Package type="sandbox,sd,hd">./res/packages/misc.pkg</Package>
       <Package type="hd">./res/packages/misc_hd.pkg</Package>
-      <Package type="sandbox,sd,hd">./res/packages/mt_birthday.pkg</Package>
+      <Package type="sandbox,sd,hd">./res/packages/museum_of_glory.pkg</Package>
       <Package type="sandbox,sd,hd">./res/packages/newbie_start_page.pkg</Package>
       <Package type="sandbox,sd,hd">./res/packages/particles.pkg</Package>
       <Package type="hd">./res/packages/particles_hd.pkg</Package>
@@ -280,6 +300,7 @@
       <Package type="hd">./res/packages/vehicles_level_11_hd-part1.pkg</Package>
       <Package type="hd">./res/packages/vehicles_level_11_hd-part2.pkg</Package>
       <Package type="sandbox,sd,hd">./res/packages/versus_ai.pkg</Package>
+      <Package type="sandbox,sd,hd">./res/packages/white_tiger.pkg</Package>
       <Package type="sandbox,sd,hd">./res/packages/winback.pkg</Package>
     </Packages>
     <Path>./res</Path>

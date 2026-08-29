@@ -8,7 +8,7 @@ class SelectableRewardItemModel(ViewModel):
     STATE_LIMITED = 'state_limited'
     STATE_RECEIVED = 'state_received'
 
-    def __init__(self, properties=5, commands=0):
+    def __init__(self, properties=6, commands=0):
         super(SelectableRewardItemModel, self).__init__(properties=properties, commands=commands)
 
     def getType(self):
@@ -41,6 +41,12 @@ class SelectableRewardItemModel(ViewModel):
     def setState(self, value):
         self._setString(4, value)
 
+    def getDecorator(self):
+        return self._getString(5)
+
+    def setDecorator(self, value):
+        self._setString(5, value)
+
     def _initialize(self):
         super(SelectableRewardItemModel, self)._initialize()
         self._addStringProperty('type', '')
@@ -48,3 +54,4 @@ class SelectableRewardItemModel(ViewModel):
         self._addNumberProperty('storageCount', 0)
         self._addNumberProperty('packSize', 1)
         self._addStringProperty('state', 'state_normal')
+        self._addStringProperty('decorator', '')

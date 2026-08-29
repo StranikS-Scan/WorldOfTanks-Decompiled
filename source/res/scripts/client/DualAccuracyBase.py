@@ -1,10 +1,14 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/DualAccuracyBase.py
+import typing
 import BigWorld
 import Event
 from constants import DUAL_ACCURACY_STATE
 from PlayerEvents import g_playerEvents
 _DEFAULT_ACCURACY_FACTOR = 1.0
+_DEFAULT_COOLING_DELAY = 0.0
+if typing.TYPE_CHECKING:
+    from items.vehicles import VehicleDescriptor
 
 def getPlayerVehicleDualAccuracy():
     vehicle = BigWorld.player().getVehicleAttached()
@@ -17,12 +21,14 @@ class DualAccuracyBase(BigWorld.DynamicScriptComponent):
         super(DualAccuracyBase, self).__init__()
         self.__appearanceInited = False
         self.__dualAccuracyFactor = _DEFAULT_ACCURACY_FACTOR
-        self.__coolingDelay = self.entity.typeDescriptor.gun.dualAccuracy.coolingDelay
+        self.__coolingDelay = _DEFAULT_COOLING_DELAY
+        self.__currentVehicleName = self.entity.typeDescriptor.name
         self.__eManager = Event.EventManager()
         self.onSetDualAccState = Event.Event(self.__eManager)
         self.onDualAccuracyDataUpdated = Event.Event(self.__eManager)
-        self.__initDualAccuracyAppearance()
-        self.__initDualAccuracyAvatar()
+        if self.entity.typeDescriptor.hasDualAccuracy and self.__isAppearanceReady():
+            self.__onAppearanceReady()
+        self.entity.onAppearanceReady += self.__onAppearanceReady
 
     def getDualAccuracyFactor(self):
         return self.__dualAccuracyFactor
@@ -87,14 +93,12 @@ class DualAccuracyBase(BigWorld.DynamicScriptComponent):
         player = player or BigWorld.player()
         return player is not None and player.playerVehicleID == self.entity.id
 
-    def __onAvatarReady(self):
-        self.__updateDualAccuracyAvatar()
-
     def __onAppearanceReady(self):
-        if self.__appearanceInited:
+        if self.__appearanceInited and self.__currentVehicleName == self.entity.typeDescriptor.name:
             return
         self.__collectDualAccuracyParams()
         self.updateDualAccuracyData()
+        self.__initDualAccuracyAvatar()
         self.__appearanceInited = True
 
     def __updateDualAccuracyAvatar(self, withShot=0):
@@ -104,19 +108,14 @@ class DualAccuracyBase(BigWorld.DynamicScriptComponent):
 
     def __initDualAccuracyAvatar(self):
         if self.__isAvatarReady():
-            self.__onAvatarReady()
+            self.__updateDualAccuracyAvatar()
         else:
-            g_playerEvents.onAvatarReady += self.__onAvatarReady
-
-    def __initDualAccuracyAppearance(self):
-        if self.__isAppearanceReady():
-            self.__onAppearanceReady()
-        else:
-            self.entity.onAppearanceReady += self.__onAppearanceReady
+            g_playerEvents.onAvatarReady += self.__updateDualAccuracyAvatar
 
     def __collectDualAccuracyParams(self, typeDescriptor=None):
         typeDescriptor = typeDescriptor or self.entity.typeDescriptor
         params = typeDescriptor.gun
+        self.__coolingDelay = params.dualAccuracy.coolingDelay
         self.__dualAccuracyFactor = params.dualAccuracy.afterShotDispersionAngle / params.shotDispersionAngle
 
     @property

@@ -1,0 +1,25 @@
+<WTVehicleExtractorShot.def>
+  <Properties>
+    <isShotFiring>
+      <Type>	BOOL	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <Default>	0	</Default>
+    </isShotFiring>
+    <plasmaCounter>
+      <Type>	INT8	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <Default>	0	</Default>
+      <DetailLevel>	MY_VEHICLE	</DetailLevel>
+    </plasmaCounter>
+    <multiplierDamagePerPlasma>
+      <Type>	FLOAT32	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <Default>	0	</Default>
+      <DetailLevel>	MY_VEHICLE	</DetailLevel>
+    </multiplierDamagePerPlasma>
+  </Properties>
+  <ofEntity>
+    <Vehicle></Vehicle>
+  </ofEntity>
+  <DefaultKeyName>	wtExtractorShot	</DefaultKeyName>
+</WTVehicleExtractorShot.def>

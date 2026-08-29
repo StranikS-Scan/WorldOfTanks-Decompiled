@@ -1,0 +1,1209 @@
+<equipments.xml>
+  <wt_repairkit>
+    <id>	1000	</id>
+    <userString>	#white_tiger.artefacts.extend:builtinRepairkit_wt/name	</userString>
+    <description>	#white_tiger.artefacts.extend:builtinRepairkit_wt/descr	</description>
+    <shortDescriptionSpecial>	#white_tiger.artefacts.extend:largeRepairkit_wt/short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#white_tiger.artefacts.extend:builtinRepairkit_wt/long_special	</longDescriptionSpecial>
+    <icon>	wt_largeRepairkit 0 0	</icon>
+    <soundNotification>	wt_ability	</soundNotification>
+    <soundPressedReady>	ev_white_tiger_ability_button	</soundPressedReady>
+    <soundPressedNotReady>	ev_white_tiger_ability_button_not_ready	</soundPressedNotReady>
+    <price>	0	</price>
+    <notInShop>	true	</notInShop>
+    <tags>	notForSale repairkit hideBuiltinInfo	</tags>
+    <type>	regular	</type>
+    <subType>	activable	</subType>
+    <script>	white_tiger_common.wt_artefacts.WTRepairkit	  <repairAll>	true	</repairAll>
+      <bonusValue>	0.15	</bonusValue>
+      <cooldownSeconds>	90	</cooldownSeconds>
+      <reuseCount>	-1	</reuseCount>
+      <activeSeconds>	3	</activeSeconds>
+    </script>
+    <kpi>
+      <mul>
+        <name>	vehicleRepairSpeed	</name>
+        <value>	1.15	</value>
+      </mul>
+    </kpi>
+  </wt_repairkit>
+  <wt_medkit>
+    <id>	901	</id>
+    <userString>	#white_tiger.artefacts.extend:builtinLargeMedkit_wt/name	</userString>
+    <description>	#white_tiger.artefacts.extend:builtinLargeMedkit_wt/stunDisabled/descr	</description>
+    <shortDescriptionSpecial>	#white_tiger.artefacts.extend:builtinLargeMedkit_wt/short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#white_tiger.artefacts.extend:builtinLargeMedkit_wt/long_special	</longDescriptionSpecial>
+    <icon>	wt_largeMedkit 0 0	</icon>
+    <soundNotification>	wt_ability	</soundNotification>
+    <soundPressedReady>	ev_white_tiger_ability_button	</soundPressedReady>
+    <soundPressedNotReady>	ev_white_tiger_ability_button_not_ready	</soundPressedNotReady>
+    <price>	0	</price>
+    <notInShop>	true	</notInShop>
+    <tags>	notForSale medkit hideBuiltinInfo	</tags>
+    <type>	regular	</type>
+    <subType>	activable	</subType>
+    <script>	white_tiger_common.wt_artefacts.WTMedkit	  <repairAll>	true	</repairAll>
+      <bonusValue>	0.0	</bonusValue>
+      <stunResistanceEffect>	0.0	</stunResistanceEffect>
+      <stunResistanceDuration>	0.0	</stunResistanceDuration>
+      <cooldownSeconds>	90	</cooldownSeconds>
+      <reuseCount>	-1	</reuseCount>
+      <activeSeconds>	3	</activeSeconds>
+      <removeDebuffsFromAbilities>	wt_extractor_shot wt_impulse_mod_a	</removeDebuffsFromAbilities>
+    </script>
+    <kpi>
+      <mul>
+        <name>	crewHitChance	</name>
+        <value>	1.15	</value>
+      </mul>
+      <mul>
+        <name>	crewStunDuration	</name>
+        <value>	0.95	</value>
+      </mul>
+    </kpi>
+  </wt_medkit>
+  <wt_passive_heal>
+    <id>	902	</id>
+    <userString>	#white_tiger.artefacts.extend:wt_passive_heal/name	</userString>
+    <description>	#white_tiger.artefacts.extend:wt_passive_heal/descr	</description>
+    <shortDescriptionSpecial>	#white_tiger.artefacts.extend:wt_passive_heal/short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#white_tiger.artefacts.extend:wt_passive_heal/long_special	</longDescriptionSpecial>
+    <icon>	wt_passive_heal 0 0	</icon>
+    <soundNotification>	wt_ability	</soundNotification>
+    <soundPressedReady>	ev_white_tiger_ability_button	</soundPressedReady>
+    <soundPressedNotReady>	ev_white_tiger_ability_button_not_ready	</soundPressedNotReady>
+    <price>	0	</price>
+    <notInShop>	true	</notInShop>
+    <tags>	notForSale hideBuiltinInfo eventItem	</tags>
+    <type>	regular	</type>
+    <subType>	passive	</subType>
+    <usagePrefab>	content/WtPrefabs/abilities/PassiveHealing_Cz04.prefab	</usagePrefab>
+    <script>	white_tiger_common.wt_artefacts.WTPassiveHealing	  <reuseCount>	-1	</reuseCount>
+      <cooldownSeconds>	0	</cooldownSeconds>
+      <maxHealthRegenPct>	0.01	</maxHealthRegenPct>
+      <tickInterval>	1.0	</tickInterval>
+    </script>
+  </wt_passive_heal>
+  <wt_union_strength>
+    <id>	903	</id>
+    <userString>	#white_tiger.artefacts.extend:wt_union_strength/name	</userString>
+    <description>	#white_tiger.artefacts.extend:wt_union_strength/descr	</description>
+    <shortDescriptionSpecial>	#white_tiger.artefacts.extend:wt_union_strength/short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#white_tiger.artefacts.extend:wt_union_strength/long_special	</longDescriptionSpecial>
+    <icon>	wt_ability_unionStrength 0 0	</icon>
+    <soundNotification>	wt_ability	</soundNotification>
+    <soundPressedReady>	ev_white_tiger_ability_button	</soundPressedReady>
+    <soundPressedNotReady>	ev_white_tiger_ability_button_not_ready	</soundPressedNotReady>
+    <price>	0	</price>
+    <notInShop>	true	</notInShop>
+    <tags>	notForSale eventItem	</tags>
+    <type>	regular	</type>
+    <subType>	passive	</subType>
+    <script>	white_tiger_common.wt_artefacts.WTUnionStrength	  <effectDuration>	5	</effectDuration>
+      <receiveDamageFactor>	0.20	</receiveDamageFactor>
+      <teamMateRadius>	15	</teamMateRadius>
+      <healingValue>	25	</healingValue>
+      <healingTickInterval>	1.0	</healingTickInterval>
+      <visualEffects>
+        <sequences>
+          <enemy>
+            <sequence>
+              <path>	particles/Environment/event_white_tiger/player_tank/unity/wt_unity_damage.seq	</path>
+              <bindNode>	hull	</bindNode>
+            </sequence>
+          </enemy>
+        </sequences>
+      </visualEffects>
+      <hunterVisualEffects>
+        <hunter>
+          <vehicle>	ussr:R97_Object_140_hound_TLXXL	</vehicle>
+          <prefab>	content/WtPrefabs/abilities/UnionStrength_R97.prefab	</prefab>
+        </hunter>
+        <hunter>
+          <vehicle>	usa:A120_M48A5_hound_TLXXL	</vehicle>
+          <prefab>	content/WtPrefabs/abilities/UnionStrength_A120.prefab	</prefab>
+        </hunter>
+        <hunter>
+          <vehicle>	france:F18_Bat_Chatillon25t_hound_TLXXL	</vehicle>
+          <prefab>	content/WtPrefabs/abilities/UnionStrength_F18.prefab	</prefab>
+        </hunter>
+        <hunter>
+          <vehicle>	czech:Cz04_T50_51_Waf_Hound_3DSt	</vehicle>
+          <prefab>	content/WtPrefabs/abilities/UnionStrength_Cz04.prefab	</prefab>
+        </hunter>
+        <hunter>
+          <vehicle>	czech:Cz04_T50_51_Waf_Hound_3DSt_clone	</vehicle>
+          <prefab>	content/WtPrefabs/abilities/UnionStrength_Cz04.prefab	</prefab>
+        </hunter>
+      </hunterVisualEffects>
+    </script>
+  </wt_union_strength>
+  <wt_invisibility_mod_a>
+    <id>	904	</id>
+    <userString>	#white_tiger.artefacts.extend:wt_invisibility_mod_a/name	</userString>
+    <description>	#white_tiger.artefacts.extend:wt_invisibility_mod_a/descr	</description>
+    <shortDescriptionSpecial>	#white_tiger.artefacts.extend:wt_invisibility_mod_a/short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#white_tiger.artefacts.extend:wt_invisibility_mod_a/long_special	</longDescriptionSpecial>
+    <icon>	wt_invisibility_mod_a 0 0	</icon>
+    <soundNotification>	wt_ability	</soundNotification>
+    <soundPressedReady>	ev_white_tiger_ability_button	</soundPressedReady>
+    <soundPressedNotReady>	ev_white_tiger_ability_button_not_ready	</soundPressedNotReady>
+    <price>	0	</price>
+    <notInShop>	true	</notInShop>
+    <tags>	notForSale eventItem	</tags>
+    <type>	regular	</type>
+    <subType>	activable	</subType>
+    <script>	white_tiger_common.wt_artefacts.WTInvisibilityModA	  <reuseCount>	-1	</reuseCount>
+      <cooldownSeconds>	60	</cooldownSeconds>
+      <procedureEffects>
+        <effect>	system/data/wt_procedure_effects/distortion_wt_own_invisibility.xml	</effect>
+        <effect>	system/data/wt_procedure_effects/lightning_wt_own_invisibility.xml	</effect>
+      </procedureEffects>
+      <entrancePrefab>	content/WtPrefabs/abilities/InvisibilityEntranceModA.prefab	</entrancePrefab>
+      <escapePrefab>	content/WtPrefabs/abilities/InvisibilityEscapeModA.prefab	</escapePrefab>
+      <consumeSeconds>	60	</consumeSeconds>
+    </script>
+  </wt_invisibility_mod_a>
+  <wt_invisibility_mod_b>
+    <id>	905	</id>
+    <userString>	#white_tiger.artefacts.extend:wt_invisibility_mod_b/name	</userString>
+    <description>	#white_tiger.artefacts.extend:wt_invisibility_mod_b/descr	</description>
+    <shortDescriptionSpecial>	#white_tiger.artefacts.extend:wt_invisibility_mod_b/short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#white_tiger.artefacts.extend:wt_invisibility_mod_b/long_special	</longDescriptionSpecial>
+    <icon>	wt_invisibility_mod_b 0 0	</icon>
+    <soundNotification>	wt_ability	</soundNotification>
+    <soundPressedReady>	ev_white_tiger_ability_button	</soundPressedReady>
+    <soundPressedNotReady>	ev_white_tiger_ability_button_not_ready	</soundPressedNotReady>
+    <price>	0	</price>
+    <notInShop>	true	</notInShop>
+    <tags>	notForSale eventItem	</tags>
+    <type>	regular	</type>
+    <subType>	activable	</subType>
+    <script>	white_tiger_common.wt_artefacts.WTInvisibilityModB	  <reuseCount>	-1	</reuseCount>
+      <cooldownSeconds>	60	</cooldownSeconds>
+      <entrancePrefab>	content/WtPrefabs/abilities/InvisibilityEntranceModB.prefab	</entrancePrefab>
+      <escapePrefab>	content/WtPrefabs/abilities/InvisibilityEscapeModB.prefab	</escapePrefab>
+      <consumeSeconds>	15	</consumeSeconds>
+    </script>
+  </wt_invisibility_mod_b>
+  <wt_hyperion_mod_a>
+    <id>	906	</id>
+    <userString>	#white_tiger.artefacts.extend:wt_hyperion_mod_a/name	</userString>
+    <description>	#white_tiger.artefacts.extend:wt_hyperion_mod_a/descr	</description>
+    <shortDescriptionSpecial>	#white_tiger.artefacts.extend:wt_hyperion_mod_a/short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#white_tiger.artefacts.extend:wt_hyperion_mod_a/long_special	</longDescriptionSpecial>
+    <icon>	wt_hyperion_mod_a 0 0	</icon>
+    <soundNotification>	wt_ability	</soundNotification>
+    <soundPressedReady>	ev_white_tiger_ability_button	</soundPressedReady>
+    <soundPressedNotReady>	ev_white_tiger_ability_button_not_ready	</soundPressedNotReady>
+    <soundPressedCancel>	ev_wt_hyperion_reset	</soundPressedCancel>
+    <activationSound>	ev_wt_hyperion_set	</activationSound>
+    <price>	0	</price>
+    <notInShop>	true	</notInShop>
+    <tags>	notForSale eventItem	</tags>
+    <type>	regular	</type>
+    <subType>	activable	</subType>
+    <script>	white_tiger_common.wt_artefacts.WTHyperionModA	  <clientSelector>	white_tiger.avatar_input_handler.wt_map_case_mode.HyperionStrikeSelector	</clientSelector>
+      <reuseCount>	-1	</reuseCount>
+      <radius>	75.0	</radius>
+      <height>	15.0	</height>
+      <depth>	15.0	</depth>
+      <chargeFactor>	0.024	</chargeFactor>
+      <chargingDelay>	6	</chargingDelay>
+      <damagePerShot>	400	</damagePerShot>
+      <shotsAmount>	4	</shotsAmount>
+      <shotDuration>	1.0	</shotDuration>
+      <minApplyRadius>	15	</minApplyRadius>
+      <maxApplyRadius>	1000	</maxApplyRadius>
+      <arenaAimLimits>
+        <areaColor>	0xFFFF0000	</areaColor>
+      </arenaAimLimits>
+      <aimCircleVisual>	particles/Environment/event_white_tiger/player_tank/hyperion/Hyperion_Aiming_Circle.visual	</aimCircleVisual>
+      <shotPrefab>	content/WtPrefabs/abilities/HyperionShotModA.prefab	</shotPrefab>
+      <chargePrefab>	content/WtPrefabs/abilities/HyperionChargingModA.prefab	</chargePrefab>
+      <readyPrefab>	content/WtPrefabs/abilities/HyperionReadyModA.prefab	</readyPrefab>
+    </script>
+  </wt_hyperion_mod_a>
+  <wt_hyperion_mod_b>
+    <id>	907	</id>
+    <userString>	#white_tiger.artefacts.extend:wt_hyperion_mod_b/name	</userString>
+    <description>	#white_tiger.artefacts.extend:wt_hyperion_mod_b/descr	</description>
+    <shortDescriptionSpecial>	#white_tiger.artefacts.extend:wt_hyperion_mod_b/short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#white_tiger.artefacts.extend:wt_hyperion_mod_b/long_special	</longDescriptionSpecial>
+    <icon>	wt_hyperion_mod_b 0 0	</icon>
+    <soundNotification>	wt_ability	</soundNotification>
+    <soundPressedReady>	ev_white_tiger_ability_button	</soundPressedReady>
+    <soundPressedNotReady>	ev_white_tiger_ability_button_not_ready	</soundPressedNotReady>
+    <soundPressedCancel>	ev_wt_hyperion_reset	</soundPressedCancel>
+    <activationSound>	ev_wt_hyperion_set	</activationSound>
+    <price>	0	</price>
+    <notInShop>	true	</notInShop>
+    <tags>	notForSale eventItem	</tags>
+    <type>	regular	</type>
+    <subType>	activable	</subType>
+    <script>	white_tiger_common.wt_artefacts.WTHyperionModB	  <clientSelector>	white_tiger.avatar_input_handler.wt_map_case_mode.HyperionStrikeSelector	</clientSelector>
+      <reuseCount>	-1	</reuseCount>
+      <radius>	75.0	</radius>
+      <chargeFactor>	0.024	</chargeFactor>
+      <chargingDelay>	6	</chargingDelay>
+      <destroyDelay>	1	</destroyDelay>
+      <damagePerShot>	400	</damagePerShot>
+      <shotsAmount>	25	</shotsAmount>
+      <shotDuration>	0.16	</shotDuration>
+      <shotRadius>	20	</shotRadius>
+      <minApplyRadius>	15	</minApplyRadius>
+      <maxApplyRadius>	1000	</maxApplyRadius>
+      <arenaAimLimits>
+        <areaColor>	0xFFFF0000	</areaColor>
+      </arenaAimLimits>
+      <aimCircleVisual>	particles/Environment/event_white_tiger/player_tank/karna/Karna_bells_Aiming_Circle.visual	</aimCircleVisual>
+      <shotPrefab>	content/WtPrefabs/abilities/HyperionShotModB.prefab	</shotPrefab>
+      <chargePrefab>	content/WtPrefabs/abilities/HyperionChargingModB.prefab	</chargePrefab>
+      <readyPrefab>	content/WtPrefabs/abilities/HyperionReadyModB.prefab	</readyPrefab>
+    </script>
+  </wt_hyperion_mod_b>
+  <wt_teleport_mod_a>
+    <id>	908	</id>
+    <userString>	#white_tiger.artefacts.extend:wt_teleport_mod_a/name	</userString>
+    <description>	#white_tiger.artefacts.extend:wt_teleport_mod_a/descr	</description>
+    <shortDescriptionSpecial>	#white_tiger.artefacts.extend:wt_teleport_mod_a/short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#white_tiger.artefacts.extend:wt_teleport_mod_a/long_special	</longDescriptionSpecial>
+    <icon>	wt_teleport_mod_a 0 0	</icon>
+    <soundNotification>	wt_ability	</soundNotification>
+    <soundPressedReady>	ev_white_tiger_ability_button	</soundPressedReady>
+    <soundPressedNotReady>	ev_white_tiger_ability_button_not_ready	</soundPressedNotReady>
+    <price>	0	</price>
+    <notInShop>	true	</notInShop>
+    <tags>	notForSale eventItem	</tags>
+    <type>	regular	</type>
+    <subType>	activable	</subType>
+    <script>	white_tiger_common.wt_artefacts.WTTeleportModA	  <cooldownSeconds>	60	</cooldownSeconds>
+      <consumeSeconds>	7	</consumeSeconds>
+      <reuseCount>	-1	</reuseCount>
+      <prefabDeparture>	content/WtPrefabs/TeleportDeparture.prefab	</prefabDeparture>
+      <prefabDestination>	content/WtPrefabs/TeleportDestination.prefab	</prefabDestination>
+      <debuffFactors>
+        <gun-canShoot>	False	</gun-canShoot>
+        <vehicle-rotationSpeed>	0.000001	</vehicle-rotationSpeed>
+        <vehicle-maxSpeed>	0.000001	</vehicle-maxSpeed>
+        <engine-power>	0.000001	</engine-power>
+        <turret-rotationSpeed>	0.000001	</turret-rotationSpeed>
+        <gun-rotationSpeed>	0.000001	</gun-rotationSpeed>
+      </debuffFactors>
+    </script>
+  </wt_teleport_mod_a>
+  <wt_teleport_mod_b>
+    <id>	909	</id>
+    <userString>	#white_tiger.artefacts.extend:wt_teleport_mod_b/name	</userString>
+    <description>	#white_tiger.artefacts.extend:wt_teleport_mod_b/descr	</description>
+    <shortDescriptionSpecial>	#white_tiger.artefacts.extend:wt_teleport_mod_b/short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#white_tiger.artefacts.extend:wt_teleport_mod_b/long_special	</longDescriptionSpecial>
+    <icon>	wt_teleport_mod_b 0 0	</icon>
+    <soundNotification>	wt_ability	</soundNotification>
+    <soundPressedReady>	ev_white_tiger_ability_button	</soundPressedReady>
+    <soundPressedNotReady>	ev_white_tiger_ability_button_not_ready	</soundPressedNotReady>
+    <price>	0	</price>
+    <notInShop>	true	</notInShop>
+    <tags>	notForSale eventItem	</tags>
+    <type>	regular	</type>
+    <subType>	activable	</subType>
+    <script>	white_tiger_common.wt_artefacts.WTTeleportModB	  <cooldownSeconds>	60	</cooldownSeconds>
+      <consumeSeconds>	7	</consumeSeconds>
+      <reuseCount>	-1	</reuseCount>
+      <prefabDeparture>	content/WtPrefabs/TeleportDeparture.prefab	</prefabDeparture>
+      <prefabDestination>	content/WtPrefabs/TeleportDestination.prefab	</prefabDestination>
+      <debuffFactors>
+        <gun-canShoot>	False	</gun-canShoot>
+        <vehicle-rotationSpeed>	0.000001	</vehicle-rotationSpeed>
+        <vehicle-maxSpeed>	0.000001	</vehicle-maxSpeed>
+        <engine-power>	0.000001	</engine-power>
+        <turret-rotationSpeed>	0.000001	</turret-rotationSpeed>
+        <gun-rotationSpeed>	0.000001	</gun-rotationSpeed>
+      </debuffFactors>
+    </script>
+  </wt_teleport_mod_b>
+  <wt_clone>
+    <id>	910	</id>
+    <userString>	#white_tiger.artefacts.extend:wt_clone/name	</userString>
+    <description>	#white_tiger.artefacts.extend:wt_clone/descr	</description>
+    <shortDescriptionSpecial>	#white_tiger.artefacts.extend:wt_clone/short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#white_tiger.artefacts.extend:wt_clone/long_special	</longDescriptionSpecial>
+    <icon>	wt_clone 0 0	</icon>
+    <soundNotification>	wt_ability	</soundNotification>
+    <soundPressedReady>	ev_white_tiger_ability_button	</soundPressedReady>
+    <soundPressedNotReady>	ev_white_tiger_ability_button_not_ready	</soundPressedNotReady>
+    <activationSound>	play	</activationSound>
+    <soundPressedCancel>	ev_white_tiger_ability_button_not_ready	</soundPressedCancel>
+    <price>	0	</price>
+    <notInShop>	true	</notInShop>
+    <tags>	notForSale eventItem	</tags>
+    <type>	regular	</type>
+    <subType>	cancelable	</subType>
+    <script>	white_tiger_common.wt_artefacts.WTClone	  <clientSelector>	white_tiger.avatar_input_handler.wt_map_case_mode.CloneSelector	</clientSelector>
+      <areaVisual>	particles/Environment/event_white_tiger/player_tank/copy/wt_copy.visual	</areaVisual>
+      <areaColor>	0x72ACFFFB	</areaColor>
+      <areaWidth>	5	</areaWidth>
+      <areaLength>	10	</areaLength>
+      <minApplyRadius>	15	</minApplyRadius>
+      <maxApplyRadius>	75	</maxApplyRadius>
+      <cooldownSeconds>	90	</cooldownSeconds>
+      <arenaAimLimits>
+        <insetRadius>	5	</insetRadius>
+        <areaColor>	0xFFFF2626	</areaColor>
+      </arenaAimLimits>
+      <useVehPosition>	False	</useVehPosition>
+      <shuffleOwner>	False	</shuffleOwner>
+      <cloneSettings>
+        <vehName>	czech:Cz04_T50_51_Waf_Hound_3DSt_clone	</vehName>
+        <cloneProperties>	name health passive_abilities	</cloneProperties>
+        <cloneFactors>
+          <damageFactor>	0.8	</damageFactor>
+          <gun-reloadTime>	0.5	</gun-reloadTime>
+        </cloneFactors>
+        <cloneCount>	1	</cloneCount>
+        <cloneRadius>	30	</cloneRadius>
+        <cloneLifetime>	30	</cloneLifetime>
+        <botConfig>	clonebot_wt_pve	</botConfig>
+      </cloneSettings>
+    </script>
+  </wt_clone>
+  <wt_stun_area>
+    <id>	911	</id>
+    <userString>	#white_tiger.artefacts.extend:wt_stun_area/name	</userString>
+    <description>	#white_tiger.artefacts.extend:wt_stun_area/descr	</description>
+    <shortDescriptionSpecial>	#white_tiger.artefacts.extend:wt_stun_area/short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#white_tiger.artefacts.extend:wt_stun_area/long_special	</longDescriptionSpecial>
+    <icon>	wt_ability_stunArea 0 0	</icon>
+    <soundNotification>	wt_ability	</soundNotification>
+    <soundPressedReady>	ev_white_tiger_ability_button	</soundPressedReady>
+    <soundPressedNotReady>	ev_white_tiger_ability_button_not_ready	</soundPressedNotReady>
+    <price>	0	</price>
+    <notInShop>	true	</notInShop>
+    <tags>	notForSale eventItem	</tags>
+    <type>	regular	</type>
+    <subType>	activable	</subType>
+    <script>	white_tiger_common.wt_artefacts.WTStunArea	  <reuseCount>	-1	</reuseCount>
+      <cooldownSeconds>	60	</cooldownSeconds>
+      <debuffDuration>	5	</debuffDuration>
+      <components>
+        <component>
+          <name>	WTVehicleFactorAppliers	</name>
+          <key>	wtFactorAppliers	</key>
+          <params>
+            <onceDamage>	50	</onceDamage>
+            <factors>
+              <vehicle-rotationSpeed>	0.0001	</vehicle-rotationSpeed>
+              <engine-power>	0.0001	</engine-power>
+              <vehicle-maxSpeed-forward>	0.0001	</vehicle-maxSpeed-forward>
+              <vehicle-maxSpeed-backward>	0.0001	</vehicle-maxSpeed-backward>
+              <gun-rotationSpeed>	0.0001	</gun-rotationSpeed>
+              <turret-rotationSpeed>	0.0001	</turret-rotationSpeed>
+            </factors>
+          </params>
+        </component>
+        <component>
+          <name>	WTVehicleAbilityLock	</name>
+          <key>	wtAbilityLock	</key>
+          <params>
+            <vehicleParams>
+              <vehicle>
+                <name>	ussr:R97_Object_140_hound_TLXXL	</name>
+                <lockedAbilities>	wt_explosive_shot wt_nitro wt_missile wt_repairkit wt_medkit	</lockedAbilities>
+              </vehicle>
+              <vehicle>
+                <name>	usa:A120_M48A5_hound_TLXXL	</name>
+                <lockedAbilities>	wt_barrier wt_group_repair wt_explosive_damage_shield wt_repairkit wt_medkit	</lockedAbilities>
+              </vehicle>
+              <vehicle>
+                <name>	france:F18_Bat_Chatillon25t_hound_TLXXL	</name>
+                <lockedAbilities>	wt_increase_damage wt_smoke_screen wt_damage_shield wt_repairkit wt_medkit	</lockedAbilities>
+              </vehicle>
+              <vehicle>
+                <name>	czech:Cz04_T50_51_Waf_Hound_3DSt	</name>
+                <lockedAbilities>	wt_charged_shot wt_dome wt_clone wt_repairkit wt_medkit	</lockedAbilities>
+              </vehicle>
+              <vehicle>
+                <name>	czech:Cz04_T50_51_Waf_Hound_3DSt_clone	</name>
+                <lockedAbilities></lockedAbilities>
+              </vehicle>
+            </vehicleParams>
+          </params>
+        </component>
+      </components>
+      <damageRadius>	20	</damageRadius>
+      <shotData>
+        <shellName>	_100mm_UBR-412PB_default_ability_shell_WT	</shellName>
+        <shotPiercing100m>	1000	</shotPiercing100m>
+        <shotPiercing500m>	1000	</shotPiercing500m>
+        <shotSpeed>	500	</shotSpeed>
+        <shotGravity>	9.81	</shotGravity>
+        <shotMaxDistance>	720	</shotMaxDistance>
+        <maxHeight>	100	</maxHeight>
+      </shotData>
+      <visualEffects>
+        <sequences>
+          <owner>
+            <sequence>
+              <path>	particles/eff_sequence/event_white_tiger/wt_shot_large_ability.seq	</path>
+              <bindNode>	HP_gunFire	</bindNode>
+              <loopCount>	1	</loopCount>
+              <duration>	1.0	</duration>
+            </sequence>
+          </owner>
+          <enemy>
+            <sequence>
+              <path>	particles/eff_sequence/event_white_tiger/wt_ability_debuff.seq	</path>
+              <bindNode>	hull	</bindNode>
+            </sequence>
+          </enemy>
+        </sequences>
+      </visualEffects>
+      <shotEffect>	stunAreaAP_wt	</shotEffect>
+    </script>
+  </wt_stun_area>
+  <wt_charged_shot>
+    <id>	912	</id>
+    <userString>	#white_tiger.artefacts.extend:wt_charged_shot/name	</userString>
+    <description>	#white_tiger.artefacts.extend:wt_charged_shot/descr	</description>
+    <shortDescriptionSpecial>	#white_tiger.artefacts.extend:wt_charged_shot/short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#white_tiger.artefacts.extend:wt_charged_shot/long_special	</longDescriptionSpecial>
+    <icon>	wt_charged_shot 0 0	</icon>
+    <soundNotification>	wt_ability	</soundNotification>
+    <soundPressedReady>	ev_white_tiger_ability_button	</soundPressedReady>
+    <soundPressedNotReady>	ev_white_tiger_ability_button_not_ready	</soundPressedNotReady>
+    <price>	0	</price>
+    <notInShop>	true	</notInShop>
+    <tags>	notForSale eventItem	</tags>
+    <type>	regular	</type>
+    <subType>	activable	</subType>
+    <usagePrefab>	content/WtPrefabs/abilities/ChargedShot.prefab	</usagePrefab>
+    <script>	white_tiger_common.wt_artefacts.WTChargedShot	  <cooldownSeconds>	45	</cooldownSeconds>
+      <reuseCount>	-1	</reuseCount>
+      <factors>
+        <multShotDispersionFactor>	0.5	</multShotDispersionFactor>
+        <damageFactor>	2	</damageFactor>
+      </factors>
+      <moduleDamageFactors>
+        <fuelTankHealth>	0.5	</fuelTankHealth>
+      </moduleDamageFactors>
+      <shotData>
+        <shellName>	_100mm_UBR-412PB_default_ability_shell_WT	</shellName>
+        <shotPiercing100m>	1000	</shotPiercing100m>
+        <shotPiercing500m>	1000	</shotPiercing500m>
+        <shotSpeed>	2000	</shotSpeed>
+        <shotGravity>	9.81	</shotGravity>
+        <shotMaxDistance>	720	</shotMaxDistance>
+        <maxHeight>	100	</maxHeight>
+      </shotData>
+    </script>
+  </wt_charged_shot>
+  <wt_barrier>
+    <id>	913	</id>
+    <userString>	#white_tiger.artefacts.extend:wt_barrier/name	</userString>
+    <description>	#white_tiger.artefacts.extend:wt_barrier/descr	</description>
+    <shortDescriptionSpecial>	#white_tiger.artefacts.extend:wt_barrier/short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#white_tiger.artefacts.extend:wt_barrier/long_special	</longDescriptionSpecial>
+    <icon>	wt_barrier 0 0	</icon>
+    <soundNotification>	wt_ability	</soundNotification>
+    <soundPressedReady>	ev_white_tiger_ability_button	</soundPressedReady>
+    <soundPressedNotReady>	ev_white_tiger_ability_button_not_ready	</soundPressedNotReady>
+    <price>	0	</price>
+    <notInShop>	true	</notInShop>
+    <tags>	notForSale eventItem	</tags>
+    <rawTags>	lockShot	</rawTags>
+    <type>	regular	</type>
+    <subType>	activable	</subType>
+    <script>	white_tiger_common.wt_artefacts.WTBarrier	  <reuseCount>	-1	</reuseCount>
+      <cooldownSeconds>	45	</cooldownSeconds>
+      <settingDistance>	10	</settingDistance>
+      <duration>	30	</duration>
+      <staticPrefab>	content/WtPrefabs/abilities/BarrierStatic.prefab	</staticPrefab>
+      <components>
+        <component>
+          <name>	WTVehicleAbilityLock	</name>
+          <key>	wtAbilityLock	</key>
+          <params>
+            <vehicleParams>
+              <vehicle>
+                <name>	usa:A120_M48A5_hound_TLXXL	</name>
+                <lockedAbilities>	wt_group_repair wt_explosive_damage_shield	</lockedAbilities>
+              </vehicle>
+            </vehicleParams>
+          </params>
+        </component>
+        <component>
+          <name>	WTVehicleFactorAppliers	</name>
+          <key>	wtFactorAppliers	</key>
+          <params>
+            <factors>
+              <engine-power>	0.5	</engine-power>
+              <vehicle-maxSpeed-forward>	0.5	</vehicle-maxSpeed-forward>
+              <vehicle-maxSpeed-backward>	0.5	</vehicle-maxSpeed-backward>
+              <turret-rotationSpeed>	0.5	</turret-rotationSpeed>
+            </factors>
+          </params>
+        </component>
+      </components>
+    </script>
+  </wt_barrier>
+  <wt_dome>
+    <id>	925	</id>
+    <userString>	#white_tiger.artefacts.extend:wt_dome/name	</userString>
+    <description>	#white_tiger.artefacts.extend:wt_dome/descr	</description>
+    <shortDescriptionSpecial>	#white_tiger.artefacts.extend:wt_dome/short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#white_tiger.artefacts.extend:wt_dome/long_special	</longDescriptionSpecial>
+    <icon>	wt_dome 0 0	</icon>
+    <soundNotification>	wt_ability	</soundNotification>
+    <soundPressedReady>	ev_white_tiger_ability_button	</soundPressedReady>
+    <soundPressedNotReady>	ev_white_tiger_ability_button_not_ready	</soundPressedNotReady>
+    <price>	0	</price>
+    <notInShop>	true	</notInShop>
+    <tags>	notForSale eventItem	</tags>
+    <type>	regular	</type>
+    <subType>	activable	</subType>
+    <script>	white_tiger_common.wt_artefacts.WTDome	  <reuseCount>	-1	</reuseCount>
+      <cooldownSeconds>	120	</cooldownSeconds>
+      <receiveDamageFactor>	0	</receiveDamageFactor>
+      <moduleDamageFactor>	0	</moduleDamageFactor>
+      <objPrefab>	content/WtPrefabs/abilities/Dome.prefab	</objPrefab>
+    </script>
+  </wt_dome>
+  <wt_nitro>
+    <id>	914	</id>
+    <userString>	#white_tiger.artefacts.extend:wt_nitro/name	</userString>
+    <description>	#white_tiger.artefacts.extend:wt_nitro/descr	</description>
+    <shortDescriptionSpecial>	#white_tiger.artefacts.extend:wt_nitro/short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#white_tiger.artefacts.extend:wt_nitro/long_special	</longDescriptionSpecial>
+    <icon>	wt_nitro 0 0	</icon>
+    <soundNotification>	wt_ability	</soundNotification>
+    <soundPressedReady>	ev_white_tiger_ability_button	</soundPressedReady>
+    <soundPressedNotReady>	ev_white_tiger_ability_button_not_ready	</soundPressedNotReady>
+    <price>	0	</price>
+    <notInShop>	true	</notInShop>
+    <tags>	notForSale eventItem	</tags>
+    <type>	regular	</type>
+    <subType>	activable	</subType>
+    <usagePrefab>	content/WtPrefabs/Afterburning.prefab	</usagePrefab>
+    <script>	white_tiger_common.wt_artefacts.WTNitro	  <cooldownSeconds>	90	</cooldownSeconds>
+      <consumeSeconds>	10	</consumeSeconds>
+      <reuseCount>	-1	</reuseCount>
+      <factors>
+        <vehicle-maxSpeed>	1.5	</vehicle-maxSpeed>
+        <engine-power>	2	</engine-power>
+        <chassis-terrainResistance>	2.0 2.0 2.0	</chassis-terrainResistance>
+      </factors>
+    </script>
+  </wt_nitro>
+  <wt_damage_shield>
+    <id>	915	</id>
+    <userString>	#white_tiger.artefacts.extend:wt_damage_shield/name	</userString>
+    <description>	#white_tiger.artefacts.extend:wt_damage_shield/descr	</description>
+    <shortDescriptionSpecial>	#white_tiger.artefacts.extend:wt_damage_shield/short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#white_tiger.artefacts.extend:wt_damage_shield/long_special	</longDescriptionSpecial>
+    <icon>	wt_damage_shield 0 0	</icon>
+    <soundNotification>	wt_ability	</soundNotification>
+    <soundPressedReady>	ev_white_tiger_ability_button	</soundPressedReady>
+    <soundPressedNotReady>	ev_white_tiger_ability_button_not_ready	</soundPressedNotReady>
+    <price>	0	</price>
+    <notInShop>	true	</notInShop>
+    <tags>	notForSale eventItem	</tags>
+    <type>	regular	</type>
+    <subType>	activable	</subType>
+    <script>	white_tiger_common.wt_artefacts.WTDamageShield	  <cooldownSeconds>	120	</cooldownSeconds>
+      <durationSeconds>	5	</durationSeconds>
+      <reuseCount>	-1	</reuseCount>
+      <factors>
+        <vehicle-canBeDamaged>	False	</vehicle-canBeDamaged>
+      </factors>
+    </script>
+  </wt_damage_shield>
+  <wt_impulse_mod_a>
+    <id>	916	</id>
+    <userString>	#white_tiger.artefacts.extend:wt_impulse_mod_a/name	</userString>
+    <description>	#white_tiger.artefacts.extend:wt_impulse_mod_a/descr	</description>
+    <shortDescriptionSpecial>	#white_tiger.artefacts.extend:wt_impulse_mod_a/short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#white_tiger.artefacts.extend:wt_impulse_mod_a/long_special	</longDescriptionSpecial>
+    <icon>	wt_impulse_mod_a 0 0	</icon>
+    <soundNotification>	wt_ability	</soundNotification>
+    <soundPressedReady>	ev_white_tiger_ability_button	</soundPressedReady>
+    <soundPressedNotReady>	ev_white_tiger_ability_button_not_ready	</soundPressedNotReady>
+    <price>	0	</price>
+    <notInShop>	true	</notInShop>
+    <tags>	notForSale eventItem	</tags>
+    <type>	regular	</type>
+    <subType>	activable	</subType>
+    <script>	white_tiger_common.wt_artefacts.WTImpulseModA	  <reloadTimes>	20 18 16 14 12 10 8	</reloadTimes>
+      <cooldownSeconds>	30	</cooldownSeconds>
+      <consumeSeconds>	4	</consumeSeconds>
+      <radius>	35	</radius>
+      <debuffDuration>	10	</debuffDuration>
+      <reuseCount>	-1	</reuseCount>
+      <components>
+        <component>
+          <name>	WTVehicleFactorAppliers	</name>
+          <key>	wtFactorAppliers	</key>
+          <params>
+            <onceDamage>	100	</onceDamage>
+            <factors>
+              <vehicle-rotationSpeed>	0.5	</vehicle-rotationSpeed>
+              <engine-power>	0.5	</engine-power>
+              <vehicle-maxSpeed-forward>	0.5	</vehicle-maxSpeed-forward>
+              <vehicle-maxSpeed-backward>	0.5	</vehicle-maxSpeed-backward>
+              <gun-rotationSpeed>	0.5	</gun-rotationSpeed>
+              <turret-rotationSpeed>	0.5	</turret-rotationSpeed>
+            </factors>
+          </params>
+        </component>
+        <component>
+          <name>	WTVehicleAbilityLock	</name>
+          <key>	wtAbilityLock	</key>
+          <params>
+            <vehicleParams>
+              <vehicle>
+                <name>	ussr:R97_Object_140_hound_TLXXL	</name>
+                <lockedAbilities>	wt_explosive_shot wt_nitro wt_missile	</lockedAbilities>
+              </vehicle>
+              <vehicle>
+                <name>	usa:A120_M48A5_hound_TLXXL	</name>
+                <lockedAbilities>	wt_barrier wt_group_repair wt_explosive_damage_shield	</lockedAbilities>
+              </vehicle>
+              <vehicle>
+                <name>	france:F18_Bat_Chatillon25t_hound_TLXXL	</name>
+                <lockedAbilities>	wt_increase_damage wt_smoke_screen wt_damage_shield	</lockedAbilities>
+              </vehicle>
+              <vehicle>
+                <name>	czech:Cz04_T50_51_Waf_Hound_3DSt	</name>
+                <lockedAbilities>	wt_charged_shot wt_dome wt_clone	</lockedAbilities>
+              </vehicle>
+              <vehicle>
+                <name>	czech:Cz04_T50_51_Waf_Hound_3DSt_clone	</name>
+                <lockedAbilities></lockedAbilities>
+              </vehicle>
+            </vehicleParams>
+          </params>
+        </component>
+      </components>
+    </script>
+  </wt_impulse_mod_a>
+  <wt_vampirism>
+    <id>	917	</id>
+    <userString>	#white_tiger.artefacts.extend:wt_vampirism/name	</userString>
+    <description>	#white_tiger.artefacts.extend:wt_vampirism/descr	</description>
+    <shortDescriptionSpecial>	#white_tiger.artefacts.extend:wt_vampirism/short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#white_tiger.artefacts.extend:wt_vampirism/long_special	</longDescriptionSpecial>
+    <icon>	wt_vampirism 0 0	</icon>
+    <soundNotification>	wt_ability	</soundNotification>
+    <soundPressedReady>	ev_white_tiger_ability_button	</soundPressedReady>
+    <soundPressedNotReady>	ev_white_tiger_ability_button_not_ready	</soundPressedNotReady>
+    <price>	0	</price>
+    <notInShop>	true	</notInShop>
+    <tags>	notForSale eventItem	</tags>
+    <type>	regular	</type>
+    <subType>	passive	</subType>
+    <usagePrefab>	content/WtPrefabs/abilities/Vampirism_F18.prefab	</usagePrefab>
+    <script>	white_tiger_common.wt_artefacts.WTVampirism	  <partOfDamageToHP>	0.1	</partOfDamageToHP>
+      <reuseCount>	-1	</reuseCount>
+    </script>
+  </wt_vampirism>
+  <wt_explosive_shot>
+    <id>	918	</id>
+    <userString>	#white_tiger.artefacts.extend:wt_explosive_shot/name	</userString>
+    <description>	#white_tiger.artefacts.extend:wt_explosive_shot/descr	</description>
+    <shortDescriptionSpecial>	#white_tiger.artefacts.extend:wt_explosive_shot/short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#white_tiger.artefacts.extend:wt_explosive_shot/long_special	</longDescriptionSpecial>
+    <icon>	wt_explosive_shot 0 0	</icon>
+    <soundNotification>	wt_ability	</soundNotification>
+    <soundPressedReady>	ev_white_tiger_ability_button	</soundPressedReady>
+    <soundPressedNotReady>	ev_white_tiger_ability_button_not_ready	</soundPressedNotReady>
+    <price>	0	</price>
+    <notInShop>	true	</notInShop>
+    <tags>	notForSale eventItem	</tags>
+    <type>	regular	</type>
+    <subType>	activable	</subType>
+    <usagePrefab>	content/WtPrefabs/abilities/ExplosiveShot.prefab	</usagePrefab>
+    <script>	white_tiger_common.wt_artefacts.WTExplosiveShot	  <cooldownSeconds>	45	</cooldownSeconds>
+      <reuseCount>	-1	</reuseCount>
+      <damage>	200	</damage>
+      <damageRadius>	20	</damageRadius>
+      <shotData>
+        <shellName>	_100mm_UBR-412PB_default_ability_shell_WT	</shellName>
+        <shotPiercing100m>	1000	</shotPiercing100m>
+        <shotPiercing500m>	1000	</shotPiercing500m>
+        <shotSpeed>	1000	</shotSpeed>
+        <shotGravity>	9.81	</shotGravity>
+        <shotMaxDistance>	720	</shotMaxDistance>
+        <maxHeight>	100	</maxHeight>
+      </shotData>
+      <factors>
+        <multShotDispersionFactor>	2.0	</multShotDispersionFactor>
+      </factors>
+      <barrelFlashPrefab>	content/WtPrefabs/abilities/ExplosiveShotBarrelFlash.prefab	</barrelFlashPrefab>
+      <barrelFlashPrefabUnloadTimeoutAfterShot>	2.0	</barrelFlashPrefabUnloadTimeoutAfterShot>
+      <shotEffect>	explosive_shot_wt	</shotEffect>
+    </script>
+  </wt_explosive_shot>
+  <wt_decrease_reload_time>
+    <id>	919	</id>
+    <userString>	#white_tiger.artefacts.extend:wt_decrease_reload_time/name	</userString>
+    <description>	#white_tiger.artefacts.extend:wt_decrease_reload_time/descr	</description>
+    <shortDescriptionSpecial>	#white_tiger.artefacts.extend:wt_decrease_reload_time/short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#white_tiger.artefacts.extend:wt_decrease_reload_time/long_special	</longDescriptionSpecial>
+    <icon>	wt_decrease_reload_time 0 0	</icon>
+    <soundNotification>	wt_ability	</soundNotification>
+    <soundPressedReady>	ev_white_tiger_ability_button	</soundPressedReady>
+    <soundPressedNotReady>	ev_white_tiger_ability_button_not_ready	</soundPressedNotReady>
+    <price>	0	</price>
+    <notInShop>	true	</notInShop>
+    <tags>	notForSale eventItem	</tags>
+    <type>	regular	</type>
+    <subType>	passive	</subType>
+    <script>	white_tiger_common.wt_artefacts.WTDecreaseReloadTime	  <reuseCount>	-1	</reuseCount>
+      <ignoredReasons>	ability_shell missile	</ignoredReasons>
+      <components>
+        <component>
+          <name>	WTVehicleDynamicFactors	</name>
+          <key>	wtDynamicFactors	</key>
+          <params>
+            <factorsByLevel>
+              <level>
+                <factors>
+                  <gun-reloadTime>	0.9	</gun-reloadTime>
+                </factors>
+              </level>
+              <level>
+                <factors>
+                  <gun-reloadTime>	0.81	</gun-reloadTime>
+                </factors>
+              </level>
+              <level>
+                <factors>
+                  <gun-reloadTime>	0.73	</gun-reloadTime>
+                </factors>
+              </level>
+              <level>
+                <factors>
+                  <gun-reloadTime>	0.66	</gun-reloadTime>
+                </factors>
+              </level>
+              <level>
+                <factors>
+                  <gun-reloadTime>	0.59	</gun-reloadTime>
+                </factors>
+              </level>
+            </factorsByLevel>
+          </params>
+        </component>
+      </components>
+    </script>
+  </wt_decrease_reload_time>
+  <wt_group_repair>
+    <id>	920	</id>
+    <userString>	#white_tiger.artefacts.extend:wt_group_repair/name	</userString>
+    <description>	#white_tiger.artefacts.extend:wt_group_repair/descr	</description>
+    <shortDescriptionSpecial>	#white_tiger.artefacts.extend:wt_group_repair/short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#white_tiger.artefacts.extend:wt_group_repair/long_special	</longDescriptionSpecial>
+    <icon>	wt_group_repair 0 0	</icon>
+    <soundNotification>	wt_ability	</soundNotification>
+    <soundPressedReady>	ev_white_tiger_ability_button	</soundPressedReady>
+    <soundPressedNotReady>	ev_white_tiger_ability_button_not_ready	</soundPressedNotReady>
+    <price>	0	</price>
+    <notInShop>	true	</notInShop>
+    <tags>	notForSale eventItem	</tags>
+    <type>	regular	</type>
+    <subType>	activable	</subType>
+    <usagePrefab>	content/WtPrefabs/abilities/GroupRepairArea.prefab	</usagePrefab>
+    <script>	white_tiger_common.wt_artefacts.WTGroupRepair	  <cooldownSeconds>	90	</cooldownSeconds>
+      <reuseCount>	-1	</reuseCount>
+      <healRangeRadius>	20	</healRangeRadius>
+      <instantHealthRestore>	300	</instantHealthRestore>
+      <tickInterval>	1.0	</tickInterval>
+      <healAmountPerTick>	100	</healAmountPerTick>
+      <healingAreaDuration>	3	</healingAreaDuration>
+      <hunterVisualEffects>
+        <hunter>
+          <vehicle>	ussr:R97_Object_140_hound_TLXXL	</vehicle>
+          <prefab>	content/WtPrefabs/abilities/GroupRepair_R97.prefab	</prefab>
+        </hunter>
+        <hunter>
+          <vehicle>	usa:A120_M48A5_hound_TLXXL	</vehicle>
+          <prefab>	content/WtPrefabs/abilities/GroupRepair_A120.prefab	</prefab>
+        </hunter>
+        <hunter>
+          <vehicle>	france:F18_Bat_Chatillon25t_hound_TLXXL	</vehicle>
+          <prefab>	content/WtPrefabs/abilities/GroupRepair_F18.prefab	</prefab>
+        </hunter>
+        <hunter>
+          <vehicle>	czech:Cz04_T50_51_Waf_Hound_3DSt	</vehicle>
+          <prefab>	content/WtPrefabs/abilities/GroupRepair_Cz04.prefab	</prefab>
+        </hunter>
+        <hunter>
+          <vehicle>	czech:Cz04_T50_51_Waf_Hound_3DSt_clone	</vehicle>
+          <prefab>	content/WtPrefabs/abilities/GroupRepair_Cz04.prefab	</prefab>
+        </hunter>
+      </hunterVisualEffects>
+    </script>
+  </wt_group_repair>
+  <wt_missile>
+    <id>	921	</id>
+    <userString>	#white_tiger.artefacts.extend:wt_missile/name	</userString>
+    <description>	#white_tiger.artefacts.extend:wt_missile/descr	</description>
+    <shortDescriptionSpecial>	#white_tiger.artefacts.extend:wt_missile/short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#white_tiger.artefacts.extend:wt_missile/long_special	</longDescriptionSpecial>
+    <icon>	wt_missile 0 0	</icon>
+    <soundNotification>	wt_ability	</soundNotification>
+    <soundPressedReady>	ev_white_tiger_ability_button	</soundPressedReady>
+    <soundPressedNotReady>	ev_white_tiger_ability_button_not_ready	</soundPressedNotReady>
+    <price>	0	</price>
+    <notInShop>	true	</notInShop>
+    <tags>	notForSale eventItem	</tags>
+    <rawTags>	lockShot	</rawTags>
+    <type>	regular	</type>
+    <subType>	activable	</subType>
+    <script>	white_tiger_common.wt_artefacts.WTMissile	  <reuseCount>	-1	</reuseCount>
+      <cooldownSeconds>	90	</cooldownSeconds>
+      <consumeSeconds>	7	</consumeSeconds>
+      <missilePrefab>	content/WtPrefabs/abilities/MissileProjectile.prefab	</missilePrefab>
+      <components>
+        <component>
+          <name>	WTVehicleAbilityLock	</name>
+          <key>	wtAbilityLock	</key>
+          <params>
+            <vehicleParams>
+              <vehicle>
+                <name>	ussr:R97_Object_140_hound_TLXXL	</name>
+                <lockedAbilities>	wt_explosive_shot wt_nitro	</lockedAbilities>
+              </vehicle>
+            </vehicleParams>
+          </params>
+        </component>
+      </components>
+    </script>
+  </wt_missile>
+  <wt_plasma_retention>
+    <id>	922	</id>
+    <userString>	#white_tiger.artefacts.extend:wt_plasma_retention/name	</userString>
+    <description>	#white_tiger.artefacts.extend:wt_plasma_retention/descr	</description>
+    <shortDescriptionSpecial>	#white_tiger.artefacts.extend:wt_plasma_retention/short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#white_tiger.artefacts.extend:wt_plasma_retention/long_special	</longDescriptionSpecial>
+    <icon>	wt_plasma_retention 0 0	</icon>
+    <soundNotification>	wt_ability	</soundNotification>
+    <soundPressedReady>	ev_white_tiger_ability_button	</soundPressedReady>
+    <soundPressedNotReady>	ev_white_tiger_ability_button_not_ready	</soundPressedNotReady>
+    <price>	0	</price>
+    <notInShop>	true	</notInShop>
+    <tags>	notForSale eventItem	</tags>
+    <type>	regular	</type>
+    <subType>	passive	</subType>
+    <script>	white_tiger_common.wt_artefacts.WTPlasmaRetention	  <reuseCount>	-1	</reuseCount>
+      <plasmaSavedOnDeath>	2	</plasmaSavedOnDeath>
+    </script>
+  </wt_plasma_retention>
+  <wt_increase_damage>
+    <id>	923	</id>
+    <userString>	#white_tiger.artefacts.extend:wt_increase_damage/name	</userString>
+    <description>	#white_tiger.artefacts.extend:wt_increase_damage/descr	</description>
+    <shortDescriptionSpecial>	#white_tiger.artefacts.extend:wt_increase_damage/short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#white_tiger.artefacts.extend:wt_increase_damage/long_special	</longDescriptionSpecial>
+    <icon>	wt_increase_damage 0 0	</icon>
+    <soundNotification>	wt_ability	</soundNotification>
+    <soundPressedReady>	ev_white_tiger_ability_button	</soundPressedReady>
+    <soundPressedNotReady>	ev_white_tiger_ability_button_not_ready	</soundPressedNotReady>
+    <price>	0	</price>
+    <notInShop>	true	</notInShop>
+    <tags>	notForSale eventItem	</tags>
+    <type>	regular	</type>
+    <subType>	activable	</subType>
+    <usagePrefab>	content/WtPrefabs/abilities/Azart_F18.prefab	</usagePrefab>
+    <script>	white_tiger_common.wt_artefacts.WTIncreaseDamage	  <reuseCount>	-1	</reuseCount>
+      <cooldownSeconds>	45	</cooldownSeconds>
+      <components>
+        <component>
+          <name>	WTVehicleDynamicFactors	</name>
+          <key>	wtDynamicFactors	</key>
+          <params>
+            <factorsByLevel>
+              <level>
+                <factors>
+                  <damageFactor>	1.1	</damageFactor>
+                </factors>
+              </level>
+              <level>
+                <factors>
+                  <damageFactor>	1.21	</damageFactor>
+                </factors>
+              </level>
+              <level>
+                <factors>
+                  <damageFactor>	1.33	</damageFactor>
+                </factors>
+              </level>
+              <level>
+                <factors>
+                  <damageFactor>	1.46	</damageFactor>
+                </factors>
+              </level>
+              <level>
+                <factors>
+                  <damageFactor>	1.61	</damageFactor>
+                </factors>
+              </level>
+            </factorsByLevel>
+          </params>
+        </component>
+      </components>
+    </script>
+  </wt_increase_damage>
+  <wt_extractor_shot>
+    <id>	924	</id>
+    <userString>	#white_tiger.artefacts.extend:wt_extractor_shot/name	</userString>
+    <description>	#white_tiger.artefacts.extend:wt_extractor_shot/descr	</description>
+    <shortDescriptionSpecial>	#white_tiger.artefacts.extend:wt_extractor_shot/short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#white_tiger.artefacts.extend:wt_extractor_shot/long_special	</longDescriptionSpecial>
+    <icon>	wt_extractor_shot 0 0	</icon>
+    <soundNotification>	wt_ability	</soundNotification>
+    <soundPressedReady>	ev_white_tiger_ability_button	</soundPressedReady>
+    <soundPressedNotReady>	ev_white_tiger_ability_button_not_ready	</soundPressedNotReady>
+    <price>	0	</price>
+    <notInShop>	true	</notInShop>
+    <tags>	notForSale eventItem	</tags>
+    <type>	regular	</type>
+    <subType>	activable	</subType>
+    <script>	white_tiger_common.wt_artefacts.WTExtractorShot	  <cooldownSeconds>	30	</cooldownSeconds>
+      <reuseCount>	-1	</reuseCount>
+      <damageRadius>	20	</damageRadius>
+      <shotData>
+        <shellName>	_130mm_UBR-482_D_plasma_extractor_WT	</shellName>
+        <shotPiercing100m>	1000	</shotPiercing100m>
+        <shotPiercing500m>	1000	</shotPiercing500m>
+        <shotSpeed>	900	</shotSpeed>
+        <shotGravity>	9.81	</shotGravity>
+        <shotMaxDistance>	720	</shotMaxDistance>
+        <maxHeight>	100	</maxHeight>
+      </shotData>
+      <damageMultiplierPerPlasma>	0.25	</damageMultiplierPerPlasma>
+      <maxPlasmaTakeFromHunter>	1	</maxPlasmaTakeFromHunter>
+      <maxPlasmaCounter>	4	</maxPlasmaCounter>
+      <debuffDuration>	8	</debuffDuration>
+      <components>
+        <component>
+          <name>	WTVehicleFactorAppliers	</name>
+          <key>	wtFactorAppliers	</key>
+          <params>
+            <onceDamage>	50	</onceDamage>
+            <factors>
+              <vehicle-rotationSpeed>	0.5	</vehicle-rotationSpeed>
+              <engine-power>	0.5	</engine-power>
+              <vehicle-maxSpeed-forward>	0.5	</vehicle-maxSpeed-forward>
+              <vehicle-maxSpeed-backward>	0.5	</vehicle-maxSpeed-backward>
+              <gun-rotationSpeed>	0.5	</gun-rotationSpeed>
+              <turret-rotationSpeed>	0.5	</turret-rotationSpeed>
+            </factors>
+          </params>
+        </component>
+      </components>
+      <visualEffects>
+        <sequences>
+          <owner>
+            <sequence>
+              <sequenceID>	0	</sequenceID>
+              <path>	particles/eff_sequence/event_white_tiger/wt_shot_large_ability_suction.eff.seq	</path>
+              <bindNode>	HP_gunFire	</bindNode>
+              <loopCount>	1	</loopCount>
+              <duration>	1.0	</duration>
+            </sequence>
+            <sequence>
+              <sequenceID>	1	</sequenceID>
+              <path>	particles/Environment/event_white_tiger/player_tank/suction/wt_ability_suction_in.seq	</path>
+              <bindNode>	hull	</bindNode>
+              <loopCount>	1	</loopCount>
+              <duration>	3.500000	</duration>
+            </sequence>
+            <sequence>
+              <sequenceID>	2	</sequenceID>
+              <path>	particles/Environment/event_white_tiger/player_tank/suction/wt_ability_suction_out.seq	</path>
+              <bindNode>	hull	</bindNode>
+              <loopCount>	1	</loopCount>
+              <duration>	3.700000	</duration>
+            </sequence>
+          </owner>
+        </sequences>
+      </visualEffects>
+    </script>
+  </wt_extractor_shot>
+  <wt_smoke_screen>
+    <id>	967	</id>
+    <userString>	#white_tiger.artefacts.extend:wt_smoke_screen/name	</userString>
+    <description>	#white_tiger.artefacts.extend:wt_smoke_screen/descr	</description>
+    <shortDescriptionSpecial>	#white_tiger.artefacts.extend:wt_smoke_screen/short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#white_tiger.artefacts.extend:wt_smoke_screen/long_special	</longDescriptionSpecial>
+    <icon>	wt_smoke_screen 0 0	</icon>
+    <soundNotification>	wt_ability	</soundNotification>
+    <soundPressedReady>	ev_white_tiger_ability_button	</soundPressedReady>
+    <soundPressedNotReady>	ev_white_tiger_ability_button_not_ready	</soundPressedNotReady>
+    <price>	0	</price>
+    <notInShop>	true	</notInShop>
+    <tags>	notForSale eventItem	</tags>
+    <type>	regular	</type>
+    <subType>	activable	</subType>
+    <script>	white_tiger_common.wt_artefacts.WTSmokeScreen	  <shortDescription>	#white_tiger.artefacts.extend:wt_smoke_screen/short_special	</shortDescription>
+      <longDescription>	#white_tiger.artefacts.extend:wt_smoke_screen/long_special	</longDescription>
+      <consumeAmmo>	true	</consumeAmmo>
+      <cooldownSeconds>	90	</cooldownSeconds>
+      <reuseCount>	-1	</reuseCount>
+      <totalDuration>	30	</totalDuration>
+      <shortFilterAlert></shortFilterAlert>
+      <longFilterAlert></longFilterAlert>
+      <tooltips>	cooldownTime minDelay areaLength_areaWidth-targetedArea projectilesNumber totalDuration attrFactorMods/circularVisionRadius attrFactorMods/crewRolesFactor	</tooltips>
+      <cooldownFactors></cooldownFactors>
+      <sharedCooldownTime>	0	</sharedCooldownTime>
+      <consumeAmmo>	true	</consumeAmmo>
+      <disableAllyDamage>	false	</disableAllyDamage>
+      <cooldownTimeRespawnFactor>	1	</cooldownTimeRespawnFactor>
+      <reserveUnlockFactor>	1	</reserveUnlockFactor>
+      <startCooldownTimeFactor>	1	</startCooldownTimeFactor>
+      <minDelay>	1.0	</minDelay>
+      <deltaDelayRange>	0.1 0.3	</deltaDelayRange>
+      <smokeModelName>	objects/misc/server_smoke/cylinder1.model	</smokeModelName>
+      <smokeEffectNameAlly>	SmokeScreenEffect_lev1/ally	</smokeEffectNameAlly>
+      <smokeEffectNameEnemy>	SmokeScreenEffect_lev1/enemy	</smokeEffectNameEnemy>
+      <startRadius>	20.	</startRadius>
+      <expandedRadius>	50.	</expandedRadius>
+      <startHeight>	10.	</startHeight>
+      <expandedHeight>	40.	</expandedHeight>
+      <heightUpFraction>	0.7	</heightUpFraction>
+      <expansionDuration>	2.	</expansionDuration>
+      <dispersionRadius>	1.	</dispersionRadius>
+      <smokeOpacity>	10.	</smokeOpacity>
+      <attrFactorMods>
+        <circularVisionRadius>
+          <value>	-0.9	</value>
+          <ignoreAllies>	True	</ignoreAllies>
+        </circularVisionRadius>
+        <crewRolesFactor>
+          <value>	-0.25	</value>
+          <ignoreAllies>	True	</ignoreAllies>
+        </crewRolesFactor>
+      </attrFactorMods>
+      <postEffect>
+        <enemy></enemy>
+      </postEffect>
+      <areaLength>	75	</areaLength>
+      <areaWidth>	75	</areaWidth>
+      <projectilesNumber>	1	</projectilesNumber>
+      <shellCompactDescr>	64538	</shellCompactDescr>
+      <noOwner>	false	</noOwner>
+      <vignetteColor>	200 200 200	</vignetteColor>
+      <vignetteIntensity>	0.08	</vignetteIntensity>
+    </script>
+  </wt_smoke_screen>
+  <wt_stun_area_mod_a>
+    <id>	970	</id>
+    <userString>	#white_tiger.artefacts.extend:wt_stun_area_mod_a/name	</userString>
+    <description>	#white_tiger.artefacts.extend:wt_stun_area_mod_a/descr	</description>
+    <shortDescriptionSpecial>	#white_tiger.artefacts.extend:wt_stun_area_mod_a/short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#white_tiger.artefacts.extend:wt_stun_area_mod_a/long_special	</longDescriptionSpecial>
+    <icon>	wt_ability_stunAreaModA 0 0	</icon>
+    <soundNotification>	wt_ability	</soundNotification>
+    <soundPressedReady>	ev_white_tiger_ability_button	</soundPressedReady>
+    <soundPressedNotReady>	ev_white_tiger_ability_button_not_ready	</soundPressedNotReady>
+    <price>	0	</price>
+    <notInShop>	true	</notInShop>
+    <tags>	notForSale eventItem	</tags>
+    <type>	regular	</type>
+    <subType>	activable	</subType>
+    <script>	white_tiger_common.wt_artefacts.WTStunAreaModA	  <reuseCount>	-1	</reuseCount>
+      <cooldownSeconds>	60	</cooldownSeconds>
+      <debuffDuration>	5	</debuffDuration>
+      <components>
+        <component>
+          <name>	WTVehicleFactorAppliers	</name>
+          <key>	wtFactorAppliers	</key>
+          <params>
+            <onceDamage>	200	</onceDamage>
+            <factors>
+              <vehicle-rotationSpeed>	0.0001	</vehicle-rotationSpeed>
+              <engine-power>	0.0001	</engine-power>
+              <vehicle-maxSpeed-forward>	0.0001	</vehicle-maxSpeed-forward>
+              <vehicle-maxSpeed-backward>	0.0001	</vehicle-maxSpeed-backward>
+              <gun-rotationSpeed>	0.0001	</gun-rotationSpeed>
+              <turret-rotationSpeed>	0.0001	</turret-rotationSpeed>
+            </factors>
+          </params>
+        </component>
+        <component>
+          <name>	WTVehicleAbilityLock	</name>
+          <key>	wtAbilityLock	</key>
+          <params>
+            <vehicleParams>
+              <vehicle>
+                <name>	ussr:R97_Object_140_hound_TLXXL	</name>
+                <lockedAbilities>	wt_explosive_shot wt_nitro wt_missile wt_repairkit wt_medkit	</lockedAbilities>
+              </vehicle>
+              <vehicle>
+                <name>	usa:A120_M48A5_hound_TLXXL	</name>
+                <lockedAbilities>	wt_barrier wt_group_repair wt_repairkit wt_medkit wt_explosive_damage_shield	</lockedAbilities>
+              </vehicle>
+              <vehicle>
+                <name>	france:F18_Bat_Chatillon25t_hound_TLXXL	</name>
+                <lockedAbilities>	wt_damage_shield wt_repairkit wt_medkit wt_smoke_screen wt_increase_damage	</lockedAbilities>
+              </vehicle>
+              <vehicle>
+                <name>	czech:Cz04_T50_51_Waf_Hound_3DSt	</name>
+                <lockedAbilities>	wt_charged_shot wt_clone wt_repairkit wt_medkit wt_dome	</lockedAbilities>
+              </vehicle>
+              <vehicle>
+                <name>	czech:Cz04_T50_51_Waf_Hound_3DSt_clone	</name>
+                <lockedAbilities></lockedAbilities>
+              </vehicle>
+            </vehicleParams>
+          </params>
+        </component>
+      </components>
+      <damageRadius>	25	</damageRadius>
+      <visualEffects>
+        <sequences>
+          <owner>
+            <sequence>
+              <path>	particles/Environment/event_white_tiger/player_tank/electromagnetic_field/Electro_Ring.seq	</path>
+              <bindNode>	hull	</bindNode>
+              <loopCount>	1	</loopCount>
+            </sequence>
+          </owner>
+          <enemy>
+            <sequence>
+              <path>	particles/eff_sequence/event_white_tiger/wt_ability_debuff.seq	</path>
+              <bindNode>	hull	</bindNode>
+            </sequence>
+          </enemy>
+        </sequences>
+      </visualEffects>
+    </script>
+  </wt_stun_area_mod_a>
+  <wt_explosive_damage_shield>
+    <id>	973	</id>
+    <userString>	#white_tiger.artefacts.extend:wt_explosive_damage_shield/name	</userString>
+    <description>	#white_tiger.artefacts.extend:wt_explosive_damage_shield/descr	</description>
+    <shortDescriptionSpecial>	#white_tiger.artefacts.extend:wt_explosive_damage_shield/short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#white_tiger.artefacts.extend:wt_explosive_damage_shield/long_special	</longDescriptionSpecial>
+    <icon>	wt_explosive_damage_shield 0 0	</icon>
+    <soundNotification>	wt_ability	</soundNotification>
+    <soundPressedReady>	ev_white_tiger_ability_button	</soundPressedReady>
+    <soundPressedNotReady>	ev_white_tiger_ability_button_not_ready	</soundPressedNotReady>
+    <price>	0	</price>
+    <notInShop>	true	</notInShop>
+    <tags>	notForSale eventItem	</tags>
+    <type>	regular	</type>
+    <subType>	activable	</subType>
+    <usagePrefab>	content/WtPrefabs/abilities/ExplosiveShield_A120.prefab	</usagePrefab>
+    <script>	white_tiger_common.wt_artefacts.WTExplosiveDamageShield	  <cooldownSeconds>	120	</cooldownSeconds>
+      <consumeSeconds>	15	</consumeSeconds>
+      <reuseCount>	-1	</reuseCount>
+      <damageRadius>	35	</damageRadius>
+      <maxDamage>	800	</maxDamage>
+      <explosionDamageFactor>	1	</explosionDamageFactor>
+      <factors>
+        <vehicle-canBeDamaged>	False	</vehicle-canBeDamaged>
+      </factors>
+    </script>
+  </wt_explosive_damage_shield>
+</equipments.xml>

@@ -81,6 +81,8 @@ ORDERS_FILTER = 'ORDERS_FILTER'
 CURRENT_VEHICLE = 'current'
 ROYALE_VEHICLE = 'ROYALE_VEHICLE'
 BOOTCAMP_VEHICLE = 'BOOTCAMP_VEHICLE'
+EVENT_VEHICLE = 'EVENT_VEHICLE'
+EVENT_SAVED_VEHICLE = 'EVENT_SAVED_VEHICLE'
 LOBBY_MENU_MANUAL_TRIGGER_SHOWN = 'lobby_menu_manual_trigger_shown'
 LOBBY_MENU_BOOTCAMP_TRIGGER_SHOWN = 'lobby_menu_bootcamp_trigger_shown'
 MANUAL_NEW_CONTENT = 'manual_new_content'
@@ -177,9 +179,6 @@ FUN_RANDOM_HINT_SECTION = 'funRandomHintSection'
 MAPBOX_HINT_SECTION = 'mapboxHintSection'
 QUEST_PROGRESS_HINT_SECTION = 'questProgressHint'
 HELP_SCREEN_HINT_SECTION = 'helpScreenHint'
-IBC_HINT_SECTION = 'battleCommunicationHint'
-RESERVES_HINT_SECTION = 'reservesHintSection'
-COMMANDER_CAM_HINT_SECTION = 'commanderCamHintSection'
 MINIMAP_IBC_HINT_SECTION = 'minimapHintSection'
 DEV_MAPS_HINT_SECTION = 'devMapsHintSection'
 WATCHED_PRE_BATTLE_TIPS_SECTION = 'watchedPreBattleTipsSection'
@@ -264,6 +263,11 @@ LOOT_BOXES_SHORT_STAT_STATE = 'lootBoxesShortStatState'
 LOOT_BOXES_STATS_HINT_STATE = 'lootBoxesStatsHintState'
 LOOT_BOXES_STATS_NO_BOX_HINT_STATE = 'lootBoxesStatsNoBoxHintState'
 KEY_LOOTBOX_TRIGGER_HINT_SHOWN = 'keyLootboxTriggerHintShown'
+LOOT_BOXES = 'lootBoxes'
+EVENT_LOOT_BOXES = 'eventLootBoxes'
+LOOT_BOXES_WAS_STARTED = 'lootBoxesWasStarted'
+LOOT_BOXES_WAS_FINISHED = 'lootBoxesWasFinished'
+LOOT_BOXES_EVENT_UNIQUE_ID = 'lootBoxesEventUniqueID'
 COLLECTIONS_SECTION = 'collections'
 COLLECTIONS_INTRO_SHOWN = 'collectionsIntroShown'
 COLLECTION_SHOWN_NEW_REWARDS = 'collectionsNewRewards'
@@ -313,6 +317,10 @@ NY_FIRST_VIDEO_SHUFFLE = 'NYFirstVideoShuffle'
 NY_ACTIVE_WIDGET_TRANSITION_SHOWN = 'NyActiveWidgetTransitionShown'
 NY_PET_SLOT_VISITED = 'NyPetSlotVisited'
 NY_GREETINGS_SEEN = 'NYGreetingsSeen'
+EVENT_LAST_LEVEL_SEEN = 'eventLastLevelSeen'
+EVENT_LAST_STAMPS_SEEN = 'eventLastStampsSeen'
+WT_PROGRESSION_QUESTS_TAB = 'wtProgressionQuestsTab'
+IS_LAUNCH_ANIMATED = 'isLaunchAnimated'
 PREMIUM_QUESTS_NOTIFICATION = 'PremiumPurchased'
 DEFERRED_LOG_PLAYER_SETTINGS_ACTIONS = 'DeferredLogPlayerSettingsActions'
 DYNAMIC_SETTINGS_REPOSITORY = 'dynamicSettingsRepository'
@@ -324,6 +332,11 @@ class BattleMatters(object):
     QUEST_IDX_FOR_LAST_UPDATED_PROGRESS = 'progressForQuest'
     LAST_QUEST_PROGRESS = 'lastQuestProgress'
     REMINDER_LAST_DISPLAY_TIME = 'reminderLastDisplayTime'
+
+
+class TankAcademy(object):
+    TANK_ACADEMY_SETTINGS = 'tankAcademySettings'
+    CURRENT_QUEST_ORDER = 'currentQuestOrder'
 
 
 class Winback(object):
@@ -1036,6 +1049,8 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
  KEY_FAVORITES: {BOOTCAMP_VEHICLE: 0,
                  CURRENT_VEHICLE: 0,
                  ROYALE_VEHICLE: 0,
+                 EVENT_VEHICLE: 0,
+                 EVENT_SAVED_VEHICLE: None,
                  FALLOUT_VEHICLES: {}},
  KEY_MANUAL: {LOBBY_MENU_MANUAL_TRIGGER_SHOWN: False,
               LOBBY_MENU_BOOTCAMP_TRIGGER_SHOWN: False,
@@ -1174,6 +1189,7 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                 'replayEnabled': 2,
                 'sniperZoom': 0,
                 GAME.SNIPER_MODE_STABILIZATION: True,
+                GAME.ENABLE_BATTLE_CONTEXT_HINTS: True,
                 GAME.SWITCH_SETUPS_IN_LOADING: None,
                 GAME.HULLLOCK_ENABLED: True,
                 GAME.PRE_COMMANDER_CAM: True,
@@ -1350,14 +1366,11 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                 PRE_BATTLE_HINT_SECTION: {QUEST_PROGRESS_HINT_SECTION: {HINTS_LEFT: 3,
                                                                         LAST_DISPLAY_DAY: 0,
                                                                         NUM_BATTLES: 0},
-                                          HELP_SCREEN_HINT_SECTION: {},
-                                          IBC_HINT_SECTION: {HINTS_LEFT: 10},
-                                          RESERVES_HINT_SECTION: {HINTS_LEFT: 10}},
+                                          HELP_SCREEN_HINT_SECTION: {}},
                 PRE_BATTLE_ROLE_HINT_SECTION: {},
                 FUN_RANDOM_HINT_SECTION: {},
                 MAPBOX_HINT_SECTION: {},
                 DEV_MAPS_HINT_SECTION: {},
-                COMMANDER_CAM_HINT_SECTION: {HINTS_LEFT: 5},
                 MINIMAP_IBC_HINT_SECTION: {HINTS_LEFT: 10},
                 WATCHED_PRE_BATTLE_TIPS_SECTION: {},
                 SIEGE_HINT_SECTION: {HINTS_LEFT: 3,
@@ -1400,6 +1413,10 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                 RANKED_YEAR_POSITION: None,
                 TOP_OF_TREE_CONFIG: {},
                 BECOME_ELITE_VEHICLES_WATCHED: set(),
+                EVENT_LAST_STAMPS_SEEN: 0,
+                EVENT_LAST_LEVEL_SEEN: 0,
+                WT_PROGRESSION_QUESTS_TAB: 1,
+                IS_LAUNCH_ANIMATED: True,
                 GAME.GAMEPLAY_ONLY_10_MODE: False,
                 GAME.GAMEPLAY_DEV_MAPS: True,
                 MAPBOX_PROGRESSION: {'previous_battles_played': 0,
@@ -1429,8 +1446,14 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                                         BattleMatters.QUEST_IDX_FOR_LAST_UPDATED_PROGRESS: 0,
                                                         BattleMatters.LAST_QUEST_PROGRESS: 0,
                                                         BattleMatters.REMINDER_LAST_DISPLAY_TIME: 0},
+                TankAcademy.TANK_ACADEMY_SETTINGS: {TankAcademy.CURRENT_QUEST_ORDER: 0},
                 BR_PROGRESSION_POINTS_SEEN: 0,
                 ROYALE_INTRO_VIDEO_SHOWN: False,
+                LOOT_BOXES: {EVENT_LOOT_BOXES: {LOOT_BOXES_WAS_STARTED: False,
+                                                LOOT_BOXES_WAS_FINISHED: False,
+                                                LOOT_BOXES_OPEN_ANIMATION_ENABLED: True,
+                                                LOOT_BOXES_VIEWED_COUNT: 0,
+                                                LOOT_BOXES_EVENT_UNIQUE_ID: 0}},
                 Winback.WINBACK_SETTINGS: {Winback.INTRO_LAST_TIME_SHOWN: 0,
                                            Winback.NEED_SHOW_INTRO: True,
                                            Winback.HAS_LEFT_VERSUS_AI_FROM_WINBACK: False,
@@ -1749,7 +1772,7 @@ def _recursiveStep(defaultDict, savedDict, finalDict):
 
 class AccountSettings(object):
     onSettingsChanging = Event.Event()
-    version = 80
+    version = 81
     settingsCore = dependency.descriptor(ISettingsCore)
     __cache = {'login': None,
      'section': None}
@@ -2183,20 +2206,7 @@ class AccountSettings(object):
                             counterSettings.write(flushName, _pack(1))
 
             if currVersion < 42:
-                for key, section in _filterAccountSection(ads):
-                    accSettings = AccountSettings._readSection(section, KEY_SETTINGS)
-                    if PRE_BATTLE_HINT_SECTION in accSettings.keys():
-                        preBattleSection = DEFAULT_VALUES[KEY_SETTINGS][PRE_BATTLE_HINT_SECTION].copy()
-                        defPre = DEFAULT_VALUES[KEY_SETTINGS][PRE_BATTLE_HINT_SECTION].copy()[IBC_HINT_SECTION]
-                        for key1, section1 in accSettings.items()[:]:
-                            if key1 == PRE_BATTLE_HINT_SECTION:
-                                preBattleSection = _unpack(section1.asString)
-                                preBattleSection[IBC_HINT_SECTION] = defPre
-                                accSettings.deleteSection(key1)
-                                break
-
-                        accSettings.write('preBattleHintSection', _pack(preBattleSection))
-
+                pass
             if currVersion < 43:
                 AccountSettings.checkAndResetFireKeyIfInUse(expectedCommand='CMD_CHAT_SHORTCUT_THANKYOU', expectedKey='KEY_F3')
                 AccountSettings.checkAndResetFireKeyIfInUse(expectedCommand='CMD_CHAT_SHORTCUT_CONTEXT_COMMIT', expectedKey='KEY_F2')
@@ -2295,20 +2305,7 @@ class AccountSettings(object):
                         keySettings.deleteSection(obsoleteKey)
 
             if currVersion < 55:
-                for key, section in _filterAccountSection(ads):
-                    accSettings = AccountSettings._readSection(section, KEY_SETTINGS)
-                    if PRE_BATTLE_HINT_SECTION in accSettings.keys():
-                        preBattleSection = DEFAULT_VALUES[KEY_SETTINGS][PRE_BATTLE_HINT_SECTION].copy()
-                        defPre = preBattleSection[RESERVES_HINT_SECTION].copy()
-                        for key1, section1 in accSettings.items()[:]:
-                            if key1 == PRE_BATTLE_HINT_SECTION:
-                                preBattleSection = _unpack(section1.asString)
-                                preBattleSection[RESERVES_HINT_SECTION] = defPre
-                                accSettings.deleteSection(key1)
-                                break
-
-                        accSettings.write(PRE_BATTLE_HINT_SECTION, _pack(preBattleSection))
-
+                pass
             if currVersion < 56:
                 for key, section in _filterAccountSection(ads):
                     keySettings = AccountSettings._readSection(section, KEY_SETTINGS)
@@ -2507,6 +2504,18 @@ class AccountSettings(object):
                         mtBirthdaySettings['BONUS_RECEIVED'] = False
                         accSettings.write(mtBirthdayKey, _pack(mtBirthdaySettings))
 
+            if currVersion < 81:
+                for key, section in _filterAccountSection(ads):
+                    accSettings = AccountSettings._readSection(section, KEY_SETTINGS)
+                    if 'commanderCamHintSection' in accSettings.keys():
+                        accSettings.deleteSection('commanderCamHintSection')
+                    if PRE_BATTLE_HINT_SECTION in accSettings.keys():
+                        preBattleSection = _unpack(accSettings[PRE_BATTLE_HINT_SECTION].asString)
+                        for hintKey in ('battleCommunicationHint', 'reservesHintSection'):
+                            preBattleSection.pop(hintKey, None)
+
+                        accSettings.write(PRE_BATTLE_HINT_SECTION, _pack(preBattleSection))
+
             ads.writeInt('version', AccountSettings.version)
         return
 
@@ -2668,6 +2677,19 @@ class AccountSettings(object):
             cls._setValue(BattleMatters.BATTLE_MATTERS_SETTINGS, bmSection, KEY_SETTINGS)
         else:
             _logger.error("Cann't set value in %s section for %s.", BattleMatters.BATTLE_MATTERS_SETTINGS, name)
+
+    @classmethod
+    def getTankAcademySetting(cls, name):
+        return cls.getSettings(TankAcademy.TANK_ACADEMY_SETTINGS).get(name)
+
+    @classmethod
+    def setTankAcademySetting(cls, name, value):
+        taSection = cls.getSettings(TankAcademy.TANK_ACADEMY_SETTINGS)
+        if name in taSection:
+            taSection[name] = value
+            cls._setValue(TankAcademy.TANK_ACADEMY_SETTINGS, taSection, KEY_SETTINGS)
+        else:
+            _logger.error("Cann't set value in %s section for %s.", TankAcademy.TANK_ACADEMY_SETTINGS, name)
 
     @staticmethod
     def getArmoryYard(name):

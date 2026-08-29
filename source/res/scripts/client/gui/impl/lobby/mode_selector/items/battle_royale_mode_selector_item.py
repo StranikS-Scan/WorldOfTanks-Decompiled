@@ -114,4 +114,3 @@ class BattleRoyaleModeSelectorItem(ModeSelectorLegacyItem):
             vm.setCurrentStage(data['currentStage'])
             vm.setStageCurrentPoints(data['stagePoints'])
             vm.setStageMaximumPoints(data['stageMaxPoints'])
-            vm.setIconPostfix(self.brProgression.getBirthdayIconPostfix())

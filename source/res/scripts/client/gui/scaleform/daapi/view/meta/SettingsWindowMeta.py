@@ -96,3 +96,18 @@ class SettingsWindowMeta(AbstractWindowView):
 
     def as_setDisabledTabsOverlayS(self, tabIndexes, text):
         return self.flashObject.as_setDisabledTabsOverlay(tabIndexes, text) if self._isDAAPIInited() else None
+
+    def as_setBattleContextHintsEnabledS(self, isEnabled):
+        return self.flashObject.as_setBattleContextHintsEnabled(isEnabled) if self._isDAAPIInited() else None
+
+    def as_setBattleContextHintsResetEnabledS(self, isEnabled):
+        return self.flashObject.as_setBattleContextHintsResetEnabled(isEnabled) if self._isDAAPIInited() else None
+
+    def as_setTigerEventS(self, isInEvent):
+        return self.flashObject.as_setTigerEvent(isInEvent) if self._isDAAPIInited() else None
+
+    def as_setVOIPTestReadyS(self, value):
+        return self.flashObject.as_setVOIPTestReady(value) if self._isDAAPIInited() else None
+
+    def as_setVOIPButtonStateS(self, enabled):
+        return self.flashObject.as_setVOIPButtonState(enabled) if self._isDAAPIInited() else None

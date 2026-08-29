@@ -80,6 +80,21 @@ class VOIPHandler(object):
     def onParticipantUpdated(self, data):
         pass
 
+    def channelAvailable(self, channel, token, isRejoin, isEchoChannel):
+        pass
+
+    def channelLost(self):
+        pass
+
+    def credentialReceived(self, name, pwd):
+        pass
+
+    def usersListReceived(self, tags):
+        pass
+
+    def userActionReceived(self, actionID, user, shadowMode):
+        pass
+
     @noexcept
     def __call__(self, message, data=None):
         if data is None:

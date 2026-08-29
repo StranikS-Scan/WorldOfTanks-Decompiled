@@ -15,6 +15,7 @@ class State(IntEnum):
 
 class TankAcademyRewardsViewModel(ViewModel):
     __slots__ = ('onClose', 'goToRewardsSelection', 'goToNextTask', 'goToHangarPreview')
+    BOX_TOOLTIP_ARG_SHOW_COUNT = 'showCount'
 
     def __init__(self, properties=4, commands=4):
         super(TankAcademyRewardsViewModel, self).__init__(properties=properties, commands=commands)

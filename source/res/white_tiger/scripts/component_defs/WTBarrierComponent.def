@@ -1,0 +1,17 @@
+<WTBarrierComponent.def>
+  <Properties>
+    <replicableAvatarId>
+      <Type>	OBJECT_ID	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <SendLatestOnly>	true	</SendLatestOnly>
+      <Default>	-1	</Default>
+    </replicableAvatarId>
+    <mode>
+      <Type>	UINT8	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <SendLatestOnly>	true	</SendLatestOnly>
+      <Default>	1	</Default>
+    </mode>
+  </Properties>
+  <DefaultKeyName>	wtBarrierComponent	</DefaultKeyName>
+</WTBarrierComponent.def>

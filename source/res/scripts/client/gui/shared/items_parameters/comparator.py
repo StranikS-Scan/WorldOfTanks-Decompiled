@@ -70,7 +70,10 @@ PARAMS_WITH_BATTLE_MODIFIERS = {'maxHealth': {'vehicleHealth'},
  'reloadTimeSecs': {'reloadTime'},
  'autoReloadTime': {'autoReloadTime'},
  'avgDamagePerMinute': {'reloadTime', 'autoReloadTime'},
- 'clipFireRate': {'reloadTime', 'autoReloadTime'}}
+ 'clipFireRate': {'reloadTime', 'autoReloadTime'},
+ 'enginePower': {'enginePower'},
+ 'enginePowerPerTon': {'enginePower'},
+ 'speedLimits': {'fwMaxSpeed', 'bkMaxSpeed'}}
 NEGATIVE_PARAMS = ['switchOnTime', 'switchOffTime', CHASSIS_REPAIR_TIME]
 NOT_COMPARABLE_PARAMS = [KPI.Name.TEMPERATURE_STATES_COUNT]
 PARAMS_WITH_IGNORED_EMPTY_VALUES = {SHOT_DISPERSION_ANGLE, DISPERSION_RADIUS, CHASSIS_REPAIR_TIME}

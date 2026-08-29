@@ -1056,6 +1056,14 @@
       <initialVisibility>	true	</initialVisibility>
     </attachment>
     <attachment>
+      <id>	31114	</id>
+      <name>	A180_ACIT_40t_Concept	</name>
+      <modelName>	vehicles/american/A180_ACIT_40t_Concept/SleeveEjection.prefab	</modelName>
+      <attachmentLogic>	prefab	</attachmentLogic>
+      <initialVisibility>	true	</initialVisibility>
+      <hangarModelName>	vehicles/american/A180_ACIT_40t_Concept/SleeveEjection_hangar.prefab	</hangarModelName>
+    </attachment>
+    <attachment>
       <id>	31110	</id>
       <name>	R239_ST_Molot_02_3Dst_01	</name>
       <modelName>	vehicles/russian/R239_ST_Molot/_skins/R239_ST_Molot_02_3Dst_01/SleeveEjection.prefab	</modelName>
@@ -1077,6 +1085,21 @@
       <modelName>	vehicles/russian/R169_ST_II/_skins/R169_ST_II_3Dst_Oberon/R169_ST_II_3Dst_Oberon_prefabs.prefab	</modelName>
       <hangarModelName>	vehicles/russian/R169_ST_II/_skins/R169_ST_II_3Dst_Oberon/R169_ST_II_3Dst_Oberon_prefabs_hangar.prefab	</hangarModelName>
       <initialVisibility>	true	</initialVisibility>
+      <attachmentLogic>	prefab	</attachmentLogic>
+    </attachment>
+    <attachment>
+      <id>	32000	</id>
+      <name>	R232_IS-7W	</name>
+      <modelName>	vehicles/russian/R232_IS-7W/R232_IS-7W_anim.prefab	</modelName>
+      <hangarModelName>	vehicles/russian/R232_IS-7W/R232_IS-7W_anim_hangar.prefab	</hangarModelName>
+      <attachmentLogic>	prefab	</attachmentLogic>
+      <initialVisibility>	true	</initialVisibility>
+    </attachment>
+    <attachment>
+      <id>	32001	</id>
+      <name>	R232_IS-7W_idle	</name>
+      <initialVisibility>	true	</initialVisibility>
+      <modelName>	content/WtPrefabs/Boss2025Idle.prefab	</modelName>
       <attachmentLogic>	prefab	</attachmentLogic>
     </attachment>
     <attachment>
@@ -1198,6 +1221,14 @@
       <initialVisibility>	true	</initialVisibility>
     </attachment>
     <attachment>
+      <id>	31140	</id>
+      <name>	G194_E_50_GT_Alkett_Prod_02_3Dst_Hertz Red	</name>
+      <modelName>	vehicles/german/G194_E_50_GT_Alkett_Prod/_skins/G194_E_50_GT_Alkett_Prod_02_3Dst_Hertz/G194_E_50_GT_Alkett_Prod_02_3Dst_Hertz.prefab	</modelName>
+      <hangarModelName>	vehicles/german/G194_E_50_GT_Alkett_Prod/_skins/G194_E_50_GT_Alkett_Prod_02_3Dst_Hertz/G194_E_50_GT_Alkett_Prod_02_3Dst_Hertz_hangar.prefab	</hangarModelName>
+      <attachmentLogic>	prefab	</attachmentLogic>
+      <initialVisibility>	true	</initialVisibility>
+    </attachment>
+    <attachment>
       <id>	31138	</id>
       <modelName>	vehicles/german/G197_E_94_Fechter/SleeveEjection.prefab	</modelName>
       <hangarModelName>	vehicles/german/G197_E_94_Fechter/SleeveEjection_hangar.prefab	</hangarModelName>
@@ -1225,6 +1256,110 @@
       <name>	Sleeve	</name>
       <modelName>	vehicles/british/GB131_Crusher/SleeveEjection.prefab	</modelName>
       <hangarModelName>	vehicles/british/GB131_Crusher/SleeveEjection_hangar.prefab	</hangarModelName>
+      <attachmentLogic>	prefab	</attachmentLogic>
+      <initialVisibility>	true	</initialVisibility>
+    </attachment>
+    <attachment>
+      <id>	31132	</id>
+      <name>	GB134_FV242B_Condor_3Dst_02 Lights	</name>
+      <modelName>	vehicles/british/GB134_FV242B_Condor/_skins/GB134_FV242B_Condor_3Dst_02/GB134_FV242B_Condor_3Dst_02_anim.prefab	</modelName>
+      <hangarModelName>	vehicles/british/GB134_FV242B_Condor/_skins/GB134_FV242B_Condor_3Dst_02/GB134_FV242B_Condor_3Dst_02_anim_hangar.prefab	</hangarModelName>
+      <initialVisibility>	true	</initialVisibility>
+      <attachmentLogic>	prefab	</attachmentLogic>
+    </attachment>
+    <attachment>
+      <id>	31134	</id>
+      <name>	GB134_FV242B_Condor_3Dst_02 Sleeve Ejection	</name>
+      <modelName>	vehicles/british/GB134_FV242B_Condor/_skins/GB134_FV242B_Condor_3Dst_02/SleeveEjection.prefab	</modelName>
+      <hangarModelName>	vehicles/british/GB134_FV242B_Condor/_skins/GB134_FV242B_Condor_3Dst_02/SleeveEjection_hangar.prefab	</hangarModelName>
+      <initialVisibility>	true	</initialVisibility>
+      <attachmentLogic>	prefab	</attachmentLogic>
+    </attachment>
+    <attachment>
+      <id>	31131	</id>
+      <name>	R213_TET_100_3Dst_02	</name>
+      <hangarModelName>	vehicles/russian/R213_TET_100/_skins/R213_TET_100_3Dst_02/R213_TET_100_3Dst_02_anim_hangar.prefab	</hangarModelName>
+      <modelName>	vehicles/russian/R213_TET_100/_skins/R213_TET_100_3Dst_02/R213_TET_100_3Dst_02_anim.prefab	</modelName>
+      <attachmentLogic>	prefab	</attachmentLogic>
+      <initialVisibility>	true	</initialVisibility>
+    </attachment>
+    <attachment>
+      <id>	31135	</id>
+      <name>	F72_AMX_30_3Dst_02	</name>
+      <modelName>	vehicles/french/F72_AMX_30/_skins/F72_AMX_30_3Dst_02/F72_AMX_30_3Dst_02_anim.prefab	</modelName>
+      <hangarModelName>	vehicles/french/F72_AMX_30/_skins/F72_AMX_30_3Dst_02/F72_AMX_30_3Dst_02_anim_hangar.prefab	</hangarModelName>
+      <attachmentLogic>	prefab	</attachmentLogic>
+      <initialVisibility>	true	</initialVisibility>
+    </attachment>
+    <attachment>
+      <id>	41109	</id>
+      <name>	R242_BM_13_Katyusha	</name>
+      <modelName>	vehicles/russian/R242_BM_13_Katyusha/missile_battle.prefab	</modelName>
+      <hangarModelName>	vehicles/russian/R242_BM_13_Katyusha/missile.prefab	</hangarModelName>
+      <attachmentLogic>	prefab	</attachmentLogic>
+      <initialVisibility>	true	</initialVisibility>
+    </attachment>
+    <attachment>
+      <id>	31148	</id>
+      <name>	Hull_anim	</name>
+      <modelName>	vehicles/french/F144_Etoile/Hull_anim_prefab.prefab	</modelName>
+      <hangarModelName>	vehicles/french/F144_Etoile/Hull_anim_hangar_prefab.prefab	</hangarModelName>
+      <attachmentLogic>	prefab	</attachmentLogic>
+      <initialVisibility>	true	</initialVisibility>
+    </attachment>
+    <attachment>
+      <id>	31146	</id>
+      <name>	SleeveEjection	</name>
+      <modelName>	vehicles/russian/R240_Object_771/SleeveEjection.prefab	</modelName>
+      <hangarModelName>	vehicles/russian/R240_Object_771/SleeveEjection_hangar.prefab	</hangarModelName>
+      <attachmentLogic>	prefab	</attachmentLogic>
+      <initialVisibility>	true	</initialVisibility>
+    </attachment>
+    <attachment>
+      <id>	31128	</id>
+      <name>	S43_Armborst_sleeve	</name>
+      <modelName>	vehicles/sweden/S43_Armborst/SleeveEjection.prefab	</modelName>
+      <hangarModelName>	vehicles/sweden/S43_Armborst/SleeveEjection_hangar.prefab	</hangarModelName>
+      <attachmentLogic>	flagAnimation	</attachmentLogic>
+      <initialVisibility>	true	</initialVisibility>
+    </attachment>
+    <attachment>
+      <id>	31143	</id>
+      <name>	Sleeve	</name>
+      <modelName>	vehicles/german/G180_Hauptpanzer_Gruppe_A/SleeveEjection.prefab	</modelName>
+      <hangarModelName>	vehicles/german/G180_Hauptpanzer_Gruppe_A/SleeveEjection_hangar.prefab	</hangarModelName>
+      <attachmentLogic>	prefab	</attachmentLogic>
+      <initialVisibility>	true	</initialVisibility>
+    </attachment>
+    <attachment>
+      <id>	31155	</id>
+      <name>	sleeveEjection	</name>
+      <modelName>	vehicles/russian/R247_Object_440/SleeveEjection.prefab	</modelName>
+      <hangarModelName>	vehicles/russian/R247_Object_440/Hangar_sleeve.prefab	</hangarModelName>
+      <attachmentLogic>	prefab	</attachmentLogic>
+      <initialVisibility>	true	</initialVisibility>
+    </attachment>
+    <attachment>
+      <id>	31147	</id>
+      <name>	effects	</name>
+      <modelName>	vehicles/russian/R253_Object_277_S/_skins/R253_Object_277_S_3Dst_01/R253_Object_277_S_3Dst_01_prefabs.prefab	</modelName>
+      <hangarModelName>	vehicles/russian/R253_Object_277_S/_skins/R253_Object_277_S_3Dst_01/R253_Object_277_S_3Dst_01_prefabs_hangar.prefab	</hangarModelName>
+      <attachmentLogic>	prefab	</attachmentLogic>
+      <initialVisibility>	true	</initialVisibility>
+    </attachment>
+    <attachment>
+      <id>	31152	</id>
+      <name>	R253_Object_277_S_3Dst_01	</name>
+      <modelName>	particles/Tank/rocket_accelerator/R253_Object_277_S_3Dst_01.prefab	</modelName>
+      <hangarModelName>	particles/Tank/rocket_accelerator/empty.prefab	</hangarModelName>
+      <attachmentLogic>	prefab	</attachmentLogic>
+      <initialVisibility>	true	</initialVisibility>
+    </attachment>
+    <attachment>
+      <id>	31153	</id>
+      <name>	R253_Object_277_S_Rocket	</name>
+      <modelName>	particles/Tank/rocket_accelerator/R253_Object_277_S_Rocket.prefab	</modelName>
+      <hangarModelName>	particles/Tank/rocket_accelerator/empty.prefab	</hangarModelName>
       <attachmentLogic>	prefab	</attachmentLogic>
       <initialVisibility>	true	</initialVisibility>
     </attachment>

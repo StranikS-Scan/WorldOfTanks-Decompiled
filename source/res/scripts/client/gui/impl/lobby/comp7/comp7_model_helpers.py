@@ -6,6 +6,7 @@ from gui.comp7.comp7_helpers import getComp7SkillParamsOrder
 from gui.impl.gen.view_models.views.lobby.comp7.dynamic_param_model import DynamicParamModel
 from gui.impl.gen.view_models.views.lobby.comp7.static_param_model import StaticParamModel
 from gui.impl.lobby.comp7 import comp7_shared
+from gui.impl.lobby.comp7.meta_view import meta_view_helper
 from gui.periodic_battles.models import PrimeTimeStatus
 from helpers import dependency
 from helpers.time_utils import getServerUTCTime
@@ -27,6 +28,10 @@ def setDivisionInfo(model, division=None):
     model.setName(divisionValue)
     model.setFrom(division.range.begin)
     model.setTo(division.range.end + 1)
+    model.setState(meta_view_helper.getDivisionState(division))
+    model.setType(division.type)
+    if division.elitePercent:
+        model.setElitePercent(division.elitePercent)
     return
 
 

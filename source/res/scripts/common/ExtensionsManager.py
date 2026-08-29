@@ -69,7 +69,7 @@ class ExtensionsManager(object):
             return BigWorld.getExtensionsDirList()
         else:
             import os
-            return [ '{}/{}'.format(_EXTENSIONS_RELATIVE_DIR, item) for item in os.listdir(ResMgr.resolveToAbsolutePath(_EXTENSIONS_RELATIVE_DIR)) if os.path.isdir(ResMgr.resolveToAbsolutePath(os.path.join(_EXTENSIONS_RELATIVE_DIR, item))) ]
+            return [ item for item in os.listdir(ResMgr.resolveToAbsolutePath(_EXTENSIONS_RELATIVE_DIR)) if os.path.isdir(ResMgr.resolveToAbsolutePath(os.path.join(_EXTENSIONS_RELATIVE_DIR, item))) ]
 
 
 g_extensionsManager = ExtensionsManager()

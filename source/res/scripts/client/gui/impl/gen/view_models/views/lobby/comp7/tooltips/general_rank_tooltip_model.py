@@ -15,7 +15,7 @@ class Rank(IntEnum):
 class GeneralRankTooltipModel(ViewModel):
     __slots__ = ()
 
-    def __init__(self, properties=4, commands=0):
+    def __init__(self, properties=5, commands=0):
         super(GeneralRankTooltipModel, self).__init__(properties=properties, commands=commands)
 
     def getRank(self):
@@ -42,9 +42,16 @@ class GeneralRankTooltipModel(ViewModel):
     def setTo(self, value):
         self._setNumber(3, value)
 
+    def getElitePercent(self):
+        return self._getNumber(4)
+
+    def setElitePercent(self, value):
+        self._setNumber(4, value)
+
     def _initialize(self):
         super(GeneralRankTooltipModel, self)._initialize()
         self._addNumberProperty('rank')
         self._addStringProperty('divisions', 'E, D, C, B, A')
         self._addNumberProperty('from', 1000)
         self._addNumberProperty('to', 2000)
+        self._addNumberProperty('elitePercent', 0)

@@ -11,32 +11,59 @@ class Division(IntEnum):
     E = 5
 
 
+class State(IntEnum):
+    ACHIEVED = 0
+    CURRENT = 1
+    INACTIVE = 2
+
+
 class DivisionInfoModel(ViewModel):
     __slots__ = ()
 
-    def __init__(self, properties=3, commands=0):
+    def __init__(self, properties=6, commands=0):
         super(DivisionInfoModel, self).__init__(properties=properties, commands=commands)
 
-    def getName(self):
-        return Division(self._getNumber(0))
+    def getType(self):
+        return self._getNumber(0)
 
-    def setName(self, value):
-        self._setNumber(0, value.value)
+    def setType(self, value):
+        self._setNumber(0, value)
 
-    def getFrom(self):
+    def getElitePercent(self):
         return self._getNumber(1)
 
-    def setFrom(self, value):
+    def setElitePercent(self, value):
         self._setNumber(1, value)
 
+    def getName(self):
+        return Division(self._getNumber(2))
+
+    def setName(self, value):
+        self._setNumber(2, value.value)
+
+    def getFrom(self):
+        return self._getNumber(3)
+
+    def setFrom(self, value):
+        self._setNumber(3, value)
+
     def getTo(self):
-        return self._getNumber(2)
+        return self._getNumber(4)
 
     def setTo(self, value):
-        self._setNumber(2, value)
+        self._setNumber(4, value)
+
+    def getState(self):
+        return State(self._getNumber(5))
+
+    def setState(self, value):
+        self._setNumber(5, value.value)
 
     def _initialize(self):
         super(DivisionInfoModel, self)._initialize()
+        self._addNumberProperty('type', 0)
+        self._addNumberProperty('elitePercent', 0)
         self._addNumberProperty('name')
         self._addNumberProperty('from', 0)
         self._addNumberProperty('to', 0)
+        self._addNumberProperty('state', State.INACTIVE.value)

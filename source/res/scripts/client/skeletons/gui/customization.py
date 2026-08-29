@@ -85,7 +85,7 @@ class ICustomizationService(object):
     def getEmptyOutfit(self, vehicleCD=''):
         raise NotImplementedError
 
-    def getEmptyOutfitWithNationalEmblems(self, vehicleCD):
+    def getEmptyOutfitWithNationalEmblems(self, vehicleCD, isClanHidden=False, isMarksOnGunHidden=False):
         raise NotImplementedError
 
     def getOutfitByStyleId(self, vehicleCD, styleId):

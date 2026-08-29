@@ -1,0 +1,24 @@
+<WTTeamInfoComponent.def>
+  <Properties>
+    <cloneVehicleInfos>
+      <Type>	ARRAY	  <of>	FIXED_DICT	  <Properties>
+            <vehicleId>
+              <Type>	OBJECT_ID	</Type>
+            </vehicleId>
+            <cloneSpawnTime>
+              <Type>	FLOAT	</Type>
+            </cloneSpawnTime>
+            <cloneLifeTime>
+              <Type>	FLOAT	</Type>
+            </cloneLifeTime>
+          </Properties>
+        </of>
+      </Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </cloneVehicleInfos>
+  </Properties>
+  <ofEntity>
+    <TeamInfo></TeamInfo>
+  </ofEntity>
+  <DefaultKeyName>	wtTeamInfoComponent	</DefaultKeyName>
+</WTTeamInfoComponent.def>

@@ -98,6 +98,7 @@ class VehicleGunRotator(object):
                 ctrl.onVehicleFeedbackReceived += self.__onVehicleFeedbackReceived
             self.__gunPosition = multiGunCurrentShotPosition()
             self.__isStarted = True
+            self.__setupStartMatrix()
             self.__updateGunMarker()
             self.__timerID = BigWorld.callback(self.__ROTATION_TICK_LENGTH, self.__onTick)
             if self.__clientMode:
@@ -378,8 +379,7 @@ class VehicleGunRotator(object):
         if shotPoint == self.__prevSentShotPoint:
             return
         else:
-            typeDescriptor = self._avatar.vehicleTypeDescriptor
-            if typeDescriptor.isHullAimingAvailable and typeDescriptor.isYawHullAimingAvailable:
+            if self._avatar.vehicleTypeDescriptor.isYawHullAimingAvailable:
                 if shotPoint is None:
                     self.__stopTrackingWithPerfection()
                 else:
@@ -745,6 +745,20 @@ class VehicleGunRotator(object):
 
     def __getTurretStaticYaw(self):
         return self._avatar.vehicleTypeDescriptor.gun.staticTurretYaw
+
+    def __setupStartMatrix(self):
+        player = BigWorld.player()
+        if player is None:
+            return
+        else:
+            vehicle = player.getVehicleAttached()
+            if vehicle is None:
+                return
+            turretMatrix, gunMatrix = vehicle.appearance.getGunMatrix()
+            self.__updateTurretMatrix(Math.Matrix(turretMatrix).yaw, 0.0)
+            self.__updateGunMatrix(Math.Matrix(gunMatrix).pitch, 0.0)
+            vehicle.appearance.setupGunMatrixTargets(self)
+            return
 
 
 class MatrixAnimator(object):

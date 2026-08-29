@@ -3092,6 +3092,9 @@ class ServerSettings(object):
     def getLootBoxStatisticsConfig(self):
         return self.__getGlobalSetting(Configs.LOOTBOX_STATISTICS_CONFIG.value, {})
 
+    def getMuseumOfGloryConfig(self):
+        return self.__getGlobalSetting('museum_of_glory_config', {})
+
     def __getGlobalSetting(self, settingsName, default=None):
         return self.__serverSettings.get(settingsName, default)
 

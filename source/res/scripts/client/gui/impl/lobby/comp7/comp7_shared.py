@@ -42,7 +42,7 @@ def isQualification(comp7Controller=None):
 @dependency.replace_none_kwargs(lobbyCtx=ILobbyContext)
 def getPlayerDivisionByRating(rating, lobbyCtx=None):
     ranksConfig = lobbyCtx.getServerSettings().comp7RanksConfig
-    division = findFirst(lambda d: rating in d.range, ranksConfig.divisions if not isElite() else reversed(ranksConfig.divisions))
+    division = findFirst(lambda d: rating in d.range, ranksConfig.divisions)
     return division
 
 
@@ -53,9 +53,31 @@ def getPlayerDivisionByRankAndIndex(rank, divisionIdx, lobbyCtx=None):
     return division
 
 
-def getPlayerDivision():
-    rating = getRating()
+def getPlayerDivision(rating=None):
+    if isElite():
+        return getPlayerEliteDivision()
+    rating = rating if rating else getRating()
     return getPlayerDivisionByRating(rating)
+
+
+@dependency.replace_none_kwargs(lobbyCtx=ILobbyContext)
+def getRankByDivisionId(divisionId, lobbyCtx=None):
+    ranksConfig = lobbyCtx.getServerSettings().comp7RanksConfig
+    division = findFirst(lambda d: d.dvsnID == int(divisionId), ranksConfig.divisions)
+    return getRankEnumValue(division)
+
+
+@dependency.replace_none_kwargs(comp7Controller=IComp7Controller)
+def getPlayerEliteDivision(comp7Controller=None):
+    divIdx = comp7Controller.getEliteDivisionIdx()
+    return getPlayerDivisionByRankAndIndex(Rank.SIXTH.value, divIdx)
+
+
+@dependency.replace_none_kwargs(lobbyCtx=ILobbyContext)
+def getDivisionNameById(divisionIdx, lobbyCtx=None):
+    ranksConfig = lobbyCtx.getServerSettings().comp7RanksConfig
+    division = findFirst(lambda d: d.dvsnID == int(divisionIdx), reversed(ranksConfig.divisions))
+    return getDivisionEnumValue(division)
 
 
 @dependency.replace_none_kwargs(lobbyCtx=ILobbyContext, comp7Controller=IComp7Controller)

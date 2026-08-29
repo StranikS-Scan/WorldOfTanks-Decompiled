@@ -29,7 +29,7 @@ from helpers import dependency, time_utils
 from items import getTypeOfCompactDescr
 from personal_missions import PERSONAL_MISSIONS_XML_PATH
 from quest_cache_helpers import readQuestsFromFile
-from shared_utils import first, findFirst
+from shared_utils import first, findFirst, safeCancelCallback
 from skeletons.gui.game_control import IBattleRoyaleController, IEpicBattleMetaGameController, IRankedBattlesController, IFunRandomController, IVersusAIController, IComp7Controller
 from skeletons.gui.battle_matters import IBattleMattersController
 from skeletons.gui.lobby_context import ILobbyContext
@@ -860,14 +860,16 @@ class EventsCache(IEventsCache):
         self.__invalidateCbID = BigWorld.callback(math.ceil(duration), self.__onInvalidateNearestQuests)
 
     def __onInvalidateNearestQuests(self):
+        self.__invalidateCbID = None
         if BigWorld.player() is not None:
             self.__invalidateData()
         return
 
     def __clearInvalidateCallback(self):
-        if self.__invalidateCbID is not None:
-            BigWorld.cancelCallback(self.__invalidateCbID)
-            self.__invalidateCbID = None
+        callbackID = self.__invalidateCbID
+        self.__invalidateCbID = None
+        if callbackID is not None:
+            safeCancelCallback(callbackID)
         return
 
     def __clearCache(self):

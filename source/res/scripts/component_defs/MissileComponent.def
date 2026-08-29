@@ -1,0 +1,26 @@
+<MissileComponent.def>
+  <Properties>
+    <replicableAvatarId>
+      <Type>	OBJECT_ID	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <SendLatestOnly>	true	</SendLatestOnly>
+    </replicableAvatarId>
+  </Properties>
+  <CellMethods>
+    <setDestinationDirection>
+      <Exposed>	OWN_CLIENT	</Exposed>
+      <Arg>	VECTOR3	</Arg>
+    </setDestinationDirection>
+    <startBoostEffect>
+      <Exposed>	OWN_CLIENT	</Exposed>
+    </startBoostEffect>
+    <endBoostEffect>
+      <Exposed>	OWN_CLIENT	</Exposed>
+    </endBoostEffect>
+    <detonateProjectile>
+      <Exposed>	OWN_CLIENT	</Exposed>
+    </detonateProjectile>
+  </CellMethods>
+  <ClientMethods></ClientMethods>
+  <DefaultKeyName>	missileComponent	</DefaultKeyName>
+</MissileComponent.def>

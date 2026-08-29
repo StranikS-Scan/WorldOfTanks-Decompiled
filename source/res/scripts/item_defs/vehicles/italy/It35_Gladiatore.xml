@@ -10,8 +10,8 @@
   <postProgressionTree>	role_HT_support	</postProgressionTree>
   <customRoleSlotOptions>	2 4	</customRoleSlotOptions>
   <speedLimits>
-    <forward>	44	</forward>
-    <backward>	16	</backward>
+    <forward>	37	</forward>
+    <backward>	14	</backward>
   </speedLimits>
   <invisibility>
     <moving>	0.060	</moving>
@@ -42,8 +42,8 @@
   </camouflage>
   <hull>
     <armor>
-      <armor_1>	140	</armor_1>
-      <armor_2>	130	</armor_2>
+      <armor_1>	170	</armor_1>
+      <armor_2>	120	</armor_2>
       <armor_3>	70	</armor_3>
       <armor_4>	60	</armor_4>
       <armor_5>	30	</armor_5>
@@ -53,9 +53,9 @@
       <armor_9>	20	</armor_9>
       <armor_10>	20	</armor_10>
       <armor_11>	30	</armor_11>
-      <armor_12>	60	</armor_12>
-      <armor_13>	240	</armor_13>
-      <armor_14>	100	</armor_14>
+      <armor_12>	55	</armor_12>
+      <armor_13>	220	</armor_13>
+      <armor_14>	90	</armor_14>
       <armor_15>	30	</armor_15>
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
@@ -1801,22 +1801,22 @@
           </armor>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
-            <maxPitch>	0 9 0.36 9 0.42 2 0.58 2 0.64 9 1 9	</maxPitch>
+            <maxPitch>	0 8 0.36 8 0.42 2 0.58 2 0.64 8 1 8	</maxPitch>
           </pitchLimits>
           <invisibilityFactorAtShot>	0.198	</invisibilityFactorAtShot>
-          <reloadTime>	12	</reloadTime>
+          <reloadTime>	13	</reloadTime>
           <clip>
             <count>	4	</count>
             <rate>	15	</rate>
           </clip>
           <autoreload>
-            <reloadTime>	12 12 14 18	</reloadTime>
+            <reloadTime>	13 13 15 19	</reloadTime>
             <boostFraction>	0.5	</boostFraction>
             <boostStartTime>	0	</boostStartTime>
             <boostResidueTime>	2	</boostResidueTime>
           </autoreload>
-          <aimingTime>	2.8	</aimingTime>
-          <shotDispersionRadius>	0.32	</shotDispersionRadius>
+          <aimingTime>	2.6	</aimingTime>
+          <shotDispersionRadius>	0.35	</shotDispersionRadius>
           <shotDispersionFactors>
             <turretRotation>	0.14	</turretRotation>
             <afterShot>	5	</afterShot>
@@ -2500,7 +2500,7 @@
       <engines>
         <MB_880_It35>
           <smplEnginePower>	960	</smplEnginePower>
-          <smplFwMaxSpeed>	44	</smplFwMaxSpeed>
+          <smplFwMaxSpeed>	37	</smplFwMaxSpeed>
         </MB_880_It35>
       </engines>
       <chassis>

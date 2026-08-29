@@ -14,10 +14,17 @@ class Rank(IntEnum):
     SIXTH = 1
 
 
+class State(IntEnum):
+    INITIAL = 0
+    SUCCESS = 1
+    LOADING = 2
+    ERROR = 3
+
+
 class MainWidgetTooltipModel(ViewModel):
     __slots__ = ()
 
-    def __init__(self, properties=5, commands=0):
+    def __init__(self, properties=7, commands=0):
         super(MainWidgetTooltipModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -42,22 +49,36 @@ class MainWidgetTooltipModel(ViewModel):
     def setRank(self, value):
         self._setNumber(2, value.value)
 
+    def getExternalDataState(self):
+        return State(self._getNumber(3))
+
+    def setExternalDataState(self, value):
+        self._setNumber(3, value.value)
+
     def getCurrentScore(self):
-        return self._getNumber(3)
-
-    def setCurrentScore(self, value):
-        self._setNumber(3, value)
-
-    def getTopPercentage(self):
         return self._getNumber(4)
 
-    def setTopPercentage(self, value):
+    def setCurrentScore(self, value):
         self._setNumber(4, value)
+
+    def getMyPosition(self):
+        return self._getNumber(5)
+
+    def setMyPosition(self, value):
+        self._setNumber(5, value)
+
+    def getLeaderboardUpdateTimestamp(self):
+        return self._getNumber(6)
+
+    def setLeaderboardUpdateTimestamp(self, value):
+        self._setNumber(6, value)
 
     def _initialize(self):
         super(MainWidgetTooltipModel, self)._initialize()
         self._addViewModelProperty('divisionInfo', DivisionInfoModel())
         self._addViewModelProperty('qualificationModel', QualificationModel())
         self._addNumberProperty('rank')
+        self._addNumberProperty('externalDataState', State.INITIAL.value)
         self._addNumberProperty('currentScore', 0)
-        self._addNumberProperty('topPercentage', 0)
+        self._addNumberProperty('myPosition', -1)
+        self._addNumberProperty('leaderboardUpdateTimestamp', 0)

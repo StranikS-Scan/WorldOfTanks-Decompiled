@@ -3200,6 +3200,243 @@
     </style>
   </itemGroup>
   <itemGroup>
+    <userString>	#vehicle_customization:styles/historical_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	0	</historical>
+    <priceGroup>	MT 2D styles universal 1000g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <style>
+      <id>	31587	</id>
+      <texture>	gui/maps/vehicles/styles/BP21_01_Style_145.png	</texture>
+      <outfits>
+        <outfit>
+          <season>	all	</season>
+          <paints>
+            <item>
+              <id>	31540	</id>
+              <appliedTo>	20753	</appliedTo>
+            </item>
+          </paints>
+          <camouflages>
+            <item>
+              <id>	31555	</id>
+              <patternSize>	1	</patternSize>
+              <appliedTo>	4368	</appliedTo>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <projection_decals>
+            <item>
+              <id>	31490	</id>
+              <tags>	cover formfactor_rect1x2	</tags>
+            </item>
+            <item>
+              <id>	31491	</id>
+              <tags>	formfactor_square safe left	</tags>
+              <scaleFactorId>	2	</scaleFactorId>
+            </item>
+            <item>
+              <id>	31492	</id>
+              <tags>	right safe formfactor_square	</tags>
+            </item>
+          </projection_decals>
+        </outfit>
+      </outfits>
+      <userString>	#vehicle_customization:BP21_01_Style_145/name	</userString>
+      <description>	#vehicle_customization:BP21_01_Style_145/description	</description>
+      <longDescriptionSpecial>	#vehicle_customization:BP21_01_Style_145/longDescription	</longDescriptionSpecial>
+    </style>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/historical_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	0	</historical>
+    <priceGroup>	MT 2D styles universal 1000g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <style>
+      <id>	31588	</id>
+      <outfits>
+        <outfit>
+          <season>	all	</season>
+          <paints>
+            <item>
+              <id>	31541	</id>
+              <appliedTo>	20753	</appliedTo>
+            </item>
+          </paints>
+          <camouflages>
+            <item>
+              <id>	31556	</id>
+              <patternSize>	1	</patternSize>
+              <appliedTo>	4368	</appliedTo>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <projection_decals>
+            <item>
+              <id>	31493	</id>
+              <scaleFactorId>	2	</scaleFactorId>
+              <tags>	safe formfactor_square right	</tags>
+            </item>
+            <item>
+              <id>	31494	</id>
+              <scaleFactorId>	2	</scaleFactorId>
+              <tags>	formfactor_rect1x2 mimic front	</tags>
+            </item>
+            <item>
+              <id>	31495	</id>
+              <scaleFactorId>	2	</scaleFactorId>
+              <tags>	safe formfactor_square left	</tags>
+            </item>
+          </projection_decals>
+        </outfit>
+      </outfits>
+      <texture>	gui/maps/vehicles/styles/BP21_02_Style_145.png	</texture>
+      <userString>	#vehicle_customization:BP21_02_Style_145/name	</userString>
+      <description>	#vehicle_customization:BP21_02_Style_145/description	</description>
+      <longDescriptionSpecial>	#vehicle_customization:BP21_02_Style_145/longDescription	</longDescriptionSpecial>
+    </style>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/historical_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	0	</historical>
+    <priceGroup>	MT 2D styles universal 1000g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <style>
+      <id>	31602	</id>
+      <outfits>
+        <outfit>
+          <season>	event	</season>
+        </outfit>
+        <outfit>
+          <season>	winter	</season>
+          <modifications>
+            <item>	1	</item>
+          </modifications>
+          <paints>
+            <item>
+              <id>	31557	</id>
+              <appliedTo>	20753	</appliedTo>
+            </item>
+          </paints>
+          <camouflages>
+            <item>
+              <id>	31572	</id>
+              <patternSize>	1	</patternSize>
+              <appliedTo>	4368	</appliedTo>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+        </outfit>
+        <outfit>
+          <season>	summer	</season>
+          <modifications>
+            <item>	1	</item>
+          </modifications>
+          <paints>
+            <item>
+              <id>	31555	</id>
+              <appliedTo>	20753	</appliedTo>
+            </item>
+          </paints>
+          <camouflages>
+            <item>
+              <id>	31570	</id>
+              <patternSize>	1	</patternSize>
+              <appliedTo>	4368	</appliedTo>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+        </outfit>
+        <outfit>
+          <season>	desert	</season>
+          <modifications>
+            <item>	1	</item>
+          </modifications>
+          <paints>
+            <item>
+              <id>	31556	</id>
+              <appliedTo>	20753	</appliedTo>
+            </item>
+          </paints>
+          <camouflages>
+            <item>
+              <id>	31571	</id>
+              <patternSize>	1	</patternSize>
+              <appliedTo>	4368	</appliedTo>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+        </outfit>
+      </outfits>
+      <texture>	gui/maps/vehicles/styles/BP21_03_Style_145.png	</texture>
+      <userString>	#vehicle_customization:BP21_03_Style_145/name	</userString>
+      <description>	#vehicle_customization:BP21_03_Style_145/description	</description>
+      <longDescriptionSpecial>	#vehicle_customization:BP21_03_Style_145/longDescription	</longDescriptionSpecial>
+    </style>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/historical_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	0	</historical>
+    <priceGroup>	MT 2D styles universal 1000g notInShop	</priceGroup>
+    <style>
+      <id>	31590	</id>
+      <texture>	gui/maps/vehicles/styles/BP21_04_Style_145.png	</texture>
+      <userString>	#vehicle_customization:BP21_04_Style_145/name	</userString>
+      <description>	#vehicle_customization:BP21_04_Style_145/description	</description>
+      <longDescriptionSpecial>	#vehicle_customization:BP21_04_Style_145/longDescription	</longDescriptionSpecial>
+      <outfits>
+        <outfit>
+          <season>	all	</season>
+          <paints>
+            <item>
+              <id>	31544	</id>
+              <appliedTo>	20753	</appliedTo>
+            </item>
+          </paints>
+          <camouflages>
+            <item>
+              <id>	31558	</id>
+              <patternSize>	1	</patternSize>
+              <appliedTo>	4368	</appliedTo>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <projection_decals>
+            <item>
+              <id>	31496	</id>
+              <tags>	left safe formfactor_square	</tags>
+            </item>
+            <item>
+              <id>	31497	</id>
+              <scaleFactorId>	2	</scaleFactorId>
+              <tags>	right safe formfactor_square	</tags>
+            </item>
+          </projection_decals>
+        </outfit>
+      </outfits>
+    </style>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+  </itemGroup>
+  <itemGroup>
     <season>	ALL	</season>
     <historical>	1	</historical>
     <priceGroup>	MT 2D styles universal 1000g notInShop	</priceGroup>
@@ -5652,6 +5889,328 @@
     <historical>	1	</historical>
     <userString>	#vehicle_customization:styles/special_styles	</userString>
     <style>
+      <id>	31571	</id>
+      <texture>	gui/maps/vehicles/styles/CS_Style_145.png	</texture>
+      <outfits>
+        <outfit>
+          <season>	all	</season>
+          <camouflages>
+            <item>
+              <id>	31535	</id>
+              <patternSize>	1	</patternSize>
+              <appliedTo>	4368	</appliedTo>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+        </outfit>
+      </outfits>
+      <userString>	#vehicle_customization:CS_Style_00_145/name	</userString>
+      <description>	#vehicle_customization:CS_Style_00_145/description	</description>
+      <longDescriptionSpecial>	#vehicle_customization:CS_Style_00_145/longDescription	</longDescriptionSpecial>
+      <alternateItems>
+        <camouflage>
+          <id>	31535 31536 31537 31538 31539 31540	</id>
+        </camouflage>
+        <decal>
+          <id>	31471 31472 31473 31474 31475 31476 31477 31478	</id>
+        </decal>
+      </alternateItems>
+    </style>
+    <priceGroup>	MT 2D styles universal 1000g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <tags>	questsProgression	</tags>
+  </itemGroup>
+  <itemGroup>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <style>
+      <id>	31572	</id>
+      <texture>	gui/maps/vehicles/styles/CS_Style_145.png	</texture>
+      <outfits>
+        <outfit>
+          <season>	all	</season>
+          <modifications>
+            <item>	4	</item>
+          </modifications>
+          <paints>
+            <item>
+              <id>	31519	</id>
+              <appliedTo>	20753	</appliedTo>
+            </item>
+          </paints>
+          <camouflages>
+            <item>
+              <id>	31535	</id>
+              <patternSize>	1	</patternSize>
+              <appliedTo>	4368	</appliedTo>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <projection_decals>
+            <item>
+              <id>	31480	</id>
+              <tags>	formfactor_square safe front	</tags>
+            </item>
+          </projection_decals>
+        </outfit>
+      </outfits>
+      <userString>	#vehicle_customization:CS_Style_01_145/name	</userString>
+      <description>	#vehicle_customization:CS_Style_01_145/description	</description>
+      <longDescriptionSpecial>	#vehicle_customization:CS_Style_01_145/longDescription	</longDescriptionSpecial>
+    </style>
+    <tags>	hiddenInUI	</tags>
+    <priceGroup>	MT 2D styles universal 1000g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+  </itemGroup>
+  <itemGroup>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <style>
+      <id>	31573	</id>
+      <texture>	gui/maps/vehicles/styles/CS_Style_145.png	</texture>
+      <outfits>
+        <outfit>
+          <season>	all	</season>
+          <modifications>
+            <item>	4	</item>
+          </modifications>
+          <paints>
+            <item>
+              <id>	31520	</id>
+              <appliedTo>	20753	</appliedTo>
+            </item>
+          </paints>
+          <camouflages>
+            <item>
+              <id>	31536	</id>
+              <patternSize>	1	</patternSize>
+              <appliedTo>	4368	</appliedTo>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <projection_decals>
+            <item>
+              <id>	31481	</id>
+              <tags>	formfactor_square safe front	</tags>
+            </item>
+          </projection_decals>
+        </outfit>
+      </outfits>
+      <userString>	#vehicle_customization:CS_Style_02_145/name	</userString>
+      <description>	#vehicle_customization:CS_Style_02_145/description	</description>
+      <longDescriptionSpecial>	#vehicle_customization:CS_Style_02_145/longDescription	</longDescriptionSpecial>
+    </style>
+    <tags>	hiddenInUI	</tags>
+    <priceGroup>	MT 2D styles universal 1000g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+  </itemGroup>
+  <itemGroup>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <style>
+      <id>	31574	</id>
+      <texture>	gui/maps/vehicles/styles/CS_Style_145.png	</texture>
+      <outfits>
+        <outfit>
+          <season>	all	</season>
+          <modifications>
+            <item>	4	</item>
+          </modifications>
+          <paints>
+            <item>
+              <id>	31521	</id>
+              <appliedTo>	20753	</appliedTo>
+            </item>
+          </paints>
+          <camouflages>
+            <item>
+              <id>	31537	</id>
+              <patternSize>	1	</patternSize>
+              <appliedTo>	4368	</appliedTo>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <projection_decals>
+            <item>
+              <id>	31482	</id>
+              <tags>	formfactor_square safe front	</tags>
+            </item>
+          </projection_decals>
+        </outfit>
+      </outfits>
+      <userString>	#vehicle_customization:CS_Style_03_145/name	</userString>
+      <description>	#vehicle_customization:CS_Style_03_145/description	</description>
+      <longDescriptionSpecial>	#vehicle_customization:CS_Style_03_145/longDescription	</longDescriptionSpecial>
+    </style>
+    <tags>	hiddenInUI	</tags>
+    <priceGroup>	MT 2D styles universal 1000g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+  </itemGroup>
+  <itemGroup>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <style>
+      <id>	31575	</id>
+      <texture>	gui/maps/vehicles/styles/CS_Style_145.png	</texture>
+      <outfits>
+        <outfit>
+          <season>	all	</season>
+          <modifications>
+            <item>	4	</item>
+          </modifications>
+          <paints>
+            <item>
+              <id>	31522	</id>
+              <appliedTo>	20753	</appliedTo>
+            </item>
+          </paints>
+          <camouflages>
+            <item>
+              <id>	31538	</id>
+              <patternSize>	1	</patternSize>
+              <appliedTo>	4368	</appliedTo>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <projection_decals>
+            <item>
+              <id>	31483	</id>
+              <tags>	formfactor_square safe front	</tags>
+            </item>
+          </projection_decals>
+        </outfit>
+      </outfits>
+      <userString>	#vehicle_customization:CS_Style_04_145/name	</userString>
+      <description>	#vehicle_customization:CS_Style_04_145/description	</description>
+      <longDescriptionSpecial>	#vehicle_customization:CS_Style_04_145/longDescription	</longDescriptionSpecial>
+    </style>
+    <tags>	hiddenInUI	</tags>
+    <priceGroup>	MT 2D styles universal 1000g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+  </itemGroup>
+  <itemGroup>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <style>
+      <id>	31576	</id>
+      <texture>	gui/maps/vehicles/styles/CS_Style_145.png	</texture>
+      <outfits>
+        <outfit>
+          <season>	all	</season>
+          <modifications>
+            <item>	4	</item>
+          </modifications>
+          <paints>
+            <item>
+              <id>	31523	</id>
+              <appliedTo>	20753	</appliedTo>
+            </item>
+          </paints>
+          <camouflages>
+            <item>
+              <id>	31539	</id>
+              <patternSize>	1	</patternSize>
+              <appliedTo>	4368	</appliedTo>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <projection_decals>
+            <item>
+              <id>	31484	</id>
+              <tags>	formfactor_square safe front	</tags>
+            </item>
+          </projection_decals>
+        </outfit>
+      </outfits>
+      <userString>	#vehicle_customization:CS_Style_05_145/name	</userString>
+      <description>	#vehicle_customization:CS_Style_05_145/description	</description>
+      <longDescriptionSpecial>	#vehicle_customization:CS_Style_05_145/longDescription	</longDescriptionSpecial>
+    </style>
+    <tags>	hiddenInUI	</tags>
+    <priceGroup>	MT 2D styles universal 1000g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+  </itemGroup>
+  <itemGroup>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <style>
+      <id>	31577	</id>
+      <texture>	gui/maps/vehicles/styles/CS_Style_145.png	</texture>
+      <outfits>
+        <outfit>
+          <season>	all	</season>
+          <modifications>
+            <item>	4	</item>
+          </modifications>
+          <paints>
+            <item>
+              <id>	31524	</id>
+              <appliedTo>	20753	</appliedTo>
+            </item>
+          </paints>
+          <camouflages>
+            <item>
+              <id>	31540	</id>
+              <patternSize>	1	</patternSize>
+              <appliedTo>	4368	</appliedTo>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <projection_decals>
+            <item>
+              <id>	31485	</id>
+              <tags>	formfactor_square safe front	</tags>
+            </item>
+          </projection_decals>
+        </outfit>
+      </outfits>
+      <userString>	#vehicle_customization:CS_Style_06_145/name	</userString>
+      <description>	#vehicle_customization:CS_Style_06_145/description	</description>
+      <longDescriptionSpecial>	#vehicle_customization:CS_Style_06_145/longDescription	</longDescriptionSpecial>
+    </style>
+    <tags>	hiddenInUI	</tags>
+    <priceGroup>	MT 2D styles universal 1000g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+  </itemGroup>
+  <itemGroup>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <style>
       <id>	31427	</id>
       <texture>	gui/maps/vehicles/styles/Calendar_Style_137.png	</texture>
       <userString>	#vehicle_customization:Calendar_Style_137/name	</userString>
@@ -6429,6 +6988,82 @@
         <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
       </exclude>
     </vehicleFilter>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <style>
+      <id>	31582	</id>
+      <texture>	gui/maps/vehicles/styles/ClanSeason_J36Type63HT_Style_145.png	</texture>
+      <outfits>
+        <outfit>
+          <season>	all	</season>
+          <modifications>
+            <item>	3	</item>
+          </modifications>
+          <paints>
+            <item>
+              <id>	31530	</id>
+              <appliedTo>	4119	</appliedTo>
+            </item>
+            <item>
+              <id>	31531	</id>
+              <appliedTo>	16640	</appliedTo>
+            </item>
+          </paints>
+          <camouflages>
+            <item>
+              <id>	31546	</id>
+              <patternSize>	1	</patternSize>
+              <appliedTo>	4096	</appliedTo>
+              <palette>	0	</palette>
+            </item>
+            <item>
+              <id>	31547	</id>
+              <patternSize>	1	</patternSize>
+              <appliedTo>	256	</appliedTo>
+              <palette>	0	</palette>
+            </item>
+            <item>
+              <id>	31548	</id>
+              <patternSize>	1	</patternSize>
+              <appliedTo>	16	</appliedTo>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <insignias>
+            <item>
+              <id>	31060	</id>
+              <appliedTo>	4096	</appliedTo>
+            </item>
+          </insignias>
+          <projection_decals>
+            <item>
+              <id>	31489	</id>
+              <tags>	formfactor_square right safe	</tags>
+            </item>
+          </projection_decals>
+        </outfit>
+      </outfits>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+      <userString>	#vehicle_customization:ClanSeason_J36Type63HT_Style_145/name	</userString>
+      <description>	#vehicle_customization:ClanSeason_J36Type63HT_Style_145/description	</description>
+      <longDescriptionSpecial>	#vehicle_customization:ClanSeason_J36Type63HT_Style_145/longDescription	</longDescriptionSpecial>
+    </style>
+    <priceGroup>	MT 2D styles direct 1500g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	japan:J36_Type_63_HT_02	</vehicles>
+      </include>
+    </vehicleFilter>
+    <tags>	lockedOnVehicle progression_required	</tags>
   </itemGroup>
   <itemGroup>
     <userString>	#vehicle_customization:styles/special_styles	</userString>
@@ -15813,6 +16448,331 @@
     </vehicleFilter>
   </itemGroup>
   <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <style>
+      <id>	31593	</id>
+      <texture>	gui/maps/vehicles/styles/Rush_FireFalcon_Style_145.png	</texture>
+      <outfits>
+        <outfit>
+          <season>	all	</season>
+          <camouflages>
+            <item>
+              <id>	31562	</id>
+              <patternSize>	1	</patternSize>
+              <appliedTo>	4368	</appliedTo>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <insignias>
+            <item>
+              <id>	31062	</id>
+              <appliedTo>	4096	</appliedTo>
+            </item>
+          </insignias>
+        </outfit>
+      </outfits>
+      <userString>	#vehicle_customization:Rush_00_FireFalcon_Style_145/name	</userString>
+      <description>	#vehicle_customization:Rush_00_FireFalcon_Style_145/description	</description>
+      <longDescriptionSpecial>	#vehicle_customization:Rush_00_FireFalcon_Style_145/longDescription	</longDescriptionSpecial>
+      <alternateItems>
+        <camouflage>
+          <id>	31562 31563 31564 31565 31566 31567	</id>
+        </camouflage>
+      </alternateItems>
+    </style>
+    <tags>	questsProgression	</tags>
+    <priceGroup>	MT 2D styles universal 1000g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <style>
+      <id>	31594	</id>
+      <texture>	gui/maps/vehicles/styles/Rush_FireFalcon_Style_145.png	</texture>
+      <outfits>
+        <outfit>
+          <season>	all	</season>
+          <modifications>
+            <item>	3	</item>
+          </modifications>
+          <paints>
+            <item>
+              <id>	31547	</id>
+              <appliedTo>	20753	</appliedTo>
+            </item>
+          </paints>
+          <camouflages>
+            <item>
+              <id>	31562	</id>
+              <patternSize>	1	</patternSize>
+              <appliedTo>	4368	</appliedTo>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <projection_decals>
+            <item>
+              <id>	31506	</id>
+              <tags>	formfactor_square front safe	</tags>
+            </item>
+          </projection_decals>
+        </outfit>
+      </outfits>
+      <userString>	#vehicle_customization:Rush_01_FireFalcon_Style_145/name	</userString>
+      <description>	#vehicle_customization:Rush_01_FireFalcon_Style_145/description	</description>
+      <longDescriptionSpecial>	#vehicle_customization:Rush_01_FireFalcon_Style_145/longDescription	</longDescriptionSpecial>
+    </style>
+    <tags>	hiddenInUI	</tags>
+    <priceGroup>	MT 2D styles universal 1000g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <style>
+      <id>	31595	</id>
+      <texture>	gui/maps/vehicles/styles/Rush_FireFalcon_Style_145.png	</texture>
+      <outfits>
+        <outfit>
+          <season>	all	</season>
+          <modifications>
+            <item>	4	</item>
+          </modifications>
+          <paints>
+            <item>
+              <id>	31548	</id>
+              <appliedTo>	20753	</appliedTo>
+            </item>
+          </paints>
+          <camouflages>
+            <item>
+              <id>	31563	</id>
+              <patternSize>	1	</patternSize>
+              <appliedTo>	4368	</appliedTo>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <projection_decals>
+            <item>
+              <id>	31507	</id>
+              <tags>	formfactor_square front safe	</tags>
+            </item>
+          </projection_decals>
+        </outfit>
+      </outfits>
+      <userString>	#vehicle_customization:Rush_02_FireFalcon_Style_145/name	</userString>
+      <description>	#vehicle_customization:Rush_02_FireFalcon_Style_145/description	</description>
+      <longDescriptionSpecial>	#vehicle_customization:Rush_02_FireFalcon_Style_145/longDescription	</longDescriptionSpecial>
+    </style>
+    <tags>	hiddenInUI	</tags>
+    <priceGroup>	MT 2D styles universal 1000g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <style>
+      <id>	31596	</id>
+      <texture>	gui/maps/vehicles/styles/Rush_FireFalcon_Style_145.png	</texture>
+      <outfits>
+        <outfit>
+          <season>	all	</season>
+          <modifications>
+            <item>	4	</item>
+          </modifications>
+          <paints>
+            <item>
+              <id>	31549	</id>
+              <appliedTo>	20753	</appliedTo>
+            </item>
+          </paints>
+          <camouflages>
+            <item>
+              <id>	31564	</id>
+              <patternSize>	1	</patternSize>
+              <appliedTo>	4368	</appliedTo>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <projection_decals>
+            <item>
+              <id>	31508	</id>
+              <tags>	formfactor_square front safe	</tags>
+            </item>
+          </projection_decals>
+        </outfit>
+      </outfits>
+      <userString>	#vehicle_customization:Rush_03_FireFalcon_Style_145/name	</userString>
+      <description>	#vehicle_customization:Rush_03_FireFalcon_Style_145/description	</description>
+      <longDescriptionSpecial>	#vehicle_customization:Rush_03_FireFalcon_Style_145/longDescription	</longDescriptionSpecial>
+    </style>
+    <tags>	hiddenInUI	</tags>
+    <priceGroup>	MT 2D styles universal 1000g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <style>
+      <id>	31597	</id>
+      <texture>	gui/maps/vehicles/styles/Rush_FireFalcon_Style_145.png	</texture>
+      <outfits>
+        <outfit>
+          <season>	all	</season>
+          <modifications>
+            <item>	4	</item>
+          </modifications>
+          <paints>
+            <item>
+              <id>	31550	</id>
+              <appliedTo>	20753	</appliedTo>
+            </item>
+          </paints>
+          <camouflages>
+            <item>
+              <id>	31565	</id>
+              <patternSize>	1	</patternSize>
+              <appliedTo>	4368	</appliedTo>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <projection_decals>
+            <item>
+              <id>	31509	</id>
+              <tags>	formfactor_square front safe	</tags>
+            </item>
+          </projection_decals>
+        </outfit>
+      </outfits>
+      <userString>	#vehicle_customization:Rush_04_FireFalcon_Style_145/name	</userString>
+      <description>	#vehicle_customization:Rush_04_FireFalcon_Style_145/description	</description>
+      <longDescriptionSpecial>	#vehicle_customization:Rush_04_FireFalcon_Style_145/longDescription	</longDescriptionSpecial>
+    </style>
+    <tags>	hiddenInUI	</tags>
+    <priceGroup>	MT 2D styles universal 1000g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <style>
+      <id>	31598	</id>
+      <texture>	gui/maps/vehicles/styles/Rush_FireFalcon_Style_145.png	</texture>
+      <outfits>
+        <outfit>
+          <season>	all	</season>
+          <modifications>
+            <item>	4	</item>
+          </modifications>
+          <paints>
+            <item>
+              <id>	31551	</id>
+              <appliedTo>	20753	</appliedTo>
+            </item>
+          </paints>
+          <camouflages>
+            <item>
+              <id>	31566	</id>
+              <patternSize>	1	</patternSize>
+              <appliedTo>	4368	</appliedTo>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <projection_decals>
+            <item>
+              <id>	31510	</id>
+              <tags>	formfactor_square front safe	</tags>
+            </item>
+          </projection_decals>
+        </outfit>
+      </outfits>
+      <userString>	#vehicle_customization:Rush_05_FireFalcon_Style_145/name	</userString>
+      <description>	#vehicle_customization:Rush_05_FireFalcon_Style_145/description	</description>
+      <longDescriptionSpecial>	#vehicle_customization:Rush_05_FireFalcon_Style_145/longDescription	</longDescriptionSpecial>
+    </style>
+    <tags>	hiddenInUI	</tags>
+    <priceGroup>	MT 2D styles universal 1000g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <style>
+      <id>	31599	</id>
+      <texture>	gui/maps/vehicles/styles/Rush_FireFalcon_Style_145.png	</texture>
+      <outfits>
+        <outfit>
+          <season>	all	</season>
+          <modifications>
+            <item>	4	</item>
+          </modifications>
+          <paints>
+            <item>
+              <id>	31552	</id>
+              <appliedTo>	20753	</appliedTo>
+            </item>
+          </paints>
+          <camouflages>
+            <item>
+              <id>	31567	</id>
+              <patternSize>	1	</patternSize>
+              <appliedTo>	4368	</appliedTo>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <projection_decals>
+            <item>
+              <id>	31511	</id>
+              <tags>	formfactor_square front safe	</tags>
+            </item>
+          </projection_decals>
+        </outfit>
+      </outfits>
+      <userString>	#vehicle_customization:Rush_06_FireFalcon_Style_145/name	</userString>
+      <description>	#vehicle_customization:Rush_06_FireFalcon_Style_145/description	</description>
+      <longDescriptionSpecial>	#vehicle_customization:Rush_06_FireFalcon_Style_145/longDescription	</longDescriptionSpecial>
+    </style>
+    <tags>	hiddenInUI	</tags>
+    <priceGroup>	MT 2D styles universal 1000g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+  </itemGroup>
+  <itemGroup>
     <season>	ALL	</season>
     <historical>	1	</historical>
     <tags>	hiddenInUI	</tags>
@@ -16467,6 +17427,110 @@
       </exclude>
     </vehicleFilter>
     <tags>	hiddenInUI	</tags>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	MT 2D styles universal 1000g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <style>
+      <id>	31600	</id>
+      <texture>	gui/maps/vehicles/styles/Rush_BlackEdition_Legend_Style_145.png	</texture>
+      <outfits>
+        <outfit>
+          <season>	all	</season>
+          <modifications>
+            <item>	4	</item>
+          </modifications>
+          <paints>
+            <item>
+              <id>	31553	</id>
+              <appliedTo>	20753	</appliedTo>
+            </item>
+          </paints>
+          <camouflages>
+            <item>
+              <id>	31568	</id>
+              <patternSize>	1	</patternSize>
+              <appliedTo>	4368	</appliedTo>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <insignias>
+            <item>
+              <id>	31063	</id>
+              <appliedTo>	4096	</appliedTo>
+            </item>
+          </insignias>
+          <projection_decals>
+            <item>
+              <id>	31516	</id>
+              <tags>	safe front formfactor_square	</tags>
+            </item>
+          </projection_decals>
+        </outfit>
+      </outfits>
+      <userString>	#vehicle_customization:Rush_BlackEdition_Legend_Style_145/name	</userString>
+      <description>	#vehicle_customization:Rush_BlackEdition_Legend_Style_145/description	</description>
+      <longDescriptionSpecial>	#vehicle_customization:Rush_BlackEdition_Legend_Style_145/longDescription	</longDescriptionSpecial>
+    </style>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	MT 2D styles universal 1000g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <style>
+      <id>	31592	</id>
+      <texture>	gui/maps/vehicles/styles/Rush_BlackEdition_Style_145.png	</texture>
+      <outfits>
+        <outfit>
+          <season>	all	</season>
+          <modifications>
+            <item>	4	</item>
+          </modifications>
+          <paints>
+            <item>
+              <id>	31546	</id>
+              <appliedTo>	20753	</appliedTo>
+            </item>
+          </paints>
+          <camouflages>
+            <item>
+              <id>	31561	</id>
+              <patternSize>	1	</patternSize>
+              <appliedTo>	4368	</appliedTo>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <projection_decals>
+            <item>
+              <id>	31505	</id>
+              <tags>	formfactor_square safe front	</tags>
+            </item>
+          </projection_decals>
+          <insignias>
+            <item>
+              <id>	31061	</id>
+              <appliedTo>	4096	</appliedTo>
+            </item>
+          </insignias>
+        </outfit>
+      </outfits>
+      <userString>	#vehicle_customization:Rush_BlackEdition_Style_145/name	</userString>
+      <description>	#vehicle_customization:Rush_BlackEdition_Style_145/description	</description>
+      <longDescriptionSpecial>	#vehicle_customization:Rush_BlackEdition_Style_145/longDescription	</longDescriptionSpecial>
+    </style>
   </itemGroup>
   <itemGroup>
     <userString>	#vehicle_customization:styles/special_styles	</userString>
@@ -17300,6 +18364,128 @@
     <userString>	#vehicle_customization:styles/special_styles	</userString>
     <season>	ALL	</season>
     <historical>	1	</historical>
+    <priceGroup>	MT 2D styles universal 1000g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <style>
+      <id>	31606	</id>
+      <outfits>
+        <outfit>
+          <season>	all	</season>
+          <modifications>
+            <item>	4	</item>
+          </modifications>
+          <paints>
+            <item>
+              <id>	31564	</id>
+              <appliedTo>	20752	</appliedTo>
+            </item>
+            <item>
+              <id>	31565	</id>
+              <appliedTo>	1	</appliedTo>
+            </item>
+          </paints>
+          <camouflages>
+            <item>
+              <id>	31577	</id>
+              <patternSize>	1	</patternSize>
+              <appliedTo>	256	</appliedTo>
+              <palette>	0	</palette>
+            </item>
+            <item>
+              <id>	31578	</id>
+              <patternSize>	1	</patternSize>
+              <appliedTo>	16	</appliedTo>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <projection_decals>
+            <item>
+              <id>	31518	</id>
+              <tags>	left safe formfactor_square	</tags>
+            </item>
+            <item>
+              <id>	31518	</id>
+              <tags>	safe right formfactor_square	</tags>
+            </item>
+          </projection_decals>
+        </outfit>
+      </outfits>
+      <texture>	gui/maps/vehicles/styles/SubscriptionRostelecom_Shop_Style_145.png	</texture>
+      <userString>	#vehicle_customization:SubscriptionRostelecom_Shop_Style_145/name	</userString>
+      <description>	#vehicle_customization:SubscriptionRostelecom_Shop_Style_145/description	</description>
+      <longDescriptionSpecial>	#vehicle_customization:SubscriptionRostelecom_Shop_Style_145/longDescription	</longDescriptionSpecial>
+    </style>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	MT 2D styles direct 1500g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	ussr:R171_IS_3_II_02	</vehicles>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	31605	</id>
+      <texture>	gui/maps/vehicles/styles/SubscriptionRostelecom_Style_145.png	</texture>
+      <userString>	#vehicle_customization:SubscriptionRostelecom_Style_145/name	</userString>
+      <description>	#vehicle_customization:SubscriptionRostelecom_Style_145/description	</description>
+      <longDescriptionSpecial>	#vehicle_customization:SubscriptionRostelecom_Style_145/longDescription	</longDescriptionSpecial>
+      <outfits>
+        <outfit>
+          <season>	all	</season>
+          <modifications>
+            <item>	3	</item>
+          </modifications>
+          <paints>
+            <item>
+              <id>	31562	</id>
+              <appliedTo>	20752	</appliedTo>
+            </item>
+            <item>
+              <id>	31563	</id>
+              <appliedTo>	7	</appliedTo>
+            </item>
+          </paints>
+          <camouflages>
+            <item>
+              <id>	31575	</id>
+              <patternSize>	1	</patternSize>
+              <appliedTo>	256	</appliedTo>
+              <palette>	0	</palette>
+            </item>
+            <item>
+              <id>	31576	</id>
+              <patternSize>	1	</patternSize>
+              <appliedTo>	16	</appliedTo>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <projection_decals>
+            <item>
+              <id>	31517	</id>
+              <tags>	formfactor_square safe left	</tags>
+            </item>
+            <item>
+              <id>	31517	</id>
+              <tags>	formfactor_square safe right	</tags>
+            </item>
+          </projection_decals>
+        </outfit>
+      </outfits>
+    </style>
+    <tags>	lockedOnVehicle	</tags>
+    <maxNumber>	1	</maxNumber>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
     <style>
       <id>	31565	</id>
       <texture>	gui/maps/vehicles/styles/SummerSale_Style_143.png	</texture>
@@ -17884,6 +19070,109 @@
     </style>
   </itemGroup>
   <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	MT 2D styles universal 1000g notInShop	</priceGroup>
+    <tags>	progression_required	</tags>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <style>
+      <id>	31585	</id>
+      <texture>	gui/maps/vehicles/styles/TanksDay_Style_145.png	</texture>
+      <outfits>
+        <outfit>
+          <season>	event	</season>
+        </outfit>
+        <outfit>
+          <season>	winter	</season>
+          <camouflages>
+            <item>
+              <id>	31553	</id>
+              <patternSize>	1	</patternSize>
+              <appliedTo>	4368	</appliedTo>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <paints>
+            <item>
+              <id>	31535	</id>
+              <appliedTo>	1	</appliedTo>
+            </item>
+            <item>
+              <id>	31539	</id>
+              <appliedTo>	20752	</appliedTo>
+            </item>
+          </paints>
+          <modifications>
+            <item>	4	</item>
+          </modifications>
+        </outfit>
+        <outfit>
+          <season>	summer	</season>
+          <camouflages>
+            <item>
+              <id>	31551	</id>
+              <patternSize>	1	</patternSize>
+              <appliedTo>	4368	</appliedTo>
+              <palette>	1	</palette>
+            </item>
+          </camouflages>
+          <modifications>
+            <item>	4	</item>
+          </modifications>
+          <paints>
+            <item>
+              <id>	31534	</id>
+              <appliedTo>	1	</appliedTo>
+            </item>
+            <item>
+              <id>	31539	</id>
+              <appliedTo>	20752	</appliedTo>
+            </item>
+          </paints>
+        </outfit>
+        <outfit>
+          <season>	desert	</season>
+          <paints>
+            <item>
+              <id>	31536	</id>
+              <appliedTo>	1	</appliedTo>
+            </item>
+            <item>
+              <id>	31539	</id>
+              <appliedTo>	20752	</appliedTo>
+            </item>
+          </paints>
+          <camouflages>
+            <item>
+              <id>	31552	</id>
+              <patternSize>	1	</patternSize>
+              <appliedTo>	4368	</appliedTo>
+              <palette>	2	</palette>
+            </item>
+          </camouflages>
+          <modifications>
+            <item>	4	</item>
+          </modifications>
+        </outfit>
+      </outfits>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+      <userString>	#vehicle_customization:TanksDay_Style_145/name	</userString>
+      <description>	#vehicle_customization:TanksDay_Style_145/description	</description>
+      <longDescriptionSpecial>	#vehicle_customization:TanksDay_Style_145/longDescription	</longDescriptionSpecial>
+    </style>
+  </itemGroup>
+  <itemGroup>
     <season>	ALL	</season>
     <historical>	1	</historical>
     <userString>	#vehicle_customization:styles/special_styles	</userString>
@@ -18263,6 +19552,106 @@
     </style>
     <priceGroup>	MT 2D styles universal 1000g notInShop	</priceGroup>
     <tags>	progression_required	</tags>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <tags>	addNationalEmblem progression_required	</tags>
+    <priceGroup>	MT 2D styles universal 1000g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <style>
+      <id>	31615	</id>
+      <texture>	gui/maps/vehicles/styles/TradeCaravan_01_Style_145.png	</texture>
+      <userString>	#vehicle_customization:TradeCaravan_01_Style_145/name	</userString>
+      <description>	#vehicle_customization:TradeCaravan_01_Style_145/description	</description>
+      <longDescriptionSpecial>	#vehicle_customization:TradeCaravan_01_Style_145/longDescription	</longDescriptionSpecial>
+      <outfits>
+        <outfit>
+          <season>	all	</season>
+          <modifications>
+            <item>	4	</item>
+          </modifications>
+          <paints>
+            <item>
+              <id>	31571	</id>
+              <appliedTo>	20753	</appliedTo>
+            </item>
+          </paints>
+          <camouflages>
+            <item>
+              <id>	31591	</id>
+              <patternSize>	1	</patternSize>
+              <appliedTo>	4368	</appliedTo>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+        </outfit>
+      </outfits>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+    </style>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <tags>	progression_required	</tags>
+    <priceGroup>	MT 2D styles universal 1000g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <style>
+      <id>	31616	</id>
+      <texture>	gui/maps/vehicles/styles/TradeCaravan_02_Style_145.png	</texture>
+      <userString>	#vehicle_customization:TradeCaravan_02_Style_145/name	</userString>
+      <description>	#vehicle_customization:TradeCaravan_02_Style_145/description	</description>
+      <longDescriptionSpecial>	#vehicle_customization:TradeCaravan_02_Style_145/longDescription	</longDescriptionSpecial>
+      <outfits>
+        <outfit>
+          <season>	all	</season>
+          <modifications>
+            <item>	4	</item>
+          </modifications>
+          <paints>
+            <item>
+              <id>	31572	</id>
+              <appliedTo>	20752	</appliedTo>
+            </item>
+            <item>
+              <id>	31573	</id>
+              <appliedTo>	1	</appliedTo>
+            </item>
+          </paints>
+          <camouflages>
+            <item>
+              <id>	31592	</id>
+              <patternSize>	1	</patternSize>
+              <appliedTo>	4368	</appliedTo>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+        </outfit>
+      </outfits>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+    </style>
   </itemGroup>
   <itemGroup>
     <season>	ALL	</season>
@@ -20855,6 +22244,392 @@
         </outfit>
       </outfits>
     </style>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+  </itemGroup>
+  <itemGroup>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <tags>	progression_required	</tags>
+    <priceGroup>	MT 2D styles universal 1000g notInShop	</priceGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <style>
+      <id>	31583	</id>
+      <texture>	gui/maps/vehicles/styles/WT26_01_Style_145.png	</texture>
+      <userString>	#vehicle_customization:WT26_01_Style_145/name	</userString>
+      <description>	#vehicle_customization:WT26_01_Style_145/description	</description>
+      <longDescriptionSpecial>	#vehicle_customization:WT26_01_Style_145/longDescription	</longDescriptionSpecial>
+      <outfits>
+        <outfit>
+          <season>	all	</season>
+          <modifications>
+            <item>	4	</item>
+          </modifications>
+          <paints>
+            <item>
+              <id>	31532	</id>
+              <appliedTo>	20753	</appliedTo>
+            </item>
+          </paints>
+          <camouflages>
+            <item>
+              <id>	31549	</id>
+              <patternSize>	1	</patternSize>
+              <appliedTo>	4368	</appliedTo>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+        </outfit>
+      </outfits>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+    </style>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <tags>	progression_required	</tags>
+    <priceGroup>	MT 2D styles universal 1000g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <style>
+      <id>	31578	</id>
+      <texture>	gui/maps/vehicles/styles/WT26_02_Style_145.png	</texture>
+      <outfits>
+        <outfit>
+          <season>	all	</season>
+          <modifications>
+            <item>	4	</item>
+          </modifications>
+          <paints>
+            <item>
+              <id>	31525	</id>
+              <appliedTo>	20753	</appliedTo>
+            </item>
+          </paints>
+          <camouflages>
+            <item>
+              <id>	31541	</id>
+              <patternSize>	1	</patternSize>
+              <appliedTo>	4368	</appliedTo>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+        </outfit>
+      </outfits>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+      <userString>	#vehicle_customization:WT26_02_Style_145/name	</userString>
+      <description>	#vehicle_customization:WT26_02_Style_145/description	</description>
+      <longDescriptionSpecial>	#vehicle_customization:WT26_02_Style_145/longDescription	</longDescriptionSpecial>
+    </style>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <tags>	progression_required	</tags>
+    <priceGroup>	MT 2D styles universal 1000g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <style>
+      <id>	31584	</id>
+      <texture>	gui/maps/vehicles/styles/WT26_03_Style_145.png	</texture>
+      <userString>	#vehicle_customization:WT26_03_Style_145/name	</userString>
+      <description>	#vehicle_customization:WT26_03_Style_145/description	</description>
+      <longDescriptionSpecial>	#vehicle_customization:WT26_03_Style_145/longDescription	</longDescriptionSpecial>
+      <outfits>
+        <outfit>
+          <season>	all	</season>
+          <modifications>
+            <item>	3	</item>
+          </modifications>
+          <paints>
+            <item>
+              <id>	31533	</id>
+              <appliedTo>	20753	</appliedTo>
+            </item>
+          </paints>
+          <camouflages>
+            <item>
+              <id>	31550	</id>
+              <patternSize>	1	</patternSize>
+              <appliedTo>	4368	</appliedTo>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+        </outfit>
+      </outfits>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+    </style>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <tags>	progression_required	</tags>
+    <priceGroup>	MT 2D styles universal 1000g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <style>
+      <id>	31589	</id>
+      <texture>	gui/maps/vehicles/styles/WT26_05_Style_145.png	</texture>
+      <userString>	#vehicle_customization:WT26_05_Style_145/name	</userString>
+      <description>	#vehicle_customization:WT26_05_Style_145/description	</description>
+      <longDescriptionSpecial>	#vehicle_customization:WT26_05_Style_145/longDescription	</longDescriptionSpecial>
+      <outfits>
+        <outfit>
+          <season>	all	</season>
+          <modifications>
+            <item>	4	</item>
+          </modifications>
+          <paints>
+            <item>
+              <id>	31542	</id>
+              <appliedTo>	20848	</appliedTo>
+            </item>
+            <item>
+              <id>	31543	</id>
+              <appliedTo>	7	</appliedTo>
+            </item>
+          </paints>
+          <camouflages>
+            <item>
+              <id>	31557	</id>
+              <patternSize>	1	</patternSize>
+              <appliedTo>	4368	</appliedTo>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+        </outfit>
+      </outfits>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+    </style>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	2	</historical>
+    <style>
+      <id>	31579	</id>
+      <texture>	gui/maps/vehicles/styles/WT26_07_Style_145.png	</texture>
+      <userString>	#vehicle_customization:WT26_07_Style_145/name	</userString>
+      <description>	#vehicle_customization:WT26_07_Style_145/description	</description>
+      <longDescriptionSpecial>	#vehicle_customization:WT26_07_Style_145/longDescription	</longDescriptionSpecial>
+      <outfits>
+        <outfit>
+          <season>	all	</season>
+          <modifications>
+            <item>	4	</item>
+          </modifications>
+          <paints>
+            <item>
+              <id>	31526	</id>
+              <appliedTo>	20753	</appliedTo>
+            </item>
+          </paints>
+          <camouflages>
+            <item>
+              <id>	31542	</id>
+              <patternSize>	1	</patternSize>
+              <appliedTo>	4368	</appliedTo>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+        </outfit>
+      </outfits>
+    </style>
+    <priceGroup>	MT 2D styles universal 1000g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <style>
+      <id>	31591	</id>
+      <texture>	gui/maps/vehicles/styles/WT26_Seleb_Style_145.png	</texture>
+      <outfits>
+        <outfit>
+          <season>	all	</season>
+          <modifications>
+            <item>	4	</item>
+          </modifications>
+          <paints>
+            <item>
+              <id>	31545	</id>
+              <appliedTo>	20753	</appliedTo>
+            </item>
+          </paints>
+          <camouflages>
+            <item>
+              <id>	31559	</id>
+              <patternSize>	1	</patternSize>
+              <appliedTo>	272	</appliedTo>
+              <palette>	0	</palette>
+            </item>
+            <item>
+              <id>	31560	</id>
+              <patternSize>	1	</patternSize>
+              <appliedTo>	4096	</appliedTo>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <projection_decals>
+            <item>
+              <id>	31502	</id>
+              <tags>	left safe formfactor_square	</tags>
+            </item>
+            <item>
+              <id>	31503	</id>
+              <tags>	safe right formfactor_square	</tags>
+            </item>
+            <item>
+              <id>	31504	</id>
+              <tags>	formfactor_rect1x2 front cover	</tags>
+            </item>
+          </projection_decals>
+        </outfit>
+      </outfits>
+      <userString>	#vehicle_customization:WT26_Seleb_Style_145/name	</userString>
+      <description>	#vehicle_customization:WT26_Seleb_Style_145/description	</description>
+      <longDescriptionSpecial>	#vehicle_customization:WT26_Seleb_Style_145/longDescription	</longDescriptionSpecial>
+    </style>
+    <priceGroup>	MT 2D styles universal 1000g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	MT 2D styles universal 1000g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <style>
+      <id>	31603	</id>
+      <userString>	#vehicle_customization:WT26_Shop_01_Style_145/name	</userString>
+      <description>	#vehicle_customization:WT26_Shop_01_Style_145/description	</description>
+      <longDescriptionSpecial>	#vehicle_customization:WT26_Shop_01_Style_145/longDescription	</longDescriptionSpecial>
+      <outfits>
+        <outfit>
+          <season>	all	</season>
+          <modifications>
+            <item>	4	</item>
+          </modifications>
+          <paints>
+            <item>
+              <id>	31558	</id>
+              <appliedTo>	20752	</appliedTo>
+            </item>
+            <item>
+              <id>	31559	</id>
+              <appliedTo>	1	</appliedTo>
+            </item>
+          </paints>
+          <camouflages>
+            <item>
+              <id>	31573	</id>
+              <patternSize>	1	</patternSize>
+              <appliedTo>	4368	</appliedTo>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+        </outfit>
+      </outfits>
+      <texture>	gui/maps/vehicles/styles/WT26_Shop_01_Style_145.png	</texture>
+    </style>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <style>
+      <id>	31608	</id>
+      <texture>	gui/maps/vehicles/styles/WT26_Shop_02_Style_145.png	</texture>
+      <outfits>
+        <outfit>
+          <season>	all	</season>
+          <modifications>
+            <item>	4	</item>
+          </modifications>
+          <paints>
+            <item>
+              <id>	31566	</id>
+              <appliedTo>	20753	</appliedTo>
+            </item>
+          </paints>
+          <camouflages>
+            <item>
+              <id>	31580	</id>
+              <patternSize>	1	</patternSize>
+              <appliedTo>	4368	</appliedTo>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <projection_decals>
+            <item>
+              <id>	31519	</id>
+              <tags>	cover front formfactor_rect1x2	</tags>
+            </item>
+          </projection_decals>
+        </outfit>
+      </outfits>
+      <userString>	#vehicle_customization:WT26_Shop_02_Style_145/name	</userString>
+      <description>	#vehicle_customization:WT26_Shop_02_Style_145/description	</description>
+      <longDescriptionSpecial>	#vehicle_customization:WT26_Shop_02_Style_145/longDescription	</longDescriptionSpecial>
+    </style>
+    <priceGroup>	MT 2D styles universal 1000g notInShop	</priceGroup>
     <vehicleFilter>
       <exclude>
         <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
@@ -49952,6 +51727,53 @@
     </style>
   </itemGroup>
   <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	0	</historical>
+    <priceGroup>	MT 3D styles 9-10 levels 8000g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	france:F72_AMX_30	</vehicles>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	31538	</id>
+      <texture>	gui/maps/vehicles/styles/F72_AMX_30_3Dst_02.png	</texture>
+      <modelsSet>	F72_AMX_30_3Dst_02	</modelsSet>
+      <maxNumber>	1	</maxNumber>
+      <tags>	progression_required	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	1	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <attachments>
+            <item>
+              <id>	31135	</id>
+              <slotId>	18000	</slotId>
+            </item>
+          </attachments>
+        </outfit>
+      </outfits>
+      <userString>	#vehicle_customization:F72_AMX_30_3Dst_02/name	</userString>
+      <description>	#vehicle_customization:F72_AMX_30_3Dst_02/description	</description>
+      <longDescriptionSpecial>	#vehicle_customization:F72_AMX_30_3Dst_02/longDescription	</longDescriptionSpecial>
+    </style>
+  </itemGroup>
+  <itemGroup>
     <userString>	#vehicle_customization:styles/main_styles	</userString>
     <season>	ALL	</season>
     <historical>	0	</historical>
@@ -52211,6 +54033,46 @@
           <attachments>
             <item>
               <id>	31041	</id>
+              <slotId>	18000	</slotId>
+            </item>
+          </attachments>
+        </outfit>
+      </outfits>
+    </style>
+  </itemGroup>
+  <itemGroup>
+    <season>	ALL	</season>
+    <historical>	2	</historical>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <priceGroup>	MT 3D styles 9-10 levels 8000g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	germany:G194_E_50_GT_Alkett_Prod_02	</vehicles>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	31567	</id>
+      <modelsSet>	G194_E_50_GT_Alkett_Prod_02_3Dst_Hertz	</modelsSet>
+      <maxNumber>	1	</maxNumber>
+      <texture>	gui/maps/vehicles/styles/G194_E_50_GT_Alkett_Prod_02_3Dst_Hertz.png	</texture>
+      <userString>	#vehicle_customization:G194_E_50_GT_Alkett_Prod_02_3Dst_Hertz/name	</userString>
+      <description>	#vehicle_customization:G194_E_50_GT_Alkett_Prod_02_3Dst_Hertz/description	</description>
+      <longDescriptionSpecial>	#vehicle_customization:G194_E_50_GT_Alkett_Prod_02_3Dst_Hertz/longDescription	</longDescriptionSpecial>
+      <tags>	lockedOnVehicle hiddenInUI	</tags>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	1	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <attachments>
+            <item>
+              <id>	31140	</id>
               <slotId>	18000	</slotId>
             </item>
           </attachments>
@@ -57141,6 +59003,64 @@
       </include>
     </vehicleFilter>
     <maxNumber>	1	</maxNumber>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	0	</historical>
+    <style>
+      <id>	31558	</id>
+      <texture>	gui/maps/vehicles/styles/GB134_FV242B_Condor_3Dst_02.png	</texture>
+      <modelsSet>	GB134_FV242B_Condor_3Dst_02	</modelsSet>
+      <outfits>
+        <outfit>
+          <season>	all	</season>
+          <camouflages>
+            <item>
+              <id>	1	</id>
+              <patternSize>	1	</patternSize>
+              <appliedTo>	4368	</appliedTo>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <insignias>
+            <item>
+              <id>	6	</id>
+              <appliedTo>	4096	</appliedTo>
+            </item>
+          </insignias>
+          <attachments>
+            <item>
+              <id>	31134	</id>
+              <slotId>	38000	</slotId>
+            </item>
+            <item>
+              <id>	31132	</id>
+              <slotId>	18000	</slotId>
+            </item>
+          </attachments>
+          <overrideDefaultAttachments>	1	</overrideDefaultAttachments>
+        </outfit>
+      </outfits>
+      <userString>	#vehicle_customization:GB134_FV242B_Condor_3Dst_02/name	</userString>
+      <description>	#vehicle_customization:GB134_FV242B_Condor_3Dst_02/description	</description>
+      <longDescriptionSpecial>	#vehicle_customization:GB134_FV242B_Condor_3Dst_02/longDescription	</longDescriptionSpecial>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+    </style>
+    <priceGroup>	MT 3D styles 9-10 levels 8000g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	uk:GB134_FV242B_Condor	</vehicles>
+      </include>
+    </vehicleFilter>
+    <maxNumber>	1	</maxNumber>
+    <tags>	progression_required	</tags>
   </itemGroup>
   <itemGroup>
     <season>	ALL	</season>
@@ -62620,7 +64540,7 @@
     <priceGroup>	MT 3D styles 6-7-8 levels 4000g notInShop	</priceGroup>
     <vehicleFilter>
       <include>
-        <vehicles>	ussr:R127_T44_100_I	</vehicles>
+        <vehicles>	ussr:R127_T44_100_I ussr:R122_T44_100	</vehicles>
       </include>
     </vehicleFilter>
     <style>
@@ -64962,6 +66882,105 @@
           </include>
         </projection_decal>
       </itemFilters>
+    </style>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	0	</historical>
+    <priceGroup>	MT 3D styles 9-10 levels 8000g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	ussr:R213_TET_100	</vehicles>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	31539	</id>
+      <isRent>	false	</isRent>
+      <texture>	gui/maps/vehicles/styles/R213_TET_100_3Dst_02.png	</texture>
+      <longDescriptionSpecial>	#vehicle_customization:special_style/R213_TET_100_3Dst_02/longDescription	</longDescriptionSpecial>
+      <description>	#vehicle_customization:special_style/R213_TET_100_3Dst_02/description	</description>
+      <modelsSet>	R213_TET_100_3Dst_02	</modelsSet>
+      <maxNumber>	1	</maxNumber>
+      <userString>	#vehicle_customization:special_style/R213_TET_100_3Dst_02/name	</userString>
+      <tags>	progression_required	</tags>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	1	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <attachments>
+            <item>
+              <id>	31131	</id>
+              <slotId>	18000	</slotId>
+            </item>
+          </attachments>
+        </outfit>
+      </outfits>
+    </style>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <maxNumber>	1	</maxNumber>
+    <priceGroup>	MT 3D styles 9-10 levels 8000g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	ussr:R253_Object_277_S	</vehicles>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	31569	</id>
+      <modelsSet>	R253_Object_277_S_3Dst_01	</modelsSet>
+      <userString>	#vehicle_customization:special_style/R253_Object_277_S_3Dst_01/name	</userString>
+      <description>	#vehicle_customization:special_style/R253_Object_277_S_3Dst_01/description	</description>
+      <longDescriptionSpecial>	#vehicle_customization:special_style/R253_Object_277_S_3Dst_01/longDescription	</longDescriptionSpecial>
+      <tags>	lockedOnVehicle	</tags>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	31581	</id>
+              <patternSize>	1	</patternSize>
+              <appliedTo>	16	</appliedTo>
+              <palette>	0	</palette>
+            </item>
+            <item>
+              <id>	31582	</id>
+              <patternSize>	1	</patternSize>
+              <appliedTo>	256	</appliedTo>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <attachments>
+            <item>
+              <id>	31152	</id>
+              <slotId>	18000	</slotId>
+            </item>
+            <item>
+              <id>	31147	</id>
+              <slotId>	18000	</slotId>
+            </item>
+          </attachments>
+          <overrideDefaultAttachments>	1	</overrideDefaultAttachments>
+        </outfit>
+      </outfits>
+      <texture>	gui/maps/vehicles/styles/DEV.png	</texture>
     </style>
   </itemGroup>
   <itemGroup>

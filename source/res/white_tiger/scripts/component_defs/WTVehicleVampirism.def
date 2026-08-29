@@ -1,0 +1,16 @@
+<WTVehicleVampirism.def>
+  <ClientMethods>
+    <onHeal></onHeal>
+  </ClientMethods>
+  <Properties>
+    <equipmentID>
+      <Type>	UINT16	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <Default>	0	</Default>
+    </equipmentID>
+  </Properties>
+  <ofEntity>
+    <Vehicle></Vehicle>
+  </ofEntity>
+  <DefaultKeyName>	wtVampirism	</DefaultKeyName>
+</WTVehicleVampirism.def>

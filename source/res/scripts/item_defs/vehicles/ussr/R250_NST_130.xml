@@ -2263,28 +2263,31 @@
     </detailed>
   </physics>
   <siege_mode>
-    <switchOnTime>	0	</switchOnTime>
-    <switchOffTime>	0	</switchOffTime>
+    <switchOnTime>	2	</switchOnTime>
+    <switchOffTime>	2	</switchOffTime>
     <engineDamageCoeff>	2	</engineDamageCoeff>
     <soundStateChange>
-      <on>	strv_siege_mode_on_PC	</on>
-      <off>	strv_siege_mode_off_PC	</off>
+      <on>	turbine_polish_start_PC	</on>
+      <off>	turbine_polish_stop_PC	</off>
+      <npcOn>	turbine_polish_start_NPC	</npcOn>
+      <npcOff>	turbine_polish_stop_NPC	</npcOff>
+      <isEngine>	true	</isEngine>
     </soundStateChange>
-    <autoSwitchOffRequiredVehicleSpeed>	0	</autoSwitchOffRequiredVehicleSpeed>
-    <autoSwitchOnRequiredVehicleSpeed>	0	</autoSwitchOnRequiredVehicleSpeed>
   </siege_mode>
   <hull_aiming>
     <pitch>
+      <isEnabled>	True	</isEnabled>
       <isFlexible>	True	</isFlexible>
       <wheelCorrectionCenterZ>	0	</wheelCorrectionCenterZ>
       <wheelsCorrectionSpeed>	10	</wheelsCorrectionSpeed>
       <wheelsCorrectionAngles>
-        <pitchMin>	0	</pitchMin>
-        <pitchMax>	0	</pitchMax>
+        <pitchMin>	-3	</pitchMin>
+        <pitchMax>	3	</pitchMax>
       </wheelsCorrectionAngles>
     </pitch>
     <yawDisabled></yawDisabled>
   </hull_aiming>
+  <isRotationStill>	True	</isRotationStill>
   <useHullZSize>	True	</useHullZSize>
   <effects>
     <collision></collision>

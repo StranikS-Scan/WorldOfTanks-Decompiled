@@ -10,8 +10,6 @@ from gui.impl.lobby.common.view_wrappers import createBackportTooltipDecorator
 from gui.impl.pub import ViewImpl
 from gui.impl.pub.lobby_window import LobbyNotificationWindow
 from gui.server_events.bonuses import getNonQuestBonuses
-from helpers import dependency
-from skeletons.gui.game_control import IBRProgressionOnTokensController
 
 def awardsFactory(items, ctx=None):
     bonuses = []
@@ -23,7 +21,6 @@ def awardsFactory(items, ctx=None):
 
 class BattleQuestAwardsView(ViewImpl):
     _COMMON_SOUND_SPACE = GENERAL_SOUND_SPACE
-    brProgression = dependency.descriptor(IBRProgressionOnTokensController)
     __slots__ = ('__tooltipData', '_stage')
 
     def __init__(self, stage):
@@ -55,7 +52,6 @@ class BattleQuestAwardsView(ViewImpl):
             model.setLevel(level)
             rewards = model.getRewards()
             packBonusModelAndTooltipData(bonuses, rewards, self.__tooltipData, getBonusPacker())
-            model.setIconPostfix(self.brProgression.getBirthdayIconPostfix())
 
     def _onLoading(self, *args, **kwargs):
         super(BattleQuestAwardsView, self)._onLoading(args, kwargs)

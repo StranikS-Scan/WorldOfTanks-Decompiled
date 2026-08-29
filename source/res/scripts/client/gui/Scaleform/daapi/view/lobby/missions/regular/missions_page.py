@@ -81,7 +81,8 @@ class MissionsPage(LobbySubView, MissionsPageMeta):
      QUESTS_ALIASES.BATTLE_MATTERS_VIEW_PY_ALIAS: (backport.sound(R.sounds.bm_enter()), backport.sound(R.sounds.bm_exit())),
      QUESTS_ALIASES.TEMP_VIEW_PY_ALIAS: (backport.sound(R.sounds.summer_sale_enter()), backport.sound(R.sounds.summer_sale_exit()))}
     __MISSIONS_MARATHON_DYNAMIC_SOUND = {'black_market': (backport.sound(R.sounds.black_market_enter()), backport.sound(R.sounds.black_market_exit())),
-     'silver_hunt': (backport.sound(R.sounds.silver_hunt_enter()), backport.sound(R.sounds.silver_hunt_exit()))}
+     'silver_hunt': (backport.sound(R.sounds.silver_hunt_enter()), backport.sound(R.sounds.silver_hunt_exit())),
+     'events': (backport.sound(R.sounds.events_enter()), backport.sound(R.sounds.events_exit()))}
     eventsCache = dependency.descriptor(IEventsCache)
     lobbyContext = dependency.descriptor(ILobbyContext)
     eventsController = dependency.descriptor(IEventBoardController)

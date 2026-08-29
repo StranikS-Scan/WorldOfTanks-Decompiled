@@ -922,9 +922,6 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
             self.consistentMatrices.notifyVehicleLoaded(self, vehicle)
         return
 
-    def __makeScreenShot(self, fileType='jpg', fileMask='./../screenshots/'):
-        BigWorld.screenShot(fileType, fileMask)
-
     def enemySPGHit(self, hitPoint):
         self.guiSessionProvider.shared.feedback.setEnemySPGHit(hitPoint)
 
@@ -1066,6 +1063,8 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
     def updateVehicleHealth(self, vehicleID, health, deathReasonID, isCrewActive, isRespawn):
         if vehicleID != self.playerVehicleID or not self.userSeesWorld():
             return
+        elif not self.userSeesWorld():
+            return
         else:
             rawHealth = health
             health = max(0, health)
@@ -1080,6 +1079,9 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
             self.__isRespawnAvailable = isRespawn
             LOG_DEBUG_DEV('[RESPAWN] client.Avatar.updateVehicleHealth', vehicleID, health, deathReasonID, isCrewActive, isRespawn, wasAlive)
             self.guiSessionProvider.invalidateVehicleState(VEHICLE_VIEW_STATE.HEALTH, health, vehicleID)
+            vehicle = BigWorld.entities.get(self.playerVehicleID)
+            if vehicle is not None and vehicle.maxHealth == health:
+                self.guiSessionProvider.invalidateVehicleState(VEHICLE_VIEW_STATE.FULL_HP, None)
             if not wasAlive and isAlive:
                 self.__disableRespawnMode = True
                 self.__isObserver = None
@@ -1971,7 +1973,7 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
                 return
             if not keyDown:
                 self.__cancelWaitingForCharge()
-            if self.isGunLocked or self.__isOwnBarrelUnderWater():
+            if self.isGunLocked or self.isGunLockedForcefully or self.__isOwnBarrelUnderWater():
                 if not isRepeat:
                     self.showVehicleError(self.__cantShootCriticals['gun_locked'])
                 return
@@ -2012,7 +2014,7 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
             if not isRepeat and error in self.__cantShootCriticals:
                 self.showVehicleError(self.__cantShootCriticals[error], args={'typeDescriptor': self.getVehicleDescriptor()})
             return (False, error)
-        elif self.isGunLocked or self.__isOwnBarrelUnderWater():
+        elif self.isGunLocked or self.isGunLockedForcefully or self.__isOwnBarrelUnderWater():
             if not isRepeat:
                 self.showVehicleError(self.__cantShootCriticals['gun_locked'])
             return (False, error)
@@ -2454,7 +2456,7 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
         if not g_offlineMapCreator.Active():
             self.inputHandler = AvatarInputHandler.AvatarInputHandler(self.spaceID)
             prereqs += self.inputHandler.prerequisites()
-        self.soundNotifications = IngameSoundNotifications.IngameSoundNotifications()
+        self.soundNotifications = IngameSoundNotifications.IngameSoundNotifications(self.arena.arenaType)
         self.complexSoundNotifications = IngameSoundNotifications.ComplexSoundNotifications()
         arena = BigWorld.player().arena
         notificationsRemapping = arena.arenaType.notificationsRemapping or {}

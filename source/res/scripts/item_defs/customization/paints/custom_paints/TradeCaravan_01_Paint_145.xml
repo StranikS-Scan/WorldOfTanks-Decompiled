@@ -1,0 +1,24 @@
+<TradeCaravan_01_Paint_145.xml>
+  <itemGroup>
+    <name>	TradeCaravan_01_Paint_145	</name>
+    <userString>	#vehicle_customization:repaint/color_group_04	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <tags>	hiddenInUI	</tags>
+    <priceGroup>	paints 20g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <paint>
+      <id>	31571	</id>
+      <texture>	gui/maps/vehicles/repaints/custom_color_DEV.png	</texture>
+      <userString>	#vehicle_customization:TradeCaravan_01_Paint_145/name	</userString>
+      <description>	#vehicle_customization:TradeCaravan_01_Paint_145/description	</description>
+      <color>	51 33 27 255	</color>
+      <gloss>	0.4	</gloss>
+      <metallic>	0.24	</metallic>
+    </paint>
+  </itemGroup>
+</TradeCaravan_01_Paint_145.xml>

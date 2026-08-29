@@ -504,6 +504,20 @@
       <devices>	150	</devices>
     </damage>
   </_105mm_slpprj_m_61P>
+  <_105mm_slpprj_m_61_S43>
+    <id>	31025	</id>
+    <userString>	#sweden_vehicles:_105mm_slpprj_m_61_S43	</userString>
+    <icon>	ap_cr	</icon>
+    <price>	1120	</price>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	105	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainAPCR	</effects>
+    <damage>
+      <armor>	390	</armor>
+      <devices>	150	</devices>
+    </damage>
+  </_105mm_slpprj_m_61_S43>
   <_105mm_slpprj_m_62>
     <id>	84	</id>
     <userString>	#sweden_vehicles:_105mm_slpprj_m_62	</userString>
@@ -579,6 +593,21 @@
       <devices>	150	</devices>
     </damage>
   </_105mm_slpprj_m_66P>
+  <_105mm_slpprj_m_66_S43>
+    <id>	31026	</id>
+    <userString>	#sweden_vehicles:_105mm_slpprj_m_66_S43	</userString>
+    <icon>	ap_cr_premium	</icon>
+    <price>	4800	</price>
+    <improved>	true	</improved>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	105	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainAPCR	</effects>
+    <damage>
+      <armor>	390	</armor>
+      <devices>	150	</devices>
+    </damage>
+  </_105mm_slpprj_m_66_S43>
   <_105mm_slpprj_m_ny>
     <id>	57	</id>
     <userString>	#sweden_vehicles:_105mm_slpprj_m_ny	</userString>
@@ -682,16 +711,17 @@
     <price>	190	</price>
     <kind>	HIGH_EXPLOSIVE	</kind>
     <caliber>	105	</caliber>
-    <explosionRadius>	4.91	</explosionRadius>
+    <explosionRadius>	5.91	</explosionRadius>
     <isTracer>	true	</isTracer>
     <effects>	mainSH	</effects>
     <damage>
-      <armor>	450	</armor>
+      <armor>	470	</armor>
       <devices>	150	</devices>
     </damage>
     <deviceDamagePossibility>
       <protectFromIndirectHits>	internal tankmen	</protectFromIndirectHits>
     </deviceDamagePossibility>
+    <explosionDamageFactor>	0.70	</explosionDamageFactor>
   </_105mm_slsgr_m34>
   <_105mm_slsgr_m_61A>
     <id>	14	</id>
@@ -717,6 +747,30 @@
       </damage>
     </armorSpalls>
   </_105mm_slsgr_m_61A>
+  <_105mm_slsgr_m_61A_S43>
+    <id>	31027	</id>
+    <userString>	#sweden_vehicles:_105mm_slsgr_m_61A_S43	</userString>
+    <icon>	he_modern	</icon>
+    <price>	805	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	105	</caliber>
+    <explosionRadius>	1.91	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	mainHighExplosive	</effects>
+    <damage>
+      <armor>	480	</armor>
+      <devices>	150	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	1.91	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	240	</armor>
+        <devices>	75	</devices>
+      </damage>
+    </armorSpalls>
+  </_105mm_slsgr_m_61A_S43>
   <_105mm_slsgr_m_61B>
     <id>	82	</id>
     <userString>	#sweden_vehicles:_105mm_slsgr_m_61B	</userString>

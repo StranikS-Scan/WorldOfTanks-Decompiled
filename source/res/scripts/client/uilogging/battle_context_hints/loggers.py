@@ -1,7 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/uilogging/battle_context_hints/loggers.py
 from uilogging.base.logger import MetricsLogger, createPartnerID
-from uilogging.battle_context_hints.constants import FEATURE, BattleContextHintsLogActions
+from uilogging.battle_context_hints.constants import FEATURE, BattleContextHintsLogActions, BattleContextHintsLogItems
+from uilogging.constants import CommonLogActions
 
 class BattleContextHintsLogger(MetricsLogger):
     __slots__ = ('__partnerId', '__hintId')
@@ -22,3 +23,12 @@ class BattleContextHintsLogger(MetricsLogger):
 
     def logHintMaxViewsReached(self):
         self.log(action=BattleContextHintsLogActions.HINT_MAX_VIEWS_REACHED, item=self.__hintId, partnerID=self.__partnerId)
+
+
+class BattleContextHintsSettingsLogger(MetricsLogger):
+
+    def __init__(self):
+        super(BattleContextHintsSettingsLogger, self).__init__(FEATURE)
+
+    def logResetHintsCountersClicked(self):
+        self.log(action=CommonLogActions.CLICK, item=BattleContextHintsLogItems.RESET_HINTS_COUNTERS_BUTTON)

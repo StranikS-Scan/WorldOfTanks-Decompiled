@@ -1,0 +1,35 @@
+<SubscriptionRostelecom_Decal_145_name.xml>
+  <xmlns:czech1>	ussr	</xmlns:czech1>
+  <xmlns:germany>	germany	</xmlns:germany>
+  <xmlns:czech0>	usa	</xmlns:czech0>
+  <xmlns:china>	china	</xmlns:china>
+  <xmlns:france>	france	</xmlns:france>
+  <xmlns:uk>	uk	</xmlns:uk>
+  <xmlns:japan>	japan	</xmlns:japan>
+  <xmlns:czech>	czech	</xmlns:czech>
+  <xmlns:sweden>	sweden	</xmlns:sweden>
+  <xmlns:poland>	poland	</xmlns:poland>
+  <xmlns:italy>	italy	</xmlns:italy>
+  <xmlns:intunion>	intunion	</xmlns:intunion>
+  <itemGroup>
+    <name>	SubscriptionRostelecom_Decal_145	</name>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	MT projection_decals 100g notInShop	</priceGroup>
+    <vehicleFilter></vehicleFilter>
+    <userString>	#vehicle_customization:projection_decals/special	</userString>
+    <projection_decal>
+      <id>	31517	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/SubscriptionRostelecom_Decal_01_145.dds	</texture>
+      <userString>	#vehicle_customization:SubscriptionRostelecom_Decal_01_145/name	</userString>
+      <description>	#vehicle_customization:SubscriptionRostelecom_Decal_01_145/description	</description>
+      <glossTexture>	gui/maps/vehicles/decals/projection_decals/special/SubscriptionRostelecom_Decal_01_145_GMM.dds	</glossTexture>
+      <tags>	formfactor_square hiddenInUI styleOnly	</tags>
+      <vehicleFilter>
+        <include>
+          <vehicles>	ussr:R171_IS_3_II_02	</vehicles>
+        </include>
+      </vehicleFilter>
+    </projection_decal>
+  </itemGroup>
+</SubscriptionRostelecom_Decal_145_name.xml>

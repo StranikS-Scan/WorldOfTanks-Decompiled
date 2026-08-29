@@ -7,3 +7,4 @@ class SETTINGS_DIALOGS(object):
     SOUND_MODE_INVALID = 'soundModeInvalid'
     CONTROLS_WRONG_NOTIFICATION = 'controlsWrongNotification'
     LIMITED_UI_OFF_NOTIFICATION = 'limitedUIOffNotification'
+    RESET_BATTLE_CONTEXT_HINTS_NOTIFICATION = 'resetBattleContextHintsNotification'

@@ -9,12 +9,12 @@
   <postProgressionTree>	role_MT_assault	</postProgressionTree>
   <customRoleSlotOptions>	3 5	</customRoleSlotOptions>
   <speedLimits>
-    <forward>	53	</forward>
-    <backward>	18	</backward>
+    <forward>	63	</forward>
+    <backward>	22	</backward>
   </speedLimits>
   <invisibility>
-    <moving>	0.183	</moving>
-    <still>	0.244	</still>
+    <moving>	0.155	</moving>
+    <still>	0.207	</still>
     <camouflageBonus>	0.03	</camouflageBonus>
     <firePenalty>	0.366	</firePenalty>
   </invisibility>
@@ -587,8 +587,8 @@
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
       <rotationSpeed>	42	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.18	</vehicleMovement>
-        <vehicleRotation>	0.18	</vehicleRotation>
+        <vehicleMovement>	0.3	</vehicleMovement>
+        <vehicleRotation>	0.3	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	250	</maxHealth>
@@ -1669,7 +1669,8 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_130mm_M_65A_R250>	shared	  <maxAmmo>	60	</maxAmmo>
+        <_130mm_M_65A_R250>
+          <maxAmmo>	60	</maxAmmo>
           <armor>
             <armor_1>	330	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_1>
@@ -1690,7 +1691,7 @@
             <maxPitch>	0 6 1 6	</maxPitch>
           </pitchLimits>
           <invisibilityFactorAtShot>	0.153	</invisibilityFactorAtShot>
-          <shotDispersionRadius>	0.40	</shotDispersionRadius>
+          <shotDispersionRadius>	0.50	</shotDispersionRadius>
           <reloadTime>	11.4	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.08	</turretRotation>
@@ -2227,7 +2228,9 @@
     </Turret_1_R250_NST_130>
   </turrets0>
   <engines>
-    <_8TDF_R250>	shared	</_8TDF_R250>
+    <_8TDF_R250>
+      <power>	1150	</power>
+    </_8TDF_R250>
   </engines>
   <fuelTanks>
     <Large>	shared	</Large>
@@ -2240,8 +2243,8 @@
     <detailed>
       <engines>
         <_8TDF_R250>
-          <smplEnginePower>	800	</smplEnginePower>
-          <smplFwMaxSpeed>	53	</smplFwMaxSpeed>
+          <smplEnginePower>	1150	</smplEnginePower>
+          <smplFwMaxSpeed>	63	</smplFwMaxSpeed>
         </_8TDF_R250>
       </engines>
       <chassis>
@@ -2263,29 +2266,31 @@
     </detailed>
   </physics>
   <siege_mode>
-    <switchOnTime>	0	</switchOnTime>
-    <switchOffTime>	0	</switchOffTime>
+    <switchOnTime>	2	</switchOnTime>
+    <switchOffTime>	2	</switchOffTime>
     <engineDamageCoeff>	2	</engineDamageCoeff>
     <soundStateChange>
-      <on>	strv_siege_mode_on_PC	</on>
-      <off>	strv_siege_mode_off_PC	</off>
+      <on>	turbine_polish_start_PC	</on>
+      <off>	turbine_polish_stop_PC	</off>
+      <npcOn>	turbine_polish_start_NPC	</npcOn>
+      <npcOff>	turbine_polish_stop_NPC	</npcOff>
+      <isEngine>	true	</isEngine>
     </soundStateChange>
-    <autoSwitchOffRequiredVehicleSpeed>	0	</autoSwitchOffRequiredVehicleSpeed>
-    <autoSwitchOnRequiredVehicleSpeed>	0	</autoSwitchOnRequiredVehicleSpeed>
   </siege_mode>
   <hull_aiming>
     <pitch>
+      <isEnabled>	True	</isEnabled>
       <isFlexible>	True	</isFlexible>
       <wheelCorrectionCenterZ>	0	</wheelCorrectionCenterZ>
       <wheelsCorrectionSpeed>	10	</wheelsCorrectionSpeed>
       <wheelsCorrectionAngles>
-        <pitchMin>	0	</pitchMin>
-        <pitchMax>	0	</pitchMax>
+        <pitchMin>	-3	</pitchMin>
+        <pitchMax>	3	</pitchMax>
       </wheelsCorrectionAngles>
-      <isEnabled>	True	</isEnabled>
     </pitch>
     <yawDisabled></yawDisabled>
   </hull_aiming>
+  <isRotationStill>	True	</isRotationStill>
   <useHullZSize>	True	</useHullZSize>
   <effects>
     <collision></collision>

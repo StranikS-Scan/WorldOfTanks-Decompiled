@@ -1,0 +1,78 @@
+<ClanSeason_J36Type63HT_Style_145_name.xml>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <style>
+      <id>	31582	</id>
+      <texture>	gui/maps/vehicles/styles/ClanSeason_J36Type63HT_Style_145.png	</texture>
+      <outfits>
+        <outfit>
+          <season>	all	</season>
+          <modifications>
+            <item>	3	</item>
+          </modifications>
+          <paints>
+            <item>
+              <id>	31530	</id>
+              <appliedTo>	4119	</appliedTo>
+            </item>
+            <item>
+              <id>	31531	</id>
+              <appliedTo>	16640	</appliedTo>
+            </item>
+          </paints>
+          <camouflages>
+            <item>
+              <id>	31546	</id>
+              <patternSize>	1	</patternSize>
+              <appliedTo>	4096	</appliedTo>
+              <palette>	0	</palette>
+            </item>
+            <item>
+              <id>	31547	</id>
+              <patternSize>	1	</patternSize>
+              <appliedTo>	256	</appliedTo>
+              <palette>	0	</palette>
+            </item>
+            <item>
+              <id>	31548	</id>
+              <patternSize>	1	</patternSize>
+              <appliedTo>	16	</appliedTo>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <insignias>
+            <item>
+              <id>	31060	</id>
+              <appliedTo>	4096	</appliedTo>
+            </item>
+          </insignias>
+          <projection_decals>
+            <item>
+              <id>	31489	</id>
+              <tags>	formfactor_square right safe	</tags>
+            </item>
+          </projection_decals>
+        </outfit>
+      </outfits>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+      <userString>	#vehicle_customization:ClanSeason_J36Type63HT_Style_145/name	</userString>
+      <description>	#vehicle_customization:ClanSeason_J36Type63HT_Style_145/description	</description>
+      <longDescriptionSpecial>	#vehicle_customization:ClanSeason_J36Type63HT_Style_145/longDescription	</longDescriptionSpecial>
+    </style>
+    <priceGroup>	MT 2D styles direct 1500g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	japan:J36_Type_63_HT_02	</vehicles>
+      </include>
+    </vehicleFilter>
+    <tags>	lockedOnVehicle progression_required	</tags>
+  </itemGroup>
+</ClanSeason_J36Type63HT_Style_145_name.xml>

@@ -8,7 +8,8 @@ from gui.Scaleform.genConsts.PROFILE_DROPDOWN_KEYS import PROFILE_DROPDOWN_KEYS
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 from soft_exception import SoftException
-from gui.Scaleform.daapi.view.lobby.comp7.comp7_profile_helper import COMP7_ARCHIVE_NAMES, COMP7_SEASON_NUMBERS, getDropdownKeyByArchiveName, getDropdownKeyBySeason
+from comp7_common import COMP7_ARCHIVE_NAMES, COMP7_SEASON_NUMBERS
+from gui.Scaleform.daapi.view.lobby.comp7.comp7_profile_helper import getDropdownKeyByArchiveName, getDropdownKeyBySeason
 _DropdownData = namedtuple('_DropdownData', ('useSelf', 'funcName', 'params'))
 
 class ProfileSection(ProfileSectionMeta):

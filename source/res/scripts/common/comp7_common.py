@@ -2,9 +2,11 @@
 # Embedded file name: scripts/common/comp7_common.py
 import enum
 ROLE_EQUIPMENT_TAG = 'roleEquipment'
-COMP7_CURRENT_SEASON = 4
-COMP7_MASKOT_ID = '5'
+COMP7_CURRENT_SEASON = 1
+COMP7_MASKOT_ID = '6'
 SEASONS_IN_YEAR = 4
+COMP7_SEASON_NUMBERS = tuple(range(1, COMP7_CURRENT_SEASON + 1))
+COMP7_ARCHIVE_NAMES = ('Griffin',)
 COMP7_QUEST_PREFIX = 'comp7_{maskot}_{season}'.format(maskot=COMP7_MASKOT_ID, season=COMP7_CURRENT_SEASON)
 COMP7_TOKEN_PREFIX = 'comp7_{maskot}_{season}'.format(maskot=COMP7_MASKOT_ID, season=COMP7_CURRENT_SEASON)
 COMP7_QUEST_DELIMITER = '_'

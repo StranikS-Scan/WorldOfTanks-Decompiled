@@ -386,9 +386,8 @@ class _ClientHangarSpacePathOverride(object):
             _EVENT_HANGAR_PATHS[isPremium] = (path, visibilityMask, environment)
         elif isPremium in _EVENT_HANGAR_PATHS:
             del _EVENT_HANGAR_PATHS[isPremium]
-        environmentSwitcher = BigWorld.EnvironmentSwitcher.instance()
-        if environmentSwitcher is not None and environment is not None:
-            environmentSwitcher.setMainEnvironment(environment)
+        if environment is not None:
+            BigWorld.EnvironmentSwitcher.instance().setMainEnvironment(environment)
         if isReload:
             self.hangarSpace.refreshSpace(self.hangarSpace.isPremium, True)
             if event is None:

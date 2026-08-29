@@ -3,6 +3,7 @@
 from enum import Enum
 from battle_pass_common import BATTLE_PASS_OFFER_TOKEN_PREFIX
 from epic_constants import EPIC_OFFER_TOKEN_PREFIX
+from gui.clans.settings import CLANS_SELECTABLE_REWARD_PREFIX
 from gui.ranked_battles.constants import YEAR_AWARD_SELECTABLE_OPT_DEVICE_PREFIX
 from personal_missions_constants import PM3_OFFER_TOKEN_PREFIX
 
@@ -12,10 +13,12 @@ class Features(Enum):
     RANKED = 2
     EPIC = 3
     PERSONAL_MISSIONS = 4
+    STRONGHOLD = 5
 
 
 FEATURE_TO_PREFIX = {Features.BATTLE_PASS: BATTLE_PASS_OFFER_TOKEN_PREFIX,
  Features.RANKED: YEAR_AWARD_SELECTABLE_OPT_DEVICE_PREFIX,
  Features.EPIC: EPIC_OFFER_TOKEN_PREFIX,
- Features.PERSONAL_MISSIONS: PM3_OFFER_TOKEN_PREFIX}
+ Features.PERSONAL_MISSIONS: PM3_OFFER_TOKEN_PREFIX,
+ Features.STRONGHOLD: CLANS_SELECTABLE_REWARD_PREFIX}
 SELECTABLE_BONUS_NAME = 'selectableBonus'

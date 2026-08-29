@@ -359,14 +359,19 @@ class AdvancedChatComponent(ClientArenaComponent):
             return
 
     def __removeActualTargetIfDestroyed(self, commands, playerVehID, targetID, markerType):
+        commandsByTarget = self._chatCommands.get(markerType, {})
         if self.__markerInFocus and self.__markerInFocus.isFocused(targetID, markerType):
-            listOfCommands = self._chatCommands[markerType][targetID]
+            listOfCommands = commandsByTarget.get(targetID)
+            if not listOfCommands:
+                _logger.warning('Focused chat command target is missing: targetID=%s; markerType=%s; commandID=%s', targetID, markerType, self.__markerInFocus.commandID)
+                self.__setFocusedOnMarker(-1, MarkerType.INVALID_MARKER_TYPE, -1)
+                return
             for _, commandData in listOfCommands.iteritems():
                 if playerVehID == commandData.commandCreatorVehID or playerVehID in commandData.owners:
                     commands.sendClearChatCommandsFromTarget(targetID, markerType.name)
 
         elif markerType == MarkerType.VEHICLE_MARKER_TYPE:
-            for cmdTargetID, listOfCommands in self._chatCommands[markerType].iteritems():
+            for cmdTargetID, listOfCommands in commandsByTarget.iteritems():
                 if not self.__isAliveVehicle(cmdTargetID):
                     commands.sendClearChatCommandsFromTarget(cmdTargetID, markerType.name)
 
@@ -647,6 +652,11 @@ class AdvancedChatComponent(ClientArenaComponent):
             self.__setFocusedOnMarker(targetID, markerType, repliedToCommandID)
 
     def __setFocusedOnMarker(self, targetID, markerType, repliedToCommandID):
+        if markerType != MarkerType.INVALID_MARKER_TYPE:
+            commands = self._chatCommands.get(markerType, {}).get(targetID, {})
+            if repliedToCommandID not in commands:
+                _logger.warning('Unable to focus missing chat command: targetID=%s; markerType=%s; commandID=%s', targetID, markerType, repliedToCommandID)
+                return
         self.__checkTemporarySticky(repliedToCommandID, targetID)
         oldID = 0
         oldMarkerType = MarkerType.INVALID_MARKER_TYPE
@@ -656,7 +666,7 @@ class AdvancedChatComponent(ClientArenaComponent):
         feedbackCtrl = self.sessionProvider.shared.feedback
         if feedbackCtrl:
             feedbackCtrl.setInFocusForPlayer(oldID, oldMarkerType, targetID, markerType, False)
-        if targetID == 0 and markerType == MarkerType.INVALID_MARKER_TYPE:
+        if markerType == MarkerType.INVALID_MARKER_TYPE:
             self.__markerInFocus = None
         else:
             self.__markerInFocus = MarkerInFocus(commandID=repliedToCommandID, targetID=targetID, markerType=markerType)
@@ -850,14 +860,18 @@ class AdvancedChatComponent(ClientArenaComponent):
         else:
             commandName = _ACTIONS.battleChatCommandFromActionID(commandID).name
             markerType = _COMMAND_NAME_TRANSFORM_MARKER_TYPE[commandName]
-            if commandID in self._chatCommands[markerType][targetID]:
-                commandData = self._chatCommands[markerType][targetID][commandID]
+            commands = self._chatCommands.get(markerType, {}).get(targetID)
+            if commands and commandID in commands:
+                commandData = commands[commandID]
                 if forceRemove or not self.__delayer.hasDelayedCallbackID(commandData.callbackID) and not commandData.owners:
                     self.__delayer.stopCallback(commandData.callbackID)
-                    self._chatCommands[markerType][targetID].pop(commandID)
-                    wasLastCommandForTarget = not self._chatCommands[markerType][targetID]
+                    commands.pop(commandID)
+                    wasLastCommandForTarget = not commands
                     if wasLastCommandForTarget:
                         self._chatCommands[markerType].pop(targetID)
+                    couldSetFocusedOnMarker = self.__markerInFocus and self.__markerInFocus.isFocused(targetID, markerType) and self.__markerInFocus.commandID == commandID
+                    if couldSetFocusedOnMarker:
+                        self.__setFocusedOnMarker(-1, MarkerType.INVALID_MARKER_TYPE, -1)
                     if wasLastCommandForTarget:
                         feedbackCtrl = self.sessionProvider.shared.feedback
                         if feedbackCtrl:

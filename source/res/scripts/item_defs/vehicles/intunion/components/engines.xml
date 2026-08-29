@@ -388,6 +388,40 @@
       <rpm_min>	349	</rpm_min>
       <rpm_max>	2727	</rpm_max>
     </Rolls_Royse_Meteor_MkIV>
+    <Skoda_16_ADH_140>
+      <id>	31028	</id>
+      <userString>	#intunion_vehicles:Skoda_16_ADH_140	</userString>
+      <tags>	diesel	</tags>
+      <level>	7	</level>
+      <price>	36000	</price>
+      <wwsoundPC>	eng_V2K_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_V2K_npc	</wwsoundNPC>
+      <power>	550	</power>
+      <weight>	1400	</weight>
+      <maxHealth>	234	</maxHealth>
+      <maxRegenHealth>	123	</maxRegenHealth>
+      <repairCost>	5	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+      <rpm_min>	336	</rpm_min>
+      <rpm_max>	2200	</rpm_max>
+    </Skoda_16_ADH_140>
+    <Skoda_16_ADH_145>
+      <id>	31029	</id>
+      <userString>	#intunion_vehicles:Skoda_16_ADH_145	</userString>
+      <tags>	diesel	</tags>
+      <level>	8	</level>
+      <price>	57000	</price>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <power>	600	</power>
+      <weight>	1400	</weight>
+      <maxHealth>	255	</maxHealth>
+      <maxRegenHealth>	127	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+      <rpm_min>	249	</rpm_min>
+      <rpm_max>	2452	</rpm_max>
+    </Skoda_16_ADH_145>
     <V-2-54>
       <id>	31021	</id>
       <userString>	#intunion_vehicles:V-2-54	</userString>
@@ -426,11 +460,11 @@
       <id>	31026	</id>
       <userString>	#intunion_vehicles:V_2_34	</userString>
       <tags>	diesel	</tags>
-      <level>	7	</level>
-      <price>	35000	</price>
-      <wwsoundPC>	eng_V2K_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_V2K_npc	</wwsoundNPC>
-      <power>	520	</power>
+      <level>	8	</level>
+      <price>	44000	</price>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <power>	630	</power>
       <weight>	750	</weight>
       <maxHealth>	190	</maxHealth>
       <maxRegenHealth>	95	</maxRegenHealth>
@@ -443,11 +477,11 @@
       <id>	31027	</id>
       <userString>	#intunion_vehicles:V_44	</userString>
       <tags>	diesel	</tags>
-      <level>	8	</level>
-      <price>	50000	</price>
-      <wwsoundPC>	eng_V2K_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_V2K_npc	</wwsoundNPC>
-      <power>	570	</power>
+      <level>	9	</level>
+      <price>	83000	</price>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <power>	710	</power>
       <weight>	895	</weight>
       <maxHealth>	260	</maxHealth>
       <maxRegenHealth>	130	</maxRegenHealth>
@@ -492,12 +526,29 @@
       <rpm_min>	319	</rpm_min>
       <rpm_max>	2261	</rpm_max>
     </V_54B>
+    <V_54_Un16>
+      <id>	31031	</id>
+      <userString>	#intunion_vehicles:V_54_Un16	</userString>
+      <tags>	diesel	</tags>
+      <level>	9	</level>
+      <price>	92000	</price>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <power>	700	</power>
+      <weight>	895	</weight>
+      <maxHealth>	260	</maxHealth>
+      <maxRegenHealth>	130	</maxRegenHealth>
+      <repairCost>	5	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+      <rpm_min>	299	</rpm_min>
+      <rpm_max>	2301	</rpm_max>
+    </V_54_Un16>
     <V_55>
       <id>	31025	</id>
       <userString>	#intunion_vehicles:V_55	</userString>
       <tags>	diesel	</tags>
       <level>	10	</level>
-      <price>	100000	</price>
+      <price>	110000	</price>
       <notInShop>	true	</notInShop>
       <wwsoundPC>	eng_v55_pc	</wwsoundPC>
       <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
@@ -519,7 +570,7 @@
       <notInShop>	true	</notInShop>
       <wwsoundPC>	eng_v55_pc	</wwsoundPC>
       <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
-      <power>	750	</power>
+      <power>	700	</power>
       <weight>	940	</weight>
       <maxHealth>	360	</maxHealth>
       <maxRegenHealth>	180	</maxRegenHealth>
@@ -528,6 +579,23 @@
       <rpm_min>	249	</rpm_min>
       <rpm_max>	2452	</rpm_max>
     </V_55_T>
+    <V_55_Un16>
+      <id>	31032	</id>
+      <userString>	#intunion_vehicles:V_55_Un16	</userString>
+      <tags>	diesel	</tags>
+      <level>	10	</level>
+      <price>	105000	</price>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <power>	750	</power>
+      <weight>	940	</weight>
+      <maxHealth>	260	</maxHealth>
+      <maxRegenHealth>	130	</maxRegenHealth>
+      <repairCost>	5	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+      <rpm_min>	249	</rpm_min>
+      <rpm_max>	2452	</rpm_max>
+    </V_55_Un16>
     <_5TD>
       <id>	31030	</id>
       <userString>	#intunion_vehicles:_5TD	</userString>

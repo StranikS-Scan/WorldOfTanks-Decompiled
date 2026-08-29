@@ -12,7 +12,7 @@
   <postProgressionTree>	role_HT_assault	</postProgressionTree>
   <customRoleSlotOptions>	2 4	</customRoleSlotOptions>
   <speedLimits>
-    <forward>	37	</forward>
+    <forward>	34	</forward>
     <backward>	15	</backward>
   </speedLimits>
   <invisibility>
@@ -44,13 +44,13 @@
   </camouflage>
   <hull>
     <armor>
-      <armor_1>	200	</armor_1>
-      <armor_2>	140	</armor_2>
-      <armor_3>	100	</armor_3>
+      <armor_1>	210	</armor_1>
+      <armor_2>	150	</armor_2>
+      <armor_3>	120	</armor_3>
       <armor_4>	100	</armor_4>
       <armor_5>	40	</armor_5>
       <armor_6>	170	</armor_6>
-      <armor_7>	100	</armor_7>
+      <armor_7>	120	</armor_7>
       <armor_8>	0	</armor_8>
       <armor_9>	40	</armor_9>
       <armor_10>	40	</armor_10>
@@ -844,8 +844,8 @@
     </customization>
     <hangarShadowTexture>	vehicles/german/G197_E_94_Fechter/G197_E_94_Fechter_HangarShadowMap.dds	</hangarShadowTexture>
     <camouflage>
-      <density>	102.865387 103.241325	</density>
-      <aoTextureSize>	1024 512	</aoTextureSize>
+      <density>	94.799438 94.786385	</density>
+      <aoTextureSize>	1024 1024	</aoTextureSize>
     </camouflage>
   </hull>
   <chassis>
@@ -1904,17 +1904,17 @@
       <price>	60000	</price>
       <notInShop>	true	</notInShop>
       <armor>
-        <armor_1>	300	</armor_1>
-        <armor_2>	240	</armor_2>
+        <armor_1>	330	</armor_1>
+        <armor_2>	260	</armor_2>
         <armor_3>	200	</armor_3>
         <armor_4>	160	</armor_4>
         <armor_5>	50	</armor_5>
         <armor_6>	180	</armor_6>
-        <armor_7>	230	</armor_7>
+        <armor_7>	240	</armor_7>
         <armor_8>	0	</armor_8>
         <armor_9>	40	</armor_9>
         <armor_10>	40	</armor_10>
-        <armor_11>	230	</armor_11>
+        <armor_11>	240	</armor_11>
         <armor_12>	200	</armor_12>
         <armor_13>	200	</armor_13>
         <armor_14>	200	</armor_14>
@@ -1929,12 +1929,12 @@
         <armor_23>	80	</armor_23>
         <armor_24>	80	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
         </armor_24>
-        <armor_25>	240	</armor_25>
+        <armor_25>	250	</armor_25>
         <armor_32>	190	</armor_32>
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	22000	</weight>
-      <maxHealth>	850	</maxHealth>
+      <maxHealth>	750	</maxHealth>
       <rotationSpeed>	25	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	180	</maxHealth>
@@ -1949,7 +1949,7 @@
       </surveyingDeviceHealth>
       <guns>
         <_128mm_KwK_L53_G197>	shared	  <maxAmmo>	60	</maxAmmo>
-          <shotDispersionRadius>	0.34	</shotDispersionRadius>
+          <shotDispersionRadius>	0.36	</shotDispersionRadius>
           <reloadTime>	11.7	</reloadTime>
           <aimingTime>	3.0	</aimingTime>
           <shotDispersionFactors>
@@ -2442,7 +2442,7 @@
       <engines>
         <Maybach_HL230x2>
           <smplEnginePower>	1300	</smplEnginePower>
-          <smplFwMaxSpeed>	37	</smplFwMaxSpeed>
+          <smplFwMaxSpeed>	34	</smplFwMaxSpeed>
         </Maybach_HL230x2>
       </engines>
       <chassis>

@@ -31,7 +31,8 @@ from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from soft_exception import SoftException
 from gui.shared.events import ProfileTechniqueEvent
-from gui.Scaleform.daapi.view.lobby.comp7.comp7_profile_helper import isComp7Archive, isComp7Season, getArchiveName, getSeasonName, COMP7_ARCHIVE_NAMES, COMP7_SEASON_NUMBERS, getDropdownKeyByArchiveName, getDropdownKeyBySeason
+from comp7_common import COMP7_ARCHIVE_NAMES, COMP7_SEASON_NUMBERS
+from gui.Scaleform.daapi.view.lobby.comp7.comp7_profile_helper import isComp7Archive, isComp7Season, getArchiveName, getSeasonName, getDropdownKeyByArchiveName, getDropdownKeyBySeason
 _MARK_ON_GUN_MIN_LVL = 5
 
 class ProfileTechnique(ProfileTechniqueMeta):

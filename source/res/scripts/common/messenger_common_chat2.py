@@ -69,6 +69,7 @@ class MESSENGER_LIMITS():
     BROADCASTS_FROM_CLIENT_COOLDOWN_SEC = (0.5 if not IS_CHINA else 3.0) + _COOLDOWN_OFFSET
     ADMIN_COMMANDS_FROM_CLIENT_COOLDOWN_SEC = 5.0 + _COOLDOWN_OFFSET
     VOIP_CREDENTIALS_REQUEST_COOLDOWN_SEC = 10.0 + _COOLDOWN_OFFSET
+    VOIP_CHANNEL_REQUEST_COOLDOWN_SEC = 10.0 + _COOLDOWN_OFFSET
 
 
 class MESSENGER_ACTION_IDS():
@@ -79,6 +80,7 @@ class MESSENGER_ACTION_IDS():
     LOG_VIVOX_LOGIN = _makeID()
     ENTER_VOIP_CHANNEL = _makeID()
     LEAVE_VOIP_CHANNEL = _makeID()
+    REQUEST_ECHO_CHANNEL = _makeID()
     _ADMIN_COMMAND_START_ID = _makeID(range=10)
     _BATTLE_ACTION_START_ID = _makeID()
     INIT_BATTLE_CHAT = _makeID()
@@ -269,7 +271,7 @@ BATTLE_CHAT_COMMANDS = (BattleChatCommand(id=_makeID(start=MESSENGER_ACTION_IDS.
  BattleChatCommand(id=_makeID(), name=BATTLE_CHAT_COMMAND_NAMES.DEFEND_SUPPLY, cooldownPeriod=_SAME_BATTLE_CHAT_CMD_COOLDOWN_DURATION, msgText='defend_supply', vehMarker='defend', senderVehMarker='defendSender', soundNotification='ibc_ping_request', soundNotificationReply='ibc_ping_reply'),
  BattleChatCommand(id=_makeID(), name=BATTLE_CHAT_COMMAND_NAMES.DEFENDING_SUPPLY, cooldownPeriod=_SAME_BATTLE_CHAT_CMD_COOLDOWN_DURATION, msgText='defending_supply', vehMarker='defend', senderVehMarker='defendSender', soundNotification='ibc_ping_action', soundNotificationReply='ibc_ping_reply'),
  BattleChatCommand(id=_makeID(), name=BATTLE_CHAT_COMMAND_NAMES.SELF_REPAIR_SUPPLY, cooldownPeriod=_SAME_BATTLE_CHAT_CMD_COOLDOWN_DURATION, msgText='supply_self_repair', vehMarker=None, senderVehMarker=None, soundNotification='ibc_ping_action', soundNotificationReply='ibc_ping_reply'),
- BattleChatCommand(id=_makeID(), name=BATTLE_CHAT_COMMAND_NAMES.FOCUS_SUPPLY, cooldownPeriod=_SAME_BATTLE_CHAT_CMD_COOLDOWN_DURATION, msgText=None, vehMarker=None, senderVehMarker=None, soundNotification=None, soundNotificationReply=None, activeCmdTime=40.0))
+ BattleChatCommand(id=_makeID(), name=BATTLE_CHAT_COMMAND_NAMES.FOCUS_SUPPLY, cooldownPeriod=_OTHER_BATTLE_CHAT_CMD_COOLDOWN_DURATION, msgText=None, vehMarker=None, senderVehMarker=None, soundNotification=None, soundNotificationReply=None, activeCmdTime=40.0))
 BATTLE_CHAT_COMMANDS_BY_NAMES = {v.name:v for v in BATTLE_CHAT_COMMANDS}
 
 class MUC_SERVICE_TYPE(object):
@@ -353,3 +355,7 @@ def addCoolDowns(currTime, listOfCoolDownTimeData, cmdID, cmdName, cmdCooldownTi
         else:
             data = ChatCommandBlockedData(reqID=reqID, cmdID=cmdID, cooldownType=CHAT_COMMAND_COOLDOWN_TYPE_IDS.TIMEFRAME_DATA_COOLDOWN, cooldownEnd=currTime + cooldownConf.timeframeToAttentionCmds, targetID=cmdTargetID)
         listOfCoolDownTimeData.append(data)
+
+
+VOIP_VIVOX_PROFILE_NAME = 'vivox'
+VOIP_WEBRTC_PROFILE_NAME = 'webrtc'

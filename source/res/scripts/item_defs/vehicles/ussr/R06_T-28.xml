@@ -3652,6 +3652,8 @@
           <unlocks>
             <gun>	_76mm_F-32	  <cost>	500	</cost>
             </gun>
+            <gun>	_76mm_KT-28	  <cost>	400	</cost>
+            </gun>
           </unlocks>
           <armor>
             <armor_1>	20	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
@@ -3798,6 +3800,82 @@
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_76mm_F-32>
+        <_76mm_KT-28>	shared	  <maxAmmo>	105	</maxAmmo>
+          <armor>
+            <armor_1>	20	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	10	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	20	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_3>
+            <armor_4>	0	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_4>
+            <armor_5>	15	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_5>
+            <armor_6>	15	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_6>
+            <armor_7>	15	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_7>
+            <gun>	20	</gun>
+          </armor>
+          <shotDispersionRadius>	0.45	</shotDispersionRadius>
+          <reloadTime>	3.9	</reloadTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.12	</turretRotation>
+            <afterShot>	4.0	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <aimingTime>	2.3	</aimingTime>
+          <pitchLimits>
+            <minPitch>	0 -25 1 -25	</minPitch>
+            <maxPitch>	0 6 0.353005 6 0.416667 3 0.583333 3 0.646995 6 1 6	</maxPitch>
+          </pitchLimits>
+          <invisibilityFactorAtShot>	0.26	</invisibilityFactorAtShot>
+          <models>
+            <undamaged>	vehicles/russian/R06_T-28/normal/lod0/Gun_01.model	</undamaged>
+            <destroyed>	vehicles/russian/R06_T-28/crash/lod0/Gun_01.model	</destroyed>
+            <exploded>	vehicles/russian/R06_T-28/crash/lod0/Gun_01.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModelServer>	vehicles/russian/R06_T-28/collision/Gun_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/russian/R06_T-28/collision_client/Gun_01.model	</collisionModelClient>
+          </hitTester>
+          <effects>	shot_medium	</effects>
+          <reloadEffect>	reload50_75	</reloadEffect>
+          <customizationSlots>
+            <slot>
+              <slotType>	paint	</slotType>
+              <slotId>	41000	</slotId>
+              <anchorPosition>	0.000133 -0.006199 0.463665	</anchorPosition>
+              <anchorDirection>	-0 0 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+            <slot>
+              <slotType>	paint	</slotType>
+              <slotId>	41001	</slotId>
+              <anchorPosition>	0.000001 0.16155 0.180815	</anchorPosition>
+              <anchorDirection>	-0 0.707107 0.707107	</anchorDirection>
+              <applyTo>	16384	</applyTo>
+            </slot>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	42000	</slotId>
+              <anchorPosition>	0.000133 -0.006199 0.463669	</anchorPosition>
+              <anchorDirection>	-0 0 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
+          <customization>
+            <customizableVehicleAreas>
+              <paint>	GUN GUN_2	</paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <camouflage>
+            <density>	126.424 124.309	</density>
+            <aoTextureSize>	512 512	</aoTextureSize>
+          </camouflage>
+        </_76mm_KT-28>
       </guns>
       <models>
         <undamaged>	vehicles/russian/R06_T-28/normal/lod0/Turret_01.model	</undamaged>
@@ -4243,6 +4321,82 @@
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
         </_57mm_ZiS-8>
+        <_76mm_KT-28>	shared	  <maxAmmo>	105	</maxAmmo>
+          <armor>
+            <armor_1>	25	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	10	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	25	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_3>
+            <armor_4>	0	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_4>
+            <armor_5>	15	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_5>
+            <armor_6>	15	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_6>
+            <armor_7>	15	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            </armor_7>
+            <gun>	20	</gun>
+          </armor>
+          <shotDispersionRadius>	0.45	</shotDispersionRadius>
+          <reloadTime>	3.9	</reloadTime>
+          <aimingTime>	2.2	</aimingTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.10	</turretRotation>
+            <afterShot>	4.0	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <pitchLimits>
+            <minPitch>	0 -25 1 -25	</minPitch>
+            <maxPitch>	0 6 0.353005 6 0.416667 3 0.583333 3 0.646995 6 1 6	</maxPitch>
+          </pitchLimits>
+          <invisibilityFactorAtShot>	0.26	</invisibilityFactorAtShot>
+          <models>
+            <undamaged>	vehicles/russian/R06_T-28/normal/lod0/Gun_06.model	</undamaged>
+            <destroyed>	vehicles/russian/R06_T-28/crash/lod0/Gun_06.model	</destroyed>
+            <exploded>	vehicles/russian/R06_T-28/crash/lod0/Gun_06.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModelServer>	vehicles/russian/R06_T-28/collision/Gun_06.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/russian/R06_T-28/collision_client/Gun_06.model	</collisionModelClient>
+          </hitTester>
+          <effects>	shot_medium	</effects>
+          <reloadEffect>	reload50_75	</reloadEffect>
+          <customizationSlots>
+            <slot>
+              <slotType>	paint	</slotType>
+              <slotId>	41000	</slotId>
+              <anchorPosition>	0.00015 0.006162 0.457521	</anchorPosition>
+              <anchorDirection>	-0 0 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+            <slot>
+              <slotType>	paint	</slotType>
+              <slotId>	41001	</slotId>
+              <anchorPosition>	0.000015 0.167905 0.195653	</anchorPosition>
+              <anchorDirection>	-0 0.707107 0.707107	</anchorDirection>
+              <applyTo>	16384	</applyTo>
+            </slot>
+            <slot>
+              <slotType>	camouflage	</slotType>
+              <slotId>	42000	</slotId>
+              <anchorPosition>	0.00015 0.006161 0.457526	</anchorPosition>
+              <anchorDirection>	0 0.000001 1	</anchorDirection>
+              <applyTo>	4096	</applyTo>
+            </slot>
+          </customizationSlots>
+          <customization>
+            <customizableVehicleAreas>
+              <paint>	GUN GUN_2	</paint>
+              <camouflage>	GUN	</camouflage>
+            </customizableVehicleAreas>
+          </customization>
+          <camouflage>
+            <density>	126.424 124.309	</density>
+            <aoTextureSize>	512 512	</aoTextureSize>
+          </camouflage>
+        </_76mm_KT-28>
         <_76mm_F-32>	shared	  <maxAmmo>	105	</maxAmmo>
           <armor>
             <armor_1>	25	  <vehicleDamageFactor>	0	</vehicleDamageFactor>

@@ -244,6 +244,10 @@ class DynamicControllersLocator(_ControllersLocator, IDynamicControllersLocator)
         return self._repository.getController(BATTLE_CTRL_ID.BATTLE_FIELD_CTRL)
 
     @property
+    def arenaInfo(self):
+        return self._repository.getController(BATTLE_CTRL_ID.ARENA_INFO_CTRL)
+
+    @property
     def repair(self):
         return self._repository.getController(BATTLE_CTRL_ID.REPAIR)
 
@@ -270,6 +274,10 @@ class DynamicControllersLocator(_ControllersLocator, IDynamicControllersLocator)
     @property
     def spawn(self):
         return self._repository.getController(BATTLE_CTRL_ID.SPAWN_CTRL)
+
+    @property
+    def teleport(self):
+        return self._repository.getController(BATTLE_CTRL_ID.TELEPORT_CTRL)
 
     @property
     def deathScreen(self):
@@ -330,6 +338,18 @@ class DynamicControllersLocator(_ControllersLocator, IDynamicControllersLocator)
     @property
     def comp7PrebattleSkillController(self):
         return self._repository.getController(BATTLE_CTRL_ID.COMP7_PREBATTLE_SKILL_CTRL)
+
+    @property
+    def playersPanel(self):
+        return self._repository.getController(BATTLE_CTRL_ID.PLAYERS_PANEL_CTRL)
+
+    @property
+    def bossPanel(self):
+        return self._repository.getController(BATTLE_CTRL_ID.BOSS_INFO_CTRL)
+
+    @property
+    def wtAbilityCtrl(self):
+        return self._repository.getController(BATTLE_CTRL_ID.WT_ABILITY_CTRL)
 
 
 class _EmptyRepository(interfaces.IBattleControllersRepository):

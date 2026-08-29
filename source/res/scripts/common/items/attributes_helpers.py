@@ -1,218 +1,106 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/items/attributes_helpers.py
-from items._xml import raiseWrongXml, readFloat
-from typing import Dict, Tuple, Iterable, List, TYPE_CHECKING
-if TYPE_CHECKING:
-    import ResMgr
-STATIC_ATTR_PREFIX = 'miscAttrs/'
-DYNAMIC_ATTR_PREFIX = 'dynAttrs/'
-AUTOSHOOT_ATTR_PREFIX = 'autoShootAttrs/'
-ALLOWED_STATIC_ATTRS = {'additiveShotDispersionFactor',
- 'ammoBayHealthFactor',
- 'ammoBayReduceFineFactor',
- 'antifragmentationLiningFactor',
- 'armorSpallsDamageDevicesFactor',
- 'backwardMaxSpeedKMHTerm',
- 'centerRotationFwdSpeedFactor',
- 'chassis/shotDispersionFactors/movement',
- 'chassis/shotDispersionFactors/rotation',
- 'chassisHealthAfterHysteresisFactor',
- 'chassisHealthFactor',
- 'chassisRepairSpeedFactor',
- 'circularVisionRadiusFactor',
- 'circularVisionRadiusBaseFactor',
- 'crewChanceToHitFactor',
- 'crewLevelIncrease',
- 'damageFactor',
- 'deathZones/sensitivityFactor',
- 'decreaseOwnSpottingTime',
- 'demaskFoliageFactor',
- 'demaskMovingFactor',
- 'engineHealthFactor',
- 'enginePowerFactor',
- 'engineReduceFineFactor',
- 'fireStartingChanceFactor',
- 'forwardMaxSpeedKMHTerm',
- 'fuelTankHealthFactor',
- 'gun/shotDispersionFactors/afterShot',
- 'gun/shotDispersionFactors/turretRotation',
- 'gun/shotDispersionFactors/whileGunDamaged',
- 'gunAimingTimeFactor',
- 'gunHealthFactor',
- 'gunReloadTimeFactor',
- 'healthFactor',
- 'increaseEnemySpottingTime',
- 'invisibilityBaseAdditive',
- 'invisibilityAdditiveTerm',
- 'invisibilityMultFactor',
- 'invisibilityFactorAtShot',
- 'multShotDispersionFactor',
- 'onMoveRotationSpeedFactor',
- 'onStillRotationSpeedFactor',
- 'radioHealthFactor',
- 'rammingFactor',
- 'repairSpeedFactor',
- 'repeatedStunDurationFactor',
- 'rollingFrictionFactor',
- 'stunResistanceDuration',
- 'stunResistanceEffect',
- 'surveyingDeviceHealthFactor',
- 'turretRotationSpeed',
- 'turretRotatorHealthFactor',
- 'vehicleByChassisDamageFactor',
- 'moduleDamageFactor',
- 'engineAndFuelTanksDamageFactor'}
-ALLOWED_DYNAMIC_ATTRS = {'additiveShotDispersionFactor',
- 'armorSpallsDamageFactor',
- 'deviceDamageFactor',
- 'armorDamageFactor',
- 'spallsDeviceDamageFactor',
- 'chassis/shotDispersionFactors/movement',
- 'chassis/shotDispersionFactors/rotation',
- 'circularVisionRadius',
- 'crewChanceToHitFactor',
- 'crewLevelIncrease',
- 'crewRolesFactor',
- 'damageFactor',
- 'deathZones/sensitivityFactor',
- 'engine/fireStartingChance',
- 'engine/power',
- 'enginePowerFactor',
- 'gun/aimingTime',
- 'gun/changeShell/reloadFactor',
- 'gun/piercing',
- 'gun/maxDistanceFactor',
- 'gun/shellSpeedFactor',
- 'gun/reloadTime',
- 'gun/rotationSpeed',
- 'gun/shotDispersionFactors/afterShot',
- 'gun/shotDispersionFactors/turretRotation',
- 'gun/temperature/heatingFactor',
- 'healthBurnPerSecLossFraction',
- 'healthFactor',
- 'multShotDispersionFactor',
- 'radio/distance',
- 'ramming',
- 'repairSpeed',
- 'repeatedStunDurationFactor',
- 'stunResistanceDuration',
- 'stunResistanceEffect',
- 'turret/rotationSpeed',
- 'vehicle/maxSpeed',
- 'vehicle/maxSpeed/forward',
- 'vehicle/maxSpeed/backward',
- 'vehicle/rotationSpeed',
- 'vehicle/bkMaxSpeedBonus',
- 'vehicle/fwMaxSpeedBonus',
- 'moduleDamageFactor',
- 'engineAndFuelTanksDamageFactor',
- 'gun/chargeTimeBonus',
- 'gun/reloadLockTimeBonus',
- 'gun/loadShellIntoDualGunBonus'}
-AUTOSHOOT_DYNAMIC_ATTRS = {'rate/multiplier', 'shotDispersionPerSecFactor', 'maxShotDispersionFactor'}
-ALLOWED_ATTRS = {STATIC_ATTR_PREFIX: ALLOWED_STATIC_ATTRS,
- DYNAMIC_ATTR_PREFIX: ALLOWED_DYNAMIC_ATTRS,
- AUTOSHOOT_ATTR_PREFIX: AUTOSHOOT_DYNAMIC_ATTRS}
-ALLOWED_ATTR_PREFIXES = set(ALLOWED_ATTRS.keys())
+import copy
+from operator import add, mul
+from math_common import isclose
+from soft_exception import SoftException
+from items._xml import raiseWrongXml, readFloat, readBool, readString
 
-class MODIFIER_TYPE:
-    MUL = 'mul'
-    ADD = 'add'
+class MODIFIER_TYPE(object):
+    ADD = (0.0, add, add)
+    MUL = (1.0, add, mul)
 
 
-def _parseAttrName(complexName):
-    for attrPrefix in ALLOWED_ATTR_PREFIXES:
-        if complexName.startswith(attrPrefix):
-            return (attrPrefix, intern(complexName[len(attrPrefix):]))
-
-    return (None, None)
-
-
-def readModifiers(xmlCtx, section):
+def readModifiers(xmlCtx, section, readers, defaultIndependent=True, prettyMul=True):
     xmlCtx = (xmlCtx, section.name)
     modifiers = []
     for opType, data in section.items():
-        name = data.readString('name')
+        name = readString(xmlCtx, data, 'name')
         value = readFloat(xmlCtx, data, 'value')
-        modifier = createModifier(xmlCtx, opType, name, value)
-        if modifier:
-            modifiers.append(modifier)
+        independent = readBool(xmlCtx, data, 'independent', defaultIndependent)
+        for reader in readers:
+            modifier = reader.createModifier(xmlCtx, opType, name, value, independent, prettyMul)
+            if modifier:
+                modifiers.append(modifier)
+                break
+        else:
+            raiseWrongXml(xmlCtx, opType, 'Exists trash modifiers, name - {}'.format(name))
 
     return modifiers
 
 
-def createModifier(ctx, opType, name, value):
-    if opType not in (MODIFIER_TYPE.MUL, MODIFIER_TYPE.ADD):
-        return raiseWrongXml(ctx, opType, 'Unknown operation type')
-    attrType, attrName = _parseAttrName(name)
-    if attrType not in ALLOWED_ATTRS:
-        return raiseWrongXml(ctx, name, 'Unknown attribute type')
-    return raiseWrongXml(ctx, name, 'Unknown attribute name') if attrName not in ALLOWED_ATTRS.get(attrType) else (opType,
-     attrType,
-     attrName,
-     value)
+def createModifier(opType, name, value, readers):
+    for reader in readers:
+        modifier = reader.createModifier(None, opType, name, value)
+        if modifier:
+            return modifier
+
+    return raiseWrongXml(None, opType, 'Unknown modifier - opType({}), name({})'.format(opType, name))
 
 
-def isclose(a, b, rel_tol=1e-09, abs_tol=0.0):
-    return abs(a - b) <= max(rel_tol * max(abs(a), abs(b)), abs_tol)
+class CommonFactorsHelper(object):
+    MODIFIERS = MODIFIER_TYPE
+    ALLOWED_ATTRS = None
+    PREFIX = None
 
+    def __init__(self):
+        if self.ALLOWED_ATTRS is None or self.PREFIX is None:
+            raise SoftException('Incorrect ALLOWED_ATTRS({}) or PREFIX({})'.format(self.ALLOWED_ATTRS, self.PREFIX))
+        self.ATTRS = attrs = {}
+        self.DEFAULTS = defaults = {}
+        for aName in self.ALLOWED_ATTRS:
+            modifier = None
+            if isinstance(aName, tuple):
+                aName, modifier = aName
+                defaults[aName] = modifier[0]
+            attrs[aName] = modifier
 
-class SingleCollectorHelper(object):
-    _EMPTY_CHECKER = {MODIFIER_TYPE.ADD: lambda value: isclose(value, 0.0),
-     MODIFIER_TYPE.MUL: lambda value: isclose(value, 1.0)}
-    _APPLIERS = {MODIFIER_TYPE.ADD: lambda currentValue, addValue: currentValue + addValue,
-     MODIFIER_TYPE.MUL: lambda currentValue, addValue: currentValue * addValue}
+        return
 
-    @staticmethod
-    def isEmpty(opType, value):
-        return SingleCollectorHelper._EMPTY_CHECKER[opType](value)
+    def createModifier(self, xmlCtx, opType, name, value, independent=True, prettyMul=True):
+        if not name.startswith(self.PREFIX):
+            return
+        else:
+            attrName = intern(name[len(self.PREFIX):])
+            modifier = getattr(self.MODIFIERS, opType.upper(), None)
+            if modifier is None:
+                return raiseWrongXml(xmlCtx, opType, 'Unknown operation type')
+            if prettyMul and modifier is self.MODIFIERS.MUL:
+                value -= 1
+            if attrName not in self.ATTRS:
+                return raiseWrongXml(xmlCtx, opType, 'Unknown attribute attrName - {}'.format(attrName))
+            if self.ATTRS[attrName] is None:
+                self.ATTRS[attrName] = modifier
+                self.DEFAULTS[attrName] = modifier[0]
+            elif self.ATTRS[attrName] is not modifier:
+                return raiseWrongXml(xmlCtx, opType, 'Different operations types, name - {}'.format(attrName))
+            return ((self.PREFIX, attrName), value, independent)
 
-    @staticmethod
-    def collect(total, modifiersList, attrPrefix):
-        isEmpty = SingleCollectorHelper.isEmpty
-        appliers = SingleCollectorHelper._APPLIERS
-        for modifiers in modifiersList:
-            for opType, attrType, attrName, value in modifiers:
-                if attrType != attrPrefix:
-                    continue
-                if isEmpty(opType, value):
-                    continue
-                total[attrName] = appliers[opType](total[attrName], value)
-
-
-class AggregatedCollectorHelper(object):
-    _EMPTY_CHECKER = {MODIFIER_TYPE.ADD: lambda value: isclose(value, 0.0),
-     MODIFIER_TYPE.MUL: lambda value: isclose(value, 0.0)}
-    _MERGERS = {MODIFIER_TYPE.ADD: lambda currentValue, addValue: currentValue + addValue,
-     MODIFIER_TYPE.MUL: lambda currentValue, addValue: currentValue + (addValue - 1)}
-    _APPLIERS = {MODIFIER_TYPE.ADD: lambda currentValue, addValue: currentValue + addValue,
-     MODIFIER_TYPE.MUL: lambda currentValue, addValue: currentValue * (addValue + 1)}
-
-    @staticmethod
-    def isEmpty(opType, value):
-        return AggregatedCollectorHelper._EMPTY_CHECKER[opType](value)
-
-    @staticmethod
-    def collect(total, modifiersList, attrPrefix):
+    def collect(self, total, modifiers):
         uniqueAttrs = dict()
-        mergers = AggregatedCollectorHelper._MERGERS
-        for modifiers in modifiersList:
-            for opType, attrType, attrName, value in modifiers:
-                if attrType != attrPrefix:
-                    continue
-                key = (attrName, opType)
-                uniqueAttrs[key] = mergers[opType](uniqueAttrs.get(key, 0.0), value)
-
-        isEmpty = AggregatedCollectorHelper.isEmpty
-        appliers = AggregatedCollectorHelper._APPLIERS
-        for (attrName, opType), value in uniqueAttrs.iteritems():
-            if isEmpty(opType, value):
+        curAttrs = self.ATTRS
+        curPrefix = self.PREFIX
+        for (attrPrefix, attrName), value, independent in modifiers:
+            if attrPrefix != curPrefix:
                 continue
-            total[attrName] = appliers[opType](total[attrName], value)
+            default, merger, applier = curAttrs[attrName]
+            if independent:
+                value = merger(default, value)
+                if isclose(value, default):
+                    continue
+                total[attrName] = applier(total[attrName], value)
+            uniqueAttrs[attrName] = merger(uniqueAttrs.get(attrName, default), value)
 
+        if uniqueAttrs:
+            self.apply(total, uniqueAttrs)
 
-def onCollectAttributes(total, modifiersList, attrPrefix, asAggregated):
-    if asAggregated:
-        AggregatedCollectorHelper.collect(total, modifiersList, attrPrefix)
-    else:
-        SingleCollectorHelper.collect(total, modifiersList, attrPrefix)
+    def apply(self, total, mergedModifiers):
+        curAttrs = self.ATTRS
+        for attrName, value in mergedModifiers.iteritems():
+            default, _, applier = curAttrs[attrName]
+            if isclose(value, default):
+                continue
+            total[attrName] = applier(total[attrName], value)
+
+    def defaults(self):
+        return copy.copy(self.DEFAULTS)

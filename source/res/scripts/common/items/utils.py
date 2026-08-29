@@ -3,7 +3,9 @@
 import copy
 from operator import sub
 from functools import partial
+from math_common import isclose
 from typing import Any, Dict, Tuple
+from battle_modifiers_common import BattleParams
 from constants import VEHICLE_TTC_ASPECTS
 from debug_utils import *
 from items import tankmen
@@ -62,10 +64,6 @@ def makeDefaultVehicleAttributeFactors():
     return vehicleAttributeFactors()
 
 
-def isclose(a, b, rel_tol=1e-09, abs_tol=0.0):
-    return abs(a - b) <= max(rel_tol * max(abs(a), abs(b)), abs_tol)
-
-
 def generateDefaultCrew(vehicleType, level):
     nationID, vehicleTypeID = vehicleType.id
     skills = ()
@@ -110,7 +108,16 @@ def getRadioDistance(vehicleDescr, factors):
 
 
 def getCircularVisionRadius(vehicleDescr, factors):
-    return vehicleDescr.circularVisionRadius * vehicleDescr.miscAttrs['circularVisionRadiusBaseFactor'] * vehicleDescr.miscAttrs['circularVisionRadiusFactor'] * max(factors['circularVisionRadius'], 0.0)
+    return __calcCircularVisionRadius(vehicleDescr.circularVisionRadius, vehicleDescr.miscAttrs, factors)
+
+
+def getModifiedCircularVisionRadius(vehicleDescr, factors):
+    baseRadius = vehicleDescr.battleModifiers(BattleParams.VISION_RADIUS, vehicleDescr.circularVisionRadius)
+    return __calcCircularVisionRadius(baseRadius, vehicleDescr.miscAttrs, factors)
+
+
+def __calcCircularVisionRadius(baseRadius, miscAttrs, factors):
+    return baseRadius * miscAttrs['circularVisionRadiusBaseFactor'] * miscAttrs['circularVisionRadiusFactor'] * max(factors['circularVisionRadius'], 0.0)
 
 
 def getFirstReloadTime(vehicleDescr, factors, ignoreRespawn=False):

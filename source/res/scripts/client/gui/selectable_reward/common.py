@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/selectable_reward/common.py
 import logging
 import typing
+from account_helpers.offers.events_data import OfferEventData, OfferGift
 from adisp import adisp_process
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.impl.backport import createTooltipData
@@ -17,7 +18,6 @@ from skeletons.gui.offers import IOffersDataProvider
 from skeletons.gui.shared import IItemsCache
 if typing.TYPE_CHECKING:
     from typing import Callable, Dict, List, Tuple
-    from account_helpers.offers.events_data import OfferEventData
     from gui.SystemMessages import ResultMsg
 _logger = logging.getLogger(__name__)
 
@@ -201,6 +201,37 @@ class PersonalMissionsSelectableRewardManager(SelectableRewardManager):
 
 class RankedSelectableRewardManager(SelectableRewardManager):
     _FEATURE = Features.RANKED
+
+    @classmethod
+    def getTabTooltipData(cls, selectableBonus):
+        tokenID = selectableBonus.getValue().keys()[0]
+        return createTooltipData(tooltip=None, isSpecial=True, specialAlias=TOOLTIPS_CONSTANTS.BATTLE_PASS_GIFT_TOKEN, specialArgs=[_getGiftTokenFromOffer(tokenID), True]) if cls.isFeatureReward(tokenID) else None
+
+
+class StrongholdSelectableRewardManager(SelectableRewardManager):
+    _FEATURE = Features.STRONGHOLD
+    _BONUS_COUNT = 1
+
+    @classmethod
+    def _makeCustomGifts(cls, offer):
+        allGifts = []
+        for giftID, settings in offer._data.get('gift', {}).iteritems():
+            bonus = settings.get('bonus', {})
+            if 'customizations' in bonus.keys():
+                bonus['clans_customizations'] = bonus.pop('customizations')
+            allGifts.append(OfferGift(giftID, settings))
+
+        return allGifts
+
+    @classmethod
+    def getBonusOptions(cls, bonus):
+        if not isinstance(bonus, SelectableBonus):
+            return {}
+        offer = cls._getBonusOffer(bonus)
+        allGifts = cls._makeCustomGifts(offer)
+        return {gift.id:{'option': gift.bonus,
+         'count': cls._BONUS_COUNT,
+         'limit': gift.limit()} for gift in allGifts}
 
     @classmethod
     def getTabTooltipData(cls, selectableBonus):

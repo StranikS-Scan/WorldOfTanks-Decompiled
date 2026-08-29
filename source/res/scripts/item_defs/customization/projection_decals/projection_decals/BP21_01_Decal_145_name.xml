@@ -1,0 +1,48 @@
+<BP21_01_Decal_145_name.xml>
+  <xmlns:czech1>	ussr	</xmlns:czech1>
+  <xmlns:germany>	germany	</xmlns:germany>
+  <xmlns:czech0>	usa	</xmlns:czech0>
+  <xmlns:china>	china	</xmlns:china>
+  <xmlns:france>	france	</xmlns:france>
+  <xmlns:uk>	uk	</xmlns:uk>
+  <xmlns:japan>	japan	</xmlns:japan>
+  <xmlns:czech>	czech	</xmlns:czech>
+  <xmlns:sweden>	sweden	</xmlns:sweden>
+  <xmlns:poland>	poland	</xmlns:poland>
+  <xmlns:italy>	italy	</xmlns:italy>
+  <xmlns:intunion>	intunion	</xmlns:intunion>
+  <itemGroup>
+    <name>	BP21_01_Decal_145	</name>
+    <season>	ALL	</season>
+    <historical>	0	</historical>
+    <priceGroup>	MT projection_decals 100g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF usa:A104_M4A3E8A usa:A126_PzVI_Tiger_II_capt ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <userString>	#vehicle_customization:projection_decals/special	</userString>
+    <projection_decal>
+      <id>	31490	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/BP21_01_Decal_Cover_145.dds	</texture>
+      <userString>	#vehicle_customization:BP21_01_Decal_Cover_145/name	</userString>
+      <description>	#vehicle_customization:BP21_01_Decal_Cover_145/description	</description>
+      <tags>	formfactor_rect1x2 styleOnly hiddenInUI disableVerticalMirror	</tags>
+    </projection_decal>
+    <projection_decal>
+      <id>	31491	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/BP21_01_Decal_Left_145.dds	</texture>
+      <userString>	#vehicle_customization:BP21_01_Decal_Left_145/name	</userString>
+      <description>	#vehicle_customization:BP21_01_Decal_Left_145/description	</description>
+      <tags>	styleOnly formfactor_square hiddenInUI disableVerticalMirror	</tags>
+      <scaleFactorId>	2	</scaleFactorId>
+    </projection_decal>
+    <projection_decal>
+      <id>	31492	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/BP21_01_Decal_Right_145.dds	</texture>
+      <userString>	#vehicle_customization:BP21_01_Decal_Right_145/name	</userString>
+      <description>	#vehicle_customization:BP21_01_Decal_Right_145/description	</description>
+      <tags>	styleOnly formfactor_square hiddenInUI disableVerticalMirror	</tags>
+    </projection_decal>
+  </itemGroup>
+</BP21_01_Decal_145_name.xml>

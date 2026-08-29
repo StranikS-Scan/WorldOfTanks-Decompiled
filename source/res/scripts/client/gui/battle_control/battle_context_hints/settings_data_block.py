@@ -60,6 +60,27 @@ class HintDataLongBattleCntrBlock(HintDataBlock):
         return rawVal
 
 
+class HintDataPlayerObservedBlock(HintDataBlock):
+
+    def unpack(self, rawVal):
+        watchingCounter = rawVal & 3
+        watchingCounterPerBattle = (rawVal & 4) >> 2
+        battlesCooldown = (rawVal & 24) >> 3
+        return HintData(watchingCounter, watchingCounterPerBattle, battlesCooldown, False)
+
+    def pack(self, value):
+        watchingCounter = int(value.watchingCounter)
+        watchingCounter &= 3
+        watchingCounterPerBattle = int(value.watchingCounterPerBattle)
+        watchingCounterPerBattle &= 1
+        watchingCounterPerBattle <<= 2
+        battlesCooldown = int(value.battlesCooldown)
+        battlesCooldown &= 3
+        battlesCooldown <<= 3
+        rawVal = watchingCounter | watchingCounterPerBattle | battlesCooldown
+        return rawVal
+
+
 class HintDataShortBattleCntrBlock(HintDataBlock):
 
     def unpack(self, rawVal):

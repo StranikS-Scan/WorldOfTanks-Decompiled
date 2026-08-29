@@ -2386,6 +2386,65 @@
         </_130mm_HE_Mark_80>
       </shots>
     </_130mm_Cannone_da_130_45_bob>
+    <_149mm_Cannone_da_149_40_It37>
+      <id>	31006	</id>
+      <userString>	#italy_vehicles:_149mm_Cannone_da_149_40_It37	</userString>
+      <tags></tags>
+      <level>	8	</level>
+      <price>	130000	</price>
+      <notInShop>	true	</notInShop>
+      <impulse>	0.48	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.24	</amplitude>
+        <recoilEffect>	huge	</recoilEffect>
+      </recoil>
+      <effects>	shot_huge	</effects>
+      <reloadEffect>	autoloader_reload115_152	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -20.0 1.0 -20.0	</minPitch>
+        <maxPitch>	0.0 10.0 1.0 10.0	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	20	</rotationSpeed>
+      <reloadTime>	7.5	</reloadTime>
+      <maxAmmo>	60	</maxAmmo>
+      <aimingTime>	2	</aimingTime>
+      <weight>	4000	</weight>
+      <maxHealth>	208	</maxHealth>
+      <maxRegenHealth>	104	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.4	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.05	</turretRotation>
+        <afterShot>	4.0	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_149mm_GP35_It37>
+          <defaultPortion>	0.8	</defaultPortion>
+          <speed>	800	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	229 208	</piercingPower>
+        </_149mm_GP35_It37>
+        <_149mm_GEP39A_It37>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	700	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	264 264	</piercingPower>
+        </_149mm_GEP39A_It37>
+        <_149mm_GEF32_It37>
+          <defaultPortion>	0.2	</defaultPortion>
+          <speed>	650	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	149 149	</piercingPower>
+        </_149mm_GEF32_It37>
+      </shots>
+    </_149mm_Cannone_da_149_40_It37>
     <_47_mm_Cannone_Da_47_40_bis>
       <id>	46	</id>
       <userString>	#italy_vehicles:_47_mm_Cannone_Da_47_40_bis	</userString>

@@ -15,7 +15,7 @@ from gui.impl.gen.view_models.common.missions.bonuses.icon_bonus_model import Ic
 from gui.impl.gen.view_models.common.missions.bonuses.token_bonus_model import TokenBonusModel
 from gui.selectable_reward.constants import SELECTABLE_BONUS_NAME
 from gui.selectable_reward.bonus_packers import SelectableBonusPacker
-from gui.shared.missions.packers.bonus import VehiclesBonusUIPacker, getDefaultBonusPackersMap, BonusUIPacker, BlueprintBonusUIPacker, SimpleBonusUIPacker, TokenBonusUIPacker, CrewBookBonusUIPacker, PremiumDaysBonusPacker
+from gui.shared.missions.packers.bonus import VehiclesBonusUIPacker, getDefaultBonusPackersMap, BonusUIPacker, BlueprintBonusUIPacker, SimpleBonusUIPacker, TokenBonusUIPacker, CrewBookBonusUIPacker, PremiumDaysBonusPacker, CustomizationBonusUIPacker
 from gui.techtree.techtree_dp import g_techTreeDP
 from gui.shared.gui_items.Vehicle import getNationLessName, getIconResourceName
 from gui.shared.money import Currency
@@ -164,7 +164,8 @@ def getTankAcademyBonusPacker():
      VehiclesBonus.VEHICLES_BONUS: TankAcademyVehiclesBonusUIPacker(),
      BlueprintBonusTypes.BLUEPRINTS: TankAcademyBlueprintBonusUIPacker(),
      SELECTABLE_BONUS_NAME: TankAcademySelectableBonusUIPacker(),
-     'items': ExtendedItemBonusUIPacker()})
+     'items': ExtendedItemBonusUIPacker(),
+     'customizations': TankAcademyCustomizationBonusUIPacker()})
     return BonusUIPacker(mapping)
 
 
@@ -188,6 +189,24 @@ class TankAcademyBlueprintBonusUIPacker(BlueprintBonusUIPacker):
         nation = bonus.getImageCategory()
         nationName = backport.text(R.strings.blueprints.nations.dyn(nation)())
         return backport.text(R.strings.quests.bonusName.blueprints.nation(), nationName=nationName)
+
+
+class TankAcademyCustomizationBonusUIPacker(CustomizationBonusUIPacker):
+
+    @classmethod
+    def _pack(cls, bonus):
+        result = []
+        for item in bonus.getCustomizations():
+            if item is None:
+                continue
+            c11nItem = bonus.getC11nItem(item)
+            result.append(cls._packSingleBonus(bonus, item, cls._getLabel(c11nItem)))
+
+        return result
+
+    @classmethod
+    def _getLabel(cls, c11nItem):
+        return c11nItem.userName
 
 
 class TankAcademySimpleBonusUIPacker(SimpleBonusUIPacker):

@@ -33,7 +33,7 @@ from messenger.proto.entities import ClanInfo as UserClanInfo
 from messenger.proto.entities import SharedUserEntity
 from messenger.storage import storage_getter
 from nation_change_helpers.client_nation_change_helper import getValidVehicleCDForNationChange
-from skeletons.gui.game_control import IVehicleComparisonBasket, IBattleRoyaleController, IMapboxController, IEventBattlesController, IPlatoonController, IEpicBattleMetaGameController, IComp7Controller, IRankedBattlesController
+from skeletons.gui.game_control import IVehicleComparisonBasket, IBattleRoyaleController, IMapboxController, IEventBattlesController, IPlatoonController, IEpicBattleMetaGameController, IComp7Controller, IRankedBattlesController, IWhiteTigerController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
@@ -68,6 +68,7 @@ class USER(object):
     CREATE_COMP7_SQUAD = 'createComp7Squad'
     CREATE_RANKED_SQUAD = 'createRankedSquad'
     CREATE_EPIC_SQUAD = 'createEpicSquad'
+    CREATE_WHITE_TIGER_SQUAD = 'createWhiteTigerSquad'
 
 
 _CM_ICONS = {USER.END_REFERRAL_COMPANY: 'endReferralCompany'}
@@ -85,6 +86,7 @@ class BaseUserCMHandler(AbstractContextMenuHandler, EventSystemEntity):
     __epicCtrl = dependency.descriptor(IEpicBattleMetaGameController)
     __comp7Ctrl = dependency.descriptor(IComp7Controller)
     __rankedCtrl = dependency.descriptor(IRankedBattlesController)
+    __wtBattlesCtrl = dependency.descriptor(IWhiteTigerController)
 
     @prbDispatcherProperty
     def prbDispatcher(self):
@@ -184,6 +186,9 @@ class BaseUserCMHandler(AbstractContextMenuHandler, EventSystemEntity):
     def createMapboxSquad(self):
         self._doSelect(PREBATTLE_ACTION_NAME.MAPBOX_SQUAD, (self.databaseID,))
 
+    def createWhiteTigerSquad(self):
+        self._doSelect(PREBATTLE_ACTION_NAME.WHITE_TIGER_SQUAD, (self.databaseID,))
+
     def createComp7Squad(self):
         self._doSelect(PREBATTLE_ACTION_NAME.COMP7_SQUAD, (self.databaseID,))
 
@@ -220,7 +225,8 @@ class BaseUserCMHandler(AbstractContextMenuHandler, EventSystemEntity):
          USER.CREATE_MAPBOX_SQUAD: 'createMapboxSquad',
          USER.CREATE_COMP7_SQUAD: 'createComp7Squad',
          USER.CREATE_RANKED_SQUAD: 'createRankedSquad',
-         USER.CREATE_EPIC_SQUAD: 'createEpicSquad'}
+         USER.CREATE_EPIC_SQUAD: 'createEpicSquad',
+         USER.CREATE_WHITE_TIGER_SQUAD: 'createWhiteTigerSquad'}
         if not IS_CHINA:
             handlers.update({USER.SET_MUTED: 'setMuted',
              USER.UNSET_MUTED: 'unsetMuted'})
@@ -321,6 +327,9 @@ class BaseUserCMHandler(AbstractContextMenuHandler, EventSystemEntity):
                 isEnabled = primeTimeStatus == PrimeTimeStatus.AVAILABLE and self.__rankedCtrl.hasSuitableVehicles()
                 options.append(self._makeItem(USER.CREATE_RANKED_SQUAD, MENU.contextmenu(USER.CREATE_RANKED_SQUAD), optInitData={'enabled': canCreate and isEnabled,
                  'textColor': _ADD_SQUAD_COLOR}))
+            if self.__wtBattlesCtrl.isEnabled() and not self.__wtBattlesCtrl.isFrozen() and not self.__isSquadAlreadyCreated(PREBATTLE_TYPE.WHITE_TIGER):
+                options.append(self._makeItem(USER.CREATE_WHITE_TIGER_SQUAD, backport.text(R.strings.menu.contextMenu.dyn(USER.CREATE_WHITE_TIGER_SQUAD)()), optInitData={'enabled': canCreate,
+                 'textColor': 13347959}))
         return options
 
     def _addPrebattleInfo(self, options, userCMInfo):

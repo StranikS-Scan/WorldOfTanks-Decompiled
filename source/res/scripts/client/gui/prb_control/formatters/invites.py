@@ -98,7 +98,10 @@ def getLeaveOrChangeText(funcState, invitePrbType, peripheryID, lobbyContext=Non
     text = ''
     if funcState.doLeaveToAcceptInvite(invitePrbType):
         if funcState.isInLegacy() or funcState.isInUnit():
-            entityName = PREBATTLE_LEAVE_PREFIX + getPrbName(funcState.entityTypeID)
+            prefix = PREBATTLE_LEAVE_PREFIX
+            if funcState.entityTypeID == PREBATTLE_TYPE.WHITE_TIGER and invitePrbType == PREBATTLE_TYPE.WHITE_TIGER:
+                prefix = 'SQUAD_'
+            entityName = prefix + getPrbName(funcState.entityTypeID)
             kwargs = getModeNameKwargs(funcState.entityTypeID, isQueue=False)
         elif funcState.isInPreQueue():
             entityName = QUEUE_LEAVE_PREFIX + getPreQueueName(funcState.entityTypeID)

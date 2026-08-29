@@ -1,8 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/comp7/comp7_profile_helper.py
-from comp7_common import COMP7_CURRENT_SEASON
-COMP7_SEASON_NUMBERS = tuple(range(1, COMP7_CURRENT_SEASON + 1))
-COMP7_ARCHIVE_NAMES = ('Griffin',)
 COMP7_ARCHIVE_DROPDOWN_KEY_PREFIX = 'comp7_archive_'
 COMP7_SEASON_DROPDOWN_KEY_PREFIX = 'comp7_season_'
 

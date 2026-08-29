@@ -20,6 +20,7 @@ from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
 from gui.shared.utils import flashObject2Dict, decorators, graphics
 from gui.Scaleform.daapi.view.meta.SettingsWindowMeta import SettingsWindowMeta
 from gui.Scaleform.daapi.view.common.settings.SettingsParams import SettingsParams
+from gui.battle_control.battle_context_hints.classic_battle_context_hints_config import isBattleContextHintsResetAvailable, resetBattleContextHintsCounters
 from account_helpers.settings_core import settings_constants
 from account_helpers.settings_core.options import APPLY_METHOD
 from helpers import dependency
@@ -30,9 +31,12 @@ from gui.shared.formatters import icons
 from gui import makeHtmlString
 from gui.impl import backport
 from gui.impl.gen import R
+from skeletons.gui.battle_session import IBattleSessionProvider
+from messenger_common_chat2 import MESSENGER_LIMITS as _LIMITS, MESSENGER_ACTION_IDS as _ACTIONS
 from skeletons.account_helpers.settings_core import ISettingsCore
-from skeletons.gui.game_control import IAnonymizerController, ILimitedUIController
+from skeletons.gui.game_control import IAnonymizerController, ILimitedUIController, IWhiteTigerController
 from skeletons.gui.lobby_context import ILobbyContext
+from uilogging.battle_context_hints.loggers import BattleContextHintsSettingsLogger
 from uilogging.limited_ui.constants import LimitedUILogItem, LimitedUILogScreenParent
 from uilogging.limited_ui.loggers import LimitedUILogger
 _PAGES = (SETTINGS.GAMETITLE,
@@ -68,6 +72,8 @@ class SettingsWindow(SettingsWindowMeta):
     settingsCore = dependency.descriptor(ISettingsCore)
     lobbyContext = dependency.descriptor(ILobbyContext)
     limitedUIController = dependency.descriptor(ILimitedUIController)
+    sessionProvider = dependency.descriptor(IBattleSessionProvider)
+    __wtController = dependency.descriptor(IWhiteTigerController)
 
     def __init__(self, ctx=None):
         super(SettingsWindow, self).__init__()
@@ -76,6 +82,8 @@ class SettingsWindow(SettingsWindowMeta):
         if 'tabIndex' in ctx and ctx['tabIndex'] is not None:
             _setLastTabIndex(ctx['tabIndex'])
         self.params = SettingsParams()
+        self.updateCaptureDevices()
+        self.__buttonTimer = None
         return
 
     @proto_getter(PROTO_TYPE.BW_CHAT2)
@@ -147,12 +155,15 @@ class SettingsWindow(SettingsWindowMeta):
          {'label': SETTINGS.FEEDBACK_TAB_QUESTSPROGRESS,
           'linkage': VIEW_ALIAS.FEEDBACK_QUESTS_PROGRESS}]
         self.as_setFeedbackDataProviderS(dataVO)
+        isActive = self.__wtController.isEventPrbActive() or self.sessionProvider.arenaVisitor.gui.isWhiteTigerBattle()
+        self.as_setTigerEventS(isActive)
         if self.__redefinedKeyModeEnabled:
             BigWorld.setRedefineKeysMode(True)
         self.__currentSettings = self.params.getMonitorSettings()
         self._update()
         self.settingsCore.onSettingsChanged += self.__onSettingsChanged
         self.anonymizerController.onStateChanged += self.__refreshSettings
+        self.lobbyContext.onServerSettingsChanged += self.__setBattleContextHintsEnabled
         g_guiResetters.add(self.onRecreateDevice)
         BigWorld.setAdapterOrdinalNotifyCallback(self.onRecreateDevice)
 
@@ -165,6 +176,9 @@ class SettingsWindow(SettingsWindowMeta):
         self.as_openTabS(_getLastTabIndex())
         self.__setColorGradingTechnique()
         self.__setLimitedUISettingVisibility()
+        self.__setBattleContextHintsResetEnabled()
+        self.__setBattleContextHintsEnabled()
+        self.__disableVOIPTestButton()
 
     def _dispose(self):
         if self.__redefinedKeyModeEnabled:
@@ -176,6 +190,8 @@ class SettingsWindow(SettingsWindowMeta):
         self.stopArtyBulbPreview()
         self.anonymizerController.onStateChanged -= self.__refreshSettings
         self.settingsCore.onSettingsChanged -= self.__onSettingsChanged
+        self.lobbyContext.onServerSettingsChanged -= self.__setBattleContextHintsEnabled
+        self.__buttonTimer = None
         super(SettingsWindow, self)._dispose()
         return
 
@@ -196,6 +212,8 @@ class SettingsWindow(SettingsWindowMeta):
     def onSettingsChange(self, settingName, settingValue):
         settingValue = flashObject2Dict(settingValue)
         self.params.preview(settingName, settingValue)
+        if settingName == settings_constants.GAME.ENABLE_BATTLE_CONTEXT_HINTS:
+            self.__setBattleContextHintsResetEnabled(settingValue and isBattleContextHintsResetAvailable())
 
     def applySettings(self, settings, isCloseWnd):
         self._applySettings(flashObject2Dict(settings), isCloseWnd)
@@ -263,10 +281,13 @@ class SettingsWindow(SettingsWindowMeta):
         return True
 
     def startVOIPTest(self, isStart):
-        LOG_DEBUG('Vivox test: %s' % str(isStart))
+        LOG_DEBUG('VOIP test: %s' % str(isStart))
         rh = VOIP.getVOIPManager()
         if isStart:
             rh.enterTestChannel()
+            delay = self.bwProto.voipController.noiseCancellationDelay()
+            self.__disableVOIPTestButton(_LIMITS.VOIP_CHANNEL_REQUEST_COOLDOWN_SEC + delay)
+            BigWorld.callback(delay, self.__setVOIPTestReady)
         else:
             rh.leaveTestChannel()
         return False
@@ -315,6 +336,11 @@ class SettingsWindow(SettingsWindowMeta):
             ctx = {'icon': icons.alert(),
              'alert': makeHtmlString('html_templates:lobby/dialogs', 'limitedUIOffNotification', {'message': backport.text(R.strings.dialogs.limitedUIOffNotification.message.alert())})}
             applyMethod = self.__applyLimitedUISetting
+        elif dialogID == SETTINGS_DIALOGS.RESET_BATTLE_CONTEXT_HINTS_NOTIFICATION:
+            ctx = {'icon': icons.alert(),
+             'alert': makeHtmlString('html_templates:lobby/dialogs', 'resetBattleContextHintsNotificationAlert', {'message': backport.text(R.strings.dialogs.resetBattleContextHintsNotification.message.alert())}),
+             'caption': makeHtmlString('html_templates:lobby/dialogs', 'resetBattleContextHintsNotificationCaption', {'message': backport.text(R.strings.dialogs.resetBattleContextHintsNotification.message.caption())})}
+            applyMethod = self.__applyBattleContextHintsReset
 
         def callback(isOk):
             if not self.isDisposed():
@@ -392,3 +418,42 @@ class SettingsWindow(SettingsWindowMeta):
     def __applyLimitedUISetting(self):
         self.limitedUIController.completeAllRules()
         LimitedUILogger().handleClickOnce(LimitedUILogItem.DISABLE_LIMITED_UI_BUTTON, LimitedUILogScreenParent.SETTINGS_WINDOW)
+
+    def __setBattleContextHintsResetEnabled(self, isResetAvailable=None):
+        if isResetAvailable is None:
+            isResetAvailable = self.settingsCore.getSetting(settings_constants.GAME.ENABLE_BATTLE_CONTEXT_HINTS) and isBattleContextHintsResetAvailable()
+        self.as_setBattleContextHintsResetEnabledS(isResetAvailable)
+        return
+
+    def __applyBattleContextHintsReset(self):
+        resetBattleContextHintsCounters()
+        self.__setBattleContextHintsResetEnabled(False)
+        BattleContextHintsSettingsLogger().logResetHintsCountersClicked()
+
+    def __setBattleContextHintsEnabled(self):
+        config = self.lobbyContext.getServerSettings().battleContextHintsConfig
+        self.as_setBattleContextHintsEnabledS(config.enabled)
+
+    def __restoreButtonToggle(self):
+        if self.__buttonTimer is None:
+            return
+        else:
+            self.as_setVOIPButtonStateS(True)
+            self.__buttonTimer = None
+            return
+
+    def __disableVOIPTestButton(self, cooldown=0.0):
+        provider = self.bwProto.voipProvider.provider()
+        if provider.isActionInCoolDown(_ACTIONS.REQUEST_ECHO_CHANNEL):
+            if self.__buttonTimer is None:
+                leftSecs = max(provider.getCooldownTime(_ACTIONS.REQUEST_ECHO_CHANNEL), cooldown)
+                self.__buttonTimer = BigWorld.callback(leftSecs, self.__restoreButtonToggle)
+            self.as_setVOIPButtonStateS(False)
+        return
+
+    def __setVOIPTestReady(self):
+        mgr = VOIP.getVOIPManager()
+        if mgr.isInTesting():
+            self.as_setVOIPTestReadyS(True)
+        else:
+            self.as_setVOIPTestReadyS(False)

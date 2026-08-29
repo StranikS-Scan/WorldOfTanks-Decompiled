@@ -90,6 +90,11 @@ class LootBoxWebApi(object):
                     aggregatedBonuses.append(bonusEntry)
                 if not self.__isExistingVehicle(bonusEntry, result['bonuses']):
                     bonusEntry['icon'] = {size:sanitizeResPath(path) for size, path in bonusEntry['icon'].iteritems()}
+                    if bonusEntry.get('type') == 'custom/allof' and bonusEntry.get('id') == 0:
+                        smallIcon = bonusEntry.get('icon', {}).get('small')
+                        bigIcon = bonusEntry.get('icon', {}).get('big')
+                        if not smallIcon and not bigIcon:
+                            continue
                     result['bonuses'].append(bonusEntry)
 
         result['bonuses'].extend([ _BONUS_WRAPPERS.get(bType, BonusAggregateWrapper).getWrappedBonus(bValues) for bType, bValues in aggregatedBonusesMap.iteritems() ])

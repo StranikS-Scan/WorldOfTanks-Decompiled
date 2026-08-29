@@ -85,11 +85,11 @@ class _ServiceHelpersMixin(object):
         vehicleCD = vehicleCD or self._getVehicleCD()
         return self.itemsFactory.createOutfit(vehicleCD=vehicleCD)
 
-    def getEmptyOutfitWithNationalEmblems(self, vehicleCD):
+    def getEmptyOutfitWithNationalEmblems(self, vehicleCD, isClanHidden=False, isMarksOnGunHidden=False):
         vehDesc = VehicleDescr(vehicleCD)
         decals = createNationalEmblemComponents(vehDesc)
         component = CustomizationOutfit(decals=decals)
-        return self.itemsFactory.createOutfit(component=component, vehicleCD=vehicleCD)
+        return self.itemsFactory.createOutfit(component=component, vehicleCD=vehicleCD, isClanHidden=isClanHidden, isMarksOnGunHidden=isMarksOnGunHidden)
 
     def getOutfitByStyleId(self, vehicleCD, styleId):
         styleIntCD = vehicles.makeIntCompactDescrByID('customizationItem', CustomizationType.STYLE, styleId)

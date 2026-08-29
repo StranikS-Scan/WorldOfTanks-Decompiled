@@ -9,6 +9,7 @@ from constants import ARENA_PERIOD
 from gui.battle_control.battle_context_hints.common import HintId
 from gui.battle_control.battle_constants import VEHICLE_VIEW_STATE
 from skeletons.gui.battle_session import IBattleSessionProvider
+from skeletons.gui.game_control import ITankAcademyController
 if typing.TYPE_CHECKING:
     from gui.battle_control.controllers.vehicle_state_ctrl import VehicleStateController
 _logger = logging.getLogger(__name__)
@@ -51,6 +52,14 @@ class PreBattleHintActivationTrigger(HintActivationTrigger):
     def __onArenaPeriodChange(self, period, *args, **kwargs):
         if period == ARENA_PERIOD.BATTLE and self.needToShowHint():
             self._activationCallback(self._hintId, *self._args, **self._kwargs)
+
+
+class TankAcademyQuestHintTrigger(object):
+    __tankAcademyController = dependency.descriptor(ITankAcademyController)
+
+    def isTankAcademyQuestActive(self, questNumber):
+        currentQuestOrder = self.__tankAcademyController.getCurrentQuestOrder()
+        return self.__tankAcademyController.isFinished() or currentQuestOrder is not None and currentQuestOrder >= questNumber
 
 
 class KilledWhileObservedHintTrigger(HintActivationTrigger):
@@ -196,3 +205,130 @@ class ModuleDamageHintTrigger(PreBattleHintActivationTrigger):
         hintsCtrl = self._sessionProvider.dynamic.battleContextHintsCtrl
         hintsData = hintsCtrl.getHintsData()
         return all((hintData.getWatchingCounter() == 0 for hintId, hintData in hintsData.iteritems() if hintId in self._MODULE_RELATED_HINTS))
+
+
+class AmmoAvailableHintTrigger(TankAcademyQuestHintTrigger, PreBattleHintActivationTrigger):
+    _TANK_ACADEMY_AMMO_QUEST_NUMBER = 8
+    _MIN_VEHICLE_LEVEL = 4
+
+    def needToShowHint(self):
+        if not self.isTankAcademyQuestActive(self._TANK_ACADEMY_AMMO_QUEST_NUMBER):
+            return False
+        else:
+            vehicleStateCtrl = self._sessionProvider.shared.vehicleState
+            vehicle = vehicleStateCtrl.getControllingVehicle() if vehicleStateCtrl is not None else None
+            if vehicle is None or vehicle.typeDescriptor.level < self._MIN_VEHICLE_LEVEL:
+                return False
+            ammoCtrl = self._sessionProvider.shared.ammo
+            if ammoCtrl is None:
+                return False
+            availableShells = set(ammoCtrl.getGunSettings().shots)
+            if not availableShells:
+                return False
+            loadedShells = set((intCD for intCD, (count, _) in ammoCtrl.getShellsLayout() if count > 0))
+            return availableShells == loadedShells
+
+
+class AmmoTypeSwitchHintTrigger(TankAcademyQuestHintTrigger, HintActivationTrigger, TriggersManager.ITriggerListener):
+    _REQUIRED_FAILED_HITS = 2
+    _NO_DAMAGE_NO_PIERCE_EVENTS = (TriggersManager.TRIGGER_TYPE.PLAYER_SHOT_NOT_PIERCED, TriggersManager.TRIGGER_TYPE.PLAYER_SHOT_RICOCHET)
+    _BREAK_SEQUENCE_EVENTS = (TriggersManager.TRIGGER_TYPE.PLAYER_SHOT_MISSED, TriggersManager.TRIGGER_TYPE.PLAYER_SHOT_MADE_NONFATAL_DAMAGE)
+    _sessionProvider = dependency.descriptor(IBattleSessionProvider)
+
+    def __init__(self, hintId, activationCallback, *args, **kwargs):
+        super(AmmoTypeSwitchHintTrigger, self).__init__(hintId, activationCallback, *args, **kwargs)
+        self.__ammoCtrl = None
+        self.__shellQuantities = {}
+        self.__shotShellCD = None
+        self.__lastShellCD = None
+        self.__lastTargetId = None
+        self.__failedHitsCount = 0
+        return
+
+    def start(self):
+        self.__ammoCtrl = self._sessionProvider.shared.ammo
+        if self.__ammoCtrl is not None:
+            self.__ammoCtrl.onShellsAdded += self.__onShellsAdded
+            self.__ammoCtrl.onShellsUpdated += self.__onShellsUpdated
+        TriggersManager.g_manager.addListener(self)
+        return
+
+    def stop(self):
+        if self.__ammoCtrl is not None:
+            self.__ammoCtrl.onShellsAdded -= self.__onShellsAdded
+            self.__ammoCtrl.onShellsUpdated -= self.__onShellsUpdated
+            self.__ammoCtrl = None
+        TriggersManager.g_manager.delListener(self)
+        self.__shellQuantities.clear()
+        self.__shotShellCD = None
+        self.__resetSequence()
+        return
+
+    def onTriggerActivated(self, args):
+        triggerType = args['type']
+        if triggerType in self._BREAK_SEQUENCE_EVENTS:
+            self.__resetSequence()
+            return
+        elif triggerType not in self._NO_DAMAGE_NO_PIERCE_EVENTS:
+            return
+        else:
+            shotShellCD = self.__shotShellCD
+            self.__shotShellCD = None
+            targetId = args.get('targetId')
+            if targetId is None:
+                self.__resetSequence()
+                return
+            elif not self.__ammoTypeAvailableWasShown():
+                self.__resetSequence()
+                return
+            elif shotShellCD is None:
+                self.__resetSequence()
+                return
+            elif self.__isShellHighestPiercing(shotShellCD):
+                self.__resetSequence()
+                return
+            if shotShellCD == self.__lastShellCD and targetId == self.__lastTargetId:
+                self.__failedHitsCount += 1
+            else:
+                self.__lastShellCD = shotShellCD
+                self.__lastTargetId = targetId
+                self.__failedHitsCount = 1
+            if self.__failedHitsCount >= self._REQUIRED_FAILED_HITS:
+                self.__resetSequence()
+                self._activationCallback(self._hintId, *self._args, **self._kwargs)
+            return
+
+    def __ammoTypeAvailableWasShown(self):
+        hintsCtrl = self._sessionProvider.dynamic.battleContextHintsCtrl
+        if hintsCtrl is None:
+            return False
+        else:
+            hintsData = hintsCtrl.getHintsData().get(HintId.AMMO_TYPE_AVAILABLE)
+            hintsConfig = hintsCtrl.getHintsConfig()[HintId.AMMO_TYPE_AVAILABLE]
+            return hintsData is not None and hintsData.getWatchingCounter() < hintsConfig.maxWatchingQty
+
+    def __isShellHighestPiercing(self, shellCD):
+        ammoCtrl = self.__ammoCtrl
+        if ammoCtrl is None:
+            return True
+        else:
+            gunSettings = ammoCtrl.getGunSettings()
+            piercingPower = gunSettings.getPiercingPower(shellCD)
+            loadedShells = (intCD for intCD, (count, _) in ammoCtrl.getShellsLayout() if count > 0)
+            return all((piercingPower >= gunSettings.getPiercingPower(intCD) for intCD in loadedShells))
+
+    def __onShellsUpdated(self, intCD, quantity, _, __):
+        previousQuantity = self.__shellQuantities.get(intCD)
+        self.__shellQuantities[intCD] = quantity
+        if previousQuantity is not None and quantity < previousQuantity:
+            self.__shotShellCD = intCD
+        return
+
+    def __onShellsAdded(self, intCD, _, quantity, *__):
+        self.__shellQuantities[intCD] = quantity
+
+    def __resetSequence(self):
+        self.__lastShellCD = None
+        self.__lastTargetId = None
+        self.__failedHitsCount = 0
+        return

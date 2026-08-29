@@ -25,3 +25,5 @@ class DivisionTooltip(ViewImpl):
             vm.setDivision(self.__params['division'])
             vm.setFrom(self.__params['from'])
             vm.setTo(self.__params['to'])
+            vm.setType(self.__params['type'])
+            vm.setElitePercent(self.__params['elitePercent'])

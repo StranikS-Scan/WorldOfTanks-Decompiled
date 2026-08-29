@@ -5,12 +5,15 @@ import logging
 from typing import Any
 from gui.Scaleform.daapi.settings.config import ADVANCED_COMPLEX_TOOLTIPS
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
-from gui.shared.gui_items.artefacts import OptionalDevice
+from gui.shared.gui_items.artefacts import OptionalDevice, Equipment
 from gui.shared.tooltips import complex_formatters
 from gui.shared.tooltips import contexts, advanced
 from helpers import dependency
 from skeletons.account_helpers.settings_core import ISettingsCore
 from soft_exception import SoftException
+from gui.prb_control.dispatcher import g_prbLoader
+from fun_random.gui.fun_gui_constants import DISABLED_ADVANCED_TOOLTIPS_ITEMS_CD
+from constants import QUEUE_TYPE
 _logger = logging.getLogger(__name__)
 DISABLED_ITEMS_ID = 12793
 
@@ -125,12 +128,14 @@ class AdvancedDataBuilder(AdvancedBuilder):
                 self._setDisableAnimFlag()
         else:
             data = self._provider.buildToolTip(*args)
+            isDisabledForWheeled = False
+            isDisabledAdvAnim = False
             item = self._provider.item
-            disabledForWheeled = False
             if item is not None:
-                if isinstance(item, OptionalDevice):
-                    disabledForWheeled = item.intCD == DISABLED_ITEMS_ID
-            if supportAdvanced and not disabledForWheeled:
+                isDisabledForWheeled = isinstance(item, OptionalDevice) and item.intCD == DISABLED_ITEMS_ID
+                entity = g_prbLoader.getDispatcher().getEntity()
+                isDisabledAdvAnim = entity is not None and isinstance(item, Equipment) and entity.getEntityType() == QUEUE_TYPE.FUN_RANDOM and item.intCD in DISABLED_ADVANCED_TOOLTIPS_ITEMS_CD
+            if supportAdvanced and not isDisabledForWheeled and not isDisabledAdvAnim:
                 self._provider.addAdvancedBlock(data, disableAnim)
         return data
 

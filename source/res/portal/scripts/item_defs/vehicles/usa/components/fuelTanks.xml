@@ -1,0 +1,109 @@
+<fuelTanks.xml>
+  <xmlns:xmlref>	http://bwt/xmlref	</xmlns:xmlref>
+  <shared>
+    <Average>
+      <id>	203	</id>
+      <tags></tags>
+      <price>	100	</price>
+      <weight>	250	</weight>
+      <maxHealth>	150	</maxHealth>
+      <maxRegenHealth>	50	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+      <healthRegenPerSec>	6.125	</healthRegenPerSec>
+      <healthBurnPerSec>	21	</healthBurnPerSec>
+    </Average>
+    <Average_MapsTraining_Dummy_LT_2>
+      <id>	4	</id>
+      <tags></tags>
+      <price>	100	</price>
+      <weight>	250	</weight>
+      <maxHealth>	150	</maxHealth>
+      <maxRegenHealth>	50	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+      <healthRegenPerSec>	6.125	</healthRegenPerSec>
+      <healthBurnPerSec>	21	</healthBurnPerSec>
+      <notInShop>	True	</notInShop>
+    </Average_MapsTraining_Dummy_LT_2>
+    <Average_MapsTraining_Dummy_MT_1>
+      <id>	2	</id>
+      <tags></tags>
+      <price>	100	</price>
+      <weight>	250	</weight>
+      <maxHealth>	150	</maxHealth>
+      <maxRegenHealth>	50	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+      <healthRegenPerSec>	6.125	</healthRegenPerSec>
+      <healthBurnPerSec>	21	</healthBurnPerSec>
+      <notInShop>	True	</notInShop>
+    </Average_MapsTraining_Dummy_MT_1>
+    <Average_MapsTraining_Player_HT_1>
+      <id>	3	</id>
+      <tags></tags>
+      <price>	100	</price>
+      <weight>	250	</weight>
+      <maxHealth>	150	</maxHealth>
+      <maxRegenHealth>	50	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+      <healthRegenPerSec>	6.125	</healthRegenPerSec>
+      <healthBurnPerSec>	21	</healthBurnPerSec>
+      <invulnerable>	True	</invulnerable>
+      <notInShop>	True	</notInShop>
+    </Average_MapsTraining_Player_HT_1>
+    <Heavy>
+      <id>	204	</id>
+      <tags></tags>
+      <price>	100	</price>
+      <weight>	275	</weight>
+      <maxHealth>	175	</maxHealth>
+      <maxRegenHealth>	70	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+      <healthRegenPerSec>	8.75	</healthRegenPerSec>
+      <healthBurnPerSec>	30	</healthBurnPerSec>
+    </Heavy>
+    <Large>
+      <id>	205	</id>
+      <tags></tags>
+      <price>	100	</price>
+      <weight>	300	</weight>
+      <maxHealth>	200	</maxHealth>
+      <maxRegenHealth>	70	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+      <healthRegenPerSec>	13.125	</healthRegenPerSec>
+      <healthBurnPerSec>	45	</healthBurnPerSec>
+    </Large>
+    <Large_SH>
+      <id>	207	</id>
+      <tags></tags>
+      <price>	0	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	300	</weight>
+      <maxHealth>	1000	</maxHealth>
+      <maxRegenHealth>	135	</maxRegenHealth>
+      <repairCost>	0	</repairCost>
+      <healthRegenPerSec>	6.125	</healthRegenPerSec>
+      <healthBurnPerSec>	20	</healthBurnPerSec>
+    </Large_SH>
+    <Medium>
+      <id>	202	</id>
+      <tags></tags>
+      <price>	100	</price>
+      <weight>	250	</weight>
+      <maxHealth>	125	</maxHealth>
+      <maxRegenHealth>	50	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+      <healthRegenPerSec>	6.125	</healthRegenPerSec>
+      <healthBurnPerSec>	21	</healthBurnPerSec>
+    </Medium>
+    <Small>
+      <id>	201	</id>
+      <tags></tags>
+      <price>	100	</price>
+      <weight>	200	</weight>
+      <maxHealth>	100	</maxHealth>
+      <maxRegenHealth>	40	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+      <healthRegenPerSec>	4.375	</healthRegenPerSec>
+      <healthBurnPerSec>	15	</healthBurnPerSec>
+    </Small>
+  </shared>
+</fuelTanks.xml>

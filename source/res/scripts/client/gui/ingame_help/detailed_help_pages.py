@@ -31,6 +31,7 @@ class HelpPagePriority(object):
     TURBOSHAFT_ENGINE = 4
     BATTLE_ROYALE = 6
     DUAL_GUN = 7
+    CLIP_GUN = 7
     WHEELED = 8
     DUAL_ACCURACY = 8
     BURNOUT = 9
@@ -641,6 +642,27 @@ class AutoshootTankPagesBuilder(DetailedHelpPagesBuilder):
         return
 
 
+class ClipGunPagesBuilder(DetailedHelpPagesBuilder):
+    _SUITABLE_CTX_KEYS = ('hasClipGun',)
+
+    @classmethod
+    def priority(cls):
+        return HelpPagePriority.CLIP_GUN
+
+    @classmethod
+    def buildPages(cls, ctx):
+        pages = []
+        headerTitle = buildTitle(ctx)
+        addPage(pages, headerTitle, backport.text(R.strings.ingame_help.detailsHelp.clipGun.title()), text_styles.mainBig(backport.text(R.strings.ingame_help.detailsHelp.clipGun.description())), [], [], backport.image(R.images.gui.maps.icons.battleHelp.clipGun.clip_gun()), hintCtx=HelpHintContext.MECHANICS)
+        return pages
+
+    @classmethod
+    def _collectHelpCtx(cls, ctx, arenaVisitor, vehicle):
+        ctx['hasClipGun'] = hasClipGun = vehicle is not None and vehicle.typeDescriptor.isClipGun and not vehicle.typeDescriptor.isAutoReloadGun and not vehicle.typeDescriptor.isAutoShootGunVehicle
+        ctx['hasUniqueVehicleHelpScreen'] = ctx.get('hasUniqueVehicleHelpScreen') or hasClipGun
+        return
+
+
 registerIngameHelpPagesBuilders((SiegeModePagesBuilder,
  BurnOutPagesBuilder,
  WheeledPagesBuilder,
@@ -663,4 +685,5 @@ registerIngameHelpPagesBuilders((SiegeModePagesBuilder,
  DualgunWithAutoreloadClip,
  DualgunWithClip,
  DistanceDamagePagesBuilder,
- AutoshootTankPagesBuilder))
+ AutoshootTankPagesBuilder,
+ ClipGunPagesBuilder))

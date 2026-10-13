@@ -549,7 +549,7 @@ class IPlatoonController(IGameController):
     def setPlatoonPopoverPosition(self, xPopoverOffset):
         raise NotImplementedError
 
-    def togglePlayerReadyAction(self, callback):
+    def togglePlayerReadyAction(self, callback, checkAmmo=True):
         raise NotImplementedError
 
     def getChannelController(self):
@@ -743,7 +743,7 @@ class IVehicleComparisonBasket(IGameController):
     def applyNewParameters(self, index, vehicle, crewLvl, crewSkills, selectedShellIndex=0):
         raise NotImplementedError
 
-    def addVehicle(self, vehicleCompactDesr, initParameters=None, settings=None):
+    def addVehicle(self, vehicleCompactDesr, initParameters=None):
         raise NotImplementedError
 
     def addVehicles(self, vehCDs):
@@ -4104,187 +4104,6 @@ class IEarlyAccessController(IGameController, ISeasonProvider):
         raise NotImplementedError
 
 
-class ILootBoxesController(IGameController):
-    onUpdated = None
-    onUpdatedConfig = None
-
-    def getLootBoxesByType(self):
-        raise NotImplementedError
-
-    def getLootBoxesCountByType(self, lottBoxType):
-        raise NotImplementedError
-
-    def getLootBoxesCountByTypeForUI(self, lootBoxType):
-        raise NotImplementedError
-
-    def getLootBoxByTypeInInventory(self, lootBoxType):
-        raise NotImplementedError
-
-    def getLootBoxLimitsInfo(self, lootBoxType):
-        raise NotImplementedError
-
-    def getLootBoxesRewards(self, lootBoxType):
-        raise NotImplementedError
-
-    def getLastViewedCount(self):
-        raise NotImplementedError
-
-    def updateLastViewedCount(self):
-        raise NotImplementedError
-
-    def getCollectionType(self, itemID):
-        raise NotImplementedError
-
-    def isCollectionElement(self, intCD, collection):
-        raise NotImplementedError
-
-    def claimReRolledReward(self, boxType, count, parentWindow, callbackUpdate=None):
-        raise NotImplementedError
-
-
-class IWhiteTigerSettingsController(IGameController):
-
-    @property
-    def disabledSettings(self):
-        raise NotImplementedError
-
-
-class IWhiteTigerController(IGameController, ISeasonProvider):
-    onPrimeTimeStatusUpdated = None
-    onProgressUpdated = None
-    onEventPrbChanged = None
-    onUpdated = None
-    onTicketsUpdate = None
-    onLobbyHeaderUpdate = None
-
-    def isEnabled(self):
-        raise NotImplementedError
-
-    def isEventPrbActive(self):
-        raise NotImplementedError
-
-    def doSelectEventPrb(self):
-        raise NotImplementedError
-
-    def doSelectEventPrbAndCallback(self, callback):
-        raise NotImplementedError
-
-    def doLeaveEventPrb(self):
-        raise NotImplementedError
-
-    def isModeActive(self):
-        raise NotImplementedError
-
-    def isBattlesEnd(self):
-        raise NotImplementedError
-
-    def isAvailable(self):
-        raise NotImplementedError
-
-    def getConfig(self):
-        raise NotImplementedError
-
-    def isHangarAvailable(self):
-        raise NotImplementedError
-
-    def isWelcomeScreenShown(self):
-        raise NotImplementedError
-
-    def isWtMode(self):
-        raise NotImplementedError
-
-    def getCurrentStampsCount(self):
-        raise NotImplementedError
-
-    def getCurrentMainPrizeDiscountTokensCount(self):
-        raise NotImplementedError
-
-    def getTotalStampsCount(self):
-        raise NotImplementedError
-
-    def getStampsCountPerLevel(self):
-        raise NotImplementedError
-
-    def getMainPrizeDiscountPerToken(self):
-        raise NotImplementedError
-
-    def getTotalLevelsCount(self):
-        raise NotImplementedError
-
-    def getFinishedLevelsCount(self):
-        raise NotImplementedError
-
-    def getCurrentLevel(self):
-        raise NotImplementedError
-
-    def getTicketCount(self):
-        raise NotImplementedError
-
-    def getQuickTicketCount(self):
-        raise NotImplementedError
-
-    def getLootBoxAreaSoundMgr(self):
-        raise NotImplementedError
-
-    def getSelectedVehicleSoundMgr(self):
-        raise NotImplementedError
-
-    def hasSpecialBoss(self):
-        raise NotImplementedError
-
-    def getSpecialBossBattlesRemaining(self):
-        raise NotImplementedError
-
-    def getQuestRewards(self, questID):
-        raise NotImplementedError
-
-    def getDisplayedCollectionProgress(self, questID):
-        raise NotImplementedError
-
-    def setVehicleForPreview(self, vehicleCD):
-        raise NotImplementedError
-
-    @property
-    def mainViewLoaded(self):
-        raise NotImplementedError
-
-    @property
-    def isBanned(self):
-        raise NotImplementedError
-
-    @property
-    def banDuration(self):
-        raise NotImplementedError
-
-    @property
-    def banExpiryTime(self):
-        raise NotImplementedError
-
-    def analyzeClientSystem(self):
-        raise NotImplementedError
-
-    def showIntroVideo(self, onVideoClosed=None):
-        raise NotImplementedError
-
-    def isOutroVideoAvailable(self):
-        raise NotImplementedError
-
-    def needToShowOutroVideo(self):
-        raise NotImplementedError
-
-    def showOutroVideo(self):
-        raise NotImplementedError
-
-    def isLastSeasonDay(self):
-        raise NotImplementedError
-
-    def hasPrimeTimesPassedForCurrentCycle(self):
-        raise NotImplementedError
-
-    def isPrimeStatusBlocked(self, status):
-        raise NotImplementedError
-
-
 class IVersusAIController(IGameController):
 
     def isEnabled(self):
@@ -4539,6 +4358,9 @@ class IParagonsController(IGameController, IEntitlementsConsumer):
     def isVehicleReset(self, compDescr):
         raise NotImplementedError
 
+    def isNextResetVehPossibleToUnlock(self, compDescr):
+        raise NotImplementedError
+
     def isNextResetVehUnlocked(self, compDescr):
         raise NotImplementedError
 
@@ -4758,7 +4580,7 @@ class IBlackMarketController(IGameController):
     def isStarted(self):
         raise NotImplementedError
 
-    def isSpecial(self):
+    def isNowSpecialPhase(self):
         raise NotImplementedError
 
     def getLastOfferStartDate(self):
@@ -4911,6 +4733,9 @@ class ITankAcademyController(IGameController):
     def isEnabled(self):
         raise NotImplementedError
 
+    def isEnabledByConfig(self):
+        raise NotImplementedError
+
     def isFinished(self):
         raise NotImplementedError
 
@@ -5028,6 +4853,15 @@ class ITankAcademyController(IGameController):
     def isFirstQuestCompleted(self):
         raise NotImplementedError
 
+    def getMigrationInfo(self):
+        raise NotImplementedError
+
+    def isMigratedFromNonZeroProgress(self):
+        raise NotImplementedError
+
+    def isMigrationUpdatesScenario(self):
+        raise NotImplementedError
+
 
 class IMuseumOfGloryController(IGameController):
     onConfigUpdate = None
@@ -5046,4 +4880,42 @@ class IMuseumOfGloryController(IGameController):
         raise NotImplementedError
 
     def getMinYear(self):
+        raise NotImplementedError
+
+
+class ISessionProgressRewardsController(IGameController):
+    onDataUpdated = None
+
+    @property
+    def isEnabled(self):
+        raise NotImplementedError
+
+    @property
+    def isCompleted(self):
+        raise NotImplementedError
+
+    @property
+    def isAvailable(self):
+        raise NotImplementedError
+
+    @property
+    def currentStep(self):
+        raise NotImplementedError
+
+    @property
+    def finalStep(self):
+        raise NotImplementedError
+
+    @property
+    def isRewardWasReceivedToday(self):
+        raise NotImplementedError
+
+    @property
+    def rewardsCalendar(self):
+        raise NotImplementedError
+
+    def getRewardsByStep(self, step):
+        raise NotImplementedError
+
+    def isLastReward(self, step):
         raise NotImplementedError

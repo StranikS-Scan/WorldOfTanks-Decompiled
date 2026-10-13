@@ -132,9 +132,6 @@ class HangarVehicleAppearance(ScriptGameObject):
         return None
 
     isVehicleDestroyed = property(lambda self: self.__isVehicleDestroyed)
-    typeDescriptor = property(lambda self: self.__vDesc if self.__vEntity is None else self.__vEntity.typeDescriptor)
-    attachments = property(lambda self: self.__attachments)
-    modelAnimators = property(lambda self: self.__modelAnimators)
 
     def __init__(self, spaceId, vEntity):
         ScriptGameObject.__init__(self, vEntity.spaceID, 'HangarVehicleAppearance')
@@ -489,8 +486,6 @@ class HangarVehicleAppearance(ScriptGameObject):
         for modelAnimator in self.__modelAnimators:
             modelAnimator.animator.start()
 
-        self._onOutfitReady()
-
     def __onSettingsChanged(self, diff):
         if 'showMarksOnGun' in diff:
             self.__showMarksOnGun = not diff['showMarksOnGun']
@@ -572,7 +567,7 @@ class HangarVehicleAppearance(ScriptGameObject):
             self.flagComponent = None
         self.__staticTurretYaw = self.__vDesc.gun.staticTurretYaw
         self.__staticGunPitch = self.__vDesc.gun.staticPitch
-        if self._applyGunAndTurretDir() or not self.__isSPG():
+        if not self.__isSPG():
             if self.__staticTurretYaw is None:
                 self.__staticTurretYaw = self._getTurretYaw()
                 turretYawLimits = self.__vDesc.gun.turretYawLimits
@@ -1119,9 +1114,3 @@ class HangarVehicleAppearance(ScriptGameObject):
             return outfit
         vehicleCD = g_currentPreviewVehicle.item.descriptor.makeCompactDescr()
         return self.customizationService.getOutfitByStyleId(styleId=styleId, vehicleCD=vehicleCD) if vehicle.isOutfitLocked and styleId > 0 else self.customizationService.getEmptyOutfitWithNationalEmblems(vehicleCD=vehicleCD)
-
-    def _onOutfitReady(self):
-        pass
-
-    def _applyGunAndTurretDir(self):
-        return False

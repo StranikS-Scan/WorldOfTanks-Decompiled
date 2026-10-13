@@ -4,7 +4,7 @@ import typing
 import Event
 from skeletons.gui.game_control import ITankAcademyController
 if typing.TYPE_CHECKING:
-    from typing import Optional, List, Callable
+    from typing import Optional, List, Callable, Tuple
     from gui.Scaleform.daapi.view.lobby.hangar.entry_points.gf_header_widget import GFWidgetAliases
     from gui.server_events.event_items import Quest, ITankAcademyQuest, ITankAcademyGroup
     from gui.shared.gui_items import Vehicle
@@ -17,6 +17,9 @@ class TankAcademyController(ITankAcademyController):
         ITankAcademyController.__init__(self)
 
     def isEnabled(self):
+        return False
+
+    def isEnabledByConfig(self):
         return False
 
     def isFinished(self):
@@ -133,5 +136,14 @@ class TankAcademyController(ITankAcademyController):
     def getHangarWidgetAlias(self):
         return None
 
+    def getMigrationInfo(self):
+        return None
+
     def isFirstQuestCompleted(self):
+        return False
+
+    def isMigratedFromNonZeroProgress(self):
+        return False
+
+    def isMigrationUpdatesScenario(self):
         return False

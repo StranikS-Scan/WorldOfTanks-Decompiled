@@ -10,7 +10,7 @@ from gui.impl.pub import ViewImpl
 from gui.impl.lobby.crew.crew_helpers.skill_helpers import checkSingleSkillOnVehicle
 from gui.shared.gui_items.Tankman import getTankmanSkill, crewMemberRealSkillLevel, tankmanPersonalSkillLevel, getBattleBooster
 from gui.shared.skill_parameters.skills_packers import g_skillPackers, packBase
-from gui.shared.tooltips.advanced import SKILL_MOVIES
+from gui.shared.tooltips.advanced.data.advanced_constants import SKILL_MOVIES
 from helpers import dependency
 from items.tankmen import getSkillsConfig, MAX_SKILL_LEVEL, SEPARATE_SKILLS
 from skeletons.gui.shared import IItemsCache

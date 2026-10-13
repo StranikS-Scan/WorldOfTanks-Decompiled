@@ -13,19 +13,23 @@ EFFECT_MATERIAL_INDEXES_BY_NAMES = None
 EFFECT_MATERIAL_NAMES_BY_INDEXES = None
 EFFECT_MATERIAL_INDEXES_BY_IDS = None
 EFFECT_MATERIAL_IDS_BY_NAMES = None
+EFFECT_MATERIAL_NAME_BY_ID = None
 NOT_GROUND_MATERIALS = None
+LIQUID_MATERIALS = None
 EFFECT_MATERIAL_PROPERTIES = None
 
 def _init():
-    global IDS_BY_NAMES
+    global EFFECT_MATERIAL_NAME_BY_ID
     global EFFECT_MATERIAL_INDEXES_BY_IDS
-    global EFFECT_MATERIALS
     global EFFECT_MATERIAL_NAMES_BY_INDEXES
-    global NAMES_BY_IDS
-    global NOT_GROUND_MATERIALS
-    global EFFECT_MATERIAL_INDEXES_BY_NAMES
-    global EFFECT_MATERIAL_PROPERTIES
     global EFFECT_MATERIAL_IDS_BY_NAMES
+    global NOT_GROUND_MATERIALS
+    global LIQUID_MATERIALS
+    global EFFECT_MATERIAL_PROPERTIES
+    global IDS_BY_NAMES
+    global EFFECT_MATERIALS
+    global NAMES_BY_IDS
+    global EFFECT_MATERIAL_INDEXES_BY_NAMES
     IDS_BY_NAMES = {}
     if IS_EDITOR:
         NAMES_BY_IDS = {}
@@ -34,7 +38,9 @@ def _init():
     EFFECT_MATERIAL_NAMES_BY_INDEXES = {}
     EFFECT_MATERIAL_INDEXES_BY_IDS = {}
     EFFECT_MATERIAL_IDS_BY_NAMES = {'default': [0]}
+    EFFECT_MATERIAL_NAME_BY_ID = {0: 'default'}
     NOT_GROUND_MATERIALS = []
+    LIQUID_MATERIALS = []
     EFFECT_MATERIAL_PROPERTIES = {}
     xmlPath = _MATERIAL_KINDS_FILE
     section = ResMgr.openSection(xmlPath)
@@ -58,6 +64,7 @@ def _init():
             if EFFECT_MATERIAL_IDS_BY_NAMES.get(matName) is None:
                 EFFECT_MATERIAL_IDS_BY_NAMES[matName] = []
             EFFECT_MATERIAL_IDS_BY_NAMES[matName].append(id)
+            EFFECT_MATERIAL_NAME_BY_ID[id] = matName
 
     for ind, matName in enumerate(EFFECT_MATERIALS):
         EFFECT_MATERIAL_INDEXES_BY_NAMES[matName] = ind
@@ -80,8 +87,11 @@ def _init():
         hardnessMap = s.readVector2('hardness_map')
         if hardnessMap:
             EFFECT_MATERIAL_PROPERTIES[name]['hardness_map'] = [hardnessMap[0], hardnessMap[1]]
+        if s.readBool('liquid_material'):
+            LIQUID_MATERIALS.append(name)
         if s.readBool('not_ground_material'):
             NOT_GROUND_MATERIALS.append(name)
+        NOT_GROUND_MATERIALS.extend(LIQUID_MATERIALS)
 
     ResMgr.purge(xmlPath, True)
     return

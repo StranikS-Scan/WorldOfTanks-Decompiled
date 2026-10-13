@@ -185,7 +185,7 @@
     <price>	25000	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
-    <tags>	mediumTank role_MT_sniper private HD secret special patton inGame improvedVentilation_class2_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_medium_user earn_crystals	</tags>
+    <tags>	mediumTank role_MT_sniper private HD secret special patton improvedVentilation_class2_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_medium_user earn_crystals testTank lockOutfit	</tags>
     <level>	10	</level>
   </A106_M48A2_120>
   <A107_T1_HMC>
@@ -388,17 +388,6 @@
     <tags>	mediumTank role_MT_universal private HD secret premiumIGR patton improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_medium_user earn_crystals	</tags>
     <level>	10	</level>
   </A120_M48A5_IGR>
-  <A120_M48A5_hound_TLXXL>
-    <id>	254	</id>
-    <userString>	#white_tiger.usa_vehicles.extend:A120_M48A5_hound_TLXXL	</userString>
-    <description>	#white_tiger.usa_vehicles.extend:A120_M48A5_hound_TLXXL_descr	</description>
-    <shortUserString>	#white_tiger.usa_vehicles.extend:A120_M48A5_hound_TLXXL_short	</shortUserString>
-    <shortDescriptionSpecial>	#white_tiger.usa_vehicles.extend:A120_M48A5_hound_TLXXL_short_special	</shortDescriptionSpecial>
-    <price>	6100000	</price>
-    <notInShop>	true	</notInShop>
-    <tags>	mediumTank role_MT_universal event_battles special secret HD lockCrew lockCrewSkills lockOutfit lockShells lockDevices cannot_be_sold unrecoverable earn_crystals mode_hidden hideStorage hideCrew	</tags>
-    <level>	10	</level>
-  </A120_M48A5_hound_TLXXL>
   <A121_M26_Cologne>
     <id>	234	</id>
     <userString>	#usa_vehicles:A121_M26_Cologne	</userString>
@@ -748,6 +737,20 @@
     <tags>	heavyTank role_HT_break HD improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user private secret special cannot_be_sold comp7 earn_crystals	</tags>
     <level>	10	</level>
   </A143_M_V_Y_7x7>
+  <A143_M_V_Y_cl>
+    <id>	31032	</id>
+    <userString>	#usa_vehicles:A143_M_V_Y_cl	</userString>
+    <description>	#usa_vehicles:A143_M_V_Y_descr	</description>
+    <shortUserString>	#usa_vehicles:A143_M_V_Y_cl_short	</shortUserString>
+    <shortDescriptionSpecial>	#usa_vehicles:A143_M_V_Y_cl_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#usa_vehicles:A143_M_V_Y_cl_long_special	</longDescriptionSpecial>
+    <price>	1	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <cannotBeBought>	true	</cannotBeBought>
+    <tags>	heavyTank role_HT_break HD improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user clanWarsBattles special cannot_be_sold private	</tags>
+    <level>	10	</level>
+  </A143_M_V_Y_cl>
   <A144_M_VI_Y>
     <id>	83	</id>
     <userString>	#usa_vehicles:A144_M_VI_Y	</userString>
@@ -1243,7 +1246,7 @@
     <price>	25000	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
-    <tags>	heavyTank role_HT_universal HD improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user earn_crystals special secret testTank lockOutfit	</tags>
+    <tags>	heavyTank role_HT_universal HD improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user earn_crystals special	</tags>
     <level>	10	</level>
   </A184_HTPC>
   <A18_M41>

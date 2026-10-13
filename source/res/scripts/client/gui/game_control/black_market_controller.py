@@ -50,9 +50,10 @@ class BlackMarketController(IBlackMarketController, EventsHandler, EventsSubscri
     def isStarted(self):
         return self.getStartTime() <= time_utils.getServerUTCTime()
 
-    def isSpecial(self):
-        lootboxSchedule = self.__getConfig().lootboxSchedule
-        for startTime, endTime in lootboxSchedule.iteritems():
+    def isNowSpecialPhase(self, phaseName):
+        specialPhaseSchedule = self.__getConfig().specialPhaseSchedule
+        phaseSchedule = specialPhaseSchedule.get(phaseName, dict())
+        for startTime, endTime in phaseSchedule.iteritems():
             if startTime <= time_utils.getServerUTCTime() <= endTime:
                 return True
 

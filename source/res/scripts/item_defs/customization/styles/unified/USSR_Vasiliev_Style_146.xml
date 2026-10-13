@@ -1,0 +1,62 @@
+<USSR_Vasiliev_Style_146.xml>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	MT 2D styles direct 1500g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	ussr:R225_Vasiliev_project	</vehicles>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	31625	</id>
+      <outfits>
+        <outfit>
+          <season>	all	</season>
+          <paints>
+            <item>
+              <id>	31576	</id>
+              <appliedTo>	20753	</appliedTo>
+            </item>
+          </paints>
+          <decals>
+            <item>
+              <id>	31486	</id>
+              <appliedTo>	3072	</appliedTo>
+            </item>
+            <item>
+              <id>	15876	</id>
+              <appliedTo>	8736	</appliedTo>
+            </item>
+            <item>
+              <id>	15877	</id>
+              <appliedTo>	4368	</appliedTo>
+            </item>
+          </decals>
+          <camouflages>
+            <item>
+              <id>	31595	</id>
+              <patternSize>	1	</patternSize>
+              <appliedTo>	4368	</appliedTo>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+        </outfit>
+      </outfits>
+      <itemFilters>
+        <projection_decal>
+          <include>
+            <itemGroupName>	Progression Decals	</itemGroupName>
+          </include>
+        </projection_decal>
+      </itemFilters>
+      <userString>	#vehicle_customization:USSR_Vasiliev_Style_146/name	</userString>
+      <description>	#vehicle_customization:USSR_Vasiliev_Style_146/description	</description>
+      <longDescriptionSpecial>	#vehicle_customization:USSR_Vasiliev_Style_146/longDescription	</longDescriptionSpecial>
+      <texture>	gui/maps/vehicles/styles/USSR_Vasiliev_Style_146.png	</texture>
+    </style>
+    <tags>	progression_required	</tags>
+    <maxNumber>	1	</maxNumber>
+  </itemGroup>
+</USSR_Vasiliev_Style_146.xml>

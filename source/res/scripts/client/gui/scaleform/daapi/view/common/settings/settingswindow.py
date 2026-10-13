@@ -17,6 +17,7 @@ from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.SETTINGS import SETTINGS
 from gui import DialogsInterface, g_guiResetters
 from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
+from gui.shared.event_dispatcher import showSystemMixerVolumeDisabledPage
 from gui.shared.utils import flashObject2Dict, decorators, graphics
 from gui.Scaleform.daapi.view.meta.SettingsWindowMeta import SettingsWindowMeta
 from gui.Scaleform.daapi.view.common.settings.SettingsParams import SettingsParams
@@ -31,10 +32,9 @@ from gui.shared.formatters import icons
 from gui import makeHtmlString
 from gui.impl import backport
 from gui.impl.gen import R
-from skeletons.gui.battle_session import IBattleSessionProvider
 from messenger_common_chat2 import MESSENGER_LIMITS as _LIMITS, MESSENGER_ACTION_IDS as _ACTIONS
 from skeletons.account_helpers.settings_core import ISettingsCore
-from skeletons.gui.game_control import IAnonymizerController, ILimitedUIController, IWhiteTigerController
+from skeletons.gui.game_control import IAnonymizerController, ILimitedUIController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.sounds import ISoundsController
 from uilogging.battle_context_hints.loggers import BattleContextHintsSettingsLogger
@@ -73,8 +73,6 @@ class SettingsWindow(SettingsWindowMeta):
     settingsCore = dependency.descriptor(ISettingsCore)
     lobbyContext = dependency.descriptor(ILobbyContext)
     limitedUIController = dependency.descriptor(ILimitedUIController)
-    sessionProvider = dependency.descriptor(IBattleSessionProvider)
-    __wtController = dependency.descriptor(IWhiteTigerController)
     soundsCtrl = dependency.descriptor(ISoundsController)
 
     def __init__(self, ctx=None):
@@ -157,8 +155,6 @@ class SettingsWindow(SettingsWindowMeta):
          {'label': SETTINGS.FEEDBACK_TAB_QUESTSPROGRESS,
           'linkage': VIEW_ALIAS.FEEDBACK_QUESTS_PROGRESS}]
         self.as_setFeedbackDataProviderS(dataVO)
-        isActive = self.__wtController.isEventPrbActive() or self.sessionProvider.arenaVisitor.gui.isWhiteTigerBattle()
-        self.as_setTigerEventS(isActive)
         self.soundsCtrl.markNeedInvAppMixerVolume()
         if self.__redefinedKeyModeEnabled:
             BigWorld.setRedefineKeysMode(True)
@@ -367,8 +363,9 @@ class SettingsWindow(SettingsWindowMeta):
     def isSystemMixerVolumeDisabled(self):
         return self.soundsCtrl.isSystemMixerVolumeDisabled()
 
-    def fixSystemMixerVolume(self):
-        self.soundsCtrl.fixSystemMixerVolume()
+    def showSystemMixerVolumeDisabledPage(self):
+        showSystemMixerVolumeDisabledPage()
+        self.onWindowClose()
 
     def __updateInterfaceScale(self):
         self.as_updateVideoSettingsS(self.params.getMonitorSettings())

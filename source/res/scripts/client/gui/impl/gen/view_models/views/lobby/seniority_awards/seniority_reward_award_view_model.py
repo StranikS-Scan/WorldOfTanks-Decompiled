@@ -8,7 +8,7 @@ from gui.impl.gen.view_models.views.lobby.common.vehicle_model import VehicleMod
 class SeniorityRewardAwardViewModel(ViewModel):
     __slots__ = ('onOpenBtnClick',)
 
-    def __init__(self, properties=5, commands=1):
+    def __init__(self, properties=6, commands=1):
         super(SeniorityRewardAwardViewModel, self).__init__(properties=properties, commands=commands)
 
     def getCategory(self):
@@ -27,32 +27,43 @@ class SeniorityRewardAwardViewModel(ViewModel):
     def getBonusesType():
         return BonusModel
 
-    def getVehicles(self):
+    def getMainBonuses(self):
         return self._getArray(2)
 
-    def setVehicles(self, value):
+    def setMainBonuses(self, value):
         self._setArray(2, value)
+
+    @staticmethod
+    def getMainBonusesType():
+        return BonusModel
+
+    def getVehicles(self):
+        return self._getArray(3)
+
+    def setVehicles(self, value):
+        self._setArray(3, value)
 
     @staticmethod
     def getVehiclesType():
         return VehicleModel
 
     def getSpecialCurrencyCount(self):
-        return self._getNumber(3)
+        return self._getNumber(4)
 
     def setSpecialCurrencyCount(self, value):
-        self._setNumber(3, value)
+        self._setNumber(4, value)
 
     def getIsShopOnOpenLocked(self):
-        return self._getBool(4)
+        return self._getBool(5)
 
     def setIsShopOnOpenLocked(self, value):
-        self._setBool(4, value)
+        self._setBool(5, value)
 
     def _initialize(self):
         super(SeniorityRewardAwardViewModel, self)._initialize()
         self._addStringProperty('category', '')
         self._addArrayProperty('bonuses', Array())
+        self._addArrayProperty('mainBonuses', Array())
         self._addArrayProperty('vehicles', Array())
         self._addNumberProperty('specialCurrencyCount', -1)
         self._addBoolProperty('isShopOnOpenLocked', False)

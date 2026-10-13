@@ -33,6 +33,7 @@
         <inactivate>	HangarButtonWasClicked	</inactivate>
         <set-var>	CurrentVehicleCDSetter	</set-var>
         <run-trigger>	CurrentVehicleChangeTrigger	</run-trigger>
+        <run-trigger>	UnexpectedViewLoadedTrigger	</run-trigger>
       </post-effects>
       <runtime-effects>
         <show-hint>	TankCarouselHint	  <condition>
@@ -146,6 +147,16 @@
           </condition>
         </close-hint>
         <close-hint>	TuningBtnHint	</close-hint>
+      </on-effects>
+    </trigger>
+    <trigger>	UnexpectedViewLoadedTrigger	  <type>	view-loaded	</type>
+      <excluded-views>
+        <scaleform>	lobby	</scaleform>
+        <scaleform>	hangar	</scaleform>
+        <wulf>	R.views.lobby.customization.CustomizationMainView	</wulf>
+      </excluded-views>
+      <on-effects>
+        <refuse-training></refuse-training>
       </on-effects>
     </trigger>
   </triggers>

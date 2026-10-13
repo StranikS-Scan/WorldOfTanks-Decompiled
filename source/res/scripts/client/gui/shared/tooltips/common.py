@@ -174,7 +174,10 @@ class BlocksTooltipData(ToolTipBaseData):
         displayableData['blocksData'].append(block)
 
     def getDisplayableData(self, *args, **kwargs):
-        return {'blocksData': self._packBlocks(*args, **kwargs),
+        return self._packTooltipVO(self._packBlocks(*args, **kwargs))
+
+    def _packTooltipVO(self, blocksData):
+        return {'blocksData': blocksData,
          'marginAfterBlock': self.__marginAfterBlock,
          'marginAfterSeparator': self.__marginAfterSeparator,
          'contentMargin': self._getContentMargin(),
@@ -1618,7 +1621,7 @@ class PersonalReservesWidgetTooltipContent(BlocksTooltipData):
     def __init__(self, ctx):
         super(PersonalReservesWidgetTooltipContent, self).__init__(ctx, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI)
 
-    def getDisplayableData(self, *args, **kwargs):
+    def getDisplayableData(self, *args):
         content = PersonalReservesTooltipView()
         window = ToolTipWindow(None, content, content.getParentWindow())
         return window

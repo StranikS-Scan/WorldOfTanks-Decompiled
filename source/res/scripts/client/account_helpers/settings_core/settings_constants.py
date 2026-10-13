@@ -285,7 +285,6 @@ class BATTLE_EVENTS(CONST_CONTAINER):
     RECEIVED_CRITS = 'battleEventsReceivedCrits'
     ENEMY_ASSIST_STUN = 'battleEventsEnemyAssistStun'
     ENEMIES_STUN = 'battleEventsEnemyStun'
-    HEALTH_ADDED = 'battleEventsHealthAdded'
 
 
 class BATTLE_BORDER_MAP(CONST_CONTAINER):
@@ -356,14 +355,9 @@ class OnceOnlyHints(CONST_CONTAINER):
     C11N_PROGRESSION_REQUIRED_STYLES_HINT = 'C11nProgressionRequiredStylesHint'
     C11N_PROGRESSION_REQUIRED_STYLE_SLOT_HINT = 'C11nProgressionRequiredStyleSlotHint'
     C11N_PROGRESSION_REQUIRED_STYLE_SLOT_BUTTON_HINT = 'C11nProgressionRequiredStyleSlotButtonHint'
-    BLUEPRINTS_SWITCHBUTTON_HINT = 'BlueprintsSwitchButtonHint'
-    BLUEPRINTS_RESEARCH_BUTTON_HINT = 'BlueprintsResearchButtonHint'
     BLUEPRINTS_TECHTREE_CONVERT_BUTTON_HINT = 'BlueprintsTechtreeConvertButtonHint'
-    BLUEPRINTS_RESEARCH_CONVERT_BUTTON_HINT = 'BlueprintsResearchConvertButtonHint'
     BLUEPRINT_SCREEN_CONVERT_FRAGMENT_HINT = 'BlueprintScreenConvertFragmentHint'
     ACCOUNT_BUTTON_HINT = 'AccountButtonHint'
-    SESSION_STATS_OPEN_BTN_HINT = 'SessionStatsOpenBtnHint'
-    SESSION_STATS_SETTINGS_BTN_HINT = 'SessionStatsSettingsBtnHint'
     BATTLE_SESSION_UP_BUTTON_TOURNAMENT_HINT = 'BattleSessionUpButtonTournamentHint'
     CREW_OPERATION_BTN_HINT = 'CrewOperationBtnHint'
     SOUND_BUTTONEX_HINT = 'SoundButtonExHint'
@@ -377,8 +371,6 @@ class OnceOnlyHints(CONST_CONTAINER):
     DOGTAG_HANGAR_HINT = 'DogTagHangarHint'
     DOGTAG_PROFILE_HINT = 'DogTagProfileHint'
     WOTPLUS_HANGAR_HINT = 'WotPlusHangarHint'
-    PERSONAL_RESERVES_HANGAR_HINT = 'PersonalReservesHangarHint'
-    PERSONAL_RESERVES_ACTIVATION_HINT = 'PersonalReservesActivationHint'
     WOTPLUS_PROFILE_HINT = 'WotPlusProfileHint'
     MODE_SELECTOR_WIDGETS_BTN_HINT = 'ModeSelectorWidgetsBtnHint'
     MAPS_TRAINING_NEWBIE_HINT = 'MapsTrainingNewbieHint'
@@ -388,7 +380,6 @@ class OnceOnlyHints(CONST_CONTAINER):
     RESEARCH_POST_PROGRESSION_ENTRY_POINT_HINT = 'ResearchPostProgressionEntryPointHint'
     HERO_VEHICLE_POST_PROGRESSION_ENTRY_POINT_HINT = 'HeroVehiclePreviewPostProgressionButtonHint'
     SWITCH_EQUIPMENT_AUXILIARY_LOADOUT_HINT = 'SwitchEquipmentAuxiliaryLoadoutHint'
-    ADD_ECONOMIC_DIRECTIVES_HINT = 'AddEconomicDirectivesHint'
     SWITCH_EQUIPMENT_ESSENTIALS_LOADOUT_HINT = 'SwitchEquipmentEssentialsLoadoutHint'
     COMPARE_MODIFICATIONS_PANEL_HINT = 'CompareModificationsPanelHint'
     COMPARE_SPECIALIZATION_BUTTON_HINT = 'CompareSpecializationButtonHint'
@@ -535,8 +526,3 @@ class NewYearStorageKeys(CONST_CONTAINER):
     DECORATIONS_POPOVER_VIEWED = 'decorationsPopoverViewed'
     DECORATIONS_POPOVER_BROKEN = 'decorationsPopoverBroken'
     BOOL_FLAGS = (HAS_TOYS_HINT_SHOWN, DECORATIONS_POPOVER_VIEWED, DECORATIONS_POPOVER_BROKEN)
-
-
-class WTLootBoxesViewedKeys(CONST_CONTAINER):
-    HUNTER_LAST_VIEWED = 'hunterLastViewed'
-    BOSS_LAST_VIEWED = 'bossLastViewed'

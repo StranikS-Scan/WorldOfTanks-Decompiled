@@ -1,0 +1,39 @@
+<BP18Stalcraft_Inscription_01_140_name.xml>
+  <xmlns:czech1>	ussr	</xmlns:czech1>
+  <xmlns:germany>	germany	</xmlns:germany>
+  <xmlns:czech0>	usa	</xmlns:czech0>
+  <xmlns:china>	china	</xmlns:china>
+  <xmlns:france>	france	</xmlns:france>
+  <xmlns:uk>	uk	</xmlns:uk>
+  <xmlns:japan>	japan	</xmlns:japan>
+  <xmlns:czech>	czech	</xmlns:czech>
+  <xmlns:sweden>	sweden	</xmlns:sweden>
+  <xmlns:poland>	poland	</xmlns:poland>
+  <xmlns:italy>	italy	</xmlns:italy>
+  <xmlns:intunion>	intunion	</xmlns:intunion>
+  <itemGroup>
+    <name>	BP18Stalcraft_Inscription_140	</name>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <decal>
+      <id>	31433	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/BP18Stalcraft_Inscription_01_140.dds	</texture>
+      <userString>	#vehicle_customization:BP18Stalcraft_Inscription_01_140/name	</userString>
+      <description>	#vehicle_customization:BP18Stalcraft_Inscription_01_140/description	</description>
+    </decal>
+    <decal>
+      <id>	31434	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/BP18Stalcraft_Inscription_02_140.dds	</texture>
+      <userString>	#vehicle_customization:BP18Stalcraft_Inscription_02_140/name	</userString>
+      <description>	#vehicle_customization:BP18Stalcraft_Inscription_02_140/description	</description>
+    </decal>
+    <priceGroup>	MT inscriptions 25g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF usa:A104_M4A3E8A usa:A126_PzVI_Tiger_II_capt ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <type>	inscription	</type>
+    <userString>	#vehicle_customization:inscription/special	</userString>
+  </itemGroup>
+</BP18Stalcraft_Inscription_01_140_name.xml>

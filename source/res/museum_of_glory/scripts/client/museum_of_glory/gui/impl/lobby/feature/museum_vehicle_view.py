@@ -346,7 +346,7 @@ class MuseumVehicleView(BaseTransitionView):
         SoundGroups.setState(Constants.DATES_STATE, state)
         outfit = self.__customizationService.getEmptyOutfitWithNationalEmblems(vehicle.strCD, isClanHidden=True, isMarksOnGunHidden=True)
         g_currentPreviewVehicle.selectVehicle(vehicle.intCD, vehicle.strCD, outfit=outfit)
-        if self.__audioEnabled and self.__welcomeCallback is None:
+        if self.__isExcursionPlaying or self.__audioEnabled and self.__welcomeCallback is None:
             self.__playVehSoundEvent(vehicle)
         if not self.__isExcursionPlaying and not self.__isExcursionPaused and self.__welcomeCallback is None:
             SoundGroups.playSound2D(Constants.RESUME_SOUND_EVENT)

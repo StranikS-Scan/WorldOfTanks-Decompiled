@@ -72,7 +72,7 @@ from messenger.proto import proto_getter
 from messenger.proto.events import g_messengerEvents
 from messenger.proto.xmpp.xmpp_constants import XMPP_ITEM_TYPE
 from nations import AVAILABLE_NAMES
-from notification.decorators import BattlePassLockButtonDecorator, BattlePassSwitchChapterReminderDecorator, C11nMessageDecorator, C2DProgressionStyleDecorator, ClanAppActionDecorator, ClanAppsDecorator, ClanInvitesActionDecorator, ClanInvitesDecorator, ClanSingleAppDecorator, ClanSingleInviteDecorator, CollectionsLockButtonDecorator, EmailConfirmationReminderMessageDecorator, FriendshipRequestDecorator, CustomNotificationsStartDecorator, IntegratedAuctionStageFinishDecorator, IntegratedAuctionStageStartDecorator, LockButtonMessageDecorator, MapboxButtonDecorator, MessageDecorator, MissingEventsDecorator, PrbInviteDecorator, ProgressiveRewardDecorator, RecruitReminderMessageDecorator, ResourceWellLockButtonDecorator, ResourceWellStartDecorator, SeniorityAwardsDecorator, NotifyCenterPopUpDecorator, WotPlusIntroViewMessageDecorator, BattleMattersReminderDecorator, C11nProgressiveItemDecorator, TradingCaravanRefillDecorator, EarlyAccessDecorator, BlackMarketVehicleAuctionStageStartDecorator, BlackMarketVehicleAuctionStageFinishDecorator, BlackMarketAuctionStageStartDecorator, BlackMarketAuctionStageFinishDecorator
+from notification.decorators import BattlePassLockButtonDecorator, BattlePassSwitchChapterReminderDecorator, C11nMessageDecorator, C2DProgressionStyleDecorator, ClanAppActionDecorator, ClanAppsDecorator, ClanInvitesActionDecorator, ClanInvitesDecorator, ClanSingleAppDecorator, ClanSingleInviteDecorator, CollectionsLockButtonDecorator, EmailConfirmationReminderMessageDecorator, FriendshipRequestDecorator, CustomNotificationsStartDecorator, IntegratedAuctionStageFinishDecorator, IntegratedAuctionStageStartDecorator, LockButtonMessageDecorator, MapboxButtonDecorator, MessageDecorator, MissingEventsDecorator, PrbInviteDecorator, ProgressiveRewardDecorator, RecruitReminderMessageDecorator, ResourceWellLockButtonDecorator, ResourceWellStartDecorator, SeniorityAwardsDecorator, NotifyCenterPopUpDecorator, WotPlusIntroViewMessageDecorator, BattleMattersReminderDecorator, C11nProgressiveItemDecorator, TradingCaravanRefillDecorator, EarlyAccessDecorator, BlackMarketVehicleAuctionStageStartDecorator, BlackMarketVehicleAuctionStageFinishDecorator, BlackMarketAuctionStageStartDecorator, BlackMarketAuctionStageFinishDecorator, ParagonsCoinsCustomMessageDecorator
 from notification.settings import NOTIFICATION_TYPE, NotificationData
 from shared_utils import first
 from skeletons.gui.battle_matters import IBattleMattersController
@@ -2847,6 +2847,79 @@ class OptDevicesRestoreListener(_NotificationListener):
         SystemMessages.pushMessage(text=backport.text(messageRes.body()), type=msgType, priority=NotificationPriorityLevel.MEDIUM, messageData={'header': backport.text(messageRes.title())})
 
 
+class ParagonsCoinsListener(_NotificationListener):
+    __paragonsController = dependency.descriptor(IParagonsController)
+    __limitedUIController = dependency.descriptor(ILimitedUIController)
+
+    def __init__(self):
+        super(ParagonsCoinsListener, self).__init__()
+        self.__entityId = 1
+
+    def start(self, model):
+        model = super(ParagonsCoinsListener, self).start(model)
+        self.__paragonsController.onProgressPointsChanged += self.__handle
+        self.__paragonsController.onAvailabilityChanged += self.__onAvailabilityChanged
+        self.__limitedUIController.startObserve(LuiRules.PARAGONS_ENTRY_POINT, self.__onParagonsEntryPointRuleUpdated)
+        self.__paragonsController.onSettingsChanged += self.__onEventSettingsUpdated
+        if not self.__paragonsController.isInactive:
+            self.__handle()
+        return model
+
+    def stop(self):
+        self.__paragonsController.onProgressPointsChanged -= self.__handle
+        self.__limitedUIController.stopObserve(LuiRules.PARAGONS_ENTRY_POINT, self.__onParagonsEntryPointRuleUpdated)
+        self.__paragonsController.onAvailabilityChanged -= self.__onAvailabilityChanged
+        self.__paragonsController.onSettingsChanged -= self.__onEventSettingsUpdated
+        super(ParagonsCoinsListener, self).stop()
+
+    @property
+    def isBranchResetAvailable(self):
+        return self.__paragonsController.wasBranchResetEverAvailable
+
+    @property
+    def isParagonsEntryPointAvailable(self):
+        return self.__paragonsController.isLimitedUiRuleCompleted
+
+    def __handle(self):
+        count = self.__paragonsController.progress
+        if self.isParagonsEntryPointAvailable and self.isBranchResetAvailable or not count:
+            return
+        else:
+            model = self._model()
+            prevNotification = model.getNotification(NOTIFICATION_TYPE.PARAGONS_COINS, self.__entityId)
+            if prevNotification is None:
+                newNotification = ParagonsCoinsCustomMessageDecorator(self.__entityId, count, self.isParagonsEntryPointAvailable, model)
+                model.addNotification(newNotification)
+            else:
+                prevNotification.updateCount(count)
+                prevNotification.updateAvailability(self.isParagonsEntryPointAvailable)
+                model.updateNotification(prevNotification.getType(), self.__entityId, prevNotification.getEntity(), True)
+            return
+
+    def __onParagonsEntryPointRuleUpdated(self, *args):
+        model = self._model()
+        prevNotification = model.getNotification(NOTIFICATION_TYPE.PARAGONS_COINS, self.__entityId)
+        if prevNotification is not None and self.isParagonsEntryPointAvailable:
+            prevNotification.updateAvailability(self.isParagonsEntryPointAvailable)
+            model.updateNotification(prevNotification.getType(), self.__entityId, prevNotification.getEntity(), True)
+        return
+
+    def __onEventSettingsUpdated(self, *args):
+        model = self._model()
+        prevNotification = model.getNotification(NOTIFICATION_TYPE.PARAGONS_COINS, self.__entityId)
+        if prevNotification is not None and self.__paragonsController.isInactive:
+            model.removeNotification(NOTIFICATION_TYPE.PARAGONS_COINS, self.__entityId)
+        return
+
+    def __onAvailabilityChanged(self, *args):
+        model = self._model()
+        isBranchResetAvailable = self.__paragonsController.wasBranchResetEverAvailable
+        prevNotification = model.getNotification(NOTIFICATION_TYPE.PARAGONS_COINS, self.__entityId)
+        if prevNotification is not None and isBranchResetAvailable:
+            model.removeNotification(NOTIFICATION_TYPE.PARAGONS_COINS, self.__entityId)
+        return
+
+
 class ExtNotificationListener(_NotificationListener):
     pass
 
@@ -2883,7 +2956,8 @@ registerNotificationsListeners((ServiceChannelListener,
  DailyBonusQuestListener,
  EpicBattleNotificationListener,
  OptDevicesRestoreListener,
- NewbieChatLockNotificationListener))
+ NewbieChatLockNotificationListener,
+ ParagonsCoinsListener))
 
 class NotificationsListeners(_NotificationListener):
 

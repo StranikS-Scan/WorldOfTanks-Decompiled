@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/impl/lobby/black_market/black_market_entry_point_view.py
 import logging
 from frameworks.wulf import ViewFlags, ViewSettings
+from gui.impl import backport
 from gui.impl.gen.view_models.views.lobby.black_market.banner.black_market_view_model import BlackMarketViewModel, StatusEnum, PhaseEnum
 from gui.impl.pub import ViewImpl
 from gui.impl.gen import R
@@ -54,10 +55,30 @@ class BlackMarketEntryPointView(ViewImpl):
         return StatusEnum.ACTIVE if self.__blackMarket.isEnabled() and not self.__blackMarket.isPaused() else StatusEnum.DISABLED
 
     def __getPhase(self):
-        return PhaseEnum.LOOTBOX if self.__blackMarket.isSpecial() else PhaseEnum.SPECIAL
+        if self.__blackMarket.isNowSpecialPhase(PhaseEnum.LOOTBOX.value):
+            return PhaseEnum.LOOTBOX
+        return PhaseEnum.SPECIAL if self.__blackMarket.isNowSpecialPhase(PhaseEnum.SPECIAL.value) else PhaseEnum.DEFAULT
 
     def __getTimer(self):
         return self.__blackMarket.getStartTime() - time_utils.getServerUTCTime() if not self.__blackMarket.isStarted() else self.__blackMarket.getFinishTime() - time_utils.getServerUTCTime()
+
+    def __getFooter(self):
+        eventStatus = self.__getStatus()
+        if eventStatus == StatusEnum.DISABLED:
+            return backport.text(R.strings.black_market.banner.unavailable.text())
+        remainingTime = self.__getTimer()
+        if remainingTime < time_utils.ONE_DAY:
+            return self.__getTimeText(remainingTime, eventStatus)
+        eventTime = self.__blackMarket.getStartTime() if eventStatus == StatusEnum.ANNOUNCE else self.__blackMarket.getFinishTime()
+        return self.__getDateText(time_utils.getTimeStructInLocal(eventTime), eventStatus)
+
+    def __getTimeText(self, timeValue, eventStatus):
+        bannerText = backport.text(R.strings.black_market.banner.dyn(eventStatus.value).time())
+        remainingTime = backport.backport_time_utils.getTillTimeStringByRClass(timeValue=timeValue, stringRClass=R.strings.black_market.tillTime, removeLeadingZeros=True)
+        return bannerText + remainingTime
+
+    def __getDateText(self, dateTime, eventStatus):
+        return backport.text(R.strings.black_market.banner.dyn(eventStatus.value).date(), day=dateTime.tm_mday, month=backport.text(R.strings.menu.dateTime.months.num(dateTime.tm_mon)()))
 
     def __isNewPhase(self):
         lastSeenPhase = AccountSettings.getBlackMarket(BlackMarket.BLACK_MARKET_LAST_PHASE_SEEN)
@@ -72,5 +93,5 @@ class BlackMarketEntryPointView(ViewImpl):
             tx.setIsAloneBanner(self.__isSingle)
             tx.setStatus(self.__getStatus())
             tx.setEventPhase(self.__getPhase())
-            tx.setTimer(self.__getTimer())
-            tx.setIsNew(not AccountSettings.getBlackMarket(BlackMarket.BLACK_MARKET_ENTRY_CLICKED))
+            tx.setFooter(self.__getFooter())
+            tx.setIsNew(not AccountSettings.getBlackMarket(BlackMarket.BLACK_MARKET_ENTRY_CLICKED) and self.__getStatus() == StatusEnum.ACTIVE)

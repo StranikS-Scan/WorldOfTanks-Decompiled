@@ -23,6 +23,7 @@ class ITEM_TYPES(object):
     TURRET_DESC = '#item_types:turret/desc'
     TURRET_TAGS = '#item_types:turret/tags'
     GUN_NAME = '#item_types:gun/name'
+    CLIPGUN_NAME = '#item_types:clipGun/name'
     DUALGUN_NAME = '#item_types:dualGun/name'
     FLAMEGUN_NAME = '#item_types:flameGun/name'
     AUTOSHOOTFLAMEGUN_NAME = '#item_types:autoShootFlameGun/name'

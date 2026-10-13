@@ -1,0 +1,20 @@
+<PortalSentryGunPlacementComponent.def>
+  <Properties>
+    <isSentryBotDeployed>
+      <Type>	BOOL	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <default>	FALSE	</default>
+    </isSentryBotDeployed>
+    <deployPosition>
+      <Type>	VECTOR3	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </deployPosition>
+    <equipmentID>
+      <Type>	UINT32	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </equipmentID>
+  </Properties>
+  <ofEntity>
+    <Vehicle></Vehicle>
+  </ofEntity>
+</PortalSentryGunPlacementComponent.def>

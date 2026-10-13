@@ -16,7 +16,7 @@ from ClientUnitMgr import ClientUnitMgr, ClientUnitBrowser
 from ContactInfo import ContactInfo
 from OfflineMapCreator import g_offlineMapCreator
 from PlayerEvents import g_playerEvents as events
-from account_helpers import AccountSyncData, Inventory, DossierCache, Shop, Stats, QuestProgress, CustomFilesCache, BattleResultsCache, ClientGoodies, client_blueprints, client_recycle_bin, AccountSettings, client_anonymizer, ClientBattleRoyale, ArmoryYard
+from account_helpers import AccountSyncData, Inventory, DossierCache, Shop, Stats, QuestProgress, CustomFilesCache, BattleResultsCache, ClientGoodies, client_blueprints, client_recycle_bin, AccountSettings, client_anonymizer, ClientBattleRoyale, ArmoryYard, portal
 from account_helpers.dog_tags import DogTags
 from account_helpers.maps_training import MapsTraining
 from account_helpers.offers.sync_data import OffersSyncData
@@ -26,6 +26,7 @@ from account_helpers import client_epic_meta_game, tokens
 from account_helpers.AccountSettings import CURRENT_VEHICLE
 from account_helpers.battle_pass import BattlePassManager
 from account_helpers.comp7_storage import Comp7Storage
+from account_helpers.session_progress_rewards import SessionProgressRewards
 from account_helpers.festivity_manager import FestivityManager
 from account_helpers.game_restrictions import GameRestrictions
 from account_helpers.paragons import Paragons
@@ -61,7 +62,6 @@ from skeletons.gui.shared.utils import IHangarSpace
 from soft_exception import SoftException
 from streamIDs import RangeStreamIDCallbacks, STREAM_ID_CHAT_MAX, STREAM_ID_CHAT_MIN
 from shared_utils.account_helpers.diff_utils import synchronizeDicts
-from account_helpers.white_tiger import WhiteTiger
 StreamData = namedtuple('StreamData', ['data',
  'isCorrupted',
  'origPacketLen',
@@ -195,8 +195,9 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self.referralProgram = g_accountRepository.referralProgram
         self.paragons = g_accountRepository.paragons
         self.comp7Storage = g_accountRepository.comp7Storage
+        self.sessionProgressRewards = g_accountRepository.sessionProgressRewards
         self.stall = g_accountRepository.stall
-        self.whiteTiger = g_accountRepository.whiteTiger
+        self.portal = g_accountRepository.portal
         self.customFilesCache = g_accountRepository.customFilesCache
         self.commandProxy = g_accountRepository.commandProxy
         self.syncData.setAccount(self)
@@ -292,6 +293,7 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self.achievements20.onAccountBecomePlayer()
         self.referralProgram.onAccountBecomePlayer()
         self.comp7Storage.onAccountBecomePlayer()
+        self.sessionProgressRewards.onAccountBecomePlayer()
         chatManager.switchPlayerProxy(self)
         events.onAccountBecomePlayer()
         BigWorld.target.source = BigWorld.MouseTargetingMatrix()
@@ -340,6 +342,7 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self.achievements20.onAccountBecomeNonPlayer()
         self.referralProgram.onAccountBecomeNonPlayer()
         self.comp7Storage.onAccountBecomeNonPlayer()
+        self.sessionProgressRewards.onAccountBecomeNonPlayer()
         self.__cancelCommands()
         self.syncData.setAccount(None)
         self.inventory.setAccount(None)
@@ -1262,8 +1265,9 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
             self.achievements20.synchronize(isFullSync, diff)
             self.referralProgram.synchronize(isFullSync, diff)
             self.comp7Storage.synchronize(isFullSync, diff)
+            self.sessionProgressRewards.synchronize(isFullSync, diff)
             self.paragons.synchronize(isFullSync, diff)
-            self.whiteTiger.synchronize(isFullSync, diff)
+            self.portal.synchronize(isFullSync, diff)
             self._synchronizeServerSettings(diff)
             self._synchronizeDisabledPersonalMissions(diff)
             self._synchronizeEventNotifications(diff)
@@ -1527,7 +1531,8 @@ class _AccountRepository(object):
         self.freePremiumCrew = {}
         self.referralProgram = ReferralProgram(self.syncData)
         self.comp7Storage = Comp7Storage(self.syncData)
-        self.whiteTiger = WhiteTiger()
+        self.sessionProgressRewards = SessionProgressRewards(self.syncData)
+        self.portal = portal.Portal()
         self.gMap = ClientGlobalMap()
         self.onTokenReceived = Event.Event()
         self.requestID = AccountCommands.REQUEST_ID_UNRESERVED_MIN
@@ -1548,7 +1553,7 @@ def delAccountRepository():
         g_accountRepository.prebattleInvitations.clear()
         g_accountRepository.paragons.clear()
         g_accountRepository.comp7Storage.clear()
-        g_accountRepository.whiteTiger.clear()
+        g_accountRepository.portal.clear()
         g_accountRepository = None
         return
 

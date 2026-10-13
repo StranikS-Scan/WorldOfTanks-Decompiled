@@ -228,6 +228,7 @@ _ACHIEVEMENTS_BY_NAME = {(_AB.TOTAL, 'warrior'): _CustomAchieveFactory.get(_as.r
  (_AB.SINGLE, 'twitchPrime4'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
  (_AB.SINGLE, 'alphaTester'): _AchieveFactory.get(LoyalServiceAchievement),
  (_AB.SINGLE, 'betaTester'): _AchieveFactory.get(LoyalServiceAchievement),
+ (_AB.SINGLE, '16YearsOfService'): _AchieveFactory.get(LoyalServiceAchievement),
  (_AB.SINGLE, '15YearsOfService'): _AchieveFactory.get(LoyalServiceAchievement),
  (_AB.SINGLE, '14YearsOfService'): _AchieveFactory.get(LoyalServiceAchievement),
  (_AB.SINGLE, '13YearsOfService'): _AchieveFactory.get(LoyalServiceAchievement),
@@ -531,7 +532,9 @@ _ACHIEVEMENTS_BY_NAME = {(_AB.TOTAL, 'warrior'): _CustomAchieveFactory.get(_as.r
  (_AB.SINGLE, 'comp7_6_1_champion_2'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
  (_AB.SINGLE, 'comp7_6_1_legend_0'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
  (_AB.SINGLE, 'comp7_6_1_legend_1'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
- (_AB.SINGLE, 'comp7_6_1_legend_2'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement)}
+ (_AB.SINGLE, 'comp7_6_1_legend_2'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
+ (_AB.SINGLE, 'portal2026Medal_1'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement),
+ (_AB.SINGLE, 'portal2026Medal_2'): _AchieveFactory.get(_abstract_achievements.DeprecatedAchievement)}
 for _nID, _ in enumerate(nations.NAMES):
     _ACHIEVEMENTS_BY_NAME[_AB.TOTAL, 'tankExpert%d' % _nID] = _NationAchieveFactory.get(_as.nation_specific.TankExpertAchievement, _nID)
     _ACHIEVEMENTS_BY_NAME[_AB.TOTAL, 'mechanicEngineer%d' % _nID] = _NationAchieveFactory.get(_as.nation_specific.MechEngineerAchievement, _nID)

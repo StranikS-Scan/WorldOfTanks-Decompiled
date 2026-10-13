@@ -1,0 +1,63 @@
+<Maps_training_emblem.xml>
+  <xmlns:czech1>	ussr	</xmlns:czech1>
+  <xmlns:germany>	germany	</xmlns:germany>
+  <xmlns:czech0>	usa	</xmlns:czech0>
+  <xmlns:china>	china	</xmlns:china>
+  <xmlns:france>	france	</xmlns:france>
+  <xmlns:uk>	uk	</xmlns:uk>
+  <xmlns:japan>	japan	</xmlns:japan>
+  <xmlns:czech>	czech	</xmlns:czech>
+  <xmlns:sweden>	sweden	</xmlns:sweden>
+  <xmlns:poland>	poland	</xmlns:poland>
+  <xmlns:italy>	italy	</xmlns:italy>
+  <xmlns:intunion>	intunion	</xmlns:intunion>
+  <itemGroup>
+    <userString>	#vehicle_customization:emblem/battle	</userString>
+    <season>	ALL	</season>
+    <historical>	0	</historical>
+    <priceGroup>	MT emblems 25g notInShop	</priceGroup>
+    <decal>
+      <id>	791	</id>
+      <texture>	gui/maps/vehicles/decals/Maps_training_emblem.dds	</texture>
+      <userString>	#vehicle_customization:Maps_training_emblem	</userString>
+      <historical>	1	</historical>
+      <mirror>	false	</mirror>
+    </decal>
+    <decal>
+      <id>	671	</id>
+      <texture>	gui/maps/vehicles/decals/player_stickers/special/sticker_453.dds	</texture>
+      <userString>	#vehicle_customization:emblem/special/sticker_453	</userString>
+      <vehicleFilter>
+        <include>
+          <nations>	germany	</nations>
+        </include>
+      </vehicleFilter>
+      <mirror>	false	</mirror>
+    </decal>
+    <decal>
+      <id>	672	</id>
+      <texture>	gui/maps/vehicles/decals/player_stickers/special/sticker_454.dds	</texture>
+      <userString>	#vehicle_customization:emblem/special/sticker_454	</userString>
+      <vehicleFilter>
+        <include>
+          <nations>	czech	</nations>
+        </include>
+      </vehicleFilter>
+      <mirror>	false	</mirror>
+    </decal>
+    <decal>
+      <id>	677	</id>
+      <texture>	gui/maps/vehicles/decals/player_stickers/battle/sticker_44.dds	</texture>
+      <userString>	#vehicle_customization:emblem/special/sticker_456	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+    <decal>
+      <id>	678	</id>
+      <texture>	gui/maps/vehicles/decals/player_stickers/battle/sticker_02.dds	</texture>
+      <userString>	#vehicle_customization:emblem/special/sticker_457	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+    <name>	Generic Custom Look 1	</name>
+    <type>	EMBLEM	</type>
+  </itemGroup>
+</Maps_training_emblem.xml>

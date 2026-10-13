@@ -8,7 +8,7 @@ from CurrentVehicle import g_currentPreviewVehicle, g_currentVehicle
 from HeroTank import HeroTank
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import PREVIEW_INFO_PANEL_IDX
-from account_helpers.settings_core.ServerSettingsManager import UI_STORAGE_KEYS
+from account_helpers.settings_core.ServerSettingsManager import UI_STORAGE_KEYS, SETTINGS_SECTIONS
 from constants import QUEUE_TYPE
 from gui import makeHtmlString
 from gui.ClientUpdateManager import g_clientUpdateManager
@@ -48,8 +48,7 @@ from helpers import dependency
 from helpers.i18n import makeString as _ms
 from preview_selectable_logic import PreviewSelectableLogic
 from skeletons.account_helpers.settings_core import ISettingsCore
-from skeletons.gui.game_control import IHeroTankController, IVehicleComparisonBasket, IPersonalMissionsController, IWhiteTigerController
-from skeletons.prebattle_vehicle import IPrebattleVehicle
+from skeletons.gui.game_control import IHeroTankController, IVehicleComparisonBasket, IPersonalMissionsController
 from skeletons.gui.impl import IGuiLoader
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
@@ -90,29 +89,29 @@ def _isCollectibleVehicleWithModules():
     return g_currentPreviewVehicle.isCollectible() and g_currentPreviewVehicle.hasModulesToSelect()
 
 
-def _updateCollectorHintParameters():
+def _updateCollectorHintParameters(disableHints):
     tutorialStorage = getTutorialGlobalStorage()
     if tutorialStorage is None:
         return
     else:
         isActiveModulesTab = AccountSettings.getSettings(PREVIEW_INFO_PANEL_IDX) == _getModulesTabIdx()
-        hintValue = False if isActiveModulesTab else _isCollectibleVehicleWithModules()
+        hintValue = False if isActiveModulesTab or disableHints else _isCollectibleVehicleWithModules()
         tutorialStorage.setValue(GLOBAL_FLAG.COLLECTIBLE_VEHICLE_PREVIEW_ENABLED, hintValue)
         return
 
 
-def _updatePostProgressionParameters():
+def _updatePostProgressionParameters(disableHints):
     tutorialStorage = getTutorialGlobalStorage()
     if tutorialStorage is None:
         return
     else:
-        tutorialStorage.setValue(GLOBAL_FLAG.VEH_POST_PROGRESSION_ENABLED, g_currentPreviewVehicle.isPostProgressionExists())
+        tutorialStorage.setValue(GLOBAL_FLAG.VEH_POST_PROGRESSION_ENABLED, not disableHints and g_currentPreviewVehicle.isPostProgressionExists())
         return
 
 
 @dependency.replace_none_kwargs(settingsCore=ISettingsCore)
 def _isPostProgressionBulletVisible(settingsCore=None):
-    return g_currentPreviewVehicle.isPostProgressionExists() and not settingsCore.serverSettings.getUIStorage().get(UI_STORAGE_KEYS.VEH_PREVIEW_POST_PROGRESSION_BULLET_SHOWN)
+    return g_currentPreviewVehicle.isPostProgressionExists() and not settingsCore.serverSettings.getUIStorage(SETTINGS_SECTIONS.UI_STORAGE).get(UI_STORAGE_KEYS.VEH_PREVIEW_POST_PROGRESSION_BULLET_SHOWN)
 
 
 def _getModulesTabIdx():
@@ -130,8 +129,6 @@ class VehiclePreview(LobbySelectableView, VehiclePreviewMeta):
     __settingsCore = dependency.descriptor(ISettingsCore)
     __guiLoader = dependency.descriptor(IGuiLoader)
     __personalMissionsController = dependency.descriptor(IPersonalMissionsController)
-    __gameEventCtrl = dependency.descriptor(IWhiteTigerController)
-    __prebattleVehicle = dependency.descriptor(IPrebattleVehicle)
 
     def __init__(self, ctx=None):
         self.__ctx = ctx
@@ -166,6 +163,7 @@ class VehiclePreview(LobbySelectableView, VehiclePreviewMeta):
         self.__subscriptions = ctx.get('subscriptions') or ()
         self.__bottomPanelTextData = ctx.get('bottomPanelTextData')
         self.__showCloseBtn = ctx.get('showCloseBtn', _SHOW_CLOSE_BTN)
+        self.__disableHints = ctx.get('disableHints', False)
         self.__unmodifiedItemsPack = deepcopy(self._itemsPack)
         addBuiltInEquipment(self._itemsPack, self._itemsCache, self._vehicleCD)
         notInteractive = (VIEW_ALIAS.LOBBY_STORE,
@@ -188,9 +186,6 @@ class VehiclePreview(LobbySelectableView, VehiclePreviewMeta):
             self.__hangarSpace.removeVehicle()
         g_currentPreviewVehicle.selectHeroTank(self.__isHeroTank)
         self.__uiMetricsLogger, self.__uiFlowLogger = getPreviewUILoggers(bool(self._itemsPack), str(self._vehicleCD), self.__buyParams)
-        if self.__gameEventCtrl.isEventPrbActive():
-            if self.__prebattleVehicle.item is not None:
-                self.__prebattleVehicle.selectNone()
         return
 
     def setTopPanel(self):
@@ -201,10 +196,6 @@ class VehiclePreview(LobbySelectableView, VehiclePreviewMeta):
 
     def _populate(self):
         self.addListener(CameraRelatedEvents.VEHICLE_LOADING, self.__onVehicleLoading, EVENT_BUS_SCOPE.DEFAULT)
-        g_eventBus.addListener(events.HangarSimpleEvent.EVENT_PORTAL_SELECTED, self.__onCloseView, EVENT_BUS_SCOPE.LOBBY)
-        g_eventBus.addListener(events.HangarSimpleEvent.EVENT_VEHICLE_SELECTED, self.__onCloseView, EVENT_BUS_SCOPE.LOBBY)
-        g_eventBus.addListener(events.HangarSimpleEvent.VEHICLE_PREVIEW_CLOSE, self.__onCloseView, EVENT_BUS_SCOPE.LOBBY)
-        g_eventBus.handleEvent(events.HangarSimpleEvent(events.HangarSimpleEvent.VEHICLE_PREVIEW_LOADED), scope=EVENT_BUS_SCOPE.LOBBY)
         self.setTopPanel()
         self.setBottomPanel()
         if g_currentPreviewVehicle.intCD == self._vehicleCD:
@@ -238,8 +229,8 @@ class VehiclePreview(LobbySelectableView, VehiclePreviewMeta):
         if specialData is not None and specialData.enterEvent:
             SoundGroups.g_instance.playSound2D(specialData.enterEvent)
         g_eventBus.addListener(OFFER_CHANGED_EVENT, self.__onOfferChanged)
-        _updateCollectorHintParameters()
-        _updatePostProgressionParameters()
+        _updateCollectorHintParameters(self.__disableHints)
+        _updatePostProgressionParameters(self.__disableHints)
         for event, callback in self.__subscriptions:
             event += callback
 
@@ -247,10 +238,6 @@ class VehiclePreview(LobbySelectableView, VehiclePreviewMeta):
         return
 
     def _dispose(self):
-        g_eventBus.handleEvent(events.HangarSimpleEvent(events.HangarSimpleEvent.VEHICLE_PREVIEW_UNLOADED), scope=EVENT_BUS_SCOPE.LOBBY)
-        g_eventBus.removeListener(events.HangarSimpleEvent.EVENT_PORTAL_SELECTED, self.__onCloseView, EVENT_BUS_SCOPE.LOBBY)
-        g_eventBus.removeListener(events.HangarSimpleEvent.EVENT_VEHICLE_SELECTED, self.__onCloseView, EVENT_BUS_SCOPE.LOBBY)
-        g_eventBus.removeListener(events.HangarSimpleEvent.VEHICLE_PREVIEW_CLOSE, self.__onCloseView, EVENT_BUS_SCOPE.LOBBY)
         specialData = getHeroTankPreviewParams() if self.__isHeroTank else None
         if specialData is not None and specialData.exitEvent:
             SoundGroups.g_instance.playSound2D(specialData.exitEvent)
@@ -306,7 +293,7 @@ class VehiclePreview(LobbySelectableView, VehiclePreviewMeta):
 
     def onOpenInfoTab(self, index):
         AccountSettings.setSettings(PREVIEW_INFO_PANEL_IDX, index)
-        _updatePostProgressionParameters()
+        _updatePostProgressionParameters(self.__disableHints)
 
     def onGoToPostProgressionClick(self):
         self._resetPostProgressionBullet()
@@ -449,7 +436,8 @@ class VehiclePreview(LobbySelectableView, VehiclePreviewMeta):
          'topPanelData': self.__topPanelData,
          'style': self.__ctx.get('style'),
          'backBtnLabel': self._backBtnLabel,
-         'previewAppearance': self.__previewAppearance})
+         'previewAppearance': self.__previewAppearance,
+         'disableHints': self.__disableHints})
 
     def __onVehicleLoading(self, ctxEvent):
         if self.__customizationCD is not None and not ctxEvent.ctx.get('started'):
@@ -497,9 +485,6 @@ class VehiclePreview(LobbySelectableView, VehiclePreviewMeta):
 
     def __updateHeaderData(self):
         self.as_setDataS(self._getData())
-
-    def __onCloseView(self, _):
-        self.closeView()
 
     @staticmethod
     def __getInfoPanelListDescription(vehicle):
@@ -586,5 +571,5 @@ class VehiclePreview(LobbySelectableView, VehiclePreviewMeta):
 
     def _resetPostProgressionBullet(self):
         if _isPostProgressionBulletVisible(settingsCore=self.__settingsCore):
-            self.__settingsCore.serverSettings.saveInUIStorage({UI_STORAGE_KEYS.VEH_PREVIEW_POST_PROGRESSION_BULLET_SHOWN: True})
+            self.__settingsCore.serverSettings.saveInUIStorage(SETTINGS_SECTIONS.UI_STORAGE, {UI_STORAGE_KEYS.VEH_PREVIEW_POST_PROGRESSION_BULLET_SHOWN: True})
             self.__updateModuleBullet()

@@ -211,7 +211,8 @@ def packEfficiencyPropData(randomStats, sessionStats, accountWtr, propId):
     params.append({'label': text_styles.standard(backport.text(R.strings.session_stats.propertyInfo.current())),
      'value': text_styles.main(currentValue)})
     if not isWithoutTotalValue and not isWithoutDelta:
-        params.append({'label': text_styles.standard(backport.text(R.strings.session_stats.propertyInfo.dynamic())),
+        label = text_styles.standard(backport.text(R.strings.session_stats.propertyInfo.dynamic() if isWtr else R.strings.session_stats.propertyInfo.delta()))
+        params.append({'label': label,
          'value': dynamicValue,
          'delta': {'icon': diffIconSource}})
     return {'title': text_styles.promoSubTitle(backport.text(data['title'])),

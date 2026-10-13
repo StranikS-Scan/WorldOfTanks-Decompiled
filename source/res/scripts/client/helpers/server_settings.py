@@ -1143,12 +1143,12 @@ class _BlackMarketConfig(namedtuple('_BlackMarketConfig', ('isEnabled',
  'isPaused',
  'startTime',
  'finishTime',
- 'lootboxSchedule',
+ 'specialPhaseSchedule',
  'offerLaunchSchedule'))):
     __slots__ = ()
 
     def __new__(cls, **kwargs):
-        defaults = dict(isEnabled=False, isPaused=False, startTime=None, finishTime=None, lootboxSchedule={}, offerLaunchSchedule=[])
+        defaults = dict(isEnabled=False, isPaused=False, startTime=None, finishTime=None, specialPhaseSchedule={}, offerLaunchSchedule=[])
         defaults.update(kwargs)
         return super(_BlackMarketConfig, cls).__new__(cls, **defaults)
 
@@ -2021,6 +2021,27 @@ class _NewbieChatLockConfig(namedtuple('_NewbieChatLockConfig', ('enabled', 'bat
         return cls()
 
 
+class _SessionProgressRewardsConfig(namedtuple('_SessionProgressRewardsConfig', ('isEnabled', 'groups'))):
+    __slots__ = ()
+
+    def __new__(cls, **kwargs):
+        defaults = dict(isEnabled=False, groups={})
+        defaults.update(kwargs)
+        return super(_SessionProgressRewardsConfig, cls).__new__(cls, **defaults)
+
+    def asDict(self):
+        return self._asdict()
+
+    def replace(self, data):
+        allowedFields = self._fields
+        dataToUpdate = dict(((k, v) for k, v in data.iteritems() if k in allowedFields))
+        return self._replace(**dataToUpdate)
+
+    @classmethod
+    def defaults(cls):
+        return cls()
+
+
 class ServerSettings(object):
 
     def __init__(self, serverSettings):
@@ -2091,6 +2112,7 @@ class ServerSettings(object):
         self.__newbieStartPageConfig = _NewbieStartPageConfig()
         self.__stallConfig = _StallConfig()
         self.__newbieChatLockConfig = _NewbieChatLockConfig()
+        self.__sessionProgressRewardsConfig = _SessionProgressRewardsConfig()
         self.__schemaManager = getSchemaManager()
         self.set(serverSettings)
 
@@ -2302,6 +2324,8 @@ class ServerSettings(object):
             self.__stallConfig = _StallConfig.defaults()
         if Configs.NEWBIE_CHAT_LOCK_CONFIG.value in self.__serverSettings:
             self.__newbieChatLockConfig = makeTupleByDict(_NewbieChatLockConfig, self.__serverSettings[Configs.NEWBIE_CHAT_LOCK_CONFIG.value])
+        if Configs.SESSION_PROGRESS_REWARDS_CONFIG.value in self.__serverSettings:
+            self.__sessionProgressRewardsConfig = makeTupleByDict(_SessionProgressRewardsConfig, self.__serverSettings[Configs.SESSION_PROGRESS_REWARDS_CONFIG.value])
         self.onServerSettingsChange(serverSettings)
 
     def update(self, serverSettingsDiff):
@@ -2456,6 +2480,8 @@ class ServerSettings(object):
             self.__updateControlPointConfig(serverSettingsDiff)
         if Configs.NEWBIE_CHAT_LOCK_CONFIG.value in serverSettingsDiff:
             self.__updateNewbieChatLockConfig(serverSettingsDiff)
+        if Configs.SESSION_PROGRESS_REWARDS_CONFIG.value in serverSettingsDiff:
+            self.__updateSessionProgressRewardsConfig(serverSettingsDiff)
         self.__schemaManager.update(serverSettingsDiff)
         self.onServerSettingsChange(serverSettingsDiff)
 
@@ -2711,6 +2737,10 @@ class ServerSettings(object):
     @property
     def newbieChatLockConfig(self):
         return self.__newbieChatLockConfig
+
+    @property
+    def sessionProgressRewardsConfig(self):
+        return self.__sessionProgressRewardsConfig
 
     def isEpicBattleEnabled(self):
         return self.epicBattles.isEnabled
@@ -3306,6 +3336,9 @@ class ServerSettings(object):
     def __updateNewbieChatLockConfig(self, serverSettingsDiff):
         if Configs.NEWBIE_CHAT_LOCK_CONFIG.value in serverSettingsDiff:
             self.__newbieChatLockConfig = self.__newbieChatLockConfig.replace(serverSettingsDiff[Configs.NEWBIE_CHAT_LOCK_CONFIG.value])
+
+    def __updateSessionProgressRewardsConfig(self, diff):
+        self.__sessionProgressRewardsConfig = self.__sessionProgressRewardsConfig.replace(diff[Configs.SESSION_PROGRESS_REWARDS_CONFIG.value])
 
 
 def serverSettingsChangeListener(*configKeys):

@@ -203,10 +203,6 @@ class VehicleInfoTooltipData(BlocksTooltipData):
                 leftStr = str(rentInfo.battlesLeft)
             elif rentInfo.winsLeft > 0:
                 leftStr = str(rentInfo.winsLeft)
-            isSpecialWindow = self.context.getStatusConfiguration(self.item).isSpecialWindow
-            if vehicle.isWtBossMainVehicle and isSpecialWindow:
-                leftStr = ''
-                descrStr = ''
             if descrStr or leftStr:
                 items.append(formatters.packTextParameterWithIconBlockData(name=text_styles.main(descrStr), value=text_styles.expText(leftStr), icon=ICON_TEXT_FRAMES.RENTALS, iconYOffset=2, gap=0, valueWidth=valueWidth, padding=formatters.packPadding(left=0, bottom=-10)))
         if statsConfig.showRankedBonusBattle:

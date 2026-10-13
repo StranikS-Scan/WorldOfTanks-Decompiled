@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/tutorial/doc_loader/sub_parsers/sales.py
+from gui.impl.lobby.common.view_helpers import getLayoutIDByText
 from gui.shared.event_bus import EVENT_BUS_SCOPE
 from items import _xml
 from tutorial.control.sales import triggers
@@ -48,6 +49,25 @@ def readResearchGoToNextVehicleTriggerSection(xmlCtx, section, _, triggerID):
     return sub_parsers.readValidateVarTriggerSection(xmlCtx, section, triggerID, triggers.ResearchGoToNextVehicleTrigger, unlockTargetIDs=unlockTargetIDs)
 
 
+def readViewLoadedTriggerSection(xmlCtx, section, _, triggerID):
+    excludedScaleformAliases = set()
+    excludedWulfLayoutIDs = set()
+    if 'excluded-views' in section.keys():
+        for viewType, viewSec in _xml.getChildren(xmlCtx, section, 'excluded-views'):
+            viewID = parseID(xmlCtx, viewSec, 'Specify a view ID')
+            if viewType == 'scaleform':
+                excludedScaleformAliases.add(viewID)
+            if viewType == 'wulf':
+                layoutPath = viewID[len('R.views.'):] if viewID.startswith('R.views.') else viewID
+                layoutID = getLayoutIDByText(layoutPath)
+                if not layoutID.exists():
+                    _xml.raiseWrongXml(xmlCtx, viewSec.name, 'View {} does not exist'.format(viewID))
+                excludedWulfLayoutIDs.add(layoutID())
+            _xml.raiseWrongXml(xmlCtx, viewSec.name, 'Unsupported GUI type {}'.format(viewType))
+
+    return triggers.ViewLoadedTrigger(triggerID, excludedScaleformAliases=excludedScaleformAliases, excludedWulfLayoutIDs=excludedWulfLayoutIDs)
+
+
 def _readUnlockTargetIDs(xmlCtx, section):
     unlockTargetIDs = []
     if 'unlock-targets' in section.keys():
@@ -77,4 +97,5 @@ def init():
      'isCollectibleVehicle': readIsCollectibleVehicleTrigger,
      'current-vehicle-changed': readCurrentVehicleChangedTriggerSection,
      'items-cache-sync': readItemsCacheSyncTriggerSection,
-     'research-go-to-next-vehicle': readResearchGoToNextVehicleTriggerSection})
+     'research-go-to-next-vehicle': readResearchGoToNextVehicleTriggerSection,
+     'view-loaded': readViewLoadedTriggerSection})

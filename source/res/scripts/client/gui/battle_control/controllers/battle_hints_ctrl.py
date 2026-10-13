@@ -15,16 +15,7 @@ import SoundGroups
 _logger = logging.getLogger(__name__)
 HintRequest = namedtuple('HintRequest', ('hint', 'data', 'requestTime'))
 
-class IBattleHintView(object):
-
-    def showHint(self, hint, data):
-        pass
-
-    def hideHint(self, hint=None):
-        pass
-
-
-class BattleHintComponent(IBattleHintView):
+class BattleHintComponent(object):
     HINT_MIN_SHOW_TIME = 2.0
 
     def __init__(self):

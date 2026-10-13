@@ -3,7 +3,7 @@
 import itertools
 from collections import namedtuple
 import typing
-from ValueReplay import ValueReplay, ValueReplayConnector
+from ValueReplay import ValueReplay, ValueReplayConnector, makeFactor100
 from constants import PREMIUM_TYPE
 from debug_utils import LOG_ERROR
 from dossiers2.custom.records import RECORD_DB_IDS
@@ -26,13 +26,18 @@ _LifeTimeInfo = namedtuple('_LifeTimeInfo', ('isKilled', 'lifeTime'))
 class SquadBonusInfo(object):
     itemsCache = dependency.descriptor(IItemsCache)
     eventsCache = dependency.descriptor(IEventsCache)
-    __slots__ = ('__vehicles', '__joinedOnArena', '__size')
+    __slots__ = ('__vehicles', '__joinedOnArena', '__size', '__premSize')
 
-    def __init__(self, vehicles=None, joinedOnArena=None, size=0, **kwargs):
+    def __init__(self, vehicles=None, joinedOnArena=None, size=0, premSize=0, **kwargs):
         super(SquadBonusInfo, self).__init__()
         self.__vehicles = vehicles or set()
         self.__joinedOnArena = joinedOnArena or []
         self.__size = size
+        self.__premSize = premSize
+
+    @property
+    def premiumSize(self):
+        return self.__premSize
 
     def getVehiclesLevelsDistance(self):
         getter = self.itemsCache.items.getItemByCD
@@ -103,6 +108,10 @@ class PersonalAvatarInfo(object):
     def extensionInfo(self):
         return self.__extInfo
 
+    @property
+    def premiumSquadSize(self):
+        return self.__squadBonusInfo.premiumSize
+
     def getPersonalSquadFlags(self, vehicles):
         vehicleID = vehicles.getVehicleID(self.__accountDBID)
         return self.__squadBonusInfo.getSquadFlags(vehicleID, vehicles.getVehicleInfo(vehicleID).intCD)
@@ -168,12 +177,12 @@ class _CrystalRecords(records.RawRecords):
 class _CreditsReplayRecords(records.ReplayRecords):
     __slots__ = ()
 
-    def __init__(self, replay, results, squadCreditsFactor=0):
+    def __init__(self, replay, results):
         super(_CreditsReplayRecords, self).__init__(replay, 'credits')
         self._addRecord(ValueReplay.SUB, 'originalCreditsToDraw', results['originalCreditsToDraw'], 0)
         self._addRecord(ValueReplay.SET, 'achievementCredits', results['achievementCredits'], 0)
-        self._addRecord(ValueReplay.FACTOR, 'premSquadCreditsFactor100', squadCreditsFactor, 0)
-        self._addRecord(ValueReplay.SUBCOEFF, 'originalCreditsToDrawSquad', results['originalCreditsToDrawSquad'], results['originalCreditsToDrawSquad'] * self.getFactor('premSquadCreditsFactor100') * -1)
+        self._addRecord(ValueReplay.FACTOR, 'premSquadCreditsFactor100', results['premSquadCreditsFactor100'], 0)
+        self._addRecord(ValueReplay.SUBCOEFF, 'originalCreditsToDrawSquad', results['originalCreditsToDrawSquad'], int(round(results['originalCreditsToDrawSquad'] * self.getFactor('premSquadCreditsFactor100'))) * -1)
 
     def _getRecord(self, name):
         value = super(_CreditsReplayRecords, self)._getRecord(name)
@@ -294,9 +303,9 @@ class _EconomicsRecordsChains(object):
     def getXPDiff(self):
         return self._premiumXP.getRecord('xp') - self._baseXP.getRecord('xp')
 
-    def addResults(self, _, results):
+    def addResults(self, _, results, avatarInfo):
         connector = ValueReplayConnector(results)
-        self._addMoneyResults(connector, results)
+        self._addMoneyResults(connector, results, avatarInfo)
         self._addXPResults(connector, results)
         self._addCrystalResults(connector, results)
 
@@ -316,19 +325,19 @@ class _EconomicsRecordsChains(object):
         self._crystal.addRecords(records.RawRecords({'avatarCrystalEvent': crystalEvent}))
         self._crystalDetails.addRecords(records.RawRecords({'avatarCrystalEvent': crystalEvent}))
 
-    def _addMoneyResults(self, connector, results):
+    def _addMoneyResults(self, connector, results, avatarInfo):
         if 'creditsReplay' in results and results['creditsReplay'] is not None:
             replay = ValueReplay(connector, recordName='credits', replay=results['creditsReplay'])
             appliedPremiumCreditsFactor100Exists = 'appliedPremiumCreditsFactor100' in replay
             if appliedPremiumCreditsFactor100Exists:
                 replay['appliedPremiumCreditsFactor100'] = FACTOR_VALUE.BASE_CREDITS_FACTOR
-            self._baseCredits.addRecords(self.__buildCreditsReplayForPremType(PREMIUM_TYPE.NONE, results, replay))
+            self._baseCredits.addRecords(self.__buildCreditsReplayForPremType(PREMIUM_TYPE.NONE, results, replay, avatarInfo))
             if appliedPremiumCreditsFactor100Exists:
                 replay['appliedPremiumCreditsFactor100'] = results['premiumCreditsFactor100']
-            self._premiumCredits.addRecords(self.__buildCreditsReplayForPremType(PREMIUM_TYPE.BASIC, results, replay))
+            self._premiumCredits.addRecords(self.__buildCreditsReplayForPremType(PREMIUM_TYPE.BASIC, results, replay, avatarInfo))
             if appliedPremiumCreditsFactor100Exists:
                 replay['appliedPremiumCreditsFactor100'] = results['premiumPlusCreditsFactor100']
-            self._premiumPlusCredits.addRecords(self.__buildCreditsReplayForPremType(PREMIUM_TYPE.PLUS, results, replay))
+            self._premiumPlusCredits.addRecords(self.__buildCreditsReplayForPremType(PREMIUM_TYPE.PLUS, results, replay, avatarInfo))
         else:
             LOG_ERROR('Credits replay is not found', results)
         if 'goldReplay' in results and results['goldReplay'] is not None:
@@ -392,11 +401,11 @@ class _EconomicsRecordsChains(object):
             LOG_ERROR('crystalReplay is not found', results)
         return
 
-    def __buildCreditsReplayForPremType(self, targetPremiumType, results, replay):
+    def __buildCreditsReplayForPremType(self, targetPremiumType, results, replay, avatarInfo):
         initialSquadFactor = results['premSquadCreditsFactor100']
-        squadCreditsFactor = self.__getPremiumSquadCreditsFactor(results, targetPremiumType)
+        squadCreditsFactor = self.__getPremiumSquadCreditsFactor(results, targetPremiumType, avatarInfo)
         results['premSquadCreditsFactor100'] = squadCreditsFactor
-        creditsReplayToUse = _CreditsReplayRecords(replay, results, squadCreditsFactor)
+        creditsReplayToUse = _CreditsReplayRecords(replay, results)
         results['premSquadCreditsFactor100'] = initialSquadFactor
         return creditsReplayToUse
 
@@ -425,11 +434,14 @@ class _EconomicsRecordsChains(object):
 
     @staticmethod
     @dependency.replace_none_kwargs(lobbyContext=ILobbyContext)
-    def __getPremiumSquadCreditsFactor(results, targetPremiumType, lobbyContext=None):
+    def __getPremiumSquadCreditsFactor(results, targetPremiumType, avatarInfo, lobbyContext=None):
         premiumType = PREMIUM_TYPE.activePremium(results.get('premMask', PREMIUM_TYPE.NONE))
-        if targetPremiumType > premiumType:
-            return lobbyContext.getServerSettings().squadPremiumBonus.ownCredits * 100
-        return 0 if targetPremiumType < premiumType else results.get('premSquadCreditsFactor100', 0)
+        if targetPremiumType == premiumType:
+            return results.get('premSquadCreditsFactor100', 0)
+        if targetPremiumType & PREMIUM_TYPE.AFFECTING_TYPES:
+            return makeFactor100(lobbyContext.getServerSettings().squadPremiumBonus.ownCredits)
+        hasEffectingPremium = premiumType & PREMIUM_TYPE.AFFECTING_TYPES > 0
+        return makeFactor100(lobbyContext.getServerSettings().squadPremiumBonus.mateCredits) if avatarInfo.premiumSquadSize > int(hasEffectingPremium) else 0
 
 
 class PersonalInfo(shared.UnpackedInfo):
@@ -617,7 +629,7 @@ class PersonalInfo(shared.UnpackedInfo):
                 self._addUnpackedItemID(intCD)
                 continue
             self.__vehicles.append(intCD)
-            self._economicsRecords.addResults(intCD, data)
+            self._economicsRecords.addResults(intCD, data, self.__avatar)
             if not self.__isObserver:
                 self.__isObserver = item.isObserver
             killerID = data['killerID'] if 'killerID' in data else 0

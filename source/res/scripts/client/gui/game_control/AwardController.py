@@ -53,6 +53,7 @@ from gui.impl.lobby.comp7.comp7_quest_helpers import isComp7VisibleQuest, getCom
 from gui.impl.lobby.mapbox.map_box_awards_view import MapBoxAwardsViewWindow
 from gui.impl.lobby.personal_missions.personal_missions_window_events import showPersonalMissionsRewardsView
 from gui.impl.lobby.personal_missions.personal_missions_window_events import showOperationAdditionRewardsView
+from gui.impl.lobby.seniority_awards.seniority_awards_quest_helper import processSeniorityAwardsParagonsCoins
 from gui.impl.pub.notification_commands import WindowNotificationCommand
 from gui.limited_ui.lui_rules_storage import LuiRules
 from gui.prb_control.entities.listener import IGlobalListener
@@ -65,7 +66,7 @@ from gui.server_events.events_helpers import isACEmailConfirmationQuest, isDaily
 from gui.server_events.finders import CHAMPION_BADGES_BY_BRANCH, CHAMPION_BADGE_AT_OPERATION_ID, PM_FINAL_TOKEN_QUEST_IDS_BY_OPERATION_ID, getBranchByOperationId, BRANCH_TO_OPERATION_IDS
 from gui.shared import EVENT_BUS_SCOPE, events, g_eventBus
 from gui.shared import event_dispatcher
-from gui.shared.event_dispatcher import showBadgeInvoiceAwardWindow, showBattlePassAwardsWindow, showBattlePassVehicleAwardWindow, showDedicationRewardWindow, showEliteWindow, showMultiAwardWindow, showProgressionRequiredStyleUnlockedWindow, showProgressiveItemsRewardWindow, showProgressiveRewardAwardWindow, showRankedSeasonCompleteView, showRankedSelectableReward, showRankedYearAwardWindow, showRankedYearLBAwardWindow, showResourceWellAwardWindow, showSeniorityRewardAwardWindow, showBlankGiftWindow, showCollectionAwardsWindow, showParagonsRewardsWindow, showDailyEpicQuestRewardWindow, showPromoCodeRewardScreen, showTelecomRewardsPage
+from gui.shared.event_dispatcher import showBadgeInvoiceAwardWindow, showBattlePassAwardsWindow, showBattlePassVehicleAwardWindow, showDedicationRewardWindow, showEliteWindow, showMultiAwardWindow, showProgressionRequiredStyleUnlockedWindow, showProgressiveItemsRewardWindow, showProgressiveRewardAwardWindow, showRankedSeasonCompleteView, showRankedSelectableReward, showRankedYearAwardWindow, showRankedYearLBAwardWindow, showResourceWellAwardWindow, showSeniorityRewardAwardWindow, showBlankGiftWindow, showCollectionAwardsWindow, showParagonsRewardsWindow, showDailyEpicQuestRewardWindow, showPromoCodeRewardScreen, showTelecomRewardsPage, showSessionProgressRewardWindow
 from gui.impl.lobby.paragons.paragons_window_events import showVideoRewardView
 from gui.shared.events import PersonalMissionsEvent
 from gui.shared.gui_items.dossier.factories import getAchievementFactory
@@ -88,7 +89,7 @@ from shared_utils import first, findFirst
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.app_loader import IAppLoader
 from skeletons.gui.battle_matters import IBattleMattersController
-from skeletons.gui.game_control import IAwardController, IBattlePassController, IBootcampController, ILimitedUIController, IMapboxController, IRankedBattlesController, ISeniorityAwardsController, ICollectionsSystemController, IWotPlusController, IEarlyAccessController, IComp7Controller, IPersonalMissionsController, IParagonsRewardsShopController, ISummerSaleController
+from skeletons.gui.game_control import IAwardController, IBattlePassController, IBootcampController, ILimitedUIController, IMapboxController, IRankedBattlesController, ISeniorityAwardsController, ICollectionsSystemController, IWotPlusController, IEarlyAccessController, IComp7Controller, IPersonalMissionsController, IParagonsRewardsShopController, ISummerSaleController, ISessionProgressRewardsController
 from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.impl import IGuiLoader, INotificationWindowController
 from skeletons.gui.platform.catalog_service_controller import IPurchaseCache
@@ -532,9 +533,13 @@ class SeniorityAwardsWindowHandler(ServiceChannelHandler):
 
     def __update(self):
         if self.__questsData:
-            allQuests = self.eventsCache.getAllQuests()
             detailedRewards = self.__questsData.get('detailedRewards', {})
-            rewards = list((detailedRewards.get(qID, {}) for qID in self.__completedQuests if self.isShowCongrats(allQuests.get(qID))))
+            rewards = []
+            for qID in self.__completedQuests:
+                quest = self.eventsCache.getQuestByID(qID)
+                if self.isShowCongrats(quest):
+                    rewards.append(processSeniorityAwardsParagonsCoins(detailedRewards.get(qID, {}), quest))
+
             if rewards:
                 self.__mergedRewards = getMergedBonusesFromDicts(rewards)
                 return True
@@ -2110,6 +2115,31 @@ class SummerSaleRewardReceivedHandler(MultiTypeServiceChannelHandler):
         return comp
 
 
+class SessionProgressRewardsHandler(ServiceChannelHandler):
+    __sessionProgressRewardsController = dependency.descriptor(ISessionProgressRewardsController)
+
+    def __init__(self, awardCtrl):
+        super(SessionProgressRewardsHandler, self).__init__(SYS_MESSAGE_TYPE.sessionProgressRewards.index(), awardCtrl)
+
+    def _showAward(self, ctx):
+        _, message = ctx
+        rewards = message.data.get('rewards')
+        if rewards:
+            from gui.impl.auxiliary.rewards_helper import preparationRewardsCurrency
+            preparationRewardsCurrency(rewards)
+            showSessionProgressRewardWindow(rewards)
+        else:
+            _logger.error("Can't show empty or invalid reward!")
+
+    def _needToShowAward(self, ctx):
+        if not super(SessionProgressRewardsHandler, self)._needToShowAward(ctx):
+            return False
+        else:
+            _, message = ctx
+            step = message.data.get('step')
+            return False if step is None else self.__sessionProgressRewardsController.isLastReward(step)
+
+
 registerAwardControllerHandlers((BattleQuestsAutoWindowHandler,
  PunishWindowHandler,
  TokenQuestsWindowHandler,
@@ -2157,4 +2187,5 @@ registerAwardControllerHandlers((BattleQuestsAutoWindowHandler,
  EarlyAccessQuestHandler,
  DailyEpicQuestsHandler,
  PromoCodeInvoiceHandler,
- SummerSaleRewardReceivedHandler))
+ SummerSaleRewardReceivedHandler,
+ SessionProgressRewardsHandler))

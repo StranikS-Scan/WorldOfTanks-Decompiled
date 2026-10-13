@@ -355,6 +355,42 @@
       </effects>
     </variant1>
   </waterCollisionHeavy>
+  <lavaCollisionLight>
+    <variant1>
+      <timeline>
+        <impactEnd>	2.0	</impactEnd>
+      </timeline>
+      <effects>
+        <pixie>
+          <startKey>	start	</startKey>
+          <file>	particles/Tank/tank_collision_light_lava.eff	</file>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	start	</startKey>
+          <wwsound>	water_coll_light	</wwsound>
+        </sound>
+      </effects>
+    </variant1>
+  </lavaCollisionLight>
+  <lavaCollisionHeavy>
+    <variant1>
+      <timeline>
+        <impactEnd>	2.0	</impactEnd>
+      </timeline>
+      <effects>
+        <pixie>
+          <startKey>	start	</startKey>
+          <file>	particles/Tank/tank_collision_light_lava.eff	</file>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	start	</startKey>
+          <wwsound>	water_coll_heavy	</wwsound>
+        </sound>
+      </effects>
+    </variant1>
+  </lavaCollisionHeavy>
   <groundCollisionWheeledLight>
     <variant1>
       <timeline>
@@ -737,6 +773,42 @@
       </effects>
     </variant1>
   </waterCollisionWheeledHeavy>
+  <lavaCollisionWheeledLight>
+    <variant1>
+      <timeline>
+        <impactEnd>	2.0	</impactEnd>
+      </timeline>
+      <effects>
+        <pixie>
+          <startKey>	start	</startKey>
+          <file>	particles/Tank/tank_collision_light_lava.eff	</file>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	start	</startKey>
+          <wwsound>	water_coll_light	</wwsound>
+        </sound>
+      </effects>
+    </variant1>
+  </lavaCollisionWheeledLight>
+  <lavaCollisionWheeledHeavy>
+    <variant1>
+      <timeline>
+        <impactEnd>	2.0	</impactEnd>
+      </timeline>
+      <effects>
+        <pixie>
+          <startKey>	start	</startKey>
+          <file>	particles/Tank/tank_collision_light_lava.eff	</file>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	start	</startKey>
+          <wwsound>	water_coll_heavy	</wwsound>
+        </sound>
+      </effects>
+    </variant1>
+  </lavaCollisionWheeledHeavy>
   <collision>
     <variant1>
       <timeline>
@@ -3865,4 +3937,313 @@
       </effects>
     </variant1>
   </cosm_mediumSubmersionDeath>
+  <turelDestruction>
+    <variant1>
+      <timeline>
+        <death>	0.01	</death>
+        <flaming>	0.015	</flaming>
+        <static>	0.02	</static>
+        <waitChangeBurnSound>	20.0	</waitChangeBurnSound>
+        <stopDeath>	36000	</stopDeath>
+      </timeline>
+      <effects>
+        <flashBang>
+          <startKey>	start	</startKey>
+          <stages>
+            <stage>	0.1	  <color>	1.0 0.15 0.0 0.5	</color>
+            </stage>
+            <stage>	1.5	  <color>	0.9 0.1 0.0 0.1	</color>
+            </stage>
+            <stage>	0.0	  <color>	0 0 0 0	</color>
+            </stage>
+          </stages>
+        </flashBang>
+        <pixie>
+          <startKey>	death	</startKey>
+          <endKey>	stopDeath	</endKey>
+          <alwaysUpdateModel>	true	</alwaysUpdateModel>
+          <file>	particles/environment/interior/252_portal26_turel_destroy.eff	</file>
+          <position>	Scene Root	</position>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	death	</startKey>
+          <wwsoundPC>	expl_fuel_PC	</wwsoundPC>
+          <wwsoundNPC>	expl_fuel_NPC	</wwsoundNPC>
+        </sound>
+      </effects>
+    </variant1>
+  </turelDestruction>
+  <turelFlaming>
+    <variant1>
+      <stages>
+        <fire>	1.0	</fire>
+        <noEmission>	4.0	</noEmission>
+      </stages>
+      <effects>
+        <pixie>
+          <startKey>	fire	</startKey>
+          <file>	particles/environment/interior/252_portal26_turel_destroy.eff	</file>
+          <position>	HP_Fire_1	</position>
+        </pixie>
+        <sound>
+          <startKey>	fire	</startKey>
+          <endKey>	noEmission	</endKey>
+          <stopSyncVisual>	true	</stopSyncVisual>
+          <wwsoundPC>	flaming_engine_small_pc	</wwsoundPC>
+          <wwsoundNPC>	flaming_engine_small_npc	</wwsoundNPC>
+        </sound>
+        <stopEmission>
+          <startKey>	noEmission	</startKey>
+        </stopEmission>
+      </effects>
+    </variant1>
+  </turelFlaming>
+  <turelAmmoBayExplosion>
+    <variant1>
+      <timeline>
+        <explosion>	0.01	</explosion>
+        <flaming>	0.015	</flaming>
+        <static>	0.02	</static>
+        <waitChangeBurnSound>	25.0	</waitChangeBurnSound>
+        <stopExplosion>	36000	</stopExplosion>
+      </timeline>
+      <effects>
+        <flashBang>
+          <startKey>	start	</startKey>
+          <stages>
+            <stage>	0.1	  <color>	1.0 0.15 0.0 0.5	</color>
+            </stage>
+            <stage>	1.5	  <color>	0.9 0.1 0.0 0.1	</color>
+            </stage>
+            <stage>	0.0	  <color>	0 0 0 0	</color>
+            </stage>
+          </stages>
+        </flashBang>
+        <pixie>
+          <startKey>	explosion	</startKey>
+          <endKey>	stopExplosion	</endKey>
+          <alwaysUpdateModel>	true	</alwaysUpdateModel>
+          <file>	particles/environment/interior/252_portal26_turel_destroy.eff	</file>
+          <position>	Scene Root	</position>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	explosion	</startKey>
+          <wwsoundPC>	expl_ammo_PC	</wwsoundPC>
+          <wwsoundNPC>	expl_ammo_NPC	</wwsoundNPC>
+        </sound>
+      </effects>
+    </variant1>
+  </turelAmmoBayExplosion>
+  <turelInstantExplosion>
+    <variant1>
+      <timeline>
+        <explosion>	0.01	</explosion>
+        <flaming>	0.015	</flaming>
+        <static>	0.02	</static>
+        <waitChangeBurnSound>	25.0	</waitChangeBurnSound>
+        <stopExplosion>	36000	</stopExplosion>
+      </timeline>
+      <effects>
+        <flashBang>
+          <startKey>	start	</startKey>
+          <stages>
+            <stage>	0.1	  <color>	1.0 0.15 0.0 0.5	</color>
+            </stage>
+            <stage>	1.5	  <color>	0.9 0.1 0.0 0.1	</color>
+            </stage>
+            <stage>	0.0	  <color>	0 0 0 0	</color>
+            </stage>
+          </stages>
+        </flashBang>
+        <pixie>
+          <startKey>	explosion	</startKey>
+          <endKey>	stopExplosion	</endKey>
+          <alwaysUpdateModel>	true	</alwaysUpdateModel>
+          <file>	particles/environment/interior/252_portal26_turel_destroy.eff	</file>
+          <position>	Scene Root	</position>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	explosion	</startKey>
+          <wwsoundPC>	expl_ammo_PC	</wwsoundPC>
+          <wwsoundNPC>	expl_ammo_NPC	</wwsoundNPC>
+        </sound>
+      </effects>
+    </variant1>
+  </turelInstantExplosion>
+  <turelAmmoBayBurnOff>
+    <variant1>
+      <timeline>
+        <explosion>	0.01	</explosion>
+        <flaming>	0.015	</flaming>
+        <static>	0.02	</static>
+        <waitChangeBurnSound>	25.0	</waitChangeBurnSound>
+        <stopExplosion>	36000	</stopExplosion>
+      </timeline>
+      <effects>
+        <flashBang>
+          <startKey>	start	</startKey>
+          <stages>
+            <stage>	0.1	  <color>	1.0 0.15 0.0 0.5	</color>
+            </stage>
+            <stage>	1.5	  <color>	0.9 0.1 0.0 0.1	</color>
+            </stage>
+            <stage>	0.0	  <color>	0 0 0 0	</color>
+            </stage>
+          </stages>
+        </flashBang>
+        <pixie>
+          <startKey>	explosion	</startKey>
+          <endKey>	stopExplosion	</endKey>
+          <alwaysUpdateModel>	true	</alwaysUpdateModel>
+          <file>	particles/environment/interior/252_portal26_turel_destroy.eff	</file>
+          <position>	Scene Root	</position>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	explosion	</startKey>
+          <wwsoundPC>	expl_burnup_ammo_PC	</wwsoundPC>
+          <wwsoundNPC>	expl_burnup_ammo_NPC	</wwsoundNPC>
+        </sound>
+      </effects>
+    </variant1>
+  </turelAmmoBayBurnOff>
+  <turelFuelExplosion>
+    <variant1>
+      <timeline>
+        <explosion>	0.01	</explosion>
+        <flaming>	0.015	</flaming>
+        <static>	0.02	</static>
+        <waitChangeBurnSound>	25.0	</waitChangeBurnSound>
+        <stopExplosion>	36000	</stopExplosion>
+      </timeline>
+      <effects>
+        <flashBang>
+          <startKey>	start	</startKey>
+          <stages>
+            <stage>	0.1	  <color>	1.0 0.15 0.0 0.5	</color>
+            </stage>
+            <stage>	1.5	  <color>	0.9 0.1 0.0 0.1	</color>
+            </stage>
+            <stage>	0.0	  <color>	0 0 0 0	</color>
+            </stage>
+          </stages>
+        </flashBang>
+        <pixie>
+          <startKey>	explosion	</startKey>
+          <endKey>	stopExplosion	</endKey>
+          <alwaysUpdateModel>	true	</alwaysUpdateModel>
+          <file>	particles/environment/interior/252_portal26_turel_destroy.eff	</file>
+          <position>	Scene Root	</position>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	explosion	</startKey>
+          <wwsoundPC>	expl_fuel_PC	</wwsoundPC>
+          <wwsoundNPC>	expl_fuel_NPC	</wwsoundNPC>
+        </sound>
+      </effects>
+    </variant1>
+  </turelFuelExplosion>
+  <turelCrewDeath>
+    <variant1>
+      <timeline>
+        <explosion>	0.01	</explosion>
+        <flaming>	0.015	</flaming>
+        <static>	0.02	</static>
+        <waitChangeBurnSound>	25.0	</waitChangeBurnSound>
+        <stopExplosion>	36000	</stopExplosion>
+      </timeline>
+      <effects>
+        <flashBang>
+          <startKey>	start	</startKey>
+          <stages>
+            <stage>	0.1	  <color>	1.0 0.15 0.0 0.5	</color>
+            </stage>
+            <stage>	1.5	  <color>	0.9 0.1 0.0 0.1	</color>
+            </stage>
+            <stage>	0.0	  <color>	0 0 0 0	</color>
+            </stage>
+          </stages>
+        </flashBang>
+        <pixie>
+          <startKey>	explosion	</startKey>
+          <endKey>	stopExplosion	</endKey>
+          <alwaysUpdateModel>	true	</alwaysUpdateModel>
+          <file>	particles/environment/interior/252_portal26_turel_destroy.eff	</file>
+          <position>	Scene Root	</position>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	explosion	</startKey>
+          <wwsoundPC>	expl_crew_death_s_PC	</wwsoundPC>
+          <wwsoundNPC>	expl_crew_death_s_NPC	</wwsoundNPC>
+        </sound>
+      </effects>
+    </variant1>
+  </turelCrewDeath>
+  <turelRammingDestruction>
+    <variant1>
+      <timeline>
+        <death>	0.01	</death>
+        <flaming>	0.015	</flaming>
+        <static>	0.02	</static>
+        <waitChangeBurnSound>	20.0	</waitChangeBurnSound>
+        <stopDeath>	36000	</stopDeath>
+      </timeline>
+      <effects>
+        <flashBang>
+          <startKey>	start	</startKey>
+          <stages>
+            <stage>	0.1	  <color>	1.0 0.15 0.0 0.5	</color>
+            </stage>
+            <stage>	1.5	  <color>	0.9 0.1 0.0 0.1	</color>
+            </stage>
+            <stage>	0.0	  <color>	0 0 0 0	</color>
+            </stage>
+          </stages>
+        </flashBang>
+        <pixie>
+          <startKey>	death	</startKey>
+          <endKey>	stopDeath	</endKey>
+          <alwaysUpdateModel>	true	</alwaysUpdateModel>
+          <file>	particles/environment/interior/252_portal26_turel_destroy.eff	</file>
+          <position>	Scene Root	</position>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	death	</startKey>
+          <wwsoundPC>	expl_ram_death_PC	</wwsoundPC>
+          <wwsoundNPC>	expl_ram_death_NPC	</wwsoundNPC>
+        </sound>
+      </effects>
+    </variant1>
+  </turelRammingDestruction>
+  <turelSubmersionDeath>
+    <variant1>
+      <timeline>
+        <explosion>	0.01	</explosion>
+        <flaming>	0.015	</flaming>
+        <static>	0.02	</static>
+        <waitChangeBurnSound>	25.0	</waitChangeBurnSound>
+        <stopExplosion>	36000	</stopExplosion>
+      </timeline>
+      <effects>
+        <pixie>
+          <startKey>	explosion	</startKey>
+          <endKey>	stopExplosion	</endKey>
+          <alwaysUpdateModel>	true	</alwaysUpdateModel>
+          <file>	particles/environment/interior/252_portal26_turel_destroy.eff	</file>
+          <position>	Scene Root	</position>
+          <force>	1	</force>
+        </pixie>
+        <sound>
+          <startKey>	explosion	</startKey>
+          <wwsound>	expl_submersion_death	</wwsound>
+        </sound>
+      </effects>
+    </variant1>
+  </turelSubmersionDeath>
 </vehicle_effects.xml>

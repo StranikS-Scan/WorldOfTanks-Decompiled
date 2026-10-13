@@ -63,6 +63,13 @@ class BattleMattersMissionComponent(InjectComponentAdaptor, BattleMattersViewMet
     def markVisited(self):
         pass
 
+    def handleMissionsPageClose(self):
+        injectView = self._injectView
+        if injectView is None:
+            return False
+        else:
+            return injectView.handleMissionsPageClose() if getattr(injectView, 'handleMissionsPageClose', None) else False
+
     def _addInjectContentListeners(self):
         if getattr(self._injectView.viewModel, 'onShowView', None):
             self._injectView.viewModel.onShowView += self._onViewReady

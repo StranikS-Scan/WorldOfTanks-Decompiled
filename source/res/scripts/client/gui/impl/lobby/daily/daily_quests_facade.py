@@ -6,6 +6,8 @@ from gui.impl.gen import R
 from gui.impl.lobby.daily import DailyTabs
 from gui.impl.lobby.daily.daily_quests_subview import DailyQuestsSubview
 from gui.impl.lobby.daily.daily_quests_tab_view import DailyQuestTabView, DailyQuestPremTabView
+from gui.impl.lobby.daily.serial_enter_tab_view import SerialEnterTabView
+from gui.impl.lobby.daily.serial_enter_view import SerialEnterView
 from gui.impl.lobby.daily.tooltips.mode_selector_tooltip import ModeSelectorTooltip
 from gui.server_events.events_helpers import isDailyRegularQuestsEnabled
 from skeletons.gui.game_control import IFunRandomController
@@ -15,19 +17,24 @@ from helpers import dependency
 DAILY_LAYOUT_ID = R.views.lobby.daily.DailyQuestsRegularView()
 DAILY_TAB_REGULAR_LAYOUT_ID = R.views.lobby.daily.DailyQuestRegularTabView()
 DAILY_TAB_PREMIUM_LAYOUT_ID = R.views.lobby.daily.DailyQuestPremiumTabView()
+SERIAL_ENTER_TAB_LAYOUT_ID = R.views.lobby.daily.SerialEnterTabView()
+SERIAL_ENTER_LAYOUT_ID = R.views.lobby.daily.SerialEnterView()
 
 class DailyQuestsFacade(object):
     eventsCache = dependency.descriptor(IEventsCache)
     itemsCache = dependency.descriptor(IItemsCache)
     __funRandomController = dependency.descriptor(IFunRandomController)
-    __slots__ = ('__dailySubView', '__tabs', '__tabsToSubview', '__battleTypes')
+    __slots__ = ('__dailySubView', '__serialEnterSubView', '__tabs', '__tabsToSubview', '__battleTypes')
 
     def __init__(self, parentView, *args, **kwargs):
         self.__dailySubView = DailyQuestsSubview(parentView, DAILY_LAYOUT_ID)
+        self.__serialEnterSubView = SerialEnterView(SERIAL_ENTER_LAYOUT_ID)
         self.__tabsToSubview = {DailyTabs.QUESTS: (self.__dailySubView, DAILY_LAYOUT_ID),
-         DailyTabs.PREMIUM: (self.__dailySubView, DAILY_LAYOUT_ID)}
+         DailyTabs.PREMIUM: (self.__dailySubView, DAILY_LAYOUT_ID),
+         DailyTabs.SERIAL: (self.__serialEnterSubView, SERIAL_ENTER_LAYOUT_ID)}
         self.__tabs = {DailyTabs.QUESTS: (DailyQuestTabView(), DAILY_TAB_REGULAR_LAYOUT_ID),
-         DailyTabs.PREMIUM: (DailyQuestPremTabView(), DAILY_TAB_PREMIUM_LAYOUT_ID)}
+         DailyTabs.PREMIUM: (DailyQuestPremTabView(), DAILY_TAB_PREMIUM_LAYOUT_ID),
+         DailyTabs.SERIAL: (SerialEnterTabView(), SERIAL_ENTER_TAB_LAYOUT_ID)}
         self.__battleTypes = None
         return
 

@@ -74,7 +74,6 @@
             <value>	False	</value>
           </condition-hint-showed>
           <global-active>	_HaveNewBadge	</global-active>
-          <global-inactive>	wtActive	</global-inactive>
         </condition-and>
       </condition>
     </hint>
@@ -99,7 +98,6 @@
             <value>	False	</value>
           </condition-hint-showed>
           <global-active>	_HaveNewSuffixBadge	</global-active>
-          <global-inactive>	wtActive	</global-inactive>
         </condition-and>
       </condition>
     </hint>
@@ -147,80 +145,6 @@
       </arrow>
       <equal-actions>	True	</equal-actions>
     </hint>
-    <hint>	BlueprintsSwitchButtonHint	  <item-id>	BlueprintsSwitchButton	</item-id>
-      <text>	_(#tutorial:blueprints/techtree/switchButton)	</text>
-      <arrow>
-        <direction>	R	</direction>
-        <loop>	True	</loop>
-      </arrow>
-      <checked-ui-state>
-        <simple-state>
-          <state>	enabled	</state>
-          <value>	True	</value>
-        </simple-state>
-      </checked-ui-state>
-      <condition>
-        <condition-and>
-          <condition-hint-showed>
-            <hint-id>	AccountButtonHint	</hint-id>
-            <value>	True	</value>
-          </condition-hint-showed>
-          <class-condition>	LimitedUIHintChecker	  <path>	gui.limited_ui.lui_tutorial_hints	</path>
-            <arguments>	blueprintsButton	</arguments>
-          </class-condition>
-        </condition-and>
-      </condition>
-      <update-runtime>	True	</update-runtime>
-      <ignore-outside-click>	True	</ignore-outside-click>
-    </hint>
-    <hint>	BlueprintsResearchButtonHint	  <item-id>	BlueprintsResearchButton	</item-id>
-      <text>	_(#tutorial:blueprints/research/blueprintButton)	</text>
-      <arrow>
-        <direction>	L	</direction>
-        <loop>	True	</loop>
-      </arrow>
-      <checked-ui-state>
-        <simple-state>
-          <state>	visible	</state>
-          <value>	True	</value>
-        </simple-state>
-        <simple-state>
-          <state>	enabled	</state>
-          <value>	True	</value>
-        </simple-state>
-      </checked-ui-state>
-      <condition>
-        <class-condition>	LimitedUIHintChecker	  <path>	gui.limited_ui.lui_tutorial_hints	</path>
-          <arguments>	blueprintsButton	</arguments>
-        </class-condition>
-      </condition>
-      <ignore-outside-click>	True	</ignore-outside-click>
-      <update-runtime>	True	</update-runtime>
-    </hint>
-    <hint>	BlueprintsResearchConvertButtonHint	  <item-id>	BlueprintsResearchConvertButton	</item-id>
-      <text>	_(#tutorial:blueprints/convertButton)	</text>
-      <arrow>
-        <direction>	R	</direction>
-        <loop>	True	</loop>
-      </arrow>
-      <checked-ui-state>
-        <simple-state>
-          <state>	enabled	</state>
-          <value>	True	</value>
-        </simple-state>
-      </checked-ui-state>
-      <condition>
-        <condition-and>
-          <condition-hint-showed>
-            <hint-id>	BlueprintsResearchButtonHint	</hint-id>
-            <value>	True	</value>
-          </condition-hint-showed>
-        </condition-and>
-      </condition>
-      <update-runtime>	True	</update-runtime>
-      <hide-immediately>	True	</hide-immediately>
-      <ignore-outside-click>	True	</ignore-outside-click>
-    </hint>
     <hint>	BlueprintScreenConvertFragmentHint	  <item-id>	BlueprintScreenConvertFragment	</item-id>
       <text>	_(#tutorial:blueprints/blueprintScreen/fragmentItem)	</text>
       <arrow>
@@ -265,7 +189,6 @@
             <hint-id>	DogTagProfileHint	</hint-id>
             <value>	False	</value>
           </condition-hint-showed>
-          <global-inactive>	wtActive	</global-inactive>
         </condition-and>
       </condition>
       <update-runtime>	True	</update-runtime>
@@ -295,50 +218,7 @@
             <arguments>	DogTagHangarHint	</arguments>
           </class-condition>
           <global-active>	_DogTagsEnabled	</global-active>
-          <global-inactive>	wtActive	</global-inactive>
         </condition-and>
-      </condition>
-    </hint>
-    <hint>	PersonalReservesHangarHint	  <item-id>	ReservesButton	</item-id>
-      <text>	_(#personal_reserves:hangarEntry/onlyOnceHint)	</text>
-      <arrow>
-        <direction>	B	</direction>
-        <loop>	True	</loop>
-      </arrow>
-      <checked-ui-state>
-        <simple-state>
-          <state>	enabled	</state>
-          <value>	True	</value>
-        </simple-state>
-      </checked-ui-state>
-      <update-runtime>	True	</update-runtime>
-      <ignore-outside-click>	True	</ignore-outside-click>
-      <condition>
-        <global-active>	_Personal_reserves_available	</global-active>
-        <class-condition>	LimitedUIHintChecker	  <path>	gui.limited_ui.lui_tutorial_hints	</path>
-          <arguments>	PersonalReservesHangarHint	</arguments>
-        </class-condition>
-      </condition>
-    </hint>
-    <hint>	PersonalReservesActivationHint	  <item-id>	PersonalReservesGroup	</item-id>
-      <text>	_(#personal_reserves:activation/onlyOnceHint)	</text>
-      <arrow>
-        <direction>	T	</direction>
-        <loop>	True	</loop>
-      </arrow>
-      <checked-ui-state>
-        <simple-state>
-          <state>	visible	</state>
-          <value>	True	</value>
-        </simple-state>
-      </checked-ui-state>
-      <update-runtime>	True	</update-runtime>
-      <ignore-outside-click>	True	</ignore-outside-click>
-      <condition>
-        <global-active>	_Personal_reserves_available	</global-active>
-        <class-condition>	LimitedUIHintChecker	  <path>	gui.limited_ui.lui_tutorial_hints	</path>
-          <arguments>	PersonalReservesHangarHint	</arguments>
-        </class-condition>
       </condition>
     </hint>
     <hint>	HangarManualHint	  <item-id>	LobbyMenuBnt	</item-id>
@@ -354,7 +234,6 @@
             <hint-id>	DogTagHangarHint	</hint-id>
             <value>	True	</value>
           </condition-hint-showed>
-          <global-inactive>	wtActive	</global-inactive>
         </condition-and>
       </condition>
       <checked-ui-state>
@@ -408,52 +287,6 @@
       </checked-ui-state>
       <update-runtime>	True	</update-runtime>
       <ignore-outside-click>	False	</ignore-outside-click>
-    </hint>
-    <hint>	SessionStatsOpenBtnHint	  <item-id>	SessionStatsOpenBtn	</item-id>
-      <text>	_(#tutorial:sessionStat/openBtn)	</text>
-      <arrow>
-        <direction>	L	</direction>
-        <loop>	True	</loop>
-      </arrow>
-      <checked-ui-state>
-        <simple-state>
-          <state>	enabled	</state>
-          <value>	True	</value>
-        </simple-state>
-        <simple-state>
-          <state>	visible	</state>
-          <value>	True	</value>
-        </simple-state>
-      </checked-ui-state>
-      <condition>
-        <condition-and>
-          <condition-hint-showed>
-            <hint-id>	SessionStatsSettingsBtnHint	</hint-id>
-            <value>	False	</value>
-          </condition-hint-showed>
-          <class-condition>	LimitedUIHintChecker	  <path>	gui.limited_ui.lui_tutorial_hints	</path>
-            <arguments>	sessionStats	</arguments>
-          </class-condition>
-        </condition-and>
-      </condition>
-      <update-runtime>	True	</update-runtime>
-      <ignore-outside-click>	True	</ignore-outside-click>
-    </hint>
-    <hint>	SessionStatsSettingsBtnHint	  <item-id>	SessionStatsSettingsBtn	</item-id>
-      <text>	_(#tutorial:sessionStat/settingsBtn)	</text>
-      <arrow>
-        <direction>	L	</direction>
-        <loop>	True	</loop>
-      </arrow>
-      <checked-ui-state>
-        <simple-state>
-          <state>	enabled	</state>
-          <value>	True	</value>
-        </simple-state>
-      </checked-ui-state>
-      <update-runtime>	True	</update-runtime>
-      <hide-immediately>	True	</hide-immediately>
-      <ignore-outside-click>	True	</ignore-outside-click>
     </hint>
     <hint>	CustomizationProgressionViewHint	  <item-id>	ProgressionEntryPoint	</item-id>
       <text>	_(#tutorial:customization/progression)	</text>
@@ -922,7 +755,7 @@
       <condition>
         <global-active>	_isPM3Enabled	</global-active>
         <global-inactive>	cosmicActive	</global-inactive>
-        <global-inactive>	wtActive	</global-inactive>
+        <global-inactive>	portalActive	</global-inactive>
         <class-condition>	LimitedUIHintChecker	  <path>	gui.limited_ui.lui_tutorial_hints	</path>
           <arguments>	NewCampaignHint	</arguments>
         </class-condition>
@@ -999,7 +832,7 @@
           <service>	IParagonsController	  <path>	skeletons.gui.game_control	</path>
           </service>
           <global-inactive>	cosmicActive	</global-inactive>
-          <global-inactive>	wtActive	</global-inactive>
+          <global-inactive>	portalActive	</global-inactive>
         </condition-and>
       </condition>
       <update-runtime>	True	</update-runtime>
@@ -1018,16 +851,6 @@
       </checked-ui-state>
       <update-runtime>	True	</update-runtime>
       <ignore-outside-click>	True	</ignore-outside-click>
-    </hint>
-    <hint>	AddEconomicDirectivesHint	  <item-id>	AddEconomicDirectivesHintNew	</item-id>
-      <text>	_(#tutorial:economicDirectives/new/hint)	</text>
-      <arrow>
-        <direction>	T	</direction>
-        <loop>	True	</loop>
-      </arrow>
-      <update-runtime>	True	</update-runtime>
-      <ignore-outside-click>	True	</ignore-outside-click>
-      <hide-immediately>	True	</hide-immediately>
     </hint>
     <hint>	Comp7SkillHint	  <item-id>	Comp7SkillHintNew	</item-id>
       <text>	_(#tutorial:comp7Skill/select/hint)	</text>

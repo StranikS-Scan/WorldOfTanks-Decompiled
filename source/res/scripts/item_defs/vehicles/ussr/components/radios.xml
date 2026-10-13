@@ -285,19 +285,6 @@
       <maxRegenHealth>	150	</maxRegenHealth>
       <repairCost>	3	</repairCost>
     </R113M_R253>
-    <R113M_WT>
-      <id>	1001	</id>
-      <userString>	#white_tiger.ussr_vehicles.extend:R113M_WT	</userString>
-      <tags></tags>
-      <level>	10	</level>
-      <price>	52200	</price>
-      <notInShop>	true	</notInShop>
-      <weight>	80	</weight>
-      <distance>	930	</distance>
-      <maxHealth>	200	</maxHealth>
-      <maxRegenHealth>	150	</maxRegenHealth>
-      <repairCost>	3	</repairCost>
-    </R113M_WT>
     <R113M_bob>
       <id>	31037	</id>
       <userString>	#ussr_vehicles:R113M	</userString>
@@ -428,6 +415,21 @@
       <maxRegenHealth>	150	</maxRegenHealth>
       <repairCost>	3	</repairCost>
     </R113_FL>
+    <R113_H>
+      <id>	20003	</id>
+      <userString>	#ussr_vehicles:R113_H	</userString>
+      <tags></tags>
+      <level>	3	</level>
+      <price>	0	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	100	</weight>
+      <distance>	2000	</distance>
+      <maxHealth>	200	</maxHealth>
+      <maxRegenHealth>	150	</maxRegenHealth>
+      <repairCost>	0	</repairCost>
+      <radarRadius>	450	</radarRadius>
+      <radarCooldown>	30	</radarCooldown>
+    </R113_H>
     <R113_IGR>
       <id>	60003	</id>
       <userString>	#igr_vehicles:R113_IGR	</userString>
@@ -910,19 +912,6 @@
       <maxRegenHealth>	75	</maxRegenHealth>
       <repairCost>	3.5	</repairCost>
     </_10RK-26_T>
-    <_10RK-26_W>
-      <id>	31049	</id>
-      <userString>	#white_tiger.ussr_vehicles.extend:_10RK-26_W	</userString>
-      <tags></tags>
-      <level>	10	</level>
-      <notInShop>	true	</notInShop>
-      <price>	51600	</price>
-      <weight>	160	</weight>
-      <distance>	720	</distance>
-      <maxHealth>	250	</maxHealth>
-      <maxRegenHealth>	75	</maxRegenHealth>
-      <repairCost>	3.5	</repairCost>
-    </_10RK-26_W>
     <_10RK-26_bob>
       <id>	31038	</id>
       <userString>	#ussr_vehicles:_10RK-26	</userString>
@@ -936,6 +925,19 @@
       <maxRegenHealth>	75	</maxRegenHealth>
       <repairCost>	3.5	</repairCost>
     </_10RK-26_bob>
+    <_10RK-26_cl>
+      <id>	31080	</id>
+      <userString>	#ussr_vehicles:_10RK-26	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <notInShop>	true	</notInShop>
+      <price>	51600	</price>
+      <weight>	160	</weight>
+      <distance>	720	</distance>
+      <maxHealth>	250	</maxHealth>
+      <maxRegenHealth>	75	</maxRegenHealth>
+      <repairCost>	3.5	</repairCost>
+    </_10RK-26_cl>
     <_10RK-26_fallout>
       <id>	205	</id>
       <userString>	#ussr_vehicles:_10RK-26_fallout	</userString>
@@ -1026,6 +1028,21 @@
       <maxRegenHealth>	125	</maxRegenHealth>
       <repairCost>	1.5	</repairCost>
     </_10RK_F>
+    <_10RK_H>
+      <id>	20001	</id>
+      <userString>	#ussr_vehicles:_10RK_H	</userString>
+      <tags></tags>
+      <level>	1	</level>
+      <price>	0	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	100	</weight>
+      <distance>	2000	</distance>
+      <maxHealth>	100	</maxHealth>
+      <maxRegenHealth>	60	</maxRegenHealth>
+      <repairCost>	0	</repairCost>
+      <radarRadius>	350	</radarRadius>
+      <radarCooldown>	30	</radarCooldown>
+    </_10RK_H>
     <_10RK_IGR>
       <id>	60001	</id>
       <userString>	#igr_vehicles:_10RK_IGR	</userString>
@@ -1399,6 +1416,21 @@
       <maxRegenHealth>	150	</maxRegenHealth>
       <repairCost>	3	</repairCost>
     </_12RT_FL>
+    <_12RT_H>
+      <id>	20002	</id>
+      <userString>	#ussr_vehicles:_12RT_H	</userString>
+      <tags></tags>
+      <level>	3	</level>
+      <price>	0	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	100	</weight>
+      <distance>	2000	</distance>
+      <maxHealth>	200	</maxHealth>
+      <maxRegenHealth>	150	</maxRegenHealth>
+      <repairCost>	0	</repairCost>
+      <radarRadius>	250	</radarRadius>
+      <radarCooldown>	20	</radarCooldown>
+    </_12RT_H>
     <_12RT_IGR>
       <id>	60002	</id>
       <userString>	#igr_vehicles:_12RT_IGR	</userString>
@@ -1605,6 +1637,19 @@
       <maxRegenHealth>	60	</maxRegenHealth>
       <repairCost>	1.5	</repairCost>
     </_9RM>
+    <_9RM_02>
+      <id>	31081	</id>
+      <userString>	#ussr_vehicles:_9RM_02	</userString>
+      <tags></tags>
+      <level>	8	</level>
+      <price>	20000	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	100	</weight>
+      <distance>	525	</distance>
+      <maxHealth>	120	</maxHealth>
+      <maxRegenHealth>	60	</maxRegenHealth>
+      <repairCost>	1.5	</repairCost>
+    </_9RM_02>
     <_9RM_122>
       <id>	31009	</id>
       <userString>	#ussr_vehicles:_9RM	</userString>

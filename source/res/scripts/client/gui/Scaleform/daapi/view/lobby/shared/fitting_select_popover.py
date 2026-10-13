@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/shared/fitting_select_popover.py
 import logging
 import typing
-from account_helpers.settings_core.ServerSettingsManager import UI_STORAGE_KEYS
+from account_helpers.settings_core.ServerSettingsManager import UI_STORAGE_KEYS, SETTINGS_SECTIONS
 from gui.Scaleform.daapi.view.meta.FittingSelectPopoverMeta import FittingSelectPopoverMeta
 from gui.Scaleform.daapi.view.lobby.shared.fitting_select.module_extenders import ModuleParamsExtender, fittingSelectModuleExtenders
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
@@ -277,19 +277,19 @@ class PopoverLogicProvider(object):
 
     def resetCounters(self):
         if self._needToResetAutoReload:
-            self._settingsCore.serverSettings.saveInUIStorage({UI_STORAGE_KEYS.AUTO_RELOAD_MARK_IS_SHOWN: True})
+            self._settingsCore.serverSettings.saveInUIStorage(SETTINGS_SECTIONS.UI_STORAGE, {UI_STORAGE_KEYS.AUTO_RELOAD_MARK_IS_SHOWN: True})
         if self._needToResetDualGun:
-            self._settingsCore.serverSettings.saveInUIStorage({UI_STORAGE_KEYS.DUAL_GUN_MARK_IS_SHOWN: True})
+            self._settingsCore.serverSettings.saveInUIStorage(SETTINGS_SECTIONS.UI_STORAGE, {UI_STORAGE_KEYS.DUAL_GUN_MARK_IS_SHOWN: True})
         if self._needToResetTurboshaft:
-            self._settingsCore.serverSettings.saveInUIStorage({UI_STORAGE_KEYS.TURBOSHAFT_MARK_IS_SHOWN: True})
+            self._settingsCore.serverSettings.saveInUIStorage(SETTINGS_SECTIONS.UI_STORAGE, {UI_STORAGE_KEYS.TURBOSHAFT_MARK_IS_SHOWN: True})
         if self._needToResetRocketAcceleration:
-            self._settingsCore.serverSettings.saveInUIStorage2({UI_STORAGE_KEYS.ROCKET_ACCELERATION_MARK_IS_SHOWN: True})
+            self._settingsCore.serverSettings.saveInUIStorage(SETTINGS_SECTIONS.UI_STORAGE_2, {UI_STORAGE_KEYS.ROCKET_ACCELERATION_MARK_IS_SHOWN: True})
         if self._needToResetDualAccuracy:
-            self._settingsCore.serverSettings.saveInUIStorage2({UI_STORAGE_KEYS.DUAL_ACCURACY_MARK_IS_SHOWN: True})
+            self._settingsCore.serverSettings.saveInUIStorage(SETTINGS_SECTIONS.UI_STORAGE_2, {UI_STORAGE_KEYS.DUAL_ACCURACY_MARK_IS_SHOWN: True})
         if self._needToResetAutoReloadDualGun:
-            self._settingsCore.serverSettings.saveInUIStorage2({UI_STORAGE_KEYS.AUTO_RELOAD_DUAL_GUN_MARK_IS_SHOWN: True})
+            self._settingsCore.serverSettings.saveInUIStorage(SETTINGS_SECTIONS.UI_STORAGE_2, {UI_STORAGE_KEYS.AUTO_RELOAD_DUAL_GUN_MARK_IS_SHOWN: True})
         if self._needToResetClipDualGun:
-            self._settingsCore.serverSettings.saveInUIStorage2({UI_STORAGE_KEYS.CLIP_DUAL_GUN_MARK_IS_SHOWN: True})
+            self._settingsCore.serverSettings.saveInUIStorage(SETTINGS_SECTIONS.UI_STORAGE_2, {UI_STORAGE_KEYS.CLIP_DUAL_GUN_MARK_IS_SHOWN: True})
 
     def _checkCounters(self, vehicleModule):
         if vehicleModule.itemTypeID == GUI_ITEM_TYPE.GUN:

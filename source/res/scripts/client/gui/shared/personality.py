@@ -376,10 +376,12 @@ def onRecreateDevice():
 def __runItemsCacheSync(_, callback=None):
     yield ServicesLocator.itemsCache.update(CACHE_SYNC_REASON.SHOW_GUI, notify=False)
     if not ServicesLocator.itemsCache.isSynced():
-        ServicesLocator.gameplay.goToLoginByError('#menu:disconnect/codes/0')
+        ServicesLocator.gameplay.goToLoginByError(None)
         callback(False)
         return
-    callback(True)
+    else:
+        callback(True)
+        return
 
 
 @adisp_process

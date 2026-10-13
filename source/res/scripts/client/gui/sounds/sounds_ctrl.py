@@ -63,9 +63,6 @@ class SoundsController(ISoundsController):
     def isSystemMixerVolumeDisabled(self):
         return self.__mixerVolume.isSystemMixerVolumeDisabled()
 
-    def fixSystemMixerVolume(self):
-        self.__mixerVolume.fixSystemMixerVolume()
-
     def markNeedInvAppMixerVolume(self):
         self.__mixerVolume.markNeedInvAppMixerVolume()
 

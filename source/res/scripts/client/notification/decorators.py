@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/notification/decorators.py
+from datetime import datetime
 import typing
 import BigWorld
 from CurrentVehicle import g_currentVehicle
@@ -31,7 +32,7 @@ from items import makeIntCompactDescrByID
 from items.components.c11n_constants import CustomizationType
 from messenger import g_settings
 from messenger.formatters.users_messages import makeFriendshipRequestText
-from messenger.m_constants import PROTO_TYPE
+from messenger.m_constants import PROTO_TYPE, GFNotificationTemplates
 from messenger.proto import proto_getter
 from messenger.proto.xmpp.xmpp_constants import XMPP_ITEM_TYPE
 from notification.settings import NOTIFICATION_BUTTON_STATE, NOTIFICATION_TYPE, makePathToIcon
@@ -40,7 +41,6 @@ from skeletons.gui.game_control import IBattlePassController, ICollectionsSystem
 from skeletons.gui.impl import IGuiLoader
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.web import IWebController
-from skeletons.gui.game_control import IWhiteTigerController
 if typing.TYPE_CHECKING:
     from gui.shared.events import LoadViewEvent
 
@@ -332,7 +332,6 @@ class LockButtonMessageDecorator(MessageDecorator):
 
 class C11nMessageDecorator(LockButtonMessageDecorator):
     itemsCache = dependency.descriptor(IItemsCache)
-    __gameEventCtrl = dependency.descriptor(IWhiteTigerController)
 
     def __init__(self, entityID, entity=None, settings=None, model=None):
         super(C11nMessageDecorator, self).__init__(entityID, entity, settings, model)
@@ -357,7 +356,7 @@ class C11nMessageDecorator(LockButtonMessageDecorator):
     def _getIsLocked(self):
         isLocked = True
         vehicle = self._getVehicle()
-        if not currentHangarIsBattleRoyale() and not self.__gameEventCtrl.isEventPrbActive() and vehicle is not None and vehicle.isCustomizationEnabled():
+        if not currentHangarIsBattleRoyale() and vehicle is not None and vehicle.isCustomizationEnabled():
             isLocked = self._entity.get('savedData', {}).get('toStyle', False) and not isVehicleCanBeCustomized(vehicle, GUI_ITEM_TYPE.STYLE)
         return isLocked
 
@@ -1596,3 +1595,31 @@ class BattleMattersAwardsDecorator(MessageDecorator):
         if finalQuest and getIdxFromQuestID(finalQuest.getID()) == self.__questIdx:
             return NOTIFICATION_BUTTON_STATE.HIDDEN
         return NOTIFICATION_BUTTON_STATE.DEFAULT if not self.__battleMattersController.isFinished() else NOTIFICATION_BUTTON_STATE.VISIBLE
+
+
+class ParagonsCoinsCustomMessageDecorator(MessageDecorator):
+    _VIEW_TIMEOUT = 6000
+    _TEMPLATE = GFNotificationTemplates.CUSTOM_PARAGONS_COINS_NOTIFICATION
+
+    def __init__(self, entityID, count, isParagonsEntryPointAvailable, model=None):
+        self.__count = count
+        self.__isParagonsEntryPointAvailable = isParagonsEntryPointAvailable
+        entity = self.__makeEntity()
+        settings = NotificationGuiSettings(isNotify=True, priorityLevel=NotificationPriorityLevel.MEDIUM, lifeTime=self._VIEW_TIMEOUT, groupID=NotificationGroup.OFFER)
+        super(ParagonsCoinsCustomMessageDecorator, self).__init__(entityID, entity, settings, model=model)
+
+    def getType(self):
+        return NOTIFICATION_TYPE.PARAGONS_COINS
+
+    def __makeEntity(self):
+        self.__updatedTime = datetime.utcnow()
+        return g_settings.msgTemplates.format(self._TEMPLATE, data={'linkageData': {'count': self.__count,
+                         'isParagonsEntryPointAvailable': self.__isParagonsEntryPointAvailable}})
+
+    def updateCount(self, count):
+        self.__count = count
+        self._entity = self.__makeEntity()
+
+    def updateAvailability(self, isParagonsEntryPointAvailable):
+        self.__isParagonsEntryPointAvailable = isParagonsEntryPointAvailable
+        self._entity = self.__makeEntity()

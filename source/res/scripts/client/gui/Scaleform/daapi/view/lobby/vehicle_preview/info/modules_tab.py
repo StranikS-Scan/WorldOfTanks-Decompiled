@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/vehicle_preview/info/modules_tab.py
 from CurrentVehicle import g_currentPreviewVehicle
-from account_helpers.settings_core.ServerSettingsManager import SETTINGS_SECTIONS
+from account_helpers.settings_core.ServerSettingsManager import UI_STORAGES
 from gui.Scaleform.daapi.view.lobby.shared.fitting_slot_vo import FittingSlotVO
 from gui.impl import backport
 from gui.impl.gen import R
@@ -130,8 +130,9 @@ class ModulesPanel(ModulesPanelMeta):
         return
 
     def __onSettingsChanged(self, diff):
-        if SETTINGS_SECTIONS.UI_STORAGE in diff or SETTINGS_SECTIONS.UI_STORAGE_2 in diff:
-            self._update()
+        for storage in UI_STORAGES:
+            if storage in diff:
+                self._update()
 
 
 def _makeStatusText(textRes, iconRes, style):

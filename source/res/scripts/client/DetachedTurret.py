@@ -144,13 +144,13 @@ class DetachedTurret(BigWorld.Entity, ScriptGameObject):
             surfaceMaterial = calcSurfaceMaterialNearPoint(point, normal, self.spaceID)
             effectIdx = surfaceMaterial.effectIdx
             groundEffect = True
-            distToWater = BigWorld.collideWater(self.position, surfaceMaterial.point)
+            distToWater, matKind = BigWorld.collideWaterMatKind(self.position, surfaceMaterial.point)
             collisionPointDest = surfaceMaterial.point - self.position
             if distToWater != -1 and distToWater <= collisionPointDest.length:
                 vel = Math.Vector3(self.velocity).length
                 if vel < _MIN_COLLISION_SPEED:
                     groundEffect = False
-                effectIdx = material_kinds.EFFECT_MATERIAL_INDEXES_BY_NAMES['water']
+                effectIdx = material_kinds.EFFECT_MATERIAL_INDEXES_BY_IDS[matKind]
             self.__detachmentEffects.notifyAboutCollision(energy, point, effectIdx, groundEffect, self.isUnderWater)
         return
 

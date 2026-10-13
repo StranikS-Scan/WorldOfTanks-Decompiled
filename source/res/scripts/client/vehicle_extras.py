@@ -5,7 +5,6 @@ from functools import partial
 from vehicle_systems.stricted_loading import makeCallbackWeak
 import BigWorld
 import Math
-import material_kinds
 import AnimationSequence
 from debug_utils import LOG_CODEPOINT_WARNING, LOG_CURRENT_EXCEPTION
 from gui.impl import backport
@@ -130,10 +129,10 @@ class ShowShooting(EntityExtra):
             centerToGun.normalise()
             gunHeight = centerToGunDist * centerToGun.dot(upVec) / upVec.y
             gunPos.y -= gunHeight
-        distanceToWater = BigWorld.collideWater(gunPos, gunPos + Math.Vector3(0, 1, 0), False)
+        distanceToWater, waterMatKind = BigWorld.collideWaterMatKind(gunPos, gunPos + Math.Vector3(0, 1, 0), False)
         if distanceToWater > -1:
             position = gunPos - Math.Vector3(0, distanceToWater, 0)
-            matKind = material_kinds.getWaterMatKind()
+            matKind = waterMatKind
         else:
             testRes = BigWorld.collideSegment(BigWorld.player().spaceID, gunPos + Math.Vector3(0, 0.5, 0), gunPos - Math.Vector3(0, 1.5, 0), 128)
             if testRes is None:

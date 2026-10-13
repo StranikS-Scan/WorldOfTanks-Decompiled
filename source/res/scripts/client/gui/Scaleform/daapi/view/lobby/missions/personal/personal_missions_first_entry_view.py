@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/missions/personal/personal_missions_first_entry_view.py
+from account_helpers.settings_core.ServerSettingsManager import SETTINGS_SECTIONS
 from adisp import adisp_process
 from gui import GUI_SETTINGS
 from gui.Scaleform.daapi import LobbySubView
@@ -43,7 +44,7 @@ class PersonalMissionFirstEntryView(LobbySubView, PersonalMissionFirstEntryViewM
 
     def onViewClose(self, isAcceptBtnClick=False):
         if isAcceptBtnClick:
-            self.__settingsCore.serverSettings.saveInUIStorage({PM_TUTOR_FIELDS.GREETING_SCREEN_SHOWN: True})
+            self.__settingsCore.serverSettings.saveInUIStorage(SETTINGS_SECTIONS.UI_STORAGE, {PM_TUTOR_FIELDS.GREETING_SCREEN_SHOWN: True})
             self.backBtnClicked()
         else:
             self.fireEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.LOBBY_HANGAR)), scope=EVENT_BUS_SCOPE.LOBBY)
@@ -60,7 +61,7 @@ class PersonalMissionFirstEntryView(LobbySubView, PersonalMissionFirstEntryViewM
     def _populate(self):
         super(PersonalMissionFirstEntryView, self)._populate()
         infoBlocks = [ self.__makeTileData(cardIndex) for cardIndex in xrange(0, self.__cardsLen) ]
-        firstEntry = not self.__settingsCore.serverSettings.getUIStorage().get(PM_TUTOR_FIELDS.GREETING_SCREEN_SHOWN)
+        firstEntry = not self.__settingsCore.serverSettings.getUIStorage(SETTINGS_SECTIONS.UI_STORAGE).get(PM_TUTOR_FIELDS.GREETING_SCREEN_SHOWN)
         self.as_setInitDataS({'titleLabel': PERSONAL_MISSIONS.PERSONALMISSIONFIRSTENTRYVIEW_TITLE,
          'bigBtnLabel': PERSONAL_MISSIONS.PERSONALMISSIONFIRSTENTRYVIEW_ACKNOWLEDGEBTN,
          'playVideoBtnLabel': text_styles.concatStylesToSingleLine(icons.makeImageTag(RES_ICONS.MAPS_ICONS_PERSONALMISSIONS_PLAYICON, width=14, height=15, vSpace=-2), i18n.makeString(PERSONAL_MISSIONS.PERSONALMISSIONFIRSTENTRYVIEW_VIDEOBTNLABEL)),

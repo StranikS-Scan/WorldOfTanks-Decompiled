@@ -7,9 +7,11 @@ import TriggersManager
 from TriggersManager import TRIGGER_TYPE
 import FlockManager
 import items
+from debug_utils import LOG_ERROR
 from vehicle_systems.tankStructure import TankPartNames, ColliderTypes
 from helpers import gEffectsDisabled
 from helpers.trajectory_drawer import TrajectoryDrawer
+from material_kinds import EFFECT_MATERIAL_NAME_BY_ID
 
 def ownVehicleGunShotPositionGetter():
     ownVehicle = BigWorld.entities.get(BigWorld.player().playerVehicleID, None)
@@ -183,22 +185,30 @@ class ProjectileMover(object):
         effectTypeStr = proj.get('effectMaterial', '') + 'Hit'
         p0 = Math.Vector3(position.x, 1000, position.z)
         p1 = Math.Vector3(position.x, -1000, position.z)
-        waterDist = BigWorld.collideWater(p0, p1, False)
+        waterDist, matKind = BigWorld.collideWaterMatKind(p0, p1, False)
         if waterDist > 0:
             waterY = p0.y - waterDist
             testRes = BigWorld.collideSegment(BigWorld.player().spaceID, p0, p1, 128)
             staticY = testRes.closestPoint.y if testRes is not None else waterY
             if staticY < waterY and position.y - waterY <= 0.1:
                 shallowWaterDepth, rippleDiameter = proj['effectsDescr']['waterParams']
+                if matKind not in EFFECT_MATERIAL_NAME_BY_ID:
+                    LOG_ERROR('There is no matKind %d in the effect materials map' % matKind)
+                    return
+                matKindName = EFFECT_MATERIAL_NAME_BY_ID[matKind].title()
                 if waterY - staticY < shallowWaterDepth:
-                    effectTypeStr = 'shallowWaterHit'
+                    effectTypeStr = 'shallow' + matKindName + 'Hit'
                 else:
-                    effectTypeStr = 'deepWaterHit'
+                    effectTypeStr = 'deep' + matKindName + 'Hit'
                 position = Math.Vector3(position.x, waterY, position.z)
                 self.__addWaterRipples(position, rippleDiameter, 5)
-        keyPoints, effects, _ = proj['effectsDescr'][effectTypeStr]
-        BigWorld.player().terrainEffects.addNew(position, effects, keyPoints, None, dir=velocityDir, start=position + velocityDir.scale(-1.0), end=position + velocityDir.scale(1.0), attackerID=proj['attackerID'])
-        return
+        if effectTypeStr not in proj['effectsDescr']:
+            LOG_ERROR('There is no effect type %s in the effects descr' % effectTypeStr)
+            return
+        else:
+            keyPoints, effects, _ = proj['effectsDescr'][effectTypeStr]
+            BigWorld.player().terrainEffects.addNew(position, effects, keyPoints, None, dir=velocityDir, start=position + velocityDir.scale(-1.0), end=position + velocityDir.scale(1.0), attackerID=proj['attackerID'])
+            return
 
     def __killProjectile(self, shotID, position, impactVelDir, deathType, explode):
         proj = self.__projectiles.get(shotID)

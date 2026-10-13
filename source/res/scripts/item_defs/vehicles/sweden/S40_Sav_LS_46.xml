@@ -3100,6 +3100,30 @@
           </hitTester>
           <effects>	shot_large	</effects>
           <edgeByVisualModel>	false	</edgeByVisualModel>
+          <drivenJoints>
+            <master>
+              <node>	turret	</node>
+              <pitch>
+                <row>	0	</row>
+              </pitch>
+              <yaw>
+                <row>	-20	</row>
+                <row>	20	</row>
+              </yaw>
+              <slaves>
+                <slave>
+                  <node>	static_joint	</node>
+                  <pitch>
+                    <row>	0	</row>
+                  </pitch>
+                  <yaw>
+                    <row>	20	</row>
+                    <row>	-20	</row>
+                  </yaw>
+                </slave>
+              </slaves>
+            </master>
+          </drivenJoints>
           <camouflage>
             <tiling>	6.9 6.9 -1.5 -1.5	</tiling>
             <density>	115.642242 116.011497	</density>
@@ -3180,6 +3204,30 @@
           </hitTester>
           <effects>	shot_huge	</effects>
           <edgeByVisualModel>	false	</edgeByVisualModel>
+          <drivenJoints>
+            <master>
+              <node>	turret	</node>
+              <pitch>
+                <row>	0	</row>
+              </pitch>
+              <yaw>
+                <row>	-20	</row>
+                <row>	20	</row>
+              </yaw>
+              <slaves>
+                <slave>
+                  <node>	static_joint	</node>
+                  <pitch>
+                    <row>	0	</row>
+                  </pitch>
+                  <yaw>
+                    <row>	20	</row>
+                    <row>	-20	</row>
+                  </yaw>
+                </slave>
+              </slaves>
+            </master>
+          </drivenJoints>
           <camouflage>
             <tiling>	6.9 6.9 -1.5 -1.5	</tiling>
             <density>	123.304955 123.383659	</density>

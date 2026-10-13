@@ -11,7 +11,7 @@ from gui.Scaleform.daapi.view.meta.DailyQuestMeta import DailyQuestMeta
 from gui.Scaleform.managers import UtilsManager
 from helpers import dependency
 from helpers.CallbackDelayer import CallbackDelayer
-from skeletons.gui.game_control import IPromoController, ILimitedUIController
+from skeletons.gui.game_control import IPromoController, ILimitedUIController, ISessionProgressRewardsController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 
@@ -20,6 +20,7 @@ class DailyQuestWidget(InjectComponentAdaptor, DailyQuestMeta, IGlobalListener):
     eventsCache = dependency.descriptor(IEventsCache)
     promoController = dependency.descriptor(IPromoController)
     limitedUIController = dependency.descriptor(ILimitedUIController)
+    __sessionProgressRewardsController = dependency.descriptor(ISessionProgressRewardsController)
     __layout = 0
 
     def updateWidgetLayout(self, value):
@@ -102,7 +103,10 @@ class DailyQuestWidget(InjectComponentAdaptor, DailyQuestMeta, IGlobalListener):
         self.as_setEnabledS(isEnabled)
 
     def __shouldHide(self):
-        return self.promoController.isTeaserOpen() or not self._isQueueEnabled() or not self.isLimitedUiRuleCompleted() or not isDailyQuestsEnable()
+        return self.promoController.isTeaserOpen() or not self._isQueueEnabled() or not self.isLimitedUiRuleCompleted() or not self.__hasAnyQuestToShow()
+
+    def __hasAnyQuestToShow(self):
+        return isDailyQuestsEnable() or self.__sessionProgressRewardsController.isAvailable
 
     def __onServerSettingsChanged(self, diff):
         if DAILY_QUESTS_CONFIG in diff:
@@ -122,6 +126,7 @@ class DailyQuestWidget(InjectComponentAdaptor, DailyQuestMeta, IGlobalListener):
         self.startGlobalListening()
         self.lobbyContext.getServerSettings().onServerSettingsChange += self.__onServerSettingsChanged
         self.eventsCache.onSyncCompleted += self.__onSyncCompleted
+        self.__sessionProgressRewardsController.onDataUpdated += self.__showOrHide
         self.promoController.onTeaserShown += self.__onTeaserShown
         self.promoController.onTeaserClosed += self.__onTeaserClosed
         self.limitedUIController.startObserve(LuiRules.DAILY_MISSIONS, self.__updateDailyMissionVisibility)
@@ -130,6 +135,7 @@ class DailyQuestWidget(InjectComponentAdaptor, DailyQuestMeta, IGlobalListener):
         self.stopGlobalListening()
         self.lobbyContext.getServerSettings().onServerSettingsChange -= self.__onServerSettingsChanged
         self.eventsCache.onSyncCompleted -= self.__onSyncCompleted
+        self.__sessionProgressRewardsController.onDataUpdated -= self.__showOrHide
         self.promoController.onTeaserShown -= self.__onTeaserShown
         self.promoController.onTeaserClosed -= self.__onTeaserClosed
         self.limitedUIController.stopObserve(LuiRules.DAILY_MISSIONS, self.__updateDailyMissionVisibility)

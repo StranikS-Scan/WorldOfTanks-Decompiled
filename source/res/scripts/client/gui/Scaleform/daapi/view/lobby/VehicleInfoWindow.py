@@ -64,7 +64,8 @@ def _highlightsMap(settings, vehicle=None):
        DUAL_ACCURACY_COOLING_DELAY,
        CLIP_FIRE_RATE,
        RELOAD_TIME_SECS_PROP_NAME,
-       DUAL_GUN_CHARGE_TIME), _Highlight(lambda : vehicle.descriptor.hasDualAccuracy and vehicle.descriptor.isDualgunVehicle and settings.checkDualGunDualAccuracyHighlights(increase=True))))
+       DUAL_GUN_CHARGE_TIME), _Highlight(lambda : vehicle.descriptor.hasDualAccuracy and vehicle.descriptor.isDualgunVehicle and settings.checkDualGunDualAccuracyHighlights(increase=True))),
+     ((SHOT_DISPERSION_ANGLE, DUAL_ACCURACY_COOLING_DELAY, CLIP_FIRE_RATE), _Highlight(lambda : vehicle.descriptor.isClipGun and vehicle.descriptor.hasDualAccuracy and settings.checkClipGunDualAccuracyHighlights(increase=True))))
     mapping = [ zip(params, [highlight] * len(params)) for params, highlight in config ]
     return dict([ item for sub in mapping for item in sub ])
 

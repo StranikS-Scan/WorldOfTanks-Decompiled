@@ -609,10 +609,6 @@ class _LeaderboardDataProvider(object):
             myInfo = yield self.__eventsController.getMyLeaderboardInfo(self.__EVENT_ID, self.__LEADERBOARD_ID, showNotification=False)
             if myInfo is not None:
                 position = myInfo.getRank()
-                if position is not None:
-                    yield self.__invalidateMetaData()
-                    if position > self.__recordsCount:
-                        position = None
                 self.__cachedOwnData = self._OwnData(True, position, myInfo.getP2(), myInfo.getBattlesCount())
                 callback(self.__cachedOwnData)
             else:

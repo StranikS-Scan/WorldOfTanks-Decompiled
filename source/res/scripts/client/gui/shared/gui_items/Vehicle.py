@@ -17,6 +17,7 @@ from collector_vehicle import CollectorVehicleConsts
 from constants import WIN_XP_FACTOR_MODE, RentType
 from gui import GUI_SETTINGS
 from gui import makeHtmlString
+from gui.Scaleform.genConsts.FITTING_TYPES import FITTING_TYPES
 from gui.Scaleform.genConsts.STORE_CONSTANTS import STORE_CONSTANTS
 from gui.Scaleform.locale.ITEM_TYPES import ITEM_TYPES
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
@@ -47,7 +48,7 @@ from post_progression_common import TankSetupGroupsId
 from rent_common import parseRentID
 from shared_utils import findFirst, CONST_CONTAINER
 from skeletons.gui.customization import ICustomizationService
-from skeletons.gui.game_control import IIGRController, IRentalsController, IVehiclePostProgressionController, ITradeInController, IWotPlusController, IEarlyAccessController, IParagonsController, IWhiteTigerController
+from skeletons.gui.game_control import IIGRController, IRentalsController, IVehiclePostProgressionController, ITradeInController, IWotPlusController, IEarlyAccessController, IParagonsController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
@@ -177,6 +178,7 @@ class VEHICLE_TAGS(CONST_CONTAINER):
     HIDDEN = 'hidden_in_hangar'
     RESTORE_WITH_STYLE = 'restoreWithStyle'
     BUILTIN_STYLE = 'builtinStyle'
+    PORTAL = 'portal'
 
 
 DISCLAIMER_TAGS = frozenset((VEHICLE_TAGS.T34_DISCLAIMER,))
@@ -213,12 +215,8 @@ class Vehicle(FittingItem):
         UNSUITABLE_TO_UNIT = 'unsuitableToUnit'
         TEMP_UNAVAILABLE = 'tempUnavailable'
         WILL_BE_UNLOCKED_IN_BATTLE = 'willBeUnlockedInBattle'
-        TICKETS_SHORTAGE = 'ticketsShortage'
-        CUSTOM = (UNSUITABLE_TO_QUEUE,
-         UNSUITABLE_TO_UNIT,
-         WILL_BE_UNLOCKED_IN_BATTLE,
-         TICKETS_SHORTAGE)
-        UNSUITABLE = (UNSUITABLE_TO_QUEUE, UNSUITABLE_TO_UNIT, TICKETS_SHORTAGE)
+        CUSTOM = (UNSUITABLE_TO_QUEUE, UNSUITABLE_TO_UNIT, WILL_BE_UNLOCKED_IN_BATTLE)
+        UNSUITABLE = (UNSUITABLE_TO_QUEUE, UNSUITABLE_TO_UNIT)
         DEAL_IS_OVER = 'dealIsOver'
         ROTATION_GROUP_UNLOCKED = 'rotationGroupUnlocked'
         ROTATION_GROUP_LOCKED = 'rotationGroupLocked'
@@ -267,7 +265,6 @@ class Vehicle(FittingItem):
     __earlyAccessController = dependency.descriptor(IEarlyAccessController)
     __paragonsController = dependency.descriptor(IParagonsController)
     tradeInCtrl = dependency.descriptor(ITradeInController)
-    __wtController = dependency.descriptor(IWhiteTigerController)
 
     def __init__(self, strCompactDescr=None, inventoryID=-1, typeCompDescr=None, proxy=None, extData=None, invData=None):
         self.__postProgressionCtrl.processVehExtData(getVehicleType(typeCompDescr or strCompactDescr), extData)
@@ -374,6 +371,10 @@ class Vehicle(FittingItem):
 
     def __deepcopy__(self, memo=None):
         raise SoftException('Deep copy of GUI Vehicle is not supported')
+
+    @property
+    def fittingType(self):
+        return FITTING_TYPES.VEHICLE
 
     def initCrew(self):
         defaultCrew = [None] * len(self._descriptor.type.crewRoles)
@@ -1519,8 +1520,8 @@ class Vehicle(FittingItem):
         return checkForTags(self.tags, VEHICLE_TAGS.EARN_CRYSTALS)
 
     @property
-    def isWtBossMainVehicle(self):
-        return self.intCD == self.__wtController.getWtBossMainVehicleIntCD() if self.__wtController.isAvailable() else False
+    def isOnlyForPortalBattlesVehicle(self):
+        return checkForTags(self.tags, VEHICLE_TAGS.PORTAL)
 
     def getCrystalsEarnedInfo(self):
         limit = 0
@@ -1551,11 +1552,6 @@ class Vehicle(FittingItem):
         if result:
             result = not self.isBroken and self.isCrewFull and not self.isDisabledInPremIGR and not self.isInBattle and not self.isRotationGroupLocked and not self.isDisabled
         return result
-
-    @property
-    def isUnsuitableToQueue(self):
-        state, _ = self.getState()
-        return state == self.VEHICLE_STATE.UNSUITABLE_TO_QUEUE
 
     @property
     def isReadyToFight(self):
@@ -2193,10 +2189,6 @@ def getUserName(vehicleType, textPrefix=False):
 
 def getShortUserName(vehicleType, textPrefix=False):
     return _getActualName(vehicleType.shortUserString, vehicleType.tags, textPrefix)
-
-
-def getSimpleShortUserName(vehicleType):
-    return vehicleType.descriptor.type.shortUserString
 
 
 def _getActualName(name, tags, textPrefix=False):

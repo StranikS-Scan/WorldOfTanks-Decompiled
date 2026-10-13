@@ -7,7 +7,7 @@ from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.crew.tooltips.crew_perks_additional_tooltip_model import CrewPerksAdditionalTooltipModel
 from gui.impl.pub import ViewImpl
 from gui.shared.gui_items.Tankman import getTankmanSkill
-from gui.shared.tooltips.advanced import SKILL_MOVIES
+from gui.shared.tooltips.advanced.data.advanced_constants import SKILL_MOVIES
 from helpers import dependency
 from skeletons.gui.shared import IItemsCache
 if typing.TYPE_CHECKING:

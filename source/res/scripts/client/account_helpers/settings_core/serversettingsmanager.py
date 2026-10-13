@@ -4,7 +4,7 @@ import weakref
 from collections import namedtuple
 from account_helpers.settings_core import settings_constants, longToInt32
 from account_helpers.settings_core.migrations import migrateToVersion
-from account_helpers.settings_core.settings_constants import VERSION, GuiSettingsBehavior, OnceOnlyHints, SPGAim, CONTOUR, NewYearStorageKeys, WTLootBoxesViewedKeys
+from account_helpers.settings_core.settings_constants import VERSION, GuiSettingsBehavior, OnceOnlyHints, SPGAim, CONTOUR, NewYearStorageKeys
 from adisp import adisp_process, adisp_async
 from debug_utils import LOG_ERROR, LOG_DEBUG
 from gui.battle_pass.battle_pass_helpers import updateBattlePassSettings
@@ -63,6 +63,7 @@ class SETTINGS_SECTIONS(CONST_CONTAINER):
     QUESTS_PROGRESS = 'QUESTS_PROGRESS'
     UI_STORAGE = 'UI_STORAGE'
     UI_STORAGE_2 = 'UI_STORAGE_2'
+    UI_STORAGE_3 = 'UI_STORAGE_3'
     BATTLE_MATTERS_QUESTS = 'BATTLE_MATTERS_QUESTS'
     SESSION_STATS = 'SESSION_STATS'
     BATTLE_PASS_STORAGE = 'BATTLE_PASS_STORAGE'
@@ -82,7 +83,6 @@ class SETTINGS_SECTIONS(CONST_CONTAINER):
     BATTLE_CONTEXT_HINTS_GROUP = (BATTLE_CONTEXT_HINTS, BATTLE_CONTEXT_HINTS_2, BATTLE_CONTEXT_HINTS_3)
     ONCE_ONLY_HINTS_GROUP = (ONCE_ONLY_HINTS, ONCE_ONLY_HINTS_2, ONCE_ONLY_HINTS_3)
     LIMITED_UI_GROUP = (LIMITED_UI_1, LIMITED_UI_2)
-    LOOT_BOX_VIEWED = 'LOOT_BOX_VIEWED'
 
 
 class UI_STORAGE_KEYS(CONST_CONTAINER):
@@ -116,6 +116,7 @@ class UI_STORAGE_KEYS(CONST_CONTAINER):
     CLIP_DUAL_GUN_MARK_IS_SHOWN = 'clip_dual_gun_mark_is_shown'
     DUAL_GUN_DUAL_ACCURACY_HIGHLIGHTS_COUNTER = 'dual_gun_dual_accuracy_highlights_count'
     TANK_ACADEMY_WELCOME_SCREEN_SHOWN = 'tank_academy_welcome_screen_shown'
+    CLIP_GUN_DUAL_ACCURACY_HIGHLIGHTS_COUNTER = 'clip_gun_dual_accuracy_highlights_count'
 
 
 class BATTLE_MATTERS_KEYS(CONST_CONTAINER):
@@ -152,6 +153,8 @@ class BATTLE_CONTEXT_HINTS(CONST_CONTAINER):
     AMMO_TYPE_AVAILABLE = 'AmmoTypeAvailable'
     AMMO_TYPE_SWITCH = 'AmmoTypeSwitch'
 
+
+UI_STORAGES = [SETTINGS_SECTIONS.UI_STORAGE, SETTINGS_SECTIONS.UI_STORAGE_2, SETTINGS_SECTIONS.UI_STORAGE_3]
 
 class ServerSettingsManager(object):
     settingsCache = dependency.descriptor(ISettingsCache)
@@ -523,17 +526,12 @@ class ServerSettingsManager(object):
                                          OnceOnlyHints.HAVE_NEW_SUFFIX_BADGE_HINT: 9,
                                          OnceOnlyHints.BADGE_PAGE_NEW_SUFFIX_BADGE_HINT: 10,
                                          OnceOnlyHints.C11N_AUTOPROLONGATION_HINT: 11,
-                                         OnceOnlyHints.BLUEPRINTS_SWITCHBUTTON_HINT: 12,
-                                         OnceOnlyHints.BLUEPRINTS_RESEARCH_BUTTON_HINT: 13,
                                          OnceOnlyHints.BLUEPRINTS_TECHTREE_CONVERT_BUTTON_HINT: 14,
-                                         OnceOnlyHints.BLUEPRINTS_RESEARCH_CONVERT_BUTTON_HINT: 15,
                                          OnceOnlyHints.BLUEPRINT_SCREEN_CONVERT_FRAGMENT_HINT: 16,
                                          OnceOnlyHints.ACCOUNT_BUTTON_HINT: 17,
-                                         OnceOnlyHints.SESSION_STATS_OPEN_BTN_HINT: 18,
                                          OnceOnlyHints.BATTLE_SESSION_UP_BUTTON_TOURNAMENT_HINT: 19,
                                          OnceOnlyHints.CREW_OPERATION_BTN_HINT: 20,
                                          OnceOnlyHints.SOUND_BUTTONEX_HINT: 21,
-                                         OnceOnlyHints.SESSION_STATS_SETTINGS_BTN_HINT: 22,
                                          OnceOnlyHints.VEHICLE_PREVIEW_MODULES_BUTTON_HINT: 23,
                                          OnceOnlyHints.C11N_EDITABLE_STYLES_HINT: 24,
                                          OnceOnlyHints.C11N_PROGRESSION_REQUIRED_STYLES_HINT: 25,
@@ -568,8 +566,6 @@ class ServerSettingsManager(object):
                                            OnceOnlyHints.APPLY_ABILITIES_TO_TYPE_CHECKBOX_HINT: 24,
                                            OnceOnlyHints.BATTLE_MATTERS_FIGHT_BUTTON_HINT: 25,
                                            OnceOnlyHints.BATTLE_MATTERS_ENTRY_POINT_BUTTON_HINT: 26,
-                                           OnceOnlyHints.PERSONAL_RESERVES_HANGAR_HINT: 27,
-                                           OnceOnlyHints.PERSONAL_RESERVES_ACTIVATION_HINT: 28,
                                            OnceOnlyHints.AMMUNITION_FILTER_HINT: 29,
                                            OnceOnlyHints.SUMMARY_CUSTOMIZATION_BUTTON_HINT: 30}, offsets={}),
      SETTINGS_SECTIONS.ONCE_ONLY_HINTS_3: Section(masks={OnceOnlyHints.BATTLE_SELECTOR_BAR_AI_HINT: 2,
@@ -580,7 +576,6 @@ class ServerSettingsManager(object):
                                            OnceOnlyHints.PARAGONS_ENTRY_POINT_HINT: 7,
                                            OnceOnlyHints.PARAGONS_RESEARCH_BUTTON_HINT: 8,
                                            OnceOnlyHints.BIRTHDAY_POSTBATTLE_TEAM_STATS_TAB_HINT: 9,
-                                           OnceOnlyHints.ADD_ECONOMIC_DIRECTIVES_HINT: 10,
                                            OnceOnlyHints.EPIC_SUPPLY_INFO_HINT: 11,
                                            OnceOnlyHints.COMP7_SKILL_HINT: 12,
                                            OnceOnlyHints.TANK_ACADEMY_FIGHT_BUTTON_HINT: 13,
@@ -616,8 +611,7 @@ class ServerSettingsManager(object):
                                        BATTLE_EVENTS.RECEIVED_DAMAGE: 15,
                                        BATTLE_EVENTS.RECEIVED_CRITS: 16,
                                        BATTLE_EVENTS.ENEMY_ASSIST_STUN: 17,
-                                       BATTLE_EVENTS.ENEMIES_STUN: 18,
-                                       BATTLE_EVENTS.HEALTH_ADDED: 20}, offsets={}),
+                                       BATTLE_EVENTS.ENEMIES_STUN: 18}, offsets={}),
      SETTINGS_SECTIONS.BATTLE_BORDER_MAP: Section(masks={}, offsets={BATTLE_BORDER_MAP.MODE_SHOW_BORDER: Offset(0, 3),
                                            BATTLE_BORDER_MAP.TYPE_BORDER: Offset(2, 3 << 2)}),
      SETTINGS_SECTIONS.SIXTH_SENSE: Section(masks={}, offsets={SIXTH_SENSE.INDICATOR_SIZE: Offset(0, 3),
@@ -657,6 +651,7 @@ class ServerSettingsManager(object):
                                       UI_STORAGE_KEYS.AUTO_RELOAD_DUAL_GUN_HIGHLIGHTS_COUNTER: Offset(18, 1835008),
                                       UI_STORAGE_KEYS.CLIP_DUAL_GUN_HIGHLIGHTS_COUNTER: Offset(22, 29360128),
                                       UI_STORAGE_KEYS.DUAL_GUN_DUAL_ACCURACY_HIGHLIGHTS_COUNTER: Offset(26, 469762048)}),
+     SETTINGS_SECTIONS.UI_STORAGE_3: Section(masks={}, offsets={UI_STORAGE_KEYS.CLIP_GUN_DUAL_ACCURACY_HIGHLIGHTS_COUNTER: Offset(0, 7)}),
      SETTINGS_SECTIONS.BATTLE_MATTERS_QUESTS: Section(masks={}, offsets={BATTLE_MATTERS_KEYS.QUESTS_SHOWN: Offset(0, 255),
                                                BATTLE_MATTERS_KEYS.QUEST_PROGRESS: Offset(8, 4294967040L)}),
      SETTINGS_SECTIONS.QUESTS_PROGRESS: Section(masks={}, offsets={QUESTS_PROGRESS.VIEW_TYPE: Offset(0, 3),
@@ -996,9 +991,7 @@ class ServerSettingsManager(object):
                                                 BATTLE_CONTEXT_HINTS.LOADER_DAMAGE_MED_KIT: Offset(29, 7 << 29)}),
      SETTINGS_SECTIONS.BATTLE_CONTEXT_HINTS_3: Section(masks={}, offsets={BATTLE_CONTEXT_HINTS.RADIOMAN_DAMAGE_MED_KIT: Offset(0, 7),
                                                 BATTLE_CONTEXT_HINTS.AMMO_TYPE_AVAILABLE: Offset(3, 7 << 3),
-                                                BATTLE_CONTEXT_HINTS.AMMO_TYPE_SWITCH: Offset(6, 127 << 6)}),
-     SETTINGS_SECTIONS.LOOT_BOX_VIEWED: Section(masks={}, offsets={WTLootBoxesViewedKeys.HUNTER_LAST_VIEWED: Offset(0, 65535),
-                                         WTLootBoxesViewedKeys.BOSS_LAST_VIEWED: Offset(16, 4294901760L)})}
+                                                BATTLE_CONTEXT_HINTS.AMMO_TYPE_SWITCH: Offset(6, 127 << 6)})}
     AIM_MAPPING = {'net': 1,
      'netType': 1,
      'centralTag': 1,
@@ -1040,6 +1033,7 @@ class ServerSettingsManager(object):
     _MAX_AUTO_RELOAD_DUAL_GUN_HIGHLIGHTS_COUNT = 5
     _MAX_CLIP_DUAL_GUN_HIGHLIGHTS_COUNT = 5
     _MAX_DUAL_GUN_DUAL_ACCURACY_HIGHLIGHTS_COUNT = 5
+    _MAX_CLIP_GUN_DUAL_ACCURACY_HIGHLIGHTS_COUNT = 5
 
     def __init__(self, core):
         self._core = weakref.proxy(core)
@@ -1108,23 +1102,17 @@ class ServerSettingsManager(object):
             self._core.onOnceOnlyHintsChanged(onceOnlyHintsDiff)
         return
 
-    def getUIStorage(self, defaults=None):
-        return self.getSection(SETTINGS_SECTIONS.UI_STORAGE, defaults)
+    def getUIStorage(self, storage, defaults=None):
+        return self.getSection(storage, defaults)
 
-    def saveInUIStorage(self, fields):
-        return self.setSections([SETTINGS_SECTIONS.UI_STORAGE], fields)
+    def saveInUIStorage(self, storage, fields):
+        return self.setSections([storage], fields)
 
     def getNewYearStorage(self, defaults=None):
         return self.getSection(SETTINGS_SECTIONS.NEW_YEAR, defaults) if self.settingsCache.isSynced() else {}
 
     def saveInNewYearStorage(self, settings):
         return self.setSectionSettings(SETTINGS_SECTIONS.NEW_YEAR, settings)
-
-    def getUIStorage2(self, defaults=None):
-        return self.getSection(SETTINGS_SECTIONS.UI_STORAGE_2, defaults)
-
-    def saveInUIStorage2(self, fields):
-        return self.setSections([SETTINGS_SECTIONS.UI_STORAGE_2], fields)
 
     def getBPStorage(self, defaults=None):
         return {} if not self.settingsCache.isSynced() else self.getSection(SETTINGS_SECTIONS.BATTLE_PASS_STORAGE, defaults)
@@ -1167,26 +1155,25 @@ class ServerSettingsManager(object):
     def checkClipDualGunHighlights(self, increase=False):
         return self.__checkUIHighlights(UI_STORAGE_KEYS.CLIP_DUAL_GUN_HIGHLIGHTS_COUNTER, self._MAX_CLIP_DUAL_GUN_HIGHLIGHTS_COUNT, increase)
 
-    def updateUIStorageCounter(self, key, step=1):
-        storageSection = self.getSection(SETTINGS_SECTIONS.UI_STORAGE)
+    def checkClipGunDualAccuracyHighlights(self, increase=False):
+        return self.__checkUIHighlights(UI_STORAGE_KEYS.CLIP_GUN_DUAL_ACCURACY_HIGHLIGHTS_COUNTER, self._MAX_CLIP_GUN_DUAL_ACCURACY_HIGHLIGHTS_COUNT, increase)
+
+    def updateUIStorageCounter(self, storage, key, step=1):
+        storageSection = self.getSection(storage)
         if key in storageSection:
-            self.saveInUIStorage({key: storageSection[key] + step})
-        else:
-            storageSection = self.getSection(SETTINGS_SECTIONS.UI_STORAGE_2)
-            if key in storageSection:
-                self.saveInUIStorage2({key: storageSection[key] + step})
+            self.saveInUIStorage(storage, {key: storageSection[key] + step})
 
     def setDisableAnimTooltipFlag(self):
-        self.saveInUIStorage({UI_STORAGE_KEYS.DISABLE_ANIMATED_TOOLTIP: 1})
+        self.saveInUIStorage(SETTINGS_SECTIONS.UI_STORAGE, {UI_STORAGE_KEYS.DISABLE_ANIMATED_TOOLTIP: 1})
 
     def getDisableAnimTooltipFlag(self):
-        return self.getUIStorage().get(UI_STORAGE_KEYS.DISABLE_ANIMATED_TOOLTIP) == 1
+        return self.getUIStorage(SETTINGS_SECTIONS.UI_STORAGE).get(UI_STORAGE_KEYS.DISABLE_ANIMATED_TOOLTIP) == 1
 
     def isTankAcademyWelcomeScreenShown(self):
-        return self.getUIStorage2().get(UI_STORAGE_KEYS.TANK_ACADEMY_WELCOME_SCREEN_SHOWN) == 1
+        return self.getUIStorage(SETTINGS_SECTIONS.UI_STORAGE_2).get(UI_STORAGE_KEYS.TANK_ACADEMY_WELCOME_SCREEN_SHOWN) == 1
 
     def setTankAcademyWelcomeScreenShown(self):
-        self.saveInUIStorage2({UI_STORAGE_KEYS.TANK_ACADEMY_WELCOME_SCREEN_SHOWN: 1})
+        self.saveInUIStorage(SETTINGS_SECTIONS.UI_STORAGE_2, {UI_STORAGE_KEYS.TANK_ACADEMY_WELCOME_SCREEN_SHOWN: 1})
 
     def getBattleMattersQuestWasShowed(self):
         return self.getSectionSettings(SETTINGS_SECTIONS.BATTLE_MATTERS_QUESTS, BATTLE_MATTERS_KEYS.QUESTS_SHOWN, 0)
@@ -1448,6 +1435,7 @@ class ServerSettingsManager(object):
          'onceOnlyHints3': {},
          'uiStorage': {},
          SETTINGS_SECTIONS.UI_STORAGE_2: {},
+         SETTINGS_SECTIONS.UI_STORAGE_3: {},
          'epicCarouselFilter2': {},
          'rankedCarouselFilter1': {},
          'rankedCarouselFilter2': {},
@@ -1463,7 +1451,6 @@ class ServerSettingsManager(object):
          SETTINGS_SECTIONS.CONTOUR: {},
          SETTINGS_SECTIONS.ROYALE_CAROUSEL_FILTER_1: {},
          SETTINGS_SECTIONS.ROYALE_CAROUSEL_FILTER_2: {},
-         'lootboxViewed': {},
          'clear': {},
          'delete': [],
          SETTINGS_SECTIONS.LIMITED_UI_1: {},
@@ -1585,6 +1572,10 @@ class ServerSettingsManager(object):
         clearUIStorage2 = clear.get(SETTINGS_SECTIONS.UI_STORAGE_2, 0)
         if uiStorage2 or clearUIStorage2:
             settings[SETTINGS_SECTIONS.UI_STORAGE_2] = self._buildSectionSettings(SETTINGS_SECTIONS.UI_STORAGE_2, uiStorage2) ^ clearUIStorage2
+        uiStorage3 = data.get(SETTINGS_SECTIONS.UI_STORAGE_3, {})
+        clearUIStorage3 = clear.get(SETTINGS_SECTIONS.UI_STORAGE_3, 0)
+        if uiStorage3 or clearUIStorage3:
+            settings[SETTINGS_SECTIONS.UI_STORAGE_3] = self._buildSectionSettings(SETTINGS_SECTIONS.UI_STORAGE_3, uiStorage3) ^ clearUIStorage3
         sessionStats = data.get('sessionStats', {})
         clearSessionStats = clear.get('sessionStats', 0)
         if sessionStats or clearSessionStats:
@@ -1609,9 +1600,6 @@ class ServerSettingsManager(object):
         clearBPStorage = clear.get('battlePassStorage', 0)
         if BPStorage or clearBPStorage:
             settings[SETTINGS_SECTIONS.BATTLE_PASS_STORAGE] = self._buildSectionSettings(SETTINGS_SECTIONS.BATTLE_PASS_STORAGE, BPStorage) ^ clearBPStorage
-        lootboxesViewedStorage = data.get('lootboxViewed', {})
-        if lootboxesViewedStorage:
-            settings[SETTINGS_SECTIONS.LOOT_BOX_VIEWED] = self._buildSectionSettings(SETTINGS_SECTIONS.LOOT_BOX_VIEWED, lootboxesViewedStorage)
         spgAimData = data.get('spgAim', {})
         clearSpgAimData = clear.get(SETTINGS_SECTIONS.SPG_AIM, 0)
         if spgAimData or clearSpgAimData:
@@ -1662,10 +1650,12 @@ class ServerSettingsManager(object):
         return
 
     def __checkUIHighlights(self, key, maxVal, increase):
-        storage = self.getUIStorage()
-        if key not in storage:
-            storage = self.getUIStorage2()
-        res = storage.get(key) < maxVal
-        if res and increase:
-            self.updateUIStorageCounter(key)
-        return res
+        for strg in UI_STORAGES:
+            storage = self.getUIStorage(strg, {key: 0})
+            if key in storage:
+                res = storage.get(key) < maxVal
+                if res and increase:
+                    self.updateUIStorageCounter(strg, key)
+                return res
+
+        return False

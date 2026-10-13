@@ -162,9 +162,11 @@ class UsersManager(ChatActionsListener):
 
     def __onAddIgnored(self, chatAction):
         self.__onUserRosterChange(chatAction, _ACTION_ID.IGNORED_ADDED, {_TAG.IGNORED}, exclude={_TAG.FRIEND, _TAG.SUB_TO})
+        self.__onSetMuted(chatAction)
 
     def __onRemoveIgnored(self, chatAction):
         self.__onUserRosterRemoved(chatAction, _ACTION_ID.IGNORED_REMOVED, {_TAG.IGNORED})
+        self.__onUnsetMuted(chatAction)
 
     def __onSetMuted(self, chatAction):
         self.__onUserRosterChange(chatAction, _ACTION_ID.MUTE_SET, {_TAG.MUTED})

@@ -128,7 +128,7 @@ class AvatarObserver(CallbackDelayer):
 
     def getObservedVehicleMatrix(self):
         player = BigWorld.player()
-        if player.isObserver():
+        if player.isObserver() or self.isFollowDynamicallyChangedVehicle():
             vehicle = player.getVehicleAttached()
             if vehicle is not None:
                 if isinstance(vehicle.filter, BigWorld.VehicleFilter):
@@ -138,7 +138,7 @@ class AvatarObserver(CallbackDelayer):
 
     def getObservedVehicleStabilisedMatrix(self):
         player = BigWorld.player()
-        if player.isObserver():
+        if player.isObserver() or self.isFollowDynamicallyChangedVehicle():
             vehicle = player.getVehicleAttached()
             if vehicle is not None:
                 if isinstance(vehicle.filter, BigWorld.VehicleFilter):
@@ -148,7 +148,7 @@ class AvatarObserver(CallbackDelayer):
 
     def getObservedVehicleTurretMatrix(self):
         player = BigWorld.player()
-        if player.isObserver():
+        if player.isObserver() or self.isFollowDynamicallyChangedVehicle():
             vehicle = player.getVehicleAttached()
             if vehicle is not None:
                 if isinstance(vehicle.filter, BigWorld.VehicleFilter):
@@ -248,6 +248,9 @@ class AvatarObserver(CallbackDelayer):
 
     def isFollowWinner(self):
         return BONUS_CAPS.checkAny(self.arenaBonusType, BONUS_CAPS.FOLLOW_WINNER)
+
+    def isFollowDynamicallyChangedVehicle(self):
+        return BONUS_CAPS.checkAny(self.arenaBonusType, BONUS_CAPS.DYNAMIC_VEHICLE_CHANGE)
 
     def __resetFPVModeSwitching(self):
         self.__isFPVModeSwitching = False

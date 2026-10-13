@@ -20,6 +20,7 @@ from gui.Scaleform.genConsts.RANKEDBATTLES_CONSTS import RANKEDBATTLES_CONSTS
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.impl.lobby.comp7 import comp7_quest_helpers, comp7_shared, comp7_i18n_helpers
+from gui.impl.lobby.seniority_awards.seniority_awards_quest_helper import processSeniorityAwardsParagonsCoins
 from gui.ranked_battles import ranked_helpers
 from gui.ranked_battles.constants import RankedDossierKeys, YEAR_POINTS_TOKEN
 from gui.ranked_battles.ranked_helpers.web_season_provider import UNDEFINED_LEAGUE_ID, TOP_LEAGUE_ID
@@ -33,7 +34,7 @@ from helpers import dependency, int2roman
 from helpers import time_utils
 from messenger import g_settings
 from messenger.formatters import TimeFormatter
-from messenger.formatters.service_channel import WaitItemsSyncFormatter, QuestAchievesFormatter, RankedQuestAchievesFormatter, ServiceChannelFormatter, PersonalMissionsQuestAchievesFormatter, BattlePassQuestAchievesFormatter, InvoiceReceivedFormatter, BattleMattersQuestAchievesFormatter, CollectionsFormatter, Comp7QualificationRewardsFormatter, ClanSeasonProgressRewardsFormatter
+from messenger.formatters.service_channel import WaitItemsSyncFormatter, QuestAchievesFormatter, RankedQuestAchievesFormatter, ServiceChannelFormatter, PersonalMissionsQuestAchievesFormatter, BattlePassQuestAchievesFormatter, InvoiceReceivedFormatter, BattleMattersQuestAchievesFormatter, CollectionsFormatter, Comp7QualificationRewardsFormatter, ClanSeasonProgressRewardsFormatter, SeniorityAwardsAchievesFormatter
 from messenger.formatters.service_channel_helpers import getRewardsForQuests, EOL, MessageData, getCustomizationItemData, getDefaultMessage, DEFAULT_MESSAGE, popCollectionEntitlements
 from messenger.proto.bw.wrappers import ServiceChannelMessage
 from paragons_common import isParagonsQuestID
@@ -43,7 +44,6 @@ from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.system_messages import ISystemMessages
-from gui.wt_event.wt_event_helpers import isWTEventProgressionQuest
 _logger = logging.getLogger(__name__)
 
 class ITokenQuestsSubFormatter(object):
@@ -297,7 +297,7 @@ class RankedSeasonTokenQuestFormatter(RankedTokenQuestFormatter):
         customizations = data.get('customizations', [])
         for customizationItem in customizations:
             customizationType = customizationItem['custType']
-            _, itemUserName, _ = getCustomizationItemData(customizationItem['id'], customizationType)
+            _, itemUserName = getCustomizationItemData(customizationItem['id'], customizationType)
             if customizationType == 'style':
                 result.append(itemUserName)
 
@@ -602,6 +602,11 @@ class PersonalMissionsFormatter(PersonalMissionsTokenQuestsFormatter):
 class SeniorityAwardsFormatter(AsyncTokenQuestsSubFormatter):
     __MESSAGE_TEMPLATE = 'SeniorityAwardsQuest'
     __seniorityAwardCtrl = dependency.descriptor(ISeniorityAwardsController)
+    __eventsCache = dependency.descriptor(IEventsCache)
+
+    def __init__(self):
+        super(SeniorityAwardsFormatter, self).__init__()
+        self._achievesFormatter = SeniorityAwardsAchievesFormatter()
 
     @adisp_async
     @adisp_process
@@ -612,7 +617,7 @@ class SeniorityAwardsFormatter(AsyncTokenQuestsSubFormatter):
             data = message.data or {}
             completedQuestIDs = self.getQuestOfThisGroup(data.get('completedQuestIDs', set()))
             detailedRewards = data.get('detailedRewards', {})
-            mergedRewards = getMergedBonusesFromDicts((detailedRewards.get(qID, {}) for qID in completedQuestIDs))
+            mergedRewards = getMergedBonusesFromDicts((processSeniorityAwardsParagonsCoins(detailedRewards.get(qID, {}), self.__eventsCache.getQuestByID(qID)) for qID in completedQuestIDs))
             messageData = self.__buildMessage(mergedRewards, message)
             if messageData is not None:
                 messageDataList.append(messageData)
@@ -1094,10 +1099,3 @@ class ParagonsTokenQuestsSubformatter(SyncTokenQuestsSubFormatter):
     @classmethod
     def _isQuestOfThisGroup(cls, questID):
         return isParagonsQuestID(questID)
-
-
-class WtEventProgressionQuestFormatter(WaitItemsSyncFormatter, TokenQuestsSubFormatter):
-
-    @classmethod
-    def _isQuestOfThisGroup(cls, questID):
-        return isWTEventProgressionQuest(questID)

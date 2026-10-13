@@ -67,11 +67,15 @@ class EpicBattleTimer(EpicBattleTimerMeta):
         return
 
     def __onOvertimeStart(self, endTime):
-        self.as_enableOvertimeS(True)
-        self.__overtimeEnd = endTime
-        self.__overTimeMaxTimeFac = 1.0 / (self.__overtimeEnd - BigWorld.serverTime())
-        self.__overtimeTick()
-        self.__overTimeActive = True
+        if endTime is None:
+            return
+        else:
+            self.as_enableOvertimeS(True)
+            self.__overtimeEnd = endTime
+            self.__overTimeMaxTimeFac = 1.0 / (self.__overtimeEnd - BigWorld.serverTime())
+            self.__overtimeTick()
+            self.__overTimeActive = True
+            return
 
     def __onOvertimeOver(self):
         self.as_enableOvertimeS(False)

@@ -1,0 +1,33 @@
+<emblem_group8_special_01.xml>
+  <xmlns:czech1>	ussr	</xmlns:czech1>
+  <xmlns:germany>	germany	</xmlns:germany>
+  <xmlns:czech0>	usa	</xmlns:czech0>
+  <xmlns:china>	china	</xmlns:china>
+  <xmlns:france>	france	</xmlns:france>
+  <xmlns:uk>	uk	</xmlns:uk>
+  <xmlns:japan>	japan	</xmlns:japan>
+  <xmlns:czech>	czech	</xmlns:czech>
+  <xmlns:sweden>	sweden	</xmlns:sweden>
+  <xmlns:poland>	poland	</xmlns:poland>
+  <xmlns:italy>	italy	</xmlns:italy>
+  <xmlns:intunion>	intunion	</xmlns:intunion>
+  <itemGroup>
+    <userString>	#vehicle_customization:emblem/special	</userString>
+    <season>	ALL	</season>
+    <historical>	0	</historical>
+    <priceGroup>	MT emblems 25g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <nations>	china france uk usa ussr	</nations>
+      </include>
+    </vehicleFilter>
+    <decal>
+      <id>	15872	</id>
+      <texture>	gui/maps/vehicles/decals/player_stickers/special/sticker_01.dds	</texture>
+      <userString>	#vehicle_customization:emblem/group8/special_01	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+    <name>	Medal	</name>
+    <type>	EMBLEM	</type>
+  </itemGroup>
+</emblem_group8_special_01.xml>

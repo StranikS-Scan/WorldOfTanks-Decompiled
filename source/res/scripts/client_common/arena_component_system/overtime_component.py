@@ -49,6 +49,7 @@ class OvertimeComponent(ClientArenaComponent, CallbackDelayer):
         if self.__isActive:
             if self.__duration is None or self.__endTime is None or currentTime >= self.__endTime or currentTime < self.__endTime - self.__duration:
                 self.stopCallback(self.__startOvertime)
+                self.stopCallback(self.__endOvertime)
                 self.__endOvertime()
             else:
                 self.delayCallback(self.__endTime - currentTime, self.__endOvertime)
@@ -58,6 +59,9 @@ class OvertimeComponent(ClientArenaComponent, CallbackDelayer):
                 self.__startOvertime()
             else:
                 self.delayCallback(self.__endTime - self.__duration - currentTime, self.__startOvertime)
+        else:
+            self.stopCallback(self.__startOvertime)
+            self.stopCallback(self.__endOvertime)
         return
 
     def __startOvertime(self):

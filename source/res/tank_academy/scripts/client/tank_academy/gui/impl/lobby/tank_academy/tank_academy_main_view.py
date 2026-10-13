@@ -3,6 +3,7 @@
 import logging
 import typing
 from frameworks.wulf import ViewFlags, ViewSettings, WindowLayer
+from gui.impl.pub.notification_commands import WindowNotificationCommand, Priority
 from frameworks.wulf.gui_constants import WindowStatus
 from gui.battle_pass.battle_pass_decorators import createBackportTooltipDecorator
 from gui import GUI_SETTINGS
@@ -18,6 +19,7 @@ from shared_utils import first
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.game_control import ITankAcademyController
 from skeletons.gui.server_events import IEventsCache
+from skeletons.gui.impl import INotificationWindowController
 from skeletons.gui.shared import IItemsCache
 from skeletons.tutorial import ITutorialLoader
 from tank_academy.gui.impl.gen.view_models.views.lobby.tank_academy.quest_group_model import QuestGroupModel
@@ -25,11 +27,12 @@ from tank_academy.gui.impl.gen.view_models.views.lobby.tank_academy.quest_progre
 from tank_academy.gui.impl.gen.view_models.views.lobby.tank_academy.tank_academy_main_view_model import TankAcademyMainViewModel
 from tank_academy.gui.impl.gen.view_models.views.lobby.tank_academy.quest_view_model import QuestViewModel, State
 from tank_academy.gui.impl.lobby.tank_academy.tank_academy_rewards_view import TankAcademyRewardsViewWindow
+from tank_academy.gui.impl.lobby.tank_academy.tank_academy_migration_updates_view import TankAcademyMigrationUpdatesViewWindow
 from tank_academy.gui.impl.lobby.tank_academy.tank_academy_tutorials import getQuestTutorialChapterID, hasQuestTutorial
 from tank_academy.gui.shared.bonus_packers import packBonusModelAndTooltipData
 from tank_academy.gui.shared.event_dispatcher import showTankAcademyVehicleSelection
 if typing.TYPE_CHECKING:
-    from typing import List
+    from typing import List, Tuple, Optional
     from gui.server_events.event_items import ITankAcademyQuest, ITankAcademyGroup
 _logger = logging.getLogger(__name__)
 
@@ -40,6 +43,7 @@ class TankAcademyMainView(ViewImpl):
     __itemsCache = dependency.descriptor(IItemsCache)
     __settingsCore = dependency.descriptor(ISettingsCore)
     __tutorialLoader = dependency.descriptor(ITutorialLoader)
+    __notificationMgr = dependency.descriptor(INotificationWindowController)
 
     def __init__(self):
         settings = ViewSettings(R.views.tank_academy.lobby.tank_academy.TankAcademyMainView(), flags=ViewFlags.VIEW, model=TankAcademyMainViewModel())
@@ -86,6 +90,7 @@ class TankAcademyMainView(ViewImpl):
     def _getEvents(self):
         return ((self.viewModel.onClose, showHangar),
          (self.viewModel.onShowInfoPage, self.__onShowInfoPage),
+         (self.viewModel.onShowUpdatesView, self.__onShowUpdatesView),
          (self.viewModel.onShowQuestTutorial, self.__onShowQuestTutorial),
          (self.viewModel.onShowQuestVehicle, self.__onShowQuestVehicle),
          (self.viewModel.onUseQuestToken, self.__onUseQuestToken),
@@ -115,15 +120,22 @@ class TankAcademyMainView(ViewImpl):
             model.setIsRewardsViewOpen(self.__currentQuestIdx != currentQuestIdx)
             model.setUnobtainedVehiclesCount(len(self.__tankAcademyController.getDelayedRewardCurrencyTokens()))
             self.__currentQuestIdx = currentQuestIdx
+            model.setShowMigrationUpdates(self.__tankAcademyController.isMigratedFromNonZeroProgress())
             questGroups = self.__tankAcademyController.getTankAcademyQuestGroups()
             currentQuest = self.__tankAcademyController.getCurrentQuest()
             lastSeenQuestIdx = self.__getLastSeenQuestIdx()
+            migrationInfo = self.__tankAcademyController.getMigrationInfo()
+            if migrationInfo is not None:
+                toQuest = migrationInfo[2]
+                questGroups, trimmedCount = self.__filterQuestGroupsForMigration(questGroups, toQuest)
+                lastSeenQuestIdx = max(lastSeenQuestIdx, trimmedCount)
             self.__fillQuestGroups(model, questGroups, currentQuest, lastSeenQuestIdx)
             totalQuestsCount = self.__tankAcademyController.getCountTankAcademyQuests()
             completedQuestsCount = self.__tankAcademyController.getCompletedTankAcademyQuestsCount()
             self.__fillQuestProgress(model.questProgress, totalQuestsCount, completedQuestsCount, lastSeenQuestIdx)
             currentQuestProgress, _ = self.__tankAcademyController.getQuestProgress(currentQuest)
             self.__updateLastSeenQuestProgress(currentQuestProgress)
+        return
 
     def __fillQuestGroups(self, model, questGroups, currentQuest, lastSeenQuestIdx):
         questGroupModelArray = model.getQuest_groups()
@@ -195,6 +207,15 @@ class TankAcademyMainView(ViewImpl):
     def __onShowInfoPage(self):
         showBrowserOverlayView(GUI_SETTINGS.tankAcademyInfoPageURL, VIEW_ALIAS.WEB_VIEW_TRANSPARENT, hiddenLayers=(WindowLayer.MARKER, WindowLayer.VIEW, WindowLayer.WINDOW))
 
+    def __onShowUpdatesView(self):
+        migrationInfo = self.__tankAcademyController.getMigrationInfo()
+        if migrationInfo is None:
+            return
+        else:
+            window = TankAcademyMigrationUpdatesViewWindow(ctx={'migrationInfo': migrationInfo})
+            self.__notificationMgr.append(WindowNotificationCommand(window, Priority.HIGH))
+            return
+
     def __onShowQuestTutorial(self, args):
         questNumber = args.get(TankAcademyMainViewModel.ARG_SHOW_QUEST_TUTORIAL)
         if questNumber is None:
@@ -254,6 +275,17 @@ class TankAcademyMainView(ViewImpl):
 
     def __onStateChanged(self, *_, **__):
         self.__update()
+
+    def __filterQuestGroupsForMigration(self, questGroups, toQuest):
+        trimmedCount = 0
+        filteredGroups = []
+        for group in questGroups:
+            quests = self.__tankAcademyController.getTankAcademyQuestsByGroup(group)
+            if all((quest.getOrder() < toQuest for quest in quests)):
+                trimmedCount += len(quests)
+            filteredGroups.append(group)
+
+        return (filteredGroups, trimmedCount)
 
     def __updateLastSeenQuestIdx(self, idx):
         self.__settingsCore.serverSettings.setBattleMattersQuestWasShowed(idx)

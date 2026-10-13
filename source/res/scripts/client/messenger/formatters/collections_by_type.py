@@ -21,7 +21,6 @@ registerTokenQuestsSubFormatters((token_quest_subformatters.LootBoxTokenQuestFor
  token_quest_subformatters.WotPlusAttendanceRewardsFormatterTestSMViewer(),
  token_quest_subformatters.BattleMattersAwardsFormatter(),
  token_quest_subformatters.Comp7RewardsFormatter(),
- token_quest_subformatters.WtEventProgressionQuestFormatter(),
  token_quest_subformatters.CrewPerksFormatter(),
  token_quest_subformatters.ParagonsTokenQuestsSubformatter(),
  token_quest_subformatters.ClanSeasonProgressionFormatter(),
@@ -80,6 +79,7 @@ SERVER_FORMATTERS = {_SM_TYPE.serverReboot.index(): _sc.ServerRebootFormatter(),
  _SM_TYPE.personalMissionFailed.index(): _sc.PersonalMissionFailedFormatter(),
  _SM_TYPE.customizationChanged.index(): _sc.CustomizationChangedFormatter(),
  _SM_TYPE.progressiveReward.index(): _sc.ProgressiveRewardFormatter(),
+ _SM_TYPE.sessionProgressRewards.index(): _sc.SessionProgressRewardsFormatter(),
  _SM_TYPE.piggyBankSmashed.index(): _sc.PiggyBankSmashedFormatter(),
  _SM_TYPE.blackMapRemoved.index(): _sc.BlackMapRemovedFormatter(),
  _SM_TYPE.excludedMapSlotKillSwitch.index(): _sc.ExcludedMapSlotKillSwitchFormatter(),
@@ -188,6 +188,7 @@ def initRegistrationFormatters():
     registerMessengerServerFormatter(_SM_TYPE.personalMissionFailed.index(), _sc.PersonalMissionFailedFormatter())
     registerMessengerServerFormatter(_SM_TYPE.customizationChanged.index(), _sc.CustomizationChangedFormatter())
     registerMessengerServerFormatter(_SM_TYPE.progressiveReward.index(), _sc.ProgressiveRewardFormatter())
+    registerMessengerServerFormatter(_SM_TYPE.sessionProgressRewards.index(), _sc.SessionProgressRewardsFormatter())
     registerMessengerServerFormatter(_SM_TYPE.piggyBankSmashed.index(), _sc.PiggyBankSmashedFormatter())
     registerMessengerServerFormatter(_SM_TYPE.blackMapRemoved.index(), _sc.BlackMapRemovedFormatter())
     registerMessengerServerFormatter(_SM_TYPE.excludedMapSlotKillSwitch.index(), _sc.ExcludedMapSlotKillSwitchFormatter())

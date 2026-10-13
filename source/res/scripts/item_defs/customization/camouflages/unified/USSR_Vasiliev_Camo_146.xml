@@ -1,0 +1,41 @@
+<USSR_Vasiliev_Camo_146.xml>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/transparent	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <tags>	hiddenInUI fullRGB	</tags>
+    <priceGroup>	MT camouflages 50g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	ussr:R225_Vasiliev_project	</vehicles>
+      </include>
+    </vehicleFilter>
+    <camouflage>
+      <id>	31595	</id>
+      <userString>	#vehicle_customization:USSR_Vasiliev_Camo_146/name	</userString>
+      <description>	#vehicle_customization:USSR_Vasiliev_Camo_146/description	</description>
+      <scales>	1.2 1 0.7	</scales>
+      <forceUv0>	true	</forceUv0>
+      <palettes>
+        <palette>
+          <c0>	255 0 0 0	</c0>
+          <c1>	81 30 0 255	</c1>
+          <c2>	153 153 153 255	</c2>
+          <c3>	0 0 0 0	</c3>
+        </palette>
+      </palettes>
+      <rotation>
+        <HULL>	-2.96706	</HULL>
+        <TURRET>	-2.96706	</TURRET>
+        <GUN>	-2.96706	</GUN>
+      </rotation>
+      <tilingSettings>
+        <type>	relative	</type>
+        <factor>	1.2 1.2	</factor>
+        <offset>	6.53 12.45	</offset>
+      </tilingSettings>
+      <texture>	vehicles/russian/Camouflage/USSR_Vasiliev_Camo_146.dds	</texture>
+      <gloss>	0.509 0.509 0.2 0.509	</gloss>
+    </camouflage>
+  </itemGroup>
+</USSR_Vasiliev_Camo_146.xml>

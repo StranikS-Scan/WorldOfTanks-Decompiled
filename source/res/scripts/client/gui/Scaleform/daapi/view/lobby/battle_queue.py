@@ -117,9 +117,6 @@ class QueueProvider(object):
             currPlayer.createArenaFromQueue()
         return
 
-    def getVehicle(self):
-        return g_currentVehicle.item
-
     def _doRequestQueueInfo(self, currPlayer):
         params = self._getRequestQueueInfoParams()
         LOG_DEBUG('Requestion queue info: ', params)
@@ -308,7 +305,7 @@ class BattleQueue(BattleQueueMeta, LobbySubView):
         g_playerEvents.onArenaCreated += self.onStartBattle
         self.__updateQueueInfo()
         self.__updateTimer()
-        self.updateClientState()
+        self.__updateClientState()
         MusicControllerWWISE.play()
 
     def _dispose(self):
@@ -319,8 +316,8 @@ class BattleQueue(BattleQueueMeta, LobbySubView):
         self._blur.fini()
         super(BattleQueue, self)._dispose()
 
-    def updateClientState(self):
-        if self.prbEntity is None or self.__provider is None:
+    def __updateClientState(self):
+        if self.prbEntity is None:
             return
         else:
             permissions = self.prbEntity.getPermissions()
@@ -335,7 +332,7 @@ class BattleQueue(BattleQueueMeta, LobbySubView):
             else:
                 iconlabel = 'neutral'
             additional = self.__provider.additionalInfo()
-            vehicle = self.__provider.getVehicle()
+            vehicle = g_currentVehicle.item
             textLabel = self.__provider.getTankInfoLabel()
             tankName = self.__provider.getTankName(vehicle)
             iconPath = self.__provider.getTankIcon(vehicle)

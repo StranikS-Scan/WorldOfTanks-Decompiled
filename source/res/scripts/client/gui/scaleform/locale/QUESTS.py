@@ -968,6 +968,7 @@ class QUESTS(object):
     DETAILS_DOSSIER_42_BATTLESCOUNT = '#quests:details/dossier/42/battlesCount'
     DETAILS_DOSSIER_43_BATTLESCOUNT = '#quests:details/dossier/43/battlesCount'
     DETAILS_DOSSIER_50_BATTLESCOUNT = '#quests:details/dossier/50/battlesCount'
+    DETAILS_DOSSIER_61_BATTLESCOUNT = '#quests:details/dossier/61/battlesCount'
     DETAILS_MODIFIERS_TITLE_DISCOUNT = '#quests:details/modifiers/title/discount'
     DETAILS_MODIFIERS_TITLE_SELLING = '#quests:details/modifiers/title/selling'
     DETAILS_MODIFIERS_TITLE_AVAILABILITY = '#quests:details/modifiers/title/availability'
@@ -1066,6 +1067,7 @@ class QUESTS(object):
     MISSIONS_TAB_CATEGORIES_BODY = '#quests:missions/tab/categories/body'
     MISSIONS_TAB_DAILY_HEADER = '#quests:missions/tab/daily/header'
     MISSIONS_TAB_DAILY_BODY = '#quests:missions/tab/daily/body'
+    MISSIONS_TAB_SERIALENTER_HEADER = '#quests:missions/tab/serialEnter/header'
     MISSIONS_TAB_WINBACK_HEADER = '#quests:missions/tab/winback/header'
     MISSIONS_TAB_WINBACK_BODY = '#quests:missions/tab/winback/body'
     MISSIONS_TAB_BATTLE_PASS_BODY = '#quests:missions/tab/battle_pass/body'
@@ -1651,6 +1653,17 @@ class QUESTS(object):
     DAILYQUESTS_TAB_HIDDENBATTLETYPES = '#quests:dailyQuests/tab/hiddenBattleTypes'
     DAILYQUESTS_TAB_CATHEGORY_TOOLTIP_DAILY_HEADER = '#quests:dailyQuests/tab/cathegory/tooltip/daily/header'
     DAILYQUESTS_TAB_CATHEGORY_TOOLTIP_DAILY_BODY = '#quests:dailyQuests/tab/cathegory/tooltip/daily/body'
+    DAILYQUESTS_TAB_CATHEGORY_TOOLTIP_SERIALENTER_HEADER = '#quests:dailyQuests/tab/cathegory/tooltip/serialEnter/header'
+    DAILYQUESTS_TAB_CATHEGORY_TOOLTIP_SERIALENTER_BODY = '#quests:dailyQuests/tab/cathegory/tooltip/serialEnter/body'
+    SERIALENTER_TAB_LABEL = '#quests:serialEnter/tab/label'
+    SERIALENTER_TAB_DESCRIPTION = '#quests:serialEnter/tab/description'
+    SERIALENTER_TAB_COMPLETED_TITLE = '#quests:serialEnter/tab/completed/title'
+    SERIALENTER_TAB_COMPLETED_DESCRIPTION = '#quests:serialEnter/tab/completed/description'
+    SERIALENTER_TAB_FINAL_TITLE = '#quests:serialEnter/tab/final/title'
+    SERIALENTER_TAB_FINAL_DESCRIPTION = '#quests:serialEnter/tab/final/description'
+    SERIALENTER_CALENDAR_TITLE = '#quests:serialEnter/calendar/title'
+    SERIALENTER_CALENDAR_DESCRIPTION = '#quests:serialEnter/calendar/description'
+    SERIALENTER_CALENDAR_PREVIEW = '#quests:serialEnter/calendar/preview'
     DAILYQUESTS_BODY_REROLL = '#quests:dailyQuests/body/reroll'
     DAILYQUESTS_MISSIONSWITCH_TOOLTIP_HEADER = '#quests:dailyQuests/missionSwitch/tooltip/header'
     DAILYQUESTS_MISSIONSWITCH_TOOLTIP_BODY_AVAILABLE = '#quests:dailyQuests/missionSwitch/tooltip/body/available'
@@ -1792,24 +1805,31 @@ class QUESTS(object):
     WEEKLYQUEST_REWARDSCREEN_SUBHEADER = '#quests:weeklyQuest/rewardScreen/subheader'
     WEEKLYQUEST_REWARDSCREEN_CLOSE = '#quests:weeklyQuest/rewardScreen/close'
     WEEKLYQUEST_REWARDSCREEN_CONFIRM = '#quests:weeklyQuest/rewardScreen/confirm'
+    SESSIONPROGRESSREWARDSCREEN_HEADER = '#quests:sessionProgressRewardScreen/header'
+    SESSIONPROGRESSREWARDSCREEN_TITLE = '#quests:sessionProgressRewardScreen/title'
+    SESSIONPROGRESSREWARDSCREEN_CLOSE = '#quests:sessionProgressRewardScreen/close'
+    SESSIONPROGRESSREWARDSCREEN_CONFIRM = '#quests:sessionProgressRewardScreen/confirm'
+    SESSIONPROGRESSREWARDSCREEN_SHOWINHANGAR = '#quests:sessionProgressRewardScreen/showInHangar'
+    SESSIONPROGRESSREWARDSCREEN_COMPENSATIONTOOLTIP_TITLE_GOLD = '#quests:sessionProgressRewardScreen/compensationTooltip/title/gold'
+    SESSIONPROGRESSREWARDSCREEN_COMPENSATIONTOOLTIP_TITLE_CREDITS = '#quests:sessionProgressRewardScreen/compensationTooltip/title/credits'
+    SESSIONPROGRESSREWARDSCREEN_COMPENSATIONTOOLTIP_DESCRIPTION_VEHICLES = '#quests:sessionProgressRewardScreen/compensationTooltip/description/vehicles'
+    SESSIONPROGRESSREWARDSCREEN_COMPENSATIONTOOLTIP_FOOTERDETAILS_VEHICLES = '#quests:sessionProgressRewardScreen/compensationTooltip/footerDetails/vehicles'
     DAILYWIDGET_PROGRESS = '#quests:dailyWidget/progress'
     DAILYWIDGET_TOOLTIP_HEADER_DAILY = '#quests:dailyWidget/tooltip/header/daily'
     DAILYWIDGET_TOOLTIP_HEADER_PREMIUM = '#quests:dailyWidget/tooltip/header/premium'
     DAILYWIDGET_TOOLTIP_HEADER_BONUS = '#quests:dailyWidget/tooltip/header/bonus'
     DAILYWIDGET_TOOLTIP_HEADER_EPIC = '#quests:dailyWidget/tooltip/header/epic'
+    DAILYWIDGET_TOOLTIP_SERIALENTER_HEADER = '#quests:dailyWidget/tooltip/serialEnter/header'
+    DAILYWIDGET_TOOLTIP_SERIALENTER_DESCRIPTION = '#quests:dailyWidget/tooltip/serialEnter/description'
+    DAILYWIDGET_TOOLTIP_SERIALENTER_COMPLETED = '#quests:dailyWidget/tooltip/serialEnter/completed'
+    DAILYWIDGET_TOOLTIP_SERIALENTER_AVAILABLE = '#quests:dailyWidget/tooltip/serialEnter/available'
+    DAILYWIDGET_TOOLTIP_SERIALENTER_ALLRECEIVED = '#quests:dailyWidget/tooltip/serialEnter/allReceived'
     DAILYWIDGET_TOOLTIP_TIMER = '#quests:dailyWidget/tooltip/timer'
     DAILYWIDGET_TOOLTIP_HIDEQUESTS = '#quests:dailyWidget/tooltip/hideQuests'
     DAILYWIDGET_TOOLTIP_COMPLETED = '#quests:dailyWidget/tooltip/completed'
     DAILYWIDGET_TOOLTIP_NOTAVAILABLE_HEADER = '#quests:dailyWidget/tooltip/notAvailable/header'
     DAILYWIDGET_TOOLTIP_NOTAVAILABLE_DESCRIPTION = '#quests:dailyWidget/tooltip/notAvailable/description'
     DAILYWIDGET_TOOLTIP_HIDDENREWARDS = '#quests:dailyWidget/tooltip/hiddenRewards'
-    INTROSCREEN_TITLE = '#quests:introScreen/title'
-    INTROSCREEN_SUBTITLE = '#quests:introScreen/subtitle'
-    INTROSCREEN_SUBTITLEDAILYQUESTSONLY = '#quests:introScreen/subtitleDailyQuestsOnly'
-    INTROSCREEN_DAILYQUESTS_HEADER = '#quests:introScreen/dailyQuests/header'
-    INTROSCREEN_DAILYQUESTS_DESCRIPTION = '#quests:introScreen/dailyQuests/description'
-    INTROSCREEN_CONFIRM = '#quests:introScreen/confirm'
-    INTROSCREEN_CLOSE = '#quests:introScreen/close'
     DAILYREROLL_TITLE = '#quests:dailyReroll/title'
     DAILYREROLL_SUBTITLE = '#quests:dailyReroll/subtitle'
     DAILYREROLL_SUBTITLEPREMIUM = '#quests:dailyReroll/subtitlePremium'
@@ -1841,11 +1861,8 @@ class QUESTS(object):
     SWITCH_ISWEEKLYENABLED = '#quests:switch/isWeeklyEnabled'
     SWITCH_ISWEEKLYENABLEDTITLE = '#quests:switch/isWeeklyEnabledTitle'
     BONUSNAME_GOLDENTICKET = '#quests:bonusName/goldenticket'
-    DETAILS_CONDITIONS_CUMULATIVE_WTBOSSVULNERABLEDAMAGE = '#quests:details/conditions/cumulative/wtBossVulnerableDamage'
-    DETAILS_CONDITIONS_CUMULATIVE_MAXWTPLASMABONUS = '#quests:details/conditions/cumulative/maxWtPlasmaBonus'
-    DETAILS_CONDITIONS_CUMULATIVE_WTGENERATORSCAPTURED = '#quests:details/conditions/cumulative/wtGeneratorsCaptured'
-    DETAILS_CONDITIONS_CUMULATIVE_WTTOTALGENERATORSCAPTURED = '#quests:details/conditions/cumulative/wtTotalGeneratorsCaptured'
-    DETAILS_CONDITIONS_CUMULATIVE_WTDEATHCOUNT = '#quests:details/conditions/cumulative/wtDeathCount'
+    BONUSNAME_RAZLOM_COIN = '#quests:bonusName/razlom_coin'
+    BONUSNAME_ENTITLEMENTS_RAZLOMSUPERCOIN = '#quests:bonusName/entitlements/razlomsupercoin'
     TOKEN_DEFAULT_ENUM = (TOKEN_DEFAULT_USSR,
      TOKEN_DEFAULT_GERMANY,
      TOKEN_DEFAULT_USA,
@@ -1977,7 +1994,9 @@ class QUESTS(object):
      BONUSNAME_BUMBLEBEE_COIN,
      BONUSNAME_HONEY_COIN,
      BONUSNAME_REWARDSSLOTS,
-     BONUSNAME_GOLDENTICKET)
+     BONUSNAME_GOLDENTICKET,
+     BONUSNAME_RAZLOM_COIN,
+     BONUSNAME_ENTITLEMENTS_RAZLOMSUPERCOIN)
     ACTION_ENUM = (ACTION_AUTO_CALENDAR,
      ACTION_FULL_CALENDAR,
      ACTION_HERO_FULL_CALENDAR,
@@ -2372,7 +2391,8 @@ class QUESTS(object):
      DETAILS_DOSSIER_39_BATTLESCOUNT,
      DETAILS_DOSSIER_42_BATTLESCOUNT,
      DETAILS_DOSSIER_43_BATTLESCOUNT,
-     DETAILS_DOSSIER_50_BATTLESCOUNT)
+     DETAILS_DOSSIER_50_BATTLESCOUNT,
+     DETAILS_DOSSIER_61_BATTLESCOUNT)
     PERSONALMISSION_STATUS_ADDBOTTOM_VEHICLETYPE_ENUM = (PERSONALMISSION_STATUS_ADDBOTTOM_VEHICLETYPE_ALLIANCE_USSR,
      PERSONALMISSION_STATUS_ADDBOTTOM_VEHICLETYPE_ALLIANCE_GERMANY,
      PERSONALMISSION_STATUS_ADDBOTTOM_VEHICLETYPE_ALLIANCE_USA,

@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/shared/fitting_slot_vo.py
-from account_helpers.settings_core.ServerSettingsManager import UI_STORAGE_KEYS
+from account_helpers.settings_core.ServerSettingsManager import UI_STORAGE_KEYS, SETTINGS_SECTIONS
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.shared.utils import EXTRA_MODULE_INFO
@@ -55,40 +55,35 @@ class FittingSlotVO(dict):
         return vehicleModule
 
     def _setNewCounter(self, vehicleModule, vehicle):
+        uiStorage = dependency.instance(ISettingsCore).serverSettings.getUIStorage(SETTINGS_SECTIONS.UI_STORAGE)
+        uiStorage2 = dependency.instance(ISettingsCore).serverSettings.getUIStorage(SETTINGS_SECTIONS.UI_STORAGE_2)
         if vehicleModule is None:
             return
         else:
             if vehicleModule.itemTypeID == ITEM_TYPES.vehicleGun:
                 if vehicleModule.isAutoReloadable(vehicle.descriptor):
-                    uiStorage = dependency.instance(ISettingsCore).serverSettings.getUIStorage()
                     if not uiStorage.get(UI_STORAGE_KEYS.AUTO_RELOAD_MARK_IS_SHOWN):
                         self['counter'] = 1
                 if vehicleModule.isDualGun(vehicle.descriptor):
-                    uiStorage = dependency.instance(ISettingsCore).serverSettings.getUIStorage()
                     if not uiStorage.get(UI_STORAGE_KEYS.DUAL_GUN_MARK_IS_SHOWN):
                         if 'counter' in self:
                             self['counter'] += 3
                         else:
                             self['counter'] = 3
                 if vehicleModule.hasDualAccuracy(vehicle.descriptor):
-                    uiStorage = dependency.instance(ISettingsCore).serverSettings.getUIStorage2()
-                    if not uiStorage.get(UI_STORAGE_KEYS.DUAL_ACCURACY_MARK_IS_SHOWN):
+                    if not uiStorage2.get(UI_STORAGE_KEYS.DUAL_ACCURACY_MARK_IS_SHOWN):
                         self['counter'] = self.get('counter', 0) + 1
                 if vehicleModule.isAutoReloadableDualGun(vehicle.descriptor):
-                    uiStorage = dependency.instance(ISettingsCore).serverSettings.getUIStorage2()
-                    if not uiStorage.get(UI_STORAGE_KEYS.AUTO_RELOAD_DUAL_GUN_MARK_IS_SHOWN):
+                    if not uiStorage2.get(UI_STORAGE_KEYS.AUTO_RELOAD_DUAL_GUN_MARK_IS_SHOWN):
                         self['counter'] = self.get('counter', 0) + 1
                 if vehicleModule.isClipDualGun(vehicle.descriptor):
-                    uiStorage = dependency.instance(ISettingsCore).serverSettings.getUIStorage2()
-                    if not uiStorage.get(UI_STORAGE_KEYS.CLIP_DUAL_GUN_MARK_IS_SHOWN):
+                    if not uiStorage2.get(UI_STORAGE_KEYS.CLIP_DUAL_GUN_MARK_IS_SHOWN):
                         self['counter'] = self.get('counter', 0) + 1
             if vehicleModule.itemTypeID == ITEM_TYPES.vehicleEngine:
                 if vehicleModule.hasTurboshaftEngine():
-                    uiStorage = dependency.instance(ISettingsCore).serverSettings.getUIStorage()
                     if not uiStorage.get(UI_STORAGE_KEYS.TURBOSHAFT_MARK_IS_SHOWN):
                         self['counter'] = self.get('counter', 0) + 1
                 if vehicleModule.hasRocketAcceleration():
-                    uiStorage = dependency.instance(ISettingsCore).serverSettings.getUIStorage2()
-                    if not uiStorage.get(UI_STORAGE_KEYS.ROCKET_ACCELERATION_MARK_IS_SHOWN):
+                    if not uiStorage2.get(UI_STORAGE_KEYS.ROCKET_ACCELERATION_MARK_IS_SHOWN):
                         self['counter'] = self.get('counter', 0) + 1
             return

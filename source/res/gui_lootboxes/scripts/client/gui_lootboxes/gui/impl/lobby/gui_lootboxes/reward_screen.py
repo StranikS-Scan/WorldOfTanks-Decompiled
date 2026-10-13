@@ -128,7 +128,8 @@ class LootBoxesRewardScreen(ViewImpl):
         return ((self.viewModel.onClose, self.__onClose),
          (self.viewModel.showVehicleInHangar, self.__showVehicleInHangar),
          (self.__userInfoHelper.onNamesReceived, self.__onSenderNameReceived),
-         (self.viewModel.onRepeatOpen, self.__onRepeatOpen))
+         (self.viewModel.onRepeatOpen, self.__onRepeatOpen),
+         (self.__guiLootBoxes.onBoxesCountChange, self.__updateBoxesCount))
 
     def __onSenderNameReceived(self, receivedNames):
         name = receivedNames.get(self.__spaIdOfReceivedName)
@@ -138,6 +139,12 @@ class LootBoxesRewardScreen(ViewImpl):
                 vm.setSenderName(self.__lobbyContext.getPlayerFullName(name, clanAbbrev=clanAbbrev))
                 vm.setIsNameLoading(False)
             self.__spaIdOfReceivedName = None
+        return
+
+    def __updateBoxesCount(self, *_):
+        with self.viewModel.transaction() as vm:
+            if self.__lootbox is not None:
+                vm.setLootBoxCount(self.__lootbox.getInventoryCount())
         return
 
     def _processGifts(self):

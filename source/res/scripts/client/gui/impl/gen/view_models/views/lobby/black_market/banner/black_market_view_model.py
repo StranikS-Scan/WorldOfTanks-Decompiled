@@ -12,6 +12,7 @@ class StatusEnum(Enum):
 class PhaseEnum(Enum):
     LOOTBOX = 'lootbox'
     SPECIAL = 'special'
+    DEFAULT = 'default'
 
 
 class BlackMarketViewModel(ViewModel):
@@ -32,11 +33,11 @@ class BlackMarketViewModel(ViewModel):
     def setIsNew(self, value):
         self._setBool(1, value)
 
-    def getTimer(self):
-        return self._getNumber(2)
+    def getFooter(self):
+        return self._getString(2)
 
-    def setTimer(self, value):
-        self._setNumber(2, value)
+    def setFooter(self, value):
+        self._setString(2, value)
 
     def getStatus(self):
         return StatusEnum(self._getString(3))
@@ -54,7 +55,7 @@ class BlackMarketViewModel(ViewModel):
         super(BlackMarketViewModel, self)._initialize()
         self._addBoolProperty('isAloneBanner', False)
         self._addBoolProperty('isNew', False)
-        self._addNumberProperty('timer', 123456789)
+        self._addStringProperty('footer', '')
         self._addStringProperty('status', StatusEnum.ACTIVE.value)
         self._addStringProperty('eventPhase', PhaseEnum.SPECIAL.value)
         self.toBlackMarketEvent = self._addCommand('toBlackMarketEvent')

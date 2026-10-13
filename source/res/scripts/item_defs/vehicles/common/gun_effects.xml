@@ -367,6 +367,56 @@
       </shotSound>
     </effects>
   </shot_small_mb>
+  <shot_small_turel_portal26>
+    <timeline>
+      <lighting2>	0.075	</lighting2>
+      <end>	0.4	</end>
+      <endpixie>	0.5	</endpixie>
+      <soundplaystop>	5	</soundplaystop>
+    </timeline>
+    <effects>
+      <pixie>
+        <startKey>	start	</startKey>
+        <endKey>	endpixie	</endKey>
+        <file>	particles/tank/shots/portal_26_turel_shot.eff	</file>
+        <force>	1	</force>
+        <position>	HP_gunFire	</position>
+      </pixie>
+      <light>
+        <startKey>	start	</startKey>
+        <endKey>	lighting2	</endKey>
+        <innerRadius>	0.125	</innerRadius>
+        <outerRadius>	3	</outerRadius>
+        <castShadows>	false	</castShadows>
+        <position>	HP_gunFire	</position>
+        <animation>
+          <time>	0.0	</time>
+          <color>	255 150 0	</color>
+          <multiplier>	4	</multiplier>
+        </animation>
+        <animation>
+          <time>	0.15	</time>
+          <color>	255 200 100	</color>
+          <multiplier>	6	</multiplier>
+        </animation>
+        <animation>
+          <time>	0.65	</time>
+          <color>	170 65 25	</color>
+          <multiplier>	4	</multiplier>
+        </animation>
+        <animation>
+          <time>	1.0	</time>
+          <color>	0 0 0 0	</color>
+          <multiplier>	2	</multiplier>
+        </animation>
+      </light>
+      <shotSound>
+        <startKey>	start	</startKey>
+        <wwsoundPC>	wpn_small_PC	</wwsoundPC>
+        <wwsoundNPC>	wpn_small_NPC	</wwsoundNPC>
+      </shotSound>
+    </effects>
+  </shot_small_turel_portal26>
   <shot_autoshoot_small_shell_inside>
     <timeline>
       <end>	0.4	</end>
@@ -549,6 +599,13 @@
           </pixie>
           <pixie>
             <startKey>	start	</startKey>
+            <surfaceMatKind>	lava	</surfaceMatKind>
+            <file>	particles/Tank/shots/groundwave_main_lava.eff	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+          <pixie>
+            <startKey>	start	</startKey>
             <surfaceMatKind>	dirt	</surfaceMatKind>
             <file>	particles/Tank/shots/groundwave_medium_dirt.eff	</file>
             <force>	1	</force>
@@ -659,6 +716,13 @@
             <startKey>	start	</startKey>
             <surfaceMatKind>	water	</surfaceMatKind>
             <file>	particles/Tank/shots/groundwave_medium_water.eff	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+          <pixie>
+            <startKey>	start	</startKey>
+            <surfaceMatKind>	lava	</surfaceMatKind>
+            <file>	particles/Tank/shots/groundwave_main_lava.eff	</file>
             <force>	1	</force>
             <position>	Scene Root	</position>
           </pixie>
@@ -845,6 +909,13 @@
           </pixie>
           <pixie>
             <startKey>	start	</startKey>
+            <surfaceMatKind>	lava	</surfaceMatKind>
+            <file>	particles/Tank/shots/groundwave_main_lava.eff	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+          <pixie>
+            <startKey>	start	</startKey>
             <surfaceMatKind>	dirt	</surfaceMatKind>
             <file>	particles/Tank/shots/groundwave_main_dirt.eff	</file>
             <force>	1	</force>
@@ -955,6 +1026,13 @@
             <startKey>	start	</startKey>
             <surfaceMatKind>	water	</surfaceMatKind>
             <file>	particles/Tank/shots/groundwave_main_water.eff	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+          <pixie>
+            <startKey>	start	</startKey>
+            <surfaceMatKind>	lava	</surfaceMatKind>
+            <file>	particles/Tank/shots/groundwave_main_lava.eff	</file>
             <force>	1	</force>
             <position>	Scene Root	</position>
           </pixie>
@@ -1075,6 +1153,13 @@
           </pixie>
           <pixie>
             <startKey>	start	</startKey>
+            <surfaceMatKind>	lava	</surfaceMatKind>
+            <file>	particles/Tank/shots/groundwave_main_lava.eff	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+          <pixie>
+            <startKey>	start	</startKey>
             <surfaceMatKind>	dirt	</surfaceMatKind>
             <file>	particles/Tank/shots/groundwave_main_dirt_mb.eff	</file>
             <force>	1	</force>
@@ -1190,6 +1275,13 @@
           </pixie>
           <pixie>
             <startKey>	start	</startKey>
+            <surfaceMatKind>	lava	</surfaceMatKind>
+            <file>	particles/Tank/shots/groundwave_main_lava.eff	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+          <pixie>
+            <startKey>	start	</startKey>
             <surfaceMatKind>	dirt	</surfaceMatKind>
             <file>	particles/Tank/shots/groundwave_main_dirt_mb.eff	</file>
             <force>	1	</force>
@@ -1295,6 +1387,13 @@
             <startKey>	start	</startKey>
             <surfaceMatKind>	water	</surfaceMatKind>
             <file>	particles/Tank/shots/groundwave_dualgun_main_water.eff	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+          <pixie>
+            <startKey>	start	</startKey>
+            <surfaceMatKind>	lava	</surfaceMatKind>
+            <file>	particles/Tank/shots/groundwave_main_lava.eff	</file>
             <force>	1	</force>
             <position>	Scene Root	</position>
           </pixie>
@@ -1409,6 +1508,13 @@
           <pixie>
             <startKey>	start	</startKey>
             <surfaceMatKind>	water	</surfaceMatKind>
+            <file>	particles/Tank/empty.eff	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+          <pixie>
+            <startKey>	start	</startKey>
+            <surfaceMatKind>	lava	</surfaceMatKind>
             <file>	particles/Tank/empty.eff	</file>
             <force>	1	</force>
             <position>	Scene Root	</position>
@@ -1530,6 +1636,13 @@
           </pixie>
           <pixie>
             <startKey>	start	</startKey>
+            <surfaceMatKind>	lava	</surfaceMatKind>
+            <file>	particles/Tank/shots/groundwave_main_lava.eff	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+          <pixie>
+            <startKey>	start	</startKey>
             <surfaceMatKind>	dirt	</surfaceMatKind>
             <file>	particles/Tank/shots/groundwave_main_dirt.eff	</file>
             <force>	1	</force>
@@ -1645,6 +1758,13 @@
           </pixie>
           <pixie>
             <startKey>	start	</startKey>
+            <surfaceMatKind>	lava	</surfaceMatKind>
+            <file>	particles/Tank/shots/groundwave_main_lava.eff	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+          <pixie>
+            <startKey>	start	</startKey>
             <surfaceMatKind>	dirt	</surfaceMatKind>
             <file>	particles/Tank/shots/groundwave_main_dirt.eff	</file>
             <force>	1	</force>
@@ -1750,6 +1870,13 @@
             <startKey>	start	</startKey>
             <surfaceMatKind>	water	</surfaceMatKind>
             <file>	particles/Tank/shots/groundwave_dualgun_main_water.eff	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+          <pixie>
+            <startKey>	start	</startKey>
+            <surfaceMatKind>	lava	</surfaceMatKind>
+            <file>	particles/Tank/shots/groundwave_main_lava.eff	</file>
             <force>	1	</force>
             <position>	Scene Root	</position>
           </pixie>
@@ -1864,6 +1991,13 @@
           <pixie>
             <startKey>	start	</startKey>
             <surfaceMatKind>	water	</surfaceMatKind>
+            <file>	particles/Tank/empty.eff	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+          <pixie>
+            <startKey>	start	</startKey>
+            <surfaceMatKind>	lava	</surfaceMatKind>
             <file>	particles/Tank/empty.eff	</file>
             <force>	1	</force>
             <position>	Scene Root	</position>
@@ -1985,6 +2119,13 @@
           </pixie>
           <pixie>
             <startKey>	start	</startKey>
+            <surfaceMatKind>	lava	</surfaceMatKind>
+            <file>	particles/Tank/shots/groundwave_main_lava.eff	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+          <pixie>
+            <startKey>	start	</startKey>
             <surfaceMatKind>	dirt	</surfaceMatKind>
             <file>	particles/Tank/shots/groundwave_main_dirt.eff	</file>
             <force>	1	</force>
@@ -2095,6 +2236,13 @@
             <startKey>	start	</startKey>
             <surfaceMatKind>	water	</surfaceMatKind>
             <file>	particles/Tank/shots/groundwave_main_water.eff	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+          <pixie>
+            <startKey>	start	</startKey>
+            <surfaceMatKind>	lava	</surfaceMatKind>
+            <file>	particles/Tank/shots/groundwave_main_lava.eff	</file>
             <force>	1	</force>
             <position>	Scene Root	</position>
           </pixie>
@@ -2215,6 +2363,13 @@
           </pixie>
           <pixie>
             <startKey>	start	</startKey>
+            <surfaceMatKind>	lava	</surfaceMatKind>
+            <file>	particles/Tank/shots/groundwave_main_lava.eff	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+          <pixie>
+            <startKey>	start	</startKey>
             <surfaceMatKind>	dirt	</surfaceMatKind>
             <file>	particles/Tank/shots/groundwave_main_dirt_mb.eff	</file>
             <force>	1	</force>
@@ -2330,6 +2485,13 @@
           </pixie>
           <pixie>
             <startKey>	start	</startKey>
+            <surfaceMatKind>	lava	</surfaceMatKind>
+            <file>	particles/Tank/shots/groundwave_main_lava.eff	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+          <pixie>
+            <startKey>	start	</startKey>
             <surfaceMatKind>	dirt	</surfaceMatKind>
             <file>	particles/Tank/shots/groundwave_main_dirt_mb.eff	</file>
             <force>	1	</force>
@@ -2435,6 +2597,13 @@
             <startKey>	start	</startKey>
             <surfaceMatKind>	water	</surfaceMatKind>
             <file>	particles/Tank/shots/groundwave_dualgun_main_water.eff	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+          <pixie>
+            <startKey>	start	</startKey>
+            <surfaceMatKind>	lava	</surfaceMatKind>
+            <file>	particles/Tank/shots/groundwave_main_lava.eff	</file>
             <force>	1	</force>
             <position>	Scene Root	</position>
           </pixie>
@@ -2549,6 +2718,13 @@
           <pixie>
             <startKey>	start	</startKey>
             <surfaceMatKind>	water	</surfaceMatKind>
+            <file>	particles/Tank/empty.eff	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+          <pixie>
+            <startKey>	start	</startKey>
+            <surfaceMatKind>	lava	</surfaceMatKind>
             <file>	particles/Tank/empty.eff	</file>
             <force>	1	</force>
             <position>	Scene Root	</position>
@@ -2670,6 +2846,13 @@
           </pixie>
           <pixie>
             <startKey>	start	</startKey>
+            <surfaceMatKind>	lava	</surfaceMatKind>
+            <file>	particles/Tank/shots/groundwave_main_lava.eff	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+          <pixie>
+            <startKey>	start	</startKey>
             <surfaceMatKind>	dirt	</surfaceMatKind>
             <file>	particles/Tank/shots/groundwave_main_dirt.eff	</file>
             <force>	1	</force>
@@ -2785,6 +2968,13 @@
           </pixie>
           <pixie>
             <startKey>	start	</startKey>
+            <surfaceMatKind>	lava	</surfaceMatKind>
+            <file>	particles/Tank/shots/groundwave_main_lava.eff	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+          <pixie>
+            <startKey>	start	</startKey>
             <surfaceMatKind>	dirt	</surfaceMatKind>
             <file>	particles/Tank/shots/groundwave_main_dirt.eff	</file>
             <force>	1	</force>
@@ -2890,6 +3080,13 @@
             <startKey>	start	</startKey>
             <surfaceMatKind>	water	</surfaceMatKind>
             <file>	particles/Tank/shots/groundwave_dualgun_main_water.eff	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+          <pixie>
+            <startKey>	start	</startKey>
+            <surfaceMatKind>	lava	</surfaceMatKind>
+            <file>	particles/Tank/shots/groundwave_main_lava.eff	</file>
             <force>	1	</force>
             <position>	Scene Root	</position>
           </pixie>
@@ -3004,6 +3201,13 @@
           <pixie>
             <startKey>	start	</startKey>
             <surfaceMatKind>	water	</surfaceMatKind>
+            <file>	particles/Tank/empty.eff	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+          <pixie>
+            <startKey>	start	</startKey>
+            <surfaceMatKind>	lava	</surfaceMatKind>
             <file>	particles/Tank/empty.eff	</file>
             <force>	1	</force>
             <position>	Scene Root	</position>
@@ -3125,6 +3329,13 @@
           </pixie>
           <pixie>
             <startKey>	start	</startKey>
+            <surfaceMatKind>	lava	</surfaceMatKind>
+            <file>	particles/Tank/shots/groundwave_main_lava.eff	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+          <pixie>
+            <startKey>	start	</startKey>
             <surfaceMatKind>	dirt	</surfaceMatKind>
             <file>	particles/Tank/shots/groundwave_large_dirt.eff	</file>
             <force>	1	</force>
@@ -3235,6 +3446,13 @@
             <startKey>	start	</startKey>
             <surfaceMatKind>	water	</surfaceMatKind>
             <file>	particles/Tank/shots/groundwave_large_water.eff	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+          <pixie>
+            <startKey>	start	</startKey>
+            <surfaceMatKind>	lava	</surfaceMatKind>
+            <file>	particles/Tank/shots/groundwave_main_lava.eff	</file>
             <force>	1	</force>
             <position>	Scene Root	</position>
           </pixie>
@@ -3360,6 +3578,13 @@
           </pixie>
           <pixie>
             <startKey>	start	</startKey>
+            <surfaceMatKind>	lava	</surfaceMatKind>
+            <file>	particles/Tank/shots/groundwave_main_lava.eff	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+          <pixie>
+            <startKey>	start	</startKey>
             <surfaceMatKind>	dirt	</surfaceMatKind>
             <file>	particles/Tank/shots/groundwave_large_dirt.eff	</file>
             <force>	1	</force>
@@ -3470,6 +3695,13 @@
             <startKey>	start	</startKey>
             <surfaceMatKind>	water	</surfaceMatKind>
             <file>	particles/Tank/shots/groundwave_large_water.eff	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+          <pixie>
+            <startKey>	start	</startKey>
+            <surfaceMatKind>	lava	</surfaceMatKind>
+            <file>	particles/Tank/shots/groundwave_main_lava.eff	</file>
             <force>	1	</force>
             <position>	Scene Root	</position>
           </pixie>
@@ -3590,6 +3822,13 @@
           </pixie>
           <pixie>
             <startKey>	start	</startKey>
+            <surfaceMatKind>	lava	</surfaceMatKind>
+            <file>	particles/Tank/shots/groundwave_main_lava.eff	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+          <pixie>
+            <startKey>	start	</startKey>
             <surfaceMatKind>	dirt	</surfaceMatKind>
             <file>	particles/Tank/shots/groundwave_large_dirt.eff	</file>
             <force>	1	</force>
@@ -3700,6 +3939,13 @@
             <startKey>	start	</startKey>
             <surfaceMatKind>	water	</surfaceMatKind>
             <file>	particles/Tank/shots/groundwave_large_water.eff	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+          <pixie>
+            <startKey>	start	</startKey>
+            <surfaceMatKind>	lava	</surfaceMatKind>
+            <file>	particles/Tank/shots/groundwave_main_lava.eff	</file>
             <force>	1	</force>
             <position>	Scene Root	</position>
           </pixie>
@@ -3820,6 +4066,13 @@
           </pixie>
           <pixie>
             <startKey>	start	</startKey>
+            <surfaceMatKind>	lava	</surfaceMatKind>
+            <file>	particles/Tank/shots/groundwave_main_lava.eff	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+          <pixie>
+            <startKey>	start	</startKey>
             <surfaceMatKind>	dirt	</surfaceMatKind>
             <file>	particles/Tank/shots/groundwave_large_dirt.eff	</file>
             <force>	1	</force>
@@ -3836,236 +4089,6 @@
       </groundWave>
     </relatedEffects>
   </shot_large>
-  <wt_shot_large>
-    <timeline>
-      <lighting2>	0.09	</lighting2>
-      <end>	0.5	</end>
-      <endpixie>	2	</endpixie>
-      <soundplaystop>	9	</soundplaystop>
-    </timeline>
-    <effects>
-      <pixie>
-        <startKey>	start	</startKey>
-        <endKey>	endpixie	</endKey>
-        <file>	particles/Tank/shots/wt_shot_large.eff	</file>
-        <force>	1	</force>
-        <position>	HP_gunFire	</position>
-      </pixie>
-      <light>
-        <startKey>	start	</startKey>
-        <endKey>	lighting2	</endKey>
-        <innerRadius>	1.5	</innerRadius>
-        <outerRadius>	8	</outerRadius>
-        <castShadows>	false	</castShadows>
-        <position>	HP_gunFire	</position>
-        <animation>
-          <time>	0.0	</time>
-          <color>	255 150 0	</color>
-          <multiplier>	20	</multiplier>
-        </animation>
-        <animation>
-          <time>	0.15	</time>
-          <color>	255 200 100	</color>
-          <multiplier>	25	</multiplier>
-        </animation>
-        <animation>
-          <time>	0.65	</time>
-          <color>	170 65 25	</color>
-          <multiplier>	15	</multiplier>
-        </animation>
-        <animation>
-          <time>	1.0	</time>
-          <color>	0 0 0 0	</color>
-          <multiplier>	5	</multiplier>
-        </animation>
-      </light>
-      <shotSound>
-        <startKey>	start	</startKey>
-        <wwsoundPC>	wpn_large_PC	</wwsoundPC>
-        <wwsoundNPC>	wpn_large_NPC	</wwsoundNPC>
-      </shotSound>
-    </effects>
-    <relatedEffects>
-      <groundWave>
-        <timeline>
-          <shooting>	1	</shooting>
-        </timeline>
-        <effects>
-          <pixie>
-            <startKey>	start	</startKey>
-            <surfaceMatKind>	default	</surfaceMatKind>
-            <file>	particles/Tank/shots/groundwave_large_ground.eff	</file>
-            <force>	1	</force>
-            <position>	Scene Root	</position>
-          </pixie>
-          <pixie>
-            <startKey>	start	</startKey>
-            <surfaceMatKind>	ground	</surfaceMatKind>
-            <file>	particles/Tank/shots/groundwave_large_ground.eff	</file>
-            <force>	1	</force>
-            <position>	Scene Root	</position>
-          </pixie>
-          <pixie>
-            <startKey>	start	</startKey>
-            <surfaceMatKind>	stone	</surfaceMatKind>
-            <file>	particles/Tank/shots/groundwave_large_stone.eff	</file>
-            <force>	1	</force>
-            <position>	Scene Root	</position>
-          </pixie>
-          <pixie>
-            <startKey>	start	</startKey>
-            <surfaceMatKind>	sand	</surfaceMatKind>
-            <file>	particles/Tank/shots/groundwave_large_sand.eff	</file>
-            <force>	1	</force>
-            <position>	Scene Root	</position>
-          </pixie>
-          <pixie>
-            <startKey>	start	</startKey>
-            <surfaceMatKind>	snow	</surfaceMatKind>
-            <file>	particles/Tank/shots/groundwave_large_snow.eff	</file>
-            <force>	1	</force>
-            <position>	Scene Root	</position>
-          </pixie>
-          <pixie>
-            <startKey>	start	</startKey>
-            <surfaceMatKind>	water	</surfaceMatKind>
-            <file>	particles/Tank/shots/groundwave_large_water.eff	</file>
-            <force>	1	</force>
-            <position>	Scene Root	</position>
-          </pixie>
-          <pixie>
-            <startKey>	start	</startKey>
-            <surfaceMatKind>	dirt	</surfaceMatKind>
-            <file>	particles/Tank/shots/groundwave_large_dirt.eff	</file>
-            <force>	1	</force>
-            <position>	Scene Root	</position>
-          </pixie>
-          <pixie>
-            <startKey>	start	</startKey>
-            <surfaceMatKind>	oil	</surfaceMatKind>
-            <file>	particles/Tank/shots/groundwave_large_oil.eff	</file>
-            <force>	1	</force>
-            <position>	Scene Root	</position>
-          </pixie>
-        </effects>
-      </groundWave>
-    </relatedEffects>
-  </wt_shot_large>
-  <shot_explosive_large_wt>
-    <timeline>
-      <lighting2>	0.09	</lighting2>
-      <end>	0.5	</end>
-      <endpixie>	2	</endpixie>
-      <soundplaystop>	9	</soundplaystop>
-    </timeline>
-    <effects>
-      <pixie>
-        <startKey>	start	</startKey>
-        <endKey>	endpixie	</endKey>
-        <file>	particles/tank/shots/explosive_shot_wt.eff	</file>
-        <force>	1	</force>
-        <position>	HP_gunFire	</position>
-      </pixie>
-      <light>
-        <startKey>	start	</startKey>
-        <endKey>	lighting2	</endKey>
-        <innerRadius>	1.5	</innerRadius>
-        <outerRadius>	8	</outerRadius>
-        <castShadows>	false	</castShadows>
-        <position>	HP_gunFire	</position>
-        <animation>
-          <time>	0.0	</time>
-          <color>	255 150 0	</color>
-          <multiplier>	20	</multiplier>
-        </animation>
-        <animation>
-          <time>	0.15	</time>
-          <color>	255 200 100	</color>
-          <multiplier>	25	</multiplier>
-        </animation>
-        <animation>
-          <time>	0.65	</time>
-          <color>	170 65 25	</color>
-          <multiplier>	15	</multiplier>
-        </animation>
-        <animation>
-          <time>	1.0	</time>
-          <color>	0 0 0 0	</color>
-          <multiplier>	5	</multiplier>
-        </animation>
-      </light>
-      <shotSound>
-        <startKey>	start	</startKey>
-        <wwsoundPC>	wpn_large_PC	</wwsoundPC>
-        <wwsoundNPC>	wpn_large_NPC	</wwsoundNPC>
-      </shotSound>
-    </effects>
-    <relatedEffects>
-      <groundWave>
-        <timeline>
-          <shooting>	1	</shooting>
-        </timeline>
-        <effects>
-          <pixie>
-            <startKey>	start	</startKey>
-            <surfaceMatKind>	default	</surfaceMatKind>
-            <file>	particles/Tank/shots/groundwave_large_ground.eff	</file>
-            <force>	1	</force>
-            <position>	Scene Root	</position>
-          </pixie>
-          <pixie>
-            <startKey>	start	</startKey>
-            <surfaceMatKind>	ground	</surfaceMatKind>
-            <file>	particles/Tank/shots/groundwave_large_ground.eff	</file>
-            <force>	1	</force>
-            <position>	Scene Root	</position>
-          </pixie>
-          <pixie>
-            <startKey>	start	</startKey>
-            <surfaceMatKind>	stone	</surfaceMatKind>
-            <file>	particles/Tank/shots/groundwave_large_stone.eff	</file>
-            <force>	1	</force>
-            <position>	Scene Root	</position>
-          </pixie>
-          <pixie>
-            <startKey>	start	</startKey>
-            <surfaceMatKind>	sand	</surfaceMatKind>
-            <file>	particles/Tank/shots/groundwave_large_sand.eff	</file>
-            <force>	1	</force>
-            <position>	Scene Root	</position>
-          </pixie>
-          <pixie>
-            <startKey>	start	</startKey>
-            <surfaceMatKind>	snow	</surfaceMatKind>
-            <file>	particles/Tank/shots/groundwave_large_snow.eff	</file>
-            <force>	1	</force>
-            <position>	Scene Root	</position>
-          </pixie>
-          <pixie>
-            <startKey>	start	</startKey>
-            <surfaceMatKind>	water	</surfaceMatKind>
-            <file>	particles/Tank/shots/groundwave_large_water.eff	</file>
-            <force>	1	</force>
-            <position>	Scene Root	</position>
-          </pixie>
-          <pixie>
-            <startKey>	start	</startKey>
-            <surfaceMatKind>	dirt	</surfaceMatKind>
-            <file>	particles/Tank/shots/groundwave_large_dirt.eff	</file>
-            <force>	1	</force>
-            <position>	Scene Root	</position>
-          </pixie>
-          <pixie>
-            <startKey>	start	</startKey>
-            <surfaceMatKind>	oil	</surfaceMatKind>
-            <file>	particles/Tank/shots/groundwave_large_oil.eff	</file>
-            <force>	1	</force>
-            <position>	Scene Root	</position>
-          </pixie>
-        </effects>
-      </groundWave>
-    </relatedEffects>
-  </shot_explosive_large_wt>
   <shot_dualgun1_large_mb_L>
     <timeline>
       <lighting2>	0.09	</lighting2>
@@ -4160,6 +4183,13 @@
             <startKey>	start	</startKey>
             <surfaceMatKind>	water	</surfaceMatKind>
             <file>	particles/Tank/shots/groundwave_large_water.eff	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+          <pixie>
+            <startKey>	start	</startKey>
+            <surfaceMatKind>	lava	</surfaceMatKind>
+            <file>	particles/Tank/shots/groundwave_main_lava.eff	</file>
             <force>	1	</force>
             <position>	Scene Root	</position>
           </pixie>
@@ -4280,6 +4310,13 @@
           </pixie>
           <pixie>
             <startKey>	start	</startKey>
+            <surfaceMatKind>	lava	</surfaceMatKind>
+            <file>	particles/Tank/shots/groundwave_main_lava.eff	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+          <pixie>
+            <startKey>	start	</startKey>
             <surfaceMatKind>	dirt	</surfaceMatKind>
             <file>	particles/Tank/shots/groundwave_large_dirt_mb.eff	</file>
             <force>	1	</force>
@@ -4385,6 +4422,13 @@
             <startKey>	start	</startKey>
             <surfaceMatKind>	water	</surfaceMatKind>
             <file>	particles/Tank/shots/groundwave_dualgun_large_water.eff	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+          <pixie>
+            <startKey>	start	</startKey>
+            <surfaceMatKind>	lava	</surfaceMatKind>
+            <file>	particles/Tank/shots/groundwave_main_lava.eff	</file>
             <force>	1	</force>
             <position>	Scene Root	</position>
           </pixie>
@@ -4499,6 +4543,13 @@
           <pixie>
             <startKey>	start	</startKey>
             <surfaceMatKind>	water	</surfaceMatKind>
+            <file>	particles/Tank/empty.eff	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+          <pixie>
+            <startKey>	start	</startKey>
+            <surfaceMatKind>	lava	</surfaceMatKind>
             <file>	particles/Tank/empty.eff	</file>
             <force>	1	</force>
             <position>	Scene Root	</position>
@@ -4620,6 +4671,13 @@
           </pixie>
           <pixie>
             <startKey>	start	</startKey>
+            <surfaceMatKind>	lava	</surfaceMatKind>
+            <file>	particles/Tank/shots/groundwave_main_lava.eff	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+          <pixie>
+            <startKey>	start	</startKey>
             <surfaceMatKind>	dirt	</surfaceMatKind>
             <file>	particles/Tank/shots/groundwave_large_dirt.eff	</file>
             <force>	1	</force>
@@ -4735,6 +4793,13 @@
           </pixie>
           <pixie>
             <startKey>	start	</startKey>
+            <surfaceMatKind>	lava	</surfaceMatKind>
+            <file>	particles/Tank/shots/groundwave_main_lava.eff	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+          <pixie>
+            <startKey>	start	</startKey>
             <surfaceMatKind>	dirt	</surfaceMatKind>
             <file>	particles/Tank/shots/groundwave_large_dirt.eff	</file>
             <force>	1	</force>
@@ -4840,6 +4905,13 @@
             <startKey>	start	</startKey>
             <surfaceMatKind>	water	</surfaceMatKind>
             <file>	particles/Tank/shots/groundwave_dualgun_large_water.eff	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+          <pixie>
+            <startKey>	start	</startKey>
+            <surfaceMatKind>	lava	</surfaceMatKind>
+            <file>	particles/Tank/shots/groundwave_main_lava.eff	</file>
             <force>	1	</force>
             <position>	Scene Root	</position>
           </pixie>
@@ -4960,6 +5032,13 @@
           </pixie>
           <pixie>
             <startKey>	start	</startKey>
+            <surfaceMatKind>	lava	</surfaceMatKind>
+            <file>	particles/Tank/empty.eff	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+          <pixie>
+            <startKey>	start	</startKey>
             <surfaceMatKind>	dirt	</surfaceMatKind>
             <file>	particles/Tank/empty.eff	</file>
             <force>	1	</force>
@@ -5065,6 +5144,13 @@
             <startKey>	start	</startKey>
             <surfaceMatKind>	water	</surfaceMatKind>
             <file>	particles/Tank/shots/groundwave_dualgun_large_water.eff	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+          <pixie>
+            <startKey>	start	</startKey>
+            <surfaceMatKind>	lava	</surfaceMatKind>
+            <file>	particles/Tank/shots/groundwave_main_lava.eff	</file>
             <force>	1	</force>
             <position>	Scene Root	</position>
           </pixie>
@@ -5185,6 +5271,13 @@
           </pixie>
           <pixie>
             <startKey>	start	</startKey>
+            <surfaceMatKind>	lava	</surfaceMatKind>
+            <file>	particles/Tank/shots/groundwave_main_lava.eff	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+          <pixie>
+            <startKey>	start	</startKey>
             <surfaceMatKind>	dirt	</surfaceMatKind>
             <file>	particles/Tank/shots/groundwave_dualgun_large_dirt.eff	</file>
             <force>	1	</force>
@@ -5295,6 +5388,13 @@
             <startKey>	start	</startKey>
             <surfaceMatKind>	water	</surfaceMatKind>
             <file>	particles/Tank/shots/groundwave_dualgun_large_water.eff	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+          <pixie>
+            <startKey>	start	</startKey>
+            <surfaceMatKind>	lava	</surfaceMatKind>
+            <file>	particles/Tank/shots/groundwave_main_lava.eff	</file>
             <force>	1	</force>
             <position>	Scene Root	</position>
           </pixie>
@@ -5415,6 +5515,13 @@
           </pixie>
           <pixie>
             <startKey>	start	</startKey>
+            <surfaceMatKind>	lava	</surfaceMatKind>
+            <file>	particles/Tank/shots/groundwave_main_lava.eff	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+          <pixie>
+            <startKey>	start	</startKey>
             <surfaceMatKind>	dirt	</surfaceMatKind>
             <file>	particles/Tank/shots/groundwave_dualgun_large_dirt.eff	</file>
             <force>	1	</force>
@@ -5520,6 +5627,13 @@
             <startKey>	start	</startKey>
             <surfaceMatKind>	water	</surfaceMatKind>
             <file>	particles/Tank/shots/groundwave_dualgun_large_water.eff	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+          <pixie>
+            <startKey>	start	</startKey>
+            <surfaceMatKind>	lava	</surfaceMatKind>
+            <file>	particles/Tank/shots/groundwave_main_lava.eff	</file>
             <force>	1	</force>
             <position>	Scene Root	</position>
           </pixie>
@@ -5634,6 +5748,13 @@
           <pixie>
             <startKey>	start	</startKey>
             <surfaceMatKind>	water	</surfaceMatKind>
+            <file>	particles/Tank/empty.eff	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+          <pixie>
+            <startKey>	start	</startKey>
+            <surfaceMatKind>	lava	</surfaceMatKind>
             <file>	particles/Tank/empty.eff	</file>
             <force>	1	</force>
             <position>	Scene Root	</position>
@@ -5755,6 +5876,13 @@
           </pixie>
           <pixie>
             <startKey>	start	</startKey>
+            <surfaceMatKind>	lava	</surfaceMatKind>
+            <file>	particles/Tank/shots/groundwave_main_lava.eff	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+          <pixie>
+            <startKey>	start	</startKey>
             <surfaceMatKind>	dirt	</surfaceMatKind>
             <file>	particles/Tank/shots/groundwave_large_dirt_mb.eff	</file>
             <force>	1	</force>
@@ -5865,6 +5993,13 @@
             <startKey>	start	</startKey>
             <surfaceMatKind>	water	</surfaceMatKind>
             <file>	particles/Tank/shots/groundwave_large_water.eff	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+          <pixie>
+            <startKey>	start	</startKey>
+            <surfaceMatKind>	lava	</surfaceMatKind>
+            <file>	particles/Tank/shots/groundwave_main_lava.eff	</file>
             <force>	1	</force>
             <position>	Scene Root	</position>
           </pixie>
@@ -5985,6 +6120,13 @@
           </pixie>
           <pixie>
             <startKey>	start	</startKey>
+            <surfaceMatKind>	lava	</surfaceMatKind>
+            <file>	particles/Tank/shots/groundwave_main_lava.eff	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+          <pixie>
+            <startKey>	start	</startKey>
             <surfaceMatKind>	dirt	</surfaceMatKind>
             <file>	particles/Tank/shots/groundwave_large_dirt.eff	</file>
             <force>	1	</force>
@@ -6001,86 +6143,6 @@
       </groundWave>
     </relatedEffects>
   </shot_largeext>
-  <shot_largeext_empty>
-    <timeline>
-      <lighting2>	0.09	</lighting2>
-      <end>	0.5	</end>
-      <endpixie>	2	</endpixie>
-      <soundplaystop>	9	</soundplaystop>
-    </timeline>
-    <effects>
-      <shotSound>
-        <startKey>	start	</startKey>
-        <wwsoundPC>	wpn_large_extra_PC	</wwsoundPC>
-        <wwsoundNPC>	wpn_large_extra_NPC	</wwsoundNPC>
-      </shotSound>
-    </effects>
-    <relatedEffects>
-      <groundWave>
-        <timeline>
-          <shooting>	1	</shooting>
-        </timeline>
-        <effects>
-          <pixie>
-            <startKey>	start	</startKey>
-            <surfaceMatKind>	default	</surfaceMatKind>
-            <file>	particles/Tank/shots/groundwave_large_ground.eff	</file>
-            <force>	1	</force>
-            <position>	Scene Root	</position>
-          </pixie>
-          <pixie>
-            <startKey>	start	</startKey>
-            <surfaceMatKind>	ground	</surfaceMatKind>
-            <file>	particles/Tank/shots/groundwave_large_ground.eff	</file>
-            <force>	1	</force>
-            <position>	Scene Root	</position>
-          </pixie>
-          <pixie>
-            <startKey>	start	</startKey>
-            <surfaceMatKind>	stone	</surfaceMatKind>
-            <file>	particles/Tank/shots/groundwave_large_stone.eff	</file>
-            <force>	1	</force>
-            <position>	Scene Root	</position>
-          </pixie>
-          <pixie>
-            <startKey>	start	</startKey>
-            <surfaceMatKind>	sand	</surfaceMatKind>
-            <file>	particles/Tank/shots/groundwave_large_sand.eff	</file>
-            <force>	1	</force>
-            <position>	Scene Root	</position>
-          </pixie>
-          <pixie>
-            <startKey>	start	</startKey>
-            <surfaceMatKind>	snow	</surfaceMatKind>
-            <file>	particles/Tank/shots/groundwave_large_snow.eff	</file>
-            <force>	1	</force>
-            <position>	Scene Root	</position>
-          </pixie>
-          <pixie>
-            <startKey>	start	</startKey>
-            <surfaceMatKind>	water	</surfaceMatKind>
-            <file>	particles/Tank/shots/groundwave_large_water.eff	</file>
-            <force>	1	</force>
-            <position>	Scene Root	</position>
-          </pixie>
-          <pixie>
-            <startKey>	start	</startKey>
-            <surfaceMatKind>	dirt	</surfaceMatKind>
-            <file>	particles/Tank/shots/groundwave_large_dirt.eff	</file>
-            <force>	1	</force>
-            <position>	Scene Root	</position>
-          </pixie>
-          <pixie>
-            <startKey>	start	</startKey>
-            <surfaceMatKind>	oil	</surfaceMatKind>
-            <file>	particles/Tank/shots/groundwave_large_oil.eff	</file>
-            <force>	1	</force>
-            <position>	Scene Root	</position>
-          </pixie>
-        </effects>
-      </groundWave>
-    </relatedEffects>
-  </shot_largeext_empty>
   <shot_largeext_mb>
     <timeline>
       <lighting2>	0.09	</lighting2>
@@ -6180,6 +6242,13 @@
           </pixie>
           <pixie>
             <startKey>	start	</startKey>
+            <surfaceMatKind>	lava	</surfaceMatKind>
+            <file>	particles/Tank/shots/groundwave_main_lava.eff	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+          <pixie>
+            <startKey>	start	</startKey>
             <surfaceMatKind>	dirt	</surfaceMatKind>
             <file>	particles/Tank/shots/groundwave_large_dirt_mb.eff	</file>
             <force>	1	</force>
@@ -6196,86 +6265,6 @@
       </groundWave>
     </relatedEffects>
   </shot_largeext_mb>
-  <shot_largeext_empty>
-    <timeline>
-      <lighting2>	0.09	</lighting2>
-      <end>	0.5	</end>
-      <endpixie>	2	</endpixie>
-      <soundplaystop>	9	</soundplaystop>
-    </timeline>
-    <effects>
-      <shotSound>
-        <startKey>	start	</startKey>
-        <wwsoundPC>	wpn_large_extra_PC	</wwsoundPC>
-        <wwsoundNPC>	wpn_large_extra_NPC	</wwsoundNPC>
-      </shotSound>
-    </effects>
-    <relatedEffects>
-      <groundWave>
-        <timeline>
-          <shooting>	1	</shooting>
-        </timeline>
-        <effects>
-          <pixie>
-            <startKey>	start	</startKey>
-            <surfaceMatKind>	default	</surfaceMatKind>
-            <file>	particles/Tank/shots/groundwave_large_ground.eff	</file>
-            <force>	1	</force>
-            <position>	Scene Root	</position>
-          </pixie>
-          <pixie>
-            <startKey>	start	</startKey>
-            <surfaceMatKind>	ground	</surfaceMatKind>
-            <file>	particles/Tank/shots/groundwave_large_ground.eff	</file>
-            <force>	1	</force>
-            <position>	Scene Root	</position>
-          </pixie>
-          <pixie>
-            <startKey>	start	</startKey>
-            <surfaceMatKind>	stone	</surfaceMatKind>
-            <file>	particles/Tank/shots/groundwave_large_stone.eff	</file>
-            <force>	1	</force>
-            <position>	Scene Root	</position>
-          </pixie>
-          <pixie>
-            <startKey>	start	</startKey>
-            <surfaceMatKind>	sand	</surfaceMatKind>
-            <file>	particles/Tank/shots/groundwave_large_sand.eff	</file>
-            <force>	1	</force>
-            <position>	Scene Root	</position>
-          </pixie>
-          <pixie>
-            <startKey>	start	</startKey>
-            <surfaceMatKind>	snow	</surfaceMatKind>
-            <file>	particles/Tank/shots/groundwave_large_snow.eff	</file>
-            <force>	1	</force>
-            <position>	Scene Root	</position>
-          </pixie>
-          <pixie>
-            <startKey>	start	</startKey>
-            <surfaceMatKind>	water	</surfaceMatKind>
-            <file>	particles/Tank/shots/groundwave_large_water.eff	</file>
-            <force>	1	</force>
-            <position>	Scene Root	</position>
-          </pixie>
-          <pixie>
-            <startKey>	start	</startKey>
-            <surfaceMatKind>	dirt	</surfaceMatKind>
-            <file>	particles/Tank/shots/groundwave_large_dirt.eff	</file>
-            <force>	1	</force>
-            <position>	Scene Root	</position>
-          </pixie>
-          <pixie>
-            <startKey>	start	</startKey>
-            <surfaceMatKind>	oil	</surfaceMatKind>
-            <file>	particles/Tank/shots/groundwave_large_oil.eff	</file>
-            <force>	1	</force>
-            <position>	Scene Root	</position>
-          </pixie>
-        </effects>
-      </groundWave>
-    </relatedEffects>
-  </shot_largeext_empty>
   <shot_ch41>
     <timeline>
       <lighting2>	0.09	</lighting2>
@@ -6370,6 +6359,13 @@
             <startKey>	start	</startKey>
             <surfaceMatKind>	water	</surfaceMatKind>
             <file>	particles/Tank/shots/groundwave_large_water.eff	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+          <pixie>
+            <startKey>	start	</startKey>
+            <surfaceMatKind>	lava	</surfaceMatKind>
+            <file>	particles/Tank/shots/groundwave_main_lava.eff	</file>
             <force>	1	</force>
             <position>	Scene Root	</position>
           </pixie>
@@ -6485,6 +6481,13 @@
             <startKey>	start	</startKey>
             <surfaceMatKind>	water	</surfaceMatKind>
             <file>	particles/Tank/shots/groundwave_large_water.eff	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+          <pixie>
+            <startKey>	start	</startKey>
+            <surfaceMatKind>	lava	</surfaceMatKind>
+            <file>	particles/Tank/shots/groundwave_main_lava.eff	</file>
             <force>	1	</force>
             <position>	Scene Root	</position>
           </pixie>
@@ -6610,6 +6613,13 @@
           </pixie>
           <pixie>
             <startKey>	start	</startKey>
+            <surfaceMatKind>	lava	</surfaceMatKind>
+            <file>	particles/Tank/shots/groundwave_main_lava.eff	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+          <pixie>
+            <startKey>	start	</startKey>
             <surfaceMatKind>	dirt	</surfaceMatKind>
             <file>	particles/Tank/shots/groundwave_large_dirt.eff	</file>
             <force>	1	</force>
@@ -6720,6 +6730,13 @@
             <startKey>	start	</startKey>
             <surfaceMatKind>	water	</surfaceMatKind>
             <file>	particles/Tank/shots/groundwave_large_water.eff	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+          <pixie>
+            <startKey>	start	</startKey>
+            <surfaceMatKind>	lava	</surfaceMatKind>
+            <file>	particles/Tank/shots/groundwave_main_lava.eff	</file>
             <force>	1	</force>
             <position>	Scene Root	</position>
           </pixie>
@@ -6840,6 +6857,13 @@
           </pixie>
           <pixie>
             <startKey>	start	</startKey>
+            <surfaceMatKind>	lava	</surfaceMatKind>
+            <file>	particles/Tank/shots/groundwave_main_lava.eff	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+          <pixie>
+            <startKey>	start	</startKey>
             <surfaceMatKind>	dirt	</surfaceMatKind>
             <file>	particles/Tank/shots/groundwave_large_dirt.eff	</file>
             <force>	1	</force>
@@ -6950,6 +6974,13 @@
             <startKey>	start	</startKey>
             <surfaceMatKind>	water	</surfaceMatKind>
             <file>	particles/Tank/shots/groundwave_large_water.eff	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+          <pixie>
+            <startKey>	start	</startKey>
+            <surfaceMatKind>	lava	</surfaceMatKind>
+            <file>	particles/Tank/shots/groundwave_main_lava.eff	</file>
             <force>	1	</force>
             <position>	Scene Root	</position>
           </pixie>
@@ -7070,6 +7101,13 @@
           </pixie>
           <pixie>
             <startKey>	start	</startKey>
+            <surfaceMatKind>	lava	</surfaceMatKind>
+            <file>	particles/Tank/shots/groundwave_main_lava.eff	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+          <pixie>
+            <startKey>	start	</startKey>
             <surfaceMatKind>	dirt	</surfaceMatKind>
             <file>	particles/Tank/shots/groundwave_large_dirt.eff	</file>
             <force>	1	</force>
@@ -7180,6 +7218,13 @@
             <startKey>	start	</startKey>
             <surfaceMatKind>	water	</surfaceMatKind>
             <file>	particles/Tank/shots/groundwave_large_water.eff	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+          <pixie>
+            <startKey>	start	</startKey>
+            <surfaceMatKind>	lava	</surfaceMatKind>
+            <file>	particles/Tank/shots/groundwave_main_lava.eff	</file>
             <force>	1	</force>
             <position>	Scene Root	</position>
           </pixie>
@@ -7300,6 +7345,13 @@
           </pixie>
           <pixie>
             <startKey>	start	</startKey>
+            <surfaceMatKind>	lava	</surfaceMatKind>
+            <file>	particles/Tank/shots/groundwave_main_lava.eff	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+          <pixie>
+            <startKey>	start	</startKey>
             <surfaceMatKind>	dirt	</surfaceMatKind>
             <file>	particles/Tank/shots/groundwave_large_dirt.eff	</file>
             <force>	1	</force>
@@ -7415,6 +7467,13 @@
           </pixie>
           <pixie>
             <startKey>	start	</startKey>
+            <surfaceMatKind>	lava	</surfaceMatKind>
+            <file>	particles/Tank/shots/groundwave_main_lava.eff	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+          <pixie>
+            <startKey>	start	</startKey>
             <surfaceMatKind>	dirt	</surfaceMatKind>
             <file>	particles/Tank/shots/groundwave_large_dirt.eff	</file>
             <force>	1	</force>
@@ -7446,6 +7505,128 @@
       </shotSound>
     </effects>
   </shot_env_artillery>
+  <shot_portal_movingshot>
+    <timeline>
+      <lighting2>	0.1	</lighting2>
+      <end>	0.4	</end>
+      <endpixie>	2	</endpixie>
+      <soundplaystop>	6	</soundplaystop>
+    </timeline>
+    <effects>
+      <pixie>
+        <startKey>	start	</startKey>
+        <endKey>	endpixie	</endKey>
+        <file>	particles/Tank/shots/portal_25_moving_shot.eff	</file>
+        <force>	1	</force>
+        <position>	HP_gunFire	</position>
+      </pixie>
+      <light>
+        <startKey>	start	</startKey>
+        <endKey>	lighting2	</endKey>
+        <innerRadius>	3	</innerRadius>
+        <outerRadius>	15	</outerRadius>
+        <castShadows>	false	</castShadows>
+        <position>	HP_gunFire	</position>
+        <animation>
+          <time>	0.0	</time>
+          <color>	255 150 0	</color>
+          <multiplier>	35	</multiplier>
+        </animation>
+        <animation>
+          <time>	0.25	</time>
+          <color>	255 200 100	</color>
+          <multiplier>	55	</multiplier>
+        </animation>
+        <animation>
+          <time>	0.75	</time>
+          <color>	170 65 25	</color>
+          <multiplier>	30	</multiplier>
+        </animation>
+        <animation>
+          <time>	1.0	</time>
+          <color>	0 0 0 0	</color>
+          <multiplier>	15	</multiplier>
+        </animation>
+      </light>
+      <shotSound>
+        <startKey>	start	</startKey>
+        <wwsoundPC>	wpn_superhuge_RW_PC	</wwsoundPC>
+        <wwsoundNPC>	wpn_superhuge_RW_NPC	</wwsoundNPC>
+      </shotSound>
+    </effects>
+    <relatedEffects>
+      <groundWave>
+        <timeline>
+          <shooting>	1	</shooting>
+        </timeline>
+        <effects>
+          <pixie>
+            <startKey>	start	</startKey>
+            <surfaceMatKind>	default	</surfaceMatKind>
+            <file>	particles/Tank/shots/groundwave_large_ground.eff	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+          <pixie>
+            <startKey>	start	</startKey>
+            <surfaceMatKind>	ground	</surfaceMatKind>
+            <file>	particles/Tank/shots/groundwave_large_ground.eff	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+          <pixie>
+            <startKey>	start	</startKey>
+            <surfaceMatKind>	stone	</surfaceMatKind>
+            <file>	particles/Tank/shots/groundwave_large_stone.eff	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+          <pixie>
+            <startKey>	start	</startKey>
+            <surfaceMatKind>	sand	</surfaceMatKind>
+            <file>	particles/Tank/shots/groundwave_large_sand.eff	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+          <pixie>
+            <startKey>	start	</startKey>
+            <surfaceMatKind>	snow	</surfaceMatKind>
+            <file>	particles/Tank/shots/groundwave_large_snow.eff	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+          <pixie>
+            <startKey>	start	</startKey>
+            <surfaceMatKind>	water	</surfaceMatKind>
+            <file>	particles/Tank/shots/groundwave_large_water.eff	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+          <pixie>
+            <startKey>	start	</startKey>
+            <surfaceMatKind>	lava	</surfaceMatKind>
+            <file>	particles/Tank/shots/groundwave_main_lava.eff	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+          <pixie>
+            <startKey>	start	</startKey>
+            <surfaceMatKind>	dirt	</surfaceMatKind>
+            <file>	particles/Tank/shots/groundwave_large_dirt.eff	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+          <pixie>
+            <startKey>	start	</startKey>
+            <surfaceMatKind>	oil	</surfaceMatKind>
+            <file>	particles/Tank/shots/groundwave_large_oil.eff	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+        </effects>
+      </groundWave>
+    </relatedEffects>
+  </shot_portal_movingshot>
   <shot_superhuge_aspg>
     <timeline>
       <lighting2>	0.1	</lighting2>
@@ -7540,6 +7721,13 @@
             <startKey>	start	</startKey>
             <surfaceMatKind>	water	</surfaceMatKind>
             <file>	particles/Tank/shots/groundwave_large_water.eff	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+          <pixie>
+            <startKey>	start	</startKey>
+            <surfaceMatKind>	lava	</surfaceMatKind>
+            <file>	particles/Tank/shots/groundwave_main_lava.eff	</file>
             <force>	1	</force>
             <position>	Scene Root	</position>
           </pixie>
@@ -7660,6 +7848,13 @@
           </pixie>
           <pixie>
             <startKey>	start	</startKey>
+            <surfaceMatKind>	lava	</surfaceMatKind>
+            <file>	particles/Tank/shots/groundwave_main_lava.eff	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+          <pixie>
+            <startKey>	start	</startKey>
             <surfaceMatKind>	dirt	</surfaceMatKind>
             <file>	particles/Tank/shots/groundwave_main_dirt.eff	</file>
             <force>	1	</force>
@@ -7770,6 +7965,13 @@
             <startKey>	start	</startKey>
             <surfaceMatKind>	water	</surfaceMatKind>
             <file>	particles/Tank/shots/groundwave_main_water.eff	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+          <pixie>
+            <startKey>	start	</startKey>
+            <surfaceMatKind>	lava	</surfaceMatKind>
+            <file>	particles/Tank/shots/groundwave_main_lava.eff	</file>
             <force>	1	</force>
             <position>	Scene Root	</position>
           </pixie>
@@ -7890,6 +8092,13 @@
           </pixie>
           <pixie>
             <startKey>	start	</startKey>
+            <surfaceMatKind>	lava	</surfaceMatKind>
+            <file>	particles/Tank/shots/groundwave_main_lava.eff	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+          <pixie>
+            <startKey>	start	</startKey>
             <surfaceMatKind>	dirt	</surfaceMatKind>
             <file>	particles/Tank/shots/groundwave_large_dirt.eff	</file>
             <force>	1	</force>
@@ -8005,6 +8214,13 @@
           </pixie>
           <pixie>
             <startKey>	start	</startKey>
+            <surfaceMatKind>	lava	</surfaceMatKind>
+            <file>	particles/Tank/shots/groundwave_main_lava.eff	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+          <pixie>
+            <startKey>	start	</startKey>
             <surfaceMatKind>	dirt	</surfaceMatKind>
             <file>	particles/Tank/shots/groundwave_large_dirt.eff	</file>
             <force>	1	</force>
@@ -8043,7 +8259,7 @@
       </shotSound>
     </effects>
   </shot_empty>
-  <shot_explosive_large_wt_copy>
+  <shot_dualgun1_large_mb_L_Ratte>
     <timeline>
       <lighting2>	0.09	</lighting2>
       <end>	0.5	</end>
@@ -8054,9 +8270,9 @@
       <pixie>
         <startKey>	start	</startKey>
         <endKey>	endpixie	</endKey>
-        <file>	particles/tank/shots/explosive_shot_wt.eff	</file>
+        <file>	particles/Tank/shots/shot_large_02_ratte.eff	</file>
         <force>	1	</force>
-        <position>	HP_gunFire	</position>
+        <position>	HP_gunFire_L	</position>
       </pixie>
       <light>
         <startKey>	start	</startKey>
@@ -8064,7 +8280,7 @@
         <innerRadius>	1.5	</innerRadius>
         <outerRadius>	8	</outerRadius>
         <castShadows>	false	</castShadows>
-        <position>	HP_gunFire	</position>
+        <position>	HP_gunFire_L	</position>
         <animation>
           <time>	0.0	</time>
           <color>	255 150 0	</color>
@@ -8076,7 +8292,7 @@
           <multiplier>	25	</multiplier>
         </animation>
         <animation>
-          <time>	0.65	</time>
+          <time>	0.75	</time>
           <color>	170 65 25	</color>
           <multiplier>	15	</multiplier>
         </animation>
@@ -8089,7 +8305,7 @@
       <shotSound>
         <startKey>	start	</startKey>
         <wwsoundPC>	wpn_large_PC	</wwsoundPC>
-        <wwsoundNPC>	wpn_large_NPC	</wwsoundNPC>
+        <wwsoundNPC>	ev_portal_ratte_huge_NPC	</wwsoundNPC>
       </shotSound>
     </effects>
     <relatedEffects>
@@ -8101,35 +8317,35 @@
           <pixie>
             <startKey>	start	</startKey>
             <surfaceMatKind>	default	</surfaceMatKind>
-            <file>	particles/Tank/shots/groundwave_large_ground.eff	</file>
+            <file>	particles/Tank/shots/groundwave_large_ground_mb_lm.eff	</file>
             <force>	1	</force>
             <position>	Scene Root	</position>
           </pixie>
           <pixie>
             <startKey>	start	</startKey>
             <surfaceMatKind>	ground	</surfaceMatKind>
-            <file>	particles/Tank/shots/groundwave_large_ground.eff	</file>
+            <file>	particles/Tank/shots/groundwave_large_ground_mb_lm.eff	</file>
             <force>	1	</force>
             <position>	Scene Root	</position>
           </pixie>
           <pixie>
             <startKey>	start	</startKey>
             <surfaceMatKind>	stone	</surfaceMatKind>
-            <file>	particles/Tank/shots/groundwave_large_stone.eff	</file>
+            <file>	particles/Tank/shots/groundwave_large_stone_mb_lm.eff	</file>
             <force>	1	</force>
             <position>	Scene Root	</position>
           </pixie>
           <pixie>
             <startKey>	start	</startKey>
             <surfaceMatKind>	sand	</surfaceMatKind>
-            <file>	particles/Tank/shots/groundwave_large_sand.eff	</file>
+            <file>	particles/Tank/shots/groundwave_large_sand_mb_lm.eff	</file>
             <force>	1	</force>
             <position>	Scene Root	</position>
           </pixie>
           <pixie>
             <startKey>	start	</startKey>
             <surfaceMatKind>	snow	</surfaceMatKind>
-            <file>	particles/Tank/shots/groundwave_large_snow.eff	</file>
+            <file>	particles/Tank/shots/groundwave_large_snow_mb_lm.eff	</file>
             <force>	1	</force>
             <position>	Scene Root	</position>
           </pixie>
@@ -8142,20 +8358,388 @@
           </pixie>
           <pixie>
             <startKey>	start	</startKey>
+            <surfaceMatKind>	lava	</surfaceMatKind>
+            <file>	particles/Tank/shots/groundwave_main_lava.eff	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+          <pixie>
+            <startKey>	start	</startKey>
             <surfaceMatKind>	dirt	</surfaceMatKind>
-            <file>	particles/Tank/shots/groundwave_large_dirt.eff	</file>
+            <file>	particles/Tank/shots/groundwave_large_dirt_mb.eff	</file>
             <force>	1	</force>
             <position>	Scene Root	</position>
           </pixie>
           <pixie>
             <startKey>	start	</startKey>
             <surfaceMatKind>	oil	</surfaceMatKind>
-            <file>	particles/Tank/shots/groundwave_large_oil.eff	</file>
+            <file>	particles/Tank/shots/groundwave_large_oil_mb.eff	</file>
             <force>	1	</force>
             <position>	Scene Root	</position>
           </pixie>
         </effects>
       </groundWave>
     </relatedEffects>
-  </shot_explosive_large_wt_copy>
+  </shot_dualgun1_large_mb_L_Ratte>
+  <shot_dualgun1_large_mb_R_Ratte>
+    <timeline>
+      <lighting2>	0.09	</lighting2>
+      <end>	0.5	</end>
+      <endpixie>	2	</endpixie>
+      <soundplaystop>	9	</soundplaystop>
+    </timeline>
+    <effects>
+      <pixie>
+        <startKey>	start	</startKey>
+        <endKey>	endpixie	</endKey>
+        <file>	particles/Tank/shots/shot_large_02_ratte.eff	</file>
+        <force>	1	</force>
+        <position>	HP_gunFire_R	</position>
+      </pixie>
+      <light>
+        <startKey>	start	</startKey>
+        <endKey>	lighting2	</endKey>
+        <innerRadius>	1.5	</innerRadius>
+        <outerRadius>	8	</outerRadius>
+        <castShadows>	false	</castShadows>
+        <position>	HP_gunFire_R	</position>
+        <animation>
+          <time>	0.0	</time>
+          <color>	255 150 0	</color>
+          <multiplier>	20	</multiplier>
+        </animation>
+        <animation>
+          <time>	0.15	</time>
+          <color>	255 200 100	</color>
+          <multiplier>	25	</multiplier>
+        </animation>
+        <animation>
+          <time>	0.75	</time>
+          <color>	170 65 25	</color>
+          <multiplier>	15	</multiplier>
+        </animation>
+        <animation>
+          <time>	1.0	</time>
+          <color>	0 0 0 0	</color>
+          <multiplier>	5	</multiplier>
+        </animation>
+      </light>
+      <shotSound>
+        <startKey>	start	</startKey>
+        <wwsoundPC>	wpn_large_PC	</wwsoundPC>
+        <wwsoundNPC>	ev_portal_ratte_huge_NPC	</wwsoundNPC>
+      </shotSound>
+    </effects>
+    <relatedEffects>
+      <groundWave>
+        <timeline>
+          <shooting>	1	</shooting>
+        </timeline>
+        <effects>
+          <pixie>
+            <startKey>	start	</startKey>
+            <surfaceMatKind>	default	</surfaceMatKind>
+            <file>	particles/Tank/shots/groundwave_large_ground_mb_lm.eff	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+          <pixie>
+            <startKey>	start	</startKey>
+            <surfaceMatKind>	ground	</surfaceMatKind>
+            <file>	particles/Tank/shots/groundwave_large_ground_mb_lm.eff	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+          <pixie>
+            <startKey>	start	</startKey>
+            <surfaceMatKind>	stone	</surfaceMatKind>
+            <file>	particles/Tank/shots/groundwave_large_stone_mb_lm.eff	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+          <pixie>
+            <startKey>	start	</startKey>
+            <surfaceMatKind>	sand	</surfaceMatKind>
+            <file>	particles/Tank/shots/groundwave_large_sand_mb_lm.eff	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+          <pixie>
+            <startKey>	start	</startKey>
+            <surfaceMatKind>	snow	</surfaceMatKind>
+            <file>	particles/Tank/shots/groundwave_large_snow_mb_lm.eff	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+          <pixie>
+            <startKey>	start	</startKey>
+            <surfaceMatKind>	water	</surfaceMatKind>
+            <file>	particles/Tank/shots/groundwave_large_water.eff	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+          <pixie>
+            <startKey>	start	</startKey>
+            <surfaceMatKind>	lava	</surfaceMatKind>
+            <file>	particles/Tank/shots/groundwave_main_lava.eff	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+          <pixie>
+            <startKey>	start	</startKey>
+            <surfaceMatKind>	dirt	</surfaceMatKind>
+            <file>	particles/Tank/shots/groundwave_large_dirt_mb.eff	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+          <pixie>
+            <startKey>	start	</startKey>
+            <surfaceMatKind>	oil	</surfaceMatKind>
+            <file>	particles/Tank/shots/groundwave_large_oil_mb.eff	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+        </effects>
+      </groundWave>
+    </relatedEffects>
+  </shot_dualgun1_large_mb_R_Ratte>
+  <shot_dualgun_large_mb_L_Ratte>
+    <timeline>
+      <lighting2>	0.09	</lighting2>
+      <end>	0.5	</end>
+      <endpixie>	12	</endpixie>
+      <soundplaystop>	9	</soundplaystop>
+    </timeline>
+    <effects>
+      <pixie>
+        <startKey>	start	</startKey>
+        <endKey>	endpixie	</endKey>
+        <file>	particles/Tank/shots/shot_dualgun_large_02_L_Ratte.eff	</file>
+        <force>	1	</force>
+        <position>	HP_gunFire_L	</position>
+      </pixie>
+      <light>
+        <startKey>	start	</startKey>
+        <endKey>	lighting2	</endKey>
+        <innerRadius>	1.5	</innerRadius>
+        <outerRadius>	8	</outerRadius>
+        <castShadows>	false	</castShadows>
+        <position>	HP_gunFire_L	</position>
+        <animation>
+          <time>	0.0	</time>
+          <color>	255 150 0	</color>
+          <multiplier>	20	</multiplier>
+        </animation>
+        <animation>
+          <time>	0.15	</time>
+          <color>	255 200 100	</color>
+          <multiplier>	25	</multiplier>
+        </animation>
+        <animation>
+          <time>	0.75	</time>
+          <color>	170 65 25	</color>
+          <multiplier>	15	</multiplier>
+        </animation>
+        <animation>
+          <time>	1.0	</time>
+          <color>	0 0 0 0	</color>
+          <multiplier>	5	</multiplier>
+        </animation>
+      </light>
+    </effects>
+    <relatedEffects>
+      <groundWave>
+        <timeline>
+          <shooting>	6	</shooting>
+        </timeline>
+        <effects>
+          <pixie>
+            <startKey>	start	</startKey>
+            <surfaceMatKind>	default	</surfaceMatKind>
+            <file>	particles/Tank/shots/groundwave_dualgun_large_ground_mb.eff	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+          <pixie>
+            <startKey>	start	</startKey>
+            <surfaceMatKind>	ground	</surfaceMatKind>
+            <file>	particles/Tank/shots/groundwave_dualgun_large_ground_mb.eff	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+          <pixie>
+            <startKey>	start	</startKey>
+            <surfaceMatKind>	stone	</surfaceMatKind>
+            <file>	particles/Tank/shots/groundwave_dualgun_large_stone_mb.eff	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+          <pixie>
+            <startKey>	start	</startKey>
+            <surfaceMatKind>	sand	</surfaceMatKind>
+            <file>	particles/Tank/shots/groundwave_dualgun_large_sand_mb.eff	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+          <pixie>
+            <startKey>	start	</startKey>
+            <surfaceMatKind>	snow	</surfaceMatKind>
+            <file>	particles/Tank/shots/groundwave_dualgun_large_snow_mb.eff	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+          <pixie>
+            <startKey>	start	</startKey>
+            <surfaceMatKind>	water	</surfaceMatKind>
+            <file>	particles/Tank/shots/groundwave_dualgun_large_water.eff	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+          <pixie>
+            <startKey>	start	</startKey>
+            <surfaceMatKind>	lava	</surfaceMatKind>
+            <file>	particles/Tank/shots/groundwave_main_lava.eff	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+          <pixie>
+            <startKey>	start	</startKey>
+            <surfaceMatKind>	dirt	</surfaceMatKind>
+            <file>	particles/Tank/shots/groundwave_dualgun_large_dirt_mb.eff	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+          <pixie>
+            <startKey>	start	</startKey>
+            <surfaceMatKind>	oil	</surfaceMatKind>
+            <file>	particles/Tank/shots/groundwave_dualgun_large_oil_mb.eff	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+        </effects>
+      </groundWave>
+    </relatedEffects>
+  </shot_dualgun_large_mb_L_Ratte>
+  <shot_dualgun_large_mb_R_Ratte>
+    <timeline>
+      <lighting2>	0.09	</lighting2>
+      <end>	0.5	</end>
+      <endpixie>	12	</endpixie>
+      <soundplaystop>	9	</soundplaystop>
+    </timeline>
+    <effects>
+      <pixie>
+        <startKey>	start	</startKey>
+        <endKey>	endpixie	</endKey>
+        <file>	particles/Tank/shots/shot_dualgun_large_02_R_Ratte.eff	</file>
+        <force>	1	</force>
+        <position>	HP_gunFire_R	</position>
+      </pixie>
+      <light>
+        <startKey>	start	</startKey>
+        <endKey>	lighting2	</endKey>
+        <innerRadius>	1.5	</innerRadius>
+        <outerRadius>	8	</outerRadius>
+        <castShadows>	false	</castShadows>
+        <position>	HP_gunFire_R	</position>
+        <animation>
+          <time>	0.0	</time>
+          <color>	255 150 0	</color>
+          <multiplier>	20	</multiplier>
+        </animation>
+        <animation>
+          <time>	0.15	</time>
+          <color>	255 200 100	</color>
+          <multiplier>	25	</multiplier>
+        </animation>
+        <animation>
+          <time>	0.75	</time>
+          <color>	170 65 25	</color>
+          <multiplier>	15	</multiplier>
+        </animation>
+        <animation>
+          <time>	1.0	</time>
+          <color>	0 0 0 0	</color>
+          <multiplier>	5	</multiplier>
+        </animation>
+      </light>
+      <shotSound>
+        <startKey>	start	</startKey>
+        <wwsoundPC>	wpn_large_dual_PC	</wwsoundPC>
+        <wwsoundNPC>	ev_portal_ratte_huge_NPC	</wwsoundNPC>
+      </shotSound>
+    </effects>
+    <relatedEffects>
+      <groundWave>
+        <timeline>
+          <shooting>	6	</shooting>
+        </timeline>
+        <effects>
+          <pixie>
+            <startKey>	start	</startKey>
+            <surfaceMatKind>	default	</surfaceMatKind>
+            <file>	particles/Tank/empty.eff	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+          <pixie>
+            <startKey>	start	</startKey>
+            <surfaceMatKind>	ground	</surfaceMatKind>
+            <file>	particles/Tank/empty.eff	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+          <pixie>
+            <startKey>	start	</startKey>
+            <surfaceMatKind>	stone	</surfaceMatKind>
+            <file>	particles/Tank/empty.eff	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+          <pixie>
+            <startKey>	start	</startKey>
+            <surfaceMatKind>	sand	</surfaceMatKind>
+            <file>	particles/Tank/empty.eff	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+          <pixie>
+            <startKey>	start	</startKey>
+            <surfaceMatKind>	snow	</surfaceMatKind>
+            <file>	particles/Tank/empty.eff	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+          <pixie>
+            <startKey>	start	</startKey>
+            <surfaceMatKind>	water	</surfaceMatKind>
+            <file>	particles/Tank/empty.eff	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+          <pixie>
+            <startKey>	start	</startKey>
+            <surfaceMatKind>	lava	</surfaceMatKind>
+            <file>	particles/Tank/empty.eff	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+          <pixie>
+            <startKey>	start	</startKey>
+            <surfaceMatKind>	dirt	</surfaceMatKind>
+            <file>	particles/Tank/empty.eff	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+          <pixie>
+            <startKey>	start	</startKey>
+            <surfaceMatKind>	oil	</surfaceMatKind>
+            <file>	particles/Tank/empty.eff	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+        </effects>
+      </groundWave>
+    </relatedEffects>
+  </shot_dualgun_large_mb_R_Ratte>
 </gun_effects.xml>

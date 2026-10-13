@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/shared/gui_items/artefacts.py
 import typing
 from constants import MIN_VEHICLE_LEVEL, MAX_VEHICLE_LEVEL
+from gui.Scaleform.genConsts.FITTING_TYPES import FITTING_TYPES
 from gui.Scaleform.genConsts.SLOT_HIGHLIGHT_TYPES import SLOT_HIGHLIGHT_TYPES
 from gui.Scaleform.genConsts.STORE_CONSTANTS import STORE_CONSTANTS
 from gui.Scaleform.locale.ARTEFACTS import ARTEFACTS
@@ -16,7 +17,7 @@ from gui.shared.gui_items.gui_item_economics import ItemPrice, ITEM_PRICE_EMPTY
 from gui.shared.money import Money, Currency, MONEY_UNDEFINED
 from gui.shared.utils.functions import stripColorTagDescrTags, replaceHyphenToUnderscore
 from helpers import i18n, dependency
-from items import artefacts, tankmen, ITEM_OPERATION, EQUIPMENT_TYPES
+from items import artefacts, tankmen, ITEM_OPERATION
 from skeletons.gui.game_control import IEpicBattleMetaGameController
 from skeletons.gui.lobby_context import ILobbyContext
 from soft_exception import SoftException
@@ -31,7 +32,6 @@ TAG_CREW_BATTLE_BOOSTER = 'crewSkillBattleBooster'
 TAG_ECONOMIC_DIRECTIVE_BATTLE_BOOSTER = 'economicDirectiveBattleBooster'
 TAG_EQUIPMENT_BATTLE_BOOSTER = 'equipmentBattleBooster'
 TAG_EQUEPMENT_BUILTIN = 'builtin'
-TAG_EQUEPMENT_HIDE_BUILTIN_INFO = 'hideBuiltinInfo'
 TAG_OPT_DEVICE_DELUXE = 'deluxe'
 TAG_OPT_DEVICE_TROPHY_BASIC = 'trophyBasic'
 TAG_OPT_DEVICE_TROPHY_UPGRADED = 'trophyUpgraded'
@@ -106,6 +106,10 @@ class Equipment(VehicleArtefact):
         return buyPrice.exchange(Currency.GOLD, Currency.CREDITS, proxy.exchangeRateForShellsAndEqs) if Currency.GOLD in buyPrice else super(Equipment, self)._getAltPrice(buyPrice, proxy)
 
     @property
+    def fittingType(self):
+        return FITTING_TYPES.EQUIPMENT
+
+    @property
     def icon(self):
         return '../maps/icons/artefact/%s.png' % super(Equipment, self).icon
 
@@ -128,10 +132,6 @@ class Equipment(VehicleArtefact):
     def isBuiltIn(self):
         return TAG_EQUEPMENT_BUILTIN in self.tags
 
-    @property
-    def isBuiltInInfoHidden(self):
-        return TAG_EQUEPMENT_HIDE_BUILTIN_INFO in self.tags
-
     def isInstalled(self, vehicle, slotIdx=None):
         return vehicle.consumables.installed.containsIntCD(self.intCD, slotIdx)
 
@@ -144,10 +144,6 @@ class Equipment(VehicleArtefact):
     @property
     def isTrigger(self):
         return TAG_TRIGGER in self.tags
-
-    @property
-    def isRegular(self):
-        return self.descriptor.equipmentType == EQUIPMENT_TYPES.regular
 
     def mayInstall(self, vehicle, slotIdx=None):
         for idx, eq in enumerate(vehicle.consumables.installed):
@@ -242,7 +238,7 @@ class Equipment(VehicleArtefact):
         pass
 
     def getHighlightType(self, vehicle=None):
-        return SLOT_HIGHLIGHT_TYPES.BUILT_IN_EQUIPMENT if self.isBuiltIn and not self.isBuiltInInfoHidden else SLOT_HIGHLIGHT_TYPES.NO_HIGHLIGHT
+        return SLOT_HIGHLIGHT_TYPES.BUILT_IN_EQUIPMENT if self.isBuiltIn else SLOT_HIGHLIGHT_TYPES.NO_HIGHLIGHT
 
     def getBuiltinPerkBoosterDescription(self, formatter=None):
         pass
@@ -258,6 +254,10 @@ class BattleBooster(Equipment):
     def __init__(self, *args, **kwargs):
         super(BattleBooster, self).__init__(*args, **kwargs)
         self.itemTypeID = GUI_ITEM_TYPE.BATTLE_BOOSTER
+
+    @property
+    def fittingType(self):
+        return FITTING_TYPES.BOOSTER
 
     @property
     def userType(self):
@@ -430,6 +430,10 @@ class BattleAbility(Equipment):
         self._level = 0
 
     @property
+    def fittingType(self):
+        return FITTING_TYPES.BATTLE_ABILITY
+
+    @property
     def level(self):
         return self._level
 
@@ -528,6 +532,10 @@ class OptionalDevice(RemovableDevice):
                         return 1
                     return -1
             return super(OptionalDevice, self).__cmp__(other)
+
+    @property
+    def fittingType(self):
+        return FITTING_TYPES.OPTIONAL_DEVICE
 
     @property
     def level(self):

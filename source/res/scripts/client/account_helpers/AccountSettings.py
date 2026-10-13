@@ -81,8 +81,7 @@ ORDERS_FILTER = 'ORDERS_FILTER'
 CURRENT_VEHICLE = 'current'
 ROYALE_VEHICLE = 'ROYALE_VEHICLE'
 BOOTCAMP_VEHICLE = 'BOOTCAMP_VEHICLE'
-EVENT_VEHICLE = 'EVENT_VEHICLE'
-EVENT_SAVED_VEHICLE = 'EVENT_SAVED_VEHICLE'
+PORTAL_VEHICLE = 'PORTAL_VEHICLE'
 LOBBY_MENU_MANUAL_TRIGGER_SHOWN = 'lobby_menu_manual_trigger_shown'
 LOBBY_MENU_BOOTCAMP_TRIGGER_SHOWN = 'lobby_menu_bootcamp_trigger_shown'
 MANUAL_NEW_CONTENT = 'manual_new_content'
@@ -209,7 +208,6 @@ IS_COLLECTIBLE_VEHICLES_VISITED = 'isCollectibleVehiclesVisited'
 LAST_SHOP_TAB_COUNTER = 'lastShopTabCounter'
 QUESTS = 'quests'
 DAILY_QUESTS = 'dailyQuests'
-DAILY_QUESTS_INTRO_SEEN = 'dailyQuestsIntroSeen'
 QUEST_DELTAS = 'questDeltas'
 QUEST_DELTAS_COMPLETION = 'questCompletion'
 QUEST_DELTAS_PROGRESS = 'questProgress'
@@ -263,11 +261,6 @@ LOOT_BOXES_SHORT_STAT_STATE = 'lootBoxesShortStatState'
 LOOT_BOXES_STATS_HINT_STATE = 'lootBoxesStatsHintState'
 LOOT_BOXES_STATS_NO_BOX_HINT_STATE = 'lootBoxesStatsNoBoxHintState'
 KEY_LOOTBOX_TRIGGER_HINT_SHOWN = 'keyLootboxTriggerHintShown'
-LOOT_BOXES = 'lootBoxes'
-EVENT_LOOT_BOXES = 'eventLootBoxes'
-LOOT_BOXES_WAS_STARTED = 'lootBoxesWasStarted'
-LOOT_BOXES_WAS_FINISHED = 'lootBoxesWasFinished'
-LOOT_BOXES_EVENT_UNIQUE_ID = 'lootBoxesEventUniqueID'
 COLLECTIONS_SECTION = 'collections'
 COLLECTIONS_INTRO_SHOWN = 'collectionsIntroShown'
 COLLECTION_SHOWN_NEW_REWARDS = 'collectionsNewRewards'
@@ -317,14 +310,12 @@ NY_FIRST_VIDEO_SHUFFLE = 'NYFirstVideoShuffle'
 NY_ACTIVE_WIDGET_TRANSITION_SHOWN = 'NyActiveWidgetTransitionShown'
 NY_PET_SLOT_VISITED = 'NyPetSlotVisited'
 NY_GREETINGS_SEEN = 'NYGreetingsSeen'
-EVENT_LAST_LEVEL_SEEN = 'eventLastLevelSeen'
-EVENT_LAST_STAMPS_SEEN = 'eventLastStampsSeen'
-WT_PROGRESSION_QUESTS_TAB = 'wtProgressionQuestsTab'
-IS_LAUNCH_ANIMATED = 'isLaunchAnimated'
 PREMIUM_QUESTS_NOTIFICATION = 'PremiumPurchased'
 DEFERRED_LOG_PLAYER_SETTINGS_ACTIONS = 'DeferredLogPlayerSettingsActions'
 DYNAMIC_SETTINGS_REPOSITORY = 'dynamicSettingsRepository'
 SHOWN_SUMMER_SALE_INTRO = 'shownSummerSaleIntro'
+SESSION_PROGRESS_REWARDS_LAST_SEEN_STEP = 'sessionProgressLastSeenStep'
+SESSION_PROGRESS_REWARDS_WIDGET_LAST_SEEN_STEP = 'sessionProgressWidgetSeenStep'
 
 class BattleMatters(object):
     BATTLE_MATTERS_SETTINGS = 'battleMattersSettings'
@@ -1049,8 +1040,7 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
  KEY_FAVORITES: {BOOTCAMP_VEHICLE: 0,
                  CURRENT_VEHICLE: 0,
                  ROYALE_VEHICLE: 0,
-                 EVENT_VEHICLE: 0,
-                 EVENT_SAVED_VEHICLE: None,
+                 PORTAL_VEHICLE: 0,
                  FALLOUT_VEHICLES: {}},
  KEY_MANUAL: {LOBBY_MENU_MANUAL_TRIGGER_SHOWN: False,
               LOBBY_MENU_BOOTCAMP_TRIGGER_SHOWN: False,
@@ -1220,8 +1210,7 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                               'headerAlert': False},
                          DAILY_QUESTS: {'lastVisitedDQTabIdx': None,
                                         'premMissionsTabDiscovered': False,
-                                        'lastBonusMissionVisited': '',
-                                        DAILY_QUESTS_INTRO_SEEN: False},
+                                        'lastBonusMissionVisited': ''},
                          QUEST_DELTAS: {QUEST_DELTAS_COMPLETION: dict(),
                                         QUEST_DELTAS_PROGRESS: dict(),
                                         QUEST_DELTAS_TOKENS_PROGRESS: dict()}},
@@ -1413,10 +1402,6 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                 RANKED_YEAR_POSITION: None,
                 TOP_OF_TREE_CONFIG: {},
                 BECOME_ELITE_VEHICLES_WATCHED: set(),
-                EVENT_LAST_STAMPS_SEEN: 0,
-                EVENT_LAST_LEVEL_SEEN: 0,
-                WT_PROGRESSION_QUESTS_TAB: 1,
-                IS_LAUNCH_ANIMATED: True,
                 GAME.GAMEPLAY_ONLY_10_MODE: False,
                 GAME.GAMEPLAY_DEV_MAPS: True,
                 MAPBOX_PROGRESSION: {'previous_battles_played': 0,
@@ -1449,11 +1434,6 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                 TankAcademy.TANK_ACADEMY_SETTINGS: {TankAcademy.CURRENT_QUEST_ORDER: 0},
                 BR_PROGRESSION_POINTS_SEEN: 0,
                 ROYALE_INTRO_VIDEO_SHOWN: False,
-                LOOT_BOXES: {EVENT_LOOT_BOXES: {LOOT_BOXES_WAS_STARTED: False,
-                                                LOOT_BOXES_WAS_FINISHED: False,
-                                                LOOT_BOXES_OPEN_ANIMATION_ENABLED: True,
-                                                LOOT_BOXES_VIEWED_COUNT: 0,
-                                                LOOT_BOXES_EVENT_UNIQUE_ID: 0}},
                 Winback.WINBACK_SETTINGS: {Winback.INTRO_LAST_TIME_SHOWN: 0,
                                            Winback.NEED_SHOW_INTRO: True,
                                            Winback.HAS_LEFT_VERSUS_AI_FROM_WINBACK: False,
@@ -1515,7 +1495,9 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                            NY_PET_SLOT_VISITED: False,
                            NY_GREETINGS_SEEN: False},
                 DEFERRED_LOG_PLAYER_SETTINGS_ACTIONS: {SettingsLogActions.SETTINGS_INITED},
-                SHOWN_SUMMER_SALE_INTRO: False},
+                SHOWN_SUMMER_SALE_INTRO: False,
+                SESSION_PROGRESS_REWARDS_LAST_SEEN_STEP: 0,
+                SESSION_PROGRESS_REWARDS_WIDGET_LAST_SEEN_STEP: -1},
  KEY_COUNTERS: {NEW_HOF_COUNTER: {PROFILE_CONSTANTS.HOF_ACHIEVEMENTS_BUTTON: True,
                                   PROFILE_CONSTANTS.HOF_VEHICLES_BUTTON: True,
                                   PROFILE_CONSTANTS.HOF_VIEW_RATING_BUTTON: True},
@@ -2453,8 +2435,7 @@ class AccountSettings(object):
                         quests = _unpack(accSettings[QUESTS].asString)
                         if DAILY_QUESTS in quests:
                             quests[DAILY_QUESTS] = {'lastVisitedDQTabIdx': None,
-                             'premMissionsTabDiscovered': False,
-                             DAILY_QUESTS_INTRO_SEEN: False}
+                             'premMissionsTabDiscovered': False}
                         if 'visited' in quests:
                             newVisited = [ q for q in quests['visited'] if not q.startswith('dq:') ]
                             quests['visited'] = newVisited

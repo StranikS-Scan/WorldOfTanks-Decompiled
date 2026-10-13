@@ -9,13 +9,15 @@ from gui.shared.gui_items.Vehicle import VEHICLE_CLASS_NAME, Vehicle
 from gui.shared.formatters import text_styles, icons
 from gui.shared.tooltips import TOOLTIP_TYPE
 from gui.shared.tooltips import formatters
+from gui.shared.tooltips.advanced.data.advanced_constants import MODULE_MOVIES
 from gui.shared.tooltips.common import BlocksTooltipData
 from gui.shared.tooltips.battle_ability_tooltip_params import g_battleAbilityTooltipMgr
 from gui.shared.utils.functions import replaceHyphenToUnderscore
 from helpers import dependency
 from skeletons.gui.game_control import IEpicBattleMetaGameController
 from skeletons.gui.shared import IItemsCache
-from gui.shared.tooltips.advanced import BaseAdvancedTooltip, MODULE_MOVIES
+from gui.shared.tooltips.advanced import BaseAdvancedTooltip
+from gui.shared.tooltips.advanced.data.default_alt_key_data import AltKeyData
 _TOOLTIP_MIN_WIDTH = 460
 _SETUP_INFO_TOOLTIP_MIN_WIDTH = 440
 
@@ -94,7 +96,7 @@ def _equipmentToEpicSkillConverter(epicMetaGameCtrl, eqCompDescr):
 class EpicSkillSlotTooltipAdvanced(BaseAdvancedTooltip):
     _epicMetaGameCtrl = dependency.descriptor(IEpicBattleMetaGameController)
 
-    def _getBlocksList(self, *args, **kwargs):
+    def _getTooltipData(self, *args, **kwargs):
         if not args:
             return
         else:
@@ -106,10 +108,12 @@ class EpicSkillSlotTooltipAdvanced(BaseAdvancedTooltip):
             movieName = None
             if movieKey in MODULE_MOVIES:
                 movieName = MODULE_MOVIES[movieKey]
+            header = ''
+            descr = ''
             if skillLevel:
                 header = skillLevel.name
                 descr = skillLevel.longDescr
-            return self._packAdvancedBlocks(movieName, header, descr, True)
+            return (AltKeyData(movieName, header, descr),)
 
 
 class EpicSkillSlotTooltip(EpicSkillBaseTooltipData):

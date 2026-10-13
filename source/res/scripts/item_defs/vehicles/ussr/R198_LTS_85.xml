@@ -6,15 +6,15 @@
     <gunner></gunner>
     <driver></driver>
   </crew>
-  <supplySlots>	3 1 1 6 6 6 7 8 8 8	</supplySlots>
-  <postProgressionTree>	role_LT_universal	</postProgressionTree>
-  <customRoleSlotOptions>	2 4	</customRoleSlotOptions>
+  <supplySlots>	2 1 1 6 6 6 7 8 8 8	</supplySlots>
+  <postProgressionTree>	role_MT_sniper	</postProgressionTree>
+  <customRoleSlotOptions>	3 5	</customRoleSlotOptions>
   <speedLimits>
-    <forward>	65	</forward>
-    <backward>	23	</backward>
+    <forward>	60	</forward>
+    <backward>	20	</backward>
   </speedLimits>
   <invisibility>
-    <moving>	0.274	</moving>
+    <moving>	0.205	</moving>
     <still>	0.274	</still>
     <camouflageBonus>	0.03	</camouflageBonus>
     <firePenalty>	0.411	</firePenalty>
@@ -43,7 +43,7 @@
   <hull>
     <primaryArmor>	armor_2 armor_3 armor_4	</primaryArmor>
     <weight>	9320	</weight>
-    <maxHealth>	920	</maxHealth>
+    <maxHealth>	900	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	180	</maxHealth>
       <maxRegenHealth>	120	</maxRegenHealth>
@@ -1667,7 +1667,7 @@
       <notInShop>	true	</notInShop>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	5000	</weight>
-      <maxHealth>	230	</maxHealth>
+      <maxHealth>	400	</maxHealth>
       <rotationSpeed>	48	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	140	</maxHealth>
@@ -1711,9 +1711,9 @@
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 7 0.422222 7 0.447222 4 0.552778 4 0.577778 7 1 7	</maxPitch>
           </pitchLimits>
-          <shotDispersionRadius>	0.42	</shotDispersionRadius>
-          <aimingTime>	2.3	</aimingTime>
-          <reloadTime>	10.9	</reloadTime>
+          <shotDispersionRadius>	0.32	</shotDispersionRadius>
+          <aimingTime>	1.9	</aimingTime>
+          <reloadTime>	7.9	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.06	</turretRotation>
             <afterShot>	4.0	</afterShot>
@@ -2057,7 +2057,7 @@
       <engines>
         <_5TDF_SM>
           <smplEnginePower>	700	</smplEnginePower>
-          <smplFwMaxSpeed>	65	</smplFwMaxSpeed>
+          <smplFwMaxSpeed>	60	</smplFwMaxSpeed>
         </_5TDF_SM>
       </engines>
       <chassis>

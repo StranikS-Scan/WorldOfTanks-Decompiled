@@ -55,6 +55,8 @@
     <metalCollisionHeavy>	metalCollisionHeavy	</metalCollisionHeavy>
     <waterCollisionLight>	waterCollisionLight	</waterCollisionLight>
     <waterCollisionHeavy>	waterCollisionHeavy	</waterCollisionHeavy>
+    <lavaCollisionLight>	lavaCollisionLight	</lavaCollisionLight>
+    <lavaCollisionHeavy>	lavaCollisionHeavy	</lavaCollisionHeavy>
     <rammingCollisionLight>	rammingCollisionLight	</rammingCollisionLight>
     <rammingCollisionHeavy>	rammingCollisionHeavy	</rammingCollisionHeavy>
     <explosionCandle1>	explosionCandle1	</explosionCandle1>
@@ -79,6 +81,7 @@
       <wood>	turret_touchdown_medium_solid	</wood>
       <metal>	turret_touchdown_medium_solid	</metal>
       <water>	turret_touchdown_medium_water	</water>
+      <lava>	turret_touchdown_medium_lava	</lava>
       <dirt>	turret_touchdown_medium	</dirt>
       <oil>	turret_touchdown_medium	</oil>
     </collision>
@@ -90,6 +93,7 @@
       <wood>	turret_pull_ground	</wood>
       <metal>	turret_pull_stone	</metal>
       <water>	turret_pull_water	</water>
+      <lava>	turret_pull_lava	</lava>
       <dirt>	turret_pull_dirt	</dirt>
       <oil>	turret_pull_oil	</oil>
     </pull>

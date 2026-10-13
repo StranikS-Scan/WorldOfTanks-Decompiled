@@ -82,7 +82,7 @@ class HighExplosiveImpactParams(object):
 
 
 class HighExplosiveType(ShellType):
-    __slots__ = ('explosionRadius', 'explosionDamageFactor', 'explosionDamageAbsorptionFactor', 'explosionEdgeDamageFactor', 'mechanics', 'blastWave', 'shellFragments', 'armorSpalls', 'shellFragmentsDamageAbsorptionFactor', 'obstaclePenetration', 'shieldPenetration', 'maxDamage', 'protectFromDirectHits', 'protectFromIndirectHits', 'protectFromDestroy', 'explosionDisableDamageFalloff')
+    __slots__ = ('explosionRadius', 'explosionDamageFactor', 'explosionDamageAbsorptionFactor', 'explosionEdgeDamageFactor', 'mechanics', 'blastWave', 'shellFragments', 'armorSpalls', 'shellFragmentsDamageAbsorptionFactor', 'obstaclePenetration', 'shieldPenetration', 'maxDamage', 'protectFromDirectHits', 'protectFromIndirectHits', 'protectFromDestroy')
 
     def __init__(self, name):
         super(HighExplosiveType, self).__init__(name)
@@ -91,7 +91,6 @@ class HighExplosiveType(ShellType):
         self.explosionDamageAbsorptionFactor = component_constants.ZERO_FLOAT
         self.explosionEdgeDamageFactor = component_constants.ZERO_FLOAT
         self.shellFragmentsDamageAbsorptionFactor = component_constants.ZERO_FLOAT
-        self.explosionDisableDamageFalloff = component_constants.ZERO_FLOAT
         self.mechanics = SHELL_MECHANICS_TYPE.LEGACY
         self.obstaclePenetration = None
         self.shieldPenetration = None
@@ -105,7 +104,7 @@ class HighExplosiveType(ShellType):
         return
 
     def __repr__(self):
-        return 'HighExplosiveType(explosionRadius={}, explosionDamageFactor={}, explosionDamageAbsorptionFactor={}, explosionEdgeDamageFactor={}, mechanics={}, obstaclePenetration={}, shieldPenetration={}, blastWave={}, shellFragments={}, armorSpalls={}, shellFragmentsDamageAbsorptionFactor={}, protectFromDirectHits = {}, protectFromIndirectHits = {}, protectFromDestroy = {}, explosionDisableDamageFalloff = {}, '.format(self.explosionRadius, self.explosionDamageFactor, self.explosionDamageAbsorptionFactor, self.explosionEdgeDamageFactor, self.mechanics, self.obstaclePenetration, self.shieldPenetration, self.blastWave, self.shellFragments, self.armorSpalls, self.shellFragmentsDamageAbsorptionFactor, self.protectFromDirectHits, self.protectFromIndirectHits, self.protectFromDestroy, self.explosionDisableDamageFalloff)
+        return 'HighExplosiveType(explosionRadius={}, explosionDamageFactor={}, explosionDamageAbsorptionFactor={}, explosionEdgeDamageFactor={}, mechanics={}, obstaclePenetration={}, shieldPenetration={}, blastWave={}, shellFragments={}, armorSpalls={}, shellFragmentsDamageAbsorptionFactor={}, protectFromDirectHits = {}, protectFromIndirectHits = {}, protectFromDestroy = {}'.format(self.explosionRadius, self.explosionDamageFactor, self.explosionDamageAbsorptionFactor, self.explosionEdgeDamageFactor, self.mechanics, self.obstaclePenetration, self.shieldPenetration, self.blastWave, self.shellFragments, self.armorSpalls, self.shellFragmentsDamageAbsorptionFactor, self.protectFromDirectHits, self.protectFromIndirectHits, self.protectFromDestroy)
 
 
 class SmokeType(ShellType):

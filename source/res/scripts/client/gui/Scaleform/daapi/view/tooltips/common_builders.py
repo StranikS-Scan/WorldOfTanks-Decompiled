@@ -2,7 +2,8 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/tooltips/common_builders.py
 from gui.Scaleform.genConsts.CURRENCIES_CONSTANTS import CURRENCIES_CONSTANTS
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
-from gui.shared.tooltips import advanced, common, contexts, stronghold
+from gui.shared.tooltips import common, contexts, stronghold
+from gui.shared.tooltips.advanced.money_and_xp import MoneyAndXpAdvanced
 from gui.shared.tooltips.builders import AdvancedDataBuilder, DataBuilder, DefaultFormatBuilder, TooltipWindowBuilder
 from gui.shared.tooltips.common import ParagonsLockedTooltipData
 from gui.shared.tooltips.dog_tags import DogTagInfoTooltip
@@ -26,16 +27,16 @@ def getTooltipBuilders():
      DataBuilder(TOOLTIPS_CONSTANTS.MISSIONS_TOKEN, TOOLTIPS_CONSTANTS.MISSIONS_TOKEN_UI, common.MissionsToken(contexts.QuestContext())),
      DataBuilder(TOOLTIPS_CONSTANTS.OLD_RESERVE_MODULE, TOOLTIPS_CONSTANTS.REF_SYS_RESERVES_UI, common.ReserveTooltipData(contexts.ReserveContext())),
      DataBuilder(TOOLTIPS_CONSTANTS.RESERVE_MODULE, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI, stronghold.ReserveTooltipData(contexts.ReserveContext())),
-     AdvancedHeaderMoneyAndXpBuilder(CURRENCIES_CONSTANTS.CRYSTAL, TOOLTIPS_CONSTANTS.CRYSTAL_INFO, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI),
-     AdvancedHeaderMoneyAndXpBuilder(CURRENCIES_CONSTANTS.EVENT_COIN, TOOLTIPS_CONSTANTS.EVENT_COIN_INFO, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI),
-     AdvancedHeaderMoneyAndXpBuilder(CURRENCIES_CONSTANTS.CREDITS, TOOLTIPS_CONSTANTS.CREDITS_INFO, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI),
-     AdvancedHeaderMoneyAndXpBuilder(CURRENCIES_CONSTANTS.GOLD, TOOLTIPS_CONSTANTS.GOLD_INFO, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI),
-     AdvancedHeaderMoneyAndXpBuilder(CURRENCIES_CONSTANTS.BPCOIN, TOOLTIPS_CONSTANTS.BPCOIN_INFO, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI),
-     AdvancedHeaderMoneyAndXpBuilder(CURRENCIES_CONSTANTS.FREE_XP, TOOLTIPS_CONSTANTS.FREEXP_INFO, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI),
-     AdvancedHeaderMoneyAndXpBuilder(CURRENCIES_CONSTANTS.GOLD, TOOLTIPS_CONSTANTS.GOLD_INFO_FULL_SCREEN, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI, True),
-     AdvancedHeaderMoneyAndXpBuilder(CURRENCIES_CONSTANTS.CREDITS, TOOLTIPS_CONSTANTS.CREDITS_INFO_FULL_SCREEN, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI, True),
-     AdvancedHeaderMoneyAndXpBuilder(CURRENCIES_CONSTANTS.CRYSTAL, TOOLTIPS_CONSTANTS.CRYSTAL_INFO_FULL_SCREEN, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI, True),
-     AdvancedHeaderMoneyAndXpBuilder(CURRENCIES_CONSTANTS.FREE_XP, TOOLTIPS_CONSTANTS.FREEXP_INFO_FULL_SCREEN, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI, True),
+     AdvancedHeaderMoneyAndXpBuilder(CURRENCIES_CONSTANTS.CRYSTAL, TOOLTIPS_CONSTANTS.CRYSTAL_INFO, TOOLTIPS_CONSTANTS.ADVANCED_SHUFFLE_UI),
+     AdvancedHeaderMoneyAndXpBuilder(CURRENCIES_CONSTANTS.EVENT_COIN, TOOLTIPS_CONSTANTS.EVENT_COIN_INFO, TOOLTIPS_CONSTANTS.ADVANCED_SHUFFLE_UI),
+     AdvancedHeaderMoneyAndXpBuilder(CURRENCIES_CONSTANTS.CREDITS, TOOLTIPS_CONSTANTS.CREDITS_INFO, TOOLTIPS_CONSTANTS.ADVANCED_SHUFFLE_UI),
+     AdvancedHeaderMoneyAndXpBuilder(CURRENCIES_CONSTANTS.GOLD, TOOLTIPS_CONSTANTS.GOLD_INFO, TOOLTIPS_CONSTANTS.ADVANCED_SHUFFLE_UI),
+     AdvancedHeaderMoneyAndXpBuilder(CURRENCIES_CONSTANTS.BPCOIN, TOOLTIPS_CONSTANTS.BPCOIN_INFO, TOOLTIPS_CONSTANTS.ADVANCED_SHUFFLE_UI),
+     AdvancedHeaderMoneyAndXpBuilder(CURRENCIES_CONSTANTS.FREE_XP, TOOLTIPS_CONSTANTS.FREEXP_INFO, TOOLTIPS_CONSTANTS.ADVANCED_SHUFFLE_UI),
+     AdvancedHeaderMoneyAndXpBuilder(CURRENCIES_CONSTANTS.GOLD, TOOLTIPS_CONSTANTS.GOLD_INFO_FULL_SCREEN, TOOLTIPS_CONSTANTS.ADVANCED_SHUFFLE_UI, True),
+     AdvancedHeaderMoneyAndXpBuilder(CURRENCIES_CONSTANTS.CREDITS, TOOLTIPS_CONSTANTS.CREDITS_INFO_FULL_SCREEN, TOOLTIPS_CONSTANTS.ADVANCED_SHUFFLE_UI, True),
+     AdvancedHeaderMoneyAndXpBuilder(CURRENCIES_CONSTANTS.CRYSTAL, TOOLTIPS_CONSTANTS.CRYSTAL_INFO_FULL_SCREEN, TOOLTIPS_CONSTANTS.ADVANCED_SHUFFLE_UI, True),
+     AdvancedHeaderMoneyAndXpBuilder(CURRENCIES_CONSTANTS.FREE_XP, TOOLTIPS_CONSTANTS.FREEXP_INFO_FULL_SCREEN, TOOLTIPS_CONSTANTS.ADVANCED_SHUFFLE_UI, True),
      HeaderMoneyAndXpBuilder(CURRENCIES_CONSTANTS.BRCOIN, TOOLTIPS_CONSTANTS.BRCOIN_INFO_FULL_SCREEN, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI, True),
      HeaderMoneyAndXpBuilder(CURRENCIES_CONSTANTS.EQUIP_COIN, TOOLTIPS_CONSTANTS.EQUIP_COIN_INFO, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI, True),
      HeaderMoneyAndXpBuilder(CURRENCIES_CONSTANTS.EQUIP_COIN, TOOLTIPS_CONSTANTS.EQUIP_COIN_INFO_FULL_SCREEN, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI, True),
@@ -77,7 +78,7 @@ class AdvancedHeaderMoneyAndXpBuilder(AdvancedDataBuilder):
     __slots__ = ('__btnType', '__hideActionBlock')
 
     def __init__(self, btnType, tooltipType, linkage, hideActionBlock=False):
-        super(AdvancedHeaderMoneyAndXpBuilder, self).__init__(tooltipType, linkage, common.HeaderMoneyAndXpTooltipData(contexts.ToolTipContext(None)), advanced.MoneyAndXpAdvanced(contexts.ToolTipContext(None)))
+        super(AdvancedHeaderMoneyAndXpBuilder, self).__init__(tooltipType, linkage, common.HeaderMoneyAndXpTooltipData(contexts.ToolTipContext(None)), MoneyAndXpAdvanced(contexts.ToolTipContext(None)))
         self.__btnType = btnType
         self.__hideActionBlock = hideActionBlock
         return

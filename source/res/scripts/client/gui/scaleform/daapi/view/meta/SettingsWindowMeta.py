@@ -52,11 +52,11 @@ class SettingsWindowMeta(AbstractWindowView):
     def openColorSettings(self):
         self._printOverrideError('openColorSettings')
 
+    def showSystemMixerVolumeDisabledPage(self):
+        self._printOverrideError('showSystemMixerVolumeDisabledPage')
+
     def isSystemMixerVolumeDisabled(self):
         self._printOverrideError('isSystemMixerVolumeDisabled')
-
-    def fixSystemMixerVolume(self):
-        self._printOverrideError('fixSystemMixerVolume')
 
     def as_setDataS(self, settingsData):
         return self.flashObject.as_setData(settingsData) if self._isDAAPIInited() else None
@@ -108,9 +108,6 @@ class SettingsWindowMeta(AbstractWindowView):
 
     def as_setBattleContextHintsResetEnabledS(self, isEnabled):
         return self.flashObject.as_setBattleContextHintsResetEnabled(isEnabled) if self._isDAAPIInited() else None
-
-    def as_setTigerEventS(self, isInEvent):
-        return self.flashObject.as_setTigerEvent(isInEvent) if self._isDAAPIInited() else None
 
     def as_setVOIPTestReadyS(self, value):
         return self.flashObject.as_setVOIPTestReady(value) if self._isDAAPIInited() else None

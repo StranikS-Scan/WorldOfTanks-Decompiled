@@ -19,7 +19,13 @@ from skeletons.gui.shared import IItemsCache
 if typing.TYPE_CHECKING:
     from typing import List
 
-class DailyQuestTabView(ViewImpl):
+class DailyQuestTabBase(object):
+
+    def onTabSelected(self, tabIdx):
+        pass
+
+
+class DailyQuestTabView(DailyQuestTabBase, ViewImpl):
     eventsCache = dependency.descriptor(IEventsCache)
     itemsCache = dependency.descriptor(IItemsCache)
     lobbyContext = dependency.descriptor(ILobbyContext)

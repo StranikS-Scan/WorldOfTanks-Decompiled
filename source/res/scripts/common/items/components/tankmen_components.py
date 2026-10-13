@@ -46,6 +46,8 @@ class SPECIAL_VOICE_TAG(object):
     PORTAL_2025 = ('portal25_carev_specialVoice', 'portal25_vasilieva_specialVoice', 'portal25_koshcheev_specialVoice', 'portal25_yaginskaya_specialVoice')
     NY_2026 = ('ny26_character01_specialVoice', 'ny26_character02_specialVoice', 'ny26_character03_specialVoice', 'ny26_character04_specialVoice', 'ny26_character05_specialVoice', 'ny26_ded_terentiy_specialVoice')
     WT_2026 = ('wt26_Tapok_specialVoice', 'wt26_Krieger_specialVoice')
+    PORTAL_2026 = ('portal26_1_specialVoice', 'portal26_2_specialVoice', 'portal26_3_specialVoice', 'portal26_4_specialVoice')
+    WDR_2026 = ('wdr2026_1_specialVoice', 'wdr2026_2_specialVoice', 'wdr2026_3_specialVoice')
     ALL = (ARIA_2023,
      BUFFON,
      SABATON,
@@ -63,7 +65,7 @@ class SPECIAL_VOICE_TAG(object):
      CELEBRITY_2023,
      A157F,
      BP_18_5_STALCRAFT,
-     DR26_TIMURKA) + BATTLE_OF_BLOGGERS + BATTLE_OF_BLOGGERS_2021 + G_I_JOE_TWITCH_2021 + WHITE_TIGER_EVENT_2021 + WHITE_TIGER_EVENT_2022 + BPH_MT_2022 + MOSFILM_2023 + HW_2023 + KIN_DZA_DZA_2024 + BATTLE_OF_BLOGGERS_2025 + PORTAL_2025 + NY_2026 + WT_2026
+     DR26_TIMURKA) + BATTLE_OF_BLOGGERS + BATTLE_OF_BLOGGERS_2021 + G_I_JOE_TWITCH_2021 + WHITE_TIGER_EVENT_2021 + WHITE_TIGER_EVENT_2022 + BPH_MT_2022 + MOSFILM_2023 + HW_2023 + KIN_DZA_DZA_2024 + BATTLE_OF_BLOGGERS_2025 + PORTAL_2025 + NY_2026 + WT_2026 + PORTAL_2026 + WDR_2026
 
 
 class SPECIAL_CREW_TAG(object):

@@ -284,6 +284,7 @@ def __readGeometryCfg(geometryID, geometryName, section, defaultXml):
         cfg['isDevelopment'] = __readBool('isDevelopment', section, defaultXml, False)
         if IS_CELLAPP or IS_BASEAPP:
             cfg['estimatedLoad'] = _readFloat('estimatedLoad', section, defaultXml, ARENA_ESTIMATED_LOAD_DEFAULT)
+            cfg['numSubsteps'] = _readInt('numSubsteps', section, defaultXml, 0)
         if IS_CLIENT or IS_WEB:
             cfg['name'] = i18n.makeString(_readString('name', section, defaultXml))
         if IS_CLIENT:
@@ -468,10 +469,6 @@ def __readCommonCfg(section, defaultXml, raiseIfMissing, geometryCfg):
         cfg['teamLowLevelSpawnPoints'] = __readTeamSpawnPoints(section, maxTeamsInArena, nodeNameTemplate='team%d_low', required=False)
         cfg['botPoints'] = __readBotPoints(section)
         cfg['pointsOfInterest'] = __readPointsOfInterest(section)
-        if raiseIfMissing or __hasKey('soundNotificationsPlan', section, defaultXml):
-            cfg['soundNotificationsPlan'] = _readString('soundNotificationsPlan', section, defaultXml)
-        if raiseIfMissing or __hasKey('soundNotificationsContext', section, defaultXml):
-            cfg['soundNotificationsContext'] = _readString('soundNotificationsContext', section, defaultXml)
     return cfg
 
 

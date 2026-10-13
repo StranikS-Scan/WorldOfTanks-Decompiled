@@ -59,24 +59,6 @@
       <devices>	150	</devices>
     </damage>
   </_105mm_APCR_M68M2>
-  <_105mm_APCR_M68M2_WT>
-    <id>	1001	</id>
-    <userString>	#white_tiger.usa_vehicles.extend:_105mm_APCR_M68M2_WT	</userString>
-    <description>	#white_tiger.usa_vehicles.extend:_105mm_APCR_M68M2_WT_descr	</description>
-    <shortDescriptionSpecial>	#white_tiger.usa_vehicles.extend:_105mm_APCR_M68M2_WT_short_special	</shortDescriptionSpecial>
-    <longDescriptionSpecial>	#white_tiger.usa_vehicles.extend:_105mm_APCR_M68M2_WT_long_special	</longDescriptionSpecial>
-    <icon>	ap_wt	</icon>
-    <price>	1000	</price>
-    <notInShop>	true	</notInShop>
-    <kind>	ARMOR_PIERCING_CR	</kind>
-    <caliber>	105	</caliber>
-    <isTracer>	true	</isTracer>
-    <effects>	hunterAP_wt	</effects>
-    <damage>
-      <armor>	370	</armor>
-      <devices>	180	</devices>
-    </damage>
-  </_105mm_APCR_M68M2_WT>
   <_105mm_APCR_M735>
     <id>	174	</id>
     <userString>	#usa_vehicles:_105mm_APCR_M735	</userString>
@@ -1055,6 +1037,20 @@
       <devices>	165	</devices>
     </damage>
   </_120mm_APBC_M358_A184>
+  <_120mm_APCR_M358_A106>
+    <id>	31104	</id>
+    <userString>	#usa_vehicles:_120mm_APCR_M358	</userString>
+    <icon>	ap_cr	</icon>
+    <price>	4800	</price>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	120	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	largeAPCR	</effects>
+    <damage>
+      <armor>	400	</armor>
+      <devices>	165	</devices>
+    </damage>
+  </_120mm_APCR_M358_A106>
   <_120mm_APCR_T62>
     <id>	31	</id>
     <userString>	#usa_vehicles:_120mm_APCR_T62	</userString>
@@ -1387,6 +1383,22 @@
     </damage>
     <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
   </_120mm_HEAT_T_M469E1>
+  <_120mm_HEAT_T_M469_A106>
+    <id>	31105	</id>
+    <userString>	#usa_vehicles:_120mm_HEAT-T_M469	</userString>
+    <icon>	hc_premium	</icon>
+    <price>	4400	</price>
+    <improved>	true	</improved>
+    <kind>	HOLLOW_CHARGE	</kind>
+    <caliber>	120	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	largeHollowCharge	</effects>
+    <damage>
+      <armor>	400	</armor>
+      <devices>	165	</devices>
+    </damage>
+    <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
+  </_120mm_HEAT_T_M469_A106>
   <_120mm_HE_M356>
     <id>	165	</id>
     <userString>	#usa_vehicles:_120mm_HE_M356	</userString>
@@ -1507,6 +1519,30 @@
       </damage>
     </armorSpalls>
   </_120mm_HE_Shot>
+  <_120mm_HE_Shot_A106>
+    <id>	31106	</id>
+    <userString>	#usa_vehicles:_120mm_HE_Shot	</userString>
+    <icon>	he_modern	</icon>
+    <price>	900	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	120	</caliber>
+    <explosionRadius>	2.42	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	largeHighExplosive	</effects>
+    <damage>
+      <armor>	515	</armor>
+      <devices>	165	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	2.42	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	260	</armor>
+        <devices>	85	</devices>
+      </damage>
+    </armorSpalls>
+  </_120mm_HE_Shot_A106>
   <_120mm_HE_Shot_T>
     <id>	31012	</id>
     <userString>	#usa_vehicles:_120mm_HE_Shot	</userString>
@@ -2632,6 +2668,27 @@
       <protectFromIndirectHits>	internal tankmen	</protectFromIndirectHits>
     </deviceDamagePossibility>
   </_240mm_HE_M146>
+  <_240mm_HE_M146_portal_ability_shell>
+    <id>	40005	</id>
+    <userString>	#usa_vehicles:_240mm_HE_M146	</userString>
+    <icon>	he_spg_stun	</icon>
+    <price>	2500	</price>
+    <notInShop>	True	</notInShop>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <caliber>	240	</caliber>
+    <explosionRadius>	12.4	</explosionRadius>
+    <hasStun>	true	</hasStun>
+    <stunDuration>	20.5	</stunDuration>
+    <isTracer>	true	</isTracer>
+    <effects>	hugeSH	</effects>
+    <damage>
+      <armor>	1100	</armor>
+      <devices>	160	</devices>
+    </damage>
+    <deviceDamagePossibility>
+      <protectFromIndirectHits>	internal tankmen	</protectFromIndirectHits>
+    </deviceDamagePossibility>
+  </_240mm_HE_M146_portal_ability_shell>
   <_240mm_HE_M160>
     <id>	49	</id>
     <userString>	#usa_vehicles:_240mm_HE_M160	</userString>
@@ -5044,6 +5101,5 @@
     <he_spg_stun>	HIGH_EXPLOSIVE_SPG_STUN.png 0 0	</he_spg_stun>
     <flame>	FLAME.png 0 0	</flame>
     <flame_alternative>	FLAME_ALTERNATIVE.png 0 0	</flame_alternative>
-    <ap_wt>	WT_ARMOR_PIERCING.png 0 0	</ap_wt>
   </icons>
 </shells.xml>

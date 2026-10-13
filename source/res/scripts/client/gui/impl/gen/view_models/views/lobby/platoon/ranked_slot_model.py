@@ -6,22 +6,22 @@ from gui.impl.gen.view_models.views.lobby.platoon.slot_model import SlotModel
 class RankedSlotModel(SlotModel):
     __slots__ = ()
 
-    def __init__(self, properties=15, commands=0):
+    def __init__(self, properties=14, commands=0):
         super(RankedSlotModel, self).__init__(properties=properties, commands=commands)
 
     @property
     def rankData(self):
-        return self._getViewModel(13)
+        return self._getViewModel(12)
 
     @staticmethod
     def getRankDataType():
         return RankedPlatoonRankData
 
     def getIsWaiting(self):
-        return self._getBool(14)
+        return self._getBool(13)
 
     def setIsWaiting(self, value):
-        self._setBool(14, value)
+        self._setBool(13, value)
 
     def _initialize(self):
         super(RankedSlotModel, self)._initialize()

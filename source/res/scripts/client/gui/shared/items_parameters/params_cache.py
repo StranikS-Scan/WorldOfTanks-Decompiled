@@ -11,7 +11,7 @@ from gui.shared.utils.decorators import debugTime
 from debug_utils import LOG_CURRENT_EXCEPTION
 from items import vehicles, ITEM_TYPES, EQUIPMENT_TYPES
 from items.vehicles import getVehicleType
-from gui.shared.utils import GUN_NORMAL, GUN_CAN_BE_CLIP, GUN_CLIP, GUN_CAN_BE_AUTO_RELOAD, GUN_AUTO_RELOAD, GUN_DUAL_GUN, GUN_CAN_BE_DUAL_GUN, GUN_AUTOSHOOT_FLAME, GUN_CAN_BE_AUTOSHOOT_FLAME, GUN_AUTO_RELOAD_DUAL_GUN, GUN_CLIP_DUAL_GUN, GUN_CAN_BE_AUTO_RELOAD_DUAL_GUN, GUN_CAN_BE_CLIP_DUAL_GUN, GUN_CAN_BE_AUTOSHOOT, GUN_AUTOSHOOT, GUN_DUAL_ACCURACY, GUN_DUAL_GUN_DUAL_ACCURACY, GUN_CAN_HAVE_DUAL_ACCURACY, GUN_CAN_BE_DUAL_GUN_DUAL_ACCURACY
+from gui.shared.utils import GUN_NORMAL, GUN_CAN_BE_CLIP, GUN_CLIP, GUN_CAN_BE_AUTO_RELOAD, GUN_AUTO_RELOAD, GUN_DUAL_GUN, GUN_CAN_BE_DUAL_GUN, GUN_AUTOSHOOT_FLAME, GUN_CAN_BE_AUTOSHOOT_FLAME, GUN_AUTO_RELOAD_DUAL_GUN, GUN_CLIP_DUAL_GUN, GUN_CAN_BE_AUTO_RELOAD_DUAL_GUN, GUN_CAN_BE_CLIP_DUAL_GUN, GUN_CAN_BE_AUTOSHOOT, GUN_AUTOSHOOT, GUN_DUAL_ACCURACY, GUN_DUAL_GUN_DUAL_ACCURACY, GUN_CAN_HAVE_DUAL_ACCURACY, GUN_CAN_BE_DUAL_GUN_DUAL_ACCURACY, GUN_CLIP_GUN_DUAL_ACCURACY, GUN_CAN_BE_CLIP_GUN_DUAL_ACCURACY
 from post_progression_common import ACTION_TYPES
 from soft_exception import SoftException
 if typing.TYPE_CHECKING:
@@ -104,6 +104,8 @@ class PrecachedGun(namedtuple('PrecachedGun', ('clipVehicles',
                     reloadingType = GUN_CAN_BE_CLIP_DUAL_GUN
                 if self.autoShootVehicles:
                     reloadingType = GUN_CAN_BE_AUTOSHOOT
+                if self.dualAccuracyVehicles:
+                    reloadingType = GUN_CAN_BE_CLIP_GUN_DUAL_ACCURACY
             elif self.dualGunVehicles:
                 reloadingType = GUN_CAN_BE_DUAL_GUN
                 if self.dualAccuracyVehicles:
@@ -122,6 +124,8 @@ class PrecachedGun(namedtuple('PrecachedGun', ('clipVehicles',
                 reloadingType = GUN_CLIP_DUAL_GUN
             elif self.autoShootVehicles and vehicleCD in self.autoShootVehicles:
                 reloadingType = GUN_AUTOSHOOT
+            elif self.dualAccuracyVehicles and vehicleCD in self.dualAccuracyVehicles:
+                reloadingType = GUN_CLIP_GUN_DUAL_ACCURACY
         elif self.dualGunVehicles and vehicleCD in self.dualGunVehicles:
             reloadingType = GUN_DUAL_GUN
             if self.dualAccuracyVehicles and vehicleCD in self.dualAccuracyVehicles:

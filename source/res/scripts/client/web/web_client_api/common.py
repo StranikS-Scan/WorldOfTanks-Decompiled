@@ -123,6 +123,7 @@ class ItemPackType(CONST_CONTAINER):
     CUSTOM_BERTHS = 'custom/berths'
     CUSTOM_GOLDENTICKET = 'custom/goldenticket'
     CUSTOM_CURRENCIES = 'custom/currencies'
+    CUSTOM_RAZLOM_COIN = 'custom/razlom_coin'
     TOKEN = 'token'
     PAINT_ALL = 'paint/all'
     PAINT_SUMMER = 'paint/summer'
@@ -170,6 +171,7 @@ class ItemPackType(CONST_CONTAINER):
     ENTITLEMENTS = 'custom/entitlements'
     CUSTOM_BUMBLEE_COIN = 'custom/bumblebee_coin'
     CUSTOM_HONEY_COIN = 'custom/honey_coin'
+    PREFERRED_MAP_SLOTS_REWARD_SLOT = 'preferredMapSlots/RewardSlot'
 
 
 class ItemPackTypeGroup(CONST_CONTAINER):
@@ -213,7 +215,8 @@ class ItemPackTypeGroup(CONST_CONTAINER):
      ItemPackType.CUSTOM_SUPPLY_POINT,
      ItemPackType.CUSTOM_BUMBLEE_COIN,
      ItemPackType.CUSTOM_HONEY_COIN,
-     ItemPackType.CUSTOM_GOLDENTICKET)
+     ItemPackType.CUSTOM_GOLDENTICKET,
+     ItemPackType.CUSTOM_RAZLOM_COIN)
     CREW = (ItemPackType.CREW_50,
      ItemPackType.CREW_75,
      ItemPackType.CREW_100,

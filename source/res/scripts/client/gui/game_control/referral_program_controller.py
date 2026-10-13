@@ -7,7 +7,7 @@ from functools import partial
 from Event import Event
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import REFERRAL_COUNTER
-from account_helpers.settings_core.ServerSettingsManager import UI_STORAGE_KEYS
+from account_helpers.settings_core.ServerSettingsManager import UI_STORAGE_KEYS, SETTINGS_SECTIONS
 from constants import RP_PGB_POINT, RP_POINT
 from frameworks.wulf import WindowLayer
 from gui import SystemMessages, InputHandler
@@ -72,7 +72,7 @@ class ReferralProgramController(GameWindowController, IReferralProgramController
             browserView.onCloseView()
 
     def isFirstIndication(self):
-        return not self.__settingsCore.serverSettings.getUIStorage().get(UI_STORAGE_KEYS.REFERRAL_BUTTON_CIRCLES_SHOWN) and isCurrentUserRecruit()
+        return not self.__settingsCore.serverSettings.getUIStorage(SETTINGS_SECTIONS.UI_STORAGE).get(UI_STORAGE_KEYS.REFERRAL_BUTTON_CIRCLES_SHOWN) and isCurrentUserRecruit()
 
     def getBubbleCount(self):
         return self.__getServerBubbleCount() if USE_SERVER_RECRUIT_DELTA else self.__getClientBubbleCount()
@@ -212,7 +212,7 @@ class ReferralProgramController(GameWindowController, IReferralProgramController
 
     def __setButtonCirclesShown(self):
         if isCurrentUserRecruit():
-            self.__settingsCore.serverSettings.saveInUIStorage({UI_STORAGE_KEYS.REFERRAL_BUTTON_CIRCLES_SHOWN: True})
+            self.__settingsCore.serverSettings.saveInUIStorage(SETTINGS_SECTIONS.UI_STORAGE, {UI_STORAGE_KEYS.REFERRAL_BUTTON_CIRCLES_SHOWN: True})
 
     def __processButtonPress(self, **_):
         self.showWindow()

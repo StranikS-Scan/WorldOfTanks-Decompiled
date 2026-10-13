@@ -23,7 +23,7 @@ class AbstractActionsHandler(object):
     def showGUI(self):
         pass
 
-    def setPlayerInfoChanged(self):
+    def setPlayerInfoChanged(self, pInfo=None):
         pass
 
     def setPlayersChanged(self):

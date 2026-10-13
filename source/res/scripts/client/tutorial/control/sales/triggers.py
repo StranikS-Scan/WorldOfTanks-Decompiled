@@ -2,12 +2,72 @@
 # Embedded file name: scripts/client/tutorial/control/sales/triggers.py
 import BigWorld
 from CurrentVehicle import g_currentVehicle
+from frameworks.wulf import WindowFlags, WindowLayer, WindowStatus
+from gui.Scaleform.framework.entities.sf_window import SFWindow
 from gui.techtree.research_items_data import ResearchItemsData
 from helpers import dependency
+from skeletons.gui.impl import IGuiLoader
 from skeletons.gui.shared import IItemsCache
 from tutorial.control.triggers import Trigger, TriggerWithSubscription, TriggerWithValidateVar
 from tutorial.logger import LOG_DEBUG
-__all__ = ('TimerTrigger', 'IsCollectibleVehicleTrigger', 'CurrentVehicleChangedTrigger', 'ItemsCacheSyncTrigger', 'ResearchGoToNextVehicleTrigger')
+__all__ = ('TimerTrigger', 'IsCollectibleVehicleTrigger', 'CurrentVehicleChangedTrigger', 'ItemsCacheSyncTrigger', 'ResearchGoToNextVehicleTrigger', 'ViewLoadedTrigger')
+_TRACKED_VIEW_LAYERS = frozenset((WindowLayer.VIEW,
+ WindowLayer.SUB_VIEW,
+ WindowLayer.TOP_SUB_VIEW,
+ WindowLayer.WINDOW,
+ WindowLayer.FULLSCREEN_WINDOW,
+ WindowLayer.TOP_WINDOW,
+ WindowLayer.OVERLAY))
+_IGNORED_WINDOW_TYPES = frozenset((WindowFlags.SERVICE_WINDOW, WindowFlags.TOOLTIP, WindowFlags.WAITING))
+
+class ViewLoadedTrigger(Trigger):
+    guiLoader = dependency.descriptor(IGuiLoader)
+
+    def __init__(self, triggerID, excludedScaleformAliases=None, excludedWulfLayoutIDs=None):
+        super(ViewLoadedTrigger, self).__init__(triggerID)
+        self.__excludedScaleformAliases = frozenset(excludedScaleformAliases or ())
+        self.__excludedWulfLayoutIDs = frozenset(excludedWulfLayoutIDs or ())
+
+    def run(self):
+        if self.isSubscribed:
+            return
+        self.__sfLoaderManager = self._gui.app.loaderManager
+        self.__windowsManager = self.guiLoader.windowsManager
+        self.__sfLoaderManager.onViewLoaded += self.__onScaleformViewLoaded
+        self.__windowsManager.onWindowStatusChanged += self.__onWulfWindowStatusChanged
+        self.isSubscribed = True
+
+    def clear(self):
+        if self.isSubscribed:
+            self.__sfLoaderManager.onViewLoaded -= self.__onScaleformViewLoaded
+            self.__windowsManager.onWindowStatusChanged -= self.__onWulfWindowStatusChanged
+            self.isSubscribed = False
+        super(ViewLoadedTrigger, self).clear()
+
+    def __onScaleformViewLoaded(self, view, _):
+        alias = view.alias
+        layer = view.layer
+        if layer in _TRACKED_VIEW_LAYERS and alias not in self.__excludedScaleformAliases:
+            self.__onUnexpectedViewLoaded('Scaleform', alias)
+
+    def __onWulfWindowStatusChanged(self, uniqueID, newStatus):
+        if newStatus != WindowStatus.LOADED:
+            return
+        else:
+            window = self.__windowsManager.getWindow(uniqueID)
+            if isinstance(window, SFWindow) or window.layer not in _TRACKED_VIEW_LAYERS or window.typeFlag in _IGNORED_WINDOW_TYPES:
+                return
+            content = window.content
+            if content is not None and content.layoutID not in self.__excludedWulfLayoutIDs:
+                self.__onUnexpectedViewLoaded('Wulf', content.layoutID)
+            return
+
+    def __onUnexpectedViewLoaded(self, guiType, viewID):
+        LOG_DEBUG('ViewLoadedTrigger.toggle', self.getID(), guiType, viewID)
+        self._tutorial.interruptCurrentEffect()
+        self.toggle()
+        self.clear()
+
 
 class TimerTrigger(TriggerWithValidateVar):
 

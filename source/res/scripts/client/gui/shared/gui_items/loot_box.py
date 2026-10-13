@@ -45,7 +45,7 @@ class EventCategories(CONST_CONTAINER):
 class WTLootBoxes(CONST_CONTAINER):
     WT_HUNTER = 'wt_hunter'
     WT_BOSS = 'wt_boss'
-    WT_TANK = 'wt_tank'
+    WT_SPECIAL = 'wt_special'
 
 
 class LunarNYLootBoxTypes(Enum):
@@ -123,14 +123,13 @@ def addBonusesToGroup(bonusGroup, bonuses):
 
 
 class LootBox(GUIItem):
-    __slots__ = ('__id', '__invCount', '__type', '__category', '__historyName', '__guaranteedFrequency', '__slotBonuses', '__guaranteedFrequencyName', '__tier', '__isEnabled', '__userNameKey', '__iconName', '__description', '__videoKey', '__weight', '__bonusGroups', '__autoOpenTime', '__rotationLists', '__config', '__rotationStage', '__tags', '__unlockKeys', '__manualMaxOpenCount', '__lootBoxInfoPageURL', '__lootBoxShopURL', '__isStatCollected', '__immediatelyOpen', '__customBonusData')
+    __slots__ = ('__id', '__invCount', '__type', '__category', '__historyName', '__guaranteedFrequency', '__slotBonuses', '__guaranteedFrequencyName', '__tier', '__isEnabled', '__userNameKey', '__iconName', '__description', '__videoKey', '__weight', '__bonusGroups', '__autoOpenTime', '__rotationLists', '__config', '__rotationStage', '__tags', '__unlockKeys', '__manualMaxOpenCount', '__lootBoxInfoPageURL', '__lootBoxShopURL', '__isStatCollected', '__immediatelyOpen')
 
     def __init__(self, lootBoxID, lootBoxConfig, invCount):
         super(LootBox, self).__init__()
         self.__id = lootBoxID
         self.__invCount = invCount
         self.__rotationStage = 0
-        self.__customBonusData = {}
         self.__updateByConfig(lootBoxConfig)
 
     def __repr__(self):
@@ -314,9 +313,6 @@ class LootBox(GUIItem):
     def _getRotationStage(self):
         return self.__rotationStage
 
-    def getCustomBonusData(self):
-        return self.__customBonusData
-
     def isMultipleStage(self):
         return len(self.__rotationLists) > 1
 
@@ -340,14 +336,13 @@ class LootBox(GUIItem):
         self.__tier = LootBoxTiers(lootBoxConfig.get('tier', 1))
         self.__historyName = lootBoxConfig.get('historyName', '')
         self.__config = lootBoxConfig.get('config', {})
-        self.__customBonusData = lootBoxConfig.get('customBonusData', {})
         self.__rotationLists = []
         if self.hasLootLists():
             self.__rotationLists, self.__slotBonuses = parseBonusSection(lootBoxConfig['bonus'], self.__config['rotationLevelCount'])
         else:
             self.__slotBonuses = parseAllOfBonusInfoSection(lootBoxConfig.get('bonus', {}).get('allof', []))
         self.__bonusGroups = None
-        self.__guaranteedFrequencyName, self.__guaranteedFrequency = self.__readLimits(lootBoxConfig.get('limits', {}))
+        self.__guaranteedFrequencyName, self.__guaranteedFrequency = self.__readLimits(lootBoxConfig.get('limits', {}), self.__iterateAllSlots())
         self.__isEnabled = lootBoxConfig.get('enabled', False)
         self.__weight = lootBoxConfig.get('weight', 0.0)
         assetsConfig = lootBoxConfig.get('assets', {})
@@ -389,16 +384,20 @@ class LootBox(GUIItem):
         return config
 
     @staticmethod
-    def __readLimits(limitsCfg):
+    def __readLimits(limitsCfg, slots):
         guaranteedFrequencies = []
         guaranteedFrequenciesNames = []
-        for limitName, limit in limitsCfg.iteritems():
-            if 'useBonusProbabilityAfter' in limit:
-                guaranteedFrequencies.append(limit['useBonusProbabilityAfter'] + 1)
-                guaranteedFrequenciesNames.append(limitName)
-            if 'guaranteedFrequency' in limit:
-                guaranteedFrequencies.append(limit['guaranteedFrequency'])
-                guaranteedFrequenciesNames.append(limitName)
+        for slot in slots:
+            for limitName in slot.get('limitIDsMap', {}).iterkeys():
+                limit = limitsCfg.get(limitName)
+                if not limit:
+                    continue
+                if 'useBonusProbabilityAfter' in limit:
+                    guaranteedFrequencies.append(limit['useBonusProbabilityAfter'] + 1)
+                    guaranteedFrequenciesNames.append(limitName)
+                if 'guaranteedFrequency' in limit:
+                    guaranteedFrequencies.append(limit['guaranteedFrequency'])
+                    guaranteedFrequenciesNames.append(limitName)
 
         return (guaranteedFrequenciesNames, guaranteedFrequencies) if guaranteedFrequencies and guaranteedFrequenciesNames else ([None], [0])
 

@@ -5,14 +5,18 @@ from functools import partial
 import typing
 from CurrentVehicle import g_currentPreviewVehicle
 from constants import RentType
+from gui import SystemMessages
+from gui.SystemMessages import SM_TYPE
 from gui.Scaleform.daapi.view.lobby.vehicle_preview.items_kit_helper import getDataOneVehicle, addBuiltInEquipment
 from gui.Scaleform.daapi.view.lobby.vehicle_preview.vehicle_preview import VehiclePreview
 from gui.Scaleform.framework.entities import BaseDAAPIComponent
 from gui.Scaleform.genConsts.STORAGE_CONSTANTS import STORAGE_CONSTANTS
 from gui.Scaleform.genConsts.VEHPREVIEW_CONSTANTS import VEHPREVIEW_CONSTANTS
+from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
 from gui.Scaleform.locale.VEHICLE_PREVIEW import VEHICLE_PREVIEW
 from gui.impl.lobby.offers.offer_gift_dialog import RENT_VALUE_DESCR_BY_TYPE
 from gui.shared import event_dispatcher, formatters
+from gui.shared.notifications import NotificationPriorityLevel
 from helpers import dependency
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.offers import IOffersDataProvider
@@ -135,11 +139,22 @@ class OfferGiftVehiclePreview(VehiclePreview):
     def __onOffersUpdated(self):
         offer = self.__offersProvider.getOffer(self._offer.id)
         if offer is None or not offer.isOfferAvailable:
+            self.__showOfferUnavailableNotification()
             if self.__offersProvider.getAvailableOffers(onlyVisible=True):
                 event_dispatcher.showStorage(defaultSection=STORAGE_CONSTANTS.OFFERS)
             else:
                 self._customCallbacks.get('offerEndedCb', event_dispatcher.showHangar)()
-        return
+            return
+        else:
+            gift = offer.getGift(self._gift.id)
+            if gift is None or offer.getGiftAvailabelCount(self._gift.id) == 0 or gift.bonus.displayedItem.intCD != self._vehicle.intCD:
+                self.__showOfferUnavailableNotification()
+                self._customCallbacks.get('giftUnavailableCb', lambda : None)()
+            return
+
+    @staticmethod
+    def __showOfferUnavailableNotification():
+        SystemMessages.pushI18nMessage(SYSTEM_MESSAGES.OFFERS_OFFER_UNAVAILABLE, type=SM_TYPE.Error, priority=NotificationPriorityLevel.MEDIUM)
 
     @classmethod
     def __getCrewItemPackEntry(cls, item):

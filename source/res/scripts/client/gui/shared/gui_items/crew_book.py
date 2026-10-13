@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/crew_book.py
 import nations
+from gui.Scaleform.genConsts.FITTING_TYPES import FITTING_TYPES
 from gui.impl import backport
 from gui.impl.gen import R
 from items import tankmen, parseIntCompactDescr
@@ -37,6 +38,10 @@ class CrewBook(FittingItem):
         if proxy is not None and proxy.inventory.isSynced():
             self.__count = proxy.inventory.getItems(GUI_ITEM_TYPE.CREW_BOOKS, intCompactDescr)
         return
+
+    @property
+    def fittingType(self):
+        return FITTING_TYPES.CREW_BOOKS
 
     @property
     def isForPurchase(self):

@@ -1569,18 +1569,8 @@ def _migrateTo147(core, data, initialized):
 
 def _migrateTo148(core, data, initialized):
     from account_helpers.settings_core.ServerSettingsManager import SETTINGS_SECTIONS, BATTLE_CONTEXT_HINTS
-    from gui.battle_control.battle_context_hints.classic_battle_context_hints_config import getConfig
-    from gui.battle_control.battle_context_hints.common import HintId
     from gui.battle_control.battle_context_hints.settings_data_block import HintData, HintDataLongBattleCntrBlock, HintDataPlayerObservedBlock
     data['gameExtData2'][GAME.ENABLE_BATTLE_CONTEXT_HINTS] = True
-    config = getConfig()
-    hintConf = {conf.hintId:conf for conf in config}
-    hints = [HintId.AMMO_TYPE_AVAILABLE, HintId.AMMO_TYPE_SWITCH]
-    for hint in hints:
-        conf = hintConf[hint]
-        hintData = HintData(conf.maxWatchingQty, conf.maxWatchingQtyPerBattle, 0, False)
-        data[conf.dataBlock.section()][conf.dataBlock.key()] = conf.dataBlock.pack(hintData)
-
     storedValue = _getSettingsCache().getSectionSettings(SETTINGS_SECTIONS.BATTLE_CONTEXT_HINTS, None)
     if storedValue is None:
         return
@@ -1592,6 +1582,62 @@ def _migrateTo148(core, data, initialized):
         migratedHintData = HintData(min(oldHintData.watchingCounter, 3), oldHintData.watchingCounterPerBattle, 0, False)
         data[SETTINGS_SECTIONS.BATTLE_CONTEXT_HINTS][BATTLE_CONTEXT_HINTS.PLAYER_VEHICLE_OBSERVED] = newBlock.pack(migratedHintData)
         return
+
+
+def _migrateTo149(core, data, initialized):
+    from account_helpers.settings_core.ServerSettingsManager import SETTINGS_SECTIONS
+    clear = data['clear']
+
+    def clearBits(section, dataSection, bits):
+        storedValue = _getSettingsCache().getSectionSettings(section, 0)
+        for bitPosition in bits:
+            settingOffset = 1 << bitPosition
+            if storedValue & settingOffset:
+                clear[dataSection] = clear.get(dataSection, 0) | settingOffset
+
+    clearBits(SETTINGS_SECTIONS.ONCE_ONLY_HINTS, 'onceOnlyHints', (12, 13, 15, 18, 22))
+    clearBits(SETTINGS_SECTIONS.ONCE_ONLY_HINTS_2, 'onceOnlyHints2', (27, 28))
+    clearBits(SETTINGS_SECTIONS.ONCE_ONLY_HINTS_3, 'onceOnlyHints3', (10,))
+    from gui.battle_control.battle_context_hints.classic_battle_context_hints_config import getConfig
+    from gui.battle_control.battle_context_hints.common import HintId
+    from gui.battle_control.battle_context_hints.settings_data_block import HintData
+    from skeletons.gui.shared import IItemsCache
+    shouldInitializeAmmoHintCounters = _getSettingsCache().getVersion() < 148
+    if shouldInitializeAmmoHintCounters:
+        itemsCache = dependency.instance(IItemsCache)
+        if itemsCache.isSynced():
+            tankAcademyUnlockToken = 'tank_academy_unlock'
+            battleMattersToTankAcademyPrefix = 'battle_matters_to_tank_academy:'
+            shouldInitializeAmmoHintCounters = False
+            tokens = itemsCache.items.tokens.getTokens()
+            if tankAcademyUnlockToken in tokens:
+                migrationToken = next((token for token in tokens if token.startswith(battleMattersToTankAcademyPrefix)), None)
+                if migrationToken is None:
+                    shouldInitializeAmmoHintCounters = True
+                else:
+                    tankAcademyQuestNumber = migrationToken.rsplit(':', 1)[-1]
+                    shouldInitializeAmmoHintCounters = tankAcademyQuestNumber.isdigit() and 1 <= int(tankAcademyQuestNumber) <= 7
+    if shouldInitializeAmmoHintCounters:
+        config = getConfig()
+        hintConf = {conf.hintId:conf for conf in config}
+        hints = [HintId.AMMO_TYPE_AVAILABLE, HintId.AMMO_TYPE_SWITCH]
+        for hint in hints:
+            conf = hintConf[hint]
+            hintData = HintData(conf.maxWatchingQty, conf.maxWatchingQtyPerBattle, 0, False)
+            data[conf.dataBlock.section()][conf.dataBlock.key()] = conf.dataBlock.pack(hintData)
+
+    itemsCache = dependency.instance(IItemsCache)
+    migrationTokenPrefix = 'battle_matters_to_tank_academy:'
+    if any((token.startswith(migrationTokenPrefix) for token in itemsCache.items.tokens.getTokens())):
+        from account_helpers.settings_core.ServerSettingsManager import BATTLE_MATTERS_KEYS
+        data[SETTINGS_SECTIONS.BATTLE_MATTERS_QUESTS] = {BATTLE_MATTERS_KEYS.QUESTS_SHOWN: 0,
+         BATTLE_MATTERS_KEYS.QUEST_PROGRESS: 0}
+    return
+
+
+def _migrateTo150(core, data, initialized):
+    from account_helpers.settings_core.ServerSettingsManager import UI_STORAGE_KEYS, SETTINGS_SECTIONS
+    data[SETTINGS_SECTIONS.UI_STORAGE_3][UI_STORAGE_KEYS.CLIP_GUN_DUAL_ACCURACY_HIGHLIGHTS_COUNTER] = 0
 
 
 _versions = ((1,
@@ -2328,7 +2374,17 @@ _versions = ((1,
   _migrateTo148,
   False,
   False,
-  True))
+  True),
+ (149,
+  _migrateTo149,
+  False,
+  False,
+  False),
+ (150,
+  _migrateTo150,
+  False,
+  False,
+  False))
 
 @adisp_async
 @adisp_process

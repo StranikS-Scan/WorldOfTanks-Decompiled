@@ -27,7 +27,7 @@ from tank_academy.gui.server_events.events_helpers import isTankAcademyQuestID, 
 from tank_academy.gui.shared.event_dispatcher import showTankAcademyReward
 from tank_academy_common.tank_academy_constants import GAME_PARAMS_KEY, TANK_ACADEMY_UNLOCK_TOKEN, TANK_ACADEMY_COMPLETE_TOKEN, AB_TEST_FEATURE_NAME, AB_TEST_DEFAULT_GROUP_NAME
 if typing.TYPE_CHECKING:
-    from typing import Optional, Union, List, Callable
+    from typing import Optional, Union, List, Callable, Tuple
     from gui.server_events.bonuses import SelectableBonus
     from gui.server_events.event_items import Quest, Group
 _CLIENT_REWARD_IDX = -1
@@ -58,6 +58,7 @@ class TankAcademyController(ITankAcademyController):
         self.__suppressedPostBattleArenaUniqueIDs = set()
         self.__hintsHelper = None
         self.__currentQuestOrder = None
+        self.__migrationInfo = None
         return
 
     def init(self):
@@ -93,6 +94,9 @@ class TankAcademyController(ITankAcademyController):
 
     def isEnabled(self):
         return self._isEnabled
+
+    def isEnabledByConfig(self):
+        return self.__getConfig().isEnabled
 
     def isFinished(self):
         return self.__itemsCache.items.tokens.getToken(TANK_ACADEMY_COMPLETE_TOKEN) is not None
@@ -270,18 +274,38 @@ class TankAcademyController(ITankAcademyController):
     def getHangarWidgetAlias(self):
         return self.__hangarWidgetAlias
 
+    def getMigrationInfo(self):
+        return self.__migrationInfo
+
     def isFirstQuestCompleted(self):
         firstQuest = self.getFirstQuest()
         return firstQuest.isCompleted() if firstQuest else False
 
+    def isMigratedFromNonZeroProgress(self):
+        migrationInfo = self.getMigrationInfo()
+        if migrationInfo is None:
+            return False
+        else:
+            _, battleMattersQuestNumber, _ = migrationInfo
+            return battleMattersQuestNumber > 1
+
+    def isMigrationUpdatesScenario(self):
+        migrationInfo = self.getMigrationInfo()
+        if migrationInfo is None:
+            return False
+        else:
+            _, _, newQuestNumber = migrationInfo
+            return newQuestNumber > 1
+
     def _getIsEnabled(self):
-        isEnabled = self.__getConfig().isEnabled and not self.__bootcampController.isInBootcamp()
+        isEnabled = self.isEnabledByConfig() and not self.__bootcampController.isInBootcamp()
         return isEnabled and (self._isAvailable or self.__eventsCache.waitForSync or not self.__itemsCache.isSynced())
 
     def _onSyncCompleted(self):
         self.__update()
 
     def _onItemsCacheSync(self, *_, **__):
+        self.__migrationInfo = self.__getMigrationInfo()
         previousIsAvailable = self._isAvailable
         self._isAvailable = self.hasAccessToken()
         if previousIsAvailable != self._isAvailable or self.__hasDelayedRewards or self.hasUnobtainedDelayedRewards():
@@ -410,9 +434,15 @@ class TankAcademyController(ITankAcademyController):
         HangarHeader.addExternalWidgetHandler(self.__hangarWidgetAlias, self.__widgetHandler)
 
     def __widgetHandler(self, hangarHeader):
-        return self.isActive() and hangarHeader.getCurrentArenaBonusType() == ARENA_BONUS_TYPE.REGULAR and self.isFirstQuestCompleted()
+        return self.isActive() and hangarHeader.getCurrentArenaBonusType() == ARENA_BONUS_TYPE.REGULAR and (self.isFirstQuestCompleted() or self.isMigratedFromNonZeroProgress())
 
     def __removeWidgetHandler(self):
         HangarHeader.removeExternalWidgetHandler(self.__hangarWidgetAlias)
         self.__hangarWidgetAlias = None
         return
+
+    def __getMigrationInfo(self):
+        migrationTokenPrefix = 'battle_matters_to_tank_academy:'
+        migrationTokens = [ token[len(migrationTokenPrefix):].split(':') for token in self.__itemsCache.items.tokens.getTokens() if token.startswith(migrationTokenPrefix) ]
+        migrationToken = first((token for token in migrationTokens if len(token) == 3 and token[1].isdigit() and token[2].isdigit()))
+        return (str(migrationToken[0]), int(migrationToken[1]), int(migrationToken[2])) if migrationToken else None

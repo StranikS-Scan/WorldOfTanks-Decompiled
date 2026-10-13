@@ -42,6 +42,10 @@
         <close-hint>	ReturnToHangarHint	</close-hint>
         <set-var>	CurrentVehicleCDSetter	</set-var>
         <run-trigger>	CurrentVehicleChangeTrigger	</run-trigger>
+        <run-trigger>	UnexpectedViewLoadedTrigger	  <condition>
+            <active>	ModuleBought	</active>
+          </condition>
+        </run-trigger>
       </post-effects>
       <runtime-effects>
         <show-hint>	VehicleResearchButtonHint	  <condition>
@@ -383,6 +387,15 @@
       <on-effects>
         <close-hint>	ResearchModuleHint	</close-hint>
         <close-hint>	BuyModuleHint	</close-hint>
+        <refuse-training></refuse-training>
+      </on-effects>
+    </trigger>
+    <trigger>	UnexpectedViewLoadedTrigger	  <type>	view-loaded	</type>
+      <excluded-views>
+        <scaleform>	lobby	</scaleform>
+        <scaleform>	hangar	</scaleform>
+      </excluded-views>
+      <on-effects>
         <refuse-training></refuse-training>
       </on-effects>
     </trigger>

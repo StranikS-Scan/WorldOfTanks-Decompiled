@@ -16,11 +16,13 @@ from gui.shared.formatters import time_formatters
 from helpers import dependency
 from helpers import time_utils
 from skeletons.gui.game_control import IComp7Controller
+from skeletons.gui.impl import IGuiLoader
 if typing.TYPE_CHECKING:
     from gui.impl.gen.view_models.views.lobby.mode_selector.mode_selector_comp7_widget_model import ModeSelectorComp7WidgetModel
 
 class Comp7ModeSelectorItem(ModeSelectorLegacyItem):
     __comp7Controller = dependency.descriptor(IComp7Controller)
+    __gui = dependency.descriptor(IGuiLoader)
     __slots__ = ('__currentSeason',)
     _VIEW_MODEL = ModeSelectorComp7Model
     _CARD_VISUAL_TYPE = ModeSelectorCardTypes.COMP7

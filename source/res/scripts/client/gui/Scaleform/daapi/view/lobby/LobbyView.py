@@ -58,7 +58,6 @@ class _LobbySubViewsLifecycleHandler(IViewLifecycleHandler):
      VIEW_ALIAS.LOBBY_RESEARCH,
      VIEW_ALIAS.BATTLE_QUEUE,
      VIEW_ALIAS.BATTLE_STRONGHOLDS_QUEUE,
-     VIEW_ALIAS.EVENT_BATTLE_QUEUE,
      RANKEDBATTLES_ALIASES.RANKED_BATTLES_VIEW_ALIAS)
     __WULF_SUB_VIEWS = (R.views.lobby.techtree.VehicleTechTree(),)
 
@@ -189,6 +188,9 @@ class LobbyView(LobbyPageMeta, IWaitingWidget):
         self.removeListener(events.GameEvent.REVEAL_LOBBY_SUB_CONTAINER_ITEMS, self.__revealSubContainerItems, EVENT_BUS_SCOPE.GLOBAL)
         self._UiEffectsManager.dispose()
         self.removeListener(events.LobbyInterfaceEvent.TOGGLE_VISIBILITY, self.__onToggleVisibility, scope=EVENT_BUS_SCOPE.LOBBY)
+        proto = self.bwProto
+        if proto and proto.voipController:
+            proto.voipController.invalidateMicrophoneMute()
         View._dispose(self)
         return
 

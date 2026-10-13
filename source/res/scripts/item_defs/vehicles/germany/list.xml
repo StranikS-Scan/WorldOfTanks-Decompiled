@@ -38,6 +38,36 @@
     <tags>	AT-SPG HD secret supply earn_crystals stationary supply_Flamer private event_battles cannot_be_sold	</tags>
     <level>	10	</level>
   </G00_Feuerbunker>
+  <G00_Mausekonig_V01>
+    <id>	41012	</id>
+    <userString>	#germany_vehicles:G00_Mausekonig_V01	</userString>
+    <shortUserString>	#germany_vehicles:G00_Mausekonig_V01_short	</shortUserString>
+    <description>	#germany_vehicles:G00_Mausekonig_V01_descr	</description>
+    <price>	0	</price>
+    <notInShop>	true	</notInShop>
+    <tags>	heavyTank HD role_HT_assault siegeMode dualgun charger secret private cannot_be_sold lockCrew lockOutfit restoreWithStyle calculate_bbox builtinStyle new_hp_vfx	</tags>
+    <level>	1	</level>
+  </G00_Mausekonig_V01>
+  <G00_PzVI_Tiger_P>
+    <id>	40012	</id>
+    <userString>	#germany_vehicles:G00_PzVI_Tiger_P	</userString>
+    <shortUserString>	#germany_vehicles:G00_PzVI_Tiger_P_short	</shortUserString>
+    <description>	#germany_vehicles:G00_PzVI_Tiger_P_descr	</description>
+    <price>	0	</price>
+    <notInShop>	true	</notInShop>
+    <tags>	heavyTank role_HT_assault HD secret private cannot_be_sold lockCrew lockOutfit restoreWithStyle builtinStyle	</tags>
+    <level>	7	</level>
+  </G00_PzVI_Tiger_P>
+  <G00_Ratte_V1>
+    <id>	41011	</id>
+    <userString>	#germany_vehicles:G00_Ratte_V1	</userString>
+    <shortUserString>	#germany_vehicles:G00_Ratte_V1_short	</shortUserString>
+    <description>	#germany_vehicles:G00_Ratte_V1_descr	</description>
+    <price>	0	</price>
+    <notInShop>	true	</notInShop>
+    <tags>	heavyTank HD role_HT_assault siegeMode dualgun charger secret private cannot_be_sold lockCrew lockOutfit restoreWithStyle calculate_bbox	</tags>
+    <level>	1	</level>
+  </G00_Ratte_V1>
   <G00_Startgestell>
     <id>	60001	</id>
     <userString>	#germany_vehicles:G00_Startgestell	</userString>
@@ -48,6 +78,16 @@
     <tags>	SPG HD secret supply supply_Mortar earn_crystals stationary private event_battles cannot_be_sold	</tags>
     <level>	10	</level>
   </G00_Startgestell>
+  <G00_Typ_205>
+    <id>	40011	</id>
+    <userString>	#germany_vehicles:G00_Typ_205	</userString>
+    <shortUserString>	#germany_vehicles:G00_Typ_205_short	</shortUserString>
+    <description>	#germany_vehicles:G00_Typ_205_descr	</description>
+    <price>	0	</price>
+    <notInShop>	true	</notInShop>
+    <tags>	heavyTank role_HT_assault HD secret private cannot_be_sold lockCrew lockOutfit restoreWithStyle builtinStyle	</tags>
+    <level>	9	</level>
+  </G00_Typ_205>
   <G02_Hummel>
     <id>	01	</id>
     <userString>	#germany_vehicles:Hummel	</userString>
@@ -213,26 +253,6 @@
     <level>	6	</level>
     <notInShop>	True	</notInShop>
   </G1002_Hummel_NewOnBoarding>
-  <G1003_PzV_Panther_WT_bot>
-    <id>	504	</id>
-    <userString>	#white_tiger.germany_vehicles.extend:PzV_WT	</userString>
-    <shortUserString>	#white_tiger.germany_vehicles.extend:PzV_WT_short	</shortUserString>
-    <description>	#white_tiger.germany_vehicles.extend:PzV_WT_descr	</description>
-    <price>	1380000	</price>
-    <notInShop>	true	</notInShop>
-    <tags>	mediumTank wt_bot HD secret private event_battles lockCrew lockOutfit cannot_be_sold spawned	</tags>
-    <level>	7	</level>
-  </G1003_PzV_Panther_WT_bot>
-  <G1004_PzVI_Tiger_I_WT_bot>
-    <id>	503	</id>
-    <userString>	#white_tiger.germany_vehicles.extend:PzVI_WT	</userString>
-    <shortUserString>	#white_tiger.germany_vehicles.extend:Tiger_WT_short	</shortUserString>
-    <description>	#white_tiger.germany_vehicles.extend:PzVI_WT_descr	</description>
-    <price>	1390000	</price>
-    <notInShop>	true	</notInShop>
-    <tags>	heavyTank wt_bot HD secret private event_battles lockCrew lockOutfit cannot_be_sold spawned	</tags>
-    <level>	7	</level>
-  </G1004_PzVI_Tiger_I_WT_bot>
   <G100_Gtraktor_Krupp>
     <id>	233	</id>
     <userString>	#germany_vehicles:G100_Gtraktor_Krupp	</userString>
@@ -255,16 +275,6 @@
     <level>	4	</level>
     <notInShop>	True	</notInShop>
   </G1010_PzIII_AusfJ_NewOnBoarding>
-  <G1015_VK3601H_WT_bot>
-    <id>	507	</id>
-    <userString>	#white_tiger.germany_vehicles.extend:VK3601H_WT	</userString>
-    <shortUserString>	#white_tiger.germany_vehicles.extend:VK3601H_WT_short	</shortUserString>
-    <description>	#white_tiger.germany_vehicles.extend:VK3601H_WT_descr	</description>
-    <price>	935000	</price>
-    <notInShop>	true	</notInShop>
-    <tags>	heavyTank wt_bot HD secret private event_battles lockCrew lockOutfit cannot_be_sold spawned	</tags>
-    <level>	6	</level>
-  </G1015_VK3601H_WT_bot>
   <G1016_PzVIB_Tiger_II_NewOnBoarding>
     <id>	105	</id>
     <userString>	#germany_vehicles:PzVIB_Tiger_II	</userString>
@@ -275,16 +285,6 @@
     <level>	8	</level>
     <notInShop>	True	</notInShop>
   </G1016_PzVIB_Tiger_II_NewOnBoarding>
-  <G1016_PzVIB_Tiger_II_WT_bot>
-    <id>	505	</id>
-    <userString>	#white_tiger.germany_vehicles.extend:PzVIB_Tiger_II_WT	</userString>
-    <shortUserString>	#white_tiger.germany_vehicles.extend:PzVIB_Tiger_II_WT_short	</shortUserString>
-    <description>	#white_tiger.germany_vehicles.extend:PzVIB_Tiger_II_WT_descr	</description>
-    <price>	2450000	</price>
-    <notInShop>	true	</notInShop>
-    <tags>	heavyTank wt_bot HD secret private event_battles lockCrew lockOutfit cannot_be_sold spawned	</tags>
-    <level>	8	</level>
-  </G1016_PzVIB_Tiger_II_WT_bot>
   <G1018_JagdPanther_NewOnBoarding>
     <id>	407	</id>
     <userString>	#germany_vehicles:JagdPanther	</userString>
@@ -304,16 +304,6 @@
     <tags>	AT-SPG HD mediumAT-SPG improvedVentilation_class3_user extraHealthReserve_class3_user	</tags>
     <level>	4	</level>
   </G101_StuG_III>
-  <G1025_PzII_Luchs_WT_bot>
-    <id>	501	</id>
-    <userString>	#white_tiger.germany_vehicles.extend:PzII_Luchs_WT	</userString>
-    <shortUserString>	#white_tiger.germany_vehicles.extend:PzII_Luchs_WT_short	</shortUserString>
-    <description>	#white_tiger.germany_vehicles.extend:PzII_Luchs_WT_descr	</description>
-    <price>	155000	</price>
-    <notInShop>	true	</notInShop>
-    <tags>	lightTank wt_bot HD secret private event_battles lockCrew lockOutfit cannot_be_sold spawned	</tags>
-    <level>	4	</level>
-  </G1025_PzII_Luchs_WT_bot>
   <G1027_VK3001P_NewOnBoarding>
     <id>	403	</id>
     <userString>	#germany_vehicles:VK3001P	</userString>
@@ -342,16 +332,6 @@
     <tags>	lightTank role_LT_universal HD scout improvedVentilation_class3_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_light_user	</tags>
     <level>	9	</level>
   </G103_RU_251>
-  <G1042_Maus_WT_bot>
-    <id>	510	</id>
-    <userString>	#white_tiger.germany_vehicles.extend:Maus_WT	</userString>
-    <shortUserString>	#white_tiger.germany_vehicles.extend:Maus_WT_short	</shortUserString>
-    <description>	#white_tiger.germany_vehicles.extend:Maus_WT_descr	</description>
-    <price>	6100000	</price>
-    <notInShop>	true	</notInShop>
-    <tags>	heavyTank wt_bot HD secret private event_battles lockCrew lockOutfit cannot_be_sold spawned	</tags>
-    <level>	10	</level>
-  </G1042_Maus_WT_bot>
   <G104_Stug_IV>
     <id>	237	</id>
     <userString>	#germany_vehicles:G104_Stug_IV	</userString>
@@ -365,36 +345,6 @@
     <tags>	AT-SPG HD special mediumAT-SPG improvedVentilation_class2_user tankRammer_class2_user extraHealthReserve_class2_user antifragmentationLining_medium_user preferential	</tags>
     <level>	5	</level>
   </G104_Stug_IV>
-  <G1054_E-50_WT_bot>
-    <id>	512	</id>
-    <userString>	#white_tiger.germany_vehicles.extend:E-50_WT	</userString>
-    <shortUserString>	#white_tiger.germany_vehicles.extend:E-50_WT_short	</shortUserString>
-    <description>	#white_tiger.germany_vehicles.extend:E-50_WT_descr	</description>
-    <price>	3450000	</price>
-    <notInShop>	true	</notInShop>
-    <tags>	mediumTank wt_bot HD secret private event_battles lockCrew lockOutfit cannot_be_sold spawned	</tags>
-    <level>	9	</level>
-  </G1054_E-50_WT_bot>
-  <G1055_E-75_WT_bot>
-    <id>	509	</id>
-    <userString>	#white_tiger.germany_vehicles.extend:E-75_WT	</userString>
-    <shortUserString>	#white_tiger.germany_vehicles.extend:E-75_WT_short	</shortUserString>
-    <description>	#white_tiger.germany_vehicles.extend:E-75_WT_descr	</description>
-    <price>	3480000	</price>
-    <notInShop>	true	</notInShop>
-    <tags>	heavyTank wt_bot HD secret private event_battles lockCrew lockOutfit cannot_be_sold spawned	</tags>
-    <level>	9	</level>
-  </G1055_E-75_WT_bot>
-  <G1056_E-100_WT_bot>
-    <id>	506	</id>
-    <userString>	#white_tiger.germany_vehicles.extend:E-100_WT	</userString>
-    <shortUserString>	#white_tiger.germany_vehicles.extend:E-100_WT_short	</shortUserString>
-    <description>	#white_tiger.germany_vehicles.extend:E-100_WT_descr	</description>
-    <price>	6100000	</price>
-    <notInShop>	true	</notInShop>
-    <tags>	heavyTank wt_bot HD secret private event_battles lockCrew lockOutfit cannot_be_sold spawned	</tags>
-    <level>	10	</level>
-  </G1056_E-100_WT_bot>
   <G1057_PzVI_Tiger_P_NewOnBoarding>
     <id>	406	</id>
     <userString>	#germany_vehicles:PzVI_Tiger_P	</userString>
@@ -418,26 +368,6 @@
     <tags>	mediumTank role_MT_universal HD special improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
     <level>	9	</level>
   </G105_T-55_NVA_DDR>
-  <G1064_Panther_II_WT_bot>
-    <id>	513	</id>
-    <userString>	#white_tiger.germany_vehicles.extend:Panther_II_WT	</userString>
-    <shortUserString>	#white_tiger.germany_vehicles.extend:Panther_II_WT_short	</shortUserString>
-    <description>	#white_tiger.germany_vehicles.extend:Panther_II_WT_descr	</description>
-    <price>	2390000	</price>
-    <notInShop>	true	</notInShop>
-    <tags>	mediumTank wt_bot HD secret private event_battles lockCrew lockOutfit cannot_be_sold spawned	</tags>
-    <level>	8	</level>
-  </G1064_Panther_II_WT_bot>
-  <G1066_VK2801_WT_bot>
-    <id>	508	</id>
-    <userString>	#white_tiger.germany_vehicles.extend:VK2801_WT	</userString>
-    <shortUserString>	#white_tiger.germany_vehicles.extend:VK2801_WT_short	</shortUserString>
-    <description>	#white_tiger.germany_vehicles.extend:VK2801_WT_descr	</description>
-    <price>	945000	</price>
-    <notInShop>	true	</notInShop>
-    <tags>	lightTank wt_bot HD secret private event_battles lockCrew lockOutfit cannot_be_sold spawned	</tags>
-    <level>	6	</level>
-  </G1066_VK2801_WT_bot>
   <G106_PzKpfwPanther_AusfF>
     <id>	235	</id>
     <userString>	#germany_vehicles:G106_PzKpfwPanther_AusfF	</userString>
@@ -451,16 +381,6 @@
     <tags>	mediumTank role_MT_sniper HD beast improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_medium_user	</tags>
     <level>	8	</level>
   </G106_PzKpfwPanther_AusfF>
-  <G1073_E50_Ausf_M_WT_bot>
-    <id>	514	</id>
-    <userString>	#white_tiger.germany_vehicles.extend:E50_Ausf_M_WT	</userString>
-    <shortUserString>	#white_tiger.germany_vehicles.extend:E50_Ausf_M_WT_short	</shortUserString>
-    <description>	#white_tiger.germany_vehicles.extend:E50_Ausf_M_WT_descr	</description>
-    <price>	6100000	</price>
-    <notInShop>	true	</notInShop>
-    <tags>	mediumTank wt_bot HD secret private event_battles lockCrew lockOutfit cannot_be_sold spawned	</tags>
-    <level>	10	</level>
-  </G1073_E50_Ausf_M_WT_bot>
   <G107_PzKpfwIII_AusfK>
     <id>	240	</id>
     <userString>	#germany_vehicles:G107_PzKpfwIII_AusfK	</userString>
@@ -483,16 +403,6 @@
     <level>	5	</level>
     <notInShop>	True	</notInShop>
   </G1081_Pz_IV_AusfH_NewOnBoarding>
-  <G1081_Pz_IV_AusfH_WT_bot>
-    <id>	502	</id>
-    <userString>	#white_tiger.germany_vehicles.extend:Pz_IV_AusfH_WT	</userString>
-    <shortUserString>	#white_tiger.germany_vehicles.extend:Pz_IV_AusfH_WT_short	</shortUserString>
-    <description>	#white_tiger.germany_vehicles.extend:Pz_IV_AusfH_WT_descr	</description>
-    <price>	373000	</price>
-    <notInShop>	true	</notInShop>
-    <tags>	mediumTank wt_bot HD secret private event_battles lockCrew lockOutfit cannot_be_sold spawned	</tags>
-    <level>	5	</level>
-  </G1081_Pz_IV_AusfH_WT_bot>
   <G108_PzKpfwII_AusfD>
     <id>	236	</id>
     <userString>	#germany_vehicles:G108_PzKpfwII_AusfD	</userString>
@@ -526,26 +436,6 @@
     <tags>	mediumTank HD improvedVentilation_class3_user extraHealthReserve_class3_user	</tags>
     <level>	4	</level>
   </G10_PzIII_AusfJ>
-  <G1102_Pz_III_WT_bot>
-    <id>	500	</id>
-    <userString>	#white_tiger.germany_vehicles.extend:PzIII_A_WT	</userString>
-    <shortUserString>	#white_tiger.germany_vehicles.extend:PzIII_A_WT_short	</shortUserString>
-    <description>	#white_tiger.germany_vehicles.extend:PzIII_A_WT_descr	</description>
-    <price>	35000	</price>
-    <notInShop>	true	</notInShop>
-    <tags>	lightTank wt_bot HD secret private event_battles lockCrew lockOutfit cannot_be_sold spawned	</tags>
-    <level>	3	</level>
-  </G1102_Pz_III_WT_bot>
-  <G1103_RU_251_WT_bot>
-    <id>	515	</id>
-    <userString>	#white_tiger.germany_vehicles.extend:G103_RU_251_WT	</userString>
-    <shortUserString>	#white_tiger.germany_vehicles.extend:G103_RU_251_WT_short	</shortUserString>
-    <description>	#white_tiger.germany_vehicles.extend:G103_RU_251_WT_descr	</description>
-    <price>	3460000	</price>
-    <notInShop>	true	</notInShop>
-    <tags>	lightTank wt_bot HD secret private event_battles lockCrew lockOutfit cannot_be_sold spawned	</tags>
-    <level>	9	</level>
-  </G1103_RU_251_WT_bot>
   <G1105_T-55_NVA_DDR_T>
     <id>	35001	</id>
     <userString>	#germany_vehicles:G1105_T-55_NVA_DDR_T	</userString>
@@ -568,26 +458,6 @@
     <tags>	heavyTank role_HT_assault HD heavyTank1 improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_superheavy_user	</tags>
     <level>	9	</level>
   </G110_Typ_205>
-  <G1110_Typ_205_WT_bot>
-    <id>	516	</id>
-    <userString>	#germany_vehicles:G110_Typ_205	</userString>
-    <shortUserString>	#germany_vehicles:G110_Typ_205_short	</shortUserString>
-    <description>	#germany_vehicles:G110_Typ_205_descr	</description>
-    <price>	3580000	</price>
-    <notInShop>	true	</notInShop>
-    <tags>	heavyTank wt_bot HD secret private event_battles lockCrew lockOutfit cannot_be_sold spawned	</tags>
-    <level>	9	</level>
-  </G1110_Typ_205_WT_bot>
-  <G1126_HWK_12_WT_bot>
-    <id>	517	</id>
-    <userString>	#white_tiger.germany_vehicles.extend:G126_HWK_12_WT	</userString>
-    <shortUserString>	#white_tiger.germany_vehicles.extend:G126_HWK_12_WT_short	</shortUserString>
-    <description>	#white_tiger.germany_vehicles.extend:G126_HWK_12_WT_descr	</description>
-    <price>	2440000	</price>
-    <notInShop>	true	</notInShop>
-    <tags>	lightTank wt_bot HD secret private event_battles lockCrew lockOutfit cannot_be_sold spawned	</tags>
-    <level>	8	</level>
-  </G1126_HWK_12_WT_bot>
   <G112_KanonenJagdPanzer>
     <id>	242	</id>
     <userString>	#germany_vehicles:G112_KanonenJagdPanzer	</userString>
@@ -613,16 +483,6 @@
     <tags>	AT-SPG role_ATSPG_sniper HD mediumAT-SPG AT-SPG1 improvedVentilation_class2_user tankRammer_class2_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
     <level>	8	</level>
   </G112_KanonenJagdPanzer_105>
-  <G1134_PzKpfw_VII_WT_bot>
-    <id>	511	</id>
-    <userString>	#white_tiger.germany_vehicles.extend:G1134_PzKpfw_VII_WT_bot	</userString>
-    <shortUserString>	#white_tiger.germany_vehicles.extend:G1134_PzKpfw_VII_WT_bot_short	</shortUserString>
-    <description>	#white_tiger.germany_vehicles.extend:G1134_PzKpfw_VII_WT_bot_descr	</description>
-    <price>	6100000	</price>
-    <notInShop>	true	</notInShop>
-    <tags>	heavyTank wt_bot HD secret private event_battles lockCrew lockOutfit cannot_be_sold spawned	</tags>
-    <level>	10	</level>
-  </G1134_PzKpfw_VII_WT_bot>
   <G113_SP_I_C>
     <id>	74	</id>
     <userString>	#germany_vehicles:G113_SP_I_C	</userString>
@@ -1354,6 +1214,19 @@
     <tags>	heavyTank role_HT_assault new_hp_vfx HD siegeMode dualgun charger improvedVentilation_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_superheavy_user earn_crystals special	</tags>
     <level>	11	</level>
   </G182_Mausekonig>
+  <G182_Mausekonig_T>
+    <id>	35002	</id>
+    <userString>	#germany_vehicles:G182_Mausekonig_T	</userString>
+    <shortUserString>	#germany_vehicles:G182_Mausekonig_T_short	</shortUserString>
+    <description>	#germany_vehicles:G182_Mausekonig_T_descr	</description>
+    <shortDescriptionSpecial>	#germany_vehicles:G182_Mausekonig_T_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#germany_vehicles:G182_Mausekonig_T_long_special	</longDescriptionSpecial>
+    <price>	100	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	heavyTank role_HT_assault new_hp_vfx HD siegeMode dualgun charger improvedVentilation_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_superheavy_user earn_crystals special secret testTank lockOutfit	</tags>
+    <level>	11	</level>
+  </G182_Mausekonig_T>
   <G184_EisBaer>
     <id>	31004	</id>
     <userString>	#germany_vehicles:G184_EisBaer	</userString>
@@ -1367,6 +1240,19 @@
     <tags>	heavyTank role_HT_universal HD siegeMode autoSiege improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user special earn_crystals	</tags>
     <level>	11	</level>
   </G184_EisBaer>
+  <G184_EisBaer_T>
+    <id>	35003	</id>
+    <userString>	#germany_vehicles:G184_EisBaer_T	</userString>
+    <shortUserString>	#germany_vehicles:G184_EisBaer_T_short	</shortUserString>
+    <description>	#germany_vehicles:G184_EisBaer_T_descr	</description>
+    <shortDescriptionSpecial>	#germany_vehicles:G184_EisBaer_T_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#germany_vehicles:G184_EisBaer_T_long_special	</longDescriptionSpecial>
+    <price>	100	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	heavyTank role_HT_universal HD siegeMode autoSiege improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user special earn_crystals secret testTank lockOutfit	</tags>
+    <level>	11	</level>
+  </G184_EisBaer_T>
   <G189_E100_02>
     <id>	31007	</id>
     <userString>	#germany_vehicles:G189_E100_02	</userString>
@@ -1451,7 +1337,7 @@
     <price>	25000	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
-    <tags>	heavyTank role_HT_assault HD improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_superheavy_user special earn_crystals secret testTank lockOutfit	</tags>
+    <tags>	heavyTank role_HT_universal HD improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_superheavy_user special earn_crystals	</tags>
     <level>	10	</level>
   </G197_E_94_Fechter>
   <G19_Wespe>
@@ -1463,6 +1349,19 @@
     <tags>	SPG HD collectorVehicle lightSPG	</tags>
     <level>	3	</level>
   </G19_Wespe>
+  <G201_Flakpanzer_5_5_cm_Coelian_Kr>
+    <id>	31018	</id>
+    <userString>	#germany_vehicles:G201_Flakpanzer_5_5_cm_Coelian_Kr	</userString>
+    <description>	#germany_vehicles:G201_Flakpanzer_5_5_cm_Coelian_Kr_descr	</description>
+    <shortUserString>	#germany_vehicles:G201_Flakpanzer_5_5_cm_Coelian_Kr_short	</shortUserString>
+    <shortDescriptionSpecial>	#germany_vehicles:G201_Flakpanzer_5_5_cm_Coelian_Kr_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#germany_vehicles:G201_Flakpanzer_5_5_cm_Coelian_Kr_long_special	</longDescriptionSpecial>
+    <price>	11000	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	mediumTank role_MT_support HD improvedVentilation_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user secret testTank lockOutfit	</tags>
+    <level>	8	</level>
+  </G201_Flakpanzer_5_5_cm_Coelian_Kr>
   <G20_Marder_II>
     <id>	26	</id>
     <userString>	#germany_vehicles:G20_Marder_II	</userString>
@@ -1957,6 +1856,20 @@
     <tags>	heavyTank role_HT_assault HD heavyTank1 improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_superheavy_user earn_crystals	</tags>
     <level>	10	</level>
   </G56_E-100>
+  <G56_E-100_cl>
+    <id>	31019	</id>
+    <userString>	#germany_vehicles:E-100_cl	</userString>
+    <shortUserString>	#germany_vehicles:E-100_cl_short	</shortUserString>
+    <description>	#germany_vehicles:E-100_descr	</description>
+    <shortDescriptionSpecial>	#germany_vehicles:E-100_cl_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#germany_vehicles:E-100_cl_long_special	</longDescriptionSpecial>
+    <price>	1	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <cannotBeBought>	true	</cannotBeBought>
+    <tags>	heavyTank role_HT_assault HD heavyTank1 improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_superheavy_user clanWarsBattles special cannot_be_sold private	</tags>
+    <level>	10	</level>
+  </G56_E-100_cl>
   <G57_PzVI_Tiger_P>
     <id>	42	</id>
     <userString>	#germany_vehicles:PzVI_Tiger_P	</userString>
@@ -2103,6 +2016,19 @@
     <tags>	AT-SPG role_ATSPG_universal HD beast collectorVehicle mediumAT-SPG improvedVentilation_class2_user tankRammer_class1_user extraHealthReserve_class1_user antifragmentationLining_medium_user	</tags>
     <level>	8	</level>
   </G71_JagdPantherII>
+  <G71_JagdPantherII_02>
+    <id>	31020	</id>
+    <userString>	#germany_vehicles:G71_JagdPantherII_02	</userString>
+    <description>	#germany_vehicles:G71_JagdPantherII_02_descr	</description>
+    <shortUserString>	#germany_vehicles:G71_JagdPantherII_02_short	</shortUserString>
+    <shortDescriptionSpecial>	#germany_vehicles:G71_JagdPantherII_02_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#germany_vehicles:G71_JagdPantherII_02_long_special	</longDescriptionSpecial>
+    <price>	11000	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	AT-SPG role_ATSPG_universal HD beast mediumAT-SPG improvedVentilation_class2_user tankRammer_class1_user extraHealthReserve_class1_user antifragmentationLining_medium_user secret testTank lockOutfit	</tags>
+    <level>	8	</level>
+  </G71_JagdPantherII_02>
   <G72_JagdPz_E100>
     <id>	47	</id>
     <userString>	#germany_vehicles:JagdPz_E100	</userString>
@@ -2434,33 +2360,6 @@
     <tags>	AT-SPG role_ATSPG_support private HD secret disabledInRoaming heavyAT-SPG AT-SPG2 extraHealthReserve_class1_user antifragmentationLining_superheavy_user earn_crystals	</tags>
     <level>	10	</level>
   </G98_Waffentrager_E100_P>
-  <G98_Waffentrager_E100_TLXXL>
-    <id>	518	</id>
-    <userString>	#white_tiger.germany_vehicles.extend:G98_Waffentrager_E100_TLXXL	</userString>
-    <description>	#white_tiger.germany_vehicles.extend:G98_Waffentrager_E100_TLXXL_desc	</description>
-    <shortUserString>	#white_tiger.germany_vehicles.extend:G98_Waffentrager_E100_TLXXL_short	</shortUserString>
-    <shortDescriptionSpecial>	#white_tiger.germany_vehicles.extend:G98_Waffentrager_E100_TLXXL_short_special	</shortDescriptionSpecial>
-    <price>	6100000	</price>
-    <notInShop>	true	</notInShop>
-    <tags>	AT-SPG
-			HD
-			event_battles
-			special
-			secret
-			private
-			unrecoverable
-			lockCrew
-			lockCrewSkills
-			lockOutfit
-			lockShells
-			lockDevices
-			cannot_be_sold
-			earn_crystals
-			mode_hidden
-			hideStorage
-			hideCrew	</tags>
-    <level>	10	</level>
-  </G98_Waffentrager_E100_TLXXL>
   <G98_Waffentrager_E100_WO>
     <id>	172	</id>
     <userString>	#germany_vehicles:G98_Waffentrager_E100_WO	</userString>

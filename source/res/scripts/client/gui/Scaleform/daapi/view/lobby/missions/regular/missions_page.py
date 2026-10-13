@@ -160,7 +160,11 @@ class MissionsPage(LobbySubView, MissionsPageMeta):
         return self.__filterData
 
     def onClose(self):
+        if self.currentTab and getattr(self.currentTab, 'handleMissionsPageClose', None):
+            if self.currentTab.handleMissionsPageClose():
+                return
         self.fireEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.LOBBY_HANGAR)), scope=EVENT_BUS_SCOPE.LOBBY)
+        return
 
     def resetFilters(self):
         self.__filterData = {'hideDone': False,
@@ -491,7 +495,7 @@ class MissionsPage(LobbySubView, MissionsPageMeta):
         return bm.isEnabled() and (not bm.isFinished() or bm.hasUnobtainedDelayedRewards()) and bm.isValidConfiguration()
 
     def __isTankAcademyAvailable(self):
-        return self.__tankAcademyController.isEnabled() and (not self.__tankAcademyController.isFinished() or self.__tankAcademyController.hasUnobtainedDelayedRewards()) and self.__tankAcademyController.isValidConfiguration() and self.__tankAcademyController.isFirstQuestCompleted() and self.__settingsCore.serverSettings.isTankAcademyWelcomeScreenShown()
+        return self.__tankAcademyController.isEnabled() and (not self.__tankAcademyController.isFinished() or self.__tankAcademyController.hasUnobtainedDelayedRewards()) and self.__tankAcademyController.isValidConfiguration() and (self.__tankAcademyController.isFirstQuestCompleted() or self.__tankAcademyController.isMigratedFromNonZeroProgress()) and self.__settingsCore.serverSettings.isTankAcademyWelcomeScreenShown()
 
     @staticmethod
     def __getSuitableEvents(tab):

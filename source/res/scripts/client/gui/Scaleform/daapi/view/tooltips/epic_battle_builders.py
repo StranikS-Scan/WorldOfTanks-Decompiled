@@ -14,12 +14,12 @@ __all__ = ('getTooltipBuilders',)
 
 def getTooltipBuilders():
     return (DataBuilder(TOOLTIPS_CONSTANTS.EPIC_SKILL_INFO, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI, EpicSkillBaseTooltipData(contexts.QuestsBoosterContext())),
-     AdvancedDataBuilder(TOOLTIPS_CONSTANTS.EPIC_SKILL_SLOT_INFO, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI, EpicSkillSlotTooltip(contexts.ToolTipContext(None)), EpicSkillSlotTooltipAdvanced(contexts.HangarCardContext())),
-     DataBuilder(TOOLTIPS_CONSTANTS.EPIC_SKILL_SLOT_SETUP_INFO, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI, EpicSkillSlotSetupInfoTooltip(contexts.ToolTipContext(None))),
+     AdvancedDataBuilder(TOOLTIPS_CONSTANTS.EPIC_SKILL_SLOT_INFO, TOOLTIPS_CONSTANTS.ADVANCED_SHUFFLE_UI, EpicSkillSlotTooltip(contexts.ToolTipContext(None)), EpicSkillSlotTooltipAdvanced(contexts.HangarCardContext())),
+     DataBuilder(TOOLTIPS_CONSTANTS.EPIC_SKILL_SLOT_SETUP_INFO, TOOLTIPS_CONSTANTS.ADVANCED_SHUFFLE_UI, EpicSkillSlotSetupInfoTooltip(contexts.ToolTipContext(None))),
      DataBuilder(TOOLTIPS_CONSTANTS.EPIC_QUESTS_PREVIEW, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI, EpicBattleQuestsTooltipData(contexts.QuestsBoosterContext())),
      DataBuilder(TOOLTIPS_CONSTANTS.EPIC_BATTLE_COMPLETED_QUESTS_INFO, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI, CompletedQuestsTooltipData(contexts.QuestsBoosterContext())),
      DataBuilder(TOOLTIPS_CONSTANTS.EPIC_BATTLE_SELECTOR_INFO, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI, EpicBattleSelectorTooltip(contexts.ToolTipContext(None))),
      DataBuilder(TOOLTIPS_CONSTANTS.EPIC_BATTLE_WIDGET_INFO, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI, EpicBattleWidgetTooltip(contexts.ToolTipContext(None))),
-     AdvancedDataBuilder(TOOLTIPS_CONSTANTS.EPIC_BATTLE_RECERTIFICATION_FORM_TOOLTIP, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI, EpicBattleRecertificationFormTooltip(EpicBattleBlanksContext()), EpicBattleRecertificationFormTooltipAdvanced(EpicBattleBlanksContext())),
+     AdvancedDataBuilder(TOOLTIPS_CONSTANTS.EPIC_BATTLE_RECERTIFICATION_FORM_TOOLTIP, TOOLTIPS_CONSTANTS.ADVANCED_SHUFFLE_UI, EpicBattleRecertificationFormTooltip(EpicBattleBlanksContext()), EpicBattleRecertificationFormTooltipAdvanced(EpicBattleBlanksContext())),
      DataBuilder(TOOLTIPS_CONSTANTS.EPIC_BATTLE_CALENDAR_INFO, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI, EpicBattleCalendarTooltip(contexts.ToolTipContext(None))),
      DataBuilder(TOOLTIPS_CONSTANTS.EPIC_BATTLE_INSTRUCTION_TOOLTIP, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI, EpicBattleInstructionTooltipData(EpicBattleTokenInstructionContext())))

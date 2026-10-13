@@ -104,8 +104,7 @@ def getGameControllersConfig(manager):
     from gui.game_control.newbie_entry_point_controller import NewbieEntryPointController
     from gui.game_control.summer_sale_controller import SummerSaleController
     from gui.game_control.control_point_override_controller import ControlPointOverrideController
-    from white_tiger.gui.wt_event_notifications import WTEventNotifications
-    from skeletons.gui.wt_event import IWTEventNotifications
+    from gui.game_control.session_progress_rewards_controller import SessionProgressRewardsController
     tracker = GameStateTracker()
     tracker.init()
     manager.addInstance(_interface.IGameStateTracker, tracker, finalizer='fini')
@@ -206,5 +205,5 @@ def getGameControllersConfig(manager):
     _config(_interface.IControlPointOverrideController, ControlPointOverrideController())
     _config(_interface.ITankAcademyController, TankAcademyController())
     _config(_interface.IMuseumOfGloryController, MuseumOfGloryController())
-    _config(IWTEventNotifications, WTEventNotifications())
+    _config(_interface.ISessionProgressRewardsController, SessionProgressRewardsController())
     collectGameControllers(_config)

@@ -1,0 +1,35 @@
+<CampReplicableComponent.def>
+  <Properties>
+    <canBeCaptured>
+      <Type>	BOOL	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </canBeCaptured>
+    <isCaptured>
+      <Type>	BOOL	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </isCaptured>
+    <captureProgress>
+      <Type>	FLOAT32	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </captureProgress>
+    <captureTotal>
+      <Type>	FLOAT32	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </captureTotal>
+    <captureCurrentSpeed>
+      <Type>	FLOAT32	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </captureCurrentSpeed>
+    <invaderIDs>
+      <Type>	ARRAY	  <of>	OBJECT_ID	</of>
+      </Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </invaderIDs>
+    <index>
+      <Type>	UINT8	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </index>
+  </Properties>
+  <CellMethods></CellMethods>
+  <DefaultKeyName>	campReplicableComponent	</DefaultKeyName>
+</CampReplicableComponent.def>

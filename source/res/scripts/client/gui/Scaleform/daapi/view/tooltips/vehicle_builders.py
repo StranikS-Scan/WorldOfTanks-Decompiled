@@ -1,7 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/tooltips/vehicle_builders.py
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
-from gui.shared.tooltips import advanced, contexts, vehicle, vehicle_roles
+from gui.shared.tooltips import contexts, vehicle, vehicle_roles
+from gui.shared.tooltips.advanced.tankman import TankmanPreviewTooltipAdvanced
+from gui.shared.tooltips.advanced.vehicle_parameters import VehicleParametersAdvanced
 from gui.shared.tooltips.builders import DataBuilder, DefaultFormatBuilder, AdvancedDataBuilder, TooltipWindowBuilder, AdvancedTooltipWindowBuilder
 __all__ = ('getTooltipBuilders',)
 
@@ -15,24 +17,23 @@ def getTooltipBuilders():
      DataBuilder(TOOLTIPS_CONSTANTS.AWARD_VEHICLE, TOOLTIPS_CONSTANTS.VEHICLE_INFO_UI, vehicle.VehicleInfoTooltipData(contexts.AwardContext())),
      DataBuilder(TOOLTIPS_CONSTANTS.EXTENDED_AWARD_VEHICLE, TOOLTIPS_CONSTANTS.VEHICLE_INFO_UI, vehicle.ExtendedVehicleInfoTooltipData(contexts.ExtendedAwardContext())),
      DataBuilder(TOOLTIPS_CONSTANTS.SENIORITY_AWARD_VEHICLE, TOOLTIPS_CONSTANTS.VEHICLE_INFO_UI, vehicle.ExtendedVehicleInfoTooltipData(contexts.SeniorityAwardContext())),
-     DataBuilder(TOOLTIPS_CONSTANTS.WT_PORTAL_VEHICLE, TOOLTIPS_CONSTANTS.VEHICLE_INFO_UI, vehicle.VehicleInfoTooltipData(contexts.WtEventPortalContext())),
      DefaultFormatBuilder(TOOLTIPS_CONSTANTS.TRADE_IN, TOOLTIPS_CONSTANTS.COMPLEX_UI, vehicle.VehicleTradeInTooltipData(contexts.HangarContext())),
      DataBuilder(TOOLTIPS_CONSTANTS.TRADE_IN_PRICE, TOOLTIPS_CONSTANTS.TRADE_IN_PRICE, vehicle.VehicleTradeInPriceTooltipData(contexts.HangarContext())),
      DataBuilder(TOOLTIPS_CONSTANTS.HISTORICAL_VEHICLE, TOOLTIPS_CONSTANTS.VEHICLE_INFO_UI, vehicle.VehicleInfoTooltipData(contexts.HangarContext())),
      TooltipWindowBuilder(TOOLTIPS_CONSTANTS.BASE_VEHICLE_PARAMETERS, None, vehicle.BaseVehicleAdvancedParametersTooltipData(contexts.HangarParamContext())),
-     AdvancedTooltipWindowBuilder(TOOLTIPS_CONSTANTS.VEHICLE_CMP_PARAMETERS, None, vehicle.BaseVehicleAdvancedParametersTooltipData(contexts.CmpParamContext()), advanced.VehicleParametersAdvanced(contexts.CmpParamContext()), condition=vehicle.BaseVehicleParametersTooltipData.readyForAdvanced),
+     AdvancedTooltipWindowBuilder(TOOLTIPS_CONSTANTS.VEHICLE_CMP_PARAMETERS, None, vehicle.BaseVehicleAdvancedParametersTooltipData(contexts.CmpParamContext()), VehicleParametersAdvanced(contexts.CmpParamContext()), condition=vehicle.BaseVehicleParametersTooltipData.readyForAdvanced),
      TooltipWindowBuilder(TOOLTIPS_CONSTANTS.VEHICLE_AVG_PARAMETERS, None, vehicle.VehicleAvgParameterTooltipData(contexts.HangarParamContext())),
-     AdvancedTooltipWindowBuilder(TOOLTIPS_CONSTANTS.VEHICLE_ADVANCED_PARAMETERS, None, vehicle.VehicleAdvancedParametersTooltipData(contexts.HangarParamContext()), advanced.VehicleParametersAdvanced(contexts.HangarParamContext()), condition=vehicle.BaseVehicleParametersTooltipData.readyForAdvanced),
-     AdvancedTooltipWindowBuilder(TOOLTIPS_CONSTANTS.VEHICLE_TANK_SETUP_PARAMETERS, None, vehicle.VehicleAdvancedParametersTooltipData(contexts.TankSetupParamContext()), advanced.VehicleParametersAdvanced(contexts.TankSetupParamContext()), condition=vehicle.BaseVehicleParametersTooltipData.readyForAdvanced),
-     AdvancedTooltipWindowBuilder(TOOLTIPS_CONSTANTS.VEHICLE_POST_PROGRESSION_PARAMETERS, None, vehicle.VehicleAdvancedParametersTooltipData(contexts.PostProgressionParamContext()), advanced.VehicleParametersAdvanced(contexts.PostProgressionParamContext()), condition=vehicle.BaseVehicleParametersTooltipData.readyForAdvanced),
+     AdvancedTooltipWindowBuilder(TOOLTIPS_CONSTANTS.VEHICLE_ADVANCED_PARAMETERS, None, vehicle.VehicleAdvancedParametersTooltipData(contexts.HangarParamContext()), VehicleParametersAdvanced(contexts.HangarParamContext()), condition=vehicle.BaseVehicleParametersTooltipData.readyForAdvanced),
+     AdvancedTooltipWindowBuilder(TOOLTIPS_CONSTANTS.VEHICLE_TANK_SETUP_PARAMETERS, None, vehicle.VehicleAdvancedParametersTooltipData(contexts.TankSetupParamContext()), VehicleParametersAdvanced(contexts.TankSetupParamContext()), condition=vehicle.BaseVehicleParametersTooltipData.readyForAdvanced),
+     AdvancedTooltipWindowBuilder(TOOLTIPS_CONSTANTS.VEHICLE_POST_PROGRESSION_PARAMETERS, None, vehicle.VehicleAdvancedParametersTooltipData(contexts.PostProgressionParamContext()), VehicleParametersAdvanced(contexts.PostProgressionParamContext()), condition=vehicle.BaseVehicleParametersTooltipData.readyForAdvanced),
      TooltipWindowBuilder(TOOLTIPS_CONSTANTS.VEHICLE_PREVIEW_AVG_PARAMETERS, None, vehicle.VehicleAvgParameterTooltipData(contexts.PreviewParamContext())),
-     AdvancedTooltipWindowBuilder(TOOLTIPS_CONSTANTS.VEHICLE_PREVIEW_ADVANCED_PARAMETERS, None, vehicle.VehicleAdvancedParametersTooltipData(contexts.PreviewParamContext()), advanced.VehicleParametersAdvanced(contexts.PreviewParamContext()), condition=vehicle.BaseVehicleParametersTooltipData.readyForAdvanced),
-     AdvancedDataBuilder(TOOLTIPS_CONSTANTS.DEFAULT_CREW_MEMBER, TOOLTIPS_CONSTANTS.VEHICLE_PREVIEW_CREW_MEMBER_UI, vehicle.DefaultCrewMemberTooltipData(contexts.PreviewContext()), advanced.TankmanPreviewTooltipAdvanced(contexts.PreviewContext())),
-     AdvancedDataBuilder(TOOLTIPS_CONSTANTS.VEHICLE_PREVIEW_CREW_MEMBER, TOOLTIPS_CONSTANTS.VEHICLE_PREVIEW_CREW_MEMBER_UI, vehicle.VehiclePreviewCrewMemberTooltipData(contexts.PreviewContext()), advanced.TankmanPreviewTooltipAdvanced(contexts.PreviewContext())),
+     AdvancedTooltipWindowBuilder(TOOLTIPS_CONSTANTS.VEHICLE_PREVIEW_ADVANCED_PARAMETERS, None, vehicle.VehicleAdvancedParametersTooltipData(contexts.PreviewParamContext()), VehicleParametersAdvanced(contexts.PreviewParamContext()), condition=vehicle.BaseVehicleParametersTooltipData.readyForAdvanced),
+     AdvancedDataBuilder(TOOLTIPS_CONSTANTS.DEFAULT_CREW_MEMBER, TOOLTIPS_CONSTANTS.ADVANCED_SHUFFLE_UI, vehicle.DefaultCrewMemberTooltipData(contexts.PreviewContext()), TankmanPreviewTooltipAdvanced(contexts.PreviewContext())),
+     AdvancedDataBuilder(TOOLTIPS_CONSTANTS.VEHICLE_PREVIEW_CREW_MEMBER, TOOLTIPS_CONSTANTS.ADVANCED_SHUFFLE_UI, vehicle.VehiclePreviewCrewMemberTooltipData(contexts.PreviewContext()), TankmanPreviewTooltipAdvanced(contexts.PreviewContext())),
      DataBuilder(TOOLTIPS_CONSTANTS.TECHTREE_VEHICLE_ANNOUNCEMENT, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI, vehicle.VehicleAnnouncementParametersTooltipData(contexts.VehicleAnnouncementContext())),
      TooltipWindowBuilder(TOOLTIPS_CONSTANTS.VEHICLE_ROLES, None, vehicle_roles.VehicleRolesTooltipContentWindowData(contexts.ToolTipContext(None))),
      TooltipWindowBuilder(TOOLTIPS_CONSTANTS.VEHICLE_STAT_TRACK, None, vehicle.StatTrackTooltipData(contexts.ToolTipContext(None))),
-     AdvancedTooltipWindowBuilder(TOOLTIPS_CONSTANTS.MODIFIED_VEHICLE_PARAMS_TOOLTIP, None, vehicle.VehicleAdvancedParametersTooltipData(contexts.ModifiedVehicleParamContext()), advanced.VehicleParametersAdvanced(contexts.ModifiedVehicleParamContext()), condition=vehicle.BaseVehicleParametersTooltipData.readyForAdvanced))
+     AdvancedTooltipWindowBuilder(TOOLTIPS_CONSTANTS.MODIFIED_VEHICLE_PARAMS_TOOLTIP, None, vehicle.VehicleAdvancedParametersTooltipData(contexts.ModifiedVehicleParamContext()), VehicleParametersAdvanced(contexts.ModifiedVehicleParamContext()), condition=vehicle.BaseVehicleParametersTooltipData.readyForAdvanced))
 
 
 class InventoryVehicleBuilder(DataBuilder):

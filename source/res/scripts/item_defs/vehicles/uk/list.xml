@@ -178,6 +178,16 @@
     <tags>	mediumTank HD mediumTank1 improvedVentilation_class2_user tankRammer_class2_user extraHealthReserve_class3_user antifragmentationLining_medium_user	</tags>
     <level>	5	</level>
   </GB107_Cavalier>
+  <GB107_Cavalier_H>
+    <id>	20001	</id>
+    <userString>	#gb_vehicles:Cavalier_H	</userString>
+    <shortUserString>	#gb_vehicles:Cavalier_H_short	</shortUserString>
+    <description>	#gb_vehicles:Cavalier_H_descr	</description>
+    <price>	1	</price>
+    <notInShop>	true	</notInShop>
+    <tags>	mediumTank private HD lockOutfit lockCrew lockCrewSkills cannot_be_sold lockEquipment lockShells secret portal event_battles mode_hidden builtinStyle restoreWithStyle	</tags>
+    <level>	1	</level>
+  </GB107_Cavalier_H>
   <GB107_Cavalier_SH>
     <id>	162	</id>
     <userString>	#gb_vehicles:Cavalier_SH	</userString>
@@ -387,6 +397,20 @@
     <tags>	mediumTank role_MT_sniper private HD secret bob cannot_be_sold wheeledVehicle wheeledVehicleWithoutFeatures improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user earn_crystals	</tags>
     <level>	10	</level>
   </GB120_Concept_No_5_bob>
+  <GB120_Concept_No_5_cl>
+    <id>	31018	</id>
+    <userString>	#gb_vehicles:GB120_Concept_No_5_cl	</userString>
+    <shortUserString>	#gb_vehicles:GB120_Concept_No_5_cl_short	</shortUserString>
+    <description>	#gb_vehicles:GB120_Concept_No_5_descr	</description>
+    <shortDescriptionSpecial>	#gb_vehicles:GB120_Concept_No_5_cl_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#gb_vehicles:GB120_Concept_No_5_cl_long_special	</longDescriptionSpecial>
+    <price>	1	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <cannotBeBought>	true	</cannotBeBought>
+    <tags>	mediumTank role_MT_sniper HD wheeledVehicle wheeledVehicleWithoutFeatures improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user clanWarsBattles special cannot_be_sold private	</tags>
+    <level>	10	</level>
+  </GB120_Concept_No_5_cl>
   <GB121_GSOR_1010_FB>
     <id>	239	</id>
     <userString>	#gb_vehicles:GB121_GSOR_1010_FB	</userString>
@@ -515,7 +539,7 @@
     <price>	11000	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
-    <tags>	heavyTank role_HT_assault HD improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user secret testTank lockOutfit	</tags>
+    <tags>	heavyTank role_HT_assault HD improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user	</tags>
     <level>	8	</level>
   </GB131_Crusher>
   <GB133_Cyclone_Mk_2>
@@ -603,7 +627,7 @@
     <price>	17500	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
-    <tags>	heavyTank role_HT_break HD siegeMode dualgun charger improvedVentilation_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user earn_crystals secret testTank lockOutfit	</tags>
+    <tags>	heavyTank role_HT_break HD siegeMode dualgun charger improvedVentilation_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user earn_crystals	</tags>
     <level>	9	</level>
   </GB138_FV246_Colossus>
   <GB139_Vulcan>
@@ -652,6 +676,19 @@
     <tags>	heavyTank role_HT_universal HD improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user earn_crystals special	</tags>
     <level>	11	</level>
   </GB140_Champion>
+  <GB140_Champion_T>
+    <id>	35003	</id>
+    <userString>	#gb_vehicles:GB140_Champion_T	</userString>
+    <shortUserString>	#gb_vehicles:GB140_Champion_T_short	</shortUserString>
+    <description>	#gb_vehicles:GB140_Champion_T_descr	</description>
+    <shortDescriptionSpecial>	#gb_vehicles:GB140_Champion_T_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#gb_vehicles:GB140_Champion_T_long_special	</longDescriptionSpecial>
+    <price>	100	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	heavyTank role_HT_universal HD improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user earn_crystals special secret testTank lockOutfit	</tags>
+    <level>	11	</level>
+  </GB140_Champion_T>
   <GB141_Celestial_2_51>
     <id>	31013	</id>
     <userString>	#gb_vehicles:GB141_Celestial_2_51	</userString>

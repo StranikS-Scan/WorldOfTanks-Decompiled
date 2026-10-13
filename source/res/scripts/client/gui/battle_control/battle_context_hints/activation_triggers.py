@@ -57,9 +57,10 @@ class PreBattleHintActivationTrigger(HintActivationTrigger):
 class TankAcademyQuestHintTrigger(object):
     __tankAcademyController = dependency.descriptor(ITankAcademyController)
 
-    def isTankAcademyQuestActive(self, questNumber):
+    def areTankAcademyContextHintsUnlocked(self, unlockQuestOrder):
         currentQuestOrder = self.__tankAcademyController.getCurrentQuestOrder()
-        return self.__tankAcademyController.isFinished() or currentQuestOrder is not None and currentQuestOrder >= questNumber
+        isLocked = self.__tankAcademyController.isEnabledByConfig() and currentQuestOrder is not None and currentQuestOrder < unlockQuestOrder
+        return not isLocked
 
 
 class KilledWhileObservedHintTrigger(HintActivationTrigger):
@@ -208,11 +209,11 @@ class ModuleDamageHintTrigger(PreBattleHintActivationTrigger):
 
 
 class AmmoAvailableHintTrigger(TankAcademyQuestHintTrigger, PreBattleHintActivationTrigger):
-    _TANK_ACADEMY_AMMO_QUEST_NUMBER = 8
     _MIN_VEHICLE_LEVEL = 4
+    _TANK_ACADEMY_AMMO_HINTS_UNLOCK_QUEST_ORDER = 8
 
     def needToShowHint(self):
-        if not self.isTankAcademyQuestActive(self._TANK_ACADEMY_AMMO_QUEST_NUMBER):
+        if not self.areTankAcademyContextHintsUnlocked(self._TANK_ACADEMY_AMMO_HINTS_UNLOCK_QUEST_ORDER):
             return False
         else:
             vehicleStateCtrl = self._sessionProvider.shared.vehicleState
@@ -229,7 +230,7 @@ class AmmoAvailableHintTrigger(TankAcademyQuestHintTrigger, PreBattleHintActivat
             return availableShells == loadedShells
 
 
-class AmmoTypeSwitchHintTrigger(TankAcademyQuestHintTrigger, HintActivationTrigger, TriggersManager.ITriggerListener):
+class AmmoTypeSwitchHintTrigger(HintActivationTrigger, TriggersManager.ITriggerListener):
     _REQUIRED_FAILED_HITS = 2
     _NO_DAMAGE_NO_PIERCE_EVENTS = (TriggersManager.TRIGGER_TYPE.PLAYER_SHOT_NOT_PIERCED, TriggersManager.TRIGGER_TYPE.PLAYER_SHOT_RICOCHET)
     _BREAK_SEQUENCE_EVENTS = (TriggersManager.TRIGGER_TYPE.PLAYER_SHOT_MISSED, TriggersManager.TRIGGER_TYPE.PLAYER_SHOT_MADE_NONFATAL_DAMAGE)

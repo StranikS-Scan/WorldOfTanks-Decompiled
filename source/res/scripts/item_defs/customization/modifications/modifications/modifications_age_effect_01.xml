@@ -1,0 +1,44 @@
+<modifications_age_effect_01.xml>
+  <itemGroup>
+    <season>	ALL	</season>
+    <historical>	0	</historical>
+    <priceGroup>	modifications 300g	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <modification>
+      <id>	1	</id>
+      <texture>	gui/maps/vehicles/modifications/effect.png	</texture>
+      <description>	#vehicle_customization:modifications/age_effect_01/description	</description>
+      <effects>
+        <effect>
+          <type>	paint_age	</type>
+          <value>	0.3	</value>
+        </effect>
+        <effect>
+          <type>	paint_fading	</type>
+          <value>	0.1	</value>
+        </effect>
+      </effects>
+      <userString>	#vehicle_customization:modifications/age_effect_01	</userString>
+    </modification>
+    <modification>
+      <id>	2	</id>
+      <texture>	gui/maps/vehicles/modifications/effect.png	</texture>
+      <description>	#vehicle_customization:modifications/age_effect_02/description	</description>
+      <effects>
+        <effect>
+          <type>	paint_age	</type>
+          <value>	0.5	</value>
+        </effect>
+        <effect>
+          <type>	paint_fading	</type>
+          <value>	0.3	</value>
+        </effect>
+      </effects>
+      <userString>	#vehicle_customization:modifications/age_effect_02	</userString>
+    </modification>
+  </itemGroup>
+</modifications_age_effect_01.xml>

@@ -1953,13 +1953,13 @@
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <models>
-            <undamaged>	vehicles/american/A100_T49/normal/lod0/Gun_03.model	</undamaged>
-            <destroyed>	vehicles/american/A100_T49/crash/lod0/Gun_03.model	</destroyed>
-            <exploded>	vehicles/american/A100_T49/crash/lod0/Gun_03.model	</exploded>
+            <undamaged>	vehicles/american/A100_T49/normal/lod0/Gun_04.model	</undamaged>
+            <destroyed>	vehicles/american/A100_T49/crash/lod0/Gun_04.model	</destroyed>
+            <exploded>	vehicles/american/A100_T49/crash/lod0/Gun_04.model	</exploded>
           </models>
           <hitTester>
-            <collisionModelServer>	vehicles/american/A100_T49/collision/Gun_03.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/american/A100_T49/collision_client/Gun_03.model	</collisionModelClient>
+            <collisionModelServer>	vehicles/american/A100_T49/collision/Gun_04.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/american/A100_T49/collision_client/Gun_04.model	</collisionModelClient>
           </hitTester>
           <effects>	shot_medium_mb	</effects>
           <reloadEffect>	reload_automat_reloading_50_75	</reloadEffect>
@@ -2011,6 +2011,7 @@
               <camouflage>	GUN	</camouflage>
             </customizableVehicleAreas>
           </customization>
+          <edgeByVisualModel>	false	</edgeByVisualModel>
           <camouflage>
             <density>	96.5083 99.982	</density>
             <aoTextureSize>	512 512	</aoTextureSize>

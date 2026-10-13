@@ -154,7 +154,7 @@ def _getVehicleDataVO(vehicle, bootcampCtrl, debutBoxCtrl, earlyAccessCtrl, para
         if vehicle.isResetParagons and paragonsCtrl.getVehicleProgressPoints(vehicle.intCD) > 0:
             data.update({'paragonsImgSource': getButtonsAssetPath('paragons_points'),
              'paragonsPointsTooltip': TOOLTIPS_CONSTANTS.PARAGONS_CAROUSEL_POINTS_BEFORE_WIN})
-        elif paragonsCtrl.paragons.isVehicleWasReset(vehicle.intCD) and vehicle.level < _VEHICLE_MAX_RESEARCH_LEVEL and not paragonsCtrl.isNextResetVehUnlocked(vehicle.intCD):
+        elif paragonsCtrl.paragons.isVehicleNowInResetBranch(vehicle.intCD) and vehicle.level < _VEHICLE_MAX_RESEARCH_LEVEL and paragonsCtrl.isNextResetVehPossibleToUnlock(vehicle.intCD):
             data.update({'paragonsImgSource': getButtonsAssetPath('paragons_points_blue'),
              'paragonsPointsTooltip': TOOLTIPS_CONSTANTS.PARAGONS_CAROUSEL_POINTS_BEFORE_UNLOCK_VEH})
     return data

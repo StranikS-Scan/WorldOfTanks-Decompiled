@@ -343,7 +343,7 @@ class BasicCriteriesGroup(CriteriesGroup):
     def _paragonsCriteria(cls, vehicle):
         controller = cls.__paragonsController
         intCD = vehicle.intCD
-        return vehicle.isResetParagons and controller.getVehicleProgressPoints(intCD) > 0 or controller.paragons.isVehicleWasReset(intCD) and not controller.isNextResetVehUnlocked(intCD) and vehicle.level < _VEHICLE_MAX_RESEARCH_LEVEL
+        return vehicle.isResetParagons and controller.getVehicleProgressPoints(intCD) > 0 or controller.paragons.isVehicleNowInResetBranch(intCD) and controller.isNextResetVehPossibleToUnlock(intCD) and vehicle.level < _VEHICLE_MAX_RESEARCH_LEVEL
 
     def _setEarlyAccessCriteria(self, filters):
         if filters.get(FILTER_KEYS.EARLY_ACCESS):

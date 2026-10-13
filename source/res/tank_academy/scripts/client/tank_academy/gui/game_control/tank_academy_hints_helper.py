@@ -232,7 +232,7 @@ class FightBtnMultiShowHint(_TAManualTriggeredHint, IGlobalListener):
         self.__checkFightBtnHint()
 
     def canBeShownInFuture(self):
-        return super(FightBtnMultiShowHint, self).canBeShownInFuture() and not self._tankAcademyController.isFirstQuestCompleted()
+        return super(FightBtnMultiShowHint, self).canBeShownInFuture() and not self._tankAcademyController.isFirstQuestCompleted() and not self._tankAcademyController.isMigratedFromNonZeroProgress()
 
     def _getHintSettings(self):
         return {'updateRuntime': True}
@@ -297,8 +297,12 @@ class FightBtnMultiShowHint(_TAManualTriggeredHint, IGlobalListener):
             isRandom = prbEntity and prbEntity.getEntityFlags() != FUNCTIONAL_FLAG.UNDEFINED and prbEntity.getQueueType() == QUEUE_TYPE.RANDOMS
             prbDispatcher = self.prbDispatcher
             if isRandom and prbDispatcher is not None:
+                state = prbDispatcher.getFunctionalState()
+                playerInfo = prbDispatcher.getPlayerInfo()
+                if not playerInfo.isCreator and state.isReadyActionSupported():
+                    return False
                 items = battle_selector_items.getItems()
-                selected = items.update(prbDispatcher.getFunctionalState())
+                selected = items.update(state)
                 return prbEntity.canPlayerDoAction().isValid and not selected.isLocked()
         else:
             return False
@@ -333,7 +337,7 @@ class EntryPointHint(_TAManualTriggeredHint):
     def _isReadyToShow(self):
         result = False
         if self._controlOnScene and not self._eventsCache.waitForSync and not self._tutorialLoader.isRunning:
-            result = self._tankAcademyController.getCompletedTankAcademyQuestsCount() >= 1 and not self.isShown()
+            result = (self._tankAcademyController.getCompletedTankAcademyQuestsCount() >= 1 or self._tankAcademyController.isMigratedFromNonZeroProgress()) and not self.isShown()
         return result
 
     def _onItemFound(self, event):
@@ -354,4 +358,6 @@ class EntryPointHint(_TAManualTriggeredHint):
             self._show()
 
     def __getHintText(self):
+        if self._tankAcademyController.isMigratedFromNonZeroProgress():
+            return R.strings.tank_academy.entryPoint.hint.new()
         return R.strings.tank_academy.entryPoint.hint.quests() if self._settingsCore.serverSettings.isTankAcademyWelcomeScreenShown() else R.strings.tank_academy.entryPoint.hint.rewards()

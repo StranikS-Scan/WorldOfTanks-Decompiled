@@ -109,6 +109,18 @@ class MonitorSettings(object):
 
         return (maxWdth, maxHght)
 
+    def getMaxResolutionsInfo(self):
+        maxActive = maxGlobal = (-1, 0, 0, 0, '', 0)
+        activeMonitor = self.activeMonitor
+        vmodes = BigWorld.listVideoModesAllMonitors()
+        numAdapters = len(vmodes)
+        for idx, monitorModes in enumerate(vmodes):
+            maxGlobal = max(maxGlobal, key=(lambda x: x[1] * x[2]), *monitorModes)
+            if activeMonitor == idx:
+                maxActive = max(maxActive, key=(lambda x: x[1] * x[2]), *monitorModes)
+
+        return (numAdapters, VideoMode(*maxActive), VideoMode(*maxGlobal))
+
     def isFullscreen(self):
         return BigWorld.getWindowMode() == BigWorld.WindowModeExclusiveFullscreen
 

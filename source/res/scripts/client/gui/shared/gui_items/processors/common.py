@@ -22,7 +22,8 @@ from gui.shared.money import Currency, Money
 from gui.shared.notifications import NotificationPriorityLevel
 from helpers import dependency
 from items import makeIntCompactDescrByID
-from items.components.c11n_constants import CustomizationType, CustomizationTypeNames, HIDDEN_CAMOUFLAGE_ID
+from items.components.c11n_constants import ApplyArea, CustomizationType, CustomizationTypeNames, EMPTY_ITEM_ID, HIDDEN_CAMOUFLAGE_ID, SLOT_TYPE_NAMES
+from items.components.c11n_components import getSlotType
 from items.customizations import isEditedStyle
 from preferred_maps import BlacklistWrapper, Slot, getConfiguredSlotLayout
 from skeletons.gui.customization import ICustomizationService
@@ -199,6 +200,7 @@ class OutfitApplier(Processor):
                 baseComponent = baseOutfit.pack()
                 self.__removeHiddenCamouflages(baseComponent)
                 component = component.getDiff(baseComponent)
+                self.__dropNonClearableEmptyItems(component, style)
             self.__validateOutfitComponent(component)
             requestData.append((component.makeCompDescr(), season))
 
@@ -224,6 +226,46 @@ class OutfitApplier(Processor):
                 camouflages.append(camoComponent)
 
         outfitComponent.camouflages = camouflages
+
+    @staticmethod
+    def __dropNonClearableEmptyItems(component, baseStyle):
+        clearableSlotTypes = baseStyle.descriptor.clearableSlotTypes
+        dropped = []
+        for itemType in CustomizationType.FULL_RANGE:
+            typeName = lower(CustomizationTypeNames[itemType])
+            componentsAttrName = '{}s'.format(typeName)
+            if componentsAttrName not in component.__slots__:
+                continue
+            components = getattr(component, componentsAttrName, None)
+            if not components:
+                continue
+            if itemType == CustomizationType.MODIFICATION:
+                filtered = [ comp for comp in components if comp != EMPTY_ITEM_ID ]
+                if len(filtered) != len(components):
+                    dropped.append(typeName)
+            else:
+                filtered = []
+                for comp in components:
+                    if comp.id != EMPTY_ITEM_ID:
+                        filtered.append(comp)
+                        continue
+                    if itemType == CustomizationType.DECAL:
+                        slotTypes = []
+                        if comp.appliedTo & ApplyArea.INSCRIPTION_REGIONS_VALUE > 0:
+                            slotTypes.append(SLOT_TYPE_NAMES.INSCRIPTION)
+                        if comp.appliedTo & ApplyArea.EMBLEM_REGIONS_VALUE > 0:
+                            slotTypes.append(SLOT_TYPE_NAMES.EMBLEM)
+                    else:
+                        slotTypes = [getSlotType(itemType)]
+                    if all((slotType in clearableSlotTypes for slotType in slotTypes)):
+                        filtered.append(comp)
+                    dropped.append(typeName)
+
+            setattr(component, componentsAttrName, filtered)
+
+        if dropped:
+            _logger.warning('[c11n] Dropped EMPTY_ITEM_ID components not clearable in editable style %s: %s', component.styleId, dropped)
+        return
 
 
 class CustomizationsBuyer(Processor):

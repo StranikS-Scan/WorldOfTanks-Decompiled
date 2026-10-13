@@ -37,8 +37,5 @@ def lobbyHeaderNavigationPossibleCheck(func):
 
 @adisp_process
 def checkVehicleAmmoFull(vehicle, callback=None):
-    if vehicle.inventoryCount > 0:
-        result = yield functions.checkAmmoLevel((vehicle,))
-        callback(result)
-        return
-    callback(True)
+    result = yield functions.checkAmmoLevel((vehicle,))
+    callback(result)

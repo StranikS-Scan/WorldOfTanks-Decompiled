@@ -61,8 +61,6 @@ from web.web_client_api import webApiCollection
 from web.web_client_api.sound import HangarSoundWebApi
 from th_async import th_async, th_await
 from gui.shared.event_dispatcher import showVehicleTechTreeView, showSystemMixerVolumeDisabledPage
-import logging
-_logger = logging.getLogger(__name__)
 if typing.TYPE_CHECKING:
     from typing import Tuple
     from notification.NotificationsModel import NotificationsModel
@@ -1234,20 +1232,6 @@ class _OpenAchievementsScreen(NavigationDisabledActionHandler):
         g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.LOBBY_PROFILE), ctx={'selectedAlias': VIEW_ALIAS.PROFILE_SUMMARY_PAGE}), scope=EVENT_BUS_SCOPE.LOBBY)
 
 
-class _OpenEventLootBoxesShopHandler(NavigationDisabledActionHandler):
-
-    @classmethod
-    def getNotType(cls):
-        return NOTIFICATION_TYPE.MESSAGE
-
-    @classmethod
-    def getActions(cls):
-        pass
-
-    def doAction(self, model, entityID, action):
-        _logger.error('NEEDS IMPLEMENT DO ACTION!!')
-
-
 class _OpenReferralProgramMainViewHandler(NavigationDisabledActionHandler):
     __referralProgramController = dependency.descriptor(IReferralProgramController)
 
@@ -1623,22 +1607,6 @@ class _OpenSystemMixerVolumeDisabledPageHandler(ActionHandler):
         showSystemMixerVolumeDisabledPage()
 
 
-class _FixSystemMixerVolumeHandler(ActionHandler):
-    from skeletons.gui.sounds import ISoundsController
-    __soundsCtrl = dependency.descriptor(ISoundsController)
-
-    @classmethod
-    def getNotType(cls):
-        return NOTIFICATION_TYPE.MESSAGE
-
-    @classmethod
-    def getActions(cls):
-        pass
-
-    def handleAction(self, model, entityID, action):
-        self.__soundsCtrl.fixSystemMixerVolume()
-
-
 _AVAILABLE_HANDLERS = (ShowBattleResultsHandler,
  ShowFortBattleResultsHandler,
  OpenPollHandler,
@@ -1700,7 +1668,6 @@ _AVAILABLE_HANDLERS = (ShowBattleResultsHandler,
  _OpenSeniorityAwards,
  _OpenMissingEventsHandler,
  _OpenReferralProgramMainViewHandler,
- _OpenEventLootBoxesShopHandler,
  _OpenCollectionHandler,
  _OpenCollectionRewardHandler,
  _OpenArmoryYardMain,
@@ -1720,8 +1687,7 @@ _AVAILABLE_HANDLERS = (ShowBattleResultsHandler,
  ParagonsSelectRewardViewHandler,
  _OpenBattleMattersHandler,
  _BattleMattersTaskReminder,
- _OpenSystemMixerVolumeDisabledPageHandler,
- _FixSystemMixerVolumeHandler)
+ _OpenSystemMixerVolumeDisabledPageHandler)
 registerNotificationsActionsHandlers(_AVAILABLE_HANDLERS)
 
 class NotificationsActionsHandlers(object):

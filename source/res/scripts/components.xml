@@ -9,6 +9,7 @@
     <AccountRankedComponent></AccountRankedComponent>
     <ArenaRankedComponent></ArenaRankedComponent>
     <AccountNewbieChatLockComponent></AccountNewbieChatLockComponent>
+    <DynamicVehicleChangeComponent></DynamicVehicleChangeComponent>
   </StaticComponents>
   <DynamicComponents>
     <OwnVehicle></OwnVehicle>
@@ -70,9 +71,7 @@
     <DualAccuracy></DualAccuracy>
     <DualGunDualAccuracy></DualGunDualAccuracy>
     <RankedVoiceComponent></RankedVoiceComponent>
-    <VehicleShellOverride></VehicleShellOverride>
-    <PublicHealth></PublicHealth>
-    <HealthTracker></HealthTracker>
-    <MissileComponent></MissileComponent>
+    <MasterVehicleEventsListener></MasterVehicleEventsListener>
+    <VehicleTeamOverride></VehicleTeamOverride>
   </DynamicComponents>
 </components.xml>

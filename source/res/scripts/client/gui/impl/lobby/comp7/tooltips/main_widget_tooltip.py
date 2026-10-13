@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/lobby/comp7/tooltips/main_widget_tooltip.py
 from adisp import adisp_process
-from frameworks.wulf import ViewSettings
+from frameworks.wulf import ViewSettings, ViewStatus
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.comp7.tooltips.main_widget_tooltip_model import MainWidgetTooltipModel, State
 from gui.impl.lobby.comp7 import comp7_model_helpers, comp7_shared, comp7_qualification_helpers
@@ -32,7 +32,7 @@ class MainWidgetTooltip(ViewImpl):
             if isQualification:
                 self.__updateQualificationData(vm)
             else:
-                self.__updateLeaderboardData(vm)
+                self.__updateLeaderboardData()
                 self.__updateProgressionData(vm)
 
     @staticmethod
@@ -46,12 +46,14 @@ class MainWidgetTooltip(ViewImpl):
         comp7_model_helpers.setDivisionInfo(model=model.divisionInfo, division=division)
 
     @adisp_process
-    def __updateLeaderboardData(self, model):
+    def __updateLeaderboardData(self):
+        model = self.viewModel
         model.setExternalDataState(State.LOADING)
         lbUpdateTime, isSuccessLastUpdateTime = yield self.__comp7Controller.leaderboard.getLastUpdateTime()
-        if isSuccessLastUpdateTime:
-            model.setLeaderboardUpdateTimestamp(lbUpdateTime or 0)
         isSuccessOwnData, myPosition, _, _ = yield self.__comp7Controller.leaderboard.getOwnData()
-        if isSuccessOwnData:
-            model.setMyPosition(myPosition or 0)
-        model.setExternalDataState(State.SUCCESS if all((isSuccessLastUpdateTime, isSuccessOwnData)) else State.ERROR)
+        if self.viewStatus not in (ViewStatus.UNDEFINED, ViewStatus.DESTROYED, ViewStatus.DESTROYING):
+            if isSuccessLastUpdateTime:
+                model.setLeaderboardUpdateTimestamp(lbUpdateTime or 0)
+            if isSuccessOwnData:
+                model.setMyPosition(myPosition or 0)
+            model.setExternalDataState(State.SUCCESS if all((isSuccessLastUpdateTime, isSuccessOwnData)) else State.ERROR)

@@ -1,0 +1,24 @@
+<USSR_Vasiliev_Paint_146.xml>
+  <itemGroup>
+    <name>	USSR_Vasiliev_Paint_146	</name>
+    <userString>	#vehicle_customization:repaint/color_group_04	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <tags>	hiddenInUI	</tags>
+    <priceGroup>	paints 20g notInShop	</priceGroup>
+    <paint>
+      <id>	31576	</id>
+      <texture>	gui/maps/vehicles/repaints/custom_color_DEV.png	</texture>
+      <userString>	#vehicle_customization:USSR_Vasiliev_Paint_146/name	</userString>
+      <description>	#vehicle_customization:USSR_Vasiliev_Paint_146/description	</description>
+      <color>	51 57 64 255	</color>
+      <gloss>	0.6	</gloss>
+      <metallic>	0.4	</metallic>
+    </paint>
+    <vehicleFilter>
+      <include>
+        <vehicles>	ussr:R225_Vasiliev_project	</vehicles>
+      </include>
+    </vehicleFilter>
+  </itemGroup>
+</USSR_Vasiliev_Paint_146.xml>

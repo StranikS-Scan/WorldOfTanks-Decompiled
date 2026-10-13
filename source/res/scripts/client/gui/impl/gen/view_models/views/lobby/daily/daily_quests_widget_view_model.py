@@ -7,7 +7,7 @@ from gui.impl.gen.view_models.views.lobby.daily.widget_quest_model import Widget
 class DailyQuestsWidgetViewModel(ViewModel):
     __slots__ = ('onQuestClick', 'onDisappear')
 
-    def __init__(self, properties=5, commands=2):
+    def __init__(self, properties=6, commands=2):
         super(DailyQuestsWidgetViewModel, self).__init__(properties=properties, commands=commands)
 
     def getQuests(self):
@@ -30,23 +30,33 @@ class DailyQuestsWidgetViewModel(ViewModel):
     def getPremiumQuestsType():
         return WidgetQuestModel
 
+    def getSerialEnterQuests(self):
+        return self._getArray(2)
+
+    def setSerialEnterQuests(self, value):
+        self._setArray(2, value)
+
+    @staticmethod
+    def getSerialEnterQuestsType():
+        return WidgetQuestModel
+
     def getCountdown(self):
-        return self._getNumber(2)
+        return self._getNumber(3)
 
     def setCountdown(self, value):
-        self._setNumber(2, value)
+        self._setNumber(3, value)
 
     def getVisible(self):
-        return self._getBool(3)
+        return self._getBool(4)
 
     def setVisible(self, value):
-        self._setBool(3, value)
+        self._setBool(4, value)
 
     def getIndicateCompleteQuests(self):
-        return self._getArray(4)
+        return self._getArray(5)
 
     def setIndicateCompleteQuests(self, value):
-        self._setArray(4, value)
+        self._setArray(5, value)
 
     @staticmethod
     def getIndicateCompleteQuestsType():
@@ -56,6 +66,7 @@ class DailyQuestsWidgetViewModel(ViewModel):
         super(DailyQuestsWidgetViewModel, self)._initialize()
         self._addArrayProperty('quests', Array())
         self._addArrayProperty('premiumQuests', Array())
+        self._addArrayProperty('serialEnterQuests', Array())
         self._addNumberProperty('countdown', 0)
         self._addBoolProperty('visible', False)
         self._addArrayProperty('indicateCompleteQuests', Array())

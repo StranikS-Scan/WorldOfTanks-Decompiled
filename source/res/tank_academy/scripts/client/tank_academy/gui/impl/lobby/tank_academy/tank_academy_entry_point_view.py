@@ -46,7 +46,7 @@ class TankAcademyEntryPointView(GFHeaderWidgetView):
             currentQuest = self.__tankAcademyController.getCurrentQuest()
             completedQuestsCount = self.__tankAcademyController.getCompletedTankAcademyQuestsCount()
             model.setIsCompleted(currentQuest is None)
-            model.setIsMainViewVisited(completedQuestsCount == self.__getLastSeenQuestIdx())
+            model.setIsMainViewVisited(completedQuestsCount == self.__getLastSeenQuestIdx() and self.__settingsCore.serverSettings.isTankAcademyWelcomeScreenShown())
             model.setUnobtainedVehiclesCount(len(self.__tankAcademyController.getDelayedRewardCurrencyTokens()))
             if currentQuest is not None:
                 currentProgress, maxProgress = self.__tankAcademyController.getQuestProgress(currentQuest)

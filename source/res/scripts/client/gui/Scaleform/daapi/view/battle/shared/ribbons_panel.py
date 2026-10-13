@@ -156,11 +156,6 @@ def killRibbonFormatter(ribbon, arenaDP, updater, ribbonType=None):
     updater(ribbonID=ribbon.getID(), ribbonType=ribbonType, vehName=vehicleName, vehType=vehicleClassTag, leftFieldStr=leftFieldStr, bonusRibbonLabelID=bonusRibbonLabelID, role=ribbon.role())
 
 
-def _healthAddedFormatter(ribbon, arenaDP, updater):
-    vehicleName, vehicleClassTag = _getVehicleData(arenaDP, ribbon.getVehicleID())
-    updater(ribbonID=ribbon.getID(), ribbonType=ribbon.getType(), vehName=vehicleName, vehType=vehicleClassTag, leftFieldStr=backport.getIntegralFormat(ribbon.getExtraValue()))
-
-
 _RIBBONS_FMTS = {_BET.CAPTURE: _baseRibbonFormatter,
  _BET.DEFENCE: _baseRibbonFormatter,
  _BET.DETECTION: _enemyDetectionRibbonFormatter,
@@ -203,17 +198,10 @@ _RIBBONS_FMTS = {_BET.CAPTURE: _baseRibbonFormatter,
  _BET.RECEIVED_BY_CLING_BRANDER: _singleVehRibbonFormatter,
  _BET.DEALT_DMG_BY_THUNDER_STRIKE: _singleVehRibbonFormatter,
  _BET.RECEIVED_BY_THUNDER_STRIKE: _singleVehRibbonFormatter,
- _BET.VEHICLE_HEALTH_ADDED: _healthAddedFormatter,
- _BET.RECEIVED_BY_CIRCUIT_OVERLOAD: _singleVehRibbonFormatter,
- _BET.DEALT_BY_MISSILE: _singleVehRibbonFormatter,
- _BET.RECEIVED_BY_MISSILE: _singleVehRibbonFormatter,
  _BET.PERK: _perkRibbonFormatter,
- _BET.DEALT_BY_ANOMALY: _singleVehRibbonFormatter,
- _BET.RECEIVED_BY_ANOMALY: _singleVehRibbonFormatter,
- _BET.DEALT_BY_ENERGY_SHIELD: _singleVehRibbonFormatter,
- _BET.RECEIVED_BY_ENERGY_SHIELD: _singleVehRibbonFormatter,
- _BET.DEALT_BY_STUN_AREA_MOD_A: _singleVehRibbonFormatter,
- _BET.RECEIVED_BY_STUN_AREA_MOD_A: _singleVehRibbonFormatter}
+ _BET.RECEIVED_BY_PERIODIC: _singleVehRibbonFormatter,
+ _BET.DEALT_DMG_BY_PERIODIC: _singleVehRibbonFormatter,
+ _BET.HEALTH_ADDED: _baseRibbonFormatter}
 _SHOT_PASSION_INT_CD = 2817787
 _ABILITY_MODIFIERS_BY_CDS = {_SHOT_PASSION_INT_CD: _BET.DAMAGE_MODIFIER_ABILITY}
 _DISPLAY_PRECONDITIONS = {_BET.DETECTION: lambda dp, ribbon: dp.getVehicleInfo(ribbon.getVehIDs()[0]).vehicleType.compactDescr > 0}
@@ -231,8 +219,17 @@ class BattleRibbonsPanel(RibbonsPanelMeta, IArenaVehiclesController):
         self.__isExtendedAnim = True
         self.__isVisible = True
         self.__arenaDP = self.sessionProvider.getCtx().getArenaDP()
-        self.__ribbonsAggregator = ribbons_aggregator.createRibbonsAggregator()
+        self.__ribbonsAggregator = self._createRibbonAggregator()
         self.__delayedRibbons = []
+
+    def _createRibbonAggregator(self):
+        return ribbons_aggregator.createRibbonsAggregator()
+
+    def _getRibbonAggregator(self):
+        return self.__ribbonsAggregator
+
+    def _getArenaDP(self):
+        return self.__arenaDP
 
     def onShow(self, ribbonID):
         sound = _SHOW_RIBBON_SOUND_NAME
@@ -303,8 +300,12 @@ class BattleRibbonsPanel(RibbonsPanelMeta, IArenaVehiclesController):
     def _getRibbonFormatter(self, ribbonType):
         return _RIBBONS_FMTS.get(ribbonType)
 
+    @classmethod
+    def _getAdditionalRibbons(cls):
+        return []
+
     def _getViewData(self):
-        return [[_BET.ARMOR, backport.text(R.strings.ingame_gui.efficiencyRibbons.armor())],
+        ribbons = [[_BET.ARMOR, backport.text(R.strings.ingame_gui.efficiencyRibbons.armor())],
          [_BET.DEFENCE, backport.text(R.strings.ingame_gui.efficiencyRibbons.defence())],
          [_BET.DAMAGE, backport.text(R.strings.ingame_gui.efficiencyRibbons.damage())],
          [_BET.ASSIST_SPOT, backport.text(R.strings.ingame_gui.efficiencyRibbons.assistSpot())],
@@ -346,17 +347,9 @@ class BattleRibbonsPanel(RibbonsPanelMeta, IArenaVehiclesController):
          [_BET.RECEIVED_BY_CLING_BRANDER, backport.text(R.strings.ingame_gui.efficiencyRibbons.receivedByClingBrander())],
          [_BET.DEALT_DMG_BY_THUNDER_STRIKE, backport.text(R.strings.ingame_gui.efficiencyRibbons.dealtDamageByThunderStrike())],
          [_BET.RECEIVED_BY_THUNDER_STRIKE, backport.text(R.strings.ingame_gui.efficiencyRibbons.receivedByThunderStrike())],
-         [_BET.VEHICLE_HEALTH_ADDED, backport.text(R.strings.ingame_gui.efficiencyRibbons.healthAdded())],
-         [_BET.RECEIVED_BY_CIRCUIT_OVERLOAD, backport.text(R.strings.ingame_gui.efficiencyRibbons.wtReceivedCircuitOverload())],
-         [_BET.RECEIVED_BY_ENERGY_SHIELD, backport.text(R.strings.ingame_gui.efficiencyRibbons.wtReceivedByEnergyShield())],
-         [_BET.DEALT_BY_ENERGY_SHIELD, backport.text(R.strings.ingame_gui.efficiencyRibbons.wtDealtByEnergyShield())],
-         [_BET.RECEIVED_BY_MISSILE, backport.text(R.strings.ingame_gui.efficiencyRibbons.wtReceivedByMissile())],
-         [_BET.DEALT_BY_MISSILE, backport.text(R.strings.ingame_gui.efficiencyRibbons.wtDealtDamageByMissile())],
-         [_BET.RECEIVED_BY_ANOMALY, backport.text(R.strings.ingame_gui.efficiencyRibbons.wtReceivedByAnomaly())],
-         [_BET.DEALT_BY_ANOMALY, backport.text(R.strings.ingame_gui.efficiencyRibbons.wtDealtByAnomaly())],
-         [_BET.RECEIVED_BY_STUN_AREA_MOD_A, backport.text(R.strings.ingame_gui.efficiencyRibbons.wtReceivedByStunAreaModA())],
-         [_BET.DEALT_BY_STUN_AREA_MOD_A, backport.text(R.strings.ingame_gui.efficiencyRibbons.wtDealtByStunAreaModA())],
          [_BET.PERK, '']]
+        ribbons.extend(self._getAdditionalRibbons())
+        return ribbons
 
     def __processDelayedRibbons(self):
         for ribbon, method in ((self.__ribbonsAggregator.getRibbon(ribbonID), method) for ribbonID, method in self.__delayedRibbons):
@@ -446,6 +439,9 @@ class BattleRibbonsPanel(RibbonsPanelMeta, IArenaVehiclesController):
 
     def __checkUserPreferences(self, ribbon):
         return self.__userPreferences.get(ribbon.getType(), True)
+
+    def __isPanelEnabled(self):
+        return self.sessionProvider.arenaVisitor.gui.isEventBattle() or self.__enabled
 
     def __checkControllingOwnVehicle(self):
         return avatar_getter.getPlayerVehicleID() == self.sessionProvider.shared.vehicleState.getControllingVehicleID()

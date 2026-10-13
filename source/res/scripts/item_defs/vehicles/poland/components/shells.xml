@@ -152,6 +152,22 @@
     </damage>
     <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
   </_100mm_APCR_w49_DAP_Wz_57D>
+  <_100mm_armata_wz_58_G5_APCR_H>
+    <id>	20010	</id>
+    <userString>	#poland_vehicles:_100mm_armata_wz_58_G5_APCR_H	</userString>
+    <icon>	ap_cr_premium	</icon>
+    <price>	0	</price>
+    <notInShop>	true	</notInShop>
+    <improved>	true	</improved>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	100	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	BRmainAPCR	</effects>
+    <damage>
+      <armor>	290	</armor>
+      <devices>	39	</devices>
+    </damage>
+  </_100mm_armata_wz_58_G5_APCR_H>
   <_100mm_armata_wz_58_G5_APCR_SH>
     <id>	95	</id>
     <userString>	#poland_vehicles:_100mm_armata_wz_58_G5_APCR_SH	</userString>
@@ -168,6 +184,22 @@
       <devices>	39	</devices>
     </damage>
   </_100mm_armata_wz_58_G5_APCR_SH>
+  <_100mm_armata_wz_58_G5_HEAT_H>
+    <id>	20009	</id>
+    <userString>	#poland_vehicles:_100mm_armata_wz_58_G5_HEAT_H	</userString>
+    <icon>	ap_portal	</icon>
+    <price>	0	</price>
+    <notInShop>	true	</notInShop>
+    <improved>	true	</improved>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	100	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	BRmainArmorPiercing	</effects>
+    <damage>
+      <armor>	365	</armor>
+      <devices>	39	</devices>
+    </damage>
+  </_100mm_armata_wz_58_G5_HEAT_H>
   <_100mm_armata_wz_58_G5_HEAT_SH>
     <id>	94	</id>
     <userString>	#poland_vehicles:_100mm_armata_wz_58_G5_HEAT_SH	</userString>
@@ -184,6 +216,22 @@
       <devices>	39	</devices>
     </damage>
   </_100mm_armata_wz_58_G5_HEAT_SH>
+  <_100mm_armata_wz_62_G4_APCR_H>
+    <id>	20008	</id>
+    <userString>	#poland_vehicles:_100mm_armata_wz_62_G4_APCR_H	</userString>
+    <icon>	ap_cr_premium	</icon>
+    <price>	0	</price>
+    <notInShop>	true	</notInShop>
+    <improved>	True	</improved>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	100	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	BRmainAPCR	</effects>
+    <damage>
+      <armor>	200	</armor>
+      <devices>	24	</devices>
+    </damage>
+  </_100mm_armata_wz_62_G4_APCR_H>
   <_100mm_armata_wz_62_G4_APCR_SH>
     <id>	93	</id>
     <userString>	#poland_vehicles:_100mm_armata_wz_62_G4_APCR_SH	</userString>
@@ -200,6 +248,22 @@
       <devices>	24	</devices>
     </damage>
   </_100mm_armata_wz_62_G4_APCR_SH>
+  <_100mm_armata_wz_62_G4_HEAT_H>
+    <id>	20007	</id>
+    <userString>	#poland_vehicles:_100mm_armata_wz_62_G4_HEAT_H	</userString>
+    <icon>	ap_premium	</icon>
+    <price>	0	</price>
+    <notInShop>	true	</notInShop>
+    <improved>	true	</improved>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	100	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	BRmainArmorPiercing	</effects>
+    <damage>
+      <armor>	245	</armor>
+      <devices>	24	</devices>
+    </damage>
+  </_100mm_armata_wz_62_G4_HEAT_H>
   <_100mm_armata_wz_62_G4_HEAT_SH>
     <id>	92	</id>
     <userString>	#poland_vehicles:_100mm_armata_wz_62_G4_HEAT_SH	</userString>
@@ -632,6 +696,22 @@
       </damage>
     </armorSpalls>
   </_105mm_tung_sgr_m_34>
+  <_105mm_wz_22_24_G1_APCR_H>
+    <id>	20002	</id>
+    <userString>	#poland_vehicles:_105mm_wz_22_24_G1_APCR_H	</userString>
+    <icon>	ap_cr_premium	</icon>
+    <price>	0	</price>
+    <notInShop>	true	</notInShop>
+    <improved>	true	</improved>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	105	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	BRmainAPCR	</effects>
+    <damage>
+      <armor>	170	</armor>
+      <devices>	17	</devices>
+    </damage>
+  </_105mm_wz_22_24_G1_APCR_H>
   <_105mm_wz_22_24_G1_APCR_SH>
     <id>	87	</id>
     <userString>	#poland_vehicles:_105mm_wz_22_24_G1_APCR_SH	</userString>
@@ -648,6 +728,22 @@
       <devices>	17	</devices>
     </damage>
   </_105mm_wz_22_24_G1_APCR_SH>
+  <_105mm_wz_22_24_G1_HEAT_H>
+    <id>	20001	</id>
+    <userString>	#poland_vehicles:_105mm_wz_22_24_G1_HEAT_H	</userString>
+    <icon>	ap_portal	</icon>
+    <price>	0	</price>
+    <notInShop>	true	</notInShop>
+    <improved>	true	</improved>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	105	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	BRmainArmorPiercing	</effects>
+    <damage>
+      <armor>	210	</armor>
+      <devices>	17	</devices>
+    </damage>
+  </_105mm_wz_22_24_G1_HEAT_H>
   <_105mm_wz_22_24_G1_HEAT_SH>
     <id>	86	</id>
     <userString>	#poland_vehicles:_105mm_wz_22_24_G1_HEAT_SH	</userString>
@@ -930,6 +1026,22 @@
       </damage>
     </armorSpalls>
   </_122mm_UOF-471_P>
+  <_122mm_wz_43_50_G6_APCR_H>
+    <id>	20012	</id>
+    <userString>	#poland_vehicles:_122mm_wz_43_50_G6_APCR_H	</userString>
+    <icon>	ap_cr_premium	</icon>
+    <price>	0	</price>
+    <notInShop>	true	</notInShop>
+    <improved>	true	</improved>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	122	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	BRlargeAPCR	</effects>
+    <damage>
+      <armor>	270	</armor>
+      <devices>	36	</devices>
+    </damage>
+  </_122mm_wz_43_50_G6_APCR_H>
   <_122mm_wz_43_50_G6_APCR_SH>
     <id>	97	</id>
     <userString>	#poland_vehicles:_122mm_wz_43_50_G6_APCR_SH	</userString>
@@ -946,6 +1058,22 @@
       <devices>	36	</devices>
     </damage>
   </_122mm_wz_43_50_G6_APCR_SH>
+  <_122mm_wz_43_50_G6_HEAT_H>
+    <id>	20011	</id>
+    <userString>	#poland_vehicles:_122mm_wz_43_50_G6_HEAT_H	</userString>
+    <icon>	ap_premium	</icon>
+    <price>	0	</price>
+    <notInShop>	true	</notInShop>
+    <improved>	true	</improved>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	122	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	BRlargeArmorPiercing	</effects>
+    <damage>
+      <armor>	340	</armor>
+      <devices>	36	</devices>
+    </damage>
+  </_122mm_wz_43_50_G6_HEAT_H>
   <_122mm_wz_43_50_G6_HEAT_SH>
     <id>	96	</id>
     <userString>	#poland_vehicles:_122mm_wz_43_50_G6_HEAT_SH	</userString>
@@ -1854,6 +1982,22 @@
       </damage>
     </armorSpalls>
   </_75mm_Sprg.18_K2_AT_wz40>
+  <_75mm_wz_36_37_G2_APCR_H>
+    <id>	20004	</id>
+    <userString>	#poland_vehicles:_75mm_wz_36_37_G2_APCR_H	</userString>
+    <icon>	ap_cr_premium	</icon>
+    <price>	0	</price>
+    <notInShop>	true	</notInShop>
+    <improved>	true	</improved>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	75	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	BRlargeAPCR	</effects>
+    <damage>
+      <armor>	150	</armor>
+      <devices>	21	</devices>
+    </damage>
+  </_75mm_wz_36_37_G2_APCR_H>
   <_75mm_wz_36_37_G2_APCR_SH>
     <id>	89	</id>
     <userString>	#poland_vehicles:_75mm_wz_36_37_G2_APCR_SH	</userString>
@@ -1870,6 +2014,22 @@
       <devices>	21	</devices>
     </damage>
   </_75mm_wz_36_37_G2_APCR_SH>
+  <_75mm_wz_36_37_G2_HEAT_H>
+    <id>	20003	</id>
+    <userString>	#poland_vehicles:_75mm_wz_36_37_G2_HEAT_H	</userString>
+    <icon>	ap_portal	</icon>
+    <price>	0	</price>
+    <notInShop>	true	</notInShop>
+    <improved>	true	</improved>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	75	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	BRmainArmorPiercing	</effects>
+    <damage>
+      <armor>	190	</armor>
+      <devices>	20	</devices>
+    </damage>
+  </_75mm_wz_36_37_G2_HEAT_H>
   <_75mm_wz_36_37_G2_HEAT_SH>
     <id>	88	</id>
     <userString>	#poland_vehicles:_75mm_wz_36_37_G2_HEAT_SH	</userString>
@@ -2311,6 +2471,22 @@
       </damage>
     </armorSpalls>
   </_90mm_PW42_Pl36>
+  <_90mm_armata_wz_46_G3_APCR_H>
+    <id>	20006	</id>
+    <userString>	#poland_vehicles:_90mm_armata_wz_46_G3_APCR_H	</userString>
+    <icon>	ap_cr_premium	</icon>
+    <price>	0	</price>
+    <notInShop>	true	</notInShop>
+    <improved>	true	</improved>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	90	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	BRmainAPCR	</effects>
+    <damage>
+      <armor>	190	</armor>
+      <devices>	23	</devices>
+    </damage>
+  </_90mm_armata_wz_46_G3_APCR_H>
   <_90mm_armata_wz_46_G3_APCR_SH>
     <id>	91	</id>
     <userString>	#poland_vehicles:_90mm_armata_wz_46_G3_APCR_SH	</userString>
@@ -2327,6 +2503,22 @@
       <devices>	23	</devices>
     </damage>
   </_90mm_armata_wz_46_G3_APCR_SH>
+  <_90mm_armata_wz_46_G3_HEAT_H>
+    <id>	20005	</id>
+    <userString>	#poland_vehicles:_90mm_armata_wz_46_G3_HEAT_H	</userString>
+    <icon>	ap_portal	</icon>
+    <price>	0	</price>
+    <notInShop>	true	</notInShop>
+    <improved>	true	</improved>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	90	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	BRmainArmorPiercing	</effects>
+    <damage>
+      <armor>	240	</armor>
+      <devices>	23	</devices>
+    </damage>
+  </_90mm_armata_wz_46_G3_HEAT_H>
   <_90mm_armata_wz_46_G3_HEAT_SH>
     <id>	90	</id>
     <userString>	#poland_vehicles:_90mm_armata_wz_46_G3_HEAT_SH	</userString>
@@ -2362,6 +2554,7 @@
   <icons>
     <ap>	ARMOR_PIERCING.png 0 0	</ap>
     <ap_premium>	ARMOR_PIERCING_PREMIUM.png 0 0	</ap_premium>
+    <ap_portal>	ARMOR_PIERCING_PORTAL.png 0 0	</ap_portal>
     <ap_cr>	ARMOR_PIERCING_CR.png 0 0	</ap_cr>
     <ap_cr_premium>	ARMOR_PIERCING_CR_PREMIUM.png 0 0	</ap_cr_premium>
     <he>	HIGH_EXPLOSIVE.png 0 0	</he>

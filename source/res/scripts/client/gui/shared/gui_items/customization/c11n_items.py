@@ -8,6 +8,7 @@ import typing
 import Math
 import ResMgr
 from CurrentVehicle import g_currentVehicle
+from gui.Scaleform.genConsts.FITTING_TYPES import FITTING_TYPES
 from gui.customization.shared import EDITABLE_STYLE_APPLY_TO_ALL_AREAS_TYPES, getAvailableRegions
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.VEHICLE_CUSTOMIZATION import VEHICLE_CUSTOMIZATION
@@ -257,6 +258,10 @@ class Customization(FittingItem):
 
     def __repr__(self):
         return '{}<intCD:{}, id:{}>'.format(self.__class__.__name__, self.intCD, self.id)
+
+    @property
+    def fittingType(self):
+        return FITTING_TYPES.CUSTOMIZATION
 
     @property
     def id(self):

@@ -47,7 +47,6 @@ class INGAME_GUI(object):
     PLAYER_ERRORS_EQUIPMENT_ISINCOOLDOWN = '#ingame_gui:player_errors/equipment/isInCooldown'
     PLAYER_ERRORS_EQUIPMENT_MEDKIT_TANKMANISSAFE = '#ingame_gui:player_errors/equipment/medkit/tankmanIsSafe'
     PLAYER_ERRORS_EQUIPMENT_MEDKIT_ALLTANKMENARESAFE = '#ingame_gui:player_errors/equipment/medkit/allTankmenAreSafe'
-    PLAYER_ERRORS_EQUIPMENT_FEPMEDKIT_ALLTANKMENARESAFE = '#ingame_gui:player_errors/equipment/FEPmedkit/allTankmenAreSafe'
     PLAYER_ERRORS_EQUIPMENT_REPAIRKIT_DEVICEISNOTDAMAGED = '#ingame_gui:player_errors/equipment/repairkit/deviceIsNotDamaged'
     PLAYER_ERRORS_EQUIPMENT_REPAIRKIT_ALLDEVICESARENOTDAMAGED = '#ingame_gui:player_errors/equipment/repairkit/allDevicesAreNotDamaged'
     PLAYER_ERRORS_EQUIPMENT_REPAIREVERYTHING_CREWANDDEVICESAREOK = '#ingame_gui:player_errors/equipment/repairEverything/crewAndDevicesAreOk'
@@ -1042,6 +1041,9 @@ class INGAME_GUI(object):
     PREBATTLEMARKER_PREBATTLEMARKER_50 = '#ingame_gui:prebattlemarker/prebattlemarker_50'
     PREBATTLEMARKER_PREBATTLEMARKER_51 = '#ingame_gui:prebattlemarker/prebattlemarker_51'
     PREBATTLEMARKER_PREBATTLEMARKER_52 = '#ingame_gui:prebattlemarker/prebattlemarker_52'
+    PREBATTLEMARKER_PREBATTLEMARKER_53 = '#ingame_gui:prebattlemarker/prebattlemarker_53'
+    PREBATTLEMARKER_PREBATTLEMARKER_54 = '#ingame_gui:prebattlemarker/prebattlemarker_54'
+    PREBATTLEMARKER_PREBATTLEMARKER_55 = '#ingame_gui:prebattlemarker/prebattlemarker_55'
     OPTDEVICERESURRECTION_ENGINE = '#ingame_gui:optDeviceResurrection/engine'
     OPTDEVICERESURRECTION_FUELTANK = '#ingame_gui:optDeviceResurrection/fuelTank'
     OPTDEVICERESURRECTION_AMMOBAY = '#ingame_gui:optDeviceResurrection/ammoBay'
@@ -1067,8 +1069,6 @@ class INGAME_GUI(object):
     PLAYER_ERRORS_THERMALVISION_COOLDOWN = '#ingame_gui:player_errors/thermalVision/cooldown'
     PLAYER_ERRORS_THERMALVISION_ALREADYACTIVATED = '#ingame_gui:player_errors/thermalVision/alreadyActivated'
     PLAYER_ERRORS_THERMALVISION_OVERTURNED = '#ingame_gui:player_errors/thermalVision/overturned'
-    DESTROYTIMER_MEDKITINUSE = '#ingame_gui:destroyTimer/medkitInUse'
-    CROSSHAIR_HINT_WTBARRIER = '#ingame_gui:crosshair/hint/wtBarrier'
     CHAT_SHORTCUTS_ENUM = (CHAT_SHORTCUTS_ATTENTION_TO_POSITION_GRIDINFO,
      CHAT_SHORTCUTS_ATTENTION_TO_POSITION,
      CHAT_SHORTCUTS_GOING_THERE_GRIDINFO,

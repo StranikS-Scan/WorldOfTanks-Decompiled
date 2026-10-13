@@ -163,6 +163,8 @@ class ARENAS(object):
     C_127_JAPORT_DESCRIPTION = '#arenas:127_japort/description'
     C_252_BR_BATTLE_CITY4_NAME = '#arenas:252_br_battle_city4/name'
     C_252_BR_BATTLE_CITY4_DESCRIPTION = '#arenas:252_br_battle_city4/description'
+    C_252_BR_BATTLE_CITY4_PORTAL_NAME = '#arenas:252_br_battle_city4_portal/name'
+    C_252_BR_BATTLE_CITY4_PORTAL_DESCRIPTION = '#arenas:252_br_battle_city4_portal/description'
     C_128_LAST_FRONTIER_V_NAME = '#arenas:128_last_frontier_v/name'
     C_128_LAST_FRONTIER_V_DESCRIPTION = '#arenas:128_last_frontier_v/description'
     C_108_NORMANDY_NOM_NAME = '#arenas:108_normandy_nom/name'
@@ -206,8 +208,8 @@ class ARENAS(object):
     MODIFIED = '#arenas:modified'
     C_280_COSMIC_2026_NAME = '#arenas:280_cosmic_2026/name'
     C_280_COSMIC_2026_DESCRIPTION = '#arenas:280_cosmic_2026/description'
-    H08_MT_HANGAR_WT_NAME = '#arenas:h08_mt_hangar_wt/name'
-    H08_MT_HANGAR_WT_DESCRIPTION = '#arenas:h08_mt_hangar_wt/description'
+    H13_MT_PORTAL_2025_NAME = '#arenas:h13_mt_portal_2025/name'
+    H13_MT_PORTAL_2025_DESCRIPTION = '#arenas:h13_mt_portal_2025/description'
     ALL_ENUM = (TYPE_CTF_NAME,
      TYPE_CTF_DESCRIPTION,
      TYPE_DOMINATION_NAME,
@@ -368,6 +370,8 @@ class ARENAS(object):
      C_127_JAPORT_DESCRIPTION,
      C_252_BR_BATTLE_CITY4_NAME,
      C_252_BR_BATTLE_CITY4_DESCRIPTION,
+     C_252_BR_BATTLE_CITY4_PORTAL_NAME,
+     C_252_BR_BATTLE_CITY4_PORTAL_DESCRIPTION,
      C_128_LAST_FRONTIER_V_NAME,
      C_128_LAST_FRONTIER_V_DESCRIPTION,
      C_108_NORMANDY_NOM_NAME,
@@ -411,8 +415,8 @@ class ARENAS(object):
      MODIFIED,
      C_280_COSMIC_2026_NAME,
      C_280_COSMIC_2026_DESCRIPTION,
-     H08_MT_HANGAR_WT_NAME,
-     H08_MT_HANGAR_WT_DESCRIPTION)
+     H13_MT_PORTAL_2025_NAME,
+     H13_MT_PORTAL_2025_DESCRIPTION)
 
     @classmethod
     def all(cls, key0):

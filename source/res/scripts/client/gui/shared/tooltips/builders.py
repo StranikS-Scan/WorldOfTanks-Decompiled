@@ -5,15 +5,13 @@ import logging
 from typing import Any
 from gui.Scaleform.daapi.settings.config import ADVANCED_COMPLEX_TOOLTIPS
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
-from gui.shared.gui_items.artefacts import OptionalDevice, Equipment
+from gui.shared.gui_items.artefacts import OptionalDevice
 from gui.shared.tooltips import complex_formatters
 from gui.shared.tooltips import contexts, advanced
+from gui.shared.tooltips.complex_tooltip import ComplexTooltip
 from helpers import dependency
 from skeletons.account_helpers.settings_core import ISettingsCore
 from soft_exception import SoftException
-from gui.prb_control.dispatcher import g_prbLoader
-from fun_random.gui.fun_gui_constants import DISABLED_ADVANCED_TOOLTIPS_ITEMS_CD
-from constants import QUEUE_TYPE
 _logger = logging.getLogger(__name__)
 DISABLED_ITEMS_ID = 12793
 
@@ -128,14 +126,12 @@ class AdvancedDataBuilder(AdvancedBuilder):
                 self._setDisableAnimFlag()
         else:
             data = self._provider.buildToolTip(*args)
-            isDisabledForWheeled = False
-            isDisabledAdvAnim = False
             item = self._provider.item
+            disabledForWheeled = False
             if item is not None:
-                isDisabledForWheeled = isinstance(item, OptionalDevice) and item.intCD == DISABLED_ITEMS_ID
-                entity = g_prbLoader.getDispatcher().getEntity()
-                isDisabledAdvAnim = entity is not None and isinstance(item, Equipment) and entity.getEntityType() == QUEUE_TYPE.FUN_RANDOM and item.intCD in DISABLED_ADVANCED_TOOLTIPS_ITEMS_CD
-            if supportAdvanced and not isDisabledForWheeled and not isDisabledAdvAnim:
+                if isinstance(item, OptionalDevice):
+                    disabledForWheeled = item.intCD == DISABLED_ITEMS_ID
+            if supportAdvanced and not disabledForWheeled:
                 self._provider.addAdvancedBlock(data, disableAnim)
         return data
 
@@ -196,8 +192,8 @@ class ComplexBuilder(AdvancedBuilder):
                 if not disableAnim:
                     self._setDisableAnimFlag()
             else:
-                data = advanced.ComplexTooltip(contexts.ToolTipContext(None), disableAnim).buildToolTip(data)
-            linkage = TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI
+                data = ComplexTooltip(contexts.ToolTipContext(None), disableAnim).buildToolTip(data)
+            linkage = TOOLTIPS_CONSTANTS.ADVANCED_SHUFFLE_UI
         if data:
             return (self._provider, data, linkage)
         else:
@@ -284,8 +280,8 @@ class LazyBuildersCollection(BuildersCollection):
             imported = importlib.import_module(path)
             try:
                 builders = imported.getTooltipBuilders()
-            except AttributeError:
-                raise SoftException('Package {0} does not have method "getTooltipBuilders", or when calling "getTooltipBuilders", it failed to instantiate one of the builders.'.format(path))
+            except AttributeError as error:
+                raise SoftException('Package {path} does not have method "getTooltipBuilders", or when calling "getTooltipBuilders", it failed to instantiate one of the builders. Error: {errorMsg}'.format(path=path, errorMsg=error.message))
 
             for builder in builders:
                 if builder.tooltipType not in tooltipTypes:

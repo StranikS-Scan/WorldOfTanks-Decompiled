@@ -1577,7 +1577,7 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_120mm_Gun_T123E6>	shared	  <maxAmmo>	36	</maxAmmo>
+        <_120mm_T123E6_A106>	shared	  <maxAmmo>	56	</maxAmmo>
           <armor>
             <armor_1>	203.2	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_1>
@@ -1605,8 +1605,9 @@
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 10 0.397222 10 0.4 9.7 0.402778 9 0.405556 8.4 0.408333 8 0.411111 7.6 0.413889 6.8 0.416667 6.4 0.45 6.4 0.452778 5.9 0.455556 4.7 0.458333 3.7 0.461111 2.6 0.463889 2.2 0.466667 1.9 0.477778 1.9 0.480556 1.8 0.491667 1.7 0.494444 1.6 0.505556 1.6 0.508333 1.7 0.519444 1.8 0.522222 1.9 0.533333 1.9 0.536111 2.2 0.538889 2.6 0.541667 3.7 0.544444 4.7 0.547222 5.9 0.55 6.4 0.583333 6.4 0.586111 6.8 0.588889 7.6 0.591667 8 0.594444 8.4 0.597222 9 0.6 9.7 0.602778 10 1 10	</maxPitch>
           </pitchLimits>
-          <reloadTime>	9	</reloadTime>
-          <aimingTime>	2.1	</aimingTime>
+          <shotDispersionRadius>	0.36	</shotDispersionRadius>
+          <reloadTime>	8.6	</reloadTime>
+          <aimingTime>	2.3	</aimingTime>
           <models>
             <undamaged>	vehicles/american/A106_M48A2_120/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/american/A106_M48A2_120/crash/lod0/Gun_01.model	</destroyed>
@@ -1660,7 +1661,7 @@
             <density>	100.006 100.933	</density>
             <aoTextureSize>	256 256	</aoTextureSize>
           </camouflage>
-        </_120mm_Gun_T123E6>
+        </_120mm_T123E6_A106>
       </guns>
       <models>
         <undamaged>	vehicles/american/A106_M48A2_120/normal/lod0/Turret_01.model	</undamaged>

@@ -115,6 +115,22 @@
       </sound>
     </effects>
   </turret_touchdown_medium_water>
+  <turret_touchdown_medium_lava>
+    <stages>
+      <impact>	2.0	</impact>
+    </stages>
+    <effects>
+      <pixie>
+        <startKey>	impact	</startKey>
+        <file>	particles/Tank/tank_collision_light_lava.eff	</file>
+        <force>	1	</force>
+      </pixie>
+      <sound>
+        <startKey>	impact	</startKey>
+        <wwsound>	water_coll_heavy	</wwsound>
+      </sound>
+    </effects>
+  </turret_touchdown_medium_lava>
   <turret_flaming_medium>
     <timeline>
       <static>	0.015	</static>
@@ -287,4 +303,16 @@
       </pixie>
     </effects>
   </turret_pull_water>
+  <turret_pull_lava>
+    <timeline>
+      <fire>	0.0	</fire>
+      <end>	36000	</end>
+    </timeline>
+    <effects>
+      <pixie>
+        <startKey>	fire	</startKey>
+        <file>	particles/Tank/movement/lava/trail_medium_lava.eff	</file>
+      </pixie>
+    </effects>
+  </turret_pull_lava>
 </turret_effects.xml>

@@ -1756,7 +1756,7 @@
             <maxPitch>	0 10 0.40 10 0.45 5 0.55 5 0.60 10 1 10	</maxPitch>
           </pitchLimits>
           <shotDispersionRadius>	0.39	</shotDispersionRadius>
-          <reloadTime>	10	</reloadTime>
+          <reloadTime>	9.5	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.12	</turretRotation>
             <afterShot>	4.0	</afterShot>
@@ -2320,23 +2320,27 @@
     </detailed>
   </physics>
   <rocketAcceleration>
-    <deployTime>	25	</deployTime>
-    <reloadTime>	20	</reloadTime>
+    <deployTime>	10	</deployTime>
+    <reloadTime>	15	</reloadTime>
     <reuseCount>	8	</reuseCount>
-    <duration>	5	</duration>
+    <duration>	6	</duration>
     <impulse>
-      <magnitude>	20	</magnitude>
+      <magnitude>	40	</magnitude>
       <applyPoint>	0.00 0.00 -1.2	</applyPoint>
       <duration>	1.0	</duration>
     </impulse>
     <modifiers>
+      <mul>
+        <name>	dynAttrs/ramming	</name>
+        <value>	1.10	</value>
+      </mul>
       <mul>
         <name>	dynAttrs/engine/power	</name>
         <value>	1.6	</value>
       </mul>
       <mul>
         <name>	dynAttrs/vehicle/maxSpeed/forward	</name>
-        <value>	1.12	</value>
+        <value>	1.15	</value>
       </mul>
       <mul>
         <name>	dynAttrs/vehicle/maxSpeed/backward	</name>
@@ -2344,7 +2348,7 @@
       </mul>
       <mul>
         <name>	dynAttrs/vehicle/rotationSpeed	</name>
-        <value>	0.30	</value>
+        <value>	0.50	</value>
       </mul>
     </modifiers>
     <kpi>
@@ -2354,7 +2358,7 @@
       </mul>
       <mul>
         <name>	vehicleForwardMaxSpeed	</name>
-        <value>	1.12	</value>
+        <value>	1.15	</value>
       </mul>
       <mul>
         <name>	vehicleBackwardMaxSpeed	</name>
@@ -2362,7 +2366,7 @@
       </mul>
       <mul>
         <name>	vehicleAllGroundRotationSpeed	</name>
-        <value>	0.30	</value>
+        <value>	0.50	</value>
       </mul>
     </kpi>
   </rocketAcceleration>

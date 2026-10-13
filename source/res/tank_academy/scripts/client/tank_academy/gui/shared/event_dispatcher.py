@@ -9,8 +9,10 @@ from gui.shared import EVENT_BUS_SCOPE, events, g_eventBus
 from gui.shared.gui_items.Vehicle import getNationLessName
 from helpers import dependency
 from skeletons.account_helpers.settings_core import ISettingsCore
+from skeletons.gui.game_control import ITankAcademyController
 from skeletons.gui.impl import INotificationWindowController
 from tank_academy.gui.impl.lobby.tank_academy.tank_academy_welcome_view import TankAcademyWelcomeViewWindow
+from tank_academy.gui.impl.lobby.tank_academy.tank_academy_migration_updates_view import TankAcademyMigrationUpdatesViewWindow
 from th_async import th_async, th_await
 _logger = logging.getLogger(__name__)
 
@@ -25,10 +27,10 @@ def showTankAcademyReward(ctx=None, notificationMgr=None):
     return
 
 
-@dependency.replace_none_kwargs(settingsCore=ISettingsCore, notificationMgr=INotificationWindowController)
-def showTankAcademy(settingsCore=None, notificationMgr=None):
+@dependency.replace_none_kwargs(settingsCore=ISettingsCore, notificationMgr=INotificationWindowController, tankAcademyController=ITankAcademyController)
+def showTankAcademy(settingsCore=None, notificationMgr=None, tankAcademyController=None):
     if not settingsCore.serverSettings.isTankAcademyWelcomeScreenShown():
-        window = TankAcademyWelcomeViewWindow()
+        window = TankAcademyMigrationUpdatesViewWindow() if tankAcademyController.isMigrationUpdatesScenario() else TankAcademyWelcomeViewWindow()
         notificationMgr.append(WindowNotificationCommand(window, Priority.HIGH))
     else:
         g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.LOBBY_MISSIONS), ctx={'tab': QUESTS_ALIASES.BATTLE_MATTERS_VIEW_PY_ALIAS,

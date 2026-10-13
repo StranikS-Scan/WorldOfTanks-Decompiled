@@ -3,8 +3,6 @@
 import logging
 import typing
 from battle_modifiers_common import BattleParams
-from constants import QUEUE_TYPE
-from fun_random.gui.fun_gui_constants import MEDKIT_DURATION
 from gui.Scaleform import MENU
 from gui.Scaleform.genConsts.BLOCKS_TOOLTIP_TYPES import BLOCKS_TOOLTIP_TYPES
 from gui.Scaleform.genConsts.SLOT_HIGHLIGHT_TYPES import SLOT_HIGHLIGHT_TYPES
@@ -22,7 +20,7 @@ from gui.shared.items_parameters.params_helper import SimplifiedBarVO
 from gui.shared.money import MONEY_UNDEFINED, Currency
 from gui.shared.tooltips import getComplexStatusWULF, getUnlockPrice, TOOLTIP_TYPE, formatters
 from gui.shared.tooltips.common import BlocksTooltipData, makePriceBlock, CURRENCY_SETTINGS, makeRemovalPriceBlock
-from gui.shared.utils import GUN_CLIP, SHELLS_COUNT_PROP_NAME, SHELL_RELOADING_TIME_PROP_NAME, RELOAD_MAGAZINE_TIME_PROP_NAME, AIMING_TIME_PROP_NAME, RELOAD_TIME_PROP_NAME, GUN_AUTO_RELOAD, AUTO_RELOAD_PROP_NAME, DISPERSION_RADIUS, RELOAD_TIME_SECS_PROP_NAME, DUAL_GUN_RATE_TIME, DUAL_GUN_CHARGE_TIME, BURST_FIRE_RATE, BURST_TIME_INTERVAL, BURST_COUNT, BURST_SIZE, GUN_DUAL_GUN, GUN_CAN_BE_CLIP, GUN_CAN_BE_AUTO_RELOAD, GUN_CAN_BE_DUAL_GUN, TURBOSHAFT_ENGINE_POWER, ROCKET_ACCELERATION_ENGINE_POWER, DUAL_ACCURACY_COOLING_DELAY, AUOTSHOOT_FLAME_OVERHEAT_COOLING_TIME, AUTOSHOOT_FLAME_CHANGE_SHELL_TIME, GUN_AUTOSHOOT_FLAME, GUN_CAN_BE_AUTOSHOOT_FLAME, AVG_DAMAGE_PER_SECOND, FLAME_MAX_DISTANCE, THERMAL_VISION_DISTANCE, THERMAL_VISION_RELOAD_TIME, THERMAL_VISION_OBSERVE_TIME, THERMAL_VISION_REUSE_AND_DURATION, GUN_AUTO_RELOAD_DUAL_GUN, GUN_CLIP_DUAL_GUN, GUN_CAN_BE_AUTOSHOOT, GUN_AUTOSHOOT
+from gui.shared.utils import GUN_CLIP, SHELLS_COUNT_PROP_NAME, SHELL_RELOADING_TIME_PROP_NAME, RELOAD_MAGAZINE_TIME_PROP_NAME, AIMING_TIME_PROP_NAME, RELOAD_TIME_PROP_NAME, GUN_AUTO_RELOAD, AUTO_RELOAD_PROP_NAME, DISPERSION_RADIUS, RELOAD_TIME_SECS_PROP_NAME, DUAL_GUN_RATE_TIME, DUAL_GUN_CHARGE_TIME, BURST_FIRE_RATE, BURST_TIME_INTERVAL, BURST_COUNT, BURST_SIZE, GUN_DUAL_GUN, GUN_CAN_BE_CLIP, GUN_CAN_BE_AUTO_RELOAD, GUN_CAN_BE_DUAL_GUN, TURBOSHAFT_ENGINE_POWER, ROCKET_ACCELERATION_ENGINE_POWER, DUAL_ACCURACY_COOLING_DELAY, AUOTSHOOT_FLAME_OVERHEAT_COOLING_TIME, AUTOSHOOT_FLAME_CHANGE_SHELL_TIME, GUN_AUTOSHOOT_FLAME, GUN_CAN_BE_AUTOSHOOT_FLAME, AVG_DAMAGE_PER_SECOND, FLAME_MAX_DISTANCE, THERMAL_VISION_DISTANCE, THERMAL_VISION_RELOAD_TIME, THERMAL_VISION_OBSERVE_TIME, THERMAL_VISION_REUSE_AND_DURATION, GUN_AUTO_RELOAD_DUAL_GUN, GUN_CLIP_DUAL_GUN, GUN_CAN_BE_AUTOSHOOT, GUN_AUTOSHOOT, GUN_CLIP_GUN_DUAL_ACCURACY, GUN_CAN_BE_CLIP_GUN_DUAL_ACCURACY
 from gui.shared.utils.requesters import REQ_CRITERIA
 from helpers import dependency
 from helpers.i18n import makeString as _ms
@@ -33,7 +31,6 @@ from skeletons.gui.game_control import IBootcampController, IWotPlusController, 
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.shared.gui_items import IGuiItemsFactory
-from gui.prb_control.dispatcher import g_prbLoader
 if typing.TYPE_CHECKING:
     from gui.shared.gui_items.Vehicle import Vehicle
 _logger = logging.getLogger(__name__)
@@ -243,6 +240,7 @@ class ModuleTooltipBlockConstructor(object):
     AUTO_RELOAD_DUAL_GUN_MODULE_PARAM = 'autoReloadDualGun'
     CLIP_DUAL_GUN_MODULE_PARAM = 'clipDualGun'
     DUAL_GUN_DUAL_ACCURACY_PARAM = 'dualGunDualAccuracy'
+    CLIP_GUN_DUAL_ACCURACY_PARAM = 'clipGunDualAccuracy'
     MODULE_PARAMS = {GUI_ITEM_TYPE.CHASSIS: ('rotationSpeed', 'maxSteeringLockAngle', 'vehicleChassisRepairSpeed', 'chassisRepairTime', 'vehicleGunShotStabilizationChassisMovement', 'vehicleGunShotStabilizationChassisRotation'),
      GUI_ITEM_TYPE.TURRET: ('armor', 'rotationSpeed', 'circularVisionRadius'),
      GUI_ITEM_TYPE.GUN: ('avgDamageList',
@@ -382,6 +380,21 @@ class ModuleTooltipBlockConstructor(object):
                                     DUAL_GUN_CHARGE_TIME,
                                     DISPERSION_RADIUS,
                                     DUAL_ACCURACY_COOLING_DELAY,
+                                    AIMING_TIME_PROP_NAME),
+     CLIP_GUN_DUAL_ACCURACY_PARAM: ('avgDamageList',
+                                    'avgPiercingPower',
+                                    SHELLS_COUNT_PROP_NAME,
+                                    'shellsBurstCount',
+                                    'shellsFlameBurstCount',
+                                    SHELL_RELOADING_TIME_PROP_NAME,
+                                    RELOAD_MAGAZINE_TIME_PROP_NAME,
+                                    BURST_TIME_INTERVAL,
+                                    BURST_COUNT,
+                                    BURST_SIZE,
+                                    'stunMaxDurationList',
+                                    DISPERSION_RADIUS,
+                                    DUAL_ACCURACY_COOLING_DELAY,
+                                    'maxShotDistance',
                                     AIMING_TIME_PROP_NAME)}
     HIGHLIGHT_MODULE_PARAMS = {DEFAULT_PARAM: (AUTO_RELOAD_PROP_NAME,
                      RELOAD_TIME_SECS_PROP_NAME,
@@ -402,7 +415,12 @@ class ModuleTooltipBlockConstructor(object):
                                     DUAL_ACCURACY_COOLING_DELAY,
                                     DUAL_GUN_CHARGE_TIME,
                                     RELOAD_TIME_SECS_PROP_NAME,
-                                    DUAL_GUN_RATE_TIME)}
+                                    DUAL_GUN_RATE_TIME),
+     CLIP_GUN_DUAL_ACCURACY_PARAM: (SHELLS_COUNT_PROP_NAME,
+                                    SHELL_RELOADING_TIME_PROP_NAME,
+                                    RELOAD_MAGAZINE_TIME_PROP_NAME,
+                                    DISPERSION_RADIUS,
+                                    DUAL_ACCURACY_COOLING_DELAY)}
     itemsCache = dependency.descriptor(IItemsCache)
 
     def __init__(self, module, configuration, leftPadding=_DEFAULT_PADDING, rightPadding=_DEFAULT_PADDING):
@@ -750,6 +768,9 @@ class CommonStatsBlockConstructor(ModuleTooltipBlockConstructor):
                 reloadingType = module.getReloadingType(vehicle.descriptor if vehicle is not None else None)
                 if reloadingType == GUN_CLIP or reloadingType == GUN_CAN_BE_CLIP:
                     paramsKeyName = self.CLIP_GUN_MODULE_PARAM
+                elif reloadingType == GUN_CLIP_GUN_DUAL_ACCURACY or reloadingType == GUN_CAN_BE_CLIP_GUN_DUAL_ACCURACY:
+                    highlightPossible = serverSettings.checkClipGunDualAccuracyHighlights(increase=True)
+                    paramsKeyName = self.CLIP_GUN_DUAL_ACCURACY_PARAM
                 elif reloadingType == GUN_CAN_BE_AUTO_RELOAD or reloadingType == GUN_AUTO_RELOAD:
                     highlightPossible = serverSettings.checkAutoReloadHighlights(increase=True)
                     paramsKeyName = self.AUTO_RELOAD_GUN_MODULE_PARAM
@@ -849,6 +870,9 @@ class CommonStatsBlockConstructor(ModuleTooltipBlockConstructor):
             result.append(_ModuleExtraStatuses.AUTOSHOOT_GUN)
         elif module.isClipGun(vDescr):
             result.append(_ModuleExtraStatuses.CLIP_GUN)
+        elif module.isClipGunDualAccuracy(vDescr):
+            result.append(_ModuleExtraStatuses.CLIP_GUN)
+            result.append(_ModuleExtraStatuses.DUAL_ACCURACY_GUN)
         elif module.isAutoReloadableDualGun(vDescr):
             gun = findFirst(lambda g: module.intCD == g.compactDescr, vDescr.turret.guns)
             dualGunParams = gun.dualGun
@@ -973,26 +997,20 @@ class EffectsBlockConstructor(ModuleTooltipBlockConstructor):
         attribs = R.strings.artefacts.dyn(name)
         if not attribs:
             return block
-        else:
-            kpiArgs = {kpi.name:text_styles.bonusAppliedText(getKpiValueString(kpi, kpi.value)) for kpi in module.getKpi(self.configuration.vehicle)}
-            onUseStr = backport.text((attribs.removingStun.onUse() if isRemovingStun else attribs.onUse()), **kpiArgs)
-            restrictionStr = backport.text(attribs.restriction())
-            alwaysStr = backport.text(attribs.always(), **kpiArgs)
-            if hasString(alwaysStr):
-                block.append(formatters.packTitleDescBlock(title=text_styles.middleTitle(backport.text(R.strings.tooltips.equipment.always())), desc=text_styles.main(alwaysStr), padding=formatters.packPadding(top=5)))
-            if hasString(onUseStr):
-                block.append(formatters.packTitleDescBlock(title=text_styles.middleTitle(backport.text(R.strings.tooltips.equipment.onUse())), desc=text_styles.main(onUseStr), padding=formatters.packPadding(top=5)))
-            if hasString(restrictionStr):
-                block.append(formatters.packTitleDescBlock(title=text_styles.middleTitle(backport.text(R.strings.tooltips.equipment.restriction())), desc=text_styles.main(restrictionStr), padding=formatters.packPadding(top=5)))
-            entity = g_prbLoader.getDispatcher().getEntity()
-            if entity.getEntityType() == QUEUE_TYPE.FUN_RANDOM:
-                duration = MEDKIT_DURATION.get(module.name, None)
-                if duration:
-                    block.append(formatters.packTextBlockData(text=backport.text(R.strings.fun_random.consumables.dyn(module.name)(), healDuration=duration), padding=formatters.packPadding(top=5)))
-            if block:
-                block[0]['padding']['top'] = -1
-                block[-1]['padding']['bottom'] = -5
-            return block
+        kpiArgs = {kpi.name:text_styles.bonusAppliedText(getKpiValueString(kpi, kpi.value)) for kpi in module.getKpi(self.configuration.vehicle)}
+        onUseStr = backport.text((attribs.removingStun.onUse() if isRemovingStun else attribs.onUse()), **kpiArgs)
+        restrictionStr = backport.text(attribs.restriction())
+        alwaysStr = backport.text(attribs.always(), **kpiArgs)
+        if hasString(alwaysStr):
+            block.append(formatters.packTitleDescBlock(title=text_styles.middleTitle(backport.text(R.strings.tooltips.equipment.always())), desc=text_styles.main(alwaysStr), padding=formatters.packPadding(top=5)))
+        if hasString(onUseStr):
+            block.append(formatters.packTitleDescBlock(title=text_styles.middleTitle(backport.text(R.strings.tooltips.equipment.onUse())), desc=text_styles.main(onUseStr), padding=formatters.packPadding(top=5)))
+        if hasString(restrictionStr):
+            block.append(formatters.packTitleDescBlock(title=text_styles.middleTitle(backport.text(R.strings.tooltips.equipment.restriction())), desc=text_styles.main(restrictionStr), padding=formatters.packPadding(top=5)))
+        if block:
+            block[0]['padding']['top'] = -1
+            block[-1]['padding']['bottom'] = -5
+        return block
 
 
 class OptDeviceEffectsBlockConstructor(ModuleTooltipBlockConstructor):

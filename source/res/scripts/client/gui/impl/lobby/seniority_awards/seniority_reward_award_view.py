@@ -5,7 +5,9 @@ import re
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import SENIORITY_AWARDS_COINS_REMINDER_SHOWN_TIMESTAMP
 from gui.impl.gen.view_models.views.lobby.common.vehicle_model import VehicleModel
+from gui.impl.gen.view_models.views.lobby.tooltips.preferred_map_slot_reward_tooltip_model import PreferredMapSlotRewardTooltipModel
 from gui.impl.lobby.common.vehicle_model_helpers import fillVehicleModel
+from gui.impl.gen.view_models.views.lobby.paragons.tooltips.rewards_header_tooltip_model import RewardsHeaderTooltipModel
 from helpers import dependency, time_utils
 from frameworks.wulf import ViewSettings, WindowLayer
 from gui.game_control.seniority_awards_controller import SACOIN
@@ -29,26 +31,32 @@ from gui.Scaleform.daapi.view.lobby.store.browser.shop_helpers import getPlayerS
 _logger = logging.getLogger(__name__)
 REG_EXP_QUEST_SUBTYPE = ':([Y, y]\\d*)|:([A,a,B,b][T,t])'
 _T50_2_STYLE_NAME = backport.text(R.strings.vehicle_customization.special_style.t50_2())
-_EXCLUDED_BONUSES = ('slots',)
-_BONUSES_ORDER = ({'getLabel': _T50_2_STYLE_NAME},
+_EXCLUDED_BONUSES = ('slots', 'entitlements')
+_BONUSES_ORDER = ({'getName': 'battleToken',
+  'getUserName': 'paragonsCoin'},
+ {'getName': 'tmanToken'},
+ {'getName': 'rewardsSlots'},
+ {'getLabel': _T50_2_STYLE_NAME},
  {'getName': 'crystal'},
  {'getName': 'credits'},
  {'getName': 'premium_plus'},
+ {'getName': 'dossier_achievement'},
+ {'getName': 'badge'},
  {'getName': 'customizations',
   'getIcon': 'style'},
+ {'getIcon': 'projectionDecal'},
+ {'getName': 'customizations',
+  'getIcon': 'emblem'},
+ {'getIcon': 'universalBook'},
+ {'getIcon': 'universalGuid'},
+ {'getName': 'battle_bonus_x5'},
  {'getName': 'goodies',
   'getIcon': 'credits'},
  {'getName': 'goodies',
   'getIcon': 'xp'},
- {'getIcon': 'universalBook'},
- {'getIcon': 'recertificationForm'},
- {'getName': 'badge'},
- {'getName': 'dossier_achievement'},
- {'getIcon': 'projectionDecal'},
- {'getName': 'customizations',
-  'getIcon': 'emblem'})
+ {'getIcon': 'recertificationForm'})
 
-def _keySortOrder(bonus, _):
+def _keySortOrder(bonus, *args):
     for index, criteria in enumerate(_BONUSES_ORDER):
         for method, value in criteria.items():
             if not hasattr(bonus, method) or value not in getattr(bonus, method)():
@@ -59,7 +67,8 @@ def _keySortOrder(bonus, _):
     return len(_BONUSES_ORDER)
 
 
-_SENIORITY_VEHICLES_ORDER = ('germany:G15_VK3601H_C', 'ussr:R197_KV_1S_MZ', 'germany:G158_VK2801_105_SPXXI', 'usa:A134_M24E2_SuperChaffee', 'usa:A130_Super_Hellcat', 'ussr:R160_T_50_2')
+_SENIORITY_VEHICLES_ORDER = ('ussr:R160_T_50_2', 'usa:A130_Super_Hellcat', 'usa:A134_M24E2_SuperChaffee', 'germany:G158_VK2801_105_SPXXI', 'ussr:R197_KV_1S_MZ', 'germany:G15_VK3601H_C', 'ussr:R209_T_115', 'usa:A174_M36B1_GMC', 'france:F121_G1L')
+_MAX_LEN_MAIN_BONUSES = 2
 
 @dependency.replace_none_kwargs(itemsCache=IItemsCache)
 def _vehiclesSortOrder(vehicleCD, itemsCache=None):
@@ -111,6 +120,20 @@ class SeniorityRewardAwardView(ViewImpl):
             return super(SeniorityRewardAwardView, self).createToolTip(event)
 
     def createToolTipContent(self, event, contentID):
+        if contentID == R.views.lobby.paragons.tooltips.RewardsHeaderTooltip():
+            rewardsHeaderModel = RewardsHeaderTooltipModel()
+            rewardsHeaderModel.setIsParagonsPoints(True)
+            settings = ViewSettings(layoutID=R.views.lobby.paragons.tooltips.RewardsHeaderTooltip(), model=rewardsHeaderModel)
+            return ViewImpl(settings)
+        if contentID == R.views.lobby.tooltips.PreferredMapSlotRewardTooltip():
+            rewardModel = PreferredMapSlotRewardTooltipModel()
+            tooltipData = self.getTooltipData(event)
+            name, days = tooltipData.specialArgs
+            rewardModel.setSlotName(name)
+            rewardModel.setAmountDay(days)
+            rewardModel.setExpire(0)
+            settings = ViewSettings(layoutID=R.views.lobby.tooltips.PreferredMapSlotRewardTooltip(), model=rewardModel)
+            return ViewImpl(settings)
         tooltipData = self.__getBackportTooltipData(event)
         return getRewardTooltipContent(event, tooltipData)
 
@@ -162,19 +185,32 @@ class SeniorityRewardAwardView(ViewImpl):
     def __setBonuses(self, viewModel):
         bonusesList = viewModel.getBonuses()
         bonusesList.clear()
-        for index, (bonus, tooltip) in enumerate(self.__bonuses):
+        mainBonusesList = viewModel.getMainBonuses()
+        mainBonusesList.clear()
+        for index, (bonus, tooltip, contentID) in enumerate(self.__bonuses):
             tooltipId = str(index)
             bonus.setTooltipId(tooltipId)
             bonus.setIndex(index)
-            bonusesList.addViewModel(bonus)
+            if contentID is not None:
+                bonus.setTooltipContentId(str(contentID))
+            if index < _MAX_LEN_MAIN_BONUSES and self.__specialCurrencies.get(SACOIN):
+                mainBonusesList.addViewModel(bonus)
+            else:
+                bonusesList.addViewModel(bonus)
             self.__tooltipData[tooltipId] = tooltip
 
+        mainBonusesList.invalidate()
         bonusesList.invalidate()
+        return
 
     def __setSpecialCurrency(self, viewModel):
         currencyCount = self.__specialCurrencies.get(SACOIN)
         if currencyCount:
             viewModel.setSpecialCurrencyCount(currencyCount)
+
+    def getTooltipData(self, event):
+        tooltipId = event.getArgument('tooltipId')
+        return None if tooltipId is None else self.__tooltipData.get(tooltipId)
 
     def __getBackportTooltipData(self, event):
         tooltipId = event.getArgument('tooltipId')

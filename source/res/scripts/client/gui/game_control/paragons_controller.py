@@ -254,11 +254,20 @@ class ParagonsController(IParagonsController):
     def isVehicleReset(self, compDescr):
         return self.isEnabled and self.paragons.isVehicleReset(compDescr)
 
+    def isNextResetVehPossibleToUnlock(self, compDescr):
+        if not self.isEnabled:
+            return False
+        for _, _, nextLevelCD, _ in self.__itemsCache.items.getItemByCD(compDescr).getUnlocksDescrs():
+            if getTypeOfCompactDescr(nextLevelCD) == GUI_ITEM_TYPE.VEHICLE and not self.__itemsCache.items.getItemByCD(nextLevelCD).isUnlocked and self.isVehicleReset(nextLevelCD):
+                return True
+
+        return False
+
     def isNextResetVehUnlocked(self, compDescr):
         if not self.isEnabled:
-            return
+            return False
         for _, _, nextLevelCD, _ in self.__itemsCache.items.getItemByCD(compDescr).getUnlocksDescrs():
-            if getTypeOfCompactDescr(nextLevelCD) == GUI_ITEM_TYPE.VEHICLE and self.__itemsCache.items.getItemByCD(nextLevelCD).isUnlocked and self.paragons.isVehicleWasReset(nextLevelCD):
+            if getTypeOfCompactDescr(nextLevelCD) == GUI_ITEM_TYPE.VEHICLE and self.__itemsCache.items.getItemByCD(nextLevelCD).isUnlocked and self.isVehicleReset(nextLevelCD):
                 return True
 
         return False

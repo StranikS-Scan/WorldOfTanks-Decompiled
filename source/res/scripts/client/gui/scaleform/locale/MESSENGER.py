@@ -938,6 +938,9 @@ class MESSENGER(object):
     SERVICECHANNELMESSAGES_PROGRESSIVEREWARDNOTIFICATION_HEADER = '#messenger:serviceChannelMessages/progressiveRewardNotification/header'
     SERVICECHANNELMESSAGES_PROGRESSIVEREWARDNOTIFICATION_TEXT = '#messenger:serviceChannelMessages/progressiveRewardNotification/text'
     SERVICECHANNELMESSAGES_PROGRESSIVEREWARDNOTIFICATION_BUTTON = '#messenger:serviceChannelMessages/progressiveRewardNotification/button'
+    SERVICECHANNELMESSAGES_SESSIONPROGRESSREWARDSNOTIFICATION_HEADER = '#messenger:serviceChannelMessages/sessionProgressRewardsNotification/header'
+    SERVICECHANNELMESSAGES_SESSIONPROGRESSREWARDSNOTIFICATION_TEXT = '#messenger:serviceChannelMessages/sessionProgressRewardsNotification/text'
+    SERVICECHANNELMESSAGES_SESSIONPROGRESSREWARDSNOTIFICATION_BUTTON = '#messenger:serviceChannelMessages/sessionProgressRewardsNotification/button'
     SERVICECHANNELMESSAGES_CREWSKINSCOUNT = '#messenger:serviceChannelMessages/crewSkinsCount'
     SERVICECHANNELMESSAGES_PIGGYBANK_TITLE = '#messenger:serviceChannelMessages/piggyBank/title'
     SERVICECHANNELMESSAGES_PIGGYBANK_CONTINUEAFTERSMASHED_PIGGYBANKWOTPLUS = '#messenger:serviceChannelMessages/piggyBank/continueAfterSmashed/piggyBankWotPlus'
@@ -1261,6 +1264,8 @@ class MESSENGER(object):
     SERVICECHANNELMESSAGES_TRADINGCARAVANCOINADDED_TITLE = '#messenger:serviceChannelMessages/tradingCaravanCoinAdded/title'
     SERVICECHANNELMESSAGES_TRADINGCARAVANCOINADDED_BODY = '#messenger:serviceChannelMessages/tradingCaravanCoinAdded/body'
     SERVICECHANNELMESSAGES_PARAGONS_BODY = '#messenger:serviceChannelMessages/paragons/body'
+    SERVICECHANNELMESSAGES_PARAGONSCOINS_TITLE = '#messenger:serviceChannelMessages/paragonsCoins/title'
+    SERVICECHANNELMESSAGES_PARAGONSCOINS_PURCHASE = '#messenger:serviceChannelMessages/paragonsCoins/purchase'
     PLATFORMCURRENCYMSG_RECEIVED_GOLDENTICKET = '#messenger:platformCurrencyMsg/received/goldenticket'
     PLATFORMCURRENCYMSG_DEBITED_GOLDENTICKET = '#messenger:platformCurrencyMsg/debited/goldenticket'
     SERVICECHANNELMESSAGES_LIMITEDUIPLATOONLOCKED_TITLE = '#messenger:serviceChannelMessages/limitedUIPlatoonLocked/title'
@@ -1277,10 +1282,11 @@ class MESSENGER(object):
     VOIP_READY = '#messenger:voip/ready'
     SERVICECHANNELMESSAGES_SESSIONPROGRESSREWARDSCOMPLETE_HEADER = '#messenger:serviceChannelMessages/sessionProgressRewardsComplete/header'
     SERVICECHANNELMESSAGES_SESSIONPROGRESSREWARDSCOMPLETE_BODY = '#messenger:serviceChannelMessages/sessionProgressRewardsComplete/body'
+    PLATFORMCURRENCYMSG_RECEIVED_RAZLOM_COIN = '#messenger:platformCurrencyMsg/received/razlom_coin'
+    PLATFORMCURRENCYMSG_DEBITED_RAZLOM_COIN = '#messenger:platformCurrencyMsg/debited/razlom_coin'
     SERVICECHANNELMESSAGES_SYSTEMMIXERVOLUMEDISABLEDSYSMESSAGE_HEADER = '#messenger:serviceChannelMessages/systemMixerVolumeDisabledSysMessage/header'
     SERVICECHANNELMESSAGES_SYSTEMMIXERVOLUMEDISABLEDSYSMESSAGE_BODY = '#messenger:serviceChannelMessages/systemMixerVolumeDisabledSysMessage/body'
     SERVICECHANNELMESSAGES_SYSTEMMIXERVOLUMEDISABLEDSYSMESSAGE_BUTTON = '#messenger:serviceChannelMessages/systemMixerVolumeDisabledSysMessage/button'
-    SERVICECHANNELMESSAGES_SYSTEMMIXERVOLUMEDISABLEDSYSMESSAGE_FIXBUTTON = '#messenger:serviceChannelMessages/systemMixerVolumeDisabledSysMessage/fixButton'
     CLIENT_ERROR_SHARED_ENUM = (CLIENT_ERROR_SHARED_TRY_LATER,
      CLIENT_ERROR_SHARED_GENERIC,
      CLIENT_ERROR_SHARED_LOCKED,

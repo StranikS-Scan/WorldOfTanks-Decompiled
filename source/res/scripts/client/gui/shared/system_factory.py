@@ -59,6 +59,7 @@ SETTINGS_PROVIDERS_SERIALIZABLES = 52
 BATTLE_MODIFIERS_PANELS = 53
 BONUS_PACKERS = 54
 WULF_TOOLTIP_CONTENT_FACTORY = 55
+DAMAGE_LOG_PANEL = 56
 
 class _CollectEventsManager(object):
 
@@ -184,6 +185,18 @@ def registerSharedControllerRepo(guiType, repoCls):
 def collectSharedControllerRepo(guiType, setup):
     ctx = __collectEM.handleEvent((SHARED_REPO, guiType), ctx={'setup': setup})
     return (ctx.get('repo'), 'repo' in ctx)
+
+
+def registerDamageLogPanel(guiType, panelCls):
+
+    def onCollect(ctx):
+        ctx['panel'] = panelCls
+
+    __collectEM.addListener((DAMAGE_LOG_PANEL, guiType), onCollect)
+
+
+def collectDamageLogPanel(guiType):
+    return __collectEM.handleEvent((DAMAGE_LOG_PANEL, guiType), {'panel': None})['panel']
 
 
 def registerQueueEntity(queueType, queueCls):

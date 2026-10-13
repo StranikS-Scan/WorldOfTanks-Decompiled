@@ -297,6 +297,11 @@ class Tutorial(object):
     def unlockState(self, targetID):
         self._currentState.unlock(targetID)
 
+    def interruptCurrentEffect(self):
+        if self._currentState is not None:
+            self._currentState.interruptCurrentEffect()
+        return
+
     def startBattle(self):
         self.__tryRunFirstState(INITIAL_FLAG.CHAPTER_RESOLVED)
         return True

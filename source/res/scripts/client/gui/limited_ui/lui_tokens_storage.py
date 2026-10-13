@@ -282,7 +282,7 @@ class _LootboxesAvailability(LimitedUICondition):
     __itemsCache = dependency.descriptor(IItemsCache)
 
     def _getValue(self):
-        uiStorage = self.__settingsCore.serverSettings.getUIStorage2()
+        uiStorage = self.__settingsCore.serverSettings.getUIStorage(SETTINGS_SECTIONS.UI_STORAGE_2)
         isEntryPointEnabled = uiStorage.get(UI_STORAGE_KEYS.GUI_LOOTBOXES_ENTRY_POINT)
         return isEntryPointEnabled or hasInfiniteLootBoxes(itemsCache=self.__itemsCache)
 
@@ -304,6 +304,17 @@ class _IsInClan(LimitedUICondition):
         return (('stats.clanInfo', self._update),)
 
 
+class _SessionProgressRewardsStep(LimitedUICondition):
+    __slots__ = ()
+    __itemsCache = dependency.descriptor(IItemsCache)
+
+    def _getValue(self):
+        return self.__itemsCache.items.sessionProgressRewards.getCurrentStep()
+
+    def _getCallbacks(self):
+        return (('sessionProgressRewards', self._update),)
+
+
 class LimitedUITokenID(CONST_CONTAINER):
     MIN_VEHICLE_LEVEL = 'minVehicleLevel_{}'
     MIN_NON_PREMIUM_VEHICLE_LEVEL = 'minNonPremiumVehicleLevel_{}'
@@ -320,6 +331,7 @@ class LimitedUITokenID(CONST_CONTAINER):
     WERE_REAL_MONEY_EXPENSES = 'wereRealMoneyExpenses'
     HAD_LOOTBOXES = 'hadLootboxes'
     IS_IN_CLAN = 'isInClan'
+    SESSION_PROGRESS_REWARDS_STEP = 'sessionProgressRewardsStep'
 
 
 class _BranchResetAvailable(LimitedUICondition):
@@ -346,6 +358,7 @@ _REGISTER_TOKENS = (LimitedUITokenInfo(LimitedUITokenID.PERMANENT_TRUE, _Permane
  LimitedUITokenInfo(LimitedUITokenID.WERE_REAL_MONEY_EXPENSES, _WereRealMoneyExpenses, None),
  LimitedUITokenInfo(LimitedUITokenID.HAD_LOOTBOXES, _LootboxesAvailability, None),
  LimitedUITokenInfo(LimitedUITokenID.IS_IN_CLAN, _IsInClan, None),
+ LimitedUITokenInfo(LimitedUITokenID.SESSION_PROGRESS_REWARDS_STEP, _SessionProgressRewardsStep, None),
  LimitedUITokenInfo('branchResetAvailable', _BranchResetAvailable, None)) + _VEHICLE_LEVEL_TOKENS
 registerLimitedUITokens(_REGISTER_TOKENS)
 

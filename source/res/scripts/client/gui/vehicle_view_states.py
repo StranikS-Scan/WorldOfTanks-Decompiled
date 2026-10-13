@@ -209,10 +209,6 @@ class WoTPlusVehicleViewState(SelectedViewState):
     def isSuitableVehicle(cls, vehicle):
         return vehicle.isWotPlus()
 
-    def isMaintenanceEnabled(self):
-        isWotPlusMaintenanceEnabled = self._wotPlusCtrl.isEnabled() and self.lobbyContext.getServerSettings().isWoTPlusExclusiveVehicleEnabled()
-        return super(WoTPlusVehicleViewState, self).isMaintenanceEnabled() and isWotPlusMaintenanceEnabled
-
 
 registerVehicleViewState(WoTPlusVehicleViewState)
 

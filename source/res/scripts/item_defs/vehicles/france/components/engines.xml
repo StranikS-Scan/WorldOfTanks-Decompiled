@@ -35,6 +35,24 @@
       <rpm_min>	458	</rpm_min>
       <rpm_max>	2333	</rpm_max>
     </AMX_B_271>
+    <AMX_B_271_H>
+      <id>	20001	</id>
+      <userString>	#france_vehicles:AMX_B_271_H	</userString>
+      <tags>	gasoline	</tags>
+      <level>	1	</level>
+      <price>	0	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_Continental_R975_C1_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Continental_R975_C1_npc	</wwsoundNPC>
+      <power>	600	</power>
+      <weight>	1000	</weight>
+      <maxHealth>	103	</maxHealth>
+      <maxRegenHealth>	65	</maxRegenHealth>
+      <repairCost>	0	</repairCost>
+      <fireStartingChance>	0.0	</fireStartingChance>
+      <rpm_min>	399	</rpm_min>
+      <rpm_max>	2551	</rpm_max>
+    </AMX_B_271_H>
     <AMX_B_271_SH>
       <id>	10000	</id>
       <userString>	#france_vehicles:AMX_B_271_SH	</userString>
@@ -122,6 +140,24 @@
       <rpm_min>	319	</rpm_min>
       <rpm_max>	2060	</rpm_max>
     </Aster_M>
+    <Aster_portal>
+      <id>	40000	</id>
+      <userString>	#france_vehicles:Aster	</userString>
+      <tags>	diesel	</tags>
+      <level>	2	</level>
+      <price>	750	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_Hetzer_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Hetzer_npc	</wwsoundNPC>
+      <power>	150	</power>
+      <weight>	540	</weight>
+      <maxHealth>	50	</maxHealth>
+      <maxRegenHealth>	25	</maxRegenHealth>
+      <repairCost>	2	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+      <rpm_min>	324	</rpm_min>
+      <rpm_max>	2050	</rpm_max>
+    </Aster_portal>
     <Berliet_MDP>
       <id>	16	</id>
       <userString>	#france_vehicles:Berliet_MDP	</userString>
@@ -371,6 +407,24 @@
       <rpm_min>	500	</rpm_min>
       <rpm_max>	1900	</rpm_max>
     </Detroit_Diesel_6V53T_FL>
+    <Detroit_Diesel_6V53T_H>
+      <id>	20002	</id>
+      <userString>	#france_vehicles:Detroit_Diesel_6V53T_H	</userString>
+      <tags>	diesel	</tags>
+      <level>	3	</level>
+      <price>	0	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_V2_34_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_V2_34_npc	</wwsoundNPC>
+      <power>	900	</power>
+      <weight>	1000	</weight>
+      <maxHealth>	103	</maxHealth>
+      <maxRegenHealth>	65	</maxRegenHealth>
+      <repairCost>	0	</repairCost>
+      <fireStartingChance>	0.0	</fireStartingChance>
+      <rpm_min>	450	</rpm_min>
+      <rpm_max>	2000	</rpm_max>
+    </Detroit_Diesel_6V53T_H>
     <Detroit_Diesel_6V53T_SH>
       <id>	10001	</id>
       <userString>	#france_vehicles:Detroit_Diesel_6V53T_SH	</userString>
@@ -530,6 +584,24 @@
       <rpm_min>	279	</rpm_min>
       <rpm_max>	2361	</rpm_max>
     </Hispano-Suiza_HS110_A>
+    <Hispano-Suiza_HS110_H>
+      <id>	20003	</id>
+      <userString>	#france_vehicles:Hispano-Suiza_HS110_H	</userString>
+      <tags>	diesel	</tags>
+      <level>	3	</level>
+      <price>	0	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_V2_34_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_V2_34_npc	</wwsoundNPC>
+      <power>	1200	</power>
+      <weight>	1000	</weight>
+      <maxHealth>	103	</maxHealth>
+      <maxRegenHealth>	65	</maxRegenHealth>
+      <repairCost>	0	</repairCost>
+      <fireStartingChance>	0.0	</fireStartingChance>
+      <rpm_min>	300	</rpm_min>
+      <rpm_max>	2300	</rpm_max>
+    </Hispano-Suiza_HS110_H>
     <Hispano-Suiza_HS110_IGR>
       <id>	60006	</id>
       <userString>	#igr_vehicles:Hispano-Suiza_HS110_IGR	</userString>
@@ -566,24 +638,6 @@
       <rpm_min>	300	</rpm_min>
       <rpm_max>	2300	</rpm_max>
     </Hispano-Suiza_HS110_SH>
-    <Hispano-Suiza_HS110_WT>
-      <id>	1001	</id>
-      <userString>	#white_tiger.france_vehicles.extend:Hispano-Suiza_HS110_WT	</userString>
-      <tags>	diesel	</tags>
-      <level>	10	</level>
-      <price>	94250	</price>
-      <notInShop>	true	</notInShop>
-      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
-      <power>	1140	</power>
-      <weight>	1426	</weight>
-      <maxHealth>	360	</maxHealth>
-      <maxRegenHealth>	170	</maxRegenHealth>
-      <repairCost>	9	</repairCost>
-      <fireStartingChance>	0.0	</fireStartingChance>
-      <rpm_min>	328	</rpm_min>
-      <rpm_max>	2216	</rpm_max>
-    </Hispano-Suiza_HS110_WT>
     <Hispano-Suiza_HS110_cl>
       <id>	31019	</id>
       <userString>	#france_vehicles:Hispano-Suiza_HS110	</userString>

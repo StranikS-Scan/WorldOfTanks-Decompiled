@@ -4,6 +4,7 @@ import logging
 import operator
 from collections import namedtuple
 import BigWorld
+from account_helpers.settings_core.ServerSettingsManager import SETTINGS_SECTIONS
 from gui import SystemMessages
 from gui.impl import backport
 from gui.impl.gen import R
@@ -421,7 +422,7 @@ class PersonalMissionsPage(LobbySubView, PersonalMissionsPageMeta, PersonalMissi
     def __checkTutorState(self):
         if self.__callbackID is not None:
             self.__callbackID = None
-        storageData = self.__settingsCore.serverSettings.getUIStorage()
+        storageData = self.__settingsCore.serverSettings.getUIStorage(SETTINGS_SECTIONS.UI_STORAGE)
         multipleState = self.__getTutorMultipleState()
         singleState = self.__getTutorSingleState()
         if not storageData.get(multipleState):
@@ -464,7 +465,7 @@ class PersonalMissionsPage(LobbySubView, PersonalMissionsPageMeta, PersonalMissi
             self.soundManager.playSound(SOUNDS.FOUR_AWARD_LISTS_RECEIVED)
             self.as_showFourAwardSheetsObtainedPopupS(True, self.__packUseFreeSheetsAwardTutorData(showPawned))
         self.__lastTutorState = tutorState
-        self.__settingsCore.serverSettings.saveInUIStorage({self.__lastTutorState: True})
+        self.__settingsCore.serverSettings.saveInUIStorage(SETTINGS_SECTIONS.UI_STORAGE, {self.__lastTutorState: True})
 
     def _packFirstShowAwardTutorData(self):
         if self.getBranch() == PM_BRANCH.REGULAR:

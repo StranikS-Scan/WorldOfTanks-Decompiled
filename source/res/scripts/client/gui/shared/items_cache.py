@@ -27,6 +27,7 @@ from gui.shared.utils.requesters.session_stats_requester import SessionStatsRequ
 from gui.shared.utils.requesters.gift_system_requester import GiftSystemRequester
 from gui.shared.utils.requesters.ArmoryYardRequester import ArmoryYardRequester
 from gui.shared.utils.requesters.achievements20_requester import Achievements20Requester
+from gui.shared.utils.requesters.session_progress_rewards_requester import SessionProgressRewardsRequester
 from gui.shared.compat_vehicles_cache import CompatVehiclesCache
 from helpers import dependency
 from skeletons.festivity_factory import IFestivityFactory
@@ -42,7 +43,7 @@ class ItemsCache(IItemsCache):
     def __init__(self):
         super(ItemsCache, self).__init__()
         goodies = GoodiesRequester()
-        self.__items = ItemsRequester.ItemsRequester(InventoryRequester(), StatsRequester(), DossierRequester(), goodies, ShopRequester(goodies), RecycleBinRequester(), VehicleRotationRequester(), RankedRequester(), BattleRoyaleRequester(), BadgesRequester(), EpicMetaGameRequester(), TokensRequester(), dependency.instance(IFestivityFactory).getRequester(), ArmoryYardRequester(), BlueprintsRequester(), SessionStatsRequester(), AnonymizerRequester(), BattlePassRequester(), GiftSystemRequester(), GameRestrictionsRequester(), ResourceWellRequester(), Achievements20Requester(), ReferralProgramRequester())
+        self.__items = ItemsRequester.ItemsRequester(InventoryRequester(), StatsRequester(), DossierRequester(), goodies, ShopRequester(goodies), RecycleBinRequester(), VehicleRotationRequester(), RankedRequester(), BattleRoyaleRequester(), BadgesRequester(), EpicMetaGameRequester(), TokensRequester(), dependency.instance(IFestivityFactory).getRequester(), ArmoryYardRequester(), BlueprintsRequester(), SessionStatsRequester(), AnonymizerRequester(), BattlePassRequester(), GiftSystemRequester(), GameRestrictionsRequester(), ResourceWellRequester(), Achievements20Requester(), ReferralProgramRequester(), SessionProgressRewardsRequester())
         self.__compatVehiclesCache = CompatVehiclesCache()
         self.__waitForSync = False
         self.__syncFailed = False

@@ -951,11 +951,15 @@ class EpicMissionsController(IViewComponentsController):
         return
 
     def __onOvertimeStart(self, endTime):
-        self.__overTimeEnd = endTime
-        timeLeft = int(endTime - BigWorld.serverTime())
-        self.__sendIngameMessage(self.__makeMessageData(GAME_MESSAGES_CONSTS.OVERTIME, {'timestamp': timeLeft,
-         'title': EPIC_BATTLE.OVERTIME_LABEL}))
-        self.__overtimeCB = BigWorld.callback(OVERTIME_TICK_INTERVAL, self.__overtimeTick)
+        if endTime is None:
+            return
+        else:
+            self.__overTimeEnd = endTime
+            timeLeft = int(endTime - BigWorld.serverTime())
+            self.__sendIngameMessage(self.__makeMessageData(GAME_MESSAGES_CONSTS.OVERTIME, {'timestamp': timeLeft,
+             'title': EPIC_BATTLE.OVERTIME_LABEL}))
+            self.__overtimeCB = BigWorld.callback(OVERTIME_TICK_INTERVAL, self.__overtimeTick)
+            return
 
     def __onOvertimeOver(self):
         if self.__overtimeCB:

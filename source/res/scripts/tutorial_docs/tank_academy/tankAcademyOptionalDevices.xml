@@ -35,6 +35,7 @@
         <set-var>	CurrentVehicleCDSetter	</set-var>
         <run-trigger>	CurrentVehicleChangeTrigger	</run-trigger>
         <run-trigger>	ItemsCacheSyncTrigger	</run-trigger>
+        <run-trigger>	UnexpectedViewLoadedTrigger	</run-trigger>
       </post-effects>
       <runtime-effects>
         <show-hint>	TankCarouselHint	  <condition>
@@ -139,6 +140,14 @@
         <loop>	True	</loop>
       </arrow>
       <actions>
+        <click>	HangarEquipmentSlots	  <effects>
+            <refuse-training></refuse-training>
+          </effects>
+        </click>
+        <click>	HangarPanelShells	  <effects>
+            <refuse-training></refuse-training>
+          </effects>
+        </click>
         <esc>	HangarOptionalDeviceSlots	  <effects>
             <refuse-training></refuse-training>
           </effects>
@@ -148,12 +157,21 @@
     <hint>	HangarPanelShellsHint	  <item-id>	HangarPanelShells	</item-id>
       <text>	Оборудование установлено&lt;br/&gt;&lt;br/&gt;Проверьте наличие боекомплекта —&lt;br/&gt;и выходите &lt;b&gt;В БОЙ&lt;/b&gt;	</text>
       <update-runtime>	True	</update-runtime>
+      <hide-immediately>	True	</hide-immediately>
       <arrow>
         <direction>	T	</direction>
         <loop>	True	</loop>
       </arrow>
       <actions>
         <click>	HangarPanelShells	  <effects>
+            <refuse-training></refuse-training>
+          </effects>
+        </click>
+        <click>	HangarEquipmentSlots	  <effects>
+            <refuse-training></refuse-training>
+          </effects>
+        </click>
+        <click>	HangarOptionalDeviceSlots	  <effects>
             <refuse-training></refuse-training>
           </effects>
         </click>
@@ -203,6 +221,16 @@
             </game-item>
           </condition>
         </close-hint>
+      </on-effects>
+    </trigger>
+    <trigger>	UnexpectedViewLoadedTrigger	  <type>	view-loaded	</type>
+      <excluded-views>
+        <scaleform>	lobby	</scaleform>
+        <scaleform>	hangar	</scaleform>
+        <scaleform>	ammunitionSetupView	</scaleform>
+      </excluded-views>
+      <on-effects>
+        <refuse-training></refuse-training>
       </on-effects>
     </trigger>
   </triggers>

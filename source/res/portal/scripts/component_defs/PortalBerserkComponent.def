@@ -1,0 +1,20 @@
+<PortalBerserkComponent.def>
+  <Properties>
+    <isBerserkActive>
+      <Type>	BOOL	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <Default>	0	</Default>
+    </isBerserkActive>
+    <equipmentID>
+      <Type>	UINT32	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <Default>	0	</Default>
+    </equipmentID>
+  </Properties>
+  <CellMethods></CellMethods>
+  <ClientMethods></ClientMethods>
+  <ofEntity>
+    <Vehicle></Vehicle>
+  </ofEntity>
+  <DefaultKeyName>	portalBerserk	</DefaultKeyName>
+</PortalBerserkComponent.def>

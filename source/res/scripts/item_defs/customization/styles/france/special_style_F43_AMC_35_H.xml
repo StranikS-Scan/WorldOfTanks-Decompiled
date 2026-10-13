@@ -1,0 +1,45 @@
+<special_style_F43_AMC_35_H.xml>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	MT 2D styles direct 1500g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	france:F43_AMC_35_H	</vehicles>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	31619	</id>
+      <userString>	#vehicle_customization:PortalTanks_style/name	</userString>
+      <texture>	gui/maps/vehicles/styles/DEV.png	</texture>
+      <maxNumber>	1	</maxNumber>
+      <outfits>
+        <outfit>
+          <season>	all	</season>
+          <camouflages>
+            <item>
+              <id>	31604	</id>
+              <patternSize>	1	</patternSize>
+              <appliedTo>	16	</appliedTo>
+              <palette>	0	</palette>
+            </item>
+            <item>
+              <id>	31605	</id>
+              <patternSize>	1	</patternSize>
+              <appliedTo>	256	</appliedTo>
+              <palette>	0	</palette>
+            </item>
+            <item>
+              <id>	31618	</id>
+              <patternSize>	1	</patternSize>
+              <appliedTo>	4096	</appliedTo>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+        </outfit>
+      </outfits>
+    </style>
+    <tags>	lockedOnVehicle	</tags>
+  </itemGroup>
+</special_style_F43_AMC_35_H.xml>

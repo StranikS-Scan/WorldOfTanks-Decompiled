@@ -125,6 +125,7 @@ class TankAcademyVehiclesSelectionView(ViewImpl):
             vehiclesLevel = self.__getOfferTabKey(offer)[0]
             onConfirm = partial(showTankAcademyDelayedConfirmationDialog, vehicleDict['vehicle'].displayedItem, vehiclesLevel, partial(self.__onDialogConfirm, bonus=self.__selectableBonus, giftID=giftID, offerToken=offerToken))
             showOfferGiftVehiclePreview(offer.id, giftID, onConfirm, VEHICLE_PREVIEW.HEADER_BACKBTN_DESCRLABEL_BATTLEMATTERS, soundSpace=PREVIEW_VEHICLE_SOUND_SPACE, customCallbacks={'previewBackCb': partial(showTankAcademyVehicleSelection, self.__offerToken),
+             'giftUnavailableCb': partial(showTankAcademyVehicleSelection, self.__offerToken),
              'offerEndedCb': lambda : None}, showCloseBtn=False)
             return
 
@@ -137,6 +138,12 @@ class TankAcademyVehiclesSelectionView(ViewImpl):
         with self.viewModel.transaction() as tx:
             self.__updateFilterControls(tx.getTypes(), self.__filters[_TYPES_KEY_NAME])
             self.__updateFilterControls(tx.getNations(), self.__filters[_NATIONS_KEY_NAME])
+
+    def handleMissionsPageClose(self):
+        if self.__closeFilterPopover():
+            return True
+        showBattleMattersMainView()
+        return True
 
     def _onLoading(self, *args, **kwargs):
         super(TankAcademyVehiclesSelectionView, self)._onLoading(*args, **kwargs)
@@ -187,6 +194,19 @@ class TankAcademyVehiclesSelectionView(ViewImpl):
     def __getVehicles(self):
         return self.__vehiclesByTabKey.get(self.__selectedTabKey, OrderedDict())
 
+    def __closeFilterPopover(self):
+        filterPopover = self.__filterPopover
+        if filterPopover is None:
+            return False
+        elif filterPopover.viewStatus not in (ViewStatus.LOADING, ViewStatus.LOADED):
+            return False
+        else:
+            window = filterPopover.getWindow()
+            if window is None:
+                return False
+            window.hide(True)
+            return True
+
     @staticmethod
     def __updateFilterControls(arrayVM, values):
         arrayVM.clear()
@@ -220,7 +240,10 @@ class TankAcademyVehiclesSelectionView(ViewImpl):
     def __updateOffersData(self):
         self.__offersByTabKey = OrderedDict()
         self.__vehiclesByTabKey = OrderedDict()
-        offers = [ offer for offer in self.__offersProvider.getAllOffers() if self.__tankAcademyController.isTAOfferToken(offer.token) ]
+        self.__questsByOfferToken = self.__getQuestsByOfferToken()
+        migrationInfo = self.__tankAcademyController.getMigrationInfo()
+        migrationTargetLevel = migrationInfo[2] if migrationInfo is not None else None
+        offers = [ offer for offer in self.__offersProvider.getAllOffers() if self.__tankAcademyController.isTAOfferToken(offer.token) and self.__isOfferVisibleAfterMigration(offer, migrationTargetLevel) ]
         offers.sort(key=self.__getOfferSortKey)
         unlocked = self.__itemsCache.items.stats.unlocks
         for offer in offers:
@@ -243,7 +266,6 @@ class TankAcademyVehiclesSelectionView(ViewImpl):
         for tabKey, vehicles in self.__vehiclesByTabKey.iteritems():
             self.__vehiclesByTabKey[tabKey] = OrderedDict(_sortVehicles(vehicles))
 
-        self.__questsByOfferToken = self.__getQuestsByOfferToken()
         self.__selectedTabKey = self.__getInitialSelectedTabKey()
         selectedOffer = self.__getSelectedOffer()
         if selectedOffer is None or selectedOffer.token != self.__offerToken:
@@ -373,13 +395,16 @@ class TankAcademyVehiclesSelectionView(ViewImpl):
         vm.invalidate()
 
     def __updateTabTasks(self, vm, offers):
+        migrationInfo = self.__tankAcademyController.getMigrationInfo()
+        migrationTargetLevel = migrationInfo[2] if migrationInfo is not None else None
         vm.clear()
         currentQuest = self.__tankAcademyController.getCurrentQuest()
         currentQuestNumber = currentQuest.getOrder() if currentQuest else None
         quests = OrderedDict()
         for offer in offers:
             for quest in self.__questsByOfferToken.get(offer.token, []):
-                quests[quest.getOrder()] = quest
+                if migrationTargetLevel is None or quest.getOrder() >= migrationTargetLevel:
+                    quests[quest.getOrder()] = quest
 
         for _, quest in quests.iteritems():
             vm.addViewModel(self.__createQuestViewModel(quest, currentQuestNumber))
@@ -394,6 +419,9 @@ class TankAcademyVehiclesSelectionView(ViewImpl):
                 result.setdefault(offerToken, []).append(quest)
 
         return result
+
+    def __isOfferVisibleAfterMigration(self, offer, migrationTargetLevel):
+        return True if migrationTargetLevel is None or self.__tankAcademyController.hasOfferToken(offer.token) else any((quest.getOrder() >= migrationTargetLevel for quest in self.__questsByOfferToken.get(offer.token, ())))
 
     def __createQuestViewModel(self, quest, currentQuestNumber):
         questModel = QuestViewModel()

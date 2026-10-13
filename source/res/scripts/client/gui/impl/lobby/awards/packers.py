@@ -5,23 +5,27 @@ import typing
 from adisp import adisp_async, adisp_process
 from constants import RentType, OFFER_TOKEN_PREFIX
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
-from gui.battle_pass.battle_pass_bonuses_packers import TmanTemplateBonusPacker
+from gui.battle_pass.battle_pass_bonuses_packers import TmanTemplateBonusPacker as BpTmanTemplateBonusPacker
 from gui.impl import backport
 from gui.impl.backport import createTooltipData
 from gui.impl.gen import R
+from gui.impl.gen.view_models.common.missions.bonuses.token_bonus_model import TokenBonusModel
 from gui.impl.gen.view_models.views.lobby.awards.reward_model import RewardModel, RentTypeEnum
 from gui.impl.lobby.awards import SupportedTokenTypes
 from gui.impl.lobby.awards.prefetch import TokenDataPrefetcher
 from gui.impl.lobby.awards.tooltip import VEH_FOR_CHOOSE_ID
+from gui.server_events.awards_formatters import AWARDS_SIZES
+from gui.server_events.recruit_helper import getRecruitInfo
 from gui.shared.gui_items.Vehicle import getNationLessName, getIconResourceName
-from gui.shared.missions.packers.bonus import VehiclesBonusUIPacker, getDefaultBonusPackersMap, BaseBonusUIPacker, AsyncBonusUIPacker, BACKPORT_TOOLTIP_CONTENT_ID, Customization3Dand2DbonusUIPacker, CustomizationBonusUIPacker, BonusUIPacker
+from gui.shared.missions.packers.bonus import VehiclesBonusUIPacker, getDefaultBonusPackersMap, BaseBonusUIPacker, AsyncBonusUIPacker, BACKPORT_TOOLTIP_CONTENT_ID, Customization3Dand2DbonusUIPacker, CustomizationBonusUIPacker, BonusUIPacker, TokenBonusUIPacker, TmanTemplateBonusPacker
 from gui.shared.utils.functions import makeTooltip
 from helpers import dependency, int2roman
+from items.tankmen import RECRUIT_TMAN_TOKEN_PREFIX
 from skeletons.gui.offers import IOffersDataProvider
 from skeletons.gui.platform.catalog_service_controller import IPurchaseCache
 from skeletons.gui.shared import IItemsCache
 if typing.TYPE_CHECKING:
-    from gui.server_events.bonuses import VehiclesBonus, TokensBonus
+    from gui.server_events.bonuses import VehiclesBonus, TokensBonus, TmanTemplateTokensBonus
     from gui.impl.backport import TooltipData
     from gui.platform.catalog_service.controller import _PurchaseDescriptor
     from gui.shared.gui_items.Vehicle import Vehicle
@@ -230,7 +234,7 @@ def getMultipleAwardsBonusPacker(productCode):
     tokenBonus = _MultiAwardTokenBonusUIPacker(productCode)
     mapping = getDefaultBonusPackersMap()
     mapping.update({'vehicles': _MultiAwardVehiclesBonusUIPacker(),
-     'tmanToken': TmanTemplateBonusPacker(),
+     'tmanToken': BpTmanTemplateBonusPacker(),
      'customizations': Customization3Dand2DbonusUIPacker(),
      SupportedTokenTypes.BATTLE_TOKEN: tokenBonus,
      SupportedTokenTypes.TOKENS: tokenBonus,
@@ -248,7 +252,85 @@ class _AdditionalCustomizationBonusUIPacker(CustomizationBonusUIPacker):
         return model
 
 
+class _ParagonsCoinsUIPacker(TokenBonusUIPacker):
+    _PARAGONS_COIN = 'paragonsCoin'
+
+    @classmethod
+    def _getTokenBonusPackers(cls):
+        tokenBonusPackers = super(_ParagonsCoinsUIPacker, cls)._getTokenBonusPackers()
+        tokenBonusPackers.update({cls._PARAGONS_COIN: cls.__packParagonsCoin})
+        return tokenBonusPackers
+
+    @classmethod
+    def __packParagonsCoin(cls, model, bonus, complexToken, token):
+        model.setUserName(cls._PARAGONS_COIN)
+        model.setIcon(cls._PARAGONS_COIN)
+        model.setIconSmall(backport.image(R.images.gui.maps.icons.quests.bonuses.dyn(AWARDS_SIZES.SMALL).dyn(cls._PARAGONS_COIN)()))
+        model.setIconBig(backport.image(R.images.gui.maps.icons.quests.bonuses.dyn(AWARDS_SIZES.BIG).dyn(cls._PARAGONS_COIN)()))
+        model.setLabel(backport.text(R.strings.seniority_awards.rewardsView.paragonsPoints.label()))
+        model.setValue(str(token.count))
+        return model
+
+    @classmethod
+    def _getTokenBonusType(cls, tokenID, complexToken):
+        return cls._PARAGONS_COIN if tokenID == cls._PARAGONS_COIN else super(_ParagonsCoinsUIPacker, cls)._getTokenBonusType(tokenID, complexToken)
+
+    @classmethod
+    def _getTooltipsPackers(cls):
+        tooltipsPackers = super(_ParagonsCoinsUIPacker, cls)._getTooltipsPackers()
+        tooltipsPackers.update({cls._PARAGONS_COIN: cls.__packParagonsCoinTooltip})
+        return tooltipsPackers
+
+    @classmethod
+    def __packParagonsCoinTooltip(cls, complexToken, token):
+        return createTooltipData(tooltip=None, isSpecial=True, specialAlias=None, specialArgs=[token.id])
+
+    @classmethod
+    def _getContentId(cls, bonus):
+        result = []
+        bonusTokens = bonus.getTokens()
+        for token in bonusTokens:
+            name = token.split(':')[0]
+            if name == cls._PARAGONS_COIN:
+                result.append(R.views.lobby.paragons.tooltips.RewardsHeaderTooltip())
+
+        result.extend(super(_ParagonsCoinsUIPacker, cls)._getContentId(bonus))
+        return result
+
+
+class SeniorityAwardsBonusUIPacker(TmanTemplateBonusPacker):
+
+    @classmethod
+    def _pack(cls, bonus):
+        result = []
+        for tokenID in bonus.getTokens().iterkeys():
+            if tokenID.startswith(RECRUIT_TMAN_TOKEN_PREFIX):
+                packed = cls._packTmanTemplateToken(tokenID, bonus)
+                if packed is not None:
+                    result.append(packed)
+
+        return result
+
+    @classmethod
+    def _packTmanTemplateToken(cls, tokenID, bonus):
+        recruitInfo = getRecruitInfo(tokenID)
+        if recruitInfo is None:
+            return
+        else:
+            model = TokenBonusModel()
+            cls._packCommon(bonus, model)
+            tokenRecord = bonus.getTokens()[tokenID]
+            if tokenRecord.count > 1:
+                model.setValue(str(tokenRecord.count))
+            model.setLabel(recruitInfo.getFullUserName())
+            model.setIcon(recruitInfo.getSourceID())
+            model.setUserName(recruitInfo.getFullUserName())
+            return model
+
+
 def getAdditionalAwardsBonusPacker():
     mapping = getDefaultBonusPackersMap()
-    mapping.update({'customizations': _AdditionalCustomizationBonusUIPacker()})
+    mapping.update({'customizations': _AdditionalCustomizationBonusUIPacker(),
+     'tmanToken': SeniorityAwardsBonusUIPacker(),
+     'battleToken': _ParagonsCoinsUIPacker()})
     return BonusUIPacker(mapping)

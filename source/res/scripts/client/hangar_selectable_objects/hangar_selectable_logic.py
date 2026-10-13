@@ -6,15 +6,11 @@ from gui.Scaleform.Waiting import Waiting
 from hangar_selectable_objects import ISelectableObject
 from helpers import dependency
 from skeletons.gui.shared.utils import IHangarSpace
-from skeletons.gui.shared import IItemsCache
-from skeletons.prebattle_vehicle import IPrebattleVehicle
 from .base_selectable_logic import BaseSelectableLogic
 
 class HangarSelectableLogic(BaseSelectableLogic):
     __slots__ = ('__selected3DEntity', '__selected3DEntityUnderMouseDown')
     __hangarSpace = dependency.descriptor(IHangarSpace)
-    __prebattleVehicle = dependency.descriptor(IPrebattleVehicle)
-    __itemsCache = dependency.descriptor(IItemsCache)
 
     def __init__(self):
         super(HangarSelectableLogic, self).__init__()
@@ -85,7 +81,8 @@ class HangarSelectableLogic(BaseSelectableLogic):
         if self._hangarSpace.isCursorOver3DScene:
             if self.__selected3DEntityUnderMouseDown:
                 self.__selected3DEntityUnderMouseDown.onMouseUp()
-                self.__onSelected3DEntityClick()
+                if self.__selected3DEntityUnderMouseDown == self.__selected3DEntity:
+                    self.__selected3DEntityUnderMouseDown.onMouseClick()
         self.__onMouseEnter(self.__selected3DEntity)
         self.__selected3DEntityUnderMouseDown = None
         return
@@ -106,21 +103,3 @@ class HangarSelectableLogic(BaseSelectableLogic):
     def __fade3DEntity(self, entity):
         entity.setHighlight(False)
         self._callbackMethodCall('onFade3DEntity', entity)
-
-    def __onSelected3DEntityClick(self):
-        if self.__selected3DEntityUnderMouseDown == self.__selected3DEntity:
-            if self.__isAcceptMouseClick():
-                self.__selected3DEntityUnderMouseDown.onMouseClick()
-
-    def __isAcceptMouseClick(self):
-        currentVehicle = self.__prebattleVehicle.item
-        if not currentVehicle:
-            return True
-        if not currentVehicle.isEvent:
-            return True
-        if currentVehicle.isLocked and currentVehicle.isInPrebattle:
-            selectedDescr = self.__selected3DEntity.typeDescriptor.type.compactDescr
-            selectedVehicle = self.__itemsCache.items.getItemByCD(selectedDescr)
-            if selectedVehicle.isEvent and selectedVehicle.isBoss:
-                return False
-        return True

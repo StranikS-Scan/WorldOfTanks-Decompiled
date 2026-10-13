@@ -328,6 +328,8 @@ def getItemTitle(rawItem, item, forBox=False, additionalInfo=False):
         title = _ms(TOOLTIPS.AWARDITEM_HONEY_COIN_HEADER)
     elif rawItem.type == ItemPackType.CUSTOM_GOLDENTICKET:
         title = backport.text(R.strings.tooltips.awardItem.goldenticket.header())
+    elif rawItem.type == ItemPackType.CUSTOM_RAZLOM_COIN:
+        title = backport.text(R.strings.tooltips.awardItem.razlom_coin.header())
     else:
         title = rawItem.title or ''
     return title
@@ -386,6 +388,8 @@ def getItemDescription(rawItem, item):
         description = _ms(TOOLTIPS.AWARDITEM_HONEY_COIN_BODY)
     elif rawItem.type == ItemPackType.CUSTOM_GOLDENTICKET:
         description = backport.text(R.strings.tooltips.awardItem.goldenticket.body())
+    elif rawItem.type == ItemPackType.CUSTOM_RAZLOM_COIN:
+        description = backport.text(R.strings.tooltips.awardItem.razlom_coin.body())
     else:
         description = rawItem.description or ''
     return description

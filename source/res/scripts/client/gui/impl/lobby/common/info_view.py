@@ -6,6 +6,7 @@ from functools import partial
 import th_async
 from BWUtil import AsyncReturn
 from PlayerEvents import g_playerEvents
+from account_helpers.settings_core.ServerSettingsManager import SETTINGS_SECTIONS
 from frameworks.wulf import ViewSettings, WindowFlags
 from frameworks.wulf import Window
 from gui.impl.gen.view_models.views.lobby.common.info_view_model import InfoViewModel
@@ -99,12 +100,12 @@ class _InfoWindowProcessor(IInfoWindowProcessor):
         self.wndFlags = wndFlags
 
     def showAllowed(self):
-        allowedByUIStorage = self.uiStorageKey is None or not self.__settingsCore.serverSettings.getUIStorage().get(self.uiStorageKey, False)
+        allowedByUIStorage = self.uiStorageKey is None or not self.__settingsCore.serverSettings.getUIStorage(SETTINGS_SECTIONS.UI_STORAGE).get(self.uiStorageKey, False)
         return allowedByUIStorage
 
     def setShown(self):
         if self.uiStorageKey is not None:
-            self.__settingsCore.serverSettings.saveInUIStorage({self.uiStorageKey: True})
+            self.__settingsCore.serverSettings.saveInUIStorage(SETTINGS_SECTIONS.UI_STORAGE, {self.uiStorageKey: True})
         return
 
     @th_async.th_async

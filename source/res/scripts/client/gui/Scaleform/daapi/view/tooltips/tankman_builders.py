@@ -10,17 +10,17 @@ from gui.impl.lobby.crew.tooltips.commander_bonus_tooltip import CommanderBonusT
 from gui.impl.lobby.crew.tooltips.crew_perks_additional_tooltip import CrewPerksAdditionalTooltip, BattleRoyaleCrewPerksAdditionalTooltip
 from gui.impl.lobby.crew.tooltips.crew_perks_tooltip import CrewPerksTooltip
 from gui.impl.lobby.crew.tooltips.tankman_tooltip import TankmanTooltip
-from gui.shared.tooltips import advanced
 from gui.shared.tooltips import contexts, ToolTipBaseData
 from gui.shared.tooltips import tankman
-from gui.shared.tooltips.advanced import TANKMAN_MOVIES
+from gui.shared.tooltips.advanced.data.advanced_constants import TANKMAN_MOVIES
+from gui.shared.tooltips.advanced.data.advanced_constants import SKILL_MOVIES
 from gui.shared.tooltips.builders import DataBuilder, AdvancedTooltipWindowBuilder
 from helpers import dependency
 from skeletons.gui.game_control import IBattleRoyaleController
 __all__ = ('getTooltipBuilders',)
 
 def _advancedPerkCondition(skillName, *_):
-    return skillName in advanced.SKILL_MOVIES
+    return skillName in SKILL_MOVIES
 
 
 class BattleRoyaleTankmanTooltipBuilder(DataBuilder):

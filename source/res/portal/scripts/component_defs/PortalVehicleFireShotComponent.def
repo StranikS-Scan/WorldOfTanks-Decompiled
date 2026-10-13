@@ -1,0 +1,13 @@
+<PortalVehicleFireShotComponent.def>
+  <Properties>
+    <isAnyHarmCaused>
+      <Type>	BOOL	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <Default>	0	</Default>
+    </isAnyHarmCaused>
+  </Properties>
+  <ofEntity>
+    <Vehicle></Vehicle>
+  </ofEntity>
+  <DefaultKeyName>	portalFireShot	</DefaultKeyName>
+</PortalVehicleFireShotComponent.def>

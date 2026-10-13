@@ -39,7 +39,7 @@ from uilogging.prebattle_highlights.loggers import PrebattleHighlightsEventLogge
 from vehicle_systems.tankStructure import selectItemByTankSize, getVehicleAABB
 from wg_async import wg_await, wg_async
 if typing.TYPE_CHECKING:
-    from typing import Dict
+    from typing import Dict, Tuple
     from gui.battle_control.controllers.prebattle_highlights.sub_systems.base_sub_system import BasePbhSubSystem
 _logger = logging.getLogger(__name__)
 
@@ -61,6 +61,7 @@ class PrebattleHighlightsController(IArenaPeriodController, ViewComponentsContro
         self.__triggeredByDevHotkey = False
         self.__displayingHighlights = False
         self.__ending = False
+        self.__finished = False
         self.__winnersStats = None
         self.__pbhWasShown = False
         self.__pbhSize = None
@@ -131,6 +132,7 @@ class PrebattleHighlightsController(IArenaPeriodController, ViewComponentsContro
         self.__pbhSize = None
         self.__pbhWasShown = False
         self.__ending = False
+        self.__finished = False
         if self.__prefabLoader:
             self.__prefabLoader.clear()
             self.__prefabLoader = None
@@ -167,8 +169,9 @@ class PrebattleHighlightsController(IArenaPeriodController, ViewComponentsContro
 
     def invalidatePeriodInfo(self, period, endTime, length, additionalInfo):
         _logger.debug('[PBH] invalidatePeriodInfo, period %s, self.__displayingHighlights %s', period, self.__displayingHighlights)
-        if period == ARENA_PERIOD.BATTLE and self.windowHandler.isReady():
-            self.__end()
+        if period != ARENA_PERIOD.BATTLE or not self.windowHandler.isReady():
+            return
+        self.__finishHighlights()
 
     def handleEscClose(self):
         if self.windowHandler.isReady() and self.__displayingHighlights:
@@ -223,16 +226,19 @@ class PrebattleHighlightsController(IArenaPeriodController, ViewComponentsContro
                 _logger.info('[PBH] Prefab sequence is not ready.')
                 return
             sequenceLayerInfo = self.sequenceHandler.getSequenceLayerInfo()
-            notEnoughTime = sequenceLayerInfo == EMPTY_SEQUENCE_LAYER_VALUE
-            if period in (ARENA_PERIOD.BATTLE, ARENA_PERIOD.AFTERBATTLE) and not self.__triggeredByDevHotkey or notEnoughTime:
-                _logger.info('[PBH] Player reconnected and joined an ongoing battle or Player loads into battle when there is little time remaining before the start.')
+            if self.__isTooLateToStart(period, sequenceLayerInfo):
                 self.__skipPrebattleHighlights()
-                if notEnoughTime:
-                    self.__uiLogger.logSkipViewingEvent({'view_status': PrebattleHighlightsLogKeys.NOT_ENOUGH_TIME.value,
-                     'time_to_battle_start': timeUntilEndOfPeriod()})
                 return
             self.__displayingHighlights = True
+            self.__finished = False
             yield wg_await(self.windowHandler.toggleFadeManager(True))
+            period = self.__sessionProvider.arenaVisitor.getArenaPeriod()
+            sequenceLayerInfo = self.sequenceHandler.getSequenceLayerInfo()
+            if self.__isTooLateToStart(period, sequenceLayerInfo):
+                self.__displayingHighlights = False
+                yield wg_await(self.windowHandler.toggleFadeManager(False))
+                self.__skipPrebattleHighlights()
+                return
             self.windowHandler.startFlow()
             inputHandler = getInputHandler()
             inputHandler.onControlModeChanged(CTRL_MODE_NAME.PREBATTLE_HIGHLIGHTS)
@@ -245,6 +251,17 @@ class PrebattleHighlightsController(IArenaPeriodController, ViewComponentsContro
             self.__uiLogger.logStartViewingAction(PBHViewingLogInfo(sequence_layer=sequenceLayerInfo, historical_level=hLevel, was_historical_compliance=not self.__meetsHistoricalCompliance))
             return
 
+    def __isTooLateToStart(self, period, sequenceLayerInfo):
+        notEnoughTime = sequenceLayerInfo == EMPTY_SEQUENCE_LAYER_VALUE
+        battleStarted = period in (ARENA_PERIOD.BATTLE, ARENA_PERIOD.AFTERBATTLE) and not self.__triggeredByDevHotkey
+        if not (battleStarted or notEnoughTime):
+            return False
+        _logger.info('[PBH] Player reconnected and joined an ongoing battle or Player loads into battle when there is little time remaining before the start.')
+        if notEnoughTime:
+            self.__uiLogger.logSkipViewingEvent({'view_status': PrebattleHighlightsLogKeys.NOT_ENOUGH_TIME.value,
+             'time_to_battle_start': timeUntilEndOfPeriod()})
+        return True
+
     def __skipPrebattleHighlights(self):
         _logger.debug('[PBH] skip showing')
         self.__prefabLoader.reset()
@@ -254,26 +271,35 @@ class PrebattleHighlightsController(IArenaPeriodController, ViewComponentsContro
     @wg_async
     def __end(self):
         _logger.debug('[PBH] __end, self.__displayingHighlights %s', self.__displayingHighlights)
-        if self.__ending:
+        if self.__ending or self.__finished:
             return
         self.__ending = True
         yield wg_await(self.windowHandler.toggleFadeManager(True))
-        self.windowHandler.stopFlow()
-        if self.__displayingHighlights:
-            self.__pbhWasShown = True
-            self.vehicleAppearanceMover.stopFlow()
-            inputHandler = getInputHandler()
-            inputHandler.onControlModeChanged(CTRL_MODE_NAME.ARCADE)
-        self.__displayingHighlights = False
-        self.__prefabLoader.reset()
-        g_eventBus.handleEvent(GameEvent(GameEvent.RETURN_FROM_PREBATTLE_HIGHLIGHTS), scope=EVENT_BUS_SCOPE.BATTLE)
-        SoundGroups.g_instance.playSound2D(PbhSounds.EXIT_EVENT)
-        SoundGroups.g_instance.setState(PbhSounds.GROUP, PbhSounds.GROUP_OFF)
-        self.gameLogicObserver.postPbhEnd()
-        self.__triggeredByDevHotkey = False
+        self.__finishHighlights()
         yield wg_await(self.windowHandler.toggleFadeManager(False))
         self.__ending = False
-        self.__uiLogger.logStopViewingAction(PrebattleHighlightsLogKeys.FULLY_VIEWED)
+
+    def __finishHighlights(self):
+        if self.__finished:
+            return
+        else:
+            self.__finished = True
+            self.windowHandler.stopFlow()
+            if self.__displayingHighlights:
+                self.__pbhWasShown = True
+            self.__displayingHighlights = False
+            self.vehicleAppearanceMover.stopFlow()
+            inputHandler = getInputHandler()
+            if inputHandler is not None and inputHandler.ctrlModeName == CTRL_MODE_NAME.PREBATTLE_HIGHLIGHTS:
+                inputHandler.onControlModeChanged(CTRL_MODE_NAME.ARCADE)
+            self.__prefabLoader.reset()
+            g_eventBus.handleEvent(GameEvent(GameEvent.RETURN_FROM_PREBATTLE_HIGHLIGHTS), scope=EVENT_BUS_SCOPE.BATTLE)
+            SoundGroups.g_instance.playSound2D(PbhSounds.EXIT_EVENT)
+            SoundGroups.g_instance.setState(PbhSounds.GROUP, PbhSounds.GROUP_OFF)
+            self.gameLogicObserver.postPbhEnd()
+            self.__triggeredByDevHotkey = False
+            self.__uiLogger.logStopViewingAction(PrebattleHighlightsLogKeys.FULLY_VIEWED)
+            return
 
     if constants.IS_DEVELOPMENT:
 

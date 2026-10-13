@@ -3,7 +3,7 @@
 from __future__ import absolute_import
 import logging
 import SoundGroups
-from frameworks.wulf import WindowLayer
+from frameworks.wulf import ViewStatus, WindowLayer
 from gui.battle_pass.battle_pass_bonuses_packers import packBonusModelAndTooltipData
 from gui.battle_pass.battle_pass_buyer import BattlePassBuyer
 from gui.battle_pass.battle_pass_constants import ChapterState
@@ -156,9 +156,16 @@ class BuyLevelsPresenter(ViewComponent[BattlePassBuyLevelViewModel]):
             packBonusModelAndTooltipData(self.__package.getNowAwards(), model.rewards, self.__tooltipItems)
             model.rewards.invalidate()
 
+    def __notifyPurchaseAborted(self):
+        if self.viewStatus in (ViewStatus.DESTROYING, ViewStatus.DESTROYED):
+            return
+        with self.viewModel.transaction() as model:
+            model.setPurchaseAbortedCount(model.getPurchaseAbortedCount() + 1)
+
     def __onBuyLevelsCallback(self, result):
         if not result:
             self.__battlePass.onLevelUp += self.__onLevelUp
+            self.__notifyPurchaseAborted()
         else:
             g_eventBus.addListener(events.BattlePassEvent.AWARD_VIEW_CLOSE, self.__onAwardViewClose, EVENT_BUS_SCOPE.LOBBY)
             g_eventBus.handleEvent(events.BattlePassEvent(events.BattlePassEvent.ON_PURCHASE_LEVELS), scope=EVENT_BUS_SCOPE.LOBBY)

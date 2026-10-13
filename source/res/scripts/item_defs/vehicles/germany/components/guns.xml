@@ -1,5 +1,4 @@
 <guns.xml>
-  <xmlns:xmlref>	http://bwt/xmlref	</xmlns:xmlref>
   <ids>
     <_75mm_KwK_37_L24>	0	</_75mm_KwK_37_L24>
     <_50mm_KwK_39_L60>	1	</_50mm_KwK_39_L60>
@@ -11237,20 +11236,20 @@
       <impulse>	0.68	</impulse>
       <reloadEffect>	reload115_152	</reloadEffect>
       <pitchLimits>
-        <minPitch>	0.0 -10 1.0 -10	</minPitch>
-        <maxPitch>	0.0 10 1.0 10	</maxPitch>
+        <minPitch>	0 -20 1 -20	</minPitch>
+        <maxPitch>	0 10 1 10	</maxPitch>
       </pitchLimits>
       <turretYawLimits>	-180 180	</turretYawLimits>
-      <rotationSpeed>	0.96	</rotationSpeed>
-      <reloadTime>	62.58	</reloadTime>
+      <rotationSpeed>	26.25	</rotationSpeed>
+      <reloadTime>	8	</reloadTime>
       <maxAmmo>	45	</maxAmmo>
-      <aimingTime>	10.43	</aimingTime>
-      <weight>	100	</weight>
+      <aimingTime>	2	</aimingTime>
+      <weight>	3780	</weight>
       <maxHealth>	240	</maxHealth>
       <maxRegenHealth>	120	</maxRegenHealth>
       <repairCost>	11	</repairCost>
-      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
-      <shotDispersionRadius>	1.04	</shotDispersionRadius>
+      <invisibilityFactorAtShot>	0.18	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.3	</shotDispersionRadius>
       <shotDispersionFactors>
         <turretRotation>	0.10	</turretRotation>
         <afterShot>	4.0	</afterShot>
@@ -11262,21 +11261,21 @@
           <speed>	1150	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	100	</piercingPower>
+          <piercingPower>	275 255	</piercingPower>
         </_120_mm_Hartkern_Wuchtgeschoss_70_fur_Zusatzkammerbetrieb>
         <_120_mm_Mehrzweck_Hl_Gr_70_mit_mundungsgestelltem_Zunder>
           <defaultPortion>	0.0	</defaultPortion>
           <speed>	990	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	100	</piercingPower>
+          <piercingPower>	340 340	</piercingPower>
         </_120_mm_Mehrzweck_Hl_Gr_70_mit_mundungsgestelltem_Zunder>
         <_120_mm_Sprgr_70>
           <defaultPortion>	0.05	</defaultPortion>
           <speed>	900	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	100	</piercingPower>
+          <piercingPower>	60 60	</piercingPower>
         </_120_mm_Sprgr_70>
       </shots>
     </_120_mm_Glattrohr_Panzerkanone_Muster_70_mit_Zusatzkammern_Mundungsgeschwindigkeitsmessbasis_und_Zunderstellgerat>

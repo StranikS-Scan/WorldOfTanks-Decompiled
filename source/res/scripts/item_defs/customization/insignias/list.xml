@@ -1110,6 +1110,18 @@
       <alphabet>	gui/maps/vehicles/decals/insignia/custom/gun_bp2026_march_2.xml	</alphabet>
       <texture>	gui/maps/vehicles/decals/insignia/custom/gun_bp2026_march_2_3.dds	</texture>
     </insignia>
+    <insignia>
+      <id>	129	</id>
+      <atlas>	gui/maps/vehicles/decals/insignia/custom/gun_bp2026_october_1.dds	</atlas>
+      <alphabet>	gui/maps/vehicles/decals/insignia/custom/gun_bp2026_october_1.xml	</alphabet>
+      <texture>	gui/maps/vehicles/decals/insignia/custom/gun_bp2026_october_1_3.dds	</texture>
+    </insignia>
+    <insignia>
+      <id>	130	</id>
+      <atlas>	gui/maps/vehicles/decals/insignia/custom/gun_bp2026_october_2.dds	</atlas>
+      <alphabet>	gui/maps/vehicles/decals/insignia/custom/gun_bp2026_october_2.xml	</alphabet>
+      <texture>	gui/maps/vehicles/decals/insignia/custom/gun_bp2026_october_2_3.dds	</texture>
+    </insignia>
   </itemGroup>
   <itemGroup>
     <name>	GB142_FV230_Canopener_KS_3Dst	</name>
@@ -1208,6 +1220,21 @@
       <atlas>	gui/maps/vehicles/decals/insignia/custom/gun_ch74.dds	</atlas>
       <alphabet>	gui/maps/vehicles/decals/insignia/custom/gun_ch74.xml	</alphabet>
       <texture>	gui/maps/vehicles/decals/insignia/custom/gun_ch74_3.dds	</texture>
+    </insignia>
+  </itemGroup>
+  <itemGroup>
+    <name>	GB130_FV225_Collector_DMC_3Dst	</name>
+    <userString>	#vehicle_customization:insignias/special	</userString>
+    <season>	ALL	</season>
+    <historical>	2	</historical>
+    <priceGroup>	insignias 50g notInShop	</priceGroup>
+    <tags>	hiddenInUI	</tags>
+    <insignia>
+      <id>	131	</id>
+      <atlas>	gui/maps/vehicles/decals/insignia/custom/gun_gb130.dds	</atlas>
+      <alphabet>	gui/maps/vehicles/decals/insignia/custom/gun_gb130.xml	</alphabet>
+      <texture>	gui/maps/vehicles/decals/insignia/custom/gun_gb130_3.dds	</texture>
+      <canBeMirrored>	false	</canBeMirrored>
     </insignia>
   </itemGroup>
   <itemGroup>

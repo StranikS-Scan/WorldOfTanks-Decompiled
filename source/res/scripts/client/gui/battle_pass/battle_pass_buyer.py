@@ -25,57 +25,56 @@ class BattlePassBuyer(object):
     @classmethod
     @decorators.adisp_process('buyBattlePass')
     def buyBP(cls, seasonID, chapterID, onBuyCallback=None):
+        result = False
         if chapterID not in cls.__battlePass.getMainChapterIDs():
             _logger.error('Invalid chapterID: %s!', chapterID)
-            return
-        currency, amount = first(viewitems(cls.__battlePass.getBattlePassCost(chapterID)))
-        result = False
-        if currency == Currency.GOLD and cls.__itemsCache.items.stats.actualGold < amount:
-            showBuyGoldForBattlePass(amount)
-        elif currency == Currency.FREE_XP and cls.__itemsCache.items.stats.actualFreeXP < amount:
-            showExchangeXPWindow(amount)
         else:
-            result = yield cls.__buyBattlePass(seasonID, chapterID)
+            currency, amount = first(viewitems(cls.__battlePass.getBattlePassCost(chapterID)))
+            if currency == Currency.GOLD and cls.__itemsCache.items.stats.actualGold < amount:
+                showBuyGoldForBattlePass(amount)
+            elif currency == Currency.FREE_XP and cls.__itemsCache.items.stats.actualFreeXP < amount:
+                showExchangeXPWindow(amount)
+            else:
+                result = yield cls.__buyBattlePass(seasonID, chapterID)
         if onBuyCallback:
             onBuyCallback(result)
 
     @classmethod
     @decorators.adisp_process('buyBattlePass')
     def buyBPWithLevels(cls, seasonID, chapterID, onBuyCallback=None):
+        result = False
         if chapterID not in cls.__battlePass.getMainChapterIDs():
             _logger.error('Invalid chapterID: %s!', chapterID)
-            return
-        spendMoney = cls.__battlePass.getBattlePassCost(chapterID).get(Currency.GOLD)
-        levelCount = cls.__battlePass.getMaxLevelInChapter(chapterID) - cls.__battlePass.getLevelInChapter(chapterID)
-        if levelCount > 0:
-            spendMoney += cls.__itemsCache.items.shop.getBattlePassLevelCost().get(Currency.GOLD, 0) * levelCount
-        result = False
-        if cls.__itemsCache.items.stats.actualGold < spendMoney:
-            showBuyGoldForBattlePass(spendMoney)
         else:
-            result = yield cls.__buyBattlePassWithLevels(seasonID, chapterID)
+            spendMoney = cls.__battlePass.getBattlePassCost(chapterID).get(Currency.GOLD)
+            levelCount = cls.__battlePass.getMaxLevelInChapter(chapterID) - cls.__battlePass.getLevelInChapter(chapterID)
+            if levelCount > 0:
+                spendMoney += cls.__itemsCache.items.shop.getBattlePassLevelCost().get(Currency.GOLD, 0) * levelCount
+            if cls.__itemsCache.items.stats.actualGold < spendMoney:
+                showBuyGoldForBattlePass(spendMoney)
+            else:
+                result = yield cls.__buyBattlePassWithLevels(seasonID, chapterID)
         if onBuyCallback:
             onBuyCallback(result)
 
     @classmethod
     @decorators.adisp_process('buyBattlePassLevels')
     def buyLevels(cls, seasonID, chapterID, levels=0, onBuyCallback=None):
+        result = False
         if chapterID not in cls.__battlePass.getMainChapterIDs():
             _logger.error('Invalid chapterID: %s!', chapterID)
-            return
-        if cls.__battlePass.getChapterState(chapterID) != ChapterState.ACTIVE:
+        elif cls.__battlePass.getChapterState(chapterID) != ChapterState.ACTIVE:
             _logger.error('Chapter %s should be active to buy levels at it!', chapterID)
-            return
-        spendMoneyGold = 0
-        if levels > 0:
-            spendMoneyGold += cls.__itemsCache.items.shop.getBattlePassLevelCost().get(Currency.GOLD, 0) * levels
-        result = False
-        if cls.__itemsCache.items.stats.actualGold < spendMoneyGold:
-            showBuyGoldForBattlePassLevels(spendMoneyGold)
         else:
-            cls.__soundEventChecker.lockPlayingSounds()
-            result = yield cls.__buyBattlePassLevels(seasonID, chapterID, levels)
-            cls.__soundEventChecker.unlockPlayingSounds()
+            spendMoneyGold = 0
+            if levels > 0:
+                spendMoneyGold += cls.__itemsCache.items.shop.getBattlePassLevelCost().get(Currency.GOLD, 0) * levels
+            if cls.__itemsCache.items.stats.actualGold < spendMoneyGold:
+                showBuyGoldForBattlePassLevels(spendMoneyGold)
+            else:
+                cls.__soundEventChecker.lockPlayingSounds()
+                result = yield cls.__buyBattlePassLevels(seasonID, chapterID, levels)
+                cls.__soundEventChecker.unlockPlayingSounds()
         if onBuyCallback:
             onBuyCallback(result)
 

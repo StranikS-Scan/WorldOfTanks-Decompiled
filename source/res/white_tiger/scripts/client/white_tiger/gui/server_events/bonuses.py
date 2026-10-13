@@ -8,7 +8,6 @@ from gui.server_events.bonuses import LootBoxTokensBonus, TokensBonus, tokensFac
 from white_tiger.skeletons.economics_controller import IEconomicsController
 from helpers import dependency
 from gui import makeHtmlString
-from white_tiger_common.wt_constants import WT_LOOTBOX_TOKEN_KEYS
 
 def whiteTigerTokensFactory(name, value, isCompensation=False, ctx=None):
     result = []
@@ -19,7 +18,7 @@ def whiteTigerTokensFactory(name, value, isCompensation=False, ctx=None):
             result.append(TicketTokensBonus(name, {tID: tValue}, isCompensation, ctx))
         if tID == economyController.getStampTokenName():
             result.append(StampTokensBonus(name, {tID: tValue}, isCompensation, ctx))
-        if tID in WT_LOOTBOX_TOKEN_KEYS:
+        if tID in economyController.getLootboxTokenKeys():
             result.append(WTLootBoxBonus({tID: tValue}, isCompensation, ctx))
         nonWhiteTigerTokens[tID] = tValue
 

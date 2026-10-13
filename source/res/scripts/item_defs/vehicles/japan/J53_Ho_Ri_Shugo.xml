@@ -10,14 +10,14 @@
   <postProgressionTree>	J53_Ho_Ri_Shugo	</postProgressionTree>
   <customRoleSlotOptions>	3 5	</customRoleSlotOptions>
   <speedLimits>
-    <forward>	10	</forward>
-    <backward>	10	</backward>
+    <forward>	35	</forward>
+    <backward>	15	</backward>
   </speedLimits>
   <invisibility>
-    <moving>	0.01	</moving>
-    <still>	0.01	</still>
-    <camouflageBonus>	0.0	</camouflageBonus>
-    <firePenalty>	0.1	</firePenalty>
+    <moving>	0.127	</moving>
+    <still>	0.212	</still>
+    <camouflageBonus>	0.04	</camouflageBonus>
+    <firePenalty>	0.318	</firePenalty>
   </invisibility>
   <optDevsOverrides>
     <camouflageNet>
@@ -47,33 +47,33 @@
   </camouflage>
   <hull>
     <armor>
-      <armor_1>	10	</armor_1>
-      <armor_2>	10	</armor_2>
-      <armor_3>	10	</armor_3>
-      <armor_4>	10	</armor_4>
-      <armor_5>	10	</armor_5>
-      <armor_6>	10	</armor_6>
-      <armor_7>	10	</armor_7>
-      <armor_8>	10	</armor_8>
-      <armor_9>	10	</armor_9>
-      <armor_10>	10	</armor_10>
-      <armor_11>	10	</armor_11>
-      <armor_12>	10	</armor_12>
-      <armor_14>	10	</armor_14>
-      <armor_15>	10	</armor_15>
-      <armor_16>	10	</armor_16>
-      <armor_17>	10	</armor_17>
-      <armor_18>	10	</armor_18>
-      <armor_19>	10	</armor_19>
-      <armor_20>	10	</armor_20>
-      <armor_21>	10	</armor_21>
-      <armor_22>	10	</armor_22>
-      <armor_23>	10	</armor_23>
-      <armor_24>	10	</armor_24>
+      <armor_1>	230	</armor_1>
+      <armor_2>	80	</armor_2>
+      <armor_3>	60	</armor_3>
+      <armor_4>	40	</armor_4>
+      <armor_5>	20	</armor_5>
+      <armor_6>	20	</armor_6>
+      <armor_7>	155	</armor_7>
+      <armor_8>	0	</armor_8>
+      <armor_9>	20	</armor_9>
+      <armor_10>	20	</armor_10>
+      <armor_11>	200	</armor_11>
+      <armor_12>	55	</armor_12>
+      <armor_14>	60	</armor_14>
+      <armor_15>	20	</armor_15>
+      <armor_16>	40	</armor_16>
+      <armor_17>	20	</armor_17>
+      <armor_18>	40	</armor_18>
+      <armor_19>	20	</armor_19>
+      <armor_20>	100	</armor_20>
+      <armor_21>	50	</armor_21>
+      <armor_22>	65	</armor_22>
+      <armor_23>	50	</armor_23>
+      <armor_24>	20	</armor_24>
     </armor>
     <primaryArmor>	armor_11 armor_3 armor_4	</primaryArmor>
-    <weight>	9400	</weight>
-    <maxHealth>	10	</maxHealth>
+    <weight>	59000	</weight>
+    <maxHealth>	1660	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	270	</maxHealth>
       <maxRegenHealth>	203	</maxRegenHealth>
@@ -1129,14 +1129,14 @@
       <price>	100000	</price>
       <notInShop>	true	</notInShop>
       <armor>
-        <leftTrack>	10	</leftTrack>
-        <rightTrack>	10	</rightTrack>
+        <leftTrack>	20	</leftTrack>
+        <rightTrack>	20	</rightTrack>
       </armor>
-      <weight>	100	</weight>
+      <weight>	17500	</weight>
       <terrainResistance>	1.2 1.4 2.3	</terrainResistance>
       <brakeForce>	85000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
-      <rotationSpeed>	10	</rotationSpeed>
+      <rotationSpeed>	36	</rotationSpeed>
       <shotDispersionFactors>
         <vehicleMovement>	0.14	</vehicleMovement>
         <vehicleRotation>	0.14	</vehicleRotation>
@@ -2014,7 +2014,7 @@
           </sourceCollisionHullPoints>
         </right>
       </physicalTracks>
-      <repairTime>	0.649999976	</repairTime>
+      <repairTime>	6.66666651	</repairTime>
     </Chassis_J53_Ho_Ri_Shugo>
   </chassis>
   <turrets0>
@@ -2025,31 +2025,30 @@
       <price>	100000	</price>
       <notInShop>	true	</notInShop>
       <armor>
-        <armor_1>	10	  <tags>	hull	</tags>
+        <armor_1>	350	  <tags>	hull	</tags>
         </armor_1>
-        <armor_2>	10	  <tags>	hull	</tags>
+        <armor_2>	160	  <tags>	hull	</tags>
         </armor_2>
-        <armor_3>	10	  <tags>	hull	</tags>
+        <armor_3>	50	  <tags>	hull	</tags>
         </armor_3>
-        <armor_4>	10	  <tags>	hull	</tags>
+        <armor_4>	0	  <tags>	hull	</tags>
         </armor_4>
-        <armor_5>	10	  <tags>	hull	</tags>
+        <armor_5>	150	  <tags>	hull	</tags>
         </armor_5>
-        <armor_6>	10	  <tags>	hull	</tags>
+        <armor_6>	100	  <tags>	hull	</tags>
         </armor_6>
-        <armor_7>	10	  <tags>	hull	</tags>
+        <armor_7>	150	  <tags>	hull	</tags>
         </armor_7>
-        <armor_6>	10	</armor_6>
       </armor>
       <weight>	100	</weight>
-      <maxHealth>	10	</maxHealth>
-      <rotationSpeed>	0.96	</rotationSpeed>
+      <maxHealth>	440	</maxHealth>
+      <rotationSpeed>	28	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	200	</maxHealth>
         <maxRegenHealth>	100	</maxRegenHealth>
         <repairCost>	11	</repairCost>
       </turretRotatorHealth>
-      <circularVisionRadius>	100	</circularVisionRadius>
+      <circularVisionRadius>	390	</circularVisionRadius>
       <surveyingDeviceHealth>
         <maxHealth>	130	</maxHealth>
         <maxRegenHealth>	65	</maxRegenHealth>
@@ -2058,42 +2057,42 @@
       <guns>
         <_15_5_cm_Gun_Shin>	shared	  <maxAmmo>	40	</maxAmmo>
           <armor>
-            <gun>	10	</gun>
-            <armor_1>	10	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            <gun>	60	</gun>
+            <armor_1>	350	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_1>
-            <armor_2>	10	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            <armor_2>	250	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_2>
-            <armor_3>	10	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            <armor_3>	60	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_3>
-            <armor_5>	10	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            <armor_5>	50	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_5>
-            <armor_6>	10	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            <armor_6>	50	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_6>
             <armor_4>	0	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_4>
-            <armor_7>	10	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            <armor_7>	260	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_7>
-            <armor_8>	10	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            <armor_8>	200	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_8>
-            <armor_9>	10	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            <armor_9>	200	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_9>
-            <armor_10>	10	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            <armor_10>	100	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_10>
           </armor>
           <turretYawLimits>	-10 10	</turretYawLimits>
           <pitchLimits>
-            <minPitch>	0.0 -10 1.0 -10	</minPitch>
-            <maxPitch>	0.0 10 1.0 10	</maxPitch>
+            <minPitch>	0 -20 1 -20	</minPitch>
+            <maxPitch>	0 7 1 7	</maxPitch>
           </pitchLimits>
-          <shotDispersionRadius>	1.04	</shotDispersionRadius>
-          <reloadTime>	62.58	</reloadTime>
+          <shotDispersionRadius>	0.36	</shotDispersionRadius>
+          <reloadTime>	16.8	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.10	</turretRotation>
             <afterShot>	4.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <aimingTime>	10.43	</aimingTime>
-          <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+          <aimingTime>	2.4	</aimingTime>
+          <invisibilityFactorAtShot>	0.143	</invisibilityFactorAtShot>
           <secondaryGun>	_12_cm_Shisei_Funshinhou	</secondaryGun>
           <models>
             <undamaged>	vehicles/japan/J53_Ho_Ri_Shugo/normal/lod0/Gun_02.model	</undamaged>
@@ -2166,34 +2165,21 @@
             <density>	232.432571 238.439911	</density>
             <aoTextureSize>	1024 1024	</aoTextureSize>
           </camouflage>
-          <rotationSpeed>	0.96	</rotationSpeed>
-          <weight>	100	</weight>
-          <shots>
-            <_15_5_cm_AP_Shin>
-              <piercingPower>	100	</piercingPower>
-            </_15_5_cm_AP_Shin>
-            <_15_5_cm_AP_Shin_Toku_Kou>
-              <piercingPower>	100	</piercingPower>
-            </_15_5_cm_AP_Shin_Toku_Kou>
-            <_15_5_cm_HE_Shin>
-              <piercingPower>	100	</piercingPower>
-            </_15_5_cm_HE_Shin>
-          </shots>
         </_15_5_cm_Gun_Shin>
       </guns>
       <secondaryGuns>
-        <_12_cm_Shisei_Funshinhou>	shared	  <reloadTime>	62.58	</reloadTime>
-          <aimingTime>	10.43	</aimingTime>
-          <shotDispersionRadius>	1.04	</shotDispersionRadius>
+        <_12_cm_Shisei_Funshinhou>	shared	  <reloadTime>	60	</reloadTime>
+          <aimingTime>	1.0	</aimingTime>
+          <shotDispersionRadius>	0.15	</shotDispersionRadius>
           <shotDispersionFactors>
             <turretRotation>	0.10	</turretRotation>
             <afterShot>	1.0	</afterShot>
             <whileGunDamaged>	1.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+          <invisibilityFactorAtShot>	0.143	</invisibilityFactorAtShot>
           <mechanics>
             <secondaryGun>
-              <initiationTime>	1000	</initiationTime>
+              <initiationTime>	0	</initiationTime>
               <dependentOnMainGun>	false	</dependentOnMainGun>
             </secondaryGun>
             <auxiliaryRocketLauncher></auxiliaryRocketLauncher>
@@ -2204,11 +2190,6 @@
           <multiGunState>
             <gunIndexes>	0	</gunIndexes>
           </multiGunState>
-          <shots>
-            <_12_cm_Shisei_HE_Funshindan>
-              <piercingPower>	100	</piercingPower>
-            </_12_cm_Shisei_HE_Funshindan>
-          </shots>
         </_12_cm_Shisei_Funshinhou>
       </secondaryGuns>
       <models>
@@ -2268,17 +2249,17 @@
   <clientAdjustmentFactors>
     <guns>
       <_15_5_cm_Gun_Shin>
-        <delta>	1.0	</delta>
+        <delta>	1.092278719	</delta>
       </_15_5_cm_Gun_Shin>
     </guns>
-    <armour>	1.0	</armour>
+    <armour>	1.214442013	</armour>
   </clientAdjustmentFactors>
   <physics>
     <detailed>
       <engines>
         <Aichi_Ha_70S>
-          <smplEnginePower>	10	</smplEnginePower>
-          <smplFwMaxSpeed>	10	</smplFwMaxSpeed>
+          <smplEnginePower>	1310	</smplEnginePower>
+          <smplFwMaxSpeed>	35	</smplFwMaxSpeed>
         </Aichi_Ha_70S>
       </engines>
       <chassis>

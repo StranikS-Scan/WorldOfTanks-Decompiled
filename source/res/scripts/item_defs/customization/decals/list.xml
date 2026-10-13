@@ -18212,6 +18212,37 @@
   <itemGroup>
     <userString>	#vehicle_customization:inscription/special	</userString>
     <season>	ALL	</season>
+    <historical>	2	</historical>
+    <priceGroup>	inscriptions 50g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <tags>	excluded_from_customization	</tags>
+      </exclude>
+    </vehicleFilter>
+    <decal>
+      <id>	1357	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_881.dds	</texture>
+      <userString>	#vehicle_customization:inscription/special/special_881	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+    <decal>
+      <id>	1358	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_882.dds	</texture>
+      <userString>	#vehicle_customization:inscription/special/special_882	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+    <decal>
+      <id>	1359	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_883.dds	</texture>
+      <userString>	#vehicle_customization:inscription/special/special_883	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+    <name>	BattlePass 2026	</name>
+    <type>	INSCRIPTION	</type>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:inscription/special	</userString>
+    <season>	ALL	</season>
     <historical>	1	</historical>
     <priceGroup>	inscriptions 50g notInShop	</priceGroup>
     <vehicleFilter>

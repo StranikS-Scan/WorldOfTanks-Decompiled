@@ -1,5 +1,4 @@
 <shells.xml>
-  <xmlns:xmlref>	http://bwt/xmlref	</xmlns:xmlref>
   <icons>
     <ap>	ARMOR_PIERCING.png 0 0	</ap>
     <ap_premium>	ARMOR_PIERCING_PREMIUM.png 0 0	</ap_premium>
@@ -4707,7 +4706,7 @@
     <isTracer>	true	</isTracer>
     <effects>	hugeArmorPiercing	</effects>
     <damage>
-      <armor>	100	</armor>
+      <armor>	750	</armor>
       <devices>	210	</devices>
     </damage>
     <normalizationAngle>	5	</normalizationAngle>
@@ -4724,7 +4723,7 @@
     <isTracer>	true	</isTracer>
     <effects>	hugeArmorPiercing	</effects>
     <damage>
-      <armor>	100	</armor>
+      <armor>	750	</armor>
       <devices>	210	</devices>
     </damage>
     <normalizationAngle>	5	</normalizationAngle>
@@ -4742,14 +4741,14 @@
     <isTracer>	true	</isTracer>
     <effects>	hugeHighExplosive	</effects>
     <damage>
-      <armor>	100	</armor>
+      <armor>	950	</armor>
       <devices>	210	</devices>
     </damage>
     <armorSpalls>
       <impactRadius>	3.78	</impactRadius>
       <coneAngle>	90	</coneAngle>
       <damage>
-        <armor>	50	</armor>
+        <armor>	475	</armor>
         <devices>	100	</devices>
       </damage>
     </armorSpalls>
@@ -4768,14 +4767,14 @@
     <isForceTracer>	true	</isForceTracer>
     <effects>	rocket	</effects>
     <damage>
-      <armor>	100	</armor>
+      <armor>	550	</armor>
       <devices>	165	</devices>
     </damage>
     <armorSpalls>
       <impactRadius>	2.42	</impactRadius>
       <coneAngle>	90	</coneAngle>
       <damage>
-        <armor>	50	</armor>
+        <armor>	275	</armor>
         <devices>	85	</devices>
       </damage>
     </armorSpalls>

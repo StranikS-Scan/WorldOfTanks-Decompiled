@@ -1,5 +1,4 @@
 <guns.xml>
-  <xmlns:xmlref>	http://bwt/xmlref	</xmlns:xmlref>
   <ids>
     <Cannone_da_90_50_T119E1>	0	</Cannone_da_90_50_T119E1>
     <Cannone_da_37_20>	1	</Cannone_da_37_20>
@@ -2534,20 +2533,20 @@
       <effects>	shot_large_mb	</effects>
       <reloadEffect>	autoloader_reload85_107	</reloadEffect>
       <pitchLimits>
-        <minPitch>	0.0 -10 1.0 -10	</minPitch>
-        <maxPitch>	0.0 10 1.0 10	</maxPitch>
+        <minPitch>	0.0 -20.0 1.0 -20.0	</minPitch>
+        <maxPitch>	0.0 10.0 1.0 10.0	</maxPitch>
       </pitchLimits>
       <turretYawLimits>	-180 180	</turretYawLimits>
-      <rotationSpeed>	0.96	</rotationSpeed>
-      <reloadTime>	60	</reloadTime>
+      <rotationSpeed>	35.0	</rotationSpeed>
+      <reloadTime>	7.5	</reloadTime>
       <maxAmmo>	60	</maxAmmo>
-      <aimingTime>	10.43	</aimingTime>
-      <weight>	100	</weight>
+      <aimingTime>	2	</aimingTime>
+      <weight>	1179	</weight>
       <maxHealth>	240	</maxHealth>
       <maxRegenHealth>	120	</maxRegenHealth>
       <repairCost>	11	</repairCost>
-      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
-      <shotDispersionRadius>	1.04	</shotDispersionRadius>
+      <invisibilityFactorAtShot>	0.209	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.4	</shotDispersionRadius>
       <shotDispersionFactors>
         <turretRotation>	0.05	</turretRotation>
         <afterShot>	4.0	</afterShot>
@@ -2559,27 +2558,23 @@
           <speed>	1470	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	100	</piercingPower>
+          <piercingPower>	277 261	</piercingPower>
         </_105mm_PPS_T_Sperimentale>
         <_105mm_Gr_EP_T_Sperimentale>
           <defaultPortion>	0.0	</defaultPortion>
           <speed>	1180	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	100	</piercingPower>
+          <piercingPower>	335 335	</piercingPower>
         </_105mm_Gr_EP_T_Sperimentale>
         <_105mm_Gr_D_Sperimentale>
           <defaultPortion>	0	</defaultPortion>
           <speed>	750	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	100	</piercingPower>
+          <piercingPower>	105 105	</piercingPower>
         </_105mm_Gr_D_Sperimentale>
       </shots>
-      <clip>
-        <count>	1	</count>
-        <rate>	1	</rate>
-      </clip>
     </Cannone_da_105_55_Sperimentale>
     <_105mm_OTO_Melara_105_mod_57>
       <userString>	#italy_vehicles:_105mm_OTO_Melara_105_mod_57	</userString>

@@ -15,7 +15,7 @@ from gui.Scaleform.genConsts.BATTLE_RESULTS_PREMIUM_STATES import BATTLE_RESULTS
 from gui.impl.backport import TooltipData
 from helpers import dependency
 from white_tiger_common.wt_constants import WT_PROGRESSION_ACHIEVEMENT
-from white_tiger.gui.white_tiger_gui_constants import WT_BATTLE_QUEST_PREFIX
+from white_tiger.gui.white_tiger_gui_constants import WT_BATTLE_QUEST_PREFIX, WT_PROGRESSION_QUEST_PREFIX
 from helpers.dependency import replace_none_kwargs
 from white_tiger.gui.wt_bonus_packers import getWTEventBonusPacker
 from shared_utils import findFirst, first
@@ -145,34 +145,52 @@ def _extractWtBattleQuests(questProgress):
     return [ questId for questId, qProgress in viewitems(questProgress) if questId.startswith(WT_BATTLE_QUEST_PREFIX) and isQuestCompleted(*qProgress) ]
 
 
+def _extractWtProgressionQuests(questProgress):
+    return [ questId for questId, qProgress in viewitems(questProgress) if questId.startswith(WT_PROGRESSION_QUEST_PREFIX) and isQuestCompleted(*qProgress) ]
+
+
+def _packBonusesIntoRewards(quests, packer, tooltipData, bonusIndexTotal, processedBonuses, ignoreList, bonusNameFilter=None):
+    bonusTooltipList = []
+    for quest in quests.values():
+        for bonus in quest.getBonuses():
+            if not bonus.isShowInGUI() or bonus.getName() in ignoreList:
+                continue
+            if bonusNameFilter is not None and not bonusNameFilter(bonus.getName()):
+                continue
+            bonusList = packer.pack(bonus)
+            if bonusList and tooltipData is not None:
+                bonusTooltipList = packer.getToolTip(bonus)
+            for bonusIndex, item in enumerate(bonusList):
+                tooltipIdx = str(bonusIndexTotal)
+                item.setTooltipId(tooltipIdx)
+                if tooltipData is not None:
+                    tooltipData[tooltipIdx] = bonusTooltipList[bonusIndex]
+                bonusIndexTotal += 1
+                bonusModel = processedBonuses.get(item.getName())
+                if bonusModel:
+                    bonusModel.setValue(str(int(bonusModel.getValue() or 0) + int(item.getValue() or 0)))
+                processedBonuses[item.getName()] = item
+
+    return bonusIndexTotal
+
+
 @replace_none_kwargs(eventsCache=IEventsCache)
 def getQuestRewards(reusable, tooltipData, ignoreList=None, eventsCache=None):
-    wtQuestIds = _extractWtBattleQuests(reusable.personal.avatar.extensionInfo.get('questsProgress', {}))
-    if not wtQuestIds:
+    questProgress = reusable.personal.avatar.extensionInfo.get('questsProgress', {})
+    battleQuestIds = _extractWtBattleQuests(questProgress)
+    progressionQuestIds = _extractWtProgressionQuests(questProgress)
+    if not battleQuestIds and not progressionQuestIds:
         return {}
     else:
-        quests = eventsCache.getAllQuests(lambda quest: quest.getID() in wtQuestIds)
-        packer = getWTEventBonusPacker()
         if ignoreList is None:
             ignoreList = []
+        packer = getWTEventBonusPacker()
         bonusIndexTotal = len(tooltipData) if tooltipData else 0
-        bonusTooltipList = []
         processedBonuses = {}
-        for quest in quests.values():
-            for bonus in quest.getBonuses():
-                if bonus.isShowInGUI() and bonus.getName() not in ignoreList:
-                    bonusList = packer.pack(bonus)
-                    if bonusList and tooltipData is not None:
-                        bonusTooltipList = packer.getToolTip(bonus)
-                    for bonusIndex, item in enumerate(bonusList):
-                        tooltipIdx = str(bonusIndexTotal)
-                        item.setTooltipId(tooltipIdx)
-                        if tooltipData is not None:
-                            tooltipData[tooltipIdx] = bonusTooltipList[bonusIndex]
-                        bonusIndexTotal += 1
-                        bonusModel = processedBonuses.get(item.getName())
-                        if bonusModel:
-                            bonusModel.setValue(str(int(bonusModel.getValue() or 0) + int(item.getValue() or 0)))
-                        processedBonuses[item.getName()] = item
-
+        if battleQuestIds:
+            battleQuests = eventsCache.getAllQuests(lambda quest: quest.getID() in battleQuestIds)
+            bonusIndexTotal = _packBonusesIntoRewards(battleQuests, packer, tooltipData, bonusIndexTotal, processedBonuses, ignoreList)
+        if progressionQuestIds:
+            progressionQuests = eventsCache.getAllQuests(lambda quest: quest.getID() in progressionQuestIds)
+            _packBonusesIntoRewards(progressionQuests, packer, tooltipData, bonusIndexTotal, processedBonuses, ignoreList, bonusNameFilter=lambda name: name == 'lootBox')
         return processedBonuses

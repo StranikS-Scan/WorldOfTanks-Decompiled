@@ -231,7 +231,7 @@
         <priority>	1	</priority>
         <rank>	silver	</rank>
         <params>
-          <param>	1.5	  <name>	shellParamsSwitchingTime	</name>
+          <param>	1	  <name>	shellParamsSwitchingTime	</name>
           </param>
         </params>
         <mechanicSubtypes>
@@ -268,7 +268,7 @@
         <priority>	1	</priority>
         <rank>	silver	</rank>
         <params>
-          <param>	1.5	  <name>	shellParamsSwitchingTime	</name>
+          <param>	1	  <name>	shellParamsSwitchingTime	</name>
           </param>
         </params>
         <mechanicSubtypes>
@@ -295,7 +295,7 @@
         <priority>	1	</priority>
         <rank>	gold	</rank>
         <params>
-          <param>	100	  <name>	shellParamsSwitchingTime	</name>
+          <param>	0.5	  <name>	shellParamsSwitchingTime	</name>
             <template>	vehicle_hub.characteristics.templates.upTo	</template>
           </param>
         </params>
@@ -323,7 +323,7 @@
         <priority>	1	</priority>
         <rank>	silver	</rank>
         <params>
-          <param>	1.5	  <name>	shellParamsSwitchingTime	</name>
+          <param>	1	  <name>	shellParamsSwitchingTime	</name>
           </param>
         </params>
         <mechanicSubtypes>
@@ -350,7 +350,7 @@
         <priority>	1	</priority>
         <rank>	silver	</rank>
         <params>
-          <param>	1.5	  <name>	shellParamsSwitchingTime	</name>
+          <param>	1	  <name>	shellParamsSwitchingTime	</name>
           </param>
         </params>
         <mechanicSubtypes>
@@ -624,7 +624,7 @@
         <priority>	1	</priority>
         <rank>	silver	</rank>
         <params>
-          <param>	4.8	  <name>	timeToOverheat	</name>
+          <param>	3.3	  <name>	timeToOverheat	</name>
           </param>
           <param>	19	  <name>	overheatDuration	</name>
             <template>	vehicle_hub.characteristics.templates.upTo	</template>
@@ -871,17 +871,17 @@
         <priority>	1	</priority>
         <rank>	gold	</rank>
         <params>
-          <param>	1	  <name>	auxiliaryRocketLauncherReloadTime	</name>
+          <param>	45	  <name>	auxiliaryRocketLauncherReloadTime	</name>
             <template>	vehicle_hub.characteristics.templates.upTo	</template>
           </param>
-          <param>	1	  <name>	auxiliaryRocketLauncherAvgDamage	</name>
+          <param>	600	  <name>	auxiliaryRocketLauncherAvgDamage	</name>
             <template>	vehicle_hub.characteristics.templates.upTo	</template>
           </param>
-          <param>	1	  <name>	auxiliaryRocketLauncherPenetration	</name>
+          <param>	80	  <name>	auxiliaryRocketLauncherPenetration	</name>
           </param>
-          <param>	1	  <name>	auxiliaryRocketLauncherVelocity	</name>
+          <param>	320	  <name>	auxiliaryRocketLauncherVelocity	</name>
           </param>
-          <param>	1	  <name>	auxiliaryRocketLauncherDispersion	</name>
+          <param>	0.15	  <name>	auxiliaryRocketLauncherDispersion	</name>
           </param>
         </params>
       </auxiliaryRocketLauncher>
@@ -894,32 +894,32 @@
         <priority>	1	</priority>
         <rank>	gold	</rank>
         <params>
-          <param>	1	  <name>	sightPointerDeployTime	</name>
+          <param>	30.0	  <name>	sightPointerDeployTime	</name>
             <template>	vehicle_hub.characteristics.templates.upTo	</template>
           </param>
-          <param>	1	  <name>	sightPointerReloadTime	</name>
+          <param>	30.0	  <name>	sightPointerReloadTime	</name>
             <template>	vehicle_hub.characteristics.templates.upTo	</template>
           </param>
-          <param>	1	  <name>	sightPointerDuration	</name>
+          <param>	7.0	  <name>	sightPointerDuration	</name>
             <template>	vehicle_hub.characteristics.templates.upTo	</template>
           </param>
-          <param>	-1%	  <name>	sightPointerRotationSpeed	</name>
+          <param>	-50%	  <name>	sightPointerRotationSpeed	</name>
           </param>
-          <param>	1	  <name>	sightPointerSectorAngleStart	</name>
+          <param>	15.0	  <name>	sightPointerSectorAngleStart	</name>
           </param>
-          <param>	1	  <name>	sightPointerSectorAngleEnd	</name>
+          <param>	5.0	  <name>	sightPointerSectorAngleEnd	</name>
             <template>	vehicle_hub.characteristics.templates.upTo	</template>
           </param>
-          <param>	1	  <name>	sightPointerSelfSpottingTime	</name>
+          <param>	4.0	  <name>	sightPointerSelfSpottingTime	</name>
             <template>	vehicle_hub.characteristics.templates.upTo	</template>
           </param>
-          <param>	+1%	  <name>	sightPointerViewRange	</name>
+          <param>	+123.0	  <name>	sightPointerViewRange	</name>
             <template>	vehicle_hub.characteristics.templates.upTo	</template>
           </param>
-          <param>	-1%	  <name>	sightPointerConsealmentFoliage	</name>
+          <param>	-40.0%	  <name>	sightPointerConsealmentFoliage	</name>
             <template>	vehicle_hub.characteristics.templates.upTo	</template>
           </param>
-          <param>	-1%	  <name>	sightPointerConsealmentMoving	</name>
+          <param>	-17.5%	  <name>	sightPointerConsealmentMoving	</name>
             <template>	vehicle_hub.characteristics.templates.upTo	</template>
           </param>
         </params>
@@ -933,10 +933,10 @@
         <priority>	1	</priority>
         <rank>	gold	</rank>
         <params>
-          <param>	1%	  <name>	shellCalibrationAvgDamage	</name>
+          <param>	15%	  <name>	shellCalibrationAvgDamage	</name>
             <template>	vehicle_hub.characteristics.templates.upTo	</template>
           </param>
-          <param>	1%	  <name>	shellCalibrationAvgPenetration	</name>
+          <param>	10%	  <name>	shellCalibrationAvgPenetration	</name>
             <template>	vehicle_hub.characteristics.templates.upTo	</template>
           </param>
         </params>
@@ -950,18 +950,18 @@
         <priority>	1	</priority>
         <rank>	gold	</rank>
         <params>
-          <param>	1	  <name>	autoreloaderSurgeMaxCharges	</name>
+          <param>	3	  <name>	autoreloaderSurgeMaxCharges	</name>
           </param>
-          <param>	1	  <name>	autoreloaderSurgeInitCharges	</name>
+          <param>	2	  <name>	autoreloaderSurgeInitCharges	</name>
             <template>	vehicle_hub.characteristics.templates.upTo	</template>
           </param>
-          <param>	1	  <name>	autoreloaderSurgeChargeTimeSlow	</name>
+          <param>	45	  <name>	autoreloaderSurgeChargeTimeSlow	</name>
             <template>	vehicle_hub.characteristics.templates.upTo	</template>
           </param>
-          <param>	1	  <name>	autoreloaderSurgeChargeTimeFast	</name>
+          <param>	15	  <name>	autoreloaderSurgeChargeTimeFast	</name>
             <template>	vehicle_hub.characteristics.templates.upTo	</template>
           </param>
-          <param>	1	  <name>	autoreloaderSurgeBoostedReloadTime	</name>
+          <param>	8	  <name>	autoreloaderSurgeBoostedReloadTime	</name>
             <template>	vehicle_hub.characteristics.templates.upTo	</template>
           </param>
         </params>
@@ -975,18 +975,18 @@
         <priority>	1	</priority>
         <rank>	gold	</rank>
         <params>
-          <param>	1	  <name>	bustleFeedDamagePerShot	</name>
+          <param>	560	  <name>	bustleFeedDamagePerShot	</name>
             <template>	vehicle_hub.characteristics.templates.upTo	</template>
           </param>
-          <param>	-1%	  <name>	bustleFeedRateOfFire	</name>
+          <param>	-30%	  <name>	bustleFeedRateOfFire	</name>
             <template>	vehicle_hub.characteristics.templates.upTo	</template>
           </param>
-          <param>	-1%	  <name>	bustleFeedMaxSpeed	</name>
+          <param>	-45%	  <name>	bustleFeedMaxSpeed	</name>
             <template>	vehicle_hub.characteristics.templates.upTo	</template>
           </param>
-          <param>	1	  <name>	bustleFeedSwitchingToEASMMode	</name>
+          <param>	5	  <name>	bustleFeedSwitchingToEASMMode	</name>
           </param>
-          <param>	1	  <name>	bustleFeedSwitchingToStandardMode	</name>
+          <param>	2.5	  <name>	bustleFeedSwitchingToStandardMode	</name>
           </param>
         </params>
       </bustleFeed>

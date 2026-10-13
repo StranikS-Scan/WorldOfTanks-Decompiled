@@ -1,5 +1,4 @@
 <guns.xml>
-  <xmlns:xmlref>	http://bwt/xmlref	</xmlns:xmlref>
   <ids>
     <_100mm_59>	0	</_100mm_59>
     <_85mm_Tip_62-85TS>	1	</_85mm_Tip_62-85TS>
@@ -3643,20 +3642,20 @@
       <effects>	shot_large	</effects>
       <reloadEffect>	reload115_152	</reloadEffect>
       <pitchLimits>
-        <minPitch>	0.0 -10 1.0 -10	</minPitch>
-        <maxPitch>	0.0 10 1.0 10	</maxPitch>
+        <minPitch>	0.0 -15.0 1.0 -15.0	</minPitch>
+        <maxPitch>	0.0 11.0 1.0 11.0	</maxPitch>
       </pitchLimits>
       <turretYawLimits>	-180 180	</turretYawLimits>
-      <rotationSpeed>	0.96	</rotationSpeed>
-      <reloadTime>	60	</reloadTime>
+      <rotationSpeed>	33	</rotationSpeed>
+      <reloadTime>	8	</reloadTime>
       <maxAmmo>	45	</maxAmmo>
-      <aimingTime>	10.43	</aimingTime>
-      <weight>	100	</weight>
+      <aimingTime>	2	</aimingTime>
+      <weight>	2500	</weight>
       <maxHealth>	240	</maxHealth>
       <maxRegenHealth>	120	</maxRegenHealth>
       <repairCost>	11	</repairCost>
-      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
-      <shotDispersionRadius>	1.04	</shotDispersionRadius>
+      <invisibilityFactorAtShot>	0.2	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.34	</shotDispersionRadius>
       <shotDispersionFactors>
         <turretRotation>	0.14	</turretRotation>
         <afterShot>	4.0	</afterShot>
@@ -3668,21 +3667,21 @@
           <speed>	1200	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	100	</piercingPower>
+          <piercingPower>	250 211	</piercingPower>
         </_115mm_Tuo_chuan_115G>
         <_115mm_Po_115G>
           <defaultPortion>	0.0	</defaultPortion>
           <speed>	900	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	100	</piercingPower>
+          <piercingPower>	285 285	</piercingPower>
         </_115mm_Po_115G>
         <_115mm_Sha_bao_115G>
           <defaultPortion>	0.05	</defaultPortion>
           <speed>	800	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	100	</piercingPower>
+          <piercingPower>	58 58	</piercingPower>
         </_115mm_Sha_bao_115G>
       </shots>
     </_115mm_69_115T>

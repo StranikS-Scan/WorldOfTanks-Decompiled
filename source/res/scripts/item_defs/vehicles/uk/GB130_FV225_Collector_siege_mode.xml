@@ -89,6 +89,13 @@
       <undamaged>	vehicles/british/GB130_FV225_Collector/normal/lod0/Hull.model	</undamaged>
       <destroyed>	vehicles/british/GB130_FV225_Collector/crash/lod0/Hull.model	</destroyed>
       <exploded>	vehicles/british/GB130_FV225_Collector/crash/lod0/Hull.model	</exploded>
+      <sets>
+        <GB130_FV225_Collector_DMC_3Dst>
+          <undamaged>	vehicles/british/GB130_FV225_Collector/_skins/GB130_FV225_Collector_DMC_3Dst/normal/lod0/Hull.model	</undamaged>
+          <destroyed>	vehicles/british/GB130_FV225_Collector/_skins/GB130_FV225_Collector_DMC_3Dst/crash/lod0/Hull.model	</destroyed>
+          <exploded>	vehicles/british/GB130_FV225_Collector/_skins/GB130_FV225_Collector_DMC_3Dst/crash/lod0/Hull.model	</exploded>
+        </GB130_FV225_Collector_DMC_3Dst>
+      </sets>
     </models>
     <swinging>
       <lodDist>	FAR	</lodDist>
@@ -115,6 +122,15 @@
         <rayEnd>	0 0.467593 2.716242	</rayEnd>
         <rayUp>	0 0.573577 -0.819152	</rayUp>
         <size>	0.28	</size>
+      </slot>
+      <slot>
+        <slotType>	clan	</slotType>
+        <slotId>	10001	</slotId>
+        <compatibleModels>	GB130_FV225_Collector_DMC_3Dst	</compatibleModels>
+        <rayStart>	-0.322414 0.401096 3.388889	</rayStart>
+        <rayEnd>	-0.322211 0.209573 3.331291	</rayEnd>
+        <rayUp>	0.000163 0.287999 -0.957631	</rayUp>
+        <size>	0.3	</size>
       </slot>
       <slot>
         <slotType>	paint	</slotType>
@@ -752,6 +768,14 @@
         <applyType>	universal	</applyType>
         <size>	medium	</size>
       </slot>
+      <slot>
+        <slotType>	attachment	</slotType>
+        <slotId>	18002	</slotId>
+        <position>	0 0 0	</position>
+        <rotation>	0 0 0	</rotation>
+        <hiddenForUser>	true	</hiddenForUser>
+        <scale>	1 1 1	</scale>
+      </slot>
     </customizationSlots>
     <customization>
       <customizableVehicleAreas>
@@ -793,6 +817,13 @@
         <undamaged>	vehicles/british/GB130_FV225_Collector/normal/lod0/Chassis.model	</undamaged>
         <destroyed>	vehicles/british/GB130_FV225_Collector/crash/lod0/Chassis.model	</destroyed>
         <exploded>	vehicles/british/GB130_FV225_Collector/crash/lod0/Chassis.model	</exploded>
+        <sets>
+          <GB130_FV225_Collector_DMC_3Dst>
+            <undamaged>	vehicles/british/GB130_FV225_Collector/_skins/GB130_FV225_Collector_DMC_3Dst/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/british/GB130_FV225_Collector/_skins/GB130_FV225_Collector_DMC_3Dst/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/british/GB130_FV225_Collector/_skins/GB130_FV225_Collector_DMC_3Dst/crash/lod0/Chassis.model	</exploded>
+          </GB130_FV225_Collector_DMC_3Dst>
+        </sets>
       </models>
       <traces>
         <lodDist>	MEDIUM	</lodDist>
@@ -890,6 +921,51 @@
                   <row3>	-2.061706 1.003392 0.113201	</row3>
                 </boxCollider>
               </hullCollider>
+              <hullCollider>
+                <modelsSet>	GB130_FV225_Collector_DMC_3Dst	</modelsSet>
+                <boxCollider>
+                  <row0>	2.180442 0.000000 0.000000	</row0>
+                  <row1>	0.000000 1.843790 0.000000	</row1>
+                  <row2>	0.000000 0.000000 8.352271	</row2>
+                  <row3>	0.000001 1.437055 0.000000	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	4.371664 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.652147 0.000000	</row1>
+                  <row2>	0.000000 0.000000 7.767602	</row2>
+                  <row3>	0.000000 1.712639 0.000000	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	4.361993 0.000000 -0.000001	</row0>
+                  <row1>	0.000000 0.465512 0.316394	</row1>
+                  <row2>	0.000000 -0.829800 1.220887	</row2>
+                  <row3>	0.000000 1.634157 3.653237	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	4.239607 0.000002 0.000002	</row0>
+                  <row1>	0.000000 0.294761 -0.489268	</row1>
+                  <row2>	-0.000001 0.947542 0.570850	</row2>
+                  <row3>	0.000000 1.572501 -3.753565	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.953709 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.300000 0.000000	</row1>
+                  <row2>	0.000000 0.000000 6.114601	</row2>
+                  <row3>	0.000000 0.749563 0.000000	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	0.414539 0.000000 0.000000	</row0>
+                  <row1>	0.000000 1.000000 0.000000	</row1>
+                  <row2>	0.000000 0.000000 8.113931	</row2>
+                  <row3>	-2.114471 0.954974 0.327328	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	4.571858 0.000000 -0.000001	</row0>
+                  <row1>	0.000000 0.391483 0.080750	</row1>
+                  <row2>	0.000000 -0.112418 0.545011	</row2>
+                  <row3>	0.000000 0.544869 4.159244	</row3>
+                </boxCollider>
+              </hullCollider>
             </physicalParams>
           </trackDebris>
           <trackDebris>
@@ -973,6 +1049,51 @@
                   <row1>	0.000000 1.000000 0.000000	</row1>
                   <row2>	0.000000 0.000000 7.877887	</row2>
                   <row3>	2.061706 1.003392 0.113201	</row3>
+                </boxCollider>
+              </hullCollider>
+              <hullCollider>
+                <modelsSet>	GB130_FV225_Collector_DMC_3Dst	</modelsSet>
+                <boxCollider>
+                  <row0>	2.180442 0.000000 0.000000	</row0>
+                  <row1>	0.000000 1.843790 0.000000	</row1>
+                  <row2>	0.000000 0.000000 8.352271	</row2>
+                  <row3>	-0.000001 1.437055 0.000000	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	4.371664 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.652147 0.000000	</row1>
+                  <row2>	0.000000 0.000000 7.767602	</row2>
+                  <row3>	0.000000 1.712639 0.000000	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	4.361993 0.000000 0.000001	</row0>
+                  <row1>	0.000000 0.465512 0.316394	</row1>
+                  <row2>	0.000000 -0.829800 1.220887	</row2>
+                  <row3>	0.000000 1.634157 3.653237	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	4.239607 -0.000002 -0.000002	</row0>
+                  <row1>	0.000000 0.294761 -0.489268	</row1>
+                  <row2>	0.000001 0.947541 0.570850	</row2>
+                  <row3>	0.000000 1.572501 -3.753565	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	3.953709 0.000000 0.000000	</row0>
+                  <row1>	0.000000 0.300000 0.000000	</row1>
+                  <row2>	0.000000 0.000000 6.114601	</row2>
+                  <row3>	0.000000 0.749563 0.000000	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	0.414539 0.000000 0.000000	</row0>
+                  <row1>	0.000000 1.000000 0.000000	</row1>
+                  <row2>	0.000000 0.000000 8.113931	</row2>
+                  <row3>	2.114471 0.954974 0.327328	</row3>
+                </boxCollider>
+                <boxCollider>
+                  <row0>	4.571858 0.000000 0.000001	</row0>
+                  <row1>	0.000000 0.391483 0.080750	</row1>
+                  <row2>	0.000000 -0.112418 0.545011	</row2>
+                  <row3>	0.000000 0.544869 4.159244	</row3>
                 </boxCollider>
               </hullCollider>
             </physicalParams>
@@ -1169,6 +1290,12 @@
             <UTiles>	1	</UTiles>
             <VTiles>	1	</VTiles>
           </atlas>
+          <modelSets>
+            <GB130_FV225_Collector_DMC_3Dst>
+              <segmentModelLeft>	vehicles/british/GB130_FV225_Collector/_skins/GB130_FV225_Collector_DMC_3Dst/track/segment.model	</segmentModelLeft>
+              <segmentModelRight>	vehicles/british/GB130_FV225_Collector/_skins/GB130_FV225_Collector_DMC_3Dst/track/segment.model	</segmentModelRight>
+            </GB130_FV225_Collector_DMC_3Dst>
+          </modelSets>
         </trackPair>
         <lodDist>	SPLINE_TRACK	</lodDist>
       </splineDesc>
@@ -1183,6 +1310,11 @@
             <model>	vehicles/british/GB130_FV225_Collector/track/segment.model	</model>
             <length>	0.150828	</length>
           </mainSegment>
+          <modelSets>
+            <GB130_FV225_Collector_DMC_3Dst>
+              <mainSegmentModel>	vehicles/british/GB130_FV225_Collector/_skins/GB130_FV225_Collector_DMC_3Dst/track/segment.model	</mainSegmentModel>
+            </GB130_FV225_Collector_DMC_3Dst>
+          </modelSets>
           <springsLength>
             <backwardMovement>
               <back>	0.148165	</back>
@@ -1386,6 +1518,11 @@
             <model>	vehicles/british/GB130_FV225_Collector/track/segment.model	</model>
             <length>	0.150828	</length>
           </mainSegment>
+          <modelSets>
+            <GB130_FV225_Collector_DMC_3Dst>
+              <mainSegmentModel>	vehicles/british/GB130_FV225_Collector/_skins/GB130_FV225_Collector_DMC_3Dst/track/segment.model	</mainSegmentModel>
+            </GB130_FV225_Collector_DMC_3Dst>
+          </modelSets>
           <springsLength>
             <backwardMovement>
               <back>	0.148165	</back>
@@ -1689,6 +1826,11 @@
           </twinGun>
           <prefabs>
             <main>	content/CGFPrefabs/Vehicle/guns/uk/gun_Twin_110_mm_Gun_MBC.prefab	</main>
+            <sets>
+              <GB130_FV225_Collector_DMC_3Dst>
+                <main>	content/CGFPrefabs/Vehicle/guns/uk/gun_Twin_110_mm_Gun_MBC_DMC_3Dst.prefab	</main>
+              </GB130_FV225_Collector_DMC_3Dst>
+            </sets>
           </prefabs>
           <customizationSlots>
             <slot>
@@ -1728,6 +1870,26 @@
               <rayUp>	0.134408 0 0	</rayUp>
               <size>	0.79	</size>
             </slot>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	49002	</slotId>
+              <compatibleModels>	GB130_FV225_Collector_DMC_3Dst	</compatibleModels>
+              <rayStart>	-0.243 0 4.465	</rayStart>
+              <rayEnd>	-0.243 0 4.885	</rayEnd>
+              <rayUp>	0.09441 0 0	</rayUp>
+              <size>	0.42	</size>
+              <isMirrored>	false	</isMirrored>
+            </slot>
+            <slot>
+              <slotType>	insigniaOnGun	</slotType>
+              <slotId>	49003	</slotId>
+              <compatibleModels>	GB130_FV225_Collector_DMC_3Dst	</compatibleModels>
+              <rayStart>	0.243 0 4.465	</rayStart>
+              <rayEnd>	0.243 0 4.885	</rayEnd>
+              <rayUp>	0.09441 0 0	</rayUp>
+              <size>	0.42	</size>
+              <isMirrored>	false	</isMirrored>
+            </slot>
           </customizationSlots>
           <customization>
             <customizableVehicleAreas>
@@ -1739,6 +1901,13 @@
             <undamaged>	vehicles/british/GB130_FV225_Collector/normal/lod0/Gun_03.model	</undamaged>
             <destroyed>	vehicles/british/GB130_FV225_Collector/crash/lod0/Gun_03.model	</destroyed>
             <exploded>	vehicles/british/GB130_FV225_Collector/crash/lod0/Gun_03.model	</exploded>
+            <sets>
+              <GB130_FV225_Collector_DMC_3Dst>
+                <undamaged>	vehicles/british/GB130_FV225_Collector/_skins/GB130_FV225_Collector_DMC_3Dst/normal/lod0/Gun_03.model	</undamaged>
+                <destroyed>	vehicles/british/GB130_FV225_Collector/_skins/GB130_FV225_Collector_DMC_3Dst/crash/lod0/Gun_03.model	</destroyed>
+                <exploded>	vehicles/british/GB130_FV225_Collector/_skins/GB130_FV225_Collector_DMC_3Dst/crash/lod0/Gun_03.model	</exploded>
+              </GB130_FV225_Collector_DMC_3Dst>
+            </sets>
           </models>
           <hitTester>
             <collisionModelServer>	vehicles/british/GB130_FV225_Collector/collision/Gun_03.model	</collisionModelServer>
@@ -1756,6 +1925,13 @@
         <undamaged>	vehicles/british/GB130_FV225_Collector/normal/lod0/Turret_01.model	</undamaged>
         <destroyed>	vehicles/british/GB130_FV225_Collector/crash/lod0/Turret_01.model	</destroyed>
         <exploded>	vehicles/british/GB130_FV225_Collector/crash/lod0/Turret_01.model	</exploded>
+        <sets>
+          <GB130_FV225_Collector_DMC_3Dst>
+            <undamaged>	vehicles/british/GB130_FV225_Collector/_skins/GB130_FV225_Collector_DMC_3Dst/normal/lod0/Turret_01.model	</undamaged>
+            <destroyed>	vehicles/british/GB130_FV225_Collector/_skins/GB130_FV225_Collector_DMC_3Dst/crash/lod0/Turret_01.model	</destroyed>
+            <exploded>	vehicles/british/GB130_FV225_Collector/_skins/GB130_FV225_Collector_DMC_3Dst/crash/lod0/Turret_01.model	</exploded>
+          </GB130_FV225_Collector_DMC_3Dst>
+        </sets>
       </models>
       <hitTester>
         <collisionModelServer>	vehicles/british/GB130_FV225_Collector/collision/Turret_01.model	</collisionModelServer>

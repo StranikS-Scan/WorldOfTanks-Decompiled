@@ -2731,4 +2731,51 @@
       </outfits>
     </style>
   </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	2	</historical>
+    <priceGroup>	styles 3000g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	uk:GB130_FV225_Collector	</vehicles>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	1372	</id>
+      <texture>	gui/maps/vehicles/styles/GB130_FV225_Collector_DMC_3Dst.png	</texture>
+      <modelsSet>	GB130_FV225_Collector_DMC_3Dst	</modelsSet>
+      <maxNumber>	1	</maxNumber>
+      <userString>	#vehicle_customization:special_style/GB130_FV225_Collector_DMC_3Dst	</userString>
+      <longDescriptionSpecial>	#vehicle_customization:special_style/GB130_FV225_Collector_DMC_3Dst_desc/long	</longDescriptionSpecial>
+      <tags>	c11n3D	</tags>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	1	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+          <insignias>
+            <item>
+              <id>	131	</id>
+              <appliedTo>	4096	</appliedTo>
+            </item>
+          </insignias>
+          <attachments>
+            <item>
+              <slotId>	18002	</slotId>
+              <id>	194	</id>
+              <scaleFactorId>	0	</scaleFactorId>
+              <rotated>	0	</rotated>
+            </item>
+          </attachments>
+        </outfit>
+      </outfits>
+    </style>
+  </itemGroup>
 </uk.xml>

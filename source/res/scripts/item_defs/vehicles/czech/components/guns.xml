@@ -1,5 +1,4 @@
 <guns.xml>
-  <xmlns:xmlref>	http://bwt/xmlref	</xmlns:xmlref>
   <ids>
     <_88mm_Vz_37N_A>	0	</_88mm_Vz_37N_A>
     <_37mm_Pechotni_delo_Skoda_L_27>	1	</_37mm_Pechotni_delo_Skoda_L_27>
@@ -3366,20 +3365,20 @@
       <effects>	shot_largeext_mb	</effects>
       <reloadEffect>	reload_automat_reloading_115_152	</reloadEffect>
       <pitchLimits>
-        <minPitch>	0.0 -10 1.0 -10	</minPitch>
-        <maxPitch>	0.0 10 1.0 10	</maxPitch>
+        <minPitch>	0.0 -20.0 1.0 -20.0	</minPitch>
+        <maxPitch>	0.0 10.0 1.0 10.0	</maxPitch>
       </pitchLimits>
       <turretYawLimits>	-180 180	</turretYawLimits>
-      <rotationSpeed>	0.96	</rotationSpeed>
-      <reloadTime>	62.58	</reloadTime>
+      <rotationSpeed>	26.25	</rotationSpeed>
+      <reloadTime>	12	</reloadTime>
       <maxAmmo>	40	</maxAmmo>
-      <aimingTime>	10.43	</aimingTime>
-      <weight>	100	</weight>
+      <aimingTime>	2.5	</aimingTime>
+      <weight>	2800	</weight>
       <maxHealth>	240	</maxHealth>
       <maxRegenHealth>	120	</maxRegenHealth>
       <repairCost>	11	</repairCost>
-      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
-      <shotDispersionRadius>	1.04	</shotDispersionRadius>
+      <invisibilityFactorAtShot>	0.153	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.36	</shotDispersionRadius>
       <shotDispersionFactors>
         <turretRotation>	0.08	</turretRotation>
         <afterShot>	4.0	</afterShot>
@@ -3391,42 +3390,38 @@
           <speed>	980	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	100	</piercingPower>
+          <piercingPower>	270 260	</piercingPower>
         </_130mm_Prurazny_vz_63_NZ>
         <_130mm_Prurazny_vz_63_s_jadrem_NZ>
           <defaultPortion>	0.0	</defaultPortion>
           <speed>	1150	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	100	</piercingPower>
+          <piercingPower>	316 286	</piercingPower>
         </_130mm_Prurazny_vz_63_s_jadrem_NZ>
         <_130mm_Narazovy_vz_63_NZ>
           <defaultPortion>	0	</defaultPortion>
           <speed>	870	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	100	</piercingPower>
+          <piercingPower>	68 68	</piercingPower>
         </_130mm_Narazovy_vz_63_NZ>
       </shots>
       <mechanics>
         <shellCalibration>
           <penetration>
-            <damageCoefficient>	0.01	</damageCoefficient>
+            <damageCoefficient>	0.1	</damageCoefficient>
           </penetration>
           <nonPenetration>
             <modifiers>
               <mul>
                 <name>	dynAttrs/gun/piercing	</name>
-                <value>	1.01	</value>
+                <value>	1.05	</value>
               </mul>
             </modifiers>
           </nonPenetration>
         </shellCalibration>
       </mechanics>
-      <clip>
-        <count>	2	</count>
-        <rate>	1	</rate>
-      </clip>
     </_130mm_vz_63_s_ANZ>
     <_152_mm_D_20SM>
       <userString>	#czech_vehicles:_152_mm_D_20SM	</userString>

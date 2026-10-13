@@ -5,6 +5,7 @@ import logging
 import math
 from math import tan
 import typing
+from Compound import AppearanceDeactivatedEvent
 from enum import IntEnum
 import BigWorld
 import CGF
@@ -208,6 +209,7 @@ class CompoundAppearance(CommonTankAppearance):
 
     def deactivate(self):
         super(CompoundAppearance, self).deactivate()
+        CGF.postEvent(self._spaceID, AppearanceDeactivatedEvent(self._entityGameObject, self._gameObject))
         if self.highlighter:
             if self._isPlayerVehicle:
                 self.highlighter.highlight(False)
@@ -601,7 +603,6 @@ class CompoundAppearance(CommonTankAppearance):
         self.__resourceLoadID = BigWorld.loadResourceListBG((assembler, collisionAssembler), makeCallbackWeak(self.__onModelsRefresh, modelsSetParams.state), loadingPriority(self._vehicle.id))
         CGF.postEvent(self.spaceID, Compound.AppearanceRefreshRequestedEvent(self._entityGameObject))
         self.__reparentEffects()
-        self.__deactivateShotEffect()
 
     def __onModelsRefresh(self, modelState, resourceList):
         _logger.debug('CompoundAppearance.__onModelsRefresh (%r)', self.id)
@@ -675,14 +676,6 @@ class CompoundAppearance(CommonTankAppearance):
             newLocal.postMultiply(appWorldTransform)
             transformComponent.transform = newLocal
             hierarchyComponent.parent = self._entityGameObject.uuid
-
-    def __deactivateShotEffect(self):
-        if self.typeDescriptor.gun.prefabBased:
-            return
-        shotEffectGo = GenericComponents.findSlot(self._entityGameObject, self._getShotEffectSlotName())
-        if shotEffectGo.valid:
-            queue = CGF.CommandQueue(self._spaceID)
-            queue.deactivateGameObject(shotEffectGo)
 
     def __activateOnModelUpdate(self, ctx):
         self._calcWeaponEnergy(ctx.collisions)
@@ -777,8 +770,8 @@ class CompoundAppearance(CommonTankAppearance):
         self.filter.vehicleCollisionCallback = player.handleVehicleCollidedVehicle
         return
 
-    def _attachStickers(self):
-        super(CompoundAppearance, self)._attachStickers()
+    def _attachStickers(self, collisionComponent):
+        super(CompoundAppearance, self)._attachStickers(collisionComponent)
         self.__updateStickers()
 
     def __updateStickers(self):

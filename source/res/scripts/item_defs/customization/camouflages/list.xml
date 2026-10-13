@@ -113680,6 +113680,122 @@
   <itemGroup>
     <userString>	#vehicle_customization:camouflage/opaque	</userString>
     <season>	ALL	</season>
+    <historical>	2	</historical>
+    <priceGroup>	camouflages 50g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+      <exclude>
+        <tags>	excluded_from_customization	</tags>
+      </exclude>
+    </vehicleFilter>
+    <camouflage>
+      <id>	1165	</id>
+      <texture>	vehicles/russian/Camouflage/bp2026_october_1.dds	</texture>
+      <userString>	#vehicle_customization:camouflage/bp2026_october_1/label	</userString>
+      <description>	#vehicle_customization:camouflage/empty/description	</description>
+      <scales>	1.2 1 0.7	</scales>
+      <tags>	fullRGB hiddenInUI	</tags>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	255 0 0 255	</c0>
+          <c1>	0 255 0 255	</c1>
+          <c2>	0 0 255 255	</c2>
+          <c3>	0 0 0 255	</c3>
+        </palette>
+      </palettes>
+      <rotation>
+        <HULL>	-0.710698	</HULL>
+        <TURRET>	-0.710698	</TURRET>
+        <GUN>	-0.710698	</GUN>
+      </rotation>
+      <tilingSettings>
+        <type>	relativewithfactor	</type>
+        <factor>	2.45 2.45	</factor>
+        <offset>	-0.23 3.53	</offset>
+      </tilingSettings>
+      <glossMetallicMap>	vehicles/russian/Camouflage/bp2026_october_1_GMM.dds	</glossMetallicMap>
+    </camouflage>
+    <camouflage>
+      <id>	1166	</id>
+      <texture>	vehicles/russian/Camouflage/bp2026_october_2_hull.dds	</texture>
+      <userString>	#vehicle_customization:camouflage/bp2026_october_1/label	</userString>
+      <description>	#vehicle_customization:camouflage/empty/description	</description>
+      <scales>	1.2 1 0.7	</scales>
+      <tags>	fullRGB hiddenInUI	</tags>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	255 0 0 255	</c0>
+          <c1>	0 255 0 255	</c1>
+          <c2>	0 0 255 255	</c2>
+          <c3>	0 0 0 255	</c3>
+        </palette>
+      </palettes>
+      <tilingSettings>
+        <type>	relativewithfactor	</type>
+        <factor>	1.77 1.77	</factor>
+        <offset>	-0.4 0.55	</offset>
+      </tilingSettings>
+      <glossMetallicMap>	vehicles/russian/Camouflage/bp2026_october_2_hull_GMM.dds	</glossMetallicMap>
+    </camouflage>
+    <camouflage>
+      <id>	1167	</id>
+      <texture>	vehicles/russian/Camouflage/bp2026_october_2_turret.dds	</texture>
+      <userString>	#vehicle_customization:camouflage/bp2026_october_2/label	</userString>
+      <description>	#vehicle_customization:camouflage/empty/description	</description>
+      <scales>	1.2 1 0.7	</scales>
+      <tags>	fullRGB hiddenInUI	</tags>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	255 0 0 255	</c0>
+          <c1>	0 255 0 255	</c1>
+          <c2>	0 0 255 255	</c2>
+          <c3>	0 0 0 255	</c3>
+        </palette>
+      </palettes>
+      <tilingSettings>
+        <type>	relativewithfactor	</type>
+        <factor>	1.63 1.63	</factor>
+        <offset>	-0.77 0.12	</offset>
+      </tilingSettings>
+      <glossMetallicMap>	vehicles/russian/Camouflage/bp2026_october_2_turret_GMM.dds	</glossMetallicMap>
+    </camouflage>
+    <camouflage>
+      <id>	1168	</id>
+      <texture>	vehicles/russian/Camouflage/bp2026_october_3.dds	</texture>
+      <userString>	#vehicle_customization:camouflage/bp2026_october_3/label	</userString>
+      <description>	#vehicle_customization:camouflage/empty/description	</description>
+      <scales>	1.2 1 0.7	</scales>
+      <tags>	fullRGB hiddenInUI	</tags>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	255 0 0 255	</c0>
+          <c1>	0 255 0 255	</c1>
+          <c2>	0 0 255 255	</c2>
+          <c3>	0 0 0 255	</c3>
+        </palette>
+      </palettes>
+      <rotation>
+        <HULL>	-0.507716	</HULL>
+        <TURRET>	-0.507716	</TURRET>
+        <GUN>	-0.507716	</GUN>
+      </rotation>
+      <tilingSettings>
+        <type>	relativewithfactor	</type>
+        <factor>	1.98 1.98	</factor>
+        <offset>	0.44 3.73	</offset>
+      </tilingSettings>
+      <glossMetallicMap>	vehicles/russian/Camouflage/bp2026_october_3_GMM.dds	</glossMetallicMap>
+    </camouflage>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/opaque	</userString>
+    <season>	ALL	</season>
     <historical>	1	</historical>
     <vehicleFilter>
       <exclude>

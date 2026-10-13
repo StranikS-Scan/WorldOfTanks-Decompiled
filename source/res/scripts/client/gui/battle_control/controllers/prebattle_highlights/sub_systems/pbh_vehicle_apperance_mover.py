@@ -148,7 +148,7 @@ class PbhVehicleAppearanceMover(BasePbhSubSystem):
         return
 
     def __resetVehiclePositions(self):
-        for vehEntity in self.__vehicleEntities:
+        for vehEntity in self.__vehicleEntities or ():
             original = self.__originalMatrixProviders.get(vehEntity.id)
             if original is not None:
                 appearanceTransform = vehEntity.appearance.gameObject.findWrite(TransformComponent)

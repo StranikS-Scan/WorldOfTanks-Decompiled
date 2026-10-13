@@ -1,33 +1,36 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: white_tiger/scripts/client/white_tiger/gui/game_control/economics_controller.py
 from __future__ import absolute_import
+import typing
 from future.utils import viewitems
 import Event
 from collections import namedtuple
+from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.game_control.season_provider import SeasonProvider
 from gui.prb_control.entities.listener import IGlobalListener
+from gui.shared.items_cache import CACHE_SYNC_REASON
+from gui.shared.utils.requesters import REQ_CRITERIA
 from helpers import dependency, server_settings
+from shared_utils import first
 from shared_utils import makeTupleByDict
+from skeletons.gui.lobby_context import ILobbyContext
+from skeletons.gui.server_events import IEventsCache
+from skeletons.gui.shared import IItemsCache
+from white_tiger.gui.white_tiger_account_settings import AccountSettingsKeys, setSettings, setWTFavorites
+from white_tiger.gui.wt_bonus_packers import mergeWtProgressionBonuses
 from white_tiger.skeletons.economics_controller import IEconomicsController
 from white_tiger.skeletons.white_tiger_controller import IWhiteTigerController
-from skeletons.gui.lobby_context import ILobbyContext
-from skeletons.gui.shared import IItemsCache
 from white_tiger_common.wt_constants import WHITE_TIGER_GAME_PARAMS_KEY
-from gui.ClientUpdateManager import g_clientUpdateManager
-from white_tiger.gui.wt_bonus_packers import mergeWtProgressionBonuses
-from skeletons.gui.server_events import IEventsCache
-from gui.shared.utils.requesters import REQ_CRITERIA
-from white_tiger_common.wt_constants import WT_VEHICLE_TAGS
-from shared_utils import first
-from white_tiger.gui.white_tiger_account_settings import AccountSettingsKeys, setSettings, setWTFavorites
 from white_tiger_common.wt_constants import WT_EVENT_TICKET_KEY, WT_FIRST_TIME_EVENT_ENTER_TANK, WT_EVENT_GOLDEN_TICKET_KEY
-from gui.shared.items_cache import CACHE_SYNC_REASON
+from white_tiger_common.wt_constants import WT_VEHICLE_TAGS
+if typing.TYPE_CHECKING:
+    from typing import Set
 
-class _EconomicsConfig(namedtuple('_ProgressionConfig', ('ticketToken', 'quickBossTicketToken', 'quickHunterTicketToken', 'ticketsToDraw', 'progression', 'stampsPerProgressionStage', 'stamp', 'mainRewardTypeFilter'))):
+class _EconomicsConfig(namedtuple('_ProgressionConfig', ('ticketToken', 'quickBossTicketToken', 'quickHunterTicketToken', 'ticketsToDraw', 'progression', 'stampsPerProgressionStage', 'stamp', 'mainRewardTypeFilter', 'lootboxes'))):
     __slots__ = ()
 
     def __new__(cls, **kwargs):
-        defaults = dict(ticketToken='', quickBossTicketToken='', quickHunterTicketToken='', ticketsToDraw=0, progression=[], stampsPerProgressionStage=0, stamp='', mainRewardTypeFilter='')
+        defaults = dict(ticketToken='', quickBossTicketToken='', quickHunterTicketToken='', ticketsToDraw=0, progression=[], stampsPerProgressionStage=0, stamp='', mainRewardTypeFilter='', lootboxes=set())
         defaults.update(kwargs)
         return super(_EconomicsConfig, cls).__new__(cls, **defaults)
 
@@ -125,6 +128,9 @@ class EconomicsController(IEconomicsController, IGlobalListener, SeasonProvider)
 
     def getQuickTicketTokenName(self):
         return self.getEconomicsSettings().quickBossTicketToken
+
+    def getLootboxTokenKeys(self):
+        return self.getEconomicsSettings().lootboxes
 
     def getQuickHunterTicketTokenName(self):
         return self.getEconomicsSettings().quickHunterTicketToken

@@ -77,6 +77,7 @@ class SPECIAL_VOICE_TAG(object):
     BP_H6 = ('tankmen_bp1006_1', 'tankmen_bp1006_2', 'tankmen_bp1006_3', 'tankmen_bp1006_4', 'tankmen_bp1006_5', 'tankmen_bp1006_6')
     BP_19_M = ('tankmen_bp19_5', 'tankmen_bp19_6', 'tankmen_bp19_7', 'tankmen_bp19_8', 'tankmen_bp19_9')
     BP_20_M = ('tankmen_bp20_5', 'tankmen_bp20_6', 'tankmen_bp20_7', 'tankmen_bp20_8', 'tankmen_bp20_9')
+    BP_21_M = ('tankmen_bp21_5', 'tankmen_bp21_6', 'tankmen_bp21_7', 'tankmen_bp21_8', 'tankmen_bp21_9')
     MT_LB_4 = 'tankmen_mtlb4_1'
     ALL = (BUFFON,
      SABATON,
@@ -119,7 +120,7 @@ class SPECIAL_VOICE_TAG(object):
      CELEBRITY_2026,
      ERWIN,
      JAGER_MAILAND,
-     JAGER_MOUZAKROBAT) + BATTLE_OF_BLOGGERS + BATTLE_OF_BLOGGERS_2021 + G_I_JOE_TWITCH_2021 + WHITE_TIGER_EVENT_2021 + G_I_JOE_2022 + WHITE_TIGER_EVENT_2022 + BPH_2022 + WHITE_TIGER_EVENT_2023 + BP_12_M + BP_H2 + BP_13 + CTM_24 + BP_14_M + WHITE_TIGER_EVENT_2024 + BP_15_M + BP_H4 + BP_16_M + BP_17_DC_M + BP_18_M + BP_18_NM + BP_H5 + BP_H6 + BP_19_M + BP_20_M
+     JAGER_MOUZAKROBAT) + BATTLE_OF_BLOGGERS + BATTLE_OF_BLOGGERS_2021 + G_I_JOE_TWITCH_2021 + WHITE_TIGER_EVENT_2021 + G_I_JOE_2022 + WHITE_TIGER_EVENT_2022 + BPH_2022 + WHITE_TIGER_EVENT_2023 + BP_12_M + BP_H2 + BP_13 + CTM_24 + BP_14_M + WHITE_TIGER_EVENT_2024 + BP_15_M + BP_H4 + BP_16_M + BP_17_DC_M + BP_18_M + BP_18_NM + BP_H5 + BP_H6 + BP_19_M + BP_20_M + BP_21_M
 
 
 class SPECIAL_CREW_TAG(object):

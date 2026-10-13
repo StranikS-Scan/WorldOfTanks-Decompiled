@@ -9648,6 +9648,48 @@
     </paint>
   </itemGroup>
   <itemGroup>
+    <name>	Battle Pass 2026	</name>
+    <userString>	#vehicle_customization:repaint/color_group_04	</userString>
+    <season>	ALL	</season>
+    <historical>	2	</historical>
+    <priceGroup>	paints 20g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+      <exclude>
+        <tags>	excluded_from_customization	</tags>
+      </exclude>
+    </vehicleFilter>
+    <paint>
+      <id>	686	</id>
+      <texture>	gui/maps/vehicles/repaints/germany_color_05.png	</texture>
+      <color>	52 64 40 255	</color>
+      <gloss>	0.59	</gloss>
+      <metallic>	0.32	</metallic>
+      <userString>	#vehicle_customization:special_style/bp2026_october_1	</userString>
+      <tags>	hiddenInUI	</tags>
+    </paint>
+    <paint>
+      <id>	687	</id>
+      <texture>	gui/maps/vehicles/repaints/sweden_color_06.png	</texture>
+      <color>	56 48 34 255	</color>
+      <gloss>	0.45	</gloss>
+      <metallic>	0.34	</metallic>
+      <userString>	#vehicle_customization:special_style/bp2026_october_2	</userString>
+      <tags>	hiddenInUI	</tags>
+    </paint>
+    <paint>
+      <id>	688	</id>
+      <texture>	gui/maps/vehicles/repaints/custom_color_20.png	</texture>
+      <color>	28 19 18 255	</color>
+      <gloss>	0.63	</gloss>
+      <metallic>	0.235	</metallic>
+      <userString>	#vehicle_customization:special_style/bp2026_october_3	</userString>
+      <tags>	hiddenInUI	</tags>
+    </paint>
+  </itemGroup>
+  <itemGroup>
     <name>	theboys	</name>
     <userString>	#vehicle_customization:repaint/color_group_04	</userString>
     <season>	ALL	</season>

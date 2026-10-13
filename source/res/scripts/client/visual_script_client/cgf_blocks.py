@@ -12,7 +12,7 @@ from visual_script.misc import ASPECT, errorVScript
 from visual_script.dependency import dependencyImporter
 from visual_script.contexts.cgf_context import GameObjectWrapper
 from visual_script.cgf_blocks import CGFMeta
-Vehicle, CGF, tankStructure, RAC, SimulatedVehicle, cgf_helpers = dependencyImporter('Vehicle', 'CGF', 'vehicle_systems.tankStructure', 'cgf_components.rocket_acceleration_component', 'SimulatedVehicle', 'cgf_common.cgf_helpers')
+Vehicle, CGF, tankStructure, RAC, SimulatedVehicle, cgf_helpers, GenericComponents = dependencyImporter('Vehicle', 'CGF', 'vehicle_systems.tankStructure', 'cgf_components.rocket_acceleration_component', 'SimulatedVehicle', 'cgf_common.cgf_helpers', 'GenericComponents')
 if not IS_VS_EDITOR:
     from gui.battle_control.controllers.vehicle_passenger import hasVehiclePassengerCtrl, VehiclePassengerInfoWatcher
 else:

@@ -10,14 +10,14 @@
   <postProgressionTree>	G197_Pz_Kpfw_Neu	</postProgressionTree>
   <customRoleSlotOptions>	2 4	</customRoleSlotOptions>
   <speedLimits>
-    <forward>	10	</forward>
-    <backward>	10	</backward>
+    <forward>	40	</forward>
+    <backward>	13	</backward>
   </speedLimits>
   <invisibility>
-    <moving>	0.01	</moving>
-    <still>	0.01	</still>
-    <camouflageBonus>	0.0	</camouflageBonus>
-    <firePenalty>	0.1	</firePenalty>
+    <moving>	0.055	</moving>
+    <still>	0.11	</still>
+    <camouflageBonus>	0.02	</camouflageBonus>
+    <firePenalty>	0.166	</firePenalty>
   </invisibility>
   <optDevsOverrides>
     <camouflageNet>
@@ -47,38 +47,38 @@
   </camouflage>
   <hull>
     <armor>
-      <armor_1>	10	</armor_1>
-      <armor_2>	10	</armor_2>
-      <armor_3>	10	</armor_3>
-      <armor_4>	10	</armor_4>
-      <armor_5>	10	</armor_5>
-      <armor_6>	10	</armor_6>
-      <armor_8>	10	</armor_8>
-      <armor_10>	10	</armor_10>
-      <armor_11>	10	</armor_11>
-      <armor_12>	10	</armor_12>
-      <armor_13>	10	</armor_13>
-      <armor_14>	10	</armor_14>
-      <armor_15>	10	</armor_15>
-      <armor_16>	10	</armor_16>
-      <armor_17>	10	</armor_17>
-      <armor_20>	10	</armor_20>
-      <armor_21>	10	</armor_21>
-      <armor_22>	10	</armor_22>
-      <armor_23>	10	</armor_23>
-      <armor_24>	10	</armor_24>
-      <armor_25>	10	</armor_25>
-      <armor_26>	10	</armor_26>
-      <armor_27>	10	</armor_27>
-      <armor_30>	10	</armor_30>
-      <armor_31>	10	</armor_31>
+      <armor_1>	185	</armor_1>
+      <armor_2>	200	</armor_2>
+      <armor_3>	100	</armor_3>
+      <armor_4>	60	</armor_4>
+      <armor_5>	40	</armor_5>
+      <armor_6>	20	</armor_6>
+      <armor_8>	0	</armor_8>
+      <armor_10>	40	</armor_10>
+      <armor_11>	90	</armor_11>
+      <armor_12>	30	</armor_12>
+      <armor_13>	70	</armor_13>
+      <armor_14>	20	</armor_14>
+      <armor_15>	130	</armor_15>
+      <armor_16>	130	</armor_16>
+      <armor_17>	45	</armor_17>
+      <armor_20>	300	</armor_20>
+      <armor_21>	280	</armor_21>
+      <armor_22>	240	</armor_22>
+      <armor_23>	200	</armor_23>
+      <armor_24>	160	</armor_24>
+      <armor_25>	110	</armor_25>
+      <armor_26>	70	</armor_26>
+      <armor_27>	40	</armor_27>
+      <armor_30>	45	</armor_30>
+      <armor_31>	30	</armor_31>
       <armor_32>	10	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
       </armor_32>
-      <armor_28>	10	</armor_28>
+      <armor_28>	50	</armor_28>
     </armor>
     <primaryArmor>	armor_1 armor_11 armor_4	</primaryArmor>
-    <weight>	9400	</weight>
-    <maxHealth>	10	</maxHealth>
+    <weight>	31450	</weight>
+    <maxHealth>	2000	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	270	</maxHealth>
       <maxRegenHealth>	203	</maxRegenHealth>
@@ -746,14 +746,14 @@
       <price>	100000	</price>
       <notInShop>	true	</notInShop>
       <armor>
-        <leftTrack>	10	</leftTrack>
-        <rightTrack>	10	</rightTrack>
+        <leftTrack>	20	</leftTrack>
+        <rightTrack>	20	</rightTrack>
       </armor>
-      <weight>	100	</weight>
+      <weight>	17250	</weight>
       <terrainResistance>	1 1.2 2	</terrainResistance>
       <brakeForce>	70000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
-      <rotationSpeed>	10	</rotationSpeed>
+      <rotationSpeed>	32	</rotationSpeed>
       <shotDispersionFactors>
         <vehicleMovement>	0.14	</vehicleMovement>
         <vehicleRotation>	0.14	</vehicleRotation>
@@ -1845,7 +1845,7 @@
           </sourceCollisionHullPoints>
         </right>
       </physicalTracks>
-      <repairTime>	0.649999976	</repairTime>
+      <repairTime>	6.66666651	</repairTime>
     </Chassis_G197_Pz_Kpfw_Neu>
   </chassis>
   <turrets0>
@@ -1856,91 +1856,92 @@
       <price>	100000	</price>
       <notInShop>	true	</notInShop>
       <armor>
-        <armor_1>	10	</armor_1>
-        <armor_2>	10	</armor_2>
-        <armor_3>	10	</armor_3>
-        <armor_4>	10	</armor_4>
-        <armor_5>	10	</armor_5>
-        <armor_6>	10	</armor_6>
-        <armor_8>	10	</armor_8>
-        <armor_11>	10	</armor_11>
-        <armor_12>	10	</armor_12>
-        <armor_13>	10	</armor_13>
-        <armor_14>	10	</armor_14>
-        <armor_15>	10	</armor_15>
-        <armor_16>	10	</armor_16>
-        <armor_17>	10	</armor_17>
-        <armor_18>	10	</armor_18>
-        <armor_19>	10	</armor_19>
-        <armor_20>	10	</armor_20>
-        <armor_21>	10	</armor_21>
-        <armor_22>	10	</armor_22>
-        <armor_23>	10	</armor_23>
-        <armor_24>	10	</armor_24>
-        <armor_25>	10	</armor_25>
-        <armor_26>	10	</armor_26>
-        <armor_27>	10	</armor_27>
-        <armor_28>	10	</armor_28>
-        <armor_29>	10	</armor_29>
-        <armor_30>	10	</armor_30>
-        <armor_31>	10	</armor_31>
-        <armor_32>	10	</armor_32>
+        <armor_1>	360	</armor_1>
+        <armor_2>	320	</armor_2>
+        <armor_3>	140	</armor_3>
+        <armor_4>	70	</armor_4>
+        <armor_5>	30	</armor_5>
+        <armor_6>	20	</armor_6>
+        <armor_8>	0	</armor_8>
+        <armor_11>	125	</armor_11>
+        <armor_12>	80	</armor_12>
+        <armor_13>	100	</armor_13>
+        <armor_14>	55	</armor_14>
+        <armor_15>	150	</armor_15>
+        <armor_16>	200	</armor_16>
+        <armor_17>	50	</armor_17>
+        <armor_18>	30	</armor_18>
+        <armor_19>	30	</armor_19>
+        <armor_20>	30	</armor_20>
+        <armor_21>	230	</armor_21>
+        <armor_22>	220	</armor_22>
+        <armor_23>	180	</armor_23>
+        <armor_24>	140	</armor_24>
+        <armor_25>	100	</armor_25>
+        <armor_26>	50	</armor_26>
+        <armor_27>	80	</armor_27>
+        <armor_28>	60	</armor_28>
+        <armor_29>	50	</armor_29>
+        <armor_30>	50	</armor_30>
+        <armor_31>	230	</armor_31>
+        <armor_32>	30	</armor_32>
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
-      <weight>	100	</weight>
-      <maxHealth>	10	</maxHealth>
-      <rotationSpeed>	0.96	</rotationSpeed>
+      <weight>	15200	</weight>
+      <maxHealth>	500	</maxHealth>
+      <rotationSpeed>	37	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	200	</maxHealth>
         <maxRegenHealth>	100	</maxRegenHealth>
         <repairCost>	11	</repairCost>
       </turretRotatorHealth>
-      <circularVisionRadius>	100	</circularVisionRadius>
+      <circularVisionRadius>	390	</circularVisionRadius>
       <surveyingDeviceHealth>
         <maxHealth>	130	</maxHealth>
         <maxRegenHealth>	65	</maxRegenHealth>
         <repairCost>	3	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_120_mm_Glattrohr_Panzerkanone_Muster_70_mit_Zusatzkammern_Mundungsgeschwindigkeitsmessbasis_und_Zunderstellgerat>	shared	  <maxAmmo>	55	</maxAmmo>
+        <_120_mm_Glattrohr_Panzerkanone_Muster_70_mit_Zusatzkammern_Mundungsgeschwindigkeitsmessbasis_und_Zunderstellgerat>
+          <maxAmmo>	55	</maxAmmo>
           <armor>
-            <gun>	10	</gun>
-            <armor_1>	10	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            <gun>	50	</gun>
+            <armor_1>	360	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_1>
-            <armor_2>	10	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            <armor_2>	100	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_2>
-            <armor_3>	10	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            <armor_3>	100	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_3>
-            <armor_4>	10	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            <armor_4>	0	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_4>
-            <armor_5>	10	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            <armor_5>	30	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_5>
-            <armor_6>	10	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            <armor_6>	30	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_6>
-            <armor_7>	10	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            <armor_7>	180	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_7>
-            <armor_9>	10	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            <armor_9>	50	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_9>
-            <armor_10>	10	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            <armor_10>	260	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_10>
-            <armor_11>	10	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            <armor_11>	100	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_11>
-            <armor_12>	10	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            <armor_12>	180	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_12>
           </armor>
           <pitchLimits>
-            <minPitch>	0.0 -10 1.0 -10	</minPitch>
-            <maxPitch>	0.0 10 1.0 10	</maxPitch>
+            <minPitch>	0 -18 1 -18	</minPitch>
+            <maxPitch>	0.00000 10.00 0.38333 10.00 0.42778 1.00 0.57222 1.00 0.61667 10.00 1.00000 10.00	</maxPitch>
           </pitchLimits>
-          <shotDispersionRadius>	1.04	</shotDispersionRadius>
-          <reloadTime>	62.58	</reloadTime>
+          <shotDispersionRadius>	0.33	</shotDispersionRadius>
+          <reloadTime>	8.9	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.06	</turretRotation>
             <afterShot>	4.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <aimingTime>	10.43	</aimingTime>
-          <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+          <aimingTime>	2	</aimingTime>
+          <invisibilityFactorAtShot>	0.18	</invisibilityFactorAtShot>
           <mechanics>
             <shellParamsSwitcher>
               <modifiedShells>	germany:_120_mm_Hartkern_Wuchtgeschoss_70_fur_Zusatzkammerbetrieb
@@ -2032,26 +2033,19 @@
           </camouflage>
           <shots>
             <_120_mm_Hartkern_Wuchtgeschoss_70_fur_Zusatzkammerbetrieb>
-              <normalizationAngle>	1	</normalizationAngle>
-              <ricochetAngle>	1	</ricochetAngle>
+              <normalizationAngle>	7	</normalizationAngle>
+              <ricochetAngle>	75	</ricochetAngle>
               <damage>
-                <armor>	100	</armor>
+                <armor>	390	</armor>
               </damage>
-              <piercingPower>	100	</piercingPower>
             </_120_mm_Hartkern_Wuchtgeschoss_70_fur_Zusatzkammerbetrieb>
             <_120_mm_Mehrzweck_Hl_Gr_70_mit_mundungsgestelltem_Zunder>
-              <piercingPowerLossFactorByDistance>	1	</piercingPowerLossFactorByDistance>
+              <piercingPowerLossFactorByDistance>	0.02	</piercingPowerLossFactorByDistance>
               <damage>
-                <armor>	100	</armor>
+                <armor>	390	</armor>
               </damage>
-              <piercingPower>	100	</piercingPower>
             </_120_mm_Mehrzweck_Hl_Gr_70_mit_mundungsgestelltem_Zunder>
-            <_120_mm_Sprgr_70>
-              <piercingPower>	100	</piercingPower>
-            </_120_mm_Sprgr_70>
           </shots>
-          <rotationSpeed>	0.96	</rotationSpeed>
-          <weight>	100	</weight>
         </_120_mm_Glattrohr_Panzerkanone_Muster_70_mit_Zusatzkammern_Mundungsgeschwindigkeitsmessbasis_und_Zunderstellgerat>
       </guns>
       <models>
@@ -2502,8 +2496,8 @@
     <detailed>
       <engines>
         <MAN_Mehrstoff_Hochleistungsdiesel_70N>
-          <smplEnginePower>	10	</smplEnginePower>
-          <smplFwMaxSpeed>	10	</smplFwMaxSpeed>
+          <smplEnginePower>	1230	</smplEnginePower>
+          <smplFwMaxSpeed>	40	</smplFwMaxSpeed>
         </MAN_Mehrstoff_Hochleistungsdiesel_70N>
       </engines>
       <chassis>
@@ -2527,8 +2521,8 @@
   <clientAdjustmentFactors></clientAdjustmentFactors>
   <siege_mode>
     <device>	gun	</device>
-    <switchOnTime>	100	</switchOnTime>
-    <switchOffTime>	100	</switchOffTime>
+    <switchOnTime>	1	</switchOnTime>
+    <switchOffTime>	1	</switchOffTime>
     <engineDamageCoeff>	1	</engineDamageCoeff>
     <stopEngineOnSwitch>	false	</stopEngineOnSwitch>
     <soundStateChange>

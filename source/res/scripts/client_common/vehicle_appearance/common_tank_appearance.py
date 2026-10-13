@@ -454,10 +454,10 @@ class CommonTankAppearance(PrefabLoader):
             hierarchy.parent = parentUuid
         else:
             _logger.error('Unable to find appearance HierarchyComponent')
-        self._attachStickers()
 
     def onActivate(self, ctx):
         _logger.debug('Appearance onActivate(%r)', self.id)
+        self._attachStickers(ctx.collisions)
         if ctx.flyingInfoProvider:
             if self.modelsSetParams.state == 'undamaged':
                 self.__filter.setFlyingInfo(CGF.createBoolLink(ctx.flyingInfoProvider, 'isFlying'))
@@ -747,7 +747,7 @@ class CommonTankAppearance(PrefabLoader):
         self._vehicleStickers = None
         return
 
-    def _attachStickers(self):
+    def _attachStickers(self, collisionComponent):
         _logger.debug('Attaching VehicleStickers for vehicle: %s', self._vehicle)
         isCurrentModelDamaged = self.damageState.isCurrentModelDamaged
         if self.vehicleStickers is None:
@@ -756,7 +756,7 @@ class CommonTankAppearance(PrefabLoader):
             return
         else:
             self.vehicleStickers.alpha = DEFAULT_STICKERS_ALPHA
-            self.vehicleStickers.attach(compoundModel=self.compoundModel, isDamaged=isCurrentModelDamaged, showDamageStickers=not isCurrentModelDamaged, attachChildPart=True)
+            self.vehicleStickers.attach(compoundModel=self.compoundModel, isDamaged=isCurrentModelDamaged, showDamageStickers=not isCurrentModelDamaged, attachChildPart=True, collisionComponent=collisionComponent)
             return
 
     def _detachStickers(self):

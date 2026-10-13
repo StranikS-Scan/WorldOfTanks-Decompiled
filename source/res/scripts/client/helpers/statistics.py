@@ -3,6 +3,8 @@
 import BigWorld
 import ResMgr
 import Settings
+import WWISE
+import SoundGroups
 from constants import ARENA_PERIOD, INVALID_CLIENT_STATS
 from account_helpers.settings_core.settings_constants import GRAPHICS
 from debug_utils import LOG_DEBUG, LOG_NOTE
@@ -239,6 +241,8 @@ class StatisticsCollector(IStatisticsCollector):
         stat['lastArenaUniqueID'] = self.__lastArenaUniqueID
         stat['lastArenaTypeID'] = self.__lastArenaTypeID
         stat['lastArenaTeam'] = self.__lastArenaTeam
+        stat['systemVolume'] = int(round(WWISE.WW_getAppMixerVolume() * 100))
+        stat['gameVolume'] = int(round(SoundGroups.g_instance.getMasterVolume() * 100))
         return stat
 
     def __getSystemData(self, statisticsDict):
@@ -272,7 +276,9 @@ class StatisticsCollector(IStatisticsCollector):
          'virtTotal': statisticsDict['virtTotal'],
          'pageFileTotal': statisticsDict['pageFileTotal'],
          'systemHddName': statisticsDict['systemHddName'],
-         'gameHddName': statisticsDict['gameHddName']}
+         'gameHddName': statisticsDict['gameHddName'],
+         'systemVolume': int(round(WWISE.WW_getAppMixerVolume() * 100)),
+         'gameVolume': int(round(SoundGroups.g_instance.getMasterVolume() * 100))}
 
     def __onSettingsChanged(self, diff):
         keys = set(diff.keys())

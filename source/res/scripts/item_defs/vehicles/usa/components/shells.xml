@@ -2023,33 +2023,6 @@
     </damage>
     <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
   </_152mm_HEAT_XM409>
-  <_152mm_HEAT_XM409_A100_02>
-    <id>	31092	</id>
-    <userString>	#usa_vehicles:_152mm_HEAT_XM409_A100_02	</userString>
-    <tags>	GLUM	</tags>
-    <icon>	hc_df	</icon>
-    <price>	1600	</price>
-    <kind>	HOLLOW_CHARGE	</kind>
-    <caliber>	152	</caliber>
-    <isTracer>	true	</isTracer>
-    <isForceTracer>	true	</isForceTracer>
-    <effects>	largeNursMissleCumulative	</effects>
-    <damage>
-      <armor>	650	</armor>
-      <devices>	203	</devices>
-    </damage>
-    <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
-    <distanceFactor>
-      <armorFactor>	0 0.9
-				100 1
-				300 1.25
-				500 1.35	</armorFactor>
-      <pierceFactor>	0 0.9
-				100 1
-				300 1.25
-				500 1.35	</pierceFactor>
-    </distanceFactor>
-  </_152mm_HEAT_XM409_A100_02>
   <_152mm_HE_XM657E2>
     <id>	107	</id>
     <userString>	#usa_vehicles:_152mm_HE_XM657E2	</userString>
@@ -2138,46 +2111,6 @@
       </damage>
     </armorSpalls>
   </_152mm_HE_XM657E2_59>
-  <_152mm_HE_XM657E2_A100_02>
-    <id>	31090	</id>
-    <userString>	#usa_vehicles:_152mm_HE_XM657E2_A100_02	</userString>
-    <tags>	GLUM	</tags>
-    <icon>	he_modern_df	</icon>
-    <price>	1500	</price>
-    <kind>	HIGH_EXPLOSIVE	</kind>
-    <mechanics>	MODERN	</mechanics>
-    <caliber>	152	</caliber>
-    <explosionRadius>	3.66	</explosionRadius>
-    <isTracer>	true	</isTracer>
-    <isForceTracer>	true	</isForceTracer>
-    <effects>	largeNursMissleExplosive	</effects>
-    <damage>
-      <armor>	800	</armor>
-      <devices>	203	</devices>
-    </damage>
-    <armorSpalls>
-      <impactRadius>	3.66	</impactRadius>
-      <coneAngle>	90	</coneAngle>
-      <damage>
-        <armor>	400	</armor>
-        <devices>	100	</devices>
-      </damage>
-    </armorSpalls>
-    <distanceFactor>
-      <armorFactor>	0 0.9
-				100 1
-				300 1.25
-				500 1.35	</armorFactor>
-      <pierceFactor>	0 0.9
-				100 1
-				300 1.25
-				500 1.35	</pierceFactor>
-      <spallsDamageFactor>	0 0.9
-				100 1
-				300 1.25
-				500 1.35	</spallsDamageFactor>
-    </distanceFactor>
-  </_152mm_HE_XM657E2_A100_02>
   <_152mm_HE_XM657E2_O>
     <id>	31057	</id>
     <userString>	#usa_vehicles:_152mm_HE_XM657E2_O	</userString>
@@ -3887,6 +3820,20 @@
       <devices>	105	</devices>
     </damage>
   </_76mm_APDS_M331A3>
+  <_76mm_APDS_M331A3_A100_02>
+    <id>	31090	</id>
+    <userString>	#usa_vehicles:_76mm_APDS_M331A3_A100_02	</userString>
+    <icon>	ap_cr	</icon>
+    <price>	600	</price>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	76	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mediumAPCR	</effects>
+    <damage>
+      <armor>	170	</armor>
+      <devices>	105	</devices>
+    </damage>
+  </_76mm_APDS_M331A3_A100_02>
   <_76mm_AP_M339>
     <id>	63	</id>
     <userString>	#usa_vehicles:_76mm_AP_M339	</userString>
@@ -4006,6 +3953,22 @@
     </damage>
     <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
   </_76mm_HEAT_M496A1>
+  <_76mm_HEAT_M496A1_A100_02>
+    <id>	31092	</id>
+    <userString>	#usa_vehicles:_76mm_HEAT_M496A1_A100_02	</userString>
+    <icon>	hc_premium	</icon>
+    <price>	4400	</price>
+    <improved>	true	</improved>
+    <kind>	HOLLOW_CHARGE	</kind>
+    <caliber>	76	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mediumHollowCharge	</effects>
+    <damage>
+      <armor>	170	</armor>
+      <devices>	105	</devices>
+    </damage>
+    <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
+  </_76mm_HEAT_M496A1_A100_02>
   <_76mm_HEAT_M496_SH>
     <id>	328	</id>
     <userString>	#usa_vehicles:_76mm_HEAT_M496_SH	</userString>
@@ -4110,6 +4073,30 @@
       </damage>
     </armorSpalls>
   </_76mm_HE_M352A1>
+  <_76mm_HE_M352A1_A100_02>
+    <id>	31091	</id>
+    <userString>	#usa_vehicles:_76mm_HE_M352A1_A100_02	</userString>
+    <icon>	he_modern	</icon>
+    <price>	300	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	76	</caliber>
+    <explosionRadius>	1.09	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	mediumHighExplosive	</effects>
+    <damage>
+      <armor>	260	</armor>
+      <devices>	105	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	1.09	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	130	</armor>
+        <devices>	55	</devices>
+      </damage>
+    </armorSpalls>
+  </_76mm_HE_M352A1_A100_02>
   <_76mm_HE_M42A1>
     <id>	19	</id>
     <userString>	#usa_vehicles:_76mm_HE_M42A1	</userString>

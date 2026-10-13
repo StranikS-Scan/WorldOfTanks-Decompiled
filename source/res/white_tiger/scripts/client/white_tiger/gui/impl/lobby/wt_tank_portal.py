@@ -66,8 +66,10 @@ class WtTankPortalView(WtEventBasePortalsView, CallbackDelayer):
         model.setTankNation(vehicle.name.split(':')[0])
         model.setTankType(vehicle.type)
         model.setTankRoleName(ROLE_TYPE_TO_LABEL[vehicle.role])
+        tankPortalPrice = self._eventCtrl.getConfig().tankPortalPrice
+        discountPerToken = self._eventCtrl.getMainPrizeDiscountPerToken()
         model.setDiscountTokenCount(self._eventCtrl.getCurrentMainPrizeDiscountTokensCount())
-        model.setDiscountPerToken(self._eventCtrl.getMainPrizeDiscountPerToken())
+        model.setDiscountPerToken(int(discountPerToken * 100 / tankPortalPrice))
         model.setMaxDiscountTokenCount(self._eventCtrl.getConfig().mainPrizeMaxDiscountTokenCount)
 
     def _addListeners(self):

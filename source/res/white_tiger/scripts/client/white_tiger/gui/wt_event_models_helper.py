@@ -28,7 +28,7 @@ def setBonusVehicles(model, isShortName=False, boxesCtrl=None):
         vehicles = getVehiclesFromAwards(vehicleGroup.bonuses)
         model.clear()
         for vehicle in vehicles:
-            if vehicle.name in ('poland:Pl26_Czolg_P_Wz_46_Verbesserter', 'france:F133_Projet_57_Ampere'):
+            if vehicle.name in ('poland:Pl26_Czolg_P_Wz_46_Verbesserter', 'france:F133_Projet_57_Ampere', 'germany:G194_E_50_GT_Alkett_Prod_02'):
                 continue
             model.addString(vehicle.shortUserName if isShortName else vehicle.userName)
 

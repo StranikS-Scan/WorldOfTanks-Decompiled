@@ -8,7 +8,3 @@ def getVOIPManager():
         globals()['handler'] = VOIPSingleton()
         BigWorld.VOIP.setHandler(handler)
     return handler
-
-
-def isOSSupported():
-    return BigWorld.VOIP.isOSSupported()

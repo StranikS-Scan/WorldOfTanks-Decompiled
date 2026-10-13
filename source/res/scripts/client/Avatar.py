@@ -103,6 +103,7 @@ from messenger import MessengerEntry
 from battle_modifiers_common import BattleModifiers, BattleParams
 import VOIP
 from helpers.thermal_vision.constants import RTPC_EVENT_WARNING
+from messenger.proto.bw_chat2.battle_chat_cmd import BASE_CMD_NAMES, EPIC_GLOBAL_CMD_NAMES
 _logger = logging.getLogger(__name__)
 
 class _CRUISE_CONTROL_MODE(object):
@@ -2314,7 +2315,11 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
 
     def messenger_onActionByServer_chat2(self, actionID, reqID, args):
         from messenger_common_chat2 import MESSENGER_ACTION_IDS as actions
-        LOG_DEBUG('messenger_onActionByServer', actions.getActionName(actionID), reqID, args)
+        actionName = actions.getActionName(actionID)
+        if actionName in ('command:DEFENDING_BASE', 'command:DEFEND_BASE', 'command:ATTACKING_BASE', 'command:ATTACK_BASE'):
+            if args.has_key('strArg1'):
+                args['strArg1'] = ''
+        LOG_DEBUG('messenger_onActionByServer', actionName, reqID, args)
         MessengerEntry.g_instance.protos.BW_CHAT2.onActionReceived(actionID, reqID, args)
 
     def processInvitations(self, invitations):

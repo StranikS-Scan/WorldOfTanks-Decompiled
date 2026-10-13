@@ -1275,6 +1275,12 @@ class MESSENGER(object):
     SERVICECHANNELMESSAGES_STALLPURCHASERECEIPT_BODY = '#messenger:serviceChannelMessages/stallPurchaseReceipt/body'
     VOIP_INITINPROGRESS = '#messenger:voip/initInProgress'
     VOIP_READY = '#messenger:voip/ready'
+    SERVICECHANNELMESSAGES_SESSIONPROGRESSREWARDSCOMPLETE_HEADER = '#messenger:serviceChannelMessages/sessionProgressRewardsComplete/header'
+    SERVICECHANNELMESSAGES_SESSIONPROGRESSREWARDSCOMPLETE_BODY = '#messenger:serviceChannelMessages/sessionProgressRewardsComplete/body'
+    SERVICECHANNELMESSAGES_SYSTEMMIXERVOLUMEDISABLEDSYSMESSAGE_HEADER = '#messenger:serviceChannelMessages/systemMixerVolumeDisabledSysMessage/header'
+    SERVICECHANNELMESSAGES_SYSTEMMIXERVOLUMEDISABLEDSYSMESSAGE_BODY = '#messenger:serviceChannelMessages/systemMixerVolumeDisabledSysMessage/body'
+    SERVICECHANNELMESSAGES_SYSTEMMIXERVOLUMEDISABLEDSYSMESSAGE_BUTTON = '#messenger:serviceChannelMessages/systemMixerVolumeDisabledSysMessage/button'
+    SERVICECHANNELMESSAGES_SYSTEMMIXERVOLUMEDISABLEDSYSMESSAGE_FIXBUTTON = '#messenger:serviceChannelMessages/systemMixerVolumeDisabledSysMessage/fixButton'
     CLIENT_ERROR_SHARED_ENUM = (CLIENT_ERROR_SHARED_TRY_LATER,
      CLIENT_ERROR_SHARED_GENERIC,
      CLIENT_ERROR_SHARED_LOCKED,

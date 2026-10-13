@@ -1738,17 +1738,18 @@
   <_138mm_OPS_Mle1952_F144>
     <id>	31038	</id>
     <userString>	#france_vehicles:_138mm_OPS_Mle1952_F144	</userString>
-    <icon>	ap_cr_premium	</icon>
+    <icon>	hc_premium	</icon>
     <price>	5600	</price>
     <improved>	true	</improved>
-    <kind>	ARMOR_PIERCING_CR	</kind>
+    <kind>	HOLLOW_CHARGE	</kind>
     <caliber>	138.6	</caliber>
     <isTracer>	true	</isTracer>
-    <effects>	largeAPCR	</effects>
+    <effects>	largeHollowCharge	</effects>
     <damage>
       <armor>	630	</armor>
       <devices>	180	</devices>
     </damage>
+    <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
   </_138mm_OPS_Mle1952_F144>
   <_138mm_OP_Mle1891>
     <id>	31022	</id>

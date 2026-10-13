@@ -31,3 +31,12 @@ class ISoundsController(object):
 
     def setEnvForSpace(self, spaceID, newEnv):
         raise NotImplementedError
+
+    def isSystemMixerVolumeDisabled(self):
+        raise NotImplementedError
+
+    def markNeedInvAppMixerVolume(self):
+        raise NotImplementedError
+
+    def fixSystemMixerVolume(self):
+        raise NotImplementedError

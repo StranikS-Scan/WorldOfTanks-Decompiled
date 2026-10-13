@@ -43,32 +43,32 @@
   </camouflage>
   <hull>
     <armor>
-      <armor_1>	125	</armor_1>
-      <armor_2>	180	</armor_2>
+      <armor_1>	145	</armor_1>
+      <armor_2>	210	</armor_2>
       <armor_3>	110	</armor_3>
       <armor_4>	65	</armor_4>
-      <armor_5>	30	</armor_5>
-      <armor_6>	180	</armor_6>
+      <armor_5>	45	</armor_5>
+      <armor_6>	210	</armor_6>
       <armor_7>	150	</armor_7>
       <armor_8>	0	</armor_8>
       <armor_9>	30	</armor_9>
       <armor_10>	25	</armor_10>
       <armor_11>	220	</armor_11>
-      <armor_12>	180	</armor_12>
-      <armor_13>	180	</armor_13>
-      <armor_14>	180	</armor_14>
+      <armor_12>	220	</armor_12>
+      <armor_13>	250	</armor_13>
+      <armor_14>	250	</armor_14>
       <armor_15>	150	</armor_15>
-      <armor_16>	190	</armor_16>
+      <armor_16>	260	</armor_16>
       <armor_17>	50	</armor_17>
       <armor_18>	180	</armor_18>
       <armor_19>	100	</armor_19>
       <armor_20>	180	</armor_20>
       <armor_21>	160	</armor_21>
-      <armor_22>	160	</armor_22>
-      <armor_23>	160	</armor_23>
-      <armor_24>	160	</armor_24>
+      <armor_22>	190	</armor_22>
+      <armor_23>	180	</armor_23>
+      <armor_24>	180	</armor_24>
       <armor_25>	218	</armor_25>
-      <armor_26>	180	</armor_26>
+      <armor_26>	220	</armor_26>
       <armor_34>	250	</armor_34>
       <armor_35>	5	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
       </armor_35>
@@ -1998,7 +1998,7 @@
         <armor_2>	250	</armor_2>
         <armor_3>	160	</armor_3>
         <armor_4>	120	</armor_4>
-        <armor_5>	30	</armor_5>
+        <armor_5>	45	</armor_5>
         <armor_6>	120	</armor_6>
         <armor_8>	0	</armor_8>
         <armor_10>	40	</armor_10>
@@ -2045,12 +2045,11 @@
         <_120mm_Rh_Kanone_G180>
           <maxAmmo>	52	</maxAmmo>
           <armor>
-            <gun>	50	</gun>
             <armor_1>	330	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_1>
             <armor_2>	300	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_2>
-            <armor_3>	110	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
+            <armor_3>	200	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_3>
             <armor_4>	0	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_4>
@@ -2062,6 +2061,7 @@
             </armor_7>
             <armor_9>	120	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_9>
+            <gun>	50	</gun>
           </armor>
           <shotDispersionRadius>	0.33	</shotDispersionRadius>
           <reloadTime>	10.5	</reloadTime>
@@ -2525,8 +2525,8 @@
     </detailed>
   </physics>
   <siege_mode>
-    <switchOnTime>	3	</switchOnTime>
-    <switchOffTime>	3	</switchOffTime>
+    <switchOnTime>	2	</switchOnTime>
+    <switchOffTime>	2	</switchOffTime>
     <engineDamageCoeff>	1	</engineDamageCoeff>
     <soundStateChange>
       <on>	turbine_polish_start_PC	</on>

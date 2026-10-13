@@ -407,6 +407,8 @@ class TOOLTIPS(object):
     HULLLOCKENABLED_BODY = '#tooltips:hullLockEnabled/body'
     MASTERVOLUMETOGGLEOFF_HEADER = '#tooltips:masterVolumeToggleOff/header'
     MASTERVOLUMETOGGLEOFF_BODY = '#tooltips:masterVolumeToggleOff/body'
+    SYSTEMMIXERVOLUMEDISABLEDWARNING_HEADER = '#tooltips:systemMixerVolumeDisabledWarning/header'
+    SYSTEMMIXERVOLUMEDISABLEDWARNING_BODY = '#tooltips:systemMixerVolumeDisabledWarning/body'
     SOUNDQUALITYON_HEADER = '#tooltips:soundQualityOn/header'
     SOUNDQUALITYON_BODY = '#tooltips:soundQualityOn/body'
     SOUND_DYNAMICRANGE_HELP_HEADER = '#tooltips:sound/dynamicRange/help/header'

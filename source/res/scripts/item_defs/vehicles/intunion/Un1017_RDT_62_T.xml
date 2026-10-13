@@ -9,7 +9,7 @@
   <postProgressionTree>	role_MT_support	</postProgressionTree>
   <customRoleSlotOptions>	3 5	</customRoleSlotOptions>
   <speedLimits>
-    <forward>	57	</forward>
+    <forward>	60	</forward>
     <backward>	20	</backward>
   </speedLimits>
   <invisibility>
@@ -1939,23 +1939,23 @@
             <minPitch>	0 -30 1 -30	</minPitch>
             <maxPitch>	0 9 0.05 9 0.0556 8 0.1 8 0.117 9 0.36 9 0.42 7 0.58 7 0.64 9 0.85 9 0.92 8 0.944 8 0.95 9 1 9	</maxPitch>
           </pitchLimits>
-          <shotDispersionRadius>	0.3	</shotDispersionRadius>
-          <reloadTime>	15	</reloadTime>
+          <shotDispersionRadius>	0.26	</shotDispersionRadius>
+          <reloadTime>	14.3	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.05	</turretRotation>
             <afterShot>	0.01	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <invisibilityFactorAtShot>	0.266	</invisibilityFactorAtShot>
-          <aimingTime>	2.2	</aimingTime>
+          <aimingTime>	1.8	</aimingTime>
           <clip>
             <count>	10	</count>
-            <rate>	180	</rate>
+            <rate>	240	</rate>
           </clip>
           <autoShoot>
             <shotDispersionPerSec>	1.7	</shotDispersionPerSec>
             <maxShotDispersion>	2	</maxShotDispersion>
-            <rate>	3	</rate>
+            <rate>	4	</rate>
             <rebuildShotDispersionDelay>	0.3	</rebuildShotDispersionDelay>
           </autoShoot>
           <customizationSlots>
@@ -2441,8 +2441,8 @@
     <detailed>
       <engines>
         <V_55_T>
-          <smplEnginePower>	700	</smplEnginePower>
-          <smplFwMaxSpeed>	57	</smplFwMaxSpeed>
+          <smplEnginePower>	740	</smplEnginePower>
+          <smplFwMaxSpeed>	60	</smplFwMaxSpeed>
         </V_55_T>
       </engines>
       <chassis>

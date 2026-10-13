@@ -11,8 +11,8 @@
   <postProgressionTree>	role_HT_break	</postProgressionTree>
   <customRoleSlotOptions>	2 4	</customRoleSlotOptions>
   <speedLimits>
-    <forward>	45	</forward>
-    <backward>	18	</backward>
+    <forward>	43	</forward>
+    <backward>	16	</backward>
   </speedLimits>
   <invisibility>
     <moving>	0.047	</moving>
@@ -43,7 +43,7 @@
   </camouflage>
   <hull>
     <armor>
-      <armor_1>	152	</armor_1>
+      <armor_1>	122	</armor_1>
       <armor_2>	127	</armor_2>
       <armor_3>	84	</armor_3>
       <armor_4>	56	</armor_4>
@@ -60,8 +60,8 @@
       <armor_16>	84	</armor_16>
       <armor_17>	110	</armor_17>
       <armor_18>	100	</armor_18>
-      <armor_19>	125	</armor_19>
-      <armor_20>	110	</armor_20>
+      <armor_19>	110	</armor_19>
+      <armor_20>	90	</armor_20>
       <armor_21>	20	</armor_21>
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
@@ -1863,7 +1863,7 @@
           </shotDispersionFactors>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
-            <maxPitch>	0 10 0.38 10 0.46 2 0.54 2 0.62 10 1 10	</maxPitch>
+            <maxPitch>	0 8 0.38 8 0.46 2 0.54 2 0.62 8 1 8	</maxPitch>
           </pitchLimits>
           <invisibilityFactorAtShot>	0.209	</invisibilityFactorAtShot>
           <multiGunEffects>	shot_dualgun1_large_mb_L shot_dualgun1_large_mb_R	</multiGunEffects>
@@ -2656,8 +2656,8 @@
     <detailed>
       <engines>
         <Rolls_Royce_Griffon_GB138>
-          <smplEnginePower>	1050	</smplEnginePower>
-          <smplFwMaxSpeed>	45	</smplFwMaxSpeed>
+          <smplEnginePower>	950	</smplEnginePower>
+          <smplFwMaxSpeed>	43	</smplFwMaxSpeed>
         </Rolls_Royce_Griffon_GB138>
       </engines>
       <chassis>

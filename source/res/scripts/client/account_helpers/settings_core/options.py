@@ -20,6 +20,7 @@ import ResMgr
 import Keys
 import BattleReplay
 import VOIP
+from VOIP.voip_constants import VOIP_SUPPORTED_API
 import Settings
 import SoundGroups
 import ArenaType
@@ -399,6 +400,9 @@ class VOIPMasterSoundSetting(SoundSetting):
 
 
 class VOIPMicSoundSetting(SoundSetting):
+    MIC_MIN = 0
+    VIVOX_MAX = 100
+    WEBRTC_MAX = 100
 
     def __init__(self, isPreview=False):
         voip = VOIP.getVOIPManager()
@@ -406,6 +410,9 @@ class VOIPMicSoundSetting(SoundSetting):
         voip.onInitialized += self.__changeGroup
         soundGroup = 'mic{}'.format(activeProfile.capitalize())
         super(VOIPMicSoundSetting, self).__init__(soundGroup, isPreview)
+
+    def _getOptions(self):
+        return (self.MIC_MIN, self.WEBRTC_MAX) if VOIP.getVOIPManager().getAPI() == VOIP_SUPPORTED_API.WebRTC else (self.MIC_MIN, self.VIVOX_MAX)
 
     def fini(self):
         voip = VOIP.getVOIPManager()

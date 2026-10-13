@@ -27,7 +27,7 @@ class MainPrizeDiscountTooltipView(ViewImpl):
         discountPerToken = self.__eventController.getMainPrizeDiscountPerToken()
         discountTokenCount = self.__eventController.getCurrentMainPrizeDiscountTokensCount()
         if self.__discount == 0:
-            discount = discountTokenCount * discountPerToken
+            discount = discountTokenCount * 10
         else:
             discount = self.__discount
         activeDiscount = discountTokenCount * discountPerToken

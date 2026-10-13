@@ -108,6 +108,12 @@
       <gameHddName>
         <Type>	STRING	</Type>
       </gameHddName>
+      <systemVolume>
+        <Type>	UINT8	</Type>
+      </systemVolume>
+      <gameVolume>
+        <Type>	UINT8	</Type>
+      </gameVolume>
     </Properties>
   </CLIENT_SYSTEM>
   <CLIENT_SESSION_STATS>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
@@ -271,6 +277,12 @@
       <pageFilePeak>
         <Type>	UINT32	</Type>
       </pageFilePeak>
+      <systemVolume>
+        <Type>	UINT8	</Type>
+      </systemVolume>
+      <gameVolume>
+        <Type>	UINT8	</Type>
+      </gameVolume>
     </Properties>
   </CLIENT_SESSION_STATS>
   <MEM_CRIT_EVENT>	FIXED_DICT	  <AllowNone>	true	</AllowNone>

@@ -1053,8 +1053,8 @@
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
       <rotationSpeed>	44	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.2	</vehicleMovement>
-        <vehicleRotation>	0.2	</vehicleRotation>
+        <vehicleMovement>	0.13	</vehicleMovement>
+        <vehicleRotation>	0.13	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	240	</maxHealth>
@@ -1914,7 +1914,7 @@
         <maxRegenHealth>	75	</maxRegenHealth>
         <repairCost>	1.0	</repairCost>
       </turretRotatorHealth>
-      <circularVisionRadius>	410	</circularVisionRadius>
+      <circularVisionRadius>	420	</circularVisionRadius>
       <surveyingDeviceHealth>
         <maxHealth>	110	</maxHealth>
         <maxRegenHealth>	55	</maxRegenHealth>
@@ -1922,7 +1922,7 @@
       </surveyingDeviceHealth>
       <invisibilityFactor>	1.218	</invisibilityFactor>
       <guns>
-        <_152mm_Gun_Launcher_M81_A100_02>	shared	  <maxAmmo>	22	</maxAmmo>
+        <_76mm_Gun_M32_A100_02>	shared	  <maxAmmo>	66	</maxAmmo>
           <armor>
             <armor_1>	50.8	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_1>
@@ -1932,33 +1932,37 @@
             </armor_3>
             <armor_4>	0	  <vehicleDamageFactor>	0	</vehicleDamageFactor>
             </armor_4>
-            <gun>	60	</gun>
+            <gun>	20	</gun>
           </armor>
-          <shotDispersionRadius>	0.05	</shotDispersionRadius>
-          <reloadTime>	21	</reloadTime>
-          <aimingTime>	1.1	</aimingTime>
-          <invisibilityFactorAtShot>	0.15	</invisibilityFactorAtShot>
+          <shotDispersionRadius>	0.34	</shotDispersionRadius>
+          <reloadTime>	19	</reloadTime>
+          <aimingTime>	1.8	</aimingTime>
+          <clip>
+            <count>	6	</count>
+            <rate>	60	</rate>
+          </clip>
+          <invisibilityFactorAtShot>	0.234	</invisibilityFactorAtShot>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 10 0.375 10 0.388889 6 0.611111 6 0.625 10 1 10	</maxPitch>
           </pitchLimits>
           <turretYawLimits>	-180 180	</turretYawLimits>
           <shotDispersionFactors>
-            <turretRotation>	0.2	</turretRotation>
-            <afterShot>	6.0	</afterShot>
+            <turretRotation>	0.08	</turretRotation>
+            <afterShot>	4.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <models>
-            <undamaged>	vehicles/american/A100_T49/normal/lod0/Gun_05.model	</undamaged>
-            <destroyed>	vehicles/american/A100_T49/crash/lod0/Gun_05.model	</destroyed>
-            <exploded>	vehicles/american/A100_T49/crash/lod0/Gun_05.model	</exploded>
+            <undamaged>	vehicles/american/A100_T49/normal/lod0/Gun_03.model	</undamaged>
+            <destroyed>	vehicles/american/A100_T49/crash/lod0/Gun_03.model	</destroyed>
+            <exploded>	vehicles/american/A100_T49/crash/lod0/Gun_03.model	</exploded>
           </models>
           <hitTester>
-            <collisionModelServer>	vehicles/american/A100_T49/collision/Gun_05.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/american/A100_T49/collision_client/Gun_05.model	</collisionModelClient>
+            <collisionModelServer>	vehicles/american/A100_T49/collision/Gun_03.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/american/A100_T49/collision_client/Gun_03.model	</collisionModelClient>
           </hitTester>
-          <effects>	shot_large_nursMissile	</effects>
-          <reloadEffect>	reload115_152	</reloadEffect>
+          <effects>	shot_medium_mb	</effects>
+          <reloadEffect>	reload_automat_reloading_50_75	</reloadEffect>
           <customizationSlots>
             <slot>
               <slotType>	paint	</slotType>
@@ -2011,7 +2015,7 @@
             <density>	96.5083 99.982	</density>
             <aoTextureSize>	512 512	</aoTextureSize>
           </camouflage>
-        </_152mm_Gun_Launcher_M81_A100_02>
+        </_76mm_Gun_M32_A100_02>
       </guns>
       <models>
         <undamaged>	vehicles/american/A100_T49/normal/lod0/Turret_02.model	</undamaged>
@@ -2574,47 +2578,8 @@
     </detailed>
   </physics>
   <clientAdjustmentFactors>
-    <guns>
-      <_152mm_Gun_Launcher_M81_A100_02>
-        <delta>	0.25	</delta>
-      </_152mm_Gun_Launcher_M81_A100_02>
-    </guns>
     <armour>	0.68528985	</armour>
   </clientAdjustmentFactors>
-  <extras>
-    <surprise>	NoneExtra : CustomAttributeModifier	  <vehicleFilter>
-        <include>
-          <componentFilters>
-            <gun>
-              <tags>	GLUM	</tags>
-            </gun>
-          </componentFilters>
-        </include>
-      </vehicleFilter>
-      <modifiers>
-        <mul>
-          <name>	dynAttrs/chassis/shotDispersionFactors/movement	</name>
-          <value>	12	</value>
-        </mul>
-        <mul>
-          <name>	dynAttrs/chassis/shotDispersionFactors/rotation	</name>
-          <value>	12	</value>
-        </mul>
-        <mul>
-          <name>	dynAttrs/gun/shotDispersionFactors/afterShot	</name>
-          <value>	12	</value>
-        </mul>
-        <mul>
-          <name>	dynAttrs/gun/shotDispersionFactors/turretRotation	</name>
-          <value>	5.5	</value>
-        </mul>
-        <mul>
-          <name>	dynAttrs/gun/aimingTime	</name>
-          <value>	0.8	</value>
-        </mul>
-      </modifiers>
-    </surprise>
-  </extras>
   <effects>
     <collision></collision>
   </effects>

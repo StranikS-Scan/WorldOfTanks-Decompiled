@@ -36,6 +36,7 @@ from messenger_common_chat2 import MESSENGER_LIMITS as _LIMITS, MESSENGER_ACTION
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.game_control import IAnonymizerController, ILimitedUIController, IWhiteTigerController
 from skeletons.gui.lobby_context import ILobbyContext
+from skeletons.gui.sounds import ISoundsController
 from uilogging.battle_context_hints.loggers import BattleContextHintsSettingsLogger
 from uilogging.limited_ui.constants import LimitedUILogItem, LimitedUILogScreenParent
 from uilogging.limited_ui.loggers import LimitedUILogger
@@ -74,6 +75,7 @@ class SettingsWindow(SettingsWindowMeta):
     limitedUIController = dependency.descriptor(ILimitedUIController)
     sessionProvider = dependency.descriptor(IBattleSessionProvider)
     __wtController = dependency.descriptor(IWhiteTigerController)
+    soundsCtrl = dependency.descriptor(ISoundsController)
 
     def __init__(self, ctx=None):
         super(SettingsWindow, self).__init__()
@@ -157,6 +159,7 @@ class SettingsWindow(SettingsWindowMeta):
         self.as_setFeedbackDataProviderS(dataVO)
         isActive = self.__wtController.isEventPrbActive() or self.sessionProvider.arenaVisitor.gui.isWhiteTigerBattle()
         self.as_setTigerEventS(isActive)
+        self.soundsCtrl.markNeedInvAppMixerVolume()
         if self.__redefinedKeyModeEnabled:
             BigWorld.setRedefineKeysMode(True)
         self.__currentSettings = self.params.getMonitorSettings()
@@ -360,6 +363,12 @@ class SettingsWindow(SettingsWindowMeta):
 
     def openColorSettings(self):
         g_eventBus.handleEvent(events.LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.COLOR_SETTING)), EVENT_BUS_SCOPE.DEFAULT)
+
+    def isSystemMixerVolumeDisabled(self):
+        return self.soundsCtrl.isSystemMixerVolumeDisabled()
+
+    def fixSystemMixerVolume(self):
+        self.soundsCtrl.fixSystemMixerVolume()
 
     def __updateInterfaceScale(self):
         self.as_updateVideoSettingsS(self.params.getMonitorSettings())

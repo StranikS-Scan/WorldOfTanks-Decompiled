@@ -76,10 +76,10 @@
     <comp7>
       <teamSpawnPoints>
         <team1>
-          <position>	-47.346001 374.540009	</position>
+          <position>	-147.083359 382.288116	</position>
         </team1>
         <team2>
-          <position>	-67.586998 -363.131989	</position>
+          <position>	-167.670609 -369.906311	</position>
         </team2>
       </teamSpawnPoints>
       <visualScript>
@@ -126,6 +126,7 @@
     </comp7>
   </gameplayTypes>
   <roadMap></roadMap>
+  <mapActivities></mapActivities>
   <modules>
     <common>
       <module>	BW::CgfCameraModule	</module>
@@ -184,6 +185,7 @@
       <module>	BW::ServerModule	</module>
       <module>	BW::VehicleStatusesModule	</module>
       <module>	BW::VehicleTriggersModule	</module>
+      <module>	BW::CGF::CGFBWCompatibilityModule	</module>
     </common>
     <comp7>
       <module>	script::PointsOfInterestModule	</module>

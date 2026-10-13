@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/helpers/aop.py
+from __future__ import absolute_import
 import logging
 import re
 import sys
@@ -39,8 +40,7 @@ def execFunction(wrapped, args, kwargs):
             if cd._avoid:
                 cd._exception = e
                 break
-            else:
-                raise
+            raise
 
         count += 1
 

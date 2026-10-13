@@ -18,9 +18,9 @@ from gui.shared.tooltips.module import ModuleTooltipBlockConstructor
 from gui.shared.utils import NORMALIZATION_ANGLE, RICOCHET_ANGLE, PENETRATION_LOSS
 from helpers import dependency
 from helpers.i18n import makeString as _ms
-from items.utils import getVehicleDescriptorWithoutMechanics
+from items.utils import getVehicleDescriptorWithoutMechanic
+from items.vehicle_mechanics_types import VehicleMechanicKeys
 from skeletons.gui.shared import IItemsCache
-from vehicles.mechanics.mechanic_constants import VehicleMechanic
 from vehicles.mechanics.mechanic_helpers import hasVehicleDescrMechanic
 from gui.impl.gen.view_models.common.vehicle_mechanic_model import MechanicsRank
 _logger = logging.getLogger(__name__)
@@ -35,14 +35,14 @@ _TOOLTIP_NORMAL_WIDTH = 420
 _TWO_COLUMNS_TOOLTIP_WIDTH = 500
 _MECHANICS_TEXT_ROOT = R.strings.tooltips.shell.mechanics
 _MECHANICS_IMAGE_ROOT = R.images.gui.maps.icons.tooltip.mechanics
-_SUPPORTED_MECHANICS = (VehicleMechanic.LOW_CHARGE_SHOT,
- VehicleMechanic.SHELL_PARAMS_SWITCHER,
- VehicleMechanic.SHELL_CALIBRATION,
- VehicleMechanic.BUSTLE_FEED)
-_MECHANIC_PARAMS_WIDTH = {VehicleMechanic.LOW_CHARGE_SHOT: _TWO_COLUMNS_TOOLTIP_WIDTH,
- VehicleMechanic.SHELL_PARAMS_SWITCHER: _TWO_COLUMNS_TOOLTIP_WIDTH,
- VehicleMechanic.SHELL_CALIBRATION: _TOOLTIP_NORMAL_WIDTH,
- VehicleMechanic.BUSTLE_FEED: _TWO_COLUMNS_TOOLTIP_WIDTH}
+_SUPPORTED_MECHANICS = (VehicleMechanicKeys.LOW_CHARGE_SHOT,
+ VehicleMechanicKeys.SHELL_PARAMS_SWITCHER,
+ VehicleMechanicKeys.SHELL_CALIBRATION,
+ VehicleMechanicKeys.BUSTLE_FEED)
+_MECHANIC_PARAMS_WIDTH = {VehicleMechanicKeys.LOW_CHARGE_SHOT: _TWO_COLUMNS_TOOLTIP_WIDTH,
+ VehicleMechanicKeys.SHELL_PARAMS_SWITCHER: _TWO_COLUMNS_TOOLTIP_WIDTH,
+ VehicleMechanicKeys.SHELL_CALIBRATION: _TOOLTIP_NORMAL_WIDTH,
+ VehicleMechanicKeys.BUSTLE_FEED: _TWO_COLUMNS_TOOLTIP_WIDTH}
 _PARAM_VISIBILITY = {ModuleTooltipBlockConstructor.CALIBER: lambda cfg, shell, value: False,
  'avgDamage': lambda cfg, shell, value: not shell.isDamageMutable(),
  NORMALIZATION_ANGLE: lambda cfg, shell, value: cfg.showNormalizationAngle and (value != 0 or _isEmptyNormalizationAngleValid(cfg, shell)),
@@ -152,7 +152,7 @@ class ShellBlockToolTipData(BlocksTooltipData):
         vehicle = paramsConfig.vehicle
         if vehicle is None:
             return
-        elif paramsConfig.showBasicIsUsedinCalculations and hasVehicleDescrMechanic(vehicle.descriptor, VehicleMechanic.LOW_CHARGE_SHOT):
+        elif paramsConfig.showBasicIsUsedinCalculations and hasVehicleDescrMechanic(vehicle.descriptor, VehicleMechanicKeys.LOW_CHARGE_SHOT):
             basicIsUsedForCalculationsText = text_styles.main(backport.text(_MECHANICS_TEXT_ROOT.lowChargeShot.infoBlock()))
             return formatters.packBuildUpBlockData([formatters.packTitleDescParameterWithIconBlockData(title=basicIsUsedForCalculationsText, icon=backport.image(_MECHANICS_IMAGE_ROOT.info()), iconPadding=formatters.packPadding(top=2), titlePadding=formatters.packPadding(left=6))])
         else:
@@ -409,7 +409,7 @@ class _ShellCalibrationCompareStrategy(ICompareStrategy):
 
     @staticmethod
     def resolveDescriptors(vDescr):
-        return (getVehicleDescriptorWithoutMechanics(vDescr, VehicleMechanic.SHELL_CALIBRATION.value), vDescr)
+        return (getVehicleDescriptorWithoutMechanic(vDescr, VehicleMechanicKeys.SHELL_CALIBRATION), vDescr)
 
     @staticmethod
     def buildComparators(shell, vDescr):
@@ -424,7 +424,7 @@ class _ShellParamsBustleFeedCompareStrategy(ICompareStrategy):
     @staticmethod
     def resolveDescriptors(vDescr):
         defaultVehicleDescr = vDescr.defaultVehicleDescr
-        basicDescr = getVehicleDescriptorWithoutMechanics(defaultVehicleDescr, VehicleMechanic.BUSTLE_FEED.value)
+        basicDescr = getVehicleDescriptorWithoutMechanic(defaultVehicleDescr, VehicleMechanicKeys.BUSTLE_FEED)
         return (basicDescr, defaultVehicleDescr)
 
     @staticmethod
@@ -437,10 +437,10 @@ class _ShellParamsBustleFeedCompareStrategy(ICompareStrategy):
 
 
 class TwoColumnsStatsBlockConstructor(CommonStatsBlockConstructor):
-    _MECHANIC_DESCRIPTOR_RESOLVERS = {VehicleMechanic.LOW_CHARGE_SHOT: _LowChargeShotCompareStrategy,
-     VehicleMechanic.SHELL_PARAMS_SWITCHER: _ShellParamsSwitcherCompareStrategy,
-     VehicleMechanic.SHELL_CALIBRATION: _ShellCalibrationCompareStrategy,
-     VehicleMechanic.BUSTLE_FEED: _ShellParamsBustleFeedCompareStrategy}
+    _MECHANIC_DESCRIPTOR_RESOLVERS = {VehicleMechanicKeys.LOW_CHARGE_SHOT: _LowChargeShotCompareStrategy,
+     VehicleMechanicKeys.SHELL_PARAMS_SWITCHER: _ShellParamsSwitcherCompareStrategy,
+     VehicleMechanicKeys.SHELL_CALIBRATION: _ShellCalibrationCompareStrategy,
+     VehicleMechanicKeys.BUSTLE_FEED: _ShellParamsBustleFeedCompareStrategy}
 
     def __init__(self, shell, configuration, valueWidth, mechanic, params=None):
         super(TwoColumnsStatsBlockConstructor, self).__init__(shell, configuration, valueWidth, mechanic, params)
@@ -492,7 +492,7 @@ class ShellCalibrationStatsBlockConstructor(TwoColumnsStatsBlockConstructor):
 
     def _getHeaderBlock(self, bottomPadding):
         headerRoot = _MECHANICS_TEXT_ROOT.dyn(self._mechanic.guiName.value).paramsHeader
-        return formatters.packTextParameterBlockData(name='', value=text_styles.middleTitle(backport.text(headerRoot())), valueWidth=self._valueWidth, padding=formatters.packPadding(bottom=8, left=-34))
+        return formatters.packTextBlockData(text=text_styles.middleTitle(backport.text(headerRoot())), padding=formatters.packPadding(bottom=8))
 
     def _packParamBlock(self, name, value, units):
         iconRoot = _MECHANICS_IMAGE_ROOT.dyn(self._mechanic.guiName.value)
@@ -505,7 +505,7 @@ class ShellCalibrationStatsBlockConstructor(TwoColumnsStatsBlockConstructor):
         return formatters.packTextParameterBlockData(name=text_styles.concatStylesWithSpace(text_styles.main(name), text_styles.standard(units)), value=value, valueWidth=self._valueWidth, padding=formatters.packPadding(left=50))
 
 
-_MECHANIC_PARAMS_CONSTRUCTOR = {VehicleMechanic.LOW_CHARGE_SHOT: TwoColumnsStatsBlockConstructor,
- VehicleMechanic.SHELL_PARAMS_SWITCHER: TwoColumnsStatsBlockConstructor,
- VehicleMechanic.SHELL_CALIBRATION: ShellCalibrationStatsBlockConstructor,
- VehicleMechanic.BUSTLE_FEED: TwoColumnsStatsBlockConstructor}
+_MECHANIC_PARAMS_CONSTRUCTOR = {VehicleMechanicKeys.LOW_CHARGE_SHOT: TwoColumnsStatsBlockConstructor,
+ VehicleMechanicKeys.SHELL_PARAMS_SWITCHER: TwoColumnsStatsBlockConstructor,
+ VehicleMechanicKeys.SHELL_CALIBRATION: ShellCalibrationStatsBlockConstructor,
+ VehicleMechanicKeys.BUSTLE_FEED: TwoColumnsStatsBlockConstructor}

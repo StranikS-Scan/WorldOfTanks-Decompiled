@@ -1,8 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/formatters/service_channel_helpers.py
+from __future__ import absolute_import
 import logging
 from collections import namedtuple
 from itertools import chain
+from future.utils import viewitems
 from typing import TYPE_CHECKING
 from dossiers2.custom.records import DB_ID_TO_RECORD
 from gui.collection.collections_constants import COLLECTION_ITEM_PREFIX_NAME
@@ -84,8 +86,8 @@ def getDefaultMessage(normal='', bold=''):
 
 
 def popCollectionEntitlements(rewards):
-    entitlements = {name:data for name, data in rewards['entitlements'].iteritems() if name.startswith(COLLECTION_ITEM_PREFIX_NAME)} if 'entitlements' in rewards else {}
-    for eName in entitlements.iterkeys():
+    entitlements = {name:data for name, data in viewitems(rewards['entitlements']) if name.startswith(COLLECTION_ITEM_PREFIX_NAME)} if 'entitlements' in rewards else {}
+    for eName in entitlements:
         rewards['entitlements'].pop(eName)
 
     return entitlements
@@ -130,7 +132,7 @@ def getPotapovQuestPopUps(message, isQuestOfThisGroup):
     otherQuestsPopUP = set()
     for achievesID, achievesCount in popUPs:
         achievesRecord = DB_ID_TO_RECORD[achievesID]
-        for questID, questData in data.get('detailedRewards', {}).iteritems():
+        for questID, questData in viewitems(data.get('detailedRewards', {})):
             records = [ (r.keys() if isinstance(r, dict) else [ rec[0] for rec in r ]) for r in questData.get('dossier', {}).values() ]
             for dossierRecord in chain.from_iterable(records):
                 if achievesRecord == dossierRecord and not isQuestOfThisGroup(questID):

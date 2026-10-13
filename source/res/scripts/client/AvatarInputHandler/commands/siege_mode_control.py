@@ -3,12 +3,12 @@
 from __future__ import absolute_import
 import BigWorld
 from weakref import ref
-from constants import ARENA_PERIOD, VEHICLE_SIEGE_STATE, VEHICLE_SETTING
 import CommandMapping
+from constants import ARENA_PERIOD, VEHICLE_SIEGE_STATE, VEHICLE_SETTING
 from AvatarInputHandler.commands.input_handler_command import InputHandlerCommand
 from AvatarInputHandler.player_notifications.siege_mode.sound_notifications import playUnavailableSound, playTriggerSound
 from helpers import dependency
-from vehicles.mechanics.mechanic_constants import VehicleMechanic
+from items.vehicle_mechanics_types import VehicleMechanicKeys
 from vehicles.mechanics.mechanic_helpers import getPlayerVehicleMechanicComponent
 from skeletons.gui.battle_session import IBattleSessionProvider
 
@@ -46,7 +46,7 @@ class SiegeModeControl(InputHandlerCommand):
                 return False
             if vehicle.isPlayerVehicle and vehicle.isAlive():
                 self.__switchSiegeMode(vehicle)
-            mechanicComponent = getPlayerVehicleMechanicComponent(VehicleMechanic.SHELL_PARAMS_SWITCHER)
+            mechanicComponent = getPlayerVehicleMechanicComponent(VehicleMechanicKeys.SHELL_PARAMS_SWITCHER)
             if mechanicComponent is not None:
                 mechanicComponent.tryActivate()
             return True

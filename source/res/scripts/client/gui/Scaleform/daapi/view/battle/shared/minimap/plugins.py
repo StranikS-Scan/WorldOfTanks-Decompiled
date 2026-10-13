@@ -42,15 +42,16 @@ from gui.veh_mechanics.battle.updaters.mechanics.tracked_mechanics_updater impor
 from gui.veh_mechanics.battle.updaters.updaters_common import ViewUpdatersCollection
 from helpers import dependency
 from ids_generators import SequenceIDGenerator
+from items.vehicle_mechanics_types import VehicleMechanicKeys
 from PlayerEvents import g_playerEvents
 from skeletons.gui.battle_session import IBattleSessionProvider
-from vehicles.mechanics.mechanic_constants import VehicleMechanic
 from vehicles.mechanics.mechanic_states import IMechanicStatesListenerLogic
 if typing.TYPE_CHECKING:
     from gui.Scaleform.daapi.view.battle.shared.minimap.interfaces import IMinimapPlugin
     from gui.Scaleform.daapi.view.meta.MinimapMeta import MinimapMeta
     from gui.veh_mechanics.battle.updaters.updaters_common import IViewUpdater
     from items.components.shared_components import SightPointerParams
+    from items.vehicle_mechanics_types import VehicleMechanicKey
     from SightPointerComponent import SightPointerState
 _logger = logging.getLogger(__name__)
 _C_NAME = settings.CONTAINER_NAME
@@ -1593,7 +1594,7 @@ class MinimapUpdatersPlugin(common.SimplePlugin):
 
 
 class VehicleMechanicMinimapPlugin(MinimapUpdatersPlugin, ContainersListener):
-    _VEHICLE_MECHANIC = None
+    _VEHICLE_MECHANIC_KEY = None
 
     def stop(self):
         self._clearParentState()
@@ -1604,7 +1605,7 @@ class VehicleMechanicMinimapPlugin(MinimapUpdatersPlugin, ContainersListener):
 
 
 class SightPointerPlugin(VehicleMechanicMinimapPlugin, IMechanicStatesListenerLogic, IComponentLifeCycleListenerLogic, IMechanicPassengerView):
-    _VEHICLE_MECHANIC = VehicleMechanic.SIGHT_POINTER
+    _VEHICLE_MECHANIC_KEY = VehicleMechanicKeys.SIGHT_POINTER
 
     def __init__(self, parentObj):
         super(SightPointerPlugin, self).__init__(parentObj)
@@ -1663,7 +1664,7 @@ class SightPointerPlugin(VehicleMechanicMinimapPlugin, IMechanicStatesListenerLo
         self.__hideCone()
 
     def _getViewUpdaters(self):
-        return [VehicleMechanicLifeCycleUpdater(self._VEHICLE_MECHANIC, self), VehicleMechanicStatesUpdater(self._VEHICLE_MECHANIC, self), VehicleMechanicPassengerUpdater(self._VEHICLE_MECHANIC, self)]
+        return [VehicleMechanicLifeCycleUpdater(self._VEHICLE_MECHANIC_KEY, self), VehicleMechanicStatesUpdater(self._VEHICLE_MECHANIC_KEY, self), VehicleMechanicPassengerUpdater(self._VEHICLE_MECHANIC_KEY, self)]
 
     def __invalidateState(self, active, visibleForPassenger):
         toShow = (not self.__active or not self.__visibleForPassenger) and active and visibleForPassenger
@@ -1695,7 +1696,7 @@ class SightPointerPlugin(VehicleMechanicMinimapPlugin, IMechanicStatesListenerLo
 
 
 class VehicleMechanicsCollectionMinimapPlugin(common.MinimapPluginsCollection, IVehicleTrackedMechanicsView):
-    _VEHICLE_MECHANIC_PLUGINS_MAP = {VehicleMechanic.SIGHT_POINTER: SightPointerPlugin}
+    _VEHICLE_MECHANIC_PLUGINS_MAP = {VehicleMechanicKeys.SIGHT_POINTER: SightPointerPlugin}
 
     def __init__(self, parentObj):
         super(VehicleMechanicsCollectionMinimapPlugin, self).__init__(parentObj)
@@ -1723,7 +1724,7 @@ class VehicleMechanicsCollectionMinimapPlugin(common.MinimapPluginsCollection, I
         self.__trackedMechanics = newMechanics
 
     def __addTrackedMechanics(self, mechanics):
-        self.addPlugins({mechanic.value:self._VEHICLE_MECHANIC_PLUGINS_MAP[mechanic] for mechanic in mechanics if mechanic in self._VEHICLE_MECHANIC_PLUGINS_MAP}, autoStart=True)
+        self.addPlugins({mechanic.uniqueName:self._VEHICLE_MECHANIC_PLUGINS_MAP[mechanic] for mechanic in mechanics if mechanic in self._VEHICLE_MECHANIC_PLUGINS_MAP}, autoStart=True)
 
     def __removeTrackedMechanics(self, mechanics):
-        self.removePlugins(*[ mechanic.value for mechanic in mechanics ])
+        self.removePlugins(*[ mechanic.uniqueName for mechanic in mechanics ])

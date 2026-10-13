@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: comp7_core/scripts/client/comp7_core/gui/Scaleform/daapi/view/battle/full_stats.py
+from __future__ import absolute_import
 from comp7_core.gui.Scaleform.daapi.view.battle.comp7_voip_helper import Comp7VoipHelper, VoiceChatControlTextStyles
 from comp7_core.gui.Scaleform.daapi.view.meta.Comp7FullStatsMeta import Comp7FullStatsMeta
 

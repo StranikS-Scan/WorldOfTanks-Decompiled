@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/promo/promo_logger.py
 import logging
 from functools import partial
+from future.utils import listitems
 import BigWorld
 from adisp import adisp_process
 from gui.macroses import getLanguageCode
@@ -90,7 +91,7 @@ class PromoLogger(IPromoLogger):
             return partial(self.__sendDelayed, teaserData, requestID, callbackID, **kwargs)
 
     def fini(self):
-        for requestID, callbackID in self.__requestIDs.items():
+        for requestID, callbackID in listitems(self.__requestIDs):
             BigWorld.cancelCallback(callbackID)
             del self.__requestIDs[requestID]
 

@@ -1,14 +1,16 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/ext/__init__.py
+from __future__ import absolute_import
 import types
+from past.builtins import unicode
 import BigWorld
 import BattleReplay
+import constants
 from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS
 from helpers import i18n
 from gui.Scaleform.locale.MESSENGER import MESSENGER
 from external_strings_utils import isAccountNameValid
 from external_strings_utils import _ACCOUNT_NAME_MIN_LENGTH, _ACCOUNT_NAME_MAX_LENGTH
-import constants
 from debug_utils import LOG_ERROR, LOG_DEBUG
 from messenger import g_settings
 from messenger.ext import dictionaries
@@ -27,7 +29,7 @@ def passCensor(text):
     if text is None:
         return u''
     else:
-        if not isinstance(text, types.UnicodeType):
+        if not isinstance(text, unicode):
             text = unicode(text, 'utf-8')
         return g_olDictionary.searchAndReplace(text) if g_settings.userPrefs.enableOlFilter else text
 

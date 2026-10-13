@@ -1,7 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/gui/Scaleform/data/faq_data.py
+from __future__ import absolute_import
 import logging
+from builtins import range
 from collections import namedtuple
+from future.utils import viewitems
 from gui.impl.gen import R
 from gui.shared.events import OpenLinkEvent
 from helpers import dependency
@@ -52,7 +55,7 @@ class FAQList(object):
         faq = R.strings.faq
         length = faq.length()
         translation = self.gui.resourceManager.getTranslatedText
-        for number in xrange(1, length + 1):
+        for number in range(1, length + 1):
             question = faq.dyn(QUESTION_FORMAT.format(number))
             if not question:
                 continue
@@ -61,7 +64,7 @@ class FAQList(object):
             if not answer:
                 _logger.error('Answer %d is not found', number)
                 continue
-            elif not answer.exists():
+            if not answer.exists():
                 answerText = self.__findAnswerWithSuffix(answer)
             else:
                 answerText = translation(answer())
@@ -79,7 +82,7 @@ class FAQList(object):
 
     def __findAnswerWithSuffix(self, answer):
         result = R.invalid()
-        for suffix, methodName in self.__extraFormats.iteritems():
+        for suffix, methodName in viewitems(self.__extraFormats):
             nextAnswer = answer.dyn(suffix)
             if nextAnswer:
                 method = getattr(self, methodName, None)

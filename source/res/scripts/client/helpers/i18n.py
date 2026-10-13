@@ -1,15 +1,20 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/helpers/i18n.py
+from __future__ import absolute_import
 import json
 import logging
-import types
+import typing
 from encodings import utf_8
+from future.utils import viewitems
+from past.builtins import unicode
 from frameworks import wulf
 _logger = logging.getLogger(__name__)
 
 def convert(utf8String):
     try:
-        return utf_8.decode(utf8String)[0]
+        if isinstance(utf8String, bytes):
+            return utf_8.decode(utf8String)[0]
+        return utf8String
     except Exception as ex:
         _logger.exception(ex)
         _logger.warning('Wrong UTF8 string: %r', utf8String)
@@ -73,7 +78,7 @@ def makeStringJSON(key, argsStr):
         args = json.loads(argsStr)
         if isinstance(args, dict):
             utf8args = {}
-            for k, v in args.iteritems():
+            for k, v in viewitems(args):
                 utf8args[k.encode('utf-8')] = v.encode('utf-8')
 
             return makeString(key, **utf8args)
@@ -91,4 +96,4 @@ def makeStringJSON(key, argsStr):
 
 
 def encodeUtf8(string):
-    return string.encode('utf-8', 'ignore') if isinstance(string, types.UnicodeType) else string
+    return string.encode('utf-8', 'ignore') if isinstance(string, unicode) else string

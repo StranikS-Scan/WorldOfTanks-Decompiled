@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/web/web_client_api/request/settings.py
+from __future__ import absolute_import
 import helpers
 from gui.limited_ui.lui_rules_storage import LUI_RULES
 from helpers import dependency

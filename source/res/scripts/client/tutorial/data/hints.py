@@ -1,6 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/tutorial/data/hints.py
+from __future__ import absolute_import
 from collections import namedtuple, defaultdict
+from future.utils import viewvalues
 HintProps = namedtuple('HintProps', ('uniqueID', 'hintID', 'itemID', 'text', 'hasBox', 'arrow', 'padding', 'updateRuntime', 'hideImmediately', 'checkViewArea'))
 
 class HintsData(object):
@@ -15,7 +17,7 @@ class HintsData(object):
         return self.__hints
 
     def getHintsCount(self):
-        return sum((len(hintsList) for hintsList in self.__hints.itervalues()))
+        return sum((len(hintsList) for hintsList in viewvalues(self.__hints)))
 
     def setGuiFilePath(self, filePath):
         self.__guiFilePath = filePath
@@ -35,7 +37,7 @@ class HintsData(object):
             self._delHints(hintsList, (hintID,))
 
     def markHintsAsShown(self, hintIDs):
-        for hintsList in self.__hints.itervalues():
+        for hintsList in viewvalues(self.__hints):
             self._delHints(hintsList, hintIDs)
 
     @staticmethod

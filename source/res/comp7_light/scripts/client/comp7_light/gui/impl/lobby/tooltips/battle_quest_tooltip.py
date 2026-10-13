@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: comp7_light/scripts/client/comp7_light/gui/impl/lobby/tooltips/battle_quest_tooltip.py
+from __future__ import absolute_import
 from comp7.gui.impl.lobby.comp7_helpers.comp7_bonus_packer import packQuestBonuses
 from comp7_light.gui.impl.lobby.comp7_light_helpers.comp7_light_mission_packer import packMissionItem
 from comp7_light.gui.impl.lobby.comp7_light_helpers.comp7_light_packers import getComp7LightBonusPacker

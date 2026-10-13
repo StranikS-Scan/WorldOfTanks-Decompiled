@@ -4,9 +4,9 @@ from __future__ import absolute_import, division
 import Event
 from constants import DUAL_ACCURACY_STATE
 from gui.shared.utils.decorators import ReprInjector
+from items.vehicle_mechanics_types import VehicleMechanicKey, VehicleMechanicKeys
 from vehicles.components.vehicle_component import VehicleDynamicComponent
 from vehicles.mechanics.gun_mechanics.common import IGunMechanicComponent
-from vehicles.mechanics.mechanic_constants import VehicleMechanic
 _DEFAULT_ACCURACY_FACTOR = 1.0
 
 @ReprInjector.withParent()
@@ -20,8 +20,8 @@ class DualAccuracy(VehicleDynamicComponent, IGunMechanicComponent):
         self._initComponent()
 
     @property
-    def vehicleMechanic(self):
-        return VehicleMechanic.DUAL_ACCURACY
+    def vehicleMechanicKey(self):
+        return VehicleMechanicKeys.DUAL_ACCURACY
 
     def isActive(self):
         return self.state == DUAL_ACCURACY_STATE.ACTIVE

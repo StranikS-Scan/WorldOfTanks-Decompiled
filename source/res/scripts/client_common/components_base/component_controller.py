@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client_common/components_base/component_controller.py
 from __future__ import absolute_import
 import typing
-from future.utils import with_metaclass
+from py2to3.patched_future import with_metaclass
 from components_base.auto_properties import AutoPropertyInitMetaclass
 if typing.TYPE_CHECKING:
     from components_base.component import Component

@@ -6,8 +6,8 @@ from gui.Scaleform.daapi.view.lobby.store.browser.shop_helpers import getIntegra
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.user_missions.constants.event_banner_state import EventBannerState
-from gui.impl.lobby.user_missions.hangar_widget.event_banners.base_event_banner import BaseEventBanner
 from gui.impl.lobby.user_missions.hangar_widget.event_banners.event_banners_container import EventBannersContainer
+from gui.impl.lobby.user_missions.hangar_widget.event_banners.standard_event_banner import StandardEventBanner
 from gui.impl.lobby.user_missions.hangar_widget.services import IEventsService
 from gui.integrated_auction.constants import AUCTION_ENTRY_POINT_NAME
 from gui.integrated_auction.tooltips.event_banner_tooltip import EventBannerTooltip
@@ -22,7 +22,7 @@ def isAuctionEventBannerAvailable(eventService=None):
     return auctionEntry.isValidDateForCreation() if auctionEntry is not None else False
 
 
-class IntegratedAuctionEventBanner(Notifiable, BaseEventBanner):
+class IntegratedAuctionEventBanner(Notifiable, StandardEventBanner):
     NAME = AUCTION_ENTRY_POINT_NAME
     __eventsService = dependency.descriptor(IEventsService)
 

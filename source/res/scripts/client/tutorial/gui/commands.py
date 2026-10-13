@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/tutorial/gui/commands.py
+from __future__ import absolute_import
 import types
 from tutorial.control import g_tutorialWeaver
 from tutorial.logger import LOG_ERROR, LOG_CURRENT_EXCEPTION
@@ -12,7 +13,7 @@ class GUICommand(object):
 
 class _PyDummyMethod(GUICommand):
 
-    def invoke(self, ui, cmdData):
+    def invoke(self, gui, cmdData):
         pathList = cmdData.name.split('.')
         method = pathList.pop()
         clazz = pathList.pop()
@@ -35,8 +36,8 @@ class _PyInvokeMethod(GUICommand):
             method = None
         return (ns, method)
 
-    def invoke(self, ui, cmdData):
-        _, method = self._py_searchMethod(ui, cmdData)
+    def invoke(self, gui, cmdData):
+        _, method = self._py_searchMethod(gui, cmdData)
         if method is not None and callable(method):
             try:
                 if isinstance(cmdData.args, dict):
@@ -47,7 +48,7 @@ class _PyInvokeMethod(GUICommand):
                 LOG_CURRENT_EXCEPTION()
 
         else:
-            LOG_ERROR('GUI method not found', ui, cmdData)
+            LOG_ERROR('GUI method not found', gui, cmdData)
         return
 
 

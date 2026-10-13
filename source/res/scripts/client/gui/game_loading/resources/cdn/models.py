@@ -19,8 +19,8 @@ _logger = loggers.getCdnConfigLogger()
 class LocalSlideModel(LocalImageModel):
     __slots__ = ('_historyKey',)
 
-    def __init__(self, imageRelativePath, vfx=None, localizationText=None, descriptionText=None, minShowTimeSec=0, transition=0):
-        super(LocalSlideModel, self).__init__(imageRelativePath=imageRelativePath, vfx=vfx, localizationText=localizationText, descriptionText=descriptionText, minShowTimeSec=minShowTimeSec, transition=transition)
+    def __init__(self, imageRelativePath, vfx=None, localizationText=None, descriptionText=None, minShowTimeSec=0, transition=0, imageAbsolutePath=None):
+        super(LocalSlideModel, self).__init__(imageRelativePath=imageRelativePath, vfx=vfx, localizationText=localizationText, descriptionText=descriptionText, minShowTimeSec=minShowTimeSec, transition=transition, imageAbsolutePath=imageAbsolutePath)
         self._historyKey = generateKey(self.imageRelativePath)
 
     @property
@@ -103,7 +103,7 @@ class ConfigSlideModel(BaseConfigModel):
                     if descriptionSection:
                         descriptionText = descriptionSection.readString(self._langCode, default=None)
                     _logger.debug('Localization for lang [%s] is [%s] [%s].', self._langCode, localizationText, descriptionText)
-            return LocalSlideModel(imageRelativePath=localImagePath, vfx=self.vfx, localizationText=localizationText or None, descriptionText=descriptionText or None, minShowTimeSec=minShowTimeSec, transition=transition)
+            return LocalSlideModel(imageRelativePath=localImagePath, vfx=self.vfx, localizationText=localizationText or None, descriptionText=descriptionText or None, minShowTimeSec=minShowTimeSec, transition=transition, imageAbsolutePath=fileCache.get(self.image))
 
     def __repr__(self):
         return '<ConfigSlideModel(image={}, vfx={}, localization={})>'.format(self.image, self.vfx, self.localization)

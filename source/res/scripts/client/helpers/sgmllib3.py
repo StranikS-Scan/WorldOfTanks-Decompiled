@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/helpers/sgmllib3.py
+from __future__ import absolute_import, print_function
 import _markupbase
 import re
 __all__ = ['SGMLParser', 'SGMLParseError']
@@ -306,8 +307,8 @@ class SGMLParser(_markupbase.ParserBase):
 
     def report_unbalanced(self, tag):
         if self.verbose:
-            print '*** Unbalanced </' + tag + '>'
-            print ('*** Stack:', self.stack)
+            print('*** Unbalanced </' + tag + '>')
+            print('*** Stack:', self.stack)
 
     def convert_charref(self, name):
         try:

@@ -9,7 +9,7 @@ from gui.Scaleform.required_libraries_config import addBattleRequiredLibraries
 from battle_royale.gui.hangar_preset.battle_royale_dynamic_gui_provider import BattleRoyaleHangarDynamicGuiProvider
 
 def registerBRBattlePackages():
-    registerScaleformBattlePackages(ARENA_GUI_TYPE.BATTLE_ROYALE, ('battle_royale.gui.Scaleform.daapi.view.battle', 'battle_royale.gui.Scaleform.daapi.view.battle.shared', 'messenger.gui.Scaleform.view.battle', 'gui.Scaleform.daapi.view.battle.shared.vehicle_mechanics'))
+    registerScaleformBattlePackages(ARENA_GUI_TYPE.BATTLE_ROYALE, ('battle_royale.gui.Scaleform.daapi.view.battle', 'battle_royale.gui.Scaleform.daapi.view.battle.shared', 'messenger.gui.Scaleform.view.battle', 'gui.Scaleform.daapi.view.battle.shared.vehicle_mechanics', 'gui.impl.battle.random', 'gui.impl.battle.shared'))
 
 
 def registerBRLobbyPackages():

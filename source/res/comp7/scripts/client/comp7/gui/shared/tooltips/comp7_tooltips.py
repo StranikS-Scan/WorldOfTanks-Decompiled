@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: comp7/scripts/client/comp7/gui/shared/tooltips/comp7_tooltips.py
+from __future__ import absolute_import
 import logging
 from comp7.gui.shared.tooltips import TOOLTIP_TYPE
 from comp7_common_const import offerRewardGiftToken
@@ -100,7 +101,8 @@ class Comp7SelectableRewardTooltip(BlocksTooltipData):
 
     @staticmethod
     def __packRewardsBlock(tokenCategory):
-        blocks = [formatters.packTextBlockData(text=text_styles.highTitle(backport.text(R.strings.selectable_reward.tabs.items.dyn(tokenCategory)())), padding={'bottom': 10})]
+        title = backport.text(R.strings.selectable_reward.tabs.c_items.dyn(tokenCategory)())
+        blocks = [formatters.packTextBlockData(text=text_styles.highTitle(title), padding={'bottom': 10})]
         selectableRewardList = R.strings.comp7_ext.rewardSelection.tooltip.selectableRewardList.dyn(tokenCategory)()
         if selectableRewardList:
             blocks.append(formatters.packTextBlockData(text=text_styles.main(backport.text(selectableRewardList))))

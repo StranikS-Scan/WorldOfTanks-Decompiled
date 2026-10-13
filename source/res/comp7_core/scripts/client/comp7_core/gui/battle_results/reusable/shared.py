@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: comp7_core/scripts/client/comp7_core/gui/battle_results/reusable/shared.py
+from __future__ import absolute_import
 from gui.battle_results.reusable.shared import VehicleDetailedInfo, VehicleSummarizeInfo, no_key_error
 from constants import DEATH_REASON_ALIVE
 

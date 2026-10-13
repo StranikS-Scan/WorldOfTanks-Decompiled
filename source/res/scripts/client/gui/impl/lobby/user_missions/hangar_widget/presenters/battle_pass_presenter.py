@@ -10,7 +10,7 @@ from gui.battle_pass.battle_pass_constants import ChapterState
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.user_missions.widget.battle_pass_model import AppearAnimationState, BattlePassModel, WidgetState
 from gui.impl.lobby.battle_pass.battle_pass_entry_point_view import BaseBattlePassEntryPointView
-from gui.impl.lobby.battle_pass.common import getExtraChapterID, isExtraChapterSeen, isHolidayChapterSeen, isUmgExtraChapterSeen, setUmgExtraChapterSeen, setHolidayChapterSeen
+from gui.impl.lobby.battle_pass.common import getExtraChapterID, isExtraChapterSeen, isExtraContentResolved, isHolidayChapterSeen, isUmgExtraChapterSeen, setUmgExtraChapterSeen, setHolidayChapterSeen
 from gui.impl.lobby.battle_pass.tooltips.battle_pass_completed_tooltip_view import BattlePassCompletedTooltipView
 from gui.impl.lobby.battle_pass.tooltips.battle_pass_in_progress_tooltip_view import BattlePassInProgressTooltipView
 from gui.impl.lobby.battle_pass.tooltips.battle_pass_no_chapter_tooltip_view import BattlePassNoChapterTooltipView
@@ -236,7 +236,7 @@ class BattlePassPresenter(UserMissionChildPresenter, TooltipPositionerMixin, Ove
         return self.hasExtra and (not isBattlePassExtraChapterSeen or self._needToRemindExtraChapter())
 
     def _needToRemindExtraChapter(self):
-        return self.hasExtra and self.isPostProgressionActive and not isUmgExtraChapterSeen() and not self.isAllExtraCompleted and not self.isAnyExtraActive
+        return self.hasExtra and self.isPostProgressionActive and not isUmgExtraChapterSeen() and not isExtraContentResolved(battlePass=self.__battlePass)
 
     def _getAppearAnimationState(self):
         if self._isIntroAnimationPlayed():

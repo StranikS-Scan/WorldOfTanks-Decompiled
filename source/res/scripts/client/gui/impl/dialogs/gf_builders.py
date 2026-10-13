@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/gui/impl/dialogs/gf_builders.py
 from __future__ import absolute_import
 import typing
-from frameworks.wulf import WindowLayer
+from frameworks.wulf import WindowLayer, PyResAccessor
 from gui.impl.dialogs.dialog_template import DialogTemplateView, DEFAULT_DIMMER_ALPHA
 from gui.impl.dialogs.sub_views.common.simple_text import ImageSubstitution
 from gui.impl.dialogs.sub_views.content.text_warning_content import TextWithWarning
@@ -17,7 +17,6 @@ from gui.impl.gen import R
 from gui.impl.gen.view_models.views.dialogs.default_dialog_place_holders import DefaultDialogPlaceHolders
 from gui.impl.gen.view_models.views.dialogs.sub_views.multiple_icons_set_view_model import IconPositionLogicEnum
 from gui.impl.gen.view_models.views.dialogs.dialog_template_button_view_model import ButtonType
-from gui.impl.gen_utils import DynAccessor
 from gui.impl.lobby.dialogs.full_screen_dialog_view import FullScreenDialogWindowWrapper
 from gui.impl.pub.dialog_window import DialogButtons
 if typing.TYPE_CHECKING:

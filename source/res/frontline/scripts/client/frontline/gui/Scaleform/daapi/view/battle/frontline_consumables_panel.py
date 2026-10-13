@@ -1,6 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: frontline/scripts/client/frontline/gui/Scaleform/daapi/view/battle/frontline_consumables_panel.py
+from __future__ import absolute_import
 from functools import partial
+from future.utils import viewitems
 import BigWorld
 from ReservesEvents import randomReservesEvents
 from frontline.gui.Scaleform.daapi.view.meta.FrontlineBattleConsumablesPanelMeta import FrontlineBattleConsumablesPanelMeta
@@ -26,8 +28,8 @@ class FrontlineBattleConsumablesPanel(FrontlineBattleConsumablesPanelMeta, Consu
 
     def __init__(self):
         super(FrontlineBattleConsumablesPanel, self).__init__()
-        self.__battleReserveSlots = dict()
-        self.__glowUpdateInfo = dict()
+        self.__battleReserveSlots = {}
+        self.__glowUpdateInfo = {}
         self.__indicatedSlots = set()
         self.__currentSlotIdx = None
         return
@@ -124,7 +126,8 @@ class FrontlineBattleConsumablesPanel(FrontlineBattleConsumablesPanelMeta, Consu
 
     def _addEquipmentSlot(self, idx, intCD, item):
         if item is None:
-            return super(FrontlineBattleConsumablesPanel, self)._addEquipmentSlot(idx, intCD, item)
+            super(FrontlineBattleConsumablesPanel, self)._addEquipmentSlot(idx, intCD, item)
+            return
         else:
             self.__currentSlotIdx = idx
             quantity = item.getQuantity()
@@ -210,8 +213,8 @@ class FrontlineBattleConsumablesPanel(FrontlineBattleConsumablesPanelMeta, Consu
         self.__addEquipmentLevelToSlot(idx, item)
 
     def __updateEquipmentGlowCB(self):
-        for idx in self.__glowUpdateInfo:
-            self.as_setGlowS(idx, self.__glowUpdateInfo[idx])
+        for idx, glow in viewitems(self.__glowUpdateInfo):
+            self.as_setGlowS(idx, glow)
 
         self.__glowUpdateInfo.clear()
 

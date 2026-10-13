@@ -36,7 +36,7 @@ class CameraTransform(object):
 
 
 CAMERAS_XML_NAME = ResMgr.appDirectory() + 'offline_mode_cameras.xml'
-g_cameraTransforms = list()
+g_cameraTransforms = []
 g_curCameraTransform = 0
 
 def _clampCameraTransformIdx(val):

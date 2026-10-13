@@ -66,7 +66,7 @@ class PERSONAL_MISSIONS_30(object):
     MAIN_OPERATION_STATUS_COMPLETED = '#personal_missions_30:main/operation/status/completed'
     MAIN_OPERATION_BUTTON_COMPLETED = '#personal_missions_30:main/operation/button/completed'
     MAIN_OPERATION_STATUS_AVAILABLE = '#personal_missions_30:main/operation/status/available'
-    MAIN_OPERATION_BUTTON_AVAILABLE = '#personal_missions_30:main/operation/button/available/'
+    MAIN_OPERATION_BUTTON_AVAILABLE = '#personal_missions_30:main/operation/button/available'
     MAIN_ASSEMBLING_COMPONENT = '#personal_missions_30:main/assembling/component'
     MAIN_COMPLETE_TITLE = '#personal_missions_30:main/complete/title'
     MAIN_COMPLETE_DESCRIPTION_NOTALLCOMPLETED = '#personal_missions_30:main/complete/description/notAllCompleted'

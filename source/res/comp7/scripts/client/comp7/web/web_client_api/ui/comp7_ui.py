@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: comp7/scripts/client/comp7/web/web_client_api/ui/comp7_ui.py
+from __future__ import absolute_import
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import NEW_SHOP_TABS, IS_COMP7_BONS_BANNER_VISITED
 from comp7.gui.shared import event_dispatcher as comp7_events

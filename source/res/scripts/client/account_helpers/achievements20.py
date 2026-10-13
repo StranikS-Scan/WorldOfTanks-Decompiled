@@ -1,7 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/account_helpers/achievements20.py
-from functools import partial
+from __future__ import absolute_import
 import typing
+from functools import partial
 import AccountCommands
 from shared_utils.account_helpers.diff_utils import synchronizeDicts
 if typing.TYPE_CHECKING:

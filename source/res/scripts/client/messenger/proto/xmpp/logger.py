@@ -1,6 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/proto/xmpp/logger.py
+from __future__ import absolute_import
 import time
+from future.utils import viewvalues
 import BigWorld
 from debug_utils import LOG_CURRENT_EXCEPTION
 from messenger.proto.xmpp.gloox_constants import LOG_LEVEL, LOG_SOURCE, GLOOX_EVENT
@@ -48,14 +50,14 @@ class LogHandler(ClientEventsHandler):
         if key in self.__loggers:
             return self.__loggers[key]
         else:
-            g_logOutput.error(CLIENT_LOG_AREA.GENERIC, 'Events logger is not found. Available loggers are', self.__loggers.keys())
+            g_logOutput.error(CLIENT_LOG_AREA.GENERIC, 'Events logger is not found. Available loggers are', list(self.__loggers))
             return None
 
     def getNames(self):
-        return self.__loggers.keys()
+        return list(self.__loggers)
 
     def clear(self):
-        for logger in self.__loggers.itervalues():
+        for logger in viewvalues(self.__loggers):
             logger.clear()
 
     def registerHandlers(self):
@@ -65,11 +67,11 @@ class LogHandler(ClientEventsHandler):
         self.client().unregisterHandler(GLOOX_EVENT.LOG, self.__handleLog)
 
     def __handleLog(self, level, source, message):
-        for logger in self.__loggers.itervalues():
+        for logger in viewvalues(self.__loggers):
             logger.log(level, source, message)
 
     def __repr__(self):
-        return 'LogHandler(id=0x{0:08X}, loggers({1!r:s}))'.format(id(self), self.__loggers.keys())
+        return 'LogHandler(id=0x{0:08X}, loggers({1!r:s}))'.format(id(self), list(self.__loggers))
 
 
 class XMPP_EVENT_LOG(object):

@@ -1,5 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: frontline/scripts/client/frontline/gui/prb_control/entities/epic_battle_training/limits.py
+from __future__ import absolute_import
+from future.utils import viewvalues
 from CurrentVehicle import g_currentVehicle
 from constants import PREBATTLE_ACCOUNT_STATE, PREBATTLE_TYPE
 from gui.Scaleform.daapi.view.lobby.epicBattle.epic_helpers import isVehLevelUnlockableInBattle
@@ -22,7 +24,7 @@ class ObserverInTeamIsValid(AbstractTeamIsValid):
     def __isAllObservers(cls, accountsInfo):
         if not accountsInfo:
             return False
-        for accInfo in accountsInfo.itervalues():
+        for accInfo in viewvalues(accountsInfo):
             if not accInfo['state'] & PREBATTLE_ACCOUNT_STATE.READY:
                 continue
             if 'vehTypeCompDescr' not in accInfo or 'vehLevel' not in accInfo:

@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: frontline/scripts/client/frontline/gui/Scaleform/daapi/view/lobby/battle_queue_provider.py
+from __future__ import absolute_import
 import BigWorld
 from gui.Scaleform.daapi.view.lobby.battle_queue.battle_queue import RandomQueueProvider
 from gui.Scaleform.locale.MENU import MENU

@@ -38,18 +38,19 @@ class AttachmentsPreview(ViewImpl):
     def getTooltipData(self, event):
         return self.__tooltips.get(event.getArgument('tooltipId', ''))
 
-    def _onLoading(self, setTokenID, *args, **kwargs):
+    def _onLoading(self, setTokenID, feature, *args, **kwargs):
         super(AttachmentsPreview, self)._onLoading(*args, **kwargs)
-        self.__fillModel(setTokenID)
+        self.__fillModel(setTokenID, feature)
 
     def _finalize(self):
         super(AttachmentsPreview, self)._finalize()
         self.__tooltips.clear()
 
-    def __fillModel(self, setTokenID):
+    def __fillModel(self, setTokenID, feature):
         with self.viewModel.transaction() as model:
             setName, attachmentIDs = parseAttachmentsSetToken(setTokenID)
             model.setAttachmentSetID(setName)
+            model.setFeature(feature.value if feature else '')
             attachmentsModel = model.getAttachments()
             attachmentsModel.clear()
             self.__tooltips.clear()
@@ -78,5 +79,5 @@ class AttachmentsPreview(ViewImpl):
 
 class AttachmentsPreviewWindow(WindowImpl):
 
-    def __init__(self, setTokenID):
-        super(AttachmentsPreviewWindow, self).__init__(WindowFlags.WINDOW | WindowFlags.WINDOW_FULLSCREEN, layer=WindowLayer.FULLSCREEN_WINDOW, content=AttachmentsPreview(setTokenID))
+    def __init__(self, setTokenID, feature):
+        super(AttachmentsPreviewWindow, self).__init__(WindowFlags.WINDOW | WindowFlags.WINDOW_FULLSCREEN, layer=WindowLayer.FULLSCREEN_WINDOW, content=AttachmentsPreview(setTokenID, feature))

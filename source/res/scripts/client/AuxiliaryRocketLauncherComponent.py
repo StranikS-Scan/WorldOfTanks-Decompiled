@@ -5,13 +5,14 @@ import typing
 from constants import SECONDARY_GUN_STATE
 from events_handler import eventHandler
 from gui.shared.utils.decorators import ReprInjector
+from items.vehicle_mechanics_types import VehicleMechanicKey, VehicleMechanicKeys
 from vehicles.components.component_wrappers import ifPlayerVehicle
 from vehicles.components.vehicle_component import VehicleDynamicComponent
 from vehicles.components.vehicle_prefabs import createMechanicPrefabSpawner
 from vehicles.mechanics.gun_mechanics.auxiliary_rocket_launcher import createAuxiliaryRocketLauncherStatesEvents, AuxiliaryRocketLauncherState, AuxiliaryRocketLauncherAmmoState
 from vehicles.mechanics.gun_mechanics.common import IGunMechanicComponent
 from vehicles.mechanics.mechanic_commands import createMechanicCommandsEvents, IMechanicCommandsComponent
-from vehicles.mechanics.mechanic_constants import VehicleMechanic, VehicleMechanicCommand
+from vehicles.mechanics.mechanic_constants import VehicleMechanicCommand
 from vehicles.mechanics.mechanic_inputs import createAuxiliaryRocketLauncherInput
 from vehicles.mechanics.mechanic_states import IMechanicStatesComponent
 if typing.TYPE_CHECKING:
@@ -36,8 +37,8 @@ class AuxiliaryRocketLauncherComponent(VehicleDynamicComponent, IGunMechanicComp
         return
 
     @property
-    def vehicleMechanic(self):
-        return VehicleMechanic.AUXILIARY_ROCKET_LAUNCHER
+    def vehicleMechanicKey(self):
+        return VehicleMechanicKeys.AUXILIARY_ROCKET_LAUNCHER
 
     @property
     def commandsEvents(self):
@@ -82,7 +83,7 @@ class AuxiliaryRocketLauncherComponent(VehicleDynamicComponent, IGunMechanicComp
 
     @eventHandler
     def onCollectAmmoStates(self, ammoStates):
-        ammoStates[self.vehicleMechanic.value] = AuxiliaryRocketLauncherAmmoState(self.__isInAimingMode)
+        ammoStates[self.vehicleMechanicKey.uniqueName] = AuxiliaryRocketLauncherAmmoState(self.__isInAimingMode)
 
     def _onAvatarReady(self, player):
         super(AuxiliaryRocketLauncherComponent, self)._onAvatarReady(player)

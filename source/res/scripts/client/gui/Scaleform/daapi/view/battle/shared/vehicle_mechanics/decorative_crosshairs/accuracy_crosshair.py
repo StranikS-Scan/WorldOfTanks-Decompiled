@@ -9,7 +9,7 @@ from gui.Scaleform.daapi.view.meta.AccuracyStackDecorativeCrosshairMeta import A
 from gui.veh_mechanics.battle.updaters.mechanics.mechanic_passenger_updater import VehicleMechanicPassengerUpdater
 from gui.veh_mechanics.battle.updaters.mechanics.mechanic_states_updater import VehicleMechanicStatesUpdater
 from gui.veh_mechanics.battle.updaters.vehicle_state_updater import VehicleStateUpdater
-from vehicles.mechanics.mechanic_constants import VehicleMechanic
+from items.vehicle_mechanics_types import VehicleMechanicKeys
 from vehicles.mechanics.mechanic_states import IMechanicStatesListenerLogic
 if typing.TYPE_CHECKING:
     from AccuracyStacksController import AccuracyStacksState
@@ -39,7 +39,7 @@ class AccuracyDecorativeCrosshair(AccuracyStackDecorativeCrosshairMeta, Containe
         self.__update(state)
 
     def _getViewUpdaters(self):
-        return [VehicleMechanicPassengerUpdater(VehicleMechanic.ACCURACY_STACKS, self), VehicleMechanicStatesUpdater(VehicleMechanic.ACCURACY_STACKS, self), VehicleStateUpdater(self)]
+        return [VehicleMechanicPassengerUpdater(VehicleMechanicKeys.ACCURACY_STACKS, self), VehicleMechanicStatesUpdater(VehicleMechanicKeys.ACCURACY_STACKS, self), VehicleStateUpdater(self)]
 
     def updateSpeedLimit(self, value, forced=False):
         if self.__isSpeedLimitActive != value or forced:

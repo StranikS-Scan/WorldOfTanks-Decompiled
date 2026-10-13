@@ -1,5 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/web/web_client_api/loot_boxes_system/__init__.py
+from __future__ import absolute_import
+from future.utils import viewitems
+from past.builtins import basestring
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.lootbox_system.base.bonuses_packers import mergeNeededBonuses, processCompensationsWithLootbox
 from gui.lootbox_system.base.common import ViewID, Views
@@ -47,7 +50,7 @@ class LootBoxSystemWebApi(object):
 
     @w2c(_LootBoxInfo, 'get_loot_box_info')
     def getLootBoxInfo(self, cmd):
-        result = dict()
+        result = {}
         lootBox = self.__itemsCache.items.tokens.getLootBoxByID(cmd.id)
         if lootBox is not None:
             guaranteedFrequency = lootBox.getGuaranteedFrequency()
@@ -75,7 +78,7 @@ class LootBoxSystemWebApi(object):
 
     def __addBonusesInfo(self, slotsInfo, eventName, fullInfo):
         result = {}
-        for idx, slotData in slotsInfo.iteritems():
+        for idx, slotData in viewitems(slotsInfo):
             bonuses = mergeNeededBonuses(slotData.get('bonuses', []), eventName)
             bonuses = processCompensationsWithLootbox(bonuses, eventName, showLootboxCompensation=False)
             result.update({idx: {'probability': int(slotData.get('probability', [0])[0] * 10000 + 1e-06) / 100.0,
@@ -85,10 +88,10 @@ class LootBoxSystemWebApi(object):
                 bonusList = bonus.getWrappedLootBoxesBonusList()
                 for bonusEntry in bonusList:
                     if not self.__isExistingBonus(bonusEntry, result[idx]['bonuses'], fullInfo):
-                        bonusEntry['icon'] = {size:sanitizeResPath(path) for size, path in bonusEntry['icon'].iteritems()}
+                        bonusEntry['icon'] = {size:sanitizeResPath(path) for size, path in viewitems(bonusEntry['icon'])}
                         result[idx]['bonuses'].append(bonusEntry)
                         if bonusEntry.get('overlayIcon') is not None:
-                            bonusEntry['overlayIcon'] = {size:sanitizeResPath(path) for size, path in bonusEntry['overlayIcon'].iteritems()}
+                            bonusEntry['overlayIcon'] = {size:sanitizeResPath(path) for size, path in viewitems(bonusEntry['overlayIcon'])}
 
         return result
 

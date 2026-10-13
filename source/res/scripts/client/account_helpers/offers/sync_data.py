@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/account_helpers/offers/sync_data.py
+from __future__ import absolute_import
 from account_helpers.AccountSyncData import BaseSyncDataCache
 from shared_utils.account_helpers.diff_utils import synchronizeDicts
 

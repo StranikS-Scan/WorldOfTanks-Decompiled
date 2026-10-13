@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: frontline/scripts/client/frontline/gui/Scaleform/daapi/view/battle/frontline_battle_carousel_filters.py
+from __future__ import absolute_import
 from gui.filters.carousel_filter import RoleCriteriesGroup
 from gui.shared.utils.requesters.ItemsRequester import RequestCriteria, PredicateCondition
 FL_RENT = RequestCriteria(PredicateCondition(lambda item: item.name.endswith('_FL')))

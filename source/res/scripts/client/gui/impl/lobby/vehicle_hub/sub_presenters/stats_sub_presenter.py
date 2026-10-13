@@ -19,12 +19,12 @@ from gui.shared.gui_items import VEHICLE_ATTR_TO_KPI_NAME_MAP, KPI
 from gui.shared.items_parameters.formatters import getMeasureUnitsForParameter
 from gui.shared.items_parameters.functions import getShellParamsSwitcherModifiedShells
 from gui.shared.items_parameters.comparator import PARAM_STATE
+from items.vehicle_mechanics_types import VehicleMechanicKeys
 from shared_utils import first
-from vehicles.mechanics.mechanic_constants import VehicleMechanic
-SUPPORTED_SHELL_TYPES = {VehicleMechanic.SHELL_PARAMS_SWITCHER: (SHELL_TYPES.HOLLOW_CHARGE,
-                                         SHELL_TYPES.HIGH_EXPLOSIVE,
-                                         SHELL_TYPES.ARMOR_PIERCING,
-                                         SHELL_TYPES.ARMOR_PIERCING_CR)}
+SUPPORTED_SHELL_TYPES = {VehicleMechanicKeys.SHELL_PARAMS_SWITCHER: (SHELL_TYPES.HOLLOW_CHARGE,
+                                             SHELL_TYPES.HIGH_EXPLOSIVE,
+                                             SHELL_TYPES.ARMOR_PIERCING,
+                                             SHELL_TYPES.ARMOR_PIERCING_CR)}
 _logger = logging.getLogger(__name__)
 
 class StatsSubPresenter(SubPresenterBase):
@@ -62,7 +62,7 @@ class StatsSubPresenter(SubPresenterBase):
                 shellParams.clear()
                 items = SpecialShellParamModel()
                 if self.__fillViewModelsArray(items.getShellArray(), specialMechanic.mechanic):
-                    shellParams.set(specialMechanic.mechanic.value, items)
+                    shellParams.set(specialMechanic.mechanic.uniqueName, items)
             return
 
     @createBackportTooltipDecorator()
@@ -98,7 +98,7 @@ class StatsSubPresenter(SubPresenterBase):
                     sp.setIsPremium(shell.descriptor.isGold)
                     shellArrayModel.addViewModel(sp)
                 else:
-                    _logger.error('"%s" mechanic do not support "%s" shell type', mechanic.value, shell.type)
+                    _logger.error('"%s" mechanic do not support "%s" shell type', mechanic.uniqueName, shell.type)
 
         shellArrayModel.invalidate()
         return shellArrayModel

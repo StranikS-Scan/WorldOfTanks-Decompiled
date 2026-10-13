@@ -137,8 +137,12 @@ def getWotPlusShopUrl():
     return _getUrl('buyWotPlus')
 
 
-def getWotPlusProShopUrl():
-    return _getUrl('buyWotPlusPro')
+def getWotPlusPro12ShopUrl():
+    return _getUrl('buyWotPlusPro12')
+
+
+def getWotPlusPro6ShopUrl():
+    return _getUrl('buyWotPlusPro6')
 
 
 def getIntegratedAuctionUrl():

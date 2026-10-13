@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: comp7/scripts/client/comp7/gui/impl/lobby/tooltips/last_update_tooltip.py
+from __future__ import absolute_import
 from frameworks.wulf import ViewSettings
 from gui.impl.gen import R
 from comp7.gui.impl.gen.view_models.views.lobby.tooltips.last_update_tooltip_model import LastUpdateTooltipModel

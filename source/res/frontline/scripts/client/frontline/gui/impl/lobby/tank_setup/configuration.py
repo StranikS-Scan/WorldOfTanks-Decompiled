@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: frontline/scripts/client/frontline/gui/impl/lobby/tank_setup/configuration.py
+from __future__ import absolute_import
 from frontline.gui.impl.lobby.tank_setup.array_provider import BattleAbilityProvider
 from gui.impl.common.tabs_controller import tabUpdateFunc
 from gui.impl.lobby.tank_setup.configurations.base import BaseTankSetupTabsController, BaseDealPanel

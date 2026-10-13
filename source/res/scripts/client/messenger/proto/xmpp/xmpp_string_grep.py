@@ -1,8 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/proto/xmpp/xmpp_string_grep.py
+from __future__ import absolute_import
 import stringprep
-import types
 import unicodedata
+from future.utils import lmap
+from past.builtins import unicode
 from soft_exception import SoftException
 
 class XmppStringPrepError(SoftException):
@@ -59,7 +61,7 @@ class _StringPrepProfile(object):
         self._bidi = bidi
 
     def prepare(self, data):
-        if not isinstance(data, types.UnicodeType):
+        if isinstance(data, bytes):
             data = unicode(data, 'utf8')
         result = self._doMapping(data)
         result = self._doNormalization(result)
@@ -70,7 +72,7 @@ class _StringPrepProfile(object):
     def _doMapping(self, data):
         result = data
         for table in self._mapping:
-            result = map(table, data)
+            result = (table(d) for d in data)
 
         return u''.join(result)
 
@@ -82,13 +84,13 @@ class _StringPrepProfile(object):
 
     def _checkProhibited(self, data):
         for item in self._prohibited:
-            map(lambda char, table=item: _isCharProhibited(table, char), data)
+            lmap(lambda char, table=item: _isCharProhibited(table, char), data)
 
         return data
 
     def _checkUnassigned(self, data):
         for item in self._unassigned:
-            map(lambda char, table=item: _isCharUnassigned(table, char), data)
+            lmap(lambda char, table=item: _isCharUnassigned(table, char), data)
 
         return data
 

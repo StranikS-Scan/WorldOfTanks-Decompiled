@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/proto/xmpp/extensions/search.py
+from __future__ import absolute_import
 from collections import namedtuple
 from messenger.proto.xmpp.extensions import PyQuery, PyExtension
 from messenger.proto.xmpp.extensions.disco import CreatedByElement

@@ -1,5 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/web/web_client_api/ui/dialogs.py
+from __future__ import absolute_import
+from past.builtins import basestring
 import adisp
 import wg_async
 from gui.impl.pub.dialog_window import DialogButtons

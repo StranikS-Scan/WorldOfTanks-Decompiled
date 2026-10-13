@@ -24,9 +24,9 @@ from gui.shared.gui_items.vehicle_mechanics.shell_mechanic_item import ShellMech
 from gui.veh_post_progression.models.progression import PostProgressionItem
 from skeletons.gui.shared.gui_items import IGuiItemsFactory
 if typing.TYPE_CHECKING:
+    from items.vehicle_mechanics_types import VehicleMechanicKey
     from items.vehicles import VehicleType
     from post_progression_common import VehicleState
-    from vehicles.mechanics.mechanic_constants import VehicleMechanic
 _logger = logging.getLogger(__name__)
 _NONE_GUI_ITEM_TYPE = 0
 _CUSTOMIZATION_TYPE_TO_CLS = {CustomizationType.CAMOUFLAGE: Camouflage,

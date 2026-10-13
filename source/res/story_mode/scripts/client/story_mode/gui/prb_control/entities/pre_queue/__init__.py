@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: story_mode/scripts/client/story_mode/gui/prb_control/entities/pre_queue/__init__.py
+from __future__ import absolute_import
 from adisp import adisp_process, adisp_async
 import wg_async as future_async
 from gui.impl.dialogs import dialogs

@@ -1,7 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/web/web_client_api/battle_pass/__init__.py
+from __future__ import absolute_import
 import logging
 from itertools import chain
+from future.utils import viewitems
+from past.builtins import basestring
 from gui.impl.gen import R
 from gui.shared import EVENT_BUS_SCOPE, events, g_eventBus
 from gui.shared.event_dispatcher import showBattlePass, showBattlePassTankmenVoiceover, showShop
@@ -65,9 +68,11 @@ class BattlePassWebApi(W2CSchema):
         g_eventBus.handleEvent(events.BattlePassEvent(events.BattlePassEvent.ON_FINISH_BATTLE_PASS_PURCHASE), scope=EVENT_BUS_SCOPE.LOBBY)
 
     def __getTankmenScreenID(self, groupName):
-        for screenID, screenData in self.__battlePass.getTankmenScreens().iteritems():
+        for screenID, screenData in viewitems(self.__battlePass.getTankmenScreens()):
             if groupName in screenData['tankmen']:
                 return screenID
+
+        return None
 
 
 class BattlePassWebApiMixin(object):

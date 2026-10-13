@@ -40,6 +40,10 @@
       <Type>	UINT32	</Type>
       <Flags>	ALL_CLIENTS	</Flags>
     </respawnID>
+    <isDisabledEffect>
+      <Type>	BOOL	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </isDisabledEffect>
   </Properties>
   <ofEntity>
     <Vehicle></Vehicle>

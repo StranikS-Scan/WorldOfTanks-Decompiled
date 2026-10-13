@@ -1,0 +1,66 @@
+<HWDeathZone.def>
+  <AppealRadius>	3000	</AppealRadius>
+  <Properties>
+    <serverTransform>
+      <Type>	FIXED_DICT	  <Properties>
+          <position>
+            <Type>	VECTOR3	</Type>
+          </position>
+          <size>
+            <Type>	VECTOR3	</Type>
+          </size>
+          <rotation>
+            <Type>	FLOAT	</Type>
+          </rotation>
+        </Properties>
+      </Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </serverTransform>
+    <shape>
+      <Type>	UINT8	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </shape>
+    <requestedTransform>
+      <Type>	FIXED_DICT	  <Properties>
+          <position>
+            <Type>	VECTOR3	</Type>
+          </position>
+          <size>
+            <Type>	VECTOR3	</Type>
+          </size>
+          <rotation>
+            <Type>	FLOAT	</Type>
+          </rotation>
+          <begin>
+            <Type>	FLOAT	</Type>
+          </begin>
+          <until>
+            <Type>	FLOAT	</Type>
+          </until>
+        </Properties>
+      </Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </requestedTransform>
+    <isActive>
+      <Type>	BOOL	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <Default>	0	</Default>
+    </isActive>
+    <proximityMarkerStyle>
+      <Type>	STRING	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <Editable>	True	</Editable>
+      <Default>	STATIC_DEATH_ZONE_PROXIMITY	</Default>
+    </proximityMarkerStyle>
+    <reactOnTeamIDs>
+      <Type>	ARRAY	  <of>	INT8	</of>
+      </Type>
+      <Flags>	CELL_PRIVATE	</Flags>
+    </reactOnTeamIDs>
+    <vehiclesInside>
+      <Type>	ARRAY	  <of>	OBJECT_ID	</of>
+      </Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </vehiclesInside>
+  </Properties>
+</HWDeathZone.def>

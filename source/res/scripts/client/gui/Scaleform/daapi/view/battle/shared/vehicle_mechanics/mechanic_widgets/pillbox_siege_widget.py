@@ -20,9 +20,10 @@ from gui.veh_mechanics.battle.updaters.mechanics.mechanic_passenger_updater impo
 from gui.veh_mechanics.battle.updaters.mechanics.mechanic_states_updater import VehicleMechanicStatesUpdater
 from gui.veh_mechanics.battle.updaters.vehicle_device_view_updater import IVehicleDeviceStatusView, VehicleDeviceStatusUpdater, makeUIDeviceState
 from gui.veh_mechanics.battle.updaters.vehicle_misc_status_view_updater import VehicleMiscStatusUpdater, IVehicleMiscStatusView, MISC_STATUS_LEVEL_CRITICAL, MISC_STATUS_LEVEL_WARNING
+from items.vehicle_mechanics_types import VehicleMechanicKeys
 from skeletons.gui.battle_session import IBattleSessionProvider
 from vehicles.mechanics.mechanic_commands import IMechanicCommandsListenerLogic
-from vehicles.mechanics.mechanic_constants import VehicleMechanic, VehicleMechanicCommand
+from vehicles.mechanics.mechanic_constants import VehicleMechanicCommand
 from vehicles.mechanics.mechanic_states import IMechanicStatesListenerLogic
 if typing.TYPE_CHECKING:
     from PillboxSiegeComponent import PillboxSiegeModeState
@@ -94,11 +95,11 @@ class PillboxSiegeMechanicWidget(PillboxSiegeWidgetMeta, ContainersListener, IMe
         return
 
     def _getViewUpdaters(self):
-        return [VehicleMechanicPassengerUpdater(VehicleMechanic.PILLBOX_SIEGE_MODE, self),
-         VehicleMechanicStatesUpdater(VehicleMechanic.PILLBOX_SIEGE_MODE, self),
+        return [VehicleMechanicPassengerUpdater(VehicleMechanicKeys.PILLBOX_SIEGE_MODE, self),
+         VehicleMechanicStatesUpdater(VehicleMechanicKeys.PILLBOX_SIEGE_MODE, self),
          VehicleMiscStatusUpdater(self._VEHICLE_MISC_OBSERVE, self),
          VehicleDeviceStatusUpdater(self._VEHICLE_DEVICES_OBSERVE, self),
-         VehicleMechanicCommandsUpdater(VehicleMechanic.PILLBOX_SIEGE_MODE, self),
+         VehicleMechanicCommandsUpdater(VehicleMechanicKeys.PILLBOX_SIEGE_MODE, self),
          HotKeysViewUpdater(list(self._HOT_KEY_MAP.keys()), self)]
 
     def __getDisplayState(self, state):

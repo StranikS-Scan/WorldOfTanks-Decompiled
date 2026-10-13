@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/ext/filters/collection.py
+from __future__ import absolute_import
 import re
 import sre_compile
 import BigWorld
@@ -151,6 +152,6 @@ class PostBattleLinksFilter(IIncomingMessageFilter):
 
 class NormalizeMessageFilter(IOutgoingMessageFilter):
 
-    def filter(self, message, limits):
-        truncated = normalized_unicode_trim(message.strip(), limits.getMessageMaxLength())
+    def filter(self, text, limits):
+        truncated = normalized_unicode_trim(text.strip(), limits.getMessageMaxLength())
         return ' '.join(truncated.split())

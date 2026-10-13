@@ -4,13 +4,14 @@ from __future__ import absolute_import
 import typing
 from events_handler import eventHandler
 from gui.shared.utils.decorators import ReprInjector
+from items.vehicle_mechanics_types import VehicleMechanicKey, VehicleMechanicKeys
 from vehicles.components.component_wrappers import ifPlayerVehicle
 from vehicles.components.vehicle_component import VehicleDynamicComponent
 from vehicles.components.vehicle_prefabs import createMechanicPrefabSpawner
 from vehicles.mechanics.gun_mechanics.common import IGunMechanicComponent
 from vehicles.mechanics.gun_mechanics.propellant_gun import DEFAULT_PROPELLANT_GUN_PARAMS, DEFAULT_PROPELLANT_GUN_MECHANIC_STATE, PropellantGunMechanicState, PropellantGunComponentParams, createPropellantStatesEvents
 from vehicles.mechanics.mechanic_commands import IMechanicCommandsComponent, createMechanicCommandsEvents
-from vehicles.mechanics.mechanic_constants import VehicleMechanic, VehicleMechanicCommand
+from vehicles.mechanics.mechanic_constants import VehicleMechanicCommand
 from vehicles.mechanics.mechanic_helpers import getVehicleDescrMechanicParams
 from vehicles.mechanics.mechanic_states import IMechanicStatesComponent
 if typing.TYPE_CHECKING:
@@ -32,8 +33,8 @@ class PropellantGunController(VehicleDynamicComponent, IGunMechanicComponent, IM
         return
 
     @property
-    def vehicleMechanic(self):
-        return VehicleMechanic.PROPELLANT_GUN
+    def vehicleMechanicKey(self):
+        return VehicleMechanicKeys.PROPELLANT_GUN
 
     @property
     def commandsEvents(self):
@@ -80,7 +81,7 @@ class PropellantGunController(VehicleDynamicComponent, IGunMechanicComponent, IM
 
     def _collectComponentParams(self, typeDescriptor):
         super(PropellantGunController, self)._collectComponentParams(typeDescriptor)
-        mechanicParams = getVehicleDescrMechanicParams(typeDescriptor, self.vehicleMechanic)
+        mechanicParams = getVehicleDescrMechanicParams(typeDescriptor, self.vehicleMechanicKey)
         self.__componentParams = PropellantGunComponentParams.fromMechanicParams(mechanicParams)
 
     def __updateMechanicState(self):

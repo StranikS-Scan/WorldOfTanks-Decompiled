@@ -7,7 +7,6 @@ from gui.impl.dialogs.sub_views.common import IconSetData
 from gui.impl.gen.view_models.views.dialogs.sub_views.multiple_icons_set_view_model import MultipleIconsSetViewModel, IconPositionLogicEnum
 from gui.impl.gen.view_models.views.dialogs.sub_views.icon_view_model import IconViewModel
 from gui.impl.gen.view_models.views.dialogs.sub_views.image_substitution_view_model import ImageSubstitutionViewModel
-from gui.impl.gen_utils import INVALID_RES_ID
 from gui.impl.pub import ViewImpl
 from frameworks.wulf import ViewSettings
 if typing.TYPE_CHECKING:
@@ -31,7 +30,7 @@ def _addIconResIdsToViewModelArray(source, target):
     if not source:
         return
     for iconData in source:
-        if iconData.iconRes == INVALID_RES_ID:
+        if iconData.iconRes == R.invalid():
             continue
         iconVM = IconViewModel()
         iconVM.setPath(iconData.iconRes)
@@ -49,7 +48,7 @@ def _addLayersResIdsToViewModelArray(source, target):
     if not source:
         return
     for resID in source:
-        if resID == INVALID_RES_ID:
+        if resID == R.invalid():
             continue
         iconVM = IconViewModel()
         iconVM.setPath(resID)

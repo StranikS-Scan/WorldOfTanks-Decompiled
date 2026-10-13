@@ -1,0 +1,16 @@
+<VehicleExpirableComponent.def>
+  <Properties>
+    <createdAt>
+      <Type>	FLOAT32	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </createdAt>
+    <duration>
+      <Type>	FLOAT32	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </duration>
+  </Properties>
+  <ofEntity>
+    <Vehicle></Vehicle>
+  </ofEntity>
+  <DefaultKeyName>	vehicleExpirable	</DefaultKeyName>
+</VehicleExpirableComponent.def>

@@ -57,7 +57,7 @@ if typing.TYPE_CHECKING:
     from gui.goodies.booster_state_provider import BoosterStateProvider
     from gui.game_control.platoon_controller import PlatoonController
     from gui.battle_control.battle_session import BattleSessionProvider
-    from gui.impl.gen_utils import DynAccessor
+    from frameworks.wulf import PyResAccessor
     from account_helpers.settings_core.SettingsCore import SettingsCore
     from TeamInfo import TeamInfo
 _logger = logging.getLogger(__name__)
@@ -272,6 +272,8 @@ class TabView(ViewImpl):
             return
         vehicleInfo = self._getVehicleInfo(vehicleId)
         self._updateSquadFinder(vehicleId, vehicleInfo)
+        with self.modifyBattlePlayer(vehicleId) as playerModel:
+            self._invalidateVehicleTypeInfo(playerModel)
         prebattleID = self._getPrebattleID(vehicleInfo)
         currPlayerHasJoinedSquad = self._hasCurrentPlayerJustJoinedSquad(vehicleId, prebattleID)
         if currPlayerHasJoinedSquad:

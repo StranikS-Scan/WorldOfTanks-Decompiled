@@ -1,6 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/m_settings.py
+from __future__ import absolute_import
 from collections import namedtuple, defaultdict
+from future.utils import viewitems, viewvalues
 import Event
 from debug_utils import LOG_ERROR
 from helpers import dependency
@@ -49,11 +51,11 @@ class _ColorScheme(defaultdict):
         return '{0:06X}'.format(self[key][self.__current])
 
     def iterColors(self):
-        for key, colors in self.iteritems():
+        for key, colors in viewitems(self):
             yield (key, colors[self.__current])
 
     def iterHexs(self):
-        for key, colors in self.iteritems():
+        for key, colors in viewitems(self):
             yield (key, '{0:06X}'.format(colors[self.__current]))
 
 
@@ -171,7 +173,7 @@ class MessengerSettings(object):
             csName = 'colorBlind'
         else:
             csName = 'default'
-        for colorScheme in self.__colorsSchemes.itervalues():
+        for colorScheme in viewvalues(self.__colorsSchemes):
             colorScheme.setCurrent(csName)
 
     def getColorScheme(self, key):
@@ -202,7 +204,7 @@ class MessengerSettings(object):
     def __accs_onSettingsChanged(self, diff):
         if 'isColorBlind' in diff:
             result = False
-            for colorScheme in self.__colorsSchemes.itervalues():
+            for colorScheme in viewvalues(self.__colorsSchemes):
                 csName = 'colorBlind' if diff['isColorBlind'] else 'default'
                 if colorScheme.setCurrent(csName):
                     result = True

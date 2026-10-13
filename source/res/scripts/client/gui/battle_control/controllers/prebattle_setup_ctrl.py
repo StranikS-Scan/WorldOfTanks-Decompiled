@@ -69,11 +69,16 @@ class _SceneController(object):
         visualPath = self.__config.getVisualPath(positionNumber)
         if not visualPath:
             return
-        queue = CGF.CommandQueue(vehicle.spaceID)
-        self.__spawnPoints[vehicle.id] = newGO = queue.createGameObject()
-        queue.createComponent(newGO, CGF.TransformComponent, Math.Matrix(vehicle.matrix))
-        queue.createComponent(newGO, GenericComponents.TerrainSelectedAreaComponent, visualPath, self.__config.size, self.__config.overTerrainHeight, self.__getAreaColor(vehicle.id, status))
-        queue.activateGameObject(newGO)
+        else:
+            existingGO = self.__spawnPoints.pop(vehicle.id, None)
+            if existingGO is not None:
+                existingGO.destroy()
+            queue = CGF.CommandQueue(vehicle.spaceID)
+            self.__spawnPoints[vehicle.id] = newGO = queue.createGameObject()
+            queue.createComponent(newGO, CGF.TransformComponent, Math.Matrix(vehicle.matrix))
+            queue.createComponent(newGO, GenericComponents.TerrainSelectedAreaComponent, visualPath, self.__config.size, self.__config.overTerrainHeight, self.__getAreaColor(vehicle.id, status))
+            queue.activateGameObject(newGO)
+            return
 
     def __getAreaColor(self, vehicleID, status):
         isConfirmed = status == constants.VehicleSelectionPlayerStatus.CONFIRMED

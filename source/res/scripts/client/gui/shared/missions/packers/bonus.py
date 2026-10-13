@@ -316,8 +316,8 @@ class TokenBonusUIPacker(BaseBonusUIPacker):
         labelStr = i18n.makeString(webCache.getTokenInfo(complexToken.styleID))
         model.setValue(str(token.count))
         model.setUserName(labelStr)
-        model.setIconSmall(webCache.getTokenImage(complexToken.styleID, TOKEN_SIZES.SMALL))
-        model.setIconBig(webCache.getTokenImage(complexToken.styleID, TOKEN_SIZES.BIG))
+        model.setIconSmall(webCache.getTokenImage(complexToken.styleID, TOKEN_SIZES.SMALL, constants.GF_RES_PROTOCOL.CACHED_IMG))
+        model.setIconBig(webCache.getTokenImage(complexToken.styleID, TOKEN_SIZES.BIG, constants.GF_RES_PROTOCOL.CACHED_IMG))
         model.setLabel(labelStr)
         return model
 

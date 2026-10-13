@@ -64,14 +64,6 @@ class BaseBattlePassEntryPointView(IGlobalListener, EventsHandler):
         return self.__battlePass.isPostProgressionActive()
 
     @property
-    def isAnyExtraActive(self):
-        return self.__battlePass.getCurrentChapterID() in self.__battlePass.getExtraChapterIDs()
-
-    @property
-    def isAllExtraCompleted(self):
-        return all((self.__battlePass.isChapterCompleted(chapterID) for chapterID in self.__battlePass.getExtraChapterIDs()))
-
-    @property
     def isPaused(self):
         return self.__battlePass.isPaused() or not self.__battlePass.isGameModeEnabled(self._getCurrentArenaBonusType())
 

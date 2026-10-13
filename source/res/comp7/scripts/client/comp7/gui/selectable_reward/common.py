@@ -1,12 +1,15 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: comp7/scripts/client/comp7/gui/selectable_reward/common.py
+from __future__ import absolute_import
 import logging
 import typing
+from future.utils import viewitems, viewvalues
 from comp7.gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS as COMP7_TOOLTIPS
 from comp7.gui.selectable_reward.constants import Features
 from gui.impl.backport import TooltipData
 from gui.selectable_reward.common import SelectableRewardManager
 from helpers import dependency
+from shared_utils import first
 from skeletons.gui.offers import IOffersDataProvider
 if typing.TYPE_CHECKING:
     from gui.server_events.bonuses import SelectableBonus
@@ -19,17 +22,17 @@ class Comp7SelectableRewardManager(SelectableRewardManager):
 
     @classmethod
     def getTabTooltipData(cls, selectableBonus):
-        tokenID = selectableBonus.getValue().keys()[0]
+        tokenID = first(selectableBonus.getValue())
         return TooltipData(tooltip=None, isSpecial=True, specialAlias=COMP7_TOOLTIPS.COMP7_SELECTABLE_REWARD, specialArgs=(tokenID,)) if cls.isFeatureReward(tokenID) else None
 
     @classmethod
     def getGiftCount(cls, bonus):
-        return sum(cls.getGiftCountPerToken(bonus).itervalues())
+        return sum(viewvalues(cls.getGiftCountPerToken(bonus)))
 
     @classmethod
     def getGiftCountPerToken(cls, bonus):
         isComp7OfferToken = cls.isFeatureReward
-        tokens = ((token, v.get('count', 0)) for token, v in bonus.getValue().iteritems() if isComp7OfferToken(token))
+        tokens = ((token, v.get('count', 0)) for token, v in viewitems(bonus.getValue()) if isComp7OfferToken(token))
         return {token:cls.__getTokenGiftCount(token, count) for token, count in tokens}
 
     @classmethod

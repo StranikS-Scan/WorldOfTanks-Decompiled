@@ -864,13 +864,21 @@ class PlatoonController(IPlatoonController, IGlobalListener, CallbackDelayer):
         self.__currentlyDisplayedTanks = 0
         if not self.isInPlatoon():
             return
-        needToShowOtherPlayers = bool([ player for player in self.prbEntity.getPlayers().values() if player.isReady and not player.isInArena() and not player.isCurrentPlayer() ])
-        if not needToShowOtherPlayers:
+        else:
+            needToShowOtherPlayers = bool([ player for player in self.prbEntity.getPlayers().values() if player.isReady and not player.isInArena() and not player.isCurrentPlayer() ])
+            if not needToShowOtherPlayers:
+                return
+            self.__updatePlatoonTankInfo()
+            entity = self.prbEntity
+            if entity is None or not hasattr(entity, 'getRosterSettings'):
+                return
+            unitSlotCount = entity.getRosterSettings().getMaxSlots()
+            if not self.__hasEnoughSlots(unitSlotCount) or not self.__isPlatoonVisualizationEnabled:
+                return
+            cameraManager = CGF.getSystem(self.__hangarSpace.spaceID, HangarCameraSystem)
+            if cameraManager:
+                cameraManager.enablePlatoonMode(True)
             return
-        self.__updatePlatoonTankInfo()
-        cameraManager = CGF.getSystem(self.__hangarSpace.spaceID, HangarCameraSystem)
-        if cameraManager:
-            cameraManager.enablePlatoonMode(True)
 
     def __stopListening(self):
         _logger.debug('PlatoonController: stop listening')

@@ -30,15 +30,16 @@ from items import getTypeInfoByIndex, ITEM_TYPES, tankmen
 from items import utils as items_utils
 from items.components import component_constants
 from items.params_utils import getHeatedAimingTime, getTemperatureRateOfFire
+from items.vehicle_mechanics_types import VehicleMechanicKeys
 from math_common import decimal_round, round_py2_style, round_py2_style_int
 from post_progression_common import ACTION_TYPES
 from shared_utils import findFirst, first
 from soft_exception import SoftException
 from helpers_common import computePiercingPowerAtDist, computeDamageAtDist
 from vehicles.mechanics.mechanic_helpers import hasVehicleDescrMechanic
-from vehicles.mechanics.mechanic_constants import VehicleMechanic
 if typing.TYPE_CHECKING:
     from items.vehicles import VehicleDescriptor, VehicleDescr
+    from items.vehicle_mechanics_types import VehicleMechanicKey
     from gui.shared.gui_items.Vehicle import Vehicle
 _DO_TTC_LOG = False
 _Weight = namedtuple('_Weight', 'current, max')
@@ -593,7 +594,7 @@ class VehicleParams(ParameterBase):
 
     @property
     def burstFireRate(self):
-        if self.__hasBurst() and not self.__hasVehicleMechanic(VehicleMechanic.CHARGEABLE_BURST):
+        if self.__hasBurst() and not self.__hasVehicleMechanic(VehicleMechanicKeys.CHARGEABLE_BURST):
             gun = self._itemDescr.gun
             burstCountLeft, burstInterval, _ = gun.burst
             return (burstInterval, old_div(gun.clip[0], burstCountLeft), burstCountLeft)

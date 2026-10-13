@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/vehicle_systems/components/vehicle_shadow_manager.py
+from __future__ import absolute_import
 import BigWorld
 import CGF
 from aih_constants import CTRL_MODE_NAME
@@ -31,10 +32,10 @@ class VehicleShadowManager(object):
     def changeCameraMode(self, cameraMode, currentVehicleId=None):
         vehicle = BigWorld.player().getVehicleAttached()
         self.__prevCameraMode = cameraMode
-        isValidMode = cameraMode == CTRL_MODE_NAME.VIDEO or cameraMode == CTRL_MODE_NAME.DEBUG
+        isValidMode = cameraMode in (CTRL_MODE_NAME.VIDEO, CTRL_MODE_NAME.DEBUG)
         if isValidMode:
             self.updatePlayerTarget(None)
-        elif not isValidMode and vehicle is not None and vehicle.appearance is not None:
+        elif vehicle is not None and vehicle.appearance is not None:
             self.updatePlayerTarget(vehicle.appearance.compoundModel)
         return
 

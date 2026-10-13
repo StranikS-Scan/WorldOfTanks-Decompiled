@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/uilogging/easy_tank_equip/loggers.py
+from __future__ import absolute_import
 import json
 from typing import TYPE_CHECKING
 from gui.impl.gen.view_models.views.lobby.easy_tank_equip.common.proposal_model import ProposalType

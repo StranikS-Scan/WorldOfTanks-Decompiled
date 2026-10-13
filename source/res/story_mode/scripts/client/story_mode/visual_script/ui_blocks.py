@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: story_mode/scripts/client/story_mode/visual_script/ui_blocks.py
+from __future__ import absolute_import
 import aih_constants
 from visual_script.misc import errorVScript
 from visual_script.block import Block

@@ -1,13 +1,14 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/battleground/kill_cam_visuals.py
+from __future__ import absolute_import, division
 import math
 import logging
 import typing
+from typing import List
 import BigWorld
 import CGF
 import Math
 import math_utils
-from typing import List
 from cgf_components.highlight_component import HighlightComponent
 from cgf_components.visual_effect_component_manager import ImpactZoneComponent
 from dyn_objects_cache import _KillCamEffectDynObjects
@@ -53,18 +54,20 @@ class EffectsController(CallbackDelayer):
         if not hasProjectilePierced and not hasNonPiercedDamage and not isShellHE:
             _logger.error('Unexpected shell data.')
             return False
-        if not hasProjectilePierced:
-            if isSPG:
-                self.__spawnExplosionSphere(trajectoryPoints[-1], explosionRadius)
-            else:
-                self.__spawnImpactZone(segments, vehicleAppearance, maxComponentIndex)
-        if isSpotted and (isSPG or hasProjectilePierced):
-            self.__spawnShellTrajectory(trajectoryPoints, isSPG, isRicochet)
-            self.__spawnImpactPoint(impactPoint)
-        elif isSpotted:
-            self.__spawnShellTrajectory(trajectoryPoints, isSPG, isRicochet)
         else:
-            self.__spawnHitCone(trajectoryPoints[0], trajectoryPoints[-1])
+            if not hasProjectilePierced:
+                if isSPG:
+                    self.__spawnExplosionSphere(trajectoryPoints[-1], explosionRadius)
+                else:
+                    self.__spawnImpactZone(segments, vehicleAppearance, maxComponentIndex)
+            if isSpotted and (isSPG or hasProjectilePierced):
+                self.__spawnShellTrajectory(trajectoryPoints, isSPG, isRicochet)
+                self.__spawnImpactPoint(impactPoint)
+            elif isSpotted:
+                self.__spawnShellTrajectory(trajectoryPoints, isSPG, isRicochet)
+            else:
+                self.__spawnHitCone(trajectoryPoints[0], trajectoryPoints[-1])
+            return None
 
     def __removeEdgeDrawer(self):
         for go in self.gameObjects:

@@ -6,12 +6,13 @@ import typing
 import BigWorld
 from constants import AUTORELOADER_SURGE_RESTRICTION, AUTORELOADER_SURGE_STATE
 from gui.shared.utils.decorators import ReprInjector
+from items.vehicle_mechanics_types import VehicleMechanicKey, VehicleMechanicKeys
 from math_utils import clamp01
 from vehicles.components.vehicle_component import VehicleDynamicComponent
 from vehicles.components.vehicle_prefabs import createMechanicPrefabSpawner
 from vehicles.mechanics.common import IMechanicComponent
 from vehicles.mechanics.mechanic_commands import IMechanicCommandsComponent, createMechanicCommandsEvents
-from vehicles.mechanics.mechanic_constants import VehicleMechanic, VehicleMechanicCommand
+from vehicles.mechanics.mechanic_constants import VehicleMechanicCommand
 from vehicles.mechanics.mechanic_helpers import getVehicleDescrMechanicParams
 from vehicles.mechanics.mechanic_states import IMechanicState, IMechanicStatesComponent, createMechanicStatesEvents
 if typing.TYPE_CHECKING:
@@ -77,8 +78,8 @@ class AutoreloaderSurgeController(VehicleDynamicComponent, IMechanicComponent, I
         return
 
     @property
-    def vehicleMechanic(self):
-        return VehicleMechanic.AUTORELOADER_SURGE
+    def vehicleMechanicKey(self):
+        return VehicleMechanicKeys.AUTORELOADER_SURGE
 
     @property
     def commandsEvents(self):
@@ -123,7 +124,7 @@ class AutoreloaderSurgeController(VehicleDynamicComponent, IMechanicComponent, I
 
     def _collectComponentParams(self, typeDescriptor):
         super(AutoreloaderSurgeController, self)._collectComponentParams(typeDescriptor)
-        self.__params = getVehicleDescrMechanicParams(typeDescriptor, self.vehicleMechanic)
+        self.__params = getVehicleDescrMechanicParams(typeDescriptor, self.vehicleMechanicKey)
 
     def __updateMechanicState(self):
         self.__mechanicState = AutoreloaderSurgeState.fromComponentStatus(self.abilityState)

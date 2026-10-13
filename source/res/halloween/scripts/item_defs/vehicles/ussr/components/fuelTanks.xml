@@ -1,0 +1,47 @@
+<fuelTanks.xml>
+  <ids>
+    <Large_Halloween_event>	5000	</Large_Halloween_event>
+    <Large_hw21>	5001	</Large_hw21>
+    <Heavy_HW_BOT>	5002	</Heavy_HW_BOT>
+    <Average_Halloween_event_turret_2>	20003	</Average_Halloween_event_turret_2>
+  </ids>
+  <shared>
+    <Large_Halloween_event>
+      <tags></tags>
+      <price>	100	</price>
+      <weight>	300	</weight>
+      <maxHealth>	300	</maxHealth>
+      <maxRegenHealth>	200	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+      <notInShop>	true	</notInShop>
+      <invulnerable>	True	</invulnerable>
+    </Large_Halloween_event>
+    <Large_hw21>
+      <tags></tags>
+      <price>	100	</price>
+      <weight>	300	</weight>
+      <maxHealth>	200	</maxHealth>
+      <maxRegenHealth>	80	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+      <notInShop>	True	</notInShop>
+    </Large_hw21>
+    <Heavy_HW_BOT>
+      <tags></tags>
+      <price>	100	</price>
+      <notInShop>	True	</notInShop>
+      <weight>	275	</weight>
+      <maxHealth>	175	</maxHealth>
+      <maxRegenHealth>	70	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+    </Heavy_HW_BOT>
+    <Average_Halloween_event_turret_2>
+      <tags></tags>
+      <price>	100	</price>
+      <weight>	250	</weight>
+      <maxHealth>	150	</maxHealth>
+      <maxRegenHealth>	60	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+      <notInShop>	True	</notInShop>
+    </Average_Halloween_event_turret_2>
+  </shared>
+</fuelTanks.xml>

@@ -39,7 +39,7 @@ if typing.TYPE_CHECKING:
 _LOC = R.strings.dialogs.perksReset
 
 class PerksResetDialog(BaseCrewDialogTemplateView):
-    __slots__ = ('_tankman', '_priceListContent', '_isFreePerkReset', '_lastSoundEvent', '_isFreeByGold')
+    __slots__ = ('_tankman', '_priceListContent', '_isFreePerkReset', '_lastSoundEvent', '_isFreeByGold', '_moneyBalance')
     _itemsCache = dependency.descriptor(IItemsCache)
     VIEW_MODEL = PerksResetDialogModel
 
@@ -49,8 +49,10 @@ class PerksResetDialog(BaseCrewDialogTemplateView):
         super(PerksResetDialog, self).__init__(layoutID=None if self._isFreePerkReset else R.views.lobby.crew.dialogs.PerksResetDialog())
         self._isFreeByGold = getPerksResetGracePeriod() > 0 or not self._tankman.descriptor.firstSkillResetDisabled
         self._lastSoundEvent = None
+        self._moneyBalance = None
         if not self._isFreePerkReset:
             self._priceListContent = PerksResetPriceList(tankmanId)
+            self._moneyBalance = MoneyBalance(layoutID=R.views.dialogs.widgets.MoneyBalance())
         return
 
     @property
@@ -63,7 +65,7 @@ class PerksResetDialog(BaseCrewDialogTemplateView):
             self.setSubView(DefaultDialogPlaceHolders.CONTENT, SimpleTextContent(_LOC.free.description()))
             self.setSubView(DefaultDialogPlaceHolders.TITLE, SimpleTextTitle(str(backport.text(_LOC.title()))))
         else:
-            self.setSubView(DefaultDialogPlaceHolders.TOP_RIGHT, MoneyBalance())
+            self.setChildView(self._moneyBalance.layoutID, self._moneyBalance)
             self.setChildView(self._priceListContent.layoutID, self._priceListContent)
             self._initModel()
         isResetBtnDisabled = not (self._isFreeByGold or self._isFreePerkReset)
@@ -88,10 +90,11 @@ class PerksResetDialog(BaseCrewDialogTemplateView):
     def _finalize(self):
         super(PerksResetDialog, self)._finalize()
         self._priceListContent = None
+        self._moneyBalance = None
         return
 
     def _getCallbacks(self):
-        return (('cache.mayConsumeWalletResources', self._onConsumeWalletUpdate),)
+        return (('cache.isResourcesConsumptionAllowed', self._onConsumeWalletUpdate),)
 
     def _getEvents(self):
         return tuple() if self._isFreePerkReset else ((self._priceListContent.onPriceChange, self._onPriceChange),)
@@ -99,7 +102,7 @@ class PerksResetDialog(BaseCrewDialogTemplateView):
     def _onPriceChange(self, index=None):
         submitBtn = self.getButton(DialogButtons.SUBMIT)
         if submitBtn is not None:
-            isWGMAvailable = self._itemsCache.items.stats.mayConsumeWalletResources
+            isWGMAvailable = self._itemsCache.items.stats.isResourcesConsumptionAllowed
             isDisabled = index is None or not isWGMAvailable
             submitBtn.isDisabled = isDisabled
             if not isDisabled:

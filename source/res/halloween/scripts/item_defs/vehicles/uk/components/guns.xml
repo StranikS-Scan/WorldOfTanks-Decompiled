@@ -1,0 +1,328 @@
+<guns.xml>
+  <ids>
+    <_20pdr_Gun_Type_B_Halloween_event>	5001	</_20pdr_Gun_Type_B_Halloween_event>
+    <_5_5inch_AT_Gun_HW_BOT>	5002	</_5_5inch_AT_Gun_HW_BOT>
+    <_183mm_AT_Gun_HELL>	5003	</_183mm_AT_Gun_HELL>
+    <_90mm_Kenerga_Mk8_HW_BOT>	5004	</_90mm_Kenerga_Mk8_HW_BOT>
+    <_105mm_MV_Gun_Halloween_event>	5005	</_105mm_MV_Gun_Halloween_event>
+    <QF_105mm_LT_Gun_HW_BOT>	5006	</QF_105mm_LT_Gun_HW_BOT>
+  </ids>
+  <shared>
+    <_20pdr_Gun_Type_B_Halloween_event>
+      <userString>	#halloween.gb_vehicles.extend:_20pdr_Gun_Type_B_Halloween_event	</userString>
+      <tags></tags>
+      <level>	9	</level>
+      <price>	180000	</price>
+      <notInShop>	true	</notInShop>
+      <effects>	shot_medium_mb	</effects>
+      <reloadEffect>	reload_autoshoot_reloading_50_75	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -20.0 1.0 -20.0	</minPitch>
+        <maxPitch>	0.0 12.5 1.0 12.5	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	40.25	</rotationSpeed>
+      <reloadTime>	20	</reloadTime>
+      <maxAmmo>	1024	</maxAmmo>
+      <aimingTime>	2.1	</aimingTime>
+      <weight>	1282	</weight>
+      <maxHealth>	190	</maxHealth>
+      <maxRegenHealth>	95	</maxRegenHealth>
+      <repairCost>	6	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.36	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.1	</turretRotation>
+        <afterShot>	3.5	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_20pdr_AP_Mk1_Halloween_event_1>
+          <defaultPortion>	1.0	</defaultPortion>
+          <speed>	1020	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	226 211	</piercingPower>
+        </_20pdr_AP_Mk1_Halloween_event_1>
+        <_20pdr_HE_Mk3_Halloween_event>
+          <defaultPortion>	0.2	</defaultPortion>
+          <speed>	1020	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	150 150	</piercingPower>
+        </_20pdr_HE_Mk3_Halloween_event>
+      </shots>
+    </_20pdr_Gun_Type_B_Halloween_event>
+    <_5_5inch_AT_Gun_HW_BOT>
+      <userString>	#gb_vehicles:_5_5inch_AT_Gun	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	332000	</price>
+      <notInShop>	true	</notInShop>
+      <impulse>	0.48	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.6	</amplitude>
+        <recoilEffect>	huge	</recoilEffect>
+      </recoil>
+      <effects>	shot_huge_hw19	</effects>
+      <reloadEffect>	reload115_152	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -45.0 1.0 -45.0	</minPitch>
+        <maxPitch>	0.0 5.0 1.0 5.0	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	23.675	</rotationSpeed>
+      <reloadTime>	15	</reloadTime>
+      <maxAmmo>	112	</maxAmmo>
+      <aimingTime>	5	</aimingTime>
+      <weight>	1869	</weight>
+      <maxHealth>	210	</maxHealth>
+      <maxRegenHealth>	105	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.46	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.44	</turretRotation>
+        <afterShot>	6.4	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_5_5inch_AP_Mk_1_HW_BOT>
+          <defaultPortion>	1.0	</defaultPortion>
+          <speed>	850	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	260 250	</piercingPower>
+        </_5_5inch_AP_Mk_1_HW_BOT>
+        <_5_5inch_HESH_Mk_1_HW_BOT>
+          <defaultPortion>	0.00	</defaultPortion>
+          <speed>	850	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	200 200	</piercingPower>
+        </_5_5inch_HESH_Mk_1_HW_BOT>
+        <_5_5inch_HE_Mk_1T_HW_BOT>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	850	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	70 70	</piercingPower>
+        </_5_5inch_HE_Mk_1T_HW_BOT>
+      </shots>
+    </_5_5inch_AT_Gun_HW_BOT>
+    <_183mm_AT_Gun_HELL>
+      <userString>	#gb_vehicles:_183mm_AT_Gun	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	335000	</price>
+      <notInShop>	true	</notInShop>
+      <impulse>	0.68	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.4	</amplitude>
+        <recoilEffect>	huge	</recoilEffect>
+      </recoil>
+      <effects>	shot_superhuge	</effects>
+      <reloadEffect>	reload155_170	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -15.0 1.0 -15.0	</minPitch>
+        <maxPitch>	0.0 10.0 1.0 10.0	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	23.625	</rotationSpeed>
+      <reloadTime>	18.2857142857143	</reloadTime>
+      <maxAmmo>	30	</maxAmmo>
+      <aimingTime>	2.51428571428571	</aimingTime>
+      <weight>	5400	</weight>
+      <maxHealth>	280	</maxHealth>
+      <maxRegenHealth>	140	</maxRegenHealth>
+      <repairCost>	12	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.377142857142857	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.08	</turretRotation>
+        <afterShot>	4.0	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_183mm_AP_Mk1_HELL>
+          <defaultPortion>	1.0	</defaultPortion>
+          <speed>	830	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	310 300	</piercingPower>
+        </_183mm_AP_Mk1_HELL>
+      </shots>
+    </_183mm_AT_Gun_HELL>
+    <_90mm_Kenerga_Mk8_HW_BOT>
+      <userString>	#halloween.gb_vehicles.extend:_90mm_Kenerga_Mk8_HW_BOT	</userString>
+      <tags></tags>
+      <level>	8	</level>
+      <price>	125000	</price>
+      <notInShop>	true	</notInShop>
+      <impulse>	0.48	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.29	</amplitude>
+        <recoilEffect>	main	</recoilEffect>
+      </recoil>
+      <effects>	shot_main_mb	</effects>
+      <reloadEffect>	reload85_107	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -19.0 1.0 -19.0	</minPitch>
+        <maxPitch>	0.0 9.0 1.0 9.0	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	35.0	</rotationSpeed>
+      <reloadTime>	4.04	</reloadTime>
+      <maxAmmo>	60	</maxAmmo>
+      <aimingTime>	2.28	</aimingTime>
+      <weight>	1480	</weight>
+      <maxHealth>	170	</maxHealth>
+      <maxRegenHealth>	85	</maxRegenHealth>
+      <repairCost>	7	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.4	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.12	</turretRotation>
+        <afterShot>	3.5	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_90mm_AP_M310K_HW_BOT>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	980	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	221 201	</piercingPower>
+        </_90mm_AP_M310K_HW_BOT>
+        <_90mm_APFSDS_T312K_HW_BOT>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	1330	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	255 230	</piercingPower>
+        </_90mm_APFSDS_T312K_HW_BOT>
+        <_90mm_HE_T342K_HW_BOT>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	980	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	45 45	</piercingPower>
+        </_90mm_HE_T342K_HW_BOT>
+      </shots>
+    </_90mm_Kenerga_Mk8_HW_BOT>
+    <_105mm_MV_Gun_Halloween_event>
+      <userString>	#halloween.gb_vehicles.extend:_57_mm_automaticky_dvojkanon_535S	</userString>
+      <tags></tags>
+      <level>	9	</level>
+      <price>	250000	</price>
+      <impulse>	0.48	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.24	</amplitude>
+        <recoilEffect>	main	</recoilEffect>
+      </recoil>
+      <effects>	shot_large	</effects>
+      <reloadEffect>	reload85_107	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -20.0 1.0 -20.0	</minPitch>
+        <maxPitch>	0.0 10.0 1.0 10.0	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	35.0	</rotationSpeed>
+      <reloadTime>	17.7	</reloadTime>
+      <maxAmmo>	320	</maxAmmo>
+      <aimingTime>	3	</aimingTime>
+      <weight>	2500	</weight>
+      <maxHealth>	208	</maxHealth>
+      <maxRegenHealth>	104	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.4	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.05	</turretRotation>
+        <afterShot>	4.0	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <clip>
+        <count>	32	</count>
+        <rate>	240	</rate>
+      </clip>
+      <autoShoot>
+        <shotDispersionPerSec>	0.25	</shotDispersionPerSec>
+        <maxShotDispersion>	10	</maxShotDispersion>
+        <groupSize>	1	</groupSize>
+      </autoShoot>
+      <shots>
+        <_105mm_MV_AP_Halloween_event>
+          <defaultPortion>	1	</defaultPortion>
+          <speed>	880	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	216 205	</piercingPower>
+        </_105mm_MV_AP_Halloween_event>
+        <_105mm_MV_APDS_Halloween_event>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	1750	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	235 223	</piercingPower>
+        </_105mm_MV_APDS_Halloween_event>
+      </shots>
+      <notInShop>	True	</notInShop>
+    </_105mm_MV_Gun_Halloween_event>
+    <QF_105mm_LT_Gun_HW_BOT>
+      <userString>	#gb_vehicles:QF_105mm_LT_Gun	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	290000	</price>
+      <notInShop>	true	</notInShop>
+      <impulse>	0.48	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.19	</amplitude>
+        <recoilEffect>	main	</recoilEffect>
+      </recoil>
+      <effects>	shot_large	</effects>
+      <reloadEffect>	reload85_107	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -20.0 1.0 -20.0	</minPitch>
+        <maxPitch>	0.0 10.0 1.0 10.0	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	35.0	</rotationSpeed>
+      <reloadTime>	7.5	</reloadTime>
+      <maxAmmo>	72	</maxAmmo>
+      <aimingTime>	2.28571428571429	</aimingTime>
+      <weight>	1282	</weight>
+      <maxHealth>	208	</maxHealth>
+      <maxRegenHealth>	104	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.422857142857143	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.05	</turretRotation>
+        <afterShot>	4.0	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_105mm_AP_EX20_HW_BOT>
+          <defaultPortion>	1	</defaultPortion>
+          <speed>	1100	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	248 208	</piercingPower>
+        </_105mm_AP_EX20_HW_BOT>
+        <_105mm_APC_EX20_HW_BOT>
+          <defaultPortion>	0	</defaultPortion>
+          <speed>	1375	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	268 226	</piercingPower>
+        </_105mm_APC_EX20_HW_BOT>
+      </shots>
+    </QF_105mm_LT_Gun_HW_BOT>
+  </shared>
+</guns.xml>

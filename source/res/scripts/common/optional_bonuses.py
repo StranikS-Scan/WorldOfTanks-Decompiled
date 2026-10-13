@@ -142,8 +142,8 @@ def __mergeEntitlements(total, key, value, isLeaf=False, count=1, *args):
 
 
 def __mergeEntitlementList(total, key, value, isLeaf=False, count=1, *args):
-    entitlementList = total.setdefault(key, {})
-    entitlementList.setdefault('items', []).extend(value.get('items', []) * count)
+    entitlementList = total.setdefault(key, [])
+    entitlementList.extend(value)
 
 
 def __mergePets(total, key, value, isLeaf, count, *args):

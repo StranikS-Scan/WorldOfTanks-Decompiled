@@ -1,17 +1,20 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/vehicle_systems/camouflages.py
+from __future__ import absolute_import, division
 import logging
-from collections import namedtuple, defaultdict
-from copy import deepcopy
-from string import lower
 import math
 import typing
 from backports.functools_lru_cache import lru_cache
+from collections import namedtuple, defaultdict
+from copy import deepcopy
+from future.utils import listvalues, viewitems
+from past.utils import old_div
 import BigWorld
 import Math
 import CGF
 import Vehicular
 import AnimationSequence
+import math_utils
 from emission_params import getEmissionParams
 from helpers import dependency
 from items.components import c11n_constants
@@ -30,7 +33,6 @@ from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.utils.graphics import isRendererPipelineDeferred
 from items.components.c11n_constants import ModificationType, C11N_MASK_REGION, DEFAULT_DECAL_SCALE_FACTORS, SeasonType, CustomizationType, EMPTY_ITEM_ID, DEFAULT_DECAL_CLIP_ANGLE, ApplyArea, MAX_PROJECTION_DECALS_PER_AREA, CamouflageTilingType, CustomizationTypeNames, SLOT_TYPE_NAMES, DEFAULT_DECAL_TINT_COLOR, Options, SLOT_DEFAULT_ALLOWED_MODEL, ItemTags, DEFAULT_GLOSS, DEFAULT_METALLIC, ProjectionDecalMatchingTags, ProjectionDecalDirectionTags, AttachmentSize, AttachmentLogic, HANGER_POSTFIX, AttachmentType
 from gui.shared.gui_items.customization.c11n_items import Customization
-import math_utils
 from helpers import newFakeModel
 from soft_exception import SoftException
 from skeletons.gui.shared.gui_items import IGuiItemsFactory
@@ -254,7 +256,7 @@ def getStyleProgressionOutfit(outfit, toLevel=0, season=None):
         _logger.info('Get style progression level for the style with id=%d', style.id)
         toLevel = getCurrentLevelForProgressiveStyle(outfit)
     resOutfit = outfit.copy()
-    for levelId, outfitConfig in styleProgression.iteritems():
+    for levelId, outfitConfig in viewitems(styleProgression):
         if 'additionalOutfit' not in outfitConfig.keys():
             continue
         if levelId != toLevel:
@@ -302,7 +304,7 @@ def changeStyleProgression(style, appearance, level=0):
         return
     materialsToShow = style.styleProgressions.get(level, {}).get('materials', [])
     materialsToHide = []
-    for levelId, levelConfig in style.styleProgressions.iteritems():
+    for levelId, levelConfig in viewitems(style.styleProgressions):
         if levelId != level:
             materialsToHide.extend(levelConfig.get('materials', []))
 
@@ -371,7 +373,7 @@ def getCamo(appearance, outfit, containerId, vDesc, descId, isDamaged, default=N
             vehPartCompDesc = getattr(vDesc, descId, None)
             if not vehPartCompDesc:
                 return result
-            area = vehPartCompDesc.customizableVehicleAreas.get(lower(CustomizationTypeNames[CustomizationType.CAMOUFLAGE]), (0, None))[0]
+            area = vehPartCompDesc.customizableVehicleAreas.get(CustomizationTypeNames[CustomizationType.CAMOUFLAGE].lower(), (0, None))[0]
             if not area:
                 return result
             tiling, exclusionMap = processTiling(appearance, vDesc, descId, camouflage, component)
@@ -439,8 +441,8 @@ def computeTiling(tilingSettings, textureSize, aoTextureSize, vehDensity, vehPar
         coeficientY = textureHeight * factorY / vehLength * vehDensity[1]
     else:
         raise SoftException('Unexpected tilingType {}'.format(tilingType))
-    coeficientTextureX = aoTextureSize[0] / textureWidth
-    coeficientTextureY = aoTextureSize[1] / textureHeight
+    coeficientTextureX = old_div(aoTextureSize[0], textureWidth)
+    coeficientTextureY = old_div(aoTextureSize[1], textureHeight)
     tilingX = coeficientTextureX * coeficientX / vehPartDensity[0] * scale
     tilingY = coeficientTextureY * coeficientY / vehPartDensity[1] * scale
     offset = tilingSettings[2]
@@ -752,9 +754,9 @@ def _findAndMatchProjectionDecalsSlotsByTags(decals, appliedDecals, slotsByTagMa
                 if matchingTag == ProjectionDecalMatchingTags.COVER or directionTag in tags:
                     slots[decal] = slotsByTags.pop((matchingTag, directionTag, formfactorTag))
 
-    slotsList = slots.values()
-    if _checkSlotsOrder(slots.values(), appliedDecals):
-        for component, slotParams in slots.iteritems():
+    slotsList = listvalues(slots)
+    if _checkSlotsOrder(listvalues(slots), appliedDecals):
+        for component, slotParams in viewitems(slots):
             if updateSlotId:
                 component.slotId = slotParams.slotId
             _checkAndMirrorProjectionDecal(component, slotParams)

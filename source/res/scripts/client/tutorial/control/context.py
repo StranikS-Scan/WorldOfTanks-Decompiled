@@ -1,12 +1,13 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/tutorial/control/context.py
-from abc import ABCMeta, abstractmethod
+from __future__ import absolute_import
+from future.utils import viewitems
+import Event
+import SoundGroups
 from helpers import dependency
 from skeletons.gui.lobby_context import ILobbyContext
 from tutorial.control import TutorialProxyHolder
 from tutorial.logger import LOG_MEMORY, LOG_ERROR
-import SoundGroups
-import Event
 __all__ = ('StartReqs', 'BonusesRequester', 'SoundPlayer', 'GlobalStorage', 'SOUND_EVENT')
 
 class StartReqs(object):
@@ -26,7 +27,6 @@ class StartReqs(object):
 
 
 class BonusesRequester(TutorialProxyHolder):
-    __meta__ = ABCMeta
 
     def __init__(self, completed):
         super(BonusesRequester, self).__init__()
@@ -47,9 +47,8 @@ class BonusesRequester(TutorialProxyHolder):
             chapter = self._descriptor.getChapter(chapterID)
         return chapter
 
-    @abstractmethod
     def request(self, chapterID=None):
-        pass
+        raise NotImplementedError
 
 
 class SOUND_EVENT(object):
@@ -58,7 +57,6 @@ class SOUND_EVENT(object):
 
 
 class SoundPlayer(object):
-    __meta__ = ABCMeta
 
     def __init__(self):
         super(SoundPlayer, self).__init__()
@@ -77,13 +75,11 @@ class SoundPlayer(object):
     def isEnabled(self):
         return self._enabled
 
-    @abstractmethod
     def play(self, event, sndID=None):
-        pass
+        raise NotImplementedError
 
-    @abstractmethod
     def stop(self):
-        pass
+        raise NotImplementedError
 
     def isPlaying(self, event, sndID=None):
         return False
@@ -164,7 +160,7 @@ class GlobalStorage(object):
 
     @classmethod
     def setFlags(cls, flags):
-        for flag, value in flags.iteritems():
+        for flag, value in viewitems(flags):
             if flag not in GLOBAL_FLAG.ALL:
                 LOG_ERROR('It is not global flag', flag)
                 continue

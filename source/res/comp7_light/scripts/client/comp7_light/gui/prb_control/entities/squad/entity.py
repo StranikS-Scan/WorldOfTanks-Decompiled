@@ -1,6 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: comp7_light/scripts/client/comp7_light/gui/prb_control/entities/squad/entity.py
+from __future__ import absolute_import
 import json
+from future.utils import viewvalues
 from CurrentVehicle import g_currentPreviewVehicle
 from comp7_light.gui.comp7_light_constants import FUNCTIONAL_FLAG, PREBATTLE_ACTION_NAME
 from comp7_light.gui.prb_control.entities.base.ctx import Comp7LightPrbAction
@@ -106,7 +108,7 @@ class Comp7LightSquadEntity(SquadEntity):
         return super(Comp7LightSquadEntity, self)._buildStats(unitMgrID, unit)
 
     def __onVehicleClientStateChanged(self, intCDs):
-        vehs = self.__itemsCache.items.getVehicles(REQ_CRITERIA.INVENTORY).itervalues()
+        vehs = viewvalues(self.__itemsCache.items.getVehicles(REQ_CRITERIA.INVENTORY))
         allIntCDs = set((vehicle.intCD for vehicle in vehs))
         validIntCDs = allIntCDs - intCDs
         isReady = self.getPlayerInfo().isReady

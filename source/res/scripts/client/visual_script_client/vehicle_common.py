@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/visual_script_client/vehicle_common.py
+from __future__ import absolute_import
 import BigWorld
 from constants import DEFAULT_GUN_INSTALLATION_INDEX
 from visual_script import ASPECT
@@ -147,7 +148,7 @@ class TriggerListener(TriggersManager.ITriggerListener):
     def onPlayerEnterTrigger(self, trigger, enter):
         pass
 
-    def onPlayerMove(self, modeCommands):
+    def onPlayerMove(self, moveCommands):
         pass
 
     def onPlayerContinuousBurstStart(self, gunInstallationIndex):

@@ -9,24 +9,9 @@ from events_debugger import EventsDebugger
 
 class ClientEventsContainer(EventsContainer, IClientEventsContainer):
 
-    def __init__(self):
-        super(ClientEventsContainer, self).__init__()
-        self.onEventsContainerDestroy = self._createEvent()
-        self._cgfIntegration = None
-        return
-
     @property
     def hasListeners(self):
         return self._eventManager.hasAnyListener
-
-    def destroy(self):
-        self.onEventsContainerDestroy(self)
-        self._cgfIntegration = None
-        super(ClientEventsContainer, self).destroy()
-        return
-
-    def attachCoreEvents(self):
-        self._cgfIntegration = self._cgfIntegration or self._createCoreIntegration()
 
     def _createLateEvent(self, lateCallback):
         return LateEvent(lateCallback, self._eventManager)

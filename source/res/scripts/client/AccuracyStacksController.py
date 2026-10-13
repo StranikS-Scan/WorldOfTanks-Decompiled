@@ -4,10 +4,10 @@ from __future__ import absolute_import, division
 import typing
 import BigWorld
 from gui.shared.utils.decorators import ReprInjector
+from items.vehicle_mechanics_types import VehicleMechanicKey, VehicleMechanicKeys
 from vehicles.components.vehicle_component import VehicleDynamicComponent
 from vehicles.components.vehicle_prefabs import createMechanicPrefabSpawner
 from vehicles.mechanics.common import IMechanicComponent
-from vehicles.mechanics.mechanic_constants import VehicleMechanic
 from vehicles.mechanics.mechanic_helpers import getVehicleDescrMechanicParams
 from vehicles.mechanics.mechanic_states import IMechanicState, IMechanicStatesComponent, createMechanicStatesEvents
 if typing.TYPE_CHECKING:
@@ -54,8 +54,8 @@ class AccuracyStacksController(VehicleDynamicComponent, IMechanicComponent, IMec
         self._initComponent()
 
     @property
-    def vehicleMechanic(self):
-        return VehicleMechanic.ACCURACY_STACKS
+    def vehicleMechanicKey(self):
+        return VehicleMechanicKeys.ACCURACY_STACKS
 
     @property
     def statesEvents(self):
@@ -84,6 +84,6 @@ class AccuracyStacksController(VehicleDynamicComponent, IMechanicComponent, IMec
 
     def _collectComponentParams(self, typeDescriptor):
         super(AccuracyStacksController, self)._collectComponentParams(typeDescriptor)
-        mechanicParams = getVehicleDescrMechanicParams(typeDescriptor, self.vehicleMechanic)
+        mechanicParams = getVehicleDescrMechanicParams(typeDescriptor, self.vehicleMechanicKey)
         self.__stackDuration = mechanicParams.gainTime
         self.__speedThreshold = mechanicParams.gainMaxSpd

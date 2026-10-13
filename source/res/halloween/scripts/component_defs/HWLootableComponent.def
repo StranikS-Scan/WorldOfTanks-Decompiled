@@ -1,0 +1,38 @@
+<HWLootableComponent.def>
+  <ClientMethods>
+    <onVehicleStartCapturing>
+      <Arg>	OBJECT_ID	</Arg>
+    </onVehicleStartCapturing>
+    <onVehicleCancelCapturing>
+      <Arg>	OBJECT_ID	</Arg>
+    </onVehicleCancelCapturing>
+    <onLootCapturingSucceeded>
+      <Arg>	OBJECT_ID	</Arg>
+      <Arg>	ARRAY	  <of>	OBJECT_ID	</of>
+      </Arg>
+    </onLootCapturingSucceeded>
+  </ClientMethods>
+  <Properties>
+    <name>
+      <Type>	STRING	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </name>
+    <startTime>
+      <Type>	FLOAT	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </startTime>
+    <captureTime>
+      <Type>	FLOAT	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </captureTime>
+    <isCapturing>
+      <Type>	BOOL	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </isCapturing>
+    <looterEntities>
+      <Type>	ARRAY	  <of>	OBJECT_ID	</of>
+      </Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </looterEntities>
+  </Properties>
+</HWLootableComponent.def>

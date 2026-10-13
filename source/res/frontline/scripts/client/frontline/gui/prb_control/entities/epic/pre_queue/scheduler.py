@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: frontline/scripts/client/frontline/gui/prb_control/entities/epic/pre_queue/scheduler.py
+from __future__ import absolute_import
 from gui.periodic_battles.models import PrimeTimeStatus
 from gui.prb_control.entities.base.pre_queue.ctx import LeavePreQueueCtx
 from gui.prb_control.entities.base.scheduler import BaseScheduler

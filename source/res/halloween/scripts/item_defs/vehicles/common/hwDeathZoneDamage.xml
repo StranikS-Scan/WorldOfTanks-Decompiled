@@ -1,0 +1,70 @@
+<hwDeathZoneDamage.xml>
+  <variant1>
+    <stages>
+      <fire>	1.0	</fire>
+      <noEmission>	4.0	</noEmission>
+    </stages>
+    <effects>
+      <flashBang>
+        <startKey>	start	</startKey>
+        <stages>
+          <stage>	0.1	  <color>	0 0 0 0	</color>
+          </stage>
+          <stage>	1.1	  <color>	1.0 0.0 0.0 0.5	</color>
+          </stage>
+          <stage>	0.0	  <color>	0 0 0 0	</color>
+          </stage>
+        </stages>
+      </flashBang>
+      <pixie>
+        <startKey>	fire	</startKey>
+        <file>	particles/Tank/destruction/flaming_large_01.eff	</file>
+        <position>	HP_Fire_1	</position>
+      </pixie>
+      <sound>
+        <startKey>	fire	</startKey>
+        <endKey>	noEmission	</endKey>
+        <stopSyncVisual>	true	</stopSyncVisual>
+        <wwsoundPC>	flaming_engine_medium_pc	</wwsoundPC>
+        <wwsoundNPC>	flaming_engine_medium_npc	</wwsoundNPC>
+      </sound>
+      <stopEmission>
+        <startKey>	noEmission	</startKey>
+      </stopEmission>
+    </effects>
+  </variant1>
+  <variant2>
+    <stages>
+      <fire>	1.0	</fire>
+      <noEmission>	4.0	</noEmission>
+    </stages>
+    <effects>
+      <flashBang>
+        <startKey>	start	</startKey>
+        <stages>
+          <stage>	0.1	  <color>	0 0 0 0	</color>
+          </stage>
+          <stage>	1.1	  <color>	1.0 0.0 0.0 0.5	</color>
+          </stage>
+          <stage>	0.0	  <color>	0 0 0 0	</color>
+          </stage>
+        </stages>
+      </flashBang>
+      <pixie>
+        <startKey>	fire	</startKey>
+        <file>	particles/Tank/destruction/flaming_large_02.eff	</file>
+        <position>	HP_Fire_1	</position>
+      </pixie>
+      <sound>
+        <startKey>	fire	</startKey>
+        <endKey>	noEmission	</endKey>
+        <stopSyncVisual>	true	</stopSyncVisual>
+        <wwsoundPC>	flaming_engine_large_pc	</wwsoundPC>
+        <wwsoundNPC>	flaming_engine_large_npc	</wwsoundNPC>
+      </sound>
+      <stopEmission>
+        <startKey>	noEmission	</startKey>
+      </stopEmission>
+    </effects>
+  </variant2>
+</hwDeathZoneDamage.xml>

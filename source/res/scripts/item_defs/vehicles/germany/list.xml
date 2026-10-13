@@ -2076,6 +2076,19 @@
     <tags>	mediumTank role_MT_sniper HD wheeledVehicle improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user special earn_crystals	</tags>
     <level>	10	</level>
   </G183_Fossa_VM_68>
+  <G89_Leopard1_CFE_A>
+    <id>	266	</id>
+    <userString>	#germany_vehicles:G89_Leopard1_CFE_A	</userString>
+    <shortUserString>	#germany_vehicles:G89_Leopard1_CFE_A_short	</shortUserString>
+    <description>	#germany_vehicles:G89_Leopard1_CFE_A_descr	</description>
+    <shortDescriptionSpecial>	#germany_vehicles:G89_Leopard1_CFE_A_short_special	</shortDescriptionSpecial>
+    <longDescriptionSpecial>	#germany_vehicles:G89_Leopard1_CFE_A_long_special	</longDescriptionSpecial>
+    <price>	22500	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	mediumTank role_MT_sniper HD beast mediumTank1 improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user earn_crystals special lockOutfit restoreWithStyle	</tags>
+    <level>	10	</level>
+  </G89_Leopard1_CFE_A>
   <Env_Artillery>
     <id>	254	</id>
     <userString>	#germany_vehicles:Env_Artillery	</userString>
@@ -2571,4 +2584,16 @@
     <tags>	heavyTank role_HT_assault HD heavyTank1 improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_superheavy_user earn_crystals private secret cannot_be_sold comp7 special lockCrew lockCrewSkills lockOptionalDevices	</tags>
     <level>	10	</level>
   </G56_E-100_7x7>
+  <G121_Grille_15_L63_FR>
+    <id>	272	</id>
+    <userString>	#germany_vehicles:G121_Grille_15_L63_FR	</userString>
+    <description>	#germany_vehicles:G121_Grille_15_L63_FR_descr	</description>
+    <shortUserString>	#germany_vehicles:G121_Grille_15_L63_FR_short	</shortUserString>
+    <price>	100	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <cannotBeBought>	true	</cannotBeBought>
+    <tags>	AT-SPG role_ATSPG_sniper HD mediumAT-SPG AT-SPG1 tankRammer_class1_user extraHealthReserve_class1_user antifragmentationLining_medium_user earn_crystals private secret cannot_be_sold special lockOptionalDevices lockCrewSkills lockCrew event_battles fort_rush	</tags>
+    <level>	10	</level>
+  </G121_Grille_15_L63_FR>
 </list.xml>

@@ -51,6 +51,14 @@ class VehicleFiltersDataProvider(ViewComponent[VehicleFilterModel]):
          (self.viewModel.onResetFilter, self.__onResetFilter))
 
     @classmethod
+    def _getVehicleTypesFilter(cls):
+        return VEHICLE_TYPES_ORDER
+
+    @classmethod
+    def _getVehicleLevelsFilter(cls):
+        return _VEHICLE_LEVEL_FILTERS
+
+    @classmethod
     def _getBaseSpecialSection(cls):
         return [FILTER_KEYS.BONUS,
          FILTER_KEYS.FAVORITE,
@@ -63,8 +71,8 @@ class VehicleFiltersDataProvider(ViewComponent[VehicleFilterModel]):
 
     def _generateMappings(self):
         self.__mapping = {FilterSection.NATIONS.value: GUI_NATIONS,
-         FilterSection.VEHICLETYPES.value: VEHICLE_TYPES_ORDER,
-         FilterSection.LEVELS.value: _VEHICLE_LEVEL_FILTERS,
+         FilterSection.VEHICLETYPES.value: self._getVehicleTypesFilter(),
+         FilterSection.LEVELS.value: self._getVehicleLevelsFilter(),
          FilterSection.SPECIALS.value: self._getBaseSpecialSection(),
          FilterSection.TEXTSEARCH.value: [FILTER_KEYS.SEARCH_NAME_VEHICLE],
          FilterSection.BATTLEPASS.value: BattlePassFilterConsts.FILTERS_KEYS,

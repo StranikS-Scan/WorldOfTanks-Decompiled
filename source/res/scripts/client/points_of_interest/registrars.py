@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/points_of_interest/registrars.py
+from __future__ import absolute_import
 import CGF
 from cgf_script.registration import registerModule
 from points_of_interest.managers import PoiStateCreateSystem, PoiStateUpdateSystem, PoiViewStateSystem, PoiSoundSystem

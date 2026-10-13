@@ -50,23 +50,6 @@
       <Arg>	INT32	</Arg>
       <Arg>	UINT32	</Arg>
     </accountAdmin_resetDailyLimits>
-    <accountAdmin_resetWalletAssets>
-      <Arg>	MAILBOX	</Arg>
-      <Arg>	INT32	</Arg>
-      <Arg>	INT64	</Arg>
-      <Arg>	INT64	</Arg>
-      <Arg>	UINT32	</Arg>
-      <Arg>	INT32	</Arg>
-      <Arg>	UINT32	</Arg>
-    </accountAdmin_resetWalletAssets>
-    <accountAdmin_resetWalletIDs>
-      <Arg>	MAILBOX	</Arg>
-      <Arg>	INT32	</Arg>
-      <Arg>	UINT64	</Arg>
-      <Arg>	UINT64	</Arg>
-      <Arg>	INT32	</Arg>
-      <Arg>	UINT32	</Arg>
-    </accountAdmin_resetWalletIDs>
     <accountAdmin_restoreAccountFromPoint>
       <Arg>	MAILBOX	</Arg>
       <Arg>	INT32	</Arg>
@@ -76,8 +59,6 @@
       </Arg>
       <Arg>	UINT64	</Arg>
       <Arg>	UINT32	</Arg>
-      <Arg>	UINT64	</Arg>
-      <Arg>	UINT64	</Arg>
       <Arg>	INT32	</Arg>
       <Arg>	UINT32	</Arg>
       <Arg>	PYTHON	</Arg>
@@ -148,7 +129,6 @@
       <Arg>	INT32	</Arg>
       <Arg>	UINT32	</Arg>
     </accountAdmin_setType>
-    <accountAdmin_syncWallet></accountAdmin_syncWallet>
     <accountAdmin_unlockVehicleType>
       <Arg>	MAILBOX	</Arg>
       <Arg>	INT32	</Arg>

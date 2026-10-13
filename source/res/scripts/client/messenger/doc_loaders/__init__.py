@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/doc_loaders/__init__.py
+from __future__ import absolute_import
 import ResMgr
 from messenger.doc_loaders import colors_schemes, html_templates, settings_set
 from messenger.doc_loaders import user_prefs

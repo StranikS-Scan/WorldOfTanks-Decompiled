@@ -4,7 +4,6 @@ from __future__ import absolute_import
 import logging
 from gui.impl.gen import R
 from gui.impl import backport
-from gui.impl.gen_utils import INVALID_RES_ID
 from gui.mapbox.mapbox_helpers import getTillTimeString, prepareProgressionData
 from gui.Scaleform.genConsts.PROGRESSCOLOR_CONSTANTS import PROGRESSCOLOR_CONSTANTS
 from gui.Scaleform.genConsts.BLOCKS_TOOLTIP_TYPES import BLOCKS_TOOLTIP_TYPES
@@ -56,8 +55,8 @@ class MapboxProgressionTooltip(BlocksTooltipData):
         passedSurveys = 0
         for mapName, mapData in sortedProgressionData:
             counter = backport.text(_STR_PATH.counter(), progress=text_styles.bonusPreviewText(min(mapData.progress, mapData.total)), total=mapData.total) if not mapData.passed else ''
-            iconPath = _IMG_PATH.progressionTooltip.num(mapName, _IMG_PATH.progressionTooltip.dyn(mapName))()
-            mapVOs.append({'icon': backport.image(iconPath) if iconPath != INVALID_RES_ID else '',
+            iconR = _IMG_PATH.progressionTooltip.num(mapName, _IMG_PATH.progressionTooltip.dyn(mapName))
+            mapVOs.append({'icon': backport.image(iconR()) if iconR.exists() else '',
              'count': counter,
              'isCompleted': mapData.passed})
             if mapData.passed:

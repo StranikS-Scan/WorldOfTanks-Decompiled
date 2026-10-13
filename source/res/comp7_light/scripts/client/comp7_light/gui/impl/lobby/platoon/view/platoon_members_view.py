@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: comp7_light/scripts/client/comp7_light/gui/impl/lobby/platoon/view/platoon_members_view.py
+from __future__ import absolute_import
 from comp7_light.gui.impl.gen.view_models.views.lobby.platoon.comp7_light_slot_model import Comp7LightSlotModel
 from comp7_light.gui.impl.gen.view_models.views.lobby.platoon.comp7_light_window_model import Comp7LightWindowModel
 from comp7_light_constants import CLIENT_UNIT_CMD

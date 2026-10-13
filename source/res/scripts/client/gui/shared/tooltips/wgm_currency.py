@@ -54,7 +54,7 @@ class WGMCurrencyTooltip(DynamicBlocksTooltipData):
 
     @classmethod
     def isWGMAvailable(cls):
-        return cls.itemsCache.items.stats.mayConsumeWalletResources
+        return cls.itemsCache.items.stats.isResourcesConsumptionAllowed
 
     def _packBlocks(self, btnType=None, hideActionBlock=False, *args, **kwargs):
         tooltipBlocks = super(WGMCurrencyTooltip, self)._packBlocks(*args, **kwargs)

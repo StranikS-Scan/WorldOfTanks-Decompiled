@@ -233,7 +233,9 @@ MEASURE_UNITS = {'aimingTime': MENU.TANK_PARAMS_S,
  'sightPointerSelfSpottingTime': MENU.TANK_PARAMS_S,
  'sightPointerViewRange': MENU.TANK_PARAMS_M,
  'sightPointerConsealmentFoliage': MENU.TANK_PARAMS_FACTOR,
- 'sightPointerConsealmentMoving': MENU.TANK_PARAMS_FACTOR}
+ 'sightPointerConsealmentMoving': MENU.TANK_PARAMS_FACTOR,
+ 'combatThrottleDuration': MENU.TANK_PARAMS_S,
+ 'combatThrottleCooldown': MENU.TANK_PARAMS_S}
 MEASURE_UNITS_NO_BRACKETS = {'weight': MENU.TANK_PARAMS_NO_BRACKETS_KG,
  'cooldownSeconds': MENU.TANK_PARAMS_NO_BRACKETS_S,
  'reloadCooldownSeconds': MENU.TANK_PARAMS_NO_BRACKETS_S,

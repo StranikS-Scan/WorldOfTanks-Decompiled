@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: frontline/scripts/client/frontline/gui/Scaleform/daapi/view/battle/frontline_battle_timer.py
+from __future__ import absolute_import
 import BigWorld
 from frontline.gui.Scaleform.daapi.view.meta.FrontlineBattleTimerMeta import FrontlineBattleTimerMeta
 from helpers import dependency

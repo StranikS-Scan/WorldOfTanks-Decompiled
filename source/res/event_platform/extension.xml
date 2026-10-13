@@ -2,11 +2,28 @@
   <FeatureName>	event_platform	</FeatureName>
   <IsEnabled>	True	</IsEnabled>
   <Personality>	EventPlatformPersonality	</Personality>
+  <EditorPersonality>	EditorEventPlatformPersonality	</EditorPersonality>
   <Components>
     <StaticComponents>
       <KafkaLoggingComponent></KafkaLoggingComponent>
       <VehicleHealthBroadcastComponent></VehicleHealthBroadcastComponent>
       <VehicleVisionOverrideComponent></VehicleVisionOverrideComponent>
+      <RespawnFrameworkArenaComponent></RespawnFrameworkArenaComponent>
     </StaticComponents>
+    <DynamicComponents>
+      <IndividualRespawnTimerComponent></IndividualRespawnTimerComponent>
+      <RespawnFrameworkVehicleComponent></RespawnFrameworkVehicleComponent>
+      <DisconnectRespawnValidatorComponent></DisconnectRespawnValidatorComponent>
+      <RespawnPolicyVehicleLinkComponent></RespawnPolicyVehicleLinkComponent>
+    </DynamicComponents>
   </Components>
+  <cgf>
+    <script>
+      <module>	cell.event_platform_cell.respawns.respawns_module	</module>
+      <module>	client.event_platform.respawns.respawns_client_module	</module>
+    </script>
+    <prefabs>
+      <path>	event_platform/content/CGFPrefabs/Respawns/individual_respawns_policy.prefab	</path>
+    </prefabs>
+  </cgf>
 </extension.xml>

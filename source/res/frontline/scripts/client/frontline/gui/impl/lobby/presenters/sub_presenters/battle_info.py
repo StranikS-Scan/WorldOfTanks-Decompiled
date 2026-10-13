@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: frontline/scripts/client/frontline/gui/impl/lobby/presenters/sub_presenters/battle_info.py
+from __future__ import absolute_import
 import typing
 from gui.battle_results.pbs_helpers.common import getArenaNameStr
 from gui.battle_results.presenters.battle_results_sub_presenter import BattleResultsSubPresenter

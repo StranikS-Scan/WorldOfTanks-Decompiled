@@ -75,12 +75,22 @@ def unsubscribeFromEvents(handler, events):
 
 class EventsHandler(with_metaclass(Metaclass, object)):
 
+    def subscribeTo(self, events, raiseException=True):
+        self._subscribeToEvents(events, raiseException=raiseException)
+
+    def unsubscribeFrom(self, events):
+        self._unsubscribeFromEvents(events)
+
+    @eventHandler
+    def onEventsContainerDestroy(self, events):
+        self._unsubscribeFromEvents(events)
+
     @classmethod
     def __init_subclass__(cls, _, bases, attributes):
         cls.__eventHandlers__ = getmembers(cls, _isMethodEventHandler)
 
-    def _subscribeToEvents(self, events):
-        return subscribeToEvents(self, events)
+    def _subscribeToEvents(self, events, raiseException=True):
+        return subscribeToEvents(self, events, raiseException=raiseException)
 
     def _unsubscribeFromEvents(self, events):
         return unsubscribeFromEvents(self, events)

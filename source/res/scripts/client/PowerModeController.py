@@ -7,11 +7,11 @@ import BigWorld
 from constants import POWER_MODE_STATE
 from gui.battle_control.battle_constants import VEHICLE_UPDATE_INTERVAL
 from gui.shared.utils.decorators import ReprInjector
+from items.vehicle_mechanics_types import VehicleMechanicKey, VehicleMechanicKeys
 from math_utils import clamp01
 from vehicles.components.vehicle_component import VehicleDynamicComponent
 from vehicles.components.vehicle_prefabs import createMechanicPrefabSpawner
 from vehicles.mechanics.common import IMechanicComponent
-from vehicles.mechanics.mechanic_constants import VehicleMechanic
 from vehicles.mechanics.mechanic_states import IMechanicState, IMechanicStatesComponent, createMechanicStatesEvents
 if typing.TYPE_CHECKING:
     from vehicles.mechanics.mechanic_states import IMechanicStatesEvents
@@ -53,8 +53,8 @@ class PowerModeController(VehicleDynamicComponent, IMechanicComponent, IMechanic
         self._initComponent()
 
     @property
-    def vehicleMechanic(self):
-        return VehicleMechanic.POWER_MODE
+    def vehicleMechanicKey(self):
+        return VehicleMechanicKeys.POWER_MODE
 
     @property
     def statesEvents(self):

@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: story_mode/scripts/client/story_mode/gui/battle_results/templates.py
+from __future__ import absolute_import
 from gui.battle_results.components import base
 from gui.battle_results.components.common import ArenaDurationItem, ArenaDateTimeItem
 from gui.battle_results.settings import BATTLE_RESULTS_RECORD as _RECORD

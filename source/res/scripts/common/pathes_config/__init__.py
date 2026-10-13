@@ -17,33 +17,34 @@ def setupPaths():
                 item = os.path.join(os.path.split(os.path.abspath(__file__))[0], item)
         return os.path.normpath(item)
 
-    platformSuffix = None
     try:
         from pycommon import platform_info
     except:
-        platformSuffix = None
+        raise SoftException('pycommon.platform_info is unavailable - cannot determine platform')
 
     platformSuffix = platform_info.getPlatformSuffix()
-    if not platformSuffix:
+    noarchSuffix = platform_info.getNoarchSuffix()
+    if not platformSuffix or not noarchSuffix:
         raise SoftException('Unable to determine platform suffix')
     addPath = [root + '/tools/bigworld/server',
      root + '/res/bigworld/scripts/common',
      root + '/res/bigworld/scripts/common/Lib',
      root + '/res/bigworld/scripts/common/site-packages',
      root + '/res/bigworld/scripts/server_common',
-     root + '/res/bigworld/scripts/server_common/lib-dynload-el7',
+     root + '/res/bigworld/scripts/server_common/lib-dynload-' + platformSuffix,
      root + '/res/wot/scripts',
      root + '/res/wot/scripts/base',
      root + '/res/wot/scripts/base/account_helpers',
      root + '/res/wot/scripts/server_common',
      root + '/res/wot/scripts/server_common/virtual_machine',
      root + '/res/wot/scripts/server_common/site-packages/' + platformSuffix,
+     root + '/res/wot/scripts/server_common/site-packages/' + noarchSuffix,
      root + '/res/wot/scripts/common',
      root + '/res/wot/scripts/development/libs',
      root + '/tools/wot/server/bw_lib/bigworld/fake']
     for path in addPath:
         norm_path = expandPath(path)
-        if norm_path.endswith('site-packages'):
+        if 'site-packages' in norm_path:
             site.addsitedir(norm_path)
         sys.path.append(norm_path)
 
@@ -51,4 +52,3 @@ def setupPaths():
     if not os.path.exists(bw_xml):
         from shutil import copyfile
         copyfile(expandPath(root + '/res/wot/server/bw.xml.dist'), bw_xml)
-    return

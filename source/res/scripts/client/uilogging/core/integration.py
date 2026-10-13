@@ -1,11 +1,12 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/uilogging/core/integration.py
+from __future__ import absolute_import
 import json
 import logging
 import typing
 from gui.impl.gen.view_models.common.ui_logger_model import UiLoggerModel
-from skeletons.gui.impl import IGuiLoader
 from helpers import dependency
+from skeletons.gui.impl import IGuiLoader
 from skeletons.ui_logging import IUILoggingCore, IUILoggingListener
 from wotdecorators import noexcept
 _logger = logging.getLogger(__name__)

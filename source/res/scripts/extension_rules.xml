@@ -9,6 +9,10 @@
       <type>	include	</type>
     </rule>
     <rule>
+      <pattern>	.*/item_defs/score_reasons/score_reasons\.xml$	</pattern>
+      <type>	include	</type>
+    </rule>
+    <rule>
       <pattern>	.*/item_defs/customization/.*/list(\.[A-Z]{2})?\.xml$	</pattern>
       <type>	include	</type>
     </rule>
@@ -40,6 +44,10 @@
     </rule>
     <rule>
       <pattern>	.*/item_defs/fairplay_violation_types\.xml$	</pattern>
+      <type>	include	</type>
+    </rule>
+    <rule>
+      <pattern>	.*/item_defs/vehicle_filters\.xml$	</pattern>
       <type>	include	</type>
     </rule>
     <rule>
@@ -205,6 +213,10 @@
     <rule>
       <pattern>	scripts/command_mapping\.xml$	</pattern>
       <type>	include	</type>
+    </rule>
+    <rule>
+      <pattern>	.*/cgf_names\.xml$	</pattern>
+      <type>	merge	</type>
     </rule>
   </xml_whitelist>
 </extension_rules.xml>

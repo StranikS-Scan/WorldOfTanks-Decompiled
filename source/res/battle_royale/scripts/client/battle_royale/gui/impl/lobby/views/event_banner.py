@@ -7,8 +7,8 @@ from battle_royale.gui.impl.lobby.tooltips.banner_tooltip_view import BannerTool
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.user_missions.constants.event_banner_state import EventBannerState
-from gui.impl.lobby.user_missions.hangar_widget.event_banners.base_event_banner import BaseEventBanner
 from gui.impl.lobby.user_missions.hangar_widget.event_banners.event_banners_container import EventBannersContainer
+from gui.impl.lobby.user_missions.hangar_widget.event_banners.standard_event_banner import StandardEventBanner
 from gui.impl.lobby.user_missions.hangar_widget.services import IEventsService
 from gui.prb_control.settings import SELECTOR_BATTLE_TYPES
 from gui.shared.utils import SelectorBattleTypesUtils as selectorUtils
@@ -22,7 +22,7 @@ def isBattleRoyaleEntryPointAvailable(battleRoyaleController=None):
     return battleRoyaleController.isActive() and not battleRoyaleController.isStPatrick()
 
 
-class BattleRoyaleEventBanner(BaseEventBanner):
+class BattleRoyaleEventBanner(StandardEventBanner):
     NAME = 'BattleRoyaleEntryPoint'
     __battleRoyaleController = dependency.descriptor(IBattleRoyaleController)
     __eventsService = dependency.descriptor(IEventsService)

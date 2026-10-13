@@ -6,11 +6,12 @@ from collections import namedtuple
 import BigWorld
 from constants import CONCENTRATION_MODE_STATE
 from gui.shared.utils.decorators import ReprInjector
+from items.vehicle_mechanics_types import VehicleMechanicKey, VehicleMechanicKeys
 from vehicles.components.vehicle_component import VehicleDynamicComponent
 from vehicles.components.vehicle_prefabs import createMechanicPrefabSpawner
 from vehicles.mechanics.common import IMechanicComponent
 from vehicles.mechanics.mechanic_commands import createMechanicCommandsEvents, IMechanicCommandsComponent
-from vehicles.mechanics.mechanic_constants import VehicleMechanic, VehicleMechanicCommand
+from vehicles.mechanics.mechanic_constants import VehicleMechanicCommand
 from vehicles.mechanics.mechanic_states import IMechanicState, IMechanicStatesComponent, createMechanicStatesEvents
 if typing.TYPE_CHECKING:
     from vehicles.mechanics.mechanic_commands import IMechanicCommandsEvents
@@ -46,8 +47,8 @@ class ConcentrationModeComponent(VehicleDynamicComponent, IMechanicComponent, IM
         self._initComponent()
 
     @property
-    def vehicleMechanic(self):
-        return VehicleMechanic.CONCENTRATION_MODE
+    def vehicleMechanicKey(self):
+        return VehicleMechanicKeys.CONCENTRATION_MODE
 
     @property
     def commandsEvents(self):

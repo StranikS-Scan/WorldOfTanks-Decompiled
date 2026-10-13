@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: comp7/scripts/client/comp7/messenger/formatters/token_quest_subformatters.py
+from __future__ import absolute_import
 from comp7.gui.impl.lobby.comp7_helpers import comp7_quest_helpers
 from comp7.gui.impl.lobby.comp7_helpers import comp7_shared, comp7_i18n_helpers
 from comp7.messenger.formatters.service_channel import Comp7QualificationRewardsFormatter
@@ -89,9 +90,9 @@ class Comp7RewardsFormatter(SyncTokenQuestsSubFormatter):
              'body': backport.text(self.__R_SYS_MESSAGES.dyn(rewardType).body(), at=TimeFormatter.getLongDatetimeFormat(time_utils.makeLocalServerTime(message.sentTime)), rewards=formattedRewards)})
 
     def __formatQualificationRewardMessage(self, message, questIDs):
-        ranksQuests = set([ q for q in questIDs if comp7_quest_helpers.getComp7QuestType(q) == Comp7QuestType.RANKS ])
+        ranksQuests = {q for q in questIDs if comp7_quest_helpers.getComp7QuestType(q) == Comp7QuestType.RANKS}
         questIDs -= ranksQuests
-        sortedQuests = sorted(list(ranksQuests))
+        sortedQuests = sorted(ranksQuests)
         detailedRewards = message.data.get('detailedRewards', {})
         mergedRewards = getMergedBonusesFromDicts([ detailedRewards.get(qID, {}) for qID in sortedQuests ])
         formattedRewards = Comp7QualificationRewardsFormatter.formatQuestAchieves(mergedRewards, False)

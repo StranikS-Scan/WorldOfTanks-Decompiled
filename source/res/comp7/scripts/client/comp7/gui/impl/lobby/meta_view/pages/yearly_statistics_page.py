@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: comp7/scripts/client/comp7/gui/impl/lobby/meta_view/pages/yearly_statistics_page.py
+from __future__ import absolute_import, division
 from shared_utils import findFirst
 from comp7.gui.impl.gen.view_models.views.lobby.constants import Constants
 from comp7.gui.impl.gen.view_models.views.lobby.enums import MetaRootViews

@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/storage/shown_messages_storage.py
-import types
+from __future__ import absolute_import
+from future.utils import listitems
 from messenger.storage.local_cache import SimpleCachedStorage
 
 class ShownMessagesStorage(SimpleCachedStorage):
@@ -24,13 +25,13 @@ class ShownMessagesStorage(SimpleCachedStorage):
         self.__channelShownMessageIDs[channelID] = messageIDs
 
     def _getCachedData(self):
-        return list([ (jid, self.__channelShownMessageIDs[jid]) for jid in self.__channelShownMessageIDs ])
+        return listitems(self.__channelShownMessageIDs)
 
     def _setCachedData(self, data):
         self.__channelShownMessageIDs = {}
         if data:
             for item in data:
-                if not isinstance(item, types.TupleType):
+                if not isinstance(item, tuple):
                     continue
                 if len(item) != 2:
                     continue

@@ -1,7 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/account_helpers/settings_core/settings_disable/aop.py
-from helpers import aop
+from __future__ import absolute_import
+from future.utils import viewitems
 from typing import TYPE_CHECKING
+from helpers import aop
 if TYPE_CHECKING:
     from typing import Dict, Sequence
 
@@ -12,7 +14,7 @@ class _FlashDisableSettingsAspect(aop.Aspect):
         self.__disabledSettings = settings
 
     def atCall(self, cd):
-        for itemId, guiPath in self.__disabledSettings.iteritems():
+        for itemId, guiPath in viewitems(self.__disabledSettings):
             self.__disableControl(cd, itemId, guiPath)
 
     def __disableControl(self, cd, itemId, guiPath):

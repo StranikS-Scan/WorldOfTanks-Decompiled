@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: comp7_core/scripts/client/comp7_core/gui/battle_control/controllers/comp7_voip_ctrl.py
+from __future__ import absolute_import
 import logging
 import BigWorld
 import Keys

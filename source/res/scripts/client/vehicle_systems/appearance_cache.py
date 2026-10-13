@@ -1,8 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/vehicle_systems/appearance_cache.py
+from __future__ import absolute_import
 import functools
 import logging
 from collections import namedtuple
+from future.utils import viewvalues
 import BigWorld
 import Event
 from skeletons.vehicle_appearance_cache import IAppearanceCache
@@ -38,26 +40,26 @@ class AppearanceCache(IAppearanceCache):
         self.__loadingAssemblerQueue = {}
         self.__loadingResourceQueue = {}
 
-    def getAppearance(self, vId, info, onCreatedCallback=None, strCD=None, needLoad=True):
+    def getAppearance(self, vId, vInfo, callback=None, strCD=None, needLoad=True):
         _logger.debug('getAppearance(%d)', vId)
         key = self.__makeUniqueKey(vId, strCD)
         self.__validateAppearanceCache(key)
         if key in self.__appearanceCache:
             _logger.debug('getAppearance of (%d) is in __appearanceCache', vId)
             appearance = self.__appearanceCache.get(key)
-            appearance.actualize(info)
-            if onCreatedCallback is not None:
-                onCreatedCallback(appearance)
+            appearance.actualize(vInfo)
+            if callback is not None:
+                callback(appearance)
             return appearance
         elif needLoad is False:
             return
         else:
-            return self.__construct(key, onCreatedCallback) if key in self.__assemblerCache else self.__load(key, info, onCreatedCallback)
+            return self.__construct(key, callback) if key in self.__assemblerCache else self.__load(key, vInfo, callback)
 
     def removeAppearance(self, vId, strCD=None):
         _logger.debug('removeAppearance(%d)', vId)
         if strCD is None:
-            for vehicleID, compactDescr in self.__appearanceCache.iterkeys():
+            for vehicleID, compactDescr in self.__appearanceCache:
                 if vehicleID == vId:
                     strCD = compactDescr
                     break
@@ -97,19 +99,19 @@ class AppearanceCache(IAppearanceCache):
 
     def clear(self):
         _logger.debug('clear')
-        for appearance in self.__appearanceCache.itervalues():
+        for appearance in viewvalues(self.__appearanceCache):
             appearance.destroy()
 
         self.__appearanceCache.clear()
         self.__assemblerCache.clear()
-        for task in self.__loadingAssemblerQueue.itervalues():
+        for task in viewvalues(self.__loadingAssemblerQueue):
             BigWorld.stopLoadResourceListBGTask(task.taskId)
             task.onConstructed.clear()
             task.appearance.destroy()
 
         self.__loadingAssemblerQueue.clear()
         self.__resourceCache.clear()
-        for taskId in self.__loadingResourceQueue.itervalues():
+        for taskId in viewvalues(self.__loadingResourceQueue):
             BigWorld.stopLoadResourceListBGTask(taskId)
 
         self.__loadingResourceQueue.clear()

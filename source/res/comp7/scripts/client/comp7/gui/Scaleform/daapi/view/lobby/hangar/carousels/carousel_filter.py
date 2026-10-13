@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: comp7/scripts/client/comp7/gui/Scaleform/daapi/view/lobby/hangar/carousels/carousel_filter.py
+from __future__ import absolute_import
 from account_helpers.AccountSettings import COMP7_CAROUSEL_FILTER_1, COMP7_CAROUSEL_FILTER_2, COMP7_CAROUSEL_FILTER_CLIENT_1, BATTLEPASS_CAROUSEL_FILTER_1, BATTLEPASS_CAROUSEL_FILTER_CLIENT_1, COMP7_CAROUSEL_FILTER_3
 from gui.filters.battle_pass_carousel_filter import BattlePassCarouselFilter, BattlePassCriteriesGroup
 from gui.filters.carousel_filter import EventCriteriesGroup

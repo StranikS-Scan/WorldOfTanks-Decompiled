@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: comp7/scripts/client/comp7/gui/Scaleform/daapi/view/battle/comp7_bans_progress_widget.py
+from __future__ import absolute_import
 import logging
 from comp7_core.gui.comp7_core_constants import BATTLE_CTRL_ID
 from comp7.gui.impl.battle.vehicle_ban.ban_progression import BanProgressionView

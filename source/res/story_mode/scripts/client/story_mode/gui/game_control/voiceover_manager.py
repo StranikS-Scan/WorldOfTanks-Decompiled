@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: story_mode/scripts/client/story_mode/gui/game_control/voiceover_manager.py
+from __future__ import absolute_import
 from functools import partial
 import typing
 from account_helpers.settings_core.settings_constants import SOUND

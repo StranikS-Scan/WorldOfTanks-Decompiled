@@ -1,5 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/web/web_client_api/ui/missions.py
+from __future__ import absolute_import
+from past.builtins import basestring
 from gui.marathon.marathon_event_controller import getMarathons
 from gui.server_events import events_dispatcher as server_events
 from helpers import dependency

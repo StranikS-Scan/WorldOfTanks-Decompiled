@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: frontline/scripts/client/frontline/gui/hangar_presets/frontline_dynamic_gui_provider.py
+from __future__ import absolute_import
 from constants import QUEUE_TYPE, ARENA_BONUS_TYPE
 from frontline.gui.impl.lobby.missions.missions_helpers import FrontlineMissionsGuiHelper
 from frontline.gui.Scaleform.daapi.view.lobby.hangar.hangar_quest_flags import EpicQuestFlagsGetter

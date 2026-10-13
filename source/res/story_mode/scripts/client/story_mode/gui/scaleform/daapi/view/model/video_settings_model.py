@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: story_mode/scripts/client/story_mode/gui/scaleform/daapi/view/model/video_settings_model.py
+from __future__ import absolute_import
 import ResMgr
 import section2dict
 import typing

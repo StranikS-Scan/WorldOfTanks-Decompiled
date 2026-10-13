@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: comp7_light/scripts/client/comp7_light/gui/Scaleform/daapi/view/lobby/__init__.py
+from __future__ import absolute_import
 from comp7_light.gui.Scaleform.genConsts.COMP7_LIGHT_HANGAR_ALIASES import COMP7_LIGHT_HANGAR_ALIASES
 from comp7_core.gui.Scaleform.genConsts.COMP7_CORE_HANGAR_ALIASES import COMP7_CORE_HANGAR_ALIASES
 from gui.Scaleform.framework import WindowLayer, ScopeTemplates, ViewSettings

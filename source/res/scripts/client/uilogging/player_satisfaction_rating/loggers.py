@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/uilogging/player_satisfaction_rating/loggers.py
+from __future__ import absolute_import
 import json
 import logging
 from enum import Enum

@@ -11,9 +11,9 @@ from constants import ROCKET_ACCELERATION_STATE
 from Event import Event
 from events_containers.components.life_cycle import createComponentLifeCycleEvents, ILifeCycleComponent
 from gui.shared.utils.decorators import ReprInjector
+from items.vehicle_mechanics_types import VehicleMechanicKey, VehicleMechanicKeys
 from wotdecorators import noexcept
 from vehicles.mechanics.common import IMechanicComponent
-from vehicles.mechanics.mechanic_constants import VehicleMechanic
 from vehicle_systems.model_assembler import loadAppearancePrefab
 if typing.TYPE_CHECKING:
     from events_containers.components.life_cycle import IComponentLifeCycleEvents
@@ -33,8 +33,8 @@ class RocketAccelerationController(BigWorld.DynamicScriptComponent, ILifeCycleCo
         return
 
     @property
-    def vehicleMechanic(self):
-        return VehicleMechanic.ROCKET_ACCELERATION
+    def vehicleMechanicKey(self):
+        return VehicleMechanicKeys.ROCKET_ACCELERATION
 
     @property
     def lifeCycleEvents(self):

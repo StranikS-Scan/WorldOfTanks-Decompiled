@@ -1,37 +1,32 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/uilogging/shop/base_loggers.py
-import abc
+from __future__ import absolute_import
 import logging
 from uilogging.base.logger import FlowLogger, MetricsLogger
 from uilogging.shop.logging_constants import FEATURE
 _logger = logging.getLogger(__name__)
 
 class ShopPreviewFlowLogger(FlowLogger):
-    __metaclass__ = abc.ABCMeta
     __slots__ = ()
 
     def __init__(self):
         super(ShopPreviewFlowLogger, self).__init__(FEATURE)
 
-    @abc.abstractmethod
     def logOpenPreview(self):
-        pass
+        raise NotImplementedError
 
 
 class ShopPreviewMetricsLogger(MetricsLogger):
-    __metaclass__ = abc.ABCMeta
     __slots__ = ()
 
     def __init__(self):
         super(ShopPreviewMetricsLogger, self).__init__(FEATURE)
 
-    @abc.abstractmethod
     def onViewOpen(self, *args, **kwargs):
-        pass
+        raise NotImplementedError
 
-    @abc.abstractmethod
     def onViewClosed(self, *args, **kwargs):
-        pass
+        raise NotImplementedError
 
     def logOpenPurchaseConfirmation(self):
         _logger.warning('[SHOPUILOG] %s not implemented logOpenPurchaseConfirmation.', self.__class__.__name__)

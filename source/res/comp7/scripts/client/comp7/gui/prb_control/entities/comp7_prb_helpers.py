@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: comp7/scripts/client/comp7/gui/prb_control/entities/comp7_prb_helpers.py
+from __future__ import absolute_import
 import logging
 import adisp
 from account_helpers import AccountSettings

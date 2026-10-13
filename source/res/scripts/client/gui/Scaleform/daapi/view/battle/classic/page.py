@@ -10,8 +10,8 @@ from gui.Scaleform.daapi.view.battle.shared.start_countdown_sound_player import 
 from gui.Scaleform.genConsts.BATTLE_VIEW_ALIASES import BATTLE_VIEW_ALIASES
 from gui.battle_control.battle_constants import BATTLE_CTRL_ID
 from gui.battle_control.battle_constants import TabsAliases
+from items.vehicle_mechanics_types import VehicleMechanicKeys
 from shared_utils import CONST_CONTAINER
-from vehicles.mechanics.mechanic_constants import VehicleMechanic
 from vehicles.mechanics.mechanic_helpers import hasVehicleDescrMechanic
 
 class DynamicAliases(CONST_CONTAINER):
@@ -246,7 +246,7 @@ class ClassicPage(SharedPage):
 
         def invalidateSiegeVehicle(vehicleDescriptor):
             vehicleType = vehicleDescriptor.type
-            return (vehicleType.hasSiegeMode or vehicleDescriptor.isTrackWithinTrack) and not vehicleType.isWheeledVehicle and not vehicleDescriptor.isDualgunVehicle and not hasVehicleDescrMechanic(vehicleDescriptor, VehicleMechanic.PILLBOX_SIEGE_MODE)
+            return (vehicleType.hasSiegeMode or vehicleDescriptor.isTrackWithinTrack) and not vehicleType.isWheeledVehicle and not vehicleDescriptor.isDualgunVehicle and not hasVehicleDescrMechanic(vehicleDescriptor, VehicleMechanicKeys.PILLBOX_SIEGE_MODE)
 
         if ctrlMode == CTRL_MODE_NAME.DEATH_FREE_CAM:
             components = {BATTLE_VIEW_ALIASES.SPECTATOR_VIEW}

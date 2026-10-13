@@ -333,8 +333,9 @@ class DestroyMiscTimerSN(_DestroyTimerSN):
                 self._setVisible(False)
             elif supportedLevel in (self._ANY_SUPPORTED_LEVEL, level):
                 if not value.needToCloseTimer():
+                    if not (self._isVisible and self._vo.get('totalTime') == value.totalTime):
+                        self._updateTimeParams(value.totalTime, 0)
                     self._isVisible = True
-                    self._updateTimeParams(value.totalTime, 0)
                     self._sendUpdate()
                     return
                 self._setVisible(False)

@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: frontline/scripts/client/frontline/gui/impl/lobby/progression_screen_view.py
+from __future__ import absolute_import
 import SoundGroups
 from frameworks.wulf import ViewFlags, ViewSettings
 from frontline.frontline_account_settings import getReceivedRewardTokens, setReceivedRewardTokens

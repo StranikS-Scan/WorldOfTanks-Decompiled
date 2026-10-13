@@ -3,20 +3,19 @@
 from __future__ import absolute_import
 import typing
 from frameworks.wulf import GuiApplication
+from gui.impl.gui_factories import GuiEntitiesFactories
 from gui.impl.optimization_manager import GraphicsOptimizationManager
 from skeletons.gui.impl import IGuiLoader
 if typing.TYPE_CHECKING:
-    from typing import Callable
-    from frameworks.wulf import ViewModel
     from frameworks.wulf.tutorial import Tutorial
     from frameworks.wulf.ui_logger import UILogger
 
 class GuiLoader(IGuiLoader):
-    __slots__ = ('__gui', '__graphicsOptimizationManager')
 
     def __init__(self):
         super(GuiLoader, self).__init__()
-        self.__gui = GuiApplication()
+        self.__gui = GuiApplication.getInstance()
+        self.__entitiesFactory = GuiEntitiesFactories()
         self.__graphicsOptimizationManager = GraphicsOptimizationManager()
 
     @property
@@ -26,6 +25,10 @@ class GuiLoader(IGuiLoader):
     @property
     def windowsManager(self):
         return self.__gui.windowsManager
+
+    @property
+    def layoutManager(self):
+        return self.__gui.layoutManager
 
     @property
     def systemLocale(self):
@@ -47,8 +50,12 @@ class GuiLoader(IGuiLoader):
     def scale(self):
         return self.__gui.scale
 
-    def init(self, tutorialModel, uiLoggerModel, serverTimeCallback):
-        self.__gui.init(tutorialModel, uiLoggerModel, serverTimeCallback)
+    @property
+    def entitiesFactory(self):
+        return self.__entitiesFactory
+
+    def init(self):
+        self.__gui.init()
         self.__graphicsOptimizationManager.init(self.__gui.windowsManager, self.__gui.scale)
 
     def fini(self):

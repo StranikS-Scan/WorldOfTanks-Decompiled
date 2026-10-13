@@ -16,10 +16,10 @@ from constants import SERVER_TICK_LENGTH, AIMING_MODE, VEHICLE_SIEGE_STATE, DEFA
 from gui.battle_control.battle_constants import FEEDBACK_EVENT_ID
 from gun_rotation_shared import calcPitchLimitsFromDesc, calcGunPitchCorrection, getLocalAimPoint
 from helpers import dependency
+from items.vehicle_mechanics_types import VehicleMechanicKeys
 from projectile_trajectory import getShotAngles
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.battle_session import IBattleSessionProvider
-from vehicles.mechanics.mechanic_constants import VehicleMechanic
 from vehicles.mechanics.mechanic_helpers import getVehicleMechanicComponent
 GunMarkerInfo = namedtuple('GunMarkerInfo', ('gunInstallationIndex',
  'gunIndex',
@@ -98,7 +98,7 @@ class VehicleGunRotator(object):
                 activeGuns = ()
                 if vehicle.typeDescriptor.isDualgunVehicle:
                     activeGuns = (vehicle.dualGunIndex,)
-                twinGun = getVehicleMechanicComponent(vehicle, VehicleMechanic.TWIN_GUN)
+                twinGun = getVehicleMechanicComponent(vehicle, VehicleMechanicKeys.TWIN_GUN)
                 if twinGun is not None:
                     activeGuns = twinGun.getActiveGunIndexes()
                 multiGun = vehicle.typeDescriptor.gun.multiGun
@@ -619,7 +619,7 @@ class VehicleGunRotator(object):
         if playerVehicle is None:
             return
         else:
-            twinGun = getVehicleMechanicComponent(playerVehicle, VehicleMechanic.TWIN_GUN)
+            twinGun = getVehicleMechanicComponent(playerVehicle, VehicleMechanicKeys.TWIN_GUN)
             if not self._avatar.inCharge and twinGun is None:
                 return
             multiGun = playerVehicle.typeDescriptor.gun.multiGun
@@ -649,7 +649,7 @@ class VehicleGunRotator(object):
         if playerVehicle is None:
             return ()
         else:
-            supportWeaponComponent = getVehicleMechanicComponent(playerVehicle, VehicleMechanic.SUPPORT_WEAPON)
+            supportWeaponComponent = getVehicleMechanicComponent(playerVehicle, VehicleMechanicKeys.SUPPORT_WEAPON)
             if supportWeaponComponent is None:
                 return ()
             supportInstallationIndex = supportWeaponComponent.getSupportInstallationIndex()

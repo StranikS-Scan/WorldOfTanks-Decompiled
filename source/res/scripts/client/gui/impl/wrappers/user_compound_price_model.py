@@ -121,7 +121,7 @@ class BuyPriceModelBuilder(PriceModelBuilder):
         priceItemModel = super(BuyPriceModelBuilder, cls)._createPriceItemModel(name, value)
         stats = cls._itemsCache.items.stats
         statsValue = stats.money.get(name) if balance is None else balance.get(name)
-        if checkBalanceAvailability and not stats.mayConsumeWalletResources:
+        if checkBalanceAvailability and not stats.isResourcesConsumptionAllowed:
             priceItemModel.setIsEnough(False)
         elif statsValue is not None:
             priceItemModel.setIsEnough(statsValue >= value)

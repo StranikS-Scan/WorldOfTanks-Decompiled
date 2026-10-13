@@ -69,7 +69,7 @@ class StylePopover(CustomizationKitPopoverMeta):
         if self.__ctx.hasCommonItems():
             header = backport.text(R.strings.vehicle_customization.customization.kitPopover.title.summary())
         elif self.__style is None:
-            header = backport.text(R.strings.vehicle_customization.customization.kitPopover.title.items())
+            header = backport.text(R.strings.vehicle_customization.customization.kitPopover.title.c_items())
         else:
             header = R.strings.tooltips.vehiclePreview.boxTooltip.style.header
             header = backport.text(header(), value=self.__style.userName)

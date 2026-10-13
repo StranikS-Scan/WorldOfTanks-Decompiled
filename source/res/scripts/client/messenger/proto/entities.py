@@ -1,7 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/proto/entities.py
-from collections import deque
+from __future__ import absolute_import
 import typing
+from collections import deque
+from future.utils import listvalues
 from helpers import dependency, i18n
 from ids_generators import SequenceIDGenerator
 from gui.shared.utils.decorators import ReprInjector
@@ -18,7 +20,7 @@ def _generateUserName():
     global _g_namesGenerator
     if _g_namesGenerator is None:
         _g_namesGenerator = SequenceIDGenerator()
-    return '%s %d' % (i18n.makeString(USER_DEFAULT_NAME_PREFIX), _g_namesGenerator.next())
+    return '%s %d' % (i18n.makeString(USER_DEFAULT_NAME_PREFIX), _g_namesGenerator.nextSequenceID)
 
 
 class ChatEntity(object):
@@ -29,6 +31,9 @@ class ChatEntity(object):
             return other.getProtoType() is self.getProtoType() and self.getID() == other.getID()
         except AttributeError:
             return False
+
+    def __hash__(self):
+        return hash((self.getID(), self.getProtoType()))
 
     def getID(self):
         return None
@@ -262,7 +267,7 @@ class ChannelEntity(ChatEntity, ChannelEvents):
         return member
 
     def getMembers(self):
-        return self._members.values()
+        return listvalues(self._members)
 
     def hasMember(self, memberID):
         return memberID in self._members
@@ -413,6 +418,9 @@ class UserEntity(ChatEntity):
 
     def __eq__(self, other):
         return self.getStorageKey() == other.getStorageKey()
+
+    def __hash__(self):
+        return hash(self.getStorageKey())
 
     def getID(self):
         return self._userID

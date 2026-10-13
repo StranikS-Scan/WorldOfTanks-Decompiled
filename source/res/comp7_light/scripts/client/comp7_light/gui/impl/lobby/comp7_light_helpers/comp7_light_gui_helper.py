@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: comp7_light/scripts/client/comp7_light/gui/impl/lobby/comp7_light_helpers/comp7_light_gui_helper.py
+from __future__ import absolute_import
 from account_helpers import AccountSettings
 from helpers import dependency
 from skeletons.gui.game_control import IComp7LightController

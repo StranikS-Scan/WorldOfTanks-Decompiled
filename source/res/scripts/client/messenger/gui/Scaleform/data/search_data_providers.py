@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/gui/Scaleform/data/search_data_providers.py
+from __future__ import absolute_import
 from debug_utils import LOG_DEBUG
 from gui import SystemMessages
 from gui.Scaleform.framework.entities.DAAPIDataProvider import DAAPIDataProvider
@@ -101,7 +102,7 @@ class SearchUsersDataProvider(SearchDataProvider):
 
     def buildList(self, result):
         self._list = []
-        result = sorted(result, cmp=self._getSearchComparator)
+        result = sorted(result, key=self._getSearchSortKey)
         for item in result:
             if item.getID() not in self.__exclude:
                 self._list.append(self._converter.makeVO(item))
@@ -119,8 +120,8 @@ class SearchUsersDataProvider(SearchDataProvider):
         g_messengerEvents.users.onUserActionReceived -= self.__onUserActionReceived
         g_messengerEvents.users.onUserStatusUpdated -= self.__onUserStatusUpdated
 
-    def _getSearchComparator(self, user, other):
-        return cmp(user.getName().lower(), other.getName().lower())
+    def _getSearchSortKey(self, user):
+        return user.getName().lower()
 
     def __onUserActionReceived(self, _, user, shadowMode):
         self.__updateUserInSearch(user)

@@ -157,6 +157,7 @@ class SubhangarObserver(BaseStateObserver):
                 if configWithCameras:
                     subHangar, _, cameraMover, _ = configWithCameras[-1]
                     _logger.debug('Switching to %s camera (group: %s).', subHangar.defaultCamera, subHangar)
+                    cameraManager.enablePlatoonMode(False)
                     if not cameraManager.cameraExists(subHangar.defaultCamera):
                         cameraMover.moveCameraFailed()
                     else:
@@ -164,5 +165,6 @@ class SubhangarObserver(BaseStateObserver):
                 else:
                     _logger.debug('No camera specified for current set of rooms. Returning camera to tank.')
                     if self.__hangarSpace.spaceInited:
+                        cameraManager.enablePlatoonMode(False)
                         cameraManager.switchToTank()
             return

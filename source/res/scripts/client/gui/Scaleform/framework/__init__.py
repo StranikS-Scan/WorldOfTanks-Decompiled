@@ -4,7 +4,6 @@ from __future__ import absolute_import
 from collections import namedtuple
 from frameworks.wulf import WindowLayer
 import gui.Scaleform.framework.ScopeTemplates
-from gui.Scaleform.framework.factories import EntitiesFactories, DAAPIModuleFactory, ViewFactory
 from gui.Scaleform.framework.settings import UIFrameworkImpl
 
 def getSwfExtensionUrl(extension, swf):
@@ -91,15 +90,3 @@ class ContainerSettings(namedtuple('ContainerSettings', 'type clazz')):
 
 
 ContainerSettings.__new__.__defaults__ = (None, None)
-g_entitiesFactories = EntitiesFactories((DAAPIModuleFactory((WindowLayer.UNDEFINED,)), ViewFactory((WindowLayer.HIDDEN_SERVICE_LAYOUT,
-  WindowLayer.MARKER,
-  WindowLayer.VIEW,
-  WindowLayer.SUB_VIEW,
-  WindowLayer.TOP_SUB_VIEW,
-  WindowLayer.CURSOR,
-  WindowLayer.WAITING,
-  WindowLayer.WINDOW,
-  WindowLayer.FULLSCREEN_WINDOW,
-  WindowLayer.TOP_WINDOW,
-  WindowLayer.OVERLAY,
-  WindowLayer.SERVICE_LAYOUT))))

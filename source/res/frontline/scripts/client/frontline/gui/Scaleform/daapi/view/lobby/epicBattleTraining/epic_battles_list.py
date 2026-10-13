@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: frontline/scripts/client/frontline/gui/Scaleform/daapi/view/lobby/epicBattleTraining/epic_battles_list.py
+from __future__ import absolute_import
 from frontline.gui.prb_control.entities.epic_battle_training.ctx import EpicTrainingSettingsCtx
 from frontline.gui.prb_control.entities.epic_battle_training.ctx import JoinEpicBattleTrainingCtx
 from adisp import adisp_process
@@ -47,8 +48,8 @@ class EpicBattlesList(TrainingsListBase):
          'battleTypeID': BATTLE_TYPES.EPIC_TRAINING}
 
     @adisp_process
-    def joinTrainingRequest(self, prbID, prbClusterID):
-        yield self.prbDispatcher.join(JoinEpicBattleTrainingCtx(prbID, prbClusterID, waitingID='prebattle/join'))
+    def joinTrainingRequest(self, prbID, prbClusterId):
+        yield self.prbDispatcher.join(JoinEpicBattleTrainingCtx(prbID, prbClusterId, waitingID='prebattle/join'))
 
     def createTrainingRequest(self):
         settings = EpicTrainingSettingsCtx()

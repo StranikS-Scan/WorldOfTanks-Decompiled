@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: frontline/scripts/client/frontline/gui/Scaleform/daapi/view/battle/frontline_missions_panel.py
+from __future__ import absolute_import
 import math
 from frontline.gui.Scaleform.daapi.view.meta.FrontlineMissionsPanelMeta import FrontlineMissionsPanelMeta
 from helpers import dependency

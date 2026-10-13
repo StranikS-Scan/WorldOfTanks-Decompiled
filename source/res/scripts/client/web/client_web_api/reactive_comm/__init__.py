@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/web/client_web_api/reactive_comm/__init__.py
+from __future__ import absolute_import
 from helpers import dependency
 from skeletons.gui.game_control import IReactiveCommunicationService
 from web.client_web_api.api import C2WHandler, c2w

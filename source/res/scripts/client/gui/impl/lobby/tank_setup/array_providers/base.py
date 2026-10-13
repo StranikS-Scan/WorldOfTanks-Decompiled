@@ -161,7 +161,7 @@ class VehicleBaseArrayProvider(BaseArrayProvider):
         if not item.isInInventory:
             stats = self._itemsCache.items.stats
             money, exchangeRate = stats.money, self._itemsCache.items.shop.exchangeRate
-            isEnough = item.mayPurchaseWithExchange(money, exchangeRate) and stats.mayConsumeWalletResources
+            isEnough = item.mayPurchaseWithExchange(money, exchangeRate) and stats.isResourcesConsumptionAllowed
             if not (isInstalledOrMounted or isEnough or self._isInstallAllowed(item)):
                 model.setIsDisabled(True)
 

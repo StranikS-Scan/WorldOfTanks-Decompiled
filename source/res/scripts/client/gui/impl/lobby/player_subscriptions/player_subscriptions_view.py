@@ -8,7 +8,7 @@ from frameworks.wulf import ViewFlags, ViewSettings
 from gui import GUI_SETTINGS
 from gui.Scaleform.Waiting import Waiting
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
-from gui.Scaleform.daapi.view.lobby.store.browser.shop_helpers import getWotPlusShopUrl, getWotPlusProShopUrl
+from gui.Scaleform.daapi.view.lobby.store.browser.shop_helpers import getWotPlusShopUrl, getWotPlusPro12ShopUrl, getWotPlusPro6ShopUrl
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.player_subscriptions.external_subscription_model import ExternalSubscriptionModel
 from gui.impl.gen.view_models.views.lobby.player_subscriptions.player_subscriptions_model import PlayerSubscriptionsModel
@@ -193,23 +193,38 @@ class PlayerSubscriptionsView(ViewImpl):
 
     def __onButtonClick(self, args):
         id_ = args['subscriptionId']
-        if _isWotPlus(self.__subscriptions[id_]):
+        subscriptionType = self.__subscriptions[id_]
+        if _isWotPlus(subscriptionType):
             self._wotPlusUILogger.logClickEvent(SubscriptionPageKeys.CTA_BUTTON)
-            if self._wotPlusCtrl.hasSubscription():
-                if self._wotPlusCtrl.shouldRedirectToSteam():
-                    showWotPlusSteamSubscriptionManagementPage()
-                    return
-                if self.__subscriptions[id_] == SubscriptionTypeEnum.WOTSUBSCRIPTION or self._wotPlusCtrl.getTier() == WotPlusTier.PRO:
-                    showWotPlusProductPage()
-                else:
-                    showShop(getWotPlusProShopUrl())
-            else:
-                if self.__subscriptions[id_] == SubscriptionTypeEnum.WOTSUBSCRIPTION:
-                    url = getWotPlusShopUrl()
-                else:
-                    url = getWotPlusProShopUrl()
-                showShop(url)
-            return
+            self.__onWotPlusButtonClick(isCoreSubRequested=subscriptionType == SubscriptionTypeEnum.WOTSUBSCRIPTION)
+        else:
+            self.__onExternalSubscriptionButtonClick(id_)
+
+    def __onWotPlusButtonClick(self, isCoreSubRequested):
+        if self._wotPlusCtrl.hasSubscription():
+            self.__showWotPlusPageForSubscriber(isCoreSubRequested)
+        else:
+            self.__showWotPlusShopForNonSubscriber(isCoreSubRequested)
+
+    def __showWotPlusPageForSubscriber(self, isCoreSubRequested):
+        hasSteamSubscription = self._wotPlusCtrl.hasSteamSubscription()
+        isProSubscriber = self._wotPlusCtrl.getTier() == WotPlusTier.PRO
+        isUpgradeToProRequested = not isCoreSubRequested and not isProSubscriber
+        if isUpgradeToProRequested:
+            showShop(getWotPlusPro6ShopUrl() if hasSteamSubscription else getWotPlusPro12ShopUrl())
+        elif hasSteamSubscription:
+            showWotPlusSteamSubscriptionManagementPage()
+        else:
+            showWotPlusProductPage()
+
+    def __showWotPlusShopForNonSubscriber(self, isCoreSubRequested):
+        if isCoreSubRequested:
+            url = getWotPlusShopUrl()
+        else:
+            url = getWotPlusPro6ShopUrl() if self._wotPlusCtrl.shouldRedirectToSteam() else getWotPlusPro12ShopUrl()
+        showShop(url)
+
+    def __onExternalSubscriptionButtonClick(self, id_):
         subscriptionDescriptor = self.__subscriptionsFetchResult.getProductByID(id_)
         if not subscriptionDescriptor:
             _logger.warning('Subscription descriptor with id=%s was not found', id_)
@@ -228,6 +243,10 @@ class PlayerSubscriptionsView(ViewImpl):
             return True
         if not self._wotPlusCtrl.isWotPlusVisible():
             return False
-        if self._wotPlusCtrl.hasSubscription() and self._wotPlusCtrl.getTier() == subscription.tier:
+        currentTier = self._wotPlusCtrl.getTier()
+        if subscription.tier == currentTier:
             return True
-        return self._wotPlusCtrl.getSettingsStorage().isProductEnabledForSteam(subscription.tier) if self._steamCompletionCtrl.isSteamAccount is True else True
+        if not self._steamCompletionCtrl.isSteamAccount:
+            return True
+        isUpgrade = subscription.tier > currentTier
+        return False if isUpgrade and self._wotPlusCtrl.isSubscriptionBoughtViaPlatform() else self._wotPlusCtrl.getSettingsStorage().isProductEnabledForSteam(subscription.tier)

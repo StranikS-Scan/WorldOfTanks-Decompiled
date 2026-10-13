@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/notification/NotificationPopUpViewer.py
+from __future__ import absolute_import
 import logging
 from typing import TYPE_CHECKING
 from PlayerEvents import g_playerEvents

@@ -4,8 +4,8 @@ from __future__ import absolute_import
 import typing
 from typing import Set, Optional
 if typing.TYPE_CHECKING:
+    from items.vehicle_mechanics_types import VehicleMechanicKey
     from items.vehicles import VehicleDescr
-    from vehicles.mechanics.mechanic_constants import VehicleMechanic
     VehicleModule = typing.TypeVar('VehicleModule')
 
 class IMechanicFactory(object):

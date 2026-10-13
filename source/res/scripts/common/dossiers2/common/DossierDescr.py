@@ -104,12 +104,13 @@ class DossierDescr(object):
                 else:
                     operation = {'code': name}
                     if isMedalAchived:
-                        operation['unlocked'] = True
+                        operation['status'] = 'unlocked'
                     if stat and (isMedalAchived or not self[medalBlock][medalName]):
                         statValue = int(self[stat[0]].get(stat[1], 0))
                         if statValue:
-                            operation['progress_amount'] = statValue
-                    if len(operation) > 1:
+                            operation['progress'] = {'value': statValue,
+                             'operation_type': 'set'}
+                    if isMedalAchived or 'progress' in operation:
                         platformAchievements.append(operation)
 
         return platformAchievements

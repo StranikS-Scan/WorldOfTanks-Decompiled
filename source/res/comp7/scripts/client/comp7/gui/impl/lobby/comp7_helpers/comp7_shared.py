@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: comp7/scripts/client/comp7/gui/impl/lobby/comp7_helpers/comp7_shared.py
+from __future__ import absolute_import
 import typing
 from gui.shared.utils.requesters import REQ_CRITERIA
 from shared_utils import findFirst

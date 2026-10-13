@@ -1,0 +1,27 @@
+<vehicle.xml>
+  <extras>
+    <nitroRamDamage>	NoneExtra : halloween_cell.hw_vehicle_extras_equipment.HWEquipmentNitroRamDamage	</nitroRamDamage>
+    <hpRepairAndCrewHeal>	NoneExtra : halloween_cell.hw_vehicle_extras_equipment.HWEquipment	</hpRepairAndCrewHeal>
+    <fastReload>	NoneExtra : halloween_cell.hw_vehicle_extras_equipment.HWEquipment	</fastReload>
+    <teamRepairKit>	NoneExtra : halloween_cell.hw_vehicle_extras_equipment.HWEquipment	</teamRepairKit>
+    <damageShield>	NoneExtra : halloween_cell.hw_vehicle_extras_equipment.HWEquipment	</damageShield>
+    <hwInvisibility>	NoneExtra : halloween_cell.hw_vehicle_extras_equipment.HWEquipment	</hwInvisibility>
+    <hwAoeDamageInstantShot>	NoneExtra : halloween_cell.hw_vehicle_extras_equipment.HWEquipment	</hwAoeDamageInstantShot>
+    <hwAoeStunInstantShot>	NoneExtra : halloween_cell.hw_vehicle_extras_equipment.HWEquipment	</hwAoeStunInstantShot>
+    <hwAoeDrainEnemyHpInstantShot>	NoneExtra : halloween_cell.hw_vehicle_extras_equipment.HWEquipment	</hwAoeDrainEnemyHpInstantShot>
+    <halloweenEmptySlot0>	NoneExtra : halloween_cell.hw_vehicle_extras_equipment.EmptySlotExtra	</halloweenEmptySlot0>
+    <halloweenEmptySlot1>	NoneExtra : halloween_cell.hw_vehicle_extras_equipment.EmptySlotExtra	</halloweenEmptySlot1>
+    <halloweenEmptySlot2>	NoneExtra : halloween_cell.hw_vehicle_extras_equipment.EmptySlotExtra	</halloweenEmptySlot2>
+    <overturn_hw_battles>	NoneExtra : halloween_cell.ext_vehicle_extras.OverturnEventBattles	  <correctionDelay>	5.0	</correctionDelay>
+      <isOnboardShotAllowed>	true	</isOnboardShotAllowed>
+      <gameplayFactors>
+        <reloadTime>	2.0	</reloadTime>
+        <turretRotationSpeed>	0.5	</turretRotationSpeed>
+        <gunRotationSpeed>	0.5	</gunRotationSpeed>
+        <aimingTime>	2.0	</aimingTime>
+        <shotDispersion>	2.0	</shotDispersion>
+        <visionRadius>	0.5	</visionRadius>
+      </gameplayFactors>
+    </overturn_hw_battles>
+  </extras>
+</vehicle.xml>

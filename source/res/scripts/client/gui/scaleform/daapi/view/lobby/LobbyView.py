@@ -283,5 +283,5 @@ class LobbyView(LobbyPageMeta, IWaitingWidget, IGlobalListener):
             SystemMessages.pushMessage(i18n.makeString(SYSTEM_MESSAGES.IGR_CUSTOMIZATION_END, igrIcon=icon), type=SystemMessages.SM_TYPE.Information)
         self.__currIgrType = roomType
 
-    def __onWalletChanged(self, status):
-        self.as_setWalletStatusS(status)
+    def __onWalletChanged(self, _):
+        self.as_setWalletStatusS(self.wallet.componentsStatuses)

@@ -11,8 +11,8 @@ from events_handler import eventHandler
 from gui.Scaleform.daapi.view.meta.OverheatDecorativeCrosshairMeta import OverheatDecorativeCrosshairMeta
 from gui.veh_mechanics.battle.updaters.mechanics.mechanic_passenger_updater import VehicleMechanicPassengerUpdater
 from gui.veh_mechanics.battle.updaters.mechanics.mechanic_states_updater import VehicleMechanicStatesUpdater
+from items.vehicle_mechanics_types import VehicleMechanicKeys
 from math_common import round_py2_style_int
-from vehicles.mechanics.mechanic_constants import VehicleMechanic
 from vehicles.mechanics.mechanic_states import IMechanicStatesListenerLogic
 if typing.TYPE_CHECKING:
     from typing import List, Optional
@@ -73,7 +73,7 @@ class OverheatDecorativeCrosshair(OverheatDecorativeCrosshairMeta, ContainersLis
         self.__invalidateExpectedDamage(newDamage)
 
     def _getViewUpdaters(self):
-        return [VehicleMechanicPassengerUpdater(VehicleMechanic.OVERHEAT_STACKS, self), VehicleMechanicStatesUpdater(VehicleMechanic.OVERHEAT_STACKS, self), CurrentShellDamageUpdater(self)]
+        return [VehicleMechanicPassengerUpdater(VehicleMechanicKeys.OVERHEAT_STACKS, self), VehicleMechanicStatesUpdater(VehicleMechanicKeys.OVERHEAT_STACKS, self), CurrentShellDamageUpdater(self)]
 
     def _onReplayTimeWarpFinished(self):
         replayCtrl = BattleReplay.g_replayCtrl

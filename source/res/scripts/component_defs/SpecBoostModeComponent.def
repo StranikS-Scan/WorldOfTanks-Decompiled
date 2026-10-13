@@ -1,0 +1,18 @@
+<SpecBoostModeComponent.def>
+  <Properties>
+    <mechanicVariant>
+      <Type>	STRING	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </mechanicVariant>
+    <status>
+      <Type>	PHASED_MODE_WITH_PROGRESS_STATUS	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </status>
+  </Properties>
+  <CellMethods>
+    <tryActivate>
+      <Exposed>	OWN_CLIENT	</Exposed>
+    </tryActivate>
+  </CellMethods>
+  <DefaultKeyName>	specBoostModeComponent	</DefaultKeyName>
+</SpecBoostModeComponent.def>

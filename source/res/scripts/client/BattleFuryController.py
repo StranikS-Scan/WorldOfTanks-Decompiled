@@ -4,10 +4,10 @@ from __future__ import absolute_import, division
 import BigWorld
 import typing
 from gui.shared.utils.decorators import ReprInjector
+from items.vehicle_mechanics_types import VehicleMechanicKey, VehicleMechanicKeys
 from vehicles.components.vehicle_component import VehicleDynamicComponent
 from vehicles.components.vehicle_prefabs import createMechanicPrefabSpawner
 from vehicles.mechanics.common import IMechanicComponent
-from vehicles.mechanics.mechanic_constants import VehicleMechanic
 from vehicles.mechanics.mechanic_states import createMechanicStatesEvents, IMechanicStatesComponent, IMechanicState
 if typing.TYPE_CHECKING:
     from vehicles.mechanics.mechanic_states import IMechanicStatesEvents
@@ -44,8 +44,8 @@ class BattleFuryController(VehicleDynamicComponent, IMechanicComponent, IMechani
         self._initComponent()
 
     @property
-    def vehicleMechanic(self):
-        return VehicleMechanic.BATTLE_FURY
+    def vehicleMechanicKey(self):
+        return VehicleMechanicKeys.BATTLE_FURY
 
     @property
     def statesEvents(self):

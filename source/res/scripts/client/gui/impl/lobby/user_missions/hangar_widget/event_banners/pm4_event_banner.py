@@ -7,12 +7,12 @@ from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.user_missions.constants.event_banner_state import EventBannerState
 from gui.impl.lobby.personal_missions_30.personal_mission_constants import OperationIDs
 from gui.impl.lobby.personal_missions_30.views_helpers import isPM4BannerAnimationShown, isIntroShown, markPM4BannerAnimationShown
-from gui.impl.lobby.user_missions.hangar_widget.event_banners.base_event_banner import BaseEventBanner
+from gui.impl.lobby.user_missions.hangar_widget.event_banners.standard_event_banner import StandardEventBanner
 from gui.impl.lobby.user_missions.tooltips.pm4_banner_tooltip import PM4BannerTooltipView
 from gui.shared.event_dispatcher import showPersonalMissionMainWindow
 from personal_missions import PM_BRANCH
 
-class PM4EventBunner(BaseEventBanner):
+class PM4EventBunner(StandardEventBanner):
     NAME = 'PM4EntryPoint'
 
     @property

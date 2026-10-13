@@ -866,6 +866,13 @@
       <attachmentLogic>	prefab	</attachmentLogic>
     </attachment>
     <attachment>
+      <id>	184	</id>
+      <name>	G89_Leopard1_KS_3Dst	</name>
+      <modelName>	particles/Tank/customization/G89_Leopard1_KS_3Dst/G89_Leopard1_KS_3Dst.prefab	</modelName>
+      <hangarModelName>	particles/Tank/customization/G89_Leopard1_KS_3Dst/G89_Leopard1_KS_3Dst_hangar.prefab	</hangarModelName>
+      <attachmentLogic>	prefab	</attachmentLogic>
+    </attachment>
+    <attachment>
       <id>	187	</id>
       <name>	Ch48_BZ_75_OSD_3Dst_2	</name>
       <modelName>	particles/Tank/customization/Ch48_BZ_75_OSD_3Dst/Ch48_BZ_75_OSD_3Dst_2.prefab	</modelName>
@@ -906,16 +913,16 @@
       <attachmentLogic>	prefab	</attachmentLogic>
     </attachment>
     <attachment>
-      <id>	196	</id>
-      <name>	F141_Durendal_RW26_3Dst_GunNumwinter	</name>
-      <modelName>	vehicles/french/F141_Durendal/_skins/F141_Durendal_RW26_3Dst/gun_number_switcher_winter.prefab	</modelName>
-      <attachmentLogic>	prefab	</attachmentLogic>
-    </attachment>
-    <attachment>
       <id>	194	</id>
       <name>	GB130_FV225_Collector_DMC_3Dst	</name>
       <modelName>	particles/Tank/customization/GB130_FV225_Collector_DMC_3Dst/GB130_FV225_Collector_DMC_3Dst.prefab	</modelName>
       <hangarModelName>	particles/Tank/customization/GB130_FV225_Collector_DMC_3Dst/GB130_FV225_Collector_DMC_3Dst_hangar.prefab	</hangarModelName>
+      <attachmentLogic>	prefab	</attachmentLogic>
+    </attachment>
+    <attachment>
+      <id>	196	</id>
+      <name>	F141_Durendal_RW26_3Dst_GunNumwinter	</name>
+      <modelName>	vehicles/french/F141_Durendal/_skins/F141_Durendal_RW26_3Dst/gun_number_switcher_winter.prefab	</modelName>
       <attachmentLogic>	prefab	</attachmentLogic>
     </attachment>
     <attachment>
@@ -4558,6 +4565,72 @@
     </attachment>
   </itemGroup>
   <itemGroup>
+    <name>	Dark Tower Trophies	</name>
+    <userString>	#vehicle_customization:attachment/Dark_Tower_Trophies	</userString>
+    <season>	ALL	</season>
+    <historical>	2	</historical>
+    <attachment>
+      <id>	2043	</id>
+      <name>	Cus_290_HW_MagneticHarpoon	</name>
+      <modelName>	content/CGFPrefabs/3D_Customization/Cus_290_HW_MagneticHarpoon/attachment.prefab	</modelName>
+      <hangarModelName>	content/CGFPrefabs/3D_Customization/Cus_290_HW_MagneticHarpoon/attachment.prefab	</hangarModelName>
+      <attachmentLogic>	prefab	</attachmentLogic>
+      <applyType>	turret	</applyType>
+      <size>	medium	</size>
+      <rarity>	rare	</rarity>
+      <priceGroup>	attachments 500g notInShop	</priceGroup>
+      <userString>	#vehicle_customization:attachment/Dark_Tower_Trophies/Cus_290_HW_MagneticHarpoon	</userString>
+    </attachment>
+    <attachment>
+      <id>	2042	</id>
+      <name>	Cus_289_HW_SpiderSpotlight	</name>
+      <modelName>	content/CGFPrefabs/3D_Customization/Cus_289_HW_SpiderSpotlight/attachment.prefab	</modelName>
+      <hangarModelName>	content/CGFPrefabs/3D_Customization/Cus_289_HW_SpiderSpotlight/attachment.prefab	</hangarModelName>
+      <attachmentLogic>	prefab	</attachmentLogic>
+      <applyType>	gunMantlet	</applyType>
+      <size>	medium	</size>
+      <rarity>	epic	</rarity>
+      <priceGroup>	attachments 1000g notInShop	</priceGroup>
+      <userString>	#vehicle_customization:attachment/Field_Salvage/Cus_289_HW_SpiderSpotlight	</userString>
+    </attachment>
+    <attachment>
+      <id>	2044	</id>
+      <name>	Cus_291_HW_SpareBatteries	</name>
+      <modelName>	content/CGFPrefabs/3D_Customization/Cus_291_HW_SpareBatteries/attachment.prefab	</modelName>
+      <hangarModelName>	content/CGFPrefabs/3D_Customization/Cus_291_HW_SpareBatteries/attachment.prefab	</hangarModelName>
+      <attachmentLogic>	prefab	</attachmentLogic>
+      <applyType>	universal	</applyType>
+      <size>	medium	</size>
+      <rarity>	rare	</rarity>
+      <priceGroup>	attachments 350g notInShop	</priceGroup>
+      <userString>	#vehicle_customization:attachment/Field_Salvage/Cus_291_HW_SpareBatteries	</userString>
+    </attachment>
+    <attachment>
+      <id>	2045	</id>
+      <name>	Cus_292_HW_PowerCollector	</name>
+      <modelName>	content/CGFPrefabs/3D_Customization/Cus_292_HW_PowerCollector/attachment.prefab	</modelName>
+      <hangarModelName>	content/CGFPrefabs/3D_Customization/Cus_292_HW_PowerCollector/attachment.prefab	</hangarModelName>
+      <attachmentLogic>	prefab	</attachmentLogic>
+      <applyType>	universal	</applyType>
+      <size>	medium	</size>
+      <rarity>	rare	</rarity>
+      <priceGroup>	attachments 500g notInShop	</priceGroup>
+      <userString>	#vehicle_customization:attachment/Field_Salvage/Cus_292_HW_PowerCollector	</userString>
+    </attachment>
+    <attachment>
+      <id>	2046	</id>
+      <name>	Cus_293_HW_SpiderMines	</name>
+      <modelName>	content/CGFPrefabs/3D_Customization/Cus_293_HW_SpiderMines/attachment.prefab	</modelName>
+      <hangarModelName>	content/CGFPrefabs/3D_Customization/Cus_293_HW_SpiderMines/attachment.prefab	</hangarModelName>
+      <attachmentLogic>	prefab	</attachmentLogic>
+      <applyType>	universal	</applyType>
+      <size>	medium	</size>
+      <rarity>	rare	</rarity>
+      <priceGroup>	attachments 650g notInShop	</priceGroup>
+      <userString>	#vehicle_customization:attachment/Field_Salvage/Cus_293_HW_SpiderMines	</userString>
+    </attachment>
+  </itemGroup>
+  <itemGroup>
     <name>	Fight Like Hell	</name>
     <userString>	#vehicle_customization:attachment/fight_like_hell	</userString>
     <season>	ALL	</season>
@@ -4632,7 +4705,7 @@
   </itemGroup>
   <itemGroup>
     <name>	Doomguy's Keepsakes	</name>
-    <userString>	#vehicle_customization:attachment/Doomguys_Keepsakes	</userString>
+    <userString>	#vehicle_customization:attachment/Doomgyus_Keepsakes	</userString>
     <season>	ALL	</season>
     <historical>	2	</historical>
     <attachment>
@@ -4646,8 +4719,8 @@
       <size>	medium	</size>
       <rarity>	legendary	</rarity>
       <priceGroup>	attachments 2150g notInShop	</priceGroup>
-      <description>	#vehicle_customization:attachment/Doomguys_Keepsakes/Cus_309_Classic_HUD/description	</description>
-      <userString>	#vehicle_customization:attachment/Doomguys_Keepsakes/Cus_309_Classic_HUD	</userString>
+      <description>	#vehicle_customization:attachment/Doomgyus_Keepsakes/Cus_309_Classic_HUD/description	</description>
+      <userString>	#vehicle_customization:attachment/Doomgyus_Keepsakes/Cus_309_Classic_HUD	</userString>
       <tags>	battleEffect	</tags>
     </attachment>
     <attachment>
@@ -4661,7 +4734,7 @@
       <size>	medium	</size>
       <rarity>	epic	</rarity>
       <priceGroup>	attachments 1000g notInShop	</priceGroup>
-      <userString>	#vehicle_customization:attachment/Doomguys_Keepsakes/Cus_310_DOOM_Ornament	</userString>
+      <userString>	#vehicle_customization:attachment/Doomgyus_Keepsakes/Cus_310_DOOM_Ornament	</userString>
     </attachment>
     <attachment>
       <id>	1257	</id>
@@ -4674,7 +4747,7 @@
       <size>	medium	</size>
       <rarity>	rare	</rarity>
       <priceGroup>	attachments 500g notInShop	</priceGroup>
-      <userString>	#vehicle_customization:attachment/Doomguys_Keepsakes/Cus_311_Chaingun	</userString>
+      <userString>	#vehicle_customization:attachment/Doomgyus_Keepsakes/Cus_311_Chaingun	</userString>
     </attachment>
     <attachment>
       <id>	1258	</id>
@@ -4687,7 +4760,7 @@
       <size>	medium	</size>
       <rarity>	rare	</rarity>
       <priceGroup>	attachments 500g notInShop	</priceGroup>
-      <userString>	#vehicle_customization:attachment/Doomguys_Keepsakes/Cus_312_Demon_Disposal_Kit	</userString>
+      <userString>	#vehicle_customization:attachment/Doomgyus_Keepsakes/Cus_312_Demon_Disposal_Kit	</userString>
     </attachment>
     <attachment>
       <id>	1259	</id>
@@ -4700,7 +4773,80 @@
       <size>	medium	</size>
       <rarity>	rare	</rarity>
       <priceGroup>	attachments 500g notInShop	</priceGroup>
-      <userString>	#vehicle_customization:attachment/Doomguys_Keepsakes/Cus_313_Marines_Stash	</userString>
+      <userString>	#vehicle_customization:attachment/Doomgyus_Keepsakes/Cus_313_Marines_Stash	</userString>
+    </attachment>
+  </itemGroup>
+  <itemGroup>
+    <name>	Transmission Tech	</name>
+    <userString>	#vehicle_customization:attachment/Transmission_Tech	</userString>
+    <season>	ALL	</season>
+    <historical>	2	</historical>
+    <attachment>
+      <id>	1260	</id>
+      <name>	Cus_314_Telemetry_Plotter	</name>
+      <modelName>	content/CGFPrefabs/3D_Customization/Cus_314_Telemetry_Plotter/Cus_314_Telemetry_Plotter.prefab	</modelName>
+      <hangarModelName>	content/CGFPrefabs/3D_Customization/Cus_314_Telemetry_Plotter/Cus_314_Telemetry_Plotter.prefab	</hangarModelName>
+      <crashModelName></crashModelName>
+      <attachmentLogic>	prefab	</attachmentLogic>
+      <applyType>	universal	</applyType>
+      <size>	medium	</size>
+      <rarity>	epic	</rarity>
+      <priceGroup>	attachments 1300g notInShop	</priceGroup>
+      <userString>	#vehicle_customization:attachment/Transmission_Tech/Cus_314_Telemetry_Plotter	</userString>
+      <tags>	battleEffect	</tags>
+    </attachment>
+    <attachment>
+      <id>	1261	</id>
+      <name>	Cus_315_Orbiter_Prototype	</name>
+      <modelName>	content/CGFPrefabs/3D_Customization/Cus_315_Orbiter_Prototype/Cus_315_Orbiter_Prototype.prefab	</modelName>
+      <hangarModelName>	content/CGFPrefabs/3D_Customization/Cus_315_Orbiter_Prototype/Cus_315_Orbiter_Prototype_hangar.prefab	</hangarModelName>
+      <crashModelName></crashModelName>
+      <attachmentLogic>	prefab	</attachmentLogic>
+      <applyType>	turret	</applyType>
+      <size>	medium	</size>
+      <rarity>	epic	</rarity>
+      <priceGroup>	attachments 1300g notInShop	</priceGroup>
+      <userString>	#vehicle_customization:attachment/Transmission_Tech/Cus_315_Orbiter_Prototype	</userString>
+      <tags>	battleEffect	</tags>
+    </attachment>
+    <attachment>
+      <id>	1262	</id>
+      <name>	Cus_316_EMP_Jammer	</name>
+      <modelName>	content/CGFPrefabs/3D_Customization/Cus_316_EMP_Jammer/Cus_316_EMP_Jammer.prefab	</modelName>
+      <hangarModelName>	content/CGFPrefabs/3D_Customization/Cus_316_EMP_Jammer/Cus_316_EMP_Jammer.prefab	</hangarModelName>
+      <crashModelName></crashModelName>
+      <attachmentLogic>	prefab	</attachmentLogic>
+      <applyType>	gunMantlet	</applyType>
+      <size>	medium	</size>
+      <rarity>	rare	</rarity>
+      <priceGroup>	attachments 650g notInShop	</priceGroup>
+      <userString>	#vehicle_customization:attachment/Transmission_Tech/Cus_316_EMP_Jammer	</userString>
+    </attachment>
+    <attachment>
+      <id>	1263	</id>
+      <name>	Cus_317_Satellite_Tracker	</name>
+      <modelName>	content/CGFPrefabs/3D_Customization/Cus_317_Satellite_Tracker/Cus_317_Satellite_Tracker.prefab	</modelName>
+      <hangarModelName>	content/CGFPrefabs/3D_Customization/Cus_317_Satellite_Tracker/Cus_317_Satellite_Tracker.prefab	</hangarModelName>
+      <crashModelName></crashModelName>
+      <attachmentLogic>	prefab	</attachmentLogic>
+      <applyType>	universal	</applyType>
+      <size>	medium	</size>
+      <rarity>	rare	</rarity>
+      <priceGroup>	attachments 650g notInShop	</priceGroup>
+      <userString>	#vehicle_customization:attachment/Transmission_Tech/Cus_317_Satellite_Tracker	</userString>
+    </attachment>
+    <attachment>
+      <id>	1264	</id>
+      <name>	Cus_318_Encryption_Station	</name>
+      <modelName>	content/CGFPrefabs/3D_Customization/Cus_318_Encryption_Station/Cus_318_Encryption_Station.prefab	</modelName>
+      <hangarModelName>	content/CGFPrefabs/3D_Customization/Cus_318_Encryption_Station/Cus_318_Encryption_Station.prefab	</hangarModelName>
+      <crashModelName></crashModelName>
+      <attachmentLogic>	prefab	</attachmentLogic>
+      <applyType>	universal	</applyType>
+      <size>	medium	</size>
+      <rarity>	rare	</rarity>
+      <priceGroup>	attachments 650g notInShop	</priceGroup>
+      <userString>	#vehicle_customization:attachment/Transmission_Tech/Cus_318_Encryption_Station	</userString>
     </attachment>
   </itemGroup>
   <itemGroup>

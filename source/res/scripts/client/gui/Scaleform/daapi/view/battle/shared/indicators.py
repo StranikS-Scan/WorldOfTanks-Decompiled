@@ -30,12 +30,12 @@ from gui.shared.crits_mask_parser import critsParserGenerator
 from helpers import dependency
 from helpers import i18n
 from helpers.time_utils import MS_IN_SECOND
+from items.vehicle_mechanics_types import VehicleMechanicKeys
 from shared_utils import CONST_CONTAINER
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.battle_session import IBattleSessionProvider
 from soft_exception import SoftException
 from gui.battle_control import avatar_getter
-from vehicles.mechanics.mechanic_constants import VehicleMechanic
 from vehicles.mechanics.mechanic_helpers import hasVehicleDescrMechanic
 if typing.TYPE_CHECKING:
     from items.vehicles import VehicleDescriptor
@@ -438,10 +438,12 @@ class _DamageIndicator(DamageIndicatorMeta, IHitIndicator):
 
 
 class SixthSenseIndicator(SixthSenseMeta, ISpottingIndicator):
+    sessionProvider = dependency.descriptor(IBattleSessionProvider)
 
     def __init__(self):
         super(SixthSenseIndicator, self).__init__()
         self._sound = SixthSenseSound()
+        self.__isBound = False
 
     def getIndicatorTogglesByType(self):
         toggle = self._sixthSenseToggle
@@ -467,10 +469,17 @@ class SixthSenseIndicator(SixthSenseMeta, ISpottingIndicator):
     def _populate(self):
         super(SixthSenseIndicator, self)._populate()
         self._sound.init()
-        bindSpottingIndicator(self)
+        vehicleState = self.sessionProvider.shared.vehicleState
+        if vehicleState is not None:
+            vehicleState.onVehicleControlling += self.__onVehicleControlling
+        self.__updateBinding()
+        return
 
     def _dispose(self):
-        unbindSpottingIndicator(self)
+        vehicleState = self.sessionProvider.shared.vehicleState
+        if vehicleState is not None:
+            vehicleState.onVehicleControlling -= self.__onVehicleControlling
+        self.__setBound(False)
         self._sound.fini()
         self._sound = None
         super(SixthSenseIndicator, self)._dispose()
@@ -485,6 +494,21 @@ class SixthSenseIndicator(SixthSenseMeta, ISpottingIndicator):
 
     def _isSixthSenseEnabled(self):
         return False
+
+    def __onVehicleControlling(self, vehicle):
+        self.__updateBinding()
+
+    def __updateBinding(self):
+        self.__setBound(not avatar_getter.isObserver() or avatar_getter.getIsObserverFPV())
+
+    def __setBound(self, shouldBind):
+        if shouldBind == self.__isBound:
+            return
+        self.__isBound = shouldBind
+        if shouldBind:
+            bindSpottingIndicator(self)
+        else:
+            unbindSpottingIndicator(self)
 
 
 class SixthSenseSound(object):
@@ -693,7 +717,7 @@ class SiegeModeIndicator(SiegeModeIndicatorMeta):
         return
 
     def __hasSiegeMode(self, vTypeDesc):
-        return (vTypeDesc.hasTurboshaftEngine or vTypeDesc.isTwinGunVehicle or vTypeDesc.hasHydraulicChassis or vTypeDesc.hasAutoSiegeMode) and not hasVehicleDescrMechanic(vTypeDesc, VehicleMechanic.PILLBOX_SIEGE_MODE)
+        return (vTypeDesc.hasTurboshaftEngine or vTypeDesc.isTwinGunVehicle or vTypeDesc.hasHydraulicChassis or vTypeDesc.hasAutoSiegeMode) and not hasVehicleDescrMechanic(vTypeDesc, VehicleMechanicKeys.PILLBOX_SIEGE_MODE)
 
     def __updateIndicatorView(self, isSmooth=False):
         if self._siegeState not in self._switchTimeTable:

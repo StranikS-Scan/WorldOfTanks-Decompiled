@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/proto/bw/search_processors.py
+from __future__ import absolute_import
 import chat_shared
 from constants import CHANNEL_SEARCH_RESULTS_LIMIT
 from messenger.m_constants import PROTO_TYPE

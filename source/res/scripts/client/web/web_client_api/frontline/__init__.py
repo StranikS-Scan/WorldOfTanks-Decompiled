@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/web/web_client_api/frontline/__init__.py
+from __future__ import absolute_import
 from helpers import dependency
 from skeletons.gui.game_control import IEpicBattleMetaGameController
 from web.web_client_api import w2c, w2capi, W2CSchema
@@ -14,7 +15,7 @@ class FrontLineWebApi(W2CSchema):
 
     @w2c(W2CSchema, name='get_calendar_info')
     def handleGetCalendarInfo(self, _):
-        calendarData = dict()
+        calendarData = {}
         seasons = (self.__epicController.getCurrentSeason(), self.__epicController.getNextSeason(), self.__epicController.getPreviousSeason())
         for season in seasons:
             if season is not None:

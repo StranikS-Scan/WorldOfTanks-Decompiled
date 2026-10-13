@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/proto/interfaces.py
+from __future__ import absolute_import
 import typing
 if typing.TYPE_CHECKING:
     from typing import Optional
@@ -170,9 +171,6 @@ class IVOIPChatController(object):
         raise NotImplementedError
 
     def isVivox(self):
-        raise NotImplementedError
-
-    def isYY(self):
         raise NotImplementedError
 
     def invalidateInitialization(self):

@@ -7,7 +7,7 @@ from frameworks.wulf import ViewModel, ViewSettings
 from gui.impl.gen import R
 from gui.impl.pub import ViewImpl
 if typing.TYPE_CHECKING:
-    from gui.impl.gen_utils import DynAccessor
+    from frameworks.wulf import PyResAccessor
 
 class CurtainBaseSubView(ViewImpl):
     __slots__ = ('_isActive', '_isHidden', 'onWaitingChanged', '_isWaitingVisible', '_waitingMsgResID')

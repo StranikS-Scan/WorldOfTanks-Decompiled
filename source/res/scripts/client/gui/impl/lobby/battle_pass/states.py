@@ -235,6 +235,7 @@ class PostProgressionBattlePassState(_BattlePassPresenterState):
         lootBoxMainState = lsm.getStateByCls(LootBoxMainState)
         self.addNavigationTransition(progressionState)
         self.addNavigationTransition(buyPassState)
+        self.addNavigationTransition(lsm.getStateByCls(TankmenBattlePassState))
         self.addNavigationTransition(lootBoxMainState, record=True)
         self.addNavigationTransition(lsm.getStateByCls(ShopState), record=True)
 
@@ -287,6 +288,7 @@ class HolidayFinalBattlePassState(_BattlePassPresenterState):
         from gui.impl.lobby.vehicle_hub.states import VehicleHubState
         lsm = self.getMachine()
         self.addNavigationTransition(lsm.getStateByCls(BuyPassBattlePassState))
+        self.addNavigationTransition(lsm.getStateByCls(TankmenBattlePassState))
         self.addNavigationTransition(lsm.getStateByCls(StylePreviewState))
         self.addNavigationTransition(lsm.getStateByCls(ConfigurableVehiclePreviewState))
         self.addNavigationTransition(lsm.getStateByCls(StyleProgressionPreviewState))

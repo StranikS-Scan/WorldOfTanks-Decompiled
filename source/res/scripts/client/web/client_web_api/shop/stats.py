@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/web/client_web_api/shop/stats.py
+from __future__ import absolute_import
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.shared.money import Currency
 from helpers import dependency
@@ -30,4 +31,4 @@ class BalanceEventHandler(C2WHandler):
 
     @c2w(name='wallet_update')
     def __onWalletUpdate(self, *_):
-        return formatWalletCurrencyStatuses(self.__itemsCache.items.stats)
+        return formatWalletCurrencyStatuses(wallet=self.__walletController, itemsCache=self.__itemsCache)

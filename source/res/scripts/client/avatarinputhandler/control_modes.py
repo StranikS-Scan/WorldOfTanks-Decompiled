@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/AvatarInputHandler/control_modes.py
+from __future__ import absolute_import, division
 import logging
 import time
 import weakref
@@ -15,21 +16,20 @@ import BattleReplay
 import CommandMapping
 import SoundGroups
 import TriggersManager
-import VideoCamera
-import cameras
 import math_utils
 import constants
+from AvatarInputHandler import VideoCamera, cameras
 from AvatarInputHandler.DynamicCameras.free_camera import FreeVideoCamera
 from AvatarInputHandler.DynamicCameras.prebattle_highlights_camera import PrebattleHighlightsCamera
-from constants import POSTMORTEM_MODIFIERS
-from AimingSystems import getShotTargetInfo
-from AimingSystems.magnetic_aim import magneticAimProcessor, MagneticAimSettings
+from AvatarInputHandler.AimingSystems import getShotTargetInfo
+from AvatarInputHandler.AimingSystems.magnetic_aim import magneticAimProcessor, MagneticAimSettings
 from AvatarInputHandler import AimingSystems, aih_global_binding, gun_marker_ctrl
 from AvatarInputHandler.DynamicCameras.camera_switcher import SwitchToPlaces
 from AvatarInputHandler.StrategicCamerasInterpolator import StrategicCamerasInterpolator
 from AvatarInputHandler.spg_marker_helpers.spg_marker_helpers import getSPGShotResult, getSPGShotFlyTime
-from DynamicCameras import SniperCamera, StrategicCamera, ArcadeCamera, ArtyCamera, DualGunCamera, twin_gun_camera
-from PostmortemDelay import PostmortemDelay
+from AvatarInputHandler.DynamicCameras import SniperCamera, StrategicCamera, ArcadeCamera, ArtyCamera, DualGunCamera, twin_gun_camera
+from AvatarInputHandler.PostmortemDelay import PostmortemDelay
+from constants import POSTMORTEM_MODIFIERS
 from ProjectileMover import collideDynamicAndStatic
 from TriggersManager import TRIGGER_TYPE
 from Vehicle import Vehicle
@@ -241,8 +241,8 @@ class _GunControlMode(IControlMode):
     def onRecreateDevice(self):
         self._gunMarker.onRecreateDevice()
 
-    def updateShootingStatus(self, canShot):
-        self._canShot = canShot
+    def updateShootingStatus(self, canShoot):
+        self._canShot = canShoot
 
     def _handleShootCmd(self):
         player = BigWorld.player()
@@ -335,7 +335,7 @@ class VideoCameraControlMode(_GunControlMode):
                 self._cam.setViewMatrix(point.matrix)
                 return
 
-        raise AssertionError('Location with name %s not found'.format(name))
+        raise AssertionError('Location with name {} not found'.format(name))
 
     def handleMouseEvent(self, dx, dy, dz):
         self._cam.handleMouseEvent(dx, dy, dz)
@@ -1223,7 +1223,9 @@ class DualGunControlMode(MultiGunGunControlMode):
     def handleKeyEvent(self, isDown, key, mods, event=None):
         if self._aih.dualGunControl and self._aih.dualGunControl.handleKeyEvent(isDown, key, mods, event):
             return True
-        super(DualGunControlMode, self).handleKeyEvent(isDown, key, mods, event)
+        else:
+            super(DualGunControlMode, self).handleKeyEvent(isDown, key, mods, event)
+            return None
 
     def _onActiveGunsChanged(self, activeGuns, switchDelay):
         self._cam.aimingSystem.onActiveGunChanged(activeGuns[0], switchDelay)
@@ -1442,12 +1444,12 @@ class PostMortemControlMode(IControlMode, CallbackDelayer):
 
     def handleKeyEvent(self, isDown, key, mods, event=None):
         if self.__transitionCamera.isInTransition():
-            return
+            return None
         cmdMap = CommandMapping.g_instance
         guiCtrlEnabled = BigWorld.player().isForcedGuiControlMode()
         if BigWorld.isKeyDown(Keys.KEY_CAPSLOCK) and isDown and key == Keys.KEY_F3 and (self.__videoControlModeAvailable or self.guiSessionProvider.getCtx().isPlayerObserver()):
             if not self.__aih.isControlModeChangeAllowed():
-                return
+                return None
             self.__aih.onControlModeChanged(CTRL_MODE_NAME.VIDEO, prevModeName=CTRL_MODE_NAME.POSTMORTEM, camMatrix=self.__cam.camera.matrix, curVehicleID=self.__curVehicleID)
             return True
         if not guiCtrlEnabled and isDown:
@@ -1489,7 +1491,8 @@ class PostMortemControlMode(IControlMode, CallbackDelayer):
                 dz = -1.0
             self.__cam.update(dx, dy, dz, True, True, not dx == dy == dz == 0.0)
             return True
-        return False
+        else:
+            return False
 
     def handleMouseEvent(self, dx, dy, dz):
         if self.__transitionCamera.isInTransition():
@@ -1668,8 +1671,10 @@ class PostMortemControlMode(IControlMode, CallbackDelayer):
     def __finishCameraTransition(self):
         if self.__transitionCamera.isInTransition():
             return 0.1
-        BigWorld.camera(self.__cam.camera)
-        self.__aih.notifyCameraChanged()
+        else:
+            BigWorld.camera(self.__cam.camera)
+            self.__aih.notifyCameraChanged()
+            return None
 
     def __getValidVehicleID(self, vehicleID):
         return BigWorld.player().playerVehicleID if vehicleID is None or vehicleID == -1 else vehicleID

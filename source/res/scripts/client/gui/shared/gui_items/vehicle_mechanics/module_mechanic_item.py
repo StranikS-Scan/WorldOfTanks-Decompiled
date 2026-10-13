@@ -6,7 +6,7 @@ from gui.impl.gen.view_models.common.vehicle_mechanic_model import MechanicsEnum
 from gui.shared.gui_items.gui_item import GUIItem
 from gui.shared.gui_items.vehicle_mechanics.constants import VEHICLE_MECHANICS_GUI_MAP
 from gui.shared.utils.decorators import ReprInjector
-from vehicles.mechanics.mechanic_constants import VehicleMechanic
+from items.vehicle_mechanics_types import VehicleMechanicKey, VehicleMechanicKeys
 if typing.TYPE_CHECKING:
     VehicleModule = typing.TypeVar('VehicleModule')
 
@@ -37,49 +37,51 @@ class ModuleMechanicItem(GUIItem):
 
 
 class GunMechanicItem(ModuleMechanicItem):
-    _GUI_SUPPORTED_MECHANICS = {VehicleMechanic.AUTO_LOADER_GUN,
-     VehicleMechanic.AUTO_LOADER_GUN_BOOST,
-     VehicleMechanic.AUTO_SHOOT_GUN,
-     VehicleMechanic.DAMAGE_MUTABLE,
-     VehicleMechanic.DUAL_ACCURACY,
-     VehicleMechanic.DUAL_GUN,
-     VehicleMechanic.HEATING_ZONES_GUN,
-     VehicleMechanic.MAGAZINE_GUN,
-     VehicleMechanic.OVERHEAT_GUN,
-     VehicleMechanic.PROPELLANT_GUN,
-     VehicleMechanic.SHELL_PARAMS_SWITCHER,
-     VehicleMechanic.STUN,
-     VehicleMechanic.TWIN_GUN,
-     VehicleMechanic.LOW_CHARGE_SHOT}
-    _EXTRA_STATUSES = {VehicleMechanic.AUTO_LOADER_GUN,
-     VehicleMechanic.AUTO_LOADER_GUN_BOOST,
-     VehicleMechanic.AUTO_SHOOT_GUN,
-     VehicleMechanic.DAMAGE_MUTABLE,
-     VehicleMechanic.DUAL_ACCURACY,
-     VehicleMechanic.DUAL_GUN,
-     VehicleMechanic.HEATING_ZONES_GUN,
-     VehicleMechanic.MAGAZINE_GUN,
-     VehicleMechanic.OVERHEAT_GUN,
-     VehicleMechanic.PROPELLANT_GUN,
-     VehicleMechanic.SHELL_PARAMS_SWITCHER,
-     VehicleMechanic.TWIN_GUN,
-     VehicleMechanic.LOW_CHARGE_SHOT}
+    _GUI_SUPPORTED_MECHANICS = {VehicleMechanicKeys.AUTO_LOADER_GUN,
+     VehicleMechanicKeys.AUTO_LOADER_GUN_BOOST,
+     VehicleMechanicKeys.AUTO_SHOOT_GUN,
+     VehicleMechanicKeys.DAMAGE_MUTABLE,
+     VehicleMechanicKeys.DUAL_ACCURACY,
+     VehicleMechanicKeys.DUAL_GUN,
+     VehicleMechanicKeys.HEATING_ZONES_GUN,
+     VehicleMechanicKeys.LOW_CHARGE_SHOT,
+     VehicleMechanicKeys.MAGAZINE_GUN,
+     VehicleMechanicKeys.OVERHEAT_GUN,
+     VehicleMechanicKeys.PROPELLANT_GUN,
+     VehicleMechanicKeys.SHELL_PARAMS_SWITCHER,
+     VehicleMechanicKeys.STUN,
+     VehicleMechanicKeys.TWIN_GUN}
+    _EXTRA_STATUSES = {VehicleMechanicKeys.AUTO_LOADER_GUN,
+     VehicleMechanicKeys.AUTO_LOADER_GUN_BOOST,
+     VehicleMechanicKeys.AUTO_SHOOT_GUN,
+     VehicleMechanicKeys.DAMAGE_MUTABLE,
+     VehicleMechanicKeys.DUAL_ACCURACY,
+     VehicleMechanicKeys.DUAL_GUN,
+     VehicleMechanicKeys.HEATING_ZONES_GUN,
+     VehicleMechanicKeys.LOW_CHARGE_SHOT,
+     VehicleMechanicKeys.MAGAZINE_GUN,
+     VehicleMechanicKeys.OVERHEAT_GUN,
+     VehicleMechanicKeys.PROPELLANT_GUN,
+     VehicleMechanicKeys.SHELL_PARAMS_SWITCHER,
+     VehicleMechanicKeys.TWIN_GUN}
 
 
 class EngineMechanicItem(ModuleMechanicItem):
-    _GUI_SUPPORTED_MECHANICS = {VehicleMechanic.TURBOSHAFT_ENGINE,
-     VehicleMechanic.ROCKET_ACCELERATION,
-     VehicleMechanic.STAGED_JET_BOOSTERS,
-     VehicleMechanic.WHEELED_DASH}
-    _EXTRA_STATUSES = {VehicleMechanic.TURBOSHAFT_ENGINE,
-     VehicleMechanic.ROCKET_ACCELERATION,
-     VehicleMechanic.STAGED_JET_BOOSTERS,
-     VehicleMechanic.WHEELED_DASH}
+    _GUI_SUPPORTED_MECHANICS = {VehicleMechanicKeys.COMBAT_THROTTLE,
+     VehicleMechanicKeys.ROCKET_ACCELERATION,
+     VehicleMechanicKeys.STAGED_JET_BOOSTERS,
+     VehicleMechanicKeys.TURBOSHAFT_ENGINE,
+     VehicleMechanicKeys.WHEELED_DASH}
+    _EXTRA_STATUSES = {VehicleMechanicKeys.COMBAT_THROTTLE,
+     VehicleMechanicKeys.ROCKET_ACCELERATION,
+     VehicleMechanicKeys.STAGED_JET_BOOSTERS,
+     VehicleMechanicKeys.TURBOSHAFT_ENGINE,
+     VehicleMechanicKeys.WHEELED_DASH}
 
 
 class ChassisMechanicItem(ModuleMechanicItem):
-    _GUI_SUPPORTED_MECHANICS = {VehicleMechanic.HYDRAULIC_WHEELED_CHASSIS, VehicleMechanic.HYDRAULIC_CHASSIS, VehicleMechanic.TRACK_WITHIN_TRACK}
-    _EXTRA_STATUSES = {VehicleMechanic.HYDRAULIC_WHEELED_CHASSIS, VehicleMechanic.HYDRAULIC_CHASSIS, VehicleMechanic.TRACK_WITHIN_TRACK}
+    _GUI_SUPPORTED_MECHANICS = {VehicleMechanicKeys.HYDRAULIC_WHEELED_CHASSIS, VehicleMechanicKeys.HYDRAULIC_CHASSIS, VehicleMechanicKeys.TRACK_WITHIN_TRACK}
+    _EXTRA_STATUSES = {VehicleMechanicKeys.HYDRAULIC_WHEELED_CHASSIS, VehicleMechanicKeys.HYDRAULIC_CHASSIS, VehicleMechanicKeys.TRACK_WITHIN_TRACK}
 
     def getExtraStatuses(self, module):
-        return 'hydroAutoSiegeChassis' if self._mechanic == VehicleMechanic.HYDRAULIC_CHASSIS and module.hasAutoSiege() else super(ChassisMechanicItem, self).getExtraStatuses(module)
+        return 'hydroAutoSiegeChassis' if self._mechanic == VehicleMechanicKeys.HYDRAULIC_CHASSIS and module.hasAutoSiege() else super(ChassisMechanicItem, self).getExtraStatuses(module)

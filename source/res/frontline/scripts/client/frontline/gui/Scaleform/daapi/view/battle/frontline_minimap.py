@@ -1,7 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: frontline/scripts/client/frontline/gui/Scaleform/daapi/view/battle/frontline_minimap.py
+from __future__ import absolute_import, division
 import logging
 import os
+from future.utils import viewvalues
 import BigWorld
 import CommandMapping
 import GUI
@@ -25,6 +27,7 @@ from gui.battle_control import minimap_utils, avatar_getter
 from gui.battle_control.battle_constants import PROGRESS_CIRCLE_TYPE, SECTOR_STATE_ID, FEEDBACK_EVENT_ID
 from gui.shared.utils.key_mapping import getScaleformKey
 from helpers import dependency
+from math_common import decimal_round
 from messenger_common_chat2 import MESSENGER_ACTION_IDS as _ACTIONS
 from skeletons.account_helpers.settings_core import ISettingsCore
 _C_NAME = settings.CONTAINER_NAME
@@ -37,7 +40,7 @@ _EPIC_ICONS = settings.CONTAINER_NAME.ICONS
 _RESPAWN_VISUALIZATION_ENTRY_1 = 0
 _RESPAWN_VISUALIZATION_ENTRY_2 = 1
 _RESPAWN_VISUALIZATION_ENTRY_3 = 2
-_IS_COORDINATOR = bool(os.getenv('WOT_COORDINATOR', False))
+_IS_COORDINATOR = bool(os.getenv('WOT_COORDINATOR'))
 _FRONT_LINE_DEV_VISUALIZATION_SUPPORTED = IS_DEVELOPMENT
 _MINI_MINIMAP_HIGHLIGHT_PATH = '_level0.root.{}.main.minimap.mapShortcutLabel.sectorOverview.mmapAreaHighlight'.format(LAYER_NAMES.VIEWS)
 _MINI_MINIMAP_SIZE = 46
@@ -146,23 +149,23 @@ class FrontlineMinimapComponent(FrontlineMinimapMeta):
     def updateSectorStates(self, states):
         self.as_updateSectorStateStatsS(states)
 
-    def _setupPlugins(self, visitor):
-        setup = super(FrontlineMinimapComponent, self)._setupPlugins(visitor)
+    def _setupPlugins(self, arenaVisitor):
+        setup = super(FrontlineMinimapComponent, self)._setupPlugins(arenaVisitor)
         setup['settings'] = EpicGlobalSettingsPlugin
         setup['personal'] = CenteredPersonalEntriesPlugin
         setup['pinging'] = EpicMinimapPingPlugin
         if IS_DEVELOPMENT:
             setup['teleport'] = EpicTeleportPlugin
-        if visitor.hasSectors():
+        if arenaVisitor.hasSectors():
             setup['epic_bases'] = SectorBaseEntriesPlugin
             setup['epic_sector_overlay'] = SectorOverlayEntriesPlugin
-        if visitor.hasRespawns() and visitor.hasSectors():
+        if arenaVisitor.hasRespawns() and arenaVisitor.hasSectors():
             setup['epic_sectorstates'] = SectorStatusEntriesPlugin
             setup['protection_zones'] = ProtectionZoneEntriesPlugin
             setup['vehicles'] = RecoveringVehiclesPlugin
-        if visitor.hasDestructibleEntities():
+        if arenaVisitor.hasDestructibleEntities():
             setup['epic_hqs'] = HeadquartersStatusEntriesPlugin
-        if visitor.hasStepRepairPoints():
+        if arenaVisitor.hasStepRepairPoints():
             setup['repairs'] = StepRepairPointEntriesPlugin
         if _FRONT_LINE_DEV_VISUALIZATION_SUPPORTED:
             setup['epic_frontline'] = DevelopmentRespawnEntriesPlugin
@@ -188,7 +191,7 @@ class FrontlineMinimapComponent(FrontlineMinimapMeta):
         return max(d1, d2) / _METERS_IN_1X_ZOOM
 
     def __zoomText(self):
-        return str(round(self.__mode, 1)) + _ZOOM_MULTIPLIER_TEXT
+        return str(decimal_round(self.__mode, 1)) + _ZOOM_MULTIPLIER_TEXT
 
     def __calculateRangeScale(self, minScale, maxScale, current):
         if minScale == maxScale:
@@ -511,7 +514,7 @@ class SectorStatusEntriesPlugin(SimplePlugin):
             group = sectorComponent.sectorGroups[groupID]
             sectors.append(SECTOR_STATE_ID[group.state])
 
-        data = dict()
+        data = {}
         data['amount'] = len(sectorComponent.sectorGroups)
         data['sectors'] = sectors
         self.parentObj.updateSectorStates(data)
@@ -542,7 +545,7 @@ class HeadquartersStatusEntriesPlugin(SimplePlugin):
             destructibleComponent.onDestructibleEntityAdded += self.__onDestructibleEntityAdded
             destructibleComponent.onDestructibleEntityHealthChanged += self.__onDestructibleEntityHealthChanged
             hqs = destructibleComponent.destructibleEntities
-            for hq in (hq for _, hq in hqs.iteritems() if hq.destructibleEntityID != 0):
+            for hq in (hq for hq in viewvalues(hqs) if hq.destructibleEntityID != 0):
                 self.__onDestructibleEntityAdded(hq)
 
         else:
@@ -839,8 +842,7 @@ class SectorOverlayEntriesPlugin(SectorStatusEntriesPlugin):
         pass
 
     def __onOverlayTriggered(self, isActive):
-        for key in self._zonesDict:
-            entryID = self._zonesDict[key]
+        for entryID in viewvalues(self._zonesDict):
             self._setActive(entryID, isActive)
 
     def __onRespawnVisibility(self, visible):

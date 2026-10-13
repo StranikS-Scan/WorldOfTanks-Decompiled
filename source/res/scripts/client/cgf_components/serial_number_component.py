@@ -3,7 +3,8 @@
 from __future__ import absolute_import
 import CGF
 from functools import partial
-from GenericComponents import DecalComponent, EntityGOSync
+from GenericComponents import DecalComponent
+from EntitySync import EntityGOSync
 from cgf_script.registration import ComponentProperty, registerComponent
 from vehicle_systems.model_assembler import loadAppearancePrefab
 from typing import TYPE_CHECKING

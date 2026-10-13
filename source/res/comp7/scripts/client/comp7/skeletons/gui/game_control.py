@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: comp7/scripts/client/comp7/skeletons/gui/game_control.py
+from __future__ import absolute_import
 import typing
 from skeletons.gui.game_control import IGameController
 if typing.TYPE_CHECKING:
@@ -25,7 +26,7 @@ class IComp7ShopController(IGameController):
     def hasNewProducts(self, rank):
         raise NotImplementedError
 
-    def hasNewDiscounts(self, rank):
+    def hasNewDiscounts(self, newRank):
         raise NotImplementedError
 
     def validateCachedProducts(self):

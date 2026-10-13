@@ -1,7 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/avatar_components/VehiclesSpawnListStorage.py
+from __future__ import absolute_import
 import logging
-import cPickle
+from future.moves import pickle
 from Event import Event
 from VehiclesSpawnListStorageCommon import convertTuplesToVehicleSpawnData
 _logger = logging.getLogger(__name__)
@@ -22,5 +23,5 @@ class VehiclesSpawnListStorage(object):
         pass
 
     def updateSpawnList(self, spawnListData):
-        spawnList = convertTuplesToVehicleSpawnData(cPickle.loads(spawnListData))
+        spawnList = convertTuplesToVehicleSpawnData(pickle.loads(spawnListData))
         self.onSpawnListUpdated(spawnList)

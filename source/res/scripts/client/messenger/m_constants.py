@@ -1,5 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/m_constants.py
+from __future__ import absolute_import
+from future.utils import viewitems
 from collections import namedtuple
 from shared_utils import CONST_CONTAINER
 MESSENGER_XML_FILE = 'messenger'
@@ -32,7 +34,7 @@ class UserEntityScope(CONST_CONTAINER):
     BATTLE = 2
 
 
-PROTO_TYPE_NAMES = {v:k for k, v in PROTO_TYPE.__dict__.iteritems() if not k.startswith('_')}
+PROTO_TYPE_NAMES = {v:k for k, v in viewitems(PROTO_TYPE.__dict__) if not k.startswith('_')}
 
 class MESSENGER_COMMAND_TYPE(object):
     UNDEFINED = 0
@@ -123,7 +125,7 @@ class USER_ACTION_ID(object):
     UNDEFINED, FRIEND_ADDED, FRIEND_REMOVED, IGNORED_ADDED, IGNORED_REMOVED, TMP_IGNORED_ADDED, TMP_IGNORED_REMOVED, MUTE_SET, MUTE_UNSET, GROUPS_CHANGED, SUBSCRIPTION_CHANGED, NOTE_CHANGED = range(12)
 
 
-USER_ACTION_ID_NAMES = {v:k for k, v in USER_ACTION_ID.__dict__.iteritems() if not k.startswith('_')}
+USER_ACTION_ID_NAMES = {v:k for k, v in viewitems(USER_ACTION_ID.__dict__) if not k.startswith('_')}
 
 class USER_GUI_TYPE(object):
     CURRENT_PLAYER = 'himself'
@@ -142,13 +144,13 @@ class CLIENT_ERROR_ID(object):
     GENERIC, LOCKED, WRONG_ARGS, NOT_CONNECTED, NOT_SUPPORTED, DBID_INVALID, NAME_EMPTY, NAME_INVALID, COOLDOWN, WAITING_BEFORE_START = range(1, 11)
 
 
-CLIENT_ERROR_NAMES = {v:k for k, v in CLIENT_ERROR_ID.__dict__.iteritems() if not k.startswith('_')}
+CLIENT_ERROR_NAMES = {v:k for k, v in viewitems(CLIENT_ERROR_ID.__dict__) if not k.startswith('_')}
 
 class CLIENT_ACTION_ID(object):
     ADD_FRIEND, REMOVE_FRIEND, ADD_IGNORED, REMOVE_IGNORED, SET_MUTE, UNSET_MUTE, ADD_GROUP, CHANGE_GROUP, RQ_FRIENDSHIP, APPROVE_FRIENDSHIP, CANCEL_FRIENDSHIP, SET_NOTE, REMOVE_NOTE, SEND_MESSAGE, RQ_HISTORY, CREATE_USER_ROOM, JOIN_USER_ROOM, LEAVE_USER_ROOM, SEARCH_USER_ROOM, FIND_USERS_BY_PREFIX, JOIN_CLAN_ROOM = range(1, 22)
 
 
-CLIENT_ACTION_NAMES = {v:k for k, v in CLIENT_ACTION_ID.__dict__.iteritems() if not k.startswith('_')}
+CLIENT_ACTION_NAMES = {v:k for k, v in viewitems(CLIENT_ACTION_ID.__dict__) if not k.startswith('_')}
 
 class GAME_ONLINE_STATUS(object):
     UNDEFINED = 0

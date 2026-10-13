@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: comp7/scripts/client/comp7/gui/Scaleform/daapi/view/lobby/profile/seasons_manager.py
+from __future__ import absolute_import
 from comp7.gui.Scaleform.daapi.view.lobby.profile.comp7_profile_helper import getDropdownKeyBySeason, getSeasonName, COMP7_ARCHIVE_NAMES, COMP7_SEASON_NUMBERS, getDropdownKeyByArchiveName, isComp7Archive, getArchiveName
 from comp7.gui.shared.gui_items.dossier.stats import getComp7DossierStats
 from gui.Scaleform.daapi.view.lobby.profile.ProfileSection import BattleTypesDropDownItems

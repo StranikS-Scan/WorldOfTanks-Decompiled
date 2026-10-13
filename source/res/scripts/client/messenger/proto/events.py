@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/proto/events.py
+from __future__ import absolute_import
 import Event
 
 class _ChannelsSharedEvents(object):
@@ -50,12 +51,13 @@ class MemberEvents(object):
 
 
 class _VOIPSharedEvents(object):
-    __slots__ = ('__eventManager', 'onCredentialReceived', 'onChannelAvailable', 'onChannelLost', 'onChannelEntered', 'onChannelLeft', 'onVoiceChatInitSucceeded', 'onVoiceChatInitFailed', 'onPlayerSpeaking')
+    __slots__ = ('__eventManager', 'onCredentialReceived', 'onCredentialFailed', 'onChannelAvailable', 'onChannelLost', 'onChannelEntered', 'onChannelLeft', 'onVoiceChatInitSucceeded', 'onVoiceChatInitFailed', 'onPlayerSpeaking', 'onCaptureDeviceSetFailed')
 
     def __init__(self):
         super(_VOIPSharedEvents, self).__init__()
         self.__eventManager = Event.EventManager()
         self.onCredentialReceived = Event.Event()
+        self.onCredentialFailed = Event.Event(self.__eventManager)
         self.onChannelAvailable = Event.Event(self.__eventManager)
         self.onChannelLost = Event.Event(self.__eventManager)
         self.onChannelEntered = Event.Event(self.__eventManager)
@@ -63,6 +65,7 @@ class _VOIPSharedEvents(object):
         self.onVoiceChatInitSucceeded = Event.Event(self.__eventManager)
         self.onVoiceChatInitFailed = Event.Event(self.__eventManager)
         self.onPlayerSpeaking = Event.Event(self.__eventManager)
+        self.onCaptureDeviceSetFailed = Event.Event(self.__eventManager)
 
     def clear(self):
         self.__eventManager.clear()

@@ -1,8 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/account_helpers/optional_devices_assistant_config.py
+from __future__ import absolute_import
 import csv
 import typing
 from io import StringIO
+from past.builtins import unicode
 import ResMgr
 from constants import VEHICLE_CLASS_INDICES, ROLE_LABEL_TO_TYPE
 from renewable_subscription_common.optional_devices_usage_config import VehicleLoadout, EQUIPMENT_NAME_TO_GENERIC_OPTIONAL_DEVICE_MAP, _getVehicleTypeCompDescr, VehicleLevelClassRoleGroup
@@ -17,13 +19,13 @@ DEFAULT_ROLE = 'NotDefined'
 def readOptionalDevicesUsageConfig(fileName):
     config = {}
     section = ResMgr.openSection(fileName)
-    reader = csv.reader(StringIO(unicode(section.asString)), delimiter=';')
+    reader = csv.reader(StringIO(unicode(section.asString, 'utf-8')), delimiter=';')
     next(reader)
     for row in reader:
         if not row:
             continue
         if len(row) != 5:
-            raise SoftException('Wrong data in optional devices usage config. %s', row)
+            raise SoftException('Wrong data in optional devices usage config. %s' % row)
         loadouts = config.setdefault(_getVehicleTypeCompDescr(row[0]), [])
         devices = []
         for device in row[1:4]:
@@ -31,7 +33,7 @@ def readOptionalDevicesUsageConfig(fileName):
                 continue
             mappedDevice = EQUIPMENT_NAME_TO_GENERIC_OPTIONAL_DEVICE_MAP.get(device, None)
             if not mappedDevice:
-                raise SoftException('Cannot map device from optional devices usage config. Unknown device. %s', device)
+                raise SoftException('Cannot map device from optional devices usage config. Unknown device. %s' % device)
             devices.append(mappedDevice)
 
         percentage = float(row[4])

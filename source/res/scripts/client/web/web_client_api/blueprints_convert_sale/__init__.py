@@ -1,10 +1,14 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/web/web_client_api/blueprints_convert_sale/__init__.py
+from __future__ import absolute_import
+from future.utils import viewitems
+from past.builtins import basestring
 import BigWorld
 from gui.shared.gui_items.processors.blueprints_convert_sale import ProcessExchangeBlueprintsProcessor
 from nations import NAMES as NATION_NAMES
 from helpers import dependency
 from gui.server_events.bonuses import getNonQuestBonuses, VehicleBlueprintBonus
+from math_common import decimal_round
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
@@ -14,12 +18,12 @@ _BCS_ACTION_POSTFIX = '_BCS'
 
 def wrap(data):
     result = {}
-    for optionType, optionTypeItems in data.iteritems():
+    for optionType, optionTypeItems in viewitems(data):
         typeBonuses = {}
-        for optionID, optionItems in optionTypeItems.iteritems():
+        for optionID, optionItems in viewitems(optionTypeItems):
             optionItemsList = []
             items, limit = optionItems
-            for itemName, itemValue in items.iteritems():
+            for itemName, itemValue in viewitems(items):
                 optionItemsList.extend(getNonQuestBonuses(itemName, itemValue))
 
             typeBonuses[optionID] = {'items': optionItemsList,
@@ -50,10 +54,10 @@ class BlueprintsConvertSaleWebApi(object):
         config = self._lobbyContext.getServerSettings().getBlueprintsConvertSaleConfig()
         options = wrap(config.getOptions())
         categories = {}
-        for optType, optData in options.iteritems():
+        for optType, optData in viewitems(options):
             nations = set()
             limit = []
-            for _, optItem in optData.iteritems():
+            for _, optItem in viewitems(optData):
                 for item in optItem.get('items', []):
                     if isinstance(item, VehicleBlueprintBonus):
                         nations.add(item.getImageCategory())
@@ -76,7 +80,7 @@ class BlueprintsConvertSaleWebApi(object):
         limits = BigWorld.player().platformBlueprintsConvertSaleLimits
         category = options.get(cmd.category, {})
         result = []
-        for optionID, optionData in category.iteritems():
+        for optionID, optionData in viewitems(category):
             configLimit = optionData.get('limit', 0)
             if configLimit > 0:
                 if optionID in limits:
@@ -108,7 +112,7 @@ class BlueprintsConvertSaleWebApi(object):
         balance = [{'currency': 'intelligence',
           'balance': self._itemsCache.items.blueprints.getIntelligenceCount()}]
         fragments = self._itemsCache.items.blueprints.getAllNationalFragmentsData()
-        for nameID, value in fragments.iteritems():
+        for nameID, value in viewitems(fragments):
             balance.append({'currency': NATION_NAMES[nameID],
              'balance': value})
 
@@ -117,10 +121,10 @@ class BlueprintsConvertSaleWebApi(object):
     @w2c(W2CSchema, 'get_blueprint_exchange_end_time')
     def getExchangeEndTime(self, _):
         actions = self._eventsCache.getActions()
-        for aName, aData in actions.iteritems():
+        for aName, aData in viewitems(actions):
             actionName = aName.split('!')[0]
             if _BCS_ACTION_POSTFIX in actionName:
-                milliseconds = round(aData.getFinishTimeLeft(), 3) * 1000
+                milliseconds = decimal_round(aData.getFinishTimeLeft(), 3) * 1000
                 return int(milliseconds)
 
     @w2c(_ExchangeBlueprintSchema, 'blueprint_do_exchange')

@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: comp7_light/scripts/client/comp7_light/gui/impl/lobby/progression_quests_presenter.py
+from __future__ import absolute_import
 from comp7.gui.impl.lobby.comp7_helpers.comp7_bonus_packer import packQuestBonuses
 from comp7_light.gui.impl.gen.view_models.views.lobby.progression_quests_model import ProgressionQuestsModel
 from comp7_light.gui.impl.lobby.comp7_light_helpers.account_settings import getLastSeenQuestData, setLastSeenQuestData

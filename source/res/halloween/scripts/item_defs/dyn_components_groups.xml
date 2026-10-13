@@ -1,0 +1,5644 @@
+<dyn_components_groups.xml>
+  <HW_lootSoulsSmall>
+    <EntityMarkerComponent>
+      <server>
+        <style>	HW_SOUL	</style>
+      </server>
+    </EntityMarkerComponent>
+    <HWLootVisualComponent>
+      <client>
+        <sequences>
+          <item>
+            <sequence>	halloween/content/sequences/loot_souls_small.ssm	</sequence>
+          </item>
+        </sequences>
+      </client>
+    </HWLootVisualComponent>
+  </HW_lootSoulsSmall>
+  <HW_lootSoulsMedium>
+    <EntityMarkerComponent>
+      <server>
+        <style>	HW_SOUL	</style>
+      </server>
+    </EntityMarkerComponent>
+    <HWLootVisualComponent>
+      <client>
+        <sequences>
+          <item>
+            <sequence>	halloween/content/sequences/loot_souls_medium.ssm	</sequence>
+          </item>
+        </sequences>
+      </client>
+    </HWLootVisualComponent>
+  </HW_lootSoulsMedium>
+  <HW_lootSoulsBig>
+    <EntityMarkerComponent>
+      <server>
+        <style>	HW_SOUL	</style>
+      </server>
+    </EntityMarkerComponent>
+    <HWLootVisualComponent>
+      <client>
+        <sequences>
+          <item>
+            <sequence>	halloween/content/sequences/loot_souls_big.ssm	</sequence>
+          </item>
+        </sequences>
+      </client>
+    </HWLootVisualComponent>
+  </HW_lootSoulsBig>
+  <HW_lootShells>
+    <EntityMarkerComponent>
+      <server>
+        <style>	HW_SHELL	</style>
+      </server>
+    </EntityMarkerComponent>
+    <HWLootVisualComponent>
+      <client>
+        <sequences>
+          <item>
+            <sequence>	halloween/content/sequences/loot_shells.ssm	</sequence>
+          </item>
+        </sequences>
+      </client>
+    </HWLootVisualComponent>
+  </HW_lootShells>
+  <HW_lootHangarItem>
+    <EntityMarkerComponent>
+      <server>
+        <style>	HW_SHELL	</style>
+      </server>
+    </EntityMarkerComponent>
+    <HWLootVisualComponent>
+      <client>
+        <sequences>
+          <item>
+            <sequence>	halloween/content/sequences/loot_shells.ssm	</sequence>
+          </item>
+        </sequences>
+      </client>
+    </HWLootVisualComponent>
+  </HW_lootHangarItem>
+  <HW_hexapod_G00_Spider_Boss_HW26_bot>
+    <HWBuffPrefabComponent>
+      <server>
+        <prefab>	halloween/content/CGFPrefabs/Hexapod/G00_Spider_Boss_HW26_bot.prefab	</prefab>
+        <offset>	0 0 0	</offset>
+        <scale>	1.0 1.0 1.0	</scale>
+      </server>
+      <client>
+        <prefab>	halloween/content/CGFPrefabs/Hexapod/G00_Spider_Boss_HW26_bot.prefab	</prefab>
+        <offset>	0 0 0	</offset>
+        <scale>	1.0 1.0 1.0	</scale>
+      </client>
+    </HWBuffPrefabComponent>
+  </HW_hexapod_G00_Spider_Boss_HW26_bot>
+  <HW_nitro>
+    <HWBuffAddDynGroupComponent>
+      <server>
+        <groupName>	HW_nitro_{vehName}	</groupName>
+        <removeOnDestroy>	True	</removeOnDestroy>
+      </server>
+    </HWBuffAddDynGroupComponent>
+    <HWBuffFactorsComponent>
+      <server>
+        <factors>
+          <item>
+            <key>	ramming	</key>
+            <add>	0.3	</add>
+          </item>
+        </factors>
+      </server>
+    </HWBuffFactorsComponent>
+    <HWBuffRepairComponent>
+      <server>
+        <healDevices>	engine	</healDevices>
+      </server>
+    </HWBuffRepairComponent>
+    <HWBuffDamageResistsComponent>
+      <server>
+        <resistReason>	NITRO	</resistReason>
+        <resists>
+          <item>
+            <target>	ENGINE	</target>
+            <attackReason>	ALL	</attackReason>
+            <value>	1.0	</value>
+          </item>
+        </resists>
+      </server>
+    </HWBuffDamageResistsComponent>
+    <HWBuffNitroComponent>
+      <client>
+        <nitro>	2	</nitro>
+      </client>
+    </HWBuffNitroComponent>
+    <HWBuffSoundComponent>
+      <client>
+        <soundEvents>
+          <item>
+            <activationSound3D>	ev_hw_gp_ability_nitro_activation	</activationSound3D>
+            <deactivationSound3D>	ev_hw_gp_ability_nitro_deactivation	</deactivationSound3D>
+            <playTo>	self	</playTo>
+          </item>
+          <item>
+            <activationSound3D>	ev_hw_gp_ability_nitro_activation_npc	</activationSound3D>
+            <deactivationSound3D>	ev_hw_gp_ability_nitro_deactivation_npc	</deactivationSound3D>
+            <playTo>	others	</playTo>
+          </item>
+        </soundEvents>
+      </client>
+    </HWBuffSoundComponent>
+  </HW_nitro>
+  <HW_nitro_GB24_Centurion_Mk3_Halloween_event>
+    <HWBuffFactorsComponent>
+      <server>
+        <factors>
+          <item>
+            <key>	vehicle/maxSpeed	</key>
+            <add>	0.4	</add>
+          </item>
+          <item>
+            <key>	engine/power	</key>
+            <add>	15.0	</add>
+          </item>
+          <item>
+            <key>	chassis/terrainResistance	</key>
+            <add>	[14.0, 14.0, 14.0]	</add>
+          </item>
+        </factors>
+      </server>
+    </HWBuffFactorsComponent>
+  </HW_nitro_GB24_Centurion_Mk3_Halloween_event>
+  <HW_nitro_F17_AMX_13_90_Halloween_event>
+    <HWBuffFactorsComponent>
+      <server>
+        <factors>
+          <item>
+            <key>	vehicle/maxSpeed	</key>
+            <add>	0.4	</add>
+          </item>
+          <item>
+            <key>	engine/power	</key>
+            <add>	14.0	</add>
+          </item>
+          <item>
+            <key>	chassis/terrainResistance	</key>
+            <add>	[18.0, 18.0, 18.0]	</add>
+          </item>
+        </factors>
+      </server>
+    </HWBuffFactorsComponent>
+  </HW_nitro_F17_AMX_13_90_Halloween_event>
+  <HW_nitro_R171_IS_3_II_hw21>
+    <HWBuffFactorsComponent>
+      <server>
+        <factors>
+          <item>
+            <key>	vehicle/maxSpeed	</key>
+            <add>	0.6	</add>
+          </item>
+          <item>
+            <key>	engine/power	</key>
+            <add>	24.0	</add>
+          </item>
+          <item>
+            <key>	chassis/terrainResistance	</key>
+            <add>	[16.0, 16.0, 16.0]	</add>
+          </item>
+        </factors>
+      </server>
+    </HWBuffFactorsComponent>
+  </HW_nitro_R171_IS_3_II_hw21>
+  <HW_nitro_A100_T49_Halloween_event>
+    <HWBuffFactorsComponent>
+      <server>
+        <factors>
+          <item>
+            <key>	vehicle/maxSpeed	</key>
+            <add>	0.4	</add>
+          </item>
+          <item>
+            <key>	engine/power	</key>
+            <add>	11.5	</add>
+          </item>
+          <item>
+            <key>	chassis/terrainResistance	</key>
+            <add>	[14.0, 14.0, 14.0]	</add>
+          </item>
+        </factors>
+      </server>
+    </HWBuffFactorsComponent>
+  </HW_nitro_A100_T49_Halloween_event>
+  <HW_nitro_R40_T-54_Halloween_event>
+    <HWBuffFactorsComponent>
+      <server>
+        <factors>
+          <item>
+            <key>	vehicle/maxSpeed	</key>
+            <add>	0.42	</add>
+          </item>
+          <item>
+            <key>	engine/power	</key>
+            <add>	12.0	</add>
+          </item>
+          <item>
+            <key>	chassis/terrainResistance	</key>
+            <add>	[11.0, 11.0, 11.0]	</add>
+          </item>
+        </factors>
+      </server>
+    </HWBuffFactorsComponent>
+  </HW_nitro_R40_T-54_Halloween_event>
+  <HW_nitro_It19_Progetto_C50_mod_66_hw21>
+    <HWBuffFactorsComponent>
+      <server>
+        <factors>
+          <item>
+            <key>	vehicle/maxSpeed	</key>
+            <add>	0.45	</add>
+          </item>
+          <item>
+            <key>	engine/power	</key>
+            <add>	24.0	</add>
+          </item>
+          <item>
+            <key>	chassis/terrainResistance	</key>
+            <add>	[12.0, 12.0, 12.0]	</add>
+          </item>
+        </factors>
+      </server>
+    </HWBuffFactorsComponent>
+  </HW_nitro_It19_Progetto_C50_mod_66_hw21>
+  <HW_nitro_GB123_GSOR_1006_v7_Halloween_event>
+    <HWBuffFactorsComponent>
+      <server>
+        <factors>
+          <item>
+            <key>	vehicle/maxSpeed	</key>
+            <add>	0.4	</add>
+          </item>
+          <item>
+            <key>	engine/power	</key>
+            <add>	15.0	</add>
+          </item>
+          <item>
+            <key>	chassis/terrainResistance	</key>
+            <add>	[14.0, 14.0, 14.0]	</add>
+          </item>
+        </factors>
+      </server>
+    </HWBuffFactorsComponent>
+  </HW_nitro_GB123_GSOR_1006_v7_Halloween_event>
+  <HW_healVehicle>
+    <HWBuffRepairComponent>
+      <server>
+        <healAmount>	250	</healAmount>
+        <healFactor>	0	</healFactor>
+        <stopFire>	true	</stopFire>
+        <removeStun>	true	</removeStun>
+        <healCrew>	true	</healCrew>
+        <healDevices>	all	</healDevices>
+      </server>
+    </HWBuffRepairComponent>
+    <HWBuffPeriodicHealComponent>
+      <server>
+        <healAmount>	20	</healAmount>
+        <healFactor>	0	</healFactor>
+        <timeCycle>	1	</timeCycle>
+      </server>
+    </HWBuffPeriodicHealComponent>
+    <HWBuffSequencesComponent>
+      <client>
+        <sequences>
+          <item>
+            <sequence>	particles/eff_sequence/halloween/healing_tank_sparks.seq	</sequence>
+            <bindNode>	HP_effect	</bindNode>
+          </item>
+        </sequences>
+      </client>
+    </HWBuffSequencesComponent>
+  </HW_healVehicle>
+  <HW_alphaCharger>
+    <HWBuffInterruptibleComponent>
+      <server>
+        <events>	onDeath	</events>
+      </server>
+    </HWBuffInterruptibleComponent>
+    <HWBuffFactorsComponent>
+      <server>
+        <factors>
+          <item>
+            <key>	vehicle/maxSpeed	</key>
+            <add>	0.45	</add>
+          </item>
+          <item>
+            <key>	engine/power	</key>
+            <add>	16.0	</add>
+          </item>
+          <item>
+            <key>	chassis/terrainResistance	</key>
+            <add>	[16.0, 16.0, 16.0]	</add>
+          </item>
+          <item>
+            <key>	ramming	</key>
+            <add>	0.3	</add>
+          </item>
+        </factors>
+      </server>
+    </HWBuffFactorsComponent>
+    <HWBuffRepairComponent>
+      <server>
+        <healDevices>	engine	</healDevices>
+      </server>
+    </HWBuffRepairComponent>
+    <HWBuffDamageResistsComponent>
+      <server>
+        <resistReason>	NITRO	</resistReason>
+        <resists>
+          <item>
+            <target>	ENGINE	</target>
+            <attackReason>	ALL	</attackReason>
+            <value>	1.0	</value>
+          </item>
+        </resists>
+      </server>
+    </HWBuffDamageResistsComponent>
+    <HWBuffNitroComponent>
+      <client>
+        <nitro>	2	</nitro>
+      </client>
+    </HWBuffNitroComponent>
+    <HWBuffSequencesComponent>
+      <client>
+        <sequences>
+          <item>
+            <sequence>	particles/eff_sequence/halloween/enemies/R171_IS_3_II_HW_BOT_charge.seq	</sequence>
+            <bindNode>	hull	</bindNode>
+          </item>
+        </sequences>
+      </client>
+    </HWBuffSequencesComponent>
+  </HW_alphaCharger>
+  <HW_healVehicleBeforeNextPhase>
+    <HWBuffRepairComponent>
+      <server>
+        <healAmount>	0	</healAmount>
+        <healFactor>	1.0	</healFactor>
+        <stopFire>	true	</stopFire>
+        <healCrew>	true	</healCrew>
+        <removeStun>	true	</removeStun>
+        <healDevices>	all	</healDevices>
+        <replenishEquipments>	true	</replenishEquipments>
+      </server>
+    </HWBuffRepairComponent>
+    <HWBuffAddDynGroupComponent>
+      <server>
+        <groupName>	HW_stunResistBeforeNextPhase	</groupName>
+        <removeOnDestroy>	False	</removeOnDestroy>
+        <replaceExisting>	True	</replaceExisting>
+        <duration>	3.0	</duration>
+      </server>
+    </HWBuffAddDynGroupComponent>
+  </HW_healVehicleBeforeNextPhase>
+  <HW_stunResistBeforeNextPhase>
+    <HWBuffFactorsComponent>
+      <server>
+        <factors>
+          <item>
+            <key>	stunResistanceEffect	</key>
+            <max>	1.0	</max>
+          </item>
+        </factors>
+      </server>
+    </HWBuffFactorsComponent>
+  </HW_stunResistBeforeNextPhase>
+  <HW_deathZoneFullResist>
+    <HWBuffDamageResistsComponent>
+      <server>
+        <resistReason>	BOSS_DAMAGE_SHIELD	</resistReason>
+        <resists>
+          <item>
+            <target>	ALL	</target>
+            <attackReason>	STATIC_DEATH_ZONE	</attackReason>
+            <value>	1.0	</value>
+          </item>
+        </resists>
+      </server>
+    </HWBuffDamageResistsComponent>
+  </HW_deathZoneFullResist>
+  <HW_bossRamResist>
+    <HWBuffDamageResistsComponent>
+      <server>
+        <resistReason>	BOSS_DAMAGE_SHIELD	</resistReason>
+        <resists>
+          <item>
+            <target>	ALL	</target>
+            <attackReason>	RAM	</attackReason>
+            <value>	1.0	</value>
+          </item>
+        </resists>
+      </server>
+    </HWBuffDamageResistsComponent>
+  </HW_bossRamResist>
+  <HW_bossAOEResists>
+    <HWBuffFactorsComponent>
+      <server>
+        <factors>
+          <item>
+            <key>	stunResistanceEffect	</key>
+            <max>	1.0	</max>
+          </item>
+        </factors>
+      </server>
+    </HWBuffFactorsComponent>
+    <HWBuffDamageResistsComponent>
+      <server>
+        <resistReason>	BOSS_DAMAGE_SHIELD	</resistReason>
+        <resists>
+          <item>
+            <target>	ALL	</target>
+            <attackReason>	HALLOWEEN_SHOT_AOE_STUN	</attackReason>
+            <value>	0.5	</value>
+          </item>
+          <item>
+            <target>	ALL	</target>
+            <attackReason>	HALLOWEEN_SHOT_AOE_DAMAGE	</attackReason>
+            <value>	0.5	</value>
+          </item>
+          <item>
+            <target>	ALL	</target>
+            <attackReason>	HALLOWEEN_SHOT_AOE_DRAIN_ENEMY_HP	</attackReason>
+            <value>	0.5	</value>
+          </item>
+        </resists>
+      </server>
+    </HWBuffDamageResistsComponent>
+  </HW_bossAOEResists>
+  <HW_ignitePlayerVehiclesInRadius>
+    <HWBuffSequencesComponent>
+      <client>
+        <sequences>
+          <item>
+            <sequence>	particles/eff_sequence/halloween/ability_fire.seq	</sequence>
+            <bindNode>	hull	</bindNode>
+            <loopCount>	1	</loopCount>
+            <visibleTo>	all	</visibleTo>
+          </item>
+        </sequences>
+      </client>
+    </HWBuffSequencesComponent>
+    <HWBuffRadiusAoEComponent>
+      <server>
+        <radius>	25	</radius>
+        <team>	1	</team>
+        <maxVehicles>	10	</maxVehicles>
+        <buffName>	HW_igniteVehicle	</buffName>
+        <duration>	0.1	</duration>
+      </server>
+    </HWBuffRadiusAoEComponent>
+    <HWBuffSoundComponent>
+      <client>
+        <soundEvents>
+          <item>
+            <activationSound3D>	ev_hw_gp_bot_hexapod_flame_ring	</activationSound3D>
+            <playTo>	all	</playTo>
+          </item>
+        </soundEvents>
+      </client>
+    </HWBuffSoundComponent>
+  </HW_ignitePlayerVehiclesInRadius>
+  <HW_igniteVehicle>
+    <HWBuffIgniteVehicleComponent>
+      <server>
+        <time>	5	</time>
+        <damagePerSecond>	100	</damagePerSecond>
+        <maxHealthDamageFactorPerSecond>	0.0	</maxHealthDamageFactorPerSecond>
+        <attackReason>	HALLOWEEN_ABILITY_IGNITE	</attackReason>
+      </server>
+    </HWBuffIgniteVehicleComponent>
+  </HW_igniteVehicle>
+  <HW_drainPlayerHpInRadius>
+    <HWBuffSequencesComponent>
+      <client>
+        <sequences>
+          <item>
+            <sequence>	particles/eff_sequence/halloween/ability_vampiric.seq	</sequence>
+            <bindNode>	hull	</bindNode>
+            <loopCount>	1	</loopCount>
+            <visibleTo>	all	</visibleTo>
+          </item>
+        </sequences>
+      </client>
+    </HWBuffSequencesComponent>
+    <HWBuffRadiusAoEComponent>
+      <server>
+        <radius>	25	</radius>
+        <team>	1	</team>
+        <maxVehicles>	10	</maxVehicles>
+        <buffName>	HW_drainHealth	</buffName>
+        <duration>	0.1	</duration>
+      </server>
+    </HWBuffRadiusAoEComponent>
+  </HW_drainPlayerHpInRadius>
+  <HW_drainHealth>
+    <HWBuffDrainHealthComponent>
+      <server>
+        <damage>	150	</damage>
+        <maxHealthDamageFactor>	0.0	</maxHealthDamageFactor>
+        <healAmount>	0	</healAmount>
+        <healFactor>	0.0	</healFactor>
+        <damageHealFactor>	1.0	</damageHealFactor>
+        <stopFire>	true	</stopFire>
+        <repairReason>	REPAIR_BY_AOE_ABILITY_VAMPIRE	</repairReason>
+        <attackReason>	HALLOWEEN_ABILITY_VAMPIRE	</attackReason>
+      </server>
+    </HWBuffDrainHealthComponent>
+  </HW_drainHealth>
+  <HW_damagePlayerInRadius>
+    <HWBuffRadiusAoEComponent>
+      <server>
+        <radius>	25	</radius>
+        <team>	1	</team>
+        <maxVehicles>	10	</maxVehicles>
+        <buffName>	HW_damageVehicle	</buffName>
+        <duration>	0.1	</duration>
+      </server>
+    </HWBuffRadiusAoEComponent>
+    <HWBuffSequencesComponent>
+      <client>
+        <sequences>
+          <item>
+            <sequence>	particles/eff_sequence/halloween/ability_damage.seq	</sequence>
+            <bindNode>	hull	</bindNode>
+            <loopCount>	1	</loopCount>
+            <visibleTo>	all	</visibleTo>
+          </item>
+        </sequences>
+      </client>
+    </HWBuffSequencesComponent>
+  </HW_damagePlayerInRadius>
+  <HW_damageVehicle>
+    <HWBuffDamageVehicleComponent>
+      <server>
+        <damage>	300	</damage>
+      </server>
+    </HWBuffDamageVehicleComponent>
+  </HW_damageVehicle>
+  <HW_instantReload>
+    <HWBuffRepairComponent>
+      <server>
+        <reloadGun>	true	</reloadGun>
+      </server>
+    </HWBuffRepairComponent>
+    <HWBuffSoundComponent>
+      <client>
+        <soundEvents>
+          <item>
+            <activationSound2D>	ev_hw_gp_ability_instant_reload	</activationSound2D>
+            <playTo>	self	</playTo>
+          </item>
+        </soundEvents>
+      </client>
+    </HWBuffSoundComponent>
+  </HW_instantReload>
+  <HW_fastReload>
+    <HWBuffAddDynGroupComponent>
+      <server>
+        <groupName>	HW_fastReload_{vehName}	</groupName>
+        <removeOnDestroy>	True	</removeOnDestroy>
+      </server>
+    </HWBuffAddDynGroupComponent>
+    <HWBuffSoundComponent>
+      <client>
+        <soundEvents>
+          <item>
+            <activationSound2D>	ev_hw_gp_ability_adrenalin_reload	</activationSound2D>
+            <playTo>	self	</playTo>
+          </item>
+        </soundEvents>
+      </client>
+    </HWBuffSoundComponent>
+  </HW_fastReload>
+  <HW_fastReload_F17_AMX_13_90_Halloween_event>
+    <HWBuffFactorsComponent>
+      <server>
+        <factors>
+          <item>
+            <key>	gun/reloadTime	</key>
+            <add>	-0.2	</add>
+            <max>	0.5	</max>
+          </item>
+          <item>
+            <key>	gun/clipTimeBetweenShots	</key>
+            <add>	-0.15	</add>
+            <max>	0.25	</max>
+          </item>
+        </factors>
+      </server>
+    </HWBuffFactorsComponent>
+    <HWBuffSequencesComponent>
+      <client>
+        <sequences>
+          <item>
+            <sequence>	particles/eff_sequence/halloween/ability_fast_reload_gun_F17_AMX_13_90_hw23.seq	</sequence>
+            <bindNode>	Gun	</bindNode>
+            <sniperModeVisibleTo>	others	</sniperModeVisibleTo>
+          </item>
+        </sequences>
+      </client>
+    </HWBuffSequencesComponent>
+  </HW_fastReload_F17_AMX_13_90_Halloween_event>
+  <HW_fastReload_GB24_Centurion_Mk3_Halloween_event>
+    <HWBuffFactorsComponent>
+      <server>
+        <factors>
+          <item>
+            <key>	gun/reloadTime	</key>
+            <add>	-0.77	</add>
+            <max>	0.23	</max>
+          </item>
+        </factors>
+      </server>
+    </HWBuffFactorsComponent>
+    <HWBuffSequencesComponent>
+      <client>
+        <sequences>
+          <item>
+            <sequence>	particles/eff_sequence/halloween/ability_fast_reload_gun_GB24_Centurion_Mk3_hw20.seq	</sequence>
+            <bindNode>	Gun	</bindNode>
+            <sniperModeVisibleTo>	others	</sniperModeVisibleTo>
+          </item>
+        </sequences>
+      </client>
+    </HWBuffSequencesComponent>
+  </HW_fastReload_GB24_Centurion_Mk3_Halloween_event>
+  <HW_fastReload_R171_IS_3_II_hw21>
+    <HWBuffFactorsComponent>
+      <server>
+        <factors>
+          <item>
+            <key>	gun/reloadTime	</key>
+            <add>	-0.2	</add>
+            <max>	0.8	</max>
+          </item>
+        </factors>
+      </server>
+    </HWBuffFactorsComponent>
+    <HWBuffSequencesComponent>
+      <client>
+        <sequences>
+          <item>
+            <sequence>	particles/eff_sequence/halloween/ability_fast_reload_gun_R171_IS_3_II_hw21.seq	</sequence>
+            <bindNode>	Gun	</bindNode>
+            <sniperModeVisibleTo>	others	</sniperModeVisibleTo>
+          </item>
+        </sequences>
+      </client>
+    </HWBuffSequencesComponent>
+  </HW_fastReload_R171_IS_3_II_hw21>
+  <HW_fastReload_A100_T49_Halloween_event>
+    <HWBuffFactorsComponent>
+      <server>
+        <factors>
+          <item>
+            <key>	gun/reloadTime	</key>
+            <add>	-0.2	</add>
+            <max>	0.5	</max>
+          </item>
+          <item>
+            <key>	gun/clipTimeBetweenShots	</key>
+            <add>	-0.15	</add>
+            <max>	0.25	</max>
+          </item>
+        </factors>
+      </server>
+    </HWBuffFactorsComponent>
+    <HWBuffSequencesComponent>
+      <client>
+        <sequences>
+          <item>
+            <sequence>	particles/eff_sequence/halloween/ability_fast_reload_gun_A100_T49_hw23.seq	</sequence>
+            <bindNode>	Gun	</bindNode>
+            <sniperModeVisibleTo>	others	</sniperModeVisibleTo>
+          </item>
+        </sequences>
+      </client>
+    </HWBuffSequencesComponent>
+  </HW_fastReload_A100_T49_Halloween_event>
+  <HW_fastReload_R40_T-54_Halloween_event>
+    <HWBuffFactorsComponent>
+      <server>
+        <factors>
+          <item>
+            <key>	gun/reloadTime	</key>
+            <add>	-0.85	</add>
+            <max>	0.15	</max>
+          </item>
+        </factors>
+      </server>
+    </HWBuffFactorsComponent>
+    <HWBuffSequencesComponent>
+      <client>
+        <sequences>
+          <item>
+            <sequence>	particles/eff_sequence/halloween/ability_fast_reload_gun_R40_T-54_hw23.seq	</sequence>
+            <bindNode>	Gun	</bindNode>
+            <sniperModeVisibleTo>	others	</sniperModeVisibleTo>
+          </item>
+        </sequences>
+      </client>
+    </HWBuffSequencesComponent>
+  </HW_fastReload_R40_T-54_Halloween_event>
+  <HW_fastReload_It19_Progetto_C50_mod_66_hw21>
+    <HWBuffFactorsComponent>
+      <server>
+        <factors>
+          <item>
+            <key>	gun/reloadTime	</key>
+            <add>	-0.2	</add>
+            <max>	0.8	</max>
+          </item>
+          <item>
+            <key>	gun/clipTimeBetweenShots	</key>
+            <add>	-0.15	</add>
+            <max>	0.25	</max>
+          </item>
+        </factors>
+      </server>
+    </HWBuffFactorsComponent>
+    <HWBuffSequencesComponent>
+      <client>
+        <sequences>
+          <item>
+            <sequence>	particles/eff_sequence/halloween/ability_fast_reload_gun_It19_Progetto_C50_mod_66_hw23.seq	</sequence>
+            <bindNode>	Gun	</bindNode>
+            <sniperModeVisibleTo>	others	</sniperModeVisibleTo>
+          </item>
+        </sequences>
+      </client>
+    </HWBuffSequencesComponent>
+  </HW_fastReload_It19_Progetto_C50_mod_66_hw21>
+  <HW_fastReload_GB123_GSOR_1006_v7_Halloween_event>
+    <HWBuffFactorsComponent>
+      <server>
+        <factors>
+          <item>
+            <key>	gun/reloadTime	</key>
+            <add>	-0.2	</add>
+            <max>	0.5	</max>
+          </item>
+        </factors>
+      </server>
+    </HWBuffFactorsComponent>
+    <HWBuffSequencesComponent>
+      <client>
+        <sequences>
+          <item>
+            <sequence>	particles/eff_sequence/halloween/ability_fast_reload_gun_F17_AMX_13_90_hw23.seq	</sequence>
+            <bindNode>	Gun	</bindNode>
+            <sniperModeVisibleTo>	others	</sniperModeVisibleTo>
+          </item>
+        </sequences>
+      </client>
+    </HWBuffSequencesComponent>
+  </HW_fastReload_GB123_GSOR_1006_v7_Halloween_event>
+  <HW_healTeamVehiclesFX>
+    <HWBuffInterruptibleComponent>
+      <server>
+        <events>	onDeath	</events>
+      </server>
+    </HWBuffInterruptibleComponent>
+    <HWBuffSequencesComponent>
+      <client>
+        <sequences>
+          <item>
+            <sequence>	particles/eff_sequence/halloween/our_tank_demolitiy/tank_bubble_healing_all.seq	</sequence>
+            <bindNode>	hull	</bindNode>
+            <loopCount>	1	</loopCount>
+            <visibleTo>	all	</visibleTo>
+          </item>
+        </sequences>
+      </client>
+    </HWBuffSequencesComponent>
+  </HW_healTeamVehiclesFX>
+  <HW_healTeamVehicles>
+    <HWBuffAddDynGroupComponent>
+      <server>
+        <groupName>	HW_healTeamVehiclesFX	</groupName>
+        <duration>	1.1	</duration>
+        <removeOnDestroy>	False	</removeOnDestroy>
+        <replaceExisting>	True	</replaceExisting>
+      </server>
+    </HWBuffAddDynGroupComponent>
+    <HWBuffAddDynGroupComponent>
+      <server>
+        <groupName>	HW_healOther	</groupName>
+        <removeOnDestroy>	True	</removeOnDestroy>
+      </server>
+    </HWBuffAddDynGroupComponent>
+    <HWBuffRadiusAoEComponent>
+      <server>
+        <radius>	50	</radius>
+        <team>	1	</team>
+        <maxVehicles>	10	</maxVehicles>
+        <buffName>	HW_healOther	</buffName>
+        <duration>	0.1	</duration>
+      </server>
+    </HWBuffRadiusAoEComponent>
+  </HW_healTeamVehicles>
+  <HW_healOther>
+    <HWBuffSequencesComponent>
+      <client>
+        <sequences>
+          <item>
+            <sequence>	particles/eff_sequence/halloween/healing_tank_sparks.seq	</sequence>
+            <bindNode>	HP_effect	</bindNode>
+          </item>
+        </sequences>
+      </client>
+    </HWBuffSequencesComponent>
+    <HWBuffRepairComponent>
+      <server>
+        <healAmount>	500	</healAmount>
+        <stopFire>	true	</stopFire>
+        <removeStun>	true	</removeStun>
+        <healCrew>	true	</healCrew>
+        <healDevices>	all	</healDevices>
+        <repairReason>	REPAIR_BY_AOE_TEAM_REPAIR_KIT	</repairReason>
+      </server>
+    </HWBuffRepairComponent>
+  </HW_healOther>
+  <HW_damageShield>
+    <HWBuffVehicleKillsCounterComponent>
+      <server>
+        <key>	DAMAGE_SHIELD	</key>
+        <roleTags>	hwrole_bomber hwrole_bomber_alpha	</roleTags>
+      </server>
+    </HWBuffVehicleKillsCounterComponent>
+    <HWBuffFactorsComponent>
+      <server>
+        <factors>
+          <item>
+            <key>	stunResistanceEffect	</key>
+            <max>	1.0	</max>
+          </item>
+        </factors>
+      </server>
+    </HWBuffFactorsComponent>
+    <HWBuffDamageResistsComponent>
+      <server>
+        <resistReason>	DAMAGE_SHIELD	</resistReason>
+        <resists>
+          <item>
+            <target>	ALL	</target>
+            <attackReason>	ALL	</attackReason>
+            <value>	1.0	</value>
+          </item>
+          <item>
+            <target>	ALL	</target>
+            <attackReason>	RAM	</attackReason>
+            <value>	-1.0	</value>
+          </item>
+          <item>
+            <target>	ALL	</target>
+            <attackReason>	DROWNING	</attackReason>
+            <value>	-1.0	</value>
+          </item>
+          <item>
+            <target>	ALL	</target>
+            <attackReason>	WORLD_COLLISION	</attackReason>
+            <value>	-1.0	</value>
+          </item>
+          <item>
+            <target>	ALL	</target>
+            <attackReason>	HALLOWEEN_PHASE_TIMER	</attackReason>
+            <value>	-1.0	</value>
+          </item>
+          <item>
+            <target>	ALL	</target>
+            <attackReason>	HALLOWEEN_DEATH_PIT	</attackReason>
+            <value>	-1.0	</value>
+          </item>
+        </resists>
+      </server>
+    </HWBuffDamageResistsComponent>
+    <HWBuffSoulsDrainResistComponent>
+      <server>
+        <resists>	BOSS_AURA	</resists>
+      </server>
+    </HWBuffSoulsDrainResistComponent>
+    <HWBuffSequencesComponent>
+      <client>
+        <sequences>
+          <item>
+            <sequence>	particles/eff_sequence/halloween/our_tank_demolitiy/tank_bubble_defense.seq	</sequence>
+            <bindNode>	hull	</bindNode>
+          </item>
+        </sequences>
+      </client>
+    </HWBuffSequencesComponent>
+    <HWBuffSoundComponent>
+      <client>
+        <soundEvents>
+          <item>
+            <activationSound3D>	ev_hw_gp_ability_shield_activation	</activationSound3D>
+            <deactivationSound3D>	ev_hw_gp_ability_shield_deactivation	</deactivationSound3D>
+            <playTo>	self	</playTo>
+          </item>
+          <item>
+            <activationSound3D>	ev_hw_gp_ability_shield_activation_npc	</activationSound3D>
+            <deactivationSound3D>	ev_hw_gp_ability_shield_deactivation_npc	</deactivationSound3D>
+            <playTo>	others	</playTo>
+          </item>
+        </soundEvents>
+      </client>
+    </HWBuffSoundComponent>
+  </HW_damageShield>
+  <HW_bossImmortality>
+    <HWBuffFactorsComponent>
+      <server>
+        <factors>
+          <item>
+            <key>	stunResistanceEffect	</key>
+            <max>	1.0	</max>
+          </item>
+        </factors>
+      </server>
+    </HWBuffFactorsComponent>
+    <HWBuffDamageResistsComponent>
+      <server>
+        <resistReason>	BOSS_DAMAGE_SHIELD	</resistReason>
+        <resists>
+          <item>
+            <target>	ALL	</target>
+            <attackReason>	ALL	</attackReason>
+            <value>	3.0	</value>
+          </item>
+          <item>
+            <target>	ALL	</target>
+            <attackReason>	HALLOWEEN_DEATH_PIT	</attackReason>
+            <value>	-1.0	</value>
+          </item>
+        </resists>
+      </server>
+    </HWBuffDamageResistsComponent>
+  </HW_bossImmortality>
+  <HW_demolitiyIdle>
+    <HWBuffSequencesComponent>
+      <client>
+        <sequences>
+          <item>
+            <sequence>	particles/eff_sequence/halloween/our_tank_demolitiy/tank_dem_idle_collector.seq	</sequence>
+            <bindNode>	HP_effect	</bindNode>
+            <sniperModeVisibleTo>	others	</sniperModeVisibleTo>
+          </item>
+        </sequences>
+      </client>
+    </HWBuffSequencesComponent>
+  </HW_demolitiyIdle>
+  <HW_demolitiyIncome>
+    <HWBuffSequencesComponent>
+      <client>
+        <sequences>
+          <item>
+            <sequence>	particles/eff_sequence/halloween/our_tank_demolitiy/tank_dem_incame_collector.seq	</sequence>
+            <bindNode>	HP_effect	</bindNode>
+            <loopCount>	1	</loopCount>
+            <visibleTo>	self	</visibleTo>
+            <sniperModeVisibleTo>	others	</sniperModeVisibleTo>
+          </item>
+          <item>
+            <sequence>	particles/eff_sequence/halloween/our_tank_demolitiy/tank_dem_incame_collector_Non_Player.seq	</sequence>
+            <bindNode>	HP_effect	</bindNode>
+            <loopCount>	1	</loopCount>
+            <visibleTo>	others	</visibleTo>
+            <sniperModeVisibleTo>	others	</sniperModeVisibleTo>
+          </item>
+        </sequences>
+      </client>
+    </HWBuffSequencesComponent>
+  </HW_demolitiyIncome>
+  <HW_demolitiyOutcome>
+    <HWBuffSequencesComponent>
+      <client>
+        <sequences>
+          <item>
+            <sequence>	particles/eff_sequence/halloween/our_tank_demolitiy/tank_dem_transfer_volot.seq	</sequence>
+            <bindNode>	HP_effect	</bindNode>
+            <loopCount>	1	</loopCount>
+            <sniperModeVisibleTo>	others	</sniperModeVisibleTo>
+          </item>
+        </sequences>
+      </client>
+    </HWBuffSequencesComponent>
+  </HW_demolitiyOutcome>
+  <HW_bossAura>
+    <HWBuffCircularVehicleProximityComponent>
+      <server>
+        <radius>	50	</radius>
+        <affectedTeam>	1	</affectedTeam>
+      </server>
+    </HWBuffCircularVehicleProximityComponent>
+    <HWBuffBossAuraComponent>
+      <server>
+        <groupNames>	HW_drainSoulsAndLife	</groupNames>
+      </server>
+    </HWBuffBossAuraComponent>
+    <HWBuffSequencesComponent>
+      <client>
+        <sequences>
+          <item>
+            <sequence>	particles/eff_sequence/halloween/enemies/boss_aura.seq	</sequence>
+          </item>
+        </sequences>
+      </client>
+    </HWBuffSequencesComponent>
+  </HW_bossAura>
+  <HW_bossAuraBossFight>
+    <HWBuffCircularVehicleProximityComponent>
+      <server>
+        <radius>	30	</radius>
+        <affectedTeam>	1	</affectedTeam>
+      </server>
+    </HWBuffCircularVehicleProximityComponent>
+    <HWBuffBossAuraComponent>
+      <server>
+        <groupNames>	HW_drainSoulsAndLife	</groupNames>
+      </server>
+    </HWBuffBossAuraComponent>
+    <HWBuffSequencesComponent>
+      <client>
+        <sequences>
+          <item>
+            <sequence>	particles/eff_sequence/halloween/enemies/boss_aura_vulnerable.seq	</sequence>
+          </item>
+        </sequences>
+      </client>
+    </HWBuffSequencesComponent>
+  </HW_bossAuraBossFight>
+  <HW_drainSoulsAndLife>
+    <HWBuffDrainLifeComponent>
+      <server>
+        <drainPerSecond>	150	</drainPerSecond>
+        <attackReason>	HALLOWEEN_BOSS_AURA	</attackReason>
+      </server>
+    </HWBuffDrainLifeComponent>
+    <HWBuffDrainSoulsComponent>
+      <server>
+        <drainPerSecond>	2	</drainPerSecond>
+        <attackReason>	HALLOWEEN_BOSS_AURA	</attackReason>
+      </server>
+      <client>
+        <sequences>
+          <item>
+            <sequence>	halloween/content/sequences/boss_aura_victim_souls.ssm	</sequence>
+          </item>
+        </sequences>
+        <statusName>	status	</statusName>
+      </client>
+    </HWBuffDrainSoulsComponent>
+    <HWBuffDrainMarkerComponent>
+      <server>
+        <attackReason>	HALLOWEEN_BOSS_AURA	</attackReason>
+      </server>
+    </HWBuffDrainMarkerComponent>
+    <HWBuffFlashBangEffectComponent>
+      <server>
+        <attackReason>	HALLOWEEN_BOSS_AURA	</attackReason>
+      </server>
+      <client>
+        <effects>
+          <item>
+            <effect>	halloween/gui/effects/screen_damage_effect.xml	</effect>
+            <visibleTo>	self	</visibleTo>
+          </item>
+        </effects>
+      </client>
+    </HWBuffFlashBangEffectComponent>
+  </HW_drainSoulsAndLife>
+  <HW_increaseDamage>
+    <HWBuffAddDynGroupComponent>
+      <server>
+        <groupName>	HW_increaseDamage_{vehName}	</groupName>
+        <removeOnDestroy>	True	</removeOnDestroy>
+      </server>
+    </HWBuffAddDynGroupComponent>
+    <HWBuffSoundComponent>
+      <client>
+        <soundEvents>
+          <item>
+            <activationSound2D>	ev_hw_gp_ui_anomalies_get_epic	</activationSound2D>
+            <playTo>	self	</playTo>
+          </item>
+        </soundEvents>
+      </client>
+    </HWBuffSoundComponent>
+  </HW_increaseDamage>
+  <HW_increaseDamage_GB24_Centurion_Mk3_Halloween_event>
+    <HWBuffFactorsComponent>
+      <server>
+        <factors>
+          <item>
+            <key>	damageFactor	</key>
+            <add>	0.2	</add>
+            <max>	0.1	</max>
+          </item>
+        </factors>
+      </server>
+    </HWBuffFactorsComponent>
+    <HWBuffPanelComponent>
+      <server>
+        <buffKey>	buffIncreaseDamage	</buffKey>
+      </server>
+      <client>
+        <buffKey>	buffIncreaseDamage	</buffKey>
+      </client>
+    </HWBuffPanelComponent>
+  </HW_increaseDamage_GB24_Centurion_Mk3_Halloween_event>
+  <HW_increaseDamage_F17_AMX_13_90_Halloween_event>
+    <HWBuffFactorsComponent>
+      <server>
+        <factors>
+          <item>
+            <key>	damageFactor	</key>
+            <add>	0.2	</add>
+            <max>	0.1	</max>
+          </item>
+        </factors>
+      </server>
+    </HWBuffFactorsComponent>
+    <HWBuffPanelComponent>
+      <server>
+        <buffKey>	buffIncreaseDamage	</buffKey>
+      </server>
+      <client>
+        <buffKey>	buffIncreaseDamage	</buffKey>
+      </client>
+    </HWBuffPanelComponent>
+  </HW_increaseDamage_F17_AMX_13_90_Halloween_event>
+  <HW_increaseDamage_R171_IS_3_II_hw21>
+    <HWBuffFactorsComponent>
+      <server>
+        <factors>
+          <item>
+            <key>	damageFactor	</key>
+            <add>	0.2	</add>
+            <max>	0.1	</max>
+          </item>
+        </factors>
+      </server>
+    </HWBuffFactorsComponent>
+    <HWBuffPanelComponent>
+      <server>
+        <buffKey>	buffIncreaseDamage	</buffKey>
+      </server>
+      <client>
+        <buffKey>	buffIncreaseDamage	</buffKey>
+      </client>
+    </HWBuffPanelComponent>
+  </HW_increaseDamage_R171_IS_3_II_hw21>
+  <HW_increaseDamage_A100_T49_Halloween_event>
+    <HWBuffFactorsComponent>
+      <server>
+        <factors>
+          <item>
+            <key>	damageFactor	</key>
+            <add>	0.2	</add>
+            <max>	0.1	</max>
+          </item>
+        </factors>
+      </server>
+    </HWBuffFactorsComponent>
+    <HWBuffPanelComponent>
+      <server>
+        <buffKey>	buffIncreaseDamage	</buffKey>
+      </server>
+      <client>
+        <buffKey>	buffIncreaseDamage	</buffKey>
+      </client>
+    </HWBuffPanelComponent>
+  </HW_increaseDamage_A100_T49_Halloween_event>
+  <HW_increaseDamage_It19_Progetto_C50_mod_66_hw21>
+    <HWBuffFactorsComponent>
+      <server>
+        <factors>
+          <item>
+            <key>	damageFactor	</key>
+            <add>	0.2	</add>
+            <max>	0.1	</max>
+          </item>
+        </factors>
+      </server>
+    </HWBuffFactorsComponent>
+    <HWBuffPanelComponent>
+      <server>
+        <buffKey>	buffIncreaseDamage	</buffKey>
+      </server>
+      <client>
+        <buffKey>	buffIncreaseDamage	</buffKey>
+      </client>
+    </HWBuffPanelComponent>
+  </HW_increaseDamage_It19_Progetto_C50_mod_66_hw21>
+  <HW_increaseDamage_R40_T-54_Halloween_event>
+    <HWBuffFactorsComponent>
+      <server>
+        <factors>
+          <item>
+            <key>	damageFactor	</key>
+            <add>	0.2	</add>
+            <max>	0.1	</max>
+          </item>
+        </factors>
+      </server>
+    </HWBuffFactorsComponent>
+    <HWBuffPanelComponent>
+      <server>
+        <buffKey>	buffIncreaseDamage	</buffKey>
+      </server>
+      <client>
+        <buffKey>	buffIncreaseDamage	</buffKey>
+      </client>
+    </HWBuffPanelComponent>
+  </HW_increaseDamage_R40_T-54_Halloween_event>
+  <HW_increaseDamage_GB123_GSOR_1006_v7_Halloween_event>
+    <HWBuffFactorsComponent>
+      <server>
+        <factors>
+          <item>
+            <key>	damageFactor	</key>
+            <add>	0.2	</add>
+            <max>	0.1	</max>
+          </item>
+        </factors>
+      </server>
+    </HWBuffFactorsComponent>
+    <HWBuffPanelComponent>
+      <server>
+        <buffKey>	buffIncreaseDamage	</buffKey>
+      </server>
+      <client>
+        <buffKey>	buffIncreaseDamage	</buffKey>
+      </client>
+    </HWBuffPanelComponent>
+  </HW_increaseDamage_GB123_GSOR_1006_v7_Halloween_event>
+  <HW_increaseRateOfFire>
+    <HWBuffAddDynGroupComponent>
+      <server>
+        <groupName>	HW_increaseRateOfFire_{vehName}	</groupName>
+        <removeOnDestroy>	True	</removeOnDestroy>
+      </server>
+    </HWBuffAddDynGroupComponent>
+    <HWBuffSoundComponent>
+      <client>
+        <soundEvents>
+          <item>
+            <activationSound2D>	ev_hw_gp_ui_anomalies_get_regular	</activationSound2D>
+            <playTo>	self	</playTo>
+          </item>
+        </soundEvents>
+      </client>
+    </HWBuffSoundComponent>
+  </HW_increaseRateOfFire>
+  <HW_increaseRateOfFire_GB24_Centurion_Mk3_Halloween_event>
+    <HWBuffFactorsComponent>
+      <server>
+        <factors>
+          <item>
+            <key>	gun/reloadTime	</key>
+            <add>	-0.15	</add>
+            <max>	0.1	</max>
+          </item>
+        </factors>
+      </server>
+    </HWBuffFactorsComponent>
+    <HWBuffPanelComponent>
+      <server>
+        <buffKey>	buffIncreaseRateOfFire	</buffKey>
+      </server>
+      <client>
+        <showNotificationPopup>	HALLOWEEN	</showNotificationPopup>
+        <buffKey>	buffIncreaseRateOfFire	</buffKey>
+      </client>
+    </HWBuffPanelComponent>
+  </HW_increaseRateOfFire_GB24_Centurion_Mk3_Halloween_event>
+  <HW_increaseRateOfFire_F17_AMX_13_90_Halloween_event>
+    <HWBuffFactorsComponent>
+      <server>
+        <factors>
+          <item>
+            <key>	gun/reloadTime	</key>
+            <add>	-0.15	</add>
+            <max>	0.1	</max>
+          </item>
+        </factors>
+      </server>
+    </HWBuffFactorsComponent>
+    <HWBuffPanelComponent>
+      <server>
+        <buffKey>	buffIncreaseRateOfFire	</buffKey>
+      </server>
+      <client>
+        <showNotificationPopup>	HALLOWEEN	</showNotificationPopup>
+        <buffKey>	buffIncreaseRateOfFire	</buffKey>
+      </client>
+    </HWBuffPanelComponent>
+  </HW_increaseRateOfFire_F17_AMX_13_90_Halloween_event>
+  <HW_increaseRateOfFire_R171_IS_3_II_hw21>
+    <HWBuffFactorsComponent>
+      <server>
+        <factors>
+          <item>
+            <key>	gun/reloadTime	</key>
+            <add>	-0.15	</add>
+            <max>	0.1	</max>
+          </item>
+        </factors>
+      </server>
+    </HWBuffFactorsComponent>
+    <HWBuffPanelComponent>
+      <server>
+        <buffKey>	buffIncreaseRateOfFire	</buffKey>
+      </server>
+      <client>
+        <showNotificationPopup>	HALLOWEEN	</showNotificationPopup>
+        <buffKey>	buffIncreaseRateOfFire	</buffKey>
+      </client>
+    </HWBuffPanelComponent>
+  </HW_increaseRateOfFire_R171_IS_3_II_hw21>
+  <HW_increaseRateOfFire_A100_T49_Halloween_event>
+    <HWBuffFactorsComponent>
+      <server>
+        <factors>
+          <item>
+            <key>	gun/reloadTime	</key>
+            <add>	-0.15	</add>
+            <max>	0.1	</max>
+          </item>
+        </factors>
+      </server>
+    </HWBuffFactorsComponent>
+    <HWBuffPanelComponent>
+      <server>
+        <buffKey>	buffIncreaseRateOfFire	</buffKey>
+      </server>
+      <client>
+        <showNotificationPopup>	HALLOWEEN	</showNotificationPopup>
+        <buffKey>	buffIncreaseRateOfFire	</buffKey>
+      </client>
+    </HWBuffPanelComponent>
+  </HW_increaseRateOfFire_A100_T49_Halloween_event>
+  <HW_increaseRateOfFire_It19_Progetto_C50_mod_66_hw21>
+    <HWBuffFactorsComponent>
+      <server>
+        <factors>
+          <item>
+            <key>	gun/reloadTime	</key>
+            <add>	-0.15	</add>
+            <max>	0.1	</max>
+          </item>
+        </factors>
+      </server>
+    </HWBuffFactorsComponent>
+    <HWBuffPanelComponent>
+      <server>
+        <buffKey>	buffIncreaseRateOfFire	</buffKey>
+      </server>
+      <client>
+        <showNotificationPopup>	HALLOWEEN	</showNotificationPopup>
+        <buffKey>	buffIncreaseRateOfFire	</buffKey>
+      </client>
+    </HWBuffPanelComponent>
+  </HW_increaseRateOfFire_It19_Progetto_C50_mod_66_hw21>
+  <HW_increaseRateOfFire_R40_T-54_Halloween_event>
+    <HWBuffFactorsComponent>
+      <server>
+        <factors>
+          <item>
+            <key>	gun/reloadTime	</key>
+            <add>	-0.15	</add>
+            <max>	0.1	</max>
+          </item>
+        </factors>
+      </server>
+    </HWBuffFactorsComponent>
+    <HWBuffPanelComponent>
+      <server>
+        <buffKey>	buffIncreaseRateOfFire	</buffKey>
+      </server>
+      <client>
+        <showNotificationPopup>	HALLOWEEN	</showNotificationPopup>
+        <buffKey>	buffIncreaseRateOfFire	</buffKey>
+      </client>
+    </HWBuffPanelComponent>
+  </HW_increaseRateOfFire_R40_T-54_Halloween_event>
+  <HW_increaseRateOfFire_GB123_GSOR_1006_v7_Halloween_event>
+    <HWBuffFactorsComponent>
+      <server>
+        <factors>
+          <item>
+            <key>	gun/reloadTime	</key>
+            <add>	-0.15	</add>
+            <max>	0.1	</max>
+          </item>
+        </factors>
+      </server>
+    </HWBuffFactorsComponent>
+    <HWBuffPanelComponent>
+      <server>
+        <buffKey>	buffIncreaseRateOfFire	</buffKey>
+      </server>
+      <client>
+        <showNotificationPopup>	HALLOWEEN	</showNotificationPopup>
+        <buffKey>	buffIncreaseRateOfFire	</buffKey>
+      </client>
+    </HWBuffPanelComponent>
+  </HW_increaseRateOfFire_GB123_GSOR_1006_v7_Halloween_event>
+  <HW_accuracy>
+    <HWBuffAddDynGroupComponent>
+      <server>
+        <groupName>	HW_accuracy_{vehName}	</groupName>
+        <removeOnDestroy>	True	</removeOnDestroy>
+      </server>
+    </HWBuffAddDynGroupComponent>
+    <HWBuffSoundComponent>
+      <client>
+        <soundEvents>
+          <item>
+            <activationSound2D>	ev_hw_gp_ui_anomalies_get_regular	</activationSound2D>
+            <playTo>	self	</playTo>
+          </item>
+        </soundEvents>
+      </client>
+    </HWBuffSoundComponent>
+  </HW_accuracy>
+  <HW_accuracy_GB24_Centurion_Mk3_Halloween_event>
+    <HWBuffFactorsComponent>
+      <server>
+        <factors>
+          <item>
+            <key>	chassis/shotDispersionFactors/movement	</key>
+            <add>	-0.15	</add>
+          </item>
+          <item>
+            <key>	chassis/shotDispersionFactors/rotation	</key>
+            <add>	-0.15	</add>
+          </item>
+          <item>
+            <key>	gun/shotDispersionFactors/turretRotation	</key>
+            <add>	-0.15	</add>
+          </item>
+        </factors>
+      </server>
+    </HWBuffFactorsComponent>
+    <HWBuffPanelComponent>
+      <server>
+        <buffKey>	buffAccuracy	</buffKey>
+      </server>
+      <client>
+        <buffKey>	buffAccuracy	</buffKey>
+        <showNotificationPopup>	HALLOWEEN	</showNotificationPopup>
+      </client>
+    </HWBuffPanelComponent>
+  </HW_accuracy_GB24_Centurion_Mk3_Halloween_event>
+  <HW_accuracy_F17_AMX_13_90_Halloween_event>
+    <HWBuffFactorsComponent>
+      <server>
+        <factors>
+          <item>
+            <key>	chassis/shotDispersionFactors/movement	</key>
+            <add>	-0.15	</add>
+          </item>
+          <item>
+            <key>	chassis/shotDispersionFactors/rotation	</key>
+            <add>	-0.15	</add>
+          </item>
+          <item>
+            <key>	gun/shotDispersionFactors/turretRotation	</key>
+            <add>	-0.15	</add>
+          </item>
+        </factors>
+      </server>
+    </HWBuffFactorsComponent>
+    <HWBuffPanelComponent>
+      <server>
+        <buffKey>	buffAccuracy	</buffKey>
+      </server>
+      <client>
+        <buffKey>	buffAccuracy	</buffKey>
+        <showNotificationPopup>	HALLOWEEN	</showNotificationPopup>
+      </client>
+    </HWBuffPanelComponent>
+  </HW_accuracy_F17_AMX_13_90_Halloween_event>
+  <HW_accuracy_R171_IS_3_II_hw21>
+    <HWBuffFactorsComponent>
+      <server>
+        <factors>
+          <item>
+            <key>	chassis/shotDispersionFactors/movement	</key>
+            <add>	-0.15	</add>
+          </item>
+          <item>
+            <key>	chassis/shotDispersionFactors/rotation	</key>
+            <add>	-0.15	</add>
+          </item>
+          <item>
+            <key>	gun/shotDispersionFactors/turretRotation	</key>
+            <add>	-0.15	</add>
+          </item>
+        </factors>
+      </server>
+    </HWBuffFactorsComponent>
+    <HWBuffPanelComponent>
+      <server>
+        <buffKey>	buffAccuracy	</buffKey>
+      </server>
+      <client>
+        <buffKey>	buffAccuracy	</buffKey>
+        <showNotificationPopup>	HALLOWEEN	</showNotificationPopup>
+      </client>
+    </HWBuffPanelComponent>
+  </HW_accuracy_R171_IS_3_II_hw21>
+  <HW_accuracy_A100_T49_Halloween_event>
+    <HWBuffFactorsComponent>
+      <server>
+        <factors>
+          <item>
+            <key>	chassis/shotDispersionFactors/movement	</key>
+            <add>	-0.15	</add>
+          </item>
+          <item>
+            <key>	chassis/shotDispersionFactors/rotation	</key>
+            <add>	-0.15	</add>
+          </item>
+          <item>
+            <key>	gun/shotDispersionFactors/turretRotation	</key>
+            <add>	-0.15	</add>
+          </item>
+        </factors>
+      </server>
+    </HWBuffFactorsComponent>
+    <HWBuffPanelComponent>
+      <server>
+        <buffKey>	buffAccuracy	</buffKey>
+      </server>
+      <client>
+        <buffKey>	buffAccuracy	</buffKey>
+        <showNotificationPopup>	HALLOWEEN	</showNotificationPopup>
+      </client>
+    </HWBuffPanelComponent>
+  </HW_accuracy_A100_T49_Halloween_event>
+  <HW_accuracy_It19_Progetto_C50_mod_66_hw21>
+    <HWBuffFactorsComponent>
+      <server>
+        <factors>
+          <item>
+            <key>	chassis/shotDispersionFactors/movement	</key>
+            <add>	-0.15	</add>
+          </item>
+          <item>
+            <key>	chassis/shotDispersionFactors/rotation	</key>
+            <add>	-0.15	</add>
+          </item>
+          <item>
+            <key>	gun/shotDispersionFactors/turretRotation	</key>
+            <add>	-0.15	</add>
+          </item>
+        </factors>
+      </server>
+    </HWBuffFactorsComponent>
+    <HWBuffPanelComponent>
+      <server>
+        <buffKey>	buffAccuracy	</buffKey>
+      </server>
+      <client>
+        <buffKey>	buffAccuracy	</buffKey>
+        <showNotificationPopup>	HALLOWEEN	</showNotificationPopup>
+      </client>
+    </HWBuffPanelComponent>
+  </HW_accuracy_It19_Progetto_C50_mod_66_hw21>
+  <HW_accuracy_R40_T-54_Halloween_event>
+    <HWBuffFactorsComponent>
+      <server>
+        <factors>
+          <item>
+            <key>	chassis/shotDispersionFactors/movement	</key>
+            <add>	-0.15	</add>
+          </item>
+          <item>
+            <key>	chassis/shotDispersionFactors/rotation	</key>
+            <add>	-0.15	</add>
+          </item>
+          <item>
+            <key>	gun/shotDispersionFactors/turretRotation	</key>
+            <add>	-0.15	</add>
+          </item>
+        </factors>
+      </server>
+    </HWBuffFactorsComponent>
+    <HWBuffPanelComponent>
+      <server>
+        <buffKey>	buffAccuracy	</buffKey>
+      </server>
+      <client>
+        <buffKey>	buffAccuracy	</buffKey>
+        <showNotificationPopup>	HALLOWEEN	</showNotificationPopup>
+      </client>
+    </HWBuffPanelComponent>
+  </HW_accuracy_R40_T-54_Halloween_event>
+  <HW_accuracy_GB123_GSOR_1006_v7_Halloween_event>
+    <HWBuffFactorsComponent>
+      <server>
+        <factors>
+          <item>
+            <key>	chassis/shotDispersionFactors/movement	</key>
+            <add>	-0.15	</add>
+          </item>
+          <item>
+            <key>	chassis/shotDispersionFactors/rotation	</key>
+            <add>	-0.15	</add>
+          </item>
+          <item>
+            <key>	gun/shotDispersionFactors/turretRotation	</key>
+            <add>	-0.15	</add>
+          </item>
+        </factors>
+      </server>
+    </HWBuffFactorsComponent>
+    <HWBuffPanelComponent>
+      <server>
+        <buffKey>	buffAccuracy	</buffKey>
+      </server>
+      <client>
+        <buffKey>	buffAccuracy	</buffKey>
+        <showNotificationPopup>	HALLOWEEN	</showNotificationPopup>
+      </client>
+    </HWBuffPanelComponent>
+  </HW_accuracy_GB123_GSOR_1006_v7_Halloween_event>
+  <HW_enlargeHealth>
+    <HWBuffAddDynGroupComponent>
+      <server>
+        <groupName>	HW_enlargeHealth_{vehName}	</groupName>
+        <removeOnDestroy>	True	</removeOnDestroy>
+      </server>
+    </HWBuffAddDynGroupComponent>
+    <HWBuffSoundComponent>
+      <client>
+        <soundEvents>
+          <item>
+            <activationSound2D>	ev_hw_gp_ui_anomalies_get_regular	</activationSound2D>
+            <playTo>	self	</playTo>
+          </item>
+        </soundEvents>
+      </client>
+    </HWBuffSoundComponent>
+  </HW_enlargeHealth>
+  <HW_enlargeHealth_GB24_Centurion_Mk3_Halloween_event>
+    <HWBuffAddMaxHealthComponent>
+      <server>
+        <healthAmount>	0	</healthAmount>
+        <healthFactor>	0.2	</healthFactor>
+      </server>
+    </HWBuffAddMaxHealthComponent>
+    <HWBuffPanelComponent>
+      <server>
+        <buffKey>	buffEnlargeHealth	</buffKey>
+      </server>
+      <client>
+        <buffKey>	buffEnlargeHealth	</buffKey>
+      </client>
+    </HWBuffPanelComponent>
+  </HW_enlargeHealth_GB24_Centurion_Mk3_Halloween_event>
+  <HW_enlargeHealth_F17_AMX_13_90_Halloween_event>
+    <HWBuffAddMaxHealthComponent>
+      <server>
+        <healthAmount>	0	</healthAmount>
+        <healthFactor>	0.2	</healthFactor>
+      </server>
+    </HWBuffAddMaxHealthComponent>
+    <HWBuffPanelComponent>
+      <server>
+        <buffKey>	buffEnlargeHealth	</buffKey>
+      </server>
+      <client>
+        <buffKey>	buffEnlargeHealth	</buffKey>
+      </client>
+    </HWBuffPanelComponent>
+  </HW_enlargeHealth_F17_AMX_13_90_Halloween_event>
+  <HW_enlargeHealth_R171_IS_3_II_hw21>
+    <HWBuffAddMaxHealthComponent>
+      <server>
+        <healthAmount>	0	</healthAmount>
+        <healthFactor>	0.2	</healthFactor>
+      </server>
+    </HWBuffAddMaxHealthComponent>
+    <HWBuffPanelComponent>
+      <server>
+        <buffKey>	buffEnlargeHealth	</buffKey>
+      </server>
+      <client>
+        <buffKey>	buffEnlargeHealth	</buffKey>
+      </client>
+    </HWBuffPanelComponent>
+  </HW_enlargeHealth_R171_IS_3_II_hw21>
+  <HW_enlargeHealth_A100_T49_Halloween_event>
+    <HWBuffAddMaxHealthComponent>
+      <server>
+        <healthAmount>	0	</healthAmount>
+        <healthFactor>	0.2	</healthFactor>
+      </server>
+    </HWBuffAddMaxHealthComponent>
+    <HWBuffPanelComponent>
+      <server>
+        <buffKey>	buffEnlargeHealth	</buffKey>
+      </server>
+      <client>
+        <buffKey>	buffEnlargeHealth	</buffKey>
+      </client>
+    </HWBuffPanelComponent>
+  </HW_enlargeHealth_A100_T49_Halloween_event>
+  <HW_enlargeHealth_It19_Progetto_C50_mod_66_hw21>
+    <HWBuffAddMaxHealthComponent>
+      <server>
+        <healthAmount>	0	</healthAmount>
+        <healthFactor>	0.2	</healthFactor>
+      </server>
+    </HWBuffAddMaxHealthComponent>
+    <HWBuffPanelComponent>
+      <server>
+        <buffKey>	buffEnlargeHealth	</buffKey>
+      </server>
+      <client>
+        <buffKey>	buffEnlargeHealth	</buffKey>
+      </client>
+    </HWBuffPanelComponent>
+  </HW_enlargeHealth_It19_Progetto_C50_mod_66_hw21>
+  <HW_enlargeHealth_R40_T-54_Halloween_event>
+    <HWBuffAddMaxHealthComponent>
+      <server>
+        <healthAmount>	0	</healthAmount>
+        <healthFactor>	0.2	</healthFactor>
+      </server>
+    </HWBuffAddMaxHealthComponent>
+    <HWBuffPanelComponent>
+      <server>
+        <buffKey>	buffEnlargeHealth	</buffKey>
+      </server>
+      <client>
+        <buffKey>	buffEnlargeHealth	</buffKey>
+      </client>
+    </HWBuffPanelComponent>
+  </HW_enlargeHealth_R40_T-54_Halloween_event>
+  <HW_enlargeHealth_GB123_GSOR_1006_v7_Halloween_event>
+    <HWBuffAddMaxHealthComponent>
+      <server>
+        <healthAmount>	0	</healthAmount>
+        <healthFactor>	0.2	</healthFactor>
+      </server>
+    </HWBuffAddMaxHealthComponent>
+    <HWBuffPanelComponent>
+      <server>
+        <buffKey>	buffEnlargeHealth	</buffKey>
+      </server>
+      <client>
+        <buffKey>	buffEnlargeHealth	</buffKey>
+      </client>
+    </HWBuffPanelComponent>
+  </HW_enlargeHealth_GB123_GSOR_1006_v7_Halloween_event>
+  <HW_mobility>
+    <HWBuffAddDynGroupComponent>
+      <server>
+        <groupName>	HW_mobility_{vehName}	</groupName>
+        <removeOnDestroy>	True	</removeOnDestroy>
+      </server>
+    </HWBuffAddDynGroupComponent>
+    <HWBuffSoundComponent>
+      <client>
+        <soundEvents>
+          <item>
+            <activationSound2D>	ev_hw_gp_ui_anomalies_get_regular	</activationSound2D>
+            <playTo>	self	</playTo>
+          </item>
+        </soundEvents>
+      </client>
+    </HWBuffSoundComponent>
+  </HW_mobility>
+  <HW_mobility_GB24_Centurion_Mk3_Halloween_event>
+    <HWBuffFactorsComponent>
+      <server>
+        <factors>
+          <item>
+            <key>	engine/power	</key>
+            <add>	0.15	</add>
+          </item>
+          <item>
+            <key>	turret/rotationSpeed	</key>
+            <add>	0.15	</add>
+          </item>
+        </factors>
+      </server>
+    </HWBuffFactorsComponent>
+    <HWBuffPanelComponent>
+      <server>
+        <buffKey>	buffMobility	</buffKey>
+      </server>
+      <client>
+        <buffKey>	buffMobility	</buffKey>
+      </client>
+    </HWBuffPanelComponent>
+  </HW_mobility_GB24_Centurion_Mk3_Halloween_event>
+  <HW_mobility_F17_AMX_13_90_Halloween_event>
+    <HWBuffFactorsComponent>
+      <server>
+        <factors>
+          <item>
+            <key>	engine/power	</key>
+            <add>	0.1	</add>
+          </item>
+          <item>
+            <key>	turret/rotationSpeed	</key>
+            <add>	0.1	</add>
+          </item>
+        </factors>
+      </server>
+    </HWBuffFactorsComponent>
+    <HWBuffPanelComponent>
+      <server>
+        <buffKey>	buffMobility	</buffKey>
+      </server>
+      <client>
+        <buffKey>	buffMobility	</buffKey>
+      </client>
+    </HWBuffPanelComponent>
+  </HW_mobility_F17_AMX_13_90_Halloween_event>
+  <HW_mobility_R171_IS_3_II_hw21>
+    <HWBuffFactorsComponent>
+      <server>
+        <factors>
+          <item>
+            <key>	engine/power	</key>
+            <add>	0.2	</add>
+          </item>
+          <item>
+            <key>	turret/rotationSpeed	</key>
+            <add>	0.2	</add>
+          </item>
+        </factors>
+      </server>
+    </HWBuffFactorsComponent>
+    <HWBuffPanelComponent>
+      <server>
+        <buffKey>	buffMobility	</buffKey>
+      </server>
+      <client>
+        <buffKey>	buffMobility	</buffKey>
+      </client>
+    </HWBuffPanelComponent>
+  </HW_mobility_R171_IS_3_II_hw21>
+  <HW_mobility_A100_T49_Halloween_event>
+    <HWBuffFactorsComponent>
+      <server>
+        <factors>
+          <item>
+            <key>	engine/power	</key>
+            <add>	0.1	</add>
+          </item>
+          <item>
+            <key>	turret/rotationSpeed	</key>
+            <add>	0.1	</add>
+          </item>
+        </factors>
+      </server>
+    </HWBuffFactorsComponent>
+    <HWBuffPanelComponent>
+      <server>
+        <buffKey>	buffMobility	</buffKey>
+      </server>
+      <client>
+        <buffKey>	buffMobility	</buffKey>
+      </client>
+    </HWBuffPanelComponent>
+  </HW_mobility_A100_T49_Halloween_event>
+  <HW_mobility_It19_Progetto_C50_mod_66_hw21>
+    <HWBuffFactorsComponent>
+      <server>
+        <factors>
+          <item>
+            <key>	engine/power	</key>
+            <add>	0.2	</add>
+          </item>
+          <item>
+            <key>	turret/rotationSpeed	</key>
+            <add>	0.2	</add>
+          </item>
+        </factors>
+      </server>
+    </HWBuffFactorsComponent>
+    <HWBuffPanelComponent>
+      <server>
+        <buffKey>	buffMobility	</buffKey>
+      </server>
+      <client>
+        <buffKey>	buffMobility	</buffKey>
+      </client>
+    </HWBuffPanelComponent>
+  </HW_mobility_It19_Progetto_C50_mod_66_hw21>
+  <HW_mobility_R40_T-54_Halloween_event>
+    <HWBuffFactorsComponent>
+      <server>
+        <factors>
+          <item>
+            <key>	engine/power	</key>
+            <add>	0.15	</add>
+          </item>
+          <item>
+            <key>	turret/rotationSpeed	</key>
+            <add>	0.15	</add>
+          </item>
+        </factors>
+      </server>
+    </HWBuffFactorsComponent>
+    <HWBuffPanelComponent>
+      <server>
+        <buffKey>	buffMobility	</buffKey>
+      </server>
+      <client>
+        <buffKey>	buffMobility	</buffKey>
+      </client>
+    </HWBuffPanelComponent>
+  </HW_mobility_R40_T-54_Halloween_event>
+  <HW_mobility_GB123_GSOR_1006_v7_Halloween_event>
+    <HWBuffFactorsComponent>
+      <server>
+        <factors>
+          <item>
+            <key>	engine/power	</key>
+            <add>	0.15	</add>
+          </item>
+          <item>
+            <key>	turret/rotationSpeed	</key>
+            <add>	0.15	</add>
+          </item>
+        </factors>
+      </server>
+    </HWBuffFactorsComponent>
+    <HWBuffPanelComponent>
+      <server>
+        <buffKey>	buffMobility	</buffKey>
+      </server>
+      <client>
+        <buffKey>	buffMobility	</buffKey>
+      </client>
+    </HWBuffPanelComponent>
+  </HW_mobility_GB123_GSOR_1006_v7_Halloween_event>
+  <HW_inspiration>
+    <HWBuffAddDynGroupComponent>
+      <server>
+        <groupName>	HW_inspiration_{vehName}	</groupName>
+        <removeOnDestroy>	True	</removeOnDestroy>
+      </server>
+    </HWBuffAddDynGroupComponent>
+    <HWBuffSoundComponent>
+      <client>
+        <soundEvents>
+          <item>
+            <activationSound2D>	ev_hw_gp_ui_anomalies_get_regular	</activationSound2D>
+            <playTo>	self	</playTo>
+          </item>
+        </soundEvents>
+      </client>
+    </HWBuffSoundComponent>
+  </HW_inspiration>
+  <HW_inspiration_GB24_Centurion_Mk3_Halloween_event>
+    <HWBuffFactorsComponent>
+      <server>
+        <factors>
+          <item>
+            <key>	crewLevelIncrease	</key>
+            <add>	15	</add>
+          </item>
+        </factors>
+      </server>
+    </HWBuffFactorsComponent>
+    <HWBuffPanelComponent>
+      <server>
+        <buffKey>	buffInspiration	</buffKey>
+      </server>
+      <client>
+        <showNotificationPopup>	HALLOWEEN	</showNotificationPopup>
+        <buffKey>	buffInspiration	</buffKey>
+      </client>
+    </HWBuffPanelComponent>
+  </HW_inspiration_GB24_Centurion_Mk3_Halloween_event>
+  <HW_inspiration_F17_AMX_13_90_Halloween_event>
+    <HWBuffFactorsComponent>
+      <server>
+        <factors>
+          <item>
+            <key>	crewLevelIncrease	</key>
+            <add>	15	</add>
+          </item>
+        </factors>
+      </server>
+    </HWBuffFactorsComponent>
+    <HWBuffPanelComponent>
+      <server>
+        <buffKey>	buffInspiration	</buffKey>
+      </server>
+      <client>
+        <showNotificationPopup>	HALLOWEEN	</showNotificationPopup>
+        <buffKey>	buffInspiration	</buffKey>
+      </client>
+    </HWBuffPanelComponent>
+  </HW_inspiration_F17_AMX_13_90_Halloween_event>
+  <HW_inspiration_R171_IS_3_II_hw21>
+    <HWBuffFactorsComponent>
+      <server>
+        <factors>
+          <item>
+            <key>	crewLevelIncrease	</key>
+            <add>	15	</add>
+          </item>
+        </factors>
+      </server>
+    </HWBuffFactorsComponent>
+    <HWBuffPanelComponent>
+      <server>
+        <buffKey>	buffInspiration	</buffKey>
+      </server>
+      <client>
+        <showNotificationPopup>	HALLOWEEN	</showNotificationPopup>
+        <buffKey>	buffInspiration	</buffKey>
+      </client>
+    </HWBuffPanelComponent>
+  </HW_inspiration_R171_IS_3_II_hw21>
+  <HW_inspiration_A100_T49_Halloween_event>
+    <HWBuffFactorsComponent>
+      <server>
+        <factors>
+          <item>
+            <key>	crewLevelIncrease	</key>
+            <add>	15	</add>
+          </item>
+        </factors>
+      </server>
+    </HWBuffFactorsComponent>
+    <HWBuffPanelComponent>
+      <server>
+        <buffKey>	buffInspiration	</buffKey>
+      </server>
+      <client>
+        <showNotificationPopup>	HALLOWEEN	</showNotificationPopup>
+        <buffKey>	buffInspiration	</buffKey>
+      </client>
+    </HWBuffPanelComponent>
+  </HW_inspiration_A100_T49_Halloween_event>
+  <HW_inspiration_It19_Progetto_C50_mod_66_hw21>
+    <HWBuffFactorsComponent>
+      <server>
+        <factors>
+          <item>
+            <key>	crewLevelIncrease	</key>
+            <add>	15	</add>
+          </item>
+        </factors>
+      </server>
+    </HWBuffFactorsComponent>
+    <HWBuffPanelComponent>
+      <server>
+        <buffKey>	buffInspiration	</buffKey>
+      </server>
+      <client>
+        <showNotificationPopup>	HALLOWEEN	</showNotificationPopup>
+        <buffKey>	buffInspiration	</buffKey>
+      </client>
+    </HWBuffPanelComponent>
+  </HW_inspiration_It19_Progetto_C50_mod_66_hw21>
+  <HW_inspiration_R40_T-54_Halloween_event>
+    <HWBuffFactorsComponent>
+      <server>
+        <factors>
+          <item>
+            <key>	crewLevelIncrease	</key>
+            <add>	15	</add>
+          </item>
+        </factors>
+      </server>
+    </HWBuffFactorsComponent>
+    <HWBuffPanelComponent>
+      <server>
+        <buffKey>	buffInspiration	</buffKey>
+      </server>
+      <client>
+        <showNotificationPopup>	HALLOWEEN	</showNotificationPopup>
+        <buffKey>	buffInspiration	</buffKey>
+      </client>
+    </HWBuffPanelComponent>
+  </HW_inspiration_R40_T-54_Halloween_event>
+  <HW_inspiration_GB123_GSOR_1006_v7_Halloween_event>
+    <HWBuffFactorsComponent>
+      <server>
+        <factors>
+          <item>
+            <key>	crewLevelIncrease	</key>
+            <add>	15	</add>
+          </item>
+        </factors>
+      </server>
+    </HWBuffFactorsComponent>
+    <HWBuffPanelComponent>
+      <server>
+        <buffKey>	buffInspiration	</buffKey>
+      </server>
+      <client>
+        <showNotificationPopup>	HALLOWEEN	</showNotificationPopup>
+        <buffKey>	buffInspiration	</buffKey>
+      </client>
+    </HWBuffPanelComponent>
+  </HW_inspiration_GB123_GSOR_1006_v7_Halloween_event>
+  <HW_modulesInvulnerability>
+    <HWBuffDamageResistsComponent>
+      <server>
+        <resistReason>	MODULES_INVULNERABILITY_BUFF	</resistReason>
+        <resists>
+          <item>
+            <target>	DEVICES	</target>
+            <attackReason>	ALL	</attackReason>
+            <value>	1.0	</value>
+          </item>
+          <item>
+            <target>	CHASSIS	</target>
+            <attackReason>	ALL	</attackReason>
+            <value>	1.0	</value>
+          </item>
+        </resists>
+      </server>
+    </HWBuffDamageResistsComponent>
+    <HWBuffPanelComponent>
+      <server>
+        <buffKey>	buffModulesInvulnerability	</buffKey>
+      </server>
+      <client>
+        <buffKey>	buffModulesInvulnerability	</buffKey>
+      </client>
+    </HWBuffPanelComponent>
+    <HWBuffSoundComponent>
+      <client>
+        <soundEvents>
+          <item>
+            <activationSound2D>	ev_hw_gp_ui_anomalies_get_epic	</activationSound2D>
+            <playTo>	self	</playTo>
+          </item>
+        </soundEvents>
+      </client>
+    </HWBuffSoundComponent>
+  </HW_modulesInvulnerability>
+  <HW_igniteEnemyOnShot>
+    <HWBuffAddBuffOnShotComponent>
+      <server>
+        <buffName>	HW_igniteFromPassive	</buffName>
+        <duration>	0.1	</duration>
+        <chance>	20	</chance>
+      </server>
+    </HWBuffAddBuffOnShotComponent>
+    <HWBuffPanelComponent>
+      <server>
+        <buffKey>	buffIgniteOnShot	</buffKey>
+      </server>
+      <client>
+        <showNotificationPopup>	HALLOWEEN	</showNotificationPopup>
+        <buffKey>	buffIgniteOnShot	</buffKey>
+      </client>
+    </HWBuffPanelComponent>
+    <HWBuffSoundComponent>
+      <client>
+        <soundEvents>
+          <item>
+            <activationSound2D>	ev_hw_gp_ui_anomalies_get_regular	</activationSound2D>
+            <playTo>	self	</playTo>
+          </item>
+        </soundEvents>
+      </client>
+    </HWBuffSoundComponent>
+  </HW_igniteEnemyOnShot>
+  <HW_igniteFromPassive>
+    <HWBuffIgniteVehicleComponent>
+      <server>
+        <time>	5	</time>
+        <damagePerSecond>	75	</damagePerSecond>
+        <maxHealthDamageFactorPerSecond>	0.0	</maxHealthDamageFactorPerSecond>
+        <attackReason>	HALLOWEEN_PASSIVE_IGNITE	</attackReason>
+      </server>
+    </HWBuffIgniteVehicleComponent>
+  </HW_igniteFromPassive>
+  <HW_drainHealthOnShot>
+    <HWBuffAddBuffOnShotComponent>
+      <server>
+        <buffName>	HW_drainHealthFromPassive	</buffName>
+        <duration>	0.1	</duration>
+        <chance>	20	</chance>
+        <addOnKillingShot>	true	</addOnKillingShot>
+      </server>
+    </HWBuffAddBuffOnShotComponent>
+    <HWBuffPanelComponent>
+      <server>
+        <buffKey>	buffDrainOnShot	</buffKey>
+      </server>
+      <client>
+        <buffKey>	buffDrainOnShot	</buffKey>
+      </client>
+    </HWBuffPanelComponent>
+    <HWBuffSoundComponent>
+      <client>
+        <soundEvents>
+          <item>
+            <activationSound2D>	ev_hw_gp_ui_anomalies_get_regular	</activationSound2D>
+            <playTo>	self	</playTo>
+          </item>
+        </soundEvents>
+      </client>
+    </HWBuffSoundComponent>
+  </HW_drainHealthOnShot>
+  <HW_drainHealthFromPassive>
+    <HWBuffDrainHealthComponent>
+      <server>
+        <damage>	0	</damage>
+        <maxHealthDamageFactor>	0.0	</maxHealthDamageFactor>
+        <healAmount>	50	</healAmount>
+        <healFactor>	0.0	</healFactor>
+        <damageHealFactor>	0.0	</damageHealFactor>
+        <repairWithoutDamage>	true	</repairWithoutDamage>
+        <repairReason>	REPAIR_BY_PASSIVE_VAMPIRE	</repairReason>
+        <attackReason>	HALLOWEEN_PASSIVE_VAMPIRE	</attackReason>
+      </server>
+    </HWBuffDrainHealthComponent>
+  </HW_drainHealthFromPassive>
+  <HW_infiniteHeal>
+    <HWBuffAddDynGroupComponent>
+      <server>
+        <groupName>	HW_infiniteHeal_{vehName}	</groupName>
+        <removeOnDestroy>	True	</removeOnDestroy>
+      </server>
+    </HWBuffAddDynGroupComponent>
+    <HWBuffSoundComponent>
+      <client>
+        <soundEvents>
+          <item>
+            <activationSound2D>	ev_hw_gp_ui_anomalies_get_regular	</activationSound2D>
+            <playTo>	self	</playTo>
+          </item>
+        </soundEvents>
+      </client>
+    </HWBuffSoundComponent>
+  </HW_infiniteHeal>
+  <HW_infiniteHeal_GB24_Centurion_Mk3_Halloween_event>
+    <HWBuffInfinitePeriodicHealComponent>
+      <server>
+        <healAmount>	10	</healAmount>
+        <healFactor>	0	</healFactor>
+        <cooldownAfterHeal>	1	</cooldownAfterHeal>
+        <cooldownAfterDamage>	10	</cooldownAfterDamage>
+      </server>
+      <client>
+        <buffKey>	buffInfiniteHeal	</buffKey>
+        <sequences>
+          <item>
+            <sequence>	particles/eff_sequence/halloween/hw_regeneration_buff.seq	</sequence>
+            <bindNode>	turret	</bindNode>
+            <autoStart>	false	</autoStart>
+          </item>
+        </sequences>
+      </client>
+    </HWBuffInfinitePeriodicHealComponent>
+    <HWBuffPanelComponent>
+      <server>
+        <buffKey>	buffInfiniteHeal	</buffKey>
+      </server>
+      <client>
+        <buffKey>	buffInfiniteHeal	</buffKey>
+        <showNotificationPopup>	HALLOWEEN	</showNotificationPopup>
+      </client>
+    </HWBuffPanelComponent>
+  </HW_infiniteHeal_GB24_Centurion_Mk3_Halloween_event>
+  <HW_infiniteHeal_F17_AMX_13_90_Halloween_event>
+    <HWBuffInfinitePeriodicHealComponent>
+      <server>
+        <healAmount>	10	</healAmount>
+        <healFactor>	0	</healFactor>
+        <cooldownAfterHeal>	1	</cooldownAfterHeal>
+        <cooldownAfterDamage>	10	</cooldownAfterDamage>
+      </server>
+      <client>
+        <buffKey>	buffInfiniteHeal	</buffKey>
+        <sequences>
+          <item>
+            <sequence>	particles/eff_sequence/halloween/hw_regeneration_buff.seq	</sequence>
+            <bindNode>	turret	</bindNode>
+            <autoStart>	false	</autoStart>
+          </item>
+        </sequences>
+      </client>
+    </HWBuffInfinitePeriodicHealComponent>
+    <HWBuffPanelComponent>
+      <server>
+        <buffKey>	buffInfiniteHeal	</buffKey>
+      </server>
+      <client>
+        <buffKey>	buffInfiniteHeal	</buffKey>
+        <showNotificationPopup>	HALLOWEEN	</showNotificationPopup>
+      </client>
+    </HWBuffPanelComponent>
+  </HW_infiniteHeal_F17_AMX_13_90_Halloween_event>
+  <HW_infiniteHeal_R171_IS_3_II_hw21>
+    <HWBuffInfinitePeriodicHealComponent>
+      <server>
+        <healAmount>	10	</healAmount>
+        <healFactor>	0	</healFactor>
+        <cooldownAfterHeal>	1	</cooldownAfterHeal>
+        <cooldownAfterDamage>	10	</cooldownAfterDamage>
+      </server>
+      <client>
+        <buffKey>	buffInfiniteHeal	</buffKey>
+        <sequences>
+          <item>
+            <sequence>	particles/eff_sequence/halloween/hw_regeneration_buff.seq	</sequence>
+            <bindNode>	turret	</bindNode>
+            <autoStart>	false	</autoStart>
+          </item>
+        </sequences>
+      </client>
+    </HWBuffInfinitePeriodicHealComponent>
+    <HWBuffPanelComponent>
+      <server>
+        <buffKey>	buffInfiniteHeal	</buffKey>
+      </server>
+      <client>
+        <buffKey>	buffInfiniteHeal	</buffKey>
+        <showNotificationPopup>	HALLOWEEN	</showNotificationPopup>
+      </client>
+    </HWBuffPanelComponent>
+  </HW_infiniteHeal_R171_IS_3_II_hw21>
+  <HW_infiniteHeal_A100_T49_Halloween_event>
+    <HWBuffInfinitePeriodicHealComponent>
+      <server>
+        <healAmount>	10	</healAmount>
+        <healFactor>	0	</healFactor>
+        <cooldownAfterHeal>	1	</cooldownAfterHeal>
+        <cooldownAfterDamage>	10	</cooldownAfterDamage>
+      </server>
+      <client>
+        <buffKey>	buffInfiniteHeal	</buffKey>
+        <sequences>
+          <item>
+            <sequence>	particles/eff_sequence/halloween/hw_regeneration_buff.seq	</sequence>
+            <bindNode>	turret	</bindNode>
+            <autoStart>	false	</autoStart>
+          </item>
+        </sequences>
+      </client>
+    </HWBuffInfinitePeriodicHealComponent>
+    <HWBuffPanelComponent>
+      <server>
+        <buffKey>	buffInfiniteHeal	</buffKey>
+      </server>
+      <client>
+        <buffKey>	buffInfiniteHeal	</buffKey>
+        <showNotificationPopup>	HALLOWEEN	</showNotificationPopup>
+      </client>
+    </HWBuffPanelComponent>
+  </HW_infiniteHeal_A100_T49_Halloween_event>
+  <HW_infiniteHeal_It19_Progetto_C50_mod_66_hw21>
+    <HWBuffInfinitePeriodicHealComponent>
+      <server>
+        <healAmount>	10	</healAmount>
+        <healFactor>	0	</healFactor>
+        <cooldownAfterHeal>	1	</cooldownAfterHeal>
+        <cooldownAfterDamage>	10	</cooldownAfterDamage>
+      </server>
+      <client>
+        <buffKey>	buffInfiniteHeal	</buffKey>
+        <sequences>
+          <item>
+            <sequence>	particles/eff_sequence/halloween/hw_regeneration_buff.seq	</sequence>
+            <bindNode>	turret	</bindNode>
+            <autoStart>	false	</autoStart>
+          </item>
+        </sequences>
+      </client>
+    </HWBuffInfinitePeriodicHealComponent>
+    <HWBuffPanelComponent>
+      <server>
+        <buffKey>	buffInfiniteHeal	</buffKey>
+      </server>
+      <client>
+        <buffKey>	buffInfiniteHeal	</buffKey>
+        <showNotificationPopup>	HALLOWEEN	</showNotificationPopup>
+      </client>
+    </HWBuffPanelComponent>
+  </HW_infiniteHeal_It19_Progetto_C50_mod_66_hw21>
+  <HW_infiniteHeal_R40_T-54_Halloween_event>
+    <HWBuffInfinitePeriodicHealComponent>
+      <server>
+        <healAmount>	10	</healAmount>
+        <healFactor>	0	</healFactor>
+        <cooldownAfterHeal>	1	</cooldownAfterHeal>
+        <cooldownAfterDamage>	10	</cooldownAfterDamage>
+      </server>
+      <client>
+        <buffKey>	buffInfiniteHeal	</buffKey>
+        <sequences>
+          <item>
+            <sequence>	particles/eff_sequence/halloween/hw_regeneration_buff.seq	</sequence>
+            <bindNode>	turret	</bindNode>
+            <autoStart>	false	</autoStart>
+          </item>
+        </sequences>
+      </client>
+    </HWBuffInfinitePeriodicHealComponent>
+    <HWBuffPanelComponent>
+      <server>
+        <buffKey>	buffInfiniteHeal	</buffKey>
+      </server>
+      <client>
+        <buffKey>	buffInfiniteHeal	</buffKey>
+        <showNotificationPopup>	HALLOWEEN	</showNotificationPopup>
+      </client>
+    </HWBuffPanelComponent>
+  </HW_infiniteHeal_R40_T-54_Halloween_event>
+  <HW_infiniteHeal_GB123_GSOR_1006_v7_Halloween_event>
+    <HWBuffInfinitePeriodicHealComponent>
+      <server>
+        <healAmount>	10	</healAmount>
+        <healFactor>	0	</healFactor>
+        <cooldownAfterHeal>	1	</cooldownAfterHeal>
+        <cooldownAfterDamage>	10	</cooldownAfterDamage>
+      </server>
+      <client>
+        <buffKey>	buffInfiniteHeal	</buffKey>
+        <sequences>
+          <item>
+            <sequence>	particles/eff_sequence/halloween/hw_regeneration_buff.seq	</sequence>
+            <bindNode>	turret	</bindNode>
+            <autoStart>	false	</autoStart>
+          </item>
+        </sequences>
+      </client>
+    </HWBuffInfinitePeriodicHealComponent>
+    <HWBuffPanelComponent>
+      <server>
+        <buffKey>	buffInfiniteHeal	</buffKey>
+      </server>
+      <client>
+        <buffKey>	buffInfiniteHeal	</buffKey>
+        <showNotificationPopup>	HALLOWEEN	</showNotificationPopup>
+      </client>
+    </HWBuffPanelComponent>
+  </HW_infiniteHeal_GB123_GSOR_1006_v7_Halloween_event>
+  <HW_miriumAmplification>
+    <HWBuffVehicleModifiersComponent>
+      <server>
+        <modifiers>
+          <modifier>
+            <key>	souls/extraDropFromBots	</key>
+            <factor>	0.15	</factor>
+          </modifier>
+        </modifiers>
+      </server>
+    </HWBuffVehicleModifiersComponent>
+    <HWBuffPanelComponent>
+      <server>
+        <buffKey>	buffMiriumAmplification	</buffKey>
+      </server>
+      <client>
+        <buffKey>	buffMiriumAmplification	</buffKey>
+      </client>
+    </HWBuffPanelComponent>
+    <HWBuffSoundComponent>
+      <client>
+        <soundEvents>
+          <item>
+            <activationSound2D>	ev_hw_gp_ui_anomalies_get_regular	</activationSound2D>
+            <playTo>	self	</playTo>
+          </item>
+        </soundEvents>
+      </client>
+    </HWBuffSoundComponent>
+  </HW_miriumAmplification>
+  <HW_shellsKeeper>
+    <HWBuffAddDynGroupComponent>
+      <server>
+        <groupName>	HW_lootPickUpVFX	</groupName>
+        <duration>	1	</duration>
+        <removeOnDestroy>	False	</removeOnDestroy>
+        <replaceExisting>	True	</replaceExisting>
+      </server>
+    </HWBuffAddDynGroupComponent>
+    <HWBuffVehicleModifiersComponent>
+      <server>
+        <modifiers>
+          <modifier>
+            <key>	shells/deathKeeper	</key>
+            <factor>	1	</factor>
+          </modifier>
+        </modifiers>
+      </server>
+    </HWBuffVehicleModifiersComponent>
+    <HWBuffPanelComponent>
+      <server>
+        <buffKey>	buffShellsKeeper	</buffKey>
+      </server>
+      <client>
+        <showNotificationPopup>	HALLOWEEN HALLOWEEN_MEDIUM HALLOWEEN_HARD	</showNotificationPopup>
+        <buffKey>	buffShellsKeeper	</buffKey>
+      </client>
+    </HWBuffPanelComponent>
+    <HWBuffSoundComponent>
+      <client>
+        <soundEvents>
+          <item>
+            <activationSound2D>	ev_hw_gp_ui_anomalies_get_individual	</activationSound2D>
+            <playTo>	self	</playTo>
+          </item>
+        </soundEvents>
+      </client>
+    </HWBuffSoundComponent>
+  </HW_shellsKeeper>
+  <HW_miriumRefund>
+    <HWBuffVehicleModifiersComponent>
+      <server>
+        <modifiers>
+          <modifier>
+            <key>	souls/refundAmount	</key>
+            <factor>	0.25	</factor>
+          </modifier>
+          <modifier>
+            <key>	souls/refundChance	</key>
+            <factor>	1	</factor>
+          </modifier>
+        </modifiers>
+      </server>
+    </HWBuffVehicleModifiersComponent>
+    <HWBuffPanelComponent>
+      <server>
+        <buffKey>	buffMiriumRefund	</buffKey>
+      </server>
+      <client>
+        <buffKey>	buffMiriumRefund	</buffKey>
+      </client>
+    </HWBuffPanelComponent>
+    <HWBuffSoundComponent>
+      <client>
+        <soundEvents>
+          <item>
+            <activationSound2D>	ev_hw_gp_ui_anomalies_get_epic	</activationSound2D>
+            <playTo>	self	</playTo>
+          </item>
+        </soundEvents>
+      </client>
+    </HWBuffSoundComponent>
+  </HW_miriumRefund>
+  <HW_botIgniteOnShot>
+    <HWBuffAddBuffOnShotComponent>
+      <server>
+        <buffName>	HW_botIgniteMakeDamageFromShot	</buffName>
+        <duration>	0.1	</duration>
+        <chance>	100	</chance>
+      </server>
+    </HWBuffAddBuffOnShotComponent>
+    <HWBuffVehicleIconComponent>
+      <client>
+        <icon>	firestarter	</icon>
+        <priority>	1	</priority>
+      </client>
+    </HWBuffVehicleIconComponent>
+  </HW_botIgniteOnShot>
+  <HW_botIgniteMakeDamageFromShot>
+    <HWBuffIgniteVehicleComponent>
+      <server>
+        <time>	4	</time>
+        <damagePerSecond>	25	</damagePerSecond>
+        <maxHealthDamageFactorPerSecond>	0.0	</maxHealthDamageFactorPerSecond>
+        <attackReason>	HALLOWEEN_PASSIVE_IGNITE	</attackReason>
+      </server>
+    </HWBuffIgniteVehicleComponent>
+  </HW_botIgniteMakeDamageFromShot>
+  <HW_botShootingSpeed>
+    <HWBuffFactorsComponent>
+      <server>
+        <factors>
+          <item>
+            <key>	gun/reloadTime	</key>
+            <add>	-0.5	</add>
+            <max>	0.1	</max>
+          </item>
+        </factors>
+      </server>
+    </HWBuffFactorsComponent>
+    <HWBuffVehicleIconComponent>
+      <client>
+        <icon>	rapid_fire	</icon>
+        <priority>	1	</priority>
+      </client>
+    </HWBuffVehicleIconComponent>
+  </HW_botShootingSpeed>
+  <HW_botIncreaseDamage>
+    <HWBuffFactorsComponent>
+      <server>
+        <factors>
+          <item>
+            <key>	damageFactor	</key>
+            <add>	0.1	</add>
+            <max>	0.1	</max>
+          </item>
+        </factors>
+      </server>
+    </HWBuffFactorsComponent>
+    <HWBuffVehicleIconComponent>
+      <client>
+        <icon>	damage_dealer	</icon>
+        <priority>	1	</priority>
+      </client>
+    </HWBuffVehicleIconComponent>
+  </HW_botIncreaseDamage>
+  <HW_botCasterBuff>
+    <HWBuffVehicleIconComponent>
+      <client>
+        <icon>	death_zone	</icon>
+        <priority>	1	</priority>
+      </client>
+    </HWBuffVehicleIconComponent>
+  </HW_botCasterBuff>
+  <HW_botProtectorBuff>
+    <HWBuffVehicleIconComponent>
+      <client>
+        <icon>	shield	</icon>
+        <priority>	2	</priority>
+      </client>
+    </HWBuffVehicleIconComponent>
+  </HW_botProtectorBuff>
+  <HW_visibilityRange_phase_1>
+    <HWBuffFactorsComponent>
+      <server>
+        <factors>
+          <item>
+            <key>	circularVisionRadius	</key>
+            <min>	1.0	</min>
+            <max>	1.0	</max>
+          </item>
+          <item>
+            <key>	radio/distance	</key>
+            <min>	1.0	</min>
+            <max>	1.0	</max>
+          </item>
+        </factors>
+      </server>
+    </HWBuffFactorsComponent>
+  </HW_visibilityRange_phase_1>
+  <HW_visibilityRange_phase_2>
+    <HWBuffFactorsComponent>
+      <server>
+        <factors>
+          <item>
+            <key>	circularVisionRadius	</key>
+            <add>	-0.1	</add>
+            <min>	0.9	</min>
+            <max>	0.9	</max>
+          </item>
+          <item>
+            <key>	radio/distance	</key>
+            <add>	-0.1	</add>
+            <min>	0.9	</min>
+            <max>	0.9	</max>
+          </item>
+        </factors>
+      </server>
+    </HWBuffFactorsComponent>
+  </HW_visibilityRange_phase_2>
+  <HW_visibilityRange_phase_3>
+    <HWBuffFactorsComponent>
+      <server>
+        <factors>
+          <item>
+            <key>	circularVisionRadius	</key>
+            <add>	-0.2	</add>
+            <min>	0.8	</min>
+            <max>	0.8	</max>
+          </item>
+          <item>
+            <key>	radio/distance	</key>
+            <add>	-0.2	</add>
+            <min>	0.8	</min>
+            <max>	0.8	</max>
+          </item>
+        </factors>
+      </server>
+    </HWBuffFactorsComponent>
+  </HW_visibilityRange_phase_3>
+  <HW_visibilityRange_phase_4>
+    <HWBuffFactorsComponent>
+      <server>
+        <factors>
+          <item>
+            <key>	circularVisionRadius	</key>
+            <add>	-0.2	</add>
+            <min>	0.8	</min>
+            <max>	0.8	</max>
+          </item>
+          <item>
+            <key>	radio/distance	</key>
+            <add>	-0.2	</add>
+            <min>	0.8	</min>
+            <max>	0.8	</max>
+          </item>
+        </factors>
+      </server>
+    </HWBuffFactorsComponent>
+  </HW_visibilityRange_phase_4>
+  <HW_bossTeleportFX>
+    <HWBuffSequencesComponent>
+      <client>
+        <sequences>
+          <item>
+            <sequence>	particles/eff_sequence/halloween/enemies/boss_teleport.seq	</sequence>
+            <loopCount>	1	</loopCount>
+            <visibleTo>	all	</visibleTo>
+          </item>
+        </sequences>
+      </client>
+    </HWBuffSequencesComponent>
+  </HW_bossTeleportFX>
+  <HW_bossAppearedFX>
+    <HWBuffSequencesComponent>
+      <client>
+        <sequences>
+          <item>
+            <sequence>	particles/eff_sequence/halloween/enemies/boss_appeared.seq	</sequence>
+            <loopCount>	1	</loopCount>
+            <visibleTo>	all	</visibleTo>
+          </item>
+        </sequences>
+      </client>
+    </HWBuffSequencesComponent>
+  </HW_bossAppearedFX>
+  <HW_spiderBossTeleportFX>
+    <HWBuffSequencesComponent>
+      <client>
+        <sequences>
+          <item>
+            <sequence>	particles/eff_sequence/halloween/enemies/boss_spider/boss_spider_teleport_end.seq	</sequence>
+            <loopCount>	1	</loopCount>
+            <visibleTo>	all	</visibleTo>
+            <offset>	0 6 0	</offset>
+          </item>
+        </sequences>
+      </client>
+    </HWBuffSequencesComponent>
+    <HWBuffSoundComponent>
+      <client>
+        <soundEvents>
+          <item>
+            <playSoundPos>	ev_hw_gp_bot_hexapod_teleport	</playSoundPos>
+            <playTo>	all	</playTo>
+          </item>
+        </soundEvents>
+      </client>
+    </HWBuffSoundComponent>
+  </HW_spiderBossTeleportFX>
+  <HW_spiderBossTeleportPreparationFX>
+    <HWBuffSequencesComponent>
+      <client>
+        <sequences>
+          <item>
+            <sequence>	particles/eff_sequence/halloween/enemies/boss_spider/boss_spider_teleport_idle.seq	</sequence>
+            <bindNode>	hull	</bindNode>
+          </item>
+          <item>
+            <sequence>	particles/eff_sequence/halloween/enemies/boss_spider/boss_spider_teleport_turret_rings.seq	</sequence>
+            <bindNode>	turret	</bindNode>
+          </item>
+        </sequences>
+      </client>
+    </HWBuffSequencesComponent>
+  </HW_spiderBossTeleportPreparationFX>
+  <HW_botsVisibilityRange_phase_1>
+    <HWBuffFactorsComponent>
+      <server>
+        <factors>
+          <item>
+            <key>	circularVisionRadius	</key>
+            <min>	1.0	</min>
+            <max>	1.0	</max>
+          </item>
+        </factors>
+      </server>
+    </HWBuffFactorsComponent>
+  </HW_botsVisibilityRange_phase_1>
+  <HW_botsVisibilityRange_phase_2>
+    <HWBuffFactorsComponent>
+      <server>
+        <factors>
+          <item>
+            <key>	circularVisionRadius	</key>
+            <add>	-0.1	</add>
+            <min>	0.9	</min>
+            <max>	0.9	</max>
+          </item>
+        </factors>
+      </server>
+    </HWBuffFactorsComponent>
+  </HW_botsVisibilityRange_phase_2>
+  <HW_botsVisibilityRange_phase_3>
+    <HWBuffFactorsComponent>
+      <server>
+        <factors>
+          <item>
+            <key>	circularVisionRadius	</key>
+            <add>	-0.2	</add>
+            <min>	0.8	</min>
+            <max>	0.8	</max>
+          </item>
+        </factors>
+      </server>
+    </HWBuffFactorsComponent>
+  </HW_botsVisibilityRange_phase_3>
+  <HW_botsVisibilityRange_phase_4>
+    <HWBuffFactorsComponent>
+      <server>
+        <factors>
+          <item>
+            <key>	circularVisionRadius	</key>
+            <add>	-0.2	</add>
+            <min>	0.8	</min>
+            <max>	0.8	</max>
+          </item>
+        </factors>
+      </server>
+    </HWBuffFactorsComponent>
+  </HW_botsVisibilityRange_phase_4>
+  <HW_visibilityRange_phase_1_hard>
+    <HWBuffFactorsComponent>
+      <server>
+        <factors>
+          <item>
+            <key>	circularVisionRadius	</key>
+            <add>	-0.1	</add>
+            <min>	0.9	</min>
+            <max>	0.9	</max>
+          </item>
+          <item>
+            <key>	radio/distance	</key>
+            <add>	-0.1	</add>
+            <min>	0.9	</min>
+            <max>	0.9	</max>
+          </item>
+        </factors>
+      </server>
+    </HWBuffFactorsComponent>
+  </HW_visibilityRange_phase_1_hard>
+  <HW_visibilityRange_phase_2_hard>
+    <HWBuffFactorsComponent>
+      <server>
+        <factors>
+          <item>
+            <key>	circularVisionRadius	</key>
+            <add>	-0.2	</add>
+            <min>	0.8	</min>
+            <max>	0.8	</max>
+          </item>
+          <item>
+            <key>	radio/distance	</key>
+            <add>	-0.2	</add>
+            <min>	0.8	</min>
+            <max>	0.8	</max>
+          </item>
+        </factors>
+      </server>
+    </HWBuffFactorsComponent>
+  </HW_visibilityRange_phase_2_hard>
+  <HW_visibilityRange_phase_3_hard>
+    <HWBuffFactorsComponent>
+      <server>
+        <factors>
+          <item>
+            <key>	circularVisionRadius	</key>
+            <add>	-0.3	</add>
+            <min>	0.7	</min>
+            <max>	0.7	</max>
+          </item>
+          <item>
+            <key>	radio/distance	</key>
+            <add>	-0.3	</add>
+            <min>	0.7	</min>
+            <max>	0.7	</max>
+          </item>
+        </factors>
+      </server>
+    </HWBuffFactorsComponent>
+  </HW_visibilityRange_phase_3_hard>
+  <HW_visibilityRange_phase_4_hard>
+    <HWBuffFactorsComponent>
+      <server>
+        <factors>
+          <item>
+            <key>	circularVisionRadius	</key>
+            <add>	-0.3	</add>
+            <min>	0.7	</min>
+            <max>	0.7	</max>
+          </item>
+          <item>
+            <key>	radio/distance	</key>
+            <add>	-0.3	</add>
+            <min>	0.7	</min>
+            <max>	0.7	</max>
+          </item>
+        </factors>
+      </server>
+    </HWBuffFactorsComponent>
+  </HW_visibilityRange_phase_4_hard>
+  <HW_botsVisibilityRange_phase_1_hard>
+    <HWBuffFactorsComponent>
+      <server>
+        <factors>
+          <item>
+            <key>	circularVisionRadius	</key>
+            <add>	-0.1	</add>
+          </item>
+        </factors>
+      </server>
+    </HWBuffFactorsComponent>
+  </HW_botsVisibilityRange_phase_1_hard>
+  <HW_botsVisibilityRange_phase_2_hard>
+    <HWBuffFactorsComponent>
+      <server>
+        <factors>
+          <item>
+            <key>	circularVisionRadius	</key>
+            <add>	-0.2	</add>
+          </item>
+        </factors>
+      </server>
+    </HWBuffFactorsComponent>
+  </HW_botsVisibilityRange_phase_2_hard>
+  <HW_botsVisibilityRange_phase_3_hard>
+    <HWBuffFactorsComponent>
+      <server>
+        <factors>
+          <item>
+            <key>	circularVisionRadius	</key>
+            <add>	-0.3	</add>
+          </item>
+        </factors>
+      </server>
+    </HWBuffFactorsComponent>
+  </HW_botsVisibilityRange_phase_3_hard>
+  <HW_botsVisibilityRange_phase_4_hard>
+    <HWBuffFactorsComponent>
+      <server>
+        <factors>
+          <item>
+            <key>	circularVisionRadius	</key>
+            <add>	-0.3	</add>
+          </item>
+        </factors>
+      </server>
+    </HWBuffFactorsComponent>
+  </HW_botsVisibilityRange_phase_4_hard>
+  <HW_bossHitFX>
+    <HWBuffAddDynGroupComponent>
+      <server>
+        <groupName>	HW_bossHitFX_{vehName}	</groupName>
+        <removeOnDestroy>	True	</removeOnDestroy>
+      </server>
+    </HWBuffAddDynGroupComponent>
+  </HW_bossHitFX>
+  <HW_bossHitFX_G146_E100_Hell_Boss>
+    <HWBuffVehicleEffectsComponent>
+      <client>
+        <sequences>
+          <item>
+            <sequence>	halloween/content/sequences/boss_hell_turret_hit_effect.ssm	</sequence>
+            <bindNode>	turret	</bindNode>
+          </item>
+        </sequences>
+        <moduleName>	turret	</moduleName>
+      </client>
+    </HWBuffVehicleEffectsComponent>
+    <HWBuffVehicleEffectsComponent>
+      <client>
+        <sequences>
+          <item>
+            <sequence>	halloween/content/sequences/boss_hell_hull_hit_effect.ssm	</sequence>
+            <bindNode>	hull	</bindNode>
+          </item>
+        </sequences>
+        <moduleName>	hull	</moduleName>
+      </client>
+    </HWBuffVehicleEffectsComponent>
+    <HWBuffVehicleEffectsComponent>
+      <client>
+        <sequences>
+          <item>
+            <sequence>	halloween/content/sequences/boss_death_effect.ssm	</sequence>
+            <bindNode>	hull	</bindNode>
+          </item>
+        </sequences>
+        <moduleName>	death	</moduleName>
+      </client>
+    </HWBuffVehicleEffectsComponent>
+  </HW_bossHitFX_G146_E100_Hell_Boss>
+  <HW_bossHitFX_R205_Rozanov_Boss_HW23>
+    <HWBuffVehicleEffectsComponent>
+      <client>
+        <sequences>
+          <item>
+            <sequence>	halloween/content/sequences/boss_rozanov_turret_hit_effect.ssm	</sequence>
+            <bindNode>	turret	</bindNode>
+          </item>
+        </sequences>
+        <moduleName>	turret	</moduleName>
+      </client>
+    </HWBuffVehicleEffectsComponent>
+    <HWBuffVehicleEffectsComponent>
+      <client>
+        <sequences>
+          <item>
+            <sequence>	halloween/content/sequences/boss_rozanov_hull_hit_effect.ssm	</sequence>
+            <bindNode>	hull	</bindNode>
+          </item>
+        </sequences>
+        <moduleName>	hull	</moduleName>
+      </client>
+    </HWBuffVehicleEffectsComponent>
+    <HWBuffVehicleEffectsComponent>
+      <client>
+        <sequences>
+          <item>
+            <sequence>	halloween/content/sequences/boss_death_effect.ssm	</sequence>
+            <bindNode>	hull	</bindNode>
+          </item>
+        </sequences>
+        <moduleName>	death	</moduleName>
+      </client>
+    </HWBuffVehicleEffectsComponent>
+  </HW_bossHitFX_R205_Rozanov_Boss_HW23>
+  <HW_bossHitFX_A66_M103_Boss_HW23>
+    <HWBuffVehicleEffectsComponent>
+      <client>
+        <sequences>
+          <item>
+            <sequence>	halloween/content/sequences/boss_m103_turret_hit_effect.ssm	</sequence>
+            <bindNode>	turret	</bindNode>
+          </item>
+        </sequences>
+        <moduleName>	turret	</moduleName>
+      </client>
+    </HWBuffVehicleEffectsComponent>
+    <HWBuffVehicleEffectsComponent>
+      <client>
+        <sequences>
+          <item>
+            <sequence>	halloween/content/sequences/boss_m103_hull_hit_effect.ssm	</sequence>
+            <bindNode>	hull	</bindNode>
+          </item>
+        </sequences>
+        <moduleName>	hull	</moduleName>
+      </client>
+    </HWBuffVehicleEffectsComponent>
+    <HWBuffVehicleEffectsComponent>
+      <client>
+        <sequences>
+          <item>
+            <sequence>	halloween/content/sequences/boss_death_effect.ssm	</sequence>
+            <bindNode>	hull	</bindNode>
+          </item>
+        </sequences>
+        <moduleName>	death	</moduleName>
+      </client>
+    </HWBuffVehicleEffectsComponent>
+  </HW_bossHitFX_A66_M103_Boss_HW23>
+  <HW_bossHitFX_G180_E100_Hell_Boss_HW24>
+    <HWBuffVehicleEffectsComponent>
+      <client>
+        <sequences>
+          <item>
+            <sequence>	halloween/content/sequences/boss_g180_e100_turret_hit_effect.ssm	</sequence>
+            <bindNode>	turret	</bindNode>
+          </item>
+        </sequences>
+        <moduleName>	turret	</moduleName>
+      </client>
+    </HWBuffVehicleEffectsComponent>
+    <HWBuffVehicleEffectsComponent>
+      <client>
+        <sequences>
+          <item>
+            <sequence>	halloween/content/sequences/boss_hell_hull_hit_effect.ssm	</sequence>
+            <bindNode>	hull	</bindNode>
+          </item>
+        </sequences>
+        <moduleName>	hull	</moduleName>
+      </client>
+    </HWBuffVehicleEffectsComponent>
+    <HWBuffVehicleEffectsComponent>
+      <client>
+        <sequences>
+          <item>
+            <sequence>	halloween/content/sequences/boss_death_effect.ssm	</sequence>
+            <bindNode>	hull	</bindNode>
+          </item>
+        </sequences>
+        <moduleName>	death	</moduleName>
+      </client>
+    </HWBuffVehicleEffectsComponent>
+  </HW_bossHitFX_G180_E100_Hell_Boss_HW24>
+  <HW_bossHitFX_G181_E100_Cannon_Boss_HW24>
+    <HWBuffVehicleEffectsComponent>
+      <client>
+        <sequences>
+          <item>
+            <sequence>	halloween/content/sequences/boss_g181_cannon_turret_hit_effect.ssm	</sequence>
+            <bindNode>	turret	</bindNode>
+          </item>
+        </sequences>
+        <moduleName>	turret	</moduleName>
+      </client>
+    </HWBuffVehicleEffectsComponent>
+    <HWBuffVehicleEffectsComponent>
+      <client>
+        <sequences>
+          <item>
+            <sequence>	halloween/content/sequences/boss_hell_hull_hit_effect.ssm	</sequence>
+            <bindNode>	hull	</bindNode>
+          </item>
+        </sequences>
+        <moduleName>	hull	</moduleName>
+      </client>
+    </HWBuffVehicleEffectsComponent>
+    <HWBuffVehicleEffectsComponent>
+      <client>
+        <sequences>
+          <item>
+            <sequence>	halloween/content/sequences/boss_death_effect.ssm	</sequence>
+            <bindNode>	hull	</bindNode>
+          </item>
+        </sequences>
+        <moduleName>	death	</moduleName>
+      </client>
+    </HWBuffVehicleEffectsComponent>
+  </HW_bossHitFX_G181_E100_Cannon_Boss_HW24>
+  <HW_bossHitFX_G181_E100_Autocannon_Boss_HW25_bot>
+    <HWBuffVehicleEffectsComponent>
+      <client>
+        <sequences>
+          <item>
+            <sequence>	halloween/content/sequences/boss_g181_autocannon_gun_hit_effect.ssm	</sequence>
+            <bindNode>	Gun	</bindNode>
+          </item>
+        </sequences>
+        <moduleName>	gun	</moduleName>
+      </client>
+    </HWBuffVehicleEffectsComponent>
+    <HWBuffVehicleEffectsComponent>
+      <client>
+        <sequences>
+          <item>
+            <sequence>	halloween/content/sequences/boss_g181_autocannon_gun_hit_effect.ssm	</sequence>
+            <bindNode>	Gun	</bindNode>
+          </item>
+        </sequences>
+        <moduleName>	turret	</moduleName>
+      </client>
+    </HWBuffVehicleEffectsComponent>
+    <HWBuffVehicleEffectsComponent>
+      <client>
+        <sequences>
+          <item>
+            <sequence>	halloween/content/sequences/boss_hell_hull_hit_effect.ssm	</sequence>
+            <bindNode>	hull	</bindNode>
+          </item>
+        </sequences>
+        <moduleName>	hull	</moduleName>
+      </client>
+    </HWBuffVehicleEffectsComponent>
+    <HWBuffVehicleEffectsComponent>
+      <client>
+        <sequences>
+          <item>
+            <sequence>	halloween/content/sequences/boss_death_effect.ssm	</sequence>
+            <bindNode>	hull	</bindNode>
+          </item>
+        </sequences>
+        <moduleName>	death	</moduleName>
+      </client>
+    </HWBuffVehicleEffectsComponent>
+  </HW_bossHitFX_G181_E100_Autocannon_Boss_HW25_bot>
+  <HW_bossHitFX_G00_Spider_Boss_HW26_bot>
+    <HWBuffVehicleEffectsComponent>
+      <client>
+        <sequences>
+          <item>
+            <sequence>	halloween/content/sequences/boss_spider_turret_hit_effect.ssm	</sequence>
+            <bindNode>	turret	</bindNode>
+          </item>
+        </sequences>
+        <moduleName>	turret	</moduleName>
+      </client>
+    </HWBuffVehicleEffectsComponent>
+    <HWBuffVehicleEffectsComponent>
+      <client>
+        <sequences>
+          <item>
+            <sequence>	halloween/content/sequences/boss_spider_hull_hit_effect.ssm	</sequence>
+            <bindNode>	hull	</bindNode>
+          </item>
+        </sequences>
+        <moduleName>	hull	</moduleName>
+      </client>
+    </HWBuffVehicleEffectsComponent>
+    <HWBuffVehicleEffectsComponent>
+      <client>
+        <sequences>
+          <item>
+            <sequence>	halloween/content/sequences/boss_spider_death_effect.ssm	</sequence>
+            <bindNode>	hull	</bindNode>
+          </item>
+        </sequences>
+        <moduleName>	death	</moduleName>
+      </client>
+    </HWBuffVehicleEffectsComponent>
+  </HW_bossHitFX_G00_Spider_Boss_HW26_bot>
+  <HW_bossPhase2Visual>
+    <HWBuffSequencesComponent>
+      <client>
+        <sequences>
+          <item>
+            <sequence>	particles/eff_sequence/halloween/enemies/boss_heat_hull_phase_02.seq	</sequence>
+            <bindNode>	hull	</bindNode>
+          </item>
+          <item>
+            <sequence>	particles/eff_sequence/halloween/enemies/boss_heat_turret_phase_02.seq	</sequence>
+            <bindNode>	turret	</bindNode>
+          </item>
+        </sequences>
+      </client>
+    </HWBuffSequencesComponent>
+  </HW_bossPhase2Visual>
+  <HW_bossPhase3Visual>
+    <HWBuffSequencesComponent>
+      <client>
+        <sequences>
+          <item>
+            <sequence>	particles/eff_sequence/halloween/enemies/boss_heat_hull_phase_03.seq	</sequence>
+            <bindNode>	hull	</bindNode>
+          </item>
+          <item>
+            <sequence>	particles/eff_sequence/halloween/enemies/boss_heat_turret_phase_03.seq	</sequence>
+            <bindNode>	turret	</bindNode>
+          </item>
+        </sequences>
+      </client>
+    </HWBuffSequencesComponent>
+  </HW_bossPhase3Visual>
+  <HW_bossCharge>
+    <HWBuffAddDynGroupComponent>
+      <server>
+        <groupName>	HW_bossCharge_{vehName}	</groupName>
+        <removeOnDestroy>	True	</removeOnDestroy>
+      </server>
+    </HWBuffAddDynGroupComponent>
+    <HWBuffNitroComponent>
+      <client>
+        <nitro>	2	</nitro>
+      </client>
+    </HWBuffNitroComponent>
+  </HW_bossCharge>
+  <HW_bossCharge_G146_E100_Hell_Boss>
+    <HWBuffSequencesComponent>
+      <client>
+        <sequences>
+          <item>
+            <sequence>	particles/eff_sequence/halloween/enemies/boss_charge.seq	</sequence>
+            <bindNode>	hull	</bindNode>
+          </item>
+        </sequences>
+      </client>
+    </HWBuffSequencesComponent>
+  </HW_bossCharge_G146_E100_Hell_Boss>
+  <HW_bossCharge_R205_Rozanov_Boss_HW23>
+    <HWBuffSequencesComponent>
+      <client>
+        <sequences>
+          <item>
+            <sequence>	particles/eff_sequence/halloween/enemies/boss_Rozanov_charge.seq	</sequence>
+            <bindNode>	hull	</bindNode>
+          </item>
+        </sequences>
+      </client>
+    </HWBuffSequencesComponent>
+  </HW_bossCharge_R205_Rozanov_Boss_HW23>
+  <HW_bossCharge_A66_M103_Boss_HW23>
+    <HWBuffSequencesComponent>
+      <client>
+        <sequences>
+          <item>
+            <sequence>	particles/eff_sequence/halloween/enemies/boss_M103_charge.seq	</sequence>
+            <bindNode>	hull	</bindNode>
+          </item>
+        </sequences>
+      </client>
+    </HWBuffSequencesComponent>
+  </HW_bossCharge_A66_M103_Boss_HW23>
+  <HW_bossCharge_G180_E100_Hell_Boss_HW24>
+    <HWBuffSequencesComponent>
+      <client>
+        <sequences>
+          <item>
+            <sequence>	particles/eff_sequence/halloween/enemies/boss_charge.seq	</sequence>
+            <bindNode>	hull	</bindNode>
+          </item>
+        </sequences>
+      </client>
+    </HWBuffSequencesComponent>
+  </HW_bossCharge_G180_E100_Hell_Boss_HW24>
+  <HW_bossCharge_G181_E100_Cannon_Boss_HW24>
+    <HWBuffSequencesComponent>
+      <client>
+        <sequences>
+          <item>
+            <sequence>	particles/eff_sequence/halloween/enemies/boss_charge.seq	</sequence>
+            <bindNode>	hull	</bindNode>
+          </item>
+        </sequences>
+      </client>
+    </HWBuffSequencesComponent>
+  </HW_bossCharge_G181_E100_Cannon_Boss_HW24>
+  <HW_bossCharge_G181_E100_Autocannon_Boss_HW25_bot>
+    <HWBuffSequencesComponent>
+      <client>
+        <sequences>
+          <item>
+            <sequence>	particles/eff_sequence/halloween/enemies/boss_charge.seq	</sequence>
+            <bindNode>	hull	</bindNode>
+          </item>
+        </sequences>
+      </client>
+    </HWBuffSequencesComponent>
+  </HW_bossCharge_G181_E100_Autocannon_Boss_HW25_bot>
+  <HW_bossCharge_G00_Spider_Boss_HW26_bot>
+    <HWBuffSequencesComponent>
+      <client>
+        <sequences>
+          <item>
+            <sequence>	particles/eff_sequence/halloween/enemies/boss_spider/boss_spider_charge.seq	</sequence>
+            <bindNode>	hull	</bindNode>
+          </item>
+        </sequences>
+      </client>
+    </HWBuffSequencesComponent>
+  </HW_bossCharge_G00_Spider_Boss_HW26_bot>
+  <HW_slowdown>
+    <HWBuffAddDynGroupComponent>
+      <server>
+        <groupName>	HW_slowdown_{vehName}	</groupName>
+        <replaceExisting>	True	</replaceExisting>
+        <removeOnDestroy>	True	</removeOnDestroy>
+      </server>
+    </HWBuffAddDynGroupComponent>
+  </HW_slowdown>
+  <HW_slowdown_R205_Rozanov_Boss_HW23>
+    <HWBuffFactorsComponent>
+      <server>
+        <factors>
+          <item>
+            <key>	vehicle/maxSpeed	</key>
+            <add>	-0.65	</add>
+          </item>
+        </factors>
+      </server>
+    </HWBuffFactorsComponent>
+  </HW_slowdown_R205_Rozanov_Boss_HW23>
+  <HW_slowdown_G146_E100_Hell_Boss>
+    <HWBuffFactorsComponent>
+      <server>
+        <factors>
+          <item>
+            <key>	vehicle/maxSpeed	</key>
+            <add>	-0.75	</add>
+          </item>
+        </factors>
+      </server>
+    </HWBuffFactorsComponent>
+  </HW_slowdown_G146_E100_Hell_Boss>
+  <HW_slowdown_A66_M103_Boss_HW23>
+    <HWBuffFactorsComponent>
+      <server>
+        <factors>
+          <item>
+            <key>	vehicle/maxSpeed	</key>
+            <add>	-0.65	</add>
+          </item>
+        </factors>
+      </server>
+    </HWBuffFactorsComponent>
+  </HW_slowdown_A66_M103_Boss_HW23>
+  <HW_slowdown_G180_E100_Hell_Boss_HW24>
+    <HWBuffFactorsComponent>
+      <server>
+        <factors>
+          <item>
+            <key>	vehicle/maxSpeed	</key>
+            <add>	-0.70	</add>
+          </item>
+        </factors>
+      </server>
+    </HWBuffFactorsComponent>
+  </HW_slowdown_G180_E100_Hell_Boss_HW24>
+  <HW_slowdown_G181_E100_Cannon_Boss_HW24>
+    <HWBuffFactorsComponent>
+      <server>
+        <factors>
+          <item>
+            <key>	vehicle/maxSpeed	</key>
+            <add>	-0.75	</add>
+          </item>
+        </factors>
+      </server>
+    </HWBuffFactorsComponent>
+  </HW_slowdown_G181_E100_Cannon_Boss_HW24>
+  <HW_slowdown_G181_E100_Autocannon_Boss_HW25_bot>
+    <HWBuffFactorsComponent>
+      <server>
+        <factors>
+          <item>
+            <key>	vehicle/maxSpeed	</key>
+            <add>	-0.75	</add>
+          </item>
+        </factors>
+      </server>
+    </HWBuffFactorsComponent>
+  </HW_slowdown_G181_E100_Autocannon_Boss_HW25_bot>
+  <HW_slowdown_G00_Spider_Boss_HW26_bot>
+    <HWBuffFactorsComponent>
+      <server>
+        <factors>
+          <item>
+            <key>	vehicle/maxSpeed	</key>
+            <add>	-0.65	</add>
+          </item>
+        </factors>
+      </server>
+    </HWBuffFactorsComponent>
+  </HW_slowdown_G00_Spider_Boss_HW26_bot>
+  <HW_slowDownBossOnSecondBossPhase_medium>
+    <HWBuffFactorsComponent>
+      <server>
+        <factors>
+          <item>
+            <key>	vehicle/maxSpeed	</key>
+            <add>	-0.65	</add>
+          </item>
+        </factors>
+      </server>
+    </HWBuffFactorsComponent>
+  </HW_slowDownBossOnSecondBossPhase_medium>
+  <HW_slowDownBossOnSecondBossPhase_hard>
+    <HWBuffFactorsComponent>
+      <server>
+        <factors>
+          <item>
+            <key>	vehicle/maxSpeed	</key>
+            <add>	-0.6	</add>
+          </item>
+        </factors>
+      </server>
+    </HWBuffFactorsComponent>
+  </HW_slowDownBossOnSecondBossPhase_hard>
+  <HW_slowDownBossOnThirdBossPhase_medium>
+    <HWBuffFactorsComponent>
+      <server>
+        <factors>
+          <item>
+            <key>	vehicle/maxSpeed	</key>
+            <add>	-0.55	</add>
+          </item>
+        </factors>
+      </server>
+    </HWBuffFactorsComponent>
+  </HW_slowDownBossOnThirdBossPhase_medium>
+  <HW_slowDownBossOnThirdBossPhase_hard>
+    <HWBuffFactorsComponent>
+      <server>
+        <factors>
+          <item>
+            <key>	vehicle/maxSpeed	</key>
+            <add>	-0.5	</add>
+          </item>
+        </factors>
+      </server>
+    </HWBuffFactorsComponent>
+  </HW_slowDownBossOnThirdBossPhase_hard>
+  <HW_speedUpForRam>
+    <HWBuffAddDynGroupComponent>
+      <server>
+        <groupName>	HW_speedUpForRam_{vehName}	</groupName>
+        <removeOnDestroy>	True	</removeOnDestroy>
+      </server>
+    </HWBuffAddDynGroupComponent>
+  </HW_speedUpForRam>
+  <HW_speedUpForRam_R205_Rozanov_Boss_HW23>
+    <HWBuffFactorsComponent>
+      <server>
+        <factors>
+          <item>
+            <key>	vehicle/maxSpeed	</key>
+            <add>	-0.4	</add>
+          </item>
+        </factors>
+      </server>
+    </HWBuffFactorsComponent>
+  </HW_speedUpForRam_R205_Rozanov_Boss_HW23>
+  <HW_speedUpForRam_G146_E100_Hell_Boss>
+    <HWBuffFactorsComponent>
+      <server>
+        <factors>
+          <item>
+            <key>	vehicle/maxSpeed	</key>
+            <add>	-0.4	</add>
+          </item>
+        </factors>
+      </server>
+    </HWBuffFactorsComponent>
+  </HW_speedUpForRam_G146_E100_Hell_Boss>
+  <HW_speedUpForRam_A66_M103_Boss_HW23>
+    <HWBuffFactorsComponent>
+      <server>
+        <factors>
+          <item>
+            <key>	vehicle/maxSpeed	</key>
+            <add>	-0.4	</add>
+          </item>
+        </factors>
+      </server>
+    </HWBuffFactorsComponent>
+  </HW_speedUpForRam_A66_M103_Boss_HW23>
+  <HW_speedUpForRam_G180_E100_Hell_Boss_HW24>
+    <HWBuffFactorsComponent>
+      <server>
+        <factors>
+          <item>
+            <key>	vehicle/maxSpeed	</key>
+            <add>	-0.4	</add>
+          </item>
+        </factors>
+      </server>
+    </HWBuffFactorsComponent>
+  </HW_speedUpForRam_G180_E100_Hell_Boss_HW24>
+  <HW_speedUpForRam_G181_E100_Cannon_Boss_HW24>
+    <HWBuffFactorsComponent>
+      <server>
+        <factors>
+          <item>
+            <key>	vehicle/maxSpeed	</key>
+            <add>	-0.4	</add>
+          </item>
+        </factors>
+      </server>
+    </HWBuffFactorsComponent>
+  </HW_speedUpForRam_G181_E100_Cannon_Boss_HW24>
+  <HW_speedUpForRam_G181_E100_Autocannon_Boss_HW25_bot>
+    <HWBuffFactorsComponent>
+      <server>
+        <factors>
+          <item>
+            <key>	vehicle/maxSpeed	</key>
+            <add>	-0.4	</add>
+          </item>
+        </factors>
+      </server>
+    </HWBuffFactorsComponent>
+  </HW_speedUpForRam_G181_E100_Autocannon_Boss_HW25_bot>
+  <HW_speedUpForRam_G00_Spider_Boss_HW26_bot>
+    <HWBuffFactorsComponent>
+      <server>
+        <factors>
+          <item>
+            <key>	vehicle/maxSpeed	</key>
+            <add>	-0.4	</add>
+          </item>
+        </factors>
+      </server>
+    </HWBuffFactorsComponent>
+  </HW_speedUpForRam_G00_Spider_Boss_HW26_bot>
+  <HW_laserSight>
+    <HWBuffInterruptibleComponent>
+      <server>
+        <events>	onDeath	</events>
+      </server>
+    </HWBuffInterruptibleComponent>
+    <HWBuffLaserSightComponent>
+      <client>
+        <bindNode>	HP_laser	</bindNode>
+        <sightMaxDistance>	500.0	</sightMaxDistance>
+        <beamModel>	particles/content_deferred/GFX_models/environment/halloween/hell_sight.model	</beamModel>
+        <beamModelFwd>	particles/content_deferred/GFX_models/environment/halloween/hell_sight_fwd.model	</beamModelFwd>
+        <modelLength>	10.0	</modelLength>
+      </client>
+    </HWBuffLaserSightComponent>
+  </HW_laserSight>
+  <HW_invisibility>
+    <HWBuffRepairComponent>
+      <server>
+        <healAmount>	0	</healAmount>
+        <healFactor>	0	</healFactor>
+        <stopFire>	true	</stopFire>
+        <removeStun>	true	</removeStun>
+        <healCrew>	true	</healCrew>
+        <healDevices>	all	</healDevices>
+      </server>
+    </HWBuffRepairComponent>
+    <HWBuffPeriodicHealComponent>
+      <server>
+        <healAmount>	35	</healAmount>
+        <healFactor>	0	</healFactor>
+        <timeCycle>	1	</timeCycle>
+        <isInterruptOnMaxHealth>	False	</isInterruptOnMaxHealth>
+        <repairReason>	BASIC_REPAIR	</repairReason>
+      </server>
+    </HWBuffPeriodicHealComponent>
+    <HWBuffInterruptibleComponent>
+      <server>
+        <events>	onShot	</events>
+      </server>
+    </HWBuffInterruptibleComponent>
+    <HWBuffInvisibilityForAIComponent></HWBuffInvisibilityForAIComponent>
+    <HWBuffAddDynGroupComponent>
+      <server>
+        <groupName>	HW_invisibilityEffect_{vehName}	</groupName>
+        <removeOnDestroy>	True	</removeOnDestroy>
+      </server>
+    </HWBuffAddDynGroupComponent>
+    <HWBuffSoundComponent>
+      <client>
+        <soundEvents>
+          <item>
+            <activationSound2D>	ev_hw_gp_ability_invis_on	</activationSound2D>
+            <deactivationSound2D>	ev_hw_gp_ability_invis_off	</deactivationSound2D>
+            <playTo>	self	</playTo>
+          </item>
+        </soundEvents>
+      </client>
+    </HWBuffSoundComponent>
+    <HWBuffDissolveComponent>
+      <client>
+        <fadeInTime>	2.0	</fadeInTime>
+        <fadeOutTime>	1.0	</fadeOutTime>
+        <maxDissolveFactor>	1.0	</maxDissolveFactor>
+      </client>
+    </HWBuffDissolveComponent>
+    <HWBuffDamageResistsComponent>
+      <server>
+        <resistReason>	DAMAGE_SHIELD	</resistReason>
+        <resists>
+          <item>
+            <target>	ALL	</target>
+            <attackReason>	HALLOWEEN_CORROSION	</attackReason>
+            <value>	1	</value>
+          </item>
+        </resists>
+      </server>
+    </HWBuffDamageResistsComponent>
+    <HWBuffAddDynGroupComponent>
+      <server>
+        <groupName>	HW_invisibilityResist	</groupName>
+        <duration>	3.0	</duration>
+        <removeOnDestroy>	True	</removeOnDestroy>
+        <replaceExisting>	False	</replaceExisting>
+      </server>
+    </HWBuffAddDynGroupComponent>
+  </HW_invisibility>
+  <HW_invisibilityEffect_GB24_Centurion_Mk3_Halloween_event>
+    <HWBuffSequencesComponent>
+      <client>
+        <sequences>
+          <item>
+            <sequence>	particles/eff_sequence/halloween/ability_invisibility_GB24_Centurion_Mk3_hw20_gun.seq	</sequence>
+            <bindNode>	Gun	</bindNode>
+            <sniperModeVisibleTo>	others	</sniperModeVisibleTo>
+            <visibleTo>	all	</visibleTo>
+          </item>
+          <item>
+            <sequence>	particles/eff_sequence/halloween/ability_invisibility_GB24_Centurion_Mk3_hw20_turret.seq	</sequence>
+            <bindNode>	turret	</bindNode>
+            <sniperModeVisibleTo>	others	</sniperModeVisibleTo>
+            <visibleTo>	all	</visibleTo>
+          </item>
+          <item>
+            <sequence>	particles/eff_sequence/halloween/ability_invisibility_GB24_Centurion_Mk3_hw20_hull.seq	</sequence>
+            <bindNode>	hull	</bindNode>
+            <sniperModeVisibleTo>	others	</sniperModeVisibleTo>
+            <visibleTo>	all	</visibleTo>
+          </item>
+        </sequences>
+      </client>
+    </HWBuffSequencesComponent>
+  </HW_invisibilityEffect_GB24_Centurion_Mk3_Halloween_event>
+  <HW_invisibilityEffect_F17_AMX_13_90_Halloween_event>
+    <HWBuffSequencesComponent>
+      <client>
+        <sequences>
+          <item>
+            <sequence>	particles/eff_sequence/halloween/ability_invisibility_F17_AMX_13_90_3Dst_HW20_gun.seq	</sequence>
+            <bindNode>	Gun	</bindNode>
+            <sniperModeVisibleTo>	others	</sniperModeVisibleTo>
+            <visibleTo>	all	</visibleTo>
+          </item>
+          <item>
+            <sequence>	particles/eff_sequence/halloween/ability_invisibility_F17_AMX_13_90_3Dst_HW20_turret.seq	</sequence>
+            <bindNode>	turret	</bindNode>
+            <sniperModeVisibleTo>	others	</sniperModeVisibleTo>
+            <visibleTo>	all	</visibleTo>
+          </item>
+          <item>
+            <sequence>	particles/eff_sequence/halloween/ability_invisibility_F17_AMX_13_90_3Dst_HW20_hull.seq	</sequence>
+            <bindNode>	hull	</bindNode>
+            <sniperModeVisibleTo>	others	</sniperModeVisibleTo>
+            <visibleTo>	all	</visibleTo>
+          </item>
+        </sequences>
+      </client>
+    </HWBuffSequencesComponent>
+  </HW_invisibilityEffect_F17_AMX_13_90_Halloween_event>
+  <HW_invisibilityEffect_R171_IS_3_II_hw21>
+    <HWBuffSequencesComponent>
+      <client>
+        <sequences>
+          <item>
+            <sequence>	particles/eff_sequence/halloween/ability_invisibility_R171_IS_3_II_hw21_gun.seq	</sequence>
+            <bindNode>	Gun	</bindNode>
+            <sniperModeVisibleTo>	others	</sniperModeVisibleTo>
+            <visibleTo>	all	</visibleTo>
+          </item>
+          <item>
+            <sequence>	particles/eff_sequence/halloween/ability_invisibility_R171_IS_3_II_hw21_turret.seq	</sequence>
+            <bindNode>	turret	</bindNode>
+            <sniperModeVisibleTo>	others	</sniperModeVisibleTo>
+            <visibleTo>	all	</visibleTo>
+          </item>
+          <item>
+            <sequence>	particles/eff_sequence/halloween/ability_invisibility_R171_IS_3_II_hw21_hull.seq	</sequence>
+            <bindNode>	hull	</bindNode>
+            <sniperModeVisibleTo>	others	</sniperModeVisibleTo>
+            <visibleTo>	all	</visibleTo>
+          </item>
+        </sequences>
+      </client>
+    </HWBuffSequencesComponent>
+  </HW_invisibilityEffect_R171_IS_3_II_hw21>
+  <HW_invisibilityEffect_A100_T49_Halloween_event>
+    <HWBuffSequencesComponent>
+      <client>
+        <sequences>
+          <item>
+            <sequence>	particles/eff_sequence/halloween/ability_invisibility_A100_T49_Halloween_event_gun.seq	</sequence>
+            <bindNode>	Gun	</bindNode>
+            <sniperModeVisibleTo>	others	</sniperModeVisibleTo>
+            <visibleTo>	all	</visibleTo>
+          </item>
+          <item>
+            <sequence>	particles/eff_sequence/halloween/ability_invisibility_A100_T49_Halloween_event_turret.seq	</sequence>
+            <bindNode>	turret	</bindNode>
+            <sniperModeVisibleTo>	others	</sniperModeVisibleTo>
+            <visibleTo>	all	</visibleTo>
+          </item>
+          <item>
+            <sequence>	particles/eff_sequence/halloween/ability_invisibility_A100_T49_Halloween_event_hull.seq	</sequence>
+            <bindNode>	hull	</bindNode>
+            <sniperModeVisibleTo>	others	</sniperModeVisibleTo>
+            <visibleTo>	all	</visibleTo>
+          </item>
+        </sequences>
+      </client>
+    </HWBuffSequencesComponent>
+  </HW_invisibilityEffect_A100_T49_Halloween_event>
+  <HW_invisibilityEffect_It19_Progetto_C50_mod_66_hw21>
+    <HWBuffSequencesComponent>
+      <client>
+        <sequences>
+          <item>
+            <sequence>	particles/eff_sequence/halloween/ability_invisibility_It19_Progetto_C50_mod_66_hw21_gun.seq	</sequence>
+            <bindNode>	Gun	</bindNode>
+            <sniperModeVisibleTo>	others	</sniperModeVisibleTo>
+            <visibleTo>	all	</visibleTo>
+          </item>
+          <item>
+            <sequence>	particles/eff_sequence/halloween/ability_invisibility_It19_Progetto_C50_mod_66_hw21_turret.seq	</sequence>
+            <bindNode>	turret	</bindNode>
+            <sniperModeVisibleTo>	others	</sniperModeVisibleTo>
+            <visibleTo>	all	</visibleTo>
+          </item>
+          <item>
+            <sequence>	particles/eff_sequence/halloween/ability_invisibility_It19_Progetto_C50_mod_66_hw21_hull.seq	</sequence>
+            <bindNode>	hull	</bindNode>
+            <sniperModeVisibleTo>	others	</sniperModeVisibleTo>
+            <visibleTo>	all	</visibleTo>
+          </item>
+        </sequences>
+      </client>
+    </HWBuffSequencesComponent>
+  </HW_invisibilityEffect_It19_Progetto_C50_mod_66_hw21>
+  <HW_invisibilityEffect_R40_T-54_Halloween_event>
+    <HWBuffSequencesComponent>
+      <client>
+        <sequences>
+          <item>
+            <sequence>	particles/eff_sequence/halloween/ability_invisibility_R40_T_54_3Dst_HW20_gun.seq	</sequence>
+            <bindNode>	Gun	</bindNode>
+            <sniperModeVisibleTo>	others	</sniperModeVisibleTo>
+            <visibleTo>	all	</visibleTo>
+          </item>
+          <item>
+            <sequence>	particles/eff_sequence/halloween/ability_invisibility_R40_T-54_3Dst_HW20_turret.seq	</sequence>
+            <bindNode>	turret	</bindNode>
+            <sniperModeVisibleTo>	others	</sniperModeVisibleTo>
+            <visibleTo>	all	</visibleTo>
+          </item>
+          <item>
+            <sequence>	particles/eff_sequence/halloween/ability_invisibility_R40_T-54_3Dst_HW20_hull.seq	</sequence>
+            <bindNode>	hull	</bindNode>
+            <sniperModeVisibleTo>	others	</sniperModeVisibleTo>
+            <visibleTo>	all	</visibleTo>
+          </item>
+        </sequences>
+      </client>
+    </HWBuffSequencesComponent>
+  </HW_invisibilityEffect_R40_T-54_Halloween_event>
+  <HW_invisibilityEffect_GB123_GSOR_1006_v7_Halloween_event>
+    <HWBuffSequencesComponent>
+      <client>
+        <sequences>
+          <item>
+            <sequence>	particles/eff_sequence/halloween/ability_invisibility_GB123_gsor_1006_v7_hw_gun.seq	</sequence>
+            <bindNode>	Gun	</bindNode>
+            <sniperModeVisibleTo>	others	</sniperModeVisibleTo>
+            <visibleTo>	all	</visibleTo>
+          </item>
+          <item>
+            <sequence>	particles/eff_sequence/halloween/ability_invisibility_GB123_gsor_1006_v7_hw_turret.seq	</sequence>
+            <bindNode>	turret	</bindNode>
+            <sniperModeVisibleTo>	others	</sniperModeVisibleTo>
+            <visibleTo>	all	</visibleTo>
+          </item>
+          <item>
+            <sequence>	particles/eff_sequence/halloween/ability_invisibility_GB123_gsor_1006_v7_hw_hull.seq	</sequence>
+            <bindNode>	hull	</bindNode>
+            <sniperModeVisibleTo>	others	</sniperModeVisibleTo>
+            <visibleTo>	all	</visibleTo>
+          </item>
+        </sequences>
+      </client>
+    </HWBuffSequencesComponent>
+  </HW_invisibilityEffect_GB123_GSOR_1006_v7_Halloween_event>
+  <HW_invisibilityResist>
+    <HWBuffDamageResistsComponent>
+      <server>
+        <resistReason>	DAMAGE_SHIELD	</resistReason>
+        <resists>
+          <item>
+            <target>	ALL	</target>
+            <attackReason>	SHOT	</attackReason>
+            <value>	1.0	</value>
+          </item>
+        </resists>
+      </server>
+    </HWBuffDamageResistsComponent>
+  </HW_invisibilityResist>
+  <HW_spawnReloadBoost>
+    <HWBuffInterruptibleComponent>
+      <server>
+        <events>	onGunReload	</events>
+      </server>
+    </HWBuffInterruptibleComponent>
+    <HWBuffFactorsComponent>
+      <server>
+        <factors>
+          <item>
+            <key>	gun/reloadTime	</key>
+            <add>	-0.5	</add>
+            <max>	0.1	</max>
+          </item>
+        </factors>
+      </server>
+    </HWBuffFactorsComponent>
+  </HW_spawnReloadBoost>
+  <HW_deathZoneVisual>
+    <HWBuffSequencesComponent>
+      <client>
+        <sequences>
+          <item>
+            <sequence>	particles/eff_sequence/halloween/enemies/limit_zone.seq	</sequence>
+            <bindNode>	hull	</bindNode>
+          </item>
+        </sequences>
+      </client>
+    </HWBuffSequencesComponent>
+  </HW_deathZoneVisual>
+  <HW_aoeDamageInstantShot_FX>
+    <HWBuffInterruptibleComponent>
+      <server>
+        <events>	onDeath	</events>
+      </server>
+    </HWBuffInterruptibleComponent>
+    <HWBuffSequencesComponent>
+      <client>
+        <sequences>
+          <item>
+            <sequence>	particles/eff_sequence/halloween/ability_damage.seq	</sequence>
+            <bindNode>	hull	</bindNode>
+            <loopCount>	1	</loopCount>
+            <visibleTo>	all	</visibleTo>
+          </item>
+        </sequences>
+      </client>
+    </HWBuffSequencesComponent>
+  </HW_aoeDamageInstantShot_FX>
+  <HW_aoeDamageInstantShot_damage_periodical>
+    <HWBuffAddDynGroupComponent>
+      <server>
+        <groupName>	HW_aoeDamageInstantShot_damage	</groupName>
+        <duration>	0.1	</duration>
+        <interval>	1.0	</interval>
+        <count>	1	</count>
+        <removeOnDestroy>	False	</removeOnDestroy>
+        <replaceExisting>	True	</replaceExisting>
+      </server>
+    </HWBuffAddDynGroupComponent>
+  </HW_aoeDamageInstantShot_damage_periodical>
+  <HW_aoeDamageInstantShot_damage>
+    <HWBuffDamageVehicleComponent>
+      <server>
+        <damage>	300	</damage>
+        <attackReason>	HALLOWEEN_SHOT_AOE_DAMAGE	</attackReason>
+      </server>
+    </HWBuffDamageVehicleComponent>
+  </HW_aoeDamageInstantShot_damage>
+  <HW_aoeDamageInstantShot_damageInRadius_periodical>
+    <HWBuffAddDynGroupComponent>
+      <server>
+        <groupName>	HW_aoeDamageInstantShot_damageInRadius	</groupName>
+        <duration>	0.1	</duration>
+        <interval>	1.0	</interval>
+        <count>	1	</count>
+        <removeOnDestroy>	False	</removeOnDestroy>
+        <replaceExisting>	True	</replaceExisting>
+      </server>
+    </HWBuffAddDynGroupComponent>
+  </HW_aoeDamageInstantShot_damageInRadius_periodical>
+  <HW_aoeDamageInstantShot_damageInRadius>
+    <HWBuffAddDynGroupComponent>
+      <server>
+        <groupName>	HW_aoeDamageInstantShot_FX	</groupName>
+        <duration>	3.0	</duration>
+        <removeOnDestroy>	False	</removeOnDestroy>
+        <replaceExisting>	True	</replaceExisting>
+      </server>
+    </HWBuffAddDynGroupComponent>
+    <HWBuffRadiusAoEComponent>
+      <server>
+        <radius>	35	</radius>
+        <team>	2	</team>
+        <maxVehicles>	10	</maxVehicles>
+        <buffName>	HW_aoeDamageInstantShot_damage	</buffName>
+        <duration>	0.1	</duration>
+      </server>
+    </HWBuffRadiusAoEComponent>
+  </HW_aoeDamageInstantShot_damageInRadius>
+  <HW_aoeDamageInstantShot_stun_periodical>
+    <HWBuffAddDynGroupComponent>
+      <server>
+        <groupName>	HW_aoeDamageInstantShot_stun	</groupName>
+        <duration>	0.1	</duration>
+        <interval>	1.0	</interval>
+        <count>	1	</count>
+        <removeOnDestroy>	False	</removeOnDestroy>
+        <replaceExisting>	True	</replaceExisting>
+      </server>
+    </HWBuffAddDynGroupComponent>
+  </HW_aoeDamageInstantShot_stun_periodical>
+  <HW_aoeDamageInstantShot_stun>
+    <HWBuffAddDynGroupComponent>
+      <server>
+        <groupName>	HW_aoeStunInstantShot_stunDebuff	</groupName>
+        <replaceExisting>	True	</replaceExisting>
+      </server>
+    </HWBuffAddDynGroupComponent>
+    <HWBuffStunVehicleComponent>
+      <server>
+        <stunDuration>	7	</stunDuration>
+        <guaranteedStunDuration>	1.0	</guaranteedStunDuration>
+      </server>
+    </HWBuffStunVehicleComponent>
+  </HW_aoeDamageInstantShot_stun>
+  <HW_aoeDamageInstantShot_stunInRadius_periodical>
+    <HWBuffAddDynGroupComponent>
+      <server>
+        <groupName>	HW_aoeDamageInstantShot_stunInRadius	</groupName>
+        <duration>	0.1	</duration>
+        <interval>	1.0	</interval>
+        <count>	1	</count>
+        <removeOnDestroy>	False	</removeOnDestroy>
+        <replaceExisting>	True	</replaceExisting>
+      </server>
+    </HWBuffAddDynGroupComponent>
+  </HW_aoeDamageInstantShot_stunInRadius_periodical>
+  <HW_aoeDamageInstantShot_stunInRadiusForPlayer>
+    <HWBuffRadiusAoEComponent>
+      <server>
+        <radius>	20	</radius>
+        <team>	1	</team>
+        <maxVehicles>	10	</maxVehicles>
+        <buffName>	HW_aoeStunInstantShot_stun	</buffName>
+        <duration>	0.1	</duration>
+      </server>
+    </HWBuffRadiusAoEComponent>
+  </HW_aoeDamageInstantShot_stunInRadiusForPlayer>
+  <HW_aoeDamageInstantShot_stunInRadius>
+    <HWBuffRadiusAoEComponent>
+      <server>
+        <radius>	35	</radius>
+        <team>	2	</team>
+        <maxVehicles>	10	</maxVehicles>
+        <buffName>	HW_aoeStunInstantShot_stun	</buffName>
+        <duration>	0.1	</duration>
+      </server>
+    </HWBuffRadiusAoEComponent>
+  </HW_aoeDamageInstantShot_stunInRadius>
+  <HW_aoeDamageInstantShot>
+    <HWBuffShootComponent>
+      <server>
+        <shotDescr>
+          <shell>	usa:_HW_AOE_DAMAGE_INSTANT_SHOT	</shell>
+          <piercingPower>	99999 99999	</piercingPower>
+          <speed>	200	</speed>
+          <gravity>	0.1	</gravity>
+          <maxDistance>	782	</maxDistance>
+          <maxHeight>	280	</maxHeight>
+        </shotDescr>
+        <damageFactor>	0.0	</damageFactor>
+        <groups>
+          <group>
+            <target>	VICTIM	</target>
+            <groupName>	HW_aoeDamageInstantShot_damage_periodical	</groupName>
+            <duration>	3.0	</duration>
+          </group>
+          <group>
+            <target>	VICTIM	</target>
+            <groupName>	HW_aoeDamageInstantShot_damageInRadius_periodical	</groupName>
+            <duration>	3.0	</duration>
+          </group>
+          <group>
+            <target>	VICTIM	</target>
+            <groupName>	HW_aoeDamageInstantShot_stun_periodical	</groupName>
+            <duration>	3.0	</duration>
+          </group>
+          <group>
+            <target>	VICTIM	</target>
+            <groupName>	HW_aoeDamageInstantShot_stunInRadius_periodical	</groupName>
+            <duration>	3.0	</duration>
+          </group>
+        </groups>
+      </server>
+    </HWBuffShootComponent>
+    <HWBuffSoundComponent>
+      <client>
+        <soundEvents>
+          <item>
+            <activationSound2D>	ev_hw_gp_ability_energy_shot_2D	</activationSound2D>
+            <playTo>	self	</playTo>
+          </item>
+        </soundEvents>
+      </client>
+    </HWBuffSoundComponent>
+  </HW_aoeDamageInstantShot>
+  <HW_aoeDrainEnemyHpInstantShot_FX>
+    <HWBuffSequencesComponent>
+      <client>
+        <sequences>
+          <item>
+            <sequence>	particles/eff_sequence/halloween/AoE_Vampiric_01_Shot.seq	</sequence>
+            <bindNode>	hull	</bindNode>
+            <loopCount>	1	</loopCount>
+            <visibleTo>	all	</visibleTo>
+          </item>
+        </sequences>
+      </client>
+    </HWBuffSequencesComponent>
+  </HW_aoeDrainEnemyHpInstantShot_FX>
+  <HW_aoeDrainEnemyHpInstantShot_selfFX_periodical>
+    <HWBuffAddDynGroupComponent>
+      <server>
+        <groupName>	HW_aoeDrainEnemyHpInstantShot_selfFX	</groupName>
+        <duration>	5.0	</duration>
+        <interval>	1.0	</interval>
+        <count>	1	</count>
+        <removeOnDestroy>	False	</removeOnDestroy>
+        <replaceExisting>	True	</replaceExisting>
+      </server>
+    </HWBuffAddDynGroupComponent>
+  </HW_aoeDrainEnemyHpInstantShot_selfFX_periodical>
+  <HW_aoeDrainEnemyHpInstantShot_selfFX>
+    <HWBuffInterruptibleComponent>
+      <server>
+        <events>	onDeath	</events>
+      </server>
+    </HWBuffInterruptibleComponent>
+    <HWBuffSequencesComponent>
+      <client>
+        <sequences>
+          <item>
+            <sequence>	particles/eff_sequence/halloween/AoE_Vampiric_02_healing.seq	</sequence>
+            <bindNode>	hull	</bindNode>
+            <loopCount>	1	</loopCount>
+            <visibleTo>	all	</visibleTo>
+          </item>
+        </sequences>
+      </client>
+    </HWBuffSequencesComponent>
+  </HW_aoeDrainEnemyHpInstantShot_selfFX>
+  <HW_aoeDrainEnemyHpInstantShot_drainHealth_periodical>
+    <HWBuffAddDynGroupComponent>
+      <server>
+        <groupName>	HW_aoeDrainEnemyHpInstantShot_drainHealth	</groupName>
+        <duration>	0.1	</duration>
+        <interval>	1.0	</interval>
+        <count>	1	</count>
+        <removeOnDestroy>	False	</removeOnDestroy>
+        <replaceExisting>	True	</replaceExisting>
+      </server>
+    </HWBuffAddDynGroupComponent>
+  </HW_aoeDrainEnemyHpInstantShot_drainHealth_periodical>
+  <HW_aoeDrainEnemyHpInstantShot_drainHealth>
+    <HWBuffDrainHealthComponent>
+      <server>
+        <damage>	170	</damage>
+        <maxHealthDamageFactor>	0.0	</maxHealthDamageFactor>
+        <healAmount>	0	</healAmount>
+        <healFactor>	0.0	</healFactor>
+        <damageHealFactor>	1.0	</damageHealFactor>
+        <stopFire>	true	</stopFire>
+        <removeStun>	true	</removeStun>
+        <healDevices>	all	</healDevices>
+        <repairReason>	REPAIR_BY_AOE_ABILITY_VAMPIRE	</repairReason>
+        <attackReason>	HALLOWEEN_SHOT_AOE_DRAIN_ENEMY_HP	</attackReason>
+      </server>
+    </HWBuffDrainHealthComponent>
+  </HW_aoeDrainEnemyHpInstantShot_drainHealth>
+  <HW_aoeDrainEnemyHpInstantShot_drainHealthInRadius_periodical>
+    <HWBuffAddDynGroupComponent>
+      <server>
+        <groupName>	HW_aoeDrainEnemyHpInstantShot_drainHealthInRadius	</groupName>
+        <duration>	0.1	</duration>
+        <interval>	1.0	</interval>
+        <count>	1	</count>
+        <removeOnDestroy>	False	</removeOnDestroy>
+        <replaceExisting>	True	</replaceExisting>
+      </server>
+    </HWBuffAddDynGroupComponent>
+  </HW_aoeDrainEnemyHpInstantShot_drainHealthInRadius_periodical>
+  <HW_aoeDrainEnemyHpInstantShot_drainHealthInRadius>
+    <HWBuffAddDynGroupComponent>
+      <server>
+        <groupName>	HW_aoeDrainEnemyHpInstantShot_FX	</groupName>
+        <duration>	2.0	</duration>
+        <removeOnDestroy>	False	</removeOnDestroy>
+        <replaceExisting>	True	</replaceExisting>
+      </server>
+    </HWBuffAddDynGroupComponent>
+    <HWBuffRadiusAoEComponent>
+      <server>
+        <radius>	35	</radius>
+        <team>	2	</team>
+        <maxVehicles>	10	</maxVehicles>
+        <buffName>	HW_aoeDrainEnemyHpInstantShot_drainHealth	</buffName>
+        <duration>	0.1	</duration>
+      </server>
+    </HWBuffRadiusAoEComponent>
+  </HW_aoeDrainEnemyHpInstantShot_drainHealthInRadius>
+  <HW_aoeDrainEnemyHpInstantShot>
+    <HWBuffShootComponent>
+      <server>
+        <shotDescr>
+          <shell>	usa:_HW_AOE_DRAIN_ENEMY_HP_INSTANT_SHOT	</shell>
+          <piercingPower>	99999 99999	</piercingPower>
+          <speed>	200	</speed>
+          <gravity>	0.1	</gravity>
+          <maxDistance>	782	</maxDistance>
+          <maxHeight>	280	</maxHeight>
+        </shotDescr>
+        <damageFactor>	0.0	</damageFactor>
+        <groups>
+          <group>
+            <target>	VICTIM	</target>
+            <groupName>	HW_aoeDrainEnemyHpInstantShot_drainHealthInRadius_periodical	</groupName>
+            <duration>	3.0	</duration>
+          </group>
+          <group>
+            <target>	VICTIM	</target>
+            <groupName>	HW_aoeDrainEnemyHpInstantShot_drainHealth_periodical	</groupName>
+            <duration>	3.0	</duration>
+          </group>
+          <group>
+            <target>	SELF	</target>
+            <groupName>	HW_aoeDrainEnemyHpInstantShot_selfFX_periodical	</groupName>
+            <duration>	5.0	</duration>
+          </group>
+        </groups>
+      </server>
+    </HWBuffShootComponent>
+    <HWBuffSoundComponent>
+      <client>
+        <soundEvents>
+          <item>
+            <activationSound2D>	ev_hw_gp_ability_vampiric_shot_2D	</activationSound2D>
+            <playTo>	self	</playTo>
+          </item>
+        </soundEvents>
+      </client>
+    </HWBuffSoundComponent>
+  </HW_aoeDrainEnemyHpInstantShot>
+  <HW_aoeStunInstantShot_FX>
+    <HWBuffInterruptibleComponent>
+      <server>
+        <events>	onDeath	</events>
+      </server>
+    </HWBuffInterruptibleComponent>
+    <HWBuffSequencesComponent>
+      <client>
+        <sequences>
+          <item>
+            <sequence>	particles/eff_sequence/halloween/ability_stun_shot.seq	</sequence>
+            <bindNode>	hull	</bindNode>
+            <loopCount>	1	</loopCount>
+            <visibleTo>	all	</visibleTo>
+          </item>
+        </sequences>
+      </client>
+    </HWBuffSequencesComponent>
+  </HW_aoeStunInstantShot_FX>
+  <HW_aoeStunInstantShot_damage>
+    <HWBuffDamageVehicleComponent>
+      <server>
+        <damage>	50	</damage>
+        <attackReason>	HALLOWEEN_SHOT_AOE_STUN	</attackReason>
+      </server>
+    </HWBuffDamageVehicleComponent>
+  </HW_aoeStunInstantShot_damage>
+  <HW_aoeStunInstantShot_stun>
+    <HWBuffAddDynGroupComponent>
+      <server>
+        <groupName>	HW_aoeStunInstantShot_stunDebuff	</groupName>
+        <replaceExisting>	True	</replaceExisting>
+      </server>
+    </HWBuffAddDynGroupComponent>
+    <HWBuffStunVehicleComponent>
+      <server>
+        <stunDuration>	7	</stunDuration>
+        <guaranteedStunDuration>	1.0	</guaranteedStunDuration>
+      </server>
+    </HWBuffStunVehicleComponent>
+  </HW_aoeStunInstantShot_stun>
+  <HW_aoeStunInstantShot_stunDebuff>
+    <HWBuffInterruptibleComponent>
+      <server>
+        <events>	onStunOff	</events>
+      </server>
+    </HWBuffInterruptibleComponent>
+    <HWBuffFactorsComponent>
+      <server>
+        <factors>
+          <item>
+            <key>	engine/power	</key>
+            <add>	-0.9	</add>
+            <max>	0.1	</max>
+          </item>
+          <item>
+            <key>	vehicle/maxSpeed	</key>
+            <add>	-0.9	</add>
+            <max>	0.1	</max>
+          </item>
+          <item>
+            <key>	turret/rotationSpeed	</key>
+            <add>	-0.7	</add>
+            <max>	0.1	</max>
+          </item>
+          <item>
+            <key>	gun/reloadTime	</key>
+            <add>	1.0	</add>
+          </item>
+          <item>
+            <key>	gun/aimingTime	</key>
+            <add>	1.0	</add>
+          </item>
+          <item>
+            <key>	chassis/shotDispersionFactors/movement	</key>
+            <add>	1.0	</add>
+          </item>
+          <item>
+            <key>	chassis/shotDispersionFactors/rotation	</key>
+            <add>	1.0	</add>
+          </item>
+          <item>
+            <key>	gun/shotDispersionFactors/turretRotation	</key>
+            <add>	1.0	</add>
+          </item>
+        </factors>
+      </server>
+    </HWBuffFactorsComponent>
+  </HW_aoeStunInstantShot_stunDebuff>
+  <HW_aoeStunInstantShot_stunInRadius>
+    <HWBuffAddDynGroupComponent>
+      <server>
+        <groupName>	HW_aoeStunInstantShot_FX	</groupName>
+        <duration>	3.0	</duration>
+        <removeOnDestroy>	False	</removeOnDestroy>
+        <replaceExisting>	True	</replaceExisting>
+      </server>
+    </HWBuffAddDynGroupComponent>
+    <HWBuffRadiusAoEComponent>
+      <server>
+        <radius>	35	</radius>
+        <team>	2	</team>
+        <maxVehicles>	10	</maxVehicles>
+        <buffName>	HW_aoeStunInstantShot_stun	</buffName>
+        <duration>	0.1	</duration>
+      </server>
+    </HWBuffRadiusAoEComponent>
+  </HW_aoeStunInstantShot_stunInRadius>
+  <HW_aoeStunInstantShot>
+    <HWBuffShootComponent>
+      <server>
+        <shotDescr>
+          <shell>	usa:_HW_AOE_STUN_INSTANT_SHOT	</shell>
+          <piercingPower>	99999 99999	</piercingPower>
+          <speed>	200	</speed>
+          <gravity>	0.1	</gravity>
+          <maxDistance>	782	</maxDistance>
+          <maxHeight>	280	</maxHeight>
+        </shotDescr>
+        <damageFactor>	0.0	</damageFactor>
+        <groups>
+          <group>
+            <target>	VICTIM	</target>
+            <groupName>	HW_aoeStunInstantShot_stun	</groupName>
+            <duration>	0.1	</duration>
+          </group>
+          <group>
+            <target>	VICTIM	</target>
+            <groupName>	HW_aoeStunInstantShot_stunInRadius	</groupName>
+            <duration>	0.1	</duration>
+          </group>
+        </groups>
+      </server>
+    </HWBuffShootComponent>
+  </HW_aoeStunInstantShot>
+  <HW_bossDamageShield>
+    <HWBuffFactorsComponent>
+      <server>
+        <factors>
+          <item>
+            <key>	stunResistanceEffect	</key>
+            <max>	1.0	</max>
+          </item>
+        </factors>
+      </server>
+    </HWBuffFactorsComponent>
+    <HWBuffDamageResistsComponent>
+      <server>
+        <resistReason>	BOSS_DAMAGE_SHIELD	</resistReason>
+        <resists>
+          <item>
+            <target>	ALL	</target>
+            <attackReason>	ALL	</attackReason>
+            <value>	3.0	</value>
+          </item>
+        </resists>
+      </server>
+    </HWBuffDamageResistsComponent>
+    <HWBuffSequencesComponent>
+      <client>
+        <sequences>
+          <item>
+            <sequence>	particles/eff_sequence/halloween/enemies/boss_spider/boss_spider_bubble_defense.seq	</sequence>
+            <bindNode>	hull	</bindNode>
+          </item>
+        </sequences>
+      </client>
+    </HWBuffSequencesComponent>
+  </HW_bossDamageShield>
+  <HW_deathZoneIgnite>
+    <HWBuffDamageVehicleComponent>
+      <server>
+        <damage>	500	</damage>
+        <attackReason>	HALLOWEEN_DEATH_ZONE_IGNITE	</attackReason>
+      </server>
+    </HWBuffDamageVehicleComponent>
+    <HWBuffAddDynGroupComponent>
+      <server>
+        <groupName>	HW_vehicleIgnite	</groupName>
+        <removeOnDestroy>	False	</removeOnDestroy>
+        <replaceExisting>	True	</replaceExisting>
+      </server>
+    </HWBuffAddDynGroupComponent>
+    <HWBuffAddDynGroupComponent>
+      <server>
+        <groupName>	HW_aoeFlashBangEffect	</groupName>
+        <removeOnDestroy>	True	</removeOnDestroy>
+        <replaceExisting>	True	</replaceExisting>
+      </server>
+    </HWBuffAddDynGroupComponent>
+  </HW_deathZoneIgnite>
+  <HW_deathZoneIgniteOvertimeFirstStrike>
+    <HWBuffDamageVehicleComponent>
+      <server>
+        <damage>	300	</damage>
+        <attackReason>	HALLOWEEN_DEATH_ZONE_IGNITE	</attackReason>
+      </server>
+    </HWBuffDamageVehicleComponent>
+    <HWBuffAddDynGroupComponent>
+      <server>
+        <groupName>	HW_aoeFlashBangEffect	</groupName>
+        <removeOnDestroy>	True	</removeOnDestroy>
+        <replaceExisting>	True	</replaceExisting>
+      </server>
+    </HWBuffAddDynGroupComponent>
+  </HW_deathZoneIgniteOvertimeFirstStrike>
+  <HW_deathZoneIgniteOvertime>
+    <HWBuffAddDynGroupComponent>
+      <server>
+        <groupName>	HW_vehicleIgnite	</groupName>
+        <removeOnDestroy>	False	</removeOnDestroy>
+        <replaceExisting>	True	</replaceExisting>
+      </server>
+    </HWBuffAddDynGroupComponent>
+    <HWBuffAddDynGroupComponent>
+      <server>
+        <groupName>	HW_aoeFlashBangEffect	</groupName>
+        <removeOnDestroy>	True	</removeOnDestroy>
+        <replaceExisting>	True	</replaceExisting>
+      </server>
+    </HWBuffAddDynGroupComponent>
+  </HW_deathZoneIgniteOvertime>
+  <HW_vehicleIgnite>
+    <HWBuffIgniteVehicleComponent>
+      <server>
+        <time>	4	</time>
+        <damagePerSecond>	25	</damagePerSecond>
+        <maxHealthDamageFactorPerSecond>	0.0	</maxHealthDamageFactorPerSecond>
+        <attackReason>	HALLOWEEN_DEATH_ZONE_IGNITE	</attackReason>
+      </server>
+    </HWBuffIgniteVehicleComponent>
+  </HW_vehicleIgnite>
+  <HW_deathZoneStun>
+    <HWBuffDamageVehicleComponent>
+      <server>
+        <damage>	500	</damage>
+        <attackReason>	HALLOWEEN_DEATH_ZONE_STUN	</attackReason>
+      </server>
+    </HWBuffDamageVehicleComponent>
+    <HWBuffStunVehicleComponent>
+      <server>
+        <stunDuration>	5	</stunDuration>
+        <guaranteedStunDuration>	1.0	</guaranteedStunDuration>
+      </server>
+    </HWBuffStunVehicleComponent>
+    <HWBuffInterruptibleComponent>
+      <server>
+        <events>	onStunOff	</events>
+      </server>
+    </HWBuffInterruptibleComponent>
+    <HWBuffAddDynGroupComponent>
+      <server>
+        <groupName>	HW_deathZoneStun_stunDebuff	</groupName>
+      </server>
+    </HWBuffAddDynGroupComponent>
+    <HWBuffAddDynGroupComponent>
+      <server>
+        <groupName>	HW_aoeFlashBangEffect	</groupName>
+        <removeOnDestroy>	True	</removeOnDestroy>
+        <replaceExisting>	True	</replaceExisting>
+      </server>
+    </HWBuffAddDynGroupComponent>
+  </HW_deathZoneStun>
+  <HW_deathZoneStun_stunDebuff>
+    <HWBuffInterruptibleComponent>
+      <server>
+        <events>	onStunOff	</events>
+      </server>
+    </HWBuffInterruptibleComponent>
+    <HWBuffFactorsComponent>
+      <server>
+        <factors>
+          <item>
+            <key>	engine/power	</key>
+            <add>	-0.4	</add>
+            <max>	0.1	</max>
+          </item>
+          <item>
+            <key>	vehicle/maxSpeed	</key>
+            <add>	-0.4	</add>
+            <max>	0.1	</max>
+          </item>
+          <item>
+            <key>	turret/rotationSpeed	</key>
+            <add>	-0.4	</add>
+            <max>	0.1	</max>
+          </item>
+          <item>
+            <key>	gun/reloadTime	</key>
+            <add>	1.0	</add>
+          </item>
+          <item>
+            <key>	gun/aimingTime	</key>
+            <add>	1.0	</add>
+          </item>
+          <item>
+            <key>	chassis/shotDispersionFactors/movement	</key>
+            <add>	1.0	</add>
+          </item>
+          <item>
+            <key>	chassis/shotDispersionFactors/rotation	</key>
+            <add>	1.0	</add>
+          </item>
+          <item>
+            <key>	gun/shotDispersionFactors/turretRotation	</key>
+            <add>	1.0	</add>
+          </item>
+        </factors>
+      </server>
+    </HWBuffFactorsComponent>
+  </HW_deathZoneStun_stunDebuff>
+  <HW_deathZoneIntervalDamageFirstStrike>
+    <HWBuffDamageVehicleComponent>
+      <server>
+        <damage>	300	</damage>
+        <attackReason>	HALLOWEEN_DEATH_ZONE_INTERVAL	</attackReason>
+      </server>
+    </HWBuffDamageVehicleComponent>
+    <HWBuffAddDynGroupComponent>
+      <server>
+        <groupName>	HW_aoeFlashBangEffect	</groupName>
+        <removeOnDestroy>	True	</removeOnDestroy>
+        <replaceExisting>	True	</replaceExisting>
+      </server>
+    </HWBuffAddDynGroupComponent>
+  </HW_deathZoneIntervalDamageFirstStrike>
+  <HW_deathZoneIntervalDamage>
+    <HWBuffDamageVehicleComponent>
+      <server>
+        <damage>	100	</damage>
+        <attackReason>	HALLOWEEN_DEATH_ZONE_INTERVAL	</attackReason>
+      </server>
+    </HWBuffDamageVehicleComponent>
+    <HWBuffAddDynGroupComponent>
+      <server>
+        <groupName>	HW_aoeFlashBangEffect	</groupName>
+        <removeOnDestroy>	True	</removeOnDestroy>
+        <replaceExisting>	True	</replaceExisting>
+      </server>
+    </HWBuffAddDynGroupComponent>
+  </HW_deathZoneIntervalDamage>
+  <HW_aoeFlashBangEffect>
+    <HWBuffFlashBangEffectComponent>
+      <server>
+        <updateDelay>	0.0	</updateDelay>
+        <repeat>	False	</repeat>
+      </server>
+      <client>
+        <effects>
+          <item>
+            <effect>	halloween/gui/effects/flash_bang_effect.xml	</effect>
+            <visibleTo>	self	</visibleTo>
+          </item>
+        </effects>
+      </client>
+    </HWBuffFlashBangEffectComponent>
+  </HW_aoeFlashBangEffect>
+  <HW_reloadVehicleBeforeNextWave>
+    <HWBuffRepairComponent>
+      <server>
+        <reloadGun>	true	</reloadGun>
+      </server>
+    </HWBuffRepairComponent>
+  </HW_reloadVehicleBeforeNextWave>
+  <HW_lootSpawn>
+    <HWLootVisualComponent>
+      <client>
+        <sequences>
+          <item>
+            <sequence>	particles/eff_sequence/halloween/loot_pickup_zone.seq	</sequence>
+          </item>
+        </sequences>
+      </client>
+    </HWLootVisualComponent>
+  </HW_lootSpawn>
+  <HW_lootAnomaly>
+    <HWLootVisualComponent>
+      <client>
+        <sequences>
+          <item>
+            <sequence>	particles/eff_sequence/halloween/loot_pickup_zone.seq	</sequence>
+          </item>
+        </sequences>
+      </client>
+    </HWLootVisualComponent>
+  </HW_lootAnomaly>
+  <HW_HiveIcon>
+    <HWBuffVehicleIconComponent>
+      <client>
+        <icon>	hive	</icon>
+        <priority>	2	</priority>
+      </client>
+    </HWBuffVehicleIconComponent>
+  </HW_HiveIcon>
+  <HW_MiriumIcon>
+    <HWBuffVehicleIconComponent>
+      <client>
+        <icon>	mirium	</icon>
+        <priority>	2	</priority>
+      </client>
+    </HWBuffVehicleIconComponent>
+  </HW_MiriumIcon>
+  <HW_chaserBeam>
+    <HWBuffCircularVehicleProximityComponent>
+      <server>
+        <radius>	9	</radius>
+        <affectedTeam>	1	</affectedTeam>
+      </server>
+    </HWBuffCircularVehicleProximityComponent>
+    <HWBuffBossAuraComponent>
+      <server>
+        <groupNames>	HW_chaserBeamDrainHealth	</groupNames>
+      </server>
+    </HWBuffBossAuraComponent>
+    <HWBuffSequencesComponent>
+      <client>
+        <sequences>
+          <item>
+            <sequence>	particles/eff_sequence/halloween/enemies/dynamic_damage_death_zone.seq	</sequence>
+          </item>
+        </sequences>
+      </client>
+    </HWBuffSequencesComponent>
+    <HWBuffSoundComponent>
+      <client>
+        <createSoundObject>	True	</createSoundObject>
+        <soundEvents>
+          <item>
+            <activationSound3D>	ev_hw_gp_bot_lightning_ball_idle	</activationSound3D>
+            <playTo>	all	</playTo>
+          </item>
+        </soundEvents>
+      </client>
+    </HWBuffSoundComponent>
+  </HW_chaserBeam>
+  <HW_chaserBeamDrainHealth>
+    <HWBuffAddDynGroupComponent>
+      <server>
+        <groupName>	HW_chaserBeamDoDamage	</groupName>
+        <duration>	1.0	</duration>
+        <interval>	1.0	</interval>
+        <count>	999999	</count>
+        <removeOnDestroy>	False	</removeOnDestroy>
+        <replaceExisting>	False	</replaceExisting>
+        <quiet>	True	</quiet>
+      </server>
+    </HWBuffAddDynGroupComponent>
+    <HWVehicleStatusNotificationComponent>
+      <server>
+        <vehicleViewState>	HW_PERSONAL_DEATH_ZONE_INTERVAL	</vehicleViewState>
+        <initArgs>	[[true, 0, 0]]	</initArgs>
+        <finiArgs>	[[false, 0, 0]]	</finiArgs>
+      </server>
+    </HWVehicleStatusNotificationComponent>
+  </HW_chaserBeamDrainHealth>
+  <HW_chaserBeamDoDamage>
+    <HWBuffDamageVehicleComponent>
+      <server>
+        <damage>	50	</damage>
+        <attackReason>	HALLOWEEN_DEATH_ZONE_INTERVAL	</attackReason>
+        <selfHarm>	True	</selfHarm>
+      </server>
+    </HWBuffDamageVehicleComponent>
+  </HW_chaserBeamDoDamage>
+  <HW_beamDestructionFX>
+    <HWBuffSequencesComponent>
+      <client>
+        <sequences>
+          <item>
+            <sequence>	particles/eff_sequence/halloween/enemies/dynamic_damage_death_zone_end.seq	</sequence>
+            <loopCount>	1	</loopCount>
+            <visibleTo>	all	</visibleTo>
+          </item>
+        </sequences>
+      </client>
+    </HWBuffSequencesComponent>
+  </HW_beamDestructionFX>
+  <HW_spiderBossBeamCastingFX>
+    <HWBuffSequencesComponent>
+      <client>
+        <sequences>
+          <item>
+            <sequence>	particles/eff_sequence/halloween/enemies/boss_spider/boss_spider_dynamic_damage_rings.seq	</sequence>
+            <loopCount>	1	</loopCount>
+            <visibleTo>	all	</visibleTo>
+            <bindNode>	turret	</bindNode>
+          </item>
+        </sequences>
+      </client>
+    </HWBuffSequencesComponent>
+  </HW_spiderBossBeamCastingFX>
+  <HW_deathZoneDebuff>
+    <HWVehicleStatusNotificationComponent>
+      <server>
+        <vehicleViewState>	DEATHZONE	</vehicleViewState>
+        <initArgs>	[[true, false, 0, 0]]	</initArgs>
+        <finiArgs>	[[false, false, 0, 0]]	</finiArgs>
+      </server>
+    </HWVehicleStatusNotificationComponent>
+    <HWBuffAddDynGroupComponent>
+      <server>
+        <groupName>	HWDamageWave	</groupName>
+        <duration>	0.1	</duration>
+        <interval>	3	</interval>
+        <count>	100	</count>
+        <removeOnDestroy>	True	</removeOnDestroy>
+        <replaceExisting>	True	</replaceExisting>
+      </server>
+    </HWBuffAddDynGroupComponent>
+    <HWBuffAddDynGroupComponent>
+      <server>
+        <groupName>	HWDamageWaveEffect	</groupName>
+        <duration>	2	</duration>
+        <interval>	3	</interval>
+        <count>	100	</count>
+        <removeOnDestroy>	True	</removeOnDestroy>
+        <replaceExisting>	True	</replaceExisting>
+      </server>
+    </HWBuffAddDynGroupComponent>
+    <HWBuffSequencesComponent>
+      <client>
+        <sequences>
+          <item>
+            <sequence>	particles/eff_sequence/halloween/enemies/limit_zone.seq	</sequence>
+            <bindNode>	hull	</bindNode>
+          </item>
+        </sequences>
+      </client>
+    </HWBuffSequencesComponent>
+    <HWBuffSoundComponent>
+      <client>
+        <soundEvents>
+          <item>
+            <activationSound2D>	ev_hw_gp_red_death_zone_enter	</activationSound2D>
+            <deactivationSound2D>	ev_hw_gp_red_death_zone_exit	</deactivationSound2D>
+            <playTo>	self	</playTo>
+          </item>
+        </soundEvents>
+      </client>
+    </HWBuffSoundComponent>
+  </HW_deathZoneDebuff>
+  <HWDamageWave>
+    <HWBuffDamageVehicleComponent>
+      <server>
+        <damage>	75	</damage>
+        <attackReason>	HALLOWEEN_DEATH_ZONE	</attackReason>
+      </server>
+    </HWBuffDamageVehicleComponent>
+    <HWBuffSoundComponent>
+      <client>
+        <soundEvents>
+          <item>
+            <activationSound2D>	ev_hw_gp_red_death_zone_damage	</activationSound2D>
+            <playTo>	self	</playTo>
+          </item>
+        </soundEvents>
+      </client>
+    </HWBuffSoundComponent>
+  </HWDamageWave>
+  <HWDamageWaveEffect>
+    <HWBuffEffectsListPlayerComponent>
+      <client>
+        <effects>
+          <item>
+            <effect>	halloween/scripts/item_defs/vehicles/common/hwDeathZoneDamage.xml	</effect>
+            <visibleTo>	self	</visibleTo>
+            <sniperModeVisibleTo>	self	</sniperModeVisibleTo>
+          </item>
+        </effects>
+      </client>
+    </HWBuffEffectsListPlayerComponent>
+  </HWDamageWaveEffect>
+  <HW_factorNitro>
+    <HWBuffVehicleModifiersComponent>
+      <server>
+        <modifiers>
+          <modifier>
+            <key>	equipment/cooldown	</key>
+            <filter>	nitroRamDamage	</filter>
+            <amount>	-10	</amount>
+          </modifier>
+          <modifier>
+            <key>	equipment/duration	</key>
+            <filter>	nitroRamDamage	</filter>
+            <factor>	1	</factor>
+          </modifier>
+        </modifiers>
+      </server>
+    </HWBuffVehicleModifiersComponent>
+    <HWBuffPanelComponent>
+      <server>
+        <buffKey>	buffTurboRacer	</buffKey>
+      </server>
+      <client>
+        <buffKey>	buffTurboRacer	</buffKey>
+      </client>
+    </HWBuffPanelComponent>
+    <HWBuffSoundComponent>
+      <client>
+        <soundEvents>
+          <item>
+            <activationSound2D>	ev_hw_gp_ui_anomalies_get_regular	</activationSound2D>
+            <playTo>	self	</playTo>
+          </item>
+        </soundEvents>
+      </client>
+    </HWBuffSoundComponent>
+  </HW_factorNitro>
+  <HW_factorAbilitiesCost>
+    <HWBuffAddDynGroupComponent>
+      <server>
+        <groupName>	HW_lootPickUpVFX	</groupName>
+        <duration>	1	</duration>
+        <removeOnDestroy>	False	</removeOnDestroy>
+        <replaceExisting>	True	</replaceExisting>
+      </server>
+    </HWBuffAddDynGroupComponent>
+    <HWBuffVehicleModifiersComponent>
+      <server>
+        <modifiers>
+          <modifier>
+            <key>	equipment/usageCost	</key>
+            <factor>	-0.75	</factor>
+          </modifier>
+        </modifiers>
+      </server>
+    </HWBuffVehicleModifiersComponent>
+    <HWBuffPanelComponent>
+      <server>
+        <buffKey>	buffMiriumEfficiency	</buffKey>
+      </server>
+      <client>
+        <showNotificationPopup>	HALLOWEEN HALLOWEEN_MEDIUM HALLOWEEN_HARD	</showNotificationPopup>
+        <buffKey>	buffMiriumEfficiency	</buffKey>
+      </client>
+    </HWBuffPanelComponent>
+    <HWBuffSoundComponent>
+      <client>
+        <soundEvents>
+          <item>
+            <activationSound2D>	ev_hw_gp_ui_anomalies_get_secret	</activationSound2D>
+            <playTo>	self	</playTo>
+          </item>
+        </soundEvents>
+      </client>
+    </HWBuffSoundComponent>
+  </HW_factorAbilitiesCost>
+  <HW_factorMiriumCapacity>
+    <HWBuffVehicleModifiersComponent>
+      <server>
+        <modifiers>
+          <modifier>
+            <key>	souls/capacity	</key>
+            <amount>	50	</amount>
+          </modifier>
+        </modifiers>
+      </server>
+    </HWBuffVehicleModifiersComponent>
+    <HWBuffPanelComponent>
+      <server>
+        <buffKey>	buffMiriumCapacity	</buffKey>
+      </server>
+      <client>
+        <showNotificationPopup>	HALLOWEEN	</showNotificationPopup>
+        <buffKey>	buffMiriumCapacity	</buffKey>
+      </client>
+    </HWBuffPanelComponent>
+    <HWBuffSoundComponent>
+      <client>
+        <soundEvents>
+          <item>
+            <activationSound2D>	ev_hw_gp_ui_anomalies_get_regular	</activationSound2D>
+            <playTo>	self	</playTo>
+          </item>
+        </soundEvents>
+      </client>
+    </HWBuffSoundComponent>
+  </HW_factorMiriumCapacity>
+  <HW_factorInfiniteMiriumCapacity>
+    <HWBuffVehicleModifiersComponent>
+      <server>
+        <modifiers>
+          <modifier>
+            <key>	souls/capacity	</key>
+            <amount>	9999	</amount>
+          </modifier>
+        </modifiers>
+      </server>
+    </HWBuffVehicleModifiersComponent>
+    <HWBuffPanelComponent>
+      <server>
+        <buffKey>	buffInfiniteMiriumCapacity	</buffKey>
+      </server>
+      <client>
+        <buffKey>	buffInfiniteMiriumCapacity	</buffKey>
+      </client>
+    </HWBuffPanelComponent>
+    <HWBuffSoundComponent>
+      <client>
+        <soundEvents>
+          <item>
+            <activationSound2D>	ev_hw_gp_ui_anomalies_get_epic	</activationSound2D>
+            <playTo>	self	</playTo>
+          </item>
+        </soundEvents>
+      </client>
+    </HWBuffSoundComponent>
+  </HW_factorInfiniteMiriumCapacity>
+  <HW_miriumDeathKeeper>
+    <HWBuffVehicleModifiersComponent>
+      <server>
+        <modifiers>
+          <modifier>
+            <key>	souls/deathKeeper	</key>
+            <factor>	1.0	</factor>
+          </modifier>
+          <modifier>
+            <key>	souls/deathDropRate	</key>
+            <factor>	-0.5	</factor>
+          </modifier>
+        </modifiers>
+      </server>
+    </HWBuffVehicleModifiersComponent>
+    <HWBuffAddDynGroupComponent>
+      <server>
+        <groupName>	HW_lootPickUpVFX	</groupName>
+        <duration>	1	</duration>
+        <removeOnDestroy>	False	</removeOnDestroy>
+        <replaceExisting>	True	</replaceExisting>
+      </server>
+    </HWBuffAddDynGroupComponent>
+    <HWBuffPanelComponent>
+      <server>
+        <buffKey>	buffMiriumDeathKeeper	</buffKey>
+      </server>
+      <client>
+        <showNotificationPopup>	HALLOWEEN HALLOWEEN_MEDIUM HALLOWEEN_HARD	</showNotificationPopup>
+        <buffKey>	buffMiriumDeathKeeper	</buffKey>
+      </client>
+    </HWBuffPanelComponent>
+    <HWBuffSoundComponent>
+      <client>
+        <soundEvents>
+          <item>
+            <activationSound2D>	ev_hw_gp_ui_anomalies_get_individual	</activationSound2D>
+            <playTo>	self	</playTo>
+          </item>
+        </soundEvents>
+      </client>
+    </HWBuffSoundComponent>
+  </HW_miriumDeathKeeper>
+  <HW_damageMitigation>
+    <HWBuffDamageResistsComponent>
+      <server>
+        <resistReason>	DAMAGE_SHIELD	</resistReason>
+        <resists>
+          <item>
+            <target>	ALL	</target>
+            <attackReason>	ALL	</attackReason>
+            <value>	0.25	</value>
+          </item>
+          <item>
+            <target>	ALL	</target>
+            <attackReason>	DROWNING	</attackReason>
+            <value>	-0.25	</value>
+          </item>
+          <item>
+            <target>	ALL	</target>
+            <attackReason>	WORLD_COLLISION	</attackReason>
+            <value>	-0.25	</value>
+          </item>
+          <item>
+            <target>	ALL	</target>
+            <attackReason>	HALLOWEEN_PHASE_TIMER	</attackReason>
+            <value>	-0.25	</value>
+          </item>
+          <item>
+            <target>	ALL	</target>
+            <attackReason>	HALLOWEEN_DEATH_PIT	</attackReason>
+            <value>	-0.25	</value>
+          </item>
+        </resists>
+      </server>
+    </HWBuffDamageResistsComponent>
+    <HWBuffPanelComponent>
+      <server>
+        <buffKey>	buffDamageMitigation	</buffKey>
+      </server>
+      <client>
+        <buffKey>	buffDamageMitigation	</buffKey>
+      </client>
+    </HWBuffPanelComponent>
+    <HWBuffSoundComponent>
+      <client>
+        <soundEvents>
+          <item>
+            <activationSound2D>	ev_hw_gp_ui_anomalies_get_epic	</activationSound2D>
+            <playTo>	self	</playTo>
+          </item>
+        </soundEvents>
+      </client>
+    </HWBuffSoundComponent>
+  </HW_damageMitigation>
+  <HW_soulsBonus>
+    <HWBuffAddDynGroupComponent>
+      <server>
+        <groupName>	HW_lootPickUpVFX	</groupName>
+        <duration>	1	</duration>
+        <removeOnDestroy>	False	</removeOnDestroy>
+        <replaceExisting>	True	</replaceExisting>
+      </server>
+    </HWBuffAddDynGroupComponent>
+    <HWBuffVehicleModifiersComponent>
+      <server>
+        <modifiers>
+          <modifier>
+            <key>	souls/capacity	</key>
+            <amount>	50	</amount>
+          </modifier>
+        </modifiers>
+      </server>
+    </HWBuffVehicleModifiersComponent>
+    <HWBuffPanelComponent>
+      <server>
+        <buffKey>	buffSoulsBonus	</buffKey>
+      </server>
+      <client>
+        <showNotificationPopup>	HALLOWEEN HALLOWEEN_MEDIUM HALLOWEEN_HARD	</showNotificationPopup>
+        <buffKey>	buffSoulsBonus	</buffKey>
+      </client>
+    </HWBuffPanelComponent>
+    <HWBuffSoundComponent>
+      <client>
+        <soundEvents>
+          <item>
+            <activationSound2D>	ev_hw_gp_ui_anomalies_get_individual	</activationSound2D>
+            <playTo>	self	</playTo>
+          </item>
+        </soundEvents>
+      </client>
+    </HWBuffSoundComponent>
+  </HW_soulsBonus>
+  <HW_shellPenetration>
+    <HWBuffFactorsComponent>
+      <server>
+        <factors>
+          <item>
+            <key>	gun/piercing	</key>
+            <add>	0.5	</add>
+          </item>
+        </factors>
+      </server>
+    </HWBuffFactorsComponent>
+    <HWBuffPanelComponent>
+      <server>
+        <buffKey>	buffShellPenetration	</buffKey>
+      </server>
+      <client>
+        <buffKey>	buffShellPenetration	</buffKey>
+      </client>
+    </HWBuffPanelComponent>
+    <HWBuffSoundComponent>
+      <client>
+        <soundEvents>
+          <item>
+            <activationSound2D>	ev_hw_gp_ui_anomalies_get_epic	</activationSound2D>
+            <playTo>	self	</playTo>
+          </item>
+        </soundEvents>
+      </client>
+    </HWBuffSoundComponent>
+  </HW_shellPenetration>
+  <HW_maxSpeedTurbine>
+    <HWBuffAddDynGroupComponent>
+      <server>
+        <groupName>	HW_lootPickUpVFX	</groupName>
+        <duration>	1	</duration>
+        <removeOnDestroy>	False	</removeOnDestroy>
+        <replaceExisting>	True	</replaceExisting>
+      </server>
+    </HWBuffAddDynGroupComponent>
+    <HWBuffAddDynGroupComponent>
+      <server>
+        <groupName>	HW_maxSpeedTurbine_{vehName}	</groupName>
+      </server>
+    </HWBuffAddDynGroupComponent>
+    <HWBuffPanelComponent>
+      <server>
+        <buffKey>	buffMaxSpeedTurbine	</buffKey>
+      </server>
+      <client>
+        <showNotificationPopup>	HALLOWEEN HALLOWEEN_MEDIUM HALLOWEEN_HARD	</showNotificationPopup>
+        <buffKey>	buffMaxSpeedTurbine	</buffKey>
+      </client>
+    </HWBuffPanelComponent>
+    <HWBuffSoundComponent>
+      <client>
+        <soundEvents>
+          <item>
+            <activationSound2D>	ev_hw_gp_ui_anomalies_get_individual	</activationSound2D>
+            <playTo>	self	</playTo>
+          </item>
+        </soundEvents>
+      </client>
+    </HWBuffSoundComponent>
+  </HW_maxSpeedTurbine>
+  <HW_maxSpeedTurbine_GB24_Centurion_Mk3_Halloween_event>
+    <HWBuffFactorsComponent>
+      <server>
+        <factors>
+          <item>
+            <key>	vehicle/maxSpeed/forward	</key>
+            <add>	0.2	</add>
+          </item>
+          <item>
+            <key>	vehicle/maxSpeed/backward	</key>
+            <add>	0.25	</add>
+          </item>
+        </factors>
+      </server>
+    </HWBuffFactorsComponent>
+  </HW_maxSpeedTurbine_GB24_Centurion_Mk3_Halloween_event>
+  <HW_maxSpeedTurbine_F17_AMX_13_90_Halloween_event>
+    <HWBuffFactorsComponent>
+      <server>
+        <factors>
+          <item>
+            <key>	vehicle/maxSpeed/forward	</key>
+            <add>	0.15	</add>
+          </item>
+          <item>
+            <key>	vehicle/maxSpeed/backward	</key>
+            <add>	0.22	</add>
+          </item>
+        </factors>
+      </server>
+    </HWBuffFactorsComponent>
+  </HW_maxSpeedTurbine_F17_AMX_13_90_Halloween_event>
+  <HW_maxSpeedTurbine_R171_IS_3_II_hw21>
+    <HWBuffFactorsComponent>
+      <server>
+        <factors>
+          <item>
+            <key>	vehicle/maxSpeed/forward	</key>
+            <add>	0.2	</add>
+          </item>
+          <item>
+            <key>	vehicle/maxSpeed/backward	</key>
+            <add>	0.33	</add>
+          </item>
+        </factors>
+      </server>
+    </HWBuffFactorsComponent>
+  </HW_maxSpeedTurbine_R171_IS_3_II_hw21>
+  <HW_maxSpeedTurbine_A100_T49_Halloween_event>
+    <HWBuffFactorsComponent>
+      <server>
+        <factors>
+          <item>
+            <key>	vehicle/maxSpeed/forward	</key>
+            <add>	0.16	</add>
+          </item>
+          <item>
+            <key>	vehicle/maxSpeed/backward	</key>
+            <add>	0.21	</add>
+          </item>
+        </factors>
+      </server>
+    </HWBuffFactorsComponent>
+  </HW_maxSpeedTurbine_A100_T49_Halloween_event>
+  <HW_maxSpeedTurbine_R40_T-54_Halloween_event>
+    <HWBuffFactorsComponent>
+      <server>
+        <factors>
+          <item>
+            <key>	vehicle/maxSpeed/forward	</key>
+            <add>	0.17	</add>
+          </item>
+          <item>
+            <key>	vehicle/maxSpeed/backward	</key>
+            <add>	0.25	</add>
+          </item>
+        </factors>
+      </server>
+    </HWBuffFactorsComponent>
+  </HW_maxSpeedTurbine_R40_T-54_Halloween_event>
+  <HW_maxSpeedTurbine_It19_Progetto_C50_mod_66_hw21>
+    <HWBuffFactorsComponent>
+      <server>
+        <factors>
+          <item>
+            <key>	vehicle/maxSpeed/forward	</key>
+            <add>	0.20	</add>
+          </item>
+          <item>
+            <key>	vehicle/maxSpeed/backward	</key>
+            <add>	0.42	</add>
+          </item>
+        </factors>
+      </server>
+    </HWBuffFactorsComponent>
+  </HW_maxSpeedTurbine_It19_Progetto_C50_mod_66_hw21>
+  <HW_maxSpeedTurbine_GB123_GSOR_1006_v7_Halloween_event>
+    <HWBuffFactorsComponent>
+      <server>
+        <factors>
+          <item>
+            <key>	vehicle/maxSpeed/forward	</key>
+            <add>	0.16	</add>
+          </item>
+          <item>
+            <key>	vehicle/maxSpeed/backward	</key>
+            <add>	0.16	</add>
+          </item>
+        </factors>
+      </server>
+    </HWBuffFactorsComponent>
+  </HW_maxSpeedTurbine_GB123_GSOR_1006_v7_Halloween_event>
+  <HW_detonatorSequenceBots>
+    <HWBuffRadiusAoEComponent>
+      <server>
+        <radius>	80	</radius>
+        <team>	2	</team>
+        <maxVehicles>	10	</maxVehicles>
+        <buffName>	HW_detonatorBotsStun	</buffName>
+        <duration>	0.1	</duration>
+      </server>
+    </HWBuffRadiusAoEComponent>
+    <HWBuffSequencesComponent>
+      <client>
+        <sequences>
+          <item>
+            <sequence>	particles/eff_sequence/halloween/enemies/detonator_aura_explosion_players_stuned.seq	</sequence>
+          </item>
+        </sequences>
+      </client>
+    </HWBuffSequencesComponent>
+  </HW_detonatorSequenceBots>
+  <HW_detonatorBotsStun>
+    <HWBuffAddDynGroupComponent>
+      <server>
+        <groupName>	HW_aoeStunInstantShot_stun	</groupName>
+        <duration>	0.1	</duration>
+        <replaceExisting>	True	</replaceExisting>
+      </server>
+    </HWBuffAddDynGroupComponent>
+    <HWBuffAddDynGroupComponent>
+      <server>
+        <groupName>	HW_detonatorBotsFX	</groupName>
+        <replaceExisting>	True	</replaceExisting>
+      </server>
+    </HWBuffAddDynGroupComponent>
+  </HW_detonatorBotsStun>
+  <HW_detonatorBotsFX>
+    <HWBuffInterruptibleComponent>
+      <server>
+        <events>	onStunOff	</events>
+      </server>
+    </HWBuffInterruptibleComponent>
+    <HWBuffSequencesComponent>
+      <client>
+        <sequences>
+          <item>
+            <sequence>	particles/eff_sequence/halloween/enemies/stunned_enemies_medium.seq	</sequence>
+          </item>
+        </sequences>
+      </client>
+    </HWBuffSequencesComponent>
+  </HW_detonatorBotsFX>
+  <HW_detonatorSequencePlayers>
+    <HWBuffRadiusAoEComponent>
+      <server>
+        <radius>	80	</radius>
+        <team>	1	</team>
+        <maxVehicles>	10	</maxVehicles>
+        <buffName>	HW_detonatorPlayersStun	</buffName>
+        <duration>	0.1	</duration>
+      </server>
+    </HWBuffRadiusAoEComponent>
+    <HWBuffSequencesComponent>
+      <client>
+        <sequences>
+          <item>
+            <sequence>	particles/eff_sequence/halloween/enemies/detonator_aura_explosion_players_stuned.seq	</sequence>
+          </item>
+        </sequences>
+      </client>
+    </HWBuffSequencesComponent>
+  </HW_detonatorSequencePlayers>
+  <HW_detonatorPlayersStun>
+    <HWBuffAddDynGroupComponent>
+      <server>
+        <groupName>	HW_aoeStunInstantShot_stun	</groupName>
+        <duration>	0.1	</duration>
+        <replaceExisting>	True	</replaceExisting>
+      </server>
+    </HWBuffAddDynGroupComponent>
+    <HWBuffAddDynGroupComponent>
+      <server>
+        <groupName>	HW_detonatorPlayersFX	</groupName>
+        <replaceExisting>	True	</replaceExisting>
+      </server>
+    </HWBuffAddDynGroupComponent>
+  </HW_detonatorPlayersStun>
+  <HW_detonatorPlayersFX>
+    <HWBuffInterruptibleComponent>
+      <server>
+        <events>	onStunOff	</events>
+      </server>
+    </HWBuffInterruptibleComponent>
+    <HWBuffSequencesComponent>
+      <client>
+        <sequences>
+          <item>
+            <sequence>	particles/eff_sequence/halloween/enemies/stunned_players.seq	</sequence>
+          </item>
+        </sequences>
+      </client>
+    </HWBuffSequencesComponent>
+  </HW_detonatorPlayersFX>
+  <HW_stunAbility>
+    <HWBuffCircularVehicleProximityComponent>
+      <server>
+        <radius>	20	</radius>
+        <affectedTeam>	1	</affectedTeam>
+      </server>
+    </HWBuffCircularVehicleProximityComponent>
+    <HWBuffBossAuraComponent>
+      <server>
+        <groupNames>	HW_applyStunAbility	</groupNames>
+      </server>
+    </HWBuffBossAuraComponent>
+    <HWBuffSequencesComponent>
+      <client>
+        <sequences>
+          <item>
+            <sequence>	particles/eff_sequence/halloween/enemies/detonator_aura_idle.seq	</sequence>
+            <bindNode>	hull	</bindNode>
+            <visibleTo>	all	</visibleTo>
+          </item>
+        </sequences>
+      </client>
+    </HWBuffSequencesComponent>
+  </HW_stunAbility>
+  <HW_applyStunAbility>
+    <HWBuffAddDynGroupComponent>
+      <server>
+        <groupName>	HW_aoeStunInstantShot_stun	</groupName>
+        <duration>	1.0	</duration>
+        <interval>	1.0	</interval>
+        <count>	999999	</count>
+        <removeOnDestroy>	False	</removeOnDestroy>
+        <replaceExisting>	True	</replaceExisting>
+      </server>
+    </HWBuffAddDynGroupComponent>
+  </HW_applyStunAbility>
+  <HW_detonatorStunnerIcon>
+    <HWBuffVehicleIconComponent>
+      <client>
+        <icon>	stunner	</icon>
+        <priority>	2	</priority>
+      </client>
+    </HWBuffVehicleIconComponent>
+  </HW_detonatorStunnerIcon>
+  <HW_bomberResist>
+    <HWBuffDamageResistsComponent>
+      <server>
+        <resistReason>	BOMBER_EXPLOSION_RESIST	</resistReason>
+        <resists>
+          <item>
+            <target>	ALL	</target>
+            <attackReason>	HALLOWEEN_BOMBER_EXPLOSION	</attackReason>
+            <value>	1	</value>
+          </item>
+        </resists>
+      </server>
+    </HWBuffDamageResistsComponent>
+    <HWBuffPanelComponent>
+      <server>
+        <buffKey>	buffBomberResist	</buffKey>
+      </server>
+      <client>
+        <showNotificationPopup>	HALLOWEEN HALLOWEEN_MEDIUM HALLOWEEN_HARD	</showNotificationPopup>
+        <buffKey>	buffBomberResist	</buffKey>
+      </client>
+    </HWBuffPanelComponent>
+    <HWBuffAddDynGroupComponent>
+      <server>
+        <groupName>	HW_lootPickUpVFX	</groupName>
+        <duration>	1	</duration>
+        <removeOnDestroy>	False	</removeOnDestroy>
+        <replaceExisting>	True	</replaceExisting>
+      </server>
+    </HWBuffAddDynGroupComponent>
+    <HWBuffSoundComponent>
+      <client>
+        <soundEvents>
+          <item>
+            <activationSound2D>	ev_hw_gp_ui_anomalies_get_secret	</activationSound2D>
+            <playTo>	self	</playTo>
+          </item>
+        </soundEvents>
+      </client>
+    </HWBuffSoundComponent>
+  </HW_bomberResist>
+  <HW_instakill>
+    <HWBuffInstantKillComponent>
+      <server>
+        <hpThreshold>	0.15	</hpThreshold>
+      </server>
+    </HWBuffInstantKillComponent>
+    <HWBuffPanelComponent>
+      <server>
+        <buffKey>	buffInstakill	</buffKey>
+      </server>
+      <client>
+        <showNotificationPopup>	HALLOWEEN HALLOWEEN_MEDIUM HALLOWEEN_HARD	</showNotificationPopup>
+        <buffKey>	buffInstakill	</buffKey>
+      </client>
+    </HWBuffPanelComponent>
+    <HWBuffAddDynGroupComponent>
+      <server>
+        <groupName>	HW_lootPickUpVFX	</groupName>
+        <duration>	1	</duration>
+        <removeOnDestroy>	False	</removeOnDestroy>
+        <replaceExisting>	True	</replaceExisting>
+      </server>
+    </HWBuffAddDynGroupComponent>
+    <HWBuffSoundComponent>
+      <client>
+        <soundEvents>
+          <item>
+            <activationSound2D>	ev_hw_gp_ui_anomalies_get_individual	</activationSound2D>
+            <playTo>	self	</playTo>
+          </item>
+        </soundEvents>
+      </client>
+    </HWBuffSoundComponent>
+  </HW_instakill>
+  <HW_controlledDamage>
+    <HWBuffDynamicFactorsComponent>
+      <server>
+        <factors>
+          <item>
+            <perkId>	5001	</perkId>
+            <key>	damageDistributionLowerBound	</key>
+            <value>	0.25	</value>
+          </item>
+          <item>
+            <perkId>	5001	</perkId>
+            <key>	damageDistributionUpperBound	</key>
+            <value>	0.25	</value>
+          </item>
+        </factors>
+      </server>
+    </HWBuffDynamicFactorsComponent>
+    <HWBuffPanelComponent>
+      <server>
+        <buffKey>	buffControlledDamage	</buffKey>
+      </server>
+      <client>
+        <buffKey>	buffControlledDamage	</buffKey>
+      </client>
+    </HWBuffPanelComponent>
+    <HWBuffSoundComponent>
+      <client>
+        <soundEvents>
+          <item>
+            <activationSound2D>	ev_hw_gp_ui_anomalies_get_regular	</activationSound2D>
+            <playTo>	self	</playTo>
+          </item>
+        </soundEvents>
+      </client>
+    </HWBuffSoundComponent>
+  </HW_controlledDamage>
+  <HW_variableDamage>
+    <HWBuffPanelComponent>
+      <server>
+        <buffKey>	buffVariableDamage	</buffKey>
+      </server>
+      <client>
+        <buffKey>	buffVariableDamage	</buffKey>
+      </client>
+    </HWBuffPanelComponent>
+    <HWBuffDamageVariableComponent>
+      <server>
+        <probabilities>
+          <item>
+            <weight>	25	</weight>
+            <dmgFactor>	-0.75	</dmgFactor>
+          </item>
+          <item>
+            <weight>	25	</weight>
+            <dmgFactor>	-0.5	</dmgFactor>
+          </item>
+          <item>
+            <weight>	25	</weight>
+            <dmgFactor>	0.75	</dmgFactor>
+          </item>
+          <item>
+            <weight>	25	</weight>
+            <dmgFactor>	2	</dmgFactor>
+          </item>
+        </probabilities>
+      </server>
+    </HWBuffDamageVariableComponent>
+    <HWBuffSoundComponent>
+      <client>
+        <soundEvents>
+          <item>
+            <activationSound2D>	ev_hw_gp_ui_anomalies_get_epic	</activationSound2D>
+            <playTo>	self	</playTo>
+          </item>
+        </soundEvents>
+      </client>
+    </HWBuffSoundComponent>
+  </HW_variableDamage>
+  <HW_miriumizationPhase>
+    <HWBuffVehicleModifiersComponent>
+      <server>
+        <modifiers>
+          <modifier>
+            <key>	souls/extraDropFromBots	</key>
+            <factor>	1	</factor>
+          </modifier>
+        </modifiers>
+      </server>
+    </HWBuffVehicleModifiersComponent>
+  </HW_miriumizationPhase>
+  <HW_lootGoblinVFX>
+    <HWBuffSequencesComponent>
+      <client>
+        <sequences>
+          <item>
+            <sequence>	particles/eff_sequence/halloween/enemies/loot_goblin_effect.seq	</sequence>
+            <bindNode>	turret	</bindNode>
+          </item>
+        </sequences>
+      </client>
+    </HWBuffSequencesComponent>
+  </HW_lootGoblinVFX>
+  <HW_lootPickUpVFX>
+    <HWBuffSequencesComponent>
+      <client>
+        <sequences>
+          <item>
+            <sequence>	particles/eff_sequence/halloween/loot_pickup_zone_end.seq	</sequence>
+          </item>
+        </sequences>
+      </client>
+    </HWBuffSequencesComponent>
+  </HW_lootPickUpVFX>
+  <HW_hivePeriodicalDamage>
+    <HWBuffInterruptibleComponent>
+      <server>
+        <events>	onDeath	</events>
+      </server>
+    </HWBuffInterruptibleComponent>
+    <HWBuffAddDynGroupComponent>
+      <server>
+        <groupName>	HW_hiveDoDamage	</groupName>
+        <duration>	0.1	</duration>
+        <interval>	0.5	</interval>
+        <count>	999	</count>
+        <removeOnDestroy>	True	</removeOnDestroy>
+        <replaceExisting>	True	</replaceExisting>
+      </server>
+    </HWBuffAddDynGroupComponent>
+  </HW_hivePeriodicalDamage>
+  <HW_hiveDoDamage>
+    <HWBuffDamageVehicleComponent>
+      <server>
+        <damage>	750	</damage>
+        <selfHarm>	True	</selfHarm>
+      </server>
+    </HWBuffDamageVehicleComponent>
+  </HW_hiveDoDamage>
+</dyn_components_groups.xml>

@@ -36,7 +36,6 @@
   <item>	particles/Tank_2.0/Sparks_p_Imposters.eff	</item>
   <item>	particles/Tank_2.0/AP_non_p_shell_explosion.eff	</item>
   <item>	particles/Tank_2.0/HE_non_p_sparks.eff	</item>
-  <item>	cs@shaders/3d_style_baking/3d_style_baking.fx	</item>
   <item>	cs@shaders/auxiliary/depth_pyramid_singlepass.fx	</item>
   <item>	cs@shaders/auxiliary/groupshared_sort.fx	</item>
   <item>	cs@shaders/auxiliary/jump_flooding.fx	</item>
@@ -46,6 +45,7 @@
   <item>	cs@shaders/gpu_decals/gpu_decals_clusterization.fx	</item>
   <item>	cs@shaders/gpu_decals/gpu_decals_commands.fx	</item>
   <item>	cs@shaders/gpu_decals/gpu_decals_sorting.fx	</item>
+  <item>	cs@shaders/gpu_driven_rendering/gpu_driven_rendering.fx	</item>
   <item>	cs@shaders/gpu_particles/basic_update_u.fx	</item>
   <item>	cs@shaders/gpu_particles/collect_mesh_samples_cm.fx	</item>
   <item>	cs@shaders/gpu_particles/color_property_u.fx	</item>
@@ -83,4 +83,6 @@
   <item>	cs@shaders/post_processing/background_blur.fx	</item>
   <item>	cs@shaders/volumetric_fog/noise_texture_generation.fx	</item>
   <item>	cs@shaders/volumetric_fog/volumetric_fog.fx	</item>
+  <item>	particles/tank/customization/gb130_fv225_collector_dmc_3dst/gb130_fv225_collector_dmc_3dst_saw_sparks.eff	</item>
+  <item>	particles/content_deferred/pfx/tank/customization/gb130_fv225_collector_dmc_3dst/gb130_fv225_collector_dmc_3dst_saw_sparks.vfx	</item>
 </precache.xml>

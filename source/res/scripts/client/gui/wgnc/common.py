@@ -1,6 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/wgnc/common.py
-from debug_utils import LOG_WARNING
+import logging
+import typing
+if typing.TYPE_CHECKING:
+    from web.web_client_api import CommandHandler
+_logger = logging.getLogger(__name__)
 
 class WebHandlersContainer(object):
     _webHandlers = {}
@@ -16,10 +20,10 @@ class WebHandlersContainer(object):
 
     @classmethod
     def getWebHandler(cls, name):
-        if name:
-            handler = cls._webHandlers.get(name)
+        if name is None:
+            return
+        elif name not in cls._webHandlers:
+            _logger.warning("Cannot get web client handler by name '%s'", name)
+            return
         else:
-            handler = None
-        if not handler:
-            LOG_WARNING("Wrong web-client handler's name '%s'" % name)
-        return handler
+            return cls._webHandlers[name]

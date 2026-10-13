@@ -272,7 +272,7 @@ class LSPersonalEntriesPlugin(LSMinimapScaleMixin, CenteredPersonalEntriesPlugin
         self._parentObj.setMinimapCenterEntry(self.__minimapCenterEntry)
         return
 
-    def _onShowDeathZone(self, zoneId, dzVisual):
+    def _onShowDeathZone(self, dzVisual):
         if not dzVisual.entity.masks:
             return
         self.__centerCoordinate = dzVisual.entity.masks[0].polygonCenter
@@ -324,7 +324,7 @@ class LSMinimapComponent(LSMinimapMeta):
         arenaSizePx = arenaSize * self._MINIMAP_1M_IN_PX
         self.as_setMapDimensionsS(int(arenaSizePx[0]), int(arenaSizePx[1]))
 
-    def _onShowDeathZone(self, zoneId, dzVisual):
+    def _onShowDeathZone(self, dzVisual):
         if not dzVisual.entity.masks:
             return
         szScale = self._getSafeZoneScale(dzVisual)

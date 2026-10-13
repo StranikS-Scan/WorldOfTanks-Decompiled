@@ -1,6 +1,8 @@
-from collections import namedtuple
+from __future__ import absolute_import
+from __future__ import division
 import logging
 import math
+from collections import namedtuple
 import GUI
 import Keys
 import Math
@@ -35,6 +37,8 @@ from helpers.CallbackDelayer import TimeDeltaMeter
 from gui.battle_control import event_dispatcher
 from helpers import dependency
 from skeletons.account_helpers.settings_core import ISettingsCache
+from account_helpers.AccountSettings import AccountSettings
+from account_helpers.settings_core.settings_constants import CONTROLS
 from account_helpers.settings_core.settings_constants import GAME
 from AvatarInputHandler.DynamicCameras.arcade_camera_helper import EScrollDir
 from AvatarInputHandler.DynamicCameras.arcade_camera_helper import EXPONENTIAL_EASING
@@ -192,6 +196,9 @@ class ArcadeCamera(CameraWithSettings, CallbackDelayer, TimeDeltaMeter):
     @staticmethod
     def _getConfigsKey():
         return ArcadeCamera.__name__
+
+    def _getMouseSensitivitySettingKey(self):
+        return CONTROLS.MOUSE_ARCADE_SENS
 
     def cloneState(self, **kwargs):
         currentDistance = kwargs.get('distance', self.getCameraDistance())
@@ -394,6 +401,7 @@ class ArcadeCamera(CameraWithSettings, CallbackDelayer, TimeDeltaMeter):
         self.setYawPitch(previousAimVector.yaw, -previousAimVector.pitch)
 
     def _handleSettingsChange(self, diff):
+        super(ArcadeCamera, self)._handleSettingsChange(diff)
         if 'fov' in diff or 'dynamicFov' in diff:
             self._ArcadeCamera__inputInertia.teleport(self._ArcadeCamera__calcRelativeDist(), self._ArcadeCamera__calculateInputInertiaMinMax())
         if GAME.PRE_COMMANDER_CAM in diff or GAME.COMMANDER_CAM in diff:
@@ -693,7 +701,7 @@ class ArcadeCamera(CameraWithSettings, CallbackDelayer, TimeDeltaMeter):
         state = self._ArcadeCamera__zoomStateSwitcher.getCurrentState()
         if state:
             totalDiff = distMinMax.max - distMinMax.min
-            ratio = ((newDist - distMinMax.min) / totalDiff) if totalDiff is not 0 else 0
+            ratio = (newDist - distMinMax.min) / totalDiff if totalDiff else 0
             angle = Math.Vector2(state.angleRangeOnMinDist)
             angle = angle + (state.angleRangeOnMaxDist - angle) * ratio
             heightAboveBaseTotalDiff = state.heightAboveBaseOnMinMaxDist.max - state.heightAboveBaseOnMinMaxDist.min
@@ -921,11 +929,9 @@ class ArcadeCamera(CameraWithSettings, CallbackDelayer, TimeDeltaMeter):
         if reason == ImpulseReason.SPLASH:
             applicationPosition = Matrix(self.vehicleMProv).translation
         impulse = applicationPosition - position
-        distance = impulse.length
-        if distance < 1.0:
-            distance = 1.0
+        distance = max(impulse.length, 1.0)
         impulse.normalise()
-        if (reason == ImpulseReason.OTHER_SHOT and distance <= self._ArcadeCamera__dynamicCfg['maxShotImpulseDistance']) or (reason == ImpulseReason.SPLASH or reason == ImpulseReason.HE_EXPLOSION or (reason == ImpulseReason.VEHICLE_EXPLOSION and distance <= self._ArcadeCamera__dynamicCfg['maxExplosionImpulseDistance'])):
+        if (reason == ImpulseReason.OTHER_SHOT and distance <= self._ArcadeCamera__dynamicCfg['maxShotImpulseDistance']) or (reason in (ImpulseReason.SPLASH, ImpulseReason.HE_EXPLOSION) or (reason == ImpulseReason.VEHICLE_EXPLOSION and distance <= self._ArcadeCamera__dynamicCfg['maxExplosionImpulseDistance'])):
             impulse = impulse * impulseValue / distance
         else:
             return
@@ -971,7 +977,7 @@ class ArcadeCamera(CameraWithSettings, CallbackDelayer, TimeDeltaMeter):
         super(ArcadeCamera, self)._readConfigs(dataSec)
         enableShift = dataSec.readBool('shift', False)
         if enableShift:
-            movementMappings = dict()
+            movementMappings = {}
             movementMappings[Keys.KEY_A] = Math.Vector3(-1, 0, 0)
             movementMappings[Keys.KEY_D] = Math.Vector3(1, 0, 0)
             movementMappings[Keys.KEY_Q] = Math.Vector3(0, 1, 0)
@@ -1002,7 +1008,7 @@ class ArcadeCamera(CameraWithSettings, CallbackDelayer, TimeDeltaMeter):
         self._ArcadeCamera__accelerationSmoother = AccelerationSmoother(accelerationFilter, maxAccelerationDuration)
         self._ArcadeCamera__inputInertia = _InputInertia(self._ArcadeCamera__calculateInputInertiaMinMax(), 0.0)
         advancedCollider = dataSec['advancedCollider']
-        self._ArcadeCamera__adCfg = dict()
+        self._ArcadeCamera__adCfg = {}
         cfg = self._ArcadeCamera__adCfg
         if advancedCollider is None:
             LOG_ERROR('<advancedCollider> dataSection is not found!')
@@ -1014,7 +1020,7 @@ class ArcadeCamera(CameraWithSettings, CallbackDelayer, TimeDeltaMeter):
             cfg['minimalCameraDistance'] = self._cfg['distRange'][0]
             cfg['speedThreshold'] = advancedCollider.readFloat('speedThreshold', 0.1)
             cfg['minimalVolume'] = advancedCollider.readFloat('minimalVolume', 200.0)
-            cfg['volumeGroups'] = dict()
+            cfg['volumeGroups'] = {}
             for group in VOLUME_GROUPS_NAMES:
                 groups = advancedCollider['volumeGroups']
                 cfg['volumeGroups'][group] = CollisionVolumeGroup.fromSection(groups[group])
@@ -1048,7 +1054,7 @@ class ArcadeCamera(CameraWithSettings, CallbackDelayer, TimeDeltaMeter):
         ucfg['vertInvert'] = False
         ucfg['sniperModeByShift'] = False
         ucfg['keySensitivity'] = readFloat(dataSec, 'keySensitivity', 0.0, 10.0, 1.0)
-        ucfg['sensitivity'] = readFloat(dataSec, 'sensitivity', 0.0, 10.0, 1.0)
+        ucfg['sensitivity'] = AccountSettings.getSettings(CONTROLS.MOUSE_ARCADE_SENS)
         ucfg['scrollSensitivity'] = readFloat(dataSec, 'scrollSensitivity', 0.0, 10.0, 1.0)
         ucfg['startDist'] = readFloat(dataSec, 'startDist', bcfg['distRange'][0], 500, bcfg['optimalStartDist'])
         if ucfg['startDist'] < bcfg['minStartDist']:
@@ -1090,7 +1096,6 @@ class ArcadeCamera(CameraWithSettings, CallbackDelayer, TimeDeltaMeter):
         ds.writeBool('arcadeMode/camera/horzInvert', ucfg['horzInvert'])
         ds.writeBool('arcadeMode/camera/vertInvert', ucfg['vertInvert'])
         ds.writeFloat('arcadeMode/camera/keySensitivity', ucfg['keySensitivity'])
-        ds.writeFloat('arcadeMode/camera/sensitivity', ucfg['sensitivity'])
         ds.writeFloat('arcadeMode/camera/scrollSensitivity', ucfg['scrollSensitivity'])
         ds.writeFloat('arcadeMode/camera/startDist', ucfg['startDist'])
         ds.writeFloat('arcadeMode/camera/fovMultMinDist', ucfg['fovMultMinMaxDist'].min)

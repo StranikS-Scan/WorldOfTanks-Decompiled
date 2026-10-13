@@ -925,15 +925,15 @@ PREM_TYPE_TO_ENTITLEMENT = {v:k for k, v in ENTITLEMENT_TO_PREM_TYPE.items()}
 
 class ENTITLEMENT_OPS:
     GRANT = 'grant'
-    GRANT_WITHOUT_EXCESS = 'grant_without_excess'
+    FORCED_GRANT = 'forced_grant'
     CONSUME = 'consume'
-    CONSUME_GREEDY = 'consume_greedy'
+    FORCED_CONSUME = 'forced_consume'
     ALL = (GRANT,
-     GRANT_WITHOUT_EXCESS,
+     FORCED_GRANT,
      CONSUME,
-     CONSUME_GREEDY)
-    GRANT_ALL = (GRANT, GRANT_WITHOUT_EXCESS)
-    CONSUME_ALL = (CONSUME, CONSUME_GREEDY)
+     FORCED_CONSUME)
+    GRANT_ALL = (GRANT, FORCED_GRANT)
+    CONSUME_ALL = (CONSUME, FORCED_CONSUME)
 
 
 class PREM_BONUS_TYPES:
@@ -1015,6 +1015,7 @@ class Configs(enum.Enum):
     W2GT_CONFIG = 'w2gt_config'
     CHALLENGES_CONFIG = 'challenges_config'
     PRE_BATTLE_HIGHLIGHTS_CONFIG = 'pbh_config'
+    GAMEFACE_HUD_CONFIG = 'gameface_hud_config'
 
 
 INBATTLE_CONFIGS = ['spgRedesignFeatures',
@@ -2056,7 +2057,6 @@ class AUTO_MAINTENANCE_RESULT:
     NOT_ENOUGH_ASSETS = 1
     NOT_PERFORMED = 2
     DISABLED_OPTION = 3
-    NO_WALLET_SESSION = 4
     RENT_IS_OVER = 5
     RENT_IS_ALMOST_OVER = 6
     BUY_NOT_AUTO_EQUIP = 7
@@ -2400,10 +2400,6 @@ class USER_SERVER_SETTINGS:
     @classmethod
     def isBattleInvitesForbidden(cls, settings):
         return not settings[cls.GAME_EXTENDED] >> 2 & 1 if settings and cls.GAME_EXTENDED in settings else False
-
-    @classmethod
-    def isMapsInDevEnabled(cls, settings):
-        return bool(settings[cls.GAME_EXTENDED_2] >> 5 & 1) if settings and cls.GAME_EXTENDED_2 in settings else False
 
 
 INT_USER_SETTINGS_KEYS = {USER_SERVER_SETTINGS.VERSION: 'Settings version',
@@ -4015,10 +4011,6 @@ class MinimapLayerType(object):
 class RandomizationType(object):
     NORMAL = 'NORMAL'
     UNIFORM = 'UNIFORM'
-
-
-class RANDOM_FLAGS:
-    IS_MAPS_IN_DEVELOPMENT_ENABLED = 2
 
 
 class PENALTY_TYPES(enum.Enum):

@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/proto/xmpp/extensions/rsm.py
+from __future__ import absolute_import
 from shared_utils import findFirst
 from messenger.proto.xmpp.extensions import PyExtension, SimpleExtension
 from messenger.proto.xmpp.extensions.ext_constants import XML_TAG_NAME as _TAG

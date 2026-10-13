@@ -5,7 +5,7 @@ from account_helpers import AccountSettings
 from account_helpers.AccountSettings import EXTRA_CHAPTERS_VIDEO_SHOWN, LAST_BATTLE_PASS_EXTRA_CHAPTER_SEEN, UMG_BATTLE_PASS_EXTRA_CHAPTER_SEEN, LAST_BATTLE_PASS_HOLIDAY_CHAPTER_SEEN
 from account_helpers.settings_core.settings_constants import BattlePassStorageKeys
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
-from gui.battle_pass.battle_pass_helpers import isIntroVideoEnabled, isIntroEnabled
+from gui.battle_pass.battle_pass_helpers import isExtraIntroVideoEnabled, isIntroVideoEnabled, isIntroEnabled
 from gui.impl.gen import R
 from gui.shared.event_dispatcher import showBrowserOverlayView
 from helpers import dependency
@@ -28,7 +28,7 @@ def getActualBattlePassIDs(layoutID=R.invalid(), chapterID=0, battlePass=None):
     if battlePass.hasExtra() and not (isExtraVideoShown() and isExtraChapterSeen()):
         return (R.aliases.battle_pass.ChapterChoice(), chapterID)
     if battlePass.isPostProgressionActive():
-        if battlePass.hasExtra() and not isUmgExtraChapterSeen():
+        if battlePass.hasExtra() and not isUmgExtraChapterSeen() and not isExtraContentResolved(battlePass=battlePass):
             return (R.aliases.battle_pass.ChapterChoice(), chapterID)
         return (R.aliases.battle_pass.PostProgression(), chapterID)
     if battlePass.isChapterExists(chapterID):
@@ -57,7 +57,7 @@ def setIntroVideoShown(settingsCore=None):
 
 @dependency.replace_none_kwargs(battlePass=IBattlePassController)
 def isExtraVideoShown(battlePass=None):
-    return not battlePass.hasExtra() or first(battlePass.getExtraChapterIDs()) in AccountSettings.getSettings(EXTRA_CHAPTERS_VIDEO_SHOWN)
+    return not battlePass.hasExtra() or not isExtraIntroVideoEnabled() or first(battlePass.getExtraChapterIDs()) in AccountSettings.getSettings(EXTRA_CHAPTERS_VIDEO_SHOWN)
 
 
 @dependency.replace_none_kwargs(battlePass=IBattlePassController)
@@ -93,6 +93,12 @@ def isUmgExtraChapterSeen():
 
 def setUmgExtraChapterSeen():
     AccountSettings.setSettings(UMG_BATTLE_PASS_EXTRA_CHAPTER_SEEN, getExtraChapterID())
+
+
+@dependency.replace_none_kwargs(battlePass=IBattlePassController)
+def isExtraContentResolved(battlePass=None):
+    extraChapterIDs = battlePass.getExtraChapterIDs()
+    return all((battlePass.isChapterCompleted(cid) for cid in extraChapterIDs)) or battlePass.getCurrentChapterID() in extraChapterIDs
 
 
 def isHolidayChapterSeen():

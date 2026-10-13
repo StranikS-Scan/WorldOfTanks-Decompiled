@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/proto/bw_chat2/entities.py
+from __future__ import absolute_import
 from constants import PREBATTLE_TYPE_NAMES
 from messenger.ext import channel_num_gen
 from messenger.m_constants import PROTO_TYPE

@@ -67,8 +67,7 @@ class CrystalProvider(CurrencyStatusProvider):
         currencyModel.setValue(self._itemsCache.items.stats.actualMoney.crystal)
         currencyModel.setTooltipType(TOOLTIPS_CONSTANTS.CRYSTAL_INFO_FULL_SCREEN)
         currencyModel.setDiscount(False)
-        walletStatus = self._wallet.componentsStatuses[self.getCurrencyType()]
-        currencyModel.setStatus(WalletController.STATUS.getKeyByValue(walletStatus))
+        currencyModel.setStatus(WalletController.STATUS.getKeyByValue(self._wallet.status))
 
     def doAction(self):
         shared_events.showCrystalWindow()
@@ -91,8 +90,7 @@ class GoldProvider(CurrencyStatusProvider):
         currencyModel.setValue(self._itemsCache.items.stats.actualMoney.gold)
         currencyModel.setTooltipType(tooltipConstant)
         currencyModel.setDiscount(False)
-        walletStatus = self._wallet.componentsStatuses[self.getCurrencyType()]
-        currencyModel.setStatus(WalletController.STATUS.getKeyByValue(walletStatus))
+        currencyModel.setStatus(WalletController.STATUS.getKeyByValue(self._wallet.status))
 
     @adisp_process
     def doAction(self):
@@ -118,8 +116,7 @@ class CreditsProvider(CurrencyStatusProvider):
         currencyModel.setValue(self._itemsCache.items.stats.actualMoney.credits)
         currencyModel.setTooltipType(tooltipConstant)
         currencyModel.setDiscount(self._exchangeRates.goldToCredits.isDiscountAvailable())
-        walletStatus = self._wallet.componentsStatuses[self.getCurrencyType()]
-        currencyModel.setStatus(WalletController.STATUS.getKeyByValue(walletStatus))
+        currencyModel.setStatus(WalletController.STATUS.getKeyByValue(self._wallet.status))
 
     def doAction(self):
         shared_events.showExchangeCurrencyWindow()
@@ -138,8 +135,7 @@ class FreeXpProvider(CurrencyStatusProvider):
         currencyModel.setValue(self._itemsCache.items.stats.actualFreeXP)
         currencyModel.setTooltipType(TOOLTIPS_CONSTANTS.FREEXP_INFO_FULL_SCREEN)
         currencyModel.setDiscount(self._exchangeRates.freeXpTranslation.isDiscountAvailable())
-        walletStatus = self._wallet.componentsStatuses[self.getCurrencyType()]
-        currencyModel.setStatus(WalletController.STATUS.getKeyByValue(walletStatus))
+        currencyModel.setStatus(WalletController.STATUS.getKeyByValue(self._wallet.status))
 
     def doAction(self):
         shared_events.showExchangeXPWindow()

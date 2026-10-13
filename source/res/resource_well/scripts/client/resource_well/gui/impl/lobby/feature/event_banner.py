@@ -6,8 +6,8 @@ from gui.Scaleform.genConsts.HANGAR_ALIASES import HANGAR_ALIASES
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.user_missions.constants.event_banner_state import EventBannerState
-from gui.impl.lobby.user_missions.hangar_widget.event_banners.base_event_banner import BaseEventBanner
 from gui.impl.lobby.user_missions.hangar_widget.event_banners.event_banners_container import EventBannersContainer
+from gui.impl.lobby.user_missions.hangar_widget.event_banners.standard_event_banner import StandardEventBanner
 from gui.impl.lobby.user_missions.hangar_widget.services import IEventsService
 from helpers import dependency, time_utils
 from helpers.CallbackDelayer import CallbackDelayer
@@ -23,7 +23,7 @@ def isResourceWellEventBannerAvailable(resourceWell=None):
     return resourceWell.isEnabled()
 
 
-class ResourceWellEventBanner(BaseEventBanner):
+class ResourceWellEventBanner(StandardEventBanner):
     NAME = HANGAR_ALIASES.RESOURCE_WELL_EVENT_BANNER
     __resourceWell = dependency.descriptor(IResourceWellController)
     __eventsService = dependency.descriptor(IEventsService)

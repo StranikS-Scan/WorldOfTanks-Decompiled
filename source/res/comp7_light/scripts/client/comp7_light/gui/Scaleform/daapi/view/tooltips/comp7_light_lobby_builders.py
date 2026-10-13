@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: comp7_light/scripts/client/comp7_light/gui/Scaleform/daapi/view/tooltips/comp7_light_lobby_builders.py
+from __future__ import absolute_import
 from comp7_light.gui.Scaleform.daapi.view.lobby.tooltips.comp7_light_calendar_day_extended_tooltip import Comp7LightCalendarDayExtendedTooltip
 from comp7_light.gui.Scaleform.daapi.view.lobby.tooltips.comp7_light_calendar_day_tooltip import Comp7LightCalendarDayTooltip
 from comp7_light.gui.Scaleform.daapi.view.lobby.tooltips.comp7_light_selector_tooltip import Comp7LightSelectorTooltip

@@ -1,5 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: story_mode/scripts/client/story_mode/gui/battle_results/components.py
+from __future__ import absolute_import
+from future.utils import viewitems
 from gui.battle_results.components import base
 from gui.server_events.bonuses import getNonQuestBonuses, mergeBonuses
 from gui.impl.gen import R
@@ -14,14 +16,14 @@ from story_mode.gui.shared.utils import getRewardList
 class FinishResultItem(base.StatsItem):
     __slots__ = ()
 
-    def _convert(self, record, reusable):
+    def _convert(self, value, reusable):
         return reusable.getPersonalTeamResult()
 
 
 class FinishReasonItem(base.StatsItem):
     __slots__ = ()
 
-    def _convert(self, record, reusable):
+    def _convert(self, value, reusable):
         finishReason = reusable.common.finishReason
         rReason = R.strings.sm_battle.finish.reason
         return rReason.num(finishReason, rReason.default)()
@@ -30,23 +32,23 @@ class FinishReasonItem(base.StatsItem):
 class MissionIdItem(base.StatsItem):
     __slots__ = ()
 
-    def _convert(self, record, reusable):
-        return record['avatar']['missionId']
+    def _convert(self, value, reusable):
+        return value['avatar']['missionId']
 
 
 class IsForceOnboardingItem(base.StatsItem):
     __slots__ = ()
 
-    def _convert(self, record, reusable):
-        return record['avatar']['isForceOnboarding']
+    def _convert(self, value, reusable):
+        return value['avatar']['isForceOnboarding']
 
 
 class VehicleNameItem(base.StatsItem):
     __slots__ = ()
     _storyModeCtrl = dependency.descriptor(IStoryModeController)
 
-    def _convert(self, record, reusable):
-        mission = self._storyModeCtrl.missions.getMission(record['avatar']['missionId'])
+    def _convert(self, value, reusable):
+        mission = self._storyModeCtrl.missions.getMission(value['avatar']['missionId'])
         return '' if mission is None else getUserName(vehicles.makeVehicleTypeByName(mission.vehicle.name))
 
 
@@ -74,7 +76,7 @@ class RewardsBlock(base.StatsBlock):
             rewardsList = getRewardList(progressInfo, self._battlePass.isActive(), True)
             bonuses = []
             for rewardRecord in rewardsList:
-                for rewardName, rewardData in rewardRecord.iteritems():
+                for rewardName, rewardData in viewitems(rewardRecord):
                     for item in getNonQuestBonuses(rewardName, rewardData):
                         bonuses.append(item)
 
@@ -87,5 +89,5 @@ class RewardsBlock(base.StatsBlock):
 class ProgressionInfoItem(base.StatsItem):
     __slots__ = ()
 
-    def _convert(self, record, reusable):
-        return record['avatar'].get('progressionInfo', {})
+    def _convert(self, value, reusable):
+        return value['avatar'].get('progressionInfo', {})

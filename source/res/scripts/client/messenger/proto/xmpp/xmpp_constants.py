@@ -1,5 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/proto/xmpp/xmpp_constants.py
+from __future__ import absolute_import
+from future.utils import viewitems
 from constants import IS_CLIENT, IS_CHINA
 from debug_utils import LOG_WARNING
 _COOLDOWN_OFFSET = 0.0 if IS_CLIENT else -0.1
@@ -40,19 +42,19 @@ class CONTACT_ERROR_ID(object):
     CONTACT_ITEM_NOT_FOUND, ROSTER_ITEM_EXISTS, ROSTER_ITEM_NOT_FOUND, FRIENDSHIP_APPROVED, FRIENDSHIP_CANCELED, FRIENDSHIP_RQ_PROCESS, BLOCK_ITEM_EXISTS, BLOCK_ITEM_NOT_FOUND, MUTED_ITEM_NOT_FOUND, GROUP_EMPTY, GROUP_EXISTS, GROUP_NOT_FOUND, GROUP_INVALID_NAME, NOTE_EMPTY, NOTE_NOT_FOUND = range(1, 16)
 
 
-CONTACT_ERROR_NAMES = {v:k for k, v in CONTACT_ERROR_ID.__dict__.iteritems() if not k.startswith('_')}
+CONTACT_ERROR_NAMES = {v:k for k, v in viewitems(CONTACT_ERROR_ID.__dict__) if not k.startswith('_')}
 
 class LIMIT_ERROR_ID(object):
     MAX_ROSTER_ITEMS, MAX_GROUP, MAX_BLOCK_ITEMS, GROUP_INVALID_LENGTH, NOTE_INVALID_LENGTH, CHANNEL_INVALID_LENGTH, PWD_INVALID_LENGTH = range(1, 8)
 
 
-LIMIT_ERROR_NAMES = {v:k for k, v in LIMIT_ERROR_ID.__dict__.iteritems() if not k.startswith('_')}
+LIMIT_ERROR_NAMES = {v:k for k, v in viewitems(LIMIT_ERROR_ID.__dict__) if not k.startswith('_')}
 
 class CHANNEL_ERROR_ID(object):
     NAME_EMPTY, NAME_INVALID, PASSWORD_EMPTY, PASSWORD_INVALID, RETYPE_EMPTY, RETYPE_INVALID, PASSWORDS_NOT_EQUALS, NAME_ALREADY_EXISTS = range(1, 9)
 
 
-CHANNEL_ERROR_NAMES = {v:k for k, v in CHANNEL_ERROR_ID.__dict__.iteritems() if not k.startswith('_')}
+CHANNEL_ERROR_NAMES = {v:k for k, v in viewitems(CHANNEL_ERROR_ID.__dict__) if not k.startswith('_')}
 
 class XMPP_ITEM_TYPE(object):
     EMPTY_ITEM = 0
@@ -137,7 +139,7 @@ class MUC_CREATION_ERROR(object):
     WRONG_WORD = 206
 
 
-MUC_CREATION_ERROR_NAMES = {v:k for k, v in MUC_CREATION_ERROR.__dict__.iteritems() if not k.startswith('_')}
+MUC_CREATION_ERROR_NAMES = {v:k for k, v in viewitems(MUC_CREATION_ERROR.__dict__) if not k.startswith('_')}
 
 class XMPP_MUC_CHANNEL_TYPE(object):
     UNKNOWN = 0

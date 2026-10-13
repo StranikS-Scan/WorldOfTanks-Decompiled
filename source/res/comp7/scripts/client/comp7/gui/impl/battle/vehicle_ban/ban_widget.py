@@ -1,5 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: comp7/scripts/client/comp7/gui/impl/battle/vehicle_ban/ban_widget.py
+from __future__ import absolute_import
+from future.utils import viewitems
 import BigWorld
 import BattleReplay
 from PlayerEvents import g_playerEvents
@@ -124,7 +126,7 @@ class BanWidgetView(ViewImpl):
         model.setBanState(BanState.FINISHED)
         ownVehicleID = arenaDP.getVehIDByAccDBID(getOwnDatabaseID())
         ownTeam = arenaDP.getVehicleInfo(ownVehicleID).team
-        for teamID, banVehicleInfo in vehicleBanCtrl.bannedVehicles.iteritems():
+        for teamID, banVehicleInfo in viewitems(vehicleBanCtrl.bannedVehicles):
             bannedVehicleCD = banVehicleInfo['vehicleCD']
             isRandomlySelected = banVehicleInfo['isRandomlySelected']
             totalVotes = banVehicleInfo['totalVotes']

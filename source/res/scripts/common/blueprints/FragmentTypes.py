@@ -7,12 +7,15 @@ import nations
 from backports.functools_lru_cache import lru_cache
 from items import vehicles, ITEM_TYPES
 from random_utils import wchoices
-from debug_utils import LOG_DEBUG_DEV, LOG_ERROR
+from debug_utils import LOG_DEBUG_DEV, LOG_ERROR, LOG_WARNING
 from . import g_cache, BlueprintsException, getAllResearchableVehicles
 from blueprints.BlueprintTypes import BlueprintTypes
 from math_common import round_py2_style
 if typing.TYPE_CHECKING:
     from typing import Optional, Tuple
+_LEGACY_SENTINEL_VEHICLE_ID = 255
+_NO_NATION_ID = 15
+_NATION_IDS = frozenset(nations.INDICES.values())
 
 class BlueprintFragment(object):
     __slots__ = ('vehTypeCD', 'total')
@@ -46,7 +49,7 @@ class BlueprintFragment(object):
         myFragmentType = getFragmentType(fragmentCD)
         for cls in BlueprintFragment.__subclasses__():
             if myFragmentType == cls.FTYPE:
-                return cls(ITEM_TYPES.vehicle + (fragmentCD & 65520), enableException)
+                return cls(ITEM_TYPES.vehicle + (fragmentCD & 16777200), enableException=enableException)
 
         raise BlueprintsException('Invalid fragment compact descriptor', fragmentCD)
 
@@ -59,7 +62,7 @@ class NationalBlueprintFragment(BlueprintFragment):
     @lru_cache(maxsize=len(nations.NAMES) * 2)
     def fromNation(nationNameOrId):
         nationID = nations.INDICES.get(nationNameOrId, -1) if isinstance(nationNameOrId, str) else nationNameOrId
-        return NationalBlueprintFragment(65280 + (nationID << 4) + ITEM_TYPES.vehicle)
+        return NationalBlueprintFragment(16776960 + (nationID << 4) + ITEM_TYPES.vehicle)
 
     def __repr__(self):
         return 'nBPF:{}'.format(self.vehTypeCD >> 4 & 15)
@@ -91,11 +94,11 @@ class VehicleBlueprintFragment(BlueprintFragment):
 
     @property
     def asNationalCD(self):
-        return (self.vehTypeCD & 65520) + BlueprintTypes.NATIONAL
+        return (self.vehTypeCD & 16777200) + BlueprintTypes.NATIONAL
 
     @property
     def asIntelligenceDataCD(self):
-        return (self.vehTypeCD & 65520) + BlueprintTypes.INTELLIGENCE_DATA
+        return (self.vehTypeCD & 16777200) + BlueprintTypes.INTELLIGENCE_DATA
 
     def getXPValueForFragments(self, count):
         return self.progressPerFragment * count if count < self.total else 1.0
@@ -145,6 +148,21 @@ def getFragmentType(ifragmentCD):
     raise BlueprintsException('Wrong fragment compact descriptor', ifragmentCD)
 
 
+def upgradeLegacyFragmentCD(ifragmentCD):
+    if not isinstance(ifragmentCD, (int, long)) or ifragmentCD >> 8 != _LEGACY_SENTINEL_VEHICLE_ID:
+        return ifragmentCD
+    fragmentType = getFragmentType(ifragmentCD)
+    nationID = ifragmentCD >> 4 & 15
+    if fragmentType == BlueprintTypes.NATIONAL and nationID in _NATION_IDS:
+        currentCD = NationalBlueprintFragment.fromNation(nationID).makeIntCompDescr()
+    elif fragmentType == BlueprintTypes.INTELLIGENCE_DATA and nationID == _NO_NATION_ID:
+        currentCD = IntelligenceDataFragment().makeIntCompDescr(normalized=True)
+    else:
+        return ifragmentCD
+    LOG_WARNING('[BPF] Legacy blueprint fragment descriptor was remapped, the source data has to be updated (from, to):', ifragmentCD, currentCD)
+    return currentCD
+
+
 def fromIntFragmentCD(ifragmentCD, enableException=True):
     return BlueprintFragment.fromIntFragmentCD(ifragmentCD, enableException)
 
@@ -187,7 +205,7 @@ def isSimilar(fragmentTypeCD1, fragmentTypeCD2, strict=True):
 
 @lru_cache(maxsize=512)
 def normalizeFragment(ifragmentCD):
-    vehTypeCD = ITEM_TYPES.vehicle + (ifragmentCD & 65520)
+    vehTypeCD = ITEM_TYPES.vehicle + (ifragmentCD & 16777200)
     fType = getFragmentType(ifragmentCD)
     return _makeIntCompDescr(vehTypeCD, fType, normalized=True)
 
@@ -195,11 +213,11 @@ def normalizeFragment(ifragmentCD):
 @lru_cache(maxsize=512)
 def _makeIntCompDescr(vehTypeCD, fType, normalized):
     if BlueprintTypes.INTELLIGENCE_DATA == fType:
-        return ((65521 if normalized else vehTypeCD) & 65520) + fType
+        return ((16777201 if normalized else vehTypeCD) & 16777200) + fType
     elif BlueprintTypes.NATIONAL == fType:
-        return ((vehTypeCD | 65280 if normalized else vehTypeCD) & 65520) + fType
+        return ((vehTypeCD | 16776960 if normalized else vehTypeCD) & 16777200) + fType
     elif BlueprintTypes.VEHICLE == fType:
-        return (vehTypeCD & 65520) + fType
+        return (vehTypeCD & 16777200) + fType
     else:
         LOG_ERROR('Incorrect fType={}'.format(fType))
         return None

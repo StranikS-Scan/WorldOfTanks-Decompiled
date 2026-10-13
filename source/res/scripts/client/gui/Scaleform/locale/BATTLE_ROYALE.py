@@ -128,7 +128,7 @@ class BATTLE_ROYALE(object):
     BATTLERESULT_PLAYERBATTLETYPESTATUS_HEADER_RANDOMPLATOON = '#battle_royale:battleResult/playerBattleTypeStatus/header/randomPlatoon'
     BATTLERESULT_PLAYERBATTLETYPESTATUS_HEADER_PLATOON = '#battle_royale:battleResult/playerBattleTypeStatus/header/platoon'
     BATTLERESULT_PLAYERBATTLETYPESTATUS_BUTTON_TEXT = '#battle_royale:battleResult/playerBattleTypeStatus/button/text'
-    BATTLERESULT_PLAYERBATTLETYPESTATUS_CLAN = '#battle_royale:battleResult/playerBattleTypeStatus/clan/'
+    BATTLERESULT_PLAYERBATTLETYPESTATUS_CLAN = '#battle_royale:battleResult/playerBattleTypeStatus/clan'
     BATTLERESULT_TAB_RESULT = '#battle_royale:battleResult/tab/result'
     BATTLERESULT_TAB_LEADERBOARD = '#battle_royale:battleResult/tab/leaderboard'
     BATTLERESULT_BATTLEREWARD_TITLE = '#battle_royale:battleResult/battleReward/title'

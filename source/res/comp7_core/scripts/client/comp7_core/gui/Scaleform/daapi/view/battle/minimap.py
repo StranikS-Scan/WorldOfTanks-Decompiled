@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: comp7_core/scripts/client/comp7_core/gui/Scaleform/daapi/view/battle/minimap.py
+from __future__ import absolute_import
 from constants import ARENA_PERIOD
 from gui.Scaleform.daapi.view.battle.classic.minimap import ClassicMinimapComponent, GlobalSettingsPlugin
 from gui.Scaleform.daapi.view.battle.shared.points_of_interest import minimap as poi_plugins

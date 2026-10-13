@@ -1,5 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/web/web_client_api/vehicles/__init__.py
+from __future__ import absolute_import
+from past.builtins import long
 import nations
 from gui.shared.gui_items.processors.vehicle import SetEnhancementProcessor, DismountEnhancementProcessor
 from gui.shared.items_parameters import params

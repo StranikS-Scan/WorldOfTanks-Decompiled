@@ -194,6 +194,7 @@ class BonusExtractor(object):
         self.__bonuses = _BonusSorter(self.__paramName).sort(bonuses)
         self.__situationalBonuses = [ bonusID for bonusID, bonusGroup in self.__bonuses if isSituationalBonus(bonusID, bonusGroup, paramName) ]
         self.__removeCamouflage = False
+        self.__removeNoEffectCrewBooster(vehicle)
 
     def getBonusInfo(self):
         self.__reorderDevices(self.__bonuses)
@@ -269,6 +270,14 @@ class BonusExtractor(object):
             sortedBonuses.append(item)
 
         return sortedBonuses
+
+    def __removeNoEffectCrewBooster(self, vehicle):
+        installedBoosters = self.__vehicle.battleBoosters.installed.getItems()
+        if installedBoosters:
+            booster = installedBoosters[0]
+            if booster.isCrewBooster() and not booster.isAffectsOnVehicle(vehicle):
+                self.__vehicle.battleBoosters.installed[0] = None
+        return
 
 
 class EasyTankEquipBonusExtractor(BonusExtractor):

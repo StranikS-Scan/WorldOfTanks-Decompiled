@@ -1,8 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: frontline/scripts/client/frontline/gui/Scaleform/daapi/view/battle/frontline_ingame_rank_panel.py
+from __future__ import absolute_import, division
 from frontline.gui.Scaleform.daapi.view.meta.FrontlineInGameRankMeta import FrontlineInGameRankMeta
 from gui.Scaleform.locale.EPIC_BATTLE import EPIC_BATTLE
 from helpers import dependency
+from math_common import decimal_round
 from skeletons.gui.battle_session import IBattleSessionProvider
 _MAX_IN_GAME_RANK = 5
 
@@ -50,7 +52,7 @@ class FrontlineInGameRankPanel(FrontlineInGameRankMeta):
             normalizedExpValue = expValue - self.__rankThresholds[activeRank]
             nextRankLevelCap = self.__rankThresholds[activeRank + 1] - self.__rankThresholds[activeRank]
             result = float(normalizedExpValue) / float(nextRankLevelCap)
-        return round(max(0.0, result - 0.005), 2)
+        return decimal_round(max(0.0, result - 0.005), 2)
 
     def __getRank(self, progressValue):
         result = -1

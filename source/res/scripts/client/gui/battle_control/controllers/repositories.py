@@ -459,7 +459,7 @@ class SharedControllersRepository(_ControllersRepository):
         if guiVisitor.isBattleRoyale():
             repository.addArenaController(arena_border_ctrl.BattleRoyaleBorderCtrl(), setup)
         else:
-            repository.addArenaController(arena_border_ctrl.ArenaBorderController(), setup)
+            repository.addArenaController(cls.getArenaBorderController(), setup)
         repository.addArenaController(anonymizer_fakes_ctrl.AnonymizerFakesController(setup), setup)
         repository.addArenaViewController(prebattle_setups_ctrl.PrebattleSetupsController(), setup)
         repository.addArenaViewController(arena_load_ctrl.createArenaLoadController(setup), setup)
@@ -496,6 +496,10 @@ class SharedControllersRepository(_ControllersRepository):
     def getAreaMarkersController(cls):
         from gui.battle_control.controllers import area_marker_ctrl
         return area_marker_ctrl.AreaMarkersController()
+
+    @classmethod
+    def getArenaBorderController(cls):
+        return arena_border_ctrl.ArenaBorderController()
 
 
 class ControllersRepositoryByBonuses(_ControllersRepository):

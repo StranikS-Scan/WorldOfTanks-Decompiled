@@ -148,7 +148,7 @@ class Comp7LightProgressionQuestsPresenter(ViewComponent[CommonBattleQuestsProgr
             index = 0
             items = model.bonusCondition.getItems()
             for cond in condsRoot.items:
-                if isinstance(cond, conditions._Cumulativable):
+                if isinstance(cond, conditions.Cumulativable):
                     for curProg, totalProg, diff, _ in cond.getProgressPerGroup(pCur, pPrev, True).values():
                         item = items[index]
                         item.setEarned(diff)

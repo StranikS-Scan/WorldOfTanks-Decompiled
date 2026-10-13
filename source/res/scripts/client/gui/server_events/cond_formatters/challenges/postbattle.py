@@ -10,12 +10,13 @@ from gui.server_events.cond_formatters import TOP_RANGE_LOWEST
 from gui.server_events.cond_formatters.challenges.constants import CHALLENGES_BATTLE_RESULT_ICONS, CONDITION_TEXT_RES, DEFAULT_CONDITION_TITLE_TEXT_RES, DEFAULT_CONDITION_TEXT_RES, ACHIEVEMENT_TEXT_RES, ConditionIcon, TextResKey, TemplateParam
 from gui.server_events.cond_formatters.challenges.helpers import packDescriptionField, packTitleField, getRelationValue
 from gui.server_events.cond_formatters.formatters import SimpleMissionsFormatter, MissionsBattleConditionsFormatter
+from gui.shared.utils.functions import replaceHyphenToUnderscore
 from shared_utils import first
 from helpers import time_utils
 if typing.TYPE_CHECKING:
     from gui.server_events.conditions import _Condition, _VehsListCondition, BattleResults, Achievements
     from gui.server_events.cond_formatters import FormattableField
-    from gui.impl.gen_utils import DynAccessor
+    from frameworks.wulf import PyResAccessor
 _logger = logging.getLogger(__name__)
 
 class ChallengePostBattleConditionsFormatter(MissionsBattleConditionsFormatter):
@@ -87,7 +88,7 @@ class ChallengeVehicleListFormatter(ChallengeDefaultFormatter):
         if vehClasses:
             if len(vehClasses) > 1:
                 _logger.error('More than 1 class in condition: %s', condition.data)
-            vehClass = first(vehClasses)
+            vehClass = replaceHyphenToUnderscore(first(vehClasses))
             textRes = textRes.dyn(TextResKey.CLASSES)
             textParams[TemplateParam.VEHICLE_CLASS] = backport.text(CONDITION_TEXT_RES.classes.dyn(vehClass)())
         if classesDiversity is not None:

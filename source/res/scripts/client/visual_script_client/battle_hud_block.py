@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/visual_script_client/battle_hud_block.py
+from __future__ import absolute_import
 import BigWorld
 from skeletons.gui.battle_session import IBattleSessionProvider
 from visual_script import ASPECT
@@ -32,7 +33,9 @@ class BattleHUDMeta(Meta):
     def _avatar(self):
         if helpers.isPlayerAvatar():
             return BigWorld.player()
-        errorVScript(self, 'BigWorld.player is not player avatar.')
+        else:
+            errorVScript(self, 'BigWorld.player is not player avatar.')
+            return None
 
 
 class BattleHUDEventMeta(BattleHUDMeta):

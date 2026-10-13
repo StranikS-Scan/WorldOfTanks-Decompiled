@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/proto/xmpp/extensions/dataform.py
+from __future__ import absolute_import
 from collections import namedtuple
 from messenger.proto.xmpp.extensions import PyExtension, SimpleExtension
 from messenger.proto.xmpp.extensions.ext_constants import XML_NAME_SPACE as _NS

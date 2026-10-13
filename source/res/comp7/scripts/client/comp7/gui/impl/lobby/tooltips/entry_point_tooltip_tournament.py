@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: comp7/scripts/client/comp7/gui/impl/lobby/tooltips/entry_point_tooltip_tournament.py
+from __future__ import absolute_import
 import typing
 from comp7.gui.impl.gen.view_models.views.lobby.enums import TournamentName
 from comp7.gui.impl.gen.view_models.views.lobby.tooltips.tournament_entry_point_tooltip_model import TournamentEntryPointTooltipModel, TournamentState
@@ -9,6 +10,7 @@ from gui.impl.pub import ViewImpl
 from helpers import dependency
 from helpers.ingame_tournament_helper import IngameTournamentState
 from helpers.time_utils import getServerUTCTime
+from math_common import round_py2_style_int
 from skeletons.gui.game_control import IIngameTournamentController
 if typing.TYPE_CHECKING:
     from helpers.ingame_tournament_helper import IngameTournamentType
@@ -46,7 +48,7 @@ class Comp7TournamentEntryPointTooltip(ViewImpl):
     def _updateState(self):
         tournamentState = self.__ingameTournamentController.getTournamentState(self.__tournamentType)
         startDate, endDate = self.__ingameTournamentController.getTournamentShowmatchPeriod(self.__tournamentType)
-        formattedServerTimestamp = int(round(getServerUTCTime()))
+        formattedServerTimestamp = round_py2_style_int(getServerUTCTime())
         with self.viewModel.transaction() as tx:
             tx.setTournamentName(TournamentName(self.__tournamentType.value))
             tx.setStartTimestamp(startDate)

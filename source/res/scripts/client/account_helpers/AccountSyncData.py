@@ -1,10 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/account_helpers/AccountSyncData.py
+from __future__ import absolute_import
 from functools import partial
 import AccountCommands
-from SyncController import SyncController
+from account_helpers.SyncController import SyncController
+from account_helpers.persistent_caches import SimpleCache
 from debug_utils import LOG_ERROR, LOG_DEBUG
-from persistent_caches import SimpleCache
 from live_crc_accountdata import accountDataPersistentHash, accountDataExtractPersistent, accountDataGetDiffForPersistent, accountDataMergePersistent
 from shared_utils.account_helpers.diff_utils import synchronizeDicts
 

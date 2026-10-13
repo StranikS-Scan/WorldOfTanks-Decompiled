@@ -6,6 +6,7 @@ import BigWorld
 from constants import LowChargeShotReloadingState
 from events_handler import eventHandler
 from gui.shared.utils.decorators import ReprInjector
+from items.vehicle_mechanics_types import VehicleMechanicKey, VehicleMechanicKeys
 from math_utils import almostEqual
 from physics_shared import getShotPredictionWindow
 from vehicles.components.component_wrappers import ifObservedVehicle
@@ -13,7 +14,6 @@ from vehicles.components.vehicle_component import VehicleDynamicComponent
 from vehicles.components.vehicle_prefabs import createMechanicPrefabSpawner
 from vehicles.entities import ShotParams
 from vehicles.mechanics.gun_mechanics.common import IGunMechanicComponent
-from vehicles.mechanics.mechanic_constants import VehicleMechanic
 from vehicles.mechanics.mechanic_helpers import getVehicleDescrMechanicParams
 from vehicles.mechanics.mechanic_states import createMechanicStatesEvents, IMechanicStatesComponent
 from vehicles.mechanics.gun_mechanics.low_charge_shot.private import LowChargeShotAmmoState, LowChargeShotMechanicState, LowChargeShotUILogging, DEFAULT_MECHANIC_STATE
@@ -35,8 +35,8 @@ class LowChargeShotController(VehicleDynamicComponent, IGunMechanicComponent, IM
         return
 
     @property
-    def vehicleMechanic(self):
-        return VehicleMechanic.LOW_CHARGE_SHOT
+    def vehicleMechanicKey(self):
+        return VehicleMechanicKeys.LOW_CHARGE_SHOT
 
     @property
     def statesEvents(self):
@@ -63,13 +63,13 @@ class LowChargeShotController(VehicleDynamicComponent, IGunMechanicComponent, IM
 
     @eventHandler
     def onCollectAmmoStates(self, ammoStates):
-        ammoStates[self.vehicleMechanic.value] = LowChargeShotAmmoState(self.getMechanicState())
+        ammoStates[self.vehicleMechanicKey.uniqueName] = LowChargeShotAmmoState(self.getMechanicState())
 
     @eventHandler
     def onCollectShotParams(self, shotParamsList):
         mechanicState = self.__mechanicState
         if mechanicState.reloadingState == LowChargeShotReloadingState.LOW_CHARGE and mechanicState.duration <= getShotPredictionWindow(BigWorld.LatencyInfo().value[3]):
-            shotParamsList.append(ShotParams(self.vehicleMechanic, 0, 0, False))
+            shotParamsList.append(ShotParams(self.vehicleMechanicKey, 0, 0, False))
 
     def _onAppearanceReady(self):
         super(LowChargeShotController, self)._onAppearanceReady()
@@ -92,7 +92,7 @@ class LowChargeShotController(VehicleDynamicComponent, IGunMechanicComponent, IM
 
     def _collectComponentParams(self, typeDescriptor):
         super(LowChargeShotController, self)._collectComponentParams(typeDescriptor)
-        self.__params = getVehicleDescrMechanicParams(typeDescriptor, self.vehicleMechanic)
+        self.__params = getVehicleDescrMechanicParams(typeDescriptor, self.vehicleMechanicKey)
 
     def __updateMechanicState(self):
         self.__prevBaseTime = self.__mechanicState.baseTime

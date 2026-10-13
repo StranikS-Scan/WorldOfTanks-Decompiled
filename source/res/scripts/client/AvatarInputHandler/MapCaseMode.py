@@ -1,7 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/AvatarInputHandler/MapCaseMode.py
+from __future__ import absolute_import
 import weakref
 import logging
+from future.utils import listvalues
 from ArtilleryEquipment import ArtilleryEquipment
 from AvatarInputHandler import gun_marker_ctrl
 from CombatSelectedArea import CombatSelectedArea
@@ -32,7 +34,7 @@ from items import vehicles as vehs_core, artefacts
 from constants import AIMING_MODE
 from items import makeIntCompactDescrByID
 from nations import NONE_INDEX
-from DynamicCameras.ArcadeCamera import ArcadeCameraState
+from AvatarInputHandler.DynamicCameras.ArcadeCamera import ArcadeCameraState
 from VehicleGunRotator import GunMarkerInfo
 _logger = logging.getLogger(__name__)
 
@@ -131,7 +133,7 @@ class _ArtilleryStrikeSelector(_DefaultStrikeSelector, _VehiclesSelector):
         _VehiclesSelector.__init__(self, self.__intersected)
         self.hitPosition = position
         myTeam = BigWorld.player().team
-        udos = BigWorld.userDataObjects.values()
+        udos = listvalues(BigWorld.userDataObjects)
         myArtyEquipment = [ x for x in udos if isinstance(x, ArtilleryEquipment) and x.team == myTeam ]
         if len(myArtyEquipment) > 1:
             LOG_ERROR('This map has multiple (%d) UDO of ArtilleryEquipment for team %d' % (len(myArtyEquipment), myTeam))
@@ -779,7 +781,7 @@ class MapCaseControlModeBase(IControlMode, CallbackDelayer):
     def getDesiredShotPoint(self, ignoreAimingMode=False):
         return self.__getDesiredShotPoint() if self.__aimingMode == 0 or ignoreAimingMode else None
 
-    def _createCamera(self, data, offset=Math.Vector2(0, 0)):
+    def _createCamera(self, config, offset=Math.Vector2(0, 0)):
         raise NotImplementedError
 
     def _initCamera(self):

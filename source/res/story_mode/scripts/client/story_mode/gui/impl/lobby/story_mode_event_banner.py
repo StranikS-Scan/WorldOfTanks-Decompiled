@@ -1,11 +1,12 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: story_mode/scripts/client/story_mode/gui/impl/lobby/story_mode_event_banner.py
+from __future__ import absolute_import
 import typing
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.user_missions.constants.event_banner_state import EventBannerState
-from gui.impl.lobby.user_missions.hangar_widget.event_banners.base_event_banner import BaseEventBanner
 from gui.impl.lobby.user_missions.hangar_widget.event_banners.event_banners_container import EventBannersContainer
+from gui.impl.lobby.user_missions.hangar_widget.event_banners.standard_event_banner import StandardEventBanner
 from helpers import dependency
 from helpers.time_utils import getTimestampFromUTC, getServerUTCTime, ONE_DAY, ONE_MINUTE
 from story_mode.account_settings import setEventEntryPointShown, getEventEntryPointShown, getEventVisited, getNewbieEntryPointAnimationSeenId, setNewbieEntryPointAnimationSeenId
@@ -17,7 +18,7 @@ from story_mode_common.configs.story_mode_settings import settingsSchema
 if typing.TYPE_CHECKING:
     from frameworks.wulf import ViewEvent
 
-class StoryModeNewbieBanner(BaseEventBanner):
+class StoryModeNewbieBanner(StandardEventBanner):
     NAME = 'StoryModeNewbieEntryPoint'
     _controller = dependency.descriptor(IStoryModeController)
 
@@ -61,7 +62,7 @@ class StoryModeNewbieBanner(BaseEventBanner):
         self._controller.switchPrb()
 
 
-class StoryModeEventBanner(BaseEventBanner):
+class StoryModeEventBanner(StandardEventBanner):
     NAME = 'StoryModeEventEntryPoint'
     _controller = dependency.descriptor(IStoryModeController)
 

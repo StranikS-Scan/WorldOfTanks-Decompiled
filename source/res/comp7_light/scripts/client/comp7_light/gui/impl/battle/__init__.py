@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: comp7_light/scripts/client/comp7_light/gui/impl/battle/__init__.py
-
+from __future__ import absolute_import
 
 def registerComp7LightBattle():
     from arena_component_system.assembler_helper import ARENA_BONUS_TYPE_CAP_COMPONENTS

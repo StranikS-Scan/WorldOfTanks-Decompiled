@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/doc_loaders/settings_set.py
+from __future__ import absolute_import
 from collections import namedtuple
 from messenger.doc_loaders import _xml_helpers
 from messenger.m_constants import BATTLE_CHANNEL

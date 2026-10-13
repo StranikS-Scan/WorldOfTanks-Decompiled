@@ -1,6 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/AvatarInputHandler/aih_global_binding.py
+from __future__ import absolute_import
 import logging
+from future.utils import viewitems
 import Math
 from aih_constants import CTRL_MODE_NAME, GUN_MARKER_FLAG, STRATEGIC_CAMERA, DEFAULT_GUN_MARKER_STATE
 from soft_exception import SoftException
@@ -122,7 +124,7 @@ class _GlobalDataDescriptor(object):
 
     @classmethod
     def clear(cls):
-        for bindingID, observable in cls.__storage.iteritems():
+        for bindingID, observable in viewitems(cls.__storage):
             observable.clear()
             observable.change(_DEFAULT_VALUES[bindingID]().value)
 

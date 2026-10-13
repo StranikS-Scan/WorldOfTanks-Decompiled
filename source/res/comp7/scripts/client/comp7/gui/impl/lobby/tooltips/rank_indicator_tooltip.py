@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: comp7/scripts/client/comp7/gui/impl/lobby/tooltips/rank_indicator_tooltip.py
+from __future__ import absolute_import
 from comp7.gui.impl.gen.view_models.views.lobby.tooltips.rank_indicator_tooltip_model import RankIndicatorTooltipModel
 from frameworks.wulf import ViewSettings
 from gui.impl.gen import R

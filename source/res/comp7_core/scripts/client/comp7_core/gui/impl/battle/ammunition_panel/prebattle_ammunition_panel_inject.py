@@ -43,6 +43,10 @@ class Comp7CorePrebattleAmmunitionPanelInject(PrebattleAmmunitionPanelInject):
     def stopSetupsSelection(self):
         pass
 
+    def updateVehicleSetups(self, vehicle):
+        if self.isActive:
+            super(Comp7CorePrebattleAmmunitionPanelInject, self).updateVehicleSetups(vehicle)
+
     def _populate(self):
         super(Comp7CorePrebattleAmmunitionPanelInject, self)._populate()
         self.addListener(events.GameEvent.FULL_STATS, self._handleToggleFullStats, scope=EVENT_BUS_SCOPE.BATTLE)
@@ -107,9 +111,11 @@ class Comp7CorePrebattleAmmunitionPanelInject(PrebattleAmmunitionPanelInject):
 
     def __onVehicleUpdated(self, vehicle):
         if self.isActive:
-            self._injectView.updateViewVehicle(vehicle, fullUpdate=False)
+            if self._injectView is not None:
+                self._injectView.updateViewVehicle(vehicle, fullUpdate=False)
         elif self.__isPrebattleSetupPossible() or not self.__sessionProvider.dynamic.prebattleSetup.isSelectionConfirmed():
             self.showSetupsView(vehicle, True)
+        return
 
     def __isPrebattleSetupPossible(self):
         vehicle = self.__sessionProvider.dynamic.prebattleSetup.getCurrentGUIVehicle()

@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/account_helpers/battle_pass.py
+from __future__ import absolute_import
 import logging
 from functools import partial, wraps
 import AccountCommands

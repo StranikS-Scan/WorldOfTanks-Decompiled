@@ -7,7 +7,7 @@ from future.utils import viewvalues
 import BigWorld
 import Event
 import constants
-from gui.Scaleform.framework import g_entitiesFactories, ViewSettings, ScopeTemplates
+from gui.Scaleform.framework import ViewSettings, ScopeTemplates
 from gui.Scaleform.framework.entities.View import View, ViewKey
 from gui.Scaleform.framework.entities.abstract.LoaderManagerMeta import LoaderManagerMeta
 from gui.Scaleform.framework.entities.sf_window import SFWindow
@@ -142,7 +142,7 @@ class GuiImplViewLoadParams(ViewLoadParams):
 
 
 class LoaderManager(LoaderManagerMeta):
-    uiLoader = dependency.descriptor(IGuiLoader)
+    __guiLoader = dependency.descriptor(IGuiLoader)
     __tutorialLoader = dependency.descriptor(ITutorialLoader)
 
     def __init__(self, app):
@@ -202,7 +202,7 @@ class LoaderManager(LoaderManagerMeta):
             if item.isCancelled or item.pyEntity.isDisposed():
                 self.onViewLoadCanceled(viewKey, item)
             else:
-                pyEntity = g_entitiesFactories.initialize(item.pyEntity, view, item.factoryIdx, extra={'name': item.name})
+                pyEntity = self.__guiLoader.entitiesFactory.initialize(item.pyEntity, view, item.factoryIdx, extra={'name': item.name})
                 item.pyEntity.onDispose -= self.__handleViewDispose
                 if pyEntity is not None:
                     pyEntity.getParentWindow().setViewLoaded()
@@ -236,7 +236,7 @@ class LoaderManager(LoaderManagerMeta):
                 if item is not None:
                     settings = item.pyEntity.settings
                     if constants.IS_DEVELOPMENT and settings.url != NO_IMPL_URL:
-                        g_entitiesFactories.addSettings(ViewSettings(NO_IMPL_ALIAS, View, NO_IMPL_URL, settings.layer, None, ScopeTemplates.DEFAULT_SCOPE, False))
+                        self.__guiLoader.entitiesFactory.addSettings(ViewSettings(NO_IMPL_ALIAS, View, NO_IMPL_URL, settings.layer, None, ScopeTemplates.DEFAULT_SCOPE, False))
                         _logger.warning('Try to load noImpl swf...')
                         self.__doLoadSFView(SFViewLoadParams(NO_IMPL_ALIAS, item.name))
             uniprof.exitFromRegion('Loading {} {}'.format(viewKey.name, item.uid))
@@ -319,7 +319,7 @@ class LoaderManager(LoaderManagerMeta):
              'viewTutorialId': viewTutorialID}
             self.as_loadViewS(viewDict)
         else:
-            pyEntity, factoryIdx = g_entitiesFactories.factory(key.alias, *args, **kwargs)
+            pyEntity, factoryIdx = self.__guiLoader.entitiesFactory.factory(key.alias, *args, **kwargs)
             if pyEntity is None:
                 _logger.warning('PyEntity for alias %s is None', key.alias)
                 window.destroy()

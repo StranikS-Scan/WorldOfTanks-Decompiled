@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/web/web_client_api/shop/__init__.py
+from __future__ import absolute_import
 from web.web_client_api import w2capi
 from web.web_client_api.shop.actions import ActionsWebApiMixin
 from web.web_client_api.shop.boosters import BoostersInfoWebApiMixin

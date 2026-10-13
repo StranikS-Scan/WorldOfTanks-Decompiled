@@ -6517,6 +6517,63 @@
       </damage>
     </armorSpalls>
   </_127_mm_Obus_Explosif_Mle_58>
+  <c_p_127_54_Mk_316S>
+    <id>	244	</id>
+    <userString>	#france_vehicles:c_p_127_54_Mk_316S	</userString>
+    <icon>	ap_cr	</icon>
+    <price>	974	</price>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	127	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	largeAPCR	</effects>
+    <damage>
+      <armor>	440	</armor>
+      <devices>	171	</devices>
+    </damage>
+    <normalizationAngle>	2	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
+  </c_p_127_54_Mk_316S>
+  <c_c_127_54_Mk_411S>
+    <id>	245	</id>
+    <userString>	#france_vehicles:c_c_127_54_Mk_411S	</userString>
+    <icon>	hc_premium	</icon>
+    <price>	5600	</price>
+    <improved>	true	</improved>
+    <kind>	HOLLOW_CHARGE	</kind>
+    <caliber>	127	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	largeHollowCharge	</effects>
+    <damage>
+      <armor>	440	</armor>
+      <devices>	171	</devices>
+    </damage>
+    <ricochetAngle>	85	</ricochetAngle>
+    <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
+  </c_c_127_54_Mk_411S>
+  <a_e_127_54_Mk_116S>
+    <id>	246	</id>
+    <userString>	#france_vehicles:a_e_127_54_Mk_116S	</userString>
+    <icon>	he_modern	</icon>
+    <price>	1405	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	127	</caliber>
+    <explosionRadius>	2.67	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	largeHighExplosive	</effects>
+    <damage>
+      <armor>	600	</armor>
+      <devices>	171	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	2.67	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	300	</armor>
+        <devices>	85	</devices>
+      </damage>
+    </armorSpalls>
+  </a_e_127_54_Mk_116S>
   <_105mm_SK_P_70>
     <id>	205	</id>
     <userString>	#france_vehicles:_105mm_SK_P_70	</userString>

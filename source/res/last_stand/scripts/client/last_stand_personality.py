@@ -24,7 +24,7 @@ from messenger.m_constants import BATTLE_CHANNEL
 from chat_shared import SYS_MESSAGE_TYPE as _SM_TYPE
 
 class ClientLastStandBattleMode(last_stand_constants.LastStandBattleMode):
-    _CLIENT_BATTLE_PAGE = ls_gui_constants.VIEW_ALIAS.LAST_STAND_BATTLE_PAGE
+    _CLIENT_BATTLE_PAGE = (ls_gui_constants.VIEW_ALIAS.LAST_STAND_BATTLE_PAGE, ls_gui_constants.VIEW_ALIAS.RANDOM_BATTLE_HUD)
     _CLIENT_PRB_ACTION_NAME = ls_gui_constants.PREBATTLE_ACTION_NAME.LAST_STAND
     _CLIENT_PRB_ACTION_NAME_SQUAD = ls_gui_constants.PREBATTLE_ACTION_NAME.LAST_STAND_SQUAD
     _CLIENT_BANNER_ENTRY_POINT_ALIAS = LAST_STAND_HANGAR_ALIASES.LS_ENTRY_POINT
@@ -416,7 +416,7 @@ def init():
      'last_stand.gui.scaleform.daapi.view.lobby.store',
      'last_stand.gui.scaleform.daapi.view.lobby.tank_setup',
      'last_stand.gui.impl.lobby'])
-    BATTLE_PACKAGES = ('last_stand.gui.scaleform.daapi.view.battle.shared', 'gui.Scaleform.daapi.view.battle.shared.vehicle_mechanics', 'messenger.gui.Scaleform.view.battle')
+    BATTLE_PACKAGES = ('last_stand.gui.scaleform.daapi.view.battle.shared', 'gui.Scaleform.daapi.view.battle.shared.vehicle_mechanics', 'messenger.gui.Scaleform.view.battle', 'gui.impl.battle.random', 'gui.impl.battle.shared')
     registerScaleformBattlePackages(last_stand_constants.ARENA_GUI_TYPE.LAST_STAND, BATTLE_PACKAGES)
     g_overrideScaleFormViewsConfig.initExtensionBattlePackages(__name__, ['last_stand.gui.scaleform.daapi.view.battle'], last_stand_constants.ARENA_GUI_TYPE.LAST_STAND)
     AccountSettings.overrideDefaultSettings(KEY_SETTINGS, ACCOUNT_DEFAULT_SETTINGS)

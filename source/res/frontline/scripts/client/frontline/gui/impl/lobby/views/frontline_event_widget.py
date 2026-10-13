@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: frontline/scripts/client/frontline/gui/impl/lobby/views/frontline_event_widget.py
+from __future__ import absolute_import
 from CurrentVehicle import g_currentVehicle
 from constants import LoadoutParams
 from frontline.frontline_account_settings import isRentBannerClicked, setRentBannerClicked
@@ -32,11 +33,11 @@ from constants import SERVER_TICK_LENGTH
 class _LastEntryState(object):
 
     def __init__(self):
-        self.rewards = dict()
+        self.rewards = {}
         self.rewardsHash = 0
 
     def update(self, rewards=None, rewardsHash=0):
-        self.rewards = dict() if rewards is None else rewards
+        self.rewards = {} if rewards is None else rewards
         self.rewardsHash = rewardsHash
         return
 
@@ -89,7 +90,7 @@ class FrontlineEventWidget(UserMissionChildPresenter, TooltipPositionerMixin, FL
 
     def _prepareRewardsData(self):
         hasNewRewards = False
-        rewards = dict()
+        rewards = {}
         tokens = self.__epicController.getNotChosenRewardTokens()
         for token in tokens:
             count = self.__itemsCache.items.tokens.getTokenCount(token)

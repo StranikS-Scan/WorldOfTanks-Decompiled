@@ -164,13 +164,11 @@ class UnitClientAPI(object):
     def setDevMode(self, isDevMode=True):
         return self._doUnitCmd(CLIENT_UNIT_CMD.SET_UNIT_DEV_MODE, int(isDevMode)) if IS_DEVELOPMENT else None
 
-    def startBattle(self, vehInvID=0, gameplaysMask=None, arenaTypeID=0, randomFlags=None, stopAutoSearch=False, startBattleUnitCmd=CLIENT_UNIT_CMD.START_UNIT_BATTLE, extraModeData=''):
+    def startBattle(self, vehInvID=0, gameplaysMask=None, arenaTypeID=0, stopAutoSearch=False, startBattleUnitCmd=CLIENT_UNIT_CMD.START_UNIT_BATTLE, extraModeData=''):
         if gameplaysMask is not None:
             self.setGameplaysMask(gameplaysMask)
         if arenaTypeID != 0:
             self.setArenaType(arenaTypeID)
-        if randomFlags is not None:
-            self.setRandomFlags(randomFlags)
         return self._doUnitCmd(startBattleUnitCmd, vehInvID, int(stopAutoSearch), extraModeData)
 
     def stopBattle(self, stopBattleUnitCmd=CLIENT_UNIT_CMD.STOP_UNIT_BATTLE):
@@ -190,9 +188,6 @@ class UnitClientAPI(object):
 
     def setGameplaysMask(self, gameplaysMask):
         return self._doUnitCmd(CLIENT_UNIT_CMD.SET_GAMEPLAYS_MASK, gameplaysMask)
-
-    def setRandomFlags(self, randomFlags):
-        return self._doUnitCmd(CLIENT_UNIT_CMD.SET_RANDOM_FLAGS, randomFlags)
 
     def setArenaType(self, arenaTypeID):
         return self._doUnitCmd(CLIENT_UNIT_CMD.SET_ARENA_TYPE, arenaTypeID)

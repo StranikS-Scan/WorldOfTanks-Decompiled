@@ -1,12 +1,14 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/proto/xmpp/log_output.py
+from __future__ import absolute_import
+from future.utils import viewitems, viewvalues
 from debug_utils import LOG_DEBUG, LOG_WARNING, LOG_ERROR
 
 class CLIENT_LOG_AREA(object):
     GLOOX_SOURCE, GLOOX_XML, PY_WRAPPER, CONNECTION, LOGIN, TOKEN, ROSTER, GROUP, SETTINGS, GENERIC, SYNC, BLOCK_LIST, RESOURCE, SUBSCRIPTION, MESSAGE, OBSOLETE = range(16)
 
 
-CLIENT_LOG_AREA_NAMES = dict([ (v, k) for k, v in CLIENT_LOG_AREA.__dict__.iteritems() if not k.startswith('_') ])
+CLIENT_LOG_AREA_NAMES = {v:k for k, v in viewitems(CLIENT_LOG_AREA.__dict__) if not k.startswith('_')}
 
 class ILogOutput(object):
 
@@ -64,19 +66,19 @@ class _LogOutputDecorator(ILogOutput):
         return output
 
     def debug(self, area, message, *args):
-        for output in self.__outputs.itervalues():
+        for output in viewvalues(self.__outputs):
             output.debug(area, message, *args)
 
     def warning(self, area, message, *args):
-        for output in self.__outputs.itervalues():
+        for output in viewvalues(self.__outputs):
             output.warning(area, message, *args)
 
     def error(self, area, message, *args):
-        for output in self.__outputs.itervalues():
+        for output in viewvalues(self.__outputs):
             output.error(area, message, *args)
 
     def clear(self):
-        for output in self.__outputs.itervalues():
+        for output in viewvalues(self.__outputs):
             output.clear()
 
 

@@ -7,19 +7,20 @@ from operator import sub
 from functools import partial
 from future.utils import lmap, viewitems, viewvalues
 from past.builtins import long, basestring
-from typing import Any, Dict, Tuple
+from typing import Any, Dict, Iterable, Tuple
 import ResMgr
 from account_shared import AmmoIterator
 from constants import VEHICLE_TTC_ASPECTS, IS_CLIENT
 from debug_utils import LOG_ERROR
 from items import tankmen, ITEM_TYPES
 from items import vehicles
+from items.artefacts import StaticOptionalDevice, AdditiveBattleBooster
+from items.components import component_constants
 from items.components.c11n_constants import CUSTOMIZATION_SLOTS_VEHICLE_PARTS
 from items.components.shared_components import ExtraShotClipParams
 from items.tankmen import MAX_SKILL_LEVEL, MIN_ROLE_LEVEL, getSkillsConfig
 from items.vehicles import vehicleAttributeFactors, VehicleDescriptor
-from items.artefacts import StaticOptionalDevice, AdditiveBattleBooster
-from items.components import component_constants
+from items.vehicle_mechanics_types import VehicleMechanicKey
 __defaultGlossTexture = None
 _FORMAT_VEH_INFO_STRING_REXP = re.compile('{([a-zA-Z]+)}')
 _VEH_INFO_STRING_CONVERTERS = {'level': lambda descr: str(descr.type.level),
@@ -437,7 +438,12 @@ def formatVehicleInfoString(fmtStr, descr):
     return _FORMAT_VEH_INFO_STRING_REXP.sub(_replaceMatch, fmtStr)
 
 
+def getVehicleDescriptorWithoutMechanic(vDescr, mechanicToDrop):
+    return getVehicleDescriptorWithoutMechanics(vDescr, (mechanicToDrop,))
+
+
 def getVehicleDescriptorWithoutMechanics(vDescr, mechanicsToDrop):
+    keysToDrop = {m.mechanic.value for m in mechanicsToDrop}
     vDescrCopy = copy.copy(vDescr)
-    vDescrCopy.mechanicsParams = {key:value for key, value in vDescr.mechanicsParams.items() if key not in mechanicsToDrop}
+    vDescrCopy.mechanicsParams = {key:value for key, value in vDescr.mechanicsParams.items() if key not in keysToDrop}
     return vDescrCopy

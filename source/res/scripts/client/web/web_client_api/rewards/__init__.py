@@ -1,6 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/web/web_client_api/rewards/__init__.py
+from __future__ import absolute_import
 import itertools
+from future.utils import viewitems
+from past.builtins import basestring
 from dossiers2.custom.account_layout import ACCOUNT_DOSSIER_BLOCKS
 from dossiers2.custom.records import DB_ID_TO_RECORD
 from gui.server_events.bonuses import HIDDEN_BONUSES
@@ -64,7 +67,7 @@ class RewardsWebApi(W2CSchema):
     def __getBonusesInfoByQuestsBaseToken(self, questIdBase):
         awardsData = {}
         allQuests = self.eventsCache.getAllQuests(filterFunc=lambda q: q.getID().startswith(questIdBase))
-        for questKey, questData in allQuests.iteritems():
+        for questKey, questData in viewitems(allQuests):
             questBonuses = questData.getBonuses()
             awardsData[questKey] = list(itertools.chain.from_iterable([ bonus.getWrappedEpicBonusList() for bonus in questBonuses if not isinstance(bonus, HIDDEN_BONUSES) ]))
 

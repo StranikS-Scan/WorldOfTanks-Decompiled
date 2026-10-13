@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: story_mode/scripts/client/story_mode/gui/story_mode_gui_constants.py
+from __future__ import absolute_import
 from constants_utils import ConstInjector
 from gui.Scaleform.daapi.settings import views
 from gui.prb_control import settings

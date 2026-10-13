@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: story_mode/scripts/client/story_mode/gui/impl/lobby/newbie_banner_tooltip.py
+from __future__ import absolute_import
 from frameworks.wulf import ViewModel
 from frameworks.wulf.view.view import ViewSettings
 from gui.impl.gen import R

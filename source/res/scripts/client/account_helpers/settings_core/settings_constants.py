@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/account_helpers/settings_core/settings_constants.py
+from __future__ import absolute_import
 from shared_utils import CONST_CONTAINER
 VERSION = 'VERSION'
 POST_PROCESSING_QUALITY = 'POST_PROCESSING_QUALITY'
@@ -115,7 +116,6 @@ class GAME(CONST_CONTAINER):
     EPIC_RANDOM_PLAYERS_PANELS_STATE = 'epicppState'
     GAMEPLAY_MASK = 'gameplayMask'
     GAMEPLAY_CTF = 'gameplay_ctf'
-    GAMEPLAY_DEV_MAPS = 'gameplay_devMaps'
     SHOW_VECTOR_ON_MAP = 'showVectorOnMap'
     SHOW_SECTOR_ON_MAP = 'showSectorOnMap'
     SHOW_VEH_MODELS_ON_MAP = 'showVehModelsOnMap'

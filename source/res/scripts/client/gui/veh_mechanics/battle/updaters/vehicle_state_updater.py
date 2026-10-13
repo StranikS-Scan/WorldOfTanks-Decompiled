@@ -7,7 +7,6 @@ from gui.veh_mechanics.battle.updaters.updaters_common import ViewUpdater
 from helpers import dependency
 from skeletons.gui.battle_session import IBattleSessionProvider
 if typing.TYPE_CHECKING:
-    from gui.battle_control.battle_session import BattleSessionProvider
     from gui.battle_control.controllers.vehicle_state_ctrl import VehicleStateController
 _logger = logging.getLogger(__name__)
 

@@ -18,14 +18,7 @@ def getWotPlusBattlePassTier(wotPlusCtrl=None, steamCtrl=None, battlePassCtrl=No
         return WotPlusTier.NONE
     if battlePassCtrl.isHoliday() or battlePassCtrl.isExtraChapter(battlePassCtrl.getCurrentChapterID()):
         return WotPlusTier.NONE
-    isBPAvailableForCurrentTier = wotPlusCtrl.getSettingsStorage().isBattlePassFeatureAvailable()
-    if steamCtrl.isSteamAccount:
-        if wotPlusCtrl.hasSteamSubscription():
-            return WotPlusTier.NONE
-        if isBPAvailableForCurrentTier:
-            return wotPlusCtrl.getTier()
-        return WotPlusTier.NONE
-    return wotPlusCtrl.getTier() if isBPAvailableForCurrentTier else settingsStorage.getBestBattlePassBonusTier()
+    return wotPlusCtrl.getTier() if wotPlusCtrl.getSettingsStorage().isBattlePassFeatureAvailable() else settingsStorage.getBestBattlePassBonusTier()
 
 
 def isWotPlusBattlePassAvailableForAnyTier():

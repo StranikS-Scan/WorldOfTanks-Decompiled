@@ -844,7 +844,7 @@ class UnitEntity(_UnitEntity):
             return
         if isReady:
             vehInfos = self.getVehiclesInfo()
-            if vehInfos:
+            if vehInfos and not vehInfos[0].isEmpty():
                 g_currentVehicle.selectVehicle(vehInfos[0].vehInvID)
         if self._isInCoolDown(settings.REQUEST_TYPE.SET_PLAYER_STATE, coolDown=ctx.getCooldown()):
             return
@@ -1016,7 +1016,7 @@ class UnitEntity(_UnitEntity):
                     callback(False)
                 return
             vehInfos = self.getVehiclesInfo()
-            if vehInfos:
+            if vehInfos and not vehInfos[0].isEmpty():
                 g_currentVehicle.selectVehicle(vehInfos[0].vehInvID)
             roster = self.getRosterSettings()
             stats = self.getStats()
@@ -1493,7 +1493,7 @@ class UnitEntity(_UnitEntity):
         self._cooldown.process(settings.REQUEST_TYPE.SET_PLAYER_STATE, coolDown=ctx.getCooldown())
 
     def _doStartBattleRequest(self, ctx, flags, callback):
-        self._requestsProcessor.doRequest(ctx, 'startBattle', vehInvID=ctx.selectVehInvID, gameplaysMask=ctx.getGamePlayMask(), arenaTypeID=ctx.getDemoArenaTypeID(), callback=callback, stopAutoSearch=flags.isInSearch(), randomFlags=ctx.getRandomFlags())
+        self._requestsProcessor.doRequest(ctx, 'startBattle', vehInvID=ctx.selectVehInvID, gameplaysMask=ctx.getGamePlayMask(), arenaTypeID=ctx.getDemoArenaTypeID(), callback=callback, stopAutoSearch=flags.isInSearch())
 
     def _doStopBattleRequest(self, ctx, callback):
         self._requestsProcessor.doRequest(ctx, 'stopBattle', callback=callback)

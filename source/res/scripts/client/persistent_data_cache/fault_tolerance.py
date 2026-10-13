@@ -1,8 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/persistent_data_cache/fault_tolerance.py
+from __future__ import absolute_import
 import typing
-from persistent_data_cache_common.common import getLogger
 from helpers import base64_utils
+from persistent_data_cache_common.common import getLogger
 if typing.TYPE_CHECKING:
     from ResMgr import DataSection
     from persistent_data_cache_common.types import TPDCVersion

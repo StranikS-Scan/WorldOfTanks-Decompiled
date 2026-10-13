@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: comp7_light/scripts/client/comp7_light/gui/impl/lobby/comp7_light_helpers/comp7_light_packers.py
+from __future__ import absolute_import
 import typing
 from comp7_light.skeletons.gui.game_control import IComp7LightProgressionController
 from constants import EVENT_TYPE
@@ -47,9 +48,7 @@ class Comp7LightTokenBonusUIPacker(TokenBonusUIPacker):
 
     @classmethod
     def _getTokenBonusType(cls, tokenID, complexToken):
-        if tokenID.startswith(cls._comp7LightProgressionController.progressionToken):
-            return cls._COMP7_LIGHT_PROGRESSION_TOKEN
-        super(Comp7LightTokenBonusUIPacker, cls)._getTokenBonusType(tokenID, complexToken)
+        return cls._COMP7_LIGHT_PROGRESSION_TOKEN if tokenID.startswith(cls._comp7LightProgressionController.progressionToken) else super(Comp7LightTokenBonusUIPacker, cls)._getTokenBonusType(tokenID, complexToken)
 
     @classmethod
     def _getTooltipsPackers(cls):

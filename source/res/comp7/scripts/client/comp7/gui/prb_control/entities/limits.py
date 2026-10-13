@@ -1,5 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: comp7/scripts/client/comp7/gui/prb_control/entities/limits.py
+from __future__ import absolute_import
+from future.utils import viewvalues
 from CurrentVehicle import g_currentVehicle
 from constants import PREBATTLE_MAX_OBSERVERS_IN_TEAM, ROLE_TYPE, PREBATTLE_TYPE
 from gui.prb_control import prb_getters
@@ -29,7 +31,7 @@ class MaxPlayersNumber(ITeamLimit):
     def __getPlayerRolesNumber(self, teamInfo):
         observersNumber = 0
         playersNumber = 0
-        for playerInfo in teamInfo.itervalues():
+        for playerInfo in viewvalues(teamInfo):
             vehicleType = getVehicleType(playerInfo['vehCompDescr'])
             isObserver = vehicleType.role == ROLE_TYPE.NOT_DEFINED
             if isObserver:

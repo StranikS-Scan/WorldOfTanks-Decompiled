@@ -1,5 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/web/web_client_api/reactive_comm/__init__.py
+from __future__ import absolute_import
+from future.utils import listvalues
+from past.builtins import basestring
 import adisp
 import wg_async
 from gui.game_control.reactive_comm import Subscription, SubscriptionClientStatus, SubscriptionServerStatus
@@ -57,7 +60,7 @@ class ReactiveCommunicationWebApi(object):
 
     def _finiSubscriptionsHandler(self):
         self.__service.onSubscriptionClosed -= self.__onSubscriptionClosed
-        for subscription in self.__subscriptions.values():
+        for subscription in listvalues(self.__subscriptions):
             self.__service.unsubscribeFromChannel(subscription)
 
         self.__subscriptions.clear()

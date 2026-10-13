@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/formatters/collections_by_type.py
+from __future__ import absolute_import
 from chat_shared import SYS_MESSAGE_TYPE as _SM_TYPE
 from gui.gift_system.proxy import GiftSystemMessagesProxy
 from gui.shared.system_factory import registerLootBoxAutoOpenSubFormatters, registerMessengerClientFormatter, registerMessengerServerFormatter, registerTokenQuestsSubFormatters

@@ -8,7 +8,7 @@ from cgf_common.cgf_helpers import getVehicleEntityByVehicleGameObject
 from cgf_components.crest_moving_effects_component import CrestMovingEffectsComponent
 from constants import CREST_MOVING_STATE
 from gui.battle_control.controllers.vehicles_tracking import VehiclesTrackingWatcher
-from vehicles.mechanics.mechanic_constants import VehicleMechanic
+from items.vehicle_mechanics_types import VehicleMechanicKeys
 if TYPE_CHECKING:
     from CrestMovingController import CrestMovingState
 _logger = logging.getLogger(__name__)
@@ -22,7 +22,7 @@ class CrestMovingEffectsSystem(CGF.System, VehiclesTrackingWatcher):
         for go, effectsComponent in self.reaction(self.EffectsDeactivated):
             self.__stopActiveSound(effectsComponent)
             if effectsComponent.vehicleID is not None:
-                self.stopVehicleMechanicsTracking(effectsComponent.vehicleID, (VehicleMechanic.CREST_MOVING,), effectsComponent)
+                self.stopVehicleMechanicsTracking(effectsComponent.vehicleID, (VehicleMechanicKeys.CREST_MOVING,), effectsComponent)
                 effectsComponent.vehicleID = None
             effectsComponent.onStateTransitionEvent -= self.__onStateChanged
 
@@ -33,7 +33,7 @@ class CrestMovingEffectsSystem(CGF.System, VehiclesTrackingWatcher):
                 continue
             effectsComponent.onStateTransitionEvent += self.__onStateChanged
             effectsComponent.vehicleID = vehicle.id
-            self.startVehicleMechanicsTracking(vehicle.id, (VehicleMechanic.CREST_MOVING,), effectsComponent)
+            self.startVehicleMechanicsTracking(vehicle.id, (VehicleMechanicKeys.CREST_MOVING,), effectsComponent)
 
         return
 

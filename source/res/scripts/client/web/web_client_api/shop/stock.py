@@ -1,9 +1,12 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/web/web_client_api/shop/stock.py
+from __future__ import absolute_import
 import itertools
 import typing
 from collections import namedtuple
 from functools import partial
+from future.utils import viewitems, viewvalues
+from past.builtins import basestring
 from WeakMethod import WeakMethodProxy
 from gui.impl import backport
 from gui.impl.gen import R
@@ -286,41 +289,41 @@ class ItemsWebApiMixin(object):
         return self.__collectGuiItems(itemType, criteria)
 
     def __collectBoosters(self, criteria):
-        return self.__goodiesCache.getBoosters(criteria=criteria).itervalues()
+        return viewvalues(self.__goodiesCache.getBoosters(criteria=criteria))
 
     def __collectGuiItems(self, itemType, criteria):
-        return self.__itemsCache.items.getItems(_GUI_ITEMS_TYPE_MAP[itemType], criteria).itervalues()
+        return viewvalues(self.__itemsCache.items.getItems(_GUI_ITEMS_TYPE_MAP[itemType], criteria))
 
     def __collectPremiumPacks(self):
         shop = self.__itemsCache.items.shop
         defaultPrem = shop.defaults.premiumCost
         discountedPrem = shop.getPremiumCostWithDiscount()
-        return (_PremiumPack(duration, discountedPrem.get(duration, cost), cost) for duration, cost in defaultPrem.iteritems())
+        return (_PremiumPack(duration, discountedPrem.get(duration, cost), cost) for duration, cost in viewitems(defaultPrem))
 
     def __collectInventoryEnhancements(self):
         inventory = self.__itemsCache.items.inventory
         fromInventory = inventory.getInventoryEnhancements()
         inventoryEnhancements = {}
-        for enhancements in fromInventory.itervalues():
-            for enhancementID, count in enhancements.iteritems():
+        for enhancements in viewvalues(fromInventory):
+            for enhancementID, count in viewitems(enhancements):
                 inventoryEnhancements[enhancementID] = count
 
-        return (_InventoryEnhancements(enhancementID, count) for enhancementID, count in inventoryEnhancements.iteritems())
+        return (_InventoryEnhancements(enhancementID, count) for enhancementID, count in viewitems(inventoryEnhancements))
 
     def __collectInstalledEnhancements(self):
         inventory = self.__itemsCache.items.inventory
         fromVehicles = inventory.getInstalledEnhancements()
         installedEnhancements = {}
-        for vehs in fromVehicles.itervalues():
-            for vehInvID, enhancements in vehs.iteritems():
+        for vehs in viewvalues(fromVehicles):
+            for vehInvID, enhancements in viewitems(vehs):
                 vehInfo = self.__itemsCache.items.getVehicle(vehInvID)
                 if vehInfo:
                     installedEnhancements[vehInfo.intCD] = enhancements
 
-        return (_InstalledEnhancements(vehIntCD, enhancements) for vehIntCD, enhancements in installedEnhancements.iteritems())
+        return (_InstalledEnhancements(vehIntCD, enhancements) for vehIntCD, enhancements in viewitems(installedEnhancements))
 
     def __collectCrew(self, criteria):
-        return (tankman for tankman in (makeTankman(crewItem) for crewItem in itertools.chain(self.__itemsCache.items.getTankmen().itervalues(), self.__itemsCache.items.getDismissedTankmen().itervalues(), getAllRecruitsInfo())) if criteria(tankman))
+        return (tankman for tankman in (makeTankman(crewItem) for crewItem in itertools.chain(viewvalues(self.__itemsCache.items.getTankmen()), viewvalues(self.__itemsCache.items.getDismissedTankmen()), getAllRecruitsInfo())) if criteria(tankman))
 
     def __getCompatVehicles(self, itemType, itemID):
         cache = self.__itemsCache.compatVehiclesCache.getCompatCache(self.__itemsCache)

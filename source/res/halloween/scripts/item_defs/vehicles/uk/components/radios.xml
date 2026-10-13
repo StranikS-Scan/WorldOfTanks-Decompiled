@@ -1,0 +1,84 @@
+<radios.xml>
+  <ids>
+    <C42_HW_BOT>	5000	</C42_HW_BOT>
+    <C42_Halloween_event>	5001	</C42_Halloween_event>
+    <C45_HELL>	5002	</C45_HELL>
+    <N19Mk3_HW_BOT>	5003	</N19Mk3_HW_BOT>
+    <C42_VHF_Halloween_event>	5004	</C42_VHF_Halloween_event>
+    <C42_VHF_HW_BOT>	5005	</C42_VHF_HW_BOT>
+  </ids>
+  <shared>
+    <C42_HW_BOT>
+      <userString>	#gb_vehicles:C42	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	54000	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	40	</weight>
+      <distance>	50	</distance>
+      <maxHealth>	180	</maxHealth>
+      <maxRegenHealth>	108	</maxRegenHealth>
+      <repairCost>	3.5	</repairCost>
+    </C42_HW_BOT>
+    <C42_Halloween_event>
+      <userString>	#halloween.gb_vehicles.extend:C42_Halloween_event	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	54000	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	40	</weight>
+      <distance>	200	</distance>
+      <maxHealth>	180	</maxHealth>
+      <maxRegenHealth>	108	</maxRegenHealth>
+      <repairCost>	3.5	</repairCost>
+    </C42_Halloween_event>
+    <C45_HELL>
+      <userString>	#gb_vehicles:C45	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	45600	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	40	</weight>
+      <distance>	50	</distance>
+      <maxHealth>	180	</maxHealth>
+      <maxRegenHealth>	108	</maxRegenHealth>
+      <repairCost>	3.5	</repairCost>
+    </C45_HELL>
+    <N19Mk3_HW_BOT>
+      <userString>	#halloween.gb_vehicles.extend:N19Mk3_HW_BOT	</userString>
+      <tags></tags>
+      <level>	8	</level>
+      <price>	22000	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	40	</weight>
+      <distance>	50	</distance>
+      <maxHealth>	140	</maxHealth>
+      <maxRegenHealth>	84	</maxRegenHealth>
+      <repairCost>	3.5	</repairCost>
+    </N19Mk3_HW_BOT>
+    <C42_VHF_Halloween_event>
+      <userString>	#gb_vehicles:C42_VHF	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	54000	</price>
+      <weight>	40	</weight>
+      <distance>	200	</distance>
+      <maxHealth>	180	</maxHealth>
+      <maxRegenHealth>	108	</maxRegenHealth>
+      <repairCost>	3.5	</repairCost>
+      <notInShop>	True	</notInShop>
+    </C42_VHF_Halloween_event>
+    <C42_VHF_HW_BOT>
+      <userString>	#gb_vehicles:C42_VHF	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	54000	</price>
+      <weight>	40	</weight>
+      <distance>	50	</distance>
+      <maxHealth>	180	</maxHealth>
+      <maxRegenHealth>	108	</maxRegenHealth>
+      <repairCost>	3.5	</repairCost>
+      <notInShop>	True	</notInShop>
+    </C42_VHF_HW_BOT>
+  </shared>
+</radios.xml>

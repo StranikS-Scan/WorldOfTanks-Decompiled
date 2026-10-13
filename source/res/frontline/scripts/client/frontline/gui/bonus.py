@@ -1,8 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: frontline/scripts/client/frontline/gui/bonus.py
+from __future__ import absolute_import
 import typing
 from epic_constants import EPIC_SKILL_TOKEN_NAME, EPIC_SELECT_BONUS_NAME
-from gui.server_events.bonuses import IntegralBonus, SimpleBonus
+from gui.server_events.bonuses import IntegralBonus
+if typing.TYPE_CHECKING:
+    from gui.server_events.bonuses import SimpleBonus
 
 class FrontlineSkillBonus(IntegralBonus):
 

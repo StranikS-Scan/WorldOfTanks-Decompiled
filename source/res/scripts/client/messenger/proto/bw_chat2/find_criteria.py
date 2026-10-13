@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/proto/bw_chat2/find_criteria.py
+from __future__ import absolute_import
 from constants import PREBATTLE_TYPE
 from messenger.ext import channel_num_gen
 from messenger.m_constants import BATTLE_CHANNEL, PROTO_TYPE
@@ -19,14 +20,14 @@ class BWBattleChannelFindCriteria(IEntityFindCriteria):
         if clientID:
             self.__ids.append(clientID)
 
-    def filter(self, channel):
-        return channel.getProtoType() is PROTO_TYPE.BW_CHAT2 and channel.getClientID() in self.__ids
+    def filter(self, entity):
+        return entity.getProtoType() is PROTO_TYPE.BW_CHAT2 and entity.getClientID() in self.__ids
 
 
 class BWPrebattleChannelFindCriteria(IEntityFindCriteria):
 
-    def filter(self, channel):
-        return channel.getProtoType() is PROTO_TYPE.BW_CHAT2 and channel.getPrebattleType()
+    def filter(self, entity):
+        return entity.getProtoType() is PROTO_TYPE.BW_CHAT2 and entity.getPrebattleType()
 
 
 class BWChatTypeFindCriteria(IEntityFindCriteria):
@@ -35,5 +36,5 @@ class BWChatTypeFindCriteria(IEntityFindCriteria):
         super(BWChatTypeFindCriteria, self).__init__()
         self.__chatType = chatType
 
-    def filter(self, channel):
-        return channel.getProtoType() is PROTO_TYPE.BW_CHAT2 and channel.getProtoData().chatType == self.__chatType
+    def filter(self, entity):
+        return entity.getProtoType() is PROTO_TYPE.BW_CHAT2 and entity.getProtoData().chatType == self.__chatType

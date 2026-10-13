@@ -1,5 +1,4 @@
 <list.xml>
-  <xmlns:xmlref>	http://bwt/xmlref	</xmlns:xmlref>
   <A21_T14>
     <id>	0	</id>
     <userString>	#usa_vehicles:T14	</userString>
@@ -913,7 +912,7 @@
     </price>
     <notInShop>	true	</notInShop>
     <cannotBeBought>	true	</cannotBeBought>
-    <tags>	heavyTank HD clanWarsBattles special cannot_be_sold improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user role_HT_universal	</tags>
+    <tags>	heavyTank HD clanWarsBattles special cannot_be_sold improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user role_HT_universal secret private	</tags>
     <level>	10	</level>
   </A69_T110E5_cl>
   <A161_ARMT>
@@ -1252,7 +1251,6 @@
     </price>
     <tags>	mediumTank HD disabledInRoaming improvedVentilation_class2_user tankRammer_class2_user extraHealthReserve_class2_user antifragmentationLining_medium_user	</tags>
     <level>	5	</level>
-    <notInShop>	true	</notInShop>
   </A44_M4A2E4>
   <A45_M6A2E1>
     <id>	205	</id>
@@ -2102,10 +2100,10 @@
     <shortUserString>	#usa_vehicles:A197_Jezevec_short	</shortUserString>
     <shortDescriptionSpecial>	#usa_vehicles:A197_Jezevec_short_special	</shortDescriptionSpecial>
     <longDescriptionSpecial>	#usa_vehicles:A197_Jezevec_long_special	</longDescriptionSpecial>
-    <price>	100	  <gold></gold>
+    <price>	9950	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
-    <tags>	mediumTank role_MT_support HD mediumTank3 improvedVentilation_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user earn_crystals secret testTank	</tags>
+    <tags>	mediumTank role_MT_support HD mediumTank3 improvedVentilation_class2_user aimingStabilizer_class1_user extraHealthReserve_class2_user antifragmentationLining_medium_user earn_crystals	</tags>
     <level>	9	</level>
   </A197_Jezevec>
   <A85_T110E3_7x7>
@@ -2120,4 +2118,42 @@
     <tags>	AT-SPG role_ATSPG_assault HD heavyAT-SPG improvedVentilation_class1_user tankRammer_class1_user extraHealthReserve_class1_user antifragmentationLining_superheavy_user earn_crystals private secret cannot_be_sold comp7 special lockCrew lockCrewSkills lockOptionalDevices	</tags>
     <level>	10	</level>
   </A85_T110E3_7x7>
+  <A183_XM69_Hacker_7x7>
+    <id>	283	</id>
+    <userString>	#usa_vehicles:A183_XM69_Hacker_7x7	</userString>
+    <shortUserString>	#usa_vehicles:A183_XM69_Hacker_7x7_short	</shortUserString>
+    <description>	#usa_vehicles:A183_XM69_Hacker_7x7_descr	</description>
+    <longDescriptionSpecial>	#usa_vehicles:A183_XM69_Hacker_7x7_long_special	</longDescriptionSpecial>
+    <price>	100	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <cannotBeBought>	true	</cannotBeBought>
+    <tags>	mediumTank role_MT_universal HD mediumTank3 improvedVentilation_class2_user tankRammer_class2_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_medium_user earn_crystals private secret cannot_be_sold clanWarsBattles special lockCrew lockCrewSkills lockOptionalDevices	</tags>
+    <level>	11	</level>
+  </A183_XM69_Hacker_7x7>
+  <A195_Gorilla_7x7>
+    <id>	284	</id>
+    <userString>	#usa_vehicles:A195_Gorilla_7x7	</userString>
+    <description>	#usa_vehicles:A195_Gorilla_7x7_descr	</description>
+    <shortUserString>	#usa_vehicles:A195_Gorilla_7x7_short	</shortUserString>
+    <longDescriptionSpecial>	#usa_vehicles:A195_Gorilla_7x7_long_special	</longDescriptionSpecial>
+    <price>	100	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <cannotBeBought>	true	</cannotBeBought>
+    <tags>	AT-SPG role_ATSPG_assault HD heavyAT-SPG siegeMode improvedVentilation_class1_user tankRammer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user earn_crystals private secret cannot_be_sold clanWarsBattles special lockCrew lockCrewSkills lockOptionalDevices	</tags>
+    <level>	11	</level>
+  </A195_Gorilla_7x7>
+  <A69_T110E5_FR>
+    <id>	282	</id>
+    <userString>	#usa_vehicles:A69_T110E5_FR	</userString>
+    <shortUserString>	#usa_vehicles:A69_T110E5_FR_short	</shortUserString>
+    <description>	#usa_vehicles:A69_T110E5_FR_descr	</description>
+    <price>	100	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <cannotBeBought>	true	</cannotBeBought>
+    <tags>	heavyTank role_HT_universal HD improvedVentilation_class1_user tankRammer_class1_user aimingStabilizer_class1_user extraHealthReserve_class1_user antifragmentationLining_heavy_user earn_crystals private secret cannot_be_sold special lockOptionalDevices lockCrewSkills lockCrew event_battles fort_rush	</tags>
+    <level>	10	</level>
+  </A69_T110E5_FR>
 </list.xml>

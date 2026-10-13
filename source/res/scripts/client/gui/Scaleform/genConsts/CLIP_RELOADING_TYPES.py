@@ -3,6 +3,7 @@
 
 
 class CLIP_RELOADING_TYPES(object):
+    HIDDEN = -1
     CASSETTE_CLIP = 0
     AUTO_LOADER_CLIP = 1
     EXTRA_SHOT_CLIP = 2

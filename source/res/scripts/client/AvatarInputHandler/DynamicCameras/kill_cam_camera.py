@@ -1,16 +1,17 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/AvatarInputHandler/DynamicCameras/kill_cam_camera.py
+from __future__ import absolute_import, division
 import logging
 import math
 from collections import namedtuple
 from enum import Enum
 from typing import Callable
-from AvatarInputHandler.DynamicCameras.arcade_camera_helper import MinMax
-from constants import IS_DEVELOPMENT
-import BattleReplay
 import BigWorld
 import Math
+import BattleReplay
 import math_utils
+from AvatarInputHandler.DynamicCameras.arcade_camera_helper import MinMax
+from constants import IS_DEVELOPMENT
 from AvatarInputHandler.DynamicCameras.ArcadeCamera import ArcadeCamera
 from Math import MatrixAnimation, Vector2, Vector3
 from gui.shared.events import DeathCamEvent

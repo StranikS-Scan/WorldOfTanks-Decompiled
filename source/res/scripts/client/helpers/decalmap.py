@@ -1,7 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/helpers/DecalMap.py
-from functools import partial
+from __future__ import absolute_import
 import typing
+from functools import partial
+from future.utils import viewitems
 import BigWorld
 import ResMgr
 import material_kinds
@@ -27,9 +29,9 @@ class DecalMap(object):
         for texName in config['traceTextures']:
             self.__texMap[texName] = BigWorld.wg_traceTextureIndex(texName)
 
-        for tsName, tset in config['textureSets'].iteritems():
+        for tsName, tset in viewitems(config['textureSets']):
             self.__textureSets[tsName] = {}
-            for mName, material in tset.iteritems():
+            for mName, material in viewitems(tset):
                 self.__textureSets[tsName][mName] = [ (self.__texMap[texName] if texName is not None else None) for texName in material ]
 
         self._initGroups(config)
@@ -61,7 +63,7 @@ class DecalMap(object):
     def getTextureSet(self, name):
         if not self.__textureSets.has_key(name):
             LOG_ERROR("Invalid texture set name '%s'" % name, stack=True)
-            return dict()
+            return {}
         return self.__textureSets[name]
 
     if IS_EDITOR:

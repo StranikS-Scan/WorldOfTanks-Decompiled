@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: comp7/scripts/client/comp7/gui/battle_control/arena_info/arena_vos.py
+from __future__ import absolute_import
 from enum import Enum
 from comp7_core.gui.battle_control.arena_info.arena_vos import Comp7CoreKeys
 _DEFAULT_ROLE_SKILL_LEVEL = 0

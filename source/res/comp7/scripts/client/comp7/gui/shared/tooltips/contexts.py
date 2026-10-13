@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: comp7/scripts/client/comp7/gui/shared/tooltips/contexts.py
+from __future__ import absolute_import
 from gui.shared.tooltips import TOOLTIP_COMPONENT
 from gui.shared.tooltips.contexts import ToolTipContext
 from helpers import dependency

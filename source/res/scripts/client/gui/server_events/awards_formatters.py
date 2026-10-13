@@ -15,7 +15,6 @@ from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.Scaleform.settings import ICONS_SIZES
 from gui.impl import backport
 from gui.impl.gen import R
-from gui.impl.gen_utils import INVALID_RES_ID
 from gui.lootbox_system.base.common import getTextResource
 from gui.ranked_battles.constants import YEAR_POINTS_TOKEN
 from gui.server_events.finders import isPMPoints
@@ -815,7 +814,7 @@ class TokenBonusFormatter(SimpleBonusFormatter):
         userName = self._getUserName(complexToken.styleID)
         tokenBase = R.strings.tooltips.quests.bonuses.token
         eventTokenBase = tokenBase.dyn(complexToken.styleID)
-        bodyResID = eventTokenBase.body() if eventTokenBase() != INVALID_RES_ID else tokenBase.body()
+        bodyResID = eventTokenBase.body() if eventTokenBase.isValid() else tokenBase.body()
         description = self.eventsCache.prefetcher.getTokenDetailedInfo(complexToken.styleID)
         if description is None:
             description = backport.text(bodyResID)

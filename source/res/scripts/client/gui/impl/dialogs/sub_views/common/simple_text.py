@@ -11,7 +11,7 @@ from gui.impl.gen.view_models.views.dialogs.sub_views.simple_text_view_model imp
 from gui.impl.pub import ViewImpl
 if typing.TYPE_CHECKING:
     from typing import Optional, List, Union
-    from gui.impl.gen_utils import DynAccessor
+    from frameworks.wulf import PyResAccessor
 ImageSubstitution = namedtuple('ImageSubstitution', 'resourceID placeholder marginTop marginRight marginBottom marginLeft')
 ImageSubstitution.__new__.__defaults__ = (-1, None, 0, 0, 0, 0)
 

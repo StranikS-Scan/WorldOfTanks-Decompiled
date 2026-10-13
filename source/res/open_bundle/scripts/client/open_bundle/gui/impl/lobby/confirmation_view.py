@@ -25,19 +25,25 @@ class ConfirmationView(FullScreenDialogBaseView):
         settings.kwargs = kwargs
         super(ConfirmationView, self).__init__(settings)
         self.__additionalData = {}
+        self.__bundleID = None
+        return
 
     @property
     def viewModel(self):
         return super(ConfirmationView, self).getViewModel()
 
     def _getEvents(self):
-        return ((self.viewModel.confirm, self.__confirm), (self.viewModel.cancel, self.__cancel))
+        return ((self.viewModel.confirm, self.__confirm),
+         (self.viewModel.cancel, self.__cancel),
+         (self.__openBundle.onStatusChanged, self.__onStatusChanged),
+         (self.__openBundle.onSettingsChanged, self.__onStatusChanged))
 
     def _getCallbacks(self):
         return (('stats.{}'.format(c), self.__setBalance) for c in Currency.ALL)
 
     def _onLoading(self, bundleID, stepNumber, *args, **kwargs):
         super(ConfirmationView, self)._onLoading(*args, **kwargs)
+        self.__bundleID = bundleID
         bundle = self.__openBundle.getBundle(bundleID=bundleID)
         with self.viewModel.transaction() as model:
             model.setBundleType(bundle.type)
@@ -55,6 +61,11 @@ class ConfirmationView(FullScreenDialogBaseView):
     def __cancel(self):
         self.__additionalData['isUserCancelAction'] = True
         self._setResult(DialogButtons.CANCEL)
+
+    def __onStatusChanged(self, *_):
+        if self.__bundleID is not None and not self.__openBundle.isBundleActive(self.__bundleID):
+            self.stopWaiting(DialogButtons.CANCEL)
+        return
 
     @replaceNoneKwargsModel
     def __setBalance(self, value=None, model=None):

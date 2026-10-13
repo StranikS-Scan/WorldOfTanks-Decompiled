@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/web/web_client_api/ui/strongholds.py
+from __future__ import absolute_import
 from gui.clans.clan_helpers import getStrongholdUrl
 from gui.impl.lobby.clan_supply.clan_supply_helpers import showClanSupplyView
 from gui.shared import event_dispatcher as shared_events

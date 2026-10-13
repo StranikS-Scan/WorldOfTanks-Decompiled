@@ -9,7 +9,7 @@ from gui.Scaleform.daapi.view.meta.PillboxSiegeDecorativeCrosshairMeta import Pi
 from gui.Scaleform.genConsts.DECORATIVE_CROSSHAIR_CONSTS import DECORATIVE_CROSSHAIR_CONSTS as _DECORATIVE_CONSTS
 from gui.veh_mechanics.battle.updaters.mechanics.mechanic_passenger_updater import VehicleMechanicPassengerUpdater
 from gui.veh_mechanics.battle.updaters.mechanics.mechanic_states_updater import VehicleMechanicStatesUpdater
-from vehicles.mechanics.mechanic_constants import VehicleMechanic
+from items.vehicle_mechanics_types import VehicleMechanicKeys
 from vehicles.mechanics.mechanic_states import IMechanicStatesListenerLogic
 if typing.TYPE_CHECKING:
     from PillboxSiegeComponent import PillboxSiegeModeState
@@ -26,7 +26,7 @@ class PillboxSiegeDecorativeCrosshair(PillboxSiegeDecorativeCrosshairMeta, Conta
         self.__invalidateAll(newState)
 
     def _getViewUpdaters(self):
-        return [VehicleMechanicPassengerUpdater(VehicleMechanic.PILLBOX_SIEGE_MODE, self), VehicleMechanicStatesUpdater(VehicleMechanic.PILLBOX_SIEGE_MODE, self)]
+        return [VehicleMechanicPassengerUpdater(VehicleMechanicKeys.PILLBOX_SIEGE_MODE, self), VehicleMechanicStatesUpdater(VehicleMechanicKeys.PILLBOX_SIEGE_MODE, self)]
 
     def __invalidateAll(self, state, isInstantly=False):
         isActive = state.state == VEHICLE_SIEGE_STATE.PILLBOX_ENABLED

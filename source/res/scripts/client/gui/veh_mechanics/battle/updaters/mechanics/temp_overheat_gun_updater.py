@@ -6,7 +6,7 @@ import weakref
 from events_handler import eventHandler
 from gui.veh_mechanics.battle.updaters.updaters_common import ViewUpdater, ViewUpdatersCollection
 from gui.veh_mechanics.battle.updaters.mechanics.mechanic_states_updater import VehicleMechanicStatesUpdater
-from vehicles.mechanics.mechanic_constants import VehicleMechanic
+from items.vehicle_mechanics_types import VehicleMechanicKeys
 from vehicles.mechanics.mechanic_states import IMechanicStatesListenerLogic
 if typing.TYPE_CHECKING:
     from Event import SafeEvent
@@ -35,7 +35,7 @@ class ITemperatureOverheatGunStatesListenerLogic(object):
 class OverheatStatesBridge(VehicleMechanicStatesUpdater, IMechanicStatesListenerLogic):
 
     def __init__(self, onStatePrepared, onStateTransition):
-        super(OverheatStatesBridge, self).__init__(VehicleMechanic.OVERHEAT_GUN, self)
+        super(OverheatStatesBridge, self).__init__(VehicleMechanicKeys.OVERHEAT_GUN, self)
         self.__onStatePrepared = weakref.proxy(onStatePrepared)
         self.__onStateTransition = weakref.proxy(onStateTransition)
 
@@ -51,7 +51,7 @@ class OverheatStatesBridge(VehicleMechanicStatesUpdater, IMechanicStatesListener
 class TemperatureStatesBridge(VehicleMechanicStatesUpdater, IMechanicStatesListenerLogic):
 
     def __init__(self, onStatePrepared, onStateObservation, onStateTick):
-        super(TemperatureStatesBridge, self).__init__(VehicleMechanic.TEMPERATURE_GUN, self)
+        super(TemperatureStatesBridge, self).__init__(VehicleMechanicKeys.TEMPERATURE_GUN, self)
         self.__onStatePrepared = weakref.proxy(onStatePrepared)
         self.__onStateObservation = weakref.proxy(onStateObservation)
         self.__onStateTick = weakref.proxy(onStateTick)

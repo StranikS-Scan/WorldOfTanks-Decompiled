@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/formatters/personal_missions_formatters.py
+from __future__ import absolute_import
 import re
 from itertools import chain
 import constants

@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/gui/Scaleform/view/lobby/ChannelsManagementWindow.py
+from __future__ import absolute_import
 from constants import IS_CHINA
 from debug_utils import LOG_ERROR
 from gui.Scaleform.locale.MESSENGER import MESSENGER

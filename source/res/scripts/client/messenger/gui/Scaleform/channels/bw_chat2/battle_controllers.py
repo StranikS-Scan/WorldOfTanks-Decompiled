@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/gui/Scaleform/channels/bw_chat2/battle_controllers.py
+from __future__ import absolute_import
 import functools
 import BigWorld
 from arena_component_system.sector_base_arena_component import ID_TO_BASENAME

@@ -145,10 +145,10 @@ class SharedEvent(object):
         super(SharedEvent, self).__init__()
         self.eventType = eventType
 
+    __hash__ = object.__hash__
+
     def __eq__(self, other):
         return other is not None and self.__dict__ == other.__dict__
-
-    __hash__ = object.__hash__
 
 
 SharedEventType = type(SharedEvent)

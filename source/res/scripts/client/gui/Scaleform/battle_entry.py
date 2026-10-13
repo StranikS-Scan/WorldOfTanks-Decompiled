@@ -60,7 +60,7 @@ class TopWindowContainer(PopUpContainer):
 class BattleEntry(AppEntry):
 
     def __init__(self, appNS, ctrlModeFlags, arenaGuiType):
-        super(BattleEntry, self).__init__(collectBattleEntry(arenaGuiType) or R.entries.default.battle(), appNS, ctrlModeFlags, daapiBridge=DAAPIRootBridge(initCallback='registerBattleTest'))
+        super(BattleEntry, self).__init__(collectBattleEntry(arenaGuiType) or R.entries.battle(), appNS, ctrlModeFlags, daapiBridge=DAAPIRootBridge(initCallback='registerBattleTest'))
         self._arenaGuiType = arenaGuiType
         self.__input = None
         return

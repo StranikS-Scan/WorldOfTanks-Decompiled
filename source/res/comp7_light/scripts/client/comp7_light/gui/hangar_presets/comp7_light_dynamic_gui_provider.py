@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: comp7_light/scripts/client/comp7_light/gui/hangar_presets/comp7_light_dynamic_gui_provider.py
+from __future__ import absolute_import
 from comp7_light.gui.Scaleform.daapi.view.lobby.header.helpers.controls_helpers import Comp7LightLobbyHeaderHelper
 from comp7_light.gui.impl.lobby.missions.missions_helpers import Comp7LightMissionsGuiHelper
 from constants import QUEUE_TYPE, ARENA_BONUS_TYPE

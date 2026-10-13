@@ -1,7 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: comp7_light/scripts/client/comp7_light/helpers/comp7_light_server_settings.py
+from __future__ import absolute_import
 import logging
 from collections import namedtuple
+from future.utils import viewitems
 from shared_utils import makeTupleByDict
 import BattleReplay
 from Event import Event
@@ -24,7 +26,7 @@ class _Comp7LightConfig(namedtuple('_Comp7LightConfig', ('isEnabled', 'isTrainin
 
     def replace(self, data):
         allowedFields = self._fields
-        dataToUpdate = dict(((k, v) for k, v in data.iteritems() if k in allowedFields))
+        dataToUpdate = {k:v for k, v in viewitems(data) if k in allowedFields}
         return self._replace(**dataToUpdate)
 
     @classmethod

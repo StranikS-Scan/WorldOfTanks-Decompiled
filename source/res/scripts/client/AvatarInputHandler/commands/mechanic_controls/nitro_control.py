@@ -10,7 +10,7 @@ from helpers import dependency
 from skeletons.gui.battle_session import IBattleSessionProvider
 from vehicles.mechanics.mechanic_helpers import getPlayerVehicleMechanicComponent
 if typing.TYPE_CHECKING:
-    from vehicles.mechanics.mechanic_constants import VehicleMechanic
+    from items.vehicle_mechanics_types import VehicleMechanicKey
 _logger = logging.getLogger(__name__)
 CLICK_THRESHOLD = 0.75
 

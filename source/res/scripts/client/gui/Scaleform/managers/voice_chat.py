@@ -29,9 +29,6 @@ class BaseVoiceChatManager(VoiceChatManagerMeta):
     def isVivox(self):
         return self.bwProto.voipController.isVivox()
 
-    def isYY(self):
-        return self.bwProto.voipController.isYY()
-
     def isVOIPEnabled(self):
         return self.bwProto.voipController.isVOIPEnabled()
 

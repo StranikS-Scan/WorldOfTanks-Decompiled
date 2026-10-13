@@ -9,6 +9,7 @@ from typing import NamedTuple, Union
 from CurrentVehicle import g_currentVehicle
 from PlayerEvents import g_playerEvents
 from cgf_components.marker_component import IGuiLoader
+from frameworks.wulf import PyResAccessor
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui import SystemMessages
 from gui.ClientUpdateManager import g_clientUpdateManager
@@ -24,7 +25,6 @@ from gui.impl.gen.view_models.views.lobby.loadout.crew.vehicle_bonus_detail_mode
 from gui.impl.gen.view_models.views.lobby.tank_setup.tank_setup_constants import TankSetupConstants
 from gui.impl.gen.view_models.views.lobby.crew.common.tooltip_constants import TooltipConstants
 from gui.impl.backport.backport_tooltip import createBackportTooltipContent
-from gui.impl.gen_utils import DynAccessor
 from gui.impl.lobby.crew.crew_header_tooltip_view import CrewHeaderTooltipView
 from gui.impl.lobby.crew.tooltips.empty_skill_tooltip import EmptySkillTooltip
 from gui.impl.lobby.crew.crew_helpers.skill_helpers import getTmanNewSkillCount, isTankmanSkillIrrelevant
@@ -56,10 +56,10 @@ if typing.TYPE_CHECKING:
     from frameworks.wulf import Array
 DOG = 'dog'
 BuiltMessage = NamedTuple('BuiltMessage', [('text', str),
- ('iconFrom', DynAccessor),
- ('iconTo', DynAccessor),
- ('vehFromCD', DynAccessor),
- ('vehToCD', DynAccessor)])
+ ('iconFrom', PyResAccessor),
+ ('iconTo', PyResAccessor),
+ ('vehFromCD', PyResAccessor),
+ ('vehToCD', PyResAccessor)])
 
 class IdleCrewBonus(Enum):
     DISABLED = 'Disabled'

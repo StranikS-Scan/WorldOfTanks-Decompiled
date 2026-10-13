@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: story_mode/scripts/client/story_mode/visual_script/__init__.py
+from __future__ import absolute_import
 from constants import IS_UE_EDITOR
 from visual_script.misc import ASPECT
 from visual_script.registrar import VSBlockRegistrar

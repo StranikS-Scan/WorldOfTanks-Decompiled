@@ -2,9 +2,8 @@
 # Embedded file name: scripts/client/cgf_components/attack_artillery_fort_components.py
 from __future__ import absolute_import
 import CGF
-import GenericComponents
-import Math
-from GenericComponents import EntityGOSync
+from EntitySync import EntityGOSync
+from cgf_components.color_components import ColorComponent
 from cgf_script.registration import ComponentProperty, registerComponent
 from constants import IS_CGF_DUMP, IS_CLIENT
 from helpers import dependency
@@ -16,52 +15,6 @@ else:
 
     class ISettingsCore(object):
         pass
-
-
-@registerComponent
-class ColorComponent(object):
-    group = 'UI'
-    editorTitle = 'Color Component'
-    domain = CGF.Domain.ClientEditor
-    model = ComponentProperty(type=CGF.PropertyType.Link, editorName='model', value=GenericComponents.DynamicModelComponent)
-    colorParamName = ComponentProperty(type=CGF.PropertyType.String, editorName='colorParamName', value='g_color')
-    color = ComponentProperty(type=CGF.PropertyType.Vector4, value=Math.Vector4(1, 0, 0, 0), editorName='color')
-
-    def __init__(self):
-        super(ColorComponent, self).__init__()
-        self.currentColor = self.color
-        self.currentColorParamName = self.colorParamName
-        self.currentModel = self.model
-
-
-class ColorSystem(CGF.System):
-    ColorActivated = CGF.ActivateReaction(CGF.ReactRw(ColorComponent))
-    ColorIterate = CGF.IterateReaction(CGF.ActiveOnly, CGF.Rw(ColorComponent))
-    ModelAccess = CGF.AccessReaction(CGF.Rw(GenericComponents.DynamicModelComponent))
-    Reactions = CGF.Reactions(ColorActivated, ColorIterate, ModelAccess)
-
-    def update(self):
-        modelAccess = self.reaction(self.ModelAccess)
-        for colorComponent in self.reaction(self.ColorActivated):
-            self.handleColorComponentAdded(colorComponent, modelAccess)
-
-        for colorComponent in self.reaction(self.ColorIterate):
-            self.processingHandler(colorComponent, modelAccess)
-
-    def handleColorComponentAdded(self, colorComponent, modelAccess):
-        model = modelAccess.find(colorComponent.model)
-        model.setMaterialParameterVector4(colorComponent.colorParamName, colorComponent.color)
-        colorComponent.currentColor = colorComponent.color
-        colorComponent.currentColorParamName = colorComponent.currentColorParamName
-        colorComponent.currentModel = colorComponent.model
-
-    def processingHandler(self, colorComponent, modelAccess):
-        if colorComponent.currentColor != colorComponent.color or colorComponent.currentModel != colorComponent.model or colorComponent.currentColorParamName != colorComponent.colorParamName:
-            model = modelAccess.find(colorComponent.model)
-            model.setMaterialParameterVector4(colorComponent.colorParamName, colorComponent.color)
-            colorComponent.currentColor = colorComponent.color
-            colorComponent.currentColorParamName = colorComponent.colorParamName
-            colorComponent.currentModel = colorComponent.model
 
 
 @registerComponent

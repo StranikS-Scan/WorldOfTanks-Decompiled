@@ -1,6 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/web/web_client_api/ui/barracks.py
+from __future__ import absolute_import
 import logging
+from past.builtins import basestring
 from gui.Scaleform.genConsts.BARRACKS_CONSTANTS import BARRACKS_CONSTANTS
 from gui.shared import event_dispatcher as shared_events
 from gui.shared.gui_items.Tankman import Tankman
@@ -31,12 +33,12 @@ def _isValidTankmanLocation(_, data, itemsCache=None):
         intCD = loc
         itemTypeID = first(parseIntCompactDescr(intCD))
         if itemTypeID != ITEM_TYPES.vehicle:
-            raise WebCommandException('intCD: %d is not valid value for "location",vehicle with this descriptor are not exists', intCD)
+            raise WebCommandException('intCD: %d is not valid value for "location",vehicle with this descriptor are not exists' % (intCD,))
         vehicles = itemsCache.items.getVehicles(_makeCriteria(intCD))
         if not vehicles:
-            raise WebCommandException('intCD: %d is not valid value for "location",vehicle with this descriptor are not in the inventory', intCD)
+            raise WebCommandException('intCD: %d is not valid value for "location",vehicle with this descriptor are not in the inventory' % (intCD,))
         return True
-    raise WebCommandException('"%s" is not valid value for "location"', loc)
+    raise WebCommandException('"%s" is not valid value for "location"' % (loc,))
 
 
 def _isValidTankType(_, data):
@@ -53,7 +55,7 @@ def _isValidParam(data, paramName, checkList):
     param = data.get(paramName)
     if param in checkList:
         return True
-    raise WebCommandException('"%s" is not valid value for "%s"', param, paramName)
+    raise WebCommandException('"%s" is not valid value for "%s"' % (param, paramName))
 
 
 def _isOverParam(data, field):

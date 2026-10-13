@@ -1,0 +1,79 @@
+<engines.xml>
+  <ids>
+    <V-55U_Halloween_event>	5000	</V-55U_Halloween_event>
+    <V-12-6M_hw21>	5001	</V-12-6M_hw21>
+    <V_2_IS_520_Roz_Boss_HW23>	5003	</V_2_IS_520_Roz_Boss_HW23>
+    <R77_KV2_turret_2_Engine>	20003	</R77_KV2_turret_2_Engine>
+  </ids>
+  <shared>
+    <V-55U_Halloween_event>
+      <userString>	#halloween.ussr_vehicles.extend:V-55U_Halloween_event	</userString>
+      <tags>	diesel	</tags>
+      <level>	9	</level>
+      <price>	82300	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <power>	700	</power>
+      <weight>	700	</weight>
+      <maxHealth>	370	</maxHealth>
+      <maxRegenHealth>	185	</maxRegenHealth>
+      <repairCost>	9	</repairCost>
+      <fireStartingChance>	0.001	</fireStartingChance>
+      <rpm_min>	333	</rpm_min>
+      <rpm_max>	2200	</rpm_max>
+      <invulnerable>	True	</invulnerable>
+    </V-55U_Halloween_event>
+    <V-12-6M_hw21>
+      <userString>	#ussr_vehicles:V_12_6M	</userString>
+      <tags>	diesel	</tags>
+      <level>	9	</level>
+      <price>	84600	</price>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <power>	780	</power>
+      <weight>	1024	</weight>
+      <maxHealth>	370	</maxHealth>
+      <maxRegenHealth>	185	</maxRegenHealth>
+      <repairCost>	9	</repairCost>
+      <fireStartingChance>	0.05	</fireStartingChance>
+      <rpm_min>	312	</rpm_min>
+      <rpm_max>	2264	</rpm_max>
+      <notInShop>	True	</notInShop>
+    </V-12-6M_hw21>
+    <V_2_IS_520_Roz_Boss_HW23>
+      <userString>	#halloween.ussr_vehicles.extend:V_2_IS_520_Roz_Boss_HW23	</userString>
+      <tags>	diesel	</tags>
+      <level>	8	</level>
+      <price>	29000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <power>	1200	</power>
+      <weight>	750	</weight>
+      <maxHealth>	360	</maxHealth>
+      <maxRegenHealth>	170	</maxRegenHealth>
+      <repairCost>	9	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+      <rpm_min>	404	</rpm_min>
+      <rpm_max>	2305	</rpm_max>
+    </V_2_IS_520_Roz_Boss_HW23>
+    <R77_KV2_turret_2_Engine>
+      <userString>	#ussr_vehicles:M-17F	</userString>
+      <tags>	diesel	</tags>
+      <level>	6	</level>
+      <price>	27860	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	ev_halloween_2020_turret_eng	</wwsoundPC>
+      <wwsoundNPC>	ev_halloween_2020_turret_eng	</wwsoundNPC>
+      <power>	600	</power>
+      <weight>	750	</weight>
+      <maxHealth>	120	</maxHealth>
+      <maxRegenHealth>	60	</maxRegenHealth>
+      <repairCost>	7	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+      <rpm_min>	360	</rpm_min>
+      <rpm_max>	2120	</rpm_max>
+    </R77_KV2_turret_2_Engine>
+  </shared>
+</engines.xml>

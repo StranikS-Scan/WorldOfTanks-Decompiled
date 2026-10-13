@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: comp7_light/scripts/client/comp7_light/gui/Scaleform/daapi/view/tooltips/comp7_light_battle_builders.py
+from __future__ import absolute_import
 from comp7_light.gui.Scaleform.genConsts.TOOLTIPS_BATTLE_CONSTANTS import TOOLTIPS_BATTLE_CONSTANTS as COMP7_LIGHT_BATTLE_TOOLTIPS
 from comp7_light.gui.shared.tooltips.comp7_light_tooltips import Comp7LightRoleSkillBattleTooltipData
 from comp7_light.gui.shared.tooltips.contexts import Comp7LightRoleSkillBattleContext

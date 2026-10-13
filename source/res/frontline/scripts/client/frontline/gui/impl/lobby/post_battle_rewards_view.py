@@ -1,6 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: frontline/scripts/client/frontline/gui/impl/lobby/post_battle_rewards_view.py
+from __future__ import absolute_import, division
 from collections import defaultdict
+from future.utils import viewitems
 import SoundGroups
 from epic_constants import EPIC_SELECT_BONUS_NAME, EPIC_SKILL_TOKEN_NAME
 from frameworks.wulf import ViewFlags, ViewSettings, WindowFlags, WindowLayer
@@ -99,7 +101,7 @@ class _PostBattleRewardsCtx(object):
     def __getBonuses(self):
         bonuses = []
         allLevelData = self.__epicController.getAllLevelRewards()
-        for questLvl, rewardData in allLevelData.iteritems():
+        for questLvl, rewardData in viewitems(allLevelData):
             if self.prevLevel < questLvl <= self.currLevel:
                 rewards = rewardData.getBonuses()
                 rewards.extend(self.__getAbilityPointsRewardBonus(questLvl))
@@ -155,7 +157,7 @@ class PostBattleRewardsView(ViewImpl, IGlobalListener):
         showCount = int(event.getArgument('showCount')) - 1
         if contentID != R.views.lobby.tooltips.AdditionalRewardsTooltip() or len(self.__rewardsList) <= showCount:
             return super(PostBattleRewardsView, self).createToolTipContent(event, contentID)
-        additionalRewards = [ reward for reward in self.__rewardsList[showCount:] ]
+        additionalRewards = list(self.__rewardsList[showCount:])
         return AdditionalRewardsTooltip(additionalRewards)
 
     def _getEvents(self):

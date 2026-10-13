@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/gui/Scaleform/channels/layout.py
+from __future__ import absolute_import
 import BattleReplay
 from debug_utils import LOG_DEBUG, LOG_ERROR
 from gui import SystemMessages

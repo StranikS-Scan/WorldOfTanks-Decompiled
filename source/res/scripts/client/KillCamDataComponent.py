@@ -12,12 +12,10 @@ from constants import KILL_CAM_STATUS_CODE, BATTLE_LOG_SHELL_TYPES
 from gun_rotation_shared import decodeGunAngles
 from items.vehicles import getItemByCompactDescr
 from AvatarInputHandler.kill_cam_mode_helpers.kill_cam_helpers import calculateSPGTrajectory
-from vehicles.mechanics.mechanic_constants import VehicleMechanic
 from shared_utils import first
 _logger = logging.getLogger(__name__)
 _UNSPOTTED_PIVOT_DISTANCE_FACTOR = 12
 _UNSPOTTED_MARKER_DISTANCE_FACTOR = 4
-_MECHANICS_WITH_DYN_ATTACHMENTS = (VehicleMechanic.STATIONARY_RELOAD,)
 
 class KillCamDataComponent(BigWorld.DynamicScriptComponent):
 

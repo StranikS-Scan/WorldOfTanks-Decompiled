@@ -8,18 +8,18 @@ from gui.veh_mechanics.battle.updaters.updaters_common import ViewUpdater
 from vehicles.mechanics.mechanic_trackers import IVehicleMechanicsTrackerListenerLogic
 if typing.TYPE_CHECKING:
     from events_containers.common.containers import IClientEventsContainerListener
-    from vehicles.mechanics.mechanic_constants import VehicleMechanic
+    from items.vehicle_mechanics_types import VehicleMechanicKey
 
 class VehicleMechanicUpdater(ViewUpdater, ContainersListener, VehiclesTrackingWatcher, IVehicleMechanicsTrackerListenerLogic):
 
     def __init__(self, vehicleMechanic, view):
         super(VehicleMechanicUpdater, self).__init__(view)
-        self.__vehicleMechanic = vehicleMechanic
+        self.__vehicleMechanicKey = vehicleMechanic
 
     def initialize(self):
         super(VehicleMechanicUpdater, self).initialize()
-        self.startCurrentVehicleMechanicsTracking((self.__vehicleMechanic,), self)
+        self.startCurrentVehicleMechanicsTracking((self.__vehicleMechanicKey,), self)
 
     def finalize(self):
-        self.stopCurrentVehicleMechanicsTracking((self.__vehicleMechanic,), self)
+        self.stopCurrentVehicleMechanicsTracking((self.__vehicleMechanicKey,), self)
         super(VehicleMechanicUpdater, self).finalize()

@@ -1,7 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/proto/xmpp/resources.py
+from __future__ import absolute_import
+from past.builtins import cmp
 from constants import IGR_TYPE, WG_GAMES
 from gui.shared.utils.decorators import ReprInjector
+from gui.shared.sort_key import SortKey
 from messenger.m_constants import USER_TAG
 from messenger.proto.xmpp.gloox_constants import PRESENCES_ORDER, PRESENCE
 from messenger.proto.xmpp.wrappers import WGExtsInfo
@@ -61,16 +64,23 @@ class Resource(object):
         return other
 
 
-def priorityComparator(resItem, otherItem):
-    resource = resItem[1]
-    other = otherItem[1]
-    if resource.presence ^ other.presence:
-        result = cmp(PRESENCES_ORDER.index(resource.presence), PRESENCES_ORDER.index(other.presence))
-    elif resource.priority ^ other.priority:
-        result = cmp(other.priority, resource.priority)
-    else:
-        result = 0
-    return result
+class PrioritySortKey(SortKey):
+    __slots__ = ('resItem',)
+
+    def __init__(self, resItem):
+        super(PrioritySortKey, self).__init__()
+        self.resItem = resItem
+
+    def _cmp(self, other):
+        resource = self.resItem[1]
+        other = other.resItem[1]
+        if resource.presence ^ other.presence:
+            result = cmp(PRESENCES_ORDER.index(resource.presence), PRESENCES_ORDER.index(other.presence))
+        elif resource.priority ^ other.priority:
+            result = cmp(other.priority, resource.priority)
+        else:
+            result = 0
+        return result
 
 
 class ResourceDictionary(object):
@@ -127,5 +137,5 @@ class ResourceDictionary(object):
             if wotId in self.__resources:
                 self.__highest = (wotId, self.__resources[wotId])
             elif self.__highest is None:
-                self.__highest = sorted(self.__resources.items(), cmp=priorityComparator)[0]
+                self.__highest = sorted(self.__resources.items(), key=PrioritySortKey)[0]
         return

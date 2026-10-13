@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: comp7_light/scripts/client/comp7_light/gui/impl/lobby/hangar/presenters/comp7_light_optional_devices_assistant_presenter.py
+from __future__ import absolute_import
 import typing
 from frameworks_common.state_machine import visitor
 from gui.impl.lobby.hangar.presenters.optional_devices_assistant_presenter import _OptionalDevicesObserver, OptionalDevicesAssistantPresenter

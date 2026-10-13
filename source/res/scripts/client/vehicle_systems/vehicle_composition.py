@@ -1,12 +1,13 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/vehicle_systems/vehicle_composition.py
+from __future__ import absolute_import
 import typing
 import enum
 import BigWorld
 import Compound
 import CGF
+import EntitySync
 import Math
-import GenericComponents
 import math_utils
 from constants import IS_UE_EDITOR
 from items.components import component_constants
@@ -123,7 +124,7 @@ def findParentVehicle(gameObject):
     from SimulatedVehicle import SimulatedVehicle
     from ClientSelectableCameraVehicle import ClientSelectableCameraVehicle
     from DetachedTurret import DetachedTurret
-    result = CGF.findParentWithComponent(gameObject, GenericComponents.EntityGOSync)
+    result = CGF.findParentWithComponent(gameObject, EntitySync.EntityGOSync)
     if result is not None:
         _, sync = result
         entity = sync.entity

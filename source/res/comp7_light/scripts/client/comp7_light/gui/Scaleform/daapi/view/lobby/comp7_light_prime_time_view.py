@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: comp7_light/scripts/client/comp7_light/gui/Scaleform/daapi/view/lobby/comp7_light_prime_time_view.py
+from __future__ import absolute_import
 from comp7_core.gui.Scaleform.daapi.view.lobby.comp7_core_prime_time_view import Comp7CorePrimeTimeView
 from comp7_light.gui.comp7_light_constants import PREBATTLE_ACTION_NAME
 from comp7_light.gui.impl.gen.view_models.views.lobby.enums import SeasonName

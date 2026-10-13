@@ -1,5 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/visual_script_client/event_platform_blocks.py
+from __future__ import absolute_import
+from builtins import range
 import Math
 from visual_script.block import Block, Meta, InitParam
 from visual_script.dependency import dependencyImporter
@@ -55,7 +57,7 @@ class RemoveMarkerAtPoint(Block, EventPlatformMeta):
         self._number = self._getInitParams()
         self._in = self._makeEventInputSlot('in', self._execute)
         if self._number > 0:
-            self._markerIds = [ self._makeDataInputSlot('markerId' + str(i), SLOT_TYPE.INT) for i in xrange(self._number) ]
+            self._markerIds = [ self._makeDataInputSlot('markerId' + str(i), SLOT_TYPE.INT) for i in range(self._number) ]
         self._out = self._makeEventOutputSlot('out')
 
     @classmethod

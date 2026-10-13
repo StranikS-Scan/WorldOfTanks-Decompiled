@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: frontline/scripts/client/frontline/gui/Scaleform/daapi/view/battle/frontline_overviewmap_screen.py
+from __future__ import absolute_import
 from collections import namedtuple
 from arena_component_system.sector_base_arena_component import ID_TO_BASENAME, _MISSION_SECTOR_ID_MAPPING
 from debug_utils import LOG_ERROR
@@ -42,11 +43,13 @@ class OverviewMapScreen(FrontlineOverviewMapScreenMeta):
     def __getCurrentZoneNamePerLane(self, lane):
         if lane > 0:
             sectorBaseComp = getattr(self.sessionProvider.arenaVisitor.getComponentSystem(), 'sectorBaseComponent', None)
-            if sectorBaseComp is not None:
-                nonCapturedBases = sectorBaseComp.getNumNonCapturedBasesByLane(lane)
-                return ID_TO_BASENAME[_MISSION_SECTOR_ID_MAPPING[lane][nonCapturedBases]]
-            LOG_ERROR('Expected SectorBaseComponent not present!')
-        return ''
+            if sectorBaseComp is None:
+                LOG_ERROR('Expected SectorBaseComponent not present!')
+                return ''
+            nonCapturedBases = sectorBaseComp.getNumNonCapturedBasesByLane(lane)
+            return ID_TO_BASENAME[_MISSION_SECTOR_ID_MAPPING[lane][nonCapturedBases]]
+        else:
+            return ''
 
     def __onSectorBaseCaptured(self, id_, isPlayerTeam):
         self.__updateLaneButtons()

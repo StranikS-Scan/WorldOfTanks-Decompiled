@@ -473,8 +473,8 @@ class Booster(BoosterUICommon):
         return RES_ICONS.boosterQualitySourcePath(self.quality)
 
     def getShopIcon(self, size=STORE_CONSTANTS.ICON_SIZE_MEDIUM):
-        resID = R.images.gui.maps.shop.boosters.num(size).dyn(replaceHyphenToUnderscore(self.getFullNameForResource()))()
-        return backport.image(resID) if resID != -1 else ''
+        res = R.images.gui.maps.shop.boosters.num(size).dyn(replaceHyphenToUnderscore(self.getFullNameForResource()))
+        return backport.image(res()) if res.exists() else ''
 
     def getExpiryDate(self):
         return backport.getLongDateFormat(self.useby) if self.useby is not None else ''

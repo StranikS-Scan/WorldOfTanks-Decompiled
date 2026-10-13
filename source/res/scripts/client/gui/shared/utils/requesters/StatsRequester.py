@@ -27,16 +27,8 @@ class StatsRequester(AbstractSyncDataRequester, IStatsRequester):
     wotPlusController = dependency.descriptor(IWotPlusController)
 
     @property
-    def mayConsumeWalletResources(self):
-        return bool(self.getCacheValue('mayConsumeWalletResources', 0))
-
-    @property
-    def currencyStatuses(self):
-        return self.wallet.componentsStatuses
-
-    @property
-    def dynamicCurrencyStatuses(self):
-        return self.wallet.dynamicComponentsStatuses
+    def isResourcesConsumptionAllowed(self):
+        return bool(self.getCacheValue('isResourcesConsumptionAllowed', 0))
 
     @property
     def credits(self):
@@ -76,7 +68,7 @@ class StatsRequester(AbstractSyncDataRequester, IStatsRequester):
 
     @property
     def actualGold(self):
-        return self.getCacheValue(Currency.GOLD, 0) if self.mayConsumeWalletResources or not self.wallet.useGold else 0
+        return self.getCacheValue(Currency.GOLD, 0) if self.isResourcesConsumptionAllowed else 0
 
     @property
     def actualCrystal(self):
@@ -104,7 +96,7 @@ class StatsRequester(AbstractSyncDataRequester, IStatsRequester):
 
     @property
     def actualFreeXP(self):
-        return self.getCacheValue('freeXP', 0) if self.mayConsumeWalletResources or not self.wallet.useFreeXP else 0
+        return self.getCacheValue('freeXP', 0) if self.isResourcesConsumptionAllowed else 0
 
     @property
     def vehiclesXPs(self):

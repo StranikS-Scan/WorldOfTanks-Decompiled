@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/uilogging/types.py
+from __future__ import absolute_import
 import typing
 from enum import Enum
 FeatureType = typing.Union[str, Enum]

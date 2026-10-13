@@ -1,6 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: comp7_light/scripts/client/comp7_light/gui/prb_control/entities/squad/actions_validator.py
+from __future__ import absolute_import
 import typing
+from future.utils import viewvalues
 from comp7_light_constants import BATTLE_MODE_VEH_TAGS_EXCEPT_COMP7_LIGHT
 from gui.prb_control.entities.base.actions_validator import ActionsValidatorComposite, BaseActionsValidator
 from gui.prb_control.entities.base.squad.actions_validator import SquadActionsValidator, SquadVehiclesValidator
@@ -44,7 +46,7 @@ class _Comp7LightModeStatusValidator(BaseActionsValidator):
 
     def _validate(self):
         if self._entity.isCommander():
-            for pInfo in self._entity.getMembers().itervalues():
+            for pInfo in viewvalues(self._entity.getMembers()):
                 if self.__isModeOfflineForPlayer(pInfo):
                     return ValidationResult(False, UNIT_RESTRICTION.MODE_OFFLINE)
 

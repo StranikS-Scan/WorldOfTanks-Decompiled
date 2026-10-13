@@ -73,6 +73,9 @@ class MESSENGER_LIMITS():
     VOIP_CREDENTIALS_REQUEST_COOLDOWN_SEC = 10.0 + _COOLDOWN_OFFSET
 
 
+VOIP_CREDS_MODE_DEFAULT = 0
+VOIP_CREDS_MODE_CHANNEL_REFRESH = 1
+
 class MESSENGER_ACTION_IDS():
     RESPONSE_SUCCESS = _makeID(start=0)
     RESPONSE_FAILURE = _makeID()
@@ -229,16 +232,16 @@ BATTLE_CHAT_COMMANDS = [BattleChatCommand(id=_makeID(start=MESSENGER_ACTION_IDS.
  BattleChatCommand(id=_makeID(), name=BATTLE_CHAT_COMMAND_NAMES.RELOADING_READY_CASSETE, cooldownPeriod=_SAME_BATTLE_CHAT_CMD_COOLDOWN_DURATION, msgText='reloading_ready_cassette', vehMarker=None, senderVehMarker=None, soundNotification='ibc_ping_attention', soundNotificationReply=None),
  BattleChatCommand(id=_makeID(), name=BATTLE_CHAT_COMMAND_NAMES.RELOADING_UNAVAILABLE, cooldownPeriod=_SAME_BATTLE_CHAT_CMD_COOLDOWN_DURATION, msgText='reloading_unavailable', vehMarker=None, senderVehMarker=None, soundNotification=None, soundNotificationReply=None),
  BattleChatCommand(id=_makeID(), name=BATTLE_CHAT_COMMAND_NAMES.OVERHEATEDGUN, cooldownPeriod=_SAME_BATTLE_CHAT_CMD_COOLDOWN_DURATION, msgText='overheated_gun', vehMarker='reloading_gun', senderVehMarker=None, soundNotification='ibc_ping_attention', soundNotificationReply=None),
- BattleChatCommand(id=_makeID(), name=BATTLE_CHAT_COMMAND_NAMES.EPIC_GLOBAL_SAVE_TANKS_ATK, cooldownPeriod=_SAME_BATTLE_CHAT_CMD_COOLDOWN_DURATION, msgText='global_msg/atk/save_tanks', vehMarker=None, senderVehMarker=None, soundNotification=None, soundNotificationReply=None),
+ BattleChatCommand(id=_makeID(), name=BATTLE_CHAT_COMMAND_NAMES.EPIC_GLOBAL_SAVE_TANKS_ATK, cooldownPeriod=_SAME_BATTLE_CHAT_CMD_COOLDOWN_DURATION, msgText='global_msg_atk_save_tanks', vehMarker=None, senderVehMarker=None, soundNotification=None, soundNotificationReply=None),
  BattleChatCommand(id=_makeID(), name=BATTLE_CHAT_COMMAND_NAMES.GOING_THERE, cooldownPeriod=_SAME_BATTLE_CHAT_CMD_COOLDOWN_DURATION, msgText='going_there', vehMarker='goingTo', senderVehMarker=None, soundNotification='ibc_ping_action', soundNotificationReply='ibc_ping_reply'),
- BattleChatCommand(id=_makeID(), name=BATTLE_CHAT_COMMAND_NAMES.EPIC_GLOBAL_SAVE_TANKS_DEF, cooldownPeriod=_SAME_BATTLE_CHAT_CMD_COOLDOWN_DURATION, msgText='global_msg/def/save_tanks', vehMarker=None, senderVehMarker=None, soundNotification=None, soundNotificationReply=None),
- BattleChatCommand(id=_makeID(), name=BATTLE_CHAT_COMMAND_NAMES.EPIC_GLOBAL_TIME_ATK, cooldownPeriod=_SAME_BATTLE_CHAT_CMD_COOLDOWN_DURATION, msgText='global_msg/atk/time', vehMarker=None, senderVehMarker=None, soundNotification=None, soundNotificationReply=None),
- BattleChatCommand(id=_makeID(), name=BATTLE_CHAT_COMMAND_NAMES.EPIC_GLOBAL_TIME_DEF, cooldownPeriod=_SAME_BATTLE_CHAT_CMD_COOLDOWN_DURATION, msgText='global_msg/def/time', vehMarker=None, senderVehMarker=None, soundNotification=None, soundNotificationReply=None),
- BattleChatCommand(id=_makeID(), name=BATTLE_CHAT_COMMAND_NAMES.EPIC_GLOBAL_HQ_ATK, cooldownPeriod=_SAME_BATTLE_CHAT_CMD_COOLDOWN_DURATION, msgText='global_msg/atk/focus_hq', vehMarker=None, senderVehMarker=None, soundNotification=None, soundNotificationReply=None),
- BattleChatCommand(id=_makeID(), name=BATTLE_CHAT_COMMAND_NAMES.EPIC_GLOBAL_HQ_DEF, cooldownPeriod=_SAME_BATTLE_CHAT_CMD_COOLDOWN_DURATION, msgText='global_msg/def/focus_hq', vehMarker=None, senderVehMarker=None, soundNotification=None, soundNotificationReply=None),
- BattleChatCommand(id=_makeID(), name=BATTLE_CHAT_COMMAND_NAMES.EPIC_GLOBAL_WEST, cooldownPeriod=_SAME_BATTLE_CHAT_CMD_COOLDOWN_DURATION, msgText='global_msg/lane/west', vehMarker=None, senderVehMarker=None, soundNotification=None, soundNotificationReply=None),
- BattleChatCommand(id=_makeID(), name=BATTLE_CHAT_COMMAND_NAMES.EPIC_GLOBAL_CENTER, cooldownPeriod=_SAME_BATTLE_CHAT_CMD_COOLDOWN_DURATION, msgText='global_msg/lane/center', vehMarker=None, senderVehMarker=None, soundNotification=None, soundNotificationReply=None),
- BattleChatCommand(id=_makeID(), name=BATTLE_CHAT_COMMAND_NAMES.EPIC_GLOBAL_EAST, cooldownPeriod=_SAME_BATTLE_CHAT_CMD_COOLDOWN_DURATION, msgText='global_msg/lane/east', vehMarker=None, senderVehMarker=None, soundNotification=None, soundNotificationReply=None),
+ BattleChatCommand(id=_makeID(), name=BATTLE_CHAT_COMMAND_NAMES.EPIC_GLOBAL_SAVE_TANKS_DEF, cooldownPeriod=_SAME_BATTLE_CHAT_CMD_COOLDOWN_DURATION, msgText='global_msg_def_save_tanks', vehMarker=None, senderVehMarker=None, soundNotification=None, soundNotificationReply=None),
+ BattleChatCommand(id=_makeID(), name=BATTLE_CHAT_COMMAND_NAMES.EPIC_GLOBAL_TIME_ATK, cooldownPeriod=_SAME_BATTLE_CHAT_CMD_COOLDOWN_DURATION, msgText='global_msg_atk_time', vehMarker=None, senderVehMarker=None, soundNotification=None, soundNotificationReply=None),
+ BattleChatCommand(id=_makeID(), name=BATTLE_CHAT_COMMAND_NAMES.EPIC_GLOBAL_TIME_DEF, cooldownPeriod=_SAME_BATTLE_CHAT_CMD_COOLDOWN_DURATION, msgText='global_msg_def_time', vehMarker=None, senderVehMarker=None, soundNotification=None, soundNotificationReply=None),
+ BattleChatCommand(id=_makeID(), name=BATTLE_CHAT_COMMAND_NAMES.EPIC_GLOBAL_HQ_ATK, cooldownPeriod=_SAME_BATTLE_CHAT_CMD_COOLDOWN_DURATION, msgText='global_msg_atk_focus_hq', vehMarker=None, senderVehMarker=None, soundNotification=None, soundNotificationReply=None),
+ BattleChatCommand(id=_makeID(), name=BATTLE_CHAT_COMMAND_NAMES.EPIC_GLOBAL_HQ_DEF, cooldownPeriod=_SAME_BATTLE_CHAT_CMD_COOLDOWN_DURATION, msgText='global_msg_def_focus_hq', vehMarker=None, senderVehMarker=None, soundNotification=None, soundNotificationReply=None),
+ BattleChatCommand(id=_makeID(), name=BATTLE_CHAT_COMMAND_NAMES.EPIC_GLOBAL_WEST, cooldownPeriod=_SAME_BATTLE_CHAT_CMD_COOLDOWN_DURATION, msgText='global_msg_lane_west', vehMarker=None, senderVehMarker=None, soundNotification=None, soundNotificationReply=None),
+ BattleChatCommand(id=_makeID(), name=BATTLE_CHAT_COMMAND_NAMES.EPIC_GLOBAL_CENTER, cooldownPeriod=_SAME_BATTLE_CHAT_CMD_COOLDOWN_DURATION, msgText='global_msg_lane_center', vehMarker=None, senderVehMarker=None, soundNotification=None, soundNotificationReply=None),
+ BattleChatCommand(id=_makeID(), name=BATTLE_CHAT_COMMAND_NAMES.EPIC_GLOBAL_EAST, cooldownPeriod=_SAME_BATTLE_CHAT_CMD_COOLDOWN_DURATION, msgText='global_msg_lane_east', vehMarker=None, senderVehMarker=None, soundNotification=None, soundNotificationReply=None),
  BattleChatCommand(id=_makeID(), name=BATTLE_CHAT_COMMAND_NAMES.EVENT_CHAT_1, cooldownPeriod=0.5 + _COOLDOWN_OFFSET, msgText='event_chat_1', msgOnMarker='event_chat_1'),
  BattleChatCommand(id=_makeID(), name=BATTLE_CHAT_COMMAND_NAMES.EVENT_CHAT_2, cooldownPeriod=0.5 + _COOLDOWN_OFFSET, msgText='event_chat_2', msgOnMarker='event_chat_2'),
  BattleChatCommand(id=_makeID(), name=BATTLE_CHAT_COMMAND_NAMES.EVENT_CHAT_3, cooldownPeriod=0.5 + _COOLDOWN_OFFSET, msgText='event_chat_3', msgOnMarker='event_chat_3'),

@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/gui/Scaleform/data/contacts_cm_handlers.py
+from __future__ import absolute_import
 from gui.Scaleform.daapi.view.lobby.user_cm_handlers import BaseUserCMHandler
 from gui.Scaleform.framework.entities.EventSystemEntity import EventSystemEntity
 from gui.Scaleform.framework.managers.context_menu import AbstractContextMenuCollectEventsHandler
@@ -90,12 +91,12 @@ class PlayerContactsCMHandler(BaseUserCMHandler):
         self.targetGroupName = None
         return
 
-    def _addRejectFriendshipInfo(self, option, userCMInfo):
+    def _addRejectFriendshipInfo(self, options, userCMInfo):
         if not userCMInfo.isFriend:
             if self.proto.contacts.isBidiFriendshipSupported():
                 if userCMInfo.getTags() and USER_TAG.SUB_PENDING_IN in userCMInfo.getTags():
-                    option.append(self._makeItem(CONTACTS_ACTION_ID.REJECT_FRIENDSHIP, MENU.contextmenu(CONTACTS_ACTION_ID.REJECT_FRIENDSHIP)))
-        return option
+                    options.append(self._makeItem(CONTACTS_ACTION_ID.REJECT_FRIENDSHIP, MENU.contextmenu(CONTACTS_ACTION_ID.REJECT_FRIENDSHIP)))
+        return options
 
     def _addContactsNoteInfo(self, options, userCMInfo):
         if self.showUserNotes and self.proto.contacts.isNoteSupported():

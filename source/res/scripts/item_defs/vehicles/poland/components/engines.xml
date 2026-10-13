@@ -58,6 +58,8 @@
     <_2xGTD_2T5A>	60	</_2xGTD_2T5A>
     <DNT_10_R>	61	</DNT_10_R>
     <UTD_20_FM>	64	</UTD_20_FM>
+    <GTD_F_x2_CFE_D>	65	</GTD_F_x2_CFE_D>
+    <DNT_10_K>	66	</DNT_10_K>
     <SGT_3Cz_M_7x7>	502	</SGT_3Cz_M_7x7>
     <GTD_2T6x2_7x7>	503	</GTD_2T6x2_7x7>
     <Development_Engine>	65000	</Development_Engine>
@@ -491,6 +493,23 @@
       <rpm_min>	416	</rpm_min>
       <rpm_max>	2848	</rpm_max>
     </GTD_F_x2>
+    <GTD_F_x2_CFE_D>
+      <userString>	#poland_vehicles:GTD_F_x2_CFE_D	</userString>
+      <tags>	gasoline	</tags>
+      <level>	8	</level>
+      <price>	47600	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_Ford_GAA_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Ford_GAA_npc	</wwsoundNPC>
+      <power>	810	</power>
+      <weight>	2000	</weight>
+      <maxHealth>	360	</maxHealth>
+      <maxRegenHealth>	170	</maxRegenHealth>
+      <repairCost>	9	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	416	</rpm_min>
+      <rpm_max>	2848	</rpm_max>
+    </GTD_F_x2_CFE_D>
     <Maybach_HL_120>
       <userString>	#poland_vehicles:Maybach_HL_120	</userString>
       <tags>	gasoline	</tags>
@@ -1050,6 +1069,23 @@
       <rpm_min>	253	</rpm_min>
       <rpm_max>	2440	</rpm_max>
     </DNT_10_R>
+    <DNT_10_K>
+      <userString>	#poland_vehicles:DNT_10_K	</userString>
+      <tags>	diesel	</tags>
+      <level>	9	</level>
+      <price>	90000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <power>	800	</power>
+      <weight>	1025	</weight>
+      <maxHealth>	310	</maxHealth>
+      <maxRegenHealth>	155	</maxRegenHealth>
+      <repairCost>	9	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+      <rpm_min>	306	</rpm_min>
+      <rpm_max>	2280	</rpm_max>
+    </DNT_10_K>
     <Development_Engine>
       <userString>	Development Engine	</userString>
       <tags>	diesel	</tags>

@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/storage/PlayerCtxStorage.py
-import types
+from __future__ import absolute_import
+from past.builtins import basestring
 import Event
 from constants import ACCOUNT_ATTR, WG_GAMES
 from debug_utils import LOG_WARNING
@@ -83,10 +84,10 @@ class PlayerCtxStorage(SimpleCachedStorage):
         self.onDenunciationsChanged((violatorID, topicID, arenaUniqueID))
 
     def setCachedItem(self, key, value):
-        if not isinstance(key, types.StringType):
+        if not isinstance(key, str):
             LOG_WARNING('Key is not string', type(key), key)
             return
-        if not isinstance(value, types.StringTypes):
+        if not isinstance(value, basestring):
             LOG_WARNING('Value is not string', type(value), value)
             return
         if key in self.__cachedItems:
@@ -106,5 +107,5 @@ class PlayerCtxStorage(SimpleCachedStorage):
 
     def _setCachedData(self, data):
         lastVoipUri = data.pop(0)
-        if isinstance(lastVoipUri, types.StringType):
+        if isinstance(lastVoipUri, str):
             self.__cachedItems['lastVoipUri'] = lastVoipUri

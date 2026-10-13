@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: comp7_light/scripts/client/comp7_light/gui/prb_control/entities/pre_queue/vehicles_watcher.py
+from __future__ import absolute_import
 from itertools import chain
 import typing
 from comp7_light_constants import BATTLE_MODE_VEH_TAGS_EXCEPT_COMP7_LIGHT, Configs

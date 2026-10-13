@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: comp7/scripts/client/comp7/gui/Scaleform/daapi/view/lobby/profile/profile_utils.py
+from __future__ import absolute_import
 from gui.Scaleform.daapi.view.lobby.profile import ProfileUtils as commonProfileUtils
 from gui.Scaleform.daapi.view.lobby.profile.ProfileUtils import ProfileUtils, DetailedStatisticsUtils
 from gui.Scaleform.locale.PROFILE import PROFILE

@@ -1,6 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/frameworks/wulf/view/array.py
+from __future__ import absolute_import
 import typing
+from builtins import range
 from contextlib import contextmanager
 from ..py_object_wrappers import PyObjectArray
 if typing.TYPE_CHECKING:
@@ -27,19 +29,19 @@ class Array(typing.Iterable[T]):
 
     def __getitem__(self, index):
         if isinstance(index, slice):
-            return (self.proxy.getValue(i) for i in xrange(index.start or 0, index.stop or len(self), index.step or 1))
+            return (self.proxy.getValue(i) for i in range(index.start or 0, index.stop or len(self), index.step or 1))
         if index < 0:
             if abs(index) > self.proxy.getSize():
-                raise IndexError('Array index %d out of range'.format(index))
+                raise IndexError('Array index {} out of range'.format(index))
             index = len(self) + index
         return self.proxy.getValue(index)
 
     def __iter__(self):
-        for index in xrange(0, self.proxy.getSize()):
+        for index in range(0, self.proxy.getSize()):
             yield self.proxy.getValue(index)
 
     def __reversed__(self):
-        for index in xrange(self.proxy.getSize() - 1, -1, -1):
+        for index in range(self.proxy.getSize() - 1, -1, -1):
             yield self.proxy.getValue(index)
 
     def reserve(self, capacity):

@@ -1,0 +1,76 @@
+<HWTeamInfoStatsComponent.def>
+  <CellMethods></CellMethods>
+  <ClientMethods></ClientMethods>
+  <Properties>
+    <damage>
+      <Type>	ARRAY	  <of>	FIXED_DICT	  <Properties>
+            <id>
+              <Type>	OBJECT_ID	</Type>
+            </id>
+            <value>
+              <Type>	UINT32	</Type>
+            </value>
+          </Properties>
+        </of>
+      </Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </damage>
+    <blocked>
+      <Type>	ARRAY	  <of>	FIXED_DICT	  <Properties>
+            <id>
+              <Type>	OBJECT_ID	</Type>
+            </id>
+            <value>
+              <Type>	UINT32	</Type>
+            </value>
+          </Properties>
+        </of>
+      </Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </blocked>
+    <assist>
+      <Type>	ARRAY	  <of>	FIXED_DICT	  <Properties>
+            <id>
+              <Type>	OBJECT_ID	</Type>
+            </id>
+            <value>
+              <Type>	UINT32	</Type>
+            </value>
+          </Properties>
+        </of>
+      </Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </assist>
+    <vehicleBuffs>
+      <Type>	ARRAY	  <of>	FIXED_DICT	  <Properties>
+            <id>
+              <Type>	OBJECT_ID	</Type>
+            </id>
+            <value>
+              <Type>	ARRAY	  <of>	STRING	</of>
+              </Type>
+            </value>
+          </Properties>
+        </of>
+      </Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </vehicleBuffs>
+    <teamHealth>
+      <Type>	ARRAY	  <of>	FIXED_DICT	  <Properties>
+            <id>
+              <Type>	OBJECT_ID	</Type>
+            </id>
+            <value>
+              <Type>	UINT32	</Type>
+            </value>
+          </Properties>
+        </of>
+      </Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </teamHealth>
+  </Properties>
+  <ofEntity>
+    <TeamInfo></TeamInfo>
+  </ofEntity>
+  <DefaultKeyName>	HWTeamInfoStatsComponent	</DefaultKeyName>
+</HWTeamInfoStatsComponent.def>

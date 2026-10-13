@@ -4,15 +4,15 @@ from __future__ import absolute_import
 import typing
 from gui.Scaleform.daapi.view.meta.DecorativeCrosshairPanelMeta import DecorativeCrosshairPanelMeta
 from gui.Scaleform.genConsts.DECORATIVE_CROSSHAIR_CONSTS import DECORATIVE_CROSSHAIR_CONSTS
-from vehicles.mechanics.mechanic_constants import VehicleMechanic
+from items.vehicle_mechanics_types import VehicleMechanicKeys
 
 class DecorativeCrosshairPanel(DecorativeCrosshairPanelMeta):
-    _VEHICLE_MECHANIC_UI_COMPONENTS_MAP = {VehicleMechanic.CONCENTRATION_MODE: (DECORATIVE_CROSSHAIR_CONSTS.CONCENTRATION,),
-     VehicleMechanic.PILLBOX_SIEGE_MODE: (DECORATIVE_CROSSHAIR_CONSTS.PILLBOX_SIEGE,),
-     VehicleMechanic.ACCURACY_STACKS: (DECORATIVE_CROSSHAIR_CONSTS.ACCURACY,),
-     VehicleMechanic.OVERHEAT_STACKS: (DECORATIVE_CROSSHAIR_CONSTS.OVERHEAT,),
-     VehicleMechanic.BATTLE_FURY: (DECORATIVE_CROSSHAIR_CONSTS.FURY,),
-     VehicleMechanic.OVERHEAT_GUN: (DECORATIVE_CROSSHAIR_CONSTS.TEMPERATURE_GUN_OVERHEAT,)}
+    _VEHICLE_MECHANIC_UI_COMPONENTS_MAP = {VehicleMechanicKeys.ACCURACY_STACKS: (DECORATIVE_CROSSHAIR_CONSTS.ACCURACY,),
+     VehicleMechanicKeys.BATTLE_FURY: (DECORATIVE_CROSSHAIR_CONSTS.FURY,),
+     VehicleMechanicKeys.CONCENTRATION_MODE: (DECORATIVE_CROSSHAIR_CONSTS.CONCENTRATION,),
+     VehicleMechanicKeys.OVERHEAT_GUN: (DECORATIVE_CROSSHAIR_CONSTS.TEMPERATURE_GUN_OVERHEAT,),
+     VehicleMechanicKeys.OVERHEAT_STACKS: (DECORATIVE_CROSSHAIR_CONSTS.OVERHEAT,),
+     VehicleMechanicKeys.PILLBOX_SIEGE_MODE: (DECORATIVE_CROSSHAIR_CONSTS.PILLBOX_SIEGE,)}
 
     def _setIsReplay(self, isReplay):
         pass
@@ -26,6 +26,6 @@ class DecorativeCrosshairPanel(DecorativeCrosshairPanelMeta):
     def _setCrosshairViewID(self, viewID):
         self.as_updateCrosshairTypeS(viewID)
 
-    def _addMechanicUIComponent(self, mechanicComponents):
+    def _addMechanicUIComponents(self, mechanicComponents):
         for componentName in mechanicComponents:
             self.as_addDecorCrosshairS(componentName)

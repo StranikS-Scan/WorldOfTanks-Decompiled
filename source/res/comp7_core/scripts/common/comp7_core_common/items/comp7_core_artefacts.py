@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: comp7_core/scripts/common/comp7_core_common/items/comp7_core_artefacts.py
 from __future__ import absolute_import
-from items.artefacts import BaseMarkerConfigReader, EffectsConfigReader, LevelBasedVisualScriptEquipment, VisualScriptEquipment
+from items.artefacts import BaseMarkerConfigReader, EffectsConfigReader, LevelBasedVisualScriptEquipment, PointVisualScriptEquipment, VisualScriptEquipment
 
 class Comp7CoreAoeHealEquipment(VisualScriptEquipment):
     _CONFIG_SLOTS = ('duration', 'radius', 'heal', 'secondaryHealDebuff', 'tickInterval')
@@ -78,7 +78,7 @@ class Comp7CoreAoeInspireEquipment(VisualScriptEquipment):
         self._exportSlotsToVSE()
 
 
-class Comp7CoreRedlineEquipment(LevelBasedVisualScriptEquipment, BaseMarkerConfigReader, EffectsConfigReader):
+class Comp7CoreRedlineEquipment(PointVisualScriptEquipment, LevelBasedVisualScriptEquipment, BaseMarkerConfigReader, EffectsConfigReader):
     _CONFIG_SLOTS = LevelBasedVisualScriptEquipment._LEVEL_BASED_SLOTS + BaseMarkerConfigReader._MARKER_SLOTS_ + EffectsConfigReader._EFFECTS_SLOTS_ + ('delay', 'damage', 'stunDuration', 'areaShow', 'fraction', 'requireAssists')
 
     def __init__(self):
@@ -171,7 +171,7 @@ class Comp7CoreRiskyAttackEquipment(VisualScriptEquipment):
         self._exportSlotsToVSE()
 
 
-class Comp7CoreReconEquipment(LevelBasedVisualScriptEquipment, BaseMarkerConfigReader):
+class Comp7CoreReconEquipment(PointVisualScriptEquipment, LevelBasedVisualScriptEquipment, BaseMarkerConfigReader):
     _CONFIG_SLOTS = LevelBasedVisualScriptEquipment._LEVEL_BASED_SLOTS + BaseMarkerConfigReader._MARKER_SLOTS_ + ('duration', 'delay', 'startupDelay')
 
     def __init__(self):

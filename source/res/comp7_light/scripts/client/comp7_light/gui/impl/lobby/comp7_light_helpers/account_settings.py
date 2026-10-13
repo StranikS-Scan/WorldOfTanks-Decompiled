@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: comp7_light/scripts/client/comp7_light/gui/impl/lobby/comp7_light_helpers/account_settings.py
+from __future__ import absolute_import
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import COMP7_LIGHT_UI_SECTION, COMP7_LIGHT_UMG_SEEN_QUESTS, COMP7_LIGHT_UMG_PROGRESSION_POINTS_SEEN, COMP7_LIGHT_UMG_ENTRY_POINT_SEEN
 

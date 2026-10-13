@@ -1,11 +1,13 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: comp7_core/scripts/client/comp7_core/arena_components/comp7_core_equipment_component.py
-from collections import defaultdict
+from __future__ import absolute_import
 import typing
 import logging
-import GenericComponents
+from collections import defaultdict
+from future.utils import viewvalues
 import BigWorld
 import CGF
+import GenericComponents
 import Math
 import math_utils
 from arena_component_system.client_arena_component_system import ClientArenaComponent
@@ -41,8 +43,8 @@ class Comp7CoreEquipmentComponent(ClientArenaComponent):
         return
 
     def __clear(self):
-        for effects in self.__effects.itervalues():
-            for effect in effects.itervalues():
+        for effects in viewvalues(self.__effects):
+            for effect in viewvalues(effects):
                 effect.destroy()
 
             effects.clear()

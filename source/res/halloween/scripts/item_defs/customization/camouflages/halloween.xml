@@ -1,0 +1,63 @@
+<halloween.xml>
+  <italy:It19_Progetto_C50_mod_66_hw216>	ussr	</italy:It19_Progetto_C50_mod_66_hw216>
+  <xmlns:germany>	germany	</xmlns:germany>
+  <italy:It19_Progetto_C50_mod_66_hw215>	usa	</italy:It19_Progetto_C50_mod_66_hw215>
+  <xmlns:china>	china	</xmlns:china>
+  <xmlns:france>	france	</xmlns:france>
+  <italy:It19_Progetto_C50_mod_66_hw214>	uk	</italy:It19_Progetto_C50_mod_66_hw214>
+  <italy:It19_Progetto_C50_mod_66_hw211>	japan	</italy:It19_Progetto_C50_mod_66_hw211>
+  <xmlns:czech>	czech	</xmlns:czech>
+  <italy:It19_Progetto_C50_mod_66_hw213>	sweden	</italy:It19_Progetto_C50_mod_66_hw213>
+  <italy:It19_Progetto_C50_mod_66_hw212>	poland	</italy:It19_Progetto_C50_mod_66_hw212>
+  <italy:It19_Progetto_C50_mod_66_hw210>	italy	</italy:It19_Progetto_C50_mod_66_hw210>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/opaque	</userString>
+    <season>	ALL	</season>
+    <historical>	0	</historical>
+    <priceGroup>	camouflages 50g notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	france:F17_AMX_13_90_Halloween_event
+					ussr:R40_T-54_Halloween_event
+					usa:A100_T49_Halloween_event
+					uk:GB24_Centurion_Mk3_Halloween_event
+					ussr:R171_IS_3_II_hw21
+					italy:It19_Progetto_C50_mod_66_hw21	</vehicles>
+      </include>
+    </vehicleFilter>
+    <camouflage>
+      <id>	9184	</id>
+      <texture>	halloween/vehicles/russian/Camouflage/halloween_2019_stage1.dds	</texture>
+      <description>	#halloween.vehicle_customization.extend:camouflage/halloween_2019_stage1/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <userString>	#halloween.vehicle_customization.extend:camouflage/halloween_2019_stage1/label	</userString>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	96 72 54 255	</c0>
+          <c1>	20 15 11 255	</c1>
+          <c2>	163 163 163 0	</c2>
+          <c3>	119 111 95 255	</c3>
+        </palette>
+      </palettes>
+      <rotation>
+        <HULL>	-0.0453786	</HULL>
+        <TURRET>	-0.0453786	</TURRET>
+        <GUN>	-0.0453786	</GUN>
+      </rotation>
+      <tiling>
+        <france:F17_AMX_13_90_Halloween_event>	1.34 1.34 2.416 1.87	</france:F17_AMX_13_90_Halloween_event>
+        <ussr:R40_T-54_Halloween_event>	2.42 2.42 2.81 -2.26	</ussr:R40_T-54_Halloween_event>
+        <usa:A100_T49_Halloween_event>	1.46 1.46 1.75 0.49	</usa:A100_T49_Halloween_event>
+        <uk:GB24_Centurion_Mk3_Halloween_event>	2.78 2.78 2.16 -2.56	</uk:GB24_Centurion_Mk3_Halloween_event>
+        <ussr:R171_IS_3_II_hw21>	1 1 0 0	</ussr:R171_IS_3_II_hw21>
+        <italy:It19_Progetto_C50_mod_66_hw21>	1 1 0 0	</italy:It19_Progetto_C50_mod_66_hw21>
+      </tiling>
+      <tilingSettings>
+        <type>	relativewithfactor	</type>
+        <factor>	2 2	</factor>
+        <offset>	0 0	</offset>
+      </tilingSettings>
+    </camouflage>
+  </itemGroup>
+</halloween.xml>

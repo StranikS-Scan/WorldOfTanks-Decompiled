@@ -1,21 +1,23 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/vehicle_systems/CompoundAppearance.py
-from functools import partial
+from __future__ import absolute_import, division
 import logging
 import math
-from math import tan
 import typing
 from Compound import AppearanceDeactivatedEvent
+from builtins import range
+from functools import partial
+from math import tan
 from enum import IntEnum
 import BigWorld
 import CGF
 import GenericComponents
 import Math
+import Vehicular
 import constants
 import items.vehicles
 import BattleReplay
 import SoundGroups
-import Vehicular
 import Compound
 from CustomEffect import EffectSettings
 from CustomEffectManager import CustomEffectManager
@@ -235,6 +237,7 @@ class CompoundAppearance(CommonTankAppearance):
         else:
             if self.__resourceLoadID is not None:
                 BigWorld.stopLoadResourceListBGTask(self.__resourceLoadID)
+                self.__resourceLoadID = None
             self.__engineStarted = False
             self.__engineStartScheduled = False
             self.__activationState = _ActivationState.DEACTIVATED
@@ -421,8 +424,9 @@ class CompoundAppearance(CommonTankAppearance):
             return
 
     def hideTerrainCircle(self):
-        self.__terrainCircle.setVisible(False)
         self.__showCircleDelayed = None
+        if self.__terrainCircle is not None:
+            self.__terrainCircle.setVisible(False)
         return
 
     @property
@@ -575,8 +579,8 @@ class CompoundAppearance(CommonTankAppearance):
         outfit = camouflages.prepareBattleOutfit(outfitCD, self.typeDescriptor, self.id, isPlayerVehicle)
         return outfit
 
-    def _initiateRecoil(self, gunNodeName, gunFireNodeName, gunAnimator):
-        impulseDir = super(CompoundAppearance, self)._initiateRecoil(gunNodeName, gunFireNodeName, gunAnimator)
+    def _initiateRecoil(self, gunNodeName, gunFireNodeName, gunRecoil):
+        impulseDir = super(CompoundAppearance, self)._initiateRecoil(gunNodeName, gunFireNodeName, gunRecoil)
         node = self.compoundModel.node(gunFireNodeName)
         gunPos = Math.Matrix(node).translation
         BigWorld.player().inputHandler.onVehicleShaken(self._vehicle, ShakeReason.OWN_SHOT_DELAYED, gunPos, impulseDir, self.typeDescriptor.gun.effectsCaliber)
@@ -840,7 +844,7 @@ class CompoundAppearance(CommonTankAppearance):
             wheelsSpeed = wheelsAnimator.getWheelsSpeed()
             wheelCount = len(wheelsSpeed)
             skippedWheelsCount = 0
-            for wheelIndex in xrange(0, wheelCount):
+            for wheelIndex in range(0, wheelCount):
                 flying = wheelIsFlying(wheelIndex)
                 if not flying:
                     self._commonScroll += wheelsSpeed[wheelIndex]

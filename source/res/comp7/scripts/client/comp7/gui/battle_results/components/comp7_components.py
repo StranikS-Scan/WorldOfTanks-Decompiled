@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: comp7/scripts/client/comp7/gui/battle_results/components/comp7_components.py
+from __future__ import absolute_import
 from comp7.gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS as COMP7_TOOLTIPS
 from comp7.gui.impl.gen.view_models.views.lobby.enums import SeasonName
 from comp7.gui.impl.gen.view_models.views.lobby.qualification_battle import BattleState
@@ -62,11 +63,13 @@ class TrainingRatingPointsBlock(PrestigePointsBlock):
 
 class IsDeserterFlag(base.StatsItem):
 
-    def _convert(self, result, reusable):
+    def _convert(self, value, reusable):
         if checkIfDeserter(reusable, FairplayViolations.COMP7_DESERTER):
-            if isQualificationBattle(result.get('avatar', {})):
+            if isQualificationBattle(value.get('avatar', {})):
                 return backport.text(R.strings.comp7_ext.battleResult.header.deserterQualification())
             return backport.text(R.strings.comp7_ext.battleResult.header.deserter())
+        else:
+            return None
 
 
 class Comp7RankBlock(base.StatsBlock):

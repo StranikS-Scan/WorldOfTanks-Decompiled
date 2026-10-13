@@ -7,8 +7,8 @@ from gui.Scaleform.daapi.view.meta.ChargeableBurstWidgetMeta import ChargeableBu
 from gui.veh_mechanics.battle.updaters.mechanics.mechanic_passenger_updater import VehicleMechanicPassengerUpdater
 from gui.veh_mechanics.battle.updaters.mechanics.mechanic_states_updater import VehicleMechanicStatesUpdater
 from helpers import dependency
+from items.vehicle_mechanics_types import VehicleMechanicKeys
 from skeletons.gui.battle_session import IBattleSessionProvider
-from vehicles.mechanics.mechanic_constants import VehicleMechanic
 from vehicles.mechanics.mechanic_states import IMechanicStatesListenerLogic
 from events_handler import eventHandler
 if typing.TYPE_CHECKING:
@@ -33,7 +33,7 @@ class ChargeableBurstMechanicWidget(ChargeableBurstWidgetMeta, ContainersListene
         self.__invalidateCharges(state)
 
     def _getViewUpdaters(self):
-        return [VehicleMechanicPassengerUpdater(VehicleMechanic.CHARGEABLE_BURST, self), VehicleMechanicStatesUpdater(VehicleMechanic.CHARGEABLE_BURST, self)]
+        return [VehicleMechanicPassengerUpdater(VehicleMechanicKeys.CHARGEABLE_BURST, self), VehicleMechanicStatesUpdater(VehicleMechanicKeys.CHARGEABLE_BURST, self)]
 
     def _populate(self):
         super(ChargeableBurstMechanicWidget, self)._populate()

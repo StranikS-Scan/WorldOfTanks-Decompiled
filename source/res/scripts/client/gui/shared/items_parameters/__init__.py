@@ -13,9 +13,9 @@ from helpers import time_utils
 from helpers_common import computeDamageAtDist
 from items import vehicles, artefacts
 from items.components import component_constants
+from items.vehicle_mechanics_types import VehicleMechanicKeys
 from math_common import decimal_round
 from vehicles.mechanics.mechanic_helpers import hasVehicleDescrMechanic
-from vehicles.mechanics.mechanic_constants import VehicleMechanic
 from items.components.shared_components import StationaryReloadParams
 RELATIVE_PARAMS = ('relativePower', 'relativeArmor', 'relativeMobility', 'relativeCamouflage', 'relativeVisibility')
 MAX_RELATIVE_VALUE = 1000
@@ -55,23 +55,23 @@ def isUnlimitedClipGun(gun):
 
 
 def isOverheatedUnlimitedGun(descr):
-    return isUnlimitedClipGun(descr) and hasVehicleDescrMechanic(descr, VehicleMechanic.OVERHEAT_GUN)
+    return isUnlimitedClipGun(descr) and hasVehicleDescrMechanic(descr, VehicleMechanicKeys.OVERHEAT_GUN)
 
 
 def isTemperatureGun(descr):
-    return descr is not None and hasVehicleDescrMechanic(descr, VehicleMechanic.TEMPERATURE_GUN)
+    return descr is not None and hasVehicleDescrMechanic(descr, VehicleMechanicKeys.TEMPERATURE_GUN)
 
 
 def isLowChargeShotGun(descr):
-    return descr is not None and hasVehicleDescrMechanic(descr, VehicleMechanic.LOW_CHARGE_SHOT)
+    return descr is not None and hasVehicleDescrMechanic(descr, VehicleMechanicKeys.LOW_CHARGE_SHOT)
 
 
 def isShellCalibration(descr):
-    return descr is not None and hasVehicleDescrMechanic(descr, VehicleMechanic.SHELL_CALIBRATION)
+    return descr is not None and hasVehicleDescrMechanic(descr, VehicleMechanicKeys.SHELL_CALIBRATION)
 
 
 def isBustleFeedShotGun(descr):
-    return descr is not None and hasVehicleDescrMechanic(descr, VehicleMechanic.BUSTLE_FEED)
+    return descr is not None and hasVehicleDescrMechanic(descr, VehicleMechanicKeys.BUSTLE_FEED)
 
 
 def isBurstGun(gun):
@@ -107,7 +107,7 @@ def getShellsLoadSize(gunDescr):
 def getShotsPerMinute(descriptor, reloadTime, autoReloadGun=False):
     clip = descriptor.clip
     burst = descriptor.burst
-    burstCount = 1 if VehicleMechanic.CHARGEABLE_BURST.value in descriptor.mechanicsParams else burst[0]
+    burstCount = 1 if hasVehicleDescrMechanic(descriptor, VehicleMechanicKeys.CHARGEABLE_BURST) else burst[0]
     if autoReloadGun:
         clipCount = 1
         reloadTime = max(reloadTime, clip[1])
@@ -171,7 +171,7 @@ def calcGunParams(gunDescr, descriptors):
         _updateMinMaxValues(result, DUAL_GUN_RATE_TIME, rateTime)
         result[DUAL_GUN_CHARGE_TIME] = chargeTime
         result[RELOAD_TIME_SECS_PROP_NAME] = reloadTimeSecs
-        if isBurstGun(descr) and VehicleMechanic.CHARGEABLE_BURST.value not in descr.mechanicsParams:
+        if isBurstGun(descr) and not hasVehicleDescrMechanic(descr, VehicleMechanicKeys.CHARGEABLE_BURST):
             burstSize, burstInterval, _ = descr.burst
             result[BURST_FIRE_RATE].extend([burstInterval, burstSize])
 

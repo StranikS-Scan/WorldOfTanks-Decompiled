@@ -1,8 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/account_helpers/offers/cache.py
+from __future__ import absolute_import
 import logging
-import urlparse
 import typing
+from future.moves.urllib import parse
+from future.utils import viewitems
 from helpers import dependency
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.offers import IOffersDataProvider
@@ -19,11 +21,11 @@ class ExternalCache(BaseExternalCache):
         super(ExternalCache, self).__init__(cacheName, workersLimit)
         self._cdnRootUrl = ''
 
-    def get(self, cdnRelativePath, appName=None):
+    def get(self, url, appName=None):
         if not self._cdnRootUrl:
             return None
         else:
-            url = urlparse.urljoin(self._cdnRootUrl, cdnRelativePath)
+            url = parse.urljoin(self._cdnRootUrl, url)
             return super(ExternalCache, self).get(url)
 
     def _createManifest(self, config=None):
@@ -37,8 +39,8 @@ class ExternalCache(BaseExternalCache):
             if not url.endswith('/'):
                 url += '/'
             self._cdnRootUrl = url
-            root = urlparse.urlparse(self._cdnRootUrl)
-            host = urlparse.urlunsplit((root.scheme,
+            root = parse.urlparse(self._cdnRootUrl)
+            host = parse.urlunsplit((root.scheme,
              root.netloc,
              '',
              '',
@@ -58,8 +60,8 @@ class ExternalCache(BaseExternalCache):
                     resMap['images'].update({gift.cdnImagePath, gift.cdnIconPath})
 
             manifest = []
-            for resName, filePaths in resMap.iteritems():
-                record = createManifestRecord(appName=resName, host=host, files=[ urlparse.urljoin(root.path, path) for path in filePaths if path ], code='OK', description='SUCCESS')
+            for resName, filePaths in viewitems(resMap):
+                record = createManifestRecord(appName=resName, host=host, files=[ parse.urljoin(root.path, path) for path in filePaths if path ], code='OK', description='SUCCESS')
                 manifest.append(record)
 
             return manifest

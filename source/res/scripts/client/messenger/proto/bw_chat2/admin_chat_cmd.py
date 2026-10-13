@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/proto/bw_chat2/admin_chat_cmd.py
-import types
+from __future__ import absolute_import
+from past.builtins import basestring, long, unicode
 from debug_utils import LOG_WARNING
 from external_strings_utils import isAccountNameValid, normalizedAccountName
 from gui.Scaleform.locale.MESSENGER import MESSENGER as I18N_MESSENGER
@@ -125,7 +126,7 @@ class _UserBanArgsParser(_UserBanUnBanArgsParser):
             return result
         else:
             banPeriod = result._next()
-            if banPeriod and isinstance(banPeriod, types.StringTypes):
+            if banPeriod and isinstance(banPeriod, basestring):
                 amount, multiplier, litter = (None, 1, None)
                 if banPeriod.isdigit():
                     amount = long(banPeriod)

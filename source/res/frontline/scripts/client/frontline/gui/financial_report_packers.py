@@ -1,6 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: frontline/scripts/client/frontline/gui/financial_report_packers.py
-from itertools import izip_longest
+from __future__ import absolute_import
+from future.utils import lzip
+from future.moves.itertools import zip_longest
 from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS
 from gui.battle_results.pbs_helpers.economics import getDirectXpRecords, FinancialRecordValues, getDirectFreeXpRecords, getDirectMoneyRecords
 from gui.battle_results.presenters.packers.economics import xp_records, common_records, free_xp_records, credits_records, gold_records
@@ -22,10 +24,10 @@ class FrontlineDetailedCurrencyPacker(DetailedCurrencyPacker):
             raise SoftException('Invalid currency data')
         records = [ extractor(battleResults.reusable) for extractor in recordsExtractors ]
         if vehIdx >= 0 and isinstance(first(records), FinancialRecordValues):
-            baseAccountValue, premiumAccountValue, additionalValue, extraValue, baseAccountValueWithWotPlus, premiumAccountValueWithWotPlus = list(izip_longest(*[ item or [] for item in records[0] ]))[vehIdx + 1]
+            baseAccountValue, premiumAccountValue, additionalValue, extraValue, baseAccountValueWithWotPlus, premiumAccountValueWithWotPlus = list(zip_longest(*[ item or [] for item in records[0] ]))[vehIdx + 1]
             specRecords = [FinancialRecordValues(baseAccountValue=RecordsIterator([baseAccountValue]) if baseAccountValue else None, premiumAccountValue=RecordsIterator([premiumAccountValue]) if premiumAccountValue else None, additionalValue=RecordsIterator([additionalValue]) if additionalValue else None, extraValue=RecordsIterator([extraValue]) if extraValue else None, baseAccountValueWithWotPlus=RecordsIterator([baseAccountValueWithWotPlus]) if baseAccountValueWithWotPlus else None, premiumAccountValueWithWotPlus=RecordsIterator([premiumAccountValueWithWotPlus]) if premiumAccountValueWithWotPlus else None)]
         elif vehIdx >= 0 and isinstance(first(records), RecordsIterator):
-            recordItem = zip(records[0])[vehIdx + 1]
+            recordItem = lzip(records[0])[vehIdx + 1]
             specRecords = [RecordsIterator(recordItem) if recordItem else None]
         else:
             specRecords = records
@@ -62,7 +64,7 @@ class FrontlineXpDetailsPacker(FrontlineDetailedCurrencyPacker):
 
     @classmethod
     def _getExtractors(cls, battleResults):
-        return ((getDirectXpRecords,), zip)
+        return ((getDirectXpRecords,), lzip)
 
 
 class FrontlineCrystalsDetailsPacker(FrontlineDetailedCurrencyPacker):
@@ -72,7 +74,7 @@ class FrontlineCrystalsDetailsPacker(FrontlineDetailedCurrencyPacker):
 
     @classmethod
     def _getExtractors(cls, battleResults):
-        return ((lambda _: battleResults.reusable.personal.getCrystalDetailsRecords(),), zip)
+        return ((lambda _: battleResults.reusable.personal.getCrystalDetailsRecords(),), lzip)
 
 
 class FrontlineFreeXpDetailsPacker(FrontlineDetailedCurrencyPacker):
@@ -95,7 +97,7 @@ class FrontlineFreeXpDetailsPacker(FrontlineDetailedCurrencyPacker):
 
     @classmethod
     def _getExtractors(cls, battleResults):
-        return ((getDirectFreeXpRecords,), zip)
+        return ((getDirectFreeXpRecords,), lzip)
 
 
 class FrontlineCreditsStatisticsPacker(FrontlineDetailedCurrencyPacker):
@@ -120,7 +122,7 @@ class FrontlineCreditsStatisticsPacker(FrontlineDetailedCurrencyPacker):
 
     @classmethod
     def _getExtractors(cls, battleResults):
-        return ((getDirectMoneyRecords,), zip)
+        return ((getDirectMoneyRecords,), lzip)
 
 
 class FrontlineGoldStatisticsPacker(FrontlineDetailedCurrencyPacker):
@@ -130,4 +132,4 @@ class FrontlineGoldStatisticsPacker(FrontlineDetailedCurrencyPacker):
 
     @classmethod
     def _getExtractors(cls, battleResults):
-        return ((getDirectMoneyRecords,), zip)
+        return ((getDirectMoneyRecords,), lzip)

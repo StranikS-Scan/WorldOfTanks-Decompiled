@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/storage/descriptor.py
+from __future__ import absolute_import
 import typing
 from future.utils import viewitems, viewvalues
 from gui.shared.utils import getPlayerDatabaseID, getPlayerName
@@ -35,7 +36,7 @@ class MessengerStorageDescriptor(Generic[_StorageType]):
 class StorageDecorator(object):
 
     def __repr__(self):
-        return 'StorageDecorator(id=0x{:08X}, ro={!r:s})'.format(id(self), _STORAGE.keys())
+        return 'StorageDecorator(id=0x{:08X}, ro={!r:s})'.format(id(self), list(_STORAGE))
 
     def __init__(self):
         self.__storageCache = None

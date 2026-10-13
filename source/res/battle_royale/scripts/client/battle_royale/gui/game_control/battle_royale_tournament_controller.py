@@ -4,6 +4,7 @@ from __future__ import absolute_import
 import logging
 import calendar
 from collections import Counter
+from future.utils import listitems
 import BigWorld
 from gui.prb_control.items import prb_seqs
 import AccountCommands
@@ -173,7 +174,7 @@ class BattleRoyaleTournamentController(IBattleRoyaleTournamentController):
     def __onCollectPrebattleInvites(self, autoInvites):
         savedPreviousIsAvailable = self.__isAvailable
         self.__isAvailable = False
-        for key, invite in autoInvites.items():
+        for key, invite in listitems(autoInvites):
             if invite['type'] == PREBATTLE_TYPE.BATTLE_ROYALE_TOURNAMENT:
                 autoInvites.pop(key)
 

@@ -15,7 +15,7 @@ from skeletons.gui.game_control import IFunRandomController
 if typing.TYPE_CHECKING:
     from gui.battle_results.reusable import _ReusableInfo
     from gui.battle_results.stats_ctrl import BattleResults
-    from gui.impl.gen_utils import DynAccessor
+    from frameworks.wulf import PyResAccessor
     from fun_random.gui.feature.sub_modes.base_sub_mode import IFunSubMode
 _CURRENCY_TO_PREM_BONUS_CAPS_MAP = {CurrenciesConstants.CREDITS: _CAPS.PREM_CREDITS,
  CurrenciesConstants.XP_COST: _CAPS.PREM_XP,

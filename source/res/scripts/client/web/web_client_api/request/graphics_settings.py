@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/web/web_client_api/request/graphics_settings.py
+from __future__ import absolute_import
 from debug_utils import LOG_DEBUG
 from gui.shared.utils import graphics
 from web.web_client_api import w2c, W2CSchema

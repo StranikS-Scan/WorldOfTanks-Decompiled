@@ -13,7 +13,8 @@ from gui.Scaleform.genConsts.MECHANICS_WIDGET_CONST import MECHANICS_WIDGET_CONS
 from gui.veh_mechanics.battle.updaters.hotkey_updaters import HotKeysViewUpdater
 from gui.veh_mechanics.battle.updaters.mechanics.mechanic_passenger_updater import VehicleMechanicPassengerUpdater
 from gui.veh_mechanics.battle.updaters.mechanics.mechanic_states_updater import VehicleMechanicStatesUpdater
-from vehicles.mechanics.mechanic_constants import VehicleMechanic, VehicleMechanicCommand
+from items.vehicle_mechanics_types import VehicleMechanicKeys
+from vehicles.mechanics.mechanic_constants import VehicleMechanicCommand
 from vehicles.mechanics.mechanic_states import IMechanicStatesListenerLogic
 if typing.TYPE_CHECKING:
     from ConcentrationModeComponent import ConcentrationModeState
@@ -54,7 +55,7 @@ class ConcentrationMechanicWidget(ConcentrationWidgetMeta, ContainersListener, I
         super(ConcentrationMechanicWidget, self)._dispose()
 
     def _getViewUpdaters(self):
-        return [VehicleMechanicPassengerUpdater(VehicleMechanic.CONCENTRATION_MODE, self), VehicleMechanicStatesUpdater(VehicleMechanic.CONCENTRATION_MODE, self), HotKeysViewUpdater(list(self._HOT_KEY_MAP.keys()), self)]
+        return [VehicleMechanicPassengerUpdater(VehicleMechanicKeys.CONCENTRATION_MODE, self), VehicleMechanicStatesUpdater(VehicleMechanicKeys.CONCENTRATION_MODE, self), HotKeysViewUpdater(list(self._HOT_KEY_MAP.keys()), self)]
 
     def __getDisplayState(self, state):
         return self._CONCENTRATION_UI_STATES[state.state]

@@ -5,12 +5,13 @@ import typing
 from collections import namedtuple
 import BigWorld
 from constants import PHASED_MECHANIC_STATE as MECHANIC_STATE
+from items.vehicle_mechanics_types import VehicleMechanicKey, VehicleMechanicKeys
 from vehicles.components.vehicle_component import VehicleDynamicComponent
 from vehicles.components.vehicle_prefabs import createMechanicPrefabSpawner
 from vehicles.mechanics.common import IMechanicComponent
 from vehicles.mechanics.generic_mechanics.wheeled_dash import createWheeledDashMiscEvents
 from vehicles.mechanics.mechanic_commands import createMechanicCommandsEvents, IMechanicCommandsComponent
-from vehicles.mechanics.mechanic_constants import VehicleMechanicCommand, VehicleMechanic
+from vehicles.mechanics.mechanic_constants import VehicleMechanicCommand
 from vehicles.mechanics.mechanic_helpers import getVehicleDescrMechanicParams
 from vehicles.mechanics.mechanic_inputs import createMechanicSingleInput
 from vehicles.mechanics.mechanic_states import IMechanicState, IMechanicStatesComponent, createMechanicStatesEvents
@@ -59,12 +60,12 @@ class WheeledDashController(VehicleDynamicComponent, IMechanicComponent, IMechan
         return
 
     @property
-    def commandsEvents(self):
-        return self.__commandsEvents
+    def vehicleMechanicKey(self):
+        return VehicleMechanicKeys.WHEELED_DASH
 
     @property
-    def vehicleMechanic(self):
-        return VehicleMechanic.WHEELED_DASH
+    def commandsEvents(self):
+        return self.__commandsEvents
 
     @property
     def statesEvents(self):
@@ -116,4 +117,4 @@ class WheeledDashController(VehicleDynamicComponent, IMechanicComponent, IMechan
 
     def _collectComponentParams(self, typeDescriptor):
         super(WheeledDashController, self)._collectComponentParams(typeDescriptor)
-        self.__params = getVehicleDescrMechanicParams(typeDescriptor, self.vehicleMechanic)
+        self.__params = getVehicleDescrMechanicParams(typeDescriptor, self.vehicleMechanicKey)

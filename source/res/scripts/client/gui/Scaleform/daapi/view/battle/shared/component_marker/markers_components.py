@@ -772,16 +772,17 @@ class PolygonalZoneMinimapMarkerComponent(MinimapMarkerComponent):
         polygon = self.getPolygon()
         if not polygon:
             return
-        else:
-            xc, yc = self._getSize()
-            self._polygon = sum(([p[0] * xc, p[1] * yc] for p in polygon), [])
-            for mask in self._entity.masks:
-                udo = BigWorld.userDataObjects.get(mask.udoGuid, None)
-                if udo:
-                    delta = udo.position - self.position
-                    self._maskingPolygons.append(sum(([(p[0] + delta[0]) * xc, (p[1] - delta[2]) * yc] for p in udo.minimapMarkerPolygon), []))
+        xc, yc = self._getSize()
+        self._polygon = sum(([p[0] * xc, p[1] * yc] for p in polygon), [])
+        for mask in self._entity.masks:
+            self._fillMaskingPolygons(mask, xc, yc)
 
-            return
+    def _fillMaskingPolygons(self, mask, xc, yc):
+        udo = BigWorld.userDataObjects.get(mask.udoGuid, None)
+        if udo:
+            delta = udo.position - self.position
+            self._maskingPolygons.append(sum(([(p[0] + delta[0]) * xc, (p[1] - delta[2]) * yc] for p in udo.minimapMarkerPolygon), []))
+        return
 
     def _getSize(self):
         boundingBox = BigWorld.player().arena.arenaType.boundingBox
@@ -794,6 +795,9 @@ class PolygonalZoneMinimapMarkerComponent(MinimapMarkerComponent):
         self._gui().invoke(self._componentID, 'setProperties', *self.__getMarkerProperties(self.__isColorBlind()))
         self._gui().invoke(self._componentID, 'addZoneData', self._polygon)
         self._gui().setActive(self._componentID, self._isBorderVisible and self._isVisible)
+        self._updateMasks()
+
+    def _updateMasks(self):
         for polygon in self._maskingPolygons:
             self._gui().invoke(self._componentID, 'addZoneData', polygon)
 
@@ -830,12 +834,7 @@ class StaticDeathZoneMinimapMarkerComponent(PolygonalZoneMinimapMarkerComponent)
         return self._entity.isActive
 
     def getPolygon(self):
-        p = self._entity.position
-        min, max = self._entity.clientVisualComp.getCorners()
-        return [(min.x - p.x, min.z - p.z),
-         (min.x - p.x, max.z - p.z),
-         (max.x - p.x, max.z - p.z),
-         (max.x - p.x, min.z - p.z)]
+        return self._entity.clientVisualComp.getPolygon()
 
 
 class W2GTBattleZoneMinimapMarkerComponent(MinimapMarkerComponent):

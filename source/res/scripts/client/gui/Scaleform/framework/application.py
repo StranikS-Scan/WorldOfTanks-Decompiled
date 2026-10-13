@@ -60,7 +60,7 @@ class DAAPIRootBridge(object):
 
 class AppEntry(FlashComponentWrapper, ApplicationMeta):
     settingsCore = dependency.descriptor(ISettingsCore)
-    guiApp = dependency.descriptor(IGuiLoader)
+    guiLoader = dependency.descriptor(IGuiLoader)
 
     def __init__(self, entryID, appNS, ctrlModeFlag, daapiBridge=None):
         super(AppEntry, self).__init__()

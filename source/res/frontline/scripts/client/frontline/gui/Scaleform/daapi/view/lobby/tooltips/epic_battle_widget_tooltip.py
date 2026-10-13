@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: frontline/scripts/client/frontline/gui/Scaleform/daapi/view/lobby/tooltips/epic_battle_widget_tooltip.py
+from __future__ import absolute_import
 from gui.Scaleform.daapi.view.lobby.epicBattle.after_battle_reward_view_helpers import getProgressionIconVODict
 from gui.Scaleform.daapi.view.lobby.epicBattle.epic_helpers import getTimeToEndStr
 from .common_blocks import packEpicBattleInfoBlock, packEpicBattleSeasonBlock

@@ -1,5 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/proto/xmpp/xmpp_string_utils.py
+from __future__ import absolute_import
+from builtins import range
 from external_strings_utils import unicode_from_utf8
 from messenger.proto.xmpp.errors import ClientContactError, ClientIntLimitError, ClientChannelError
 from messenger.proto.xmpp.xmpp_constants import CONTACT_LIMIT, CONTACT_ERROR_ID, LIMIT_ERROR_ID, CHANNEL_LIMIT, CHANNEL_ERROR_ID

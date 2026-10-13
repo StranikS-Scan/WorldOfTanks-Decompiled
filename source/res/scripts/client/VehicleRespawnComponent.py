@@ -30,7 +30,7 @@ class VehicleRespawnComponent(DynamicScriptComponent):
         self.onSetSpawnTime(self.entity.id, self.spawnTime)
 
     def set_respawnState(self, prev):
-        if self.respawnState == RespawnState.RESPAWNING:
+        if self.respawnState == RespawnState.RESPAWNING and not self.isDisabledEffect:
             self._explodeVehicleBeforeRespawn()
         elif self.respawnState == RespawnState.VEHICLE_ALIVE and prev == RespawnState.RESPAWNING:
             self.waitForRespawnReadiness()

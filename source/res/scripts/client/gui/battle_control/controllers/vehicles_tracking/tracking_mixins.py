@@ -1,15 +1,15 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_control/controllers/vehicles_tracking/tracking_mixins.py
 from __future__ import absolute_import
-import typing
+from typing import TYPE_CHECKING
 from gui.battle_control.controllers.vehicles_tracking.tracking_interfaces import IVehiclesTrackingWatcher
 from gui.battle_control.controllers.vehicles_tracking.tracking_wrappers import hasVehiclesTrackingCtrl
 from helpers import dependency
 from skeletons.gui.battle_session import IBattleSessionProvider
-if typing.TYPE_CHECKING:
-    from typing import Tuple
+if TYPE_CHECKING:
+    from typing import Optional, Tuple
     from gui.battle_control.controllers.vehicles_tracking.tracking_interfaces import IVehiclesTrackingController
-    from vehicles.mechanics.mechanic_constants import VehicleMechanic
+    from items.vehicle_mechanics_types import VehicleMechanicKey
     from vehicles.mechanics.mechanic_trackers import IVehicleMechanicsTrackerListener
 
 class VehiclesTrackingWatcher(IVehiclesTrackingWatcher):

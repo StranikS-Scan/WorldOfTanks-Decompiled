@@ -1,5 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: frontline/scripts/client/frontline/gui/prb_control/entities/epic/pre_queue/vehicles_watcher.py
+from __future__ import absolute_import
+from future.utils import viewvalues
 from itertools import chain
 import typing
 from constants import BATTLE_MODE_VEH_TAGS_EXCEPT_EPIC
@@ -20,7 +22,7 @@ class EpicVehiclesWatcher(BaseVehiclesWatcher):
 
     def _getUnsuitableVehicles(self, onClear=False):
         config = self.lobbyContext.getServerSettings().epicBattles
-        vehs = self.itemsCache.items.getVehicles(REQ_CRITERIA.INVENTORY | ~REQ_CRITERIA.VEHICLE.LEVELS(config.validVehicleLevels)).itervalues()
+        vehs = viewvalues(self.itemsCache.items.getVehicles(REQ_CRITERIA.INVENTORY | ~REQ_CRITERIA.VEHICLE.LEVELS(config.validVehicleLevels)))
         return chain(vehs, self._getUnsuitableVehiclesBase())
 
     def _getVehiclesCustomStates(self, onClear=False):
@@ -29,5 +31,4 @@ class EpicVehiclesWatcher(BaseVehiclesWatcher):
         return result
 
     def __getWillBeUnlockedVehicles(self):
-        vehicles = self.itemsCache.items.getVehicles(REQ_CRITERIA.INVENTORY | REQ_CRITERIA.CUSTOM(lambda v: isVehLevelUnlockableInBattle(v.level))).itervalues()
-        return vehicles
+        return viewvalues(self.itemsCache.items.getVehicles(REQ_CRITERIA.INVENTORY | REQ_CRITERIA.CUSTOM(lambda v: isVehLevelUnlockableInBattle(v.level))))

@@ -1,0 +1,21 @@
+<HWVehicleStatusNotificationComponent.def>
+  <Properties>
+    <vehicleViewState>
+      <Type>	STRING	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </vehicleViewState>
+    <initArgs>
+      <Type>	PYTHON	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <AllowUnsafeData>	true	</AllowUnsafeData>
+    </initArgs>
+    <finiArgs>
+      <Type>	PYTHON	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <AllowUnsafeData>	true	</AllowUnsafeData>
+    </finiArgs>
+  </Properties>
+  <ofEntity>
+    <Vehicle></Vehicle>
+  </ofEntity>
+</HWVehicleStatusNotificationComponent.def>

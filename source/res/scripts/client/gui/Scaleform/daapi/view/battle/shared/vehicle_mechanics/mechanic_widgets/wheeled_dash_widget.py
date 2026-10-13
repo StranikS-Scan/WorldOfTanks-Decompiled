@@ -16,8 +16,9 @@ from gui.veh_mechanics.battle.updaters.hotkey_updaters import HotKeysViewUpdater
 from gui.veh_mechanics.battle.updaters.mechanics.mechanic_commands_updater import VehicleMechanicCommandsUpdater
 from gui.veh_mechanics.battle.updaters.mechanics.mechanic_passenger_updater import VehicleMechanicPassengerUpdater
 from gui.veh_mechanics.battle.updaters.mechanics.mechanic_states_updater import VehicleMechanicStatesUpdater
+from items.vehicle_mechanics_types import VehicleMechanicKeys
 from skeletons.gui.battle_session import IBattleSessionProvider
-from vehicles.mechanics.mechanic_constants import VehicleMechanic, VehicleMechanicCommand
+from vehicles.mechanics.mechanic_constants import VehicleMechanicCommand
 from vehicles.mechanics.mechanic_states import IMechanicStatesListenerLogic
 if typing.TYPE_CHECKING:
     from gui.veh_mechanics.battle.updaters.updaters_common import IViewUpdater
@@ -61,9 +62,9 @@ class WheeledDashMechanicWidget(WheeledDashWidgetMeta, ContainersListener, IMech
         super(WheeledDashMechanicWidget, self)._dispose()
 
     def _getViewUpdaters(self):
-        return [VehicleMechanicPassengerUpdater(VehicleMechanic.WHEELED_DASH, self),
-         VehicleMechanicStatesUpdater(VehicleMechanic.WHEELED_DASH, self),
-         VehicleMechanicCommandsUpdater(VehicleMechanic.WHEELED_DASH, self),
+        return [VehicleMechanicPassengerUpdater(VehicleMechanicKeys.WHEELED_DASH, self),
+         VehicleMechanicStatesUpdater(VehicleMechanicKeys.WHEELED_DASH, self),
+         VehicleMechanicCommandsUpdater(VehicleMechanicKeys.WHEELED_DASH, self),
          HotKeysViewUpdater(list(self._HOT_KEY_MAP.keys()), self)]
 
     def __getDisplayState(self, state):

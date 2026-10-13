@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: comp7/scripts/client/comp7/gui/impl/lobby/hangar/notifications/punishment_notification_view.py
+from __future__ import absolute_import
 from gui.impl import backport
 from gui.impl.gen.resources import R
 from gui.impl.lobby.hangar.notifications.punishment_notification_view import PunishmentView, AfkLeaverNotification

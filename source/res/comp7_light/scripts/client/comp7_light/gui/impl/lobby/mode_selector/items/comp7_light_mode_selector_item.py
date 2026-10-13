@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: comp7_light/scripts/client/comp7_light/gui/impl/lobby/mode_selector/items/comp7_light_mode_selector_item.py
+from __future__ import absolute_import
 from comp7_light.gui.impl.gen.view_models.views.lobby.mode_selector.mode_selector_comp7_light_model import ModeSelectorComp7LightModel
 from comp7_light.gui.impl.gen.view_models.views.lobby.mode_selector.mode_selector_comp7_light_widget_model import Comp7LightProgressionStatus
 from comp7_light.skeletons.gui.game_control import IComp7LightProgressionController

@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/web/web_client_api/exchange/__init__.py
+from __future__ import absolute_import
 from exchange.personal_discounts_constants import ExchangeDiscountType, EXCHANGE_RATE_GOLD_NAME, EXCHANGE_RATE_FREE_XP_NAME
 from gui.impl.lobby.exchange.exchange_rates_helper import convertToGuiLimit, getShowFormatRate
 from helpers import dependency

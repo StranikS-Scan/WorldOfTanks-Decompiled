@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: story_mode/scripts/client/story_mode/gui/scaleform/daapi/view/battle/postmortem_panel.py
+from __future__ import absolute_import
 import SoundGroups
 from gui.Scaleform.daapi.view.battle.pve_base.postmortem_panel import PvePostmortemPanel, LivesState
 from story_mode.gui.sound_constants import RESPAWN_TIMER_SOUND_EVENT, RESPAWN_TIMER_STATE_GROUP, RESPAWN_TIMER_STATE_OFF, RESPAWN_TIMER_STATE_ON

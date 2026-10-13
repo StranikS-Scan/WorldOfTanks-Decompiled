@@ -4,7 +4,7 @@
     <Cadillac_75_x_3>	2	</Cadillac_75_x_3>
     <Vickers-Armstrong>	4	</Vickers-Armstrong>
     <Vickers-Armstrong_MkII>	5	</Vickers-Armstrong_MkII>
-    <Continental_W-670-9A>	7	</Continental_W-670-9A>
+    <Continental_W_670_9A1>	7	</Continental_W_670_9A1>
     <Sunbeam_Amazon>	8	</Sunbeam_Amazon>
     <AEC>	9	</AEC>
     <Leyland>	10	</Leyland>
@@ -21,6 +21,7 @@
     <Rolls_Royse_Phantom_II>	26	</Rolls_Royse_Phantom_II>
     <Meadows_DAV>	28	</Meadows_DAV>
     <Vauxhall_Bedford_Twin_Six>	29	</Vauxhall_Bedford_Twin_Six>
+    <Rolls_Royce_Meteor_with_twin_turbo_supercharges_FR>	30	</Rolls_Royce_Meteor_with_twin_turbo_supercharges_FR>
     <Wright_Continental_R-975C4>	32	</Wright_Continental_R-975C4>
     <Chrysler_A57_multibank>	34	</Chrysler_A57_multibank>
     <Rolls_Royce_Meteor_M120>	35	</Rolls_Royce_Meteor_M120>
@@ -127,6 +128,7 @@
     <Leyland_L60F>	153	</Leyland_L60F>
     <Leyland_L60_HPT_Dark_Morn>	154	</Leyland_L60_HPT_Dark_Morn>
     <Rolls_Royce_Griffon_180_CFE_G>	155	</Rolls_Royce_Griffon_180_CFE_G>
+    <Parson_s_Turbine_No_2985>	156	</Parson_s_Turbine_No_2985>
     <AEC_A190_Bishop>	2000	</AEC_A190_Bishop>
     <GMC_6004_6_71A_Bishop>	2001	</GMC_6004_6_71A_Bishop>
     <Nuffield_Liberty_Mk_III_CSP>	2002	</Nuffield_Liberty_Mk_III_CSP>
@@ -182,6 +184,7 @@
     <Rolls_Royce_Meteor_with_twin_turbo_supercharges_7x7>	503	</Rolls_Royce_Meteor_with_twin_turbo_supercharges_7x7>
     <LandRover_Meteorite_V8_7x7>	504	</LandRover_Meteorite_V8_7x7>
     <Rolls_Royce_Griffon_SC_7x7>	505	</Rolls_Royce_Griffon_SC_7x7>
+    <Parson_s_Turbine_No_2983_7x7>	506	</Parson_s_Turbine_No_2983_7x7>
     <Rolls_Royse_Meteor_MkIVC_IGR>	60001	</Rolls_Royse_Meteor_MkIVC_IGR>
     <Rolls_Royse_Meteor_M120_IGR>	60002	</Rolls_Royse_Meteor_M120_IGR>
     <Rolls_Royse_Meteor_MkIV_IGR>	60003	</Rolls_Royse_Meteor_MkIV_IGR>
@@ -1179,8 +1182,8 @@
       <rpm_min>	315	</rpm_min>
       <rpm_max>	2069	</rpm_max>
     </Leyland_V6>
-    <Continental_W-670-9A>
-      <userString>	#gb_vehicles:Continental_W-670-9A	</userString>
+    <Continental_W_670_9A1>
+      <userString>	#gb_vehicles:Continental_W_670_9A1	</userString>
       <tags>	gasoline	</tags>
       <level>	3	</level>
       <price>	5600	</price>
@@ -1194,7 +1197,7 @@
       <fireStartingChance>	0.2	</fireStartingChance>
       <rpm_min>	461	</rpm_min>
       <rpm_max>	2324	</rpm_max>
-    </Continental_W-670-9A>
+    </Continental_W_670_9A1>
     <Nuffield_liberty_MKIV>
       <userString>	#gb_vehicles:Nuffield_liberty_MKIV	</userString>
       <tags>	gasoline	</tags>
@@ -2182,6 +2185,23 @@
       <rpm_min>	348	</rpm_min>
       <rpm_max>	2485	</rpm_max>
     </Parson_s_Turbine_No_2983>
+    <Parson_s_Turbine_No_2983_7x7>
+      <userString>	#gb_vehicles:Parson_s_Turbine_No_2983_7x7	</userString>
+      <tags>	gasoline	</tags>
+      <level>	11	</level>
+      <price>	150000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_ContinentalR_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_ContinentalR_npc	</wwsoundNPC>
+      <power>	1500	</power>
+      <weight>	1050	</weight>
+      <maxHealth>	380	</maxHealth>
+      <maxRegenHealth>	190	</maxRegenHealth>
+      <repairCost>	11	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+      <rpm_min>	348	</rpm_min>
+      <rpm_max>	2485	</rpm_max>
+    </Parson_s_Turbine_No_2983_7x7>
     <Rolls_Royce_Griffon_180_B>
       <userString>	#gb_vehicles:Rolls_Royce_Griffon_180_B	</userString>
       <tags>	gasoline	</tags>
@@ -2267,6 +2287,23 @@
       <rpm_min>	474	</rpm_min>
       <rpm_max>	2080	</rpm_max>
     </Rolls_Royce_Griffon_A>
+    <Parson_s_Turbine_No_2985>
+      <userString>	#gb_vehicles:Parson_s_Turbine_No_2985	</userString>
+      <tags>	gasoline	</tags>
+      <level>	10	</level>
+      <price>	120000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_gte_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_gte_npc	</wwsoundNPC>
+      <power>	860	</power>
+      <weight>	1050	</weight>
+      <maxHealth>	345	</maxHealth>
+      <maxRegenHealth>	173	</maxRegenHealth>
+      <repairCost>	10	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	483	</rpm_min>
+      <rpm_max>	2053	</rpm_max>
+    </Parson_s_Turbine_No_2985>
     <Paxman_Ricardo>
       <userString>	#gb_vehicles:Paxman_Ricardo	</userString>
       <tags>	diesel	</tags>
@@ -2600,19 +2637,19 @@
     <Rolls_Royce_717>
       <userString>	#gb_vehicles:Rolls_Royce_717	</userString>
       <tags>	diesel	</tags>
-      <level>	8	</level>
-      <price>	60000	</price>
+      <level>	9	</level>
+      <price>	90000	</price>
       <notInShop>	true	</notInShop>
       <wwsoundPC>	eng_v55_pc	</wwsoundPC>
       <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
-      <power>	700	</power>
+      <power>	650	</power>
       <weight>	775	</weight>
-      <maxHealth>	275	</maxHealth>
-      <maxRegenHealth>	138	</maxRegenHealth>
-      <repairCost>	8	</repairCost>
+      <maxHealth>	310	</maxHealth>
+      <maxRegenHealth>	155	</maxRegenHealth>
+      <repairCost>	9	</repairCost>
       <fireStartingChance>	0.15	</fireStartingChance>
-      <rpm_min>	333	</rpm_min>
-      <rpm_max>	2200	</rpm_max>
+      <rpm_min>	346	</rpm_min>
+      <rpm_max>	2160	</rpm_max>
     </Rolls_Royce_717>
     <Wright_Continental_R-975EC2_A>
       <userString>	#gb_vehicles:Wright_Continental_R-975EC2_A	</userString>
@@ -2683,6 +2720,23 @@
       <rpm_min>	449	</rpm_min>
       <rpm_max>	2161	</rpm_max>
     </Rolls_Royce_Meteor_with_twin_turbo_supercharges_7x7>
+    <Rolls_Royce_Meteor_with_twin_turbo_supercharges_FR>
+      <userString>	#gb_vehicles:Rolls_Royce_Meteor_with_twin_turbo_supercharges_FR	</userString>
+      <tags>	gasoline	</tags>
+      <level>	10	</level>
+      <price>	65000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_ContinentalR_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_ContinentalR_npc	</wwsoundNPC>
+      <power>	1040	</power>
+      <weight>	1000	</weight>
+      <maxHealth>	320	</maxHealth>
+      <maxRegenHealth>	160	</maxRegenHealth>
+      <repairCost>	9	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	449	</rpm_min>
+      <rpm_max>	2161	</rpm_max>
+    </Rolls_Royce_Meteor_with_twin_turbo_supercharges_FR>
     <Ford_V8-220>
       <userString>	#gb_vehicles:Ford_V8-220	</userString>
       <tags>	gasoline	</tags>

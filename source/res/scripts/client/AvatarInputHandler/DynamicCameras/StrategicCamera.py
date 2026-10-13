@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/AvatarInputHandler/DynamicCameras/StrategicCamera.py
+from __future__ import absolute_import, division
 import math
 from collections import namedtuple
 import BigWorld
@@ -14,10 +15,13 @@ from BigWorld import StrategicAimingSystem, StrategicAimingSystemRemote
 from AvatarInputHandler.DynamicCameras import createOscillatorFromSection, CameraDynamicConfig, CameraWithSettings, SPGScrollSmoother
 from AvatarInputHandler.DynamicCameras.camera_switcher import CameraSwitcher, SwitchTypes, CameraSwitcherCollection, SwitchToPlaces, TRANSITION_DIST_HYSTERESIS
 from AvatarInputHandler.cameras import getWorldRayAndPoint, readFloat, readVec2, ImpulseReason, FovExtended
+from account_helpers.AccountSettings import AccountSettings
 from account_helpers.settings_core import settings_constants
+from account_helpers.settings_core.settings_constants import CONTROLS
 from aih_constants import CTRL_MODE_NAME
 from debug_utils import LOG_WARNING
 from helpers.CallbackDelayer import CallbackDelayer
+from math_common import decimal_round
 _DistRangeSetting = namedtuple('_DistRangeSetting', ['minArenaSize',
  'distRange',
  'scrollMultiplier',
@@ -80,6 +84,9 @@ class StrategicCamera(CameraWithSettings, CallbackDelayer):
     @staticmethod
     def _getConfigsKey():
         return StrategicCamera.__name__
+
+    def _getMouseSensitivitySettingKey(self):
+        return CONTROLS.MOUSE_STRATEGIC_SENS
 
     def create(self, onChangeControlMode=None):
         aimingSystemClass = StrategicAimingSystemRemote if BigWorld.player().isObserver() else StrategicAimingSystem
@@ -232,12 +239,10 @@ class StrategicCamera(CameraWithSettings, CallbackDelayer):
         self.__applyNoiseImpulse(noiseMagnitude)
 
     def applyDistantImpulse(self, position, impulseValue, reason=ImpulseReason.ME_HIT):
-        if reason != ImpulseReason.SPLASH and reason != ImpulseReason.PROJECTILE_HIT:
+        if reason not in (ImpulseReason.SPLASH, ImpulseReason.PROJECTILE_HIT):
             return
         impulse = BigWorld.player().getOwnVehiclePosition() - position
-        distance = impulse.length
-        if distance <= 1.0:
-            distance = 1.0
+        distance = max(impulse.length, 1.0)
         impulse.normalise()
         if reason == ImpulseReason.PROJECTILE_HIT:
             if not cameras.isPointOnScreen(position):
@@ -257,7 +262,6 @@ class StrategicCamera(CameraWithSettings, CallbackDelayer):
         ucfg = self._userCfg
         ds = ds[Settings.KEY_CONTROL_MODE]
         ds.writeFloat('strategicMode/camera/keySensitivity', ucfg['keySensitivity'])
-        ds.writeFloat('strategicMode/camera/sensitivity', ucfg['sensitivity'])
         ds.writeFloat('strategicMode/camera/scrollSensitivity', ucfg['scrollSensitivity'])
         ds.writeFloat('strategicMode/camera/camDist', self._cfg['camDist'])
 
@@ -325,6 +329,7 @@ class StrategicCamera(CameraWithSettings, CallbackDelayer):
         return 0.0
 
     def _handleSettingsChange(self, diff):
+        super(StrategicCamera, self)._handleSettingsChange(diff)
         if settings_constants.SPGAim.SPG_STRATEGIC_CAM_MODE in diff:
             self.__aimingSystem.setParallaxModeEnabled(diff[settings_constants.SPGAim.SPG_STRATEGIC_CAM_MODE] == 1)
         if settings_constants.SPGAim.AUTO_CHANGE_AIM_MODE in diff:
@@ -365,7 +370,7 @@ class StrategicCamera(CameraWithSettings, CallbackDelayer):
     def __updateCameraYaw(self):
         altModeEnabled = self.settingsCore.getSetting(settings_constants.SPGAim.SPG_STRATEGIC_CAM_MODE) == 1
         pitch = -math.pi * 0.499 if not altModeEnabled else math.radians(-88.0)
-        self.__cameraYaw = round(self.aimingSystem.getCamYaw(), _CAM_YAW_ROUND)
+        self.__cameraYaw = decimal_round(self.aimingSystem.getCamYaw(), _CAM_YAW_ROUND)
         srcMat = math_utils.createRotationMatrix((self.__cameraYaw, pitch, 0.0))
         self.__cam.source = srcMat
 
@@ -410,7 +415,7 @@ class StrategicCamera(CameraWithSettings, CallbackDelayer):
         ucfg['horzInvert'] = False
         ucfg['vertInvert'] = False
         ucfg['keySensitivity'] = readFloat(dataSec, 'keySensitivity', 0.0, 10.0, 1.0)
-        ucfg['sensitivity'] = readFloat(dataSec, 'sensitivity', 0.0, 10.0, 1.0)
+        ucfg['sensitivity'] = AccountSettings.getSettings(CONTROLS.MOUSE_STRATEGIC_SENS)
         ucfg['scrollSensitivity'] = readFloat(dataSec, 'scrollSensitivity', 0.0, 10.0, 1.0)
         ucfg['camDist'] = readFloat(dataSec, 'camDist', 0.0, 60.0, 0)
         return

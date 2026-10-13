@@ -1,0 +1,114 @@
+<engines.xml>
+  <ids>
+    <Rolls_Royce_Griffon_Halloween_event>	5000	</Rolls_Royce_Griffon_Halloween_event>
+    <Rolls_Royce_Griffon_HW_BOT>	5001	</Rolls_Royce_Griffon_HW_BOT>
+    <Rolls_Royce_Griffon_HELL__0>	5002	</Rolls_Royce_Griffon_HELL__0>
+    <Rolls_Royce_B81_HW_BOT>	5003	</Rolls_Royce_B81_HW_BOT>
+    <Rolls_Royce_K60_Mk2_Halloween_event>	5004	</Rolls_Royce_K60_Mk2_Halloween_event>
+    <Rolls_Royce_B81_1955_HW_BOT>	5005	</Rolls_Royce_B81_1955_HW_BOT>
+  </ids>
+  <shared>
+    <Rolls_Royce_Griffon_Halloween_event>
+      <userString>	#halloween.gb_vehicles.extend:Rolls_Royce_Griffon_Halloween_event	</userString>
+      <tags>	gasoline	</tags>
+      <level>	10	</level>
+      <price>	100000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_ContinentalR_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_ContinentalR_npc	</wwsoundNPC>
+      <power>	950	</power>
+      <weight>	952	</weight>
+      <maxHealth>	320	</maxHealth>
+      <maxRegenHealth>	160	</maxRegenHealth>
+      <repairCost>	9	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	474	</rpm_min>
+      <rpm_max>	2080	</rpm_max>
+    </Rolls_Royce_Griffon_Halloween_event>
+    <Rolls_Royce_Griffon_HW_BOT>
+      <userString>	#gb_vehicles:Rolls_Royce_Griffon	</userString>
+      <tags>	gasoline	</tags>
+      <level>	10	</level>
+      <price>	100000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_ContinentalR_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_ContinentalR_npc	</wwsoundNPC>
+      <power>	950	</power>
+      <weight>	952	</weight>
+      <maxHealth>	320	</maxHealth>
+      <maxRegenHealth>	160	</maxRegenHealth>
+      <repairCost>	9	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	474	</rpm_min>
+      <rpm_max>	2080	</rpm_max>
+    </Rolls_Royce_Griffon_HW_BOT>
+    <Rolls_Royce_Griffon_HELL__0>
+      <userString>	#gb_vehicles:Rolls_Royce_Griffon	</userString>
+      <tags>	gasoline	</tags>
+      <level>	10	</level>
+      <price>	100000	</price>
+      <wwsoundPC>	eng_ContinentalR_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_ContinentalR_npc	</wwsoundNPC>
+      <power>	950	</power>
+      <weight>	952	</weight>
+      <maxHealth>	320	</maxHealth>
+      <maxRegenHealth>	160	</maxRegenHealth>
+      <repairCost>	9	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	474	</rpm_min>
+      <rpm_max>	2080	</rpm_max>
+      <notInShop>	True	</notInShop>
+    </Rolls_Royce_Griffon_HELL__0>
+    <Rolls_Royce_B81_HW_BOT>
+      <userString>	#halloween.gb_vehicles.extend:Rolls_Royce_B81_HW_BOT	</userString>
+      <tags>	gasoline	</tags>
+      <level>	8	</level>
+      <price>	45000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_cadillac_series_42_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_cadillac_series_42_npc	</wwsoundNPC>
+      <power>	310	</power>
+      <weight>	457	</weight>
+      <maxHealth>	247	</maxHealth>
+      <maxRegenHealth>	123	</maxRegenHealth>
+      <repairCost>	5	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	400	</rpm_min>
+      <rpm_max>	3200	</rpm_max>
+    </Rolls_Royce_B81_HW_BOT>
+    <Rolls_Royce_K60_Mk2_Halloween_event>
+      <userString>	#gb_vehicles:Rolls_Royce_K60_Mk2	</userString>
+      <tags>	diesel	</tags>
+      <level>	9	</level>
+      <price>	83000	</price>
+      <wwsoundPC>	eng_brdm_2_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_brdm_2_npc	</wwsoundNPC>
+      <power>	850	</power>
+      <weight>	660	</weight>
+      <maxHealth>	320	</maxHealth>
+      <maxRegenHealth>	160	</maxRegenHealth>
+      <repairCost>	9	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+      <rpm_min>	353	</rpm_min>
+      <rpm_max>	3375	</rpm_max>
+      <notInShop>	True	</notInShop>
+    </Rolls_Royce_K60_Mk2_Halloween_event>
+    <Rolls_Royce_B81_1955_HW_BOT>
+      <userString>	#gb_vehicles:Rolls_Royce_B81_1955	</userString>
+      <tags>	gasoline	</tags>
+      <level>	10	</level>
+      <price>	100000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_Continental_R975_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Continental_R975_npc	</wwsoundNPC>
+      <power>	800	</power>
+      <weight>	744	</weight>
+      <maxHealth>	320	</maxHealth>
+      <maxRegenHealth>	160	</maxRegenHealth>
+      <repairCost>	9	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	293	</rpm_min>
+      <rpm_max>	2861	</rpm_max>
+    </Rolls_Royce_B81_1955_HW_BOT>
+  </shared>
+</engines.xml>

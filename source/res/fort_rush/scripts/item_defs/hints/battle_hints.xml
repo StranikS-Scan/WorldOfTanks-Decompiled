@@ -1,0 +1,279 @@
+<battle_hints.xml>
+  <hint>
+    <clientSchema>	fort_rush.gui.battle_hints.battle_hints_schema:hintSchema	</clientSchema>
+    <props>
+      <name>	respawn	</name>
+      <scope>	fort_rush	</scope>
+      <component>	fortRushBattleHint	</component>
+      <priority>	5	</priority>
+      <showCountdown>	True	</showCountdown>
+    </props>
+    <text>
+      <key>	#fort_rush.fort_rush_battle_hints:battle_hint/respawn/title	</key>
+      <descriptionKey>	#fort_rush.fort_rush_battle_hints:battle_hint/respawn/description	</descriptionKey>
+    </text>
+    <lifecycle>
+      <showTime>	0	</showTime>
+    </lifecycle>
+  </hint>
+  <hint>
+    <clientSchema>	fort_rush.gui.battle_hints.battle_hints_schema:hintSchema	</clientSchema>
+    <props>
+      <name>	time_ends	</name>
+      <scope>	fort_rush	</scope>
+      <component>	fortRushBattleHint	</component>
+      <priority>	1	</priority>
+      <showCountdown>	False	</showCountdown>
+    </props>
+    <sound>
+      <notify>	fort_rush_vo_timer_1min	</notify>
+    </sound>
+    <text>
+      <key>	#fort_rush.fort_rush_battle_hints:battle_hint/time_ends/title	</key>
+      <descriptionKey>	#fort_rush.fort_rush_battle_hints:battle_hint/time_ends/description	</descriptionKey>
+    </text>
+    <lifecycle>
+      <showTime>	5	</showTime>
+    </lifecycle>
+  </hint>
+  <hint>
+    <clientSchema>	fort_rush.gui.battle_hints.battle_hints_schema:hintSchema	</clientSchema>
+    <props>
+      <name>	first_zone_captured	</name>
+      <scope>	fort_rush	</scope>
+      <component>	fortRushBattleHint	</component>
+      <priority>	1	</priority>
+      <showCountdown>	False	</showCountdown>
+    </props>
+    <sound>
+      <notify>	fort_rush_vo_zone_capture_first	</notify>
+    </sound>
+    <lifecycle>
+      <showTime>	5	</showTime>
+    </lifecycle>
+  </hint>
+  <hint>
+    <clientSchema>	fort_rush.gui.battle_hints.battle_hints_schema:hintSchema	</clientSchema>
+    <props>
+      <name>	owning_one_zone	</name>
+      <scope>	fort_rush	</scope>
+      <component>	fortRushBattleHint	</component>
+      <priority>	1	</priority>
+      <showCountdown>	False	</showCountdown>
+    </props>
+    <sound>
+      <notify>	fort_rush_vo_zone_capture	</notify>
+    </sound>
+    <lifecycle>
+      <showTime>	5	</showTime>
+    </lifecycle>
+  </hint>
+  <hint>
+    <clientSchema>	fort_rush.gui.battle_hints.battle_hints_schema:hintSchema	</clientSchema>
+    <props>
+      <name>	owning_more_zones	</name>
+      <scope>	fort_rush	</scope>
+      <component>	fortRushBattleHint	</component>
+      <priority>	1	</priority>
+      <showCountdown>	False	</showCountdown>
+    </props>
+    <sound>
+      <notify>	fort_rush_vo_zone_capture_more	</notify>
+    </sound>
+    <lifecycle>
+      <showTime>	5	</showTime>
+    </lifecycle>
+  </hint>
+  <hint>
+    <clientSchema>	fort_rush.gui.battle_hints.battle_hints_schema:hintSchema	</clientSchema>
+    <props>
+      <name>	score_25	</name>
+      <scope>	fort_rush	</scope>
+      <component>	fortRushBattleHint	</component>
+      <priority>	1	</priority>
+      <showCountdown>	False	</showCountdown>
+    </props>
+    <sound>
+      <notify>	fort_rush_vo_score_25	</notify>
+    </sound>
+    <lifecycle>
+      <showTime>	5	</showTime>
+    </lifecycle>
+  </hint>
+  <hint>
+    <clientSchema>	fort_rush.gui.battle_hints.battle_hints_schema:hintSchema	</clientSchema>
+    <props>
+      <name>	score_50	</name>
+      <scope>	fort_rush	</scope>
+      <component>	fortRushBattleHint	</component>
+      <priority>	1	</priority>
+      <showCountdown>	False	</showCountdown>
+    </props>
+    <sound>
+      <notify>	fort_rush_vo_score_50	</notify>
+    </sound>
+    <lifecycle>
+      <showTime>	5	</showTime>
+    </lifecycle>
+  </hint>
+  <hint>
+    <clientSchema>	fort_rush.gui.battle_hints.battle_hints_schema:hintSchema	</clientSchema>
+    <props>
+      <name>	score_75	</name>
+      <scope>	fort_rush	</scope>
+      <component>	fortRushBattleHint	</component>
+      <priority>	1	</priority>
+      <showCountdown>	False	</showCountdown>
+    </props>
+    <sound>
+      <notify>	fort_rush_vo_score_75	</notify>
+    </sound>
+    <lifecycle>
+      <showTime>	5	</showTime>
+    </lifecycle>
+  </hint>
+  <hint>
+    <clientSchema>	fort_rush.gui.battle_hints.battle_hints_schema:hintSchema	</clientSchema>
+    <props>
+      <name>	half_time	</name>
+      <scope>	fort_rush	</scope>
+      <component>	fortRushBattleHint	</component>
+      <priority>	1	</priority>
+      <showCountdown>	False	</showCountdown>
+    </props>
+    <sound>
+      <notify>	fort_rush_vo_timer_half	</notify>
+    </sound>
+    <lifecycle>
+      <showTime>	5	</showTime>
+    </lifecycle>
+  </hint>
+  <hint>
+    <clientSchema>	fort_rush.gui.battle_hints.battle_hints_schema:hintSchema	</clientSchema>
+    <props>
+      <name>	ally_domination	</name>
+      <scope>	fort_rush	</scope>
+      <component>	fortRushBattleHint	</component>
+      <priority>	1	</priority>
+      <showCountdown>	False	</showCountdown>
+    </props>
+    <sound>
+      <notify>	fort_rush_vo_ally_lead	</notify>
+    </sound>
+    <lifecycle>
+      <showTime>	5	</showTime>
+    </lifecycle>
+  </hint>
+  <hint>
+    <clientSchema>	fort_rush.gui.battle_hints.battle_hints_schema:hintSchema	</clientSchema>
+    <props>
+      <name>	enemy_team_domination	</name>
+      <scope>	fort_rush	</scope>
+      <component>	fortRushBattleHint	</component>
+      <priority>	1	</priority>
+      <showCountdown>	False	</showCountdown>
+    </props>
+    <sound>
+      <notify>	fort_rush_vo_enemy_lead	</notify>
+    </sound>
+    <lifecycle>
+      <showTime>	5	</showTime>
+    </lifecycle>
+  </hint>
+  <hint>
+    <clientSchema>	fort_rush.gui.battle_hints.battle_hints_schema:hintSchema	</clientSchema>
+    <props>
+      <name>	score_victory	</name>
+      <scope>	fort_rush	</scope>
+      <component>	fortRushBattleHint	</component>
+      <priority>	1	</priority>
+      <showCountdown>	False	</showCountdown>
+    </props>
+    <sound>
+      <notify>	fort_rush_vo_victory_score	</notify>
+    </sound>
+    <lifecycle>
+      <showTime>	5	</showTime>
+    </lifecycle>
+  </hint>
+  <hint>
+    <clientSchema>	fort_rush.gui.battle_hints.battle_hints_schema:hintSchema	</clientSchema>
+    <props>
+      <name>	score_defeat	</name>
+      <scope>	fort_rush	</scope>
+      <component>	fortRushBattleHint	</component>
+      <priority>	1	</priority>
+      <showCountdown>	False	</showCountdown>
+    </props>
+    <sound>
+      <notify>	fort_rush_vo_defeat_score	</notify>
+    </sound>
+    <lifecycle>
+      <showTime>	5	</showTime>
+    </lifecycle>
+  </hint>
+  <hint>
+    <clientSchema>	fort_rush.gui.battle_hints.battle_hints_schema:hintSchema	</clientSchema>
+    <props>
+      <name>	timeout_victory	</name>
+      <scope>	fort_rush	</scope>
+      <component>	fortRushBattleHint	</component>
+      <priority>	1	</priority>
+      <showCountdown>	False	</showCountdown>
+    </props>
+    <sound>
+      <notify>	fort_rush_vo_victory_time	</notify>
+    </sound>
+    <lifecycle>
+      <showTime>	5	</showTime>
+    </lifecycle>
+  </hint>
+  <hint>
+    <clientSchema>	fort_rush.gui.battle_hints.battle_hints_schema:hintSchema	</clientSchema>
+    <props>
+      <name>	timeout_defeat	</name>
+      <scope>	fort_rush	</scope>
+      <component>	fortRushBattleHint	</component>
+      <priority>	1	</priority>
+      <showCountdown>	False	</showCountdown>
+    </props>
+    <sound>
+      <notify>	fort_rush_vo_defeat_time	</notify>
+    </sound>
+    <lifecycle>
+      <showTime>	5	</showTime>
+    </lifecycle>
+  </hint>
+  <hint>
+    <clientSchema>	fort_rush.gui.battle_hints.battle_hints_schema:hintSchema	</clientSchema>
+    <props>
+      <name>	score_draw	</name>
+      <scope>	fort_rush	</scope>
+      <component>	fortRushBattleHint	</component>
+      <priority>	1	</priority>
+      <showCountdown>	False	</showCountdown>
+    </props>
+    <sound>
+      <notify>	fort_rush_vo_draw_score	</notify>
+    </sound>
+    <lifecycle>
+      <showTime>	5	</showTime>
+    </lifecycle>
+  </hint>
+  <hint>
+    <clientSchema>	fort_rush.gui.battle_hints.battle_hints_schema:hintSchema	</clientSchema>
+    <props>
+      <name>	timeout_draw	</name>
+      <scope>	fort_rush	</scope>
+      <component>	fortRushBattleHint	</component>
+      <priority>	1	</priority>
+      <showCountdown>	False	</showCountdown>
+    </props>
+    <sound>
+      <notify>	fort_rush_vo_draw_time	</notify>
+    </sound>
+    <lifecycle>
+      <showTime>	5	</showTime>
+    </lifecycle>
+  </hint>
+</battle_hints.xml>

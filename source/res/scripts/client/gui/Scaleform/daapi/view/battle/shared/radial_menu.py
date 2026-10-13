@@ -177,7 +177,8 @@ class RadialMenu(RadialMenuMeta, BattleGUIKeyHandler, CallbackDelayer):
         self.__playSound(SoundEffectsId.SELECT_RADIAL_BUTTON)
 
     def onHideCompleted(self):
-        self.__setVisibility(False)
+        if not self.__hideReshow:
+            self.__setVisibility(False)
         ctrl = self.sessionProvider.shared.calloutCtrl
         if ctrl is not None and ctrl.isRadialMenuOpened():
             ctrl.resetRadialMenuData(reshow=self.__hideReshow)
@@ -222,14 +223,10 @@ class RadialMenu(RadialMenuMeta, BattleGUIKeyHandler, CallbackDelayer):
             return
 
     def hide(self, allowAction=True):
-        if self.app is not None:
-            self.app.unregisterGuiKeyHandler(self)
-        if self.__isVisible is False:
+        if not self.__isVisible:
             return
-        else:
-            self.as_hideS(allowAction)
-            self.stopCallback(self.__checkForValidLocationMarkerLoop)
-            return
+        self.as_hideS(allowAction)
+        self.stopCallback(self.__checkForValidLocationMarkerLoop)
 
     def _populate(self):
         super(RadialMenu, self)._populate()
@@ -462,7 +459,7 @@ class RadialMenu(RadialMenuMeta, BattleGUIKeyHandler, CallbackDelayer):
         self.__reshow(removedID, markerType, markerType != MarkerType.LOCATION_MARKER_TYPE)
 
     def __reshow(self, removedID, markerType, reshowPreviousState):
-        if self.__isVisible is False:
+        if not self.__isVisible:
             return
         else:
             if self.__crosshairData is not None:
@@ -493,6 +490,7 @@ class RadialMenu(RadialMenuMeta, BattleGUIKeyHandler, CallbackDelayer):
             chatCommands = self.sessionProvider.shared.chatCommands
             _, targetMarkerType, targetMarkerSubtype, _, _ = chatCommands.getAimedAtTargetData()
             if RadialMenu.__isMarkerEmptyLocationOrOutOfBorder(targetMarkerType, targetMarkerSubtype) and targetMarkerType != self.__crosshairData.targetMarkerType:
+                self.__hideReshow = True
                 self.hide(allowAction=False)
                 self.show(reshowPreviousState=False)
             hasDelayedCallback = self.hasDelayedCallback(self.__checkForValidLocationMarkerLoop)

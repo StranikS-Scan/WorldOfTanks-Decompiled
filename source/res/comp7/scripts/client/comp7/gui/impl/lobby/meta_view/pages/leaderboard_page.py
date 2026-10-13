@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: comp7/scripts/client/comp7/gui/impl/lobby/meta_view/pages/leaderboard_page.py
+from __future__ import absolute_import
 import logging
 import BigWorld
 import adisp
@@ -52,11 +53,13 @@ class LeaderboardPage(PageSubModelPresenter):
     def createToolTipContent(self, event, contentID):
         if contentID == R.views.comp7.mono.lobby.tooltips.fifth_rank_tooltip():
             return FifthRankTooltip()
-        if contentID == R.views.comp7.mono.lobby.tooltips.sixth_rank_tooltip():
+        elif contentID == R.views.comp7.mono.lobby.tooltips.sixth_rank_tooltip():
             return SixthRankTooltip()
-        if contentID == R.views.comp7.mono.lobby.tooltips.last_update_tooltip():
+        elif contentID == R.views.comp7.mono.lobby.tooltips.last_update_tooltip():
             description = event.getArgument('description')
             return LastUpdateTooltip(description, updateTime=self.__lastUpdateTime)
+        else:
+            return None
 
     def createContextMenu(self, event):
         if event.contentID == R.views.common.BackportContextMenu():

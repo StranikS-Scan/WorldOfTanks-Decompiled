@@ -1,10 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/gui/Scaleform/view/battle/messenger_view.py
+from __future__ import absolute_import
 import weakref
+from future.utils import viewitems
 import BigWorld
-from gui.battle_control import avatar_getter
-from helpers import dependency
-from helpers import i18n
 import BattleReplay
 from constants import CHAT_MESSAGE_MAX_LENGTH_IN_BATTLE, ARENA_BONUS_TYPE, BAN_REASON_BY_ID, BAN_REASON
 from debug_utils import LOG_ERROR, LOG_DEBUG, LOG_UNEXPECTED
@@ -15,6 +14,7 @@ from gui.Scaleform.genConsts.BATTLE_MESSAGES_CONSTS import BATTLE_MESSAGES_CONST
 from gui.Scaleform.genConsts.BATTLE_VIEW_ALIASES import BATTLE_VIEW_ALIASES
 from gui.Scaleform.locale.INGAME_GUI import INGAME_GUI
 from gui.Scaleform.locale.MESSENGER import MESSENGER
+from gui.battle_control import avatar_getter
 from gui.battle_control.arena_info.interfaces import IContactsAndPersonalInvitationsController
 from gui.battle_control.battle_constants import BATTLE_CTRL_ID
 from gui.shared import EVENT_BUS_SCOPE
@@ -30,6 +30,7 @@ from gui.shared.events import ChannelManagementEvent
 from gui.shared.utils.functions import makeTooltip
 from gui.shared.events import CoolDownEvent
 from gui.shared.view_helpers import CooldownHelper
+from helpers import dependency, i18n
 from skeletons.gui.battle_session import IBattleSessionProvider
 from ReplayEvents import g_replayEvents
 _UNKNOWN_RECEIVER_LABEL = 'N/A'
@@ -147,30 +148,30 @@ class BattleMessengerView(BattleMessengerMeta, IBattleChannelView, IContactsAndP
         self._arenaVisitor = None
         return
 
-    def getToxicStatus(self, avatarSessionID):
+    def getToxicStatus(self, messageID):
         vo = None
-        if avatarSessionID and avatarSessionID != self._avatarSessionID:
-            vo = self.__buildToxicStateVO(avatarSessionID)
+        if messageID and messageID != self._avatarSessionID:
+            vo = self.__buildToxicStateVO(messageID)
         if vo is not None:
-            self._toxicPanelMsgID = avatarSessionID
+            self._toxicPanelMsgID = messageID
         return vo
 
     def updateToxicStatus(self, avatarSessionID):
         self.as_updateToxicPanelS(avatarSessionID, self.__buildToxicStateVO(avatarSessionID))
 
-    def onToxicButtonClicked(self, avatarSessionID, actionID):
-        if avatarSessionID:
+    def onToxicButtonClicked(self, messageID, actionID):
+        if messageID:
             needUpdateUI = True
             if actionID == BATTLE_MESSAGES_CONSTS.ADD_IN_BLACKLIST:
                 if not self._ignoreActionCooldown.isInCooldown():
-                    self.sessionProvider.shared.anonymizerFakesCtrl.addTmpIgnored(avatarSessionID, self._battleCtx.getPlayerName(avatarSessionID=avatarSessionID))
+                    self.sessionProvider.shared.anonymizerFakesCtrl.addTmpIgnored(messageID, self._battleCtx.getPlayerName(avatarSessionID=messageID))
             elif actionID == BATTLE_MESSAGES_CONSTS.REMOVE_FROM_BLACKLIST:
                 if not self._ignoreActionCooldown.isInCooldown():
-                    self.sessionProvider.shared.anonymizerFakesCtrl.removeTmpIgnored(avatarSessionID)
+                    self.sessionProvider.shared.anonymizerFakesCtrl.removeTmpIgnored(messageID)
             else:
                 needUpdateUI = False
             if needUpdateUI:
-                self._invalidateToxicPanel(avatarSessionID)
+                self._invalidateToxicPanel(messageID)
 
     def onToxicPanelClosed(self, messageID):
         if self._toxicPanelMsgID and self._toxicPanelMsgID == messageID:
@@ -232,24 +233,23 @@ class BattleMessengerView(BattleMessengerMeta, IBattleChannelView, IContactsAndP
         LOG_DEBUG('Battle chat is not in focus')
         self.__setGuiMode(False)
 
-    def sendMessageToChannel(self, receiverIndex, rawMsgText):
-        if receiverIndex < 0 or receiverIndex >= len(self.__receivers):
-            LOG_ERROR('Index of receiver is not valid', receiverIndex)
+    def sendMessageToChannel(self, cid, message):
+        if cid < 0 or cid >= len(self.__receivers):
+            LOG_ERROR('Index of receiver is not valid', cid)
             return False
+        clientID = self.__receivers[cid][0]
+        result = self.__canSendMessage(clientID)
+        if result:
+            controller = self.__getController(clientID)
+            if not message:
+                self.setFocused(False)
+            if controller is not None:
+                controller.sendMessage(message)
+            else:
+                LOG_ERROR('Channel is not found to send message', clientID)
+            return True
         else:
-            clientID = self.__receivers[receiverIndex][0]
-            result = self.__canSendMessage(clientID)
-            if result:
-                controller = self.__getController(clientID)
-                if not rawMsgText:
-                    self.setFocused(False)
-                if controller is not None:
-                    controller.sendMessage(rawMsgText)
-                else:
-                    LOG_ERROR('Channel is not found to send message', clientID)
-                return True
             return False
-            return
 
     def enableToSendMessage(self):
         if self._arenaVisitor.getArenaBonusType() in (ARENA_BONUS_TYPE.BATTLE_ROYALE_TRN_SOLO, ARENA_BONUS_TYPE.BATTLE_ROYALE_TRN_SQUAD) and avatar_getter.isObserverSeesAll():
@@ -268,7 +268,7 @@ class BattleMessengerView(BattleMessengerMeta, IBattleChannelView, IContactsAndP
     def invalidateReceivers(self):
         self.__receivers = []
         vos = []
-        for clientID, ctrlRef in self.__controllers.iteritems():
+        for clientID, ctrlRef in viewitems(self.__controllers):
             controller = ctrlRef()
             if controller is not None and controller.getChannel().isJoined():
                 receiver, isReset = self.__addReceiver(clientID, controller)
@@ -286,11 +286,11 @@ class BattleMessengerView(BattleMessengerMeta, IBattleChannelView, IContactsAndP
         self.as_setUserPreferencesS(_getToolTipText(self._arenaVisitor))
         self.invalidateReceivers()
 
-    def addController(self, controller):
-        channel = controller.getChannel()
+    def addController(self, ctrl):
+        channel = ctrl.getChannel()
         clientID = channel.getClientID()
-        self.__controllers[clientID] = weakref.ref(controller)
-        receiver, isReset = self.__addReceiver(clientID, controller)
+        self.__controllers[clientID] = weakref.ref(ctrl)
+        receiver, isReset = self.__addReceiver(clientID, ctrl)
         if receiver is not None:
             self.as_setReceiverS(_makeReceiverVO(*receiver), isReset)
         self.__restoreLastReceiverInBattle()
@@ -298,8 +298,8 @@ class BattleMessengerView(BattleMessengerMeta, IBattleChannelView, IContactsAndP
             self.as_changeReceiverS(self.__receiverIndex)
         return
 
-    def removeController(self, controller):
-        self.__controllers.pop(controller.getChannel().getClientID(), None)
+    def removeController(self, ctrl):
+        self.__controllers.pop(ctrl.getChannel().getClientID(), None)
         return
 
     def addMessage(self, message, fillColor=FILL_COLORS.BLACK, avatarSessionID=''):

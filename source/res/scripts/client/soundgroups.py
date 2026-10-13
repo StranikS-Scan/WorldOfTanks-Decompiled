@@ -69,14 +69,13 @@ class SoundModes(object):
         def __repr__(self):
             return 'SoundModeDesc<name={}; lang={}; visible={}>'.format(self.name, self.voiceLanguage, not self.invisible)
 
+        __hash__ = object.__hash__
+
         def __eq__(self, other):
             return self.__compare(other) == 0
 
         def __lt__(self, other):
             return self.__compare(other) < 0
-
-        def __hash__(self):
-            return id(self)
 
         def getIsValid(self, soundModes):
             if self.__isValid is None:

@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: story_mode/scripts/client/story_mode/gui/scaleform/daapi/view/battle/status_notifications/sn_items.py
+from __future__ import absolute_import
 import typing
 import BigWorld
 from gui.Scaleform.daapi.view.battle.shared.status_notifications.sn_items import TimerSN
@@ -22,13 +23,13 @@ class ReconAbilitySN(TimerSN):
     def _getDescription(self, value):
         return backport.text(value)
 
-    def _update(self, equipmentInfo):
-        if not equipmentInfo:
+    def _update(self, value):
+        if not value:
             self._setVisible(False)
             return
         self._setVisible(True)
-        self._updateText(equipmentInfo['text'])
-        self._updateTimeParams(equipmentInfo['totalTime'], equipmentInfo['finishTime'])
+        self._updateText(value['text'])
+        self._updateTimeParams(value['totalTime'], value['finishTime'])
         self._sendUpdate()
 
 
@@ -44,10 +45,10 @@ class DisableShotSN(TimerSN):
     def getViewTypeID(self):
         return STORY_MODE_NOTIFICATIONS_TIMER_TYPES.SCC_DISABLE_SHOT
 
-    def _update(self, duration):
-        if duration > 0.0:
-            endTime = BigWorld.serverTime() + duration
-            self._updateTimeParams(duration, endTime)
+    def _update(self, value):
+        if value > 0.0:
+            endTime = BigWorld.serverTime() + value
+            self._updateTimeParams(value, endTime)
             self._setVisible(True)
         else:
             self._setVisible(False)

@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/web/web_client_api/ranked_battles/__init__.py
+from __future__ import absolute_import
 from functools import partial
 from gui.ranked_battles.constants import RankedDossierKeys, SeasonResultTokenPatterns
 from gui.shared import EVENT_BUS_SCOPE

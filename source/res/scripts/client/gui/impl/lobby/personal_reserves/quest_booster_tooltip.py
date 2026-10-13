@@ -32,5 +32,7 @@ class QuestBoosterTooltip(ViewImpl):
         with self.viewModel.transaction() as model:
             fillBoosterModelWithData(model, booster)
             model.setWillExpireAfter(int((booster.expireAfter or 0) / ONE_DAY))
-            model.setInDepotExpirableAmount(sum((inDepotBooster.count for inDepotBooster in boosters)))
+            if boosters:
+                model.setInDepot(sum((inDepotBooster.count for inDepotBooster in boosters)))
+                model.setInDepotExpirableAmount(sum((inDepotBooster.getExpiringAmount() for inDepotBooster in boosters)))
             model.setIconId(getFullNameForBoosterIcon(booster.boosterType, isPremium=booster.getIsPremium(), isExpirable=bool(booster.expireAfter or 0)))

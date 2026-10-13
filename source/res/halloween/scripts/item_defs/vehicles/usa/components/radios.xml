@@ -1,0 +1,71 @@
+<radios.xml>
+  <ids>
+    <AN-ARC-27_HW_BOT>	5505	</AN-ARC-27_HW_BOT>
+    <AN-ARC-27_Halloween_event_02>	5507	</AN-ARC-27_Halloween_event_02>
+    <SCR_528_HW_BOT>	5504	</SCR_528_HW_BOT>
+    <AN_VRC-3_HW_BOT>	5506	</AN_VRC-3_HW_BOT>
+    <AN-ARC-27_HW23>	5000	</AN-ARC-27_HW23>
+  </ids>
+  <shared>
+    <AN-ARC-27_HW_BOT>
+      <userString>	#usa_vehicles:AN-ARC-27	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	54000	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	120	</weight>
+      <distance>	50	</distance>
+      <maxHealth>	200	</maxHealth>
+      <maxRegenHealth>	150	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+    </AN-ARC-27_HW_BOT>
+    <AN-ARC-27_Halloween_event_02>
+      <userString>	#halloween.usa_vehicles.extend:AN-ARC-27_Halloween_event_02	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	54000	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	120	</weight>
+      <distance>	200	</distance>
+      <maxHealth>	200	</maxHealth>
+      <maxRegenHealth>	150	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+    </AN-ARC-27_Halloween_event_02>
+    <SCR_528_HW_BOT>
+      <userString>	#usa_vehicles:SCR_528	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	54000	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	80	</weight>
+      <distance>	50	</distance>
+      <maxHealth>	200	</maxHealth>
+      <maxRegenHealth>	150	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+    </SCR_528_HW_BOT>
+    <AN_VRC-3_HW_BOT>
+      <userString>	#usa_vehicles:AN_VRC-3	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <notInShop>	true	</notInShop>
+      <price>	51600	</price>
+      <weight>	160	</weight>
+      <distance>	50	</distance>
+      <maxHealth>	250	</maxHealth>
+      <maxRegenHealth>	75	</maxRegenHealth>
+      <repairCost>	3.5	</repairCost>
+    </AN_VRC-3_HW_BOT>
+    <AN-ARC-27_HW23>
+      <userString>	#halloween.usa_vehicles.extend:AN-ARC-27_HW23	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	54000	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	120	</weight>
+      <distance>	50	</distance>
+      <maxHealth>	200	</maxHealth>
+      <maxRegenHealth>	150	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+    </AN-ARC-27_HW23>
+  </shared>
+</radios.xml>

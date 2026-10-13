@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/visual_script_client/vse_client_helpers.py
+from __future__ import absolute_import
 import BigWorld
 
 def runPlan(entity, planName, params, key='', contextName=''):

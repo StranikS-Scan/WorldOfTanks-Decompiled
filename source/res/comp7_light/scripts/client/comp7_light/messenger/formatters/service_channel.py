@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: comp7_light/scripts/client/comp7_light/messenger/formatters/service_channel.py
+from __future__ import absolute_import
 from comp7_light.notification.decorators import Comp7LightProgressionLockButtonDecorator
 from constants import SCENARIO_RESULT
 from gui.impl import backport

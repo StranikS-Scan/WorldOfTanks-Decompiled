@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: frontline/scripts/client/frontline/gui/Scaleform/daapi/view/lobby/hangar/__init__.py
+from __future__ import absolute_import
 from gui.Scaleform.framework import WindowLayer, ScopeTemplates, ViewSettings
 from frontline.constants.aliases import FrontlineHangarAliases
 from gui.Scaleform.framework.package_layout import PackageBusinessHandler

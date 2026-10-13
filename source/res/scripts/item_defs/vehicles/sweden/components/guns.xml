@@ -49,7 +49,9 @@
     <_105mm_kan_strv_107_L_62>	57	</_105mm_kan_strv_107_L_62>
     <_105mm_strvkan_L_50_S>	58	</_105mm_strvkan_L_50_S>
     <_37_mm_kan_fm_32>	60	</_37_mm_kan_fm_32>
+    <_105mm_Bofors_L_62_Huggorm>	61	</_105mm_Bofors_L_62_Huggorm>
     <_12_cm_hogtrycksstrvkan_L_40>	62	</_12_cm_hogtrycksstrvkan_L_40>
+    <_120mm_stk_m_55>	64	</_120mm_stk_m_55>
     <_120mm_akan_L_40B>	300	</_120mm_akan_L_40B>
     <_120mm_Bofors_strvkan_L_40>	301	</_120mm_Bofors_strvkan_L_40>
     <_105mm_L_7_Gun_Ambassador>	302	</_105mm_L_7_Gun_Ambassador>
@@ -3255,6 +3257,64 @@
         </_105mm_sgr_L_53>
       </shots>
     </_105mm_lvkan_L_53>
+    <_105mm_Bofors_L_62_Huggorm>
+      <userString>	#sweden_vehicles:_105mm_Bofors_L_62_Huggorm	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	300000	</price>
+      <notInShop>	true	</notInShop>
+      <impulse>	0.48	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.24	</amplitude>
+        <recoilEffect>	main	</recoilEffect>
+      </recoil>
+      <effects>	shot_large	</effects>
+      <reloadEffect>	reload85_107	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -11.0 1.0 -11.0	</minPitch>
+        <maxPitch>	0.0 11.0 1.0 11.0	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	20	</rotationSpeed>
+      <reloadTime>	7.5	</reloadTime>
+      <maxAmmo>	50	</maxAmmo>
+      <aimingTime>	4.04	</aimingTime>
+      <weight>	1670	</weight>
+      <maxHealth>	220	</maxHealth>
+      <maxRegenHealth>	110	</maxRegenHealth>
+      <repairCost>	10	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.4	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.05	</turretRotation>
+        <afterShot>	4.0	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_105mm_slpprj_m_61_Huggorm>
+          <defaultPortion>	0.95	</defaultPortion>
+          <speed>	1460	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	267 255	</piercingPower>
+        </_105mm_slpprj_m_61_Huggorm>
+        <_105mm_psgr_m_66_Huggorm>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	1150	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	320 320	</piercingPower>
+        </_105mm_psgr_m_66_Huggorm>
+        <_105mm_slsgr_m_61A_Huggorm>
+          <defaultPortion>	0.05	</defaultPortion>
+          <speed>	1150	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	53 53	</piercingPower>
+        </_105mm_slsgr_m_61A_Huggorm>
+      </shots>
+    </_105mm_Bofors_L_62_Huggorm>
     <_120mm_akan_L_40>
       <userString>	#sweden_vehicles:_120mm_akan_L_40	</userString>
       <tags></tags>
@@ -3717,6 +3777,64 @@
         </_120mm_sgr_m_60>
       </shots>
     </_120mm_Bofors_strvkan_L_40>
+    <_120mm_stk_m_55>
+      <userString>	#sweden_vehicles:_120mm_stk_m_55	</userString>
+      <tags></tags>
+      <level>	9	</level>
+      <price>	200000	</price>
+      <notInShop>	true	</notInShop>
+      <impulse>	0.64	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.66	</amplitude>
+        <recoilEffect>	large	</recoilEffect>
+      </recoil>
+      <effects>	shot_large_mb	</effects>
+      <reloadEffect>	reload_automat_reloading_115_152	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -12.0 1.0 -12.0	</minPitch>
+        <maxPitch>	0.0 10.0 1.0 10.0	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	26	</rotationSpeed>
+      <reloadTime>	10	</reloadTime>
+      <maxAmmo>	36	</maxAmmo>
+      <aimingTime>	2	</aimingTime>
+      <weight>	1600	</weight>
+      <maxHealth>	200	</maxHealth>
+      <maxRegenHealth>	100	</maxRegenHealth>
+      <repairCost>	9	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.3	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.08	</turretRotation>
+        <afterShot>	3.0	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_120mm_slpgr_m_53>
+          <defaultPortion>	1.00	</defaultPortion>
+          <speed>	1130	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	243 230	</piercingPower>
+        </_120mm_slpgr_m_53>
+        <_120mm_slpprj_m_53>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	1300	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	300 270	</piercingPower>
+        </_120mm_slpprj_m_53>
+        <_120mm_sgr_m_53>
+          <defaultPortion>	0.00	</defaultPortion>
+          <speed>	920	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	60 60	</piercingPower>
+        </_120mm_sgr_m_53>
+      </shots>
+    </_120mm_stk_m_55>
     <_105mm_strvkan_L_50_S>
       <userString>	#sweden_vehicles:_105mm_strvkan_L_50_S	</userString>
       <tags></tags>

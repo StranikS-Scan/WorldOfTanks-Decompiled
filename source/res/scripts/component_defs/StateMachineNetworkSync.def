@@ -1,0 +1,12 @@
+<StateMachineNetworkSync.def>
+  <Implements>
+    <Interface>	ReplicableComponent	</Interface>
+  </Implements>
+  <Properties>
+    <replicableStateIndex>
+      <Type>	INT32	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </replicableStateIndex>
+  </Properties>
+  <DefaultKeyName>	stateMachineNetworkSync	</DefaultKeyName>
+</StateMachineNetworkSync.def>

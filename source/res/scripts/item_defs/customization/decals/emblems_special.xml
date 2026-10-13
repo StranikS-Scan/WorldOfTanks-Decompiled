@@ -4843,6 +4843,12 @@
       <userString>	#vehicle_customization:emblem/special/sticker_786	</userString>
       <mirror>	false	</mirror>
     </decal>
+    <decal>
+      <id>	1367	</id>
+      <texture>	gui/maps/vehicles/decals/player_stickers/special/sticker_888.dds	</texture>
+      <userString>	#vehicle_customization:emblem/special/sticker_888	</userString>
+      <mirror>	false	</mirror>
+    </decal>
     <name>	wci	</name>
     <type>	EMBLEM	</type>
     <vehicleFilter>
@@ -6558,6 +6564,64 @@
       <texture>	gui/maps/vehicles/decals/player_stickers/special/sticker_885.dds	</texture>
       <userString>	#vehicle_customization:special_style/2d_cust_journey_marathon_4	</userString>
       <mirror>	false	</mirror>
+    </decal>
+  </itemGroup>
+  <itemGroup>
+    <name>	Maneuvers 2026	</name>
+    <userString>	#vehicle_customization:emblem/special	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	emblems 50g notInShop	</priceGroup>
+    <tags>	hiddenInUI styleOnly	</tags>
+    <vehicleFilter>
+      <exclude>
+        <tags>	excluded_from_customization	</tags>
+      </exclude>
+    </vehicleFilter>
+    <decal>
+      <id>	1368	</id>
+      <texture>	gui/maps/vehicles/decals/player_stickers/special/sticker_889.dds	</texture>
+      <userString>	#vehicle_customization:special_style/maneuvers_2026_1	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+    <decal>
+      <id>	1369	</id>
+      <texture>	gui/maps/vehicles/decals/player_stickers/special/sticker_890.dds	</texture>
+      <userString>	#vehicle_customization:special_style/maneuvers_2026_2	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+    <decal>
+      <id>	1370	</id>
+      <texture>	gui/maps/vehicles/decals/player_stickers/special/sticker_891.dds	</texture>
+      <userString>	#vehicle_customization:special_style/maneuvers_2026_3	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+    <decal>
+      <id>	1371	</id>
+      <texture>	gui/maps/vehicles/decals/player_stickers/special/sticker_892.dds	</texture>
+      <userString>	#vehicle_customization:special_style/maneuvers_2026_4	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+    <type>	EMBLEM	</type>
+  </itemGroup>
+  <itemGroup>
+    <name>	Fortrush 2026 Emblem	</name>
+    <type>	EMBLEM	</type>
+    <userString>	#vehicle_customization:emblem/special	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	emblems 50g notInShop	</priceGroup>
+    <tags>	hiddenInUI	</tags>
+    <vehicleFilter>
+      <exclude>
+        <tags>	excluded_from_customization	</tags>
+      </exclude>
+    </vehicleFilter>
+    <decal>
+      <id>	1362	</id>
+      <mirror>	true	</mirror>
+      <texture>	gui/maps/vehicles/decals/player_stickers/special/sticker_886.dds	</texture>
+      <userString>	#vehicle_customization:emblem/special/sticker_886	</userString>
     </decal>
   </itemGroup>
 </emblems_special.xml>

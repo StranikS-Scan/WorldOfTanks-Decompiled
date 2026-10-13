@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: comp7/scripts/client/comp7/gui/battle_results/reusable/common.py
+from __future__ import absolute_import
 from gui.battle_results.reusable.common import CommonInfo
 
 class Comp7CommonInfo(CommonInfo):

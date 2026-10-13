@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: comp7_core/scripts/client/comp7_core/gui/Scaleform/daapi/view/battle/battle_loading.py
+from __future__ import absolute_import
 from gui.Scaleform.daapi.view.battle.shared.battle_loading import BattleLoading
 from account_helpers.settings_core.options import BattleLoadingTipSetting
 

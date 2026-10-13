@@ -1,0 +1,80 @@
+<HWArenaPhasesComponent.def>
+  <ClientMethods>
+    <hideVehicleOnMinimap>
+      <Args>
+        <vehicleID>	OBJECT_ID	</vehicleID>
+      </Args>
+    </hideVehicleOnMinimap>
+    <notifyPhaseTimeChanged>
+      <Args>
+        <looterID>	OBJECT_ID	</looterID>
+        <ownerID>	OBJECT_ID	</ownerID>
+        <amount>	INT32	</amount>
+      </Args>
+    </notifyPhaseTimeChanged>
+  </ClientMethods>
+  <CellMethods></CellMethods>
+  <Properties>
+    <activePhase>
+      <Type>	UINT8	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <Default>	1	</Default>
+      <MinValue>	1	</MinValue>
+    </activePhase>
+    <subPhase>
+      <Type>	UINT8	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <Default>	0	</Default>
+      <MinValue>	0	</MinValue>
+    </subPhase>
+    <phasesCount>
+      <Type>	UINT8	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <MinValue>	1	</MinValue>
+    </phasesCount>
+    <phaseDuration>
+      <Type>	UINT32	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <MinValue>	1	</MinValue>
+    </phaseDuration>
+    <modifierName>
+      <Type>	STRING	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <Default></Default>
+    </modifierName>
+    <modifierColor>
+      <Type>	STRING	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <Default></Default>
+    </modifierColor>
+    <timeLeft>
+      <Type>	INT32	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <MinValue>	1	</MinValue>
+    </timeLeft>
+    <isRespawnEnabled>
+      <Type>	BOOL	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <Default>	1	</Default>
+    </isRespawnEnabled>
+    <isBossVulnerable>
+      <Type>	BOOL	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <Default>	0	</Default>
+    </isBossVulnerable>
+    <activeEnvironment>
+      <Type>	STRING	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <Default></Default>
+    </activeEnvironment>
+    <minimapAutoZoom>
+      <Type>	BOOL	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <Default>	1	</Default>
+    </minimapAutoZoom>
+  </Properties>
+  <ofEntity>
+    <ArenaInfo></ArenaInfo>
+  </ofEntity>
+  <DefaultKeyName>	HWArenaPhasesComponent	</DefaultKeyName>
+</HWArenaPhasesComponent.def>

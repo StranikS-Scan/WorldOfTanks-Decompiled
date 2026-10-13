@@ -2,7 +2,6 @@
 # Embedded file name: scripts/client/gui/shared/RemoteDataDownloader.py
 from __future__ import absolute_import
 import time
-import base64
 import threading
 from builtins import map
 from collections import namedtuple
@@ -11,6 +10,7 @@ from future.utils import viewvalues
 from http import client as httplib
 from debug_utils import LOG_DEBUG
 from helpers import threads, http, time_utils, local_cache
+from py2to3.compat import base64compat
 _TIMEOUT = 10.0
 
 class LIFE_TIME(object):
@@ -133,7 +133,7 @@ class _LocalCache(local_cache.ShelfLocalCache):
 
     @classmethod
     def _makeKey(cls, tags):
-        return base64.b32encode(':'.join(map(str, tags)))
+        return base64compat.b32encode(':'.join(map(str, tags)))
 
 
 class _RemoteDataDownloader(object):

@@ -1,13 +1,14 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: last_stand/scripts/client/LSBeamTargetComponent.py
 from __future__ import absolute_import
+import functools
+import logging
+from future.utils import listvalues
+from typing import TYPE_CHECKING
 import CGF
 import BigWorld
 import GenericComponents
 import Math
-import functools
-import logging
-from typing import TYPE_CHECKING
 from CGF import HierarchyComponent
 from script_component.DynamicScriptComponent import DynamicScriptComponent
 from BeamRibbonComponent import BeamRibbonComponent
@@ -212,7 +213,7 @@ class LSBeamTargetComponent(DynamicScriptComponent):
         _logger.debug('_removeDMGEffect: entId=%s beamName=%s in_dmgBeams=%s', entityId, beamName, entityId in self._dmgBeams)
         queue = CGF.CommandQueue(self.spaceID)
         if entityId in self._dmgBeams:
-            for beam in self._dmgBeams[entityId].values():
+            for beam in listvalues(self._dmgBeams[entityId]):
                 self._safeRemove(queue, beam)
                 del self._dmgBeams[entityId][beamName]
 

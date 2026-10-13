@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/ext/channel_num_gen.py
+from __future__ import absolute_import
 import BigWorld
 from constants import PREBATTLE_TYPE, QUEUE_TYPE
 from shared_utils import CONST_CONTAINER
@@ -65,43 +66,28 @@ def genClientID4Channel(channel):
     elif name in _BATTLE_CLIENT_IDS:
         clientID = _BATTLE_CLIENT_IDS[name]
     else:
-        clientID = _idGen.next()
+        clientID = _idGen.nextSequenceID
     return clientID
 
 
 def getClientID4Prebattle(prbType):
-    result = 0
-    if prbType in _PRB_CLIENT_IDS:
-        result = _PRB_CLIENT_IDS[prbType]
-    return result
+    return _PRB_CLIENT_IDS.get(prbType, 0)
 
 
 def getClientID4PreQueue(queueType):
-    result = 0
-    if queueType in _QUEUE_CLIENT_IDS:
-        result = _QUEUE_CLIENT_IDS[queueType]
-    return result
+    return _QUEUE_CLIENT_IDS.get(queueType, 0)
 
 
 def getClientID4LazyChannel(name):
-    result = 0
-    if name in _LAZY_CLIENT_IDS:
-        result = _LAZY_CLIENT_IDS[name]
-    return result
+    return _LAZY_CLIENT_IDS.get(name, 0)
 
 
 def getClientID4SpecialWindow(name):
-    result = 0
-    if name in _SPECIAL_CLIENT_IDS:
-        result = _SPECIAL_CLIENT_IDS[name]
-    return result
+    return _SPECIAL_CLIENT_IDS.get(name, 0)
 
 
 def getClientID4BattleChannel(name):
-    result = 0
-    if name in _BATTLE_CLIENT_IDS:
-        result = _BATTLE_CLIENT_IDS[name]
-    return result
+    return _BATTLE_CLIENT_IDS.get(name, 0)
 
 
 def isClientIDValid(clientID):

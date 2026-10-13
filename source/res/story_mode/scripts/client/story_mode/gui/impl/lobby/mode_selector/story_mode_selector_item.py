@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: story_mode/scripts/client/story_mode/gui/impl/lobby/mode_selector/story_mode_selector_item.py
+from __future__ import absolute_import
 from frameworks.wulf import WindowLayer
 from gui import GUI_SETTINGS
 from gui.impl import backport
@@ -17,7 +18,7 @@ _rMode = R.strings.sm_lobby.mode
 EVENT_SUFFIX = '_event'
 
 class StoryModeSelectorItem(ModeSelectorLegacyItem):
-    __slots__ = ('_uiLogger', '_storyModeCtrl')
+    __slots__ = ('_uiLogger',)
     _storyModeCtrl = dependency.descriptor(IStoryModeController)
 
     def __init__(self, oldSelectorItem):

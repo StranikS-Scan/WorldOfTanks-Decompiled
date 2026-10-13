@@ -1,6 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: comp7/scripts/client/comp7/gui/impl/lobby/meta_view/products_helper.py
+from __future__ import absolute_import
 import typing
+from future.utils import viewitems, viewvalues
 from account_helpers.AccountSettings import AccountSettings, COMP7_UI_SECTION, COMP7_SHOP_SEEN_PRODUCTS
 from comp7.gui.impl.gen.view_models.views.lobby.base_product_model import BaseProductModel, ProductTypes, ProductState
 from comp7.gui.impl.gen.view_models.views.lobby.reward_product_model import RewardProductModel
@@ -56,11 +58,9 @@ def setProductModelData(productData, productModel):
     productCD, productType = _getProductTypeData(productData)
     if not productCD:
         LOG_WARNING('Unknown product with data: {}'.format(productData))
-        return None
-    else:
-        _setGenericData(productModel, productCD, productType, productData)
-        _setSpecificData(productModel, productCD, productType)
-        return None
+        return
+    _setGenericData(productModel, productCD, productType, productData)
+    _setSpecificData(productModel, productCD, productType)
 
 
 @dependency.replace_none_kwargs(itemsCache=IItemsCache)
@@ -95,7 +95,7 @@ def addSeenProduct(product):
 
 def hasUnseenProduct(products):
     seenProducts = getSeenProducts()
-    for product in products.itervalues():
+    for product in viewvalues(products):
         cd, _ = _getProductTypeData(product)
         if cd not in seenProducts and cd not in _COMP7_PREV_SEASON_PRODUCTS:
             return True
@@ -104,7 +104,7 @@ def hasUnseenProduct(products):
 
 
 def _getProductTypeData(product):
-    for cd, entitlementType in product.entitlements.iteritems():
+    for cd, entitlementType in viewitems(product.entitlements):
         itemType = getItemType(getCDFromId(entitlementType, cd))
         if itemType == GUI_ITEM_TYPE.VEHICLE:
             return (cd, ProductTypes.VEHICLE)

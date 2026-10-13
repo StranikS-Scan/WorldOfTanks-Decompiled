@@ -17,7 +17,7 @@ from skeletons.gui.shared import IItemsCache
 if typing.TYPE_CHECKING:
     from typing import Optional, Union
     from gui.shared.gui_items.gui_item_economics import ItemPrice
-    from gui.impl.gen_utils import DynAccessor
+    from frameworks.wulf import PyResAccessor
     from gui.shared.money import Money
 
 def _convertMoneyToTuple(money):

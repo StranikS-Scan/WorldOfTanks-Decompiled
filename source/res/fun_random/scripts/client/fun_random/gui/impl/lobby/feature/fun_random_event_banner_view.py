@@ -12,8 +12,8 @@ from fun_random.gui.impl.lobby.common.fun_view_helpers import getFunRandomEventS
 from gui.Scaleform.genConsts.FUNRANDOM_ALIASES import FUNRANDOM_ALIASES
 from gui.impl import backport
 from gui.impl.gen.view_models.views.lobby.user_missions.constants.event_banner_state import EventBannerState
-from gui.impl.lobby.user_missions.hangar_widget.event_banners.base_event_banner import BaseEventBanner
 from gui.impl.lobby.user_missions.hangar_widget.event_banners.event_banners_container import EventBannersContainer
+from gui.impl.lobby.user_missions.hangar_widget.event_banners.standard_event_banner import StandardEventBanner
 from gui.impl.lobby.user_missions.hangar_widget.services import IEventsService
 from helpers import dependency, time_utils
 if typing.TYPE_CHECKING:
@@ -25,7 +25,7 @@ def isFunRandomEntryPointAvailable(funRandomCtrl=None):
     return funRandomCtrl.subModesInfo.isEntryPointAvailable()
 
 
-class FunRandomEventBannerView(BaseEventBanner, FunProgressionWatcher, FunAssetPacksMixin, FunSubModesWatcher):
+class FunRandomEventBannerView(StandardEventBanner, FunProgressionWatcher, FunAssetPacksMixin, FunSubModesWatcher):
     NAME = FUNRANDOM_ALIASES.FUN_RANDOM_ENTRY_POINT
     __eventsService = dependency.descriptor(IEventsService)
 

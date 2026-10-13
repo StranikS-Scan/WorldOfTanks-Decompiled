@@ -9,8 +9,8 @@ from gui.shared.utils.decorators import ReprInjector
 from gui.battle_control.components_states.ammo import DefaultComponentAmmoState
 from gui.battle_control.components_states.ammo.constants import ActiveAmmoMode, ShellMode
 from gui.battle_control.components_states.ammo.shells import DefaultAmmoMode
+from items.vehicle_mechanics_types import VehicleMechanicKeys
 from vehicles.mechanics.gun_mechanics.shell_params_switcher.mechanic_interfaces import IShellParamsSwitcherMechanicState, IShellParamsSwitcherComponentParams
-from vehicles.mechanics.mechanic_constants import VehicleMechanic
 if typing.TYPE_CHECKING:
     from items.components.shared_components import ShellSwitcherParams
 
@@ -23,7 +23,7 @@ class ShellParamsSwitcherComponentParams(IShellParamsSwitcherComponentParams):
 
     @classmethod
     def fromMechanicParams(cls, params, vehIntCD):
-        mechanicsCache = vehicles.g_cache.vehicleMechanics.get(vehIntCD, {}).get(VehicleMechanic.SHELL_PARAMS_SWITCHER.value, {})
+        mechanicsCache = vehicles.g_cache.vehicleMechanics.get(vehIntCD, {}).get(VehicleMechanicKeys.SHELL_PARAMS_SWITCHER.uniqueName, {})
         mechanicSubtypes = mechanicsCache.get('mechanicSubtypes', {})
         shellSubtypes = {shellCD:mechanicSubtypes.get(shellCD, {}) for shellCD in params.modifiedShells}
         return cls(shellSubtypes)

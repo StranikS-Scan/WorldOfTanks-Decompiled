@@ -1,6 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/helpers/bound_effects.py
+from __future__ import absolute_import
 from functools import partial
+from future.utils import listitems
 import BigWorld
 import helpers
 from helpers.EffectsList import EffectsListPlayer
@@ -14,7 +16,7 @@ class StaticSceneBoundEffects(object):
 
     def destroy(self):
         self._matProv = None
-        for mID, elem in self._models.items():
+        for mID, elem in listitems(self._models):
             elem['effectsPlayer'].stop()
             model = elem['model']
             if model is not None:
@@ -32,7 +34,7 @@ class StaticSceneBoundEffects(object):
             model.rotate(direction.yaw, (0.0, 1.0, 0.0))
         self.__incrementalEffectID += 1
         effectID = self.__incrementalEffectID
-        desc = dict()
+        desc = {}
         desc['model'] = model
         desc['effectsPlayer'] = EffectsListPlayer(effectsList, keyPoints, **args)
         desc['effectsPlayer'].play(model, None, partial(self.__callbackBeforeDestroy, effectID, callbackOnStop), args.get('waitForKeyOff', False))
@@ -57,7 +59,7 @@ class ModelBoundEffects(object):
 
     def __init__(self, model):
         self.__model = model
-        self._effects = list()
+        self._effects = []
 
     def destroy(self):
         self.stop()

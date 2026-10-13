@@ -1,18 +1,21 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/vehicle_systems/components/debris_crashed_track_manager.py
+from __future__ import absolute_import
 import logging
 import random
+from builtins import range
+from future.utils import viewitems
 import CGF
 import Vehicular
+import math_utils
+from constants import IS_CGF_DUMP, IS_EDITOR
 from items.components.component_constants import MAIN_TRACK_PAIR_IDX
 from items.vehicle_items import CHASSIS_ITEM_TYPE
 from vehicle_systems import tankStructure
-import math_utils
 from vehicle_systems.components.CrashedTracks import CrashedTracksController
 from vehicle_systems.components.vehicle_pickup_component import VehiclePickupComponent
 from vehicle_systems.components.debris_crashed_track_component import DebrisCrashedTrackComponent, NodeRemapperComponent
 from vehicle_systems.tankStructure import TankSoundObjectsIndexes
-from constants import IS_CGF_DUMP, IS_EDITOR
 from functools import partial
 if not IS_CGF_DUMP:
     from CustomEffectManager import CustomEffectManager
@@ -78,25 +81,25 @@ class DebrisCrashedTrackSystem(CGF.System):
 
         if not IS_CGF_DUMP:
             for node, effect in self.reaction(self.EffectDeactivated):
-                for fromNode, _ in node.nodes.iteritems():
+                for fromNode in node.nodes:
                     effect.remapNode(fromNode, '')
 
             for node, effect in self.reaction(self.EffectActivated):
-                for fromNode, toNode in node.nodes.iteritems():
+                for fromNode, toNode in viewitems(node.nodes):
                     effect.remapNode(fromNode, toNode)
 
         queue.submit()
         return
 
     def __forEachValidTrackGameObject(self, appearance, predicate):
-        if appearance is None or appearance.typeDescriptor is None or appearance.tracks is None:
+        if appearance is None or appearance.typeDescriptor is None or not appearance.tracks:
             return
         else:
             chassis = appearance.typeDescriptor.chassis
             if chassis is None:
                 return
             pairsCount = len(chassis.tracks.trackPairs) if chassis.tracks is not None else 1
-            indices = xrange(pairsCount)
+            indices = range(pairsCount)
             for idx in indices:
                 for isLeft in (True, False):
                     trackGO = appearance.tracks.getTrackGameObject(isLeft, idx)
@@ -142,7 +145,7 @@ class DebrisCrashedTrackSystem(CGF.System):
             vehicleTracks = tracksAccess.find(debris.wheelsGameObject)
             amountOfBrokenTracks = 0
             if vehicleTracks is not None:
-                for otherTrackIdx in xrange(vehicleTracks.getPairsCount()):
+                for otherTrackIdx in range(vehicleTracks.getPairsCount()):
                     otherTrackGo = vehicleTracks.getTrackGameObject(track.isLeft, otherTrackIdx)
                     otherTrack = compositeTrackAccess.find(otherTrackGo)
                     thicknessAdjustment = 0 if isVisible else -track.trackThickness
@@ -186,7 +189,7 @@ class DebrisCrashedTrackSystem(CGF.System):
             if existingRemap:
                 nodes = dict(existingRemap.nodes)
                 queue.removeComponent(go, NodeRemapperComponent)
-            for fromNode, toNode in debrisDesc.nodesRemap.iteritems():
+            for fromNode, toNode in viewitems(debrisDesc.nodesRemap):
                 nodes[fromNode] = toNode
 
             queue.assignComponent(go, NodeRemapperComponent(nodes))
@@ -201,7 +204,7 @@ class DebrisCrashedTrackSystem(CGF.System):
             return
         nodes = dict(existingRemap.nodes)
         debrisDesc = debris.debrisDesc
-        for fromNode, _ in debrisDesc.nodesRemap.iteritems():
+        for fromNode in debrisDesc.nodesRemap:
             del nodes[fromNode]
 
         queue.removeComponent(go, NodeRemapperComponent)

@@ -4,11 +4,12 @@ from __future__ import absolute_import
 from typing import Tuple, List, Optional, TYPE_CHECKING
 from enum import Enum
 from gui.shared.items_parameters import params_helper
-from items.utils import getVehicleDescriptorWithoutMechanics
-from vehicles.mechanics.mechanic_constants import VehicleMechanic
+from items.vehicle_mechanics_types import VehicleMechanicKeys
+from items.utils import getVehicleDescriptorWithoutMechanic
 from vehicles.mechanics.mechanic_helpers import hasVehicleDescrMechanic
 if TYPE_CHECKING:
     from gui.shared.gui_items.vehicle_modules import Shell
+    from items.vehicle_mechanics_types import VehicleMechanicKey
     from items.vehicles import VehicleDescr
 
 class ShellMechanicState(int, Enum):
@@ -47,7 +48,7 @@ def _getSwitchedParams(shell, vehicle):
 
 
 def _getShellCalibrationParams(shell, vehicle):
-    vehicleDescrWithoutMechanic = getVehicleDescriptorWithoutMechanics(vehicle.descriptor, VehicleMechanic.SHELL_CALIBRATION.value)
+    vehicleDescrWithoutMechanic = getVehicleDescriptorWithoutMechanic(vehicle.descriptor, VehicleMechanicKeys.SHELL_CALIBRATION)
     vehicleDescr = vehicle.descriptor
     params = [(ShellMechanicState.OFF, params_helper.getParameters(shell, vehicleDescrWithoutMechanic)), (ShellMechanicState.ON, params_helper.getParameters(shell, vehicleDescr))]
     return params
@@ -55,12 +56,12 @@ def _getShellCalibrationParams(shell, vehicle):
 
 def _getBustleFeedParams(shell, vehicle):
     vehicleDescr = vehicle.descriptor.defaultVehicleDescr
-    vehicleDescrWithoutMechanics = getVehicleDescriptorWithoutMechanics(vehicleDescr, VehicleMechanic.BUSTLE_FEED.value)
+    vehicleDescrWithoutMechanics = getVehicleDescriptorWithoutMechanic(vehicleDescr, VehicleMechanicKeys.BUSTLE_FEED)
     params = [(ShellMechanicState.OFF, params_helper.getParameters(shell, vehicleDescrWithoutMechanics)), (ShellMechanicState.ON, params_helper.getParameters(shell, vehicleDescr))]
     return params
 
 
-_MECHANICS_PARAMS_HANDLERS = {VehicleMechanic.LOW_CHARGE_SHOT: _getLowChargeParams,
- VehicleMechanic.SHELL_PARAMS_SWITCHER: _getSwitchedParams,
- VehicleMechanic.SHELL_CALIBRATION: _getShellCalibrationParams,
- VehicleMechanic.BUSTLE_FEED: _getBustleFeedParams}
+_MECHANICS_PARAMS_HANDLERS = {VehicleMechanicKeys.LOW_CHARGE_SHOT: _getLowChargeParams,
+ VehicleMechanicKeys.SHELL_PARAMS_SWITCHER: _getSwitchedParams,
+ VehicleMechanicKeys.SHELL_CALIBRATION: _getShellCalibrationParams,
+ VehicleMechanicKeys.BUSTLE_FEED: _getBustleFeedParams}

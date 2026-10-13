@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/helpers/client_update_listener.py
+from __future__ import absolute_import
 import typing
 import Event
 from PlayerEvents import g_playerEvents

@@ -1,6 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/formatters/auto_boxes_subformatters.py
+from __future__ import absolute_import
 import typing
+from future.utils import viewitems
 import BigWorld
 from adisp import adisp_async, adisp_process
 from dossiers2.ui.achievements import BADGES_BLOCK
@@ -38,7 +40,7 @@ class AutoLootBoxSubFormatter(IAutoLootBoxSubFormatter):
 
     @classmethod
     def getBoxesOfThisGroup(cls, data):
-        return set((boxID for boxID in data.iterkeys() if cls._isBoxOfThisGroup(boxID)))
+        return set((boxID for boxID in data if cls._isBoxOfThisGroup(boxID)))
 
     @classmethod
     def _isBoxOfRequiredTypes(cls, boxID, boxTypes):
@@ -203,7 +205,7 @@ class LootBoxSystemAutoOpenFormatter(AsyncAutoLootBoxSubFormatter):
             openedBoxesIDs = self.getBoxesOfThisGroup(message.data)
             openedEventsBoxes = self.__getEventNames(message.data) if openedBoxesIDs else {}
             messages = []
-            for name in openedEventsBoxes.keys():
+            for name in list(openedEventsBoxes):
                 if R.strings.dyn(TEXT_RESOURCE_PREFIX + name).isValid():
                     eventBoxes = openedEventsBoxes.pop(name)
                     messages.append(self.__getMessage(message, eventBoxes, name))
@@ -218,13 +220,13 @@ class LootBoxSystemAutoOpenFormatter(AsyncAutoLootBoxSubFormatter):
 
     @classmethod
     def getBoxesOfThisGroup(cls, data):
-        return {boxId for boxId, info in data.iteritems() if info.get('relatedFeature') == DEFAULT_EVENT_NAME}
+        return {boxId for boxId, info in viewitems(data) if info.get('relatedFeature') == DEFAULT_EVENT_NAME}
 
     def __getEventNames(self, data):
         eventsBoxes = {}
-        for id, info in data.iteritems():
+        for boxId, info in viewitems(data):
             eventName = info.get('type')
-            eventsBoxes.setdefault(eventName, set()).add(id)
+            eventsBoxes.setdefault(eventName, set()).add(boxId)
 
         return eventsBoxes
 

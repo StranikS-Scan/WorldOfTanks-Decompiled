@@ -8,7 +8,7 @@ import Event
 from PlayerEvents import g_playerEvents
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import CREW_BOOKS_VIEWED
-from frameworks.wulf import ViewFlags, ViewSettings
+from frameworks.wulf import ViewFlags, ViewSettings, PyResAccessor
 from gui import SystemMessages
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
@@ -27,7 +27,6 @@ from gui.impl.gen.view_models.views.lobby.crew.common.toggle_button_model import
 from gui.impl.gen.view_models.views.lobby.crew.common.tooltip_constants import TooltipConstants
 from gui.impl.gen.view_models.views.lobby.crew.crew_constants import CrewConstants
 from gui.impl.gen.view_models.views.lobby.crew.idle_crew_bonus import IdleCrewBonusEnum
-from gui.impl.gen_utils import DynAccessor
 from gui.impl.lobby.crew.crew_header_tooltip_view import CrewHeaderTooltipView
 from gui.impl.lobby.crew.crew_helpers.model_setters import setTmanSkillsModel, setTmanMajorSkillsModel, setTmanBonusSkillsModel
 from gui.impl.lobby.crew.crew_helpers.skill_formatters import SkillLvlFormatter
@@ -54,10 +53,10 @@ if TYPE_CHECKING:
     from gui.impl.gen.view_models.views.lobby.crew.common.crew_skill_model import CrewSkillModel
     from typing import Union
 BuildedMessage = NamedTuple('BuildedMessage', [('text', str),
- ('iconFrom', DynAccessor),
- ('iconTo', DynAccessor),
- ('vehFromCD', DynAccessor),
- ('vehToCD', DynAccessor)])
+ ('iconFrom', PyResAccessor),
+ ('iconTo', PyResAccessor),
+ ('vehFromCD', PyResAccessor),
+ ('vehToCD', PyResAccessor)])
 DOG = 'dog'
 
 class CrewWidget(ViewImpl, IGlobalListener):

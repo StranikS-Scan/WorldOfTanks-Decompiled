@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/gui/Scaleform/view/lobby/ContactsTreeComponent.py
+from __future__ import absolute_import
 from helpers.i18n import makeString
 from gui.Scaleform.daapi.view.meta.ContactsTreeComponentMeta import ContactsTreeComponentMeta
 from gui.Scaleform.locale.MESSENGER import MESSENGER
@@ -25,8 +26,8 @@ class ContactsTreeComponent(ContactsTreeComponentMeta):
         self._mainDP.toggleGroup(mainGroup, groupName)
         self.onGroupToggled(mainGroup, groupName, not groupData.currentOpened)
 
-    def searchLocalContact(self, searchFilter):
-        if self._mainDP.setSearchFilter(searchFilter):
+    def searchLocalContact(self, flt):
+        if self._mainDP.setSearchFilter(flt):
             self._mainDP.refresh()
             self._setSearchInfo()
         else:

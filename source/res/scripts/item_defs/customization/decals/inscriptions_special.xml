@@ -6495,4 +6495,29 @@
       <mirror>	false	</mirror>
     </decal>
   </itemGroup>
+  <itemGroup>
+    <name>	Fortrush 2026 Inscriptions	</name>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <userString>	#vehicle_customization:inscription/special	</userString>
+    <priceGroup>	inscriptions 50g notInShop	</priceGroup>
+    <type>	INSCRIPTION	</type>
+    <vehicleFilter>
+      <exclude>
+        <tags>	excluded_from_customization	</tags>
+      </exclude>
+    </vehicleFilter>
+    <decal>
+      <id>	1363	</id>
+      <mirror>	false	</mirror>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_886.dds	</texture>
+      <userString>	#vehicle_customization:inscription/special/special_886	</userString>
+    </decal>
+    <decal>
+      <id>	1364	</id>
+      <mirror>	false	</mirror>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_887.dds	</texture>
+      <userString>	#vehicle_customization:inscription/special/special_887	</userString>
+    </decal>
+  </itemGroup>
 </inscriptions_special.xml>

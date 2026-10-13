@@ -12,6 +12,16 @@
       <Type>	BOOL	</Type>
       <Flags>	ALL_CLIENTS	</Flags>
     </drawBorder>
+    <isCircular>
+      <Type>	BOOL	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <Default>	0	</Default>
+    </isCircular>
+    <customBorder>
+      <Type>	STRING	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <Default></Default>
+    </customBorder>
   </Properties>
   <ofEntity>
     <StaticDeathZone></StaticDeathZone>

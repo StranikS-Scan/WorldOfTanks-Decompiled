@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gameplay/__init__.py
+from __future__ import absolute_import
 __all__ = ('getGameplayConfig',)
 
 def getGameplayConfig(manager):

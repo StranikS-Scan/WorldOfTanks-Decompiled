@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: comp7/scripts/client/comp7/gui/Scaleform/daapi/view/lobby/rally/action_button_state_vo.py
+from __future__ import absolute_import
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.prb_control.settings import UNIT_RESTRICTION

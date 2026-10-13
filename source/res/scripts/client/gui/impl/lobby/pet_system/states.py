@@ -3,23 +3,25 @@
 import typing
 import CGF
 from Event import Event
-from cgf_components.hangar_camera_manager import HangarCameraSystem
-from frameworks_common.state_machine import StateFlags, StateIdsObserver
-from frameworks.wulf import WindowLayer
-from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
-from gui.Scaleform.framework.entities.View import ViewKey
-from gui.impl import backport
-from gui.impl.gen import R
-from gui.lobby_state_machine.states import LobbyStateDescription, SFViewLobbyState, SubScopeSubLayerState
-from gui.shared.event_dispatcher import showPetInfoPage, showHangar
-from gui.subhangar.subhangar_state_groups import CameraMover, SmoothCameraMover, SubhangarStateGroupConfig, SubhangarStateGroupConfigProvider, SubhangarStateGroups
-from helpers import dependency
-from helpers.events_handler import EventsHandler
 from pet_system_common.pet_constants import PET_CAMERA_NAME
+from wg_async import wg_async
+from frameworks.wulf import WindowLayer
 from skeletons.gui.game_control import IFadingController
 from skeletons.gui.pet_system import IPetSystemController
 from skeletons.gui.shared.utils import IHangarSpace
-from wg_async import wg_async
+from cgf_components.hangar_camera_manager import HangarCameraSystem
+from frameworks_common.state_machine import StateFlags, StateIdsObserver
+from frameworks_common.state_machine.transitions import TransitionType
+from gui.impl import backport
+from gui.impl.gen import R
+from gui.impl.lobby.battle_results.states import PostBattleResultsEntryState
+from gui.lobby_state_machine.states import LobbyStateDescription, SFViewLobbyState, SubScopeSubLayerState
+from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
+from gui.Scaleform.framework.entities.View import ViewKey
+from gui.shared.event_dispatcher import showHangar, showPetInfoPage
+from gui.subhangar.subhangar_state_groups import CameraMover, SmoothCameraMover, SubhangarStateGroupConfig, SubhangarStateGroupConfigProvider, SubhangarStateGroups
+from helpers import dependency
+from helpers.events_handler import EventsHandler
 if typing.TYPE_CHECKING:
     from gui.lobby_state_machine.lobby_state_machine import LobbyStateMachine
 
@@ -108,6 +110,11 @@ class PetEventFullscreenWindowState(SFViewLobbyState, EventsHandler):
     hangarSpace = dependency.descriptor(IHangarSpace)
     fadeManager = dependency.descriptor(IFadingController)
     petController = dependency.descriptor(IPetSystemController)
+
+    def addNavigationTransition(self, targetViewState, transitionType=TransitionType.INTERNAL, record=True):
+        if isinstance(targetViewState, PostBattleResultsEntryState):
+            record = False
+        super(PetEventFullscreenWindowState, self).addNavigationTransition(targetViewState, transitionType, record)
 
     def _onEntered(self, event):
         super(PetEventFullscreenWindowState, self)._onEntered(event)

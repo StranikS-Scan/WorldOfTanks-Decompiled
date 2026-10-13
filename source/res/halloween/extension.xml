@@ -1,0 +1,118 @@
+<extension.xml>
+  <FeatureName>	halloween	</FeatureName>
+  <IsEnabled>	True	</IsEnabled>
+  <Personality>	halloween_personality	</Personality>
+  <EditorPersonality>	editor_halloween_personality	</EditorPersonality>
+  <PackageParts>	2	</PackageParts>
+  <Components>
+    <StaticComponents>
+      <HalloweenAccountComponent></HalloweenAccountComponent>
+      <HalloweenComponent></HalloweenComponent>
+      <HWArenaBattleResultComponent></HWArenaBattleResultComponent>
+      <HWKafkaPublisherComponent></HWKafkaPublisherComponent>
+    </StaticComponents>
+    <DynamicComponents>
+      <HWTeamInfoStatsComponent></HWTeamInfoStatsComponent>
+      <HWVehicleBattleStatsComponent></HWVehicleBattleStatsComponent>
+      <HWArenaDropComponent></HWArenaDropComponent>
+      <HWArenaPhasesComponent></HWArenaPhasesComponent>
+      <HWVehicleSoulsContainerComponent></HWVehicleSoulsContainerComponent>
+      <HWVehicleCheatsComponent></HWVehicleCheatsComponent>
+      <HWBuffNitroComponent></HWBuffNitroComponent>
+      <HWBuffDynamicFactorsComponent></HWBuffDynamicFactorsComponent>
+      <HWBuffFactorsComponent></HWBuffFactorsComponent>
+      <HWBuffSequencesComponent></HWBuffSequencesComponent>
+      <HWBuffPrefabComponent></HWBuffPrefabComponent>
+      <HWBuffPanelComponent></HWBuffPanelComponent>
+      <HWSoulsCollectorComponent></HWSoulsCollectorComponent>
+      <HWArenaVehicleKillComponent></HWArenaVehicleKillComponent>
+      <HWBuffRepairComponent></HWBuffRepairComponent>
+      <HWBuffPeriodicHealComponent></HWBuffPeriodicHealComponent>
+      <HWVehicleAIComponent></HWVehicleAIComponent>
+      <HWBuffRadiusAoEComponent></HWBuffRadiusAoEComponent>
+      <HWVehicleFireComponent></HWVehicleFireComponent>
+      <HWBuffIgniteVehicleComponent></HWBuffIgniteVehicleComponent>
+      <HWBuffDrainHealthComponent></HWBuffDrainHealthComponent>
+      <HWBuffDamageVehicleComponent></HWBuffDamageVehicleComponent>
+      <HWBuffVehicleIconComponent></HWBuffVehicleIconComponent>
+      <HWBuffVehicleModifiersComponent></HWBuffVehicleModifiersComponent>
+      <HWVehicleRepairComponent></HWVehicleRepairComponent>
+      <HWVehicleFeedbackComponent></HWVehicleFeedbackComponent>
+      <HWVehicleDissolveComponent></HWVehicleDissolveComponent>
+      <HWBuffDamageResistsComponent></HWBuffDamageResistsComponent>
+      <HWBuffSoulsDrainResistComponent></HWBuffSoulsDrainResistComponent>
+      <HWArenaVehicleRemovalComponent></HWArenaVehicleRemovalComponent>
+      <HWBuffInterruptibleComponent></HWBuffInterruptibleComponent>
+      <HWBuffCircularVehicleProximityComponent></HWBuffCircularVehicleProximityComponent>
+      <HWBuffBossAuraComponent></HWBuffBossAuraComponent>
+      <HWBuffDrainSoulsComponent></HWBuffDrainSoulsComponent>
+      <HWBuffDrainLifeComponent></HWBuffDrainLifeComponent>
+      <HWBuffDrainMarkerComponent></HWBuffDrainMarkerComponent>
+      <HWBuffEffectsListPlayerComponent></HWBuffEffectsListPlayerComponent>
+      <HWBuffFlashBangEffectComponent></HWBuffFlashBangEffectComponent>
+      <HWVehicleMaxHealthModifierComponent></HWVehicleMaxHealthModifierComponent>
+      <HWVehicleModifiersComponent></HWVehicleModifiersComponent>
+      <HWVehicleDetector></HWVehicleDetector>
+      <HWVehicleFollowedSpawner></HWVehicleFollowedSpawner>
+      <HWBuffAddBuffOnShotComponent></HWBuffAddBuffOnShotComponent>
+      <HWBuffAddMaxHealthComponent></HWBuffAddMaxHealthComponent>
+      <HWBuffInfinitePeriodicHealComponent></HWBuffInfinitePeriodicHealComponent>
+      <HWArenaInfoBossHealthBarComponent></HWArenaInfoBossHealthBarComponent>
+      <HWBuffVehicleEffectsComponent></HWBuffVehicleEffectsComponent>
+      <HWBuffLaserSightComponent></HWBuffLaserSightComponent>
+      <HWArenaSoundComponent></HWArenaSoundComponent>
+      <HWVehicleSoundComponent></HWVehicleSoundComponent>
+      <HWVehicleDeathOnFall></HWVehicleDeathOnFall>
+      <HWBuffInvisibilityForAIComponent></HWBuffInvisibilityForAIComponent>
+      <HWBuffSoundComponent></HWBuffSoundComponent>
+      <HWKafkaVehicleLoggingComponent></HWKafkaVehicleLoggingComponent>
+      <HWKafkaLoggingComponent></HWKafkaLoggingComponent>
+      <HWBuffDissolveComponent></HWBuffDissolveComponent>
+      <HWBuffAddDynGroupComponent></HWBuffAddDynGroupComponent>
+      <HWLootVisualComponent></HWLootVisualComponent>
+      <HWLootVehicleWatcherComponent></HWLootVehicleWatcherComponent>
+      <HWArenaPhaseProgressionComponent></HWArenaPhaseProgressionComponent>
+      <HWNitroAccelerationControl></HWNitroAccelerationControl>
+      <HWFairplayVehicleBattleStatsComponent></HWFairplayVehicleBattleStatsComponent>
+      <HWBuffShootComponent></HWBuffShootComponent>
+      <HWVehicleInstantShotComponent></HWVehicleInstantShotComponent>
+      <HWVehicleShotChargerComponent></HWVehicleShotChargerComponent>
+      <HWBuffStunVehicleComponent></HWBuffStunVehicleComponent>
+      <HWVehicleMultiAuraHandlerComponent></HWVehicleMultiAuraHandlerComponent>
+      <HWVehicleHitDirectionComponent></HWVehicleHitDirectionComponent>
+      <HWVehicleSpawnInfoComponent></HWVehicleSpawnInfoComponent>
+      <HWArenaSpawnInfoComponent></HWArenaSpawnInfoComponent>
+      <HWVehicleOptionsRequesterComponent></HWVehicleOptionsRequesterComponent>
+      <HWLootableComponent></HWLootableComponent>
+      <HWVehicleAnomaliesComponent></HWVehicleAnomaliesComponent>
+      <HWVehicleStatusNotificationComponent></HWVehicleStatusNotificationComponent>
+      <HWEntityChaserComponent></HWEntityChaserComponent>
+      <HWBuffDamageVariableComponent></HWBuffDamageVariableComponent>
+      <HWBuffInstantKillComponent></HWBuffInstantKillComponent>
+      <HWBuffVehicleKillsCounterComponent></HWBuffVehicleKillsCounterComponent>
+    </DynamicComponents>
+  </Components>
+  <Entities>
+    <ServerOnlyEntities>
+      <HalloweenBattlesMgr></HalloweenBattlesMgr>
+      <HalloweenMediumBattlesMgr></HalloweenMediumBattlesMgr>
+      <HalloweenHardBattlesMgr></HalloweenHardBattlesMgr>
+      <HalloweenUnitMgr></HalloweenUnitMgr>
+    </ServerOnlyEntities>
+    <ClientServerEntities>
+      <HWPersonalDeathZone></HWPersonalDeathZone>
+      <HWDeathZone></HWDeathZone>
+    </ClientServerEntities>
+  </Entities>
+  <ExternalComponents></ExternalComponents>
+  <cgf>
+    <script>
+      <module>	client.halloween.cgf_components.soul_collector_components	</module>
+      <module>	client.halloween.cgf_components.show_event_component	</module>
+      <module>	client.halloween.cgf_components.hexapod_component	</module>
+      <module>	client.halloween.cgf_components.cgf_client_module	</module>
+      <module>	cell.halloween_cell.cgf_cell.damage_on_collision_component	</module>
+      <module>	cell.halloween_cell.cgf_cell.cgf_cell_module	</module>
+    </script>
+  </cgf>
+</extension.xml>

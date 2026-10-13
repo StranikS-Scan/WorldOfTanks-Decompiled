@@ -8,13 +8,14 @@ from constants import ARENA_PERIOD, BUSTLE_FEED_STATE, BUSTLE_FEED_SWITCH_ACCESS
 from events_handler import eventHandler
 from gui.shared.utils.decorators import ReprInjector
 from vehicles.components.component_wrappers import ifAppearanceReady, ifPlayerVehicle, ifObservedVehicle
+from items.vehicle_mechanics_types import VehicleMechanicKey, VehicleMechanicKeys
 from vehicles.components.vehicle_component import VehicleDynamicComponent
 from vehicles.components.vehicle_prefabs import createMechanicPrefabSpawner
 from vehicles.entities import ShotParams
 from vehicles.mechanics.generic_mechanics.bustle_feed import createBustleFeedStatesEvents, DEFAULT_BUSTLE_FEED_PARAMS, BustleFeedComponentParams, BustleFeedState, BustleFeedAmmoState
 from vehicles.mechanics.common import IMechanicComponent
 from vehicles.mechanics.mechanic_commands import IMechanicCommandsComponent, createMechanicCommandsEvents
-from vehicles.mechanics.mechanic_constants import VehicleMechanic, VehicleMechanicCommand
+from vehicles.mechanics.mechanic_constants import VehicleMechanicCommand
 from vehicles.mechanics.mechanic_helpers import getVehicleDescrMechanicParams
 from vehicles.mechanics.mechanic_inputs import createMechanicSingleInput
 from vehicles.mechanics.mechanic_states import IMechanicStatesComponent
@@ -57,8 +58,8 @@ class BustleFeedController(VehicleDynamicComponent, IMechanicComponent, IMechani
         return
 
     @property
-    def vehicleMechanic(self):
-        return VehicleMechanic.BUSTLE_FEED
+    def vehicleMechanicKey(self):
+        return VehicleMechanicKeys.BUSTLE_FEED
 
     @property
     def commandsEvents(self):
@@ -99,12 +100,12 @@ class BustleFeedController(VehicleDynamicComponent, IMechanicComponent, IMechani
 
     @eventHandler
     def onCollectAmmoStates(self, ammoStates):
-        ammoStates[self.vehicleMechanic.value] = BustleFeedAmmoState(self.getMechanicState(), self.__componentParams.modifiedShells, self.__componentParams.shotReloadFactor)
+        ammoStates[self.vehicleMechanicKey.uniqueName] = BustleFeedAmmoState(self.getMechanicState(), self.__componentParams.modifiedShells, self.__componentParams.shotReloadFactor)
 
     @eventHandler
     def onCollectShotParams(self, shotParamsList):
         if self.__shootingBlockTimestamp > BigWorld.time():
-            shotParamsList.append(ShotParams(self.vehicleMechanic, 0, 0, False))
+            shotParamsList.append(ShotParams(self.vehicleMechanicKey, 0, 0, False))
 
     @eventHandler
     def onObserverVehicleDataUpdated(self):
@@ -153,7 +154,7 @@ class BustleFeedController(VehicleDynamicComponent, IMechanicComponent, IMechani
 
     def _collectComponentParams(self, typeDescriptor):
         super(BustleFeedController, self)._collectComponentParams(typeDescriptor)
-        mechanicParams = getVehicleDescrMechanicParams(typeDescriptor, self.vehicleMechanic)
+        mechanicParams = getVehicleDescrMechanicParams(typeDescriptor, self.vehicleMechanicKey)
         self.__componentParams = BustleFeedComponentParams.fromMechanicParams(mechanicParams, typeDescriptor)
 
     @ifObservedVehicle

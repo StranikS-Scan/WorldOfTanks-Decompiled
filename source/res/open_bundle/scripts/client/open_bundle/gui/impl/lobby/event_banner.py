@@ -1,18 +1,24 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: open_bundle/scripts/client/open_bundle/gui/impl/lobby/event_banner.py
 from __future__ import absolute_import
+import typing
 from account_helpers import AccountSettings
-from account_helpers.AccountSettings import OPEN_BUNDLE_ENTRY_POINT_SHOWN, OPEN_BUNDLE_ENTRY_POINT_ANIMATION_SHOWN
+from account_helpers.AccountSettings import OPEN_BUNDLE_ENTRY_POINT_ANIMATION_SHOWN
+from gui.impl import backport
 from gui.impl.gen.view_models.views.lobby.user_missions.constants.event_banner_state import EventBannerState
-from gui.impl.lobby.user_missions.hangar_widget.event_banners.base_event_banner import BaseEventBanner
 from gui.impl.lobby.user_missions.hangar_widget.event_banners.event_banners_container import EventBannersContainer
+from gui.impl.lobby.user_missions.hangar_widget.event_banners.standard_event_banner import StandardEventBanner
 from gui.impl.lobby.user_missions.hangar_widget.services import IEventsService
 from helpers import dependency, time_utils
 from open_bundle.gui.constants import OPEN_BUNDLE_ENTRY_POINT_NAME
 from open_bundle.gui.impl.lobby.tooltips.event_banner_tooltip import EventBannerTooltip
 from open_bundle.gui.shared.event_dispatcher import showOpenBundleMainView
+from open_bundle.helpers.account_settings import isEntryPointShown
+from open_bundle.helpers.resources import getBannerImagesPath, getTextResource
 from open_bundle.skeletons.open_bundle_controller import IOpenBundleController
 from shared_utils import findFirst
+if typing.TYPE_CHECKING:
+    from typing import List
 
 @dependency.replace_none_kwargs(openBundle=IOpenBundleController)
 def isOpenBundleEntryPointAvailable(openBundle=None):
@@ -20,7 +26,7 @@ def isOpenBundleEntryPointAvailable(openBundle=None):
     return bundleID is not None and not openBundle.isAllBundleCellsReceived(bundleID)
 
 
-class OpenBundleEventBanner(BaseEventBanner):
+class OpenBundleEventBanner(StandardEventBanner):
     NAME = OPEN_BUNDLE_ENTRY_POINT_NAME
     __eventsService = dependency.descriptor(IEventsService)
     __openBundle = dependency.descriptor(IOpenBundleController)
@@ -40,6 +46,22 @@ class OpenBundleEventBanner(BaseEventBanner):
     @property
     def borderColor(self):
         pass
+
+    @property
+    def title(self):
+        return self.__getText(['banner', 'title'])
+
+    @property
+    def iconsPath(self):
+        return '' if self.__bundleID is None else getBannerImagesPath(self.__bundleID)
+
+    @property
+    def introDescription(self):
+        return self.__getText(['banner', 'intro', 'description'])
+
+    @property
+    def inProgressDescription(self):
+        return self.__getText(['banner', 'inProgress', 'description'])
 
     def prepare(self):
         self.__bundleID = findFirst(self.__openBundle.isBundleActive, self.__openBundle.bundleIDs)
@@ -70,10 +92,6 @@ class OpenBundleEventBanner(BaseEventBanner):
 
     def onClick(self):
         if self.__openBundle.isBundleActive(bundleID=self.__bundleID):
-            settings = AccountSettings.getSettings(OPEN_BUNDLE_ENTRY_POINT_SHOWN)
-            if self.__bundleID not in settings:
-                settings.add(self.__bundleID)
-                AccountSettings.setSettings(OPEN_BUNDLE_ENTRY_POINT_SHOWN, settings)
             showOpenBundleMainView(bundleID=self.__bundleID)
 
     def onAppear(self):
@@ -96,7 +114,10 @@ class OpenBundleEventBanner(BaseEventBanner):
         else:
             self.__eventsService.updateEntries()
 
+    def __getText(self, path):
+        return '' if self.__bundleID is None else backport.text(getTextResource(self.__bundleID, path)())
+
     def __getState(self):
         if not self.__openBundle.isBundleActive(self.__bundleID):
             return EventBannerState.INACTIVE
-        return EventBannerState.INTRO if self.__bundleID not in AccountSettings.getSettings(OPEN_BUNDLE_ENTRY_POINT_SHOWN) else EventBannerState.IN_PROGRESS
+        return EventBannerState.INTRO if not isEntryPointShown(self.__bundleID) else EventBannerState.IN_PROGRESS

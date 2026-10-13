@@ -11,7 +11,7 @@ from gui.Scaleform.genConsts.MECHANICS_WIDGET_CONST import MECHANICS_WIDGET_CONS
 from gui.veh_mechanics.battle.updaters.mechanics.mechanic_life_cycle_updater import VehicleMechanicLifeCycleUpdater
 from gui.veh_mechanics.battle.updaters.mechanics.mechanic_passenger_updater import VehicleMechanicPassengerUpdater
 from gui.veh_mechanics.battle.updaters.mechanics.mechanic_states_updater import VehicleMechanicStatesUpdater
-from vehicles.mechanics.mechanic_constants import VehicleMechanic
+from items.vehicle_mechanics_types import VehicleMechanicKeys
 from vehicles.mechanics.mechanic_states import IMechanicStatesListenerLogic
 if typing.TYPE_CHECKING:
     from gui.veh_mechanics.battle.updaters.updaters_common import IViewUpdater
@@ -37,7 +37,7 @@ class TemperatureHeatingZonesGunWidget(TemperatureGunHeatZonesWidgetMeta, Contai
         self.__invalidateProgresses(state.temperatureProgress)
 
     def _getViewUpdaters(self):
-        return [VehicleMechanicLifeCycleUpdater(VehicleMechanic.HEATING_ZONES_GUN, self), VehicleMechanicPassengerUpdater(VehicleMechanic.HEATING_ZONES_GUN, self), VehicleMechanicStatesUpdater(VehicleMechanic.TEMPERATURE_GUN, self)]
+        return [VehicleMechanicLifeCycleUpdater(VehicleMechanicKeys.HEATING_ZONES_GUN, self), VehicleMechanicPassengerUpdater(VehicleMechanicKeys.HEATING_ZONES_GUN, self), VehicleMechanicStatesUpdater(VehicleMechanicKeys.TEMPERATURE_GUN, self)]
 
     def __invalidateAll(self, state, isInstantly=False):
         self.as_setStateS(MECHANICS_WIDGET_CONST.ACTIVE, isInstantly)

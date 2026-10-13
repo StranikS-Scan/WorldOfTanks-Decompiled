@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: story_mode/scripts/client/story_mode_personality.py
+from __future__ import absolute_import
 from aih_constants import CTRL_TYPE, CTRL_MODE_NAME
 from chat_shared import SYS_MESSAGE_TYPE
 from constants import HAS_DEV_RESOURCES, ARENA_GUI_TYPE, ARENA_BONUS_TYPE
@@ -29,7 +30,7 @@ from story_mode_common.configs.story_mode_missions import missionsSchema
 from story_mode_common.configs.story_mode_settings import settingsSchema
 
 class ClientStoryModeBattleMode(battle_mode.StoryModeBattleMode):
-    _CLIENT_BATTLE_PAGE = story_mode_gui_constants.VIEW_ALIAS.STORY_MODE_BATTLE_PAGE
+    _CLIENT_BATTLE_PAGE = (story_mode_gui_constants.VIEW_ALIAS.STORY_MODE_BATTLE_PAGE, story_mode_gui_constants.VIEW_ALIAS.RANDOM_BATTLE_HUD)
     _CLIENT_PRB_ACTION_NAME = story_mode_gui_constants.PREBATTLE_ACTION_NAME.STORY_MODE
     _CLIENT_BANNER_ENTRY_POINT_ALIAS = StoryModeNewbieBanner.NAME
 
@@ -133,7 +134,7 @@ class ClientStoryModeBattleMode(battle_mode.StoryModeBattleMode):
 class ClientOnboardingBattleMode(ClientStoryModeBattleMode):
     _ARENA_BONUS_TYPE = ARENA_BONUS_TYPE.STORY_MODE_ONBOARDING
     _ARENA_GUI_TYPE = ARENA_GUI_TYPE.STORY_MODE_ONBOARDING
-    _CLIENT_BATTLE_PAGE = story_mode_gui_constants.VIEW_ALIAS.ONBOARDING_BATTLE_PAGE
+    _CLIENT_BATTLE_PAGE = (story_mode_gui_constants.VIEW_ALIAS.ONBOARDING_BATTLE_PAGE, story_mode_gui_constants.VIEW_ALIAS.RANDOM_BATTLE_HUD)
 
     @property
     def _client_battleControllersRepository(self):
@@ -212,7 +213,7 @@ def init():
     account_settings.init()
     g_overrideScaleFormViewsConfig.initExtensionLobbyPackages(__name__, ['story_mode.gui.scaleform.daapi.view.lobby'])
     registerScaleformLobbyPackages(('story_mode.gui.impl.lobby',))
-    battlePackages = ('gui.Scaleform.daapi.view.battle.shared.vehicle_mechanics', 'story_mode.gui.scaleform.daapi.view.battle')
+    battlePackages = ('gui.Scaleform.daapi.view.battle.shared.vehicle_mechanics', 'story_mode.gui.scaleform.daapi.view.battle', 'gui.impl.battle.random', 'gui.impl.battle.shared')
     registerScaleformBattlePackages(story_mode_constants.ARENA_GUI_TYPE.STORY_MODE_ONBOARDING, battlePackages)
     registerScaleformBattlePackages(story_mode_constants.ARENA_GUI_TYPE.STORY_MODE_REGULAR, battlePackages)
     if HAS_DEV_RESOURCES:

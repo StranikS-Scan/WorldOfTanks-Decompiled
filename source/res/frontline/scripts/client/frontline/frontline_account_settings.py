@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: frontline/scripts/client/frontline/frontline_account_settings.py
+from __future__ import absolute_import
 from account_helpers import AccountSettings
 from frontline_common.constants import AccountSettingsKeys, ACCOUNT_DEFAULT_SETTINGS
 

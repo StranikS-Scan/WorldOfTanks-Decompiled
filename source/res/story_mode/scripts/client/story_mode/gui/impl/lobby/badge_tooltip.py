@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: story_mode/scripts/client/story_mode/gui/impl/lobby/badge_tooltip.py
+from __future__ import absolute_import
 from CurrentVehicle import g_currentVehicle
 from frameworks.wulf.view.view import ViewSettings
 from gui.impl import backport

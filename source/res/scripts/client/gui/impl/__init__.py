@@ -2,7 +2,6 @@
 # Embedded file name: scripts/client/gui/impl/__init__.py
 from __future__ import absolute_import
 import typing
-from helpers import time_utils
 from skeletons.gui.game_control import IGameStateTracker
 from skeletons.gui.impl import IGuiLoader, IFullscreenManager, INotificationWindowController
 if typing.TYPE_CHECKING:
@@ -14,10 +13,8 @@ def getGuiImplConfig(manager):
     from gui.impl.pub.fullscreen_manager import FullscreenManager
     from gui.impl.pub.notification_window_controller import NotificationWindowController
     from gui.impl.pub.window_loader_controller import WindowLoaderController
-    from gui.impl.gen.view_models.common.tutorial.tutorial_model import TutorialModel
-    from gui.impl.gen.view_models.common.ui_logger_model import UiLoggerModel
     loader = GuiLoader()
-    loader.init(TutorialModel(), UiLoggerModel(), time_utils.getServerUTCTime)
+    loader.init()
     manager.addInstance(IGuiLoader, loader, finalizer='fini')
     notifications = NotificationWindowController()
     tracker = manager.getService(IGameStateTracker)

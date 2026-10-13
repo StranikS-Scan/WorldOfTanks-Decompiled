@@ -1,6 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/helpers/drr_scale.py
+from __future__ import absolute_import, division
 import BigWorld
+from math_common import decimal_round
 DRR_MIN_SCALE_VALUE = 0.6
 DRR_MAX_SCALE_VALUE = 1.0
 DRR_MAX_STEP_VALUE = 0.05
@@ -8,7 +10,7 @@ DRR_EPSILON_VALUE = DRR_MAX_STEP_VALUE - 0.01
 PERCENT_MODIFIER = 100.0
 
 def normalizeScale(value):
-    result = min(max(round(value, 2), DRR_MIN_SCALE_VALUE), DRR_MAX_SCALE_VALUE)
+    result = min(max(decimal_round(value, 2), DRR_MIN_SCALE_VALUE), DRR_MAX_SCALE_VALUE)
     modulo = result * PERCENT_MODIFIER % (DRR_MAX_STEP_VALUE * PERCENT_MODIFIER)
     if modulo:
         result = result - modulo / PERCENT_MODIFIER
@@ -16,7 +18,7 @@ def normalizeScale(value):
 
 
 def getPercent(value):
-    return round(value, 3) * PERCENT_MODIFIER
+    return decimal_round(value, 3) * PERCENT_MODIFIER
 
 
 def changeScaleByStep(offset):

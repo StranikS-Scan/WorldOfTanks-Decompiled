@@ -1,8 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/uilogging/newbie_hints/loggers.py
-import BigWorld
+from __future__ import absolute_import
 import typing
 import logging
+import BigWorld
 from helpers import dependency
 from wotdecorators import noexcept
 from uilogging.constants import DEFAULT_LOGGER_NAME

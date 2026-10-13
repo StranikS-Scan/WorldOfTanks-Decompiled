@@ -8,7 +8,7 @@ from PlayerEvents import g_playerEvents
 from frameworks_common.state_machine import BaseStateObserver
 from frameworks.wulf import WindowLayer
 from frameworks.wulf.gui_constants import ShowingStatus, ViewFlags
-from gui.Scaleform.framework import g_entitiesFactories, ScopeTemplates
+from gui.Scaleform.framework import ScopeTemplates
 from gui.lobby_state_machine.lobby_state_machine import LobbyStateMachine
 from gui.lobby_state_machine.states import UntrackedState
 from gui.shared.events import NavigationEvent, GUICommonEvent
@@ -44,6 +44,7 @@ from gui.shared import EVENT_BUS_SCOPE, g_eventBus
 from gui.subhangar.subhangar_observer import SubhangarObserver
 from helpers import uniprof, dependency
 from skeletons.gui.app_loader import GuiGlobalSpaceID
+from skeletons.gui.impl import IGuiLoader
 from logging import getLogger
 _logger = getLogger(__name__)
 
@@ -63,7 +64,6 @@ class _UntrackedStateObserver(BaseStateObserver):
 
     def onEnterState(self, state, event):
         from skeletons.gui.app_loader import IAppLoader
-        from skeletons.gui.impl import IGuiLoader
         app = dependency.instance(IAppLoader).getApp()
         windowsManager = dependency.instance(IGuiLoader).windowsManager
         viewKey = event.params[UntrackedState.LOAD_PARAMS_KEY].loadParams.viewKey
@@ -84,7 +84,7 @@ class _UntrackedStateObserver(BaseStateObserver):
 class LobbyEntry(AppEntry):
 
     def __init__(self, appNS, ctrlModeFlags):
-        super(LobbyEntry, self).__init__(R.entries.default.lobby(), appNS, ctrlModeFlags)
+        super(LobbyEntry, self).__init__(R.entries.lobby(), appNS, ctrlModeFlags)
         self.__stateMachine = LobbyStateMachine()
         self.__untrackedStateObserver = _UntrackedStateObserver()
         self.__subhangarObserver = None
@@ -115,7 +115,7 @@ class LobbyEntry(AppEntry):
     def loadView(self, loadParams, *args, **kwargs):
 
         def getViewScopeAndLayer(loadParams, *args, **kwargs):
-            settings = g_entitiesFactories.getSettings(loadParams.viewKey.alias)
+            settings = self.guiLoader.entitiesFactory.getSettings(loadParams.viewKey.alias)
             scope = settings.scope if settings else loadParams.scope
             if settings:
                 layer = settings.layer

@@ -1,6 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/web/web_client_api/shop/trade.py
+from __future__ import absolute_import
 from collections import namedtuple
+from future.utils import viewitems
 from gui import SystemMessages
 from gui.SystemMessages import pushMessagesFromResult
 from gui.shared.gui_items.processors.common import GoldToCreditsExchanger, PremiumAccountBuyer
@@ -30,16 +32,12 @@ def parseItemsSpec(specList):
 
 
 def itemsSpecValidator(specList):
-    try:
-        parseItemsSpec(specList)
-    except SoftException:
-        raise
-
+    parseItemsSpec(specList)
     return True
 
 
 def _currencyExchangeValidator(_, data):
-    return all((v > 0 and c in _EXCHANGER.iterkeys() for c, v in data.get('currencies', {}).iteritems()))
+    return all((v > 0 and c in _EXCHANGER for c, v in viewitems(data.get('currencies', {}))))
 
 
 class _BuyItemsSchema(W2CSchema):
@@ -57,7 +55,7 @@ class TradeWebApiMixin(object):
     @w2c(_CurrencyExchangeSchema, 'exchange')
     def exchange(self, cmd):
         exchangeResults = {}
-        for currencyType, currencyValue in cmd.currencies.iteritems():
+        for currencyType, currencyValue in viewitems(cmd.currencies):
             result = yield _EXCHANGER[currencyType](currencyValue).request()
             exchangeResults[currencyType] = {'success': result.success,
              'message': result.userMsg}

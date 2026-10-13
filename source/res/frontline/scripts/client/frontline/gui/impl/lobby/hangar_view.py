@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: frontline/scripts/client/frontline/gui/impl/lobby/hangar_view.py
+from __future__ import absolute_import
 import typing
 from account_helpers.AccountSettings import HANGAR_VIEW_SETTINGS, HANGAR_KEY_BINDINGS
 from frontline.gui.impl.lobby.presenters.alert_presenter import AlertPresenter

@@ -32,11 +32,12 @@ from gui.veh_mechanics.battle.updaters.updaters_common import ViewUpdatersCollec
 from helpers import dependency
 from helpers.CallbackDelayer import CallbackDelayer
 from items import makeIntCompactDescrByID
+from items.vehicle_mechanics_types import VehicleMechanicKeys
 from skeletons.account_helpers.settings_core import ISettingsCore, IBattleCommunicationsSettings
 from skeletons.gui.battle_session import IBattleSessionProvider
 from skeletons.gui.goodies import IBoostersStateProvider
 from skeletons.gui.lobby_context import ILobbyContext
-from vehicles.mechanics.mechanic_constants import VehicleMechanic, VehicleMechanicCommand
+from vehicles.mechanics.mechanic_constants import VehicleMechanicCommand
 from vehicles.mechanics.mechanic_helpers import hasVehicleDescrMechanic, getVehicleDescrMechanics, getVehicleMechanicsComponents
 from vehicles.mechanics.mechanic_states import IMechanicStatesListenerLogic
 if typing.TYPE_CHECKING:
@@ -388,14 +389,14 @@ class SiegeIndicatorHintPlugin(HintPanelPlugin):
         vStateCtrl = self.sessionProvider.shared.vehicleState
         vTypeDesc = vehicle.typeDescriptor
         vehicleMechanicsComponents = getVehicleMechanicsComponents(vehicle)
-        isPillboxVehicle = VehicleMechanic.PILLBOX_SIEGE_MODE in vehicleMechanicsComponents
-        self.__hasRocketAcceleration = VehicleMechanic.ROCKET_ACCELERATION in vehicleMechanicsComponents
-        self.__hasRechargeableNitro = VehicleMechanic.RECHARGEABLE_NITRO in vehicleMechanicsComponents
-        self.__hasStagedJetBoosters = VehicleMechanic.STAGED_JET_BOOSTERS in vehicleMechanicsComponents
-        self.__hasWheeledDash = VehicleMechanic.WHEELED_DASH in vehicleMechanicsComponents
-        self.__hasTwinGun = VehicleMechanic.TWIN_GUN in vehicleMechanicsComponents
-        self.__hasShellParamsSwitcher = VehicleMechanic.SHELL_PARAMS_SWITCHER in vehicleMechanicsComponents
-        self.__hasBustleFeed = VehicleMechanic.BUSTLE_FEED in vehicleMechanicsComponents
+        isPillboxVehicle = VehicleMechanicKeys.PILLBOX_SIEGE_MODE in vehicleMechanicsComponents
+        self.__hasRocketAcceleration = VehicleMechanicKeys.ROCKET_ACCELERATION in vehicleMechanicsComponents
+        self.__hasRechargeableNitro = VehicleMechanicKeys.RECHARGEABLE_NITRO in vehicleMechanicsComponents
+        self.__hasStagedJetBoosters = VehicleMechanicKeys.STAGED_JET_BOOSTERS in vehicleMechanicsComponents
+        self.__hasWheeledDash = VehicleMechanicKeys.WHEELED_DASH in vehicleMechanicsComponents
+        self.__hasTwinGun = VehicleMechanicKeys.TWIN_GUN in vehicleMechanicsComponents
+        self.__hasShellParamsSwitcher = VehicleMechanicKeys.SHELL_PARAMS_SWITCHER in vehicleMechanicsComponents
+        self.__hasBustleFeed = VehicleMechanicKeys.BUSTLE_FEED in vehicleMechanicsComponents
         self.__hasTurboshaftEngine = vTypeDesc.hasTurboshaftEngine
         self.__hasHydraulicChassis = vTypeDesc.hasHydraulicChassis
         self.__isWheeledTech = vTypeDesc.isWheeledVehicle and not self.__hasWheeledDash
@@ -403,31 +404,31 @@ class SiegeIndicatorHintPlugin(HintPanelPlugin):
         if self.__hasRocketAcceleration:
             if self.__rocketCmp:
                 self.__rocketCmp.unsubscribe(tryActivateCallback=self.__onTryRocketAccelerationActivate)
-            self.__rocketCmp = vehicleMechanicsComponents[VehicleMechanic.ROCKET_ACCELERATION]
+            self.__rocketCmp = vehicleMechanicsComponents[VehicleMechanicKeys.ROCKET_ACCELERATION]
             if self.__rocketCmp:
                 self.__rocketCmp.subscribe(tryActivateCallback=self.__onTryRocketAccelerationActivate)
         if self.__hasRechargeableNitro:
             if self.__nitroCmp:
                 self.__nitroCmp.commandsEvents.onMechanicCommand -= self.__onTryRechargeableNitroActivate
-            self.__nitroCmp = vehicleMechanicsComponents[VehicleMechanic.RECHARGEABLE_NITRO]
+            self.__nitroCmp = vehicleMechanicsComponents[VehicleMechanicKeys.RECHARGEABLE_NITRO]
             if self.__nitroCmp:
                 self.__nitroCmp.commandsEvents.onMechanicCommand += self.__onTryRechargeableNitroActivate
         if self.__hasStagedJetBoosters:
             if self.__stagedJetBoostersCmp:
                 self.__stagedJetBoostersCmp.commandsEvents.onMechanicCommand -= self.__onTryStagedJetBoostersActivate
-            self.__stagedJetBoostersCmp = vehicleMechanicsComponents[VehicleMechanic.STAGED_JET_BOOSTERS]
+            self.__stagedJetBoostersCmp = vehicleMechanicsComponents[VehicleMechanicKeys.STAGED_JET_BOOSTERS]
             if self.__stagedJetBoostersCmp:
                 self.__stagedJetBoostersCmp.commandsEvents.onMechanicCommand += self.__onTryStagedJetBoostersActivate
         if self.__hasWheeledDash:
             if self.__wheeledDashCmp:
                 self.__wheeledDashCmp.commandsEvents.onMechanicCommand -= self.__onTryWheeledDashActivate
-            self.__wheeledDashCmp = vehicleMechanicsComponents[VehicleMechanic.WHEELED_DASH]
+            self.__wheeledDashCmp = vehicleMechanicsComponents[VehicleMechanicKeys.WHEELED_DASH]
             if self.__wheeledDashCmp:
                 self.__wheeledDashCmp.commandsEvents.onMechanicCommand += self.__onTryWheeledDashActivate
         if self.__hasBustleFeed:
             if self.__bustleFeedCmp:
                 self.__bustleFeedCmp.commandsEvents.onMechanicCommand -= self.__onTryBustleFeedSwitch
-            self.__bustleFeedCmp = vehicleMechanicsComponents[VehicleMechanic.BUSTLE_FEED]
+            self.__bustleFeedCmp = vehicleMechanicsComponents[VehicleMechanicKeys.BUSTLE_FEED]
             if self.__bustleFeedCmp:
                 self.__bustleFeedCmp.commandsEvents.onMechanicCommand += self.__onTryBustleFeedSwitch
         if vehicle.isAlive() and self.__isSuitableVehicle:
@@ -560,7 +561,7 @@ class SiegeIndicatorHintPlugin(HintPanelPlugin):
             elif self.__hasWheeledDash:
                 hintText = backport.text(R.strings.ingame_gui.siegeMode.hint.wheeledDash())
             else:
-                hintTextID = R.strings.ingame_gui.siegeMode.hint.forMode.dyn(attr='c_{}'.format(self.__siegeState))
+                hintTextID = R.strings.ingame_gui.siegeMode.hint.forMode.dyn(self.__siegeState)
                 hintText = backport.text(hintTextID()) if hintTextID.exists() else None
         else:
             hintText = backport.text(R.strings.ingame_gui.siegeMode.hint.noBinding())
@@ -1428,7 +1429,7 @@ class PillboxHelpPlugin(VehicleMechanicPlugin, ContainersListener, IMechanicStat
         self._updateHint()
 
     def _getViewUpdaters(self):
-        return [VehicleMechanicStatesUpdater(VehicleMechanic.PILLBOX_SIEGE_MODE, self)]
+        return [VehicleMechanicStatesUpdater(VehicleMechanicKeys.PILLBOX_SIEGE_MODE, self)]
 
     def _updateHint(self):
         if self.__canShow():
@@ -1483,7 +1484,7 @@ class PillboxHelpPlugin(VehicleMechanicPlugin, ContainersListener, IMechanicStat
         return isInSteadyMode and self.__isInDisplayPeriod and self._haveHintsLeft(self.__settings)
 
     def __onVehicleControlling(self, vehicle):
-        self.__isSuitableVehicle = hasVehicleDescrMechanic(vehicle.typeDescriptor, VehicleMechanic.PILLBOX_SIEGE_MODE)
+        self.__isSuitableVehicle = hasVehicleDescrMechanic(vehicle.typeDescriptor, VehicleMechanicKeys.PILLBOX_SIEGE_MODE)
         if vehicle.isAlive() and self.__isSuitableVehicle:
             self.__isActive = True
         else:
@@ -1613,7 +1614,7 @@ class SkillActivatedHintPlugin(HintPanelPlugin):
     def __onVehicleControlling(self, vehicle):
         vStateCtrl = self.sessionProvider.shared.vehicleState
         vTypeDesc = vehicle.typeDescriptor
-        self.__hasTargetDesignator = hasVehicleDescrMechanic(vTypeDesc, VehicleMechanic.TARGET_DESIGNATOR)
+        self.__hasTargetDesignator = hasVehicleDescrMechanic(vTypeDesc, VehicleMechanicKeys.TARGET_DESIGNATOR)
         self.__isSuitableVehicle = self.__hasTargetDesignator
         prevCmp = self.__getTargetDesignatorCmp()
         if prevCmp is not None:

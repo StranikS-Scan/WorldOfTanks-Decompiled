@@ -4,15 +4,17 @@ from __future__ import absolute_import
 import typing
 import CommandMapping
 from AvatarInputHandler.commands.input_handler_command import InputHandlerCommand
+from items.vehicle_mechanics_types import VehicleMechanicKeys
 from vehicles.mechanics.mechanic_helpers import getPlayerVehicleMechanicComponent
-from vehicles.mechanics.mechanic_constants import VehicleMechanic
+if typing.TYPE_CHECKING:
+    from items.vehicle_mechanics_types import VehicleMechanicKey
 
 class SimpleActivationControl(InputHandlerCommand):
-    _VEHICLE_MECHANIC_KEYS = {VehicleMechanic.ROCKET_ACCELERATION: CommandMapping.CMD_CM_VEHICLE_SWITCH_AUTOROTATION,
-     VehicleMechanic.CONCENTRATION_MODE: CommandMapping.CMD_CM_VEHICLE_SWITCH_AUTOROTATION,
-     VehicleMechanic.STATIONARY_RELOAD: CommandMapping.CMD_RELOAD_PARTIAL_CLIP,
-     VehicleMechanic.PROPELLANT_GUN: CommandMapping.CMD_CM_VEHICLE_SWITCH_AUTOROTATION,
-     VehicleMechanic.AUTORELOADER_SURGE: CommandMapping.CMD_CM_SPECIAL_ABILITY}
+    _VEHICLE_MECHANIC_KEYS = {VehicleMechanicKeys.AUTORELOADER_SURGE: CommandMapping.CMD_CM_SPECIAL_ABILITY,
+     VehicleMechanicKeys.CONCENTRATION_MODE: CommandMapping.CMD_CM_VEHICLE_SWITCH_AUTOROTATION,
+     VehicleMechanicKeys.PROPELLANT_GUN: CommandMapping.CMD_CM_VEHICLE_SWITCH_AUTOROTATION,
+     VehicleMechanicKeys.ROCKET_ACCELERATION: CommandMapping.CMD_CM_VEHICLE_SWITCH_AUTOROTATION,
+     VehicleMechanicKeys.STATIONARY_RELOAD: CommandMapping.CMD_RELOAD_PARTIAL_CLIP}
 
     def __init__(self, mechanic):
         self.__mechanic = mechanic

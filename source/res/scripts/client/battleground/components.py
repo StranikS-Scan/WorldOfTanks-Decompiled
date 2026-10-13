@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/battleground/components.py
+from __future__ import absolute_import
 import BigWorld
 import Math
 import AnimationSequence
@@ -25,6 +26,7 @@ class ModelComponent(Component):
         return self.__baseModel
 
     def __init__(self, compoundModel, **kwargs):
+        super(ModelComponent, self).__init__()
         offset = kwargs.get('offset', 0.0)
         self.__offset = (0.0, offset, 0.0)
         self.__baseModel = compoundModel
@@ -72,6 +74,7 @@ class ModelComponent(Component):
 class SequenceComponent(Component):
 
     def __init__(self, sequenceAnimator):
+        super(SequenceComponent, self).__init__()
         self.__sequenceAnimator = sequenceAnimator
 
     def bindToCompound(self, compound):
@@ -194,12 +197,14 @@ class _SequenceAnimatorTimer(object):
 class TerrainAreaComponent(Component):
 
     def __init__(self, area):
+        super(TerrainAreaComponent, self).__init__()
         self.area = area
 
 
 class EffectPlayer(Component):
 
     def __init__(self, effectsListSectionRoot, effectsListName):
+        super(EffectPlayer, self).__init__()
         timeline = EffectsList.effectsFromSection(effectsListSectionRoot[effectsListName])
         self.effectsListTimeLine = timeline
         self.__effectID = None

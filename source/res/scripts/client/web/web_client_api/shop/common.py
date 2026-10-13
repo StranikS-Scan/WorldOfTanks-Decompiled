@@ -1,5 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/web/web_client_api/shop/common.py
+from __future__ import absolute_import
+from past.builtins import basestring
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import CUSTOM_SHOP_SETTINGS
 from web.web_client_api import Field, W2CSchema, w2c

@@ -1,7 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/frameworks/wulf/py_object_wrappers.py
-from constants import IS_EDITOR, IS_WEB
-if not (IS_EDITOR or IS_WEB):
+from __future__ import absolute_import
+from constants import IS_EDITOR, IS_WEB, IS_CGF_DUMP
+if not (IS_EDITOR or IS_WEB or IS_CGF_DUMP):
     import _wulf as _py_objects
 else:
     import wulf_wrapper as _py_objects
@@ -17,6 +18,7 @@ PyObjectViewModel = _py_objects.PyObjectViewModel
 PyObjectWindowSettings = _py_objects.PyObjectWindowSettings
 PyObjectWindow = _py_objects.PyObjectWindow
 PyObjectWindowsArea = _py_objects.PyObjectWindowsArea
+PyResAccessor = _py_objects.ResAccessor
 isTranslatedKeyValid = _py_objects.isTranslatedKeyValid
 isTranslatedTextExisted = _py_objects.isTranslatedTextExisted
 getTranslatedText = _py_objects.getTranslatedText
@@ -32,4 +34,4 @@ getRealFormat = _py_objects.getRealFormat
 getTimeFormat = _py_objects.getTimeFormat
 getDateFormat = _py_objects.getDateFormat
 caseMap = _py_objects.caseMap
-__all__ = ('ValueType', 'Resource', 'PyObjectArray', 'PyObjectMap', 'PyObjectCommand', 'PyGuiApplication', 'PyObjectViewSettings', 'PyObjectView', 'PyObjectViewModel', 'PyObjectWindowSettings', 'PyObjectWindow', 'PyObjectWindowsArea', 'isTranslatedKeyValid', 'isTranslatedTextExisted', 'getTranslatedText', 'getTranslatedPluralText', 'getImagePath', 'getSoundEffectId', 'getLayoutPath', 'getTranslatedTextByResId', 'getTranslatedPluralTextByResId', 'getTranslatedKey', 'getNumberFormat', 'getRealFormat', 'getTimeFormat', 'getDateFormat', 'caseMap')
+__all__ = ('ValueType', 'Resource', 'PyObjectArray', 'PyObjectMap', 'PyObjectCommand', 'PyGuiApplication', 'PyObjectViewSettings', 'PyObjectView', 'PyObjectViewModel', 'PyObjectWindowSettings', 'PyObjectWindow', 'PyObjectWindowsArea', 'PyResAccessor', 'isTranslatedKeyValid', 'isTranslatedTextExisted', 'getTranslatedText', 'getTranslatedPluralText', 'getImagePath', 'getSoundEffectId', 'getLayoutPath', 'getTranslatedTextByResId', 'getTranslatedPluralTextByResId', 'getTranslatedKey', 'getNumberFormat', 'getRealFormat', 'getTimeFormat', 'getDateFormat', 'caseMap')

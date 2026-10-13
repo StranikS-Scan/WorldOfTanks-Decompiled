@@ -1,7 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/proto/bw_chat2/battle_chat_cmd.py
-from typing import TYPE_CHECKING
+from __future__ import absolute_import
 import struct
+from past.builtins import unicode
+from typing import TYPE_CHECKING
 import Math
 from chat_commands_consts import BATTLE_CHAT_COMMAND_NAMES
 from constants import CommendationsState
@@ -274,7 +276,7 @@ class _ReceivedCmdDecorator(ReceivedBattleChatCommand):
             return None
         elif not self._LOCALE_RESOURCE.dyn(command.msgText).isValid():
             text = command.msgText
-            if isinstance(text, str):
+            if isinstance(text, bytes):
                 text = unicode(text, 'utf-8', errors='ignore')
             return text
         elif self.isOnMinimap():
@@ -520,16 +522,16 @@ class BattleCommandFactory(IBattleCommandFactory):
             decorator = _OutCmdDecorator(name, msgArgs)
         return decorator
 
-    def createByObjectiveIndex(self, idx, isAtk, commandName):
+    def createByObjectiveIndex(self, idx, isAtk, actionName):
         decorator = None
         if _OBJECTIVE_CMD_IDS:
-            decorator = _OutCmdDecorator(commandName, messageArgs(int32Arg1=idx))
+            decorator = _OutCmdDecorator(actionName, messageArgs(int32Arg1=idx))
         return decorator
 
-    def createByBaseIndexAndName(self, baseIdx, commandName, baseName):
+    def createByBaseIndexAndName(self, pointID, commandName, baseName):
         decorator = None
         if commandName in BASE_CMD_NAMES:
-            decorator = _OutCmdDecorator(commandName, messageArgs(int32Arg1=baseIdx, strArg1=baseName))
+            decorator = _OutCmdDecorator(commandName, messageArgs(int32Arg1=pointID, strArg1=baseName))
         return decorator
 
     def create4Reload(self, isCassetteClip, timeLeft, quantity):
@@ -559,8 +561,8 @@ class BattleCommandFactory(IBattleCommandFactory):
     def createReplyByName(self, replyID, replyType, replierID):
         return _OutCmdDecorator(BATTLE_CHAT_COMMAND_NAMES.REPLY, messageArgs(int32Arg1=replyID, int64Arg1=replierID, strArg1=replyType))
 
-    def createCancelReplyByName(self, targetIDOfReply, replyAction, replierID):
-        return _OutCmdDecorator(BATTLE_CHAT_COMMAND_NAMES.CANCEL_REPLY, messageArgs(int32Arg1=targetIDOfReply, int64Arg1=replierID, strArg1=replyAction))
+    def createCancelReplyByName(self, replyID, replyType, replierID):
+        return _OutCmdDecorator(BATTLE_CHAT_COMMAND_NAMES.CANCEL_REPLY, messageArgs(int32Arg1=replyID, int64Arg1=replierID, strArg1=replyType))
 
     def createClearChatCommandsFromTarget(self, targetID, targetMarkerType):
         return _OutCmdDecorator(BATTLE_CHAT_COMMAND_NAMES.CLEAR_CHAT_COMMANDS, messageArgs(int32Arg1=targetID, strArg1=targetMarkerType))

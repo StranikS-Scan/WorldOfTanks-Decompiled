@@ -1,7 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/frameworks/wulf/view/map.py
+from __future__ import absolute_import
 import typing as t
-from collections import Mapping
+from past.builtins import basestring
+from py2to3.moves.collections.abc import Mapping
 from ..py_object_wrappers import PyObjectMap, ValueType
 if t.TYPE_CHECKING:
     from types import TracebackType
@@ -20,7 +22,7 @@ def toValueType(pyType):
         return ValueType.MAP
     if pyType == Array:
         return ValueType.ARRAY
-    if issubclass(pyType, (str, unicode)):
+    if issubclass(pyType, basestring):
         return ValueType.STRING
     return ValueType.VIEW_MODEL if issubclass(pyType, ViewModel) else ValueType.NONE
 

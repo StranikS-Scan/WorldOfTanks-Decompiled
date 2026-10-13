@@ -1,8 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/formatters/__init__.py
+from __future__ import absolute_import
 import logging
-from time import gmtime, time as getTime
 from collections import namedtuple
+from past.builtins import unicode
+from time import gmtime, time as getTime
 from constants import NC_CONTEXT_ITEM_TYPE
 from gui.impl import backport
 from helpers import time_utils
@@ -54,6 +56,9 @@ class TimeFormatter(object):
             return TimeFormatter.getShortTimeFormat(timestamp)
         except Exception:
             _logger.exception('There is error while formatting message time: %r', timestamp)
+            return None
+
+        return None
 
     @classmethod
     def getMessageEmptyFormatU(cls, _):

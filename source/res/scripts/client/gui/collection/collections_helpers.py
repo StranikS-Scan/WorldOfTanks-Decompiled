@@ -25,7 +25,7 @@ from skeletons.gui.shared import IItemsCache
 if typing.TYPE_CHECKING:
     from typing import List, Dict, Optional, Tuple, Union
     from collections_common import CollectionItem
-    from gui.impl.gen_utils import DynAccessor
+    from frameworks.wulf import PyResAccessor
     from gui.shared.gui_items.Vehicle import Vehicle
 
 @replace_none_kwargs(itemsCache=IItemsCache)

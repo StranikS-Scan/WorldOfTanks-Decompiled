@@ -5,7 +5,7 @@ import logging
 import typing
 import Event
 from future.utils import viewvalues
-from constants import EVENT_CLIENT_DATA, EVENT_TYPE
+from constants import ARENA_BONUS_TYPE_TO_QUEUE_TYPE, EVENT_CLIENT_DATA, EVENT_TYPE
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.prb_control.entities.listener import IGlobalListener
 from helpers import dependency
@@ -111,8 +111,17 @@ class RestBonusController(IRestBonusController, IGlobalListener):
     def __isQuestAvailable(self, quest, queueType, vehicle):
         isAccountOK = quest.accountReqs.isAvailable()
         isVehicleOK = quest.vehicleReqs.isAvailable(vehicle)
-        isBattleTypeOK = quest.hasBonusType(queueType)
+        isBattleTypeOK = self.__hasQuestQueueType(quest, queueType)
         return isAccountOK and isVehicleOK and isBattleTypeOK
+
+    @staticmethod
+    def __hasQuestQueueType(quest, queueType):
+        bonusTypesCond = quest.preBattleCond.getConditions().find('bonusTypes')
+        if bonusTypesCond is None:
+            return True
+        else:
+            questQueueTypes = {ARENA_BONUS_TYPE_TO_QUEUE_TYPE[bonusType] for bonusType in bonusTypesCond.getValue() if bonusType in ARENA_BONUS_TYPE_TO_QUEUE_TYPE}
+            return queueType in questQueueTypes
 
     def __addListeners(self):
         self.__lobbyContext.getServerSettings().onServerSettingsChange += self.__onSettingsChanged

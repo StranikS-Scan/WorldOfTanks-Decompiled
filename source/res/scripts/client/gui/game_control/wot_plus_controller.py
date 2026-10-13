@@ -26,7 +26,6 @@ from gui.platform.products_fetcher.user_subscriptions.user_subscription import U
 from gui.server_events import settings
 from gui.server_events.awards_formatters import AWARDS_SIZES
 from gui.server_events.bonuses import SimpleBonus
-from gui.shared.gui_items.artefacts import OptionalDevice
 from gui.shared.utils.requesters.ItemsRequester import REQ_CRITERIA
 from helpers import dependency
 from helpers.CallbackDelayer import CallbackDelayer
@@ -53,6 +52,7 @@ if typing.TYPE_CHECKING:
     from gui.shared.gui_items.Vehicle import Vehicle
     from renewable_subscription_common.optional_devices_usage_config import VehicleLoadout
     from Account import Account
+    from gui.shared.gui_items.artefacts import OptionalDevice
 _logger = logging.getLogger(__name__)
 
 class NotificationTypeTemplate(Enum):
@@ -115,6 +115,7 @@ class WotPlusController(IWotPlusController, _ProBoostMixin, CallbackDelayer):
         self._state = WotPlusState.INACTIVE
         self._billingPeriod = None
         self._hasSteamSubscription = False
+        self._activeSubscriptionPlatform = SubscriptionRequestPlatform.UNKNOWN
         self._assistant = WotPlusAssistant()
         self._srcAssetManager = ServiceRecordAssetManager()
         self.onDataChanged = Event()
@@ -255,6 +256,12 @@ class WotPlusController(IWotPlusController, _ProBoostMixin, CallbackDelayer):
 
     def hasSteamSubscription(self):
         return self._hasSteamSubscription
+
+    def getActiveSubscriptionPlatform(self):
+        return self._activeSubscriptionPlatform
+
+    def isSubscriptionBoughtViaPlatform(self):
+        return self._activeSubscriptionPlatform == SubscriptionRequestPlatform.WG_PLATFORM
 
     def getExpiryTime(self):
         return self._cache.get(RS_EXPIRATION_TIME, 0)
@@ -447,6 +454,7 @@ class WotPlusController(IWotPlusController, _ProBoostMixin, CallbackDelayer):
         else:
             self._invalidationInProgress = True
             self._hasSteamSubscription = False
+            self._activeSubscriptionPlatform = SubscriptionRequestPlatform.UNKNOWN
             self._billingPeriod = None
             if constants.IS_CHINA or constants.IS_CT:
                 _logger.warning('Subscriptions are not available for the current realm: %s', constants.CURRENT_REALM)
@@ -467,6 +475,9 @@ class WotPlusController(IWotPlusController, _ProBoostMixin, CallbackDelayer):
                     cancelledSub = max(cancelledSubs, key=lambda s: s.nextBillingTime)
                     self._billingPeriod = cancelledSub.billingPeriod
                     self._state = WotPlusState.CANCELLED
+                    self._activeSubscriptionPlatform = cancelledSub.platform
+            else:
+                self._activeSubscriptionPlatform = activeSubscriptions[0].platform
             self._hasSteamSubscription = any((userSubscription.platform == SubscriptionRequestPlatform.STEAM for userSubscription in userSubscriptions))
             raise AsyncReturn(None)
             return

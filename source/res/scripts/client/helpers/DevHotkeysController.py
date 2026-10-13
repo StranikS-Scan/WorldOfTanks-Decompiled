@@ -1,8 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/helpers/DevHotkeysController.py
-import Keys
+from __future__ import absolute_import
 import os
 import subprocess
+import Keys
 
 def handleKeyEvent(event):
     if event.isShiftDown() and event.isCtrlDown() and event.isAltDown() and event.isKeyDown() and not event.isRepeatedEvent():

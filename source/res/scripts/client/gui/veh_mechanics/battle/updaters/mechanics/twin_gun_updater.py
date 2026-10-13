@@ -4,7 +4,7 @@ from __future__ import absolute_import
 import typing
 from events_handler import eventHandler
 from gui.veh_mechanics.battle.updaters.mechanics.mechanics_common import VehicleMechanicUpdater
-from vehicles.mechanics.mechanic_constants import VehicleMechanic
+from items.vehicle_mechanics_types import VehicleMechanicKeys
 if typing.TYPE_CHECKING:
     from TwinGunController import TwinGunController
 
@@ -17,7 +17,7 @@ class ITwinGunView(object):
 class TwinGunUpdater(VehicleMechanicUpdater):
 
     def __init__(self, view):
-        super(TwinGunUpdater, self).__init__(VehicleMechanic.TWIN_GUN, view)
+        super(TwinGunUpdater, self).__init__(VehicleMechanicKeys.TWIN_GUN, view)
         self.__twinGunComponent = None
         return
 

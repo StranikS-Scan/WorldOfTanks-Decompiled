@@ -1,18 +1,18 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/tutorial/gui/Scaleform/gui_impl.py
+from __future__ import absolute_import
 import typing
 from collections import defaultdict
 from Event import Event, EventManager
-from gui.Scaleform.framework.managers.TutorialManager import ScaleformTutorialManager
 from helpers import dependency
 from skeletons.gui.app_loader import IAppLoader, GuiGlobalSpaceID
 from tutorial.gui import GuiType, IGuiImpl
 if typing.TYPE_CHECKING:
+    from gui.Scaleform.framework.managers.TutorialManager import ScaleformTutorialManager
     from skeletons.tutorial import ComponentID
     from tutorial.gui import ComponentDescr
 
 class ScaleformGuiImpl(IGuiImpl):
-    __slots__ = ('__proxy', '__eventMgr')
     __appLoader = dependency.descriptor(IAppLoader)
 
     def __init__(self):

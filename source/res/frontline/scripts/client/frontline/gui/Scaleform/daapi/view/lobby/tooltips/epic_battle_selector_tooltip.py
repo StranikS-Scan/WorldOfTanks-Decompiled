@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: frontline/scripts/client/frontline/gui/Scaleform/daapi/view/lobby/tooltips/epic_battle_selector_tooltip.py
+from __future__ import absolute_import
 from .common_blocks import packEpicBattleInfoBlock, packEpicBattleSeasonBlock
 from gui.game_control.epic_meta_game_ctrl import EPIC_PERF_GROUP
 from gui.impl import backport

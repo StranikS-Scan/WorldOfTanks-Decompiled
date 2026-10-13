@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: story_mode/scripts/client/story_mode/gui/impl/lobby/base_prb_view.py
+from __future__ import absolute_import
 from logging import getLogger
 from adisp import adisp_process
 from gui.impl.pub import ViewImpl

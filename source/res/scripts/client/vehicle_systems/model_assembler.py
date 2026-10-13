@@ -1,28 +1,30 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/vehicle_systems/model_assembler.py
+from __future__ import absolute_import, division
+import logging
 import math
 import typing
-from functools import partial
-from collections import namedtuple
-from typing import List, Callable
-import logging
 import weakref
-import Vehicular
-import WWISE
+from builtins import range
+from collections import namedtuple
+from functools import partial
+from future.utils import viewitems
 import BigWorld
-import Math
-import material_kinds
 import CGF
 import GenericComponents
-from constants import IS_DEVELOPMENT, IS_UE_EDITOR
-from soft_exception import SoftException
+import Math
+import Vehicular
+import WWISE
+import material_kinds
 import math_utils
+from constants import IS_DEVELOPMENT, IS_UE_EDITOR
 from helpers import DecalMap
 from items.components import shared_components, component_constants
 from items.components.c11n_constants import AttachmentLogic
 from vehicle_systems.vehicle_damage_state import VehicleDamageState
 from vehicle_systems.tankStructure import getPartModelsFromDesc, getCollisionModelsFromDesc, TankNodeNames, TankPartNames, TankPartIndexes, TankRenderMode, TankCollisionPartNames
 from vehicle_systems.components.hull_aiming_controller import HullAimingController
+from soft_exception import SoftException
 if typing.TYPE_CHECKING:
     from vehicle_appearance.common_tank_appearance import CommonTankAppearance
     from gui.hangar_vehicle_appearance import HangarVehicleAppearance
@@ -56,7 +58,7 @@ def prepareCollisionAssembler(vehicleDesc, isTurretDetached, worldID):
         hitTestersByPart[TankPartNames.TURRET] = vehicleDesc.turret.hitTester
         hitTestersByPart[TankPartNames.GUN] = vehicleDesc.gun.hitTester
     bspModels = []
-    for partName, hitTester in hitTestersByPart.iteritems():
+    for partName, hitTester in viewitems(hitTestersByPart):
         partId = TankPartNames.getIdx(partName)
         bspModel = (partId, hitTester.bspModelName)
         bspModels.append(bspModel)
@@ -85,7 +87,7 @@ def setupCollisions(vehicleDesc, collisions):
      TankPartNames.HULL: vehicleDesc.hull.hitTester,
      TankPartNames.TURRET: vehicleDesc.turret.hitTester,
      TankPartNames.GUN: vehicleDesc.gun.hitTester}
-    for partName, hitTester in hitTestersByPart.iteritems():
+    for partName, hitTester in viewitems(hitTestersByPart):
         partID = TankPartNames.getIdx(partName)
         hitTester.bbox = collisions.getBoundingBox(partID)
         if not hitTester.bbox:
@@ -318,7 +320,7 @@ def assembleVehicleTraces(appearance, vehicleFilter, wheelsAnimator, queue):
     chassisConfig = appearance.typeDescriptor.chassis
     tracesConfig = chassisConfig.traces
     textures = {}
-    for matKindName, texId in DecalMap.g_instance.getTextureSet(tracesConfig.textureSet).iteritems():
+    for matKindName, texId in viewitems(DecalMap.g_instance.getTextureSet(tracesConfig.textureSet)):
         if matKindName != 'bump':
             for matKind in material_kinds.EFFECT_MATERIAL_IDS_BY_NAMES[matKindName]:
                 textures[matKind] = texId
@@ -473,7 +475,7 @@ def setupSplineTracks(fashion, vDesc, chassisModel, prereqs, modelsSet):
     else:
         leftSpline = []
         rightSpline = []
-        for idx, trackDesc in splineDesc.trackPairs.iteritems():
+        for idx, trackDesc in viewitems(splineDesc.trackPairs):
             segmentModelLeft = segmentModelRight = segment2ModelLeft = segment2ModelRight = None
             modelName = trackDesc.segmentModelLeft(modelsSet)
             try:
@@ -584,7 +586,7 @@ def assembleSimpleTracks(vehicleDesc, appearance, tracks):
     else:
         leftTracks = []
         rightTracks = []
-        for i in xrange(len(tracksCfg.trackPairs)):
+        for i in sorted(tracksCfg.trackPairs):
             left = Vehicular.SimpleTrackCreationData(True, i, tracksCfg.trackPairs[i].leftMaterial, appearance.fashion, appearance.gameObject.uuid, tracksCfg.trackPairs[i].textureScale)
             right = Vehicular.SimpleTrackCreationData(False, i, tracksCfg.trackPairs[i].rightMaterial, appearance.fashion, appearance.gameObject.uuid, tracksCfg.trackPairs[i].textureScale)
             leftTracks.append(left)
@@ -600,7 +602,7 @@ def assembleSizePhysicalTrack(resourceRefs, resourceFormat, isLeft, trackPairsCo
     try:
         inited = True
         allTracks = []
-        for i in xrange(trackPairsCount):
+        for i in range(trackPairsCount):
             name = resourceFormat.format(i)
             trackBuilder = resourceRefs[name] if resourceRefs.has_key(name) else None
             if trackBuilder is not None and trackBuilder.isValid() and not setupOnlyThickness:

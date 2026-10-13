@@ -1,9 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/helpers/CallbackDelayer.py
+from __future__ import absolute_import
 import functools
+from collections import namedtuple
+from future.utils import viewvalues
 from typing import Callable, Dict
 import BigWorld
-from collections import namedtuple
 
 class ICallbackDelayer(object):
 
@@ -29,7 +31,7 @@ class CallbackDelayer(ICallbackDelayer):
         self.clearCallbacks()
 
     def clearCallbacks(self):
-        for _, callbackId in self.__callbacks.iteritems():
+        for callbackId in viewvalues(self.__callbacks):
             if callbackId is not None:
                 BigWorld.cancelCallback(callbackId)
 
@@ -124,7 +126,7 @@ class CallbackPauseManager(ICallbackDelayer):
 
     def clearCallbacks(self):
         self.__isPaused = False
-        for callbackRequest in self.__callbacks.itervalues():
+        for callbackRequest in viewvalues(self.__callbacks):
             if self.hasDelayedCallback(callbackRequest.func) and callbackRequest.ID is not None:
                 BigWorld.cancelCallback(callbackRequest.ID)
 
@@ -156,7 +158,7 @@ class CallbackPauseManager(ICallbackDelayer):
         else:
             self.__isPaused = True
             self.__pauseTime = self.__timeFunc()
-            for callbackRequest in self.__callbacks.itervalues():
+            for callbackRequest in viewvalues(self.__callbacks):
                 if self.hasDelayedCallback(callbackRequest.func):
                     BigWorld.cancelCallback(callbackRequest.ID)
                     self.__callbacks[callbackRequest.func] = DelayedRequest(None, callbackRequest.queuedTime, callbackRequest.delay, callbackRequest.func, callbackRequest.args, callbackRequest.kwargs)
@@ -167,7 +169,7 @@ class CallbackPauseManager(ICallbackDelayer):
         if not self.__isPaused:
             return
         self.__isPaused = False
-        for callbackRequest in self.__callbacks.itervalues():
+        for callbackRequest in viewvalues(self.__callbacks):
             delaySetback = max(0, self.__pauseTime - callbackRequest.queuedTime)
             self.delayCallback((callbackRequest.delay - delaySetback), callbackRequest.func, *callbackRequest.args, **callbackRequest.kwargs)
 

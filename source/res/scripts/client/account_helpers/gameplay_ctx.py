@@ -1,8 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/account_helpers/gameplay_ctx.py
+from __future__ import absolute_import
 import ArenaType
 import constants
-from constants import RANDOM_FLAGS
 from debug_utils import LOG_DEBUG, LOG_ERROR, LOG_WARNING
 from helpers import dependency
 from skeletons.account_helpers.settings_core import ISettingsCore
@@ -54,23 +54,3 @@ def _setMask(gameplayMask):
     from account_helpers.settings_core.ServerSettingsManager import SETTINGS_SECTIONS
     settingsCore = dependency.instance(ISettingsCore)
     settingsCore.serverSettings.setSectionSettings(SETTINGS_SECTIONS.GAMEPLAY, {'gameplayMask': gameplayMask})
-
-
-def isMapsInDevelopmentEnabled():
-    from account_helpers.settings_core.settings_constants import GAME
-    settingsCore = dependency.instance(ISettingsCore)
-    return settingsCore.getSetting(GAME.GAMEPLAY_DEV_MAPS)
-
-
-def getRandomFlags():
-    flags = 0
-    if isMapsInDevelopmentEnabled():
-        flags |= RANDOM_FLAGS.IS_MAPS_IN_DEVELOPMENT_ENABLED
-    return flags
-
-
-def getWinbackFlags():
-    flags = 0
-    if isMapsInDevelopmentEnabled():
-        flags |= RANDOM_FLAGS.IS_MAPS_IN_DEVELOPMENT_ENABLED
-    return flags

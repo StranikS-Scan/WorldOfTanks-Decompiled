@@ -20,6 +20,7 @@ from gui import GUI_SETTINGS
 from gui.Scaleform.genConsts.VEHPREVIEW_CONSTANTS import VEHPREVIEW_CONSTANTS
 from gui.impl.gen import R
 from gui.impl.gen.view_models.common.price_model import PriceModel
+from gui.impl.gen.view_models.views.lobby.customization.attachments_preview.attachments_preview_model import AttachmentsPreviewFeature
 from gui.impl.wrappers.user_compound_price_model import PriceModelBuilder
 from gui.impl.gen.view_models.views.lobby.vehicle_preview.top_panel.top_panel_tabs_model import TabID
 from gui.prb_control.dispatcher import g_prbLoader
@@ -442,7 +443,7 @@ def showFinalRewardPreviewBattlePassState(chapterID, bonusID=None, level=None, i
         allRewardTypes = getAllFinalRewards(chapterID)
         if FinalReward.ATTACHMENTS_SET in allRewardTypes:
             attachmentsSetToken = getAttachmentsSetTokenForChapter(chapterID)
-            showAttachmentsSetPreview(attachmentsSetToken)
+            showAttachmentsSetPreview(attachmentsSetToken, AttachmentsPreviewFeature.BATTLE_PASS)
             return
         styleInfo = getStyleForChapter(chapterID)
         vehicleCD = getVehicleCDForStyle(styleInfo) if styleInfo is not None else None

@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/AvatarInputHandler/commands/prebattle_setups_control.py
+from __future__ import absolute_import
 import CommandMapping
 from AvatarInputHandler.commands.input_handler_command import InputHandlerCommand
 from gui.battle_control import event_dispatcher

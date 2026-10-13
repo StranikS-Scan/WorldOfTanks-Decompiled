@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/proto/xmpp/spa_requesters.py
+from __future__ import absolute_import
 from adisp import adisp_async
 from messenger.m_constants import CLIENT_ERROR_ID
 from messenger.proto.entities import SharedUserEntity

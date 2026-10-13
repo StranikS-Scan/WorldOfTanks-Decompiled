@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: comp7/scripts/client/comp7/gui/impl/lobby/meta_view/meta_view_helper.py
+from __future__ import absolute_import
 import logging
 import typing
 from comp7.gui.impl.gen.view_models.views.lobby.enums import Division, Rank

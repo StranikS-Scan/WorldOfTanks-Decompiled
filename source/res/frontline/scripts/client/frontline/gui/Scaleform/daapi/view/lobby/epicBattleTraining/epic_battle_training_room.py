@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: frontline/scripts/client/frontline/gui/Scaleform/daapi/view/lobby/epicBattleTraining/epic_battle_training_room.py
+from __future__ import absolute_import
 from frontline.gui.prb_control.entities.epic_battle_training.ctx import EpicTrainingSettingsCtx
 from adisp import adisp_process
 from constants import PREBATTLE_TYPE

@@ -3,7 +3,7 @@
 from __future__ import absolute_import
 from collections import namedtuple
 import logging
-from typing import Iterable, Any, Optional
+from typing import Iterable, Any, Optional, TYPE_CHECKING, Dict
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.framework.entities.View import ViewKey
 from gui.impl.lobby.dialogs.contents.checkbox_content import CheckBoxDialogContent
@@ -13,11 +13,12 @@ from gui.impl.gen import R
 from gui.impl.pub.dialog_window import DialogButtons, DialogFlags
 from gui.impl.lobby.dialogs.contents.common_balance_content import CommonBalanceContent
 from gui.impl.gen.view_models.constants.dialog_presets import DialogPresets
-from gui.impl.gen_utils import DynAccessor
 from gui.impl.gen.view_models.common.format_string_arg_model import FormatStringArgModel
 from helpers import dependency
 from shared_utils import first
 from skeletons.gui.app_loader import IAppLoader
+if TYPE_CHECKING:
+    from frameworks.wulf import PyResAccessor
 _logger = logging.getLogger(__name__)
 _MessageArgs = namedtuple('_MessageArgs', ('args', 'fmtArgs', 'namedFmtArgs'))
 _DialogButton = namedtuple('DialogButton', ('name', 'label', 'isFocused', 'soundDown', 'rawLabel'))

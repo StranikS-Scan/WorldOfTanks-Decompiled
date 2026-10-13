@@ -9,7 +9,7 @@ from gui.Scaleform.daapi.view.meta.TemperatureGunOverheatDecorativeCrosshairMeta
 from gui.Scaleform.genConsts.DECORATIVE_CROSSHAIR_CONSTS import DECORATIVE_CROSSHAIR_CONSTS
 from gui.veh_mechanics.battle.updaters.mechanics.mechanic_passenger_updater import VehicleMechanicPassengerUpdater
 from gui.veh_mechanics.battle.updaters.mechanics.mechanic_states_updater import VehicleMechanicStatesUpdater
-from vehicles.mechanics.mechanic_constants import VehicleMechanic
+from items.vehicle_mechanics_types import VehicleMechanicKeys
 from vehicles.mechanics.mechanic_states import IMechanicStatesListenerLogic
 if typing.TYPE_CHECKING:
     from gui.veh_mechanics.battle.updaters.updaters_common import IViewUpdater
@@ -29,7 +29,7 @@ class TemperatureGunOverheatDecorativeCrosshair(TemperatureGunOverheatDecorative
         self.__invalidateState(newState.overheatState)
 
     def _getViewUpdaters(self):
-        return [VehicleMechanicStatesUpdater(VehicleMechanic.OVERHEAT_GUN, self), VehicleMechanicPassengerUpdater(VehicleMechanic.OVERHEAT_GUN, self)]
+        return [VehicleMechanicStatesUpdater(VehicleMechanicKeys.OVERHEAT_GUN, self), VehicleMechanicPassengerUpdater(VehicleMechanicKeys.OVERHEAT_GUN, self)]
 
     def __invalidateState(self, overheatState, isInstantly=False):
         self.as_setStateS(_MECHANIC_STATE_DECOR_MAP[overheatState], isInstantly)

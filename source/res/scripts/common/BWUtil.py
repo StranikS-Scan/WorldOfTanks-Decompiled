@@ -223,6 +223,14 @@ def getPlatformSuffix():
         return platformSuffix
 
 
+def getNoarchSuffix():
+    noarchSuffix = None
+    platformName = findPlatformName()
+    if platformName:
+        noarchSuffix = platformName + '/noarch'
+    return noarchSuffix
+
+
 class AsyncReturn(StopIteration):
     __slots__ = ('value',)
 

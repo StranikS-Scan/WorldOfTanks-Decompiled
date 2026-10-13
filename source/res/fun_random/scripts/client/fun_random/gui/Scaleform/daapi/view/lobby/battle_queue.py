@@ -8,7 +8,7 @@ from gui.impl import backport
 
 class FunRandomQueueProvider(RandomQueueProvider, FunAssetPacksMixin, FunSubModesWatcher):
 
-    def getIconPath(self, iconlabel):
+    def getIconPath(self, iconLabel):
         return backport.image(self.getModeIconsResRoot().battleTypes.c_136x136.fun_random())
 
     def getTitle(self, guiType):

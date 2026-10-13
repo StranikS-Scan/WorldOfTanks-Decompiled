@@ -71,6 +71,8 @@ class TANK_CAROUSEL_FILTER(object):
     TOOLTIP_INVENTORY_BODY = '#tank_carousel_filter:tooltip/inventory/body'
     TOOLTIP_CUSTOMIZATION_CANINSTALLATTACHMENTS_BODY = '#tank_carousel_filter:tooltip/customization/canInstallAttachments/body'
     TOOLTIP_CUSTOMIZATION_OWN3DSTYLE_BODY = '#tank_carousel_filter:tooltip/customization/own3DStyle/body'
+    TOOLTIP_BROKEN_HEADER = '#tank_carousel_filter:tooltip/broken/header'
+    TOOLTIP_BROKEN_BODY = '#tank_carousel_filter:tooltip/broken/body'
     INFOTIP_HEADER_TITLE = '#tank_carousel_filter:infotip/header/title'
     INFOTIP_HEADER_DESCRIPTION = '#tank_carousel_filter:infotip/header/description'
     INFOTIP_NATIONS = '#tank_carousel_filter:infotip/nations'

@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/AvatarInputHandler/DynamicCameras/arcade_camera_helper.py
+from __future__ import absolute_import, division
 from enum import Enum
 from collections import namedtuple
 import math

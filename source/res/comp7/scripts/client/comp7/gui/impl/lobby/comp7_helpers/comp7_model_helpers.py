@@ -1,8 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: comp7/scripts/client/comp7/gui/impl/lobby/comp7_helpers/comp7_model_helpers.py
+from __future__ import absolute_import
 import logging
-from itertools import izip
 import typing
+from future.utils import viewvalues
 from comp7.gui.impl.gen.view_models.views.lobby.enums import Rank
 from comp7.gui.impl.lobby.comp7_helpers import comp7_shared
 from helpers import dependency
@@ -54,12 +55,14 @@ def setRankInfo(model, comp7Controller=None):
 
 @dependency.replace_none_kwargs(comp7Controller=IComp7Controller)
 def getYearlyRewardsRank(comp7Controller=None):
-    seasonPointsSum = sum(comp7Controller.getReceivedSeasonPoints().itervalues())
+    seasonPointsSum = sum(viewvalues(comp7Controller.getReceivedSeasonPoints()))
     costs = comp7Controller.getYearlyRewards().getCosts()
     costs.reverse()
-    for cost, rank in izip(costs, Rank):
+    for cost, rank in zip(costs, Rank):
         if cost <= seasonPointsSum:
             return rank
+
+    return None
 
 
 @dependency.replace_none_kwargs(comp7Controller=IComp7Controller)

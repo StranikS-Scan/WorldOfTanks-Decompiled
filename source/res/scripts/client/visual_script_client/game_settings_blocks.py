@@ -1,5 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/visual_script_client/game_settings_blocks.py
+from __future__ import absolute_import
+from future.utils import viewitems
 from constants import IS_VS_EDITOR
 from visual_script import ASPECT
 from visual_script.block import Block, Meta, InitParam, buildStrKeysValue
@@ -74,7 +76,7 @@ class OnGameSettingsChanged(TunableEventBlock, GameSettingsMeta):
         self.settingsCore.onSettingsChanged -= self._onSettingsChanged
 
     def _onSettingsChanged(self, diff):
-        res = [ name for name, value in diff.iteritems() if name not in self._lastSettings or value != self._lastSettings[name] ]
+        res = [ name for name, value in viewitems(diff) if name not in self._lastSettings or value != self._lastSettings[name] ]
         self._lastSettings.update(diff)
         if res:
             self._callOutput(res)

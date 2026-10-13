@@ -1,13 +1,14 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/AvatarInputHandler/AimingSystems/__init__.py
+from __future__ import absolute_import
 import math
-from functools import wraps
 import logging.handlers
+from functools import wraps
 import BigWorld
 import Math
-import ShadowEffect
 from Math import Vector3
 import math_utils
+from AvatarInputHandler.AimingSystems import ShadowEffect
 from math_utils import MatrixProviders
 from ProjectileMover import collideDynamicAndStatic, collideVehiclesAndStaticScene, EntityCollisionData
 from vehicle_systems.tankStructure import TankPartNames

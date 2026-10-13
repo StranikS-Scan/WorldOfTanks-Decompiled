@@ -9,7 +9,7 @@ from gui.shared.gui_items.vehicle_mechanics.constants import VEHICLE_MECHANICS_G
 from gui.shared.utils.decorators import ReprInjector
 from items import vehicles
 if typing.TYPE_CHECKING:
-    from vehicles.mechanics.mechanic_constants import VehicleMechanic
+    from items.vehicle_mechanics_types import VehicleMechanicKey
 
 @ReprInjector.simple('guiName', 'priority', 'rank', 'mechanic')
 class VehicleMechanicItem(GUIItem):
@@ -27,7 +27,7 @@ class VehicleMechanicItem(GUIItem):
     @property
     def hasVideo(self):
         urlDict = GUI_SETTINGS.lookup('mechanicsVideoUrls')
-        return urlDict and self.__mechanic.value in urlDict
+        return urlDict and self.__mechanic.uniqueName in urlDict
 
     @property
     def guiName(self):
@@ -51,4 +51,4 @@ class VehicleMechanicItem(GUIItem):
 
     def __getMechanicProperties(self):
         mechanics = vehicles.g_cache.vehicleMechanics.get(self.__vehIntCD, {})
-        return mechanics.get(self.__mechanic.value, {})
+        return mechanics.get(self.__mechanic.uniqueName, {})

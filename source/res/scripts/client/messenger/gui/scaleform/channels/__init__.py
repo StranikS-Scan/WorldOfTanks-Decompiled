@@ -1,5 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/gui/Scaleform/channels/__init__.py
+from __future__ import absolute_import
+from future.utils import viewvalues
 import chat_shared
 from debug_utils import LOG_ERROR, LOG_WARNING, LOG_DEBUG
 from messenger import g_settings
@@ -20,7 +22,7 @@ class ControllersCollection(IControllersCollection):
     def init(self):
         self._addListeners()
         controllers = []
-        for factory in self._factories.itervalues():
+        for factory in viewvalues(self._factories):
             controllers.extend(factory.init())
 
         for ctrl in controllers:
@@ -31,7 +33,7 @@ class ControllersCollection(IControllersCollection):
 
     def clear(self):
         self._removeListener()
-        for factory in self._factories.itervalues():
+        for factory in viewvalues(self._factories):
             factory.clear()
 
         self.removeControllers()
@@ -62,7 +64,7 @@ class ControllersCollection(IControllersCollection):
         return controller
 
     def getControllersIterator(self):
-        for controller in self._controllers.itervalues():
+        for controller in viewvalues(self._controllers):
             yield controller
 
     def removeControllers(self):

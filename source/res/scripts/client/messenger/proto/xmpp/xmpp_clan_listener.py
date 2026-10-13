@@ -1,5 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/proto/xmpp/xmpp_clan_listener.py
+from __future__ import absolute_import
+from future.utils import viewitems
 import BigWorld
 from PlayerEvents import g_playerEvents
 from debug_utils import LOG_ERROR, LOG_DEBUG
@@ -124,7 +126,7 @@ class XmppClanListener(ClientHolder):
                 return None
 
         playerID = getPlayerDatabaseID()
-        for dbID, (name, roleFlags) in clanMembers.iteritems():
+        for dbID, (name, roleFlags) in viewitems(clanMembers):
             if getter(dbID) is None:
                 gos = GAME_ONLINE_STATUS.UNDEFINED
             else:

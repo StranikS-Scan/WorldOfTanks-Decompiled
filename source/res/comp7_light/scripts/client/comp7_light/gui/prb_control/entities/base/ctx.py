@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: comp7_light/scripts/client/comp7_light/gui/prb_control/entities/base/ctx.py
+from __future__ import absolute_import
 from gui.prb_control.entities.base.ctx import PrbAction
 from gui.shared.utils.decorators import ReprInjector
 

@@ -1,8 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/proto/bw_chat2/wrappers.py
+from __future__ import absolute_import
 from collections import namedtuple
-import types
-import cPickle
+from future.moves import pickle
+from past.builtins import unicode, long
 from gui.shared.utils import transport
 from helpers.time_utils import makeLocalServerTime
 from messenger.proto.entities import SharedUserEntity, ClanInfo
@@ -16,9 +17,7 @@ class _MessageVO(object):
         self.accountDBID = 0
         self.avatarSessionID = ''
         self.vehicleID = 0
-        self.text = strArg1
-        if not isinstance(strArg1, types.UnicodeType):
-            self.text = unicode(strArg1, 'utf-8', errors='ignore')
+        self.text = strArg1 if isinstance(strArg1, unicode) else unicode(strArg1, 'utf-8', errors='ignore')
         self.sentAt = 0
         if floatArg1 > 0:
             self.sentAt = makeLocalServerTime(floatArg1)
@@ -40,9 +39,7 @@ class UnitMessageVO(_MessageVO):
     def __init__(self, floatArg1=0, int64Arg1=0, strArg1='', strArg2='', **kwargs):
         super(UnitMessageVO, self).__init__(floatArg1, strArg1, **kwargs)
         self.accountDBID = int64Arg1
-        self.accountName = strArg2
-        if not isinstance(strArg2, types.UnicodeType):
-            self.accountName = unicode(strArg2, 'utf-8', errors='ignore')
+        self.accountName = strArg2 if isinstance(strArg2, unicode) else unicode(strArg2, 'utf-8', errors='ignore')
 
 
 def UnitHistoryIterator(value):
@@ -68,7 +65,7 @@ def ArenaHistoryIterator(value):
 def SearchResultIterator(value):
     value = dict(value)
     if 'strArg1' in value:
-        result = cPickle.loads(value['strArg1'])
+        result = pickle.loads(value['strArg1'])
     else:
         result = []
     for name, dbID, clanAbbrev in result:

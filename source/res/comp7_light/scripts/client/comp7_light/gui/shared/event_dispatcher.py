@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: comp7_light/scripts/client/comp7_light/gui/shared/event_dispatcher.py
-
+from __future__ import absolute_import
 
 def showComp7LightNoVehiclesScreen():
     from comp7_light.gui.impl.lobby.hangar.states import Comp7LightNoVehiclesState

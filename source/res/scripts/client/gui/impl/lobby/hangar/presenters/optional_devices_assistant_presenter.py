@@ -5,6 +5,7 @@ import logging
 import typing
 import Event
 from CurrentVehicle import g_currentVehicle
+from PlayerEvents import g_playerEvents
 from constants import QUEUE_TYPE
 from frameworks_common.state_machine import BaseStateObserver, visitor
 from gui.Scaleform.lobby_entry import getLobbyStateMachine
@@ -15,6 +16,7 @@ from gui.impl.lobby.tanksetup.tooltips.popular_loadouts_tooltip import PopularLo
 from gui.impl.pub.view_component import ViewComponent
 from gui.prb_control.entities.listener import IGlobalListener
 from helpers import dependency
+from renewable_subscription_common.schema import renewableSubscriptionsConfigSchema
 from skeletons.gui.game_control import IWotPlusController
 if typing.TYPE_CHECKING:
     from gui.lobby_state_machine.lobby_state_machine import LobbyStateMachine
@@ -67,7 +69,10 @@ class OptionalDevicesAssistantPresenter(ViewComponent[OptionalDevicesAssistantMo
         return super(OptionalDevicesAssistantPresenter, self).getViewModel()
 
     def _getEvents(self):
-        return ((self._wotPlusController.onEnabledStatusChanged, self.__onWotPlusDataChanged), (g_currentVehicle.onChanged, self.__onVehicleChanged), (self.optionalDevicesAssistantObserver.onEquipEntered, self.__onEquipEntered))
+        return ((self._wotPlusController.onEnabledStatusChanged, self.__validateWotPlusOptDeviseAssistance),
+         (g_playerEvents.onConfigModelUpdated, self.__onConfigModelUpdated),
+         (g_currentVehicle.onChanged, self.__onVehicleChanged),
+         (self.optionalDevicesAssistantObserver.onEquipEntered, self.__onEquipEntered))
 
     def _finalize(self):
         super(OptionalDevicesAssistantPresenter, self)._finalize()
@@ -89,6 +94,7 @@ class OptionalDevicesAssistantPresenter(ViewComponent[OptionalDevicesAssistantMo
 
     def _removeOptionalDevicesAssistantPanel(self):
         if self._optionalDevicesAssistant is not None:
+            self._optionalDevicesAssistant.showHiddenState()
             self._optionalDevicesAssistant.finalize()
             self._optionalDevicesAssistant = None
         return
@@ -101,26 +107,29 @@ class OptionalDevicesAssistantPresenter(ViewComponent[OptionalDevicesAssistantMo
     def createToolTipContent(self, event, contentID):
         return PopularLoadoutsTooltip(vehCompDescr=int(event.getArgument('sourceVehicleCompDescr', 0)), optionalDevicesResultType=int(event.getArgument('optionalDevicesResultType', 0))) if contentID == R.views.lobby.tanksetup.tooltips.PopularLoadoutsTooltip() else None
 
-    def __onWotPlusDataChanged(self, isEnabledVal):
-        if isEnabledVal is None:
+    def __validateWotPlusOptDeviseAssistance(self, userHasSubscription):
+        if userHasSubscription is None:
             return
         else:
-            if isEnabledVal:
+            if userHasSubscription and self._wotPlusController.getSettingsStorage().isOptionalDevicesAssistantAvailable():
                 if not self._optionalDevicesAssistant:
                     self._createOptionalDevicesAssistantPanel()
                     if self._optionalDevicesAssistant:
-                        self._optionalDevicesAssistant.initialize()
+                        self._optionalDevicesAssistant.fillModel()
                 else:
-                    _logger.warning('Optional device assistant widget has already been created!')
-            elif self._optionalDevicesAssistant is not None:
-                self._optionalDevicesAssistant.showHiddenState()
+                    self._optionalDevicesAssistant.fillModel()
+            else:
                 self._removeOptionalDevicesAssistantPanel()
             return
+
+    def __onConfigModelUpdated(self, gpKey):
+        if renewableSubscriptionsConfigSchema.gpKey == gpKey:
+            self.__validateWotPlusOptDeviseAssistance(self._wotPlusController.hasSubscription())
 
     def __onEquipEntered(self):
         if not self._optionalDevicesAssistant:
             self._createOptionalDevicesAssistantPanel()
             if self._optionalDevicesAssistant:
-                self._optionalDevicesAssistant.initialize()
+                self._optionalDevicesAssistant.fillModel()
         else:
             self._optionalDevicesAssistant.updateVehicle()

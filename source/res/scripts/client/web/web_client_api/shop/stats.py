@@ -1,6 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/web/web_client_api/shop/stats.py
+from __future__ import absolute_import
 import logging
+from future.utils import viewitems
 import adisp
 import nations
 from wg_async import wg_async, wg_await
@@ -8,7 +10,7 @@ from constants import PREM_TYPE_TO_ENTITLEMENT
 from gui.shared.money import Currency
 from gui.shared.utils.vehicle_collector_helper import hasCollectibleVehicles
 from helpers import dependency, time_utils
-from skeletons.gui.game_control import IEntitlementsController
+from skeletons.gui.game_control import IEntitlementsController, IWalletController
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.shared.utils.requesters import IStatsRequester
 from web.common import formatBalance, formatWalletCurrencyStatuses
@@ -23,6 +25,7 @@ class _GetInventoryEntitlementsSchema(W2CSchema):
 class BalanceWebApiMixin(object):
     itemsCache = dependency.descriptor(IItemsCache)
     __entitlementsController = dependency.descriptor(IEntitlementsController)
+    __wallet = dependency.descriptor(IWalletController)
 
     @w2c(W2CSchema, 'get_balance')
     def getBalance(self, cmd):
@@ -33,7 +36,7 @@ class BalanceWebApiMixin(object):
         else:
             premiumExpireISOTime = None
         response = formatBalance(stats)
-        response.update({'walletStatus': formatWalletCurrencyStatuses(stats),
+        response.update({'walletStatus': formatWalletCurrencyStatuses(wallet=self.__wallet, itemsCache=self.itemsCache),
          'premiumExpireDate': premiumExpireISOTime})
         return response
 
@@ -42,7 +45,7 @@ class BalanceWebApiMixin(object):
 
         def getTrainingCost(prices, currency):
             if isinstance(prices, dict):
-                prices = [ pair[1] for pair in sorted(prices.iteritems(), key=lambda i: i[0]) ]
+                prices = [ pair[1] for pair in sorted(viewitems(prices), key=lambda i: i[0]) ]
             try:
                 return [ price for price in prices if price.get(currency, None) ][0][currency]
             except IndexError:
@@ -69,7 +72,7 @@ class BalanceWebApiMixin(object):
         currentStats = self.itemsCache.items.shop
         defaultStats = self.itemsCache.items.shop.defaults
         return {key:{'current': getter(currentStats),
-         'default': getter(defaultStats)} for key, getter in getters.iteritems()}
+         'default': getter(defaultStats)} for key, getter in viewitems(getters)}
 
     @w2c(W2CSchema, 'get_premium_info')
     def getPremiumInfo(self, cmd):

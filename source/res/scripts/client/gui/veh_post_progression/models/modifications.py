@@ -3,7 +3,6 @@
 import typing
 from enum import Enum, unique
 from gui.impl.gen import R
-from gui.impl.gen_utils import DynAccessor
 from gui.veh_post_progression.models.ext_money import ExtendedMoney, ExtendedGuiItemEconomyCode, EXT_MONEY_UNDEFINED, EXT_MONEY_ZERO_CREDITS
 from gui.veh_post_progression.models.purchase import PurchaseProvider, PurchaseCheckResult, VALID_CHECK_RESULT
 from gui.shared.gui_items import collectKpi, KPI, GUI_ITEM_TYPE, GUI_ITEM_TYPE_NAMES
@@ -15,6 +14,7 @@ from post_progression_prices_common import getPostProgressionPrice
 from shared_utils import first
 from skeletons.gui.shared import IItemsCache
 if typing.TYPE_CHECKING:
+    from frameworks.wulf import PyResAccessor
     from gui.shared.gui_items.Vehicle import Vehicle
     from gui.shared.gui_items.items_actions.actions import SetEquipmentSlotType, PurchasePostProgressionPair, DiscardPostProgressionPairs
     from gui.veh_post_progression.models.progression import PostProgressionItem

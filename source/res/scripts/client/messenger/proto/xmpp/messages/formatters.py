@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/proto/xmpp/messages/formatters.py
+from __future__ import absolute_import
 from messenger.formatters.chat_message import LobbyMessageBuilder
 from messenger.m_constants import USER_GUI_TYPE
 from messenger.proto.xmpp.xmpp_constants import XMPP_MUC_USER_TEMPLATE_GROUPS, XMPP_MUC_USER_TYPE_PRIORITY

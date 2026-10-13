@@ -145,9 +145,9 @@ class CardBattleConditionsFormatters(MissionBonusAndPostBattleCondFormatter):
             components.append(self._packConditions([_packNoGuiCondition(event)]))
         return components
 
-    def _getFormattedField(self, formattableField):
-        formatter = self._formatters.get(formattableField.formatterID)
-        return formatter(*formattableField.args)
+    def _getFormattedField(self, field):
+        formatter = self._formatters.get(field.formatterID)
+        return formatter(*field.args)
 
     @classmethod
     def _packSeparator(cls, key):

@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: frontline/scripts/client/frontline/gui/impl/lobby/presenters/sub_presenters/battle_achievements.py
+from __future__ import absolute_import
 import typing
 import json
 from frameworks.wulf import Array

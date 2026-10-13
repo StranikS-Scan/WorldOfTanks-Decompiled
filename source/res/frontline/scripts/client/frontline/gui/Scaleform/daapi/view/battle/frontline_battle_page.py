@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: frontline/scripts/client/frontline/gui/Scaleform/daapi/view/battle/frontline_battle_page.py
+from __future__ import absolute_import
 import BigWorld
 import CommandMapping
 from constants import ARENA_PERIOD
@@ -19,8 +20,8 @@ from gui.Scaleform.managers.battle_input import BattleGUIKeyHandler
 from gui.battle_control.battle_constants import BATTLE_CTRL_ID
 from gui.battle_control.controllers.sound_ctrls.epic_battle_sounds import EpicBattleSoundController
 from gui.shared import EVENT_BUS_SCOPE, events
+from items.vehicle_mechanics_types import VehicleMechanicKeys
 from shared_utils import CONST_CONTAINER
-from vehicles.mechanics.mechanic_constants import VehicleMechanic
 from vehicles.mechanics.mechanic_helpers import hasVehicleDescrMechanic
 
 class DynamicAliases(CONST_CONTAINER):
@@ -192,7 +193,7 @@ class FrontlineBattlePage(FrontlineBattlePageMeta, BattleGUIKeyHandler):
             targetState = self.__topState
         else:
             targetState = self.__pageState
-        if targetState == PageStates.NONE or self.__activeState == targetState:
+        if targetState in (PageStates.NONE, self.__activeState):
             return
         else:
             controlKey = (self.__activeState, self.sessionProvider.isReplayPlaying)
@@ -212,7 +213,7 @@ class FrontlineBattlePage(FrontlineBattlePageMeta, BattleGUIKeyHandler):
             ctrl = self.sessionProvider.shared.vehicleState
             vehicle = ctrl.getControllingVehicle()
             if vehicle is not None:
-                hasPillboxMode = hasVehicleDescrMechanic(vehicle.typeDescriptor, VehicleMechanic.PILLBOX_SIEGE_MODE)
+                hasPillboxMode = hasVehicleDescrMechanic(vehicle.typeDescriptor, VehicleMechanicKeys.PILLBOX_SIEGE_MODE)
                 if (vehicle.typeDescriptor.hasSiegeMode or vehicle.isTrackWithinTrack) and not hasPillboxMode:
                     self._swapVisibleStates(visibleUI, hiddenUI, BATTLE_VIEW_ALIASES.SIEGE_MODE_INDICATOR)
                 else:
@@ -232,7 +233,7 @@ class FrontlineBattlePage(FrontlineBattlePageMeta, BattleGUIKeyHandler):
                 self._swapVisibleStates(visibleUI, hiddenUI, BATTLE_VIEW_ALIASES.CONSUMABLES_PANEL, True)
             if self.__respawnAvailable and self.as_isComponentVisibleS(BATTLE_VIEW_ALIASES.POSTMORTEM_PANEL):
                 self._swapVisibleStates(visibleUI, hiddenUI, BATTLE_VIEW_ALIASES.POSTMORTEM_PANEL, True)
-            if targetState == PageStates.RESPAWN or targetState == PageStates.LOADING:
+            if targetState in (PageStates.RESPAWN, PageStates.LOADING):
                 visibleUI.difference_update(_NEVER_HIDE)
                 hiddenUI.update(_NEVER_HIDE)
             self._setComponentsVisibility(visible=visibleUI, hidden=hiddenUI)

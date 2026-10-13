@@ -76,5 +76,5 @@ class BaseDealPanel(object):
     def _updateDisabled(cls, prices, dealPanelModel):
         buyMoney = prices[cls._MONEY]
         stats = cls._itemsCache.items.stats
-        isEnabled = not buyMoney.isDefined() or canBuyWithGoldExchange(buyMoney, stats.money, cls._itemsCache.items.shop.exchangeRate) and stats.mayConsumeWalletResources
+        isEnabled = not buyMoney.isDefined() or canBuyWithGoldExchange(buyMoney, stats.money, cls._itemsCache.items.shop.exchangeRate) and stats.isResourcesConsumptionAllowed
         dealPanelModel.setIsDisabled(not isEnabled)

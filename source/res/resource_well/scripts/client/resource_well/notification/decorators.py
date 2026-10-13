@@ -20,9 +20,9 @@ class ResourceWellLockButtonDecorator(MessageDecorator):
         self.__resourceWell.onEventUpdated -= self.__update
         self.__resourceWell.onSettingsChanged -= self.__update
 
-    def _make(self, formatted=None, settings=None):
+    def _make(self, entity=None, settings=None):
         self.__updateEntityButtons()
-        super(ResourceWellLockButtonDecorator, self)._make(formatted, settings)
+        super(ResourceWellLockButtonDecorator, self)._make(entity, settings)
 
     def __updateEntityButtons(self):
         if self._entity is None:

@@ -182,6 +182,8 @@ class INGAME_HELP(object):
     DETAILSHELP_MECHANICS_SHELLCALIBRATION_PAGE1_DESCRIPTION = '#ingame_help:detailsHelp/mechanics/shellCalibration/page1/description'
     DETAILSHELP_MECHANICS_BUSTLEFEED_PAGE1_TITLE = '#ingame_help:detailsHelp/mechanics/bustleFeed/page1/title'
     DETAILSHELP_MECHANICS_BUSTLEFEED_PAGE1_DESCRIPTION = '#ingame_help:detailsHelp/mechanics/bustleFeed/page1/description'
+    DETAILSHELP_MECHANICS_COMBATTHROTTLE_PAGE1_TITLE = '#ingame_help:detailsHelp/mechanics/combatThrottle/page1/title'
+    DETAILSHELP_MECHANICS_COMBATTHROTTLE_PAGE1_DESCRIPTION = '#ingame_help:detailsHelp/mechanics/combatThrottle/page1/description'
     DETAILSHELP_NOKEYSWARNING = '#ingame_help:detailsHelp/noKeysWarning'
     DETAILSHELP_ROLE_TITLE = '#ingame_help:detailsHelp/role/title'
     DETAILSHELP_ROLE_DESCRIPTION = '#ingame_help:detailsHelp/role/description'

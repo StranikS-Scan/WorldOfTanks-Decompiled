@@ -106,8 +106,8 @@ class QueueProvider(object):
         titleRes = R.strings.menu.loading.battleTypes.num(guiType)
         return backport.text(titleRes()) if titleRes.exists() else ''
 
-    def getIconPath(self, iconlabel):
-        return backport.image(R.images.gui.maps.icons.battleTypes.c_136x136.dyn(iconlabel)())
+    def getIconPath(self, iconLabel):
+        return backport.image(R.images.gui.maps.icons.battleTypes.c_136x136.dyn(iconLabel)())
 
     def getTankInfoLabel(self):
         return makeString(MENU.PREBATTLE_TANKLABEL)
@@ -501,12 +501,10 @@ class BattleStrongholdsQueue(BattleStrongholdsQueueMeta, LobbySubView, ClanEmble
                 if leagueIconUrl:
                     clanVO['leagueIcon'] = yield self.__imagesFetchCoordinator.fetchImageByUrl(clan.get('back_emblem'), oneUse=False)
                     if not clanVO['leagueIcon']:
-                        callback([])
-                        return
+                        clanVO['leagueIcon'] = ''
                 clanVO['clanIcon'] = yield self.__imagesFetchCoordinator.fetchImageByUrl(clan.get('emblem'), oneUse=False)
                 if not clanVO['clanIcon']:
-                    callback([])
-                    return
+                    clanVO['clanIcon'] = ''
                 elo = clan.get('elo')
                 if isinstance(elo, int):
                     clanVO['clanElo'] = backport.getNiceNumberFormat(elo)

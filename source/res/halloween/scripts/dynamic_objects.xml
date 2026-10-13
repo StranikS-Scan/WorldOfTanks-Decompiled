@@ -1,0 +1,85 @@
+<dynamic_objects.xml>
+  <hwSoulsCollector>
+    <prefab>	halloween/content/CGFPrefabs/SoulCollector/SoulCollector.prefab	</prefab>
+    <progressAnim>	halloween/content/CGFPrefabs/SoulCollector/soul_collector_progress_section.ssm	</progressAnim>
+  </hwSoulsCollector>
+  <hwPhaseSwitch>
+    <effect>	halloween/gui/effects/phase_switch_effect.xml	</effect>
+  </hwPhaseSwitch>
+  <hwDeathZoneBorderRect>
+    <model>	particles/content_deferred/GFX_models/environment/halloween/zone_dynamic_square.model	</model>
+  </hwDeathZoneBorderRect>
+  <hwDeathZoneBorderCircle>
+    <model>	particles/content_deferred/GFX_models/environment/halloween/zone_dynamic_circle.model	</model>
+  </hwDeathZoneBorderCircle>
+  <hwHexapodTerrainEffects>
+    <defaultGroup>
+      <default>
+        <effect>	particles/environment/halloween/enemies/boss_spider/movement/trail_sand.eff	</effect>
+        <rate>	1.0	</rate>
+        <duration>	3.0	</duration>
+        <sound>	ev_hw_gp_bot_hexapod_step	</sound>
+      </default>
+      <ground>
+        <effect>	particles/Tank/tank_collision_ground.eff	</effect>
+        <rate>	1.0	</rate>
+        <duration>	3.0	</duration>
+        <sound>	ev_hw_gp_bot_hexapod_step	</sound>
+      </ground>
+      <sand>
+        <effect>	particles/environment/halloween/enemies/boss_spider/movement/trail_sand.eff	</effect>
+        <rate>	1.0	</rate>
+        <duration>	3.0	</duration>
+        <sound>	ev_hw_gp_bot_hexapod_step	</sound>
+      </sand>
+      <stone>
+        <effect>	particles/Tank/tank_collision_stone.eff	</effect>
+        <rate>	1.0	</rate>
+        <duration>	3.0	</duration>
+        <sound>	ev_hw_gp_bot_hexapod_step	</sound>
+      </stone>
+      <wood>
+        <effect>	particles/Tank/tank_collision_wood.eff	</effect>
+        <rate>	1.0	</rate>
+        <duration>	3.0	</duration>
+        <sound>	ev_hw_gp_bot_hexapod_step	</sound>
+      </wood>
+      <snow>
+        <effect>	particles/Tank/tank_collision_snow.eff	</effect>
+        <rate>	1.0	</rate>
+        <duration>	3.0	</duration>
+        <sound>	ev_hw_gp_bot_hexapod_step	</sound>
+      </snow>
+      <metal>
+        <effect>	particles/Tank/tank_collision_01.eff	</effect>
+        <rate>	1.0	</rate>
+        <duration>	3.0	</duration>
+        <sound>	ev_hw_gp_bot_hexapod_step	</sound>
+      </metal>
+      <dirt>
+        <effect>	particles/Tank/tank_collision_dirt.eff	</effect>
+        <rate>	1.0	</rate>
+        <duration>	3.0	</duration>
+        <sound>	ev_hw_gp_bot_hexapod_step	</sound>
+      </dirt>
+      <oil>
+        <effect>	particles/Tank/tank_collision_oil.eff	</effect>
+        <rate>	1.0	</rate>
+        <duration>	3.0	</duration>
+        <sound>	ev_hw_gp_bot_hexapod_step	</sound>
+      </oil>
+      <blacksand>
+        <effect>	particles/Tank/tank_collision_blacksand.eff	</effect>
+        <rate>	1.0	</rate>
+        <duration>	3.0	</duration>
+        <sound>	ev_hw_gp_bot_hexapod_step	</sound>
+      </blacksand>
+      <water>
+        <effect>	particles/Tank/tank_collision_water.eff	</effect>
+        <rate>	1.0	</rate>
+        <duration>	3.0	</duration>
+        <sound>	ev_hw_gp_bot_hexapod_step	</sound>
+      </water>
+    </defaultGroup>
+  </hwHexapodTerrainEffects>
+</dynamic_objects.xml>

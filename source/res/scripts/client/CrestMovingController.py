@@ -4,9 +4,9 @@ from __future__ import absolute_import
 import logging
 import typing
 from constants import CREST_MOVING_STATE
+from items.vehicle_mechanics_types import VehicleMechanicKey, VehicleMechanicKeys
 from vehicles.components.vehicle_component import VehicleDynamicComponent
 from vehicles.mechanics.common import IMechanicComponent
-from vehicles.mechanics.mechanic_constants import VehicleMechanic
 from vehicles.mechanics.mechanic_states import IMechanicState, IMechanicStatesComponent, createMechanicStatesEvents
 if typing.TYPE_CHECKING:
     from typing import Any
@@ -32,8 +32,8 @@ class CrestMovingController(VehicleDynamicComponent, IMechanicComponent, IMechan
         self._initComponent()
 
     @property
-    def vehicleMechanic(self):
-        return VehicleMechanic.CREST_MOVING
+    def vehicleMechanicKey(self):
+        return VehicleMechanicKeys.CREST_MOVING
 
     @property
     def statesEvents(self):

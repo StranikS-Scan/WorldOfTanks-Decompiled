@@ -2,15 +2,10 @@
 # Embedded file name: scripts/common/dossiers2/custom/vehicle_layout.py
 from __future__ import absolute_import
 from dossiers2.common.DossierBlockBuilders import *
+from dossiers2.common.DossierBlockBuilders import BinarySetDossierBlockBuilder, DictBlockBuilder, ListBlockBuilder, StaticSizeBlockBuilder
 from dossiers2.custom.battle_statistics_layouts import *
-from dossiers2.custom.dependencies import ACHIEVEMENT15X15_DEPENDENCIES
-from dossiers2.custom.dependencies import ACHIEVEMENT7X7_DEPENDENCIES
-from dossiers2.custom.dependencies import FALLOUT_STATS_DEPENDENCIES
-from dossiers2.custom.dependencies import FORT_ACHIEVEMENTS_DEPENDENCIES
-from dossiers2.custom.dependencies import GLOBAL_MAP_STATS_DEPENDENCIES
-from dossiers2.custom.dependencies import RANKED_STATS_DEPENDENCIES
-from dossiers2.custom.dependencies import A30X30_STATS_DEPENDENCIES
-from dossiers2.custom.dependencies import EPIC_BATTLE_STATS_DEPENDENCIES
+from dossiers2.custom.battle_statistics_layouts import A7X7_BLOCK_LAYOUT, A7X7_STATS_DEPENDENCIES, A15X15_2_BLOCK_LAYOUT, A15X15_BLOCK_LAYOUT, A15X15_STATS_DEPENDENCIES, A30X30_BLOCK_LAYOUT, CLAN2_BLOCK_LAYOUT, CLAN_BLOCK_LAYOUT, CLAN_STATS_DEPENDENCIES, COMP7_BLOCK_LAYOUT, COMPANY2_BLOCK_LAYOUT, COMPANY_BLOCK_LAYOUT, EPIC_BATTLE_VEHICLE_BLOCK_LAYOUT, FALLOUT_VEHICLE_BLOCK_LAYOUT, FORT_BATTLES_STATS_DEPENDENCIES, FORT_BLOCK_LAYOUT, FORT_SORTIES_STATS_DEPENDENCIES, GLOBAL_MAP_BLOCK_LAYOUT, HISTORICAL_BLOCK_LAYOUT, HISTORICAL_STATS_DEPENDENCIES, MAX_BLOCK_LAYOUT, MAX_COMP7_BLOCK_LAYOUT, MAX_FALLOUT_BLOCK_LAYOUT, RANKED_BLOCK_LAYOUT, RATED_7X7_BLOCK_LAYOUT, VEH_TYPE_FRAGS_DEPENDENCIES, MAX_15x15_BLOCK_LAYOUT
+from dossiers2.custom.dependencies import A30X30_STATS_DEPENDENCIES, ACHIEVEMENT7X7_DEPENDENCIES, ACHIEVEMENT15X15_DEPENDENCIES, EPIC_BATTLE_STATS_DEPENDENCIES, FALLOUT_STATS_DEPENDENCIES, FORT_ACHIEVEMENTS_DEPENDENCIES, GLOBAL_MAP_STATS_DEPENDENCIES, RANKED_STATS_DEPENDENCIES
 TOTAL_BLOCK_LAYOUT = ['creationTime',
  'lastBattleTime',
  'battleLifeTime',
@@ -175,7 +170,8 @@ _achievements15x15PopUps = ['tankExpert',
  'tankExpert14',
  'markOfMastery',
  'marksOnGun',
- 'impenetrableshootToKill',
+ 'impenetrable',
+ 'shootToKill',
  'fighter',
  'duelist',
  'demolition',

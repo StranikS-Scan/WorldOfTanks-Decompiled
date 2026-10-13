@@ -1,9 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: frontline/scripts/client/frontline/gui/frontline_helpers.py
+from __future__ import absolute_import
+from collections import defaultdict
+from future.utils import viewitems, viewvalues
+from itertools import chain
 from typing import List
 import BigWorld
-from collections import defaultdict
-from itertools import chain
 import CommandMapping
 import typing
 from frontline.gui.impl.gen.view_models.views.lobby.views.frontline_const import FrontlineState
@@ -155,7 +157,7 @@ def getSkillParams(skillLevelData):
     equipments = vehicles.g_cache.equipments()
     from frontline.constants.common import HIDDEN_PARAMS, SKILL_PARAM_SIGN
     from gui.shared.tooltips.battle_ability_tooltip_params import g_battleAbilityTooltipMgr
-    for lvl, skillLevel in skillLevelData.levels.iteritems():
+    for lvl, skillLevel in viewitems(skillLevelData.levels):
         curLvlEq = equipments[skillLevel.eqID]
         paramId = 0
         for tooltipIdentifier in curLvlEq.tooltipIdentifiers:
@@ -175,13 +177,13 @@ def getSkillParams(skillLevelData):
 
     paramsById = defaultdict(list)
     valuesById = defaultdict(set)
-    for lvlDict in params.itervalues():
-        for param in chain.from_iterable(lvlDict.itervalues()):
+    for lvlDict in viewvalues(params):
+        for param in chain.from_iterable(viewvalues(lvlDict)):
             pid = param['id']
             paramsById[pid].append(param)
             valuesById[pid].add(param['value'])
 
-    for pid, values in valuesById.iteritems():
+    for pid, values in viewitems(valuesById):
         if len(values) > 1:
             for param in paramsById[pid]:
                 param['isDynamic'] = True

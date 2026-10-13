@@ -1,5 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/web/web_client_api/ui/clan.py
+from __future__ import absolute_import
+from past.builtins import basestring, long
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.shared.event_dispatcher import showClanProfileWindow, showClanInvitesWindow, showClanSearchWindow, showClanPersonalInvitesWindow, showBrowserOverlayView
 from web.web_client_api import w2c, W2CSchema, Field

@@ -76,6 +76,11 @@ class BattleHintsOverlapController(IBattleHintsOverlapController):
         scopeSettings = OVERLAP_SETTINGS.get(self._sessionProvider.arenaVisitor.getArenaBonusType(), {}).get(scope)
         if scopeSettings is None:
             return
+        elif battleHint.model.props.skipOverlay:
+            viewsToShow = scopeSettings.intersection(self._hiddenViews)
+            page.setComponentsVisibilityWithFade(visible=viewsToShow)
+            self._hiddenViews = self._hiddenViews.difference(viewsToShow)
+            return
         else:
             viewsToHide = scopeSettings.difference(self._hiddenViews)
             if page and viewsToHide:

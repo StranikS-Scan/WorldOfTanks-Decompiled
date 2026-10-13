@@ -9,6 +9,7 @@ from gui.challenges.challenges_decorators import createTooltipContentDecorator
 from gui.challenges.challenges_helpers import getSettings, setSettings, setVisitedChallenge
 from gui.customization.shared import getPurchaseGoldForCredits
 from gui.impl.gen import R
+from gui.impl.gen.view_models.views.lobby.customization.attachments_preview.attachments_preview_model import AttachmentsPreviewFeature
 from gui.impl.gen.view_models.views.lobby.user_missions.hub.tabs.challenge_missions.challenge_missions import ChallengeMissions
 from gui.impl.gen.view_models.views.lobby.user_missions.hub.tabs.challenge_missions.challenges_pack import ChallengesPack
 from gui.impl.gui_decorators import args2params
@@ -211,7 +212,7 @@ class ChallengeMissionsTab(UpdateChildrenMixin, ViewComponent[ChallengeMissions]
     @args2params(str, int, int, str)
     def __openPreview(self, bonusType, bonusId, styleID, attachmentsToken):
         if bonusType == ChallengeMainRewardTypes.ATTACHMENTS_SET.value:
-            showAttachmentsSetPreview(attachmentsToken)
+            showAttachmentsSetPreview(attachmentsToken, AttachmentsPreviewFeature.CHALLENGES)
         elif bonusType == ChallengeMainRewardTypes.STYLE_2D.value:
             style = self.__customizationService.getItemByID(GUI_ITEM_TYPE.STYLE, bonusId)
             vehicleCD = getVehicleCDForStyle(style)

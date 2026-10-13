@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: frontline/scripts/client/frontline/gui/Scaleform/daapi/view/battle/frontline_battle_modification_panel.py
+from __future__ import absolute_import
 from PlayerEvents import g_playerEvents
 from constants import ARENA_PERIOD
 from frontline.gui.Scaleform.daapi.view.meta.FrontlineModificationPanelMeta import FrontlineModificationPanelMeta

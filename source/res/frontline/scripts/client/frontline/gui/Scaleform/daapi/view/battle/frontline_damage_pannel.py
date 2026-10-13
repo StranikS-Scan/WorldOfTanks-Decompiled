@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: frontline/scripts/client/frontline/gui/Scaleform/daapi/view/battle/frontline_damage_pannel.py
+from __future__ import absolute_import
 import BigWorld
 from frontline.gui.Scaleform.daapi.view.meta.FrontlineDamagePanelMeta import FrontlineDamagePanelMeta
 from gui.Scaleform.daapi.view.battle.shared.damage_panel import DamagePanel

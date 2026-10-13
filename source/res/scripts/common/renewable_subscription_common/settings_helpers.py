@@ -297,8 +297,8 @@ class SubscriptionSettingsStorage(object):
         pass
 
     def isOptionalDevicesAssistantEnabled(self):
-        tierSettings = self._getEnabledTierSettings()
-        return False if not tierSettings else tierSettings.optionalDevicesAssistantFeature.enabled
+        settingsModel = self._modelProvider.getModelRef()
+        return False if not settingsModel else settingsModel.optionalDevicesAssistantFeature.enabled
 
     def isOptionalDevicesAssistantAvailable(self):
         tierSettings = self._getEnabledTierSettings()

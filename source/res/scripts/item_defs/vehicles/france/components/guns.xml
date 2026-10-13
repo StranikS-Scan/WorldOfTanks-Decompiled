@@ -114,6 +114,7 @@
     <_120mm_Canon_de_120_67_T53_D>	136	</_120mm_Canon_de_120_67_T53_D>
     <_120mm_IPC_1>	137	</_120mm_IPC_1>
     <_105mm_CN_105_F1_Chevalier>	138	</_105mm_CN_105_F1_Chevalier>
+    <_127_mm_OTO_Melara_S>	139	</_127_mm_OTO_Melara_S>
     <_127_mm_CN_127_F1>	140	</_127_mm_CN_127_F1>
     <_105mm_court_mle_1934_S_105_AM>	2000	</_105mm_court_mle_1934_S_105_AM>
     <_105mm_obusier_mle_1950_105_AM>	2001	</_105mm_obusier_mle_1950_105_AM>
@@ -8187,6 +8188,64 @@
         </_120mm_OE_T15HE_D>
       </shots>
     </_120mm_Canon_de_120_67_T53_D>
+    <_127_mm_OTO_Melara_S>
+      <userString>	#france_vehicles:_127_mm_OTO_Melara_S	</userString>
+      <tags></tags>
+      <level>	9	</level>
+      <price>	200000	</price>
+      <notInShop>	true	</notInShop>
+      <impulse>	0.48	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.44	</amplitude>
+        <recoilEffect>	main	</recoilEffect>
+      </recoil>
+      <effects>	shot_largeext	</effects>
+      <reloadEffect>	autoloader_reload85_107	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -20.0 1.0 -20.0	</minPitch>
+        <maxPitch>	0.0 10.0 1.0 10.0	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	20	</rotationSpeed>
+      <reloadTime>	7.5	</reloadTime>
+      <maxAmmo>	60	</maxAmmo>
+      <aimingTime>	2	</aimingTime>
+      <weight>	2600	</weight>
+      <maxHealth>	200	</maxHealth>
+      <maxRegenHealth>	100	</maxRegenHealth>
+      <repairCost>	9	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.4	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.05	</turretRotation>
+        <afterShot>	4.0	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <c_p_127_54_Mk_316S>
+          <defaultPortion>	0.95	</defaultPortion>
+          <speed>	1452	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	240 220	</piercingPower>
+        </c_p_127_54_Mk_316S>
+        <c_c_127_54_Mk_411S>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	925	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	305 305	</piercingPower>
+        </c_c_127_54_Mk_411S>
+        <a_e_127_54_Mk_116S>
+          <defaultPortion>	0.05	</defaultPortion>
+          <speed>	756	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	127 127	</piercingPower>
+        </a_e_127_54_Mk_116S>
+      </shots>
+    </_127_mm_OTO_Melara_S>
     <_127_mm_CN_127_F1>
       <userString>	#france_vehicles:_127_mm_CN_127_F1	</userString>
       <tags></tags>

@@ -4,8 +4,8 @@ from __future__ import absolute_import
 import typing
 from gui.battle_control.controllers.interfaces import IBattleController
 if typing.TYPE_CHECKING:
+    from items.vehicle_mechanics_types import VehicleMechanicKey
     from vehicles.entities.vehicle_trackers import IVehicleEntityTrackerListener
-    from vehicles.mechanics.mechanic_constants import VehicleMechanic
     from vehicles.mechanics.mechanic_trackers import IVehicleMechanicsTrackerListener
 
 class IVehicleTrackers(object):

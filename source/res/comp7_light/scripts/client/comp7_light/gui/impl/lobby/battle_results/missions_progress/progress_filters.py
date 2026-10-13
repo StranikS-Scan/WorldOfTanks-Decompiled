@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: comp7_light/scripts/client/comp7_light/gui/impl/lobby/battle_results/missions_progress/progress_filters.py
 from __future__ import absolute_import
+from future.utils import viewvalues
 from gui.battle_results.progress.progress_helpers import isQuestCompleted
 from helpers import dependency
 from comp7_light.skeletons.gui.game_control import IComp7LightProgressionController
@@ -23,7 +24,7 @@ def comp7LightProgressionQuestsOnlyFilter(reusable, allCommonQuests, progression
                     pGroupBy, pPrev, pCur = qProgress
                     isCompleted = isQuestCompleted(pGroupBy, pPrev, pCur)
                     isProgressReset = not isCompleted and quest.bonusCond.isInRow() and pCur.get('battlesCount', 0) == 0
-                    if pPrev or max(pCur.itervalues()) != 0:
+                    if pPrev or max(viewvalues(pCur)) != 0:
                         data = (quest,
                          {pGroupBy: pCur},
                          {pGroupBy: pPrev},

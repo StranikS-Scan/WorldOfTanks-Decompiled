@@ -14,7 +14,7 @@ from gui.Scaleform.genConsts.GUN_MARKER_VIEW_CONSTANTS import GUN_MARKER_VIEW_CO
 from gui.battle_control.arena_info.arena_vos import VehicleArenaInfoVO
 from gui.battle_control.battle_constants import CROSSHAIR_VIEW_ID as _VIEW_ID
 from gui.battle_control.controllers.crosshair_proxy import GunMarkersSetInfo
-from vehicles.mechanics.mechanic_constants import VehicleMechanic
+from items.vehicle_mechanics_types import VehicleMechanicKeys
 _GUN_MARKER_LINKAGES = {_CONSTANTS.ARCADE_GUN_MARKER_NAME: _CONSTANTS.GUN_MARKER_LINKAGE,
  _CONSTANTS.SNIPER_GUN_MARKER_NAME: _CONSTANTS.GUN_MARKER_LINKAGE,
  _CONSTANTS.SPG_GUN_MARKER_NAME: _CONSTANTS.GUN_MARKER_SPG_LINKAGE,
@@ -125,13 +125,13 @@ class _ControlMarkersFactory(_GunMarkersFactory):
             markers = self._createTwinGunMarkers()
         elif self._hasDualAccuracyMarkers():
             markers = self._createDualAccMarkers()
-        elif VehicleMechanic.ACCURACY_STACKS in self._vehicleInfo.vehicleType.vehicleMechanics:
+        elif VehicleMechanicKeys.ACCURACY_STACKS in self._vehicleInfo.vehicleType.vehicleMechanics:
             markers = self._createAccuracyGunMarkers()
-        elif VehicleMechanic.CHARGE_SHOT in self._vehicleInfo.vehicleType.vehicleMechanics:
+        elif VehicleMechanicKeys.CHARGE_SHOT in self._vehicleInfo.vehicleType.vehicleMechanics:
             markers = self._createChargeGunMarkers()
-        elif VehicleMechanic.LOW_CHARGE_SHOT in self._vehicleInfo.vehicleType.vehicleMechanics:
+        elif VehicleMechanicKeys.LOW_CHARGE_SHOT in self._vehicleInfo.vehicleType.vehicleMechanics:
             markers = self._createLowChargeShotGunMarkers()
-        elif VehicleMechanic.AUXILIARY_ROCKET_LAUNCHER in self._vehicleInfo.vehicleType.vehicleMechanics:
+        elif VehicleMechanicKeys.AUXILIARY_ROCKET_LAUNCHER in self._vehicleInfo.vehicleType.vehicleMechanics:
             markers = self._createAuxiliaryRocketLauncherGunMarkers()
         else:
             markers = self._createDefaultMarkers()

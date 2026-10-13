@@ -1,14 +1,17 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/helpers/__init__.py
-import types
+from __future__ import absolute_import
 import os
 import enum
+from past.builtins import unicode
+from future.utils import viewitems
 import BigWorld
 import ResMgr
-import i18n
 import constants
 from aih_constants import CTRL_MODE_NAME, CTRL_MODES
 from debug_utils import LOG_CURRENT_EXCEPTION
+from helpers import i18n
+from math_common import round_py2_style_int
 from soft_exception import SoftException
 from external_strings_utils import unicode_from_utf8
 VERSION_FILE_PATH = '../version.xml'
@@ -133,20 +136,20 @@ _g_alphabetOrderExcept = {1105: 1077.5,
  1108: 1077.5}
 
 def _getSymOrderIdx(symbol):
-    if not isinstance(symbol, types.UnicodeType):
+    if not isinstance(symbol, unicode):
         raise SoftException('')
     symIdx = ord(symbol)
     return _g_alphabetOrderExcept.get(symIdx, symIdx)
 
 
 def strcmp(word1, word2):
-    if not isinstance(word1, types.UnicodeType):
+    if not isinstance(word1, unicode):
         raise SoftException('First argument should be unicode')
-    if not isinstance(word2, types.UnicodeType):
+    if not isinstance(word2, unicode):
         raise SoftException('Second argument should be unicode')
     for sym1, sym2 in zip(word1, word2):
         if sym1 != sym2:
-            return int(round(_getSymOrderIdx(sym1) - _getSymOrderIdx(sym2)))
+            return round_py2_style_int(_getSymOrderIdx(sym1) - _getSymOrderIdx(sym2))
 
     return len(word1) - len(word2)
 
@@ -220,7 +223,7 @@ def unicodeToStr(data):
         return [ unicodeToStr(el) for el in data ]
     if isinstance(data, dict):
         res = {}
-        for k, v in data.iteritems():
+        for k, v in viewitems(data):
             res[unicodeToStr(k)] = unicodeToStr(v)
 
         return res

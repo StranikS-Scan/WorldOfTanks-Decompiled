@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: frontline/scripts/client/frontline/gui/Scaleform/daapi/view/lobby/tooltips/frontline.py
+from __future__ import absolute_import
 from gui import makeHtmlString
 from gui.Scaleform.genConsts.BLOCKS_TOOLTIP_TYPES import BLOCKS_TOOLTIP_TYPES
 from gui.Scaleform.locale.EPIC_BATTLE import EPIC_BATTLE
@@ -44,7 +45,7 @@ class FrontlinePackPreviewTooltipData(BlocksTooltipData):
 
     def _getDiscountSection(self, discount, bonuses):
         discount = discount or 0
-        formattedDiscount = makeHtmlString('html_templates:lobby/quests/actions', Currency.GOLD, {'value': backport.getGoldFormat(long(discount))})
+        formattedDiscount = makeHtmlString('html_templates:lobby/quests/actions', Currency.GOLD, {'value': backport.getGoldFormat(int(discount))})
         discountBlock = formatters.packTextBlockData(padding=formatters.packPadding(left=50), text=_ms(text_styles.main(TOOLTIPS.FRONTLINEPACKPREVIEW_DISCOUNT), value=formattedDiscount))
         return formatters.packBuildUpBlockData(blocks=[discountBlock, self._getGiftBlock(), self._getBonusSection(bonuses)], gap=25, layout=BLOCKS_TOOLTIP_TYPES.LAYOUT_VERTICAL, align=BLOCKS_TOOLTIP_TYPES.ALIGN_CENTER)
 

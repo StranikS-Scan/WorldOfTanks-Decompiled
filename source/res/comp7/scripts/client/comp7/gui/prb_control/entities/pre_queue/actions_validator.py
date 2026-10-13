@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: comp7/scripts/client/comp7/gui/prb_control/entities/pre_queue/actions_validator.py
+from __future__ import absolute_import
 import typing
 from CurrentVehicle import g_currentVehicle
 from comp7.gui.impl.gen.view_models.views.lobby.enums import SeasonName

@@ -16,11 +16,11 @@ from gui.Scaleform.daapi.view.lobby.vehicle_compare.cmp_configurator_parameters 
 from gui.Scaleform.daapi.view.lobby.vehicle_compare.cmp_configurator_vehicle import g_cmpConfiguratorVehicle
 from gui.Scaleform.daapi.view.meta.VehicleCompareConfiguratorMainMeta import VehicleCompareConfiguratorMainMeta
 from gui.Scaleform.daapi.view.meta.VehicleCompareConfiguratorViewMeta import VehicleCompareConfiguratorViewMeta
-from gui.Scaleform.framework import g_entitiesFactories
 from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.Scaleform.genConsts.VEHICLE_COMPARE_CONSTANTS import VEHICLE_COMPARE_CONSTANTS
 from gui.Scaleform.locale.VEH_COMPARE import VEH_COMPARE
+from gui.shared.events import LoadViewEvent
 from gui.SystemMessages import pushMessagesFromResult
 from gui.impl.gen import R
 from gui.impl.lobby.vehicle_compare.interactors import CompareInteractingItem
@@ -631,7 +631,7 @@ class VehicleCompareConfiguratorMain(LobbySubView, VehicleCompareConfiguratorMai
 
     def closeView(self, forcedBackAlias=None):
         if self.__canClose():
-            event = g_entitiesFactories.makeLoadEvent(SFViewLoadParams(forcedBackAlias or self.__backAlias))
+            event = LoadViewEvent(SFViewLoadParams(forcedBackAlias or self.__backAlias))
             self.fireEvent(event, scope=EVENT_BUS_SCOPE.LOBBY)
 
     def _populate(self):

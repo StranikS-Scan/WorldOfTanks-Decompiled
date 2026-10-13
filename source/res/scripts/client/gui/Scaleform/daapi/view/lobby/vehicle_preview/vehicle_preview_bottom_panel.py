@@ -26,7 +26,6 @@ from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.Scaleform.locale.VEHICLE_PREVIEW import VEHICLE_PREVIEW
 from gui.game_control.links import URLMacros
-from gui.game_control.wallet import WalletController
 from gui.hangar_cameras.hangar_camera_common import CameraRelatedEvents
 from gui.impl import backport
 from gui.impl.gen import R
@@ -46,7 +45,7 @@ from helpers import dependency, int2roman, time_utils
 from helpers.i18n import makeString as _ms
 from shared_utils import findFirst
 from skeletons.gui.app_loader import IAppLoader
-from skeletons.gui.game_control import IExternalLinksController, IHeroTankController, IMarathonEventsController, IRestoreController, ITradeInController, IVehicleComparisonBasket, ILootBoxSystemController
+from skeletons.gui.game_control import IExternalLinksController, IHeroTankController, IMarathonEventsController, IRestoreController, ITradeInController, IVehicleComparisonBasket, ILootBoxSystemController, IWalletController
 from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
@@ -110,6 +109,7 @@ class VehiclePreviewBottomPanel(VehiclePreviewBottomPanelMeta):
     _marathonsCtrl = dependency.descriptor(IMarathonEventsController)
     _lootBoxesCtrl = dependency.descriptor(ILootBoxSystemController)
     __linksCtrl = dependency.descriptor(IExternalLinksController)
+    __wallet = dependency.descriptor(IWalletController)
 
     def __init__(self, skipConfirm=False):
         super(VehiclePreviewBottomPanel, self).__init__()
@@ -442,7 +442,7 @@ class VehiclePreviewBottomPanel(VehiclePreviewBottomPanelMeta):
         customOffer = None
         price = self.__getPackPrice()
         currency = price.getCurrency()
-        walletAvailable = self.__walletAvailableForCurrency(currency)
+        walletAvailable = self.__wallet.isAvailable
         enabled = False
         if not walletAvailable:
             buyButtonTooltip = _buildBuyButtonTooltip('walletUnavailable')
@@ -509,7 +509,7 @@ class VehiclePreviewBottomPanel(VehiclePreviewBottomPanelMeta):
         priceType, price = getPriceTypeAndValue(vehicle, money, self._itemsCache.items.shop.defaults.exchangeRate)
         itemPrice = chooseItemPriceVO(priceType, price)
         currency = price.getCurrency(byWeight=True)
-        walletAvailable = self.__walletAvailableForCurrency(currency)
+        walletAvailable = self.__wallet.isAvailable
         buttonLabel = self.__getUnlockedVehicleBtnLabel(priceType)
         buttonIcon = None
         buttonIconAlign = None
@@ -564,7 +564,7 @@ class VehiclePreviewBottomPanel(VehiclePreviewBottomPanelMeta):
         _, isXpEnough = g_techTreeDP.isVehicleAvailableToUnlock(nodeCD, self._vehicleLevel)
         unlocks = self._itemsCache.items.stats.unlocks
         isNext2Unlock, unlockProps = g_techTreeDP.isNext2Unlock(nodeCD, unlocked=unlocks, xps=stats.vehiclesXPs, freeXP=stats.freeXP, level=self._vehicleLevel)
-        walletAvailable = self.__walletAvailableForCurrency('freeXP')
+        walletAvailable = self.__wallet.isAvailable
         isAvailableToUnlock = isXpEnough and isNext2Unlock and walletAvailable
         if not isAvailableToUnlock:
             if not isXpEnough:
@@ -728,9 +728,6 @@ class VehiclePreviewBottomPanel(VehiclePreviewBottomPanelMeta):
         else:
             factory.doAction(factory.BUY_VEHICLE, self._vehicleCD, False, None, VIEW_ALIAS.VEHICLE_PREVIEW, self.__backAlias, self.__backCallback, skipConfirm=self._skipConfirm)
         return
-
-    def __walletAvailableForCurrency(self, currency):
-        return self._itemsCache.items.stats.currencyStatuses.get(currency) == WalletController.STATUS.AVAILABLE
 
     def __getUnlockedVehicleBtnLabel(self, priceType):
         specialData = getHeroTankPreviewParams() if self.__isHeroTank else None

@@ -9,7 +9,7 @@ from gui.Scaleform.daapi.view.battle.shared.vehicle_mechanics.mechanic_widgets.v
 from gui.Scaleform.genConsts.SHELL_CALIBRATION_WIDGET_CONSTS import SHELL_CALIBRATION_WIDGET_CONSTS
 from gui.veh_mechanics.battle.updaters.mechanics.mechanic_passenger_updater import VehicleMechanicPassengerUpdater
 from gui.veh_mechanics.battle.updaters.mechanics.mechanic_states_updater import VehicleMechanicStatesUpdater
-from vehicles.mechanics.mechanic_constants import VehicleMechanic
+from items.vehicle_mechanics_types import VehicleMechanicKeys
 from vehicles.mechanics.mechanic_states import IMechanicStatesListenerLogic
 if typing.TYPE_CHECKING:
     from gui.veh_mechanics.battle.updaters.updaters_common import IViewUpdater
@@ -25,7 +25,7 @@ class ShellCalibrationMechanicWidget(VehicleMechanicWidget, ContainersListener, 
         self.__invalidateState(newState)
 
     def _getViewUpdaters(self):
-        return [VehicleMechanicPassengerUpdater(VehicleMechanic.SHELL_CALIBRATION, self), VehicleMechanicStatesUpdater(VehicleMechanic.SHELL_CALIBRATION, self)]
+        return [VehicleMechanicPassengerUpdater(VehicleMechanicKeys.SHELL_CALIBRATION, self), VehicleMechanicStatesUpdater(VehicleMechanicKeys.SHELL_CALIBRATION, self)]
 
     def __invalidateState(self, state, isInstantly=False):
         widgetState = SHELL_CALIBRATION_WIDGET_CONSTS.NO_BONUS

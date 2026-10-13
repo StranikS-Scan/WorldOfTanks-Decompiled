@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: frontline/scripts/client/frontline/gui/battle_control/controllers/frontline_respawn_ctrl.py
+from __future__ import absolute_import
 import BigWorld
 from debug_utils import LOG_ERROR, LOG_DEBUG
 from gui.battle_control import avatar_getter
@@ -50,8 +51,8 @@ class FrontlineRespawnsController(BaseRespawnsController):
             playerDataComp.onPlayerPhysicalLaneUpdated -= self.__onPlayerPhysicalLaneUpdated
         return
 
-    def updateVehicleLimits(self, limits):
-        super(FrontlineRespawnsController, self).updateVehicleLimits(limits)
+    def updateVehicleLimits(self, respawnLimits):
+        super(FrontlineRespawnsController, self).updateVehicleLimits(respawnLimits)
         self.__onRespawnInfoUpdated()
 
     def updateRespawnInfo(self, respawnInfo):

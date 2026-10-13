@@ -1,6 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/account_helpers/settings_core/migrations.py
+from __future__ import absolute_import
 import string
+from future.utils import lrange, viewitems
 import BigWorld
 import constants
 from account_helpers.AccountSettings import NEW_SETTINGS_COUNTER
@@ -56,7 +58,7 @@ def _initializeDefaultSettings(core, data, initialized):
              GAME.RECEIVE_INVITES_IN_BATTLE: 'readBool',
              GAME.STORE_RECEIVER_IN_BATTLE: 'readBool',
              GAME.CHAT_CONTACTS_LIST_ONLY: 'readBool'}
-            for key, reader in _userProps.iteritems():
+            for key, reader in viewitems(_userProps):
                 if key in tags:
                     gameData[key] = getattr(subSec, reader)(key)
 
@@ -100,7 +102,7 @@ def _reinitializeDefaultSettings(core, data, initialized, callback=None):
 
     @adisp_async
     def wrapper(callback=None):
-        BigWorld.player().intUserSettings.delIntSettings(range(1, 60), callback)
+        BigWorld.player().intUserSettings.delIntSettings(lrange(1, 60), callback)
 
     yield wrapper()
     _initializeDefaultSettings(core, data, initialized)
@@ -568,7 +570,7 @@ def _migrateTo67(core, data, initialized):
     from account_helpers.settings_core.ServerSettingsManager import SETTINGS_SECTIONS
     storedValue = _getSettingsCache().getSectionSettings(SETTINGS_SECTIONS.BATTLE_PASS_STORAGE, 0)
     clear = data['clear']
-    for position in range(2, 16) + range(18, 20):
+    for position in lrange(2, 16) + lrange(18, 20):
         settingOffset = 1 << position
         if storedValue & settingOffset:
             clear['battlePassStorage'] = clear.get('battlePassStorage', 0) | settingOffset
@@ -759,7 +761,7 @@ def _migrateTo85(core, data, initialized):
 
 
 def _migrateTo86(core, data, initialized):
-    for position in range(2) + range(17, 18):
+    for position in lrange(2) + lrange(17, 18):
         data['clear']['battlePassStorage'] = data['clear'].get('battlePassStorage', 0) | 1 << position
 
 
@@ -992,8 +994,7 @@ def _migrateTo108(core, data, initialized):
 
 
 def _migrateTo109(core, data, initialized):
-    from account_helpers.settings_core.ServerSettingsManager import GAME_EXTENDED_2
-    data[GAME_EXTENDED_2][GAME.GAMEPLAY_DEV_MAPS] = True
+    pass
 
 
 def _migrateTo110(core, data, initialized):
@@ -1099,10 +1100,10 @@ def _migrateTo116(core, data, initialized):
                     'zoomIndicator': 100}}
         aimData = data.get('aimData')
         if aimData:
-            for aimDataType in newbiesAimData:
+            for aimDataType, aimDataValue in viewitems(newbiesAimData):
                 if aimDataType in aimData:
-                    data['aimData'][aimDataType].update(newbiesAimData[aimDataType])
-                data['aimData'][aimDataType] = newbiesAimData[aimDataType]
+                    data['aimData'][aimDataType].update(aimDataValue)
+                data['aimData'][aimDataType] = aimDataValue
 
         else:
             data['aimData'] = newbiesAimData
@@ -1131,10 +1132,10 @@ def _migrateTo116(core, data, initialized):
                   'markerAltHp': 1}}
         markersData = data.get('markersData')
         if markersData:
-            for markerType in newbiesMarkersData:
+            for markerType, newMarkerData in viewitems(newbiesMarkersData):
                 if markerType in markersData:
-                    data['markersData'][markerType].update(newbiesMarkersData[markerType])
-                data['markersData'][markerType] = newbiesMarkersData[markerType]
+                    data['markersData'][markerType].update(newMarkerData)
+                data['markersData'][markerType] = newMarkerData
 
         else:
             data['markersData'] = newbiesMarkersData
@@ -1409,14 +1410,13 @@ def _migrateTo146(core, data, initialized):
 
 
 def _migrateTo147(core, data, initialized):
-    from account_helpers.settings_core.ServerSettingsManager import GAME_EXTENDED_2, SETTINGS_SECTIONS
+    from account_helpers.settings_core.ServerSettingsManager import SETTINGS_SECTIONS
     from account_helpers.AccountSettings import AccountSettings
     default = AccountSettings.getSettingsDefault(GAME.GAMEPLAY_MASK)
     storedValue = _getSettingsCache().getSectionSettings(SETTINGS_SECTIONS.GAMEPLAY, default)
     import ArenaType
     newMask = storedValue & ~ArenaType.getGameplaysMask(('ctf30x30', 'domination30x30'))
     data['gameplayData'][GAME.GAMEPLAY_MASK] = newMask & 65535
-    data[GAME_EXTENDED_2][GAME.GAMEPLAY_DEV_MAPS] = True
 
 
 def _migrateTo148(core, data, initialized):
@@ -1548,6 +1548,16 @@ def _migrateTo159(core, data, initialized):
         clear[SETTINGS_SECTIONS.PERSONAL_MISSION_4] = clear.get(SETTINGS_SECTIONS.PERSONAL_MISSION_4, 0) | settings
     else:
         data[SETTINGS_SECTIONS.PERSONAL_MISSION_4] = AccountSettings.getSettingsDefault(PERSONAL_MISSION_4)
+
+
+def _migrateTo160(core, data, initialized):
+    if not initialized:
+        return
+    dogTags = data.setdefault('dogTags', {})
+    dogTags.update({GAME.SHOW_VICTIMS_DOGTAG: True,
+     GAME.SHOW_DOGTAG_TO_KILLER: True,
+     GAME.SHOW_KILLERS_DOGTAG: True,
+     GAME.SHOW_PERSONAL_ANIMATED_DOGTAG: True})
 
 
 _versions = ((1,
@@ -2180,6 +2190,10 @@ _versions = ((1,
   False),
  (159,
   _migrateTo159,
+  False,
+  False),
+ (160,
+  _migrateTo160,
   False,
   False))
 

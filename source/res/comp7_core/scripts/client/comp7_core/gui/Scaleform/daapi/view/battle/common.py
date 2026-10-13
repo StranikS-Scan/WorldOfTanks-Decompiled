@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: comp7_core/scripts/client/comp7_core/gui/Scaleform/daapi/view/battle/common.py
+from __future__ import absolute_import
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import COMP7_PREBATTLE_CAROUSEL_ROW_VALUE
 

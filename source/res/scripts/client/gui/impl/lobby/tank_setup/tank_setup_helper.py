@@ -18,8 +18,8 @@ from helpers import i18n
 from items.components.supply_slot_categories import SlotCategories
 from wg_async import wg_async, wg_await, await_callback
 if typing.TYPE_CHECKING:
-    from vehicles.mechanics.mechanic_constants import VehicleMechanic
     from gui.shared.gui_items.vehicle_mechanics.shell_mechanic_item import ShellMechanicItem
+    from items.vehicle_mechanics_types import VehicleMechanicKey
 _logger = logging.getLogger(__name__)
 NONE_ID = -1
 _CATEGORY_MASK = {category:1 << idx for idx, category in enumerate(SlotCategories.ORDER)}

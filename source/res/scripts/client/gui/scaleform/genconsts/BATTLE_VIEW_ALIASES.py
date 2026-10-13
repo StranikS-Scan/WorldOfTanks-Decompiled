@@ -116,6 +116,7 @@ class BATTLE_VIEW_ALIASES(object):
     AUTORELOADER_SURGE_WIDGET = 'autoreloaderSurgeWidget'
     BUSTLE_FEED_WIDGET = 'bustleFeedWidget'
     SIGHT_POINTER_WIDGET = 'sightPointerWidget'
+    SPEC_BOOST_MODE_WIDGET = 'specBoostModeWidget'
     DECORATIVE_CROSSHAIR_PANEL = 'decorativeCrosshairPanel'
     CONCENTRATION_DECORATIVE_CROSSHAIR = 'concentrationDecorativeCrosshair'
     ACCURACY_DECORATIVE_CROSSHAIR = 'accuracyDecorativeCrosshair'

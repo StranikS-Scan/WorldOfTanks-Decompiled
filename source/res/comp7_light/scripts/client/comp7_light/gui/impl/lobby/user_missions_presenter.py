@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: comp7_light/scripts/client/comp7_light/gui/impl/lobby/user_missions_presenter.py
+from __future__ import absolute_import
 from comp7_light.gui.impl.lobby.user_missions.hangar_widget.overlap_ctrl import Comp7LightOverlapCtrlMixin
 from comp7_light.gui.impl.lobby.entry_point_presenter import EntryPointPresenter
 from comp7_light.gui.impl.lobby.progression_quests_presenter import ProgressionQuestsPresenter

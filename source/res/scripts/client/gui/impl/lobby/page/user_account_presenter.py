@@ -165,17 +165,16 @@ class UserAccountPresenter(ViewComponent[UserAccountModel]):
             model.setExpiryTime(accountStats.activePremiumExpiryTime)
 
     def __updateWotPlusInfo(self):
-        hasSteamAccount = self.__steamRegistrationCtrl.isSteamAccount
         with self.viewModel.subscriptions.wotPlus.transaction() as model:
             model.setType(_WOT_PLUS_TIER_MAP[self.__wotPlusCtrl.getTier()])
             model.setState(_WOT_PLUS_STATES_MAP[self.__wotPlusCtrl.getState()])
             model.setPeriodicity(self.__wotPlusCtrl.getBillingPeriod() or WotPlusPeriodicityEnum.P6MONTHS)
             model.setExpiryTime(self.__wotPlusCtrl.getExpiryTime())
             model.setIsWotPlusEnabled(self.__wotPlusCtrl.isWotPlusVisible())
+            model.setIsCrossPlatformCore(self.__steamRegistrationCtrl.isSteamAccount and self.__wotPlusCtrl.getTier() == WotPlusTier.CORE and self.__wotPlusCtrl.isSubscriptionBoughtViaPlatform())
             self.__setModelBenefits(getAvailableCoreBonuses, model.getBenefits)
             self.__setModelBenefits(getUniqueAvailableProBonuses, model.getProBenefits)
         with self.viewModel.subscriptions.transaction() as model:
-            model.setIsSteamPlatform(hasSteamAccount)
             model.setIsCnRealm(constants.IS_CHINA)
 
     def __setModelBenefits(self, getEnabledBonuses, getBenefits):
@@ -225,10 +224,9 @@ class UserAccountPresenter(ViewComponent[UserAccountModel]):
     def __onOpenWotPlus(self):
         wotPlusState = self.__wotPlusCtrl.getState()
         self.__wotPlusUILogger.logClickEvent(wotPlusState)
-        if constants.IS_CHINA or self.__steamRegistrationCtrl.isSteamAccount:
-            if not self.__wotPlusCtrl.hasSubscription():
-                showShop(getWotPlusShopUrl())
-                return
+        if constants.IS_CHINA and not self.__wotPlusCtrl.hasSubscription():
+            showShop(getWotPlusShopUrl())
+            return
         closeViewsWithFlags([R.views.lobby.player_subscriptions.PlayerSubscriptions()], [ViewFlags.LOBBY_TOP_SUB_VIEW])
         views = self.gui.windowsManager.findViews(lambda view: view.layoutID == R.views.lobby.player_subscriptions.PlayerSubscriptions())
         if not views:

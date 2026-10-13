@@ -123,9 +123,9 @@ class FunRandomLootBoxFormatter(QuestAchievesFormatter, FunAssetPacksMixin):
         return result
 
     @classmethod
-    def _processTokens(cls, tokens):
+    def _processTokens(cls, data):
         result = []
-        tokensData = tokens.get('tokens', {})
+        tokensData = data.get('tokens', {})
         sortedTokens = sorted(viewkeys(tokensData), key=cls._sortTokenFunc)
         for token in sortedTokens:
             if token.startswith(LOOTBOX_TOKEN_PREFIX):

@@ -3,6 +3,7 @@
 import logging
 from collections import namedtuple, defaultdict
 from enumerations import Enumeration, EnumItem
+from future.utils import listitems
 import typing
 import BigWorld
 from account_helpers import AccountSettings
@@ -148,7 +149,7 @@ class _LimitedUIRules(object):
             return
         else:
             serverRules = defaultdict(list)
-            for ruleType, ruleIDs in self.__postponedCompletedRules.items():
+            for ruleType, ruleIDs in listitems(self.__postponedCompletedRules):
                 if ruleType == LuiRuleTypes.VERSIONED:
                     AccountSettings.completeVersionedRules([ ruleID.name() for ruleID in ruleIDs ])
                     del self.__postponedCompletedRules[ruleType]

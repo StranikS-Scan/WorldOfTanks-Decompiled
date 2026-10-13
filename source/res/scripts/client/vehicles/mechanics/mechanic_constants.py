@@ -2,127 +2,46 @@
 # Embedded file name: scripts/client/vehicles/mechanics/mechanic_constants.py
 from __future__ import absolute_import
 from enum import Enum
-from future.utils import viewitems
-from items.components import shared_components
-
-class VehicleMechanic(Enum):
-    MAGAZINE_GUN = 'magazineGun'
-    AUTO_LOADER_GUN = 'autoLoaderGun'
-    AUTO_LOADER_GUN_BOOST = 'autoLoaderGunBoost'
-    DAMAGE_MUTABLE = 'damageMutable'
-    DUAL_GUN = 'dualGun'
-    HYDRAULIC_CHASSIS = 'hydraulicChassis'
-    TRACK_WITHIN_TRACK = 'trackWithinTrack'
-    SIEGE_MODE = 'siegeMode'
-    STUN = 'stun'
-    HYDRAULIC_WHEELED_CHASSIS = 'hydraulicWheeledChassis'
-    TURBOSHAFT_ENGINE = 'turboshaftEngine'
-    ROCKET_ACCELERATION = 'rocketAcceleration'
-    DUAL_ACCURACY = 'dualAccuracy'
-    AUTO_SHOOT_GUN = 'autoShootGun'
-    TWIN_GUN = 'twinGun'
-    IMPROVED_RAMMING = 'improvedRamming'
-    CONCENTRATION_MODE = 'concentrationMode'
-    BATTLE_FURY = 'battleFury'
-    EXTRA_SHOT_CLIP = 'extraShotClip'
-    POWER_MODE = 'powerMode'
-    ACCURACY_STACKS = 'accuracyStacks'
-    SUPPORT_WEAPON = 'supportWeapon'
-    PILLBOX_SIEGE_MODE = 'pillboxSiegeMode'
-    CHARGEABLE_BURST = 'chargeableBurst'
-    RECHARGEABLE_NITRO = 'rechargeableNitro'
-    CHARGE_SHOT = 'chargeShot'
-    OVERHEAT_STACKS = 'overheatStacks'
-    TARGET_DESIGNATOR = 'targetDesignator'
-    STANCE_DANCE = 'stanceDance'
-    AUTORELOADER_SURGE = 'autoreloaderSurge'
-    STATIONARY_RELOAD = 'stationaryReload'
-    TEMPERATURE_GUN = 'temperatureGun'
-    OVERHEAT_GUN = 'overheatGun'
-    HEATING_ZONES_GUN = 'heatingZonesGun'
-    LOW_CHARGE_SHOT = 'lowChargeShot'
-    STAGED_JET_BOOSTERS = 'stagedJetBoosters'
-    PROPELLANT_GUN = 'propellantAfterburnerGun'
-    WHEELED_DASH = 'wheeledDash'
-    AUXILIARY_ROCKET_LAUNCHER = 'auxiliaryRocketLauncher'
-    SHELL_PARAMS_SWITCHER = 'shellParamsSwitcher'
-    SHELL_CALIBRATION = 'shellCalibration'
-    CREST_MOVING = 'crestMoving'
-    BUSTLE_FEED = 'bustleFeed'
-    SIGHT_POINTER = 'sightPointer'
-
-
-VEHICLE_MECHANIC_DYN_COMPONENT_NAMES = {VehicleMechanic.IMPROVED_RAMMING: 'improvedRammingController',
- VehicleMechanic.ROCKET_ACCELERATION: 'rocketAccelerationController',
- VehicleMechanic.DUAL_ACCURACY: 'dualAccuracy',
+from items.vehicle_mechanics_types import VehicleMechanic, VehicleMechanicKeys, ALL_VEHICLE_MECHANIC_KEYS
+VEHICLE_MECHANIC_DYN_COMPONENT_NAMES = {VehicleMechanic.ACCURACY_STACKS: 'accuracyStacksController',
  VehicleMechanic.AUTO_SHOOT_GUN: 'autoShootGunController',
- VehicleMechanic.TWIN_GUN: 'twinGunController',
- VehicleMechanic.CONCENTRATION_MODE: 'concentrationModeComponent',
- VehicleMechanic.BATTLE_FURY: 'battleFuryController',
- VehicleMechanic.EXTRA_SHOT_CLIP: 'extraShotClipComponent',
- VehicleMechanic.POWER_MODE: 'powerModeController',
- VehicleMechanic.ACCURACY_STACKS: 'accuracyStacksController',
- VehicleMechanic.SUPPORT_WEAPON: 'supportWeaponComponent',
- VehicleMechanic.PILLBOX_SIEGE_MODE: 'pillboxSiegeComponent',
- VehicleMechanic.CHARGEABLE_BURST: 'chargeableBurstComponent',
- VehicleMechanic.RECHARGEABLE_NITRO: 'rechargeableNitroController',
- VehicleMechanic.CHARGE_SHOT: 'chargeShotComponent',
- VehicleMechanic.OVERHEAT_STACKS: 'overheatStacksController',
- VehicleMechanic.TARGET_DESIGNATOR: 'targetDesignatorController',
- VehicleMechanic.STANCE_DANCE: 'stanceDanceController',
  VehicleMechanic.AUTORELOADER_SURGE: 'autoreloaderSurgeController',
- VehicleMechanic.STATIONARY_RELOAD: 'stationaryReloadController',
- VehicleMechanic.TEMPERATURE_GUN: 'temperatureGunController',
- VehicleMechanic.OVERHEAT_GUN: 'overheatGunComponent',
- VehicleMechanic.HEATING_ZONES_GUN: 'heatingZonesGunComponent',
- VehicleMechanic.LOW_CHARGE_SHOT: 'lowChargeShotController',
- VehicleMechanic.STAGED_JET_BOOSTERS: 'stagedJetBoostersController',
- VehicleMechanic.PROPELLANT_GUN: 'propellantGunController',
- VehicleMechanic.WHEELED_DASH: 'wheeledDashController',
  VehicleMechanic.AUXILIARY_ROCKET_LAUNCHER: 'auxiliaryRocketLauncherComponent',
- VehicleMechanic.SHELL_PARAMS_SWITCHER: 'shellParamsSwitcherController',
- VehicleMechanic.SHELL_CALIBRATION: 'ShellCalibrationController',
- VehicleMechanic.CREST_MOVING: 'CrestMovingController',
+ VehicleMechanic.BATTLE_FURY: 'battleFuryController',
  VehicleMechanic.BUSTLE_FEED: 'bustleFeedController',
- VehicleMechanic.SIGHT_POINTER: 'sightPointerComponent'}
-TRACKABLE_VEHICLE_MECHANICS = set(VEHICLE_MECHANIC_DYN_COMPONENT_NAMES)
+ VehicleMechanic.CHARGE_SHOT: 'chargeShotComponent',
+ VehicleMechanic.CHARGEABLE_BURST: 'chargeableBurstComponent',
+ VehicleMechanic.CONCENTRATION_MODE: 'concentrationModeComponent',
+ VehicleMechanic.CREST_MOVING: 'CrestMovingController',
+ VehicleMechanic.DUAL_ACCURACY: 'dualAccuracy',
+ VehicleMechanic.EXTRA_SHOT_CLIP: 'extraShotClipComponent',
+ VehicleMechanic.HEATING_ZONES_GUN: 'heatingZonesGunComponent',
+ VehicleMechanic.IMPROVED_RAMMING: 'improvedRammingController',
+ VehicleMechanic.LOW_CHARGE_SHOT: 'lowChargeShotController',
+ VehicleMechanic.OVERHEAT_GUN: 'overheatGunComponent',
+ VehicleMechanic.OVERHEAT_STACKS: 'overheatStacksController',
+ VehicleMechanic.PILLBOX_SIEGE_MODE: 'pillboxSiegeComponent',
+ VehicleMechanic.POWER_MODE: 'powerModeController',
+ VehicleMechanic.PROPELLANT_GUN: 'propellantGunController',
+ VehicleMechanic.RECHARGEABLE_NITRO: 'rechargeableNitroController',
+ VehicleMechanic.ROCKET_ACCELERATION: 'rocketAccelerationController',
+ VehicleMechanic.SHELL_CALIBRATION: 'ShellCalibrationController',
+ VehicleMechanic.SHELL_PARAMS_SWITCHER: 'shellParamsSwitcherController',
+ VehicleMechanic.SIGHT_POINTER: 'sightPointerComponent',
+ VehicleMechanic.SPEC_BOOST_MODE: 'specBoostModeComponent',
+ VehicleMechanic.STAGED_JET_BOOSTERS: 'stagedJetBoostersController',
+ VehicleMechanic.STANCE_DANCE: 'stanceDanceController',
+ VehicleMechanic.STATIONARY_RELOAD: 'stationaryReloadController',
+ VehicleMechanic.SUPPORT_WEAPON: 'supportWeaponComponent',
+ VehicleMechanic.TARGET_DESIGNATOR: 'targetDesignatorController',
+ VehicleMechanic.TEMPERATURE_GUN: 'temperatureGunController',
+ VehicleMechanic.TWIN_GUN: 'twinGunController',
+ VehicleMechanic.WHEELED_DASH: 'wheeledDashController'}
+TRACKABLE_VEHICLE_MECHANICS = frozenset((m for m in ALL_VEHICLE_MECHANIC_KEYS if m.mechanic in VEHICLE_MECHANIC_DYN_COMPONENT_NAMES))
 VEHICLE_MECHANIC_TAGS = {VehicleMechanic.ROCKET_ACCELERATION: 'rocketAcceleration',
  VehicleMechanic.DUAL_ACCURACY: 'dualAccuracy',
  VehicleMechanic.AUTO_SHOOT_GUN: 'autoShoot',
  VehicleMechanic.TWIN_GUN: 'twinGun'}
-VEHICLE_MECHANIC_TO_PARAMS = {VehicleMechanic.IMPROVED_RAMMING: shared_components.ImprovedRammingParams.MECHANICS_NAME,
- VehicleMechanic.CONCENTRATION_MODE: shared_components.ConcentrationModeParams.MECHANICS_NAME,
- VehicleMechanic.BATTLE_FURY: shared_components.BattleFuryParams.MECHANICS_NAME,
- VehicleMechanic.EXTRA_SHOT_CLIP: shared_components.ExtraShotClipParams.MECHANICS_NAME,
- VehicleMechanic.POWER_MODE: shared_components.PowerModeParams.MECHANICS_NAME,
- VehicleMechanic.ACCURACY_STACKS: shared_components.AccuracyStacksParams.MECHANICS_NAME,
- VehicleMechanic.SUPPORT_WEAPON: shared_components.SupportWeaponParams.MECHANICS_NAME,
- VehicleMechanic.PILLBOX_SIEGE_MODE: shared_components.PillboxSiegeModeParams.MECHANICS_NAME,
- VehicleMechanic.CHARGEABLE_BURST: shared_components.ChargeableBurstParams.MECHANICS_NAME,
- VehicleMechanic.RECHARGEABLE_NITRO: shared_components.RechargeableNitroParams.MECHANICS_NAME,
- VehicleMechanic.CHARGE_SHOT: shared_components.ChargeShotParams.MECHANICS_NAME,
- VehicleMechanic.OVERHEAT_STACKS: shared_components.OverheatStacksParams.MECHANICS_NAME,
- VehicleMechanic.TARGET_DESIGNATOR: shared_components.TargetDesignatorParams.MECHANICS_NAME,
- VehicleMechanic.STANCE_DANCE: shared_components.StanceDanceParams.MECHANICS_NAME,
- VehicleMechanic.AUTORELOADER_SURGE: shared_components.AutoreloaderSurgeParams.MECHANICS_NAME,
- VehicleMechanic.STATIONARY_RELOAD: shared_components.StationaryReloadParams.MECHANICS_NAME,
- VehicleMechanic.TEMPERATURE_GUN: shared_components.TemperatureGunParams.MECHANICS_NAME,
- VehicleMechanic.OVERHEAT_GUN: shared_components.OverheatGunParams.MECHANICS_NAME,
- VehicleMechanic.HEATING_ZONES_GUN: shared_components.HeatingZonesGunParams.MECHANICS_NAME,
- VehicleMechanic.LOW_CHARGE_SHOT: shared_components.LowChargeShotParams.MECHANICS_NAME,
- VehicleMechanic.STAGED_JET_BOOSTERS: shared_components.StagedJetBoostersParams.MECHANICS_NAME,
- VehicleMechanic.PROPELLANT_GUN: shared_components.PropellantGunParams.MECHANICS_NAME,
- VehicleMechanic.WHEELED_DASH: shared_components.WheeledDashParams.MECHANICS_NAME,
- VehicleMechanic.AUXILIARY_ROCKET_LAUNCHER: shared_components.AuxiliaryRocketLauncherParams.MECHANICS_NAME,
- VehicleMechanic.SHELL_PARAMS_SWITCHER: shared_components.ShellSwitcherParams.MECHANICS_NAME,
- VehicleMechanic.SHELL_CALIBRATION: shared_components.ShellCalibrationParams.MECHANICS_NAME,
- VehicleMechanic.CREST_MOVING: shared_components.CrestMovingParams.MECHANICS_NAME,
- VehicleMechanic.BUSTLE_FEED: shared_components.BustleFeedParams.MECHANICS_NAME,
- VehicleMechanic.SIGHT_POINTER: shared_components.SightPointerParams.MECHANICS_NAME}
-VEHICLE_PARAMS_TO_MECHANIC = {v:k for k, v in viewitems(VEHICLE_MECHANIC_TO_PARAMS)}
-TRACKABLE_VEHICLE_DESCR_MECHANICS = set()
-TRACKABLE_VEHICLE_DESCR_MECHANICS |= set(VEHICLE_MECHANIC_TAGS)
-TRACKABLE_VEHICLE_DESCR_MECHANICS |= set(VEHICLE_MECHANIC_TO_PARAMS)
 
 class VehicleMechanicCommand(Enum):
     PREPARING = 'preparing'
@@ -134,22 +53,23 @@ class VehicleMechanicCommand(Enum):
     MANUAL_RELOAD = 'manual_reload'
 
 
-VEHICLE_MECHANIC_USED_COMMANDS = {VehicleMechanic.CONCENTRATION_MODE: (VehicleMechanicCommand.ACTIVATE,),
- VehicleMechanic.SUPPORT_WEAPON: (VehicleMechanicCommand.ACTIVATE,),
- VehicleMechanic.PILLBOX_SIEGE_MODE: (VehicleMechanicCommand.PREPARING,
-                                      VehicleMechanicCommand.CANCELLED,
-                                      VehicleMechanicCommand.ACTIVATE,
-                                      VehicleMechanicCommand.ALTERNATIVE_ACTIVATE),
- VehicleMechanic.RECHARGEABLE_NITRO: (VehicleMechanicCommand.ACTIVATE, VehicleMechanicCommand.DEACTIVATE),
- VehicleMechanic.CHARGE_SHOT: (VehicleMechanicCommand.ACTIVATE,),
- VehicleMechanic.TARGET_DESIGNATOR: (VehicleMechanicCommand.ACTIVATE,),
- VehicleMechanic.STANCE_DANCE: (VehicleMechanicCommand.ACTIVATE, VehicleMechanicCommand.SWITCH),
- VehicleMechanic.AUTORELOADER_SURGE: (VehicleMechanicCommand.ACTIVATE,),
- VehicleMechanic.STATIONARY_RELOAD: (VehicleMechanicCommand.MANUAL_RELOAD,),
- VehicleMechanic.STAGED_JET_BOOSTERS: (VehicleMechanicCommand.ACTIVATE,),
- VehicleMechanic.PROPELLANT_GUN: (VehicleMechanicCommand.ACTIVATE,),
- VehicleMechanic.WHEELED_DASH: (VehicleMechanicCommand.ACTIVATE,),
- VehicleMechanic.AUXILIARY_ROCKET_LAUNCHER: (VehicleMechanicCommand.ACTIVATE,),
- VehicleMechanic.SHELL_PARAMS_SWITCHER: (VehicleMechanicCommand.ACTIVATE,),
- VehicleMechanic.BUSTLE_FEED: (VehicleMechanicCommand.SWITCH,),
- VehicleMechanic.SIGHT_POINTER: (VehicleMechanicCommand.ACTIVATE, VehicleMechanicCommand.DEACTIVATE)}
+VEHICLE_MECHANIC_USED_COMMANDS = {VehicleMechanicKeys.AUTORELOADER_SURGE: (VehicleMechanicCommand.ACTIVATE,),
+ VehicleMechanicKeys.AUXILIARY_ROCKET_LAUNCHER: (VehicleMechanicCommand.ACTIVATE,),
+ VehicleMechanicKeys.BUSTLE_FEED: (VehicleMechanicCommand.SWITCH,),
+ VehicleMechanicKeys.CHARGE_SHOT: (VehicleMechanicCommand.ACTIVATE,),
+ VehicleMechanicKeys.COMBAT_THROTTLE: (VehicleMechanicCommand.ACTIVATE,),
+ VehicleMechanicKeys.CONCENTRATION_MODE: (VehicleMechanicCommand.ACTIVATE,),
+ VehicleMechanicKeys.PILLBOX_SIEGE_MODE: (VehicleMechanicCommand.PREPARING,
+                                          VehicleMechanicCommand.CANCELLED,
+                                          VehicleMechanicCommand.ACTIVATE,
+                                          VehicleMechanicCommand.ALTERNATIVE_ACTIVATE),
+ VehicleMechanicKeys.PROPELLANT_GUN: (VehicleMechanicCommand.ACTIVATE,),
+ VehicleMechanicKeys.RECHARGEABLE_NITRO: (VehicleMechanicCommand.ACTIVATE, VehicleMechanicCommand.DEACTIVATE),
+ VehicleMechanicKeys.SIGHT_POINTER: (VehicleMechanicCommand.ACTIVATE, VehicleMechanicCommand.DEACTIVATE),
+ VehicleMechanicKeys.SHELL_PARAMS_SWITCHER: (VehicleMechanicCommand.ACTIVATE,),
+ VehicleMechanicKeys.STAGED_JET_BOOSTERS: (VehicleMechanicCommand.ACTIVATE,),
+ VehicleMechanicKeys.STANCE_DANCE: (VehicleMechanicCommand.ACTIVATE, VehicleMechanicCommand.SWITCH),
+ VehicleMechanicKeys.STATIONARY_RELOAD: (VehicleMechanicCommand.MANUAL_RELOAD,),
+ VehicleMechanicKeys.SUPPORT_WEAPON: (VehicleMechanicCommand.ACTIVATE,),
+ VehicleMechanicKeys.TARGET_DESIGNATOR: (VehicleMechanicCommand.ACTIVATE,),
+ VehicleMechanicKeys.WHEELED_DASH: (VehicleMechanicCommand.ACTIVATE,)}

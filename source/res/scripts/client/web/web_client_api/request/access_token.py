@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/web/web_client_api/request/access_token.py
+from __future__ import absolute_import
 from helpers import dependency, time_utils
 from skeletons.connection_mgr import IConnectionManager
 from skeletons.gui.web import IWebController

@@ -91,6 +91,4 @@ class ShopState(SFViewLobbyState):
         self.__cachedParams = {}
 
     def _getViewLoadCtx(self, event):
-        ctx = event.params.get('ctx', {})
-        ctx.update({'forcedSkipEscape': True})
-        return {'ctx': ctx}
+        return {'ctx': event.params.get('ctx', {})}

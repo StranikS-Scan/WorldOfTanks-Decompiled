@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: story_mode/scripts/client/story_mode/gui/scaleform/daapi/view/battle/ribbons_aggregator.py
+from __future__ import absolute_import
 import BattleReplay
 from constants import ATTACK_REASON
 from gui.Scaleform.daapi.view.battle.shared.ribbons_aggregator import RibbonsAggregator, _ACCUMULATED_RIBBON_TYPES, _FEEDBACK_EVENT_TO_RIBBON_CLS_FACTORY as _DEFAULT_RIBBON_FACTORIES, _Ribbon, _RibbonSingleClassFactory, _RibbonClassFactory, _DamageRibbonClassFactory, _ReceivedDamageHitRibbon, _ReceivedFireHitRibbon, _ReceivedRamHitRibbon, _ReceivedWorldCollisionHitRibbon, _ArtilleryReceivedDamageHitRibbon, _BombersReceivedDamageHitRibbon, _ArtilleryReceivedFireHitRibbon, _BombersReceivedFireHitRibbon, _EpicRecoveryRibbon, _DeathZoneRibbon, _ReceivedBerserkerHitRibbon, _ReceivedBySpawnedBotHitRibbon, _ReceivedByMinefieldRibbon, _ReceivedByDamagingSmokeRibbon, _ReceivedByDamagingCorrodingShotRibbon, _ReceivedByFireCircleRibbon, _ReceivedByClingBranderRibbon, _ReceivedByDamagingThunderStrikeRibbon, _FortArtilleryReceivedDamageHitRibbon, _ReceivedByAirStrikeRibbon, _ReceivedByArtilleryRibbon, _StaticDeathZoneRibbon, _MinefieldZoneRibbon, _BattleshipRibbon, DAMAGE_SOURCE, _ReceivedFireDamageZoneRibbon, _ReceivedHERocketDamageRibbon

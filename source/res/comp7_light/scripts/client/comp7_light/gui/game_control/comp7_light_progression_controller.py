@@ -1,6 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: comp7_light/scripts/client/comp7_light/gui/game_control/comp7_light_progression_controller.py
+from __future__ import absolute_import
 import typing
+from future.utils import lzip
 import Event
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import COMP7_LIGHT_UI_SECTION, COMP7_LIGHT_PROGRESSION_POINTS_SEEN
@@ -109,7 +111,7 @@ class ProgressionOnConfig(ProgressionOnTokensController):
         stagePoints = 0
         stageMaxPoints = 0
         prevStageMaxPoints = 0
-        for stage, maxPoints in enumerate(zip(*self._getStages())[0], 1):
+        for stage, maxPoints in enumerate(lzip(*self._getStages())[0], 1):
             curStage = stage
             stagePoints = curPoints - prevStageMaxPoints
             stageMaxPoints = maxPoints - prevStageMaxPoints
@@ -136,7 +138,7 @@ class ProgressionOnConfig(ProgressionOnTokensController):
         stages = self._getStages()
         if not stages:
             return result
-        for stageAwards in zip(*stages)[1]:
+        for stageAwards in lzip(*stages)[1]:
             bonuses = []
             for key, value in stageAwards:
                 bonuses.extend(getNonQuestBonuses(key, value))

@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: frontline/scripts/client/frontline/gui/prb_control/entities/epic/squad/entity.py
+from __future__ import absolute_import
 from frontline.gui.prb_control.entities.epic.pre_queue.vehicles_watcher import EpicVehiclesWatcher
 from frontline.gui.prb_control.entities.epic.squad.actions_validator import EpicSquadActionsValidator
 from frontline.gui.prb_control.entities.epic.squad.components import EpicSquadRestrictionsProvider

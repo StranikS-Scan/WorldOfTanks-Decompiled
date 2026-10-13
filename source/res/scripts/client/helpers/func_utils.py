@@ -1,6 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/helpers/func_utils.py
+from __future__ import absolute_import
 from functools import partial, wraps
+from past.builtins import intern
 from time import sleep, time
 import BigWorld
 from constants import IS_DEVELOPMENT

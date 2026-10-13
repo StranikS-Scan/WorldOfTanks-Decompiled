@@ -13652,7 +13652,7 @@
       <mul>
         <name>	dynAttrs/multShotDispersionFactor	</name>
         <value>	0.95	</value>
-        <filter>	siege	</filter>
+        <filter>	lowChargeShot	</filter>
       </mul>
     </modifiers>
     <kpi>
@@ -13736,14 +13736,13 @@
   </a195_node23>
   <a195_node24>
     <id>	12224	</id>
-    <imgName>	turretTraverseStability	</imgName>
-    <locName>	turretTraverseStability	</locName>
+    <imgName>	gunStabilizationFromTurret	</imgName>
+    <locName>	gunStabilizationFromTurret	</locName>
     <categories>	firepower	</categories>
     <modifiers>
       <mul>
         <name>	miscAttrs/gun/shotDispersionFactors/turretRotation	</name>
         <value>	0.95	</value>
-        <filter>	default	</filter>
       </mul>
     </modifiers>
     <kpi>

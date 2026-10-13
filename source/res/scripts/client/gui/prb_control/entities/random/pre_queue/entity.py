@@ -59,7 +59,7 @@ class RandomEntity(PreQueueEntity):
             LOG_DEBUG('Demonstrator map selected: ', ArenaType.g_cache[arenaTypeID].geometryName)
             LOG_DEBUG('Demonstrator level selected: ', levelType)
             LOG_DEBUG('Demonstrator spawn selected: ', team)
-        BigWorld.player().enqueueRandom(ctx.getVehicleInventoryID(), gameplaysMask=ctx.getGamePlayMask(), randomFlags=ctx.getRandomFlags(), arenaTypeID=mmData)
+        BigWorld.player().enqueueRandom(ctx.getVehicleInventoryID(), gameplaysMask=ctx.getGamePlayMask(), arenaTypeID=mmData)
         LOG_DEBUG('Sends request on queuing to the random battle', ctx)
 
     def _doDequeue(self, ctx):
@@ -74,7 +74,7 @@ class RandomEntity(PreQueueEntity):
             arenaTypeID = action.mmData
         else:
             arenaTypeID = 0
-        return RandomQueueCtx(invID, arenaTypeID=arenaTypeID, gamePlayMask=gameplay_ctx.getMask(), randomFlags=gameplay_ctx.getRandomFlags(), waitingID='prebattle/join')
+        return RandomQueueCtx(invID, arenaTypeID=arenaTypeID, gamePlayMask=gameplay_ctx.getMask(), waitingID='prebattle/join')
 
     def _goToQueueUI(self):
         g_eventDispatcher.loadBattleQueue()

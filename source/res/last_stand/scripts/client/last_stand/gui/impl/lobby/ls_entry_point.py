@@ -5,8 +5,8 @@ import typing
 from gui.impl.gen import R
 from gui.impl import backport
 from gui.impl.gen.view_models.views.lobby.user_missions.constants.event_banner_state import EventBannerState
-from gui.impl.lobby.user_missions.hangar_widget.event_banners.base_event_banner import BaseEventBanner
 from gui.impl.lobby.user_missions.hangar_widget.event_banners.event_banners_container import EventBannersContainer
+from gui.impl.lobby.user_missions.hangar_widget.event_banners.standard_event_banner import StandardEventBanner
 from gui.impl.lobby.user_missions.hangar_widget.services import IEventsService
 from helpers import dependency, time_utils
 from last_stand.gui.impl.lobby.tooltips.event_banner_tooltip import EventBannerTooltipView
@@ -24,7 +24,7 @@ def isLSEntryPointAvailable(ctrl=None):
     return ctrl.isAvailable()
 
 
-class LSEventBanner(BaseEventBanner):
+class LSEventBanner(StandardEventBanner):
     NAME = LAST_STAND_HANGAR_ALIASES.LS_ENTRY_POINT
     _lsCtrl = dependency.descriptor(ILSController)
     _lsArtefactsCtrl = dependency.descriptor(ILSArtefactsController)

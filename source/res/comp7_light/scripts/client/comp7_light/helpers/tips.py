@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: comp7_light/scripts/client/comp7_light/helpers/tips.py
+from __future__ import absolute_import
 import typing
 from comp7_light_constants import ARENA_GUI_TYPE
 from helpers.tips import readTips

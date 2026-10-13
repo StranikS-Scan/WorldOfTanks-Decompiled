@@ -63,6 +63,9 @@ class EventOutputSlot(object):
     def call():
         pass
 
+    def setEditorData(self, editorData):
+        pass
+
 
 class Meta(object):
 

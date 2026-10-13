@@ -37,9 +37,9 @@ class OpenBundleAchievesFormatter(QuestAchievesFormatter):
             return None
 
     @classmethod
-    def _processTokens(cls, tokens):
+    def _processTokens(cls, data):
         result = []
-        for token, tokenData in viewitems(tokens.get('tokens', {})):
+        for token, tokenData in viewitems(data.get('tokens', {})):
             tankmanTokenResult = cls._processTankmanToken(token, tokenData)
             if tankmanTokenResult:
                 result.append(tankmanTokenResult)

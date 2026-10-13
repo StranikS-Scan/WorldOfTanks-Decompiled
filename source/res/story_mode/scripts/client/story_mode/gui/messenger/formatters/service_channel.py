@@ -1,5 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: story_mode/scripts/client/story_mode/gui/messenger/formatters/service_channel.py
+from __future__ import absolute_import
+from future.utils import viewitems, viewvalues
 from adisp import adisp_async, adisp_process
 from constants import SCENARIO_RESULT
 from gui.impl import backport
@@ -78,14 +80,14 @@ class StoryModeResultsFormatter(BattleResultsFormatter):
         for reward in rewardList:
             credits += reward.get('credits', 0)
             freeXP += reward.get('freeXP', 0)
-            bpPoints += sum((points for points in reward.get('battlePassPoints', {}).get('vehicles', {}).itervalues()))
+            bpPoints += sum(viewvalues(reward.get('battlePassPoints', {}).get('vehicles', {})))
             crystal += reward.get('crystal', 0)
             customizations += reward.get('customizations', [])
             premium += reward.get('premium_plus', 0)
             slots += reward.get('slots', 0)
             equipCoin += reward.get('equipCoin', 0)
             if 'items' in reward:
-                for itemKey, amount in reward['items'].iteritems():
+                for itemKey, amount in viewitems(reward['items']):
                     items[itemKey] = items.get(itemKey, 0) + amount
 
             vehicles += reward.get('vehicles', [])
@@ -111,7 +113,7 @@ class StoryModeResultsFormatter(BattleResultsFormatter):
             if slots:
                 commaItems.append(backport.text(R.strings.sm_messenger.result.slots()) + '&nbsp;(x' + str(slots) + ')')
             if items:
-                for itemKey in sorted(items.iterkeys(), reverse=True):
+                for itemKey in sorted(items, reverse=True):
                     item = self._itemsCache.items.getItemByCD(itemKey)
                     commaItems.append(item.userName + '&nbsp;(x' + str(items[itemKey]) + ')')
 

@@ -61,13 +61,14 @@ class StylesDataProvider(BaseDataProvider):
         style = self.__stylesPresets[self.currentPresetIndex]
         if not self.__season:
             self.__season = first(style.seasons)
-        self.__applyCamouflageTTC(style)
+        self.__applyCamouflageTTC()
 
     def revertChangesFromSelectedPreset(self):
-        outfit = self.vehicle.getOutfit(self.__season)
-        if outfit:
-            outfit.hull.slotFor(GUI_ITEM_TYPE.CAMOUFLAGE).clear()
-            self.vehicle.removeOutfitForSeason(self.__season)
+        for season in SeasonType.SEASONS:
+            outfit = self.vehicle.getOutfit(season)
+            if outfit:
+                outfit.hull.slotFor(GUI_ITEM_TYPE.CAMOUFLAGE).clear()
+                self.vehicle.removeOutfitForSeason(season)
 
     def getPresets(self):
         self.__setStylesPresets()
@@ -91,13 +92,13 @@ class StylesDataProvider(BaseDataProvider):
         data.update({'styleData': self.__getStyleRequestData(self.vehicle, self.__vehicleCD, style, self.__season)})
         return data
 
-    def __applyCamouflageTTC(self, style):
+    def __applyCamouflageTTC(self):
         itemTypeID = GUI_ITEM_TYPE.CAMOUFLAGE
         cType = C11N_ITEM_TYPE_MAP[itemTypeID]
         for itemID in self.__customizationCache[cType]:
             if itemID != EMPTY_ITEM_ID:
                 camo = self.__c11nService.getItemByID(itemTypeID, itemID)
-                outfit = style.getOutfit(self.__season, vehicleCD=self.__vehicleCD)
+                outfit = self.vehicle.getOutfit(self.__season)
                 outfit.hull.slotFor(GUI_ITEM_TYPE.CAMOUFLAGE).set(camo.intCD)
                 self.vehicle.setCustomOutfit(self.__season, outfit)
                 return

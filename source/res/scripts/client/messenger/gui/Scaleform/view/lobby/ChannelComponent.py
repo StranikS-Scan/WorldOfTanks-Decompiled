@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/gui/Scaleform/view/lobby/ChannelComponent.py
+from __future__ import absolute_import
 import weakref
 import constants
 from debug_utils import LOG_DEBUG
@@ -47,9 +48,9 @@ class ChannelComponent(ChannelComponentMeta):
             ctrl.deactivate()
 
     def getMessageMaxLength(self):
-        return round(constants.CHAT_MESSAGE_MAX_LENGTH / 2, 0)
+        return constants.CHAT_MESSAGE_MAX_LENGTH // 2
 
-    def onLinkClick(self, data):
+    def onLinkClick(self, linkCode):
         raise NotImplementedError('Shared battle results is not longer supported')
 
     def isJoined(self):

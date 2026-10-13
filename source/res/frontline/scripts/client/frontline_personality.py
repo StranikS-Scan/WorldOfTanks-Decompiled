@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: frontline/scripts/client/frontline_personality.py
+from __future__ import absolute_import
 from account_helpers.AccountSettings import AccountSettings, KEY_SETTINGS
 from aih_constants import CTRL_MODE_NAME, CTRL_TYPE
 from constants import ARENA_GUI_TYPE, PREBATTLE_TYPE, QUEUE_TYPE, ARENA_BONUS_TYPE, HAS_DEV_RESOURCES
@@ -31,7 +32,7 @@ class ClientFrontlineBattleMode(AbstractBattleMode):
     _QUEUE_TYPE = QUEUE_TYPE.EPIC
     _ARENA_BONUS_TYPE = ARENA_BONUS_TYPE.EPIC_BATTLE
     _ARENA_GUI_TYPE = ARENA_GUI_TYPE.EPIC_BATTLE
-    _CLIENT_BATTLE_PAGE = ViewAlias.EPIC_BATTLE_PAGE
+    _CLIENT_BATTLE_PAGE = (ViewAlias.EPIC_BATTLE_PAGE, ViewAlias.RANDOM_BATTLE_HUD)
     _CLIENT_PRB_ACTION_NAME = PREBATTLE_ACTION_NAME.EPIC
     _CLIENT_BANNER_ENTRY_POINT_ALIAS = EPICBATTLES_ALIASES.EPIC_BATTLES_ENTRY_POINT
 

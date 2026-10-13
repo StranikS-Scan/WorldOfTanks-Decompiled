@@ -1,8 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/arena_components/battle_royale_component.py
+from __future__ import absolute_import
 import BigWorld
-from arena_component_system.client_arena_component_system import ClientArenaComponent
 import Event
+from arena_component_system.client_arena_component_system import ClientArenaComponent
 from constants import ARENA_BONUS_TYPE
 from debug_utils import LOG_DEBUG_DEV
 from helpers import dependency

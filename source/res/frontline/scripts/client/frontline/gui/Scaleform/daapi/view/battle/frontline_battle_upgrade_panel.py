@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: frontline/scripts/client/frontline/gui/Scaleform/daapi/view/battle/frontline_battle_upgrade_panel.py
+from __future__ import absolute_import
 import BigWorld
 import WWISE
 from ReservesEvents import randomReservesEvents
@@ -298,7 +299,7 @@ class FrontlineBattleUpgradePanel(FrontlineBattleUpgradePanelMeta, IArenaVehicle
             self.__showPanel()
 
     def __hasInstalledStackReserve(self):
-        return any([ self.__epicController.isReserveStack(e.getDescriptor().extraName()) for e in self.__getInstalledEquipments() ])
+        return any((self.__epicController.isReserveStack(e.getDescriptor().extraName()) for e in self.__getInstalledEquipments()))
 
     def __isReserveInstalled(self, equipment):
-        return any([ e.getDescriptor().iconName == equipment.iconName for e in self.__getInstalledEquipments() ])
+        return any((e.getDescriptor().iconName == equipment.iconName for e in self.__getInstalledEquipments()))

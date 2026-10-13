@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: comp7_light/scripts/client/comp7_light/gui/impl/lobby/page/lobby_footer.py
+from __future__ import absolute_import
 from comp7_light.gui.impl.lobby.page.comp7_light_platoon_presenter import Comp7LightPlatoonPresenter
 from gui.impl.gen import R
 from gui.impl.lobby.page.chats_presenter import ChatsPresenter

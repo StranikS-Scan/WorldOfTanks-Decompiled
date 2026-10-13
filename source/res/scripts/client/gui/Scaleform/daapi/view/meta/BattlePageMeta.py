@@ -33,3 +33,6 @@ class BattlePageMeta(View):
 
     def as_togglePiercingPanelS(self):
         return self.flashObject.as_togglePiercingPanel() if self._isDAAPIInited() else None
+
+    def as_setLayoutS(self, layoutId):
+        return self.flashObject.as_setLayout(layoutId) if self._isDAAPIInited() else None

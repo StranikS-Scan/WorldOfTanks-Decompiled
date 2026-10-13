@@ -1,10 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/AvatarInputHandler/DynamicCameras/prebattle_highlights_camera.py
+from __future__ import absolute_import
 import math
 import logging
+from functools import partial
 import BigWorld
 import CGF
-from functools import partial
 from AvatarInputHandler.cameras import FovExtended
 from CameraComponents import CameraComponent, ActiveCameraComponent, FovComponent, DofComponent
 from GenericComponents import getGlobalTagStorage

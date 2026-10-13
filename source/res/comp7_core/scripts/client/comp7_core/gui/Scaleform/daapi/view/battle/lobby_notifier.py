@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: comp7_core/scripts/client/comp7_core/gui/Scaleform/daapi/view/battle/lobby_notifier.py
+from __future__ import absolute_import
 import BigWorld
 from gui.battle_control.controllers.period_ctrl import IAbstractPeriodView
 from constants import ARENA_PERIOD

@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: frontline/scripts/client/frontline/gui/prb_control/entities/epic/squad/actions_validator.py
+from __future__ import absolute_import
 from CurrentVehicle import g_currentVehicle
 from constants import BATTLE_MODE_VEH_TAGS_EXCEPT_EPIC
 from gui.prb_control.entities.base.actions_validator import ActionsValidatorComposite

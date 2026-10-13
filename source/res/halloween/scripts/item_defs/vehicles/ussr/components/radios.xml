@@ -1,0 +1,86 @@
+<radios.xml>
+  <ids>
+    <R113_Halloween_event>	5000	</R113_Halloween_event>
+    <_12RT_hw21>	5001	</_12RT_hw21>
+    <_12RT_Roz_Boss_HW23>	5003	</_12RT_Roz_Boss_HW23>
+    <_12RT_HW_BOT>	5004	</_12RT_HW_BOT>
+    <R113_HW_BOT>	5005	</R113_HW_BOT>
+    <R77_KV2_turret_2_Radio>	20003	</R77_KV2_turret_2_Radio>
+  </ids>
+  <shared>
+    <R113_Halloween_event>
+      <userString>	#halloween.ussr_vehicles.extend:R113_Halloween_event	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	52200	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	80	</weight>
+      <distance>	200	</distance>
+      <maxHealth>	200	</maxHealth>
+      <maxRegenHealth>	150	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+      <invulnerable>	True	</invulnerable>
+    </R113_Halloween_event>
+    <_12RT_hw21>
+      <userString>	#ussr_vehicles:_12RT	</userString>
+      <tags></tags>
+      <level>	9	</level>
+      <price>	33600	</price>
+      <weight>	110	</weight>
+      <distance>	200	</distance>
+      <maxHealth>	200	</maxHealth>
+      <maxRegenHealth>	150	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+      <notInShop>	True	</notInShop>
+    </_12RT_hw21>
+    <_12RT_Roz_Boss_HW23>
+      <userString>	#halloween.ussr_vehicles.extend:_12RT_Roz_Boss_HW23	</userString>
+      <tags></tags>
+      <level>	8	</level>
+      <price>	33600	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	110	</weight>
+      <distance>	50	</distance>
+      <maxHealth>	200	</maxHealth>
+      <maxRegenHealth>	150	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+    </_12RT_Roz_Boss_HW23>
+    <_12RT_HW_BOT>
+      <userString>	#ussr_vehicles:_12RT	</userString>
+      <tags></tags>
+      <level>	9	</level>
+      <price>	33600	</price>
+      <notInShop>	True	</notInShop>
+      <weight>	110	</weight>
+      <distance>	50	</distance>
+      <maxHealth>	200	</maxHealth>
+      <maxRegenHealth>	150	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+    </_12RT_HW_BOT>
+    <R113_HW_BOT>
+      <userString>	#halloween.ussr_vehicles.extend:R113_Halloween_event	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	52200	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	80	</weight>
+      <distance>	50	</distance>
+      <maxHealth>	200	</maxHealth>
+      <maxRegenHealth>	150	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+      <invulnerable>	True	</invulnerable>
+    </R113_HW_BOT>
+    <R77_KV2_turret_2_Radio>
+      <userString>	#ussr_vehicles:_10RK	</userString>
+      <tags></tags>
+      <level>	7	</level>
+      <price>	18600	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	100	</weight>
+      <distance>	440	</distance>
+      <maxHealth>	150	</maxHealth>
+      <maxRegenHealth>	125	</maxRegenHealth>
+      <repairCost>	1.5	</repairCost>
+    </R77_KV2_turret_2_Radio>
+  </shared>
+</radios.xml>

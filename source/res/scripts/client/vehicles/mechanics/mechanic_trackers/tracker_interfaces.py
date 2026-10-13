@@ -5,7 +5,7 @@ import typing
 from events_containers.common.containers import IClientEventsContainer, IClientEventsContainerListener
 from vehicles.entities.vehicle_trackers import IVehicleEntityTrackerListenerLogic
 if typing.TYPE_CHECKING:
-    from vehicles.mechanics.mechanic_constants import VehicleMechanic
+    from items.vehicle_mechanics_types import VehicleMechanicKey
 
 class IVehicleMechanicsTrackerLogic(IVehicleEntityTrackerListenerLogic):
     onMechanicComponentCatching = None

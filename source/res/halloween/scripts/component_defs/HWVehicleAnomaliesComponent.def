@@ -1,0 +1,17 @@
+<HWVehicleAnomaliesComponent.def>
+  <Properties>
+    <usedAnomalies>
+      <Type>	ARRAY	  <of>	STRING	</of>
+      </Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </usedAnomalies>
+    <knownAnomalies>
+      <Type>	ARRAY	  <of>	STRING	</of>
+      </Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </knownAnomalies>
+  </Properties>
+  <ofEntity>
+    <Vehicle></Vehicle>
+  </ofEntity>
+</HWVehicleAnomaliesComponent.def>

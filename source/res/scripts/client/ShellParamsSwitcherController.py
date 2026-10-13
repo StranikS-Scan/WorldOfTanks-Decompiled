@@ -4,11 +4,12 @@ from __future__ import absolute_import
 import typing
 from events_handler import eventHandler
 from gui.shared.utils.decorators import ReprInjector
+from items.vehicle_mechanics_types import VehicleMechanicKey, VehicleMechanicKeys
 from vehicles.components.vehicle_component import VehicleDynamicComponent
 from vehicles.components.vehicle_prefabs import createMechanicPrefabSpawner
 from vehicles.mechanics.gun_mechanics.common import IGunMechanicComponent
 from vehicles.mechanics.gun_mechanics.shell_params_switcher import ShellParamsSwitcherMechanicState, ShellParamsSwitcherComponentParams, createShellParamsSwitcherStatesEvents, DEFAULT_SHELL_PARAMS_SWITCHER_PARAMS, DEFAULT_SHELL_PARAMS_SWITCHER_STATE, ShellParamsSwitcherAmmoState
-from vehicles.mechanics.mechanic_constants import VehicleMechanic, VehicleMechanicCommand
+from vehicles.mechanics.mechanic_constants import VehicleMechanicCommand
 from vehicles.mechanics.mechanic_commands import IMechanicCommandsComponent, createMechanicCommandsEvents
 from vehicles.mechanics.mechanic_helpers import getVehicleDescrMechanicParams
 from vehicles.mechanics.mechanic_states import IMechanicStatesComponent
@@ -30,13 +31,9 @@ class ShellParamsSwitcherController(VehicleDynamicComponent, IGunMechanicCompone
         self._initComponent()
         return
 
-    @eventHandler
-    def onCollectAmmoStates(self, ammoStates):
-        ammoStates[self.vehicleMechanic.value] = ShellParamsSwitcherAmmoState(self.getMechanicState(), self.__componentParams.shellSubtypes.keys())
-
     @property
-    def vehicleMechanic(self):
-        return VehicleMechanic.SHELL_PARAMS_SWITCHER
+    def vehicleMechanicKey(self):
+        return VehicleMechanicKeys.SHELL_PARAMS_SWITCHER
 
     @property
     def statesEvents(self):
@@ -60,6 +57,13 @@ class ShellParamsSwitcherController(VehicleDynamicComponent, IGunMechanicCompone
         self._updateComponentAppearance()
         self._updateComponentAvatar()
 
+    def tryActivate(self):
+        self.__commandsEvents.processMechanicCommand(VehicleMechanicCommand.ACTIVATE)
+
+    @eventHandler
+    def onCollectAmmoStates(self, ammoStates):
+        ammoStates[self.vehicleMechanicKey.uniqueName] = ShellParamsSwitcherAmmoState(self.getMechanicState(), self.__componentParams.shellSubtypes.keys())
+
     @eventHandler
     def onCurrentShellChanged(self, intCD):
         self.__currentShellCD = intCD
@@ -70,12 +74,9 @@ class ShellParamsSwitcherController(VehicleDynamicComponent, IGunMechanicCompone
         self.__commandsEvents.destroy()
         super(ShellParamsSwitcherController, self).onDestroy()
 
-    def tryActivate(self):
-        self.__commandsEvents.processMechanicCommand(VehicleMechanicCommand.ACTIVATE)
-
     def _collectComponentParams(self, typeDescriptor):
         super(ShellParamsSwitcherController, self)._collectComponentParams(typeDescriptor)
-        mechanicParams = getVehicleDescrMechanicParams(typeDescriptor, self.vehicleMechanic)
+        mechanicParams = getVehicleDescrMechanicParams(typeDescriptor, self.vehicleMechanicKey)
         self.__componentParams = ShellParamsSwitcherComponentParams.fromMechanicParams(mechanicParams, typeDescriptor.type.compactDescr)
 
     def _onComponentAppearanceUpdate(self, **kwargs):

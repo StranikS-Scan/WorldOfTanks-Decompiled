@@ -1,12 +1,13 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/visual_script_client/battle_hints_blocks.py
+from __future__ import absolute_import
 import typing
+from hints.battle import manager as battleHintsModelsMgr
 from visual_script.slot_types import SLOT_TYPE
 from visual_script.misc import ASPECT, errorVScript
 from visual_script.block import Block
 from visual_script.dependency import dependencyImporter
 from visual_script.battle_hints_common import BaseSelectHint, BaseHintAction, HintActionParamsMixin, HintsMeta
-from hints.battle import manager as battleHintsModelsMgr
 from skeletons.gui.battle_session import IBattleSessionProvider
 dependency = dependencyImporter('helpers.dependency')
 if typing.TYPE_CHECKING:

@@ -1,13 +1,13 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/helpers/time_utils.py
-from typing import Optional
+from __future__ import absolute_import
 import re
 import calendar
 import datetime
 import time
+from typing import Optional, Union
 import BigWorld
 from debug_utils import LOG_CURRENT_EXCEPTION
-from helpers.i18n import makeString as _ms
 from soft_exception import SoftException
 ONE_SECOND = 1
 DAYS_IN_YEAR = 365
@@ -124,7 +124,7 @@ def getServerGameDay():
         dayStartOffset = regionalSettings['starting_day_of_a_new_week']
     elif 'starting_time_of_a_new_day' in regionalSettings:
         dayStartOffset = regionalSettings['starting_time_of_a_new_day']
-    return int(getServerRegionalTime() - dayStartOffset) / ONE_DAY
+    return int(getServerRegionalTime() - dayStartOffset) // ONE_DAY
 
 
 def getTimeDeltaFromNow(t):
@@ -177,7 +177,10 @@ def getTillTimeString(timeValue, keyNamespace='', isMinutesRoundUp=False, source
      'hour': time.strftime('%H', gmtime) if not removeLeadingZeros else str(tm.tm_hour),
      'min': time.strftime('%M', gmtime) if not removeLeadingZeros else str(tm.tm_min),
      'sec': time.strftime('%S', gmtime)}
-    return sourceStrGenerator(fmtKey, **fmtValues) if sourceStrGenerator else _ms('{}/{}'.format(keyNamespace, fmtKey), **fmtValues)
+    if sourceStrGenerator:
+        return sourceStrGenerator(fmtKey, **fmtValues)
+    from helpers.i18n import makeString as _ms
+    return _ms('{}/{}'.format(keyNamespace, fmtKey), **fmtValues)
 
 
 def getCurrentTimestamp():
@@ -315,23 +318,27 @@ def getDaysLeftDueDate(timestamp):
 
 
 def secondsToDays(seconds):
-    return int(seconds / ONE_MINUTE / MINUTES_IN_HOUR / HOURS_IN_DAY)
+    return int(seconds // ONE_MINUTE // MINUTES_IN_HOUR // HOURS_IN_DAY)
 
 
 def secondsToHours(seconds):
-    return int(seconds / ONE_MINUTE / MINUTES_IN_HOUR)
+    return int(seconds // ONE_MINUTE // MINUTES_IN_HOUR)
 
 
 def secondsToHoursNoDays(seconds):
-    return int(seconds % (ONE_MINUTE * MINUTES_IN_HOUR * HOURS_IN_DAY) / ONE_MINUTE / MINUTES_IN_HOUR)
+    return int(seconds % (ONE_MINUTE * MINUTES_IN_HOUR * HOURS_IN_DAY) // ONE_MINUTE // MINUTES_IN_HOUR)
 
 
 def secondsToMinutes(seconds):
-    return int(seconds / ONE_MINUTE)
+    return int(seconds // ONE_MINUTE)
 
 
 def secondsToMinutesNoHours(seconds):
-    return int(seconds % (ONE_MINUTE * MINUTES_IN_HOUR) / ONE_MINUTE)
+    return int(seconds % (ONE_MINUTE * MINUTES_IN_HOUR) // ONE_MINUTE)
+
+
+def secondsToMS(seconds, default=-1.0):
+    return seconds * 1000.0 if seconds > 0 else default
 
 
 class ActivityIntervalsIterator(object):
@@ -346,7 +353,7 @@ class ActivityIntervalsIterator(object):
     def __iter__(self):
         return self
 
-    def next(self):
+    def __next__(self):
         interval = None
         if self._currentDay in self._weekDays:
             interval = self.__trySearchValidTimeInterval(self._currentTime)
@@ -375,6 +382,8 @@ class ActivityIntervalsIterator(object):
         self._timeLeft += interval[1] - interval[0]
         return (timeLeft, interval)
 
+    next = __next__
+
     def __trySearchValidTimeInterval(self, curTime):
         for low, high in self._timeIntervals:
             if curTime < high:
@@ -394,7 +403,7 @@ class DaysAvailabilityIterator(object):
     def __iter__(self):
         return self
 
-    def next(self):
+    def __next__(self):
         while True:
             currentGMTime = getDateTimeInUTC(self._availableTimestamp)
             currentLocalTimestamp = time.time()
@@ -405,6 +414,8 @@ class DaysAvailabilityIterator(object):
         _, _ = getDayTimeBoundsForLocal()
         _, _ = getDayTimeBoundsForLocal(self._availableTimestamp)
         return self._availableTimestamp
+
+    next = __next__
 
     def _checkIntervals(self, timeStamp):
         for start, finish in self._intervalsToExclude:

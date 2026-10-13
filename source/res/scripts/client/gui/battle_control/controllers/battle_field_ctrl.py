@@ -133,6 +133,8 @@ class BattleFieldCtrl(IBattleFieldController, IVehiclesAndPositionsController, V
             self.__initializeVehiclesInfo()
 
     def invalidateVehicleStatus(self, flags, vInfoVO, arenaDP):
+        if vInfoVO.isObserver():
+            return
         if not vInfoVO.isAlive():
             vehicleId = vInfoVO.vehicleID
             if vehicleId in self._aliveEnemies:

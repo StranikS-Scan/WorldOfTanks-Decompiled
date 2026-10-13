@@ -8,6 +8,7 @@ import WWISE
 from PlayerEvents import g_playerEvents
 from debug_utils import LOG_WARNING, LOG_DEBUG, LOG_ERROR
 from gui import DEPTH_OF_Aim
+from gui.Scaleform.daapi.settings.views import BattleSharedLayoutType
 from gui.Scaleform.daapi.view.battle.shared.crosshair import gm_factory, plugins, settings
 from gui.Scaleform.daapi.view.external_components import ExternalFlashComponent
 from gui.Scaleform.daapi.view.external_components import ExternalFlashSettings
@@ -17,6 +18,7 @@ from gui.Scaleform.genConsts.BATTLE_VIEW_ALIASES import BATTLE_VIEW_ALIASES
 from gui.Scaleform.genConsts.AUTOLOADERBOOSTVIEWSOUNDS import AUTOLOADERBOOSTVIEWSOUNDS
 from gui.Scaleform.locale.INGAME_GUI import INGAME_GUI
 from gui.Scaleform.daapi.view.battle.shared.hint_panel.plugins import RoleHelpPlugin
+from gui.app_loader import settings as app_settings
 from gui.battle_control.battle_constants import CROSSHAIR_VIEW_ID
 from gui.impl import backport
 from gui.shared.events import GameEvent
@@ -25,6 +27,7 @@ from gui.shared.utils.plugins import PluginsCollection
 from skeletons.gui.battle_session import IBattleSessionProvider
 from helpers import dependency, i18n, isPlayerAvatar
 from helpers.CallbackDelayer import CallbackDelayer
+from skeletons.gui.impl import IGuiLoader
 _logger = logging.getLogger(__name__)
 FADE_TIMEOUT = 7
 
@@ -46,6 +49,7 @@ class AutoloaderBoostSoundEvents(object):
 
 class CrosshairPanelContainer(ExternalFlashComponent, CrosshairPanelContainerMeta):
     sessionProvider = dependency.descriptor(IBattleSessionProvider)
+    guiLoader = dependency.descriptor(IGuiLoader)
     EXTERNAL_FLASH_SETTINGS = ExternalFlashSettings(BATTLE_VIEW_ALIASES.CROSSHAIR_PANEL, settings.CROSSHAIR_CONTAINER_SWF, settings.CROSSHAIR_ROOT_PATH, settings.CROSSHAIR_INIT_CALLBACK)
 
     def __init__(self):
@@ -196,6 +200,7 @@ class CrosshairPanelContainer(ExternalFlashComponent, CrosshairPanelContainerMet
 
     def _populate(self):
         super(CrosshairPanelContainer, self)._populate()
+        self._setSharedLayout()
         self.__plugins.init()
         self.startPlugins()
         g_eventBus.addListener(GameEvent.ROLE_HINT_TOGGLE, self.__handleRoleHintToggled, scope=EVENT_BUS_SCOPE.BATTLE)
@@ -203,6 +208,11 @@ class CrosshairPanelContainer(ExternalFlashComponent, CrosshairPanelContainerMet
         if RoleHelpPlugin.isAvailableToShow():
             self.__toggleFade(True)
         g_playerEvents.crosshairPanelInitialized()
+
+    def _setSharedLayout(self):
+        layoutID = self.guiLoader.layoutManager.getLayoutByName(app_settings.APP_NAME_SPACE.SF_BATTLE, BattleSharedLayoutType.CROSSHAIR)
+        if layoutID > 0:
+            self.as_setSharedLayoutS(layoutID)
 
     def _dispose(self):
         self.stopPlugins()

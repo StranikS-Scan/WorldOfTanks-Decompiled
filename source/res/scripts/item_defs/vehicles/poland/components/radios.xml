@@ -2,6 +2,7 @@
   <ids>
     <FuG7A>	0	</FuG7A>
     <RKB_c_1>	1	</RKB_c_1>
+    <R_123M_CFE_D>	3	</R_123M_CFE_D>
     <RTU_Jesion>	4	</RTU_Jesion>
     <N2>	5	</N2>
     <N2_C>	6	</N2_C>
@@ -28,6 +29,7 @@
     <R_112>	32	</R_112>
     <R_112_R>	33	</R_112_R>
     <RM_31T>	36	</RM_31T>
+    <R_113_PK>	37	</R_113_PK>
     <R_123S>	29	</R_123S>
     <R_113_CFE_A>	28	</R_113_CFE_A>
     <R_123_7x7>	502	</R_123_7x7>
@@ -298,6 +300,18 @@
       <maxRegenHealth>	75	</maxRegenHealth>
       <repairCost>	3.5	</repairCost>
     </R_123M>
+    <R_123M_CFE_D>
+      <userString>	#poland_vehicles:R_123M_CFE_D	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	52000	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	100	</weight>
+      <distance>	730	</distance>
+      <maxHealth>	250	</maxHealth>
+      <maxRegenHealth>	75	</maxRegenHealth>
+      <repairCost>	3.5	</repairCost>
+    </R_123M_CFE_D>
     <R_123S>
       <userString>	#poland_vehicles:R_123S	</userString>
       <tags></tags>
@@ -416,6 +430,18 @@
       <maxRegenHealth>	105	</maxRegenHealth>
       <repairCost>	3	</repairCost>
     </R_112_R>
+    <R_113_PK>
+      <userString>	#poland_vehicles:R_113_PK	</userString>
+      <tags></tags>
+      <level>	9	</level>
+      <price>	40000	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	100	</weight>
+      <distance>	670	</distance>
+      <maxHealth>	210	</maxHealth>
+      <maxRegenHealth>	105	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+    </R_113_PK>
     <Development_Radio>
       <userString>	Development Radio	</userString>
       <tags></tags>

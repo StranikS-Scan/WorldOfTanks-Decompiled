@@ -19,9 +19,9 @@ class FunRandomNewSubModesMessageDecorator(MessageDecorator, FunSubModesWatcher)
         self.stopSubSettingsListening(self.__updateSubModes)
         super(FunRandomNewSubModesMessageDecorator, self).clear()
 
-    def _make(self, formatted=None, settings=None):
+    def _make(self, entity=None, settings=None):
         self.__updateButtons()
-        super(FunRandomNewSubModesMessageDecorator, self)._make(formatted, settings)
+        super(FunRandomNewSubModesMessageDecorator, self)._make(entity, settings)
 
     def __updateButtons(self):
         if self._entity and self._entity.get('buttonsLayout'):
@@ -46,9 +46,9 @@ class FunRandomProgressionStageMessageDecorator(MessageDecorator, FunProgression
         self.startProgressionListening(self.__updateProgression)
         super(FunRandomProgressionStageMessageDecorator, self).clear()
 
-    def _make(self, formatted=None, settings=None):
+    def _make(self, entity=None, settings=None):
         self.__updateButtons()
-        super(FunRandomProgressionStageMessageDecorator, self)._make(formatted, settings)
+        super(FunRandomProgressionStageMessageDecorator, self)._make(entity, settings)
 
     def __updateButtons(self):
         if self._entity and self._entity.get('buttonsLayout'):

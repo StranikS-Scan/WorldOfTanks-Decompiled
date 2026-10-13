@@ -5,6 +5,7 @@ import typing
 from account_helpers.settings_core.ServerSettingsManager import UI_STORAGE_KEYS, ServerSettingsManager
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.utils import TURBOSHAFT_ENGINE_POWER, ROCKET_ACCELERATION_ENGINE_POWER, CONTINUOUS_SHOTS_PER_MINUTE
+from items.vehicle_mechanics_types import VehicleMechanicKeys
 from gui.shared.gui_items.vehicle_modules import VehicleEngine, VehicleGun
 if typing.TYPE_CHECKING:
     from items.vehicles import VehicleDescriptor
@@ -109,7 +110,7 @@ class TurboshaftParamsExtender(ModuleParamsExtender):
     def check(self, vehicleModule, vehicleDescriptor):
         if vehicleModule.itemTypeID == GUI_ITEM_TYPE.ENGINE:
             engine = typing.cast(VehicleEngine, vehicleModule)
-            return engine.hasTurboshaftEngine()
+            return engine.hasMechanic(VehicleMechanicKeys.TURBOSHAFT_ENGINE)
         return False
 
     def extendParamList(self, paramList):
@@ -130,7 +131,7 @@ class RocketAccelerationParamsExtender(ModuleParamsExtender):
     def check(self, vehicleModule, vehicleDescriptor):
         if vehicleModule.itemTypeID == GUI_ITEM_TYPE.ENGINE:
             engine = typing.cast(VehicleEngine, vehicleModule)
-            return engine.hasRocketAcceleration()
+            return engine.hasMechanic(VehicleMechanicKeys.ROCKET_ACCELERATION)
         return False
 
     def extendParamList(self, paramList):

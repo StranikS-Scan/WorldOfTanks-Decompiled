@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/AvatarInputHandler/kill_cam_mode_helpers/kill_cam_helpers.py
+from __future__ import absolute_import
 import Math
 from projectile_trajectory import computeProjectileTrajectoryWithEnd
 _SHELL_TRAJECTORY_EPSILON_CAMERA = 0.03

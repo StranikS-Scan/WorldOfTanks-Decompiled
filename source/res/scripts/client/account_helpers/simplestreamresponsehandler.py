@@ -1,8 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/account_helpers/SimpleStreamResponseHandler.py
+from __future__ import absolute_import
 import weakref
 import zlib
-import cPickle
+from future.moves import pickle
 import AccountCommands
 from debug_utils import LOG_CODEPOINT_WARNING, LOG_CURRENT_EXCEPTION
 
@@ -28,7 +29,7 @@ class SimpleStreamResponseHandler(object):
             else:
                 try:
                     data = zlib.decompress(data)
-                    data = cPickle.loads(data)
+                    data = pickle.loads(data)
                 except Exception:
                     LOG_CURRENT_EXCEPTION()
                     isSuccess = False

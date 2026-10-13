@@ -1,0 +1,13 @@
+<IndividualRespawnTimerComponent.def>
+  <Properties>
+    <respawnDelay>
+      <Type>	UINT8	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </respawnDelay>
+    <timeOfDeath>
+      <Type>	UINT32	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </timeOfDeath>
+  </Properties>
+  <DefaultKeyName>	IndividualRespawnTimerComponent	</DefaultKeyName>
+</IndividualRespawnTimerComponent.def>

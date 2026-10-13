@@ -16,9 +16,9 @@ from gui.shared.utils import AVG_DAMAGE_PER_SECOND, DAMAGE_PROP_NAME, PIERCING_P
 from gui.shared.utils.functions import getShellImpactParams
 from items import vehicles
 from items.components.component_constants import MODERN_HE_PIERCING_POWER_REDUCTION_FACTOR_FOR_SHIELDS
+from items.vehicle_mechanics_types import VehicleMechanicKeys
 from helpers_common import computePiercingPowerAtDist
 from math_common import round_py2_style, round_py2_style_int
-from vehicles.mechanics.mechanic_constants import VehicleMechanic
 if typing.TYPE_CHECKING:
     from typing import Optional
 BASE_SHELL_PARAMETERS = ('avgDamage',
@@ -33,10 +33,10 @@ def _isDifferentValues(paramName, parameters):
     return any((paramGroup[1].get(paramName) != value for paramGroup in parameters))
 
 
-SHELL_MECHANIC_ADDITIONAL_PARAMETERS = {VehicleMechanic.SHELL_PARAMS_SWITCHER: OrderedDict([(NORMALIZATION_ANGLE, _isDifferentValues),
-                                         (RICOCHET_ANGLE, _isDifferentValues),
-                                         (PENETRATION_LOSS, _isDifferentValues),
-                                         (CRITICAL_HIT_CHANCE, _isDifferentValues)])}
+SHELL_MECHANIC_ADDITIONAL_PARAMETERS = {VehicleMechanicKeys.SHELL_PARAMS_SWITCHER: OrderedDict([(NORMALIZATION_ANGLE, _isDifferentValues),
+                                             (RICOCHET_ANGLE, _isDifferentValues),
+                                             (PENETRATION_LOSS, _isDifferentValues),
+                                             (CRITICAL_HIT_CHANCE, _isDifferentValues)])}
 
 def getMechanicParameters(mechanic, parameters):
     mechanicParams = SHELL_MECHANIC_ADDITIONAL_PARAMETERS.get(mechanic)

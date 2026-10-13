@@ -358,13 +358,13 @@ class DualGunComponent(DualGunPanelMeta, IPrebattleSetupsListener):
             if cooldownTimes[activeGun].leftTime != activeGunReloadingTimeLeft:
                 self.__soundManager.onWeaponChanged(switchLeftTime // MS_IN_SECOND)
             self.__reloadEventReceived = False
-        self.as_updateActiveGunS(activeGun, switchLeftTime, switchBaseTime)
         self.__updateDualGunState(states, cooldownTimes)
         self.__updateChargeTimerState()
         if not self.__debuffInProgress:
             timeUntilDoubleShot = self.__getTimeUntilNextDoubleShot(cooldownTimes)
             self.__currentTotalTimeTimer = timeUntilDoubleShot * DualGunConstants.TIME_MULTIPLIER
             self.__updateTimeUntilNextDoubleShot(increaseByDebuff=False)
+        self.as_updateActiveGunS(activeGun, switchLeftTime, switchBaseTime)
 
     @staticmethod
     def __getTimeUntilNextDoubleShot(cooldownTimes):

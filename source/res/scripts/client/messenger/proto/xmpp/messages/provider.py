@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/proto/xmpp/messages/provider.py
+from __future__ import absolute_import
 from messenger.proto.events import g_messengerEvents
 from messenger.proto.xmpp import find_criteria
 from messenger.proto.xmpp.errors import createChatBanError

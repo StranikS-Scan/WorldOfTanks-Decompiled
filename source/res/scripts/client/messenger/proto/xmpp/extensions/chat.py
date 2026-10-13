@@ -1,9 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/proto/xmpp/extensions/chat.py
+from __future__ import absolute_import
 import calendar
-from datetime import datetime
 import json
 import time
+from datetime import datetime
 from debug_utils import LOG_CURRENT_EXCEPTION
 from messenger.proto.xmpp.extensions import PyExtension, PyHandler, PyQuery
 from messenger.proto.xmpp.extensions.dataform import DataForm, Field

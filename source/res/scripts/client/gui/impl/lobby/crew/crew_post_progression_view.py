@@ -35,7 +35,7 @@ class CrewPostProgressionView(ViewImpl):
     def _onLoading(self, *args, **kwargs):
         super(CrewPostProgressionView, self)._onLoading(*args, **kwargs)
         with self.viewModel.transaction() as vm:
-            vm.setTitle(R.strings.crew_books.items.universalGuide.Name())
+            vm.setTitle(R.strings.crew_books.c_items.universalGuide.Name())
             vm.setDescription(backport.text(R.strings.crew_books.tooltip.universalGuide.mainText(), xp=self.__amountXpForBook()))
             vm.setIcon(R.images.gui.maps.icons.crewBooks.books.s600x450.universalGuide())
             self.__updateCountAndProgression(vm)

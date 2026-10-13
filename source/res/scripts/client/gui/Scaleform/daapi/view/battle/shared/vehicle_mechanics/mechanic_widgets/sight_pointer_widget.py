@@ -16,8 +16,9 @@ from gui.veh_mechanics.battle.updaters.mechanics.mechanic_life_cycle_updater imp
 from gui.veh_mechanics.battle.updaters.mechanics.mechanic_passenger_updater import VehicleMechanicPassengerUpdater
 from gui.veh_mechanics.battle.updaters.mechanics.mechanic_states_updater import VehicleMechanicStatesUpdater
 from helpers import dependency
+from items.vehicle_mechanics_types import VehicleMechanicKeys
 from skeletons.gui.battle_session import IBattleSessionProvider
-from vehicles.mechanics.mechanic_constants import VehicleMechanic, VehicleMechanicCommand
+from vehicles.mechanics.mechanic_constants import VehicleMechanicCommand
 from vehicles.mechanics.mechanic_states import IMechanicStatesListenerLogic
 if typing.TYPE_CHECKING:
     from gui.veh_mechanics.battle.updaters.updaters_common import IViewUpdater
@@ -78,9 +79,9 @@ class SightPointerMechanicWidget(SightPointerWidgetMeta, ContainersListener, ICo
         return
 
     def _getViewUpdaters(self):
-        return [VehicleMechanicLifeCycleUpdater(VehicleMechanic.SIGHT_POINTER, self),
-         VehicleMechanicPassengerUpdater(VehicleMechanic.SIGHT_POINTER, self),
-         VehicleMechanicStatesUpdater(VehicleMechanic.SIGHT_POINTER, self),
+        return [VehicleMechanicLifeCycleUpdater(VehicleMechanicKeys.SIGHT_POINTER, self),
+         VehicleMechanicPassengerUpdater(VehicleMechanicKeys.SIGHT_POINTER, self),
+         VehicleMechanicStatesUpdater(VehicleMechanicKeys.SIGHT_POINTER, self),
          HotKeysViewUpdater(list(self._HOT_KEY_MAP.keys()), self)]
 
     def _onSightPointerEnemySpotted(self):

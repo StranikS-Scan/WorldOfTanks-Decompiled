@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: frontline/scripts/client/frontline/gui/Scaleform/daapi/view/battle/frontline_game_messages_panel.py
+from __future__ import absolute_import
 import typing
 import BattleReplay
 from ReservesEvents import randomReservesEvents
@@ -38,32 +39,32 @@ class FrontlineMessagePanel(BattleHintComponent, GameMessagesPanelMeta):
         self.__onIngameMessageReady(msg)
         self.__blockNewMessages = True
 
-    def onMessageStarted(self, messageType, modificator, id_):
+    def onMessageStarted(self, msgType, modificator, id_):
         ctrl = self.sessionProvider.dynamic.gameNotifications
         if ctrl is not None:
             randomReservesEvents.hidePanel(True)
-            ctrl.onMessagePlaybackStarted(messageType, {'id': id_,
+            ctrl.onMessagePlaybackStarted(msgType, {'id': id_,
              'modificator': modificator})
         return
 
-    def onMessagePhaseStarted(self, messageType, modificator, id_):
+    def onMessagePhaseStarted(self, msgType, modificator, msgID):
         ctrl = self.sessionProvider.dynamic.gameNotifications
         if ctrl is not None:
-            ctrl.onMessagePlaybackPhaseStarted(messageType, {'id': id_,
+            ctrl.onMessagePlaybackPhaseStarted(msgType, {'id': msgID,
              'modificator': modificator})
         return
 
-    def onMessageEnded(self, messageType, id_):
+    def onMessageEnded(self, msgType, msgID):
         ctrl = self.sessionProvider.dynamic.gameNotifications
         if ctrl is not None:
-            ctrl.onMessagePlaybackEnded(messageType, {'id': id_})
+            ctrl.onMessagePlaybackEnded(msgType, {'id': msgID})
         return
 
-    def onMessageHiding(self, messageType, id_):
+    def onMessageHiding(self, msgType, msgID):
         ctrl = self.sessionProvider.dynamic.gameNotifications
         if ctrl is not None:
             randomReservesEvents.showPanel()
-            ctrl.onMessagePlaybackHide(messageType, {'id': id_})
+            ctrl.onMessagePlaybackHide(msgType, {'id': msgID})
         return
 
     def _populate(self):

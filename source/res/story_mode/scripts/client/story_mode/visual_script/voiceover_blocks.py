@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: story_mode/scripts/client/story_mode/visual_script/voiceover_blocks.py
+from __future__ import absolute_import
 from visual_script.block import Block
 from visual_script.slot_types import SLOT_TYPE
 from visual_script_client.sound_blocks import SoundMeta

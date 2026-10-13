@@ -1,0 +1,97 @@
+<HWVehicleCheatsComponent.def>
+  <CellMethods>
+    <spawnLootAtShotPoint>
+      <Args>
+        <lootName>	STRING	</lootName>
+        <contents>	PYTHON	</contents>
+        <isPersonal>	BOOL	</isPersonal>
+        <captureTime>	INT32	</captureTime>
+        <pickupRadius>	INT32	</pickupRadius>
+      </Args>
+      <Exposed></Exposed>
+    </spawnLootAtShotPoint>
+    <addSouls>
+      <Args>
+        <count>	INT32	</count>
+      </Args>
+      <Exposed></Exposed>
+    </addSouls>
+    <addProgressPoint>
+      <Args>
+        <count>	INT32	</count>
+      </Args>
+      <Exposed></Exposed>
+    </addProgressPoint>
+    <applyAnomalies>
+      <Args>
+        <anomalyIDs>	ARRAY	  <of>	STRING	</of>
+        </anomalyIDs>
+      </Args>
+      <Exposed></Exposed>
+    </applyAnomalies>
+    <spawnCollectorAtShotPoint>
+      <Args>
+        <radius>	FLOAT32	</radius>
+        <capacity>	INT32	</capacity>
+        <updateInterval>	FLOAT32	</updateInterval>
+        <drainRate>	INT32	</drainRate>
+      </Args>
+      <Exposed></Exposed>
+    </spawnCollectorAtShotPoint>
+    <destroyCollector>
+      <Exposed></Exposed>
+    </destroyCollector>
+    <fillCollector>
+      <Exposed></Exposed>
+    </fillCollector>
+    <resetCollector>
+      <Exposed></Exposed>
+    </resetCollector>
+    <teleportToCollector>
+      <Exposed></Exposed>
+    </teleportToCollector>
+    <toggleBuff>
+      <Args>
+        <buffName>	STRING	</buffName>
+      </Args>
+      <Exposed></Exposed>
+    </toggleBuff>
+    <spawnCampAtShotPoint>
+      <Exposed></Exposed>
+    </spawnCampAtShotPoint>
+    <destroyCamp>
+      <Exposed></Exposed>
+    </destroyCamp>
+    <killAllBots>
+      <Args>
+        <attackReason>	STRING	</attackReason>
+      </Args>
+      <Exposed></Exposed>
+    </killAllBots>
+    <killSelf>
+      <Args>
+        <attackReason>	STRING	</attackReason>
+      </Args>
+      <Exposed></Exposed>
+    </killSelf>
+    <damageBoss>
+      <Args>
+        <damage>	INT32	</damage>
+      </Args>
+      <Exposed></Exposed>
+    </damageBoss>
+    <spawnPersonalDeathZones>
+      <Args>
+        <onlyOwner>	BOOL	</onlyOwner>
+        <deathzoneConfig>	STRING	</deathzoneConfig>
+      </Args>
+      <Exposed></Exposed>
+    </spawnPersonalDeathZones>
+  </CellMethods>
+  <ClientMethods></ClientMethods>
+  <Properties></Properties>
+  <ofEntity>
+    <Vehicle></Vehicle>
+  </ofEntity>
+  <DefaultKeyName>	hwCheats	</DefaultKeyName>
+</HWVehicleCheatsComponent.def>

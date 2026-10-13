@@ -1,10 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/visual_script_client/vehicle_mechanics_common.py
+from __future__ import absolute_import
 import typing
 from constants import IS_VS_EDITOR, UNKNOWN_VEHICLE_ID
 from events_containers.common.containers import ContainersListener
 from events_handler import eventHandler
-from vehicles.mechanics.mechanic_constants import VehicleMechanic
+from items.vehicle_mechanics_types import VehicleMechanicKey, MECHANIC_KEY_BY_NAME
 from visual_script.block import Block, InitParam, buildStrKeysValue
 from visual_script.dependency import dependencyImporter
 from visual_script.misc import ASPECT, EDITOR_TYPE
@@ -53,7 +54,7 @@ class VehicleMechanicEventsBlock(Block, VehicleMechanicsMeta, ContainersListener
     def __init__(self, *args, **kwargs):
         super(VehicleMechanicEventsBlock, self).__init__(*args, **kwargs)
         self.__vehicleID = UNKNOWN_VEHICLE_ID
-        self._vehicleMechanic = self._getVehicleMechanic(self._getInitParams())
+        self._vehicleMechanicKey = self._getVehicleMechanicKey(self._getInitParams())
         self._subscribe = self._makeEventInputSlot('subscribe', self.__subscribe)
         self._unsubscribe = self._makeEventInputSlot('unsubscribe', self.__unsubscribe)
         self._object = self._makeDataInputSlot('vehicleObject', SLOT_TYPE.GAME_OBJECT)
@@ -65,21 +66,21 @@ class VehicleMechanicEventsBlock(Block, VehicleMechanicsMeta, ContainersListener
         return [ASPECT.CLIENT]
 
     def captionText(self):
-        return 'On {} {}'.format(self._vehicleMechanic.value, self._EVENTS_NAME)
+        return 'On {} {}'.format(self._vehicleMechanicKey.uniqueName, self._EVENTS_NAME)
 
     @classmethod
-    def _getVehicleMechanic(cls, initParams):
+    def _getVehicleMechanicKey(cls, initParams):
         raise NotImplementedError
 
     def __subscribe(self):
         vehicleEntity = cgf_helpers.getVehicleEntityByVehicleGameObject(self._object.getValue())
         self.__vehicleID = vehicleEntity.id if vehicleEntity is not None else UNKNOWN_VEHICLE_ID
-        self.startVehicleMechanicsTracking(self.__vehicleID, (self._vehicleMechanic,), self)
+        self.startVehicleMechanicsTracking(self.__vehicleID, (self._vehicleMechanicKey,), self)
         self._subscribeOut.call()
         return
 
     def __unsubscribe(self):
-        self.stopVehicleMechanicsTracking(self.__vehicleID, (self._vehicleMechanic,), self)
+        self.stopVehicleMechanicsTracking(self.__vehicleID, (self._vehicleMechanicKey,), self)
         self.__vehicleID = UNKNOWN_VEHICLE_ID
         self._unsubscribeOut.call()
 
@@ -95,8 +96,8 @@ class VehicleSelectableMechanicEventsBlock(VehicleMechanicEventsBlock):
         raise NotImplementedError
 
     @classmethod
-    def _getVehicleMechanic(cls, initParams):
-        return VehicleMechanic(initParams[0])
+    def _getVehicleMechanicKey(cls, initParams):
+        return MECHANIC_KEY_BY_NAME[initParams[0]]
 
 
 class VehicleMechanicLifeCycleEventsBlock(VehicleMechanicEventsBlock, IComponentLifeCycleListenerLogic):

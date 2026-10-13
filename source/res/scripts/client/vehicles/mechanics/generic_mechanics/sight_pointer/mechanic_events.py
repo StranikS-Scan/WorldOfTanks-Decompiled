@@ -25,8 +25,8 @@ class SightPointerStatesEvents(MechanicStatesEvents, ISightPointerStatesEvents):
         return SightPointerStatesCoreIntegration(self, self._getComponent())
 
     def updateComponentParams(self, maxAngle, minAngle):
-        if self._cgfIntegration is not None:
-            self._cgfIntegration.updateComponentParams(maxAngle, minAngle)
+        if self._coreIntegration is not None:
+            self._coreIntegration.updateComponentParams(maxAngle, minAngle)
         return
 
     def _createEventsDebugger(self):

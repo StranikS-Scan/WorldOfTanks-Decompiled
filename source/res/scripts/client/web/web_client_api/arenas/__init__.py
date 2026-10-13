@@ -1,5 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/web/web_client_api/arenas/__init__.py
+from __future__ import absolute_import
+from future.utils import viewitems
 import ArenaType
 from gui.impl import backport
 from gui.impl.gen import R
@@ -35,7 +37,7 @@ class ArenasWebApi(object):
                 res[arenaTypeID] = self.__collectArenaInfo(arenaType)
 
         else:
-            for arenaTypeID, arenaType in ArenaType.g_cache.iteritems():
+            for arenaTypeID, arenaType in viewitems(ArenaType.g_cache):
                 res[arenaTypeID] = self.__collectArenaInfo(arenaType)
 
         return res

@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/uilogging/customization_3d_objects/logger.py
+from __future__ import absolute_import
 from typing import TYPE_CHECKING
 from CurrentVehicle import g_currentVehicle
 from gui.shared.gui_items import GUI_ITEM_TYPE

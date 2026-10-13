@@ -6,10 +6,10 @@ import BigWorld
 from auto_shoot_guns.auto_shoot_guns_common import AutoShootGunState
 from constants import UNKNOWN_GUN_INDEX
 from gui.shared.utils.decorators import ReprInjector
+from items.vehicle_mechanics_types import VehicleMechanicKey, VehicleMechanicKeys
 from items.components.component_constants import DEFAULT_GUN_AUTOSHOOT
 from vehicles.components.vehicle_component import VehicleDynamicComponent
 from vehicles.mechanics.common import IMechanicComponentLogic
-from vehicles.mechanics.mechanic_constants import VehicleMechanic
 from vehicles.parts.guns.auto_shoot import IAutoShootDispersionState, IAutoShootGunComponentState, IAutoShootGunComponent, createAutoShootingEvents
 if typing.TYPE_CHECKING:
     from items.components.component_constants import AutoShoot
@@ -76,8 +76,8 @@ class AutoShootGunController(VehicleDynamicComponent, IAutoShootGunComponent, IM
         self._initComponent()
 
     @property
-    def vehicleMechanic(self):
-        return VehicleMechanic.AUTO_SHOOT_GUN
+    def vehicleMechanicKey(self):
+        return VehicleMechanicKeys.AUTO_SHOOT_GUN
 
     @property
     def shootingEvents(self):

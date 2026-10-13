@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: frontline/scripts/client/frontline/gui/Scaleform/daapi/view/lobby/epicBattleTraining/__init__.py
+from __future__ import absolute_import
 from frameworks.wulf import WindowLayer
 from gui.Scaleform.framework import ViewSettings
 from gui.Scaleform.framework import GroupedViewSettings, ScopeTemplates
@@ -19,8 +20,8 @@ def getContextMenuHandlers():
 
 
 def getViewSettings():
-    from epic_battles_list import EpicBattlesList
-    from epic_battle_training_room import EpicBattleTrainingRoom
+    from frontline.gui.Scaleform.daapi.view.lobby.epicBattleTraining.epic_battles_list import EpicBattlesList
+    from frontline.gui.Scaleform.daapi.view.lobby.epicBattleTraining.epic_battle_training_room import EpicBattleTrainingRoom
     from gui.Scaleform.daapi.view.lobby.trainings.TrainingSettingsWindow import TrainingSettingsWindow
     return [ViewSettings(PREBATTLE_ALIASES.EPICBATTLE_LIST_VIEW_PY, EpicBattlesList, 'trainingForm.swf', WindowLayer.SUB_VIEW, PREBATTLE_ALIASES.EPICBATTLE_LIST_VIEW_PY, ScopeTemplates.DEFAULT_SCOPE, True), ViewSettings(PREBATTLE_ALIASES.EPIC_TRAINING_ROOM_VIEW_PY, EpicBattleTrainingRoom, 'EpicBattleTrainingRoom.swf', WindowLayer.SUB_VIEW, PREBATTLE_ALIASES.EPIC_TRAINING_ROOM_VIEW_PY, ScopeTemplates.DEFAULT_SCOPE, True), GroupedViewSettings(PREBATTLE_ALIASES.EPIC_TRAINING_SETTINGS_WINDOW_PY, TrainingSettingsWindow, 'trainingWindow.swf', WindowLayer.WINDOW, PREBATTLE_ALIASES.EPIC_TRAINING_SETTINGS_WINDOW_PY, None, ScopeTemplates.DEFAULT_SCOPE, True)]
 

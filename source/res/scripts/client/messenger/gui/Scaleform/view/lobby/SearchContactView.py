@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/gui/Scaleform/view/lobby/SearchContactView.py
+from __future__ import absolute_import
 from gui.Scaleform.locale.MESSENGER import MESSENGER
 from helpers import i18n
 from messenger.gui.Scaleform.data.search_data_providers import SearchUsersDataProvider

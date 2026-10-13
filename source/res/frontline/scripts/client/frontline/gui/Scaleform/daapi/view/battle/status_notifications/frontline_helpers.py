@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: frontline/scripts/client/frontline/gui/Scaleform/daapi/view/battle/status_notifications/frontline_helpers.py
+from __future__ import absolute_import
 from items import vehicles
 
 def getEquipmentById(equipmentId):

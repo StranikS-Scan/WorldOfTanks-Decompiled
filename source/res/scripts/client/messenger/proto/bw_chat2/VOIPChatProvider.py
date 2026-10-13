@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/proto/bw_chat2/VOIPChatProvider.py
+from __future__ import absolute_import
 from debug_utils import LOG_WARNING, LOG_NOTE
 from messenger.proto.bw_chat2 import errors, provider as bw2_provider
 from messenger.proto.events import g_messengerEvents
@@ -24,12 +25,12 @@ class VOIPChatProvider(bw2_provider.ResponseDictHandler, IVOIPChatProvider):
     def getChannelParams(self):
         return self.__channelParams
 
-    def requestCredentials(self, reset=0):
+    def requestCredentials(self, reset=0, mode=0):
         provider = self.provider()
         actionID = _ACTIONS.GET_VOIP_CREDENTIALS
         if reset:
             provider.clearActionCoolDown(actionID)
-        success, reqID = provider.doAction(actionID, messageArgs(int32Arg1=reset), True)
+        success, reqID = provider.doAction(actionID, messageArgs(int32Arg1=reset, int8Arg1=mode), True)
         if reqID:
             self.pushRq(reqID, actionID)
         if success:
@@ -60,6 +61,8 @@ class VOIPChatProvider(bw2_provider.ResponseDictHandler, IVOIPChatProvider):
         if actionID is None:
             return
         else:
+            if actionID == _ACTIONS.GET_VOIP_CREDENTIALS:
+                g_messengerEvents.voip.onCredentialFailed()
             error, logOnly = errors.createVOIPError(args, actionID)
             if error:
                 if logOnly:

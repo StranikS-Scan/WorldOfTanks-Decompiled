@@ -7,7 +7,6 @@ from gui.Scaleform.daapi import LobbySubView
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.vehicle_compare.cmp_parameters import CMP_HIDDEN_PARAMETERS, IVehCompareView, VehCompareBasketParamsCache
 from gui.Scaleform.daapi.view.meta.VehicleCompareViewMeta import VehicleCompareViewMeta
-from gui.Scaleform.framework import g_entitiesFactories
 from gui.Scaleform.framework.entities.DAAPIDataProvider import ListDAAPIDataProvider
 from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
@@ -15,6 +14,7 @@ from gui.Scaleform.locale.VEH_COMPARE import VEH_COMPARE
 from gui.game_control.veh_comparison_basket import MAX_VEHICLES_TO_COMPARE_COUNT
 from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.shared.event_dispatcher import selectVehicleInHangar, showVehiclePreview, showHangar
+from gui.shared.events import LoadViewEvent
 from gui.shared.formatters import text_styles
 from gui.shared.items_parameters.formatters import getAllParametersTitles
 from helpers import dependency
@@ -85,8 +85,7 @@ class VehicleCompareView(LobbySubView, VehicleCompareViewMeta):
         if self.__backAlias in (VIEW_ALIAS.LOBBY_HANGAR, VIEW_ALIAS.LEGACY_LOBBY_HANGAR):
             showHangar()
         else:
-            event = g_entitiesFactories.makeLoadEvent(SFViewLoadParams(self.__backAlias))
-            self.fireEvent(event, scope=EVENT_BUS_SCOPE.LOBBY)
+            self.fireEvent(LoadViewEvent(SFViewLoadParams(self.__backAlias)), scope=EVENT_BUS_SCOPE.LOBBY)
 
     def _populate(self):
         super(VehicleCompareView, self)._populate()

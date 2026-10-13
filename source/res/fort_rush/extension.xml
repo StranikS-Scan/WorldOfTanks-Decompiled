@@ -1,0 +1,43 @@
+<extension.xml>
+  <FeatureName>	fort_rush	</FeatureName>
+  <IsEnabled>	True	</IsEnabled>
+  <Personality>	fort_rush_personality	</Personality>
+  <EditorPersonality>	editor_fort_rush_personality	</EditorPersonality>
+  <Entities>
+    <ServerOnlyEntities>
+      <FortRushBattlesMgr></FortRushBattlesMgr>
+      <FortRushUnitMgr></FortRushUnitMgr>
+    </ServerOnlyEntities>
+  </Entities>
+  <Components>
+    <StaticComponents>
+      <FortRushComponent></FortRushComponent>
+      <FortRushAccountComponent></FortRushAccountComponent>
+    </StaticComponents>
+    <DynamicComponents>
+      <FortRushScoreComponent></FortRushScoreComponent>
+      <FortRushDevelopmentHelper></FortRushDevelopmentHelper>
+      <CapturePointComponent></CapturePointComponent>
+      <FortRushVehicleRespawnComponent></FortRushVehicleRespawnComponent>
+      <FortRushVehicleBattleFeedbackComponent></FortRushVehicleBattleFeedbackComponent>
+      <CapturePointInvaderComponent></CapturePointInvaderComponent>
+      <FortRushHighlighter></FortRushHighlighter>
+      <VehicleExpirableComponent></VehicleExpirableComponent>
+      <FortRushDamageResistanceComponent></FortRushDamageResistanceComponent>
+      <FortRushCapturePointStateMachineComponent></FortRushCapturePointStateMachineComponent>
+      <FortRushFairplayVehicleBattleStatsComponent></FortRushFairplayVehicleBattleStatsComponent>
+      <FortRushVehicleStatsCollector></FortRushVehicleStatsCollector>
+      <FortRushSoundPlayerComponent></FortRushSoundPlayerComponent>
+    </DynamicComponents>
+  </Components>
+  <cgf>
+    <script>
+      <module>	cell.fort_rush_cell.cgf.cgf_module	</module>
+      <module>	client.fort_rush.cgf.cgf_module	</module>
+      <module>	client.fort_rush.cgf.show_event_component	</module>
+    </script>
+    <prefabs>
+      <path>	fort_rush/content/CGFPrefabs/damage_resistance.prefab	</path>
+    </prefabs>
+  </cgf>
+</extension.xml>

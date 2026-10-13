@@ -49,6 +49,7 @@ class GroupedServerResponse(namedtuple('GroupedServerResponse', ['itemID', 'item
 class Processor(object):
     itemsCache = dependency.descriptor(IItemsCache)
     PLUGIN_RES_CODE = -33
+    SILENCED_FAILS = (AccountCommands.RES_LOCKED_VEHICLE,)
 
     def __init__(self, plugins=None):
         self.plugins = []
@@ -80,7 +81,8 @@ class Processor(object):
         if code >= 0:
             _logger.debug('Server success response: code=%r, error=%r, ctx=%r', code, errStr, ctx)
             return callback(self._successHandler(code, ctx=ctx))
-        _logger.warning('Server fail response: code=%r, error=%r, ctx=%r', code, errStr, ctx)
+        logFunc = _logger.debug if code in self.SILENCED_FAILS else _logger.warning
+        logFunc('Server fail response: code=%r, error=%r, ctx=%r', code, errStr, ctx)
         baseHandler = functools.partial(self._errorHandler, code, errStr=errStr, ctx=ctx)
         return callback(self._getResCodeHandler(code, baseHandler)())
 
@@ -154,11 +156,12 @@ class ItemProcessor(Processor):
         self.item = item
 
     def _response(self, code, callback, errStr='', ctx=None):
-        if code < 0:
-            _logger.error("Server responses an error [%s] while process %s '%s'", code2str(code), self.item.itemTypeName, str(self.item))
-            baseHandler = functools.partial(self._errorHandler, code, ctx=ctx, errStr=errStr)
-            return callback(self._getResCodeHandler(code, baseHandler)())
-        return callback(self._successHandler(code, ctx=ctx))
+        if code >= 0:
+            return callback(self._successHandler(code, ctx=ctx))
+        logFunc = _logger.debug if code in self.SILENCED_FAILS else _logger.error
+        logFunc("Server responses an error [%s] while process %s '%s'", code2str(code), self.item.itemTypeName, str(self.item))
+        baseHandler = functools.partial(self._errorHandler, code, ctx=ctx, errStr=errStr)
+        return callback(self._getResCodeHandler(code, baseHandler)())
 
 
 class GroupedRequestProcessor(Processor):

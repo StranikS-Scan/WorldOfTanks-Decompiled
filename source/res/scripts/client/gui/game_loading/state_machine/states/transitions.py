@@ -67,7 +67,7 @@ class PlayerLoadingTransitionWithLastShownImage(PlayerLoadingTransition):
     def _apply(self, event, source, target):
         image = source.lastShownImage
         if image:
-            slide = LocalSlideModel(imageRelativePath=image.imageRelativePath, minShowTimeSec=self._getMinShowTime(source, image), localizationText=image.localizationText, descriptionText=image.descriptionText, vfx=image.vfx)
+            slide = LocalSlideModel(imageRelativePath=image.imageRelativePath, minShowTimeSec=self._getMinShowTime(source, image), localizationText=image.localizationText, descriptionText=image.descriptionText, vfx=image.vfx, imageAbsolutePath=image.imageAbsolutePath)
             target.setRetainMilestones(event.getArgument('retainMilestones', False))
             target.mainState.setImage(slide)
         return True

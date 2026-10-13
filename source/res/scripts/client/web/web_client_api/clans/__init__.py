@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/web/web_client_api/clans/__init__.py
+from __future__ import absolute_import
 from gui.clans.clan_cache import g_clanCache
 from messenger.proto.shared_find_criteria import MutualFriendsFindCriteria
 from web.web_client_api import w2capi, w2c, W2CSchema

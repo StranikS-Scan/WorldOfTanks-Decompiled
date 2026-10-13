@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/uilogging/core/session.py
+from __future__ import absolute_import
 import typing
 import adisp
 import wg_async
@@ -187,7 +188,7 @@ class Session(object):
         if not self._destroyed:
             if response.isSuccess():
                 if isinstance(response.data, dict):
-                    data = SessionData(self._idGen.next(), response.data)
+                    data = SessionData(self._idGen.nextSequenceID, response.data)
                     if data.isValid:
                         sessionData, retry = data, data.isExpired
                     else:

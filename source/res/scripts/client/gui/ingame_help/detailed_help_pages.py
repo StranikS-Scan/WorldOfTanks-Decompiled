@@ -17,10 +17,10 @@ from gui.shared.utils.functions import replaceHyphenToUnderscore
 from gui.shared.utils.key_mapping import getReadableKey, getVirtualKey
 from helpers import dependency
 from items.vehicles import getRolesActions
+from items.vehicle_mechanics_types import VehicleMechanicKeys
 from nations import NAMES as NATIONS_NAMES
 from skeletons.gui.game_control import IBattleRoyaleController
 from soft_exception import SoftException
-from vehicles.mechanics.mechanic_constants import VehicleMechanic
 from vehicles.mechanics.mechanic_helpers import hasVehicleDescrMechanic, getVehicleMechanicsComponents
 if typing.TYPE_CHECKING:
     from skeletons.gui.battle_session import IClientArenaVisitor
@@ -321,7 +321,7 @@ class PillboxSiegePagesBuilder(DetailedHelpPagesBuilder):
 
     @classmethod
     def _collectHelpCtx(cls, ctx, arenaVisitor, vehicle):
-        ctx['hasPillboxMode'] = hasVehicleDescrMechanic(vehicle.typeDescriptor, VehicleMechanic.PILLBOX_SIEGE_MODE)
+        ctx['hasPillboxMode'] = hasVehicleDescrMechanic(vehicle.typeDescriptor, VehicleMechanicKeys.PILLBOX_SIEGE_MODE)
 
 
 class RoleTypePagesBuilder(DetailedHelpPagesBuilder):
@@ -399,24 +399,25 @@ class DevMapsPagesBuilder(DetailedHelpPagesBuilder):
 
 class MechanicsPagesBuilder(DetailedHelpPagesBuilder):
     _SUITABLE_CTX_KEYS = ('vehicleMechanics',)
-    _VEHICLE_MECHANIC_KEYS = {VehicleMechanic.CHARGE_SHOT.value: (CommandMapping.CMD_CM_VEHICLE_SWITCH_AUTOROTATION,),
-     VehicleMechanic.CONCENTRATION_MODE.value: (CommandMapping.CMD_CM_VEHICLE_SWITCH_AUTOROTATION,),
-     VehicleMechanic.PROPELLANT_GUN.value: (None, CommandMapping.CMD_CM_VEHICLE_SWITCH_AUTOROTATION),
-     VehicleMechanic.RECHARGEABLE_NITRO.value: (CommandMapping.CMD_CM_VEHICLE_SWITCH_AUTOROTATION,),
-     VehicleMechanic.ROCKET_ACCELERATION.value: (CommandMapping.CMD_CM_VEHICLE_SWITCH_AUTOROTATION,),
-     VehicleMechanic.STAGED_JET_BOOSTERS.value: (CommandMapping.CMD_CM_SPECIAL_ABILITY,),
-     VehicleMechanic.STANCE_DANCE.value: (CommandMapping.CMD_CM_VEHICLE_SWITCH_AUTOROTATION, CommandMapping.CMD_CM_SPECIAL_ABILITY),
-     VehicleMechanic.STATIONARY_RELOAD.value: (CommandMapping.CMD_RELOAD_PARTIAL_CLIP,),
-     VehicleMechanic.SUPPORT_WEAPON.value: (CommandMapping.CMD_CM_VEHICLE_SWITCH_AUTOROTATION,),
-     VehicleMechanic.TARGET_DESIGNATOR.value: (CommandMapping.CMD_CM_VEHICLE_SWITCH_AUTOROTATION,),
-     VehicleMechanic.TWIN_GUN.value: (CommandMapping.CMD_CM_VEHICLE_SWITCH_AUTOROTATION,),
-     VehicleMechanic.WHEELED_DASH.value: (CommandMapping.CMD_CM_VEHICLE_SWITCH_AUTOROTATION, None),
-     VehicleMechanic.AUXILIARY_ROCKET_LAUNCHER.value: (CommandMapping.CMD_CM_SPECIAL_ABILITY, CommandMapping.CMD_CM_SHOOT),
-     VehicleMechanic.SHELL_PARAMS_SWITCHER.value: (CommandMapping.CMD_CM_VEHICLE_SWITCH_AUTOROTATION, None),
-     VehicleMechanic.SHELL_CALIBRATION.value: (None, CommandMapping.CMD_CM_SPECIAL_ABILITY),
-     VehicleMechanic.BUSTLE_FEED.value: (CommandMapping.CMD_CM_VEHICLE_SWITCH_AUTOROTATION,),
-     VehicleMechanic.SIGHT_POINTER.value: (CommandMapping.CMD_CM_SPECIAL_ABILITY,)}
-    _VEHICLE_MECHANIC_PRIORITIES = (((VehicleMechanic.AUTO_SHOOT_GUN, VehicleMechanic.OVERHEAT_GUN), (VehicleMechanic.AUTO_SHOOT_GUN,)),)
+    _VEHICLE_MECHANIC_KEYS = {VehicleMechanicKeys.AUXILIARY_ROCKET_LAUNCHER.uniqueName: (CommandMapping.CMD_CM_SPECIAL_ABILITY, CommandMapping.CMD_CM_SHOOT),
+     VehicleMechanicKeys.BUSTLE_FEED.uniqueName: (CommandMapping.CMD_CM_VEHICLE_SWITCH_AUTOROTATION,),
+     VehicleMechanicKeys.CHARGE_SHOT.uniqueName: (CommandMapping.CMD_CM_VEHICLE_SWITCH_AUTOROTATION,),
+     VehicleMechanicKeys.COMBAT_THROTTLE.uniqueName: (CommandMapping.CMD_CM_VEHICLE_SWITCH_AUTOROTATION,),
+     VehicleMechanicKeys.CONCENTRATION_MODE.uniqueName: (CommandMapping.CMD_CM_VEHICLE_SWITCH_AUTOROTATION,),
+     VehicleMechanicKeys.PROPELLANT_GUN.uniqueName: (None, CommandMapping.CMD_CM_VEHICLE_SWITCH_AUTOROTATION),
+     VehicleMechanicKeys.RECHARGEABLE_NITRO.uniqueName: (CommandMapping.CMD_CM_VEHICLE_SWITCH_AUTOROTATION,),
+     VehicleMechanicKeys.ROCKET_ACCELERATION.uniqueName: (CommandMapping.CMD_CM_VEHICLE_SWITCH_AUTOROTATION,),
+     VehicleMechanicKeys.SHELL_CALIBRATION.uniqueName: (None, CommandMapping.CMD_CM_SPECIAL_ABILITY),
+     VehicleMechanicKeys.SHELL_PARAMS_SWITCHER.uniqueName: (CommandMapping.CMD_CM_VEHICLE_SWITCH_AUTOROTATION,),
+     VehicleMechanicKeys.SIGHT_POINTER.uniqueName: (CommandMapping.CMD_CM_SPECIAL_ABILITY,),
+     VehicleMechanicKeys.STAGED_JET_BOOSTERS.uniqueName: (CommandMapping.CMD_CM_SPECIAL_ABILITY,),
+     VehicleMechanicKeys.STANCE_DANCE.uniqueName: (CommandMapping.CMD_CM_VEHICLE_SWITCH_AUTOROTATION, CommandMapping.CMD_CM_SPECIAL_ABILITY),
+     VehicleMechanicKeys.STATIONARY_RELOAD.uniqueName: (CommandMapping.CMD_RELOAD_PARTIAL_CLIP,),
+     VehicleMechanicKeys.SUPPORT_WEAPON.uniqueName: (CommandMapping.CMD_CM_VEHICLE_SWITCH_AUTOROTATION,),
+     VehicleMechanicKeys.TARGET_DESIGNATOR.uniqueName: (CommandMapping.CMD_CM_VEHICLE_SWITCH_AUTOROTATION,),
+     VehicleMechanicKeys.TWIN_GUN.uniqueName: (CommandMapping.CMD_CM_VEHICLE_SWITCH_AUTOROTATION,),
+     VehicleMechanicKeys.WHEELED_DASH.uniqueName: (CommandMapping.CMD_CM_VEHICLE_SWITCH_AUTOROTATION, None)}
+    _VEHICLE_MECHANIC_PRIORITIES = (((VehicleMechanicKeys.AUTO_SHOOT_GUN, VehicleMechanicKeys.OVERHEAT_GUN), (VehicleMechanicKeys.AUTO_SHOOT_GUN,)),)
 
     @classmethod
     def priority(cls):
@@ -428,13 +429,13 @@ class MechanicsPagesBuilder(DetailedHelpPagesBuilder):
         headerTitle = buildTitle(ctx)
         mechanics = ctx.get('vehicleMechanics')
         orderedMechanics = list(filter(None, (findFirst(mechanics.issuperset, mechanicKeys) for mechanicKeys in cls._VEHICLE_MECHANIC_PRIORITIES)))
-        orderedMechanicsValues = [ '_'.join((mechanic.value for mechanic in key)) for key in orderedMechanics ]
+        orderedMechanicsValues = [ '_'.join((mechanic.uniqueName for mechanic in key)) for key in orderedMechanics ]
         unorderedMechanics = mechanics.difference(chain.from_iterable(orderedMechanics))
-        unorderedMechanicsValues = [ mechanic.value for mechanic in unorderedMechanics ]
-        for mechanicValue in orderedMechanicsValues + unorderedMechanicsValues:
-            iconsRoot = R.images.gui.maps.icons.battleHelp.mechanics.dyn(mechanicValue)
-            localsRoot = R.strings.ingame_help.detailsHelp.mechanics.dyn(mechanicValue)
-            keys = cls._VEHICLE_MECHANIC_KEYS.get(mechanicValue, ())
+        unorderedMechanicsValues = [ mechanic.uniqueName for mechanic in unorderedMechanics ]
+        for uiName in orderedMechanicsValues + unorderedMechanicsValues:
+            iconsRoot = R.images.gui.maps.icons.battleHelp.mechanics.dyn(uiName)
+            localsRoot = R.strings.ingame_help.detailsHelp.mechanics.dyn(uiName)
+            keys = cls._VEHICLE_MECHANIC_KEYS.get(uiName, ())
             keysCount = len(keys)
             for index, (pageID, pageRes) in enumerate(sorted(localsRoot.items())):
                 key = keys[index] if index < keysCount else None

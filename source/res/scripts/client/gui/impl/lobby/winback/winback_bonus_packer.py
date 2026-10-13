@@ -82,14 +82,14 @@ def cutVehDiscountsFromBonuses(bonusesData, winbackData=None, received=False, go
     winbackData[WINBACK_DISCOUNTS] = winbackDiscounts
     blueprints = bonusesData.get(BlueprintBonusTypes.BLUEPRINTS, {})
     goodies = bonusesData.get(GoodiesBonus.GOODIES, {})
-    for goodyID in goodies.keys():
+    for goodyID in list(goodies):
         goodyData = goodiesCache.getGoodieByID(goodyID)
         if goodyData.variety == GOODIE_VARIETY.DISCOUNT:
             winbackDiscounts[goodyData.target.targetValue][GoodiesBonus.GOODIES][goodyID] = goodies.pop(goodyID)
 
     if not goodies and GoodiesBonus.GOODIES in bonusesData:
         bonusesData.pop(GoodiesBonus.GOODIES)
-    for fragmentID in blueprints.keys():
+    for fragmentID in list(blueprints):
         if getFragmentType(fragmentID) == BlueprintTypes.VEHICLE:
             if fragmentID in winbackDiscounts.keys():
                 fragmentsCount = blueprints.pop(fragmentID)

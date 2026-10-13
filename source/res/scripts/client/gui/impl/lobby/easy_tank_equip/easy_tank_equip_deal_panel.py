@@ -71,7 +71,7 @@ class EasyTankEquipDealPanel(BaseDealPanel):
         stats = cls._itemsCache.items.stats
         goldAmountInPriceForExchange = 0
         availableGoldForExchange = stats.money.gold - cls._prices[cls._MONEY].gold
-        isEnabled = stats.mayConsumeWalletResources and availableGoldForExchange >= 0 and canBuyWithGoldExchange(cls._prices[cls._MONEY].replace(Currency.GOLD, goldAmountInPriceForExchange), stats.money.replace(Currency.GOLD, availableGoldForExchange), cls._itemsCache.items.shop.exchangeRate)
+        isEnabled = stats.isResourcesConsumptionAllowed and availableGoldForExchange >= 0 and canBuyWithGoldExchange(cls._prices[cls._MONEY].replace(Currency.GOLD, goldAmountInPriceForExchange), stats.money.replace(Currency.GOLD, availableGoldForExchange), cls._itemsCache.items.shop.exchangeRate)
         dealPanelModel.setIsDisabled(not isEnabled)
 
 

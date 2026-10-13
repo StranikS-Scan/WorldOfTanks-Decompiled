@@ -9,10 +9,10 @@ if typing.TYPE_CHECKING:
     from gui.shared.gui_items.vehicle_mechanics.module_mechanic_item import ModuleMechanicItem
     from gui.shared.gui_items.vehicle_mechanics.vehicle_mechanic_item import VehicleMechanicItem
     from gui.veh_post_progression.models.progression import PostProgressionItem
+    from items.vehicle_mechanics_types import VehicleMechanicKey
     from items.vehicles import VehicleType
     from post_progression_common import VehicleState
     from dossiers2.common.DossierDescr import DossierDescr
-    from vehicles.mechanics.mechanic_constants import VehicleMechanic
 
 class IGuiItemsFactory(object):
 

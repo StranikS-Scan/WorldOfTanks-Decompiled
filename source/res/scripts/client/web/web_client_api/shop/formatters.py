@@ -1,8 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/web/web_client_api/shop/formatters.py
+from __future__ import absolute_import
 import re
-from collections import namedtuple
 import typing
+from collections import namedtuple
 import nations
 from constants import RentType
 from gui.Scaleform.genConsts.STORE_CONSTANTS import STORE_CONSTANTS
@@ -17,6 +18,7 @@ from helpers import dependency, i18n, time_utils
 from helpers.func_utils import replaceImgPrefix
 from items.components.supply_slot_categories import SlotCategories
 from items import vehicles
+from math_common import decimal_round
 from nation_change.nation_change_helpers import getGroupByVehTypeCompactDescr, iterVehTypeCDsInNationGroup
 from rent_common import SeasonRentDuration
 from shared_utils import first
@@ -46,7 +48,7 @@ def _formatPrice(itemPrice):
 
 
 def _formatFloat(val):
-    return round(val, 4)
+    return decimal_round(val, 4)
 
 
 def _formatKPI(kpiList):

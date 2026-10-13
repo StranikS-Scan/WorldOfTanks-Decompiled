@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/proto/xmpp/contacts/tasks.py
+from __future__ import absolute_import
 from collections import defaultdict, namedtuple
 import Event
 from messenger.m_constants import PROTO_TYPE
@@ -331,7 +332,7 @@ class ContactTaskQueue(object):
 
     def handleIQ(self, iqID, iqType, pyGlooxTag):
         isHandled = False
-        for jid in self.__queue.keys():
+        for jid in list(self.__queue):
             isHandled |= self._handleTasksResult(jid, self._getIQGenerator(jid, iqID, iqType, pyGlooxTag))
 
         if not isHandled and iqType == IQ_TYPE.SET:

@@ -1,6 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/tutorial/settings.py
+from __future__ import absolute_import
 from collections import namedtuple
+from future.utils import viewitems
 from soft_exception import SoftException
 TUTORIAL_VERSION = '0.4.0'
 DOC_DIRECTORY = 'scripts/tutorial_docs'
@@ -27,7 +29,7 @@ class _SettingsCollection(dict):
 
     def init(self, clazz):
         self.clear()
-        for name, settings in clazz.__dict__.iteritems():
+        for name, settings in viewitems(clazz.__dict__):
             if name.startswith('_'):
                 continue
             self[settings.id] = settings

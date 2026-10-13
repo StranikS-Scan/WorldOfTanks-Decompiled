@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: comp7_core/scripts/client/comp7_core/gui/battle_control/controllers/consumables/comp7_equipment_items.py
+from __future__ import absolute_import
 import logging
 import BigWorld
 from PlayerEvents import g_playerEvents

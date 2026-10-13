@@ -933,7 +933,8 @@ class CommonTankAppearance(PrefabLoader):
         model_assembler.assembleSuspensionSound(self, isPlayer, queue)
         model_assembler.assembleHullAimingController(self, queue)
         model_assembler.createTrackNodesAnimator(self, self.typeDescriptor, queue)
-        model_assembler.assembleVehicleTraces(self, self.filter, wheelsAnimator, queue)
+        if not self.isObserver:
+            model_assembler.assembleVehicleTraces(self, self.filter, wheelsAnimator, queue)
         self._setupTracks(resourceRefs, queue)
         return
 

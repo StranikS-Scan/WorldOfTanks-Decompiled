@@ -1,8 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/vehicle_systems/components/vehicle_assembly_manager.py
-from collections import namedtuple
+from __future__ import absolute_import
 import typing
 import logging
+from collections import namedtuple
 import CGF
 import GenericComponents
 import GpuDecals

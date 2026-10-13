@@ -1,13 +1,13 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/login/social_networks/DataServer.py
 import os
-import base64
 import hashlib
 from SocketServer import ThreadingMixIn
 from Event import Event
 from Crypto.Cipher import AES
 from Crypto.Util import Counter
 from debug_utils import LOG_DEBUG
+from py2to3.compat import base64compat
 from RequestHandler import RequestHandler
 from standalone.login import HttpServer
 
@@ -32,7 +32,7 @@ class EncryptingDataServer(DataServer):
 
     def keepData(self, token, spaID, socialNetwork):
         cipher = AES.new(self._tokenSecret, AES.MODE_CTR, counter=Counter.new(128))
-        token = cipher.decrypt(base64.urlsafe_b64decode(token))
+        token = cipher.decrypt(base64compat.urlsafe_b64decode(token))
         DataServer.keepData(self, token, spaID, socialNetwork)
 
     @property

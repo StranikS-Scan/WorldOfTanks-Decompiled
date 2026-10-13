@@ -1,0 +1,46 @@
+<fuelTanks.xml>
+  <ids>
+    <Large_HW_BOT>	5000	</Large_HW_BOT>
+    <Large_HELL__0>	5001	</Large_HELL__0>
+    <Heavy_HW_BOT>	5002	</Heavy_HW_BOT>
+    <Large_Halloween_event>	5003	</Large_Halloween_event>
+  </ids>
+  <shared>
+    <Large_HW_BOT>
+      <tags></tags>
+      <price>	100	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	300	</weight>
+      <maxHealth>	200	</maxHealth>
+      <maxRegenHealth>	70	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+    </Large_HW_BOT>
+    <Large_HELL__0>
+      <tags></tags>
+      <price>	100	</price>
+      <weight>	300	</weight>
+      <maxHealth>	200	</maxHealth>
+      <maxRegenHealth>	70	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+      <notInShop>	True	</notInShop>
+    </Large_HELL__0>
+    <Heavy_HW_BOT>
+      <tags></tags>
+      <price>	100	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	275	</weight>
+      <maxHealth>	175	</maxHealth>
+      <maxRegenHealth>	70	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+    </Heavy_HW_BOT>
+    <Large_Halloween_event>
+      <tags></tags>
+      <price>	100	</price>
+      <weight>	300	</weight>
+      <maxHealth>	200	</maxHealth>
+      <maxRegenHealth>	70	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+      <notInShop>	True	</notInShop>
+    </Large_Halloween_event>
+  </shared>
+</fuelTanks.xml>

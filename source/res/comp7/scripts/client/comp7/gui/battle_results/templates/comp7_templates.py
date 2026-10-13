@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: comp7/scripts/client/comp7/gui/battle_results/templates/comp7_templates.py
+from __future__ import absolute_import
 from comp7.gui.battle_results.components import comp7_components
 from comp7_core.gui.battle_results.components import comp7_core_components
 from comp7_core.gui.battle_results.components import progress

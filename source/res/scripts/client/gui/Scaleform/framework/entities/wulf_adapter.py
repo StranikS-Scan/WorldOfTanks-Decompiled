@@ -43,7 +43,12 @@ class WulfPackageLayoutAdapter(object):
         self.onCreated(self)
 
     def initWindow(self, windowClass, *args, **kwargs):
-        window = windowClass(*args, **kwargs)
+        try:
+            window = windowClass(*args, **kwargs)
+        except TypeError:
+            _logger.error('Cannot create window using %r: args= %r, kwargs= %r', windowClass, args, kwargs)
+            raise
+
         window.onStatusChanged += self.__onStatusChanged
         window.onShowingStatusChanged += self.__onShowingStatusChanged
         self.__window = window

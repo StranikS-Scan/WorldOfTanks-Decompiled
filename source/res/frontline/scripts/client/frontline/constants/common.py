@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: frontline/scripts/client/frontline/constants/common.py
+from __future__ import absolute_import
 from frontline.gui.impl.gen.view_models.views.lobby.views.frontline_const import FrontlineState, FrontlineConst
 from gui.impl.common.ammunition_panel.ammunition_groups_controller import RANDOM_GROUPS, GroupData
 from gui.impl.gen.view_models.views.lobby.tank_setup.common.ammunition_panel_constants import AmmunitionPanelConstants

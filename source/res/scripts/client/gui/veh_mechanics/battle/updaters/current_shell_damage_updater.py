@@ -8,7 +8,6 @@ from helpers import dependency
 from skeletons.gui.battle_session import IBattleSessionProvider
 if typing.TYPE_CHECKING:
     from typing import Any
-    from gui.battle_control.battle_session import BattleSessionProvider
     from gui.battle_control.controllers.consumables.ammo_ctrl import AmmoController
 _logger = logging.getLogger(__name__)
 

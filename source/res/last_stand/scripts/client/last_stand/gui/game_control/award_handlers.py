@@ -35,22 +35,33 @@ class LSAwardWindowHandler(ServiceChannelHandler):
 
     def __init__(self, awardCtrl):
         super(LSAwardWindowHandler, self).__init__(SYS_MESSAGE_TYPE.lsRewardCongrats.index(), awardCtrl)
+        self._storedMessages = []
 
-    def fini(self):
+    def stop(self):
         if self.guiLoader and self.guiLoader.windowsManager:
             self.guiLoader.windowsManager.onWindowStatusChanged -= self.__onWindowStatusChanged
-        super(LSAwardWindowHandler, self).fini()
+        self.lsCtrl.onSettingsUpdate -= self._onSettingsUpdate
+        self.lsCtrl.onEventDisabled -= self._onEventDisabled
+        self._storedMessages = []
+        super(LSAwardWindowHandler, self).stop()
 
     def start(self):
         super(LSAwardWindowHandler, self).start()
         self.guiLoader.windowsManager.onWindowStatusChanged += self.__onWindowStatusChanged
+        self.lsCtrl.onSettingsUpdate += self._onSettingsUpdate
+        self.lsCtrl.onEventDisabled += self._onEventDisabled
 
     def _needToShowAward(self, ctx):
         if not super(LSAwardWindowHandler, self)._needToShowAward(ctx):
             return False
         else:
             _, msg = ctx
-            return any((msgKey in msg.data for msgKey in MsgDataCacheKeys.ALL)) and self.lsCtrl.isAvailable() if msg is not None and isinstance(msg.data, dict) else False
+            if msg is not None and isinstance(msg.data, dict):
+                if any((msgKey in msg.data for msgKey in MsgDataCacheKeys.ALL)):
+                    if self.lsCtrl.isAvailable():
+                        return True
+                    self._storedMessages.append(ctx)
+            return False
 
     def _showAward(self, ctx):
         _, message = ctx
@@ -107,6 +118,16 @@ class LSAwardWindowHandler(ServiceChannelHandler):
     def _showAttachmentView(self, element):
         newC11nSectionHintClicked = self.settingsCore.serverSettings.getOnceOnlyHintsSetting(OnceOnlyHints.NEW_C11N_SECTION_HINT)
         showAttachmentRewardWindow(element, not newC11nSectionHintClicked, useQueue=True)
+
+    def _onSettingsUpdate(self):
+        if self.lsCtrl.isAvailable():
+            for msg in self._storedMessages:
+                self._showAward(msg)
+
+            self._storedMessages = []
+
+    def _onEventDisabled(self):
+        self._storedMessages = []
 
     def __onWindowStatusChanged(self, uniqueID, newState):
         if newState == WindowStatus.LOADED:

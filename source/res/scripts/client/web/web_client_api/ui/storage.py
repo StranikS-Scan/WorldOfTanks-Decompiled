@@ -1,5 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/web/web_client_api/ui/storage.py
+from __future__ import absolute_import
+from past.builtins import basestring
 from gui.Scaleform.daapi.view.lobby.storage import getSectionsList, STORAGE_CONSTANTS
 from gui.shared import event_dispatcher as shared_events
 from helpers import dependency

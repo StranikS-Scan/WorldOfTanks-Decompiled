@@ -531,7 +531,7 @@ class GuiAmbientsCtrl(object):
             customViews = []
             for layer in (WindowLayer.TOP_WINDOW, WindowLayer.WINDOW, WindowLayer.SUB_VIEW):
                 container = self.app.containerManager.getContainer(layer)
-                for viewAlias in self._customEnvs[layer].keys():
+                for viewAlias in list(self._customEnvs[layer]):
                     view = container.getView(criteria={POP_UP_CRITERIA.VIEW_ALIAS: viewAlias})
                     if view is not None:
                         customViews.append(view)

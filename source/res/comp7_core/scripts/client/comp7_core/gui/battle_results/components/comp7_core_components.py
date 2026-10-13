@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: comp7_core/scripts/client/comp7_core/gui/battle_results/components/comp7_core_components.py
+from __future__ import absolute_import
 from constants import EntityCaptured
 from gui.battle_results.components import base, style
 from gui.battle_results.components.vehicles import RegularVehicleStatValuesBlock, RegularVehicleStatsBlock, TeamStatsBlock, _getStunFilter
@@ -21,7 +22,7 @@ class EfficiencyTitleWithSkills(base.StatsItem):
 
 class IsDeserterFlag(base.StatsItem):
 
-    def _convert(self, result, reusable):
+    def _convert(self, value, reusable):
         raise NotImplementedError
 
 

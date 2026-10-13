@@ -87,7 +87,7 @@ class ModeSelectorDataProvider(IGlobalListener):
     def onPrbEntitySwitched(self):
         items = self.__getItems()
         self.__createItems(items)
-        for nameItem in self._items:
+        for nameItem in list(self._items):
             if not items.get(nameItem) or not items[nameItem].isVisible():
                 self._clearItem(self._items.pop(nameItem))
 
@@ -100,7 +100,7 @@ class ModeSelectorDataProvider(IGlobalListener):
         self.forceRefresh()
 
     def _clearItems(self):
-        for key in self._items:
+        for key in list(self._items):
             self._clearItem(self._items.pop(key))
 
     def _clearItem(self, item):

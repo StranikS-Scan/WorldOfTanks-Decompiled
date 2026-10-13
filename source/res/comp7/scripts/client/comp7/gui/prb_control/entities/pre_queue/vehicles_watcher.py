@@ -1,14 +1,16 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: comp7/scripts/client/comp7/gui/prb_control/entities/pre_queue/vehicles_watcher.py
+from __future__ import absolute_import
 from itertools import chain
 import typing
 from comp7_common.comp7_constants import BATTLE_MODE_VEH_TAGS_EXCEPT_COMP7, Configs
 from gui.prb_control.entities.base.pre_queue.vehicles_watcher import LimitedLevelVehiclesWatcher, RestrictedVehiclesWatcher
-from gui.shared.gui_items.Vehicle import Vehicle
 from helpers import dependency, server_settings
 from skeletons.gui.game_control import IComp7Controller
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
+if typing.TYPE_CHECKING:
+    from gui.shared.gui_items.Vehicle import Vehicle
 
 class Comp7VehiclesWatcher(LimitedLevelVehiclesWatcher, RestrictedVehiclesWatcher):
     __comp7Ctrl = dependency.descriptor(IComp7Controller)

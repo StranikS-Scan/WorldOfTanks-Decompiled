@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: comp7_light/scripts/client/comp7_light/gui/prb_control/__init__.py
-
+from __future__ import absolute_import
 
 def registerComp7LightOthersPrbParams():
     from comp7_light.gui.prb_control.storages.comp7_light_storage import Comp7LightStorage

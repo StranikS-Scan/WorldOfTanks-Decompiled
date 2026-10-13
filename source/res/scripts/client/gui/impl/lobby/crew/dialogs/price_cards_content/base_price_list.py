@@ -126,7 +126,7 @@ class BasePriceList(ViewImpl):
         return (('stats.gold', self._onGoldUpdate),
          ('stats.credits', self._onCreditsUpdate),
          ('inventory.8.compDescr', self._onTankmanChanged),
-         ('cache.mayConsumeWalletResources', self._onConsumeWalletUpdate))
+         ('cache.isResourcesConsumptionAllowed', self._onConsumeWalletUpdate))
 
     def _updateViewModel(self):
         with self.viewModel.transaction() as vm:

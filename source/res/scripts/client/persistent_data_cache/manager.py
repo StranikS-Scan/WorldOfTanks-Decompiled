@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/persistent_data_cache/manager.py
+from __future__ import absolute_import
 import BigWorld
 import wg_async
 from helpers import ExitCode

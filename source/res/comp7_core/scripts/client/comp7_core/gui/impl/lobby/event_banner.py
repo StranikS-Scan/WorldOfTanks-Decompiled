@@ -4,14 +4,14 @@ from __future__ import absolute_import
 from account_helpers.AccountSettings import AccountSettings
 from comp7_core.gui.impl.lobby.comp7_core_helpers import comp7_core_shared
 from gui.impl.gen.view_models.views.lobby.user_missions.constants.event_banner_state import EventBannerState
-from gui.impl.lobby.user_missions.hangar_widget.event_banners.base_event_banner import BaseEventBanner
 from gui.impl.lobby.user_missions.hangar_widget.event_banners.event_banners_container import EventBannersContainer
+from gui.impl.lobby.user_missions.hangar_widget.event_banners.standard_event_banner import StandardEventBanner
 from helpers.time_utils import getCurrentLocalServerTimestamp
 from gui.impl.lobby.user_missions.hangar_widget.services import IEventsService
 from gui.shared.utils import SelectorBattleTypesUtils as selectorUtils
 from helpers import int2roman, dependency
 
-class Comp7CoreEventBanner(BaseEventBanner):
+class Comp7CoreEventBanner(StandardEventBanner):
     __eventsService = dependency.descriptor(IEventsService)
 
     def __init__(self):

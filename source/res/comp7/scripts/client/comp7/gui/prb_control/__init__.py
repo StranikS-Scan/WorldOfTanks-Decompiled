@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: comp7/scripts/client/comp7/gui/prb_control/__init__.py
-
+from __future__ import absolute_import
 
 def registerComp7OthersPrbParams():
     from comp7.gui.comp7_constants import PREBATTLE_ACTION_NAME

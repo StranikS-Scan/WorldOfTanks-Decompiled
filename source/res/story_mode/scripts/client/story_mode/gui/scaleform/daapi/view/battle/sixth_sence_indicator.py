@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: story_mode/scripts/client/story_mode/gui/scaleform/daapi/view/battle/sixth_sence_indicator.py
+from __future__ import absolute_import
 from gui.Scaleform.daapi.view.battle.shared.indicators import SixthSenseIndicator
 from helpers.dependency import descriptor
 from skeletons.gui.battle_session import IBattleSessionProvider

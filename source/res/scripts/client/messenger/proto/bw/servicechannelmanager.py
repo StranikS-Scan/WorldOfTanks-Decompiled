@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/proto/bw/ServiceChannelManager.py
+from __future__ import absolute_import
 from collections import deque
 import BigWorld
 from chat_shared import CHAT_ACTIONS
@@ -98,7 +99,7 @@ class ServiceChannelManager(ChatActionsListener):
         yield lambda callback: callback(True)
         formatter = collectMessengerServerFormatter(message.type)
         serviceChannel = g_messengerEvents.serviceChannel
-        serviceChannel.onChatMessageReceived(self.__idGenerator.next(), message)
+        serviceChannel.onChatMessageReceived(self.__idGenerator.nextSequenceID, message)
         LOG_DEBUG('Server message received', message, formatter)
         if formatter:
             try:
@@ -113,7 +114,7 @@ class ServiceChannelManager(ChatActionsListener):
             for mData in messagesListData:
                 if mData is not None and mData.data:
                     formatted, settings = mData
-                    clientID = self.__idGenerator.next()
+                    clientID = self.__idGenerator.nextSequenceID
                     self.__messages.append((clientID, (True, formatted, settings)))
                     self.__unreadMessagesCount += 1
                     serviceChannel.onServerMessageReceived(clientID, formatted, settings)
@@ -142,7 +143,7 @@ class ServiceChannelManager(ChatActionsListener):
             for mData in messagesListData:
                 if mData.data:
                     formatted, settings = mData
-                    clientID = self.__idGenerator.next()
+                    clientID = self.__idGenerator.nextSequenceID
                     if not settings.isAlert:
                         settings.isAlert = isAlert
                     self.__messages.append((clientID, (False, formatted, settings)))

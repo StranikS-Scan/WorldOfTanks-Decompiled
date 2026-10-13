@@ -84,10 +84,7 @@ class IMissionsContainerService(IGlobalListener):
     onShowPlugin = None
     onHidePlugin = None
 
-    def showPlugin(self, viewAlias):
-        raise NotImplementedError
-
-    def hidePlugin(self, viewAlias):
+    def setPluginVisibility(self, viewAlias, visible):
         raise NotImplementedError
 
     def getVisiblePlugins(self):

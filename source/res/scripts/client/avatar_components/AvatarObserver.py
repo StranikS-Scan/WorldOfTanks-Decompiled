@@ -1,7 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/avatar_components/AvatarObserver.py
-from collections import defaultdict
+from __future__ import absolute_import
 import logging
+from collections import defaultdict
 import BigWorld
 import Math
 import BattleReplay

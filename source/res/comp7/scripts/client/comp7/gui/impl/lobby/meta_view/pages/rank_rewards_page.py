@@ -1,9 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: comp7/scripts/client/comp7/gui/impl/lobby/meta_view/pages/rank_rewards_page.py
+from __future__ import absolute_import
 import logging
+import typing
 from collections import namedtuple
 from functools import partial
-import typing
+from future.utils import lzip
 from shared_utils import first
 from comp7.gui.impl.gen.view_models.views.lobby.enums import MetaRootViews, Rank
 from comp7.gui.impl.gen.view_models.views.lobby.meta_view.pages.rank_rewards_item_model import RankRewardsItemModel
@@ -156,7 +158,7 @@ class RankRewardsPage(PageSubModelPresenter):
         else:
             itemModel.setHasRewardsReceived(rankQuest.isCompleted())
             bonuses, tooltips = packRanksRewardsQuestBonuses(rankQuest, periodicQuest)
-            bonusData = zip(bonuses, tooltips)
+            bonusData = lzip(bonuses, tooltips)
             rank = comp7_shared.getRankEnumValue(division)
             self.__bonusData[rank] = self.__setRewards(itemModel, bonusData)
             return

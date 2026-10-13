@@ -9,6 +9,7 @@ from events_handler import eventHandler
 from gui.battle_control.battle_constants import CANT_SHOOT_ERROR
 from gui.battle_control.components_states.ammo import DefaultComponentAmmoState
 from gui.shared.utils.decorators import ReprInjector
+from items.vehicle_mechanics_types import VehicleMechanicKey, VehicleMechanicKeys
 from physics_shared import getShotPredictionWindow
 from vehicles.components.component_wrappers import ifPlayerVehicle
 from vehicles.components.vehicle_component import VehicleDynamicComponent
@@ -16,7 +17,7 @@ from vehicles.components.vehicle_prefabs import createMechanicPrefabSpawner
 from vehicles.entities import ShotParams
 from vehicles.mechanics.common import IMechanicComponent
 from vehicles.mechanics.mechanic_commands import IMechanicCommandsComponent, createMechanicCommandsEvents
-from vehicles.mechanics.mechanic_constants import VehicleMechanic, VehicleMechanicCommand
+from vehicles.mechanics.mechanic_constants import VehicleMechanicCommand
 from vehicles.mechanics.mechanic_states import createMechanicStatesEvents, IMechanicState, IMechanicStatesComponent
 from vehicles.mechanics.mechanic_helpers import getVehicleDescrMechanicParams
 if typing.TYPE_CHECKING:
@@ -74,8 +75,8 @@ class ChargeShotComponent(VehicleDynamicComponent, IMechanicComponent, IMechanic
         return
 
     @property
-    def vehicleMechanic(self):
-        return VehicleMechanic.CHARGE_SHOT
+    def vehicleMechanicKey(self):
+        return VehicleMechanicKeys.CHARGE_SHOT
 
     @property
     def statesEvents(self):
@@ -107,12 +108,12 @@ class ChargeShotComponent(VehicleDynamicComponent, IMechanicComponent, IMechanic
 
     @eventHandler
     def onCollectAmmoStates(self, ammoStates):
-        ammoStates[self.vehicleMechanic.value] = ChargeShotAmmoState(self.__state)
+        ammoStates[self.vehicleMechanicKey.uniqueName] = ChargeShotAmmoState(self.__state)
 
     @eventHandler
     def onCollectShotParams(self, shotParamsList):
         if self.__state.level >= self.__params.maxLevel and self.__state.timeLeft() <= getShotPredictionWindow(BigWorld.LatencyInfo().value[3]):
-            shotParamsList.append(ShotParams(self.vehicleMechanic, 0, 0, False))
+            shotParamsList.append(ShotParams(self.vehicleMechanicKey, 0, 0, False))
 
     @eventHandler
     def onDiscreteShotDone(self, gunInstallationSlot):
@@ -153,7 +154,7 @@ class ChargeShotComponent(VehicleDynamicComponent, IMechanicComponent, IMechanic
 
     def _collectComponentParams(self, typeDescriptor):
         super(ChargeShotComponent, self)._collectComponentParams(typeDescriptor)
-        self.__params = getVehicleDescrMechanicParams(typeDescriptor, self.vehicleMechanic)
+        self.__params = getVehicleDescrMechanicParams(typeDescriptor, self.vehicleMechanicKey)
 
     def __getCurrentState(self):
         if self.privateState is not None:

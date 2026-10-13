@@ -9,6 +9,7 @@ from gui.shared.items_parameters.base_params import ParamsDictProxy, WeightedPar
 from gui.shared.items_parameters.params_constants import ONE_HUNDRED_PERCENTS, AUTOCANNON_SHOT_DISTANCE
 from gui.shared.items_parameters.functions import isStunParamVisible, getTurboshaftEnginePower, getRocketAccelerationEnginePower, getMaxSteeringLockAngle, getInstalledModuleVehicle, formatCompatibles, getLowChargeReloadTime, getLowChargeShotDispersion
 from gui.shared.items_parameters.params_cache import g_paramsCache
+from gui.shared.gui_items.vehicle_mechanics.mechanic_detectors import hasChassisMechanicBit, ChassisTypes
 from gui.shared.utils import DAMAGE_PROP_NAME, PIERCING_POWER_PROP_NAME, AIMING_TIME_PROP_NAME, STUN_DURATION_PROP_NAME, GUARANTEED_STUN_DURATION_PROP_NAME, AUTO_RELOAD_PROP_NAME, GUN_AUTO_RELOAD, GUN_CAN_BE_AUTO_RELOAD, GUN_AUTO_SHOOT, GUN_CAN_BE_AUTO_SHOOT, GUN_DUAL_GUN, GUN_CAN_BE_DUAL_GUN, RELOAD_TIME_SECS_PROP_NAME, DUAL_GUN_CHARGE_TIME, DUAL_GUN_RATE_TIME, DUAL_ACCURACY_AFTER_SHOT_DISPERSION_ANGLE, BURST_FIRE_RATE, MAX_MUTABLE_DAMAGE_PROP_NAME, MIN_MUTABLE_DAMAGE_PROP_NAME, GUN_CAN_BE_TWIN_GUN, GUN_TWIN_GUN, DISPERSION_RADIUS_PROP_NAME, SHELLS_PROP_NAME, SHELLS_COUNT_PROP_NAME, RELOAD_TIME_PROP_NAME, RELOAD_MAGAZINE_TIME_PROP_NAME, SHELL_RELOADING_TIME_PROP_NAME, SHELL_LOADING_TIME_PROP_NAME
 from helpers import dependency
 from items.components import component_constants
@@ -72,24 +73,16 @@ class ChassisParams(WeightedParam):
         return [ repairTime / 0.57 for repairTime in repairTimes ]
 
     @property
-    def isHydraulic(self):
-        return self._getPrecachedInfo().isHydraulic
-
-    @property
     def isWheeled(self):
-        return self._getPrecachedInfo().isWheeled
-
-    @property
-    def isTrackWithinTrack(self):
-        return self._getPrecachedInfo().isTrackWithinTrack
+        return hasChassisMechanicBit(self._getPrecachedInfo(), ChassisTypes.WHEELED)
 
     @property
     def hasAutoSiege(self):
-        return self._getPrecachedInfo().hasAutoSiege
+        return hasChassisMechanicBit(self._getPrecachedInfo(), ChassisTypes.AUTO_SIEGE)
 
     @property
     def isWheeledOnSpotRotation(self):
-        return self._getPrecachedInfo().isWheeledOnSpotRotation
+        return hasChassisMechanicBit(self._getPrecachedInfo(), ChassisTypes.ON_SPOT_ROTATION_WHEELED)
 
 
 class TurretParams(WeightedParam):

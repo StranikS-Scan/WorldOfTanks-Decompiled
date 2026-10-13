@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: comp7/scripts/client/comp7/gui/Scaleform/daapi/view/lobby/tooltips/comp7_calendar_day_extended_tooltip.py
+from __future__ import absolute_import, division
 from datetime import datetime
 from comp7.gui.Scaleform.daapi.view.lobby.tooltips.comp7_calendar_day_tooltip import Comp7CalendarDayTooltip
 from comp7.gui.comp7_constants import SELECTOR_BATTLE_TYPES

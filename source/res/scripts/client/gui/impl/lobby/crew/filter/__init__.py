@@ -11,7 +11,7 @@ from gui.impl.lobby.crew.filter.state import FilterState
 from gui.shared.gui_items.Vehicle import VEHICLE_TYPES_ORDER
 if typing.TYPE_CHECKING:
     from typing import Iterable, Optional
-    from gui.impl.gen_utils import DynAccessor
+    from frameworks.wulf import PyResAccessor
 VEHICLE_LOCATION_IN_HANGAR = 'in_hangar'
 GRADE_PREMIUM = 'premium'
 GRADE_ELITE = 'elite'

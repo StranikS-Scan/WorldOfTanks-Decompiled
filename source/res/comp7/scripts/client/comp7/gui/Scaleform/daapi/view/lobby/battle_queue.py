@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: comp7/scripts/client/comp7/gui/Scaleform/daapi/view/lobby/battle_queue.py
+from __future__ import absolute_import
 import constants
 from comp7.gui.impl.gen.view_models.views.lobby.enums import SeasonName
 from comp7.gui.impl.lobby.comp7_helpers import comp7_shared, comp7_i18n_helpers
@@ -35,7 +36,7 @@ class Comp7QueueProvider(RandomQueueProvider):
     def getLayoutStr(self):
         pass
 
-    def getIconPath(self, iconlabel):
+    def getIconPath(self, iconLabel):
         return backport.image(R.images.comp7.gui.maps.icons.battleTypes.c_136x136.comp7())
 
     def getTankInfoLabel(self):

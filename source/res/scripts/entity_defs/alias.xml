@@ -69,7 +69,7 @@
         <Type>	OBJECT_ID	</Type>
       </targetID>
       <targetVehicleIndex>
-        <Type>	UINT8	</Type>
+        <Type>	UINT16	</Type>
       </targetVehicleIndex>
       <targetTeam>
         <Type>	UINT8	</Type>
@@ -395,7 +395,7 @@
         <Type>	UINT8	</Type>
       </outfitLevel>
       <index>
-        <Type>	UINT8	</Type>
+        <Type>	UINT16	</Type>
       </index>
       <team>
         <Type>	UINT8	</Type>
@@ -544,9 +544,6 @@
       <crewPerks>
         <Type>	BOOL	</Type>
       </crewPerks>
-      <mapsInDevelopment>
-        <Type>	BOOL	</Type>
-      </mapsInDevelopment>
       <postmortemMode>
         <Type>	UINT8	</Type>
       </postmortemMode>
@@ -711,7 +708,7 @@
         <Type>	VEH_TYPE_CD	</Type>
       </attackerTypeCompactDescr>
       <attackerVehicleIndex>
-        <Type>	UINT8	</Type>
+        <Type>	UINT16	</Type>
       </attackerVehicleIndex>
       <attackerGunBurstCount>
         <Type>	UINT8	</Type>
@@ -3095,7 +3092,7 @@
       </timeInterval>
     </Properties>
   </BATTLE_FURY_STATE>
-  <CONCENTRATION_MODE_STATUS>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
+  <PHASED_MODE_WITH_PROGRESS_STATUS>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
     <Properties>
       <state>
         <Type>	UINT8	</Type>
@@ -3107,7 +3104,7 @@
         <Type>	FLOAT32	</Type>
       </endTime>
     </Properties>
-  </CONCENTRATION_MODE_STATUS>
+  </PHASED_MODE_WITH_PROGRESS_STATUS>
   <WHEELED_DASH_STATUS>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
     <Properties>
       <state>

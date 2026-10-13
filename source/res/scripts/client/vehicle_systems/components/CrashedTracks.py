@@ -1,9 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/vehicle_systems/components/CrashedTracks.py
+from __future__ import absolute_import
 import weakref
-import math_utils
-import Math
+from future.utils import lrange
 import BigWorld
+import Math
+import math_utils
 import CGF
 import Vehicular
 from cgf_script.registration import registerComponent
@@ -42,10 +44,10 @@ class CrashedTracksController(object):
         return
 
     def isLeftTrackBroken(self):
-        return any([ state.isBroken for state in self.__crashedTracks[_TRACK_SIDE.LEFT] ])
+        return any((state.isBroken for state in self.__crashedTracks[_TRACK_SIDE.LEFT]))
 
     def isRightTrackBroken(self):
-        return any([ state.isBroken for state in self.__crashedTracks[_TRACK_SIDE.RIGHT] ])
+        return any((state.isBroken for state in self.__crashedTracks[_TRACK_SIDE.RIGHT]))
 
     def hasDebris(self, isLeft, pairIndex):
         side = _TRACK_SIDE.LEFT if isLeft else _TRACK_SIDE.RIGHT
@@ -187,7 +189,7 @@ class CrashedTracksController(object):
         trackIndices = []
         tracksPresent = self.__vehicleDesc.chassis.tracks is not None
         if (self.__vehicleDesc.chassis.chassisType == CHASSIS_ITEM_TYPE.MONOLITHIC or self.__vehicleDesc.chassis.chassisType == CHASSIS_ITEM_TYPE.TRACK_WITHIN_TRACK) and tracksPresent:
-            trackIndices = list(xrange(len(self.__vehicleDesc.chassis.tracks.trackPairs)))
+            trackIndices = lrange(len(self.__vehicleDesc.chassis.tracks.trackPairs))
         elif tracksPresent:
             trackIndices = [MAIN_TRACK_PAIR_IDX]
         baseTrackRw = self.__dynAccess.findWrite(self.__tracksGo, Vehicular.VehicleTracks)

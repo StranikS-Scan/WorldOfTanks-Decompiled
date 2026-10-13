@@ -21,16 +21,17 @@ from gui.shared.utils.functions import stripColorTagDescrTags
 from helpers import dependency
 from items import vehicles
 from items.artefacts import Equipment, Artefact
-from items.utils import getVehicleShotSpeedByFactors, getVehicleDescriptorWithoutMechanics
+from items.utils import getVehicleShotSpeedByFactors, getVehicleDescriptorWithoutMechanic
+from items.vehicle_mechanics_types import VehicleMechanicKeys
 from math_common import round_py2_style_int
 from post_progression_common import TankSetupLayouts, TankSetupGroupsId
 from skeletons.gui.battle_session import IBattleSessionProvider
 from skeletons.gui.lobby_context import ILobbyContext
-from vehicles.mechanics.mechanic_constants import VehicleMechanic
 from vehicles.mechanics.mechanic_helpers import hasVehicleDescrMechanic
 if TYPE_CHECKING:
     from typing import Tuple, Optional, Type
     from items.vehicle_items import Shell
+    from items.vehicle_mechanics_types import VehicleMechanicKey
     from items.vehicles import VehicleDescriptor
     from gui.battle_control.controllers.consumables.ammo_ctrl import _GunSettings
     from gui.battle_control.arena_info.interfaces import IPrebattleSetupsController
@@ -200,7 +201,7 @@ class _ComplexMechanicParamsBuilder(IShellParamsBuilder):
         return [self._getLabel()] + params
 
     def _getLabel(self):
-        return backport.text(R.strings.ingame_gui.shells_kinds.params.header.dyn(self._mechanic.value)()) if self._mechanic is not None else ''
+        return backport.text(R.strings.ingame_gui.shells_kinds.params.header.dyn(self._mechanic.uniqueName)()) if self._mechanic is not None else ''
 
     def _getDescriptors(self, vDescr):
         return (vDescr, vDescr)
@@ -237,21 +238,21 @@ class _ComplexMechanicParamsBuilder(IShellParamsBuilder):
 
 
 class _LowChargeShotParamsBuilder(_ComplexMechanicParamsBuilder):
-    _mechanic = VehicleMechanic.LOW_CHARGE_SHOT
+    _mechanic = VehicleMechanicKeys.LOW_CHARGE_SHOT
 
     def _getDescriptors(self, vDescr):
         return (vDescr.defaultVehicleDescr, vDescr.siegeVehicleDescr)
 
 
 class _ShellCalibrationParamsBuilder(_ComplexMechanicParamsBuilder):
-    _mechanic = VehicleMechanic.SHELL_CALIBRATION
+    _mechanic = VehicleMechanicKeys.SHELL_CALIBRATION
 
     def _getDescriptors(self, vDescr):
-        return (getVehicleDescriptorWithoutMechanics(vDescr, self._mechanic.value), vDescr)
+        return (getVehicleDescriptorWithoutMechanic(vDescr, self._mechanic), vDescr)
 
 
 class _ShellParamsSwitcherParamsBuilder(_ComplexMechanicParamsBuilder):
-    _mechanic = VehicleMechanic.SHELL_PARAMS_SWITCHER
+    _mechanic = VehicleMechanicKeys.SHELL_PARAMS_SWITCHER
 
     def _getDescriptors(self, vDescr):
         return (vDescr.defaultVehicleDescr, vDescr.siegeVehicleDescr)
@@ -279,22 +280,22 @@ class _ShellParamsSwitcherParamsBuilder(_ComplexMechanicParamsBuilder):
 
 
 class _BustleFeedParamsBuilder(_ComplexMechanicParamsBuilder):
-    _mechanic = VehicleMechanic.BUSTLE_FEED
+    _mechanic = VehicleMechanicKeys.BUSTLE_FEED
 
     def _getDescriptors(self, vDescr):
         if vDescr.hasSiegeMode:
             vDescr = vDescr.defaultVehicleDescr
-        return (getVehicleDescriptorWithoutMechanics(vDescr, self._mechanic.value), vDescr)
+        return (getVehicleDescriptorWithoutMechanic(vDescr, self._mechanic), vDescr)
 
 
 _PARAM_BUILDERS = {ShellMode.LOW_CHARGE_SHOT: _LowChargeShotParamsBuilder,
  ShellMode.SHELL_PARAMS_SWITCHER: _ShellParamsSwitcherParamsBuilder,
  ShellMode.SHELL_CALIBRATION: _ShellCalibrationParamsBuilder,
  ShellMode.BUSTLE_FEED: _BustleFeedParamsBuilder}
-_PARAM_BUILDERS_BY_MECHANIC = {VehicleMechanic.LOW_CHARGE_SHOT: _LowChargeShotParamsBuilder,
- VehicleMechanic.SHELL_PARAMS_SWITCHER: _ShellParamsSwitcherParamsBuilder,
- VehicleMechanic.SHELL_CALIBRATION: _ShellCalibrationParamsBuilder,
- VehicleMechanic.BUSTLE_FEED: _BustleFeedParamsBuilder}
+_PARAM_BUILDERS_BY_MECHANIC = {VehicleMechanicKeys.LOW_CHARGE_SHOT: _LowChargeShotParamsBuilder,
+ VehicleMechanicKeys.SHELL_PARAMS_SWITCHER: _ShellParamsSwitcherParamsBuilder,
+ VehicleMechanicKeys.SHELL_CALIBRATION: _ShellCalibrationParamsBuilder,
+ VehicleMechanicKeys.BUSTLE_FEED: _BustleFeedParamsBuilder}
 
 class _FootnoteCollector(object):
 
@@ -324,14 +325,14 @@ class _FootnoteCollector(object):
 
 
 def _getShellMechanic(descriptor, vehicleDescriptor):
-    if hasVehicleDescrMechanic(vehicleDescriptor, VehicleMechanic.LOW_CHARGE_SHOT):
-        return VehicleMechanic.LOW_CHARGE_SHOT
+    if hasVehicleDescrMechanic(vehicleDescriptor, VehicleMechanicKeys.LOW_CHARGE_SHOT):
+        return VehicleMechanicKeys.LOW_CHARGE_SHOT
     elif descriptor.compactDescr in getShellCalibrationShells(vehicleDescriptor):
-        return VehicleMechanic.SHELL_CALIBRATION
+        return VehicleMechanicKeys.SHELL_CALIBRATION
     elif descriptor.compactDescr in getShellParamsSwitcherModifiedShells(vehicleDescriptor):
-        return VehicleMechanic.SHELL_PARAMS_SWITCHER
+        return VehicleMechanicKeys.SHELL_PARAMS_SWITCHER
     else:
-        return VehicleMechanic.BUSTLE_FEED if descriptor.compactDescr in getBustleFeedModifiedShells(vehicleDescriptor) else None
+        return VehicleMechanicKeys.BUSTLE_FEED if descriptor.compactDescr in getBustleFeedModifiedShells(vehicleDescriptor) else None
 
 
 def _formatPairOfValues(value1, value2, formattingFunc=backport.getNiceNumberFormat):

@@ -1,11 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/doc_loaders/WindowsStoredDataLoader.py
 from __future__ import absolute_import
-import base64
 from future.moves import pickle
 from future.utils import lmap
 import Settings
 from debug_utils import LOG_ERROR, LOG_CURRENT_EXCEPTION
+from py2to3.compat import base64compat
 
 class WindowsStoredDataLoader(object):
 
@@ -31,7 +31,7 @@ class WindowsStoredDataLoader(object):
 
                 def decode(value):
                     try:
-                        return pickle.loads(base64.b64decode(value))
+                        return pickle.loads(base64compat.b64decode(value))
                     except TypeError:
                         LOG_CURRENT_EXCEPTION()
                         return None
@@ -63,7 +63,7 @@ class WindowsStoredDataLoader(object):
                 records = records[:self.__maxRecordLen]
 
                 def encode(value):
-                    return base64.b64encode(pickle.dumps(value))
+                    return base64compat.b64encode(pickle.dumps(value))
 
                 dataSec.writeStrings('record', lmap(encode, records))
             Settings.g_instance.save()

@@ -2,6 +2,7 @@
 # Embedded file name: frontline/scripts/client/frontline/gui/impl/lobby/presenters/frontline_ability_presenter.py
 from __future__ import absolute_import
 import typing
+from future.utils import viewitems
 from frontline.gui.frontline_helpers import AbilitiesTemplates, getFrontlineState
 from frontline.gui.frontline_helpers import getSkillParams
 from frontline.gui.impl.gen.view_models.views.lobby.components.loadout.battle_abilities_setup_model import BattleAbilitiesSetupModel
@@ -183,7 +184,7 @@ class FrontlineAbilityPresenter(LoadoutPresenterBase[BattleAbilitiesSetupModel])
 
     def __fillDetailsSkillLevels(self, levels, skillData):
         skillParams = getSkillParams(skillData)
-        for lvl, skillLevelData in skillData.levels.iteritems():
+        for lvl, skillLevelData in viewitems(skillData.levels):
             levelModel = BattleAbilityLevelModel()
             levels.addViewModel(levelModel)
             levelModel.setId(skillLevelData.eqID)

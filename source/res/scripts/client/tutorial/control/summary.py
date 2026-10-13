@@ -1,5 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/tutorial/control/summary.py
+from __future__ import absolute_import
+from future.utils import listvalues, viewvalues
 from tutorial.control.functional import FunctionalVarSet
 from tutorial.logger import LOG_ERROR, LOG_DEBUG
 
@@ -34,14 +36,14 @@ class FlagSummary(object):
             initial = {}
         self.__flags = {}
         initialGetter = initial.get
-        flagNames.extend(initial.keys())
+        flagNames.extend(initial)
         for name in set(flagNames):
             self.__flags[name] = _Flag(name, initialGetter(name, False))
 
         return
 
     def __repr__(self):
-        return 'FlagSummary({0:s}): {1!r:s}'.format(hex(id(self)), self.__flags.values())
+        return 'FlagSummary({0:s}): {1!r:s}'.format(hex(id(self)), listvalues(self.__flags))
 
     def deactivateFlag(self, flagName):
         LOG_DEBUG('Deactivate flag', flagName)
@@ -68,7 +70,7 @@ class FlagSummary(object):
             self.__flags[flagName] = _Flag(flagName, False)
 
     def getDict(self):
-        filtered = [ flag for flag in self.__flags.itervalues() if flag.store ]
+        filtered = [ flag for flag in viewvalues(self.__flags) if flag.store ]
         return dict(((flag.name, flag.active) for flag in filtered))
 
 

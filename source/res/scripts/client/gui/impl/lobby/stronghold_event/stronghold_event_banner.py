@@ -11,8 +11,8 @@ from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.user_missions.constants.event_banner_state import EventBannerState
 from gui.impl.lobby.stronghold_event.stronghold_event_helpers import getSettings, setSettings
 from gui.impl.lobby.stronghold_event.tooltips.stronghold_event_banner_tooltip import StrongholdEventBannerTooltip
-from gui.impl.lobby.user_missions.hangar_widget.event_banners.base_event_banner import BaseEventBanner
 from gui.impl.lobby.user_missions.hangar_widget.event_banners.event_banners_container import EventBannersContainer
+from gui.impl.lobby.user_missions.hangar_widget.event_banners.standard_event_banner import StandardEventBanner
 from gui.impl.lobby.user_missions.hangar_widget.services import IEventsService
 from gui.shared.event_dispatcher import showStrongholds
 from gui.shared.utils.scheduled_notifications import Notifiable, SimpleNotifier
@@ -21,7 +21,7 @@ from helpers.server_settings import serverSettingsChangeListener
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.lobby_context import ILobbyContext
 
-class StrongholdEventBanner(Notifiable, BaseEventBanner):
+class StrongholdEventBanner(Notifiable, StandardEventBanner):
     NAME = HANGAR_ALIASES.STRONGHOLD_EVENT_BANNER
     __eventsService = dependency.descriptor(IEventsService)
     __lobbyContext = dependency.descriptor(ILobbyContext)

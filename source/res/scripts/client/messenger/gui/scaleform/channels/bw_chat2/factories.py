@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/gui/Scaleform/channels/bw_chat2/factories.py
+from __future__ import absolute_import
 from constants import PREBATTLE_TYPE, ARENA_GUI_TYPE
 from messenger.gui.gameface.channels.GFChannelController import GFChannelController
 from messenger.gui.Scaleform.channels.bw_chat2 import battle_controllers

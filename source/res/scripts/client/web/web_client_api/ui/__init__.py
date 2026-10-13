@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/web/web_client_api/ui/__init__.py
+from __future__ import absolute_import
 from web.web_client_api import w2capi, w2c, W2CSchema
 from web.web_client_api.battle_pass import BattlePassWebApiMixin
 from web.web_client_api.seniority_awards import OpenSeniorityAwardsWebApi

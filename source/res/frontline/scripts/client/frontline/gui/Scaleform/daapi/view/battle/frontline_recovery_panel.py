@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: frontline/scripts/client/frontline/gui/Scaleform/daapi/view/battle/frontline_recovery_panel.py
+from __future__ import absolute_import
 from functools import partial
 from frontline.gui.Scaleform.daapi.view.meta.RecoveryPanelMeta import RecoveryPanelMeta
 from gui.battle_control.avatar_getter import getSoundNotifications
@@ -75,7 +76,7 @@ class FrontlineRecoveryPanel(RecoveryPanelMeta):
             self.as_displayHintS(True, True)
             self.__cancelHideCallback(_CALLBACK_HIDE.HINT)
             self.__hideHintCB = BigWorld.callback(_SHOW_HINT_TIME, self.__hideHint)
-            if avatar_getter.isVehicleAlive:
+            if avatar_getter.isVehicleAlive():
                 self.__playSound(EPIC_SOUND.BF_EB_RECOVERY_CANCELED)
         elif eventID == _EVENT_ID.VEHICLE_RECOVERY_STATE_UPDATE:
             activated, state, _, endOfTimer = value

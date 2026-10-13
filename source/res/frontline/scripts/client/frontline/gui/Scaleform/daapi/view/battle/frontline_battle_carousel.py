@@ -1,7 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: frontline/scripts/client/frontline/gui/Scaleform/daapi/view/battle/frontline_battle_carousel.py
+from __future__ import absolute_import
 import logging
 import weakref
+from future.utils import listvalues
 import BigWorld
 import Event
 from account_helpers.AccountSettings import EPICBATTLE_CAROUSEL_FILTER_1, EPICBATTLE_CAROUSEL_FILTER_2, EPICBATTLE_CAROUSEL_FILTER_CLIENT_2
@@ -307,7 +309,7 @@ class VehicleData(object):
         return None if invID >= len(self.__vehicles) else self.__vehicles[invID]
 
     def __updateRespawnVehicles(self, vehs):
-        self.__vehicles = vehs.values()
+        self.__vehicles = listvalues(vehs)
         carousel = self.__carouselRef()
         if carousel:
             carousel.latePopulate()

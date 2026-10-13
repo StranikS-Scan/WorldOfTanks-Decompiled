@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: comp7/scripts/client/comp7/gui/shared/missions/packers/events.py
+from __future__ import absolute_import
 import typing
 from comp7.gui.impl.gen.view_models.views.lobby.meta_view.pages.quest_card_model import QuestCardModel, CardState
 from comp7.gui.impl.gen.view_models.views.lobby.weekly_quest_model import WeeklyQuestModel

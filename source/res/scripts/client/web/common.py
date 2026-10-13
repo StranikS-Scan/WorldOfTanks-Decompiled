@@ -1,11 +1,13 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/web/common.py
+from __future__ import absolute_import
 import typing
 from gui.battle_pass.battle_pass_constants import ChapterState
 from gui.game_control.wallet import WalletController
 from gui.shared.money import Currency
 from helpers import dependency
-from skeletons.gui.game_control import IBattlePassController
+from skeletons.gui.game_control import IBattlePassController, IWalletController
+from skeletons.gui.shared import IItemsCache
 from skeletons.gui.shared.utils.requesters import IStatsRequester
 if typing.TYPE_CHECKING:
     from typing import Dict
@@ -22,9 +24,10 @@ def formatBalance(stats):
     return balanceData
 
 
-def formatWalletCurrencyStatuses(stats):
-    statuses = {Currency.currencyExternalName(currencyCode):WalletController.STATUS.getKeyByValue(statusCode).lower() for currencyCode, statusCode in stats.currencyStatuses.iteritems() if currencyCode in Currency.ALL}
-    statuses.update({currencyCode:WalletController.STATUS.getKeyByValue(statusCode).lower() for currencyCode, statusCode in stats.dynamicCurrencyStatuses.iteritems()})
+@dependency.replace_none_kwargs(wallet=IWalletController, itemsCache=IItemsCache)
+def formatWalletCurrencyStatuses(wallet=None, itemsCache=None):
+    statuses = {Currency.currencyExternalName(currencyCode):WalletController.STATUS.getKeyByValue(wallet.status).lower() for currencyCode in Currency.ALL}
+    statuses.update({currencyCode:WalletController.STATUS.getKeyByValue(wallet.status).lower() for currencyCode in itemsCache.items.stats.dynamicCurrencies})
     return statuses
 
 

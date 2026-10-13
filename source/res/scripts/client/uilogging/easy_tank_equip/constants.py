@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/uilogging/easy_tank_equip/constants.py
+from __future__ import absolute_import
 from enum import Enum
 from items import ITEM_TYPE_NAMES, ITEM_TYPES
 FEATURE = 'easy_tank_equip'

@@ -6,11 +6,12 @@ import BigWorld
 from constants import RECHARGEABLE_NITRO_STATE
 from gui.shared.utils.decorators import ReprInjector
 from items.components.shared_components import RechargeableNitroParams
+from items.vehicle_mechanics_types import VehicleMechanicKey, VehicleMechanicKeys
 from vehicles.components.vehicle_component import VehicleDynamicComponent
 from vehicles.components.vehicle_prefabs import createMechanicPrefabSpawner
 from vehicles.mechanics.common import IMechanicComponent
 from vehicles.mechanics.mechanic_commands import IMechanicCommandsComponent, createMechanicCommandsEvents
-from vehicles.mechanics.mechanic_constants import VehicleMechanic, VehicleMechanicCommand
+from vehicles.mechanics.mechanic_constants import VehicleMechanicCommand
 from vehicles.mechanics.mechanic_states import IMechanicState, IMechanicStatesComponent, createMechanicStatesEvents
 from vehicles.mechanics.mechanic_helpers import getVehicleDescrMechanicParams
 if typing.TYPE_CHECKING:
@@ -74,8 +75,8 @@ class RechargeableNitroController(VehicleDynamicComponent, IMechanicComponent, I
         return
 
     @property
-    def vehicleMechanic(self):
-        return VehicleMechanic.RECHARGEABLE_NITRO
+    def vehicleMechanicKey(self):
+        return VehicleMechanicKeys.RECHARGEABLE_NITRO
 
     @property
     def commandsEvents(self):
@@ -124,4 +125,4 @@ class RechargeableNitroController(VehicleDynamicComponent, IMechanicComponent, I
 
     def _collectComponentParams(self, typeDescriptor):
         super(RechargeableNitroController, self)._collectComponentParams(typeDescriptor)
-        self.__params = getVehicleDescrMechanicParams(typeDescriptor, self.vehicleMechanic)
+        self.__params = getVehicleDescrMechanicParams(typeDescriptor, self.vehicleMechanicKey)

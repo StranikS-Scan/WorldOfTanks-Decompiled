@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/proto/bw_chat2/unit_chat_cmd.py
+from __future__ import absolute_import
 from messenger.m_constants import PROTO_TYPE
 from messenger.proto.entities import OutChatCommand, ReceivedUnitChatCommand
 from messenger.proto.interfaces import IUnitCommandFactory

@@ -697,7 +697,7 @@ class LootBoxCustomizationsBonusUIPacker(BaseBonusUIPacker):
             if itemName == GUI_ITEM_TYPE_NAMES[GUI_ITEM_TYPE.STYLE]:
                 description = backport.text(R.strings.lootbox_system.bonuses.description.style())
                 vehicleCD = getSingleVehicleForCustomization(custItem)
-                model.setIsInHangar(vehicleCD is not None and custItem.fullInventoryCount() > 0)
+                model.setIsInHangar(vehicleCD is not None and custItem.fullCount() > 0)
                 if custItem.is3D:
                     itemName = 'style_3d'
                     description = backport.text(R.strings.lootbox_system.bonuses.description.style3D())

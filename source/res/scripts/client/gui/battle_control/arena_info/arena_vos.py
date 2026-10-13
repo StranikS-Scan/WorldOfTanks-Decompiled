@@ -24,9 +24,9 @@ from gui.shared.gui_items import Vehicle
 from gui.shared.gui_items.Vehicle import VEHICLE_TAGS, VEHICLE_CLASS_NAME
 from gui.shared.system_factory import registerGameModeArenaInfoKeys, collectGameModeArenaInfoKeys, collectDisplayedClassTagGetter
 from helpers import dependency, i18n
+from items.vehicle_mechanics_types import VehicleMechanicKeys
 from skeletons.gui.server_events import IEventsCache
 from vehicles.mechanics.mechanic_helpers import getVehicleDescrMechanics, getVehicleDescrMechanicParams
-from vehicles.mechanics.mechanic_constants import VehicleMechanic
 _INVALIDATE_OP = settings.INVALIDATE_OP
 _VEHICLE_STATUS = settings.VEHICLE_STATUS
 _PLAYER_STATUS = settings.PLAYER_STATUS
@@ -278,8 +278,8 @@ class VehicleTypeInfoVO(object):
             self.iconName = settings.makeVehicleIconName(vName)
             self.iconPath = settings.makeContourIconSFPath(vName)
             self.role = vehicleType.role
-            if VehicleMechanic.IMPROVED_RAMMING in self.vehicleMechanics:
-                improvedRammingParams = getVehicleDescrMechanicParams(vehicleDescr, VehicleMechanic.IMPROVED_RAMMING)
+            if VehicleMechanicKeys.IMPROVED_RAMMING in self.vehicleMechanics:
+                improvedRammingParams = getVehicleDescrMechanicParams(vehicleDescr, VehicleMechanicKeys.IMPROVED_RAMMING)
                 self.improvedRammingAnimationDamage = improvedRammingParams.damageValueToShowAnimation
         else:
             vehicleName = i18n.makeString(settings.UNKNOWN_VEHICLE_NAME)

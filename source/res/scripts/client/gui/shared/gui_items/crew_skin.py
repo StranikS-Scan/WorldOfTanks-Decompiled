@@ -4,6 +4,7 @@ from __future__ import absolute_import
 from future.utils import viewitems
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import CREW_SKINS_VIEWED
+from constants import SkinInvData
 from helpers import i18n
 from items.components.crew_skins_constants import NO_CREW_SKIN_ID, TANKMAN_SEX, CREW_SKIN_RARITY
 from items import tankmen, parseIntCompactDescr
@@ -39,8 +40,8 @@ class CrewSkin(FittingItem):
         _, _, self.__id = parseIntCompactDescr(intCompactDescr)
         if proxy is not None and proxy.inventory.isSynced():
             self.__freeCount = proxy.inventory.getItems(GUI_ITEM_TYPE.CREW_SKINS, self.__id)
-            allTankmen = proxy.getTankmen()
-            self.__tankmenIDs = {invID for invID, tankman in viewitems(allTankmen) if tankman.skinID != NO_CREW_SKIN_ID and tankman.skinID == self.__id}
+            tankmenSkins = proxy.inventory.getCacheValue(GUI_ITEM_TYPE.CREW_SKINS, {}).get(SkinInvData.OUTFITS, {})
+            self.__tankmenIDs = {invID for invID, skinID in viewitems(tankmenSkins) if skinID != NO_CREW_SKIN_ID and skinID == self.__id}
         return
 
     def getID(self):

@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: comp7/scripts/client/comp7/gui/impl/lobby/tooltips/entry_point_tooltip.py
+from __future__ import absolute_import
 from comp7_core.gui.impl.lobby.tooltips.entry_point_tooltip import Comp7CoreEntryPointTooltip
 from comp7.gui.impl.gen.view_models.views.lobby.enums import SeasonName as Comp7SeasonName
 from comp7.gui.impl.gen.view_models.views.lobby.season_model import SeasonState as Comp7SeasonState

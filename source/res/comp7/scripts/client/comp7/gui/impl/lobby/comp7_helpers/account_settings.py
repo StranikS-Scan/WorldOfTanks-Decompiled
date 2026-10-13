@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: comp7/scripts/client/comp7/gui/impl/lobby/comp7_helpers/account_settings.py
+from __future__ import absolute_import
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import COMP7_WEEKLY_WIDGET_SHOWN_QUEST, COMP7_UI_SECTION, COMP7_UMG_ENTRY_POINT_SEEN
 

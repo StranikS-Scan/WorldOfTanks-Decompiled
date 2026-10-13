@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/gui/Scaleform/view/lobby/ContactsSettingsView.py
+from __future__ import absolute_import
 from gui.Scaleform.locale.MESSENGER import MESSENGER
 from account_helpers.AccountSettings import AccountSettings, CONTACTS
 from helpers import dependency
@@ -47,7 +48,7 @@ class ContactsSettingsView(ContactsSettingsViewMeta):
 
     def __checkIsDataChanged(self):
         newAvailableVal = False
-        for key in self.__startData.iterkeys():
+        for key in self.__startData:
             if self.__startData[key] != self.__currentData[key]:
                 newAvailableVal = True
                 break

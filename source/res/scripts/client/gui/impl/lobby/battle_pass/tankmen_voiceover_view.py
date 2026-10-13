@@ -29,6 +29,7 @@ class TankmenVoiceoverPresenter(ViewComponent[TankmenVoiceoverViewModel]):
     def __init__(self, *args, **kwargs):
         super(TankmenVoiceoverPresenter, self).__init__(R.aliases.battle_pass.TankmenScreen(), TankmenVoiceoverViewModel)
         self.__screenID = kwargs.get('screenID')
+        self.__isActive = False
 
     @property
     def viewModel(self):
@@ -40,22 +41,23 @@ class TankmenVoiceoverPresenter(ViewComponent[TankmenVoiceoverViewModel]):
 
     def activate(self):
         self._subscribe()
+        self.__activateSounds()
 
     def deactivate(self):
         self._unsubscribe()
+        self.__deactivateSounds()
 
     def createToolTipContent(self, event, contentID):
         return CrewMemberSkillTooltip(event.getArgument('name'), event.getArgument('isZero'), event.getArgument('hasZeroPerk')) if contentID == R.views.mono.battle_pass.tooltips.crew_member_skill() else super(TankmenVoiceoverPresenter, self).createToolTipContent(event, contentID)
 
     def _onLoading(self, *args, **kwargs):
         super(TankmenVoiceoverPresenter, self)._onLoading(*args, **kwargs)
-        switchHangarOverlaySoundFilter(on=True)
+        self.__activateSounds()
         self.__battlePass.tankmenCacheUpdate()
         self.__fillModel()
 
     def _finalize(self):
-        switchHangarOverlaySoundFilter(on=False)
-        self.soundManager.playInstantSound(self._getStopSound())
+        self.__deactivateSounds()
         super(TankmenVoiceoverPresenter, self)._finalize()
 
     def _getEvents(self):
@@ -67,6 +69,19 @@ class TankmenVoiceoverPresenter(ViewComponent[TankmenVoiceoverViewModel]):
 
     def _getStopSound(self):
         return BattlePassSounds.HOLIDAY_VOICEOVER_STOP if self.__battlePass.isHoliday() else BattlePassSounds.VOICEOVER_STOP
+
+    def __activateSounds(self):
+        if self.__isActive:
+            return
+        self.__isActive = True
+        switchHangarOverlaySoundFilter(on=True)
+
+    def __deactivateSounds(self):
+        if not self.__isActive:
+            return
+        self.__isActive = False
+        switchHangarOverlaySoundFilter(on=False)
+        self.soundManager.playInstantSound(self._getStopSound())
 
     def __showShop(self, args):
         tankmanGroupName = args.get('tankmanGroupName')

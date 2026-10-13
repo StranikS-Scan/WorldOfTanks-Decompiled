@@ -1,9 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/web/client_web_api/api.py
+from __future__ import absolute_import
 import json
 import time
-import weakref
 import typing
+import weakref
 if typing.TYPE_CHECKING:
     from typing import Callable, Dict, Optional, Tuple, Union
     from web.client_web_api.common import WebEventSender

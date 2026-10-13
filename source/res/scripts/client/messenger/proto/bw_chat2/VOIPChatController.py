@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/proto/bw_chat2/VOIPChatController.py
+from __future__ import absolute_import
 import BigWorld
 import BattleReplay
 import VOIP
@@ -34,6 +35,7 @@ class VOIPChatController(IVOIPChatController):
         voipMgr.onInitialized += self.__initResponse
         voipMgr.onFailedToConnect += self.__failedResponse
         voipMgr.onCaptureDevicesUpdated += self.__captureDevicesResponse
+        voipMgr.onCaptureDeviceSet += self.__onCaptureDeviceSet
         voipMgr.onPlayerSpeaking += self.__onPlayerSpeaking
         voipMgr.onJoinedChannel += self.__onJoinedChannel
         voipMgr.onLeftChannel += self.__onLeftChannel
@@ -45,6 +47,7 @@ class VOIPChatController(IVOIPChatController):
         voipMgr.onInitialized -= self.__initResponse
         voipMgr.onFailedToConnect -= self.__failedResponse
         voipMgr.onCaptureDevicesUpdated -= self.__captureDevicesResponse
+        voipMgr.onCaptureDeviceSet -= self.__onCaptureDeviceSet
         voipMgr.onPlayerSpeaking -= self.__onPlayerSpeaking
         voipMgr.onJoinedChannel -= self.__onJoinedChannel
         voipMgr.onLeftChannel -= self.__onLeftChannel
@@ -63,9 +66,6 @@ class VOIPChatController(IVOIPChatController):
 
     def isVivox(self):
         return VOIP.getVOIPManager().getAPI() == VOIP_SUPPORTED_API.VIVOX
-
-    def isYY(self):
-        return VOIP.getVOIPManager().getAPI() == VOIP_SUPPORTED_API.YY
 
     def invalidateInitialization(self):
         if self.isVOIPEnabled() and not BattleReplay.isPlaying() and not self.isReady():
@@ -86,12 +86,12 @@ class VOIPChatController(IVOIPChatController):
     @adisp_async
     def requestCaptureDevices(self, firstTime=False, callback=None):
         voipMgr = VOIP.getVOIPManager()
-        if voipMgr.getVOIPDomain() == '':
+        if not voipMgr.isLiveKit() and voipMgr.getVOIPDomain() == '':
             LOG_WARNING('RequestCaptureDevices. Vivox is not supported')
             callback([])
             return
         if not self.isReady():
-            LOG_WARNING('RequestCaptureDevices. Vivox has not been initialized')
+            LOG_WARNING('RequestCaptureDevices. VOIP has not been initialized')
             callback([])
             return
         options = self.settingsCore.options
@@ -108,34 +108,47 @@ class VOIPChatController(IVOIPChatController):
     def isCurrentChannelEnabled(self):
         return VOIP.getVOIPManager().isCurrentChannelEnabled()
 
-    def enableCurrentChannel(self, isEnableChannel):
-        VOIP.getVOIPManager().enableCurrentChannel(isEnableChannel)
+    def enableCurrentChannel(self, enabled):
+        VOIP.getVOIPManager().enableCurrentChannel(enabled)
 
     @adisp_process
     def __initialize(self):
         serverSettings = getattr(BigWorld.player(), 'serverSettings', {})
-        if serverSettings and 'voipDomain' in serverSettings:
-            domain = serverSettings['voipUserDomain']
-            server = serverSettings['voipDomain']
-        else:
-            domain = ''
-            server = ''
-        yield self.__initializeSettings(domain, server)
+        domain = ''
+        server = ''
+        livekitServer = ''
+        if serverSettings:
+            domain = serverSettings.get('voipUserDomain', domain)
+            server = serverSettings.get('voipDomain', server)
+            livekitServer = serverSettings.get('liveKitServerUrl', livekitServer)
+        yield self.__initializeSettings(domain, server, livekitServer)
         yield self.requestCaptureDevices(True)
 
     @adisp_async
-    def __initializeSettings(self, domain, server, callback):
-        if self.isReady():
+    def __initializeSettings(self, domain, server, livekitServer, callback):
+        voipMgr = VOIP.getVOIPManager()
+        desiredLiveKit = livekitServer != ''
+        backendChanged = voipMgr.isInitialized() and desiredLiveKit != voipMgr.isLiveKit()
+        if self.isReady() and not backendChanged:
             self.__applyUserSettings()
             callback(True)
             return
-        if domain == '':
-            LOG_WARNING('Initialize. Vivox is not supported')
+        if domain == '' and livekitServer == '':
+            LOG_WARNING('Initialize. Vivox and LiveKit is not supported')
             return
         self.__callbacks.append(callback)
-        voipMgr = VOIP.getVOIPManager()
-        if voipMgr.isNotInitialized():
-            voipMgr.initialize(domain, server)
+        if backendChanged and not voipMgr.isInitializing():
+            while len(self.__callbacks) > 1:
+                self.__callbacks.pop(0)(False)
+
+            voipMgr.finalise()
+            voipMgr.initialize(domain, server, livekitServer)
+        elif livekitServer != '':
+            if not voipMgr.isInitialized() and not voipMgr.isInitializing():
+                voipMgr.finalise()
+                voipMgr.initialize(domain, server, livekitServer)
+        elif voipMgr.isNotInitialized():
+            voipMgr.initialize(domain, server, livekitServer)
         self.__applyUserSettings()
 
     def __applyUserSettings(self):
@@ -153,11 +166,17 @@ class VOIPChatController(IVOIPChatController):
 
     def __failedResponse(self):
         self.invalidateInitialization()
+        while self.__callbacks:
+            self.__callbacks.pop(0)(self.isReady())
 
     def __captureDevicesResponse(self):
         devices = VOIP.getVOIPManager().getCaptureDevices()
         while self.__captureDevicesCallbacks:
             self.__captureDevicesCallbacks.pop(0)(devices)
+
+    def __onCaptureDeviceSet(self, deviceName, success):
+        if not success:
+            g_messengerEvents.voip.onCaptureDeviceSetFailed(deviceName)
 
     def __onPlayerSpeaking(self, accountDBID, isSpeak):
         if self.isVOIPEnabled():

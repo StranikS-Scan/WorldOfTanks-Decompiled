@@ -1,8 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/advanced_achievements_client/getters.py
-from collections import namedtuple
+from __future__ import absolute_import
 import typing
 import sys
+from builtins import range
+from collections import namedtuple
 from achievements20.cache import ROOT_ACHIEVEMENT_IDS, ALLOWED_ACHIEVEMENT_TYPES, getCache
 from advanced_achievements_client import items
 from advanced_achievements_client.constants import AchievementType, NEAREST_REQUIRED_COUNT, BONUS_PRIORITY_MAP
@@ -71,19 +73,18 @@ class _NearestCollector(object):
         topIndex = 0
         topAchievement = achievements[0]
         for index, achievement in enumerate(achievements):
-            if self.__compareAchievements(topAchievement, achievement) > 0:
+            if self.__compareAchievementsKey(topAchievement) > self.__compareAchievementsKey(achievement):
                 topIndex = index
                 topAchievement = achievement
 
         return topIndex
 
     def __sortAchievements(self, achievements):
-        return sorted(achievements, cmp=self.__compareAchievements)
+        return sorted(achievements, key=self.__compareAchievementsKey)
 
     @staticmethod
-    def __compareAchievements(a, b):
-        percentCmp = int(b.getProgress().getAsPercent() * 100) - int(a.getProgress().getAsPercent() * 100)
-        return percentCmp or a.getID() - b.getID()
+    def __compareAchievementsKey(a):
+        return (-int(a.getProgress().getAsPercent() * 100), a.getID())
 
 
 BonusTuple = namedtuple('BonusTuple', ('achievement', 'bonus'))
@@ -106,7 +107,7 @@ class _RewardManager(object):
 
     @classmethod
     def __sortBonusTuples(cls, bonusTuples):
-        bonusTuples.sort(key=lambda bonusTuple: BONUS_PRIORITY_MAP.get(bonusTuple.bonus.getName(), sys.maxint))
+        bonusTuples.sort(key=lambda bonusTuple: BONUS_PRIORITY_MAP.get(bonusTuple.bonus.getName(), sys.maxsize))
         return bonusTuples
 
     @classmethod
@@ -185,7 +186,7 @@ def getAchievementsEarnedBeforeTime(dossierDescr, requestedTimestamp):
             _, stage, timestamp = dossierDescr[achievementCategory].get(achievementId)
             if timestamp != 0 and stage > 0 and timestamp > requestedTimestamp:
                 if not requestedTimestamp:
-                    for currStage in xrange(1, stage):
+                    for currStage in range(1, stage):
                         achievements.append((achievementId,
                          achievementCategory,
                          currStage,

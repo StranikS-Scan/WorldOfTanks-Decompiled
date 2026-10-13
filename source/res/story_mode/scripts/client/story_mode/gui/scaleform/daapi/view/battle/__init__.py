@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: story_mode/scripts/client/story_mode/gui/scaleform/daapi/view/battle/__init__.py
+from __future__ import absolute_import
 import BigWorld
 from constants import ARENA_GUI_TYPE
 from frameworks.wulf import WindowLayer

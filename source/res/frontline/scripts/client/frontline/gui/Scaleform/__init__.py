@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: frontline/scripts/client/frontline/gui/Scaleform/__init__.py
+from __future__ import absolute_import
 from frontline.constants.aliases import FrontlineHangarAliases
 from gui.shared.system_factory import registerBattleTooltipsBuilders, registerLobbyTooltipsBuilders, registerLifecycleHandledSubViews
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS as _TOOLTIPS

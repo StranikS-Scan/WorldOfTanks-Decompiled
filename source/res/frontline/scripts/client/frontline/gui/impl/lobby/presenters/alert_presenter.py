@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: frontline/scripts/client/frontline/gui/impl/lobby/presenters/alert_presenter.py
+from __future__ import absolute_import
 from frontline.gui.frontline_helpers import isHangarAvailable, getFrontlineState
 from frontline.gui.impl.gen.view_models.views.lobby.components.alert_message_model import AlertMessageModel
 from CurrentVehicle import g_currentVehicle, g_currentPreviewVehicle

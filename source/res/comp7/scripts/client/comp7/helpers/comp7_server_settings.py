@@ -1,9 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: comp7/scripts/client/comp7/helpers/comp7_server_settings.py
+from __future__ import absolute_import
 import copy
 import logging
 import typing
-from shared_utils import makeTupleByDict
+from future.utils import viewitems
 import BattleReplay
 from Event import Event
 from Event import EventManager
@@ -11,6 +12,7 @@ from comp7_common.comp7_constants import Configs
 from comp7_ranks_common import Comp7Division
 from helpers import dependency
 from helpers.server_settings import settingsBlock
+from shared_utils import makeTupleByDict
 from skeletons.gui.lobby_context import ILobbyContext
 if typing.TYPE_CHECKING:
     from typing import Dict, List, Tuple
@@ -53,7 +55,7 @@ class Comp7RanksConfig(settingsBlock('Comp7RanksConfig', ('ranks', 'ranksOrder',
             data['divisions'] = cls.__dictDivisionsToComp7Divisions(divisions)
         divisionsByRank = data.get('divisionsByRank')
         if divisionsByRank:
-            for rankID, divisions in divisionsByRank.iteritems():
+            for rankID, divisions in viewitems(divisionsByRank):
                 data['divisionsByRank'][rankID] = cls.__dictDivisionsToComp7Divisions(divisions)
 
         return data

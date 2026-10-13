@@ -1,11 +1,12 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: comp7/scripts/client/comp7/gui/impl/lobby/user_missions/hangar_widget/event_banners/comp7_tournament_event_banner.py
+from __future__ import absolute_import
 from comp7.gui.impl.lobby.tooltips.entry_point_tooltip_tournament import Comp7TournamentEntryPointTooltip
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.user_missions.constants.event_banner_state import EventBannerState
-from gui.impl.lobby.user_missions.hangar_widget.event_banners.base_event_banner import BaseEventBanner
 from gui.impl.lobby.user_missions.hangar_widget.event_banners.event_banners_container import EventBannersContainer
+from gui.impl.lobby.user_missions.hangar_widget.event_banners.standard_event_banner import StandardEventBanner
 from gui.prb_control import prbEntityProperty
 from helpers import dependency
 from helpers.CallbackDelayer import CallbackDelayer
@@ -13,7 +14,7 @@ from helpers.ingame_tournament_helper import IngameTournamentState, IngameTourna
 from helpers.time_utils import ONE_MINUTE, getCurrentLocalServerTimestamp
 from skeletons.gui.game_control import IIngameTournamentController
 
-class Comp7TournamentEventBanner(BaseEventBanner):
+class Comp7TournamentEventBanner(StandardEventBanner):
     _TOURNAMENT_TYPE = None
     _BORDER_COLOR = '#FFCF5F'
     __tournamentStateBannerStateMap = {IngameTournamentState.INTRO: EventBannerState.INTRO,

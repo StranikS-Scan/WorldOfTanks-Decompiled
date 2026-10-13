@@ -1,5 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/proto/bw/bw_chat_string_utils.py
+from __future__ import absolute_import
+from builtins import range
 from external_strings_utils import unicode_from_utf8
 from gui.Scaleform.locale.MESSENGER import MESSENGER
 from messenger.proto.bw.errors import I18nError
@@ -7,7 +9,7 @@ from messenger.proto.bw.limits import CHANNEL_LIMIT
 
 def validateUserRoomName(name):
     name = name.strip()
-    if not name or len(unicode_from_utf8(name)[0]) not in xrange(CHANNEL_LIMIT.NAME_MIN_LENGTH, CHANNEL_LIMIT.NAME_MAX_LENGTH + 1):
+    if not name or len(unicode_from_utf8(name)[0]) not in range(CHANNEL_LIMIT.NAME_MIN_LENGTH, CHANNEL_LIMIT.NAME_MAX_LENGTH + 1):
         error = I18nError(MESSENGER.CLIENT_ERROR_LIMIT_CHANNEL_INVALID_LENGTH, int32Arg1=CHANNEL_LIMIT.NAME_MIN_LENGTH, int32Arg2=CHANNEL_LIMIT.NAME_MAX_LENGTH)
         return (name, error)
     else:
@@ -22,7 +24,7 @@ def validateUserRoomPwd(password, isRetype=False):
             key = MESSENGER.CLIENT_ERROR_CHANNEL_PASSWORD_EMPTY
         return ('', I18nError(key))
     else:
-        pwdRange = xrange(CHANNEL_LIMIT.PWD_MIN_LENGTH, CHANNEL_LIMIT.PWD_MAX_LENGTH + 1)
+        pwdRange = range(CHANNEL_LIMIT.PWD_MIN_LENGTH, CHANNEL_LIMIT.PWD_MAX_LENGTH + 1)
         if not isRetype and len(unicode_from_utf8(password)[0]) not in pwdRange:
             error = I18nError(MESSENGER.CLIENT_ERROR_LIMIT_PWD_INVALID_LENGTH, int32Arg1=CHANNEL_LIMIT.PWD_MIN_LENGTH, int32Arg2=CHANNEL_LIMIT.PWD_MAX_LENGTH)
             return ('', error)

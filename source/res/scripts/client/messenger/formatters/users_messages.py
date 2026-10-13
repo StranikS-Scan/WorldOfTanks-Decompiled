@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/formatters/users_messages.py
+from __future__ import absolute_import
 from gui import GUI_SETTINGS, makeHtmlString
 from helpers import i18n
 from messenger.m_constants import USER_ACTION_ID, MESSENGER_I18N_FILE

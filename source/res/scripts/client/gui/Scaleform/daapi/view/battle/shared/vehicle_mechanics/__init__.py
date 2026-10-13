@@ -36,6 +36,7 @@ def getViewSettings():
      ComponentSettings(BATTLE_VIEW_ALIASES.SHELL_CALIBRATION_WIDGET, mechanic_widgets.ShellCalibrationMechanicWidget, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.AUTORELOADER_SURGE_WIDGET, mechanic_widgets.AutoreloaderSurgeMechanicWidget, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.BUSTLE_FEED_WIDGET, mechanic_widgets.BustleFeedMechanicWidget, ScopeTemplates.DEFAULT_SCOPE),
+     ComponentSettings(BATTLE_VIEW_ALIASES.SPEC_BOOST_MODE_WIDGET, mechanic_widgets.SpecBoostModeWidget, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.DECORATIVE_CROSSHAIR_PANEL, panels.DecorativeCrosshairPanel, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.CONCENTRATION_DECORATIVE_CROSSHAIR, decorative_crosshairs.ConcentrationDecorativeCrosshair, ScopeTemplates.DEFAULT_SCOPE),
      ComponentSettings(BATTLE_VIEW_ALIASES.ACCURACY_DECORATIVE_CROSSHAIR, decorative_crosshairs.AccuracyDecorativeCrosshair, ScopeTemplates.DEFAULT_SCOPE),

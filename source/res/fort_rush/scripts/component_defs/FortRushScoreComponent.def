@@ -1,0 +1,14 @@
+<FortRushScoreComponent.def>
+  <Parent>	ScoreComponent	</Parent>
+  <Properties>
+    <pointsPerZonesOwned>
+      <Type>	ARRAY	  <of>	INT8	</of>
+      </Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </pointsPerZonesOwned>
+  </Properties>
+  <ofEntity>
+    <ArenaInfo></ArenaInfo>
+  </ofEntity>
+  <DefaultKeyName>	ScoreComponent	</DefaultKeyName>
+</FortRushScoreComponent.def>

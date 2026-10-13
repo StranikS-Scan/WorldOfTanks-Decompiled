@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/tutorial/control/__init__.py
-from abc import ABCMeta, abstractmethod
+from __future__ import absolute_import
 import BigWorld
 from helpers.aop import Weaver
 from tutorial.logger import LOG_ERROR
@@ -66,28 +66,23 @@ class ContentQuery(TutorialProxyHolder):
 
 
 class ControlsFactory(object):
-    __meta__ = ABCMeta
 
     def __init__(self, funcEffects, contentQueries, customFuncConditions=None):
         self._funcEffects = funcEffects
         self._contentQueries = contentQueries
         self._customFuncConditions = customFuncConditions or {}
 
-    @abstractmethod
     def createBonuses(self, completed):
-        pass
+        raise NotImplementedError
 
-    @abstractmethod
     def createSoundPlayer(self):
-        pass
+        raise NotImplementedError
 
-    @abstractmethod
     def createFuncScene(self, sceneModel):
-        pass
+        raise NotImplementedError
 
-    @abstractmethod
     def createFuncChapterCtx(self):
-        pass
+        raise NotImplementedError
 
     def createContentQuery(self, name):
         result = ContentQuery()

@@ -1,7 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/uilogging/performance/critical/loggers.py
-import BigWorld
+from __future__ import absolute_import
 import logging
+import BigWorld
 from uilogging.base.logger import _BaseLogger as Logger
 from uilogging.constants import DEFAULT_LOGGER_NAME
 from uilogging.performance.critical.constants import Features, Groups, LogActions

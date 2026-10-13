@@ -488,6 +488,10 @@ class BADGE(object):
     SUFFIX_BADGE_223 = '#badge:suffix/badge_223'
     BADGE_224 = '#badge:badge_224'
     BADGE_224_DESCR = '#badge:badge_224_descr'
+    BADGE_248 = '#badge:badge_248'
+    BADGE_248_DESCR = '#badge:badge_248_descr'
+    BADGE_249 = '#badge:badge_249'
+    BADGE_249_DESCR = '#badge:badge_249_descr'
     BADGE_225 = '#badge:badge_225'
     BADGE_225_DESCR = '#badge:badge_225_descr'
     BADGE_226 = '#badge:badge_226'
@@ -530,6 +534,12 @@ class BADGE(object):
     BADGE_244 = '#badge:badge_244'
     BADGE_244_DESCR = '#badge:badge_244_descr'
     SUFFIX_BADGE_244 = '#badge:suffix/badge_244'
+    BADGE_245 = '#badge:badge_245'
+    BADGE_245_DESCR = '#badge:badge_245_descr'
+    BADGE_246 = '#badge:badge_246'
+    BADGE_246_DESCR = '#badge:badge_246_descr'
+    BADGE_247 = '#badge:badge_247'
+    BADGE_247_DESCR = '#badge:badge_247_descr'
     BADGE_ENUM = (BADGE_0,
      BADGE_0_DESCR,
      BADGE_1,
@@ -983,6 +993,10 @@ class BADGE(object):
      BADGE_223_DESCR,
      BADGE_224,
      BADGE_224_DESCR,
+     BADGE_248,
+     BADGE_248_DESCR,
+     BADGE_249,
+     BADGE_249_DESCR,
      BADGE_225,
      BADGE_225_DESCR,
      BADGE_226,
@@ -1020,7 +1034,13 @@ class BADGE(object):
      BADGE_243,
      BADGE_243_DESCR,
      BADGE_244,
-     BADGE_244_DESCR)
+     BADGE_244_DESCR,
+     BADGE_245,
+     BADGE_245_DESCR,
+     BADGE_246,
+     BADGE_246_DESCR,
+     BADGE_247,
+     BADGE_247_DESCR)
     BADGE_ALL_SHORT_ENUM = (BADGE_10_SHORT,
      BADGE_11_SHORT,
      BADGE_12_SHORT,
@@ -1256,6 +1276,8 @@ class BADGE(object):
      BADGE_222_DESCR,
      BADGE_223_DESCR,
      BADGE_224_DESCR,
+     BADGE_248_DESCR,
+     BADGE_249_DESCR,
      BADGE_225_DESCR,
      BADGE_226_DESCR,
      BADGE_227_DESCR,
@@ -1274,7 +1296,10 @@ class BADGE(object):
      BADGE_241_DESCR,
      BADGE_242_DESCR,
      BADGE_243_DESCR,
-     BADGE_244_DESCR)
+     BADGE_244_DESCR,
+     BADGE_245_DESCR,
+     BADGE_246_DESCR,
+     BADGE_247_DESCR)
     BADGE_ALL_DESCR_LONG_ENUM = (BADGE_102_DESCR_LONG,)
 
     @classmethod

@@ -12,7 +12,8 @@ from gui.Scaleform.genConsts.MECHANICS_WIDGET_CONST import MECHANICS_WIDGET_CONS
 from gui.veh_mechanics.battle.updaters.hotkey_updaters import HotKeysViewUpdater
 from gui.veh_mechanics.battle.updaters.mechanics.mechanic_passenger_updater import VehicleMechanicPassengerUpdater
 from gui.veh_mechanics.battle.updaters.mechanics.mechanic_states_updater import VehicleMechanicStatesUpdater
-from vehicles.mechanics.mechanic_constants import VehicleMechanic, VehicleMechanicCommand
+from items.vehicle_mechanics_types import VehicleMechanicKeys
+from vehicles.mechanics.mechanic_constants import VehicleMechanicCommand
 from vehicles.mechanics.mechanic_states import IMechanicStatesListenerLogic
 if typing.TYPE_CHECKING:
     from TargetDesignatorController import TargetDesignatorState
@@ -45,4 +46,4 @@ class TargetDesignatorMechanicWidget(TargetDesignatorWidgetMeta, ContainersListe
             self.as_setTimeS(state.timeLeft())
 
     def _getViewUpdaters(self):
-        return [VehicleMechanicPassengerUpdater(VehicleMechanic.TARGET_DESIGNATOR, self), VehicleMechanicStatesUpdater(VehicleMechanic.TARGET_DESIGNATOR, self), HotKeysViewUpdater(list(self._HOT_KEY_MAP.keys()), self)]
+        return [VehicleMechanicPassengerUpdater(VehicleMechanicKeys.TARGET_DESIGNATOR, self), VehicleMechanicStatesUpdater(VehicleMechanicKeys.TARGET_DESIGNATOR, self), HotKeysViewUpdater(list(self._HOT_KEY_MAP.keys()), self)]

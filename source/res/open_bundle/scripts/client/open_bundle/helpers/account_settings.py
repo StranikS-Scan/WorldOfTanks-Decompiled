@@ -2,7 +2,7 @@
 # Embedded file name: open_bundle/scripts/client/open_bundle/helpers/account_settings.py
 from __future__ import absolute_import
 from account_helpers import AccountSettings
-from account_helpers.AccountSettings import OPEN_BUNDLE_REMINDER_SHOWN, OPEN_BUNDLE_NOTIFICATIONS, OPEN_BUNDLE_START_SHOWN, OPEN_BUNDLE_INTRO_SHOWN
+from account_helpers.AccountSettings import OPEN_BUNDLE_ENTRY_POINT_SHOWN, OPEN_BUNDLE_INTRO_SHOWN, OPEN_BUNDLE_NOTIFICATIONS, OPEN_BUNDLE_REMINDER_SHOWN, OPEN_BUNDLE_START_SHOWN
 
 def getNotificationSettings():
     defaults = AccountSettings.getNotificationDefault(OPEN_BUNDLE_NOTIFICATIONS)
@@ -12,6 +12,10 @@ def getNotificationSettings():
 
 def getIntroSettings():
     return AccountSettings.getSettings(OPEN_BUNDLE_INTRO_SHOWN)
+
+
+def getEntryPointSettings():
+    return AccountSettings.getSettings(OPEN_BUNDLE_ENTRY_POINT_SHOWN)
 
 
 def isNotificationShown(sectionName, bundleID):
@@ -49,3 +53,15 @@ def setIntroShown(bundleID):
     if not isIntroShown(bundleID):
         settings.add(bundleID)
         AccountSettings.setSettings(OPEN_BUNDLE_INTRO_SHOWN, settings)
+
+
+def isEntryPointShown(bundleID):
+    return bundleID in getEntryPointSettings()
+
+
+def setEntryPointShown(bundleID):
+    if not bundleID or isEntryPointShown(bundleID):
+        return
+    settings = getEntryPointSettings()
+    settings.add(bundleID)
+    AccountSettings.setSettings(OPEN_BUNDLE_ENTRY_POINT_SHOWN, settings)

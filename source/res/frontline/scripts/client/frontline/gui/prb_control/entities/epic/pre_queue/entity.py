@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: frontline/scripts/client/frontline/gui/prb_control/entities/epic/pre_queue/entity.py
+from __future__ import absolute_import
 import BigWorld
 from frontline.gui.prb_control.entities.epic.pre_queue.actions_validator import EpicActionsValidator
 from frontline.gui.prb_control.entities.epic.pre_queue.ctx import EpicQueueCtx

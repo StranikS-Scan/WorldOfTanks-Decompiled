@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/persistent_data_cache/version.py
+from __future__ import absolute_import
 import typing
 import constants
 from helpers import version

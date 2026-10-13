@@ -1,6 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/login/social_networks/WebBridge.py
-import base64
 import socket
 from urllib import urlencode, quote_plus
 import BigWorld
@@ -11,6 +10,7 @@ from gui import GUI_SETTINGS
 from gui.Scaleform.Waiting import Waiting
 from helpers import dependency
 from helpers import getLanguageCode
+from py2to3.compat import base64compat
 from skeletons.connection_mgr import IConnectionManager
 
 class _STATUS(object):
@@ -77,7 +77,7 @@ class WebBridge(object):
         if isExternal:
             params['external'] = self.__preferences['login_type']
         if GUI_SETTINGS.socialNetworkLogin['encryptToken'] and not isRegistration:
-            params['token_secret'] = base64.urlsafe_b64encode(self.__dataServer.tokenSecret)
+            params['token_secret'] = base64compat.urlsafe_b64encode(self.__dataServer.tokenSecret)
         return params
 
     @staticmethod

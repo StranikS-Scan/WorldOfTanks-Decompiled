@@ -9,7 +9,6 @@ if typing.TYPE_CHECKING:
     from gui.impl.pub.main_view import MainView
 
 class MainWindow(WindowImpl):
-    __slots__ = ()
 
     def __init__(self, content=None):
         super(MainWindow, self).__init__(WindowFlags.MAIN_WINDOW, content=content)

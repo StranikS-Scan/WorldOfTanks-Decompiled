@@ -1,9 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: comp7/scripts/client/comp7/gui/game_control/comp7_controller.py
+from __future__ import absolute_import
 import itertools
 import logging
 import time
 from collections import namedtuple
+from future.utils import lrange, viewitems, viewvalues
 import adisp
 import typing
 import Event
@@ -101,7 +103,7 @@ class Comp7Controller(Notifiable, SeasonProvider, IComp7Controller, IGlobalListe
             self.__roleEquipmentsCache = {}
             equipmentsCache = vehicles.g_cache.equipments()
             roleEquipmentsConfig = dict(self.getModeSettings().roleEquipments, **self.getModeSettings().roleEquipmentsByVehicle)
-            for role, equipmentConfig in roleEquipmentsConfig.iteritems():
+            for role, equipmentConfig in viewitems(roleEquipmentsConfig):
                 if equipmentConfig['equipmentID'] is not None:
                     startCharge = equipmentConfig['startCharge']
                     startLevel = len([ levelCost for levelCost in equipmentConfig['cost'] if levelCost <= startCharge ])
@@ -329,7 +331,7 @@ class Comp7Controller(Notifiable, SeasonProvider, IComp7Controller, IGlobalListe
         else:
             seasons = self.__comp7Config.seasons
             now = time.time()
-            for seasonId, season in seasons.iteritems():
+            for seasonId, season in viewitems(seasons):
                 startPreannounce = season.get('startPreannounce')
                 if startPreannounce is not None:
                     return startPreannounce < now < season['startSeason'] and seasonId
@@ -345,7 +347,7 @@ class Comp7Controller(Notifiable, SeasonProvider, IComp7Controller, IGlobalListe
             return
         else:
             season = self.__comp7Config.seasons[seasonID]
-            cycleID, cycle = season['cycles'].items()[0]
+            cycleID, cycle = next(iter(viewitems(season['cycles'])))
             cycleInfo = (cycle['start'],
              cycle['end'],
              seasonID,
@@ -433,7 +435,7 @@ class Comp7Controller(Notifiable, SeasonProvider, IComp7Controller, IGlobalListe
             return self.__comp7Config.squadRankRestriction.get(squadSize, 0)
 
     def getPlatoonMaxRankRestriction(self):
-        return max(self.__comp7Config.squadRankRestriction.itervalues())
+        return max(viewvalues(self.__comp7Config.squadRankRestriction))
 
     def getStatsSeasonsKeys(self):
         return self.__STATS_SEASONS_KEYS
@@ -491,7 +493,7 @@ class Comp7Controller(Notifiable, SeasonProvider, IComp7Controller, IGlobalListe
 
     def __updateArenaBans(self):
         arenaBans = self.__itemsCache.items.stats.restrictions.get(RESTRICTION_TYPE.ARENA_BAN, {})
-        comp7Bans = tuple((b for b in arenaBans.itervalues() if ARENA_BONUS_TYPE.COMP7 in b.get('bonusTypes', ())))
+        comp7Bans = tuple((b for b in viewvalues(arenaBans) if ARENA_BONUS_TYPE.COMP7 in b.get('bonusTypes', ())))
         if comp7Bans:
             ban = max(comp7Bans, key=lambda b: b.get('expiryTime', 0))
             expiryTime = ban['expiryTime']
@@ -535,15 +537,15 @@ class Comp7Controller(Notifiable, SeasonProvider, IComp7Controller, IGlobalListe
 
     def __updateVehicleCopiesInfo(self):
         dsu = self.__vehicleCopiesInfo = DisjointSet()
-        for baseCD, copiesCDs in self.__comp7Config.vehicleCopiesInfo.iteritems():
+        for baseCD, copiesCDs in viewitems(self.__comp7Config.vehicleCopiesInfo):
             dsu.add(baseCD)
             for copyCD in copiesCDs:
                 dsu.add(copyCD)
                 dsu.union(baseCD, copyCD)
 
     def __clearEquipmentOverrides(self):
-        for equipment, originalParams in self.__equipmentCacheOverrides.iteritems():
-            for param, value in originalParams.iteritems():
+        for equipment, originalParams in viewitems(self.__equipmentCacheOverrides):
+            for param, value in viewitems(originalParams):
                 setattr(equipment, param, value)
 
         self.__equipmentCacheOverrides.clear()
@@ -556,8 +558,8 @@ class Comp7Controller(Notifiable, SeasonProvider, IComp7Controller, IGlobalListe
         poiEquipmentsConfig = self.getModeSettings().poiEquipments
         self.__clearEquipmentOverrides()
         for overrideConfig in (roleEquipmentsConfig, poiEquipmentsConfig):
-            for equipmentConfig in overrideConfig.itervalues():
-                for param, value in equipmentConfig['overrides'].iteritems():
+            for equipmentConfig in viewvalues(overrideConfig):
+                for param, value in viewitems(equipmentConfig['overrides']):
                     equipment = equipmentsCache[equipmentConfig['equipmentID']]
                     if hasattr(equipment, param):
                         originalValue = getattr(equipment, param)
@@ -760,7 +762,7 @@ class _LeaderboardDataProvider(object):
                 callback(None)
                 return
         (startPage, endPage), (startRecord, endRecord) = self.__getRanges(limit, offset, self.__pageSize)
-        pageIDs = range(startPage, endPage + 1)
+        pageIDs = lrange(startPage, endPage + 1)
         result = yield self.__requestPages(pageIDs)
         if result:
             records = list(itertools.chain.from_iterable((self.__cachedPages.get(pID, ()) for pID in pageIDs)))
@@ -788,7 +790,7 @@ class _LeaderboardDataProvider(object):
         if self.__nextUpdateTimestamp and self.__nextUpdateTimestamp <= getServerUTCTime():
             self.__clearCache()
         if not self.__eventsController.hasEvents():
-            _logger.warn('Empty events on controller while requesting pages. Reloading.')
+            _logger.warning('Empty events on controller while requesting pages. Reloading.')
             yield self.__eventsController.getEvents(onlySettings=True)
             if not self.__eventsController.hasEvents():
                 _logger.error('Leaderboard pages request failed. Pages ids: %s', pageIDs)

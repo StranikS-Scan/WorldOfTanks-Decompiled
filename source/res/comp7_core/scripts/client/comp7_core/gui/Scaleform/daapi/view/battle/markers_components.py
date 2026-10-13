@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: comp7_core/scripts/client/comp7_core/gui/Scaleform/daapi/view/battle/markers_components.py
+from __future__ import absolute_import, division
 import BigWorld
 from chat_commands_consts import INVALID_TARGET_ID
 from gui.Scaleform.daapi.view.battle.shared.component_marker.markers_components import MinimapMarkerComponent

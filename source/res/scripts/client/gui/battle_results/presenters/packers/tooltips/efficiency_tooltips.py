@@ -15,7 +15,7 @@ if typing.TYPE_CHECKING:
     from gui.battle_results.stats_ctrl import BattleResults
     from gui.battle_results.reusable import _ReusableInfo
     from gui.battle_results.reusable.shared import VehicleSummarizeInfo
-    from gui.impl.gen_utils import DynAccessor
+    from frameworks.wulf import PyResAccessor
     from gui.impl.gen.view_models.views.lobby.battle_results.tooltips.efficiency_tooltip_model import EfficiencyTooltipModel
 _STR_PATH = R.strings.battle_results.common
 _IMG_PATH = R.images.gui.maps.icons.library.efficiency.statsParameters

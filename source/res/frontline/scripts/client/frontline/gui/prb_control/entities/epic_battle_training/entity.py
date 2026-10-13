@@ -1,6 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: frontline/scripts/client/frontline/gui/prb_control/entities/epic_battle_training/entity.py
+from __future__ import absolute_import
 from functools import partial
+from future.utils import lmap, viewitems
 import BigWorld
 from frontline.gui.prb_control.entities.epic_battle_training.actions_validator import TrainingActionsValidator, TrainingIntroActionsValidator
 from frontline.gui.prb_control.entities.epic_battle_training.ctx import EpicTrainingSettingsCtx
@@ -182,8 +184,8 @@ class EpicBattleTrainingEntity(LegacyEntity):
         hasTeam1 = PREBATTLE_ROSTER.ASSIGNED_IN_TEAM1 in result
         hasTeam2 = PREBATTLE_ROSTER.ASSIGNED_IN_TEAM2 in result
         hasUnassigned = PREBATTLE_ROSTER.UNASSIGNED in result
-        for key, roster in rosters.iteritems():
-            accounts = map(lambda accInfo: prb_items.PlayerPrbInfo(accInfo[0], entity=self, roster=key, **accInfo[1]), roster.iteritems())
+        for key, roster in viewitems(rosters):
+            accounts = lmap(lambda accInfo, key=key: prb_items.PlayerPrbInfo(accInfo[0], entity=self, roster=key, **accInfo[1]), viewitems(roster))
             team, assigned = decodeRoster(key)
             if assigned:
                 if hasTeam1 and team == 1:

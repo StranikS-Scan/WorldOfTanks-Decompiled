@@ -1,0 +1,27 @@
+<HWSoulsCollectorComponent.def>
+  <CellMethods></CellMethods>
+  <ClientMethods></ClientMethods>
+  <Properties>
+    <capacity>
+      <Type>	UINT32	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </capacity>
+    <collected>
+      <Type>	UINT32	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </collected>
+    <vehiclesInRadius>
+      <Type>	ARRAY	  <of>	OBJECT_ID	</of>
+      </Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </vehiclesInRadius>
+    <isCampActivated>
+      <Type>	BOOL	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </isCampActivated>
+  </Properties>
+  <ofEntity>
+    <Entity></Entity>
+  </ofEntity>
+  <DefaultKeyName>	hwSoulsCollector	</DefaultKeyName>
+</HWSoulsCollectorComponent.def>

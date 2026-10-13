@@ -1,10 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/AvatarInputHandler/commands/fl_random_reserves.py
+from __future__ import absolute_import
+import CommandMapping
 from AvatarInputHandler.commands.input_handler_command import InputHandlerCommand
 from ReservesEvents import randomReservesEvents
 from helpers import dependency
 from skeletons.gui.battle_session import IBattleSessionProvider
-import CommandMapping
 
 class FLRandomReserves(InputHandlerCommand):
     __guiSessionProvider = dependency.descriptor(IBattleSessionProvider)

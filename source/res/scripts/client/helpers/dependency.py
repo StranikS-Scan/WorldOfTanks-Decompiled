@@ -1,9 +1,12 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/helpers/dependency.py
+from __future__ import absolute_import
 import functools
 import inspect
 import logging
 import typing
+from future.utils import viewitems, viewvalues
+from past.builtins import basestring
 from ids_generators import SequenceIDGenerator
 from py2to3.backport.inspect import getargspec
 from soft_exception import SoftException
@@ -55,20 +58,20 @@ class replace_none_kwargs(object):
     def __init__(self, **services):
         super(replace_none_kwargs, self).__init__()
         self.__services = {}
-        for name, class_ in services.iteritems():
+        for name, class_ in viewitems(services):
             if not inspect.isclass(class_):
                 raise DependencyError('Value is not class, {}'.format(class_))
             self.__services[name] = class_
 
     def __call__(self, func):
         spec = getargspec(func)
-        for name, _ in self.__services.iteritems():
+        for name in self.__services:
             if name not in spec.args:
                 raise DependencyError('Argument {} is not found in {}'.format(name, func))
 
         @functools.wraps(func)
         def wrapper(*args, **kwargs):
-            for serviceName, clazz in self.__services.iteritems():
+            for serviceName, clazz in viewitems(self.__services):
                 actual = kwargs.get(serviceName)
                 if actual is None:
                     kwargs[serviceName] = instance(clazz)
@@ -100,7 +103,7 @@ class DependencyManager(object):
 
     def addInstance(self, class_, obj, finalizer=None):
         self._validate(class_)
-        self.__services[class_] = _DependencyItem(order=_orderGen.next(), service=obj, finalizer=finalizer)
+        self.__services[class_] = _DependencyItem(order=_orderGen.nextSequenceID, service=obj, finalizer=finalizer)
         _logger.debug('Instance of service is added: %r->%r', class_, obj)
 
     def replaceInstance(self, class_, obj, finalizer=None, force=True):
@@ -127,7 +130,7 @@ class DependencyManager(object):
         config(self)
 
     def clear(self):
-        services = sorted(self.__services.itervalues(), key=lambda item: item.order(), reverse=True)
+        services = sorted(viewvalues(self.__services), key=lambda item: item.order(), reverse=True)
         for service in services:
             service.finalize()
 
@@ -213,7 +216,7 @@ class _RuntimeItem(_DependencyItem):
         if not self.__isCreatorInvoked:
             self.__isCreatorInvoked = True
             self._service = self.__creator()
-            self._order = _orderGen.next()
+            self._order = _orderGen.nextSequenceID
         return self._service
 
     def clear(self):

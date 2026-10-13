@@ -1,7 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/account_helpers/client_epic_meta_game.py
-from functools import partial
+from __future__ import absolute_import
 import AccountCommands
+from functools import partial
 from debug_utils import LOG_DEBUG_DEV
 from shared_utils.account_helpers.diff_utils import synchronizeDicts
 

@@ -16,9 +16,10 @@ from gui.veh_mechanics.battle.updaters.mechanics.mechanic_commands_updater impor
 from gui.veh_mechanics.battle.updaters.mechanics.mechanic_life_cycle_updater import VehicleMechanicLifeCycleUpdater
 from gui.veh_mechanics.battle.updaters.mechanics.mechanic_passenger_updater import VehicleMechanicPassengerUpdater
 from gui.veh_mechanics.battle.updaters.mechanics.mechanic_states_updater import VehicleMechanicStatesUpdater
+from items.vehicle_mechanics_types import VehicleMechanicKeys
 from vehicles.mechanics.gun_mechanics.propellant_gun import DEFAULT_PROPELLANT_GUN_MECHANIC_STATE
 from vehicles.mechanics.mechanic_commands import IMechanicCommandsListenerLogic
-from vehicles.mechanics.mechanic_constants import VehicleMechanic, VehicleMechanicCommand
+from vehicles.mechanics.mechanic_constants import VehicleMechanicCommand
 from vehicles.mechanics.mechanic_states import IMechanicStatesListenerLogic
 if typing.TYPE_CHECKING:
     from gui.veh_mechanics.battle.updaters.updaters_common import IViewUpdater
@@ -66,10 +67,10 @@ class PropellantGunMechanicWidget(PropellantGunWidgetMeta, ContainersListener, I
         self.__invalidateState(isInstantly=True)
 
     def _getViewUpdaters(self):
-        return [VehicleMechanicLifeCycleUpdater(VehicleMechanic.PROPELLANT_GUN, self),
-         VehicleMechanicPassengerUpdater(VehicleMechanic.PROPELLANT_GUN, self),
-         VehicleMechanicCommandsUpdater(VehicleMechanic.PROPELLANT_GUN, self),
-         VehicleMechanicStatesUpdater(VehicleMechanic.PROPELLANT_GUN, self),
+        return [VehicleMechanicLifeCycleUpdater(VehicleMechanicKeys.PROPELLANT_GUN, self),
+         VehicleMechanicPassengerUpdater(VehicleMechanicKeys.PROPELLANT_GUN, self),
+         VehicleMechanicCommandsUpdater(VehicleMechanicKeys.PROPELLANT_GUN, self),
+         VehicleMechanicStatesUpdater(VehicleMechanicKeys.PROPELLANT_GUN, self),
          HotKeysViewUpdater(list(self._HOT_KEY_MAP.keys()), self),
          CurrentShellDamageUpdater(self),
          CrosshairTypeUpdater(self)]

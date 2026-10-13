@@ -10,7 +10,7 @@ from gui.impl import backport
 from gui.impl.gen import R
 if typing.TYPE_CHECKING:
     from typing import Optional
-    from gui.impl.gen_utils import DynAccessor
+    from frameworks.wulf import PyResAccessor
     from dog_tags_common.config.dog_tag_framework import ComponentDefinition
 _logger = logging.getLogger(__name__)
 

@@ -18,9 +18,9 @@ from gui.impl.pub.view_component import ViewComponent
 
 class LobbyHeader(ViewComponent[DefaultModel]):
 
-    def __init__(self):
+    def __init__(self, layoutID=R.views.mono.hangar.header()):
         self._currentVehicleFilter = CurrentVehicleFilterComponent()
-        super(LobbyHeader, self).__init__(R.views.mono.hangar.header(), DefaultModel)
+        super(LobbyHeader, self).__init__(layoutID, DefaultModel)
 
     @property
     def viewModel(self):

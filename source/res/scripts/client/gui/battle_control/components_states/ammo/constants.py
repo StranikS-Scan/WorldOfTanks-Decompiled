@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/gui/battle_control/components_states/ammo/constants.py
 from __future__ import absolute_import
 from enum import Enum, IntEnum
-from vehicles.mechanics.mechanic_constants import VehicleMechanic
+from items.vehicle_mechanics_types import VehicleMechanicKeys
 
 class AmmoShootPossibility(IntEnum):
     NOT_DEFINED = 0
@@ -18,8 +18,8 @@ class ActiveAmmoMode(IntEnum):
 
 class ShellMode(Enum):
     NOT_DEFINED = ''
-    LOW_CHARGE_SHOT = VehicleMechanic.LOW_CHARGE_SHOT.value
-    BUSTLE_FEED = VehicleMechanic.BUSTLE_FEED.value
-    SHELL_PARAMS_SWITCHER = VehicleMechanic.SHELL_PARAMS_SWITCHER.value
-    AUXILIARY_ROCKET_LAUNCHER = VehicleMechanic.AUXILIARY_ROCKET_LAUNCHER.value
-    SHELL_CALIBRATION = VehicleMechanic.SHELL_CALIBRATION.value
+    LOW_CHARGE_SHOT = VehicleMechanicKeys.LOW_CHARGE_SHOT.uniqueName
+    BUSTLE_FEED = VehicleMechanicKeys.BUSTLE_FEED.uniqueName
+    SHELL_PARAMS_SWITCHER = VehicleMechanicKeys.SHELL_PARAMS_SWITCHER.uniqueName
+    AUXILIARY_ROCKET_LAUNCHER = VehicleMechanicKeys.AUXILIARY_ROCKET_LAUNCHER.uniqueName
+    SHELL_CALIBRATION = VehicleMechanicKeys.SHELL_CALIBRATION.uniqueName

@@ -1,8 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/tutorial/cache.py
+from __future__ import absolute_import
+from future.utils import viewitems
+import constants
 from helpers.local_cache import FileLocalCache
 from tutorial.settings import TUTORIAL_VERSION
-import constants
 
 class TutorialCache(FileLocalCache):
 
@@ -35,7 +37,7 @@ class TutorialCache(FileLocalCache):
             self.__cache[space] = defaultValues
         if init is not None:
             cache = self.__current()
-            for flag, value in init.iteritems():
+            for flag, value in viewitems(init):
                 if flag in cache:
                     cache[flag] = value
 

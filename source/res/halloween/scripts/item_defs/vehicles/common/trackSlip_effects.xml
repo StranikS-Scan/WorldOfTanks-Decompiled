@@ -1,0 +1,18 @@
+<trackSlip_effects.xml>
+  <effects>
+    <nullTrackEffect>
+      <selector>
+        <type>	union	</type>
+        <selector>
+          <type>	union	</type>
+          <constantsGroup>	small	</constantsGroup>
+          <selector>
+            <type>	effect	</type>
+            <name>	particles/null.eff	</name>
+            <effectHP>	chassis	</effectHP>
+          </selector>
+        </selector>
+      </selector>
+    </nullTrackEffect>
+  </effects>
+</trackSlip_effects.xml>

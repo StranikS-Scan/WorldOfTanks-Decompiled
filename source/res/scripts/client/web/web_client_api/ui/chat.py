@@ -1,5 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/web/web_client_api/ui/chat.py
+from __future__ import absolute_import
+from past.builtins import basestring
 from messenger.m_constants import PROTO_TYPE
 from messenger.proto import proto_getter
 from messenger.storage import UsersStorage, MessengerStorageDescriptor

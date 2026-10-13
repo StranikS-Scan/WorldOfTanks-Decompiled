@@ -4,7 +4,7 @@ from __future__ import absolute_import
 import typing
 from vehicles.components.component_interfaces import IVehicleSlotComponent
 if typing.TYPE_CHECKING:
-    from vehicles.mechanics.mechanic_constants import VehicleMechanic
+    from items.vehicle_mechanics_types import VehicleMechanicVariant, VehicleMechanicKey
 
 class IMechanicComponentLogic(object):
 
@@ -13,9 +13,16 @@ class IMechanicComponentLogic(object):
         raise NotImplementedError
 
     @property
-    def vehicleMechanic(self):
+    def vehicleMechanicKey(self):
         raise NotImplementedError
 
 
 class IMechanicComponent(IVehicleSlotComponent, IMechanicComponentLogic):
     pass
+
+
+class IMechanicWithVariants(object):
+
+    @property
+    def mechanicVariant(self):
+        raise NotImplementedError

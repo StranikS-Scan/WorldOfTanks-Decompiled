@@ -11,7 +11,7 @@ from gui.shared.system_factory import collectDynamicUmgInfoPagePresenters
 class InfoPageView(ViewComponent[InfoPageModel]):
 
     def __init__(self, settings, *args, **kwargs):
-        super(InfoPageView, self).__init__(settings.layoutID, InfoPageModel, args, kwargs)
+        super(InfoPageView, self).__init__(settings.layoutID, InfoPageModel, *args, **kwargs)
 
     @property
     def viewModel(self):

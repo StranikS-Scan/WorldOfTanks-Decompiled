@@ -171,7 +171,7 @@ class StaticDeathZone(LimitedVisibilityEntity):
 
     def _createMarker(self):
         if self._marker is None and self.isAvatarReady:
-            self._marker = _DeathZoneMarkerHandler(self)
+            self._marker = DeathZoneMarkerHandler(self)
         return
 
     def _removeMarker(self):
@@ -188,7 +188,7 @@ class StaticDeathZone(LimitedVisibilityEntity):
         return
 
 
-class _DeathZoneMarkerHandler(object):
+class DeathZoneMarkerHandler(object):
     sessionProvider = dependency.descriptor(IBattleSessionProvider)
     SEARCH_RADIUS_EXTENSION = 2.0
 
@@ -231,6 +231,9 @@ class _DeathZoneMarkerHandler(object):
 
     def onVehicleLeftZone(self, vehID):
         self._vehiclesInZone.discard(vehID)
+
+    def getBorderModel(self, borderID):
+        pass
 
     def _tickUpdate(self):
         player = BigWorld.player()

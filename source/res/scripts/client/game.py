@@ -121,6 +121,7 @@ def init(scriptConfig, engineConfig, userPreferences):
         gameLoading.step()
         manager = dependency.configure(services_config.getClientServicesConfig)
         g_systemEvents.onDependencyConfigReady(manager)
+        g_systemEvents.onDependenciesReady()
         SoundGroups.g_instance.startListeningGUISpaceChanges()
         gameLoading.step()
         gui_personality.init()

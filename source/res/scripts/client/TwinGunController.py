@@ -6,12 +6,12 @@ from constants import DUPLET_GUN_INDEXES_TUPLE
 from events_handler import eventHandler
 from gui.shared.utils.decorators import ReprInjector
 from gui.battle_control.components_states.ammo import DefaultComponentAmmoState
+from items.vehicle_mechanics_types import VehicleMechanicKey, VehicleMechanicKeys
 from vehicle_appearance.constants import AppearanceState
 from vehicles.components.component_wrappers import ifAppearanceReady
 from vehicles.components.vehicle_component import VehicleDynamicComponent
 from vehicles.entities import ShotParams
 from vehicles.mechanics.common import IMechanicComponentLogic
-from vehicles.mechanics.mechanic_constants import VehicleMechanic
 from vehicles.parts.guns.twin_shoot import ITwinShootGunComponent, createTwinShootingEvents
 if typing.TYPE_CHECKING:
     from vehicles.parts.guns.twin_shoot import ITwinShootingEvents
@@ -37,8 +37,8 @@ class TwinGunController(VehicleDynamicComponent, ITwinShootGunComponent, IMechan
         self._initComponent()
 
     @property
-    def vehicleMechanic(self):
-        return VehicleMechanic.TWIN_GUN
+    def vehicleMechanicKey(self):
+        return VehicleMechanicKeys.TWIN_GUN
 
     @property
     def shootingEvents(self):
@@ -79,11 +79,11 @@ class TwinGunController(VehicleDynamicComponent, ITwinShootGunComponent, IMechan
 
     @eventHandler
     def onCollectAmmoStates(self, ammoStates):
-        ammoStates[self.vehicleMechanic.value] = TwinGunAmmoState(self.shotsCount)
+        ammoStates[self.vehicleMechanicKey.uniqueName] = TwinGunAmmoState(self.shotsCount)
 
     @eventHandler
     def onCollectShotParams(self, shotParamsList):
-        shotParamsList.append(ShotParams(self.vehicleMechanic, 0, 0, False))
+        shotParamsList.append(ShotParams(self.vehicleMechanicKey, 0, 0, False))
 
     def _onAppearanceReady(self):
         super(TwinGunController, self)._onAppearanceReady()

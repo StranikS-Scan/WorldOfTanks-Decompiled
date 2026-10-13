@@ -64,7 +64,7 @@ class _GuiColorsLoader(object):
         return outcome
 
     def __overrideTags(self, rootSection, baseHash):
-        keys = baseHash.keys()
+        keys = list(baseHash)
         defaultExists = self.DEFAULT_TAG in keys
         for key in keys:
             if key == self.GROUP:

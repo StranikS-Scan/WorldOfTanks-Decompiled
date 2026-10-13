@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: frontline/scripts/client/frontline/gui/impl/lobby/views/frontline_battle_results_view.py
+from __future__ import absolute_import
 from frontline.constants.aliases import FrontlineHangarAliases
 from frameworks.wulf import ViewSettings, WindowFlags, ViewFlags
 from gui.Scaleform.framework.entities.View import ViewKey

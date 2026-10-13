@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/web/web_client_api/request/spa_id.py
+from __future__ import absolute_import
 from helpers import dependency
 from skeletons.connection_mgr import IConnectionManager
 from web.web_client_api import w2c, W2CSchema

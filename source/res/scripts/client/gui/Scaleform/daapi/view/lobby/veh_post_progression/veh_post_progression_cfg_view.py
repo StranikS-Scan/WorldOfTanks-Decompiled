@@ -51,7 +51,7 @@ class VehiclePostProgressionCfgView(VehiclePostProgressionViewMeta):
     def _addListeners(self):
         super(VehiclePostProgressionCfgView, self)._addListeners()
         g_clientUpdateManager.addCallbacks({'stats.freeXP': self._updateData,
-         'cache.mayConsumeWalletResources': self._updateData})
+         'cache.isResourcesConsumptionAllowed': self._updateData})
         self.__cmpBasket.onChange += self.__onCmpBasketChange
         self.__cmpBasket.onSwitchChange += self._updateData
         progressionInjectView = self._progressionInject.getInjectView()

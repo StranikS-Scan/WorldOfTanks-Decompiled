@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: comp7_light/scripts/client/comp7_light/gui/impl/lobby/platoon/view/comp7_light_platoon_welcome_view.py
+from __future__ import absolute_import
 from comp7_light.gui.comp7_light_constants import SELECTOR_BATTLE_TYPES
 from comp7_light.gui.prb_control.entities import comp7_light_prb_helpers
 from constants import QUEUE_TYPE

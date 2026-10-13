@@ -1,7 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/helpers/fixed_dict.py
-from collections import namedtuple
+from __future__ import absolute_import
 import typing
+from collections import namedtuple
 RoleEquipmentState = namedtuple('RoleEquipmentState', ('level', 'progress'))
 StatusWithTimeInterval = namedtuple('StatusWithTimeInterval', ('statusID', 'startTime', 'endTime'))
 TimeInterval = namedtuple('TimeInterval', ('startTime', 'endTime'))

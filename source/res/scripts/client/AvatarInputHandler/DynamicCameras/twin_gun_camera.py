@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/AvatarInputHandler/DynamicCameras/twin_gun_camera.py
+from __future__ import absolute_import
 import BigWorld
 from BigWorld import TwinGunAimingSystem, TwinGunAimingSystemRemote
 from AvatarInputHandler.DynamicCameras.SniperCamera import SniperCamera

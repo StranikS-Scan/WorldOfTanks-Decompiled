@@ -166,7 +166,7 @@ def packCompensationData(books, rewardsArray, tooltipData, itemsCache=None):
         reward.setValue(str(value['amount']))
         reward.setName('crewBooks')
         reward.setType('crewBooks')
-        reward.setLabel(backport.text(R.strings.crew_books.items.dyn(key).noNationUppercaseName()))
+        reward.setLabel(backport.text(R.strings.crew_books.c_items.dyn(key).noNationUppercaseName()))
         reward.setTooltipId(key)
         reward.setTooltipContentId(str(R.views.lobby.crew.tooltips.ConversionTooltip()))
         rewardsArray.addViewModel(reward)

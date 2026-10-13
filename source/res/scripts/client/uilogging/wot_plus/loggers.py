@@ -1,7 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/uilogging/wot_plus/loggers.py
-from enum import Enum
+from __future__ import absolute_import
 import logging
+from enum import Enum
 from typing import TYPE_CHECKING
 from constants import WoTPlusBonusType, PREMIUM_TYPE
 from helpers import dependency

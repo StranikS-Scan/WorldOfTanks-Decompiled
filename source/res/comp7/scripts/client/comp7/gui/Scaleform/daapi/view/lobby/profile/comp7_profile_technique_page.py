@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: comp7/scripts/client/comp7/gui/Scaleform/daapi/view/lobby/profile/comp7_profile_technique_page.py
+from __future__ import absolute_import, division
 from comp7.gui.Scaleform.daapi.view.lobby.profile.comp7_profile_helper import getBattleHandlers
 from comp7.gui.Scaleform.daapi.view.lobby.profile.profile_utils import COMP7_VEHICLE_STATISTICS_LAYOUT
 from comp7.gui.Scaleform.daapi.view.lobby.profile.seasons_manager import getComp7SeasonManagers
@@ -9,6 +10,7 @@ from gui.Scaleform.locale.PROFILE import PROFILE
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.impl import backport
 from gui.impl.gen import R
+from math_common import round_py2_style_int
 
 class Comp7ProfileTechniquePage(ProfileTechniquePage):
 
@@ -43,7 +45,7 @@ class Comp7ProfileTechniquePage(ProfileTechniquePage):
     def _unpackVehicleParams(self, vehParams):
         if self._battlesType == PROFILE_DROPDOWN_KEYS.COMP7:
             battlesCount, wins, xp, prestigePoints = vehParams
-            avgPrestigePoints = round(float(prestigePoints) / float(battlesCount))
+            avgPrestigePoints = round_py2_style_int(float(prestigePoints) / float(battlesCount))
             return (battlesCount,
              wins,
              xp,

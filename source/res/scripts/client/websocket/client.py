@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/websocket/client.py
+from __future__ import absolute_import
 import logging
 import typing
 import BigWorld
@@ -103,13 +104,13 @@ class _Reconnection(object):
 
     def __onFailed(self, server, code, reason):
         _logger.debug('Reconnection. Server connection to %s is failed: server = %s, code = %d, reason = %s', self.__client.url, server, code, reason)
-        delay = self.__expBackOff.next()
+        delay = self.__expBackOff.nextDelay()
         _logger.debug('Reconnection. Re-connection to %s will be invoked after %d seconds', self.__client.url, delay)
         self.__callbackID = BigWorld.callback(delay, self.__doNextOpen)
 
     def __onClosed(self, server, code, reason):
         _logger.debug('Reconnection. Server connection with %s is closed: server = %s, code = %d, reason = %s', self.__client.url, server, code, reason)
-        delay = self.__expBackOff.next()
+        delay = self.__expBackOff.nextDelay()
         _logger.debug('Reconnection. Re-connection to %s will be invoked after %d seconds', self.__client.url, delay)
         self.__callbackID = BigWorld.callback(delay, self.__doNextOpen)
 

@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/storage/local_cache.py
-import types
+from __future__ import absolute_import
 import Event
 from helpers import dependency
 from helpers.local_cache import FileLocalCache, PickleIO, CryptIO
@@ -34,7 +34,7 @@ class SimpleCachedStorage(object):
         return self._getCachedData()
 
     def restoreFromCache(self, record):
-        if not isinstance(record, types.ListType):
+        if not isinstance(record, list):
             return
         restored = self._setCachedData(record)
         self.onRestoredFromCache(restored)
@@ -75,7 +75,7 @@ class RevCachedStorage(SimpleCachedStorage):
         return record
 
     def restoreFromCache(self, record):
-        if not isinstance(record, types.ListType):
+        if not isinstance(record, list):
             return
         else:
             self.__rev = self.__getServerRev()

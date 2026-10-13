@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: comp7/scripts/client/comp7/gui/server_events/bonuses.py
+from __future__ import absolute_import
 import logging
 from comp7_common_const import COMP7_WEEKLY_QUESTS_COMPLETE_TOKEN_REGEXP
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS

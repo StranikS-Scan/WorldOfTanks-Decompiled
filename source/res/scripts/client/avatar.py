@@ -88,6 +88,7 @@ from gui.shared.items_parameters import isAutoShootGun
 from gun_rotation_shared import decodeGunAngles
 from helpers import bound_effects, dependency, uniprof, EffectsList
 from items import ITEM_TYPE_INDICES, getTypeOfCompactDescr, vehicles
+from items.vehicle_mechanics_types import VehicleMechanicKeys
 from material_kinds import EFFECT_MATERIALS
 from messenger.m_constants import PROTO_TYPE
 from messenger.proto import proto_getter
@@ -104,7 +105,6 @@ from skeletons.helpers.statistics import IStatisticsCollector
 from soft_exception import SoftException
 from streamIDs import RangeStreamIDCallbacks, STREAM_ID_CHAT_MAX, STREAM_ID_CHAT_MIN, STREAM_ID_AVATAR_BATTLE_RESULTS, STREAM_ID_AVATAR_EMPTY_BATTLE_RESULTS
 from vehicles.entities import ShotParams
-from vehicles.mechanics.mechanic_constants import VehicleMechanic
 from vehicles.mechanics.mechanic_helpers import getPlayerVehicleMechanicComponent
 from vehicle_systems.stricted_loading import makeCallbackWeak
 from messenger import MessengerEntry
@@ -917,7 +917,8 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
         self.__vehicles.add(vehicle)
         AvatarObserver.vehicle_onAppearanceReady(self, vehicle)
         if vehicle.id != self.playerVehicleID:
-            vehicle.targetCaps = [1]
+            if not vehicle.appearance.isObserver:
+                vehicle.targetCaps = [1]
         else:
             _logger.debug('[INIT_STEPS] Avatar.vehicle_onAppearanceReady %d', vehicle.id)
             vehicle.isPlayerVehicle = True
@@ -1201,7 +1202,7 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
         else:
             vehicle = BigWorld.entity(vehicleID)
             ammoStates = vehicle.events.collectAmmoStates() if vehicle is not None else {}
-            extraShotState = ammoStates.get(VehicleMechanic.EXTRA_SHOT_CLIP.value)
+            extraShotState = ammoStates.get(VehicleMechanicKeys.EXTRA_SHOT_CLIP.uniqueName)
             if timeLeft == baseTime if extraShotState is None else extraShotState.isReloadAfterShot(timeLeft, baseTime):
                 self.__gunReloadCommandWaitEndTime = 0.0
             ammoCtrl = self.guiSessionProvider.shared.ammo
@@ -2276,7 +2277,7 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
         vehicleRotationFactor *= vehicleRotationFactor
         turretRotationFactor = turretRotationSpeed * gunShotDispersionFactorsTurretRotation
         turretRotationFactor *= turretRotationFactor
-        autoShootGunCtrl = getPlayerVehicleMechanicComponent(VehicleMechanic.AUTO_SHOOT_GUN)
+        autoShootGunCtrl = getPlayerVehicleMechanicComponent(VehicleMechanicKeys.AUTO_SHOOT_GUN)
         if autoShootGunCtrl is not None:
             shotFactor = autoShootGunCtrl.getDispersionState().getCurrentDispersionFactor()
         elif withShot == 0:
@@ -2290,7 +2291,7 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
         additiveSqrFactor *= self.__getAdditiveShotDispersionFactor(descr) ** 2
         idealFactor = multFactor * math.sqrt(1.0 + additiveSqrFactor)
         idealDualAccFactor = idealFactor
-        dualAccuracy = getPlayerVehicleMechanicComponent(VehicleMechanic.DUAL_ACCURACY)
+        dualAccuracy = getPlayerVehicleMechanicComponent(VehicleMechanicKeys.DUAL_ACCURACY)
         if dualAccuracy is not None:
             idealFactor *= dualAccuracy.getCurrentDualAccuracyFactor()
             idealDualAccFactor *= dualAccuracy.getDualAccuracyFactor()

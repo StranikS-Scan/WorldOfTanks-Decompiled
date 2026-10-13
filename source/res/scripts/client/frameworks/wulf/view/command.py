@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/frameworks/wulf/view/command.py
+from __future__ import absolute_import
 import typing
 from Event import Event
 from ..py_object_binder import PyObjectEntity

@@ -66,15 +66,18 @@ class CompatVehiclesCache(object):
         self.__fittedCache.update({itemType:defaultdict(list) for itemType in self._FITTED_TYPES})
         inventoryVehicles = proxy.items.getItems(GUI_ITEM_TYPE.VEHICLE, REQ_CRITERIA.INVENTORY, onlyWithPrices=False)
         for veh in itervalues(inventoryVehicles):
-            for optDevice in veh.optDevices.installed:
+            layout = veh.optDevices.setupLayouts.getUniqueItems() if veh.isPostProgressionExists else veh.optDevices.installed
+            for optDevice in layout:
                 if optDevice is not None:
                     self.__fittedCache[GUI_ITEM_TYPE.OPTIONALDEVICE][optDevice.intCD].append(veh.intCD)
 
-            for cons in veh.consumables.installed:
+            layout = veh.consumables.setupLayouts.getUniqueItems() if veh.isPostProgressionExists else veh.consumables.installed
+            for cons in layout:
                 if cons is not None:
                     self.__fittedCache[GUI_ITEM_TYPE.EQUIPMENT][cons.intCD].append(veh.intCD)
 
-            for battleBooster in veh.battleBoosters.installed:
+            layout = veh.battleBoosters.setupLayouts.getUniqueItems() if veh.isPostProgressionExists else veh.battleBoosters.installed
+            for battleBooster in layout:
                 if battleBooster is not None:
                     self.__fittedCache[GUI_ITEM_TYPE.BATTLE_BOOSTER][battleBooster.intCD].append(veh.intCD)
 

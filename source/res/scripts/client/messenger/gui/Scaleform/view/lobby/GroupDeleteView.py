@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/gui/Scaleform/view/lobby/GroupDeleteView.py
+from __future__ import absolute_import
 from gui.Scaleform.locale.MESSENGER import MESSENGER
 from messenger.gui.Scaleform.meta.GroupDeleteViewMeta import GroupDeleteViewMeta
 from messenger import normalizeGroupId

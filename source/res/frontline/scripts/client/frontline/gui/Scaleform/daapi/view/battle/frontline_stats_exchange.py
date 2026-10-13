@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: frontline/scripts/client/frontline/gui/Scaleform/daapi/view/battle/frontline_stats_exchange.py
+from __future__ import absolute_import
 import logging
 from frontline.gui.Scaleform.daapi.view.meta.FrontlineBattleStatisticDataControllerMeta import FrontlineBattleStatisticDataControllerMeta
 from gui.Scaleform.daapi.view.battle.classic.stats_exchange import DynamicVehicleStatsComponent
@@ -51,8 +52,8 @@ class EpicStatsComponent(DynamicVehicleStatsComponent):
 
 class FrontlineStatisticsDataController(FrontlineBattleStatisticDataControllerMeta):
 
-    def startControl(self, ctx, arenaVisitor):
-        super(FrontlineStatisticsDataController, self).startControl(ctx, arenaVisitor)
+    def startControl(self, battleCtx, arenaVisitor):
+        super(FrontlineStatisticsDataController, self).startControl(battleCtx, arenaVisitor)
         componentSystem = self._arenaVisitor.getComponentSystem()
         playerComp = getattr(componentSystem, 'playerDataComponent', None)
         if playerComp is not None:
@@ -82,12 +83,12 @@ class FrontlineStatisticsDataController(FrontlineBattleStatisticDataControllerMe
         super(FrontlineStatisticsDataController, self).invalidateArenaInfo()
         self.__onPlayerStatsUpdated()
 
-    def invalidateVehicleStatus(self, flags, vo, arenaDP):
-        isEnemy = arenaDP.isEnemyTeam(vo.team)
+    def invalidateVehicleStatus(self, flags, vInfoVO, arenaDP):
+        isEnemy = arenaDP.isEnemyTeam(vInfoVO.team)
         exchange = self._exchangeBroker.getVehicleStatusExchange(isEnemy)
-        exchange.addVehicleInfo(vo)
-        if not vo.isObserver():
-            self._statsCollector.addVehicleStatusUpdate(vo)
+        exchange.addVehicleInfo(vInfoVO)
+        if not vInfoVO.isObserver():
+            self._statsCollector.addVehicleStatusUpdate(vInfoVO)
         exchange.addTotalStats(self._statsCollector.getTotalStats(self._arenaVisitor, self.sessionProvider))
         data = exchange.get()
         if data:
@@ -119,7 +120,7 @@ class FrontlineStatisticsDataController(FrontlineBattleStatisticDataControllerMe
         playerDataComp = getattr(componentSystem, 'playerDataComponent', None)
         if playerDataComp is None:
             _logger.error('Expected PlayerDataComponent not present!')
-            return {}
+            return
         else:
             rank = 0
             if self._arenaVisitor.hasPlayerRanks():

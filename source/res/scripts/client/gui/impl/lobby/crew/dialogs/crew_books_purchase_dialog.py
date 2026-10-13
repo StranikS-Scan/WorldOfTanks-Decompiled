@@ -75,9 +75,9 @@ class CrewBooksPurchaseDialog(BaseCrewDialogTemplateView):
         bookType = book.getBookType()
         if bookNation:
             nationText = backport.text(R.strings.nations.dyn(bookNation)())
-            titleText = backport.text(R.strings.crew_books.items.dyn(bookType).Name(), nation=nationText)
+            titleText = backport.text(R.strings.crew_books.c_items.dyn(bookType).Name(), nation=nationText)
         else:
-            titleText = backport.text(R.strings.crew_books.items.dyn(bookType).Name())
+            titleText = backport.text(R.strings.crew_books.c_items.dyn(bookType).Name())
         result = str(backport.text(R.strings.dialogs.crewBookPurchase.purchase.title(), book=titleText))
         self.setSubView(Placeholder.TITLE, SimpleTextTitle(result))
 
@@ -103,7 +103,7 @@ class CrewBooksPurchaseDialog(BaseCrewDialogTemplateView):
     def _fillViewModel(self, vm):
         self._setBookPrice(vm)
         self._setTitle(self._bookGuiItem)
-        bookNameRoot = R.strings.crew_books.items.dyn(self._bookGuiItem.getBookType())
+        bookNameRoot = R.strings.crew_books.c_items.dyn(self._bookGuiItem.getBookType())
         bookName = str(backport.text(bookNameRoot.noNationName() if self._bookGuiItem.getNation() else bookNameRoot.Name()))
         vm.setBookName(bookName)
         vm.setIsBookPersonal(self._bookGuiItem.isPersonal())

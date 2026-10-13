@@ -1,12 +1,14 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/proto/bw/errors.py
+from __future__ import absolute_import
+from past.builtins import basestring
+import messenger
 from chat_shared import CHAT_RESPONSES
 from debug_utils import LOG_ERROR, LOG_WARNING
 from gui.Scaleform.locale.MESSENGER import MESSENGER
 from gui.impl import backport
 from helpers import i18n
 from helpers.time_utils import makeLocalServerTime
-import messenger
 from messenger.m_constants import MESSENGER_I18N_FILE
 from messenger.proto.bw.cooldown import getOperationInCooldownMsg
 from messenger.proto.interfaces import IChatError

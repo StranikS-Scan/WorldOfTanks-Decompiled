@@ -1,14 +1,15 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/battleground/bot_drop_object.py
+from __future__ import absolute_import
 import logging
 from functools import partial
 import AnimationSequence
 import BigWorld
 import Math
 import CGF
+import BattleReplay
 from constants import AirdropType
 from helpers import dependency
-import BattleReplay
 from ReplayEvents import g_replayEvents
 from battleground.components import SequenceComponent
 from battleground.iself_assembler import ISelfAssembler

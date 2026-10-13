@@ -1,6 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/account_helpers/settings_core/IntUserSettings.py
+from __future__ import absolute_import
 from functools import partial
+from future.utils import viewitems
 import AccountCommands
 from account_helpers.settings_core import longToInt32
 from debug_utils import LOG_DEBUG, LOG_ERROR
@@ -35,7 +37,7 @@ class IntUserSettings(object):
             self.__cache = dict(settingsFull)
         settingsDiff = diff.get('intUserSettings', {})
         if settingsDiff:
-            for key, value in settingsDiff.iteritems():
+            for key, value in viewitems(settingsDiff):
                 if value is not None:
                     cache[key] = value
                 cache.pop(key, None)
@@ -58,7 +60,7 @@ class IntUserSettings(object):
     def addIntSettings(self, dictIntSettings, callback=None):
         if dictIntSettings:
             arr = []
-            for k, v in dictIntSettings.iteritems():
+            for k, v in viewitems(dictIntSettings):
                 key = longToInt32(k)
                 value = longToInt32(v)
                 if isinstance(key, int) and isinstance(value, int):

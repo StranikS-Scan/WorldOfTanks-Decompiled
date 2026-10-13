@@ -13,8 +13,8 @@ from vehicles.mechanics.mechanic_helpers import isValidMechanicComponent, getVeh
 from vehicles.mechanics.mechanic_trackers.tracker_interfaces import IVehicleMechanicsTrackerLogic
 if typing.TYPE_CHECKING:
     from events_containers.components.life_cycle import ILifeCycleComponent
+    from items.vehicle_mechanics_types import VehicleMechanicKey
     from Vehicle import Vehicle
-    from vehicles.mechanics.mechanic_constants import VehicleMechanic
     from vehicles.mechanics.mechanic_trackers.tracker_interfaces import IVehicleMechanicsTrackerListener
 
 class _TrackableComponentCriteria(object):
@@ -24,7 +24,7 @@ class _TrackableComponentCriteria(object):
 
     def __call__(self, component):
         isValidType = isValidMechanicComponent(component) and isLifeCycleComponent(component)
-        return isValidType and component.vehicleMechanic in self.__trackedMechanics
+        return isValidType and component.vehicleMechanicKey in self.__trackedMechanics
 
 
 class VehicleMechanicsTracker(ClientEventsContainer, ContainersListener, IVehicleMechanicsTrackerLogic, IVehicleEventsListenerLogic, IComponentLifeCycleListenerLogic):
@@ -64,7 +64,7 @@ class VehicleMechanicsTracker(ClientEventsContainer, ContainersListener, IVehicl
 
     @eventHandler
     def onDynamicComponentCreated(self, component):
-        if self.__trackable(component) and self.getTrackedComponent(component.vehicleMechanic) is None:
+        if self.__trackable(component) and self.getTrackedComponent(component.vehicleMechanicKey) is None:
             self.__catchMechanicComponent(component)
             self.onMechanicComponentsUpdate(self.trackedComponents)
         return
@@ -100,12 +100,12 @@ class VehicleMechanicsTracker(ClientEventsContainer, ContainersListener, IVehicl
         return
 
     def __catchMechanicComponent(self, mechanicComponent):
-        self.__trackedComponents[mechanicComponent.vehicleMechanic] = weakref.ref(mechanicComponent)
+        self.__trackedComponents[mechanicComponent.vehicleMechanicKey] = weakref.ref(mechanicComponent)
         self.subscribeTo(mechanicComponent.lifeCycleEvents)
         self.onMechanicComponentCatching(mechanicComponent)
 
     def __releaseMechanicComponent(self, mechanicComponent):
-        self.__trackedComponents.pop(mechanicComponent.vehicleMechanic, None)
+        self.__trackedComponents.pop(mechanicComponent.vehicleMechanicKey, None)
         self.unsubscribeFrom(mechanicComponent.lifeCycleEvents)
         self.onMechanicComponentReleasing(mechanicComponent)
         return

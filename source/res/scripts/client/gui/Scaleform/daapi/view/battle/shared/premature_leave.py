@@ -4,10 +4,17 @@ from __future__ import absolute_import
 from BWUtil import AsyncReturn
 from gui.impl.dialogs.dialog_template_utils import closeDialogTemplate
 from gui.impl.gen import R
+from gui.impl.lobby.dialogs.full_screen_dialog_view import FullScreenDialogWindowWrapper
 from gui.impl.pub.dialog_window import DialogButtons
 from wg_async import wg_await, wg_async
 _DIMMER_ALPHA = 0.7
 _PREMATURE_LEAVE_DIALOG_ID = 'PREMATURE_LEAVE_DIALOG'
+
+class _BattleDialogWindow(FullScreenDialogWindowWrapper):
+
+    def _getParent(self, parent, content):
+        return parent
+
 
 def closeDialogWindow():
     closeDialogTemplate(_PREMATURE_LEAVE_DIALOG_ID)
@@ -18,7 +25,6 @@ def showDialogWindow(title, confirm=None, cancel=None, description=None, icon=No
     from gui.impl.dialogs import dialogs
     from gui.impl.dialogs.gf_builders import ConfirmCancelDialogBuilder
     builder = ConfirmCancelDialogBuilder(uniqueID=_PREMATURE_LEAVE_DIALOG_ID)
-    builder.setBlur(False)
     builder.setDimmerAlpha(_DIMMER_ALPHA)
     builder.setTitle(title)
     builder.setCancelButtonLabel(cancel or R.strings.dialogs.quitBattle.cancel())
@@ -28,7 +34,7 @@ def showDialogWindow(title, confirm=None, cancel=None, description=None, icon=No
         builder.setDescription(description)
     if icon:
         builder.setIcon(icon)
-    result = yield wg_await(dialogs.show(builder.build()))
+    result = yield wg_await(dialogs.show(_BattleDialogWindow(builder.buildView(), doBlur=False)))
     raise AsyncReturn(result.result)
 
 

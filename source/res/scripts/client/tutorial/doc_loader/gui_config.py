@@ -1,6 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/tutorial/doc_loader/gui_config.py
+from __future__ import absolute_import
 from collections import namedtuple
+from future.utils import viewitems, viewvalues
 from operator import getitem
 import resource_helper
 from debug_utils import LOG_ERROR
@@ -133,7 +135,7 @@ class _TutorialConfig(object):
             return ''
 
     def getSceneEvent(self, sceneID):
-        scenes = dict(((scene.sceneID, scene.event) for scene in self.__scenes.itervalues()))
+        scenes = dict(((scene.sceneID, scene.event) for scene in viewvalues(self.__scenes)))
         try:
             return scenes[sceneID]
         except KeyError:
@@ -143,7 +145,7 @@ class _TutorialConfig(object):
         return self.__guiItems[targetID] if targetID in self.__guiItems else None
 
     def getItems(self):
-        for itemID, item in self.__guiItems.iteritems():
+        for itemID, item in viewitems(self.__guiItems):
             yield (itemID, item)
 
     def getCommand(self, commandID):
@@ -155,7 +157,7 @@ class _TutorialConfig(object):
         return None
 
     def getCommands(self):
-        for commandID, command in self.__commands.iteritems():
+        for commandID, command in viewitems(self.__commands):
             yield (commandID, command)
 
 

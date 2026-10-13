@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: comp7/scripts/client/comp7/notification/listeners.py
+from __future__ import absolute_import
 from functools import partial
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import COMP7_BOND_EQUIPMENT_REMINDER_SHOWN_TIMESTAMP, COMP7_LAST_SEASON_WITH_SEEN_REWARD, COMP7_LAST_MASKOT_WITH_SEEN_REWARD

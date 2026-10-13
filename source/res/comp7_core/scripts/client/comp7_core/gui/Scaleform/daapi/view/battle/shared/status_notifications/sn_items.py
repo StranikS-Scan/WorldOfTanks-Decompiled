@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: comp7_core/scripts/client/comp7_core/gui/Scaleform/daapi/view/battle/shared/status_notifications/sn_items.py
+from __future__ import absolute_import
 from gui.Scaleform.daapi.view.battle.shared.status_notifications import sn_items
 from gui.Scaleform.genConsts.BATTLE_NOTIFICATIONS_TIMER_TYPES import BATTLE_NOTIFICATIONS_TIMER_TYPES as _TIMER_TYPES
 from gui.battle_control.battle_constants import VEHICLE_VIEW_STATE
@@ -38,19 +39,19 @@ class _Comp7BuffSN(_Comp7LocalizationProvider, sn_items.TimerSN):
     def isSourceVehicle(self):
         return self._isSourceVehicle
 
-    def _update(self, stateInfo):
-        self._isVisible = not stateInfo.get('finishing', False)
-        self._isSourceVehicle = stateInfo.get('isSourceVehicle', False)
+    def _update(self, value):
+        self._isVisible = not value.get('finishing', False)
+        self._isSourceVehicle = value.get('isSourceVehicle', False)
         if self._isVisible:
-            self._updateTimeParams(stateInfo.get('duration'), stateInfo.get('endTime'))
+            self._updateTimeParams(value.get('duration'), value.get('endTime'))
         self._sendUpdate()
 
 
 class _Comp7PulseVisibleSourceRelatedBuffSN(_Comp7BuffSN):
 
-    def _update(self, stateInfo):
-        self._isPulseVisible = not stateInfo.get('isSourceVehicle', False)
-        super(_Comp7PulseVisibleSourceRelatedBuffSN, self)._update(stateInfo)
+    def _update(self, value):
+        self._isPulseVisible = not value.get('isSourceVehicle', False)
+        super(_Comp7PulseVisibleSourceRelatedBuffSN, self)._update(value)
 
 
 class AoeHealSN(_Comp7PulseVisibleSourceRelatedBuffSN):
@@ -165,8 +166,8 @@ class IlluminationFlareSN(_Comp7BuffSN):
     _ITEM_ID = VEHICLE_VIEW_STATE.ILLUMINATION_FLARE_SPOTTED
     _VIEW_TYPE_ID = _TIMER_TYPES.COMP7_ILLUMINATION_FLARE
 
-    def _update(self, ctrl):
-        marker = getattr(ctrl, 'spottedMarker', None) if ctrl is not None else None
+    def _update(self, value):
+        marker = getattr(value, 'spottedMarker', None) if value is not None else None
         self._isVisible = marker is not None
         if self._isVisible:
             endTime = marker.endTime

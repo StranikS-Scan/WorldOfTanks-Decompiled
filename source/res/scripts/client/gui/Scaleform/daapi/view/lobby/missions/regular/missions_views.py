@@ -31,6 +31,7 @@ from gui.server_events.events_dispatcher import showMissionsCategories
 from gui.server_events.events_helpers import isMarathon, isDailyQuest, isPremium
 from gui.shared import actions
 from gui.shared import events, g_eventBus
+from gui.shared.events import LoadViewEvent
 from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.shared.event_dispatcher import showTankPremiumAboutPage, showHangar
 from gui.shared.formatters import text_styles, icons
@@ -227,8 +228,7 @@ class MissionsEventBoardsView(MissionsEventBoardsViewMeta):
     def serverClick(self, eventID, server):
 
         def doJoin():
-            from gui.Scaleform.framework import g_entitiesFactories
-            g_eventBus.handleEvent(g_entitiesFactories.makeLoadEvent(SFViewLoadParams('missions')), scope=EVENT_BUS_SCOPE.LOBBY)
+            g_eventBus.handleEvent(LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.LOBBY_MISSIONS)), scope=EVENT_BUS_SCOPE.LOBBY)
 
         reloginCtrl = dependency.instance(IReloginController)
         success = yield DialogsInterface.showI18nConfirmDialog('changePeriphery')

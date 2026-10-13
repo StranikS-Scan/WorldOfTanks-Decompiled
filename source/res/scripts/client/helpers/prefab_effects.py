@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/helpers/prefab_effects.py
+from __future__ import absolute_import
 from PrefabEffectsAvailability import getDebugForceHitType, getPrefabEffectsAvailable, setPrefabEffectsEnabledForBattle
 from constants import VEHICLE_HIT_EFFECT, IS_DEVELOPMENT
 from items import vehicles

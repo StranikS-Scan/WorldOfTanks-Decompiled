@@ -7,6 +7,7 @@ import CameraComponents
 import Vehicular
 import cgf_components.vehicle_mechanics_components
 import GenericComponents
+import CgfStateMachine
 import GpuDecals
 from CustomEffectManager import CustomEffectManager, CustomEffectManagerSystem
 from DestructibleEntityState import DestructibleEntityStatesSystem
@@ -25,7 +26,8 @@ from cgf_script.registration import bonusCapsPredicate, registerModule
 from cgf_components.accuracy_stacks_manager import AccuracyStacksMechanicSystem
 from cgf_components.arena_camera_manager import ArenaCameraSystem
 from cgf_components.armor_inspector_component import ArmorInspectorComponent, ArmorInspectorSystem
-from cgf_components.attack_artillery_fort_components import ArtilleryFortColorComponent, AttackArtilleryFortColorSystem, ColorComponent, ColorSystem
+from cgf_components.attack_artillery_fort_components import ArtilleryFortColorComponent, AttackArtilleryFortColorSystem
+from cgf_components.color_components import ColorComponent, ColorSystem
 from cgf_components.color_blind_component import ChangeModelOnColorBlindComponent, ChangeModelOnColorBlindComponentSystem
 from cgf_components.gun_audition_component import GunAuditionsSystem
 from cgf_components.hangar_camera_manager import HangarCameraSystem
@@ -49,6 +51,8 @@ from cgf_components.shot_color_transmission_component import ShotColorTransmissi
 from cgf_components.stats_display_components import StatisticDisplayComponent, TrackedStatisticComponentSystem
 from cgf_components.target_designator_manager import TargetDesignatorSoundSystem
 from cgf_components.trigger_vse_component import TriggerVSEComponent, TriggerVisualScriptComponentsSystem
+from cgf_components.vehicle_components.avatar_attached_vehicle_watcher import AvatarAttachedVehicleWatcherComponent, AvatarAttachedVehicleWatcherSystem
+from cgf_components.vehicle_components.nitro import VehicleNitroExhaustEffectComponent, VehicleNitroExhaustEffectComponentSystem
 from cgf_components.vehicle_health_observer_manager import VehicleHealthObserverSystem
 from cgf_components.visual_effect_component_manager import KillCamVisualEffectComponentSystem
 from cgf_components.zone_components import MapZoneSystem, RandomEventZoneUINotification, WeatherZoneUINotification, ZoneHint, ZoneMarker
@@ -57,6 +61,7 @@ from gui.pet_system.cgf_components.pet_place_component import PetPlaceComponent,
 from vehicle_systems.components.vehicle_to_camera_alignment_components import VehicleToCameraAlignmentSystem, VehicleToCameraAlignmentComponent
 from DeathComponent import DeathComponentSystem
 from SequenceNetworkSync import SequenceNetworkSyncSystem
+from StateMachineNetworkSync import StateMachineNetworkSyncSystem
 from ShotsReceiver import ShotReceiverSystem, ShotsReceiver
 from VehicleStickers import VehicleStickersSystem
 from vehicle_systems.components.hull_aiming_controller import HullAimingSystem, HullAimingController
@@ -104,6 +109,7 @@ class ClientCommonModule(object):
      CGF.RegisterSystem(ShotReceiverSystem, domain=CGF.Domain.ClientServer),
      CGF.RegisterSystem(DeathComponentSystem, domain=CGF.Domain.ClientEditor, updateAfter=(CGF.TransformUpdateSystem,)),
      CGF.RegisterSystem(SequenceNetworkSyncSystem, domain=CGF.Domain.Client, updateBefore=(GenericComponents.SequenceSystem,)),
+     CGF.RegisterSystem(StateMachineNetworkSyncSystem, domain=CGF.Domain.Client, updateBefore=(CgfStateMachine.StateMachineSystem,), perTickUpdate=True),
      CGF.RegisterSystem(RocketAccelerationSystem, domain=CGF.Domain.Client, updateAfter=(GenericComponents.VseComponentSystem,), predicate=clientWorldsPredicate(ClientWorld.BATTLE)),
      CGF.RegisterSystem(MapZoneSystem, domain=CGF.Domain.Client, updateAfter=(CGF.TransformUpdateSystem,), updatePeriod=1.0, predicate=clientWorldsPredicate(ClientWorld.BATTLE | ClientWorld.EDITOR)),
      CGF.RegisterSystem(RechargeableNitroMechanicSystem, domain=CGF.Domain.Client, updatePeriod=0.2, predicate=clientWorldsPredicate(ClientWorld.BATTLE | ClientWorld.EDITOR)),
@@ -126,7 +132,6 @@ class ClientCommonModule(object):
      cgf_components.vehicle_mechanics_components.AccuracyStacksRTPCComponent,
      cgf_components.vehicle_mechanics_components.BattleFuryModeEffects,
      cgf_components.vehicle_mechanics_components.SupportWeaponEffects,
-     cgf_components.vehicle_mechanics_components.PillboxSiegeModeSoundEffects,
      cgf_components.vehicle_mechanics_components.OverheatStacksEffects,
      cgf_components.vehicle_mechanics_components.RechargeableNitroEffects,
      cgf_components.vehicle_mechanics_components.ChargeShotEffects,
@@ -281,6 +286,15 @@ class VehicleAppearanceModule(object):
      VehicleShadowManager,
      SiegeEffectsController,
      CustomEffectManager]
+
+
+@registerModule
+class ClientVehicleAbilitiesModule(object):
+    name = 'Client Vehicle Abilities Module'
+    desc = 'Client vehicle abilities mechanics'
+    group = 'Vehicle abilities'
+    systems = [CGF.RegisterSystem(AvatarAttachedVehicleWatcherSystem, domain=CGF.Domain.Client, predicate=clientWorldsPredicate(ClientWorld.BATTLE)), CGF.RegisterSystem(VehicleNitroExhaustEffectComponentSystem, domain=CGF.Domain.Client, predicate=clientWorldsPredicate(ClientWorld.BATTLE))]
+    components = [AvatarAttachedVehicleWatcherComponent, VehicleNitroExhaustEffectComponent]
 
 
 if HAS_DEV_RESOURCES:

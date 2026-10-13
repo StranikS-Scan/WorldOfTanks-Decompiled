@@ -1,7 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/proto/bw/entities.py
+from __future__ import absolute_import
 import cgi
-import types
+from future.utils import viewitems
+from past.builtins import unicode
 import chat_shared
 from constants import PREBATTLE_TYPE
 from debug_utils import LOG_ERROR
@@ -17,13 +19,13 @@ PREBATTLE_TYPE_CHAT_FLAG = {PREBATTLE_TYPE.SQUAD: chat_shared.CHAT_CHANNEL_SQUAD
  PREBATTLE_TYPE.CLAN: chat_shared.CHAT_CHANNEL_PREBATTLE_CLAN,
  PREBATTLE_TYPE.TOURNAMENT: chat_shared.CHAT_CHANNEL_TOURNAMENT,
  PREBATTLE_TYPE.UNIT: chat_shared.CHAT_CHANNEL_UNIT}
-PREBATTLE_CHAT_FLAG_TYPE = dict(((v, k) for k, v in PREBATTLE_TYPE_CHAT_FLAG.iteritems()))
+PREBATTLE_CHAT_FLAG_TYPE = {v:k for k, v in viewitems(PREBATTLE_TYPE_CHAT_FLAG)}
 
 class BWChannelEntity(ChannelEntity):
     __slots__ = ('_nameToInvalidate',)
 
     def __init__(self, data):
-        if not isinstance(data, types.DictType):
+        if not isinstance(data, dict):
             LOG_ERROR('Invalid data', data)
             data = {}
         super(BWChannelEntity, self).__init__(ChannelDataWrapper(**data))
@@ -74,7 +76,7 @@ class BWChannelEntity(ChannelEntity):
             return 0
         result = 0
         flags = self._data.flags
-        for prbType, prbFlag in PREBATTLE_TYPE_CHAT_FLAG.iteritems():
+        for prbType, prbFlag in viewitems(PREBATTLE_TYPE_CHAT_FLAG):
             if flags & prbFlag != 0:
                 result = prbType
                 break
@@ -137,8 +139,7 @@ class BWChannelLightEntity(ChatEntity):
 class BWMemberEntity(MemberEntity):
 
     def __init__(self, memberID, nickName='Unknown', status=None):
-        if nickName and not isinstance(nickName, types.UnicodeType):
-            nickName = unicode(nickName, 'utf-8', errors='ignore')
+        nickName = unicode(nickName, 'utf-8', errors='ignore') if isinstance(nickName, bytes) else nickName
         super(BWMemberEntity, self).__init__(memberID, nickName, status)
 
     def getDatabaseID(self):

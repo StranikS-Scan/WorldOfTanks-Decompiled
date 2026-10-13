@@ -28,12 +28,11 @@ class SquadActionsHandler(AbstractActionsHandler):
             _, unit = self._entity.getUnit()
             pInfo = self._entity.getPlayerInfo()
             vInfos = unit.getMemberVehicles(pInfo.dbID)
-            if vInfos is not None:
+            if vInfos:
                 g_currentVehicle.selectVehicle(vInfos[0].vehInvID)
             self._goToQueueUI()
         elif loadHangar:
             g_eventDispatcher.loadHangar()
-        return
 
     def setPlayerInfoChanged(self):
         g_eventDispatcher.updateUI()

@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: comp7/scripts/client/comp7/web/web_client_api/__init__.py
+from __future__ import absolute_import
 from comp7.skeletons.gui.game_control import IComp7ShopController
 from comp7.web.web_client_api.ui.comp7_ui import OpenComp7Mixin
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS

@@ -1,0 +1,527 @@
+<battle_hints.xml>
+  <hint>
+    <props>
+      <name>	delay2	</name>
+      <scope>	halloween	</scope>
+      <component>	battleHint	</component>
+      <priority>	110	</priority>
+    </props>
+    <text>
+      <template>	hw_empty	</template>
+    </text>
+    <lifecycle>
+      <showTime>	1	</showTime>
+      <waitTime>	20	</waitTime>
+      <minShowTime>	1	</minShowTime>
+    </lifecycle>
+  </hint>
+  <hint>
+    <props>
+      <name>	delayForUpgradePanel	</name>
+      <scope>	halloween	</scope>
+      <component>	battleHint	</component>
+      <priority>	100	</priority>
+      <skipOverlay>	True	</skipOverlay>
+    </props>
+    <text>
+      <template>	hw_empty	</template>
+    </text>
+    <lifecycle>
+      <showTime>	5	</showTime>
+      <waitTime>	10	</waitTime>
+      <minShowTime>	5	</minShowTime>
+    </lifecycle>
+  </hint>
+  <hint>
+    <props>
+      <name>	buffNotification	</name>
+      <scope>	halloween	</scope>
+      <component>	buffNotificationSystem	</component>
+      <priority>	101	</priority>
+    </props>
+    <text>
+      <template>	hw_empty	</template>
+    </text>
+    <lifecycle>
+      <showTime>	5	</showTime>
+      <waitTime>	20	</waitTime>
+    </lifecycle>
+  </hint>
+  <hint>
+    <clientSchema>	halloween.gui.battle_hints.battle_hints_schemas:hintSchema	</clientSchema>
+    <props>
+      <name>	world1	</name>
+      <scope>	halloween	</scope>
+      <component>	battleHint	</component>
+      <priority>	101	</priority>
+    </props>
+    <text>
+      <template>	hw_world1	</template>
+    </text>
+    <sound>
+      <notify>	target_captured	</notify>
+    </sound>
+    <lifecycle>
+      <showTime>	5	</showTime>
+      <waitTime>	20	</waitTime>
+    </lifecycle>
+    <context>
+      <extraPadding>	35	</extraPadding>
+      <offsetY>	46	</offsetY>
+    </context>
+  </hint>
+  <hint>
+    <clientSchema>	halloween.gui.battle_hints.battle_hints_schemas:hintSchema	</clientSchema>
+    <props>
+      <name>	startPhase	</name>
+      <scope>	halloween	</scope>
+      <component>	phaseModifierHint	</component>
+      <priority>	101	</priority>
+    </props>
+    <text>
+      <template>	hw_world1	</template>
+    </text>
+    <sound>
+      <notify>	target_captured	</notify>
+    </sound>
+    <lifecycle>
+      <showTime>	5	</showTime>
+      <waitTime>	20	</waitTime>
+    </lifecycle>
+    <context>
+      <isAdaptive>	true	</isAdaptive>
+    </context>
+  </hint>
+  <hint>
+    <clientSchema>	halloween.gui.battle_hints.battle_hints_schemas:hintSchema	</clientSchema>
+    <props>
+      <name>	world2	</name>
+      <scope>	halloween	</scope>
+      <component>	battleHint	</component>
+      <priority>	101	</priority>
+    </props>
+    <text>
+      <template>	hw_world2	</template>
+    </text>
+    <sound>
+      <notify>	target_captured	</notify>
+    </sound>
+    <lifecycle>
+      <showTime>	5	</showTime>
+      <waitTime>	20	</waitTime>
+    </lifecycle>
+    <context>
+      <extraPadding>	35	</extraPadding>
+    </context>
+  </hint>
+  <hint>
+    <clientSchema>	halloween.gui.battle_hints.battle_hints_schemas:hintSchema	</clientSchema>
+    <props>
+      <name>	world3	</name>
+      <scope>	halloween	</scope>
+      <component>	battleHint	</component>
+      <priority>	101	</priority>
+    </props>
+    <text>
+      <template>	hw_world3	</template>
+    </text>
+    <sound>
+      <notify>	target_captured	</notify>
+    </sound>
+    <lifecycle>
+      <showTime>	5	</showTime>
+      <waitTime>	20	</waitTime>
+    </lifecycle>
+    <context>
+      <extraPadding>	35	</extraPadding>
+    </context>
+  </hint>
+  <hint>
+    <props>
+      <name>	bossfight_phase_1	</name>
+      <scope>	halloween	</scope>
+      <component>	battleHint	</component>
+      <priority>	101	</priority>
+    </props>
+    <text>
+      <template>	hw_bossfight_phase_1	</template>
+    </text>
+    <sound>
+      <notify>	target_captured	</notify>
+    </sound>
+    <lifecycle>
+      <showTime>	5	</showTime>
+      <waitTime>	20	</waitTime>
+    </lifecycle>
+  </hint>
+  <hint>
+    <props>
+      <name>	bossfight_phase_2	</name>
+      <scope>	halloween	</scope>
+      <component>	battleHint	</component>
+      <priority>	101	</priority>
+    </props>
+    <text>
+      <template>	hw_bossfight_phase_2	</template>
+    </text>
+    <sound>
+      <notify>	target_captured	</notify>
+    </sound>
+    <lifecycle>
+      <showTime>	5	</showTime>
+      <waitTime>	20	</waitTime>
+    </lifecycle>
+  </hint>
+  <hint>
+    <props>
+      <name>	bossfight_phase_3	</name>
+      <scope>	halloween	</scope>
+      <component>	battleHint	</component>
+      <priority>	101	</priority>
+    </props>
+    <text>
+      <template>	hw_bossfight_phase_3	</template>
+    </text>
+    <sound>
+      <notify>	target_captured	</notify>
+    </sound>
+    <lifecycle>
+      <showTime>	5	</showTime>
+      <waitTime>	20	</waitTime>
+    </lifecycle>
+  </hint>
+  <hint>
+    <clientSchema>	halloween.gui.battle_hints.battle_hints_schemas:hintSchema	</clientSchema>
+    <props>
+      <name>	hunter	</name>
+      <scope>	halloween	</scope>
+      <component>	battleHint	</component>
+      <priority>	102	</priority>
+    </props>
+    <text>
+      <template>	hw_hunter	</template>
+    </text>
+    <sound>
+      <notify>	ev_hw_gp_vo_hunters_spawn	</notify>
+    </sound>
+    <lifecycle>
+      <showTime>	3	</showTime>
+      <waitTime>	20	</waitTime>
+    </lifecycle>
+    <context>
+      <isAdaptive>	true	</isAdaptive>
+    </context>
+  </hint>
+  <hint>
+    <clientSchema>	halloween.gui.battle_hints.battle_hints_schemas:hintSchema	</clientSchema>
+    <props>
+      <name>	bomber	</name>
+      <scope>	halloween	</scope>
+      <component>	battleHint	</component>
+      <priority>	102	</priority>
+    </props>
+    <text>
+      <template>	hw_bomber	</template>
+    </text>
+    <sound>
+      <notify>	ev_hw_gp_vo_bombers_spawn	</notify>
+    </sound>
+    <lifecycle>
+      <showTime>	3	</showTime>
+      <waitTime>	20	</waitTime>
+    </lifecycle>
+    <context>
+      <isAdaptive>	true	</isAdaptive>
+    </context>
+  </hint>
+  <hint>
+    <clientSchema>	halloween.gui.battle_hints.battle_hints_schemas:hintSchema	</clientSchema>
+    <props>
+      <name>	turret	</name>
+      <scope>	halloween	</scope>
+      <component>	battleHint	</component>
+      <priority>	102	</priority>
+    </props>
+    <text>
+      <template>	hw_turret	</template>
+    </text>
+    <sound>
+      <notify>	target_captured	</notify>
+    </sound>
+    <lifecycle>
+      <showTime>	3	</showTime>
+      <waitTime>	20	</waitTime>
+    </lifecycle>
+    <context>
+      <isAdaptive>	true	</isAdaptive>
+    </context>
+  </hint>
+  <hint>
+    <clientSchema>	halloween.gui.battle_hints.battle_hints_schemas:hintSchema	</clientSchema>
+    <props>
+      <name>	spawner	</name>
+      <scope>	halloween	</scope>
+      <component>	battleHint	</component>
+      <priority>	102	</priority>
+    </props>
+    <text>
+      <template>	hw_bomber_alpha	</template>
+    </text>
+    <sound>
+      <notify>	ev_hw_gp_vo_alpha_bomber_spawn	</notify>
+    </sound>
+    <lifecycle>
+      <showTime>	3	</showTime>
+      <waitTime>	20	</waitTime>
+    </lifecycle>
+    <context>
+      <isAdaptive>	true	</isAdaptive>
+    </context>
+  </hint>
+  <hint>
+    <clientSchema>	halloween.gui.battle_hints.battle_hints_schemas:hintSchema	</clientSchema>
+    <props>
+      <name>	trapper	</name>
+      <scope>	halloween	</scope>
+      <component>	battleHint	</component>
+      <priority>	102	</priority>
+    </props>
+    <text>
+      <template>	hw_trapper	</template>
+    </text>
+    <sound>
+      <notify>	ev_hw_gp_vo_trapper_spawn	</notify>
+    </sound>
+    <lifecycle>
+      <showTime>	3	</showTime>
+      <waitTime>	20	</waitTime>
+    </lifecycle>
+    <context>
+      <isAdaptive>	true	</isAdaptive>
+    </context>
+  </hint>
+  <hint>
+    <clientSchema>	halloween.gui.battle_hints.battle_hints_schemas:hintSchema	</clientSchema>
+    <props>
+      <name>	missing_squad	</name>
+      <scope>	halloween	</scope>
+      <component>	battleHint	</component>
+      <priority>	102	</priority>
+    </props>
+    <text>
+      <template>	hw_missing_squad	</template>
+    </text>
+    <sound>
+      <notify>	ev_hw_gp_vo_lost_squad_spawn	</notify>
+    </sound>
+    <lifecycle>
+      <showTime>	3	</showTime>
+      <waitTime>	20	</waitTime>
+    </lifecycle>
+    <context>
+      <isAdaptive>	true	</isAdaptive>
+    </context>
+  </hint>
+  <hint>
+    <props>
+      <name>	collectSouls	</name>
+      <scope>	halloween	</scope>
+      <component>	progressBarBattleHint	</component>
+      <priority>	99	</priority>
+    </props>
+    <text>
+      <template>	hw_collectSouls	</template>
+    </text>
+    <sound>
+      <notify>	target_captured	</notify>
+    </sound>
+    <lifecycle>
+      <showTime>	10	</showTime>
+      <waitTime>	30	</waitTime>
+      <minShowTime>	5	</minShowTime>
+    </lifecycle>
+  </hint>
+  <hint>
+    <clientSchema>	halloween.gui.battle_hints.battle_hints_schemas:hintSchema	</clientSchema>
+    <props>
+      <name>	getToCollector	</name>
+      <scope>	halloween	</scope>
+      <component>	pinnableBattleHint	</component>
+      <priority>	99	</priority>
+    </props>
+    <text>
+      <template>	hw_getToCollector	</template>
+      <templatePinnable>	hw_getToCollectorPinnable	</templatePinnable>
+    </text>
+    <sound>
+      <notify>	target_captured	</notify>
+    </sound>
+    <lifecycle>
+      <showTime>	5	</showTime>
+      <waitTime>	30	</waitTime>
+      <minShowTime>	5	</minShowTime>
+    </lifecycle>
+  </hint>
+  <hint>
+    <clientSchema>	halloween.gui.battle_hints.battle_hints_schemas:hintSchema	</clientSchema>
+    <props>
+      <name>	enemyIsProtected	</name>
+      <scope>	halloween	</scope>
+      <component>	battleHint	</component>
+      <priority>	99	</priority>
+    </props>
+    <text>
+      <template>	hw_enemyIsProtected	</template>
+    </text>
+    <lifecycle>
+      <showTime>	5	</showTime>
+      <waitTime>	30	</waitTime>
+    </lifecycle>
+  </hint>
+  <hint>
+    <clientSchema>	halloween.gui.battle_hints.battle_hints_schemas:hintSchema	</clientSchema>
+    <props>
+      <name>	bossIsShield	</name>
+      <scope>	halloween	</scope>
+      <component>	battleHint	</component>
+      <priority>	99	</priority>
+    </props>
+    <text>
+      <template>	hw_bossIsShield	</template>
+    </text>
+    <lifecycle>
+      <showTime>	5	</showTime>
+      <waitTime>	30	</waitTime>
+    </lifecycle>
+  </hint>
+  <hint>
+    <clientSchema>	halloween.gui.battle_hints.battle_hints_schemas:hintSchema	</clientSchema>
+    <props>
+      <name>	bossesAreShield	</name>
+      <scope>	halloween	</scope>
+      <component>	battleHint	</component>
+      <priority>	99	</priority>
+    </props>
+    <text>
+      <template>	hw_bossesAreShield	</template>
+    </text>
+    <lifecycle>
+      <showTime>	5	</showTime>
+      <waitTime>	20	</waitTime>
+    </lifecycle>
+  </hint>
+  <hint>
+    <clientSchema>	halloween.gui.battle_hints.battle_hints_schemas:hintSchema	</clientSchema>
+    <props>
+      <name>	enemyIsVulnerable	</name>
+      <scope>	halloween	</scope>
+      <component>	battleHint	</component>
+      <priority>	99	</priority>
+    </props>
+    <text>
+      <template>	hw_enemyIsVulnerable	</template>
+    </text>
+    <lifecycle>
+      <showTime>	5	</showTime>
+      <waitTime>	20	</waitTime>
+    </lifecycle>
+  </hint>
+  <hint>
+    <clientSchema>	halloween.gui.battle_hints.battle_hints_schemas:hintSchema	</clientSchema>
+    <props>
+      <name>	clearTheArea	</name>
+      <scope>	halloween	</scope>
+      <component>	pinnableBattleHint	</component>
+      <priority>	99	</priority>
+    </props>
+    <text>
+      <template>	hw_clearTheArea	</template>
+      <templatePinnable>	hw_clearTheAreaPinnable	</templatePinnable>
+    </text>
+    <lifecycle>
+      <showTime>	5	</showTime>
+      <waitTime>	20	</waitTime>
+    </lifecycle>
+  </hint>
+  <hint>
+    <props>
+      <name>	bossFightSpiderPhase1	</name>
+      <scope>	halloween	</scope>
+      <component>	battleHint	</component>
+      <priority>	101	</priority>
+    </props>
+    <text>
+      <template>	hw_bossFightSpiderPhase1	</template>
+    </text>
+    <sound>
+      <notify>	target_captured	</notify>
+    </sound>
+    <lifecycle>
+      <showTime>	5	</showTime>
+      <waitTime>	20	</waitTime>
+    </lifecycle>
+  </hint>
+  <hint>
+    <props>
+      <name>	bossFightSpiderEscapedFirstTime	</name>
+      <scope>	halloween	</scope>
+      <component>	battleHint	</component>
+      <priority>	101	</priority>
+    </props>
+    <text>
+      <template>	hw_bossFightSpiderEscapedFirstTime	</template>
+    </text>
+    <lifecycle>
+      <showTime>	5	</showTime>
+      <waitTime>	20	</waitTime>
+    </lifecycle>
+  </hint>
+  <hint>
+    <props>
+      <name>	bossFightSpiderPhase2	</name>
+      <scope>	halloween	</scope>
+      <component>	battleHint	</component>
+      <priority>	101	</priority>
+    </props>
+    <text>
+      <template>	hw_bossFightSpiderPhase2	</template>
+    </text>
+    <sound>
+      <notify>	target_captured	</notify>
+    </sound>
+    <lifecycle>
+      <showTime>	5	</showTime>
+      <waitTime>	20	</waitTime>
+    </lifecycle>
+  </hint>
+  <hint>
+    <props>
+      <name>	bossFightSpiderEscapedSecondTime	</name>
+      <scope>	halloween	</scope>
+      <component>	battleHint	</component>
+      <priority>	101	</priority>
+    </props>
+    <text>
+      <template>	hw_bossFightSpiderEscapedSecondTime	</template>
+    </text>
+    <lifecycle>
+      <showTime>	5	</showTime>
+      <waitTime>	20	</waitTime>
+    </lifecycle>
+  </hint>
+  <hint>
+    <props>
+      <name>	deathZoneShrinking	</name>
+      <scope>	halloween	</scope>
+      <component>	battleHint	</component>
+      <priority>	101	</priority>
+    </props>
+    <text>
+      <template>	hw_deathZoneShrinking	</template>
+    </text>
+    <lifecycle>
+      <showTime>	5	</showTime>
+      <waitTime>	20	</waitTime>
+    </lifecycle>
+  </hint>
+</battle_hints.xml>

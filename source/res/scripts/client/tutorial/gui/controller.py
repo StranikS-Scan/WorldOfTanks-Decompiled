@@ -1,8 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/tutorial/gui/controller.py
+from __future__ import absolute_import
 import typing
 import logging
-from functools import partial
+from functools import partial, reduce
+from future.utils import lfilter, viewitems
 from gui.Scaleform.genConsts.TUTORIAL_EFFECT_TYPES import TUTORIAL_EFFECT_TYPES as _EFFECT_TYPES
 from gui.Scaleform.genConsts.TUTORIAL_TRIGGER_TYPES import TUTORIAL_TRIGGER_TYPES
 from gui.impl.gen import R
@@ -12,7 +14,7 @@ from skeletons.tutorial import IGuiController
 from soft_exception import SoftException
 from tutorial.doc_loader import gui_config
 if typing.TYPE_CHECKING:
-    from gui.impl.gen_utils import DynAccessor
+    from frameworks.wulf import PyResAccessor
     from tutorial.data.client_triggers import ClientTriggers
     from skeletons.tutorial import ComponentID
 _logger = logging.getLogger(__name__)
@@ -89,7 +91,7 @@ class GuiController(IGuiController):
         return None if not self._isEnabled else name
 
     def getFoundComponentsIDs(self):
-        return self._components.keys()
+        return list(self._components)
 
     def setCriteria(self, name, value):
         for gui in self.__guiImpls:
@@ -218,9 +220,9 @@ class GuiController(IGuiController):
 
         return
 
-    def init(self, guiImpls):
-        _logger.debug('init: %r', guiImpls)
-        self.__guiImpls.extend(guiImpls)
+    def init(self, guiProviders):
+        _logger.debug('init: %r', guiProviders)
+        self.__guiImpls.extend(guiProviders)
 
     def setup(self, isEnabled=False, path=''):
         _logger.debug('setup: %r %r', isEnabled, path)
@@ -303,7 +305,7 @@ class GuiController(IGuiController):
         _logger.debug('onEffectCompleted: %r, %r', componentID, effectType)
 
     def __tryToSetupGui(self):
-        if not any([ not api.isInited() for api in self.__guiImpls ]):
+        if not any((not api.isInited() for api in self.__guiImpls)):
             self.__setEnabled()
             self.__setDescriptions()
 
@@ -317,7 +319,7 @@ class GuiController(IGuiController):
     def __setDescriptions(self):
         if self._isEnabled and self.__descriptions:
             for gui in self.__guiImpls:
-                gui.setDescriptions(filter(_getViewFilter(gui.supportedViewTypes()), self.__descriptions))
+                gui.setDescriptions(lfilter(_getViewFilter(gui.supportedViewTypes()), self.__descriptions))
 
     def __setTriggers(self, componentID, triggers):
         triggers = triggers or ()
@@ -352,7 +354,7 @@ class GuiController(IGuiController):
 
     def __doSetComponentProps(self, componentID, props):
         props = props.copy()
-        for effectType, propertyNames in _COMPONENT_PROPERTY_EFFECTS.iteritems():
+        for effectType, propertyNames in viewitems(_COMPONENT_PROPERTY_EFFECTS):
             effectProps = {key:props.pop(key) for key in propertyNames if key in props}
             if effectProps:
                 _logger.debug('__doSetComponentProps: triggering AS effect: %r, %r, %r', componentID, effectType, effectProps)

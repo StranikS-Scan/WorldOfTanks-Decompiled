@@ -353,7 +353,7 @@ class SingleViewContainer(ViewContainer):
         return status
 
     def _setMainView(self, pyView):
-        for v in self._views.values():
+        for v in listvalues(self._views):
             if v != pyView:
                 delayUntilParentWindowReady(self.__callableDelayer, pyView, partial(self.removeView, v))
 

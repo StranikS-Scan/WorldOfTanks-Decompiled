@@ -1,7 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/web/web_client_api/sound/__init__.py
-import SoundGroups
+from __future__ import absolute_import
+from future.utils import viewitems
+from past.builtins import basestring
 import WWISE
+import SoundGroups
 from helpers import dependency
 from skeletons.gui.app_loader import IAppLoader
 from web.web_client_api import w2c, w2capi, W2CSchema, Field
@@ -72,7 +75,7 @@ class SoundStateWebApi(object):
         self.__setStates.add(str(cmd.state_name))
 
     def _soundStateFini(self):
-        for stateName, stateValue in self._ON_EXIT_STATES.iteritems():
+        for stateName, stateValue in viewitems(self._ON_EXIT_STATES):
             if stateName in self.__setStates:
                 WWISE.WW_setState(stateName, stateValue)
 

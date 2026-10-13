@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/tutorial/gui/__init__.py
+from __future__ import absolute_import
 import typing
 from enum import unique, IntEnum
 import Event
@@ -194,7 +195,6 @@ ComponentDescr = typing.NamedTuple('ComponentDescr', (('ID', str),
  ('path', str)))
 
 class IGuiImpl(object):
-    __slots__ = ('onComponentFound', 'onTriggerActivated', 'onComponentDisposed', 'onEffectCompleted', 'onInit')
     if typing.TYPE_CHECKING:
         onComponentFound = None
         onComponentDisposed = None
@@ -214,7 +214,7 @@ class IGuiImpl(object):
     def hideEffect(self, componentID, viewID, effectType, effectBuilder=''):
         raise NotImplementedError
 
-    def setDescriptions(self, items):
+    def setDescriptions(self, descriptions):
         raise NotImplementedError
 
     def setSystemEnabled(self, enabled):

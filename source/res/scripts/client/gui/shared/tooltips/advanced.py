@@ -19,10 +19,18 @@ from gui.shared.tooltips import formatters, ToolTipBaseData
 from gui.shared.tooltips.common import BlocksTooltipData
 from helpers import dependency
 from helpers import i18n
+from items.vehicle_mechanics_types import VehicleMechanicKeys
 from skeletons.account_helpers.settings_core import ISettingsCore
-from vehicles.mechanics.mechanic_constants import VehicleMechanic
 DISABLED_ITEMS_ID = 12793
 CHASSIS_TRACK_WITHIN_TRACK = 'vehicleTrackWithinTrackChassis'
+
+def _getLowChargeShotFooter(text):
+    textPath = R.strings.tooltips.advanced.LOW_CHARGE_SHOT
+    footerText = text_styles.concatStylesToMultiLine(text_styles.concatStylesToMultiLine(text, ''), backport.text(textPath.footer(), fireMode=text_styles.stats(backport.text(textPath.fireMode())), fireRate=text_styles.stats(backport.text(textPath.fireRate()))))
+    return footerText
+
+
+_FOOTER_FOR_VEHICLE_MECHANICS = {VehicleMechanicKeys.LOW_CHARGE_SHOT: _getLowChargeShotFooter}
 
 class ComplexTooltip(BlocksTooltipData):
     __settingsCore = dependency.descriptor(ISettingsCore)
@@ -101,16 +109,22 @@ class BaseAdvancedTooltip(BlocksTooltipData):
 
 class AdvancedTooltipWithMechanics(BaseAdvancedTooltip):
 
-    def _hasMechanic(self, vehicle, mechanicName):
-        return mechanicName in vehicle.getMechanics()
+    def _getMechanics(self, vehicle):
+        return vehicle.getMechanics()
 
     def _getDescrText(self, description, descReady=False):
         descrText = super(AdvancedTooltipWithMechanics, self)._getDescrText(description, descReady)
         statsConfig = self.context.getStatsConfiguration(self._item)
         vehicle = statsConfig.vehicle
-        if vehicle is not None and self._hasMechanic(vehicle, VehicleMechanic.LOW_CHARGE_SHOT):
-            descrText = text_styles.concatStylesToMultiLine(text_styles.concatStylesToMultiLine(descrText, ''), i18n.makeString(TOOLTIPS.ADVANCED_LOW_CHARGE_SHOT_FOOTER, fireMode=text_styles.stats(TOOLTIPS.ADVANCED_LOW_CHARGE_SHOT_FIREMODE), fireRate=text_styles.stats(TOOLTIPS.ADVANCED_LOW_CHARGE_SHOT_FIRERATE)))
-        return descrText
+        if vehicle is None:
+            return descrText
+        else:
+            mechanics = self._getMechanics(vehicle)
+            handlers = (handler for m, handler in _FOOTER_FOR_VEHICLE_MECHANICS.items() if m in mechanics)
+            for handler in handlers:
+                descrText = handler(descrText)
+
+            return descrText
 
 
 class FakeAdvancedTooltip(BaseAdvancedTooltip):
@@ -173,9 +187,8 @@ class HangarBoosterAdvanced(BaseAdvancedTooltip):
 
 class HangarModuleAdvanced(AdvancedTooltipWithMechanics):
 
-    def _hasMechanic(self, vehicle, mechanicName):
-        mechanics = self._item.getMechanics(vehicle.descriptor) or ()
-        return mechanicName in mechanics
+    def _getMechanics(self, vehicle):
+        return self._item.getMechanics(vehicle.descriptor) or ()
 
     def _getBlocksList(self, *args, **kwargs):
         item = self._item
@@ -188,7 +201,7 @@ class HangarModuleAdvanced(AdvancedTooltipWithMechanics):
             header = self._item.shortUserName
         else:
             header = self._item.userType
-        if itemId == FITTING_TYPES.VEHICLE_CHASSIS and item.isTrackWithinTrack():
+        if itemId == FITTING_TYPES.VEHICLE_CHASSIS and item.hasMechanic(VehicleMechanicKeys.TRACK_WITHIN_TRACK):
             movieKey = CHASSIS_TRACK_WITHIN_TRACK
             descrKey = CHASSIS_TRACK_WITHIN_TRACK
         elif isEquipment and item.isStimulator:
@@ -197,8 +210,8 @@ class HangarModuleAdvanced(AdvancedTooltipWithMechanics):
         vehicle = statsConfig.vehicle
         mechanics = item.getMechanics(vehicle.descriptor) if vehicle is not None else ()
         movieModule = None
-        for mechanicName in mechanics:
-            movieModule = MODULE_MOVIES.get('%s_%s' % (movieKey, mechanicName.value))
+        for mechanicKey in mechanics:
+            movieModule = MODULE_MOVIES.get('%s_%s' % (movieKey, mechanicKey.uniqueName))
             if movieModule:
                 break
 

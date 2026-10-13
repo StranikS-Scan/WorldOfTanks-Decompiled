@@ -4,123 +4,59 @@ from __future__ import absolute_import
 import itertools
 import math
 import sys
-from collections import namedtuple
-from functools import partial
 import typing
-from future.utils import iteritems, itervalues
+from collections import namedtuple, defaultdict
+from functools import partial
+from future.utils import iteritems, itervalues, viewitems
 import nations
 import persistent_data_cache_common as pdc
 from constants import BonusTypes
-from gui.shared.items_parameters import calcGunParams, calcShellParams, getEquipmentParameters, isAutoReloadGun, isAutoShootGun, isDualGun, isDualAccuracy, isTwinGun, isUnlimitedClipGun, isLowChargeShotGun
+from gui.shared.items_parameters import calcGunParams, calcShellParams, getEquipmentParameters
 from gui.shared.items_parameters import xml_reader
 from gui.shared.utils.decorators import debugTime
 from items import vehicles, ITEM_TYPES, EQUIPMENT_TYPES
+from items.vehicle_mechanics_types import VehicleMechanicKeys
 from items.vehicles import getVehicleType
-from gui.shared.utils import GUN_NORMAL, GUN_CAN_BE_CLIP, GUN_CLIP, GUN_AUTO_RELOAD, GUN_CAN_BE_AUTO_RELOAD, GUN_DUAL_GUN, GUN_CAN_BE_DUAL_GUN, GUN_AUTO_SHOOT, GUN_CAN_BE_AUTO_SHOOT, GUN_TWIN_GUN, GUN_CAN_BE_TWIN_GUN, GUN_CAN_BE_LOW_CHARGE_SHOT, LOW_CHARGE_SHOT
+from gui.shared.utils import GUN_NORMAL
+from gui.shared.gui_items.vehicle_mechanics.mechanic_detectors import ENGINE_MECHANICS_BITS, ENGINE_MECHANIC_DETECTORS, CHASSIS_MECHANIC_DETECTORS, GUN_MECHANICS_TO_RELOAD_TYPES, GUN_MECHANIC_DETECTORS, hasChassisMechanicBit
 from post_progression_common import ACTION_TYPES
 from soft_exception import SoftException
 if typing.TYPE_CHECKING:
-    from items.vehicles import VehicleDescriptor
+    from items.vehicle_mechanics_types import VehicleMechanicKey
+    from gui.shared.gui_items.vehicle_mechanics.mechanic_detectors import ChassisTypes
 PrecachedShell = namedtuple('PrecachedShell', 'guns params')
 PrecachedEquipment = namedtuple('PrecachedEquipment', 'nations params')
 PrecachedOptionalDevice = namedtuple('PrecachedOptionalDevice', 'weight nations')
-PrecachedChassis = namedtuple('PrecachedChassis', 'isHydraulic, isWheeled, hasAutoSiege, isTrackWithinTrack, isWheeledOnSpotRotation')
 
-class PrecachedEngine(namedtuple('PrecachedEngine', ['hasTurboshaftEngine',
- 'hasRocketAcceleration',
- 'hasWheeledDash',
- 'hasStagedJetBoosters'])):
+class PrecachedGun(namedtuple('PrecachedGun', ('mechanics', 'params', 'turretsByVehicles'))):
 
-    def __new__(cls, *args, **kwargs):
-        defaults = dict(hasTurboshaftEngine=False, hasRocketAcceleration=False, hasWheeledDash=False, hasStagedJetBoosters=False)
-        if kwargs:
-            dataToUpdate = {k:v for k, v in kwargs.items() if k in cls._fields}
-        elif args:
-            dataToUpdate = dict(hasTurboshaftEngine=args[0], hasRocketAcceleration=args[1], hasWheeledDash=args[2], hasStagedJetBoosters=args[3])
-        else:
-            dataToUpdate = {}
-        defaults.update(dataToUpdate)
-        return super(PrecachedEngine, cls).__new__(cls, **defaults)
-
-
-class _PrecachedEngineTypes(object):
-    DEFAULT = PrecachedEngine()
-    TURBOSHAFT = PrecachedEngine(hasTurboshaftEngine=True)
-    ROCKET_ACCELERATION = PrecachedEngine(hasRocketAcceleration=True)
-    WHEELED_DASH = PrecachedEngine(hasWheeledDash=True)
-    STAGED_JET_BOOSTERS = PrecachedEngine(hasStagedJetBoosters=True)
-
-
-class _PrecachedChassisTypes(object):
-    DEFAULT = PrecachedChassis(isHydraulic=False, isWheeled=False, hasAutoSiege=False, isTrackWithinTrack=False, isWheeledOnSpotRotation=False)
-    HYDRAULIC = PrecachedChassis(isHydraulic=True, isWheeled=False, hasAutoSiege=False, isTrackWithinTrack=False, isWheeledOnSpotRotation=False)
-    WHEELED = PrecachedChassis(isHydraulic=False, isWheeled=True, hasAutoSiege=False, isTrackWithinTrack=False, isWheeledOnSpotRotation=False)
-    HYDRAULIC_WHEELED = PrecachedChassis(isHydraulic=True, isWheeled=True, hasAutoSiege=False, isTrackWithinTrack=False, isWheeledOnSpotRotation=False)
-    ON_SPOT_ROTATION_WHEELED = PrecachedChassis(isHydraulic=False, isWheeled=True, hasAutoSiege=False, isTrackWithinTrack=False, isWheeledOnSpotRotation=True)
-    HYDRAULIC_AUTO_SIEGE = PrecachedChassis(isHydraulic=True, isWheeled=False, hasAutoSiege=True, isTrackWithinTrack=False, isWheeledOnSpotRotation=False)
-    TRACK_WITHIN_TRACK = PrecachedChassis(isHydraulic=False, isWheeled=False, hasAutoSiege=False, isTrackWithinTrack=True, isWheeledOnSpotRotation=False)
-    ALL = (DEFAULT,
-     HYDRAULIC,
-     WHEELED,
-     HYDRAULIC_WHEELED,
-     HYDRAULIC_AUTO_SIEGE,
-     TRACK_WITHIN_TRACK,
-     ON_SPOT_ROTATION_WHEELED)
-    MAP = dict((((pC.isHydraulic,
-      pC.isWheeled,
-      pC.hasAutoSiege,
-      pC.isTrackWithinTrack,
-      pC.isWheeledOnSpotRotation), pC) for pC in ALL))
-
-
-def isHydraulicChassis(vDescr):
-    return vDescr.hasHydraulicChassis or vDescr.isWheeledVehicle or vDescr.hasAutoSiegeMode if vDescr.hasSiegeMode else False
-
-
-def isTrackWithinTrackChassis(vChassis):
-    return vChassis.isTrackWithinTrack
-
-
-class PrecachedGun(namedtuple('PrecachedGun', ('clipVehicles', 'autoReloadVehicles', 'autoShootVehicles', 'unlimitedAutoShootVehicles', 'dualGunVehicles', 'twinGunVehicles', 'dualAccuracyVehicles', 'params', 'turretsByVehicles', 'lowChargeShotVehicles'))):
+    @property
+    def clipVehicles(self):
+        return self.mechanics.get(VehicleMechanicKeys.MAGAZINE_GUN)
 
     @property
     def clipVehiclesNames(self):
-        if self.clipVehicles is not None:
-            return [ getVehicleType(cd).userString for cd in self.clipVehicles ]
-        else:
-            return []
+        vehSet = self.clipVehicles
+        if vehSet:
+            return [ getVehicleType(cd).userString for cd in vehSet ]
+        return []
 
-    def hasDualAccuracy(self, vehicleCD):
-        return self.dualAccuracyVehicles is not None and vehicleCD in self.dualAccuracyVehicles
+    def hasMechanicForVehicle(self, mechanic, vehicleCD):
+        vehSet = self.mechanics.get(mechanic)
+        return vehSet is not None and vehicleCD in vehSet
+
+    def hasMechanic(self, mechanic):
+        return mechanic in self.mechanics
 
     def getReloadingType(self, vehicleCD=None):
-        reloadingType = GUN_NORMAL
-        if vehicleCD is None:
-            if self.autoReloadVehicles:
-                reloadingType = GUN_CAN_BE_AUTO_RELOAD
-            elif self.autoShootVehicles:
-                reloadingType = GUN_CAN_BE_AUTO_SHOOT
-            elif self.clipVehicles:
-                reloadingType = GUN_CAN_BE_CLIP
-            elif self.dualGunVehicles:
-                reloadingType = GUN_CAN_BE_DUAL_GUN
-            elif self.twinGunVehicles:
-                reloadingType = GUN_CAN_BE_TWIN_GUN
-            elif self.lowChargeShotVehicles:
-                reloadingType = GUN_CAN_BE_LOW_CHARGE_SHOT
-        elif self.autoReloadVehicles and vehicleCD in self.autoReloadVehicles:
-            reloadingType = GUN_AUTO_RELOAD
-        elif self.autoShootVehicles and vehicleCD in self.autoShootVehicles:
-            reloadingType = GUN_AUTO_SHOOT
-        elif self.clipVehicles is not None and vehicleCD in self.clipVehicles:
-            reloadingType = GUN_CLIP
-        elif self.dualGunVehicles and vehicleCD in self.dualGunVehicles:
-            reloadingType = GUN_DUAL_GUN
-        elif self.twinGunVehicles and vehicleCD in self.twinGunVehicles:
-            reloadingType = GUN_TWIN_GUN
-        elif self.lowChargeShotVehicles and vehicleCD in self.lowChargeShotVehicles:
-            reloadingType = LOW_CHARGE_SHOT
-        return reloadingType
+        for mechanic, (canBeType, activeType) in iteritems(GUN_MECHANICS_TO_RELOAD_TYPES):
+            if vehicleCD is not None:
+                if self.hasMechanicForVehicle(mechanic, vehicleCD):
+                    return activeType
+            if self.hasMechanic(mechanic):
+                return canBeType
+
+        return GUN_NORMAL
 
     def getTurretsForVehicle(self, vehicleCD):
         return self.turretsByVehicles.get(vehicleCD, ())
@@ -246,14 +182,7 @@ def _precacheGuns(data):
         for g in itervalues(getter(nationIdx)):
             del descriptors[:]
             turretsIntCDs = {}
-            clipVehiclesList = set()
-            autoReloadVehsList = set()
-            autoShootVehsList = set()
-            unlimAutoShootVehsList = set()
-            dualGunVehsList = set()
-            dualAccuracyVehsList = set()
-            twinGunVehsList = set()
-            lowChargeShotVehsList = set()
+            vehiclesByMechanics = defaultdict(set)
             for vDescr in data.vehiclesCache.generator(nationIdx):
                 del curVehicleTurretsCDs[:]
                 vehCD = vDescr.type.compactDescr
@@ -264,29 +193,14 @@ def _precacheGuns(data):
                                 descriptors.append(gun)
                                 if len(vDescr.hull.fakeTurrets['lobby']) != len(vDescr.turrets):
                                     curVehicleTurretsCDs.append(turret.compactDescr)
-                                if gun.clip[0] > 1:
-                                    clipVehiclesList.add(vehCD)
-                                if isAutoReloadGun(gun):
-                                    autoReloadVehsList.add(vehCD)
-                                if isAutoShootGun(gun):
-                                    autoShootVehsList.add(vehCD)
-                                    if isUnlimitedClipGun(gun):
-                                        unlimAutoShootVehsList.add(vehCD)
-                                if isDualGun(gun):
-                                    dualGunVehsList.add(vehCD)
-                                if isDualAccuracy(gun):
-                                    dualAccuracyVehsList.add(vehCD)
-                                if isTwinGun(gun):
-                                    twinGunVehsList.add(vehCD)
-                                if isLowChargeShotGun(gun):
-                                    lowChargeShotVehsList.add(vehCD)
+                                for mechanic, detector in viewitems(GUN_MECHANIC_DETECTORS):
+                                    if detector(gun, vDescr):
+                                        vehiclesByMechanics[mechanic].add(vehCD)
 
                 if curVehicleTurretsCDs:
                     turretsIntCDs[vDescr.type.compactDescr] = tuple(curVehicleTurretsCDs)
 
-            data.cache[nationIdx][ITEM_TYPES.vehicleGun][g.compactDescr] = PrecachedGun(clipVehicles=clipVehiclesList if clipVehiclesList else None, autoReloadVehicles=frozenset(autoReloadVehsList) if autoReloadVehsList else None, autoShootVehicles=frozenset(autoShootVehsList) if autoShootVehsList else None, unlimitedAutoShootVehicles=frozenset(unlimAutoShootVehsList) if unlimAutoShootVehsList else None, dualGunVehicles=frozenset(dualGunVehsList) if dualGunVehsList else None, dualAccuracyVehicles=frozenset(dualAccuracyVehsList) if dualAccuracyVehsList else None, twinGunVehicles=frozenset(twinGunVehsList) if twinGunVehsList else None, lowChargeShotVehicles=frozenset(lowChargeShotVehsList) if lowChargeShotVehsList else None, params=calcGunParams(g, descriptors), turretsByVehicles=turretsIntCDs)
-
-    return
+            data.cache[nationIdx][ITEM_TYPES.vehicleGun][g.compactDescr] = PrecachedGun(mechanics={m:frozenset(v) for m, v in viewitems(vehiclesByMechanics)}, params=calcGunParams(g, descriptors), turretsByVehicles=turretsIntCDs)
 
 
 def _precacheShells(data):
@@ -318,16 +232,21 @@ def _precacheChassis(data):
         cachedChassisByNation = data.cache[nationIdx][chassisItemType]
         for vDescr in data.vehiclesCache.generator(nationIdx):
             for vChs in vDescr.type.chassis:
+                mask = 0
+                for hasMechanic, detector in itervalues(CHASSIS_MECHANIC_DETECTORS):
+                    if detector(vChs, vDescr):
+                        mask |= hasMechanic
+
                 chassisCD = vChs.compactDescr
-                cachedChassisByNation[chassisCD] = _PrecachedChassisTypes.MAP[isHydraulicChassis(vDescr), vDescr.isWheeledVehicle, vDescr.hasAutoSiegeMode, isTrackWithinTrackChassis(vChs), vDescr.isWheeledOnSpotRotation]
-                processedItems.add(chassisCD)
+                cachedChassisByNation[chassisCD] = cachedChassisByNation.get(chassisCD, 0) | mask
                 if vDescr.isWheeledVehicle:
                     chassisPhysics = vDescr.type.xphysics['chassis'][vChs.name]
                     data.wheeledChassisParams[chassisCD] = chassisPhysics['axleSteeringLockAngles']
+                processedItems.add(chassisCD)
 
         for chs in itervalues(getter(nationIdx)):
             if chs.compactDescr not in processedItems:
-                cachedChassisByNation[chs.compactDescr] = _PrecachedChassisTypes.DEFAULT
+                cachedChassisByNation[chs.compactDescr] = 0
 
 
 def _precacheEngines(data):
@@ -338,23 +257,19 @@ def _precacheEngines(data):
         data.cache.setdefault(nationIdx, {})[engineItemType] = {}
         cachedEngineByNation = data.cache[nationIdx][engineItemType]
         for vDescr in data.vehiclesCache.generator(nationIdx):
+            mask = 0
+            for hasMechanic, detector in itervalues(ENGINE_MECHANIC_DETECTORS):
+                if detector(vDescr):
+                    mask |= hasMechanic
+
             for vEng in vDescr.type.engines:
                 engineCD = vEng.compactDescr
-                if vDescr.hasTurboshaftEngine:
-                    cachedEngineByNation[engineCD] = _PrecachedEngineTypes.TURBOSHAFT
-                elif vDescr.hasRocketAcceleration:
-                    cachedEngineByNation[engineCD] = _PrecachedEngineTypes.ROCKET_ACCELERATION
-                elif vDescr.hasWheeledDash:
-                    cachedEngineByNation[engineCD] = _PrecachedEngineTypes.WHEELED_DASH
-                elif vDescr.hasStagedJetBoosters:
-                    cachedEngineByNation[engineCD] = _PrecachedEngineTypes.STAGED_JET_BOOSTERS
-                else:
-                    cachedEngineByNation[engineCD] = _PrecachedEngineTypes.DEFAULT
+                cachedEngineByNation[engineCD] = cachedEngineByNation.get(engineCD, 0) | mask
                 processedItems.add(engineCD)
 
         for eng in itervalues(getter(nationIdx)):
             if eng.compactDescr not in processedItems:
-                cachedEngineByNation[eng.compactDescr] = _PrecachedEngineTypes.DEFAULT
+                cachedEngineByNation[eng.compactDescr] = 0
 
 
 def _getVehiclesWithoutCamouflage(data):
@@ -399,41 +314,20 @@ class _ParamsCache(object):
     def getGunReloadingSystemType(self, itemCD, vehicleCD=None):
         return self.getPrecachedParameters(itemCD).getReloadingType(vehicleCD)
 
-    def isChassisHydraulic(self, itemCD):
-        return self.getPrecachedParameters(itemCD).isHydraulic
-
-    def isChassisWheeled(self, itemCD):
-        return self.getPrecachedParameters(itemCD).isWheeled
-
-    def isChassisWheeledOnSpotRotation(self, itemCD):
-        return self.getPrecachedParameters(itemCD).isWheeledOnSpotRotation
-
-    def isTrackWithinTrack(self, itemCD):
-        return self.getPrecachedParameters(itemCD).isTrackWithinTrack
-
-    def isChassisAutoSiege(self, itemCD):
-        return self.getPrecachedParameters(itemCD).hasAutoSiege
-
     def getWheeledChassisAxleLockAngles(self, itemCD):
         return self.__wheeledChassisParams.get(itemCD)
 
-    def hasDualAccuracy(self, itemCD, vehicleCD=None):
-        return self.getPrecachedParameters(itemCD).hasDualAccuracy(vehicleCD)
+    def hasGunMechanic(self, itemCD, mechanic, vehicleCD=None):
+        gun = self.getPrecachedParameters(itemCD)
+        return gun.hasMechanicForVehicle(mechanic, vehicleCD) if vehicleCD is not None else gun.hasMechanic(mechanic)
 
-    def hasTurboshaftEngine(self, itemCD):
-        return self.getPrecachedParameters(itemCD).hasTurboshaftEngine
+    def hasEngineMechanic(self, itemCD, mechanic):
+        mask = self.getPrecachedParameters(itemCD) or 0
+        return bool(mask & ENGINE_MECHANICS_BITS.get(mechanic, 0))
 
-    def hasRocketAcceleration(self, itemCD):
-        return self.getPrecachedParameters(itemCD).hasRocketAcceleration
-
-    def hasRechargeableNitro(self, itemCD):
-        return self.getPrecachedParameters(itemCD).hasRechargeableNitro
-
-    def hasWheeledDash(self, itemCD):
-        return self.getPrecachedParameters(itemCD).hasWheeledDash
-
-    def hasStagedJetBoosters(self, itemCD):
-        return self.getPrecachedParameters(itemCD).hasStagedJetBoosters
+    def hasChassisMechanic(self, itemCD, mechanic):
+        mask = self.getPrecachedParameters(itemCD) or 0
+        return hasChassisMechanicBit(mask, mechanic)
 
     def getSimplifiedCoefficients(self):
         return self.__simplifiedParamsCoefficients

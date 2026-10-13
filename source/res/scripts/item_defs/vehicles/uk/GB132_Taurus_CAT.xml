@@ -9,8 +9,8 @@
   <postProgressionTree>	role_ATSPG_support	</postProgressionTree>
   <customRoleSlotOptions>	3 5	</customRoleSlotOptions>
   <speedLimits>
-    <forward>	65	</forward>
-    <backward>	25	</backward>
+    <forward>	60	</forward>
+    <backward>	20	</backward>
   </speedLimits>
   <invisibility>
     <moving>	0.200	</moving>
@@ -38,11 +38,11 @@
       <invisibilityBonus>	0.08	</invisibilityBonus>
     </deluxeAdditionalInvisibilityDevice>
   </optDevsOverrides>
-  <repairCost>	6.0	</repairCost>
-  <premiumVehicleXPFactor>	0.1	</premiumVehicleXPFactor>
+  <repairCost>	10	</repairCost>
+  <premiumVehicleXPFactor>	0.05	</premiumVehicleXPFactor>
   <crewXpFactor>	1.5	</crewXpFactor>
   <camouflage>
-    <priceFactor>	1.6	</priceFactor>
+    <priceFactor>	1.8	</priceFactor>
     <density>	1.050705 1.050705	</density>
   </camouflage>
   <hull>
@@ -84,11 +84,11 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	21565	</weight>
-    <maxHealth>	920	</maxHealth>
+    <maxHealth>	1200	</maxHealth>
     <ammoBayHealth>
-      <maxHealth>	210	</maxHealth>
-      <maxRegenHealth>	158	</maxRegenHealth>
-      <repairCost>	8	</repairCost>
+      <maxHealth>	230	</maxHealth>
+      <maxRegenHealth>	173	</maxRegenHealth>
+      <repairCost>	9	</repairCost>
     </ammoBayHealth>
     <fakeTurrets>
       <lobby>	0	</lobby>
@@ -977,8 +977,8 @@
     <Chassis_GB132_Taurus_CAT>
       <userString>	#gb_vehicles:Chassis_GB132_Taurus_CAT	</userString>
       <tags></tags>
-      <level>	8	</level>
-      <price>	30000	</price>
+      <level>	9	</level>
+      <price>	60000	</price>
       <notInShop>	true	</notInShop>
       <armor>
         <leftTrack>	20	</leftTrack>
@@ -988,14 +988,14 @@
       <terrainResistance>	1 1.2 2	</terrainResistance>
       <brakeForce>	31000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
-      <rotationSpeed>	40	</rotationSpeed>
+      <rotationSpeed>	36	</rotationSpeed>
       <shotDispersionFactors>
         <vehicleMovement>	0.25	</vehicleMovement>
         <vehicleRotation>	0.08	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	220	</maxHealth>
-      <maxRegenHealth>	165	</maxRegenHealth>
+      <maxHealth>	240	</maxHealth>
+      <maxRegenHealth>	180	</maxRegenHealth>
       <repairCost>	5.0	</repairCost>
       <models>
         <undamaged>	vehicles/british/GB132_Taurus_CAT/normal/lod0/Chassis.model	</undamaged>
@@ -1778,29 +1778,29 @@
     <Turret_1_GB132_Taurus_CAT>
       <userString>	#gb_vehicles:Turret_1_GB132_Taurus_CAT	</userString>
       <tags>	cannotDetach	</tags>
-      <level>	8	</level>
-      <price>	30000	</price>
+      <level>	9	</level>
+      <price>	60000	</price>
       <notInShop>	true	</notInShop>
       <armor>
         <armor_1>	0	</armor_1>
       </armor>
       <primaryArmor>	armor_1 armor_1 armor_1	</primaryArmor>
       <weight>	100	</weight>
-      <maxHealth>	230	</maxHealth>
+      <maxHealth>	300	</maxHealth>
       <rotationSpeed>	16	</rotationSpeed>
       <turretRotatorHealth>
-        <maxHealth>	155	</maxHealth>
-        <maxRegenHealth>	78	</maxRegenHealth>
-        <repairCost>	8	</repairCost>
+        <maxHealth>	170	</maxHealth>
+        <maxRegenHealth>	85	</maxRegenHealth>
+        <repairCost>	9	</repairCost>
       </turretRotatorHealth>
       <circularVisionRadius>	360	</circularVisionRadius>
       <surveyingDeviceHealth>
-        <maxHealth>	100	</maxHealth>
-        <maxRegenHealth>	50	</maxRegenHealth>
+        <maxHealth>	110	</maxHealth>
+        <maxRegenHealth>	55	</maxRegenHealth>
         <repairCost>	2	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_105mm_HVKE>	shared	  <maxAmmo>	56	</maxAmmo>
+        <_105mm_HVKE>	shared	  <maxAmmo>	51	</maxAmmo>
           <armor>
             <gun>	40	</gun>
           </armor>
@@ -1811,18 +1811,18 @@
           <staticPitch>	0	</staticPitch>
           <turretYawLimits>	-3 3	</turretYawLimits>
           <staticTurretYaw>	0	</staticTurretYaw>
-          <reloadTime>	28	</reloadTime>
+          <reloadTime>	27	</reloadTime>
           <aimingTime>	3.0	</aimingTime>
           <clip>
-            <count>	4	</count>
-            <rate>	30	</rate>
+            <count>	3	</count>
+            <rate>	40	</rate>
           </clip>
           <shotDispersionFactors>
             <turretRotation>	0.1	</turretRotation>
-            <afterShot>	8	</afterShot>
+            <afterShot>	3	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <shotDispersionRadius>	0.44	</shotDispersionRadius>
+          <shotDispersionRadius>	0.4	</shotDispersionRadius>
           <invisibilityFactorAtShot>	0.209	</invisibilityFactorAtShot>
           <customizationSlots>
             <slot>
@@ -1909,7 +1909,7 @@
     <Rolls_Royce_717>	shared	</Rolls_Royce_717>
   </engines>
   <fuelTanks>
-    <Heavy>	shared	</Heavy>
+    <Large>	shared	</Large>
   </fuelTanks>
   <radios>
     <SR_40_E>	shared	</SR_40_E>
@@ -1919,8 +1919,8 @@
     <detailed>
       <engines>
         <Rolls_Royce_717>
-          <smplEnginePower>	700	</smplEnginePower>
-          <smplFwMaxSpeed>	65	</smplFwMaxSpeed>
+          <smplEnginePower>	650	</smplEnginePower>
+          <smplFwMaxSpeed>	60	</smplFwMaxSpeed>
         </Rolls_Royce_717>
       </engines>
       <chassis>
@@ -1942,7 +1942,7 @@
     </detailed>
   </physics>
   <siege_mode>
-    <switchOnTime>	1	</switchOnTime>
+    <switchOnTime>	2	</switchOnTime>
     <switchOffTime>	1	</switchOffTime>
     <engineDamageCoeff>	2	</engineDamageCoeff>
     <soundStateChange>

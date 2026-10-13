@@ -3,11 +3,11 @@
 from __future__ import absolute_import
 import typing
 from gui.shared.utils.decorators import ReprInjector
+from items.vehicle_mechanics_types import VehicleMechanicKey, VehicleMechanicKeys
 from vehicles.components.vehicle_component import VehicleDynamicComponent
 from vehicles.components.vehicle_prefabs import createMechanicPrefabSpawner
 from vehicles.mechanics.gun_mechanics.common import IGunMechanicComponent
 from vehicles.mechanics.gun_mechanics.temperature.heating_zones_gun import DEFAULT_HEATING_ZONES_MECHANIC_STATE, DEFAULT_HEATING_ZONES_COMPONENT_PARAMS, HeatingZonesGunComponentParams, HeatingZonesGunMechanicState
-from vehicles.mechanics.mechanic_constants import VehicleMechanic
 from vehicles.mechanics.mechanic_helpers import getVehicleDescrMechanicParams
 from vehicles.mechanics.mechanic_states import createMechanicStatesEvents, IMechanicStatesComponent
 if typing.TYPE_CHECKING:
@@ -26,8 +26,8 @@ class HeatingZonesGunComponent(VehicleDynamicComponent, IGunMechanicComponent, I
         self._initComponent()
 
     @property
-    def vehicleMechanic(self):
-        return VehicleMechanic.HEATING_ZONES_GUN
+    def vehicleMechanicKey(self):
+        return VehicleMechanicKeys.HEATING_ZONES_GUN
 
     @property
     def statesEvents(self):
@@ -58,7 +58,7 @@ class HeatingZonesGunComponent(VehicleDynamicComponent, IGunMechanicComponent, I
 
     def _collectComponentParams(self, typeDescriptor):
         super(HeatingZonesGunComponent, self)._collectComponentParams(typeDescriptor)
-        mechanicParams = getVehicleDescrMechanicParams(typeDescriptor, self.vehicleMechanic)
+        mechanicParams = getVehicleDescrMechanicParams(typeDescriptor, self.vehicleMechanicKey)
         self.__componentParams = HeatingZonesGunComponentParams.fromMechanicParams(mechanicParams)
 
     def __updateMechanicState(self):

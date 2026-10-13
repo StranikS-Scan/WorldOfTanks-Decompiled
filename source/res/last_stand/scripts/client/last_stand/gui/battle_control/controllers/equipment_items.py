@@ -15,7 +15,7 @@ from gui.battle_control import avatar_getter, vehicle_getter
 from gui.battle_control.controllers.consumables.equipment_ctrl import _ActivationError, DynComponentsGroupItem, DynComponentsGroupReplayItem
 from gui.battle_control.battle_constants import DEVICE_STATE_DESTROYED
 from constants import SERVER_TICK_LENGTH, EQUIPMENT_STAGES
-from vehicles.mechanics.mechanic_constants import VehicleMechanic
+from items.vehicle_mechanics_types import VehicleMechanicKeys
 
 class LSSituationalEquipmentItem(DynComponentsGroupItem):
 
@@ -209,7 +209,7 @@ class _FastReload(_AbilityWithDuration):
                     return (True, None)
             if ammoCtrl.getGunSettings().isUnlimitedClip and 'autoShoot' in ammoCtrl.getGunSettings().tags:
                 ammoStatesInfo = ammoCtrl.ammoStatesInfo
-                overHeatState = ammoStatesInfo.ammoStates.get(VehicleMechanic.OVERHEAT_GUN.value)
+                overHeatState = ammoStatesInfo.ammoStates.get(VehicleMechanicKeys.OVERHEAT_GUN.uniqueName)
                 if overHeatState:
                     canShoot, _ = overHeatState.canShootValidation()
                     if not canShoot:

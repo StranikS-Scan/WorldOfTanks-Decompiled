@@ -2,14 +2,13 @@
 # Embedded file name: scripts/client/gui/veh_mechanics/battle/updaters/mechanics/tracked_mechanics_updater.py
 from __future__ import absolute_import
 import typing
-from future.utils import viewkeys
 from events_containers.common.containers import ContainersListener
 from events_handler import eventHandler
 from gui.battle_control.controllers.vehicles_tracking import VehiclesTrackingWatcher
 from gui.veh_mechanics.battle.updaters.updaters_common import ViewUpdater
 from vehicles.mechanics.mechanic_trackers import IVehicleMechanicsTrackerListenerLogic
 if typing.TYPE_CHECKING:
-    from vehicles.mechanics.mechanic_constants import VehicleMechanic
+    from items.vehicle_mechanics_types import VehicleMechanicKey
 
 class IVehicleTrackedMechanicsView(object):
 
@@ -29,4 +28,4 @@ class VehicleTrackedMechanicsUpdater(ViewUpdater, ContainersListener, VehiclesTr
 
     @eventHandler
     def onMechanicComponentsUpdate(self, components):
-        self.view.onTrackedMechanicsUpdate(viewkeys(components))
+        self.view.onTrackedMechanicsUpdate(set(components))

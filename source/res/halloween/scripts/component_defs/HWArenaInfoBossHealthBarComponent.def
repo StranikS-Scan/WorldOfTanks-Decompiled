@@ -1,0 +1,46 @@
+<HWArenaInfoBossHealthBarComponent.def>
+  <CellMethods></CellMethods>
+  <ClientMethods>
+    <clientOnBossHealthChanged>
+      <Arg>	UINT16	</Arg>
+      <Arg>	UINT16	</Arg>
+      <Arg>	OBJECT_ID	</Arg>
+      <Arg>	OBJECT_ID	</Arg>
+      <Arg>	UINT8	</Arg>
+    </clientOnBossHealthChanged>
+  </ClientMethods>
+  <Properties>
+    <lastHealth>
+      <Type>	UINT16	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <SendLatestOnly>	true	</SendLatestOnly>
+    </lastHealth>
+    <bossVehicleIDs>
+      <Type>	ARRAY	  <of>	OBJECT_ID	</of>
+      </Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </bossVehicleIDs>
+    <healthForLives>
+      <Type>	TUPLE	  <of>	UINT16	</of>
+      </Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </healthForLives>
+    <minionsCount>
+      <Type>	UINT16	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </minionsCount>
+    <isVisible>
+      <Type>	BOOL	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </isVisible>
+    <bossFightGoal>
+      <Type>	STRING	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <Default></Default>
+    </bossFightGoal>
+  </Properties>
+  <ofEntity>
+    <ArenaInfo></ArenaInfo>
+  </ofEntity>
+  <DefaultKeyName>	HWArenaInfoBossHealthBarComponent	</DefaultKeyName>
+</HWArenaInfoBossHealthBarComponent.def>

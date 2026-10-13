@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/gui/Scaleform/view/lobby/SimpleChannelWindow.py
+from __future__ import absolute_import
 from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.Scaleform.managers.windows_stored_data import g_windowsStoredData, TARGET_ID
 from gui.impl import backport

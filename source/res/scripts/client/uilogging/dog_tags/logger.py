@@ -1,9 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/uilogging/dog_tags/logger.py
+from __future__ import absolute_import
 from typing import TYPE_CHECKING
+from advanced_achievements_client.getters import getAchievementByID
 from uilogging.base.logger import MetricsLogger
 from uilogging.dog_tags.logging_constants import FEATURE, MIN_VIEW_TIME, DogTagActions, DogTagAchievementStates, DogTagsViewKeys
-from advanced_achievements_client.getters import getAchievementByID
 from wotdecorators import noexcept
 if TYPE_CHECKING:
     from typing import Optional

@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: story_mode/scripts/client/story_mode/gui/scaleform/daapi/view/battle/settings_window.py
+from __future__ import absolute_import
 from account_helpers.settings_core.settings_constants import SETTINGS_GROUP
 from gui.Scaleform.daapi.view.common.settings import SettingsWindow
 from gui.impl import backport

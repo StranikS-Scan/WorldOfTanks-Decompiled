@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: comp7_light/scripts/client/comp7_light/gui/Scaleform/daapi/view/battle/shared/premature_leave.py
+from __future__ import absolute_import
 from BWUtil import AsyncReturn
 from gui.impl.gen import R
 from gui.impl.pub.dialog_window import DialogButtons

@@ -2,6 +2,8 @@
 # Embedded file name: scripts/client/gui/impl/battle/prebattle_highlights/prebattle_highlights_view.py
 from __future__ import absolute_import
 from frameworks.wulf import ViewSettings, WindowFlags, WindowLayer
+from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
+from gui.Scaleform.framework.entities.View import ViewKey
 from gui.Scaleform.managers.battle_input import BattleGUIKeyHandler
 from gui.app_loader.settings import APP_NAME_SPACE
 from gui.impl.battle.prebattle_highlights.presenters.prebattle_highlights_presenter import PrebattleHighlightsPresenter
@@ -9,6 +11,8 @@ from gui.impl.gen import R
 from gui.impl.gen.view_models.views.battle.prebattle.prebattle_hints_view_model import PrebattleHintsViewModel
 from gui.impl.gen.view_models.views.battle.prebattle_highlights.prebattle_highlights_view_model import PrebattleHighlightsViewModel
 from gui.impl.pub import ViewImpl, WindowImpl
+from gui.shared import g_eventBus, EVENT_BUS_SCOPE
+from gui.shared.events import GameEvent
 from helpers import dependency
 from skeletons.gui.app_loader import IAppLoader
 from skeletons.gui.battle_session import IBattleSessionProvider
@@ -25,7 +29,6 @@ class PrebattleHighlightsView(ViewImpl, BattleGUIKeyHandler):
         super(PrebattleHighlightsView, self).__init__(settings)
         self.__presenter = None
         self.__pbhCtrl = None
-        self.__inStageState = False
         return
 
     @property
@@ -33,14 +36,20 @@ class PrebattleHighlightsView(ViewImpl, BattleGUIKeyHandler):
         return super(PrebattleHighlightsView, self).getViewModel()
 
     def handleEscKey(self, isDown):
-        if self.__inStageState and isDown:
-            self.__pbhCtrl.handleEscClose()
-            return True
-        return False
+        if self.__pbhCtrl is None or not self.__pbhCtrl.displayingHighlights:
+            return False
+        else:
+            if isDown and not self.__isIngameMenuShown():
+                self.__pbhCtrl.handleEscClose()
+            return isDown
 
     @property
     def _battleApp(self):
         return self.__appLoader.getApp(APP_NAME_SPACE.SF_BATTLE)
+
+    def __isIngameMenuShown(self):
+        battleApp = self._battleApp
+        return False if battleApp is None else battleApp.containerManager.getViewByKey(ViewKey(VIEW_ALIAS.INGAME_MENU)) is not None
 
     def _initialize(self, *args, **kwargs):
         super(PrebattleHighlightsView, self)._initialize()
@@ -48,22 +57,24 @@ class PrebattleHighlightsView(ViewImpl, BattleGUIKeyHandler):
             self.__pbhCtrl = self.__sessionProvider.dynamic.prebattleHighlightsController
             if self.__pbhCtrl is not None:
                 self.__pbhCtrl.onVehiclesDataReady += self.__onVehiclesDataReady
-                self.__pbhCtrl.onStartPbhStage += self.__onStartPbhStage
+        battleApp = self._battleApp
+        if battleApp:
+            battleApp.registerGuiKeyHandler(self)
+        g_eventBus.addListener(GameEvent.GO_TO_PREBATTLE_HIGHLIGHTS, self.__onPrebattleHighlightsStart, scope=EVENT_BUS_SCOPE.BATTLE)
         return
 
     def _finalize(self):
+        g_eventBus.removeListener(GameEvent.GO_TO_PREBATTLE_HIGHLIGHTS, self.__onPrebattleHighlightsStart, scope=EVENT_BUS_SCOPE.BATTLE)
         if self.__presenter:
             self.__presenter.finalize()
             self.__presenter = None
         if self.__pbhCtrl is not None:
             self.__pbhCtrl.onVehiclesDataReady -= self.__onVehiclesDataReady
-            self.__pbhCtrl.onStartPbhStage -= self.__onStartPbhStage
             self.__pbhCtrl = None
         battleApp = self._battleApp
         if battleApp:
             battleApp.unregisterGuiKeyHandler(self)
             battleApp.leaveGuiControlMode(self.uniqueID)
-        self.__inStageState = False
         super(PrebattleHighlightsView, self)._finalize()
         return
 
@@ -75,11 +86,9 @@ class PrebattleHighlightsView(ViewImpl, BattleGUIKeyHandler):
         self.__presenter.initialize()
         self.__presenter.packModel()
 
-    def __onStartPbhStage(self):
-        self.__inStageState = True
+    def __onPrebattleHighlightsStart(self, _):
         battleApp = self._battleApp
         if battleApp:
-            battleApp.registerGuiKeyHandler(self)
             battleApp.enterGuiControlMode(self.uniqueID)
 
 

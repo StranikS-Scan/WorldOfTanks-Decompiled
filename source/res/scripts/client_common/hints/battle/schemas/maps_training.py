@@ -24,8 +24,8 @@ class HintType(str, enum.Enum):
 class MTClientHintPropsModel(CommonHintPropsModel):
     __slots__ = ('hintType',)
 
-    def __init__(self, name, scope, component, unique, priority, battleTypes, hintType):
-        super(MTClientHintPropsModel, self).__init__(name=name, scope=scope, component=component, unique=unique, priority=priority, battleTypes=battleTypes)
+    def __init__(self, name, scope, component, unique, priority, battleTypes, skipOverlay, hintType):
+        super(MTClientHintPropsModel, self).__init__(name=name, scope=scope, component=component, unique=unique, priority=priority, battleTypes=battleTypes, skipOverlay=skipOverlay)
         self.hintType = hintType
 
     def _reprArgs(self):

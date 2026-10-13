@@ -7,7 +7,7 @@ from gui.impl.gen.view_models.views.lobby.page.header.wot_plus_subscription_mode
 class SubscriptionsModel(ViewModel):
     __slots__ = ('onOpenPremium', 'onOpenWotPlus')
 
-    def __init__(self, properties=4, commands=2):
+    def __init__(self, properties=3, commands=2):
         super(SubscriptionsModel, self).__init__(properties=properties, commands=commands)
 
     @property
@@ -26,23 +26,16 @@ class SubscriptionsModel(ViewModel):
     def getPremiumAccountType():
         return PremiumAccountSubscriptionModel
 
-    def getIsSteamPlatform(self):
+    def getIsCnRealm(self):
         return self._getBool(2)
 
-    def setIsSteamPlatform(self, value):
-        self._setBool(2, value)
-
-    def getIsCnRealm(self):
-        return self._getBool(3)
-
     def setIsCnRealm(self, value):
-        self._setBool(3, value)
+        self._setBool(2, value)
 
     def _initialize(self):
         super(SubscriptionsModel, self)._initialize()
         self._addViewModelProperty('wotPlus', WotPlusSubscriptionModel())
         self._addViewModelProperty('premiumAccount', PremiumAccountSubscriptionModel())
-        self._addBoolProperty('isSteamPlatform', False)
         self._addBoolProperty('isCnRealm', False)
         self.onOpenPremium = self._addCommand('onOpenPremium')
         self.onOpenWotPlus = self._addCommand('onOpenWotPlus')

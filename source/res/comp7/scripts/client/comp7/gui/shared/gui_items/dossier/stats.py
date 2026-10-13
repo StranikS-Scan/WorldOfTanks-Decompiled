@@ -1,10 +1,12 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: comp7/scripts/client/comp7/gui/shared/gui_items/dossier/stats.py
+from __future__ import absolute_import
 import logging
 import math
-from collections import namedtuple
 import typing
+from collections import namedtuple
 from gui.shared.gui_items.dossier.stats import AccountDossierStats, VehicleDossierStats, _BattleStatsBlock, _Battle2StatsBlock, _MaxStatsBlock, _VehiclesStatsBlock, _MaxVehicleStatsBlock
+from math_common import round_py2_style_int
 if typing.TYPE_CHECKING:
     from gui.shared.gui_items.dossier.stats import _DossierStats
 _logger = logging.getLogger(__name__)
@@ -79,11 +81,11 @@ class Comp7StatsBlock(_BattleStatsBlock, _Battle2StatsBlock, _MaxStatsBlock):
 
     def getAvgPoiCaptured(self):
         avgValue = self._getAvgValue(self.getBattlesCount, self.getPoiCaptured)
-        return round(avgValue) if avgValue is not None else None
+        return round_py2_style_int(avgValue) if avgValue is not None else None
 
     def getAvgRoleSkillUsed(self):
         avgValue = self._getAvgValue(self.getBattlesCount, self.getRoleSkillUsed)
-        return round(avgValue) if avgValue is not None else None
+        return round_py2_style_int(avgValue) if avgValue is not None else None
 
     def getAvgHealthRepair(self):
         avgValue = self._getAvgValue(self.getBattlesCount, self.getHealthRepair)

@@ -8,8 +8,8 @@ from gui.challenges.challenges_helpers import TIME_BEFORE_END_OF_EXPIRATION, get
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.user_missions.constants.event_banner_state import EventBannerState
-from gui.impl.lobby.user_missions.hangar_widget.event_banners.base_event_banner import BaseEventBanner
 from gui.impl.lobby.user_missions.hangar_widget.event_banners.event_banners_container import EventBannersContainer
+from gui.impl.lobby.user_missions.hangar_widget.event_banners.standard_event_banner import StandardEventBanner
 from gui.impl.lobby.user_missions.hangar_widget.services import IEventsService
 from gui.impl.lobby.user_missions.tooltips.challenges_banner_tooltip import ChallengesBannerTooltip
 from gui.server_events.events_dispatcher import showChallenges
@@ -24,7 +24,7 @@ def isChallengesBannerAvailable(challenges=None, itemsCache=None):
     return challenges.isEnabled and bool(notCompletedChallenges)
 
 
-class ChallengesEventBanner(BaseEventBanner):
+class ChallengesEventBanner(StandardEventBanner):
     NAME = HANGAR_ALIASES.CHALLENGES_EVENT_BANNER
     __eventsService = dependency.descriptor(IEventsService)
     __challenges = dependency.descriptor(IChallengesController)
@@ -87,7 +87,6 @@ class ChallengesEventBanner(BaseEventBanner):
         if self._isVisible:
             return
         super(ChallengesEventBanner, self).onAppear()
-        self.__challenges.onChallengesSettingsChanged += self.__onUpdate
         self.__challenges.onActiveChallengeChanged += self.__onUpdate
         self.__challenges.onChallengesClientUpdated += self.__onUpdate
 
@@ -95,9 +94,14 @@ class ChallengesEventBanner(BaseEventBanner):
         if not self._isVisible:
             return
         super(ChallengesEventBanner, self).onDisappear()
-        self.__challenges.onChallengesSettingsChanged -= self.__onUpdate
         self.__challenges.onActiveChallengeChanged -= self.__onUpdate
         self.__challenges.onChallengesClientUpdated -= self.__onUpdate
+
+    def startPersistentListening(self):
+        self.__challenges.onChallengesSettingsChanged += self.__onUpdate
+
+    def stopPersistentListening(self):
+        self.__challenges.onChallengesSettingsChanged -= self.__onUpdate
 
     def __onUpdate(self, *_):
         if isChallengesBannerAvailable():

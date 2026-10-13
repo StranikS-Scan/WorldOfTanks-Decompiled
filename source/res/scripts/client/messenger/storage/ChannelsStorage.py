@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/storage/ChannelsStorage.py
-import types
+from __future__ import absolute_import
+from future.utils import lfilter
 from debug_utils import LOG_ERROR
 from messenger.ext.channel_num_gen import genClientID4Channel
 from messenger.storage.local_cache import SimpleCachedStorage
@@ -33,7 +34,7 @@ class ChannelsStorage(SimpleCachedStorage):
         return result
 
     def getChannelsByCriteria(self, criteria):
-        return filter(criteria.filter, self.__channels)
+        return lfilter(criteria.filter, self.__channels)
 
     def getChannelByCriteria(self, criteria):
         channels = self.getChannelsByCriteria(criteria)
@@ -77,7 +78,7 @@ class ChannelsStorage(SimpleCachedStorage):
 
             def stateGenerator(requiredType):
                 for item in data:
-                    if not isinstance(item, types.TupleType):
+                    if not isinstance(item, tuple):
                         continue
                     if len(item) != 3:
                         continue

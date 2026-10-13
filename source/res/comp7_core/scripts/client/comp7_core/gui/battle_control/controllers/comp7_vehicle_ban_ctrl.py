@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: comp7_core/scripts/client/comp7_core/gui/battle_control/controllers/comp7_vehicle_ban_ctrl.py
+from __future__ import absolute_import
 import BigWorld
 from comp7_core_constants import ArenaPrebattlePhase
 from comp7_core.gui.comp7_core_constants import BATTLE_CTRL_ID
@@ -19,10 +20,10 @@ class Comp7VehicleBanController(IBattleController):
         self.__vehicleBanEndTime = 0.0
         self.__currentPrebattlePhase = None
         self.__vehiclesListForBan = []
-        self.__playersChoiceForBan = dict()
-        self.__bannedVehicles = dict()
-        self.__candidatesForBan = dict()
-        self.__vehicleCopiesInfo = dict()
+        self.__playersChoiceForBan = {}
+        self.__bannedVehicles = {}
+        self.__candidatesForBan = {}
+        self.__vehicleCopiesInfo = {}
         return
 
     def getControllerID(self):

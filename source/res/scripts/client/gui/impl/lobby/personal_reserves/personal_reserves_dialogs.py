@@ -16,13 +16,13 @@ from gui.impl.gen.view_models.views.dialogs.default_dialog_place_holders import 
 from gui.impl.gen.view_models.views.dialogs.dialog_template_button_view_model import ButtonType
 from gui.impl.gen.view_models.views.dialogs.sub_views.currency_view_model import CurrencySize
 from gui.impl.gen.view_models.views.dialogs.sub_views.multiple_icons_set_view_model import IconPositionLogicEnum
-from gui.impl.gen_utils import DynAccessor
 from gui.impl.lobby.dialogs.full_screen_dialog_view import FullScreenDialogWindowWrapper
 from gui.impl.pub.dialog_window import DialogButtons
 if TYPE_CHECKING:
     from typing import Union
     from gui.impl.dialogs.dialog_template import DialogTemplateView
     from gui.shared.gui_items.gui_item_economics import ItemPrice
+    from frameworks.wulf import PyResAccessor
 __all__ = ('getUpgradeBoosterDialog', 'getBuyAndActivateBoosterDialog', 'getBuyGoldDialog')
 BOOSTER_IMAGE_LOOKUP = {GOODIE_RESOURCE_TYPE.XP: R.images.gui.maps.icons.quests.bonuses.s360x270.booster_xp_premium(),
  GOODIE_RESOURCE_TYPE.CREDITS: R.images.gui.maps.icons.quests.bonuses.s360x270.booster_credits_premium(),

@@ -5,12 +5,13 @@ import typing
 import BigWorld
 from constants import SIGHT_POINTER_STATE, SIGHT_POINTER_COMMON_CONSTANTS
 from gui.shared.utils.decorators import ReprInjector
+from items.vehicle_mechanics_types import VehicleMechanicKey, VehicleMechanicKeys
 from items.vehicles import VehicleDescriptor
 from vehicles.components.vehicle_component import VehicleDynamicComponent
 from vehicles.components.vehicle_prefabs import createMechanicPrefabSpawner
 from vehicles.mechanics.common import IMechanicComponent
 from vehicles.mechanics.mechanic_commands import IMechanicCommandsComponent, IMechanicCommandsEvents, createMechanicCommandsEvents
-from vehicles.mechanics.mechanic_constants import VehicleMechanic, VehicleMechanicCommand
+from vehicles.mechanics.mechanic_constants import VehicleMechanicCommand
 from vehicles.mechanics.mechanic_helpers import getVehicleDescrMechanicParams
 from vehicles.mechanics.generic_mechanics.sight_pointer import createSightPointerStatesEvents
 from vehicles.mechanics.mechanic_states import IMechanicState, IMechanicStatesComponent, IMechanicStatesEvents
@@ -61,8 +62,8 @@ class SightPointerComponent(VehicleDynamicComponent, IMechanicComponent, IMechan
         return
 
     @property
-    def vehicleMechanic(self):
-        return VehicleMechanic.SIGHT_POINTER
+    def vehicleMechanicKey(self):
+        return VehicleMechanicKeys.SIGHT_POINTER
 
     @property
     def commandsEvents(self):
@@ -143,7 +144,7 @@ class SightPointerComponent(VehicleDynamicComponent, IMechanicComponent, IMechan
 
     def _collectComponentParams(self, typeDescriptor):
         super(SightPointerComponent, self)._collectComponentParams(typeDescriptor)
-        self.__mechanicParams = params = getVehicleDescrMechanicParams(typeDescriptor, self.vehicleMechanic)
+        self.__mechanicParams = params = getVehicleDescrMechanicParams(typeDescriptor, self.vehicleMechanicKey)
         self.__maxAngle = params.sightPointerStages[0].angle
         lastActiveIdx = min(params.activeStages, len(params.sightPointerStages)) - 1
         self.__minAngle = params.sightPointerStages[lastActiveIdx].angle

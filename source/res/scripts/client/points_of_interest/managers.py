@@ -1,6 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/points_of_interest/managers.py
+from __future__ import absolute_import
 import typing
+from future.utils import viewvalues
 import CGF
 import SoundGroups
 from points_of_interest.components import PoiStateComponent, PoiVehicleStateComponent, PoiStateUIListenerComponent, PoiCaptureBlockerStateComponent, PoiStateUpdateMask
@@ -142,7 +144,7 @@ class PoiSoundSystem(CGF.System):
 
     def onMappingUnloaded(self):
         self.__poiStates.clear()
-        for soundObj in self.__soundObjects.itervalues():
+        for soundObj in viewvalues(self.__soundObjects):
             soundObj.stop()
             soundObj.releaseMatrix()
 

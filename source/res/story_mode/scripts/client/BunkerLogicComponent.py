@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: story_mode/scripts/client/BunkerLogicComponent.py
+from __future__ import absolute_import
 import BigWorld
 import CGF
 from story_mode_common.cgf_components_common.bunkers import BunkerLogicComponentDescriptor

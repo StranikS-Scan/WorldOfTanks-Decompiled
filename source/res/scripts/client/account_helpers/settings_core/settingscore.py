@@ -1,10 +1,12 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/account_helpers/settings_core/SettingsCore.py
+from __future__ import absolute_import
+from future.utils import viewitems
 import BigWorld
 import Event
-from InterfaceScaleManager import InterfaceScaleManager
 from PlayerEvents import g_playerEvents
 from account_helpers.AccountSettings import AccountSettings
+from account_helpers.settings_core.InterfaceScaleManager import InterfaceScaleManager
 from account_helpers.settings_core.ServerSettingsManager import ServerSettingsManager, SETTINGS_SECTIONS
 from account_helpers.settings_core.settings_constants import SPGAim, CONTOUR, ArmorFlashlight
 from adisp import adisp_process
@@ -107,7 +109,7 @@ class SettingsCore(ISettingsCore):
          'contour': CONTOUR_SETTINGS_STORAGE}
         self.isDeviseRecreated = False
         self.isChangesConfirmed = True
-        graphicSettings = tuple(((settingName, options.GraphicSetting(settingName)) for settingName in BigWorld.generateGfxSettings() if settingName != GRAPHICS.COLOR_GRADING_TECHNIQUE and settingName != GRAPHICS.INCREASE_EFFECTS_CONTRAST_ENABLED))
+        graphicSettings = tuple(((settingName, options.GraphicSetting(settingName)) for settingName in BigWorld.generateGfxSettings() if settingName not in (GRAPHICS.COLOR_GRADING_TECHNIQUE, GRAPHICS.INCREASE_EFFECTS_CONTRAST_ENABLED)))
         self.__options = options.SettingsContainer(graphicSettings + ((GAME.REPLAY_ENABLED, options.ReplaySetting(GAME.REPLAY_ENABLED, storage=GAME_SETTINGS_STORAGE)),
          (GAME.SNIPER_ZOOM, options.SniperZoomSetting(GAME.SNIPER_ZOOM, storage=EXTENDED_GAME_SETTINGS_STORAGE)),
          (GAME.HULLLOCK_ENABLED, options.HullLockSetting(GAME.HULLLOCK_ENABLED, storage=EXTENDED_GAME_SETTINGS_STORAGE)),
@@ -157,7 +159,6 @@ class SettingsCore(ISettingsCore):
          (GAME.EPIC_RANDOM_PLAYERS_PANELS_STATE, options.AccountDumpSetting(GAME.EPIC_RANDOM_PLAYERS_PANELS_STATE, 'epic_random_players_panel', 'state')),
          (GAME.SNIPER_MODE_SWINGING_ENABLED, options.SniperModeSwingingSetting()),
          (GAME.GAMEPLAY_CTF, options.GameplaySetting(GAME.GAMEPLAY_MASK, 'ctf', storage=GAMEPLAY_SETTINGS_STORAGE)),
-         (GAME.GAMEPLAY_DEV_MAPS, options.DevMapsSetting(GAME.GAMEPLAY_DEV_MAPS, storage=EXTENDED_GAME_2_SETTINGS_STORAGE)),
          (GAME.LENS_EFFECT, options.LensEffectSetting(GAME.LENS_EFFECT, storage=GRAPHICS_SETTINGS_STORAGE)),
          (GAME.SHOW_VECTOR_ON_MAP, options.MinimapSetting(GAME.SHOW_VECTOR_ON_MAP, storage=GAME_SETTINGS_STORAGE)),
          (GAME.SHOW_SECTOR_ON_MAP, options.MinimapSetting(GAME.SHOW_SECTOR_ON_MAP, storage=GAME_SETTINGS_STORAGE)),
@@ -227,7 +228,7 @@ class SettingsCore(ISettingsCore):
          (SOUND.VOIP_MASTER_FADE, options.SoundSetting('masterFadeVivox')),
          (SOUND.VOIP_ENABLE, options.VOIPSetting(True)),
          (SOUND.VOIP_ENABLE_CHANNEL, options.VOIPChannelSetting()),
-         (SOUND.VOIP_MASTER, options.VOIPMasterSoundSetting()),
+         (SOUND.VOIP_MASTER, options.VOIPMasterSoundSetting(True)),
          (SOUND.VOIP_MIC, options.VOIPMicSoundSetting(True)),
          (SOUND.CAPTURE_DEVICES, options.VOIPCaptureDevicesSetting()),
          (SOUND.VOIP_SUPPORTED, options.VOIPSupportSetting()),
@@ -421,7 +422,7 @@ class SettingsCore(ISettingsCore):
         self.__options.apply(diff)
         self.onSettingsApplied(diff)
         from account_helpers.settings_core import settings_constants
-        graphicsSettings = {k:v for k, v in diff.iteritems() if k in settings_constants.GRAPHICS.ALL()}
+        graphicsSettings = {k:v for k, v in viewitems(diff) if k in settings_constants.GRAPHICS.ALL()}
         if graphicsSettings:
             LOG_DEBUG('Apply graphic settings: ', graphicsSettings)
             self.onSettingsChanged(graphicsSettings)

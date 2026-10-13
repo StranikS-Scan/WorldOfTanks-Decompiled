@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: comp7/scripts/client/comp7/gui/impl/lobby/tooltips/rank_compatibility_tooltip.py
+from __future__ import absolute_import
 from typing import Optional
 from comp7.gui.impl.gen.view_models.views.lobby.tooltips.rank_compatibility_tooltip_model import RankCompatibilityTooltipModel
 from comp7.gui.impl.gen.view_models.views.lobby.enums import SeasonName

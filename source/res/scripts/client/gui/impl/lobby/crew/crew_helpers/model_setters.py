@@ -237,7 +237,7 @@ def setTankmanRestoreInfo(vm, itemsCache=None):
 
 
 def ifWGMAvailableButtonUpdate(vm, itemsCache, button, checkIsPriceSelected):
-    isWGMAvailable = itemsCache.items.stats.mayConsumeWalletResources
+    isWGMAvailable = itemsCache.items.stats.isResourcesConsumptionAllowed
     priceSelected = vm.getIsPriceSelected() if checkIsPriceSelected else True
     button.isDisabled = not (priceSelected and isWGMAvailable)
     vm.getButtons().invalidate()

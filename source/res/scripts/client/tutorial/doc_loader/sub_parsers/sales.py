@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/tutorial/doc_loader/sub_parsers/sales.py
+from __future__ import absolute_import
 from gui.shared.event_bus import EVENT_BUS_SCOPE
 from items import _xml
 from tutorial.control.sales import triggers

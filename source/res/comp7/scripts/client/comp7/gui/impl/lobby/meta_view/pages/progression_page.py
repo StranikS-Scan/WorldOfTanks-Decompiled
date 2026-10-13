@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: comp7/scripts/client/comp7/gui/impl/lobby/meta_view/pages/progression_page.py
+from __future__ import absolute_import, division
 import logging
 import typing
 from functools import partial
@@ -52,6 +53,7 @@ from shared_utils import first
 from skeletons.gui.customization import ICustomizationService
 from gui.impl.wrappers.function_helpers import replaceNoneKwargsModel
 from helpers import dependency
+from math_common import decimal_round, round_py2_style_int
 from skeletons.gui.game_control import IComp7Controller
 from skeletons.gui.shared import IItemsCache
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
@@ -287,11 +289,11 @@ class ProgressionPage(PageSubModelPresenter):
             seasonStatsModel.setLossCount(lossCount)
             seasonStatsModel.setDrawCount(drawCount)
             if winsEfficiency is not None:
-                seasonStatsModel.setWinRate(round(winsEfficiency * 100, 2))
+                seasonStatsModel.setWinRate(decimal_round(winsEfficiency * 100, 2))
             if avgDmgDealt is not None:
-                seasonStatsModel.setAverageDamageDealt(int(round(avgDmgDealt)))
+                seasonStatsModel.setAverageDamageDealt(round_py2_style_int(avgDmgDealt))
             if avgPrestige is not None:
-                seasonStatsModel.setAveragePrestige(int(round(avgPrestige)))
+                seasonStatsModel.setAveragePrestige(round_py2_style_int(avgPrestige))
             _logger.debug('__updateSeasonStats %s', str(seasonStatsModel))
             return
 
@@ -338,11 +340,11 @@ class ProgressionPage(PageSubModelPresenter):
                     dayStatsModel.setLossCount(lossCount)
                     dayStatsModel.setDrawCount(drawCount)
                     if winsEfficiency is not None:
-                        dayStatsModel.setWinRate(round(winsEfficiency * 100, 2))
+                        dayStatsModel.setWinRate(decimal_round(winsEfficiency * 100, 2))
                     if avgDmgDealt is not None:
-                        dayStatsModel.setAverageDamageDealt(int(round(avgDmgDealt)))
+                        dayStatsModel.setAverageDamageDealt(round_py2_style_int(avgDmgDealt))
                     if avgPrestige is not None:
-                        dayStatsModel.setAveragePrestige(int(round(avgPrestige)))
+                        dayStatsModel.setAveragePrestige(round_py2_style_int(avgPrestige))
                     dayStatsModel.setIsQualification(dayData.isQualification)
                     dayStatsModel.setDiff(dayData.diffRatingPoints)
                     dayStatsModel.setHasBattles(totalBattles > 0)
@@ -376,17 +378,17 @@ class ProgressionPage(PageSubModelPresenter):
                 if battlesCount is not None:
                     vehicleStatModel.setBattles(battlesCount)
                 if winsEfficiency is not None:
-                    vehicleStatModel.setWinSeries(round(winsEfficiency * 100, 2))
+                    vehicleStatModel.setWinSeries(decimal_round(winsEfficiency * 100, 2))
                 if avgDamage is not None:
-                    vehicleStatModel.setDamage(int(round(avgDamage)))
+                    vehicleStatModel.setDamage(round_py2_style_int(avgDamage))
                 if avgDamageAssisted is not None:
-                    vehicleStatModel.setAssist(int(round(avgDamageAssisted)))
+                    vehicleStatModel.setAssist(round_py2_style_int(avgDamageAssisted))
                 if avgPrestigePoints is not None:
-                    vehicleStatModel.setPrestigePoints(int(round(avgPrestigePoints)))
+                    vehicleStatModel.setPrestigePoints(round_py2_style_int(avgPrestigePoints))
                 if damageEfficiency is not None:
-                    vehicleStatModel.setMaxFrags(round(damageEfficiency, 2))
+                    vehicleStatModel.setMaxFrags(decimal_round(damageEfficiency, 2))
                 if fragsEfficiency is not None:
-                    vehicleStatModel.setDestruction(round(fragsEfficiency, 2))
+                    vehicleStatModel.setDestruction(decimal_round(fragsEfficiency, 2))
                 fillVehicleModel(vehicleStatModel, vehicle)
                 _logger.debug('__updateSeasonVehicleStats vehicle %s ; %s', str(vehicle.shortUserName), str(vehicleStatModel))
                 viewModels.append(vehicleStatModel)
@@ -417,17 +419,17 @@ class ProgressionPage(PageSubModelPresenter):
                 if battlesCount is not None:
                     vehicleStatModel.setBattles(battlesCount)
                 if winsEfficiency is not None:
-                    vehicleStatModel.setWinSeries(round(winsEfficiency * 100, 2))
+                    vehicleStatModel.setWinSeries(decimal_round(winsEfficiency * 100, 2))
                 if avgDamage is not None:
-                    vehicleStatModel.setDamage(int(round(avgDamage)))
+                    vehicleStatModel.setDamage(round_py2_style_int(avgDamage))
                 if avgDamageAssisted is not None:
-                    vehicleStatModel.setAssist(int(round(avgDamageAssisted)))
+                    vehicleStatModel.setAssist(round_py2_style_int(avgDamageAssisted))
                 if avgPrestigePoints is not None:
-                    vehicleStatModel.setPrestigePoints(int(round(avgPrestigePoints)))
+                    vehicleStatModel.setPrestigePoints(round_py2_style_int(avgPrestigePoints))
                 if damageEfficiency is not None:
-                    vehicleStatModel.setMaxFrags(round(damageEfficiency, 2))
+                    vehicleStatModel.setMaxFrags(decimal_round(damageEfficiency, 2))
                 if fragsEfficiency is not None:
-                    vehicleStatModel.setDestruction(round(fragsEfficiency, 2))
+                    vehicleStatModel.setDestruction(decimal_round(fragsEfficiency, 2))
                 fillVehicleModel(vehicleStatModel, vehicle)
                 _logger.debug('__updateDailyVehicleStats day %s %s %s', str(dayData.dayIndex), str(vehicle.shortUserName), str(vehicleStatModel))
                 viewModels.append(vehicleStatModel)

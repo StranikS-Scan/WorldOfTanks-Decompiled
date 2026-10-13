@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: frontline/scripts/client/frontline/gui/impl/lobby/dialogs/battle_abilities_confirm_dialog.py
+from __future__ import absolute_import
 from frameworks.wulf import ViewSettings
 from gui.impl.lobby.dialogs.full_screen_dialog_view import FullScreenDialogBaseView
 from gui.impl.gen import R

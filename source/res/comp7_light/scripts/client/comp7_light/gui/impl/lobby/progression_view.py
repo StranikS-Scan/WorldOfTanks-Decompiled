@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: comp7_light/scripts/client/comp7_light/gui/impl/lobby/progression_view.py
+from __future__ import absolute_import
 import typing
 import BigWorld
 import SoundGroups
@@ -64,7 +65,7 @@ class ProgressionView(SubModelPresenter):
         if contentID == R.views.lobby.tooltips.AdditionalRewardsTooltip():
             fromIndex = int(event.getArgument('fromIndex'))
             index = int(event.getArgument('index'))
-            bonuses = [ bonus for bonus in self.__bonuses[index][fromIndex:] ]
+            bonuses = list(self.__bonuses[index][fromIndex:])
             return AdditionalRewardsTooltip(bonuses)
         return super(ProgressionView, self).createToolTipContent(event, contentID)
 

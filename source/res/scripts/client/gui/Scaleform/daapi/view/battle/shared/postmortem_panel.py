@@ -27,7 +27,6 @@ from gui.battle_control.controllers.kill_cam_ctrl import KillCamInfoMarkerType
 from gui.doc_loaders import messages_panel_reader
 from gui.impl import backport
 from gui.impl.gen import R
-from gui.impl.gen_utils import INVALID_RES_ID
 from gui.shared.badges import buildBadge
 from gui.shared.events import DeathCamEvent
 from gui.shared.gui_items import Vehicle
@@ -136,7 +135,12 @@ class _BasePostmortemPanel(PostmortemPanelMeta):
             if code in _ALLOWED_EQUIPMENT_DEATH_CODES:
                 pass
             elif equipment is not None:
-                if self.sessionProvider.arenaVisitor.getArenaBonusType() != ARENA_BONUS_TYPE.COMP7 and not self.sessionProvider.arenaVisitor.gui.isInEpicRange():
+                arenaBonusType = self.sessionProvider.arenaVisitor.getArenaBonusType()
+                comp7ArenaTypes = (ARENA_BONUS_TYPE.COMP7,
+                 ARENA_BONUS_TYPE.TRAINING_COMP7,
+                 ARENA_BONUS_TYPE.TOURNAMENT_COMP7,
+                 ARENA_BONUS_TYPE.COMP7_LIGHT)
+                if arenaBonusType not in comp7ArenaTypes and not self.sessionProvider.arenaVisitor.gui.isInEpicRange():
                     entityID = 0
                 code = '_'.join((code, equipment.messagePostfix))
         elif postfix:
@@ -397,10 +401,10 @@ class PostmortemPanel(_SummaryPostmortemPanel):
                         vehLvl = int2roman(vTypeInfoVO.level)
                     else:
                         iconResourceName = getIconResourceName(vTypeInfoVO.iconName)
-                        resID = R.images.gui.maps.icons.battleRoyale.vehicles.dyn(iconResourceName)()
-                        if resID == INVALID_RES_ID:
-                            resID = R.images.gui.maps.icons.vehicle.small.noImage()
-                        vehImg = backport.image(resID)
+                        res = R.images.gui.maps.icons.battleRoyale.vehicles.dyn(iconResourceName)
+                        if not res.exists():
+                            res = R.images.gui.maps.icons.vehicle.small.noImage
+                        vehImg = backport.image(res())
                         vehLvl = None
                     vehName = vInfoVO.getDisplayedName()
                     killerUserVO = self._makeKillerVO(vInfoVO)

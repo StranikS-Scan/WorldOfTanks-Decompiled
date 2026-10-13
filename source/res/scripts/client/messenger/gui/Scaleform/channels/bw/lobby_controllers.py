@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/gui/Scaleform/channels/bw/lobby_controllers.py
-import types
+from __future__ import absolute_import
 import BigWorld
 import constants
 from chat_shared import CHAT_MEMBER_GROUP
@@ -56,7 +56,7 @@ class _ChannelController(LobbyLayout):
         self.proto.channels.sendMessage(self._channel.getID(), message)
 
     def _format(self, message, doFormatting=True):
-        isString = isinstance(message, types.StringType)
+        isString = isinstance(message, str)
         if not doFormatting or isString:
             if isString:
                 return message

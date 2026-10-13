@@ -1,5 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: frontline/scripts/client/frontline/gui/battle_control/controllers/consumables/epic_equipment_ctrl.py
+from __future__ import absolute_import
+from future.utils import viewitems, viewvalues
 import BigWorld
 from constants import EQUIPMENT_STAGES as STAGES
 from frontline_common.frontline_constants import FLBattleReservesModifier
@@ -12,7 +14,7 @@ class EpicEquipmentsController(equipment_ctrl.EquipmentsController):
     sessionProvider = dependency.descriptor(IBattleSessionProvider)
 
     def __init__(self, setup):
-        self.slotStage = dict()
+        self.slotStage = {}
         super(EpicEquipmentsController, self).__init__(setup)
 
     def setServerPrevStage(self, **kwargs):
@@ -26,7 +28,7 @@ class EpicEquipmentsController(equipment_ctrl.EquipmentsController):
         super(EpicEquipmentsController, self).setServerPrevStage(**kwargs)
 
     def cancel(self):
-        for equipment in self._equipmentsIdxSlot.itervalues():
+        for equipment in viewvalues(self._equipmentsIdxSlot):
             item = equipment[0]
             if item and item.getStage() == STAGES.PREPARING and item.canDeactivate():
                 item.deactivate()
@@ -112,7 +114,7 @@ class EpicReplayEquipmentController(EpicEquipmentsController):
             self.__times.clear()
             self.__timeGetters.clear()
         elif arenaDP is None or arenaDP.getReservesModifier() != FLBattleReservesModifier.RANDOM:
-            for idx, equipment in enumerate(self._equipmentsIdxSlot.itervalues()):
+            for idx, equipment in enumerate(viewvalues(self._equipmentsIdxSlot)):
                 key = self.getEquipmentKey(equipment[1], idx + 1)
                 self.__percents.pop(key, None)
                 self.__percentGetters.pop(key, None)
@@ -203,7 +205,7 @@ class EpicReplayEquipmentController(EpicEquipmentsController):
         return
 
     def __tick(self):
-        for key, percentGetter in self.__percentGetters.iteritems():
+        for key, percentGetter in viewitems(self.__percentGetters):
             percent = percentGetter()
             currentPercent = self.__percents.get(key)
             if currentPercent != percent:
@@ -211,7 +213,7 @@ class EpicReplayEquipmentController(EpicEquipmentsController):
                 self.onEquipmentCooldownInPercent(key, percent)
 
     def __tickInSeconds(self):
-        for key, timeGetter in self.__timeGetters.iteritems():
+        for key, timeGetter in viewitems(self.__timeGetters):
             time = timeGetter()
             currentTime = self.__times.get(key)
             if currentTime != time:
@@ -219,6 +221,6 @@ class EpicReplayEquipmentController(EpicEquipmentsController):
                 if not equipment:
                     return
                 intCD, _ = key
-                isBaseTime = self._equipments.has_key(intCD) and equipment.getStage() == STAGES.ACTIVE
+                isBaseTime = intCD in self._equipments and equipment.getStage() == STAGES.ACTIVE
                 self.__times[key] = time
                 self.onEquipmentCooldownTime(key, time, isBaseTime, time == 0)

@@ -1,8 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: comp7/scripts/client/comp7/gui/game_control/comp7_shop_controller.py
+from __future__ import absolute_import
 import logging
-from collections import namedtuple
 import typing
+from collections import namedtuple
+from future.utils import viewitems
 from BWUtil import AsyncReturn
 from enum import Enum
 from shared_utils import findFirst
@@ -164,8 +166,8 @@ class Comp7ShopController(IComp7ShopController):
             currentRankDiscounts = discounts
             break
 
-        prevRankDiscounts = {k:v for k, v in prevRankDiscounts.iteritems() if v > 0}
-        currentRankDiscounts = {k:v for k, v in currentRankDiscounts.iteritems() if v > 0}
+        prevRankDiscounts = {k:v for k, v in viewitems(prevRankDiscounts) if v > 0}
+        currentRankDiscounts = {k:v for k, v in viewitems(currentRankDiscounts) if v > 0}
         return prevRankDiscounts != currentRankDiscounts
 
     def validateCachedProducts(self):
@@ -241,7 +243,7 @@ class Comp7ShopController(IComp7ShopController):
             discounts = category.metadata.get('rank_discounts', {})
             rank = self.__categoriesToRanks[category.code]
             self.__categoriesDiscounts[rank] = discounts
-            for rankName, rankDiscount in discounts.iteritems():
+            for rankName, rankDiscount in viewitems(discounts):
                 rank = comp7_shared.getRankByName(rankName)
                 rankDiscounts = self.__ranksDiscounts.setdefault(rank, {})
                 rankDiscounts[category.code] = rankDiscount

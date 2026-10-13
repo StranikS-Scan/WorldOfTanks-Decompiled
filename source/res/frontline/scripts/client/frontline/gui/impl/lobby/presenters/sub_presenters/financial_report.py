@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: frontline/scripts/client/frontline/gui/impl/lobby/presenters/sub_presenters/financial_report.py
+from __future__ import absolute_import
 import typing
 from frontline.gui.impl.gen.view_models.views.lobby.views.post_battle_results_view.vehicle_financial_report_model import VehicleFinancialReportModel
 from gui.battle_results.presenters.battle_results_sub_presenter import BattleResultsSubPresenter

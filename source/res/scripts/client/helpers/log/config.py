@@ -1,12 +1,14 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/helpers/log/config.py
+from __future__ import absolute_import
 import logging
 import logging.config
 import os
+from future.utils import viewvalues
 import BWLogging
 import resource_helper
-from . import handlers
-from . import hooks
+from helpers.log import handlers
+from helpers.log import hooks
 ENV_KEY = 'PY_LOGGING_CFG'
 XML_CFG_FILE = 'logging.xml'
 
@@ -22,7 +24,7 @@ class LogConfigurator(logging.config.DictConfigurator):
     @classmethod
     def _clearConvertor(cls, convertor):
         if isinstance(convertor, dict):
-            iterator = convertor.itervalues()
+            iterator = viewvalues(convertor)
         elif isinstance(convertor, (tuple, list)):
             iterator = convertor
         else:

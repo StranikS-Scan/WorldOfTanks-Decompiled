@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: comp7/scripts/client/comp7/gui/hangar_presets/comp7_dynamic_gui_provider.py
+from __future__ import absolute_import
 from battle_modifiers_common import BattleModifiers
 from comp7.gui.impl.lobby.missions.missions_helpers import Comp7MissionsGuiHelper
 from comp7.gui.Scaleform.daapi.view.lobby.header.helpers.controls_helpers import Comp7LobbyHeaderHelper

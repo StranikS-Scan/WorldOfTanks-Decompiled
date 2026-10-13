@@ -32,10 +32,10 @@ from shared_utils import first
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.game_control import IWotPlusController, ILoadoutController
 from gui.impl.gen.view_models.views.lobby.tank_setup.tank_setup_constants import TankSetupConstants
+from items.vehicle_mechanics_types import VehicleMechanicKeys
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.shared.gui_items import IGuiItemsFactory
-from vehicles.mechanics.mechanic_constants import VehicleMechanic
 from vehicles.mechanics.mechanic_helpers import hasVehicleDescrMechanic
 if typing.TYPE_CHECKING:
     from gui.shared.gui_items.Vehicle import Vehicle
@@ -161,7 +161,7 @@ class ModuleBlockTooltipData(BlocksTooltipData):
         paramsConfig = self.context.getParamsConfiguration(self.item)
         vehicle = paramsConfig.vehicle
         if vehicle is not None and self.item.itemTypeID == GUI_ITEM_TYPE.GUN:
-            if hasVehicleDescrMechanic(vehicle.descriptor, VehicleMechanic.LOW_CHARGE_SHOT):
+            if hasVehicleDescrMechanic(vehicle.descriptor, VehicleMechanicKeys.LOW_CHARGE_SHOT):
                 self._invalidateWidth(_LOW_CHARGE_SHOT_TOOLTIP_WIDTH)
                 return TwoColumnsStatsBlockConstructor
         return CommonStatsBlockConstructor

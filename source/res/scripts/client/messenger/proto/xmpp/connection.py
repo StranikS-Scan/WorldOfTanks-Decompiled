@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/proto/xmpp/connection.py
+from __future__ import absolute_import
 import random
 import BigWorld
 from constants import TOKEN_TYPE
@@ -51,7 +52,7 @@ class ConnectionsIterator(object):
     def hasNext(self):
         return self.__tcp or self.__bosh
 
-    def next(self):
+    def __next__(self):
         if self.__tcp:
             cType = CONNECTION_IMPL_TYPE.TCP
             host, port = self.__tcp.pop(0)
@@ -61,6 +62,8 @@ class ConnectionsIterator(object):
         else:
             raise StopIteration
         return (cType, host, port)
+
+    next = __next__
 
 
 class ConnectionsInfo(object):
@@ -92,12 +95,12 @@ class ConnectionsInfo(object):
                 backOff = backoff.ModBackoff(_BACK_OFF_MIN_DELAY, _BACK_OFF_MAX_DELAY, _BACK_OFF_MODIFIER, _BACK_OFF_MOD_RANDOM_FACTOR)
                 backOff.shift(self.__backOff.getTries())
                 self.__backOff = backOff
-        cType, host, port = self.__iterator.next()
+        cType, host, port = next(self.__iterator)
         self.__address = (host, port)
         return (cType, host, port)
 
     def getNextDelay(self):
-        return self.__backOff.next()
+        return self.__backOff.nextDelay()
 
     def getTries(self):
         return self.__backOff.getTries()
@@ -266,7 +269,7 @@ class ConnectionHandler(ClientEventsHandler):
             return
         tries = self.__reqTokenBackOff.getTries()
         if tries < _MAX_REQ_TOKEN_TRIES:
-            delay = self.__reqTokenBackOff.next()
+            delay = self.__reqTokenBackOff.nextDelay()
             self.__reqTokenCallbackID = BigWorld.callback(delay, self.__doNextLogin)
             g_logOutput.debug(CLIENT_LOG_AREA.TOKEN, 'Will try to request token after {0} seconds'.format(delay))
             self.__invokeConnectFailedEvent(tries)

@@ -1,12 +1,13 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: frontline/scripts/client/frontline/gui/impl/lobby/views/frontline_event_banner.py
+from __future__ import absolute_import
 from account_helpers.AccountSettings import AccountSettings, FRONTLINE_BANNER_FIRST_APPEARANCE_TIMESTAMP, FRONTLINE_BANNER_INTRO_CLICK_TIMESTAMP
 from frontline.gui.frontline_helpers import isHangarAvailable, getFrontlineState
 from frontline.gui.impl.gen.view_models.views.lobby.views.frontline_const import FrontlineState
 from frontline.gui.impl.lobby.tooltips.banner_tooltip import BannerTooltipView
 from gui.impl.gen.view_models.views.lobby.user_missions.constants.event_banner_state import EventBannerState
-from gui.impl.lobby.user_missions.hangar_widget.event_banners.base_event_banner import BaseEventBanner
 from gui.impl.lobby.user_missions.hangar_widget.event_banners.event_banners_container import EventBannersContainer
+from gui.impl.lobby.user_missions.hangar_widget.event_banners.standard_event_banner import StandardEventBanner
 from gui.impl.lobby.user_missions.hangar_widget.services import IEventsService
 from gui.Scaleform.genConsts.EPICBATTLES_ALIASES import EPICBATTLES_ALIASES
 from gui.periodic_battles.models import PrimeTimeStatus
@@ -15,7 +16,7 @@ from helpers import dependency
 from skeletons.gui.game_control import IEpicBattleMetaGameController
 from frontline.constants.common import STATES_MAP
 
-class FrontlineEventBanner(BaseEventBanner):
+class FrontlineEventBanner(StandardEventBanner):
     NAME = EPICBATTLES_ALIASES.EPIC_BATTLES_ENTRY_POINT
     __epicController = dependency.descriptor(IEpicBattleMetaGameController)
     __eventsService = dependency.descriptor(IEventsService)

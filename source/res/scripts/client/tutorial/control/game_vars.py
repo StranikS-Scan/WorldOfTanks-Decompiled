@@ -1,6 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/tutorial/control/game_vars.py
-import types
+from __future__ import absolute_import
+from future.utils import lfilter
+from past.builtins import long
 from CurrentVehicle import g_currentVehicle
 from gui.Scaleform.daapi.view.lobby.techtree.techtree_dp import g_techTreeDP
 from gui.shared.gui_items import GUI_ITEM_TYPE
@@ -17,7 +19,7 @@ def getUnlockedItems(itemsCache=None):
 
 @dependency.replace_none_kwargs(itemsCache=IItemsCache)
 def getItemByIntCD(intCD, itemsCache=None):
-    if intCD is None or not isinstance(intCD, (types.IntType, types.LongType, types.FloatType)):
+    if intCD is None or not isinstance(intCD, (int, long, float)):
         return
     else:
         return itemsCache.items.getItemByCD(intCD) if itemsCache is not None else None
@@ -125,12 +127,12 @@ def _isItemInstalled(itemCD, vehicleCD):
 
 def _vehicleHasRegularConsumables(vehicleCD):
     vehicle = getVehicleByIntCD(vehicleCD)
-    return False if vehicle is None or vehicle.invID == -1 else bool(filter(None, vehicle.consumables.installed))
+    return False if vehicle is None or vehicle.invID == -1 else bool(lfilter(None, vehicle.consumables.installed))
 
 
 def _vehicleHasOptionalDevices(vehicleCD):
     vehicle = getVehicleByIntCD(vehicleCD)
-    return False if vehicle is None or vehicle.invID == -1 else bool(filter(None, vehicle.optDevices.installed))
+    return False if vehicle is None or vehicle.invID == -1 else bool(lfilter(None, vehicle.optDevices.installed))
 
 
 def _isItemLevelEqual(itemCD, level):

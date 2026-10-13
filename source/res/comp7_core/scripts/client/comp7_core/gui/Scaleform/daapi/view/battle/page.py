@@ -1,5 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: comp7_core/scripts/client/comp7_core/gui/Scaleform/daapi/view/battle/page.py
+from __future__ import absolute_import
+from future.utils import viewitems
 import BigWorld
 from shared_utils import CONST_CONTAINER
 import BattleReplay
@@ -74,13 +76,13 @@ class Comp7BattlePage(Comp7BattlePageMeta):
             avatar_getter.getInputHandler().ctrl.handleMouseEvent(0, 0, delta)
             self.__refreshReturnCallback()
 
-    def notifyCursorOver3dScene(self, value):
-        self.__isCursorOver3dScene = value
+    def notifyCursorOver3dScene(self, isOver3dScene):
+        self.__isCursorOver3dScene = isOver3dScene
 
-    def notifyCursorDragging(self, value):
-        if self.__isCursorDragging != value:
-            self.__isCursorDragging = value
-            if value:
+    def notifyCursorDragging(self, isDragging):
+        if self.__isCursorDragging != isDragging:
+            self.__isCursorDragging = isDragging
+            if isDragging:
                 self.__returnCameraDelayer.stopCallback(self.__returnCamera)
             else:
                 self.__refreshReturnCallback()
@@ -338,7 +340,7 @@ class _ComponentsVisibilityManager(object):
             self.__needUpdateState = value
 
     def __updateState(self):
-        for key, predicate in self.__components.iteritems():
+        for key, predicate in viewitems(self.__components):
             self.__changeState(key, visible=predicate())
 
         self.__needUpdateState = False
@@ -375,7 +377,7 @@ class _ComponentsVisibilityManager(object):
         return not BattleReplay.g_replayCtrl.isPlaying and self.__arenaPeriod < ARENA_PERIOD.BATTLE and self.__isBattleLoaded and not self.__isSelectionConfirmed and not self.__isFullStatsShown and not self.__isObserver
 
     def __bansWidgetPredicate(self):
-        return self.__isVehicleBanEnabled and self.__arenaPeriod < ARENA_PERIOD.BATTLE and self.__isBattleLoaded and not self.__isFullStatsShown
+        return self.__isVehicleBanEnabled and self.__arenaPeriod < ARENA_PERIOD.BATTLE and self.__isBattleLoaded and not self.__isFullStatsShown and not self.__isObserver
 
     def __bansProgressWidgetPredicate(self):
         return self.__isVehicleBanEnabled and self.__arenaPeriod < ARENA_PERIOD.BATTLE and self.__isBattleLoaded and not self.__isFullStatsShown

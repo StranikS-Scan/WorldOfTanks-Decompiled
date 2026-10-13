@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: frontline/scripts/client/frontline/gui/Scaleform/daapi/view/lobby/tooltips/epic_battle_calendar_tooltip.py
+from __future__ import absolute_import
 from gui.impl import backport
 from gui.impl.gen import R
 from gui.shared.formatters import text_styles

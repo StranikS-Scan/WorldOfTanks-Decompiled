@@ -16,8 +16,9 @@ from gui.veh_mechanics.battle.updaters.mechanics.mechanic_life_cycle_updater imp
 from gui.veh_mechanics.battle.updaters.mechanics.mechanic_passenger_updater import VehicleMechanicPassengerUpdater
 from gui.veh_mechanics.battle.updaters.mechanics.mechanic_states_updater import VehicleMechanicStatesUpdater
 from helpers import dependency
+from items.vehicle_mechanics_types import VehicleMechanicKeys
 from skeletons.gui.battle_session import IBattleSessionProvider
-from vehicles.mechanics.mechanic_constants import VehicleMechanicCommand, VehicleMechanic
+from vehicles.mechanics.mechanic_constants import VehicleMechanicCommand
 from vehicles.mechanics.mechanic_states import IMechanicStatesListenerLogic
 if typing.TYPE_CHECKING:
     from typing import List
@@ -81,9 +82,9 @@ class AutoreloaderSurgeMechanicWidget(AutoreloaderSurgeWidgetMeta, ContainersLis
         return
 
     def _getViewUpdaters(self):
-        return [VehicleMechanicLifeCycleUpdater(VehicleMechanic.AUTORELOADER_SURGE, self),
-         VehicleMechanicStatesUpdater(VehicleMechanic.AUTORELOADER_SURGE, self),
-         VehicleMechanicPassengerUpdater(VehicleMechanic.AUTORELOADER_SURGE, self),
+        return [VehicleMechanicLifeCycleUpdater(VehicleMechanicKeys.AUTORELOADER_SURGE, self),
+         VehicleMechanicStatesUpdater(VehicleMechanicKeys.AUTORELOADER_SURGE, self),
+         VehicleMechanicPassengerUpdater(VehicleMechanicKeys.AUTORELOADER_SURGE, self),
          HotKeysViewUpdater(list(self._HOT_KEY_MAP.keys()), self),
          CrosshairTypeUpdater(self)]
 

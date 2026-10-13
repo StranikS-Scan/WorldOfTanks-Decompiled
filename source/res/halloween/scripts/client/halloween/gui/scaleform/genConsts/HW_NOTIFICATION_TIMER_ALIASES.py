@@ -1,0 +1,32 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
+# Embedded file name: halloween/scripts/client/halloween/gui/scaleform/genConsts/HW_NOTIFICATION_TIMER_ALIASES.py
+
+
+class HW_NOTIFICATION_TIMER_ALIASES(object):
+    WAIT_TIMER_UI = 'HWWaitStatusNotificationTimerUI'
+    GOTO_TIMER_UI = 'HWGotoStatusNotificationTimerUI'
+    WAIT_DESTROY_TIMER_UI = 'WaitDestroyTimerUI'
+    WAIT_SECONDARY_TIMER_UI = 'MagnusWaitSecondaryTimerUI'
+    FILL_DESTROY_TIMER_UI = 'FillDestroyTimerUI'
+    GOTO_DESTROY_TIMER_UI = 'GoToDestroyTimerUI'
+    SECONDARY_TIMER_UI = 'MagnusSecondaryTimerUI'
+    ICON_VOLOT_READY_SMALL = 'IconVolotReadySmall'
+    ICON_VOLOT_READY = 'IconVolotReady'
+    ICON_VOLOT_FILL_IN = 'IconVolotFillingIn'
+    ICON_VOLOT_FILL_IN_SMALL = 'IconVolotFillingInSmall'
+    ICON_VOLOT_FILL_NOT_ACTIVE = 'IconVolotFillingInNotActive'
+    ICON_VOLOT_FILL_NOT_ACTIVE_SMALL = 'IconVolotFillingInNotActiveSmall'
+    ICON_VOLOT_GOTO = 'TeleportTimerIcon'
+    ICON_VOLOT_GOTO_SMALL = 'TeleportTimerIconSmall'
+    HW_DEATH_ZONE = 'DearhZoneStatusIconUI'
+    HW_PERSONAL_DEATH_ZONE = 'AreaDearhZoneStatusIconUI'
+    HW_PERSONAL_DEATH_ZONE_SMALL = 'AreaDearhZoneStatusIconSmallUI'
+    HW_PERSONAL_DEATH_ZONE_IGNITE = 'AreaDeathZoneIgniteStatusIconUI'
+    HW_PERSONAL_DEATH_ZONE_IGNITE_SMALL = 'AreaDeathZoneIgniteStatusIconSmallUI'
+    HW_PERSONAL_DEATH_ZONE_STUN = 'AreaDeathZoneStunStatusIconUI'
+    HW_PERSONAL_DEATH_ZONE_STUN_SMALL = 'AreaDeathZoneStunStatusIconSmallUI'
+    HW_PERSONAL_DEATH_ZONE_DAMAGE_OVERTIME = 'AreaDeathZoneDamageOvertimeStatusIconUI'
+    HW_PERSONAL_DEATH_ZONE_DAMAGE_OVERTIME_SMALL = 'AreaDeathZoneDamageOvertimeStatusIconSmallUI'
+    HW_HALF_OVERTURN_SMALL = 'HWHalfOverturnSmallUI'
+    HW_LOOT_ICON_CONTENT = 'HWLootIconContentUI'
+    HW_DESTROY_TIMER_UI = 'HWDestroyTimerUI'

@@ -220,5 +220,8 @@ class CrosshairPanelContainerMeta(DAAPISimpleContainerMeta):
     def as_setShellCalibrationStateS(self, mask):
         return self.flashObject.as_setShellCalibrationState(mask) if self._isDAAPIInited() else None
 
+    def as_setSharedLayoutS(self, id):
+        return self.flashObject.as_setSharedLayout(id) if self._isDAAPIInited() else None
+
     def as_setAutoreloaderSurgeStateS(self, isActive):
         return self.flashObject.as_setAutoreloaderSurgeState(isActive) if self._isDAAPIInited() else None

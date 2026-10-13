@@ -8,12 +8,13 @@ import Input
 import logging
 from constants import VEHICLE_SIEGE_STATE
 from gui.shared.utils.decorators import ReprInjector
+from items.vehicle_mechanics_types import VehicleMechanicKey, VehicleMechanicKeys
 from vehicles.components.component_wrappers import ifPlayerVehicle, ifObservedVehicle
 from vehicles.components.vehicle_component import VehicleDynamicComponent
 from vehicles.components.vehicle_prefabs import createMechanicPrefabSpawner
 from vehicles.mechanics.common import IMechanicComponent
 from vehicles.mechanics.mechanic_commands import createMechanicCommandsEvents, IMechanicCommandsEvents, IMechanicCommandsComponent
-from vehicles.mechanics.mechanic_constants import VehicleMechanic, VehicleMechanicCommand
+from vehicles.mechanics.mechanic_constants import VehicleMechanicCommand
 from vehicles.mechanics.mechanic_states import IMechanicStatesComponent, createMechanicStatesEvents, IMechanicStatesEvents, IMechanicState
 from Input import TriggerEvent
 _logger = logging.getLogger(__name__)
@@ -73,8 +74,8 @@ class PillboxSiegeComponent(VehicleDynamicComponent, IMechanicComponent, IMechan
         return
 
     @property
-    def vehicleMechanic(self):
-        return VehicleMechanic.PILLBOX_SIEGE_MODE
+    def vehicleMechanicKey(self):
+        return VehicleMechanicKeys.PILLBOX_SIEGE_MODE
 
     @property
     def commandsEvents(self):

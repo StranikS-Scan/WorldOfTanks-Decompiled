@@ -1,11 +1,12 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/AvatarInputHandler/remote_camera_sender.py
+from __future__ import absolute_import
 import weakref
 import BigWorld
+from BigWorld import ArcadeAimingSystem, SniperAimingSystem, DualGunAimingSystem, StrategicAimingSystem, ArtyAimingSystem, TwinGunAimingSystem
 from aih_constants import CTRL_MODES
 from AvatarInputHandler.commands.input_handler_command import InputHandlerCommand
 from AvatarInputHandler.control_modes import ArcadeControlMode, SniperControlMode, DualGunControlMode, TwinGunControlMode, StrategicControlMode, ArtyControlMode
-from BigWorld import ArcadeAimingSystem, SniperAimingSystem, DualGunAimingSystem, StrategicAimingSystem, ArtyAimingSystem, TwinGunAimingSystem
 from AvatarInputHandler.MapCaseMode import MapCaseControlModeBase
 from system_events import g_systemEvents
 

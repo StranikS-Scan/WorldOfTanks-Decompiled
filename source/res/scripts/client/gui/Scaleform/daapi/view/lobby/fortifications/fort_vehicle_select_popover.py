@@ -1,7 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/fortifications/fort_vehicle_select_popover.py
 from __future__ import absolute_import
-from constants import QUEUE_TYPE
 from gui import makeHtmlString
 from gui.Scaleform import MENU
 from gui.Scaleform import getButtonsAssetPath
@@ -31,8 +30,10 @@ def convertState(vState):
     return makeHtmlString('html_templates:lobby', 'inPremiumIgrOnly') if vState == Vehicle.VEHICLE_STATE.IN_PREMIUM_IGR_ONLY else makeString(MENU.tankcarousel_vehiclestates(vState))
 
 
-def getVehicleCriteria(levelsRange, inHangar=False):
-    req = REQ_CRITERIA.VEHICLE.LEVELS(levelsRange) | ~REQ_CRITERIA.SECRET | ~REQ_CRITERIA.VEHICLE.EVENT_BATTLE | ~REQ_CRITERIA.VEHICLE.FORBIDDEN_VEHICLE_TO_BATTLE
+def getVehicleCriteria(levelsRange, inHangar=False, isHideFrozen=False, checkIsFrozen=None):
+    req = REQ_CRITERIA.VEHICLE.LEVELS(levelsRange) | ~REQ_CRITERIA.SECRET ^ REQ_CRITERIA.VEHICLE.CLAN_WARS | ~REQ_CRITERIA.VEHICLE.EVENT_BATTLE | ~REQ_CRITERIA.VEHICLE.FORBIDDEN_VEHICLE_TO_BATTLE
+    if isHideFrozen and checkIsFrozen:
+        req |= REQ_CRITERIA.CUSTOM(lambda v: not checkIsFrozen(v))
     if inHangar:
         req |= REQ_CRITERIA.INVENTORY
     return req
@@ -44,11 +45,13 @@ class FortVehicleSelectPopover(FortVehicleSelectPopoverMeta, VehicleSelectorBase
     def __init__(self, ctx=None):
         super(FortVehicleSelectPopover, self).__init__(ctx)
         self._classFilters = None
+        self._isHideFrozen = False
         data = ctx.get('data', None)
         self._showMainBtn = data.showMainBtn
         self._slotIndex = data.slotIndex
         self._levelsRange = data.levelsRange
         self._selectedVehicles = data.selectedVehicles
+        self._isStronghold = self.prbEntity is not None and self.prbEntity.getIsStrongholdEventEnabled()
         return
 
     def setVehicleSelected(self, dbID, autoClose):
@@ -69,6 +72,10 @@ class FortVehicleSelectPopover(FortVehicleSelectPopoverMeta, VehicleSelectorBase
         self._updateFilter(nation, vehicleType, isMain, level, hangarOnly)
         self.updateData()
 
+    def onFrozenChange(self, value):
+        self._isHideFrozen = value
+        self.updateData()
+
     def onFilterChange(self, index, value):
         self._classFilters[index] = value
         self.updateData()
@@ -80,7 +87,7 @@ class FortVehicleSelectPopover(FortVehicleSelectPopoverMeta, VehicleSelectorBase
         return filters
 
     def updateData(self):
-        vehicleCriteria = getVehicleCriteria(levelsRange=self._levelsRange, inHangar=not self._isMultiSelect)
+        vehicleCriteria = getVehicleCriteria(levelsRange=self._levelsRange, inHangar=not self._isMultiSelect, isHideFrozen=self._isHideFrozen, checkIsFrozen=self.__getIsVehicleFrozen)
         vehicles = self._updateData(self.itemsCache.items.getVehicles(vehicleCriteria), compatiblePredicate=lambda vo: vo['inHangar'])
         self._vehDP.buildList(vehicles)
         self._updateSortField()
@@ -120,6 +127,11 @@ class FortVehicleSelectPopover(FortVehicleSelectPopoverMeta, VehicleSelectorBase
             filtersData['mainBtn'] = {'value': getButtonsAssetPath(entry),
              'tooltip': makeTooltip('#tank_carousel_filter:tooltip/{}/header'.format(entry), makeString('#tank_carousel_filter:tooltip/{}/body'.format(entry))),
              'selected': False}
+        if self._isStronghold:
+            entry = 'broken'
+            filtersData['frozenBtn'] = {'value': getButtonsAssetPath(entry),
+             'tooltip': makeTooltip('#tank_carousel_filter:tooltip/{}/header'.format(entry), makeString('#tank_carousel_filter:tooltip/{}/body'.format(entry))),
+             'selected': self._isHideFrozen}
         return filtersData
 
     def _dispose(self):
@@ -133,10 +145,7 @@ class FortVehicleSelectPopover(FortVehicleSelectPopoverMeta, VehicleSelectorBase
         else:
             checkSelectedFunc = lambda vo: False
         vState, _ = vehicle.getState()
-        isFrozen = False
-        if self.prbEntity is not None and self.prbEntity.getQueueType() == QUEUE_TYPE.STRONGHOLD_UNITS:
-            frozenVehicles = self.prbEntity.getEventFrozenVehicles()
-            isFrozen = frozenVehicles is not None and (frozenVehicles == FrozenVehiclesConstants.ALL_VEHICLES_FROZEN or vehicle.intCD in frozenVehicles)
+        isFrozen = self.__getIsVehicleFrozen(vehicle)
         return {'dbID': vehicle.intCD,
          'level': vehicle.level,
          'shortUserName': vehicle.shortUserName,
@@ -148,7 +157,7 @@ class FortVehicleSelectPopover(FortVehicleSelectPopoverMeta, VehicleSelectorBase
          'inHangar': False,
          'isMultiSelect': self._isMultiSelect,
          'isReadyToFight': vehicle.isReadyToFight,
-         'enabled': vehicle.isReadyToFight,
+         'enabled': self.__getIsVehicleReady(vehicle),
          'isFrozen': isFrozen,
          'tooltip': makeTooltip('#tooltips:vehicleStatus/%s/header' % vState, '#tooltips:vehicleStatus/body'),
          'state': 'frozenVehicle' if isFrozen and vehicle.isReadyToFight else convertState(vState)}
@@ -174,6 +183,20 @@ class FortVehicleSelectPopover(FortVehicleSelectPopoverMeta, VehicleSelectorBase
 
     def __getAssetPath(self, assetType, extension='.png'):
         return ''.join(['../maps/icons/filters/tanks/', assetType, extension])
+
+    def __getIsVehicleFrozen(self, vehicle):
+        if self._isStronghold:
+            frozenVehicles = self.prbEntity.getEventFrozenVehicles()
+            return frozenVehicles is not None and (frozenVehicles == FrozenVehiclesConstants.ALL_VEHICLES_FROZEN or vehicle.intCD in frozenVehicles)
+        else:
+            return False
+
+    def __getIsVehicleReady(self, vehicle):
+        if vehicle.rentalIsOver:
+            return False
+        if not vehicle.isGroupReady()[0]:
+            return False
+        return False if vehicle.hasLockMode() else vehicle.isAlive and not vehicle.isDisabledInRoaming and not vehicle.isDisabledInPremIGR and not vehicle.isRotationGroupLocked
 
     def __createFilterToggles(self):
         filterToggles = []

@@ -2,9 +2,7 @@
 # Embedded file name: scripts/client/gui/impl/lobby/crew/dialogs/skills_training_confirm_dialog.py
 from gui.impl.dialogs.dialog_template import DialogTemplateView
 from gui.impl.dialogs.dialog_template_button import ConfirmButton, CancelButton
-from gui.impl.dialogs.sub_views.title.simple_text_title import SimpleTextTitle
 from gui.impl.gen import R
-from gui.impl.gen.view_models.views.dialogs.default_dialog_place_holders import DefaultDialogPlaceHolders
 from gui.impl.gen.view_models.views.lobby.crew.common.skill.skill_model import SkillModel
 from gui.impl.gen.view_models.views.lobby.crew.dialogs.skills_training_confirm_dialog_model import SkillsTrainingConfirmDialogModel
 from gui.impl.lobby.crew.crew_helpers.skill_model_setup import skillSimpleModelSetup
@@ -29,7 +27,6 @@ class SkillsTrainingConfirmDialog(DialogTemplateView):
 
     def _onLoading(self, *args, **kwargs):
         self.setBackgroundImagePath(R.images.gui.maps.icons.windows.background())
-        self.setSubView(DefaultDialogPlaceHolders.TITLE, SimpleTextTitle(R.strings.dialogs.skillsTrainingConfirm.message()))
         self.addButton(ConfirmButton(R.strings.dialogs.skillsTrainingConfirm.submit()))
         self.addButton(CancelButton())
         with self.viewModel.transaction() as vm:

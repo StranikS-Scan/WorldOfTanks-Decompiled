@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: comp7/scripts/client/comp7/gui/impl/lobby/platoon/view/comp7_platoon_welcome_view.py
+from __future__ import absolute_import
 import logging
 from comp7.gui.comp7_constants import SELECTOR_BATTLE_TYPES
 from comp7.gui.prb_control.entities import comp7_prb_helpers

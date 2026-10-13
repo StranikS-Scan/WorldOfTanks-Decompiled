@@ -5,7 +5,6 @@ from adisp import adisp_process
 from constants import TOURNAMENT_CONFIG
 from frameworks.wulf import ViewFlags, ViewSettings
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
-from gui.Scaleform.framework import g_entitiesFactories
 from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.impl.gen import R
 from gui.impl.gen.view_models.views.lobby.mode_selector.battle_session_model import BattleSessionModel
@@ -13,6 +12,7 @@ from gui.impl.pub import ViewImpl
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
 from gui.impl.lobby.hangar.presenters.utils import fillMenuSharedItems, navigateTo
 from gui.clans.clan_cache import g_clanCache
+from gui.shared.events import LoadViewEvent
 from gui.shared.view_helpers.emblems import getClanEmblemURL, EmblemSize
 from gui.tournament.tournament_helpers import isTournamentEnabled, showTournaments
 from helpers import dependency
@@ -67,9 +67,8 @@ class BattleSessionView(ViewImpl):
     def __globalMapClickedHandler(self):
         self.__openUrl(_GLOBAL_MAP_URL)
 
-    @staticmethod
-    def __clanClickedHandler():
-        event = g_entitiesFactories.makeLoadEvent(SFViewLoadParams(VIEW_ALIAS.LOBBY_STRONGHOLD))
+    def __clanClickedHandler(self):
+        event = LoadViewEvent(SFViewLoadParams(VIEW_ALIAS.LOBBY_STRONGHOLD))
         g_eventBus.handleEvent(event, scope=EVENT_BUS_SCOPE.LOBBY)
 
     @adisp_process

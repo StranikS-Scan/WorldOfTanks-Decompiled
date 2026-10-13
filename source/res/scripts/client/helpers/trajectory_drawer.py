@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/helpers/trajectory_drawer.py
+from __future__ import absolute_import
 import BigWorld
 import CGF
 from constants import IS_DEVELOPMENT

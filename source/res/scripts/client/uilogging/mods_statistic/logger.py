@@ -1,11 +1,13 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/uilogging/mods_statistic/logger.py
-import BigWorld
+from __future__ import absolute_import
 import json
 import logging
-from wotdecorators import noexcept
+from future.utils import iteritems
+import BigWorld
 from uilogging.base.logger import _BaseLogger as Logger
 from uilogging.constants import DEFAULT_LOGGER_NAME
+from wotdecorators import noexcept
 _logger = logging.getLogger(DEFAULT_LOGGER_NAME)
 
 class ModsStatisticLogger(Logger):
@@ -32,7 +34,7 @@ class ModsStatisticLogger(Logger):
             return
         jsonStrLen = 2
         tmpMods = {}
-        for modName, md5 in mods.iteritems():
+        for modName, md5 in iteritems(mods):
             rowStrLen = 0
             rowStrLen += 5 + self.MD5_LEN
             rowStrLen += len(modName)

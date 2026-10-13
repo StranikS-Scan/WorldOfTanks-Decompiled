@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/uilogging/prebattle_highlights/constants.py
+from __future__ import absolute_import
 from enum import Enum
 FEATURE = 'prebattle_highlights'
 

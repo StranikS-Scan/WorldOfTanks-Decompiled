@@ -1,0 +1,34 @@
+<ScoreComponent.def>
+  <Properties>
+    <teamScore>
+      <Type>	PYTHON	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <AllowUnsafeData>	true	</AllowUnsafeData>
+      <Default>	{}	</Default>
+    </teamScore>
+    <vehiclesScore>
+      <Type>	FIXED_DICT	  <implementedBy>	true_dict.instance	</implementedBy>
+        <Properties>
+          <keys>
+            <Type>	ARRAY	  <of>	OBJECT_ID	</of>
+            </Type>
+          </keys>
+          <values>
+            <Type>	ARRAY	  <of>	FLOAT	</of>
+            </Type>
+          </values>
+        </Properties>
+      </Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <Default>	{}	</Default>
+    </vehiclesScore>
+    <scoreCap>
+      <Type>	UINT16	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </scoreCap>
+  </Properties>
+  <ofEntity>
+    <ArenaInfo></ArenaInfo>
+  </ofEntity>
+  <DefaultKeyName>	ScoreComponent	</DefaultKeyName>
+</ScoreComponent.def>

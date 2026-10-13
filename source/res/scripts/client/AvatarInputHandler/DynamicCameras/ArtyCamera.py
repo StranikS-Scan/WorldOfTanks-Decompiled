@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/AvatarInputHandler/DynamicCameras/ArtyCamera.py
+from __future__ import absolute_import, division
 from math import pi, copysign, atan2, sqrt
 import BigWorld
 from Math import slerp, Vector2, Vector3, Matrix, MatrixProduct
@@ -12,7 +13,8 @@ from AvatarInputHandler.DynamicCameras import createOscillatorFromSection, Camer
 from AvatarInputHandler.DynamicCameras.camera_switcher import CameraSwitcher, SwitchTypes, CameraSwitcherCollection, SwitchToPlaces, TRANSITION_DIST_HYSTERESIS
 from AvatarInputHandler.cameras import readFloat, readVec2, ImpulseReason
 from ProjectileMover import collideDynamicAndStatic
-from account_helpers.settings_core.settings_constants import GAME, SPGAim
+from account_helpers.AccountSettings import AccountSettings
+from account_helpers.settings_core.settings_constants import CONTROLS, GAME, SPGAim
 from aih_constants import CTRL_MODE_NAME
 from debug_utils import LOG_WARNING
 from helpers.CallbackDelayer import CallbackDelayer
@@ -108,6 +110,9 @@ class ArtyCamera(CameraWithSettings, CallbackDelayer):
     def _getConfigsKey():
         return ArtyCamera.__name__
 
+    def _getMouseSensitivitySettingKey(self):
+        return CONTROLS.MOUSE_ASSIST_AIM_SENS
+
     def create(self, onChangeControlMode=None):
         super(ArtyCamera, self).create()
         self.__onChangeControlMode = onChangeControlMode
@@ -201,9 +206,9 @@ class ArtyCamera(CameraWithSettings, CallbackDelayer):
     def getCamTransitionDist(self):
         return self._cfg['transitionDist']
 
-    def update(self, dx, dy, dz, updateByKeyboard=False):
-        self.__curSense = self._cfg['keySensitivity'] if updateByKeyboard else self._cfg['sensitivity']
-        self.__autoUpdatePosition = updateByKeyboard
+    def update(self, dx, dy, dz, updatedByKeyboard=False):
+        self.__curSense = self._cfg['keySensitivity'] if updatedByKeyboard else self._cfg['sensitivity']
+        self.__autoUpdatePosition = updatedByKeyboard
         self.__dxdydz = Vector3(dx if not self._cfg['horzInvert'] else -dx, dy if not self._cfg['vertInvert'] else -dy, dz)
 
     def applyImpulse(self, position, impulse, reason=ImpulseReason.ME_HIT):
@@ -215,12 +220,10 @@ class ArtyCamera(CameraWithSettings, CallbackDelayer):
         self.__applyNoiseImpulse(noiseMagnitude)
 
     def applyDistantImpulse(self, position, impulseValue, reason=ImpulseReason.ME_HIT):
-        if reason != ImpulseReason.SPLASH and reason != ImpulseReason.PROJECTILE_HIT:
+        if reason not in (ImpulseReason.SPLASH, ImpulseReason.PROJECTILE_HIT):
             return
         impulse = BigWorld.player().getOwnVehiclePosition() - position
-        distance = impulse.length
-        if distance <= 1.0:
-            distance = 1.0
+        distance = max(impulse.length, 1.0)
         impulse.normalise()
         if reason == ImpulseReason.PROJECTILE_HIT:
             if not cameras.isPointOnScreen(position):
@@ -238,7 +241,6 @@ class ArtyCamera(CameraWithSettings, CallbackDelayer):
         ds.writeBool('artyMode/camera/horzInvert', ucfg['horzInvert'])
         ds.writeBool('artyMode/camera/vertInvert', ucfg['vertInvert'])
         ds.writeFloat('artyMode/camera/keySensitivity', ucfg['keySensitivity'])
-        ds.writeFloat('artyMode/camera/sensitivity', ucfg['sensitivity'])
         ds.writeFloat('artyMode/camera/scrollSensitivity', ucfg['scrollSensitivity'])
         ds.writeFloat('artyMode/camera/camDist', self._cfg['camDist'])
 
@@ -471,7 +473,7 @@ class ArtyCamera(CameraWithSettings, CallbackDelayer):
         ucfg['horzInvert'] = False
         ucfg['vertInvert'] = False
         ucfg['keySensitivity'] = readFloat(dataSec, 'keySensitivity', 0.0, 10.0, 1.0)
-        ucfg['sensitivity'] = readFloat(dataSec, 'sensitivity', 0.0, 10.0, 1.0)
+        ucfg['sensitivity'] = AccountSettings.getSettings(CONTROLS.MOUSE_ASSIST_AIM_SENS)
         ucfg['scrollSensitivity'] = readFloat(dataSec, 'scrollSensitivity', 0.0, 10.0, 1.0)
         ucfg['camDist'] = readFloat(dataSec, 'camDist', 0.0, 60.0, 0.0)
         return

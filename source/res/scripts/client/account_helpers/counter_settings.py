@@ -1,5 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/account_helpers/counter_settings.py
+from __future__ import absolute_import
+from future.utils import viewitems, viewvalues
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import NEW_SETTINGS_COUNTER
 from account_helpers.settings_core import settings_constants
@@ -8,7 +10,6 @@ from skeletons.gui.game_control import IAnonymizerController, IVehiclePostProgre
 from skeletons.gui.lobby_context import ILobbyContext
 _NEW_SETTING_COUNTER_VISIBILITY_VALIDATORS = {settings_constants.GAME.ANONYMIZER: lambda : dependency.instance(IAnonymizerController).isEnabled,
  'showQuestProgress': lambda : dependency.instance(ILobbyContext).getServerSettings().isPersonalMissionsEnabled(),
- settings_constants.GAME.GAMEPLAY_DEV_MAPS: lambda : dependency.instance(ILobbyContext).getServerSettings().isMapsInDevelopmentEnabled(),
  settings_constants.GAME.SWITCH_SETUPS_IN_LOADING: lambda : dependency.instance(IVehiclePostProgressionController).isSwitchSetupFeatureEnabled(),
  settings_constants.GAME.LIMITED_UI_ACTIVE: lambda : dependency.instance(ILimitedUIController).isUserSettingsMayShow,
  settings_constants.BattleCommStorageKeys.ENABLE_COMMENDATIONS_FEEDBACK: lambda : dependency.instance(ICommendationsController).isCommendationsEnabled,
@@ -28,14 +29,14 @@ def getNewSettings():
     settings = _getSettingsFromStorage()
     result = []
     grouping = set()
-    for tabID, tabsSettings in settings.iteritems():
+    for tabID, tabsSettings in viewitems(settings):
         tabData = _getTabData(result, tabID)
-        for subTabID, controlSettings in tabsSettings.iteritems():
+        for subTabID, controlSettings in viewitems(tabsSettings):
             if isinstance(controlSettings, bool):
                 controlID = subTabID
                 subTabID = None
                 _packCounter(tabData, controlSettings, subTabID, controlID)
-            for controlID, state in controlSettings.iteritems():
+            for controlID, state in viewitems(controlSettings):
                 controlID = _tryGrouping(controlID, grouping)
                 if not controlID:
                     continue
@@ -79,7 +80,7 @@ def dropCounters():
 
 
 def _countNewSettingsItems(dictItem, count):
-    for _, v in dictItem.iteritems():
+    for v in viewvalues(dictItem):
         if isinstance(v, dict):
             count = _countNewSettingsItems(v, count)
         if isinstance(v, bool) and v:
@@ -130,15 +131,15 @@ def _setSettingsToStorage(value):
 
 
 def _filterSettings(value):
-    return {category:{settingKey:settingValue for settingKey, settingValue in settings.iteritems() if isNewSettingCounterVisible(settingKey)} for category, settings in value.iteritems()}
+    return {category:{settingKey:settingValue for settingKey, settingValue in viewitems(settings) if isNewSettingCounterVisible(settingKey)} for category, settings in viewitems(value)}
 
 
 def _tryGrouping(controlID, grouping):
-    for group, controls in settings_constants.GROUPS_NOVELTY_SETTINGS.iteritems():
+    for group, controls in viewitems(settings_constants.GROUPS_NOVELTY_SETTINGS):
         if controlID in controls:
             if group not in grouping:
                 grouping.add(group)
                 return group
-            return
+            return None
 
     return controlID

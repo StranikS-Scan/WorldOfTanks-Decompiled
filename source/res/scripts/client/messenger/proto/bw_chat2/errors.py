@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/proto/bw_chat2/errors.py
+from __future__ import absolute_import
 from gui.Scaleform.locale.MESSENGER import MESSENGER as I18N_MESSENGER
 from gui.Scaleform.locale.INGAME_GUI import INGAME_GUI as I18N_INGAME_GUI
 from helpers import i18n, html
@@ -195,7 +196,9 @@ def createVOIPError(args, actionID):
     errorID = args['int32Arg1']
     error, logOnly = None, False
     if actionID == _ACTIONS.GET_VOIP_CREDENTIALS:
-        if errorID == _ERRORS.IN_COOLDOWN:
+        if errorID == _ERRORS.IN_CHAT_BAN:
+            error = ChatBanError(makeLocalServerTime(args['floatArg1']), args['strArg1'])
+        elif errorID == _ERRORS.IN_COOLDOWN:
             error = _ActionCoolDownError(_ACTIONS.GET_VOIP_CREDENTIALS, _LIMITS.VOIP_CREDENTIALS_REQUEST_COOLDOWN_SEC)
         elif errorID == _ERRORS.GENERIC_ERROR:
             logOnly = True

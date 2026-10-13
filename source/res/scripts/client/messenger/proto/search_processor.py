@@ -1,9 +1,10 @@
+from __future__ import absolute_import
 import weakref
 import BigWorld
-from interfaces import ISearchHandler
-from interfaces import ISearchProcessor
 from debug_utils import LOG_DEBUG
 from debug_utils import LOG_ERROR
+from messenger.proto.interfaces import ISearchHandler
+from messenger.proto.interfaces import ISearchProcessor
 from soft_exception import SoftException
 class SearchProcessor(ISearchProcessor):
     def __init__(self):

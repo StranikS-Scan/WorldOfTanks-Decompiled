@@ -1,5 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/AvatarInputHandler/player_notifications/siege_mode/sound_notifications.py
+from __future__ import absolute_import
+from future.utils import viewvalues
 import BigWorld
 from components_base.component import Component
 import SoundGroups
@@ -43,6 +45,7 @@ class SiegeModeNotificationsBase(Component):
     _MODE_TYPE = ''
 
     def __init__(self, vehicleID):
+        super(SiegeModeNotificationsBase, self).__init__()
         self.__vehicleID = vehicleID
 
     @property
@@ -259,7 +262,7 @@ class SiegeModeSoundNotifications(SiegeModeNotificationsBase):
 
     def __clear(self):
         if self.__sounds is not None:
-            for sound in self.__sounds.itervalues():
+            for sound in viewvalues(self.__sounds):
                 if sound is not None:
                     sound.stop()
 

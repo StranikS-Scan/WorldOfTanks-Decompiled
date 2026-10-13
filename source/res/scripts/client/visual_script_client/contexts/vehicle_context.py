@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/visual_script_client/contexts/vehicle_context.py
+from __future__ import absolute_import
 import weakref
 from visual_script.context import VScriptContext, vse_get_property
 from visual_script.misc import ASPECT

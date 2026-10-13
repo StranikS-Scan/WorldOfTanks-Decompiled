@@ -9,7 +9,7 @@ from gui.Scaleform.daapi.view.meta.PowerWidgetMeta import PowerWidgetMeta
 from gui.Scaleform.genConsts.MECHANICS_WIDGET_CONST import MECHANICS_WIDGET_CONST
 from gui.veh_mechanics.battle.updaters.mechanics.mechanic_passenger_updater import VehicleMechanicPassengerUpdater
 from gui.veh_mechanics.battle.updaters.mechanics.mechanic_states_updater import VehicleMechanicStatesUpdater
-from vehicles.mechanics.mechanic_constants import VehicleMechanic
+from items.vehicle_mechanics_types import VehicleMechanicKeys
 from vehicles.mechanics.mechanic_states import IMechanicStatesListenerLogic
 if typing.TYPE_CHECKING:
     from PowerModeController import PowerModeState
@@ -42,7 +42,7 @@ class PowerModeMechanicWidget(PowerWidgetMeta, ContainersListener, IMechanicStat
         self.__invalidateProgress(state)
 
     def _getViewUpdaters(self):
-        return [VehicleMechanicPassengerUpdater(VehicleMechanic.POWER_MODE, self), VehicleMechanicStatesUpdater(VehicleMechanic.POWER_MODE, self)]
+        return [VehicleMechanicPassengerUpdater(VehicleMechanicKeys.POWER_MODE, self), VehicleMechanicStatesUpdater(VehicleMechanicKeys.POWER_MODE, self)]
 
     def __invalidateAll(self, state, isInstantly=False):
         self.as_setStateS(self._POWER_MODE_UI_STATES[state.state], isInstantly)

@@ -35,7 +35,7 @@ class ConversionTooltip(ViewImpl):
             for book, value in self.__books:
                 tbm = ConversionTooltipBookModel()
                 tbm.setIcon(book.getBonusIconName())
-                tbm.setTitle(backport.text(R.strings.crew_books.items.dyn(book.getBookType()).noNationName()))
+                tbm.setTitle(backport.text(R.strings.crew_books.c_items.dyn(book.getBookType()).noNationName()))
                 tbm.setNation(backport.text(R.strings.nations.dyn(book.getNation())()))
                 tbm.setValue(value)
                 booksList.addViewModel(tbm)

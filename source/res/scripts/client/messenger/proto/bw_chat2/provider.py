@@ -1,9 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/proto/bw_chat2/provider.py
+from __future__ import absolute_import
 import weakref
 from collections import defaultdict, deque
-import BattleReplay
+from future.utils import viewitems
 import BigWorld
+import BattleReplay
 import Event
 from BattleReplay import CallbackDataNames
 from chat_commands_consts import CHAT_COMMANDS_THAT_IGNORE_COOLDOWNS
@@ -11,6 +13,7 @@ from debug_utils import LOG_ERROR, LOG_WARNING, LOG_CURRENT_EXCEPTION
 from gui.shared.rq_cooldown import RequestCooldownManager, REQUEST_SCOPE
 from gui.shared.utils import transport
 from ids_generators import SequenceIDGenerator
+from math_common import decimal_round
 from messenger.proto.bw_chat2.errors import createCoolDownError
 from messenger.proto.events import g_messengerEvents
 from messenger_common_chat2 import MESSENGER_ACTION_IDS as _ACTIONS, messageArgs, addCoolDowns, areSenderCooldownsActive, CHAT_COMMAND_COOLDOWN_TYPE_IDS
@@ -69,7 +72,7 @@ class BWChatProvider(object):
                 g_messengerEvents.onErrorReceived(createCoolDownError(actionID, self.__getCooldownTime(actionID, args)))
         else:
             if response:
-                reqID = self.__idGen.next()
+                reqID = self.__idGen.nextSequenceID
             if self.__isEnabled:
                 success = self.__sendAction(actionID, reqID, args)
             else:
@@ -197,7 +200,7 @@ class BWChatProvider(object):
             currTime = BigWorld.time()
             targetID = args['int32Arg1']
             sndrBlockReason = areSenderCooldownsActive(currTime, self.__battleCmdCooldowns, actionID, targetID)
-            cdTime = round(sndrBlockReason.cooldownEnd - currTime, 1) if sndrBlockReason is not None else 0
+            cdTime = decimal_round(sndrBlockReason.cooldownEnd - currTime, 1) if sndrBlockReason is not None else 0
             return cdTime
         else:
             self.__coolDown.getTime(actionID)
@@ -302,7 +305,7 @@ class ResponseDictHandler(ResponseHandler):
         result = False
         if value in self._reqIDs.values():
             result = True
-            self._reqIDs = dict((item for item in self._reqIDs.iteritems() if item[1] != value))
+            self._reqIDs = dict((item for item in viewitems(self._reqIDs) if item[1] != value))
         return result
 
 

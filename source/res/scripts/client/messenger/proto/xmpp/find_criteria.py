@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/proto/xmpp/find_criteria.py
+from __future__ import absolute_import
 from messenger.m_constants import PROTO_TYPE, USER_TAG
 from messenger.proto.interfaces import IEntityFindCriteria
 from messenger.proto.xmpp.gloox_constants import MESSAGE_TYPE
@@ -60,8 +61,8 @@ class XMPPChannelByJIDFindCriteria(IEntityFindCriteria):
         super(XMPPChannelByJIDFindCriteria, self).__init__()
         self.__jid = str(jid)
 
-    def filter(self, channel):
-        return channel.getProtoType() == PROTO_TYPE.XMPP and channel.getID() == self.__jid
+    def filter(self, entity):
+        return entity.getProtoType() == PROTO_TYPE.XMPP and entity.getID() == self.__jid
 
 
 class XMPPChannelByNameFindCriteria(IEntityFindCriteria):
@@ -70,11 +71,11 @@ class XMPPChannelByNameFindCriteria(IEntityFindCriteria):
         super(XMPPChannelByNameFindCriteria, self).__init__()
         self.__name = name
 
-    def filter(self, channel):
-        return channel.getProtoType() == PROTO_TYPE.XMPP and channel.getName() == self.__name
+    def filter(self, entity):
+        return entity.getProtoType() == PROTO_TYPE.XMPP and entity.getName() == self.__name
 
 
 class XmppClanChannelCriteria(IEntityFindCriteria):
 
-    def filter(self, channel):
-        return channel.getProtoType() is PROTO_TYPE.XMPP and channel.getMessageType() == MESSAGE_TYPE.GROUPCHAT and channel.isClan()
+    def filter(self, entity):
+        return entity.getProtoType() is PROTO_TYPE.XMPP and entity.getMessageType() == MESSAGE_TYPE.GROUPCHAT and entity.isClan()

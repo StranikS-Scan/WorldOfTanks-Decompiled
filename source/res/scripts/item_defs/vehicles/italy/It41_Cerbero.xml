@@ -11,7 +11,7 @@
   <customRoleSlotOptions>	3 5	</customRoleSlotOptions>
   <speedLimits>
     <forward>	33	</forward>
-    <backward>	12	</backward>
+    <backward>	10	</backward>
   </speedLimits>
   <invisibility>
     <moving>	0.15	</moving>
@@ -1314,7 +1314,7 @@
             <afterShot>	4	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <aimingTime>	2.4	</aimingTime>
+          <aimingTime>	2.6	</aimingTime>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 8 1 8	</maxPitch>
@@ -1323,10 +1323,10 @@
           <turretYawLimits>	-30 30	</turretYawLimits>
           <clip>
             <count>	3	</count>
-            <rate>	12	</rate>
+            <rate>	10	</rate>
           </clip>
           <autoreload>
-            <reloadTime>	19 15 11	</reloadTime>
+            <reloadTime>	20 16 12	</reloadTime>
           </autoreload>
           <models>
             <undamaged>	vehicles/italy/It41_Cerbero/normal/lod0/Gun_01.model	</undamaged>
@@ -1871,7 +1871,7 @@
     <detailed>
       <engines>
         <MTU_870_B>
-          <smplEnginePower>	750	</smplEnginePower>
+          <smplEnginePower>	700	</smplEnginePower>
           <smplFwMaxSpeed>	33	</smplFwMaxSpeed>
         </MTU_870_B>
       </engines>

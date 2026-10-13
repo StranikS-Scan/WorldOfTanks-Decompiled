@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/proto/xmpp/xmpp_items.py
+from __future__ import absolute_import
 import time
 from messenger.m_constants import USER_TAG as _TAG
 from messenger.proto.xmpp.gloox_constants import PRESENCE, SUBSCRIPTION as _SUB, SUBSCRIPTION_NAMES as _SUB_NAMES

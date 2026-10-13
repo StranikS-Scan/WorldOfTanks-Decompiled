@@ -1,9 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/battleground/simulation_movement_tracker.py
+from __future__ import absolute_import, division
 import itertools
+import logging
 from collections import namedtuple, deque
 import BigWorld
-import logging
 from aih_constants import CTRL_MODE_NAME
 from constants import ARENA_PERIOD
 from gun_rotation_shared import decodeGunAngles

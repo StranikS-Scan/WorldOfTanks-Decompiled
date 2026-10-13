@@ -8,7 +8,7 @@ from BWUtil import AsyncReturn
 from debug_utils import deprecated
 from gui import SystemMessages
 from gui.impl import backport
-from gui.shared.formatters.currency import getStyle
+from gui.shared.formatters.currency import applyAll
 from helpers.time_utils import getServerUTCTime, makeLocalServerTime
 from lootboxes_common import makeStopRerollTokenID
 from messenger.formatters import TimeFormatter
@@ -209,7 +209,7 @@ class RerollLootBoxProcessor(Processor):
             if price == 0:
                 return makeSuccess(auxData=ctx)
             currency = box.getRerollCurrency()
-            return makeSuccess(userMsg=backport.text(getTextResource(_TRANSACTION_TEXT_PATH + [currency], self.__eventName)(), amount=getStyle(currency)(price)), msgType=SystemMessages.SM_TYPE.lookup(_TRANSACTION_SM_TYPE_TEMPLATE.format(currency.capitalize())), msgData={'date': backport.text(getTextResource(_TRANSACTION_TEXT_PATH + ['date'], self.__eventName)(), date=TimeFormatter.getLongDatetimeFormat(makeLocalServerTime(getServerUTCTime())))}, auxData=ctx)
+            return makeSuccess(userMsg=backport.text(getTextResource(_TRANSACTION_TEXT_PATH + [currency], self.__eventName)(), amount=applyAll(currency, price)), msgType=SystemMessages.SM_TYPE.lookup(_TRANSACTION_SM_TYPE_TEMPLATE.format(currency.capitalize())), msgData={'date': backport.text(getTextResource(_TRANSACTION_TEXT_PATH + ['date'], self.__eventName)(), date=TimeFormatter.getLongDatetimeFormat(makeLocalServerTime(getServerUTCTime())))}, auxData=ctx)
 
 
 class AcceptLootBoxRerollProcessor(Processor):

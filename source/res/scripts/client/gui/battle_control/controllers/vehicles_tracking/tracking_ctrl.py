@@ -12,9 +12,9 @@ from vehicles.mechanics.mechanic_trackers import createVehicleMechanicsTracker
 if typing.TYPE_CHECKING:
     from events_containers.common.containers import IClientEventsContainerListener
     from gui.battle_control.controllers.vehicle_passenger import IVehiclePassengerController
+    from items.vehicle_mechanics_types import VehicleMechanicKey
     from Vehicle import Vehicle
     from vehicles.entities.vehicle_trackers import IVehicleEntityTrackerListener
-    from vehicles.mechanics.mechanic_constants import VehicleMechanic
     from vehicles.mechanics.mechanic_trackers import IVehicleMechanicsTrackerListener
 _CURR_VEH_KEY = -1
 

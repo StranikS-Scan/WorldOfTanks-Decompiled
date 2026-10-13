@@ -4,19 +4,19 @@ from __future__ import absolute_import
 from gui.shared.gui_items.vehicle_mechanics.module_mechanic_item import ModuleMechanicItem
 from gui.shared.utils.decorators import ReprInjector
 from items import vehicles
-from vehicles.mechanics.mechanic_constants import VehicleMechanic
-_SHELL_MECHANIC_PRIORITY = {VehicleMechanic.SHELL_PARAMS_SWITCHER: 1,
- VehicleMechanic.SHELL_CALIBRATION: 1,
- VehicleMechanic.LOW_CHARGE_SHOT: 1,
- VehicleMechanic.BUSTLE_FEED: 1}
+from items.vehicle_mechanics_types import VehicleMechanicKey, VehicleMechanicKeys
+_SHELL_MECHANIC_PRIORITY = {VehicleMechanicKeys.SHELL_PARAMS_SWITCHER: 1,
+ VehicleMechanicKeys.SHELL_CALIBRATION: 1,
+ VehicleMechanicKeys.LOW_CHARGE_SHOT: 1,
+ VehicleMechanicKeys.BUSTLE_FEED: 1}
 
 @ReprInjector.withParent('rank', 'mechanicSubtype')
 class ShellMechanicItem(ModuleMechanicItem):
     __slots__ = ('__rank', '__mechanicSubtype')
-    _GUI_SUPPORTED_MECHANICS = {VehicleMechanic.SHELL_PARAMS_SWITCHER,
-     VehicleMechanic.LOW_CHARGE_SHOT,
-     VehicleMechanic.SHELL_CALIBRATION,
-     VehicleMechanic.BUSTLE_FEED}
+    _GUI_SUPPORTED_MECHANICS = {VehicleMechanicKeys.SHELL_PARAMS_SWITCHER,
+     VehicleMechanicKeys.LOW_CHARGE_SHOT,
+     VehicleMechanicKeys.SHELL_CALIBRATION,
+     VehicleMechanicKeys.BUSTLE_FEED}
 
     def __init__(self, mechanic, *args, **kwargs):
         super(ShellMechanicItem, self).__init__(mechanic)
@@ -24,7 +24,7 @@ class ShellMechanicItem(ModuleMechanicItem):
         vehicleMechanicItem = self.itemsFactory.createVehicleMechanicItem(mechanic, vehIntCD)
         self.__rank = vehicleMechanicItem.rank
         shellCD = kwargs.get('shellCD')
-        mechanicCache = vehicles.g_cache.vehicleMechanics.get(vehIntCD, {}).get(mechanic.value, {})
+        mechanicCache = vehicles.g_cache.vehicleMechanics.get(vehIntCD, {}).get(mechanic.uniqueName, {})
         self.__mechanicSubtype = mechanicCache.get('mechanicSubtypes', {}).get(shellCD, {})
 
     @property

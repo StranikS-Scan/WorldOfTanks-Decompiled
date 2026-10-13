@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: frontline/scripts/client/frontline/gui/frontline_skill_packer.py
+from __future__ import absolute_import
 import typing
 from frontline.gui.impl.gen.view_models.views.lobby.views.skill_base_model import SkillBaseModel
 if typing.TYPE_CHECKING:

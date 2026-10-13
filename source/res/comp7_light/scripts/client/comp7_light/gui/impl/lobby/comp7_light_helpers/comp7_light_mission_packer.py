@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: comp7_light/scripts/client/comp7_light/gui/impl/lobby/comp7_light_helpers/comp7_light_mission_packer.py
+from __future__ import absolute_import
 from gui.Scaleform.genConsts.MISSIONS_STATES import MISSIONS_STATES
 from gui.impl import backport
 from gui.impl.gen import R

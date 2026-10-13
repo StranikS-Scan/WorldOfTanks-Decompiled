@@ -1,12 +1,14 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/tutorial/data/effects.py
+from __future__ import absolute_import
+from future.utils import viewitems
 from tutorial.data.has_id import HasTargetID
 
 class EFFECT_TYPE(object):
     EFFECTS_GROUP, ACTIVATE, DEACTIVATE, GLOBAL_ACTIVATE, GLOBAL_DEACTIVATE, SHOW_HINT, CLOSE_HINT, SHOW_DIALOG, SHOW_WINDOW, REFUSE_TRAINING, RUN_TRIGGER, SET_ITEM_PROPS, FINISH_TRAINING, INVOKE_GUI_CMD, SET_GUI_ITEM_CRITERIA, SET_GUI_ITEM_VIEW_CRITERIA, SET_ACTION, REMOVE_ACTION, SET_VAR, CLEAR_SCENE, GO_SCENE, SELECT_VEHICLE_IN_HANGAR, LOAD_VIEW, CLOSE_VIEW, PLAY_ANIMATION, SET_ALLOWED_TO_FIGHT, PLAY_SOUND = range(0, 27)
 
 
-EFFECT_TYPE_NAMES = dict(((v, k) for k, v in EFFECT_TYPE.__dict__.iteritems() if k.isupper()))
+EFFECT_TYPE_NAMES = {v:k for k, v in viewitems(EFFECT_TYPE.__dict__) if k.isupper()}
 
 class HasTargetEffect(HasTargetID):
 

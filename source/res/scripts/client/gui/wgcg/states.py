@@ -258,7 +258,7 @@ class UnavailableState(_WebState):
 
     def _schedulePingCB(self):
         if self.__bwCbId is None:
-            delay = self.__backOff.next()
+            delay = self.__backOff.nextDelay()
             self.__bwCbId = BigWorld.callback(delay, self._ping)
         return
 

@@ -1,32 +1,46 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/frameworks/wulf/gui_application.py
+from __future__ import absolute_import
 import typing
-from .py_object_wrappers import PyGuiApplication
+from helpers import time_utils
 from .formatters import Formatters
+from .py_object_wrappers import PyGuiApplication
 from .resource_manager import ResourceManager
-from .windows_system.windows_manager import WindowsManager
 from .tutorial import Tutorial
 from .ui_logger import UILogger
+from .view.layout_manager import LayoutManager
+from .windows_system.windows_manager import WindowsManager
 if typing.TYPE_CHECKING:
     from typing import Callable
-    from frameworks.wulf import ViewModel
 
 class GuiApplication(object):
-    __slots__ = ('__impl', '__windowsManager', '__resourceManager', '__formatters', '__tutorial', '__uiLogger')
+    __instance = None
 
     def __init__(self):
         super(GuiApplication, self).__init__()
-        self.__impl = PyGuiApplication()
+        self.__impl = None
         self.__windowsManager = None
+        self.__layoutManager = None
         self.__resourceManager = None
         self.__formatters = None
         self.__tutorial = None
         self.__uiLogger = None
         return
 
+    @classmethod
+    def getInstance(cls):
+        if cls.__instance is None:
+            cls.__instance = cls()
+            cls.__instance.init()
+        return cls.__instance
+
     @property
     def windowsManager(self):
         return self.__windowsManager
+
+    @property
+    def layoutManager(self):
+        return self.__layoutManager
 
     @property
     def resourceManager(self):
@@ -42,24 +56,34 @@ class GuiApplication(object):
 
     @property
     def tutorial(self):
+        if self.__tutorial is None:
+            from gui.impl.gen.view_models.common.tutorial.tutorial_model import TutorialModel
+            self.__tutorial = Tutorial.create(self.__impl.tutorial, TutorialModel())
         return self.__tutorial
 
     @property
     def uiLogger(self):
+        if self.__uiLogger is None:
+            from gui.impl.gen.view_models.common.ui_logger_model import UiLoggerModel
+            self.__uiLogger = UILogger.create(self.__impl.uiLogger, UiLoggerModel())
         return self.__uiLogger
 
     @property
     def scale(self):
         return self.__impl.scale
 
-    def init(self, tutorialModel, uiLoggerModel, serverTimeCallback):
-        self.__impl.initialize()
-        self.__resourceManager = ResourceManager.create(self.__impl.resourceManager)
-        self.__windowsManager = WindowsManager.create(self.__impl.windowsManager)
-        self.__formatters = Formatters.create(self.__impl.formatters)
-        self.__tutorial = Tutorial.create(self.__impl.tutorial, tutorialModel)
-        self.__uiLogger = UILogger.create(self.__impl.uiLogger, uiLoggerModel)
-        self._setServerTimeCallback(serverTimeCallback)
+    def init(self):
+        if self.__impl is not None:
+            return
+        else:
+            self.__impl = PyGuiApplication()
+            self.__impl.initialize()
+            self.__resourceManager = ResourceManager.create(self.__impl.resourceManager)
+            self.__windowsManager = WindowsManager.create(self.__impl.windowsManager)
+            self.__layoutManager = LayoutManager.create(self.__impl.layoutManager)
+            self.__formatters = Formatters.create(self.__impl.formatters)
+            self._setServerTimeCallback(time_utils.getServerUTCTime)
+            return
 
     def destroy(self):
         if self.__resourceManager is not None:
@@ -68,6 +92,9 @@ class GuiApplication(object):
         if self.__windowsManager is not None:
             self.__windowsManager.destroy()
             self.__windowsManager = None
+        if self.__layoutManager is not None:
+            self.__layoutManager.destroy()
+            self.__layoutManager = None
         if self.__formatters is not None:
             self.__formatters.destroy()
             self.__formatters = None

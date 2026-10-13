@@ -1,13 +1,13 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/macroses.py
 from __future__ import absolute_import
-import base64
 from future.moves.urllib.parse import quote_plus
 import BigWorld
 import constants
 from adisp import adisp_async, adisp_process
 from helpers import getClientLanguage, dependency
 from helpers.http.url_formatters import addParamsToUrlQuery
+from py2to3.compat import base64compat
 from skeletons.gui.login_manager import ILoginManager
 from skeletons.gui.web import IWebController
 from skeletons.connection_mgr import IConnectionManager
@@ -41,7 +41,7 @@ def getEncodedLogin(args=None, connectionMgr=None):
         result = login
     else:
         result = 'errorLogin'
-    return base64.b64encode(result)
+    return base64compat.b64encode(result)
 
 
 @dependency.replace_none_kwargs(connectionMgr=IConnectionManager)

@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: story_mode/scripts/client/SMSound3DComponent.py
+from __future__ import absolute_import
 import typing
 from SMSoundAbstractComponent import SMSoundAbstractComponent
 from SMSound3DObjectComponent import SMSound3DObjectComponent

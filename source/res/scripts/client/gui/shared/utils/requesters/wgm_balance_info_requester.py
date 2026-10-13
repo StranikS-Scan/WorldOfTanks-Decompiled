@@ -11,9 +11,8 @@ from gui.shared.money import Currency
 from debug_utils import LOG_WARNING
 from helpers import isPlayerAccount
 _REQUEST_COOLDOWN = 5.0
-_TOKEN_CURRENCY_CODE = 'currency_code'
+_TOKEN_CURRENCY_CODE = 'code'
 _TOKEN_IS_PAID = 'is_paid'
-_TOKEN_CLASS = 'class'
 _TOKEN_AMOUNT = 'amount'
 _TOKEN_GOLD = Currency.GOLD
 _TOKEN_CREDITS = Currency.CREDITS
@@ -86,7 +85,7 @@ class WGMBalanceInfoRequester(object):
                     currencyCode = item[_TOKEN_CURRENCY_CODE]
                     if currencyCode in (_TOKEN_GOLD, _TOKEN_CREDITS):
                         amount = item[_TOKEN_AMOUNT]
-                        isPaid = item[_TOKEN_CLASS][_TOKEN_IS_PAID]
+                        isPaid = item[_TOKEN_IS_PAID]
                         action = _ACTION_PURCHASED if isPaid else _ACTION_EARNED
                         key = currencyCode + action
                         self.__receivedData[key] = amount
@@ -97,6 +96,6 @@ class WGMBalanceInfoRequester(object):
 
     @staticmethod
     def __checkFields(row):
-        expected_keys = frozenset((_TOKEN_CURRENCY_CODE, _TOKEN_CLASS, _TOKEN_AMOUNT))
+        expected_keys = frozenset((_TOKEN_CURRENCY_CODE, _TOKEN_IS_PAID, _TOKEN_AMOUNT))
         diff = expected_keys - viewkeys(row)
-        return not diff and _TOKEN_IS_PAID in row[_TOKEN_CLASS]
+        return not diff

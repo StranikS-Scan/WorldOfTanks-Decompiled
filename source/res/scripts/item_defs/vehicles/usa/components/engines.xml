@@ -48,7 +48,7 @@
     <Maybach_HL_230P45>	53	</Maybach_HL_230P45>
     <Wright_G200A>	56	</Wright_G200A>
     <Ford_GAF_V8>	58	</Ford_GAF_V8>
-    <Continental_W-670-9A>	59	</Continental_W-670-9A>
+    <Continental_W_670_9A1>	59	</Continental_W_670_9A1>
     <American_LFF_Corporation_V12>	60	</American_LFF_Corporation_V12>
     <Continental_AOI-1195-5>	62	</Continental_AOI-1195-5>
     <Continental_AV_1790_7B>	63	</Continental_AV_1790_7B>
@@ -58,13 +58,14 @@
     <Continental_AOI-628-1>	69	</Continental_AOI-628-1>
     <Continental_AOI-628-2>	70	</Continental_AOI-628-2>
     <Continental_AOI_1490E3_7x7>	71	</Continental_AOI_1490E3_7x7>
-    <Continental_AVDS-1790-2>	74	</Continental_AVDS-1790-2>
+    <Continental_AVDS_1790_2_1>	74	</Continental_AVDS_1790_2_1>
     <Ford_GAF_R1>	76	</Ford_GAF_R1>
     <Ford_GAA_R>	77	</Ford_GAA_R>
     <Continental_W-670-12>	78	</Continental_W-670-12>
     <Ford_GAC_R>	79	</Ford_GAC_R>
     <Continental_AOI-402-5>	81	</Continental_AOI-402-5>
-    <Continental_AVI-1790-8>	84	</Continental_AVI-1790-8>
+    <AOI-1490_FR>	83	</AOI-1490_FR>
+    <Continental_AVI_1790_8_1>	84	</Continental_AVI_1790_8_1>
     <LaSalle_V8_75>	88	</LaSalle_V8_75>
     <LaSalle_V8_89>	89	</LaSalle_V8_89>
     <Continental_AV_1790_5A>	91	</Continental_AV_1790_5A>
@@ -226,6 +227,8 @@
     <AOI-1490_7x7>	505	</AOI-1490_7x7>
     <AOI_1490E4_7x7>	506	</AOI_1490E4_7x7>
     <Continental_AV_1790_5C_7x7>	507	</Continental_AV_1790_5C_7x7>
+    <Continental_AVDS_1790_2_7x7>	508	</Continental_AVDS_1790_2_7x7>
+    <Continental_AV_1790_5G_7x7>	509	</Continental_AV_1790_5G_7x7>
     <Development_Engine>	65535	</Development_Engine>
     <Wright_Continental_R-975C4_MapsTraining_Dummy_MT_1>	6	</Wright_Continental_R-975C4_MapsTraining_Dummy_MT_1>
     <Ford_GAC_1_MapsTraining_Player_HT_1>	8	</Ford_GAC_1_MapsTraining_Player_HT_1>
@@ -375,9 +378,9 @@
       <rpm_min>	461	</rpm_min>
       <rpm_max>	2324	</rpm_max>
     </Continental_W_670_M41>
-    <Continental_W-670-9A>
-      <userString>	#usa_vehicles:Continental_W-670-9A	</userString>
-      <shortUserString>	#usa_vehicles:Continental_W-670-9A_short	</shortUserString>
+    <Continental_W_670_9A1>
+      <userString>	#usa_vehicles:Continental_W_670_9A1	</userString>
+      <shortUserString>	#usa_vehicles:Continental_W_670_9A1_short	</shortUserString>
       <tags>	gasoline	</tags>
       <level>	3	</level>
       <price>	8100	</price>
@@ -392,7 +395,7 @@
       <fireStartingChance>	0.2	</fireStartingChance>
       <rpm_min>	461	</rpm_min>
       <rpm_max>	2324	</rpm_max>
-    </Continental_W-670-9A>
+    </Continental_W_670_9A1>
     <Twin_Cadillac_42series>
       <userString>	#usa_vehicles:Twin_Cadillac_42series	</userString>
       <shortUserString>	#usa_vehicles:Twin_Cadillac_42series_short	</shortUserString>
@@ -1764,6 +1767,24 @@
       <rpm_min>	495	</rpm_min>
       <rpm_max>	2013	</rpm_max>
     </AOI-1490_7x7>
+    <AOI-1490_FR>
+      <userString>	#usa_vehicles:AOI-1490_FR	</userString>
+      <shortUserString>	#usa_vehicles:AOI-1490_short	</shortUserString>
+      <tags>	gasoline	</tags>
+      <level>	10	</level>
+      <price>	100000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_ContinentalR_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_ContinentalR_npc	</wwsoundNPC>
+      <power>	875	</power>
+      <weight>	1200	</weight>
+      <maxHealth>	260	</maxHealth>
+      <maxRegenHealth>	130	</maxRegenHealth>
+      <repairCost>	6	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	495	</rpm_min>
+      <rpm_max>	2013	</rpm_max>
+    </AOI-1490_FR>
     <AOI_1490E4_7x7>
       <userString>	#usa_vehicles:AOI_1490E4	</userString>
       <shortUserString>	#usa_vehicles:AOI_1490E4_short	</shortUserString>
@@ -1957,6 +1978,24 @@
       <rpm_min>	497	</rpm_min>
       <rpm_max>	2008	</rpm_max>
     </Continental_AV_1790_5C_7x7>
+    <Continental_AV_1790_5G_7x7>
+      <userString>	#usa_vehicles:Continental_AV_1790_5G_7x7	</userString>
+      <shortUserString>	#usa_vehicles:Continental_AV_1790_5G_short	</shortUserString>
+      <tags>	diesel	</tags>
+      <level>	11	</level>
+      <price>	150000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <power>	1050	</power>
+      <weight>	1200	</weight>
+      <maxHealth>	380	</maxHealth>
+      <maxRegenHealth>	190	</maxRegenHealth>
+      <repairCost>	11	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+      <rpm_min>	253	</rpm_min>
+      <rpm_max>	2440	</rpm_max>
+    </Continental_AV_1790_5G_7x7>
     <Continental_AV_1790_5C_Rush_Ep1>
       <userString>	#usa_vehicles:Continental_AV_1790_5C_Rush_Ep1	</userString>
       <shortUserString>	#usa_vehicles:Continental_AV_1790_5C_Rush_Ep1_short	</shortUserString>
@@ -3006,9 +3045,9 @@
       <rpm_min>	266	</rpm_min>
       <rpm_max>	2400	</rpm_max>
     </Continental_AVDS_1790_8BR>
-    <Continental_AVI-1790-8>
-      <userString>	#usa_vehicles:Continental_AVI-1790-8	</userString>
-      <shortUserString>	#usa_vehicles:Continental_AVI-1790-8_short	</shortUserString>
+    <Continental_AVI_1790_8_1>
+      <userString>	#usa_vehicles:Continental_AVI_1790_8_1	</userString>
+      <shortUserString>	#usa_vehicles:Continental_AVI_1790_8_1_short	</shortUserString>
       <tags>	gasoline	</tags>
       <level>	10	</level>
       <price>	100000	</price>
@@ -3023,7 +3062,7 @@
       <fireStartingChance>	0.12	</fireStartingChance>
       <rpm_min>	395	</rpm_min>
       <rpm_max>	2894	</rpm_max>
-    </Continental_AVI-1790-8>
+    </Continental_AVI_1790_8_1>
     <Continental_AVI_1790_8C>
       <userString>	#usa_vehicles:Continental_AVI_1790_8C	</userString>
       <shortUserString>	#usa_vehicles:Continental_AVI_1790_8C_short	</shortUserString>
@@ -3545,8 +3584,8 @@
       <rpm_min>	500	</rpm_min>
       <rpm_max>	2200	</rpm_max>
     </Continental_AOI-402-5>
-    <Continental_AVDS-1790-2>
-      <userString>	#usa_vehicles:Continental_AVDS-1790-2	</userString>
+    <Continental_AVDS_1790_2_1>
+      <userString>	#usa_vehicles:Continental_AVDS_1790_2_1	</userString>
       <shortUserString>	#usa_vehicles:Continental_AVDS-1790-2_short	</shortUserString>
       <tags>	diesel	</tags>
       <level>	10	</level>
@@ -3562,7 +3601,7 @@
       <fireStartingChance>	0.1	</fireStartingChance>
       <rpm_min>	266	</rpm_min>
       <rpm_max>	2400	</rpm_max>
-    </Continental_AVDS-1790-2>
+    </Continental_AVDS_1790_2_1>
     <Continental_AVDS_1790_2>
       <userString>	#usa_vehicles:Continental_AVDS_1790_2	</userString>
       <tags>	diesel	</tags>
@@ -3580,6 +3619,23 @@
       <rpm_min>	240	</rpm_min>
       <rpm_max>	2480	</rpm_max>
     </Continental_AVDS_1790_2>
+    <Continental_AVDS_1790_2_7x7>
+      <userString>	#usa_vehicles:Continental_AVDS_1790_2_7x7	</userString>
+      <tags>	diesel	</tags>
+      <level>	11	</level>
+      <price>	150000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <power>	1100	</power>
+      <weight>	2053	</weight>
+      <maxHealth>	380	</maxHealth>
+      <maxRegenHealth>	190	</maxRegenHealth>
+      <repairCost>	11	</repairCost>
+      <fireStartingChance>	0.1	</fireStartingChance>
+      <rpm_min>	240	</rpm_min>
+      <rpm_max>	2480	</rpm_max>
+    </Continental_AVDS_1790_2_7x7>
     <Continental_AVCR_1100_2>
       <userString>	#usa_vehicles:Continental_AVCR_1100_2	</userString>
       <shortUserString>	#usa_vehicles:Continental_AVCR_1100_2_short	</shortUserString>

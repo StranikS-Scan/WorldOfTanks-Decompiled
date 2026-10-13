@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: comp7_light/scripts/client/comp7_light/gui/impl/lobby/tooltips/comp7_light_modifiers_domain_tooltip_view.py
+from __future__ import absolute_import
 from battle_modifiers.gui.feature.modifiers_data_provider import ModifiersDataProvider
 from battle_modifiers_ext.constants_ext import GameplayImpact
 from battle_modifiers.gui.impl.lobby.tooltips.modifiers_domain_tooltip_view import ModifiersDomainTooltipView

@@ -4,11 +4,11 @@ from __future__ import absolute_import
 import typing
 from events_handler import eventHandler
 from gui.shared.utils.decorators import ReprInjector
+from items.vehicle_mechanics_types import VehicleMechanicKey, VehicleMechanicKeys
 from vehicles.components.vehicle_component import VehicleDynamicComponent
 from vehicles.components.vehicle_prefabs import createMechanicPrefabSpawner
 from vehicles.mechanics.gun_mechanics.common import IGunMechanicComponent
 from vehicles.mechanics.gun_mechanics.temperature.overheat_gun import DEFAULT_OVERHEAT_MECHANIC_STATE, DEFAULT_OVERHEAT_COMPONENT_PARAMS, OverheatGunComponentParams, OverheatGunMechanicState, OverheatGunAmmoState
-from vehicles.mechanics.mechanic_constants import VehicleMechanic
 from vehicles.mechanics.mechanic_helpers import getVehicleDescrMechanicParams
 from vehicles.mechanics.mechanic_states import createMechanicStatesEvents, IMechanicStatesComponent
 if typing.TYPE_CHECKING:
@@ -26,13 +26,9 @@ class OverheatGunComponent(VehicleDynamicComponent, IGunMechanicComponent, IMech
         self.__statesEvents = createMechanicStatesEvents(self)
         self._initComponent()
 
-    @eventHandler
-    def onCollectAmmoStates(self, ammoStates):
-        ammoStates[self.vehicleMechanic.value] = OverheatGunAmmoState(self.__mechanicState)
-
     @property
-    def vehicleMechanic(self):
-        return VehicleMechanic.OVERHEAT_GUN
+    def vehicleMechanicKey(self):
+        return VehicleMechanicKeys.OVERHEAT_GUN
 
     @property
     def statesEvents(self):
@@ -47,6 +43,10 @@ class OverheatGunComponent(VehicleDynamicComponent, IGunMechanicComponent, IMech
     def set_state(self, _=None):
         self._updateComponentAppearance()
         self._updateComponentAvatar()
+
+    @eventHandler
+    def onCollectAmmoStates(self, ammoStates):
+        ammoStates[self.vehicleMechanicKey.uniqueName] = OverheatGunAmmoState(self.__mechanicState)
 
     def onDestroy(self):
         self.__statesEvents.destroy()
@@ -68,7 +68,7 @@ class OverheatGunComponent(VehicleDynamicComponent, IGunMechanicComponent, IMech
 
     def _collectComponentParams(self, typeDescriptor):
         super(OverheatGunComponent, self)._collectComponentParams(typeDescriptor)
-        mechanicParams = getVehicleDescrMechanicParams(typeDescriptor, self.vehicleMechanic)
+        mechanicParams = getVehicleDescrMechanicParams(typeDescriptor, self.vehicleMechanicKey)
         self.__componentParams = OverheatGunComponentParams.fromMechanicParams(mechanicParams)
 
     def __updateMechanicState(self):

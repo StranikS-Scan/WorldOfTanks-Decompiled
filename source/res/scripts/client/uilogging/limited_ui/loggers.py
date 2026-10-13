@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/uilogging/limited_ui/loggers.py
+from __future__ import absolute_import
 import typing
 from uilogging.base.logger import MetricsLogger
 from uilogging.limited_ui.constants import FEATURE, LimitedUILogActions

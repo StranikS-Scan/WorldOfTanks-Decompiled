@@ -1,6 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/battleground/berserker_effect.py
+from __future__ import absolute_import
 import logging
+from future.utils import viewvalues
 import BigWorld
 import CGF
 import AnimationSequence
@@ -30,7 +32,7 @@ class BerserkerEffectComponent(AvatarRelatedComponent):
 
     def deactivate(self):
         super(BerserkerEffectComponent, self).deactivate()
-        for effObject in self.__loadingEffects.itervalues():
+        for effObject in viewvalues(self.__loadingEffects):
             effObject.stopLoading = True
             effObject.destroy()
 

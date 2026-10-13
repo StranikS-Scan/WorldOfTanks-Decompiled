@@ -1,6 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: story_mode/scripts/client/story_mode/dyn_objects.py
+from __future__ import absolute_import
 import typing
+from future.utils import viewitems
 from dyn_objects_cache import DynObjectsBase, createTerrainCircleSettings
 from story_mode_common.story_mode_constants import RECON_ABILITY, DISTRACTION_ABILITY, SCC_AIRSTRIKE_ABILITY, SCC_AIRSTRIKE_ABILITY_HARD
 if typing.TYPE_CHECKING:
@@ -20,7 +22,7 @@ class StoryModeDynObjects(DynObjectsBase):
 
     def init(self, dataSection):
         if not self._initialized:
-            for name, visual in EQUIPMENT_VISUALS.iteritems():
+            for name, visual in viewitems(EQUIPMENT_VISUALS):
                 if dataSection.has_key(visual):
                     self._circleSettings[name] = createTerrainCircleSettings(dataSection[visual])
 

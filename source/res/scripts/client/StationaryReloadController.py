@@ -11,13 +11,14 @@ from events_handler import eventHandler
 from gui.battle_control.components_states.ammo import DefaultComponentAmmoState, AmmoShootPossibility
 from gui.shared.utils.decorators import ReprInjector
 from helpers import dependency
+from items.vehicle_mechanics_types import VehicleMechanicKey, VehicleMechanicKeys
 from messenger_common_chat2 import messageArgs
 from skeletons.gui.battle_session import IBattleSessionProvider
 from vehicles.components.vehicle_component import VehicleDynamicComponent
 from vehicles.components.vehicle_prefabs import createMechanicPrefabSpawner
 from vehicles.mechanics.gun_mechanics.common import IGunMechanicComponent
 from vehicles.mechanics.mechanic_commands import IMechanicCommandsComponent, createMechanicCommandsEvents
-from vehicles.mechanics.mechanic_constants import VehicleMechanic, VehicleMechanicCommand
+from vehicles.mechanics.mechanic_constants import VehicleMechanicCommand
 from vehicles.mechanics.mechanic_states import IMechanicStatesEvents, createMechanicStatesEvents, IMechanicStatesComponent, IMechanicState
 if typing.TYPE_CHECKING:
     from typing import Optional, Any
@@ -105,8 +106,8 @@ class StationaryReloadController(VehicleDynamicComponent, IGunMechanicComponent,
         self._updateComponentAvatar()
 
     @property
-    def vehicleMechanic(self):
-        return VehicleMechanic.STATIONARY_RELOAD
+    def vehicleMechanicKey(self):
+        return VehicleMechanicKeys.STATIONARY_RELOAD
 
     @property
     def commandsEvents(self):
@@ -129,7 +130,7 @@ class StationaryReloadController(VehicleDynamicComponent, IGunMechanicComponent,
 
     @eventHandler
     def onCollectAmmoStates(self, ammoStates):
-        ammoStates[self.vehicleMechanic.value] = self.getAmmoState()
+        ammoStates[self.vehicleMechanicKey.uniqueName] = self.getAmmoState()
 
     def tryActivate(self):
         self.__commandsEvents.processMechanicCommand(VehicleMechanicCommand.MANUAL_RELOAD)

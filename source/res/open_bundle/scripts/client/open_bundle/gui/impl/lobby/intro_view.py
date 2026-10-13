@@ -35,7 +35,14 @@ class Intro(ViewImpl):
         setIntroShown(self.__bundleID)
 
     def _getEvents(self):
-        return ((self.viewModel.onClose, self.__onClose), (self.viewModel.onExternalLink, self.__onExternalLink))
+        return ((self.viewModel.onClose, self.__onClose),
+         (self.viewModel.onExternalLink, self.__onExternalLink),
+         (self.__openBundle.onStatusChanged, self.__onStatusChanged),
+         (self.__openBundle.onSettingsChanged, self.__onStatusChanged))
+
+    def __onStatusChanged(self, *_):
+        if not self.__openBundle.isBundleActive(self.__bundleID):
+            self.destroyWindow()
 
     def __onClose(self):
         self.destroyWindow()

@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/tutorial/doc_loader/sub_parsers/__init__.py
+from __future__ import absolute_import
 import importlib
 from collections import namedtuple
 from functools import partial
@@ -848,7 +849,7 @@ _ArrowProps = namedtuple('_ArrowProps', ('direction', 'loop', 'positionValue', '
 _Padding = namedtuple('_Padding', ('left', 'top', 'right', 'bottom'))
 
 def parseHint(xmlCtx, section):
-    sectionInfo = dict()
+    sectionInfo = {}
     sectionInfo['hintID'] = parseID(xmlCtx, section, 'Specify a hint ID')
     tags = section.keys()
     if 'item-id' in tags:

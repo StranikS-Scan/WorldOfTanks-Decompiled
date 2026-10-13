@@ -1613,13 +1613,13 @@ class GoodiesBonus(SimpleBonus):
                 result.append(i18n.makeString('#quests:bonuses/discount/name', name=discount.userName, targetName=discount.targetName, effectValue=discount.getFormattedValue(), count=count))
 
         for demountKit, count in self.getDemountKits().iteritems():
-            result.append(backport.text(R.strings.quests.bonuses.items.name(), name=demountKit.userName, count=count))
+            result.append(backport.text(R.strings.quests.bonuses.c_items.name(), name=demountKit.userName, count=count))
 
         for recertificationForm, count in self.getRecertificationForms().iteritems():
-            result.append(backport.text(R.strings.quests.bonuses.items.name(), name=recertificationForm.userName, count=count))
+            result.append(backport.text(R.strings.quests.bonuses.c_items.name(), name=recertificationForm.userName, count=count))
 
         for item, count in self.getMentoringLicenses().iteritems():
-            result.append(backport.text(R.strings.quests.bonuses.items.name(), name=item.userName, count=count))
+            result.append(backport.text(R.strings.quests.bonuses.c_items.name(), name=item.userName, count=count))
 
         return result
 

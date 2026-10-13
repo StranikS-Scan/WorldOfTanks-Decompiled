@@ -1,8 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/account_helpers/settings_core/ServerSettingsManager.py
+from __future__ import absolute_import
 import weakref
 from collections import namedtuple
 from itertools import chain
+from future.utils import viewitems
 from account_helpers.settings_core import longToInt32, settings_constants
 from account_helpers.settings_core.migrations import migrateToVersion
 from account_helpers.settings_core.settings_constants import VERSION, GuiSettingsBehavior, OnceOnlyHints, SPGAim, CONTOUR, ReferralProgram, PersonalMission3, NewYearStorageKeys, PersonalMission4
@@ -247,7 +249,6 @@ class ServerSettingsManager(object):
                                        GAME.SNIPER_ZOOM: Offset(27, 3 << 27)}),
      SETTINGS_SECTIONS.GAME_EXTENDED_2: Section(masks={GAME.SHOW_ARTY_HIT_ON_MAP: 0,
                                          GAME.SCROLL_SMOOTHING: 4,
-                                         GAME.GAMEPLAY_DEV_MAPS: 5,
                                          GAME.NEWBIE_PREBATTLE_HINTS: 6,
                                          GAME.NEWBIE_BATTLE_HINTS: 7,
                                          GAME.ENABLE_SERVER_AIM: 8,
@@ -1018,7 +1019,7 @@ class ServerSettingsManager(object):
             storing = self._buildSectionSettings(section, currentSettings)
             if stored != storing:
                 settingToServer[section] = storing
-                for k, v in currentSettings.iteritems():
+                for k, v in viewitems(currentSettings):
                     if storedSettings.get(k) != v:
                         onceOnlyHintsDiff[k] = v
 
@@ -1120,7 +1121,7 @@ class ServerSettingsManager(object):
         if not self.settingsCache.isSynced():
             return False
         settings = {}
-        for storageInfo, offsets in data.iteritems():
+        for storageInfo, offsets in viewitems(data):
             storageIdx, ruleType = storageInfo
             storages = LIMITED_UI_STORAGES_BY_TYPE.get(ruleType, [])
             if storageIdx >= len(storages):
@@ -1141,9 +1142,10 @@ class ServerSettingsManager(object):
 
     def setLimitedUICompleted(self):
         if not self.settingsCache.isSynced():
-            return
-        fields = {UI_STORAGE_KEYS.LIMITED_UI_ALL_NOVICE_RULES_COMPLETED: True}
-        return self.setSections([SETTINGS_SECTIONS.UI_STORAGE], fields)
+            return None
+        else:
+            fields = {UI_STORAGE_KEYS.LIMITED_UI_ALL_NOVICE_RULES_COMPLETED: True}
+            return self.setSections([SETTINGS_SECTIONS.UI_STORAGE], fields)
 
     def getPM3InstalledVehDetails(self):
         return self.getSectionSettings(SETTINGS_SECTIONS.PERSONAL_MISSION_3, PersonalMission3.PART_NO, 0)
@@ -1221,13 +1223,13 @@ class ServerSettingsManager(object):
 
     def _buildAimSettings(self, settings):
         settingToServer = {}
-        for section, options in settings.iteritems():
+        for section, options in viewitems(settings):
             mapping = {}
-            for key, value in options.iteritems():
+            for key, value in viewitems(options):
                 number = self.AIM_MAPPING[key]
                 mapping.setdefault(number, {})[key] = value
 
-            for number, value in mapping.iteritems():
+            for number, value in viewitems(mapping):
                 settingsKey = 'AIM_{number}'.format(number=number)
                 storageKey = 'AIM_{section}_{number}'.format(section=section.upper(), number=number)
                 storingValue = storedValue = self.settingsCache.getSetting(storageKey)
@@ -1257,7 +1259,7 @@ class ServerSettingsManager(object):
 
     def _buildMarkersSettings(self, settings):
         settingToServer = {}
-        for section, options in settings.iteritems():
+        for section, options in viewitems(settings):
             storageKey = 'MARKERS_{section}'.format(section=section.upper())
             storingValue = storedValue = self.settingsCache.getSetting(storageKey)
             masks = self.SECTIONS[SETTINGS_SECTIONS.MARKERS].masks
@@ -1357,7 +1359,7 @@ class ServerSettingsManager(object):
         else:
             self.settingsCache.setSectionSettings(section, storingValue)
             settingsDiff = {}
-            for k, v in settings.iteritems():
+            for k, v in viewitems(settings):
                 sV = storedSettings.get(k)
                 if sV != v:
                     settingsDiff[k] = v
@@ -1383,7 +1385,7 @@ class ServerSettingsManager(object):
         return default
 
     def _mapValues(self, settings, storingValue, masks, offsets):
-        for key, value in settings.iteritems():
+        for key, value in viewitems(settings):
             if storingValue & 4294967296L:
                 storingValue &= 2147483647
                 storingValue |= 2147483648L

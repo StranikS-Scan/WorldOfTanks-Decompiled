@@ -39,11 +39,11 @@ from gui.shared.gui_items.vehicle_modules import ModulesIconNames
 from gui.shared.sort_key import SortKey
 from gun_rotation_shared import calcPitchLimitsFromDesc
 from helpers import dependency
+from items.vehicle_mechanics_types import VehicleMechanicKeys
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.app_loader import IAppLoader
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.shared.utils import IHangarSpace
-from vehicles.mechanics.mechanic_constants import VehicleMechanic
 from uilogging.vehicle_hub.loggers import ArmorTabLogger
 if typing.TYPE_CHECKING:
     import CGF
@@ -52,7 +52,7 @@ if typing.TYPE_CHECKING:
     from gui.impl.gen.view_models.views.lobby.vehicle_hub.views.sub_models.armor_model import ArmorModel
     from gui.impl.lobby.vehicle_hub.sub_presenters.armor.penetration_utils import ShellParams
 _ROTATION_PER_PX = 0.0015
-_SUPPORTED_MECHANICS = frozenset([VehicleMechanic.SHELL_PARAMS_SWITCHER, VehicleMechanic.BUSTLE_FEED])
+_SUPPORTED_MECHANICS = frozenset([VehicleMechanicKeys.SHELL_PARAMS_SWITCHER, VehicleMechanicKeys.BUSTLE_FEED])
 _logger = logging.getLogger(__name__)
 
 class _ModeBase(object):

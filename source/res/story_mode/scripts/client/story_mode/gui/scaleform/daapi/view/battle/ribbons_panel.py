@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: story_mode/scripts/client/story_mode/gui/scaleform/daapi/view/battle/ribbons_panel.py
+from __future__ import absolute_import
 from gui.Scaleform.daapi.view.battle.pve_base.ribbons_panel import PveRibbonsPanel
 from story_mode.gui.scaleform.daapi.view.battle import ribbons_aggregator
 

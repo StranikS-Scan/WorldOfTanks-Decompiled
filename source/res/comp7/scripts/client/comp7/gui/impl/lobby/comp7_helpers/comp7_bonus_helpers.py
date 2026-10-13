@@ -1,8 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: comp7/scripts/client/comp7/gui/impl/lobby/comp7_helpers/comp7_bonus_helpers.py
+from __future__ import absolute_import
 import copy
 import enum
 import typing
+from future.utils import viewitems
 from constants import PREMIUM_ENTITLEMENTS
 from dog_tags_common.components_config import componentConfigAdapter
 from dog_tags_common.config.common import ComponentViewType
@@ -240,8 +242,8 @@ def _splitDossierBonus(dossier):
     badgeSuffixIds = [ badge.badgeID for badge in dossier.getBadges() if badge.isSuffixLayout() ]
     achievements, badges, badgeSuffixes = {}, {}, {}
     extra = {}
-    for dossierType, records in dossierValue.iteritems():
-        for (block, record), value in records.iteritems():
+    for dossierType, records in viewitems(dossierValue):
+        for (block, record), value in viewitems(records):
             component = extra
             if block in ACHIEVEMENT_BLOCK.ALL:
                 component = achievements

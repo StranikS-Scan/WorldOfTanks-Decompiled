@@ -18,7 +18,6 @@ from gui import SystemMessages
 from gui.DialogsInterface import showI18nConfirmDialog
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.dialogs import I18nConfirmDialogMeta, DIALOG_BUTTON_ID
-from gui.Scaleform.framework import g_entitiesFactories
 from gui.Scaleform.framework.entities.EventSystemEntity import EventSystemEntity
 from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
@@ -30,7 +29,6 @@ from gui.impl.gen.resources import R
 from gui.impl.gen.view_models.views.dialogs.sub_views.currency_view_model import CurrencyViewModel, CurrencyType, CurrencySize
 from gui.impl.gen.view_models.views.lobby.hangar.buy_vehicle_option_model import BuyVehicleOptionModel, OptionState
 from gui.impl.gen.view_models.views.lobby.hangar.buy_vehicle_view_model import BuyVehicleViewModel
-from gui.impl.gen_utils import INVALID_RES_ID
 from gui.impl.gui_decorators import args2params
 from gui.impl.lobby.common.vehicle_model_helpers import fillVehicleModel
 from gui.impl.pub import ViewImpl
@@ -40,7 +38,7 @@ from gui.prb_control.entities.base.listener import IPrbListener
 from gui.prb_control.settings import PREBATTLE_ACTION_NAME
 from gui.shared import event_dispatcher, events, g_eventBus
 from gui.shared.event_bus import EVENT_BUS_SCOPE
-from gui.shared.events import ShopEvent, VehicleBuyEvent, OpenLinkEvent
+from gui.shared.events import LoadViewEvent, ShopEvent, VehicleBuyEvent, OpenLinkEvent
 from gui.shared.formatters.text_styles import neutral
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.Vehicle import VEHICLE_TAGS
@@ -421,7 +419,7 @@ class BuyVehicleView(ViewImpl, EventSystemEntity, IPrbListener):
             elif self.__returnAlias == VIEW_ALIAS.LOBBY_STORE:
                 returnCallback = partial(event_dispatcher.showShop)
             else:
-                event = g_entitiesFactories.makeLoadEvent(SFViewLoadParams(self.__returnAlias), {'isBackEvent': True})
+                event = LoadViewEvent(SFViewLoadParams(self.__returnAlias), ctx={'isBackEvent': True})
                 returnCallback = partial(g_eventBus.handleEvent, event, scope=EVENT_BUS_SCOPE.LOBBY)
         elif self.__usePreviousAlias and self.__previousAlias is None and self.__returnAlias == VIEW_ALIAS.LOBBY_STORE and self.__returnCallback:
             returnCallback = self.__returnCallback
@@ -528,8 +526,8 @@ class BuyVehicleView(ViewImpl, EventSystemEntity, IPrbListener):
             rentType, packageID = parseRentID(self.__selectedRentID)
             rentPackage = self.__vehicle.rentPackages[self.__selectedRentIdx]
             if rentType == constants.RentType.TIME_RENT:
-                label = textDir.dyn('rentBtnLabel{}Days'.format(packageID))()
-                if label == INVALID_RES_ID:
+                label = textDir.dyn('rentBtnLabel{}Days'.format(packageID))
+                if not label.exists():
                     label = textDir.rentBtnLabelAny()
                     labelKwargs['days'] = packageID
             elif rentType in (constants.RentType.SEASON_RENT, constants.RentType.SEASON_CYCLE_RENT):

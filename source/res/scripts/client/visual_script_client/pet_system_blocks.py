@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/visual_script_client/pet_system_blocks.py
+from __future__ import absolute_import
 import typing
 import skeletons.gui.pet_system
 from pet_system_common.pet_constants import AnimationStateName, PetHangarObject, PetStateBehavior, PetStaticTrigger, PetTrigger, StorageStaticTrigger

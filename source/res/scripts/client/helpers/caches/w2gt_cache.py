@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/helpers/caches/w2gt_cache.py
+from __future__ import absolute_import
 from helpers.local_cache import FileLocalCache
 
 class W2gtCache(FileLocalCache):

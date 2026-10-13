@@ -1,10 +1,12 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/helpers/tips.py
+from __future__ import absolute_import
 import typing
 import logging
 import random
 import re
 from collections import namedtuple
+from future.utils import lfilter
 import nations
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import ROYALE_SQUAD_TIP_SHOWN_FOR_SEASON
@@ -63,7 +65,7 @@ class TipsCriteria(object):
             return TipData(R.invalid(), R.invalid(), R.invalid())
 
     def _findRandomTip(self):
-        suitableTips = filter(self._suitableTipPredicate, self._getTargetList())
+        suitableTips = lfilter(self._suitableTipPredicate, self._getTargetList())
         precedingTips = [ tip for tip in suitableTips if tip.getPriority() == _BattleLoadingTipPriority.PRECEDING ]
         if _logger.isEnabledFor(logging.INFO):
             _logger.info('Suitable preceding tips: %s', precedingTips)
@@ -172,16 +174,17 @@ class BattleRoyaleTipsCriteria(TipsCriteria):
     @dependency.replace_none_kwargs(battleRoyaleController=IBattleRoyaleController)
     def __getSquadTip(self, battleRoyaleController=None):
         if not battleRoyaleController.isInRandomSquadSubMode():
-            return
-        curSeason = battleRoyaleController.getCurrentSeason()
-        if not curSeason:
-            return
-        curSeasonID = curSeason.getSeasonID()
-        squadTipShownForSeasonID = AccountSettings.getSettings(ROYALE_SQUAD_TIP_SHOWN_FOR_SEASON)
-        if curSeasonID == squadTipShownForSeasonID:
-            return
-        AccountSettings.setSettings(ROYALE_SQUAD_TIP_SHOWN_FOR_SEASON, curSeasonID)
-        return _buildBattleLoadingTip('battleRoyale6', R.strings.tips.battleRoyale6())
+            return None
+        else:
+            curSeason = battleRoyaleController.getCurrentSeason()
+            if not curSeason:
+                return None
+            curSeasonID = curSeason.getSeasonID()
+            squadTipShownForSeasonID = AccountSettings.getSettings(ROYALE_SQUAD_TIP_SHOWN_FOR_SEASON)
+            if curSeasonID == squadTipShownForSeasonID:
+                return None
+            AccountSettings.setSettings(ROYALE_SQUAD_TIP_SHOWN_FOR_SEASON, curSeasonID)
+            return _buildBattleLoadingTip('battleRoyale6', R.strings.tips.battleRoyale6())
 
     def __getTipIcon(self, tipId):
         if self.__battleRoyaleController.isStPatrick():

@@ -5,14 +5,16 @@ import importlib
 import logging
 from future.utils import viewvalues
 from frameworks.wulf import WindowLayer
-from gui.Scaleform.framework import g_entitiesFactories, GroupedViewSettings
+from gui.Scaleform.framework import GroupedViewSettings
 from gui.Scaleform.framework.managers import context_menu
 from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
 from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.override_scaleform_views_manager import g_overrideScaleFormViewsConfig
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
 from gui.shared.events import ViewEventType
+from helpers import dependency
 from ids_generators import SequenceIDGenerator
+from skeletons.gui.impl import IGuiLoader
 from soft_exception import SoftException
 _logger = logging.getLogger(__name__)
 _logger.addHandler(logging.NullHandler())
@@ -98,6 +100,7 @@ class PackageBusinessHandler(object):
 
 class PackageImporter(object):
     __slots__ = ('_aliases', '_handlers', '_contextMenuTypes', '_stateMachineConfigurators')
+    __guiLoader = dependency.descriptor(IGuiLoader)
 
     def __init__(self):
         super(PackageImporter, self).__init__()
@@ -146,7 +149,7 @@ class PackageImporter(object):
 
             aliases = self._aliases.pop(path, None)
             if aliases:
-                g_entitiesFactories.clearSettings(aliases)
+                self.__guiLoader.entitiesFactory.clearSettings(aliases)
             contextMenuTypes = self._contextMenuTypes.pop(path, None)
             if contextMenuTypes:
                 context_menu.unregisterHandlers(*contextMenuTypes)
@@ -166,7 +169,7 @@ class PackageImporter(object):
             _logger.exception('Package "%s" can not be loaded', path)
             raise SoftException('Package {0} does not have method getViewSettings'.format(path))
 
-        aliases = g_entitiesFactories.initSettings(settings)
+        aliases = self.__guiLoader.entitiesFactory.initSettings(settings)
         self._aliases[path] = aliases
         try:
             handlers = imported.getContextMenuHandlers()

@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/tutorial/logger.py
+from __future__ import absolute_import
 from constants import IS_DEVELOPMENT
 from debug_utils import _doLog, LOG_CURRENT_EXCEPTION
 

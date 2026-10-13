@@ -8,6 +8,7 @@ import Math
 from constants import VISIBILITY
 from gui.shared.utils.scheduled_notifications import Notifiable, SimpleNotifier
 from helpers import time_utils, dependency
+from math_utils import clamp01
 from skeletons.gui.battle_session import IBattleSessionProvider
 
 def pointSectorIntersection(p0, v0, r, a, p1):
@@ -15,7 +16,7 @@ def pointSectorIntersection(p0, v0, r, a, p1):
     if p0p1.length <= r:
         p0p1.normalise()
         dotProduct = p0p1.dot(v0)
-        if dotProduct > 0 and math.acos(dotProduct) <= a / 2:
+        if dotProduct > 0 and math.acos(clamp01(dotProduct)) <= a / 2:
             return True
     return False
 

@@ -11,7 +11,7 @@ class EventBannerModel(ViewModel):
     BG_SIZE_MEDIUM = 'medium'
     BG_SIZE_SMALL = 'small'
 
-    def __init__(self, properties=16, commands=0):
+    def __init__(self, properties=17, commands=0):
         super(EventBannerModel, self).__init__(properties=properties, commands=commands)
 
     def getName(self):
@@ -56,59 +56,65 @@ class EventBannerModel(ViewModel):
     def setIsMode(self, value):
         self._setBool(6, value)
 
+    def getPluginPath(self):
+        return self._getString(7)
+
+    def setPluginPath(self, value):
+        self._setString(7, value)
+
     def getHasRewards(self):
-        return self._getBool(7)
+        return self._getBool(8)
 
     def setHasRewards(self, value):
-        self._setBool(7, value)
+        self._setBool(8, value)
 
     def getBannerState(self):
-        return self._getString(8)
-
-    def setBannerState(self, value):
-        self._setString(8, value)
-
-    def getIconsPath(self):
         return self._getString(9)
 
-    def setIconsPath(self, value):
+    def setBannerState(self, value):
         self._setString(9, value)
 
-    def getVideosPath(self):
+    def getIconsPath(self):
         return self._getString(10)
 
-    def setVideosPath(self, value):
+    def setIconsPath(self, value):
         self._setString(10, value)
 
+    def getVideosPath(self):
+        return self._getString(11)
+
+    def setVideosPath(self, value):
+        self._setString(11, value)
+
     def getTimerValue(self):
-        return self._getNumber(11)
-
-    def setTimerValue(self, value):
-        self._setNumber(11, value)
-
-    def getEventStartDate(self):
         return self._getNumber(12)
 
-    def setEventStartDate(self, value):
+    def setTimerValue(self, value):
         self._setNumber(12, value)
 
-    def getEventEndDate(self):
+    def getEventStartDate(self):
         return self._getNumber(13)
 
-    def setEventEndDate(self, value):
+    def setEventStartDate(self, value):
         self._setNumber(13, value)
 
+    def getEventEndDate(self):
+        return self._getNumber(14)
+
+    def setEventEndDate(self, value):
+        self._setNumber(14, value)
+
     def getAppearAnimationState(self):
-        return self._getString(14)
+        return self._getString(15)
 
     def setAppearAnimationState(self, value):
-        self._setString(14, value)
+        self._setString(15, value)
 
     def getShowTimerBeforeEventEnd(self):
-        return self._getNumber(15)
+        return self._getNumber(16)
 
     def setShowTimerBeforeEventEnd(self, value):
-        self._setNumber(15, value)
+        self._setNumber(16, value)
 
     def _initialize(self):
         super(EventBannerModel, self)._initialize()
@@ -119,6 +125,7 @@ class EventBannerModel(ViewModel):
         self._addStringProperty('inProgressDescription', '')
         self._addStringProperty('timerText', '')
         self._addBoolProperty('isMode', False)
+        self._addStringProperty('pluginPath', '')
         self._addBoolProperty('hasRewards', False)
         self._addStringProperty('bannerState', '')
         self._addStringProperty('iconsPath', '')

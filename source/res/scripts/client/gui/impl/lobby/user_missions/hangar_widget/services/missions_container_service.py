@@ -30,21 +30,11 @@ class MissionsContainerService(IMissionsContainerService):
     def isPluginVisible(self, viewAlias):
         return viewAlias in self._visiblePlugins
 
-    def showPlugin(self, viewAlias):
-        plugin = self._plugins.get(viewAlias)
-        if plugin is not None:
-            self._visiblePlugins.add(viewAlias)
-            _logger.debug('Plugin %s was added to visible plugins %s', viewAlias, self._visiblePlugins)
-            self.onShowPlugin(plugin)
+    def setPluginVisibility(self, viewAlias, visible):
+        if visible:
+            self._showPlugin(viewAlias)
         else:
-            _logger.error('Failed to show plugin. Alias %s not in plugins %s', viewAlias, self._plugins)
-        return
-
-    def hidePlugin(self, viewAlias):
-        if viewAlias in self._visiblePlugins:
-            self._visiblePlugins.remove(viewAlias)
-            _logger.debug('Plugin with alias %s was hidden', viewAlias)
-            self.onHidePlugin(viewAlias)
+            self._hidePlugin(viewAlias)
 
     def getVisiblePlugins(self):
         return {alias:self._plugins[alias] for alias in self._visiblePlugins if self._plugins.get(alias) is not None}
@@ -62,12 +52,31 @@ class MissionsContainerService(IMissionsContainerService):
         g_eventBus.removeListener(events.GUICommonEvent.LOBBY_VIEW_LOADING, self._collectPlugins)
         for plugin in viewvalues(self._plugins):
             plugin.stopListening()
+            plugin.cancelPendingUpdates()
 
         self._plugins.clear()
         self._visiblePlugins.clear()
         self._selectedSlides.clear()
         self.onShowPlugin.clear()
         self.onHidePlugin.clear()
+
+    def _showPlugin(self, viewAlias):
+        plugin = self._plugins.get(viewAlias)
+        if plugin is None:
+            _logger.error('Failed to show plugin. Alias %s not in plugins %s', viewAlias, self._plugins)
+            return
+        else:
+            if viewAlias not in self._visiblePlugins:
+                self._visiblePlugins.add(viewAlias)
+                _logger.debug('Plugin %s was added to visible plugins %s', viewAlias, self._visiblePlugins)
+                self.onShowPlugin(plugin)
+            return
+
+    def _hidePlugin(self, viewAlias):
+        if viewAlias in self._visiblePlugins:
+            self._visiblePlugins.remove(viewAlias)
+            _logger.debug('Plugin with alias %s was hidden', viewAlias)
+            self.onHidePlugin(viewAlias)
 
     def _updateVisiblePlugins(self):
         for alias, plugin in viewitems(self._plugins):

@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/uilogging/customization_3d_objects/logging_constants.py
+from __future__ import absolute_import
 from enum import Enum
 from gui.filters.carousel_filter import FILTER_KEYS
 from gui.Scaleform.daapi.view.lobby.customization.shared import CustomizationTabs, CustomizationModes

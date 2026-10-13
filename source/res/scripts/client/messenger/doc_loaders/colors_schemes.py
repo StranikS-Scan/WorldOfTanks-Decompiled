@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/doc_loaders/colors_schemes.py
+from __future__ import absolute_import
 from messenger.doc_loaders import _xml_helpers
 
 def _readColors(xmlCtx, section, colorsNames, defName):
@@ -16,9 +17,7 @@ def _readColors(xmlCtx, section, colorsNames, defName):
         notFound.remove(name)
 
     if notFound:
-        defColor = 0
-        if defName in result:
-            defColor = result[defName]
+        defColor = result.get(defName, 0)
         for name in notFound:
             result[name] = defColor
 

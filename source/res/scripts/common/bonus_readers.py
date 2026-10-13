@@ -738,7 +738,7 @@ def __readBonus_entitlement(bonus, _name, section, eventType, checkLimit):
 
 
 def __readBonus_entitlementList(bonus, _name, section, eventType, checkLimit):
-    entItems = bonus.setdefault('entitlementList', {}).setdefault('items', [])
+    entItems = bonus.setdefault('entitlementList', [])
     for name, itemSection in section.items():
         if name != 'item':
             raise SoftException('Not expected element', name)

@@ -1,14 +1,16 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/account_helpers/DossierCache.py
-import cPickle
+from __future__ import absolute_import
 import os
-import base64
+from future.moves import pickle
+from future.utils import viewvalues
 import BigWorld
 import AccountCommands
-from SyncController import SyncController
+from account_helpers.SyncController import SyncController
 from PlayerEvents import g_playerEvents as events
 from constants import DOSSIER_TYPE
 from external_strings_utils import unicode_from_utf8
+from py2to3.compat import base64compat
 from debug_utils import LOG_DEBUG, LOG_ERROR, LOG_CURRENT_EXCEPTION
 
 class DossierCache(object):
@@ -19,7 +21,8 @@ class DossierCache(object):
         p = os.path
         prefsFilePath = unicode_from_utf8(BigWorld.wg_getPreferencesFilePath())[1]
         self.__cacheDir = p.join(p.dirname(prefsFilePath), 'dossier_cache')
-        self.__cacheFileName = p.join(self.__cacheDir, '%s.dat' % base64.b32encode('%s;%s;%s' % (str(BigWorld.server()), accountName, accountClassName)))
+        uniquePath = '%s;%s;%s' % (str(BigWorld.server()), accountName, accountClassName)
+        self.__cacheFileName = p.join(self.__cacheDir, '%s.dat' % base64compat.b32encode(uniquePath))
         self.__cache = {}
         self.__maxChangeTime = 0
         self.__version = 0
@@ -168,32 +171,22 @@ class DossierCache(object):
         self.__cache = {}
         self.__version = 0
         self.__maxChangeTime = 0
-        fileHandler = None
         try:
             if not os.path.isfile(self.__cacheFileName):
                 return
-            fileHandler = open(self.__cacheFileName, 'rb')
-            self.__version, self.__cache = cPickle.load(fileHandler)
-            for changeTime, _ in self.__cache.itervalues():
-                self.__maxChangeTime = max(self.__maxChangeTime, changeTime)
+            with open(self.__cacheFileName, 'rb') as fileHandler:
+                self.__version, self.__cache = pickle.load(fileHandler)
+                for changeTime, _ in viewvalues(self.__cache):
+                    self.__maxChangeTime = max(self.__maxChangeTime, changeTime)
 
         except Exception:
             LOG_CURRENT_EXCEPTION()
 
-        if fileHandler is not None:
-            fileHandler.close()
-        return
-
     def __writeCache(self):
-        fileHandler = None
         try:
             if not os.path.isdir(self.__cacheDir):
                 os.makedirs(self.__cacheDir)
-            fileHandler = open(self.__cacheFileName, 'wb')
-            cPickle.dump((self.__version, self.__cache), fileHandler, -1)
+            with open(self.__cacheFileName, 'wb') as fileHandler:
+                pickle.dump((self.__version, self.__cache), fileHandler, -1)
         except Exception:
             LOG_CURRENT_EXCEPTION()
-
-        if fileHandler is not None:
-            fileHandler.close()
-        return

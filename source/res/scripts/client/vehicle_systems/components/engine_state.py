@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/vehicle_systems/components/engine_state.py
+from __future__ import absolute_import
 from random import uniform
 import BigWorld
 from constants import ARENA_PERIOD
@@ -68,7 +69,12 @@ def _delayEngineStart(detailedEngineState, _=None, __=None):
     if arena.period == ARENA_PERIOD.BATTLE:
         detailedEngineState.startEngineWithDelay(0.1, False)
         return
-    maxTime = arena.periodEndTime - BigWorld.serverTime()
+    maxTime = _getTimeToBattleStart(arena)
     maxTime = maxTime * 0.7 if maxTime > 0.0 else 1.0
     startEnginesIn = uniform(0.0, maxTime)
     detailedEngineState.startEngineWithDelay(startEnginesIn, True)
+
+
+def _getTimeToBattleStart(arena):
+    serverTime = BigWorld.serverTime()
+    return arena.periodLength if serverTime <= 0.0 else min(arena.periodEndTime - serverTime, arena.periodLength)

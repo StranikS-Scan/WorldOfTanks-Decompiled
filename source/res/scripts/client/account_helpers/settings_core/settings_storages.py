@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/account_helpers/settings_core/settings_storages.py
+from __future__ import absolute_import, division
 import functools
 import weakref
 import BigWorld

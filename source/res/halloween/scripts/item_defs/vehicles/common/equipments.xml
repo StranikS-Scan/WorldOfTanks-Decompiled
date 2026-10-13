@@ -1,0 +1,685 @@
+<equipments.xml>
+  <nitroRamDamage>
+    <id>	20001	</id>
+    <userString>	#halloween.artefacts.extend:nitroRamDamage/name	</userString>
+    <description>	#halloween.artefacts.extend:nitroRamDamage/descr	</description>
+    <icon>	hw_nitro	</icon>
+    <price>	0	</price>
+    <notInShop>	true	</notInShop>
+    <tags>	hwEquipment dynComponentsGroup notForSale hwIgnoreUsageCountInQuest	</tags>
+    <type>	regular	</type>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <minLevel>	1	</minLevel>
+          <maxLevel>	10	</maxLevel>
+          <tags>	event_battles	</tags>
+        </vehicle>
+      </include>
+    </vehicleFilter>
+    <script>	halloween_common.items.hw_artefacts.HWEquipment	  <durationSeconds>	5	</durationSeconds>
+      <cooldownSeconds>	30	</cooldownSeconds>
+      <reuseCount>	-1	</reuseCount>
+      <usageCost>	0	</usageCost>
+      <dynComponentsGroups>	HW_nitro	</dynComponentsGroups>
+    </script>
+  </nitroRamDamage>
+  <hpRepairAndCrewHeal>
+    <id>	20002	</id>
+    <userString>	#halloween.artefacts.extend:hpRepairAndCrewHeal/name	</userString>
+    <description>	#halloween.artefacts.extend:hpRepairAndCrewHeal/descr	</description>
+    <longDescriptionSpecial>	#halloween.artefacts.extend:hpRepairAndCrewHeal/long_special	</longDescriptionSpecial>
+    <shortDescriptionSpecial>	#halloween.artefacts.extend:hpRepairAndCrewHeal/short_special	</shortDescriptionSpecial>
+    <icon>	hw_hpRepairAndCrewHeal 0 0	</icon>
+    <price>	10000	</price>
+    <notInShop>	True	</notInShop>
+    <tags>	hwEquipment dynComponentsGroup notForSale hideIfNotInShop	</tags>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <minLevel>	1	</minLevel>
+          <maxLevel>	10	</maxLevel>
+          <tags>	event_battles	</tags>
+        </vehicle>
+      </include>
+    </vehicleFilter>
+    <script>	halloween_common.items.hw_artefacts.HWEquipment	  <cooldownSeconds>	3	</cooldownSeconds>
+      <durationSeconds>	5	</durationSeconds>
+      <reuseCount>	-1	</reuseCount>
+      <usageCost>	25	</usageCost>
+      <dynComponentsGroups>	HW_healVehicle	</dynComponentsGroups>
+    </script>
+  </hpRepairAndCrewHeal>
+  <teamRepairKit>
+    <id>	20007	</id>
+    <userString>	#halloween.artefacts.extend:teamRepairKit/name	</userString>
+    <description>	#halloween.artefacts.extend:teamRepairKit/descr	</description>
+    <longDescriptionSpecial>	#halloween.artefacts.extend:teamRepairKit/long_special	</longDescriptionSpecial>
+    <shortDescriptionSpecial>	#halloween.artefacts.extend:teamRepairKit/short_special	</shortDescriptionSpecial>
+    <icon>	hw_teamRepairKit 0 0	</icon>
+    <price>	3000	</price>
+    <notInShop>	false	</notInShop>
+    <tags>	hwEquipment dynComponentsGroup notForSale hwInstantEquipment	</tags>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <minLevel>	1	</minLevel>
+          <maxLevel>	10	</maxLevel>
+          <tags>	event_battles	</tags>
+        </vehicle>
+      </include>
+    </vehicleFilter>
+    <script>	halloween_common.items.hw_artefacts.HWEquipment	  <cooldownSeconds>	3	</cooldownSeconds>
+      <durationSeconds>	0	</durationSeconds>
+      <reuseCount>	-1	</reuseCount>
+      <usageCost>	50	</usageCost>
+      <dynComponentsGroups>	HW_healTeamVehicles	</dynComponentsGroups>
+    </script>
+  </teamRepairKit>
+  <damageShield>
+    <id>	20008	</id>
+    <userString>	#halloween.artefacts.extend:damageShield/name	</userString>
+    <description>	#halloween.artefacts.extend:damageShield/descr	</description>
+    <longDescriptionSpecial>	#halloween.artefacts.extend:damageShield/long_special	</longDescriptionSpecial>
+    <shortDescriptionSpecial>	#halloween.artefacts.extend:damageShield/short_special	</shortDescriptionSpecial>
+    <icon>	hw_damageShield 0 0	</icon>
+    <price>	10000	</price>
+    <notInShop>	false	</notInShop>
+    <tags>	hwEquipment dynComponentsGroup notForSale	</tags>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <minLevel>	1	</minLevel>
+          <maxLevel>	10	</maxLevel>
+          <tags>	event_battles	</tags>
+        </vehicle>
+      </include>
+    </vehicleFilter>
+    <script>	halloween_common.items.hw_artefacts.HWEquipment	  <cooldownSeconds>	3	</cooldownSeconds>
+      <durationSeconds>	7	</durationSeconds>
+      <reuseCount>	-1	</reuseCount>
+      <usageCost>	50	</usageCost>
+      <dynComponentsGroups>	HW_damageShield	</dynComponentsGroups>
+    </script>
+  </damageShield>
+  <fastReload>
+    <id>	20009	</id>
+    <userString>	#halloween.artefacts.extend:fastReload/name	</userString>
+    <description>	#halloween.artefacts.extend:fastReload/descr	</description>
+    <longDescriptionSpecial>	#halloween.artefacts.extend:fastReload/long_special	</longDescriptionSpecial>
+    <shortDescriptionSpecial>	#halloween.artefacts.extend:fastReload/short_special	</shortDescriptionSpecial>
+    <icon>	hw_fastReload	</icon>
+    <price>	10000	</price>
+    <notInShop>	false	</notInShop>
+    <tags>	hwEquipment dynComponentsGroup notForSale	</tags>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <minLevel>	1	</minLevel>
+          <maxLevel>	10	</maxLevel>
+          <tags>	event_battles	</tags>
+        </vehicle>
+      </include>
+    </vehicleFilter>
+    <script>	halloween_common.items.hw_artefacts.HWEquipment	  <cooldownSeconds>	3	</cooldownSeconds>
+      <durationSeconds>	5	</durationSeconds>
+      <reuseCount>	-1	</reuseCount>
+      <usageCost>	50	</usageCost>
+      <equipmentItem>	fastReload	</equipmentItem>
+      <dynComponentsGroups>	HW_fastReload	</dynComponentsGroups>
+      <variantIdFormat>	{dualGun}_{clip}	</variantIdFormat>
+      <variants>
+        <variant>
+          <id>	noDualGun_hasClip	</id>
+          <cooldownSeconds>	3	</cooldownSeconds>
+          <durationSeconds>	0	</durationSeconds>
+          <usageCost>	50	</usageCost>
+          <equipmentItem>	instantReload	</equipmentItem>
+          <dynComponentsGroups>	HW_instantReload	</dynComponentsGroups>
+        </variant>
+        <variant>
+          <id>	hasDualGun_noClip	</id>
+          <cooldownSeconds>	3	</cooldownSeconds>
+          <durationSeconds>	0	</durationSeconds>
+          <usageCost>	50	</usageCost>
+          <equipmentItem>	instantReload	</equipmentItem>
+          <dynComponentsGroups>	HW_instantReload	</dynComponentsGroups>
+        </variant>
+        <variant>
+          <id>	hasDualGun_hasClip	</id>
+          <cooldownSeconds>	3	</cooldownSeconds>
+          <durationSeconds>	0	</durationSeconds>
+          <usageCost>	50	</usageCost>
+          <equipmentItem>	instantReload	</equipmentItem>
+          <dynComponentsGroups>	HW_instantReload	</dynComponentsGroups>
+        </variant>
+      </variants>
+    </script>
+  </fastReload>
+  <hwInvisibility>
+    <id>	20010	</id>
+    <userString>	#halloween.artefacts.extend:hwInvisibility/name	</userString>
+    <description>	#halloween.artefacts.extend:hwInvisibility/descr	</description>
+    <longDescriptionSpecial>	#halloween.artefacts.extend:hwInvisibility/long_special	</longDescriptionSpecial>
+    <shortDescriptionSpecial>	#halloween.artefacts.extend:hwInvisibility/short_special	</shortDescriptionSpecial>
+    <icon>	hw_invisibility 0 0	</icon>
+    <price>	10000	</price>
+    <notInShop>	false	</notInShop>
+    <tags>	hwEquipment dynComponentsGroup notForSale	</tags>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <minLevel>	1	</minLevel>
+          <maxLevel>	10	</maxLevel>
+          <tags>	event_battles	</tags>
+        </vehicle>
+      </include>
+    </vehicleFilter>
+    <script>	halloween_common.items.hw_artefacts.HWEquipment	  <cooldownSeconds>	3	</cooldownSeconds>
+      <durationSeconds>	10	</durationSeconds>
+      <reuseCount>	-1	</reuseCount>
+      <usageCost>	25	</usageCost>
+      <dynComponentsGroups>	HW_invisibility	</dynComponentsGroups>
+    </script>
+  </hwInvisibility>
+  <artillery_deathzone_aoe_hw>
+    <id>	20011	</id>
+    <userString>	#artefacts:artillery/name	</userString>
+    <description>	#artefacts:artillery/descr	</description>
+    <icon>	artillery	</icon>
+    <price>	150	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	notForSale avatar trigger	</tags>
+    <type>	battleAbilities	</type>
+    <messagePostfix>	ARTILLERY	</messagePostfix>
+    <script>	AreaOfEffectEquipment	  <shortDescription>	#artefacts:artillery/shortDescr	</shortDescription>
+      <longDescription>	#artefacts:artillery/longDescr	</longDescription>
+      <shortFilterAlert></shortFilterAlert>
+      <longFilterAlert></longFilterAlert>
+      <tooltips>	cooldownTime delay areaRadius shotsNumber duration-artillery	</tooltips>
+      <cooldownTime>	90	</cooldownTime>
+      <cooldownFactors></cooldownFactors>
+      <sharedCooldownTime>	0	</sharedCooldownTime>
+      <consumeAmmo>	false	</consumeAmmo>
+      <disableAllyDamage>	true	</disableAllyDamage>
+      <cooldownTimeRespawnFactor>	1	</cooldownTimeRespawnFactor>
+      <delay>	5	</delay>
+      <duration>	1	</duration>
+      <shotsNumber>	1	</shotsNumber>
+      <explodeDestructible>	false	</explodeDestructible>
+      <areaRadius>	15	</areaRadius>
+      <areaVisual></areaVisual>
+      <areaShow>	always	</areaShow>
+      <noOwner>	false	</noOwner>
+      <attackerType>	DEATH_ZONE	</attackerType>
+      <shotSoundPreDelay>	1	</shotSoundPreDelay>
+      <wwsoundShot>	eb_ability_artillery_firing	</wwsoundShot>
+      <effects>
+        <start>
+          <groundRaycast>	True	</groundRaycast>
+          <sequences>
+            <sequence>
+              <name>	particles/eff_sequence/halloween/enemies/death_zone.seq	</name>
+            </sequence>
+          </sequences>
+        </start>
+        <action>
+          <shotEffects>	epicArtilleryStrike_hw	</shotEffects>
+          <offsetDeviation>	0	</offsetDeviation>
+          <repeatCount>	1	</repeatCount>
+          <repeatDelay>	0.3	</repeatDelay>
+        </action>
+      </effects>
+      <actions>
+        <action>
+          <type>	DamageVehicle	</type>
+          <applyTo>	Team1	</applyTo>
+          <args>
+            <damage>	600	</damage>
+          </args>
+        </action>
+      </actions>
+    </script>
+  </artillery_deathzone_aoe_hw>
+  <hwAoeDamageInstantShot>
+    <id>	20012	</id>
+    <userString>	#halloween.artefacts.extend:hwAoeDamageInstantShot/name	</userString>
+    <description>	#halloween.artefacts.extend:hwAoeDamageInstantShot/descr	</description>
+    <longDescriptionSpecial>	#halloween.artefacts.extend:hwAoeDamageInstantShot/long_special	</longDescriptionSpecial>
+    <shortDescriptionSpecial>	#halloween.artefacts.extend:hwAoeDamageInstantShot/short_special	</shortDescriptionSpecial>
+    <icon>	hw_aoeDamageInstantShot 0 0	</icon>
+    <price>	10000	</price>
+    <notInShop>	false	</notInShop>
+    <tags>	hwEquipment dynComponentsGroup notForSale hwInstantEquipment	</tags>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <minLevel>	1	</minLevel>
+          <maxLevel>	10	</maxLevel>
+          <tags>	event_battles	</tags>
+        </vehicle>
+      </include>
+    </vehicleFilter>
+    <script>	halloween_common.items.hw_artefacts.HWEquipment	  <cooldownSeconds>	3	</cooldownSeconds>
+      <durationSeconds>	0	</durationSeconds>
+      <reuseCount>	-1	</reuseCount>
+      <usageCost>	50	</usageCost>
+      <dynComponentsGroups>	HW_aoeDamageInstantShot	</dynComponentsGroups>
+    </script>
+  </hwAoeDamageInstantShot>
+  <hwAoeDrainEnemyHpInstantShot>
+    <id>	20013	</id>
+    <userString>	#halloween.artefacts.extend:hwAoeDrainEnemyHpInstantShot/name	</userString>
+    <description>	#halloween.artefacts.extend:hwAoeDrainEnemyHpInstantShot/descr	</description>
+    <longDescriptionSpecial>	#halloween.artefacts.extend:hwAoeDrainEnemyHpInstantShot/long_special	</longDescriptionSpecial>
+    <shortDescriptionSpecial>	#halloween.artefacts.extend:hwAoeDrainEnemyHpInstantShot/short_special	</shortDescriptionSpecial>
+    <icon>	hw_aoeDrainEnemyHpInstantShot 0 0	</icon>
+    <price>	10000	</price>
+    <notInShop>	false	</notInShop>
+    <tags>	hwEquipment dynComponentsGroup notForSale hwInstantEquipment	</tags>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <minLevel>	1	</minLevel>
+          <maxLevel>	10	</maxLevel>
+          <tags>	event_battles	</tags>
+        </vehicle>
+      </include>
+    </vehicleFilter>
+    <script>	halloween_common.items.hw_artefacts.HWEquipment	  <cooldownSeconds>	3	</cooldownSeconds>
+      <durationSeconds>	0	</durationSeconds>
+      <reuseCount>	-1	</reuseCount>
+      <usageCost>	25	</usageCost>
+      <dynComponentsGroups>	HW_aoeDrainEnemyHpInstantShot	</dynComponentsGroups>
+    </script>
+  </hwAoeDrainEnemyHpInstantShot>
+  <hwAoeStunInstantShot>
+    <id>	20014	</id>
+    <userString>	#halloween.artefacts.extend:hwAoeStunInstantShot/name	</userString>
+    <description>	#halloween.artefacts.extend:hwAoeStunInstantShot/descr	</description>
+    <longDescriptionSpecial>	#halloween.artefacts.extend:hwAoeStunInstantShot/long_special	</longDescriptionSpecial>
+    <shortDescriptionSpecial>	#halloween.artefacts.extend:hwAoeStunInstantShot/short_special	</shortDescriptionSpecial>
+    <icon>	hw_aoeStunInstantShot 0 0	</icon>
+    <price>	10000	</price>
+    <notInShop>	true	</notInShop>
+    <tags>	hwEquipment dynComponentsGroup notForSale hwInstantEquipment	</tags>
+    <vehicleFilter>
+      <include>
+        <vehicle>
+          <minLevel>	1	</minLevel>
+          <maxLevel>	10	</maxLevel>
+          <tags>	event_battles	</tags>
+        </vehicle>
+      </include>
+    </vehicleFilter>
+    <script>	halloween_common.items.hw_artefacts.HWEquipment	  <cooldownSeconds>	3	</cooldownSeconds>
+      <durationSeconds>	0	</durationSeconds>
+      <reuseCount>	-1	</reuseCount>
+      <usageCost>	25	</usageCost>
+      <dynComponentsGroups>	HW_aoeStunInstantShot	</dynComponentsGroups>
+    </script>
+  </hwAoeStunInstantShot>
+  <ignite_deathzone_aoe_hw>
+    <id>	20015	</id>
+    <userString>	#artefacts:artillery/name	</userString>
+    <description>	#artefacts:artillery/descr	</description>
+    <icon>	artillery	</icon>
+    <price>	150	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	notForSale avatar trigger	</tags>
+    <type>	battleAbilities	</type>
+    <messagePostfix>	ARTILLERY	</messagePostfix>
+    <script>	AreaOfEffectEquipment	  <shortDescription>	#artefacts:artillery/shortDescr	</shortDescription>
+      <longDescription>	#artefacts:artillery/longDescr	</longDescription>
+      <shortFilterAlert></shortFilterAlert>
+      <longFilterAlert></longFilterAlert>
+      <tooltips>	cooldownTime delay areaRadius shotsNumber duration-artillery	</tooltips>
+      <cooldownTime>	90	</cooldownTime>
+      <cooldownFactors></cooldownFactors>
+      <sharedCooldownTime>	0	</sharedCooldownTime>
+      <consumeAmmo>	false	</consumeAmmo>
+      <disableAllyDamage>	true	</disableAllyDamage>
+      <cooldownTimeRespawnFactor>	1	</cooldownTimeRespawnFactor>
+      <delay>	5	</delay>
+      <duration>	1	</duration>
+      <shotsNumber>	1	</shotsNumber>
+      <explodeDestructible>	false	</explodeDestructible>
+      <areaRadius>	15	</areaRadius>
+      <areaVisual></areaVisual>
+      <areaShow>	always	</areaShow>
+      <noOwner>	false	</noOwner>
+      <attackerType>	DEATH_ZONE	</attackerType>
+      <shotSoundPreDelay>	1	</shotSoundPreDelay>
+      <wwsoundShot>	eb_ability_artillery_firing	</wwsoundShot>
+      <effects>
+        <start>
+          <groundRaycast>	True	</groundRaycast>
+          <sequences>
+            <sequence>
+              <name>	particles/eff_sequence/halloween/enemies/death_zone.seq	</name>
+            </sequence>
+          </sequences>
+        </start>
+        <action>
+          <shotEffects>	epicArtilleryStrike_hw	</shotEffects>
+          <offsetDeviation>	0	</offsetDeviation>
+          <repeatCount>	1	</repeatCount>
+          <repeatDelay>	0.3	</repeatDelay>
+        </action>
+      </effects>
+      <actions>
+        <action>
+          <type>	DynGroupVehicle	</type>
+          <applyTo>	Team1	</applyTo>
+          <args>
+            <name>	HW_deathZoneIgnite	</name>
+            <duration>	5	</duration>
+          </args>
+        </action>
+      </actions>
+    </script>
+  </ignite_deathzone_aoe_hw>
+  <stun_deathzone_aoe_hw>
+    <id>	20016	</id>
+    <userString>	#artefacts:artillery/name	</userString>
+    <description>	#artefacts:artillery/descr	</description>
+    <icon>	artillery	</icon>
+    <price>	150	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	notForSale avatar trigger	</tags>
+    <type>	battleAbilities	</type>
+    <messagePostfix>	ARTILLERY	</messagePostfix>
+    <script>	AreaOfEffectEquipment	  <shortDescription>	#artefacts:artillery/shortDescr	</shortDescription>
+      <longDescription>	#artefacts:artillery/longDescr	</longDescription>
+      <shortFilterAlert></shortFilterAlert>
+      <longFilterAlert></longFilterAlert>
+      <tooltips>	cooldownTime delay areaRadius shotsNumber duration-artillery	</tooltips>
+      <cooldownTime>	90	</cooldownTime>
+      <cooldownFactors></cooldownFactors>
+      <sharedCooldownTime>	0	</sharedCooldownTime>
+      <consumeAmmo>	false	</consumeAmmo>
+      <disableAllyDamage>	true	</disableAllyDamage>
+      <cooldownTimeRespawnFactor>	1	</cooldownTimeRespawnFactor>
+      <delay>	5	</delay>
+      <duration>	1	</duration>
+      <shotsNumber>	1	</shotsNumber>
+      <explodeDestructible>	false	</explodeDestructible>
+      <areaRadius>	15	</areaRadius>
+      <areaVisual></areaVisual>
+      <areaShow>	always	</areaShow>
+      <noOwner>	false	</noOwner>
+      <attackerType>	DEATH_ZONE	</attackerType>
+      <shotSoundPreDelay>	1	</shotSoundPreDelay>
+      <wwsoundShot>	eb_ability_artillery_firing	</wwsoundShot>
+      <effects>
+        <start>
+          <groundRaycast>	True	</groundRaycast>
+          <sequences>
+            <sequence>
+              <name>	particles/eff_sequence/halloween/enemies/death_zone.seq	</name>
+            </sequence>
+          </sequences>
+        </start>
+        <action>
+          <shotEffects>	epicArtilleryStrike_hw	</shotEffects>
+          <offsetDeviation>	0	</offsetDeviation>
+          <repeatCount>	1	</repeatCount>
+          <repeatDelay>	0.3	</repeatDelay>
+        </action>
+      </effects>
+      <actions>
+        <action>
+          <type>	DynGroupVehicle	</type>
+          <applyTo>	Team1	</applyTo>
+          <args>
+            <name>	HW_deathZoneStun	</name>
+            <duration>	5	</duration>
+          </args>
+        </action>
+      </actions>
+    </script>
+  </stun_deathzone_aoe_hw>
+  <interval_deathzone_aoe_hw>
+    <id>	20018	</id>
+    <userString>	#artefacts:artillery/name	</userString>
+    <description>	#artefacts:artillery/descr	</description>
+    <icon>	artillery	</icon>
+    <price>	150	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	notForSale avatar trigger	</tags>
+    <type>	battleAbilities	</type>
+    <messagePostfix>	ARTILLERY	</messagePostfix>
+    <script>	AreaOfEffectEquipment	  <shortDescription>	#artefacts:artillery/shortDescr	</shortDescription>
+      <longDescription>	#artefacts:artillery/longDescr	</longDescription>
+      <shortFilterAlert></shortFilterAlert>
+      <longFilterAlert></longFilterAlert>
+      <tooltips>	cooldownTime delay areaRadius shotsNumber duration-artillery	</tooltips>
+      <cooldownTime>	90	</cooldownTime>
+      <cooldownFactors></cooldownFactors>
+      <sharedCooldownTime>	0	</sharedCooldownTime>
+      <consumeAmmo>	false	</consumeAmmo>
+      <disableAllyDamage>	true	</disableAllyDamage>
+      <cooldownTimeRespawnFactor>	1	</cooldownTimeRespawnFactor>
+      <delay>	5	</delay>
+      <duration>	20	</duration>
+      <shotsNumber>	20	</shotsNumber>
+      <explodeDestructible>	false	</explodeDestructible>
+      <areaRadius>	15	</areaRadius>
+      <areaVisual></areaVisual>
+      <areaShow>	always	</areaShow>
+      <noOwner>	false	</noOwner>
+      <attackerType>	DEATH_ZONE	</attackerType>
+      <shotSoundPreDelay>	1	</shotSoundPreDelay>
+      <wwsoundShot>	eb_ability_artillery_firing	</wwsoundShot>
+      <effects>
+        <start>
+          <groundRaycast>	True	</groundRaycast>
+          <sequences>
+            <sequence>
+              <name>	particles/eff_sequence/halloween/enemies/death_zone.seq	</name>
+            </sequence>
+          </sequences>
+        </start>
+        <poststart>
+          <shotEffects>	epicArtilleryStrike_hw	</shotEffects>
+          <offsetDeviation>	0	</offsetDeviation>
+          <repeatCount>	4	</repeatCount>
+          <repeatDelay>	5	</repeatDelay>
+          <sequences>
+            <sequence>
+              <name>	particles/eff_sequence/halloween/enemies/death_zone.seq	</name>
+            </sequence>
+          </sequences>
+        </poststart>
+      </effects>
+      <actions>
+        <action>
+          <type>	DynGroupVehicle	</type>
+          <applyTo>	Team1	</applyTo>
+          <applyToShotIDs>	1	</applyToShotIDs>
+          <args>
+            <name>	HW_deathZoneIntervalDamageFirstStrike	</name>
+            <duration>	1	</duration>
+          </args>
+        </action>
+        <action>
+          <type>	DynGroupVehicle	</type>
+          <applyTo>	Team1	</applyTo>
+          <args>
+            <name>	HW_deathZoneIntervalDamage	</name>
+            <duration>	1	</duration>
+          </args>
+        </action>
+      </actions>
+    </script>
+  </interval_deathzone_aoe_hw>
+  <detonator_deathzone_aoe_hw>
+    <id>	20017	</id>
+    <userString>	#artefacts:artillery/name	</userString>
+    <description>	#artefacts:artillery/descr	</description>
+    <icon>	artillery	</icon>
+    <price>	150	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	notForSale avatar trigger	</tags>
+    <type>	battleAbilities	</type>
+    <messagePostfix>	ARTILLERY	</messagePostfix>
+    <script>	AreaOfEffectEquipment	  <shortDescription>	#artefacts:artillery/shortDescr	</shortDescription>
+      <longDescription>	#artefacts:artillery/longDescr	</longDescription>
+      <shortFilterAlert></shortFilterAlert>
+      <longFilterAlert></longFilterAlert>
+      <tooltips>	cooldownTime delay areaRadius shotsNumber duration-artillery	</tooltips>
+      <cooldownTime>	90	</cooldownTime>
+      <cooldownFactors></cooldownFactors>
+      <sharedCooldownTime>	0	</sharedCooldownTime>
+      <consumeAmmo>	false	</consumeAmmo>
+      <disableAllyDamage>	true	</disableAllyDamage>
+      <cooldownTimeRespawnFactor>	1	</cooldownTimeRespawnFactor>
+      <delay>	5	</delay>
+      <duration>	1	</duration>
+      <shotsNumber>	1	</shotsNumber>
+      <explodeDestructible>	false	</explodeDestructible>
+      <areaRadius>	15	</areaRadius>
+      <areaVisual></areaVisual>
+      <areaShow>	always	</areaShow>
+      <noOwner>	false	</noOwner>
+      <attackerType>	DEATH_ZONE	</attackerType>
+      <shotSoundPreDelay>	1	</shotSoundPreDelay>
+      <wwsoundShot>	eb_ability_artillery_firing	</wwsoundShot>
+      <effects>
+        <start>
+          <groundRaycast>	True	</groundRaycast>
+          <sequences>
+            <sequence>
+              <name>	particles/eff_sequence/halloween/enemies/death_zone.seq	</name>
+            </sequence>
+          </sequences>
+        </start>
+        <action>
+          <shotEffects>	epicArtilleryStrike_hw	</shotEffects>
+          <offsetDeviation>	0	</offsetDeviation>
+          <repeatCount>	1	</repeatCount>
+          <repeatDelay>	0.3	</repeatDelay>
+        </action>
+      </effects>
+      <actions>
+        <action>
+          <type>	DamageVehicle	</type>
+          <applyTo>	Team1	</applyTo>
+          <args>
+            <damage>	600	</damage>
+          </args>
+        </action>
+      </actions>
+    </script>
+  </detonator_deathzone_aoe_hw>
+  <ignite_deathzone_overtime_aoe_hw>
+    <id>	20019	</id>
+    <userString>	#artefacts:artillery/name	</userString>
+    <description>	#artefacts:artillery/descr	</description>
+    <icon>	artillery	</icon>
+    <price>	150	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	notForSale avatar trigger	</tags>
+    <type>	battleAbilities	</type>
+    <messagePostfix>	ARTILLERY	</messagePostfix>
+    <script>	AreaOfEffectEquipment	  <shortDescription>	#artefacts:artillery/shortDescr	</shortDescription>
+      <longDescription>	#artefacts:artillery/longDescr	</longDescription>
+      <shortFilterAlert></shortFilterAlert>
+      <longFilterAlert></longFilterAlert>
+      <tooltips>	cooldownTime delay areaRadius shotsNumber duration-artillery	</tooltips>
+      <cooldownTime>	90	</cooldownTime>
+      <cooldownFactors></cooldownFactors>
+      <sharedCooldownTime>	0	</sharedCooldownTime>
+      <consumeAmmo>	false	</consumeAmmo>
+      <disableAllyDamage>	true	</disableAllyDamage>
+      <cooldownTimeRespawnFactor>	1	</cooldownTimeRespawnFactor>
+      <delay>	5	</delay>
+      <duration>	10	</duration>
+      <shotsNumber>	5	</shotsNumber>
+      <explodeDestructible>	false	</explodeDestructible>
+      <areaRadius>	15	</areaRadius>
+      <areaVisual></areaVisual>
+      <areaShow>	always	</areaShow>
+      <noOwner>	false	</noOwner>
+      <attackerType>	DEATH_ZONE	</attackerType>
+      <shotSoundPreDelay>	1	</shotSoundPreDelay>
+      <wwsoundShot>	eb_ability_artillery_firing	</wwsoundShot>
+      <effects>
+        <start>
+          <groundRaycast>	True	</groundRaycast>
+          <sequences>
+            <sequence>
+              <name>	particles/eff_sequence/halloween/enemies/death_zone.seq	</name>
+            </sequence>
+          </sequences>
+        </start>
+        <poststart>
+          <shotEffects>	epicArtilleryStrike_hw	</shotEffects>
+          <offsetDeviation>	0	</offsetDeviation>
+          <repeatCount>	1	</repeatCount>
+          <repeatDelay>	0.3	</repeatDelay>
+          <sequences>
+            <sequence>
+              <name>	particles/eff_sequence/halloween/enemies/death_zone.seq	</name>
+            </sequence>
+          </sequences>
+        </poststart>
+        <action>
+          <shotEffects>	epicArtilleryStrike_hw	</shotEffects>
+          <offsetDeviation>	0	</offsetDeviation>
+          <repeatCount>	1	</repeatCount>
+          <repeatDelay>	0.3	</repeatDelay>
+        </action>
+      </effects>
+      <actions>
+        <action>
+          <type>	DynGroupVehicle	</type>
+          <applyTo>	Team1	</applyTo>
+          <applyToShotIDs>	1	</applyToShotIDs>
+          <args>
+            <name>	HW_deathZoneIgniteOvertimeFirstStrike	</name>
+            <duration>	1	</duration>
+          </args>
+        </action>
+        <action>
+          <type>	DynGroupVehicle	</type>
+          <applyTo>	Team1	</applyTo>
+          <args>
+            <name>	HW_deathZoneIgniteOvertime	</name>
+            <duration>	1	</duration>
+          </args>
+        </action>
+      </actions>
+    </script>
+  </ignite_deathzone_overtime_aoe_hw>
+  <halloweenEmptySlot0>
+    <id>	24040	</id>
+    <icon>	empty 0 0	</icon>
+    <price>	0	</price>
+    <notInShop>	true	</notInShop>
+    <tags>	hwEquipment hwEmptySlot	</tags>
+    <script>	Equipment	</script>
+  </halloweenEmptySlot0>
+  <halloweenEmptySlot1>
+    <id>	24041	</id>
+    <icon>	empty 0 0	</icon>
+    <price>	0	</price>
+    <notInShop>	true	</notInShop>
+    <tags>	hwEquipment hwEmptySlot	</tags>
+    <script>	Equipment	</script>
+  </halloweenEmptySlot1>
+  <halloweenEmptySlot2>
+    <id>	24042	</id>
+    <icon>	empty 0 0	</icon>
+    <price>	0	</price>
+    <notInShop>	true	</notInShop>
+    <tags>	hwEquipment hwEmptySlot	</tags>
+    <script>	Equipment	</script>
+  </halloweenEmptySlot2>
+</equipments.xml>

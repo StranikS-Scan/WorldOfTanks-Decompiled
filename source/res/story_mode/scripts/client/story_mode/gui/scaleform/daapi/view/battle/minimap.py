@@ -1,5 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: story_mode/scripts/client/story_mode/gui/scaleform/daapi/view/battle/minimap.py
+from __future__ import absolute_import
+from future.utils import viewvalues
 import BattleReplay
 import BigWorld
 import CGF
@@ -60,7 +62,7 @@ class BunkersPlugin(SimplePlugin):
             destructibleComponent.onDestructibleEntityAdded += self.__onDestructibleEntityAdded
             destructibleComponent.onDestructibleEntityHealthChanged += self.__onDestructibleEntityHealthChanged
             entities = destructibleComponent.destructibleEntities
-            for entity in (entity for _, entity in entities.iteritems() if entity.destructibleEntityID != 0):
+            for entity in (entity for entity in viewvalues(entities) if entity.destructibleEntityID != 0):
                 self.__onDestructibleEntityAdded(entity)
 
         return

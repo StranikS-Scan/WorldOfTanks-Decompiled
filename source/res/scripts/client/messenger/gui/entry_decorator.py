@@ -1,6 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/gui/entry_decorator.py
+from __future__ import absolute_import
 from collections import defaultdict
+from future.utils import viewvalues
 from messenger.gui import setGUIEntries
 from messenger.gui.interfaces import IGUIEntryDecorator, IGUIEntry
 from messenger.m_constants import MESSENGER_SCOPE, GUI_FORCED_CLOSE_ON_LOGIN
@@ -45,7 +47,7 @@ class GUIDecorator(IGUIEntryDecorator):
 
     def init(self):
         setGUIEntries(self)
-        for entry in self.__entries.itervalues():
+        for entry in viewvalues(self.__entries):
             entry.init()
 
     def clear(self):

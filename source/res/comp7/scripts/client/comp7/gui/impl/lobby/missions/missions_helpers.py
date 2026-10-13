@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: comp7/scripts/client/comp7/gui/impl/lobby/missions/missions_helpers.py
+from __future__ import absolute_import
 from gui.impl.lobby.missions.missions_helpers import DefaultMissionsGuiHelper
 
 class Comp7MissionsGuiHelper(DefaultMissionsGuiHelper):

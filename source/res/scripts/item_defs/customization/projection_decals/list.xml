@@ -13239,6 +13239,66 @@
     </projection_decal>
   </itemGroup>
   <itemGroup>
+    <name>	WCI 2026	</name>
+    <userString>	#vehicle_customization:projection_decals/special	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	projection_decals 160g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF usa:A104_M4A3E8A usa:A126_PzVI_Tiger_II_capt ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+      <exclude>
+        <tags>	excluded_from_customization	</tags>
+      </exclude>
+    </vehicleFilter>
+    <projection_decal>
+      <id>	1414	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/projection_decal_1122.dds	</texture>
+      <userString>	#vehicle_customization:projection_decals/special/projection_decal_1122	</userString>
+      <description>	#vehicle_customization:projection_decals/special/projection_decal_1122/description	</description>
+      <tags>	formfactor_square direction_right_to_left	</tags>
+      <mirror>	true	</mirror>
+    </projection_decal>
+    <projection_decal>
+      <id>	1423	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/projection_decal_1123.dds	</texture>
+      <userString>	#vehicle_customization:projection_decals/special/projection_decal_1123	</userString>
+      <description>	#vehicle_customization:projection_decals/special/projection_decal_1123/description	</description>
+      <tags>	formfactor_square direction_left_to_right	</tags>
+      <mirror>	true	</mirror>
+    </projection_decal>
+  </itemGroup>
+  <itemGroup>
+    <name>	fortrush 2026	</name>
+    <userString>	#vehicle_customization:projection_decals/special	</userString>
+    <season>	ALL	</season>
+    <historical>	1	</historical>
+    <priceGroup>	projection_decals 160g notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G114_Rheinmetall_Skorpian germany:G119_Panzer58_BF usa:A13_T34_hvy_BF usa:A104_M4A3E8A usa:A126_PzVI_Tiger_II_capt ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+      <exclude>
+        <tags>	excluded_from_customization	</tags>
+      </exclude>
+    </vehicleFilter>
+    <projection_decal>
+      <id>	1419	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/projection_decal_1119.dds	</texture>
+      <userString>	#vehicle_customization:projection_decals/special/projection_decal_1119	</userString>
+      <tags>	formfactor_square disableVerticalMirror	</tags>
+      <mirror>	false	</mirror>
+    </projection_decal>
+    <projection_decal>
+      <id>	1420	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/projection_decal_1120.dds	</texture>
+      <userString>	#vehicle_customization:projection_decals/special/projection_decal_1120	</userString>
+      <tags>	formfactor_square disableVerticalMirror	</tags>
+      <mirror>	false	</mirror>
+    </projection_decal>
+  </itemGroup>
+  <itemGroup>
     <userString>	#vehicle_customization:projection_decals/animals	</userString>
     <season>	ALL	</season>
     <historical>	1	</historical>
@@ -15765,6 +15825,13 @@
       <texture>	gui/maps/vehicles/decals/projection_decals/special/projection_decal_1114.dds	</texture>
       <tags>	direction_right_to_left formfactor_square disableVerticalMirror	</tags>
       <userString>	#vehicle_customization:projection_decals/special/projection_decal_1114	</userString>
+      <mirror>	true	</mirror>
+    </projection_decal>
+    <projection_decal>
+      <id>	1562	</id>
+      <texture>	gui/maps/vehicles/decals/projection_decals/special/projection_decal_1135.dds	</texture>
+      <tags>	direction_right_to_left formfactor_square disableVerticalMirror	</tags>
+      <userString>	#vehicle_customization:projection_decals/special/projection_decal_1135	</userString>
       <mirror>	true	</mirror>
     </projection_decal>
   </itemGroup>

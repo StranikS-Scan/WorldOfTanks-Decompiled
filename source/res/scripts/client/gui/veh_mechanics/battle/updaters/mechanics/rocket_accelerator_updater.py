@@ -8,7 +8,7 @@ from events_handler import eventHandler
 from gui.Scaleform.genConsts.MECHANICS_WIDGET_CONST import MECHANICS_WIDGET_CONST
 from gui.shared.utils.TimeInterval import TimeInterval
 from gui.veh_mechanics.battle.updaters.mechanics.mechanics_common import VehicleMechanicUpdater
-from vehicles.mechanics.mechanic_constants import VehicleMechanic
+from items.vehicle_mechanics_types import VehicleMechanicKeys
 if typing.TYPE_CHECKING:
     from RocketAccelerationController import RocketAccelerationController
 UI_ROCKET_STATE_MAP = {ROCKET_ACCELERATION_STATE.NOT_RUNNING: MECHANICS_WIDGET_CONST.IDLE,
@@ -37,7 +37,7 @@ class IRocketAcceleratorView(object):
 class RocketAcceleratorUpdater(VehicleMechanicUpdater):
 
     def __init__(self, view):
-        super(RocketAcceleratorUpdater, self).__init__(VehicleMechanic.ROCKET_ACCELERATION, view)
+        super(RocketAcceleratorUpdater, self).__init__(VehicleMechanicKeys.ROCKET_ACCELERATION, view)
         self.__timeInterval = TimeInterval(0.1, self, '_updateProgress')
         self.__rocketComponent = None
         return

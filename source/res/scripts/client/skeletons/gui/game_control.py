@@ -73,6 +73,7 @@ if typing.TYPE_CHECKING:
     from renewable_subscription_common.settings_helpers import SubscriptionSettingsStorage
     from gui.impl.gen.view_models.views.lobby.page.header.wot_plus_subscription_model import WotPlusPeriodicityEnum
     from gui.game_control.wot_plus.service_record_customization.service_record_customization import ServiceRecordAssetManager
+    from gui.platform.products_fetcher.user_subscriptions.user_subscription import SubscriptionRequestPlatform
     BattlePassBonusOpts = Optional[TokensBonus, BattlePassSelectTokensBonus]
 
 class IGameController(object):
@@ -397,10 +398,6 @@ class IWalletController(IGameController):
         raise NotImplementedError
 
     @property
-    def dynamicComponentsStatuses(self):
-        raise NotImplementedError
-
-    @property
     def isSyncing(self):
         raise NotImplementedError
 
@@ -410,14 +407,6 @@ class IWalletController(IGameController):
 
     @property
     def isAvailable(self):
-        raise NotImplementedError
-
-    @property
-    def useGold(self):
-        raise NotImplementedError
-
-    @property
-    def useFreeXP(self):
         raise NotImplementedError
 
 
@@ -2343,6 +2332,12 @@ class IWotPlusController(IGameController):
         raise NotImplementedError
 
     def hasSteamSubscription(self):
+        raise NotImplementedError
+
+    def getActiveSubscriptionPlatform(self):
+        raise NotImplementedError
+
+    def isSubscriptionBoughtViaPlatform(self):
         raise NotImplementedError
 
     def getExpiryTime(self):

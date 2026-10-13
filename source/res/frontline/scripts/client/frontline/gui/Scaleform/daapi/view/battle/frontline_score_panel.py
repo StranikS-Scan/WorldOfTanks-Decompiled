@@ -1,5 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: frontline/scripts/client/frontline/gui/Scaleform/daapi/view/battle/frontline_score_panel.py
+from __future__ import absolute_import, division
+from future.utils import viewitems
 import BigWorld
 from constants import ARENA_PERIOD
 from debug_utils import LOG_ERROR
@@ -35,13 +37,13 @@ class FrontlineScorePanel(FrontlineScorePanelMeta):
             destructEntityComp.onDestructibleEntityHealthChanged += self.__onDestructibleEntityHealthChanged
             hqs = destructEntityComp.destructibleEntities
             if hqs:
-                if hqs[hqs.keys()[0]].isActive:
+                if hqs[next(iter(hqs))].isActive:
                     self.__onHQBattleStarted()
                 destroyedHQs = destructEntityComp.getDestroyedEntityIds()
-                for i in range(0, len(destroyedHQs)):
-                    self.__onHQDestroyed(destroyedHQs[i])
+                for hq in destroyedHQs:
+                    self.__onHQDestroyed(hq)
 
-                for destId, entity in hqs.iteritems():
+                for destId, entity in viewitems(hqs):
                     self.as_updateHeadquarterHealthS(destId, entity.health / entity.maxHealth)
 
         else:

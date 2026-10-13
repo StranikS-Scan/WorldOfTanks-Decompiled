@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: comp7_core/scripts/client/comp7_core/gui/Scaleform/daapi/view/battle/messages/player_messages.py
+from __future__ import absolute_import
 import typing
 from comp7_core_constants import ROLE_EQUIPMENT_TAG
 from constants import EQUIPMENT_STAGES

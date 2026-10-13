@@ -115,8 +115,17 @@ def _yohIterator(fetcher):
 
 def _getDevicesIterator(fetcher, isYoh):
     iterator = _yohIterator if isYoh else _defaultIterator
-    for value in iterator(fetcher):
-        yield value
+    wheelStateID = None
+    for deviceID, stateID in iterator(fetcher):
+        if deviceID == DAMAGE_INFO_PANEL_CONSTS.WHEEL:
+            if wheelStateID != DAMAGE_INFO_PANEL_CONSTS.DESTROYED:
+                wheelStateID = stateID
+            continue
+        yield (deviceID, stateID)
+
+    if wheelStateID is not None:
+        yield (DAMAGE_INFO_PANEL_CONSTS.WHEEL, wheelStateID)
+    return
 
 
 def _getDevicesSnapshot(fetcher, isYoh):
@@ -206,11 +215,8 @@ class DamageInfoPanel(DamageInfoPanelMeta):
         newDevicesSnap = _getDevicesSnapshot(fetcher, self.__isTrackWithinTrack)
         toHide = self.__devicesSnap.difference(newDevicesSnap)
         toUpdate = dict(newDevicesSnap.difference(self.__devicesSnap))
-        newDeviceIDs = {devID for devID, _ in newDevicesSnap}
         for deviceID, _ in toHide:
             if deviceID in toUpdate:
-                continue
-            if deviceID in newDeviceIDs:
                 continue
             if deviceID in _DEVICE_HIDE_METHODS:
                 method = _DEVICE_HIDE_METHODS[deviceID]

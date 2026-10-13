@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/doc_loaders/_xml_helpers.py
-import types
+from __future__ import absolute_import
 from helpers.html import translation as html_translation
 from soft_exception import SoftException
 
@@ -18,10 +18,10 @@ class XMLError(SoftException):
     def __init__(self, ctx, message):
         super(XMLError, self).__init__()
         self.ctx = ctx
-        self.message = message
+        self.errorMessage = message
 
     def __str__(self):
-        return 'Error in {0:>s}. {1:>s}'.format(self.ctx, self.message)
+        return 'Error in {0:>s}. {1:>s}'.format(self.ctx, self.errorMessage)
 
 
 class XMLCtx(object):
@@ -31,7 +31,7 @@ class XMLCtx(object):
         self.__filePath = filePath
         if xpath is None:
             self.__xpath = []
-        elif isinstance(xpath, types.ListType):
+        elif isinstance(xpath, list):
             self.__xpath = xpath
         else:
             raise ValueError('xpath must be list.')

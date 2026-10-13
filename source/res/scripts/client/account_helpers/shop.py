@@ -1,18 +1,21 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/account_helpers/Shop.py
-import cPickle
+from __future__ import absolute_import
 import zlib
+from builtins import zip
+from future.moves import pickle
+from future.utils import viewitems
 from math import ceil
-from itertools import izip
 import items
 import AccountCommands
 from debug_utils import LOG_DEBUG, LOG_ERROR
 from items import vehicles, tankmen
 from AccountCommands import BUY_VEHICLE_FLAG
+from account_helpers.persistent_caches import SimpleCache
+from account_helpers.SyncController import SyncController
 from account_shared import AmmoIterator
 from items.item_price import getNextSlotPrice, getNextBerthPackPrice
-from persistent_caches import SimpleCache
-from SyncController import SyncController
+from math_common import round_py2_style_int
 from PlayerEvents import g_playerEvents as events
 from soft_exception import SoftException
 from gui.shared.money import Currency
@@ -236,7 +239,7 @@ class Shop(object):
             self.buyVehicle(nationIdx, itemShopID, False, None, True, 0, -1, callback)
             return
         else:
-            count = int(round(count))
+            count = round_py2_style_int(count)
             if callback is not None:
                 proxy = lambda requestID, resultID, errorStr, ext={}: callback(resultID)
             else:
@@ -360,7 +363,7 @@ class Shop(object):
                 callback(AccountCommands.RES_NON_PLAYER, {})
             return
         else:
-            count = int(round(count))
+            count = round_py2_style_int(count)
             if callback is not None:
                 proxy = lambda requestID, resultID, errorStr, ext={}: callback(resultID)
             else:
@@ -403,7 +406,7 @@ class Shop(object):
             else:
                 proxy = None
             intArr = [self.__getCacheRevision(), vehInvID]
-            for intCD, count in itemsCount.iteritems():
+            for intCD, count in viewitems(itemsCount):
                 intArr.extend((intCD, count))
 
             self.__account._doCmdIntArr(AccountCommands.CMD_BUY_C11N_ITEMS, intArr, proxy)
@@ -503,7 +506,7 @@ class Shop(object):
             return
         if resultID == AccountCommands.RES_CACHE:
             try:
-                data = cPickle.loads(zlib.decompress(self.__persistentCache.getData()))
+                data = pickle.loads(zlib.decompress(self.__persistentCache.getData()))
             except Exception:
                 self.resynchronize()
                 return
@@ -698,7 +701,7 @@ class Shop(object):
         else:
             vehDescr = vehicles.VehicleDescr(compactDescr=vehCompDescr)
             devices = vehDescr.getDevices()
-            for defCompDescr, instCompDescr in izip(devices[0], devices[1]):
+            for defCompDescr, instCompDescr in zip(devices[0], devices[1]):
                 if defCompDescr == instCompDescr:
                     continue
                 compPrice = self.__getPriceFromCache(defCompDescr, None)

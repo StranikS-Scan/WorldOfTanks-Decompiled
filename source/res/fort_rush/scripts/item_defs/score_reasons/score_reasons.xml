@@ -1,0 +1,62 @@
+<score_reasons.xml>
+  <extension>
+    <name>	base	</name>
+    <scope>
+      <scopeType>	vehicle	</scopeType>
+      <reason>
+        <name>	VEHICLE_KILLED	</name>
+      </reason>
+      <reason>
+        <name>	OBJECTIVE_CAPTURED	</name>
+      </reason>
+    </scope>
+  </extension>
+  <extension>
+    <name>	fort_rush	</name>
+    <scope>
+      <scopeType>	team	</scopeType>
+      <reason>
+        <name>	WAVE_POINT	</name>
+      </reason>
+      <reason>
+        <name>	DAMAGE	</name>
+      </reason>
+    </scope>
+    <scope>
+      <scopeType>	vehicle	</scopeType>
+      <reason>
+        <name>	DAMAGE	</name>
+      </reason>
+      <reason>
+        <name>	IS_INVADER_WHEN_CAPTURED_POINT	</name>
+      </reason>
+      <reason>
+        <name>	ENEMY_ZONE_DAMAGE	</name>
+      </reason>
+      <reason>
+        <name>	ENEMY_ZONE_KILL	</name>
+      </reason>
+      <reason>
+        <name>	ALLY_ZONE_DAMAGE	</name>
+      </reason>
+      <reason>
+        <name>	ALLY_ZONE_KILL	</name>
+      </reason>
+      <reason>
+        <name>	OUTSIDE_ZONE_DAMAGE	</name>
+      </reason>
+      <reason>
+        <name>	CAPTURING_NEUTRAL_ZONE	</name>
+      </reason>
+      <reason>
+        <name>	CAPTURING_ENEMY_ZONE	</name>
+      </reason>
+      <reason>
+        <name>	CONTESTING_ZONE	</name>
+      </reason>
+      <reason>
+        <name>	NEUTRALIZED_ZONE	</name>
+      </reason>
+    </scope>
+  </extension>
+</score_reasons.xml>

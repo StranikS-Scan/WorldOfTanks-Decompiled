@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: frontline/scripts/client/frontline/gui/prb_control/entities/epic_battle_training/requester.py
+from __future__ import absolute_import
 import BigWorld
 from PlayerEvents import g_playerEvents
 from constants import PREBATTLE_TYPE, PREBATTLE_CACHE_KEY

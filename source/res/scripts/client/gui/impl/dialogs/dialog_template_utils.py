@@ -4,16 +4,16 @@ from __future__ import absolute_import
 import typing
 from past.builtins import long
 import constants
+from frameworks.wulf import PyResAccessor
 from gui.Scaleform.genConsts.CURRENCIES_CONSTANTS import CURRENCIES_CONSTANTS
 from gui.impl import backport
-from gui.impl.gen_utils import DynAccessor
 from helpers import dependency
 from skeletons.gui.impl import IGuiLoader
 if typing.TYPE_CHECKING:
     from gui.impl.pub import ViewImpl
 
 def toString(value):
-    if isinstance(value, DynAccessor):
+    if isinstance(value, PyResAccessor):
         return backport.text(value())
     return backport.text(value) if isinstance(value, (long, int)) else value
 

@@ -3165,6 +3165,63 @@
       </damage>
     </armorSpalls>
   </_122mm_Narazovy_vz_52>
+  <_122mm_Prurazny_vz_52_Petra>
+    <id>	146	</id>
+    <userString>	#czech_vehicles:_122mm_Prurazny_vz_52_Petra	</userString>
+    <icon>	ap	</icon>
+    <price>	786	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	122	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	largeArmorPiercing	</effects>
+    <damage>
+      <armor>	410	</armor>
+      <devices>	165	</devices>
+    </damage>
+    <normalizationAngle>	5	</normalizationAngle>
+    <ricochetAngle>	70	</ricochetAngle>
+  </_122mm_Prurazny_vz_52_Petra>
+  <_122mm_Prupalny_vz_52_Petra>
+    <id>	147	</id>
+    <userString>	#czech_vehicles:_122mm_Prupalny_vz_52_Petra	</userString>
+    <icon>	hc_premium	</icon>
+    <price>	5200	</price>
+    <improved>	true	</improved>
+    <kind>	HOLLOW_CHARGE	</kind>
+    <caliber>	122	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	largeHollowCharge	</effects>
+    <damage>
+      <armor>	410	</armor>
+      <devices>	165	</devices>
+    </damage>
+    <ricochetAngle>	85	</ricochetAngle>
+    <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
+  </_122mm_Prupalny_vz_52_Petra>
+  <_122mm_Narazovy_vz_52_Petra>
+    <id>	148	</id>
+    <userString>	#czech_vehicles:_122mm_Narazovy_vz_52_Petra	</userString>
+    <icon>	he_modern	</icon>
+    <price>	548	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <mechanics>	MODERN	</mechanics>
+    <caliber>	122	</caliber>
+    <explosionRadius>	2.49	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	largeHighExplosive	</effects>
+    <damage>
+      <armor>	530	</armor>
+      <devices>	165	</devices>
+    </damage>
+    <armorSpalls>
+      <impactRadius>	2.49	</impactRadius>
+      <coneAngle>	90	</coneAngle>
+      <damage>
+        <armor>	265	</armor>
+        <devices>	85	</devices>
+      </damage>
+    </armorSpalls>
+  </_122mm_Narazovy_vz_52_Petra>
   <_130mm_Prurazny_vz_51>
     <id>	45	</id>
     <userString>	#czech_vehicles:_130mm_Prurazny_vz_51	</userString>

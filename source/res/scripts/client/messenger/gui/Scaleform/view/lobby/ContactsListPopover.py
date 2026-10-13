@@ -1,5 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/gui/Scaleform/view/lobby/ContactsListPopover.py
+from __future__ import absolute_import
+from future.utils import viewitems
+from past.builtins import long
 from account_helpers.AccountSettings import AccountSettings, CONTACTS
 from debug_utils import LOG_DEBUG, LOG_WARNING
 from gui.Scaleform.genConsts.CONTACTS_ALIASES import CONTACTS_ALIASES
@@ -32,8 +35,8 @@ class ContactsListPopover(ContactsListPopoverMeta, ContactsCMListener):
             tree = self.components[CONTACTS_ALIASES.CONTACTS_TREE]
         return tree
 
-    def changeGroup(self, contactDbID, contactName, groupData):
-        contactDbID = long(contactDbID)
+    def changeGroup(self, dbId, contactName, groupData):
+        contactDbID = long(dbId)
         targetGroup = normalizeGroupId(groupData.targetGroup)
         excludeGroup = normalizeGroupId(groupData.excludeGroup)
         targetParentGroup = normalizeGroupId(groupData.targetParentGroup)
@@ -48,14 +51,14 @@ class ContactsListPopover(ContactsListPopoverMeta, ContactsCMListener):
         else:
             LOG_WARNING('Action can not be resolved', contactDbID, targetGroup, excludeGroup, targetParentGroup)
 
-    def copyIntoGroup(self, dbID, groupData):
+    def copyIntoGroup(self, contactDbId, groupData):
         targetGroup = normalizeGroupId(groupData.targetGroup)
         excludeGroup = normalizeGroupId(groupData.excludeGroup)
         excludeParentGroup = normalizeGroupId(groupData.excludeParentGroup)
         targetParentGroup = normalizeGroupId(groupData.targetParentGroup)
         if (targetGroup == CONTACTS_ALIASES.GROUP_FRIENDS_CATEGORY_ID or targetParentGroup == CONTACTS_ALIASES.GROUP_FRIENDS_CATEGORY_ID) and (excludeGroup == CONTACTS_ALIASES.GROUP_FRIENDS_CATEGORY_ID or excludeParentGroup == CONTACTS_ALIASES.GROUP_FRIENDS_CATEGORY_ID):
             if targetGroup != excludeGroup:
-                self.__moveToGroupProcess(dbID, targetGroup, None)
+                self.__moveToGroupProcess(contactDbId, targetGroup, None)
         return
 
     def getContactListSettings(self):
@@ -75,7 +78,7 @@ class ContactsListPopover(ContactsListPopoverMeta, ContactsCMListener):
                 tree.showContacts(onlineMode=onlineMode, showVisibleOthers=showOthers, showEmptyGroups=True)
                 myDP = tree.getMainDP()
                 openedGroups = self.usersStorage.getOpenedGroups()
-                for categoryId, groupsSet in openedGroups.iteritems():
+                for categoryId, groupsSet in viewitems(openedGroups):
                     for groupName in groupsSet:
                         myDP.toggleGroup(categoryId, groupName)
 

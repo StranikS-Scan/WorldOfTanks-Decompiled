@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/account_helpers/settings_core/__init__.py
+from __future__ import absolute_import
 from skeletons.account_helpers.settings_core import ISettingsCache, ISettingsCore, IBattleCommunicationsSettings
 
 def getSettingsCoreConfig(manager):

@@ -1,0 +1,26 @@
+<fuelTanks.xml>
+  <ids>
+    <Large_HW_BOT>	5000	</Large_HW_BOT>
+    <Heavy_HW_BOT>	5001	</Heavy_HW_BOT>
+  </ids>
+  <shared>
+    <Large_HW_BOT>
+      <tags></tags>
+      <price>	100	</price>
+      <notInShop>	True	</notInShop>
+      <weight>	300	</weight>
+      <maxHealth>	200	</maxHealth>
+      <maxRegenHealth>	70	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+    </Large_HW_BOT>
+    <Heavy_HW_BOT>
+      <tags></tags>
+      <price>	100	</price>
+      <notInShop>	True	</notInShop>
+      <weight>	275	</weight>
+      <maxHealth>	175	</maxHealth>
+      <maxRegenHealth>	70	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+    </Heavy_HW_BOT>
+  </shared>
+</fuelTanks.xml>

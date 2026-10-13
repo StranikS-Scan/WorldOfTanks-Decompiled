@@ -1,6 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: frontline/scripts/client/frontline/gui/impl/lobby/presenters/sub_presenters/battle_efficiency.py
+from __future__ import absolute_import
 import typing
+from future.utils import viewitems
 from frameworks.wulf import Array
 from gui.battle_results.presenters.battle_results_sub_presenter import BattleResultsSubPresenter
 from gui.battle_results.pbs_helpers.common import getEnemies
@@ -66,10 +68,10 @@ class FrontlineBattleEfficiencySubPresenter(BattleResultsSubPresenter):
     def __packDetailedPersonalInfo(self, model, player):
         model.clear()
         paramsMap = getEfficiencyParametersToPropertiesMap()
-        for parameter in paramsMap:
+        for parameter, paramValue in viewitems(paramsMap):
             efficiencyItem = DetailedPersonalEfficiencyItemModel()
             efficiencyItem.setParamType(parameter)
-            efficiencyItem.setValue(getattr(player, paramsMap[parameter], 0))
+            efficiencyItem.setValue(getattr(player, paramValue, 0))
             model.addViewModel(efficiencyItem)
 
         model.invalidate()

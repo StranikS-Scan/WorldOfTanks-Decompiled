@@ -1,5 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: comp7_light/scripts/client/comp7_light/gui/battle_control/arena_info/vos_collections.py
+from __future__ import absolute_import
+from past.builtins import cmp
 from gui.battle_control.arena_info.vos_collections import VehicleInfoSortKey
 
 class Comp7LightSortKey(VehicleInfoSortKey):

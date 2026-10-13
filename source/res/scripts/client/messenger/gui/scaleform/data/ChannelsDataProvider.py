@@ -1,9 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/gui/Scaleform/data/ChannelsDataProvider.py
+from __future__ import absolute_import
+from future.utils import itervalues
 import BigWorld
 import Event
 from debug_utils import LOG_ERROR
-from future.utils import itervalues
 from gui.prb_control.events_dispatcher import TOOLTIP_PRB_DATA
 DEFAULT_FIELDS = {'clientID': 0,
  'label': '',

@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: comp7/scripts/client/comp7/notification/actions_handlers.py
+from __future__ import absolute_import
 from comp7.gui.impl.gen.view_models.views.lobby.enums import MetaRootViews
 from comp7.gui.prb_control.entities import comp7_prb_helpers
 from comp7.gui.shared.event_dispatcher import showComp7BanWindow

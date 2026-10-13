@@ -23,7 +23,7 @@ _LOBBY_EXT_PACKAGES = ['comp7.gui.Scaleform.daapi.view.lobby.profile',
 _BATTLE_EXT_PACKAGES = ['comp7.gui.Scaleform.daapi.view.battle.shared']
 
 class ClientComp7BattleMode(Comp7BattleMode):
-    _CLIENT_BATTLE_PAGE = VIEW_ALIAS.COMP7_BATTLE_PAGE
+    _CLIENT_BATTLE_PAGE = (VIEW_ALIAS.COMP7_BATTLE_PAGE, VIEW_ALIAS.RANDOM_BATTLE_HUD)
     _CLIENT_PRB_ACTION_NAME = PREBATTLE_ACTION_NAME.COMP7
     _CLIENT_PRB_ACTION_NAME_SQUAD = PREBATTLE_ACTION_NAME.COMP7_SQUAD
     _CLIENT_REPLAY_MODE_TAG = 'Onslaught'
@@ -269,10 +269,10 @@ class ClientComp7BattleMode(Comp7BattleMode):
     def registerAdditionalGuiType(self):
         from gui.prb_control import prb_utils
         from comp7_common.comp7_constants import ARENA_GUI_TYPE
-        from gui.Scaleform.daapi.settings.views import addViewBattlePageAliasByArenaGUIType
+        from gui.Scaleform.daapi.settings.views import addViewBattlePageConfigByArenaGUIType
         for guiType in (ARENA_GUI_TYPE.TOURNAMENT_COMP7, ARENA_GUI_TYPE.TRAINING_COMP7):
             prb_utils.addArenaDescrs(guiType, self._client_arenaDescrClass, self._personality)
-            addViewBattlePageAliasByArenaGUIType(guiType, self._CLIENT_BATTLE_PAGE, self._personality)
+            addViewBattlePageConfigByArenaGUIType(guiType, self._CLIENT_BATTLE_PAGE, self._personality)
 
     def registerWCITournamentEntryPointValidator(self):
         from gui.prb_control import prb_utils

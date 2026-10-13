@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: comp7_light/scripts/client/comp7_light/gui/impl/lobby/tooltips/battle_quests_done_tooltip.py
+from __future__ import absolute_import
 from comp7_core.gui.impl.lobby.comp7_core_helpers.comp7_core_model_helpers import setSeasonInfo
 from comp7_light.gui.impl.gen.view_models.views.lobby.season_model import SeasonState as Comp7LightSeasonState
 from comp7_light.gui.impl.gen.view_models.views.lobby.enums import SeasonName as Comp7LightSeasonName
@@ -10,6 +11,7 @@ from gui.impl.pub import ViewImpl
 from gui.server_events.events_helpers import EventInfoModel
 from helpers import dependency
 from helpers.time_utils import getServerUTCTime
+from math_common import round_py2_style_int
 from skeletons.gui.game_control import IComp7LightController
 
 class BattleQuestsDoneTooltip(ViewImpl):
@@ -46,4 +48,4 @@ class BattleQuestsDoneTooltip(ViewImpl):
 
     def __onPollServerTime(self):
         with self.viewModel.transaction() as tx:
-            tx.season.setServerTimestamp(round(getServerUTCTime()))
+            tx.season.setServerTimestamp(round_py2_style_int(getServerUTCTime()))

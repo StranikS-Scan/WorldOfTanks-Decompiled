@@ -8,8 +8,7 @@ from gui.shared.formatters import text_styles
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from typing import Union, List, Any
-    from gui.impl.gen_utils import DynAccessor, _InvalidDynAccessor
-    Accessor = Union[DynAccessor, _InvalidDynAccessor]
+    from frameworks.wulf import PyResAccessor
 
 class Comp7CorePagesBuilder(DetailedHelpPagesBuilder):
     _PAGE_NAMES = ('seasonModifiers', 'poi', 'roleSkills', 'rules')

@@ -16,8 +16,9 @@ from gui.veh_mechanics.battle.updaters.mechanics.mechanic_passenger_updater impo
 from gui.veh_mechanics.battle.updaters.mechanics.mechanic_states_updater import VehicleMechanicStatesUpdater
 from gui.veh_mechanics.battle.updaters.current_shell_damage_updater import CurrentShellDamageUpdater
 from gui.veh_mechanics.battle.updaters.shot_blocked_upater import ShotBlockedUpdater
+from items.vehicle_mechanics_types import VehicleMechanicKeys
 from math_common import round_py2_style_int
-from vehicles.mechanics.mechanic_constants import VehicleMechanic, VehicleMechanicCommand
+from vehicles.mechanics.mechanic_constants import VehicleMechanicCommand
 from vehicles.mechanics.mechanic_states import IMechanicStatesListenerLogic
 if typing.TYPE_CHECKING:
     from typing import List, Optional
@@ -61,9 +62,9 @@ class ChargeShotMechanicWidget(ChargeShotWidgetMeta, ContainersListener, IMechan
             self.as_showShootBlockAnimationS()
 
     def _getViewUpdaters(self):
-        return [VehicleMechanicLifeCycleUpdater(VehicleMechanic.CHARGE_SHOT, self),
-         VehicleMechanicPassengerUpdater(VehicleMechanic.CHARGE_SHOT, self),
-         VehicleMechanicStatesUpdater(VehicleMechanic.CHARGE_SHOT, self),
+        return [VehicleMechanicLifeCycleUpdater(VehicleMechanicKeys.CHARGE_SHOT, self),
+         VehicleMechanicPassengerUpdater(VehicleMechanicKeys.CHARGE_SHOT, self),
+         VehicleMechanicStatesUpdater(VehicleMechanicKeys.CHARGE_SHOT, self),
          HotKeysViewUpdater(list(self._HOT_KEY_MAP.keys()), self),
          CurrentShellDamageUpdater(self),
          ShotBlockedUpdater(self)]

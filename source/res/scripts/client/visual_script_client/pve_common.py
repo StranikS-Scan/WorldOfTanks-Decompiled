@@ -1,7 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/visual_script_client/pve_common.py
-from enum import IntEnum
+from __future__ import absolute_import
 import typing
+from enum import IntEnum
 from constants import IS_VS_EDITOR
 from pve_battle_hud import getPveHudLogger
 from visual_script import ASPECT
@@ -33,7 +34,7 @@ class PropertySlotSpec(object):
 class ClientBattleHUDWidgetSettings(Block, PVEBattleHUDMeta):
     _SETTINGS_MODEL = None
     _WIDGET_TYPE = None
-    _SETTINGS_CONFIG = list()
+    _SETTINGS_CONFIG = []
     _SETTING_TYPE = None
     _ID_SLOT = PropertySlotSpec('id', SLOT_TYPE.STR, required=True)
 

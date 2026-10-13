@@ -1,8 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/proto/bw/wrappers.py
-from collections import namedtuple
+from __future__ import absolute_import
 import time as _time
-import types
+from collections import namedtuple
+from past.builtins import unicode
 from chat_shared import SYS_MESSAGE_IMPORTANCE
 _ChannelData = namedtuple('_ChannelData', ['id',
  'channelName',
@@ -36,7 +37,7 @@ class ChatActionWrapper(_ChatActionData):
 
     def __new__(cls, action=-1, channel=0, actionResponse=-1, group=0, originator=-1, originatorNickName='Unknown', requestID=-1, data=None, time=_time.time(), sentTime=_time.time(), flags=0, **kwargs):
         result = _ChatActionData.__new__(cls, action, channel, actionResponse, group, originator, unicode(originatorNickName, 'utf-8', errors='ignore'), requestID, time, sentTime, flags)
-        result.data = unicode(data, 'utf-8', errors='ignore') if isinstance(data, types.StringTypes) else data
+        result.data = unicode(data, 'utf-8', errors='ignore') if isinstance(data, bytes) else data
         return result
 
 

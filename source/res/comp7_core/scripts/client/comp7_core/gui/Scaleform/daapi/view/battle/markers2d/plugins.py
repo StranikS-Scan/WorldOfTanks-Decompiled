@@ -1,9 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: comp7_core/scripts/client/comp7_core/gui/Scaleform/daapi/view/battle/markers2d/plugins.py
+from __future__ import absolute_import
+from future.utils import viewitems
 import BigWorld
-import settings
 from account_helpers.settings_core.settings_constants import MARKERS
 from comp7_core.gui.battle_control.arena_info.arena_vos import Comp7CoreKeys
+from comp7_core.gui.Scaleform.daapi.view.battle.markers2d import settings
 from constants import ROLE_TYPE_TO_LABEL, ROLE_TYPE, INVALID_TIMESTAMP, ARENA_PERIOD
 from gui.Scaleform.daapi.view.battle.shared.markers2d.plugins import SettingsPlugin
 from gui.Scaleform.daapi.view.battle.shared.markers2d.vehicle_plugins import VehicleMarkerPlugin
@@ -278,7 +280,7 @@ class Comp7VehicleMarkerPlugin(VehicleMarkerPlugin):
             return
 
     def __onTeammateSelectionStatuses(self, statuses):
-        for vehicleID, status in statuses.iteritems():
+        for vehicleID, status in viewitems(statuses):
             marker = self._markers.get(vehicleID)
             if marker is not None:
                 self.__updateConfirmedMarker(vehicleID, marker.getMarkerID(), status)
@@ -286,5 +288,5 @@ class Comp7VehicleMarkerPlugin(VehicleMarkerPlugin):
         return
 
     def __onBattleStarted(self):
-        statuses = {vehicleID:False for vehicleID in self._markers.iterkeys()}
+        statuses = {vehicleID:False for vehicleID in self._markers}
         self.__onTeammateSelectionStatuses(statuses)

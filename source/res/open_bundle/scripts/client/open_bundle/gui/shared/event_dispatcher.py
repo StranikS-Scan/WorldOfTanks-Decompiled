@@ -25,9 +25,3 @@ def showOpenBundleConfirmDialog(bundleID, stepNumber, parent=None, callback=None
     else:
         isOK, data = result.result
         callback((isOK, data))
-
-
-def showAttachmentsPreview(bundleID, attachmentsToken):
-    from open_bundle.gui.impl.lobby.attachments_preview import AttachmentsPreviewWindow
-    window = AttachmentsPreviewWindow(bundleID, attachmentsToken)
-    window.load()

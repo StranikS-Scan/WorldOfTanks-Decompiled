@@ -1,5 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: story_mode/scripts/client/story_mode/gui/game_control/story_mode_fading_controller.py
+from __future__ import absolute_import
+from future.utils import viewvalues
 from gui.impl.common.fade_manager import FadeManager, DefaultFadingCover
 from story_mode.gui.story_mode_gui_constants import STORY_MODE_FADE_IN_DURATION, STORY_MODE_FADE_OUT_DURATION, IS_STORY_MODE_FADE_IN_OUT_ON
 from story_mode.skeletons.story_mode_fading_controller import IStoryModeFadingController
@@ -43,7 +45,7 @@ class StoryModeFadingController(IStoryModeFadingController):
         self._hideImmediately()
 
     def _hideImmediately(self):
-        for fadeManager in self._managerByLayer.itervalues():
+        for fadeManager in viewvalues(self._managerByLayer):
             fadeManager.hideImmediately()
 
     def _getFadeManager(self, layerID):

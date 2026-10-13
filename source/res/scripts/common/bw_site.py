@@ -20,6 +20,7 @@ except ImportError:
 
 DEFAULT_ENCODING = 'utf-8'
 PLATFORM_SUFFIX = BWUtil.getPlatformSuffix()
+NOARCH_SUFFIX = BWUtil.getNoarchSuffix()
 
 class _Helper(object):
 
@@ -60,15 +61,17 @@ def getsitepackages():
     sitepackages = []
     seen = set()
     from soft_exception import SoftException
-    if not PLATFORM_SUFFIX:
+    if not PLATFORM_SUFFIX or not NOARCH_SUFFIX:
         raise SoftException('Unable to determine platform suffix')
     for prefix in sys.path:
         if not prefix or prefix in seen:
             continue
         seen.add(prefix)
         if prefix.endswith('scripts/server_common'):
-            fullPath = os.path.join(prefix, 'site-packages') + '/' + PLATFORM_SUFFIX
+            fullPath = os.path.join(prefix, 'site-packages', PLATFORM_SUFFIX)
             sitepackages.append(fullPath)
+            noarchPath = os.path.join(prefix, 'site-packages', NOARCH_SUFFIX)
+            sitepackages.append(noarchPath)
         sitepackages.append(os.path.join(prefix, 'site-packages'))
 
     return sitepackages

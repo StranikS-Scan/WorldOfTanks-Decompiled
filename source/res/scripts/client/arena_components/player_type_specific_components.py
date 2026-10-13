@@ -1,8 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/arena_components/player_type_specific_components.py
+from __future__ import absolute_import
 from arena_components.epic_battle_player_data_component import EpicBattlePlayerDataComponent
-from player_data_component import PlayerDataComponent
-from advanced_chat_component import AdvancedChatComponent
+from arena_components.player_data_component import PlayerDataComponent
+from arena_components.advanced_chat_component import AdvancedChatComponent
 from arena_component_system.epic_sector_warning_component import EpicSectorWarningComponent
 from arena_component_system.arena_equipment_component import ArenaEquipmentComponent
 from arena_component_system.overtime_component import OvertimeComponent

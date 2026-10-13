@@ -9,8 +9,8 @@ from helpers import dependency
 from items import filterIntCDsByItemType, ITEM_TYPES
 from skeletons.gui.shared import IItemsCache
 if typing.TYPE_CHECKING:
-    from gui.shared.gui_items.Vehicle import Vehicle, EliteStatusProgress
-    from gui.impl.gen_utils import DynAccessor
+    from gui.shared.gui_items.Vehicle import Vehicle
+    from frameworks.wulf import PyResAccessor
 
 class VehPostProgressionEntryPointTooltip(ViewImpl):
     __slots__ = ('__parentScreen', '__vehicle')

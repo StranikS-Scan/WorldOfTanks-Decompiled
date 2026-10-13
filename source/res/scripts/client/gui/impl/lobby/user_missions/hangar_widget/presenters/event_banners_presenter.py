@@ -132,21 +132,7 @@ class EventBannersPresenter(UserMissionChildPresenter, TooltipPositionerMixin, O
     def _fillBannerModel(self, banner):
         banner.prepare()
         model = EventBannerModel()
-        model.setName(banner.NAME)
-        model.setIsMode(banner.isMode)
-        model.setTitle(banner.title)
-        model.setHasRewards(banner.hasRewards)
-        model.setIntroDescription(banner.introDescription)
-        model.setInProgressDescription(banner.inProgressDescription)
-        model.setBannerState(banner.bannerState)
-        model.setIconsPath(banner.iconsPath)
-        model.setVideosPath(banner.videosPath)
-        model.setBorderColor(banner.borderColor)
-        model.setTimerText(banner.timerText)
-        model.setTimerValue(banner.timerValue)
-        model.setEventEndDate(banner.eventEndDate)
-        model.setEventStartDate(banner.eventStartDate)
-        model.setShowTimerBeforeEventEnd(banner.showTimerBeforeEventEnd)
+        banner.fillModel(model)
         if self.__readyForAnimations:
             playAppearAnim = self._pickPendingAnimationIfExist(banner.NAME) or banner.playAppearAnim
             model.setAppearAnimationState(EventBannerModel.APPEAR_READY_TO_PLAY if playAppearAnim else EventBannerModel.APPEAR_NONE)

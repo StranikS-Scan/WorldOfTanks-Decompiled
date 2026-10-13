@@ -145,10 +145,10 @@ class FullScreenDialogView(FullScreenDialogBaseView, patched_typing.Generic[TVie
         model.setGolds(int(self._stats.money.getSignValue(Currency.GOLD)))
         model.setCrystals(int(self._stats.money.getSignValue(Currency.CRYSTAL)))
         model.setFreexp(self._stats.freeXP)
-        model.setIsWalletAvailable(self._stats.mayConsumeWalletResources)
+        model.setIsWalletAvailable(self._stats.isResourcesConsumptionAllowed)
 
     def __createCurrencyTooltip(self, event, currency):
-        if self._stats.mayConsumeWalletResources:
+        if self._stats.isResourcesConsumptionAllowed:
             window = BackportTooltipWindow(createTooltipData(isSpecial=True, specialAlias=getCurrencyTooltipAlias(currency), specialArgs=[]), self.getParentWindow())
             window.load()
             return window

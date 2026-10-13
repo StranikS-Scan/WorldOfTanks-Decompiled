@@ -17,9 +17,9 @@ class BRProgressionLockButtonDecorator(MessageDecorator):
         self._brProgressionController.onSettingsChanged -= self.__update
         super(BRProgressionLockButtonDecorator, self).clear()
 
-    def _make(self, formatted=None, settings=None):
+    def _make(self, entity=None, settings=None):
         self.__updateEntityButtons()
-        super(BRProgressionLockButtonDecorator, self)._make(formatted, settings)
+        super(BRProgressionLockButtonDecorator, self)._make(entity, settings)
 
     def __updateEntityButtons(self):
         if self._entity is None:

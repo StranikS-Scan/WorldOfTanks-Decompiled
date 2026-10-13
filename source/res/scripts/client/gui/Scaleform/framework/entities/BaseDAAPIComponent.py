@@ -6,6 +6,8 @@ from future.utils import viewitems, viewvalues
 from gui.Scaleform.framework.entities.BaseDAAPIModule import BaseDAAPIModule
 from gui.Scaleform.framework.entities.abstract.BaseDAAPIComponentMeta import BaseDAAPIComponentMeta
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE, events
+from helpers import dependency
+from skeletons.gui.impl import IGuiLoader
 _logger = logging.getLogger(__name__)
 
 def _registerReloadedComponent(viewPy, componentsSnapshot):
@@ -20,6 +22,7 @@ def _registerReloadedComponent(viewPy, componentsSnapshot):
 
 
 class BaseDAAPIComponent(BaseDAAPIComponentMeta):
+    guiLoader = dependency.descriptor(IGuiLoader)
 
     def __init__(self):
         super(BaseDAAPIComponent, self).__init__()
@@ -61,10 +64,9 @@ class BaseDAAPIComponent(BaseDAAPIComponentMeta):
         _registerReloadedComponent(self, componentsSnapshot)
 
     def registerFlashComponent(self, component, alias, *args):
-        from gui.Scaleform.framework import g_entitiesFactories
-        componentPy, idx = g_entitiesFactories.factory(alias, *args)
+        componentPy, idx = self.guiLoader.entitiesFactory.factory(alias, *args)
         if componentPy is not None:
-            componentPy = g_entitiesFactories.initialize(componentPy, component, idx)
+            componentPy = self.guiLoader.entitiesFactory.initialize(componentPy, component, idx)
         else:
             _logger.error('Component %s not found in python', alias)
             return

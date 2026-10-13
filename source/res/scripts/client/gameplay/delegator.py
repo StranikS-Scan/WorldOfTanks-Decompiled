@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gameplay/delegator.py
+from __future__ import absolute_import
 import BigWorld
 from frameworks_common.state_machine import StringEvent
 from frameworks_common.state_machine import StateMachine
